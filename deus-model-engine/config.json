@@ -1,0 +1,10 @@
+{
+    "events": [
+        {
+            "handle": "someEvent",
+            "callbacks": [
+                {"model": "SomeModel", "callback": "bang"}
+            ]
+        }
+    ]
+}

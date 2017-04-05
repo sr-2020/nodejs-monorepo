@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "outDir": "./dist"
+    },
+    "include": ["./src/*.ts"]
+}
