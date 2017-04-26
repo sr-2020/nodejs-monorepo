@@ -2,14 +2,19 @@
   "name": "de-model-runner",
   "version": "0.0.1",
   "description": "DeusEx model scripts runner",
-  "main": "index.js",
+  "main": "dist/worker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "npm run test:unit",
+    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
   },
   "author": "",
   "license": "Apache2",
   "devDependencies": {
-    "nodemon": "^1.11.0",
+    "@types/chai": "^3.5.1",
+    "@types/mocha": "^2.2.41",
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
   },

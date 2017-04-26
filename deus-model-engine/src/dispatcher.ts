@@ -11,7 +11,7 @@ type CallbacksList = model.Callback | null | (model.Callback | null)[]
 export interface DispatcherInterface {
     on(handle: string, callbacks: CallbacksList): void
     off(handle: string, callback: model.Callback): void
-    dispatch<S>(event: Event, context: S): S
+    dispatch(event: Event, context: model.Context): model.Context
 }
 
 export class Dispatcher implements DispatcherInterface {
@@ -40,8 +40,10 @@ export class Dispatcher implements DispatcherInterface {
         this.store[handle] = this.store[handle].filter((f) => f != callback);
     }
 
-    dispatch<S>(event: Event, context: S) {
+    dispatch(event: Event, context: model.Context): model.Context {
         if (!this.store[event.handle]) return context;
-        return this.store[event.handle].reduce((s, f) => f(s, event.data), context);
+
+        return this.store[event.handle]
+            .reduce((c, f) => f.call(c, event.data), context)
     }
 }
