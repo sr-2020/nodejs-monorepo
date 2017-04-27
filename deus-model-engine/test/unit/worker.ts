@@ -59,7 +59,7 @@ describe('Worker', () => {
             { handle: "mul", data: { operand: "value", value: "2" }, timestamp }
         ];
 
-        expect(worker.process(context, events)).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2 });
+        expect(worker.process(context, events)).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
     });
 
     it("Should process some timers", () => {

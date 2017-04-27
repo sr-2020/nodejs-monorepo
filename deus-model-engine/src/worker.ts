@@ -56,17 +56,14 @@ export class Worker {
     process(context: WorkerContext, events: dispatcher.Event[]): WorkerContext {
         if (!this.dispatcher) return context;
 
-        let ctx = new model.Context(context);
-        let currentTimestamp = ctx.getTimestamp();
-        events = events.sort((a, b) => a.timestamp - b.timestamp);
-
-        let event = this.nextEvent(currentTimestamp, events, ctx);
+        let ctx = new model.Context(context, events);
+        let event = ctx.nextEvent();
 
         while (event) {
-            let prevTimestamp = ctx.get('timestamp')
-            currentTimestamp = this.processSingle(ctx, event);
-            this.updateTimers(ctx, prevTimestamp);
-            event = this.nextEvent(currentTimestamp, events, ctx)
+            let prevTimestamp = ctx.getTimestamp()
+            this.processSingle(ctx, event);
+            ctx.updateTimers(prevTimestamp);
+            event = ctx.nextEvent();
         }
 
         return ctx.valueOf()
@@ -100,29 +97,6 @@ export class Worker {
     private processSingle(context: model.Context, event: dispatcher.Event): number {
         this.dispatcher.dispatch(event, context);
         return context.setTimestamp(event.timestamp);
-    }
-
-    private nextEvent(currentTimestamp: number, events: dispatcher.Event[], context: model.Context): dispatcher.Event | null | undefined {
-        if (!events.length) return null;
-
-        let timer = context.pullTimerBefore(events[0].timestamp);
-
-        if (timer) {
-            return {
-                handle: timer.handle,
-                timestamp: currentTimestamp + timer.seconds * 1000,
-                data: timer.data
-            };
-        } else {
-            return events.shift();
-        }
-    }
-
-    private updateTimers(context: model.Context, prevTimestamp: number) {
-        if (!context.get('timers')) return [];
-
-        let diff = Math.round((context.getTimestamp() - prevTimestamp) / 1000);
-        context.updateTimers(diff);
     }
 }
 

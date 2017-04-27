@@ -1,4 +1,5 @@
 import * as model from './model'
+import { ModelApiFactory } from './model_api'
 
 export type Event = {
     handle: string,
@@ -43,7 +44,11 @@ export class Dispatcher implements DispatcherInterface {
     dispatch(event: Event, context: model.Context): model.Context {
         if (!this.store[event.handle]) return context;
 
-        return this.store[event.handle]
-            .reduce((c, f) => f.call(c, event.data), context)
+        const api = ModelApiFactory(context);
+        const handlers = this.store[event.handle];
+
+        handlers.forEach((f) => f.call(api, event.data));
+
+        return context;
     }
 }
