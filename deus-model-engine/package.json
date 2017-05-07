@@ -5,8 +5,8 @@
   "main": "dist/worker.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run test:unit",
-    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
+    "test": "npm run test:integration",
+    "test:integration": "mocha -r ts-node/register test/integration/**/*.ts"
   },
   "author": "",
   "license": "Apache2",
