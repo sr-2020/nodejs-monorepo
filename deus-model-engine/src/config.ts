@@ -3,8 +3,8 @@ export type Callback = {
     callback: string
 }
 
-type EventHandler = {
-    handle: string,
+export type EventHandler = {
+    name: string,
     callbacks: Callback[]
 }
 

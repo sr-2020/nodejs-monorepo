@@ -1,10 +1,12 @@
 import glob = require('glob');
-import { merge } from 'lodash'
+import { merge, clone } from 'lodash'
 import * as I from 'immutable'
 
 import * as config from './config'
 import * as model from './model'
+import { Context } from './context'
 import * as dispatcher from './dispatcher'
+import { ModelApiFactory } from './model_api'
 
 type IndexedModels = {
     [key: string]: model.ModelInterface
@@ -47,26 +49,54 @@ export class Worker {
 
         config.events.forEach((e) => {
             let callbacks = e.callbacks.map((c) => this.resolveCallback(c))
-            this.dispatcher.on(e.handle, callbacks);
+            this.dispatcher.on(e.name, callbacks);
         });
 
         return this;
     }
 
-    process(context: WorkerContext, events: dispatcher.Event[]): WorkerContext {
-        if (!this.dispatcher) return context;
+    process(context: WorkerContext, events: dispatcher.Event[]): [WorkerContext, WorkerContext] {
+        if (!this.dispatcher) return [context, context];
 
-        let ctx = new model.Context(context, events);
-        let event = ctx.nextEvent();
+        let baseCtx = new Context(context, events);
 
-        while (event) {
-            let prevTimestamp = ctx.getTimestamp()
-            this.processSingle(ctx, event);
-            ctx.updateTimers(prevTimestamp);
-            event = ctx.nextEvent();
+        //
+        // run instant effects
+        //
+        for (let event of baseCtx.iterateEvents()) {
+            let prevTimestamp = baseCtx.getTimestamp()
+            this.processSingle(baseCtx, event);
+            baseCtx.decreaseTimers(prevTimestamp);
         }
 
-        return ctx.valueOf()
+        //
+        // apply modifiers
+        //
+        let workingCtx = baseCtx.clone();
+        let api = ModelApiFactory(workingCtx);
+
+        // Functional effects first
+        for (let effect of workingCtx.iterateEnabledFunctionalEffects()) {
+            let f = this.resolveCallback(effect.handler);
+            if (!f) continue;
+            f.call(api);
+        }
+
+        // Then Normal effects
+        for (let effect of workingCtx.iterateEnabledNormalEffects()) {
+            let f = this.resolveCallback(effect.handler);
+            if (!f) continue;
+            f.call(api);
+        }
+
+        //
+        // copy timers to base
+        //
+        let baseCtxValue = baseCtx.valueOf()
+        let workingCtxValue = workingCtx.valueOf()
+        baseCtxValue.timers = clone(workingCtxValue.timers);
+
+        return [baseCtxValue, workingCtxValue];
     }
 
     listen() {
@@ -89,12 +119,17 @@ export class Worker {
         console.log(`Worker started: ${process.pid}`);
     }
 
-    private resolveCallback(callback: config.Callback): model.Callback | null {
+    private resolveCallback(callback: config.Callback | string): model.Callback | null {
+        if (typeof callback === 'string') {
+            let [modelName, methodName] = callback.split('.');
+            callback = { model: modelName, callback: methodName };
+        }
+
         let model = this.models[callback.model]
         return model ? model.resolveCallback(callback.callback) : null;
     }
 
-    private processSingle(context: model.Context, event: dispatcher.Event): number {
+    private processSingle(context: Context, event: dispatcher.Event): number {
         this.dispatcher.dispatch(event, context);
         return context.setTimestamp(event.timestamp);
     }

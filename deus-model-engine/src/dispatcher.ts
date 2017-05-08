@@ -1,8 +1,9 @@
 import * as model from './model'
+import { Context } from './context'
 import { ModelApiFactory } from './model_api'
 
 export type Event = {
-    handle: string,
+    name: string,
     timestamp: number,
     data: any
 }
@@ -10,9 +11,9 @@ export type Event = {
 type CallbacksList = model.Callback | null | (model.Callback | null)[]
 
 export interface DispatcherInterface {
-    on(handle: string, callbacks: CallbacksList): void
-    off(handle: string, callback: model.Callback): void
-    dispatch(event: Event, context: model.Context): model.Context
+    on(name: string, callbacks: CallbacksList): void
+    off(name: string, callback: model.Callback): void
+    dispatch(event: Event, context: Context): Context
 }
 
 export class Dispatcher implements DispatcherInterface {
@@ -24,15 +25,15 @@ export class Dispatcher implements DispatcherInterface {
         this.store = {};
     }
 
-    on(handle: string, callbacks: CallbacksList) {
-        if (!this.store[handle]) this.store[handle] = [];
+    on(name: string, callbacks: CallbacksList) {
+        if (!this.store[name]) this.store[name] = [];
 
         if (Array.isArray(callbacks)) {
             callbacks.forEach((f) => {
-                if (f) this.store[handle].push(f)
+                if (f) this.store[name].push(f)
             });
         } else if (callbacks) {
-            this.store[handle].push(callbacks);
+            this.store[name].push(callbacks);
         }
     }
 
@@ -41,11 +42,11 @@ export class Dispatcher implements DispatcherInterface {
         this.store[handle] = this.store[handle].filter((f) => f != callback);
     }
 
-    dispatch(event: Event, context: model.Context): model.Context {
-        if (!this.store[event.handle]) return context;
+    dispatch(event: Event, context: Context): Context {
+        if (!this.store[event.name]) return context;
 
         const api = ModelApiFactory(context);
-        const handlers = this.store[event.handle];
+        const handlers = this.store[event.name];
 
         handlers.forEach((f) => f.call(api, event.data));
 
