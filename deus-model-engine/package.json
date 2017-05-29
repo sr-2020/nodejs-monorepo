@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run test:integration",
-    "test:integration": "mocha -r ts-node/register test/integration/**/*.ts"
+    "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "Apache2",
