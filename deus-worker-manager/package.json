@@ -1,0 +1,26 @@
+{
+  "name": "deus-worker-manager",
+  "version": "0.0.1",
+  "description": "DeusEx model workers manager",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --config nodemon.json"
+  },
+  "author": "",
+  "license": "Apache2",
+  "dependencies": {
+    "generic-pool": "^3.1.7",
+    "glob": "^7.1.2",
+    "meow": "^3.7.0",
+    "nano": "^6.2.0",
+    "rxjs": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/glob": "^5.0.30",
+    "@types/meow": "^3.6.2",
+    "@types/node": "^7.0.21",
+    "nodemon": "^1.11.0",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.3"
+  }
+}
