@@ -1,4 +1,4 @@
-import { clone } from 'lodash'
+import { clone, assign } from 'lodash'
 
 import { requireDir } from './utils';
 import * as config from './config';
@@ -27,7 +27,8 @@ export class Worker {
     }
 
     static load(dir: string): Worker {
-        let model = requireDir(dir);
+        let model = loadModels(dir);
+        console.log('<<<', model);
         return new Worker(model);
     }
 
@@ -92,7 +93,9 @@ export class Worker {
         let workingCtxValue = workingCtx.valueOf()
         baseCtxValue.timers = clone(workingCtxValue.timers);
 
-        return [baseCtxValue, workingCtxValue];
+        let viewModel = this.runViewModels(workingCtxValue);
+
+        return [baseCtxValue, workingCtxValue, viewModel];
     }
 
     listen() {
@@ -115,11 +118,31 @@ export class Worker {
     }
 
     private resolveCallback(callback: config.Callback): model.Callback | null {
-        return this.model[callback];
+        return this.model.callbacks[callback];
     }
 
     private processSingle(context: Context, event: dispatcher.Event): number {
         this.dispatcher.dispatch(event, context);
         return context.setTimestamp(event.timestamp);
     }
+
+    private runViewModels(data: any) {
+        return this.model.viewModelCallbacks.reduce((vm, fn) => {
+            return fn(data, vm);
+        }, {});
+    }
+}
+
+function loadModels(dir: string): model.Model {
+    return requireDir(dir, (m: any, src: any) => {
+        m = clone(m);
+        src = clone(src);
+        if (!m.viewModelCallbacks) m.viewModelCallbacks = [];
+        if (src._view) {
+            m.viewModelCallbacks.push(src._view);
+            delete src._view;
+        }
+        m.callbacks = assign({}, m.callbacks, src);
+        return m;
+    });
 }

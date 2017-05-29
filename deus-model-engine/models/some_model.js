@@ -18,6 +18,13 @@ module.exports = () => {
         delayedConcat(data) {
             let {value, delay} = data;
             this.setTimer('value', 'concat', { operand, value });
+        },
+
+        _view(model, viewModel) {
+            return {
+                _id: model._id,
+                value: model.value
+            };
         }
     };
 };

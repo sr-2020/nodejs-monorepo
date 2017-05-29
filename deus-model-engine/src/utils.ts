@@ -1,8 +1,8 @@
 import glob = require('glob');
-import { merge } from 'lodash'
+import { merge as _merge } from 'lodash'
 import * as Path from 'path';
 
-export function requireDir(dir: string): any {
+export function requireDir(dir: string, merge = _merge): any {
     const extensions = Object.keys(require.extensions).join('|');
     const files = glob.sync(`${dir}/**/*+(${extensions})`);
 
@@ -21,5 +21,4 @@ export function requireDir(dir: string): any {
 
         return merge(m, src);
     }, {});
-
 }

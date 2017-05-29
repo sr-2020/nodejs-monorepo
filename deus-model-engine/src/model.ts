@@ -1,5 +1,8 @@
 export type Callback = (data: any) => void
 
+export type ViewModelCallback = (model: any, viewModel: any) => any;
+
 export type Model = {
-    [key: string]: Callback
+    callbacks: { [key: string]: Callback },
+    viewModelCallbacks: ViewModelCallback[]
 }
