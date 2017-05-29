@@ -15,6 +15,8 @@ export default class Manager {
     private nano: Nano;
     private eventsSource: EventsSource;
     private modelStorage: ModelStorage;
+    private workingModelStorage: ModelStorage;
+    private viewModelStorage: ModelStorage;
     private eventStorage: EventStorage;
     private pool: WorkersPool;
     private syncedModels: SyncedModels = {};
@@ -24,6 +26,8 @@ export default class Manager {
         this.eventsSource = new EventsSource(this.nano, config.db.events);
 
         this.modelStorage = new ModelStorage(this.nano.use(config.db.models));
+        this.workingModelStorage = new ModelStorage(this.nano.use(config.db.workingModels));
+        this.viewModelStorage = new ModelStorage(this.nano.use(config.db.viewModels));
         this.eventStorage = new EventStorage(this.nano.use(config.db.events));
 
         this.pool = new WorkersPool(config.pool.workerModule, config.pool.workerArgs, config.pool.options);
@@ -68,7 +72,15 @@ export default class Manager {
 
             console.log('>>> result =', result);
 
-            this.modelStorage.store(result[0]);
+            let [baseModel, workingModel, viewModel] = result;
+            delete workingModel._rev;
+            delete viewModel._rev;
+
+            await Promise.all([
+                this.modelStorage.store(baseModel),
+                this.workingModelStorage.store(workingModel),
+                this.viewModelStorage.store(viewModel)
+            ]);
         }
     }
 }

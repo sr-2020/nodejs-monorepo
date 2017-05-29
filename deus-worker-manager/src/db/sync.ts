@@ -23,7 +23,9 @@ const connection = nano(config.db.url);
 
 const dbs: { [key: string]: string } = {
     models: config.db.models,
-    events: config.db.events
+    events: config.db.events,
+    workingModels: config.db.workingModels,
+    viewModels: config.db.viewModels
 };
 
 function deepToString(doc: any) {

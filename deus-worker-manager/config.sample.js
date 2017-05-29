@@ -2,7 +2,9 @@ module.exports = {
     db: {
         url: "http://admin:admin@localhost:5984/",
         events: "events-dev",
-        models: "model-dev"
+        models: "models-dev",
+        workingModels: "working-models-dev",
+        viewModels: "view-models-dev"
     },
 
     pool: {
