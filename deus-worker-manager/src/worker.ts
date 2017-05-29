@@ -58,8 +58,7 @@ export default class Worker extends EventEmitter {
             this._child.once('message', (result) => resolve(result));
             this._child.once('error', (err) => reject(err));
 
-            // this._child.send({ timestamp: syncEvent.timestamp, context: model, events });
-            this._child.send({ timestamp: 0, context: model, events });
+            this._child.send({ timestamp: syncEvent.timestamp, context: model, events });
 
             // TODO: handle timeout
         });
