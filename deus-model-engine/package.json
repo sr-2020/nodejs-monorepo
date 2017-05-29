@@ -24,7 +24,6 @@
     "@types/meow": "^3.6.2",
     "@types/node": "^7.0.12",
     "@types/systemjs": "^0.20.2",
-    "coffee-script": "^1.12.4",
     "glob": "^7.1.1",
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",

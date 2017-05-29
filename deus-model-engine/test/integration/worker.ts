@@ -61,7 +61,7 @@ describe('Worker', () => {
             { eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
         ];
 
-        let result = worker.process(context, events)
+        let result = worker.process(timestamp, context, events)
 
         expect(result[0]).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
     });
@@ -78,7 +78,7 @@ describe('Worker', () => {
             { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
 
-        let result = worker.process(context, events);
+        let result = worker.process(timestamp, context, events);
 
         expect(result[0]).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: [] });
     })
