@@ -1,5 +1,5 @@
 {
-  "name": "de-model-runner",
+  "name": "deus-model-engine",
   "version": "0.0.1",
   "description": "DeusEx model scripts runner",
   "main": "dist/worker.js",

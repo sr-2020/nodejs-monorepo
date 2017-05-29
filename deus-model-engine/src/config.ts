@@ -1,11 +1,14 @@
-export type Callback = {
-    model: string,
-    callback: string
-}
+import { requireDir } from './utils';
+
+export type Callback = string;
 
 export type EventHandler = {
-    name: string,
-    callbacks: Callback[]
+    eventType: string,
+    effects: Callback[]
+}
+
+export type SerializedConfig = {
+    events: EventHandler[]
 }
 
 export interface ConfigInterface {
@@ -19,10 +22,16 @@ export class Config implements ConfigInterface {
         this.events = [];
     }
 
-    static parse(src: any): Config {
+    static parse(src: SerializedConfig): Config {
         let config = new Config();
         if ('events' in src) config.events = src.events;
 
         return config;
+    }
+
+    static load(dir: string): Config {
+        let src = requireDir(dir);
+        console.log('Load config:', src);
+        return this.parse(src);
     }
 }

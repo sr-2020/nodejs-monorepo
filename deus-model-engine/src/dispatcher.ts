@@ -3,7 +3,7 @@ import { Context } from './context'
 import { ModelApiFactory } from './model_api'
 
 export type Event = {
-    name: string,
+    eventType: string,
     timestamp: number,
     data: any
 }
@@ -43,10 +43,10 @@ export class Dispatcher implements DispatcherInterface {
     }
 
     dispatch(event: Event, context: Context): Context {
-        if (!this.store[event.name]) return context;
+        if (!this.store[event.eventType]) return context;
 
         const api = ModelApiFactory(context);
-        const handlers = this.store[event.name];
+        const handlers = this.store[event.eventType];
 
         handlers.forEach((f) => f.call(api, event.data));
 

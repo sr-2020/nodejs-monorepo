@@ -1,18 +1,14 @@
-import glob = require('glob');
-import { merge, clone } from 'lodash'
-import * as I from 'immutable'
+import { clone } from 'lodash'
 
-import * as config from './config'
-import * as model from './model'
-import { Context } from './context'
-import * as dispatcher from './dispatcher'
-import { ModelApiFactory } from './model_api'
-
-type IndexedModels = {
-    [key: string]: model.ModelInterface
-}
+import { requireDir } from './utils';
+import * as config from './config';
+import * as model from './model';
+import { Context } from './context';
+import * as dispatcher from './dispatcher';
+import { ModelApiFactory } from './model_api';
 
 export type WorkerMessage = {
+    timestamp: number,
     context: any,
     events: dispatcher.Event[]
 }
@@ -23,39 +19,33 @@ export type WorkerContext = {
 }
 
 export class Worker {
-    private models: IndexedModels
     private config: config.ConfigInterface
     private dispatcher: dispatcher.DispatcherInterface
 
-    constructor(models: IndexedModels) {
-        this.models = models;
-
+    constructor(private model: model.Model) {
         this.processSingle = this.processSingle.bind(this)
     }
 
-    static load(dir: (string | model.ModelInterface[])): Worker {
-        if (typeof dir === 'string') {
-            dir = loadModels(dir) as model.ModelInterface[];
-        }
-
-        let models = indexModels(dir) as IndexedModels;
-
-        return new Worker(models);
+    static load(dir: string): Worker {
+        let model = requireDir(dir);
+        return new Worker(model);
     }
 
     configure(config: config.ConfigInterface): Worker {
+        console.log('<<<', config);
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 
         config.events.forEach((e) => {
-            let callbacks = e.callbacks.map((c) => this.resolveCallback(c))
-            this.dispatcher.on(e.name, callbacks);
+            let callbacks = e.effects.map((c) => this.resolveCallback(c))
+            this.dispatcher.on(e.eventType, callbacks);
         });
 
         return this;
     }
 
-    process(context: WorkerContext, events: dispatcher.Event[]): [WorkerContext, WorkerContext] {
+    process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): [WorkerContext, WorkerContext] {
+        console.log("<<<", events);
         if (!this.dispatcher) return [context, context];
 
         let baseCtx = new Context(context, events);
@@ -65,8 +55,8 @@ export class Worker {
         //
         for (let event of baseCtx.iterateEvents()) {
             let prevTimestamp = baseCtx.getTimestamp()
-            this.processSingle(baseCtx, event);
             baseCtx.decreaseTimers(prevTimestamp);
+            this.processSingle(baseCtx, event);
         }
 
         //
@@ -89,6 +79,12 @@ export class Worker {
             f.call(api);
         }
 
+        let prevTimestamp = baseCtx.getTimestamp();
+        baseCtx.setTimestamp(timestamp);
+        baseCtx.decreaseTimers(prevTimestamp);
+        workingCtx.setTimestamp(timestamp);
+        workingCtx.decreaseTimers(prevTimestamp);
+
         //
         // copy timers to base
         //
@@ -106,10 +102,9 @@ export class Worker {
         });
 
         process.on('message', (message: WorkerMessage) => {
-            let context = message.context;
-            let events: dispatcher.Event[] = message.events;
+            let { timestamp, context, events } = message;
 
-            let result = this.process(context, events);
+            let result = this.process(timestamp, context, events);
 
             if (process && process.send) {
                 process.send(result);
@@ -119,47 +114,12 @@ export class Worker {
         console.log(`Worker started: ${process.pid}`);
     }
 
-    private resolveCallback(callback: config.Callback | string): model.Callback | null {
-        if (typeof callback === 'string') {
-            let [modelName, methodName] = callback.split('.');
-            callback = { model: modelName, callback: methodName };
-        }
-
-        let model = this.models[callback.model]
-        return model ? model.resolveCallback(callback.callback) : null;
+    private resolveCallback(callback: config.Callback): model.Callback | null {
+        return this.model[callback];
     }
 
     private processSingle(context: Context, event: dispatcher.Event): number {
         this.dispatcher.dispatch(event, context);
         return context.setTimestamp(event.timestamp);
     }
-}
-
-function loadModels(dir: string): model.ModelInterface[] {
-    const extensions = Object.keys(require.extensions).join('|');
-    const modelFiles = glob.sync(`${dir}/**/*+(${extensions})`);
-
-    return modelFiles.map((f) => {
-        let modelSrc = require(f);
-
-        if (typeof modelSrc == 'function') {
-            modelSrc = modelSrc();
-        }
-
-        return new model.Model(modelSrc.name, modelSrc.description, [f], modelSrc.callbacks)
-    });
-}
-
-function indexModels(models: model.ModelInterface[]): IndexedModels {
-    let seed: IndexedModels = {};
-
-    return models.reduce((sum, model) => {
-        let name = model.name;
-        if (!(name in sum)) {
-            sum[name] = model;
-        } else {
-            merge(sum[name], model);
-        }
-        return sum;
-    }, seed);
 }

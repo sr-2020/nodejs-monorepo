@@ -1,12 +1,23 @@
 module.exports = () => {
     return {
-        name: 'SomeModel',
-        description: '',
+        add(data) {
+            let {value} = data;
+            this.update('value', (oldValue) => oldValue + Number(value));
+        },
 
-        callbacks: {
-            bang(s) {
-                return s;
-            }
+        mul(data) {
+            let {value} = data;
+            this.update('value', (oldValue) => oldValue * Number(value));
+        },
+
+        concat(data) {
+            let {value} = data;
+            this.update(value, (oldValue) => '' + oldValue + value);
+        },
+
+        delayedConcat(data) {
+            let {value, delay} = data;
+            this.setTimer('value', 'concat', { operand, value });
         }
     };
 };

@@ -45,6 +45,7 @@ export class Context {
     get(name: FieldName): FieldValue {
         let value;
         if (typeof name == 'string') {
+            // XXX сплитить по '.'
             value = this.ctx.get(name);
         } else {
             value = this.ctx.getIn(name);
@@ -58,6 +59,8 @@ export class Context {
     }
 
     set(name: FieldName, value: FieldValue): this {
+        // не модифицировать напрямую id, timestamp, timers, modifiers
+
         value = I.fromJS(value);
 
         if (typeof name == 'string') {
@@ -164,7 +167,7 @@ export class Context {
 
     private timerEvent(timer: Timer): dispatcher.Event {
         return {
-            name: timer.event,
+            eventType: timer.event,
             timestamp: this.getTimestamp() + timer.seconds * 1000,
             data: timer.data
         };

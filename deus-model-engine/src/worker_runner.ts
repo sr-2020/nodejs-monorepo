@@ -16,9 +16,7 @@ if (!(cli.input.length && cli.flags.c)) {
 const MODELS_PATH = cli.input[0];
 const CONFIG_PATH = cli.flags.c;
 
-const CONFIG = require(CONFIG_PATH);
-
 let worker = Worker
     .load(MODELS_PATH)
-    .configure(config.Config.parse(CONFIG))
+    .configure(config.Config.load(CONFIG_PATH))
     .listen()
