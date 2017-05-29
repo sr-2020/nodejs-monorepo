@@ -17,7 +17,7 @@ module.exports = () => {
 
         delayedConcat(data) {
             let {value, delay} = data;
-            this.setTimer('value', 'concat', { operand, value });
+            this.setTimer('value', 'concat', { value });
         },
 
         _view(model, viewModel) {
