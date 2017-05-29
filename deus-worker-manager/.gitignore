@@ -1,3 +1,4 @@
 /.projectile
 build/
 node_modules/
+/config.js

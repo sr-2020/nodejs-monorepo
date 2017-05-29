@@ -4,7 +4,8 @@
   "description": "DeusEx model workers manager",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --config nodemon.json"
+    "dev": "nodemon --config nodemon.json",
+    "db": "ts-node src/db/sync.ts -c ../../config.js"
   },
   "author": "",
   "license": "Apache2",
