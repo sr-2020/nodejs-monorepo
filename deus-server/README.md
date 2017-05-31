@@ -6,6 +6,10 @@ Steps to set up development environment:
   git clone https://github.com/sth-larp/deus-server.git
   npm install
 
-To run tests (should automatically re-run on changes)
+To run tests:
 
   npm test
+
+To run test in watch (auto-rerun on changes) mode:
+
+  npm test -- --watch
