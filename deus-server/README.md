@@ -1,4 +1,5 @@
 DeusEx LARP Webserver API
+[![Build Status](https://travis-ci.org/sth-larp/deus-server.svg?branch=master)](https://travis-ci.org/sth-larp/deus-server)
 
 Steps to set up development environment:
   
