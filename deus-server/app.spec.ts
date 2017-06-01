@@ -1,5 +1,7 @@
 import * as http from 'http'
 import * as request from 'request'
+import * as PouchDB from 'pouchdb';
+PouchDB.plugin(require('pouchdb-adapter-memory'));
 
 import { expect } from 'chai';
 import 'mocha';
@@ -11,8 +13,13 @@ const address = 'http://localhost:' + port;
 
 describe('Express app', () => {
   let app: App;
+  let eventsDb: PouchDB.Database<{}>;
+  let viewModel: PouchDB.Database<{}>;
+  var db = new PouchDB('dbname', {adapter: 'memory'});
   beforeEach(() => {
-    app = new App;
+    eventsDb = new PouchDB('events', {adapter: 'memory'});
+    viewModel = new PouchDB('viewmodel', {adapter: 'memory'});
+    app = new App(eventsDb, viewModel);
     app.listen(port);
   })
   afterEach(() => {

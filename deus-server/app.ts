@@ -17,6 +17,13 @@ class App {
       const currentTimestamp = new Date().valueOf();
       res.send({ time: currentTimestamp });
     })
+
+    this.app.get('/viewmodel/:id', (req, res) => {
+      const id: string = req.params.id;
+      this.viewmodelDb.get(id)
+        .then(() => {
+        });
+    })
   }
 
   listen(port: number) {
