@@ -6,7 +6,8 @@ class App {
   private app: express.Express = express();
   private server: http.Server;
 
-  constructor() {
+  constructor(private eventsDb: PouchDB.Database<{}>,
+    private viewmodelDb: PouchDB.Database<{}>) {
     this.app.use((req, res, next) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -14,7 +15,7 @@ class App {
     });
     this.app.get('/time', (req, res) => {
       const currentTimestamp = new Date().valueOf();
-      res.send({time: currentTimestamp});
+      res.send({ time: currentTimestamp });
     })
   }
 
