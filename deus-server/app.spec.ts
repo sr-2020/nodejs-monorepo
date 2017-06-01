@@ -4,18 +4,19 @@ import * as request from 'request'
 import { expect } from 'chai';
 import 'mocha';
 
-import app from './app'
+import App from './app'
 
 const port = 3000;
 const address = 'http://localhost:' + port;
 
 describe('Express app', () => {
-  let server: http.Server;
+  let app: App;
   beforeEach(() => {
-    server = app.listen(port);
+    app = new App;
+    app.listen(port);
   })
-  afterEach(done => {
-    server.close(() => done());
+  afterEach(() => {
+    app.stop();
   })
 
   it('/time', done => {
