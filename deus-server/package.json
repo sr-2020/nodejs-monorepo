@@ -31,7 +31,6 @@
     "@types/pouchdb": "^6.1.0",
     "@types/request": "0.0.43",
     "chai": "^4.0.0",
-    "mocha": "^3.4.2",
-    "ts-node": "^3.0.4"
+    "mocha": "^3.4.2"
   }
 }
