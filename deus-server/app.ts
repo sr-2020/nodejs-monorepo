@@ -14,16 +14,27 @@ class App {
       next();
     });
     this.app.get('/time', (req, res) => {
-      const currentTimestamp = new Date().valueOf();
-      res.send({ time: currentTimestamp });
+      res.send({ serverTime: this.currentTimeMs() });
     })
 
     this.app.get('/viewmodel/:id', (req, res) => {
       const id: string = req.params.id;
       this.viewmodelDb.get(id)
-        .then(() => {
-        });
+        .then(doc => {
+          delete doc._id;
+          delete doc._rev;
+          res.send({
+            serverTime: this.currentTimeMs(),
+            id: id,
+            viewModel: doc
+          })
+        })
+        .catch(err => res.status(404).send("Character with such id is not found"));
     })
+  }
+
+  currentTimeMs(): number {
+    return new Date().valueOf();
   }
 
   listen(port: number) {
