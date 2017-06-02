@@ -14,7 +14,7 @@ class App {
       next();
     });
     this.app.get('/time', (req, res) => {
-      res.send({ serverTime: this.currentTimeMs() });
+      res.send({ serverTime: this.currentTimestamp() });
     })
 
     this.app.get('/viewmodel/:id', (req, res) => {
@@ -24,7 +24,7 @@ class App {
           delete doc._id;
           delete doc._rev;
           res.send({
-            serverTime: this.currentTimeMs(),
+            serverTime: this.currentTimestamp(),
             id: id,
             viewModel: doc
           })
@@ -33,8 +33,12 @@ class App {
     })
   }
 
-  currentTimeMs(): number {
+  currentTimestamp(): number {
     return new Date().valueOf();
+  }
+
+  latestAcceptedEventTimestamp(): number {
+    return 0;
   }
 
   listen(port: number) {
