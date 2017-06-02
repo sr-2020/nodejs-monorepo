@@ -41,7 +41,7 @@ describe('Express app', () => {
     });
   });
 
-  describe('/time', () => {
+  describe('/viewmodel', () => {
     beforeEach(done => {
       viewModelDb.put({_id: "1234",  data: {foo: 'bar'}}, done);
     })
