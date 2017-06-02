@@ -14,21 +14,23 @@ const address = 'http://localhost:' + port;
 describe('Express app', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{}>;
-  let viewModel: PouchDB.Database<{data: any}>;
+  let viewModelDb: PouchDB.Database<{data: any}>;
   var db = new PouchDB('dbname', {adapter: 'memory'});
   beforeEach(() => {
     eventsDb = new PouchDB('events', {adapter: 'memory'});
-    viewModel = new PouchDB('viewmodel', {adapter: 'memory'});
-    app = new App(eventsDb, viewModel);
+    viewModelDb = new PouchDB('viewmodel', {adapter: 'memory'});
+    app = new App(eventsDb, viewModelDb);
     app.listen(port);
   })
   afterEach(() => {
     app.stop();
+    viewModelDb.destroy();
+    eventsDb.destroy();
   })
 
   describe('/time', () => {
     it('Returns approximately current time', done => {
-      request(address + '/time', (error, response, body) => {
+      request.get(address + '/time', (error, response, body) => {
         expect(error).to.be.null;
         expect(response.statusCode).to.eq(200)
         expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -41,16 +43,16 @@ describe('Express app', () => {
 
   describe('/time', () => {
     beforeEach(done => {
-      viewModel.put({_id: "1234",  data: {foo: 'bar'}}, done);
+      viewModelDb.put({_id: "1234",  data: {foo: 'bar'}}, done);
     })
     afterEach(done => {
-      viewModel.get("1234").then(
-        (doc: any) => viewModel.remove(doc, done)
+      viewModelDb.get("1234").then(
+        (doc: any) => viewModelDb.remove(doc, done)
       );
     })    
 
     it('Returns viewmodel of existing character', done => {
-      request(address + '/viewmodel/1234', (error, response, body) => {
+      request.get(address + '/viewmodel/1234', (error, response, body) => {
         expect(error).to.be.null;
         expect(response.statusCode).to.eq(200)
         expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -63,7 +65,7 @@ describe('Express app', () => {
     });
 
     it('Returns 404 for non-existing character', done => {
-      request(address + '/viewmodel/5555', (error, response, body) => {
+      request.get(address + '/viewmodel/5555', (error, response, body) => {
         expect(response.statusCode).to.eq(404)
         done();
       });
