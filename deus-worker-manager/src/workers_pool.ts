@@ -1,10 +1,12 @@
 import * as genericPool from 'generic-pool';
+
+import Logger from './logger';
 import Worker from './worker';
 
 export default class WorkersPool {
     private pool: genericPool.Pool<Worker>;
 
-    constructor(private workerModule: string, private args?: string[], private opts?: genericPool.Options) {
+    constructor(private logger: Logger, private workerModule: string, private args?: string[], private opts?: genericPool.Options) {
         this.initPool();
     }
 
@@ -18,8 +20,8 @@ export default class WorkersPool {
     }
 
     private createWorker = () => {
-        console.log('>>> WorkersPool::createWorker');
-        return new Worker(this.workerModule, this.args).up();
+        this.logger.debug('manager', 'WorkersPool::createWorker');
+        return new Worker(this.logger, this.workerModule, this.args).up();
     }
 
     private destroyWorker = (worker: Worker) => {
@@ -39,7 +41,7 @@ export default class WorkersPool {
         try {
             await handler(worker);
         } catch (e) {
-            console.log('>>> Error:', e);
+            this.logger.error('manager', 'Error:', e);
         } finally {
             return this.release(worker);
         }

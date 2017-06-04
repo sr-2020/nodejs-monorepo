@@ -1,21 +1,23 @@
 import { EventEmitter } from 'events';
 import * as ChildProcess from 'child_process';
 
+import Logger from './logger';
 import { Event } from './events_source';
 
 export default class Worker extends EventEmitter {
     private _child: ChildProcess.ChildProcess | null;
 
-    constructor(private workerModule: string, private args?: string[]) {
+    constructor(private logger: Logger, private workerModule: string, private args?: string[]) {
         super();
     }
 
     get child() { return this._child; }
 
     up(): this {
-        console.log(">>> Worker::up", this.workerModule);
+        this.logger.info('manager', "Worker::up", this.workerModule);
         let workerModule = require.resolve(this.workerModule);
         this._child = ChildProcess.fork(workerModule, this.args, { silent: false });
+        this._child.on('message', this.handleLogMessage);
         return this;
     }
 
@@ -51,12 +53,36 @@ export default class Worker extends EventEmitter {
         return this;
     }
 
+    handleLogMessage = (message: any) => {
+        if (message.type == 'log') {
+            this.logger.log(message.source, message.level, message.msg, ...message.params);
+        }
+    }
+
     async process(syncEvent: Event, model: any, events: Event[]) {
         return new Promise((resolve, reject) => {
             if (!this._child) return reject(new Error('No child process'))
 
-            this._child.once('message', (result) => resolve(result));
-            this._child.once('error', (err) => reject(err));
+            const onResult = (message: any) => {
+                if (message.type == 'result') {
+                    if (this._child) {
+                        this._child.removeListener('message', onResult);
+                        this._child.removeListener('error', onError);
+                    }
+                    resolve(message.data);
+                }
+            }
+
+            const onError = (err: any) => {
+                if (this._child) {
+                    this._child.removeListener('message', onResult);
+                    this._child.removeListener('error', onError);
+                }
+                reject(err);
+            }
+
+            this._child.on('message', onResult);
+            this._child.on('error', onError);
 
             this._child.send({ timestamp: syncEvent.timestamp, context: model, events });
 

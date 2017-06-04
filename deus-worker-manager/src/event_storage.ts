@@ -15,13 +15,9 @@ export default class EventStorage {
             inclusive_end: true
         };
 
-        console.log('>>> range');
-
         let result: any = await new Promise((resolve, reject) => {
             this.db.view('character', 'by-character-id', params, stdCallback(resolve, reject));
         });
-
-        console.log('>>> range', result);
 
         return result.rows.map((r: any) => r.doc);
     }

@@ -1,10 +1,12 @@
 import { Nano, NanoDatabase } from 'nano';
 import nano = require('nano');
 
+import { Config } from './config';
 import EventsSource, { Event } from './events_source';
 import ModelStorage from './model_storage';
 import EventStorage from './event_storage';
 import WorkersPool from './workers_pool';
+import Logger from './logger';
 import Worker from './worker';
 
 type SyncedModels = {
@@ -19,25 +21,26 @@ export default class Manager {
     private viewModelStorage: ModelStorage;
     private eventStorage: EventStorage;
     private pool: WorkersPool;
+    private logger: Logger;
     private syncedModels: SyncedModels = {};
 
-    constructor(private config: any) {
+    constructor(private config: Config) {
         this.nano = nano(config.db.url);
         this.eventsSource = new EventsSource(this.nano, config.db.events);
 
+        this.logger = new Logger(this.config);
         this.modelStorage = new ModelStorage(this.nano.use(config.db.models));
         this.workingModelStorage = new ModelStorage(this.nano.use(config.db.workingModels));
         this.viewModelStorage = new ModelStorage(this.nano.use(config.db.viewModels));
         this.eventStorage = new EventStorage(this.nano.use(config.db.events));
-
-        this.pool = new WorkersPool(config.pool.workerModule, config.pool.workerArgs, config.pool.options);
+        this.pool = new WorkersPool(this.logger, config.pool.workerModule, config.pool.workerArgs, config.pool.options);
 
         this.eventsSource.refreshModelEvents.subscribe(this.refreshModel);
         this.eventsSource.follow();
     }
 
     refreshModel = async (event: Event) => {
-        console.log('>>>', event);
+        this.logger.info('manager', 'refresh event for %s', event.characterId, event);
 
         const characterId = event.characterId;
 
@@ -51,13 +54,12 @@ export default class Manager {
     }
 
     processModel(characterId: string) {
-        console.log(">>> processModel", characterId);
+        this.logger.debug('manager', 'process model %s', characterId);
 
         return async (worker: Worker) => {
             const syncEvent = this.syncedModels[characterId];
-            console.log('>>> syncEvent = ', syncEvent);
             if (!syncEvent) {
-                // warn!
+                this.logger.warn('manager', 'Sync event lost', { characterId })
                 return;
             }
 
@@ -66,11 +68,11 @@ export default class Manager {
             const events = (await this.eventStorage.range(characterId, model.timestamp + 1, syncEvent.timestamp))
                 .filter((event: Event) => event.eventType && event.eventType[0] != '_');
 
-            console.log('>>> events = ', events);
+            this.logger.debug('manager', 'events = %j', events);
 
             const result: any = await worker.process(syncEvent, model, events);
 
-            console.log('>>> result =', result);
+            this.logger.debug('manager', 'result = %j', result);
 
             let [baseModel, workingModel, viewModel] = result;
             delete workingModel._rev;
