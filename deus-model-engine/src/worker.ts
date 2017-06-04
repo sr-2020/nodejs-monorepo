@@ -1,5 +1,7 @@
 import { clone, assign } from 'lodash'
+import { inspect } from 'util';
 
+import Logger from './logger';
 import { requireDir } from './utils';
 import * as config from './config';
 import * as model from './model';
@@ -28,12 +30,12 @@ export class Worker {
 
     static load(dir: string): Worker {
         let model = loadModels(dir);
-        console.log('<<<', model);
+        Logger.debug('engine', 'model loaded: %s', inspect(model));
         return new Worker(model);
     }
 
     configure(config: config.ConfigInterface): Worker {
-        console.log('<<<', config);
+        Logger.debug('engine', 'config loaded: %j', config);
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 
@@ -46,7 +48,7 @@ export class Worker {
     }
 
     process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): [WorkerContext, WorkerContext] {
-        console.log("<<<", events);
+        Logger.debug('engine', 'processing', events);
         if (!this.dispatcher) return [context, context];
 
         let baseCtx = new Context(context, events);
@@ -110,11 +112,11 @@ export class Worker {
             let result = this.process(timestamp, context, events);
 
             if (process && process.send) {
-                process.send(result);
+                process.send({ type: 'result', data: result });
             }
         });
 
-        console.log(`Worker started: ${process.pid}`);
+        Logger.info('engine', 'Worker started: %s', process.pid);
     }
 
     private resolveCallback(callback: config.Callback): model.Callback | null {
