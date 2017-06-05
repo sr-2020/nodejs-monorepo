@@ -7,7 +7,7 @@ import ModelStorage from './model_storage';
 import EventStorage from './event_storage';
 import WorkersPool from './workers_pool';
 import Logger from './logger';
-import Worker from './worker';
+import Worker, { EngineResult } from './worker';
 
 type SyncedModels = {
     [characterId: string]: Event
@@ -70,11 +70,11 @@ export default class Manager {
 
             this.logger.debug('manager', 'events = %j', events);
 
-            const result: any = await worker.process(syncEvent, model, events);
+            const result: EngineResult = await worker.process(syncEvent, model, events);
 
             this.logger.debug('manager', 'result = %j', result);
 
-            let [baseModel, workingModel, viewModel] = result;
+            let { baseModel, workingModel, viewModel } = result;
             delete workingModel._rev;
             delete viewModel._rev;
 

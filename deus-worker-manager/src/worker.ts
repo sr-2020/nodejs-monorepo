@@ -4,6 +4,12 @@ import * as ChildProcess from 'child_process';
 import Logger from './logger';
 import { Event } from './events_source';
 
+export type EngineResult = {
+    baseModel: any,
+    workingModel: any,
+    viewModel: any
+}
+
 export default class Worker extends EventEmitter {
     private _child: ChildProcess.ChildProcess | null;
 
@@ -59,8 +65,8 @@ export default class Worker extends EventEmitter {
         }
     }
 
-    async process(syncEvent: Event, model: any, events: Event[]) {
-        return new Promise((resolve, reject) => {
+    async process(syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
+        return new Promise<EngineResult>((resolve, reject) => {
             if (!this._child) return reject(new Error('No child process'))
 
             const onResult = (message: any) => {
@@ -69,7 +75,10 @@ export default class Worker extends EventEmitter {
                         this._child.removeListener('message', onResult);
                         this._child.removeListener('error', onError);
                     }
-                    resolve(message.data);
+
+                    let { baseModel, workingModel, viewModel } = message;
+
+                    resolve({ baseModel, workingModel, viewModel });
                 }
             }
 
