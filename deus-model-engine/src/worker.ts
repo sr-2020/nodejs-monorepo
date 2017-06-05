@@ -20,6 +20,12 @@ export type WorkerContext = {
     [key: string]: any
 }
 
+export type EngineResult = {
+    baseModel: any,
+    workingModel: any,
+    viewModel: any
+}
+
 export class Worker {
     private config: config.ConfigInterface
     private dispatcher: dispatcher.DispatcherInterface
@@ -47,9 +53,8 @@ export class Worker {
         return this;
     }
 
-    process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): [WorkerContext, WorkerContext] {
+    process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): EngineResult {
         Logger.debug('engine', 'processing', events);
-        if (!this.dispatcher) return [context, context];
 
         let baseCtx = new Context(context, events);
 
@@ -97,7 +102,7 @@ export class Worker {
 
         let viewModel = this.runViewModels(workingCtxValue);
 
-        return [baseCtxValue, workingCtxValue, viewModel];
+        return { baseModel: baseCtxValue, workingModel: workingCtxValue, viewModel };
     }
 
     listen() {
@@ -112,7 +117,7 @@ export class Worker {
             let result = this.process(timestamp, context, events);
 
             if (process && process.send) {
-                process.send({ type: 'result', data: result });
+                process.send({ type: 'result', ...result });
             }
         });
 

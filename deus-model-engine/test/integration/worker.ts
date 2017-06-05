@@ -63,7 +63,7 @@ describe('Worker', () => {
 
         let result = worker.process(timestamp, context, events)
 
-        expect(result[0]).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
+        expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
     });
 
     it("Should process some timers", () => {
@@ -80,6 +80,6 @@ describe('Worker', () => {
 
         let result = worker.process(timestamp, context, events);
 
-        expect(result[0]).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: [] });
+        expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: [] });
     })
 });
