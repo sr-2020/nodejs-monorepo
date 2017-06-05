@@ -1,3 +1,24 @@
+function logger(label) {
+    let cfg =  {
+        console: {
+            level: 'debug',
+            colorize: true
+        },
+
+        file: {
+            level: 'info',
+            filename: __dirname + '/log/operation.log'
+        }
+    };
+
+    if (label) {
+        cfg.console.label = label;
+        cfg.file.label = label;
+    }
+
+    return cfg;
+}
+
 module.exports = {
     db: {
         url: "http://admin:admin@localhost:5984/",
@@ -14,5 +35,12 @@ module.exports = {
             max: 2,
             min: 2
         }
+    },
+
+    logger: {
+        default: logger(),
+        manager: logger('manager'),
+        engine: logger('engine'),
+        model: logger('model')
     }
 };
