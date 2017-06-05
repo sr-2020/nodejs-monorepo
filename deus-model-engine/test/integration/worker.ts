@@ -64,6 +64,7 @@ describe('Worker', () => {
         let result = worker.process(timestamp, context, events)
 
         expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
+        expect(result.workingModel.timestamp).to.equal(timestamp);
     });
 
     it("Should process some timers", () => {
@@ -73,7 +74,7 @@ describe('Worker', () => {
 
         const events = [
             { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 10000 },
-            { eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3 }, timestamp: timestamp - 10000 },
+            { eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 10000 },
             { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 9000 },
             { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
@@ -81,5 +82,6 @@ describe('Worker', () => {
         let result = worker.process(timestamp, context, events);
 
         expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: [] });
+        expect(result.workingModel.timestamp).to.equal(timestamp);
     })
 });

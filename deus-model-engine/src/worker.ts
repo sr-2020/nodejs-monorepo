@@ -30,9 +30,7 @@ export class Worker {
     private config: config.ConfigInterface
     private dispatcher: dispatcher.DispatcherInterface
 
-    constructor(private model: model.Model) {
-        this.processSingle = this.processSingle.bind(this)
-    }
+    constructor(private model: model.Model) { }
 
     static load(dir: string): Worker {
         let model = loadModels(dir);
@@ -57,48 +55,33 @@ export class Worker {
         Logger.debug('engine', 'processing', events);
 
         let baseCtx = new Context(context, events);
+        let workingCtx = baseCtx.clone();
 
         //
-        // run instant effects
+        // main loop
         //
         for (let event of baseCtx.iterateEvents()) {
-            let prevTimestamp = baseCtx.getTimestamp()
+            Logger.debug('engine', 'run event', event);
+            let prevTimestamp = baseCtx.timestamp;
             baseCtx.decreaseTimers(prevTimestamp);
-            this.processSingle(baseCtx, event);
+            this.runEvent(baseCtx, event);
+
+            workingCtx = this.runModifiers(baseCtx);
+            baseCtx.timers = workingCtx.timers;
+            baseCtx.events = workingCtx.events;
         }
 
         //
-        // apply modifiers
+        // set timestamp
         //
-        let workingCtx = baseCtx.clone();
-        let api = ModelApiFactory(workingCtx);
-
-        // Functional effects first
-        for (let effect of workingCtx.iterateEnabledFunctionalEffects()) {
-            let f = this.resolveCallback(effect.handler);
-            if (!f) continue;
-            f.call(api);
-        }
-
-        // Then Normal effects
-        for (let effect of workingCtx.iterateEnabledNormalEffects()) {
-            let f = this.resolveCallback(effect.handler);
-            if (!f) continue;
-            f.call(api);
-        }
-
-        let prevTimestamp = baseCtx.getTimestamp();
-        baseCtx.setTimestamp(timestamp);
+        let prevTimestamp = baseCtx.timestamp;
+        baseCtx.timestamp = timestamp;
         baseCtx.decreaseTimers(prevTimestamp);
-        workingCtx.setTimestamp(timestamp);
-        workingCtx.decreaseTimers(prevTimestamp);
+        workingCtx.timestamp = timestamp;
 
-        //
-        // copy timers to base
-        //
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
-        baseCtxValue.timers = clone(workingCtxValue.timers);
+        // baseCtxValue.timers = clone(workingCtxValue.timers);
 
         let viewModel = this.runViewModels(workingCtxValue);
 
@@ -128,9 +111,31 @@ export class Worker {
         return this.model.callbacks[callback];
     }
 
-    private processSingle(context: Context, event: dispatcher.Event): number {
+    private runEvent(context: Context, event: dispatcher.Event): number {
         this.dispatcher.dispatch(event, context);
-        return context.setTimestamp(event.timestamp);
+        return context.timestamp = event.timestamp;
+    }
+
+    private runModifiers(baseCtx: Context): Context {
+        let timestamp = baseCtx.timestamp;
+        let workingCtx = baseCtx.clone();
+        let api = ModelApiFactory(workingCtx);
+
+        // Functional effects first
+        for (let effect of workingCtx.iterateEnabledFunctionalEffects()) {
+            let f = this.resolveCallback(effect.handler);
+            if (!f) continue;
+            f.call(api);
+        }
+
+        // Then Normal effects
+        for (let effect of workingCtx.iterateEnabledNormalEffects()) {
+            let f = this.resolveCallback(effect.handler);
+            if (!f) continue;
+            f.call(api);
+        }
+
+        return workingCtx;
     }
 
     private runViewModels(data: any) {

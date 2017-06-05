@@ -2,7 +2,7 @@ import * as I from 'immutable';
 import * as dispatcher from './dispatcher';
 
 export type Timer = {
-    seconds: number,
+    miliseconds: number,
     event: string,
     data: any
 }
@@ -21,25 +21,52 @@ export type Timestamp = number;
 
 export class Context {
     private ctx: I.Map<string, any>;
-    private events: I.List<dispatcher.Event>;
-    private timers: I.List<Timer> = I.List() as I.List<Timer>;
+    private _events: I.List<dispatcher.Event>;
+    private _timers: I.List<Timer> = I.List() as I.List<Timer>;
 
     constructor(contextSrc: any, events: dispatcher.Event[] | I.List<dispatcher.Event>) {
         this.ctx = I.fromJS(contextSrc)
 
-        this.events = I.List(events).sort((a: dispatcher.Event, b: dispatcher.Event) => {
-            return a.timestamp - b.timestamp;
-        }) as I.List<dispatcher.Event>;
+        this._events = I.List(events) as I.List<dispatcher.Event>;
+        this.sortEvents();
 
         if (this.ctx.has('timers')) {
-            this.timers = this.ctx.get('timers').map((t: any) => t.toJS());
+            this._timers = this.ctx.get('timers').map((t: any) => t.toJS());
             this.sortTimers();
             this.ctx = this.ctx.remove('timers');
         }
     }
 
+    get events() {
+        return this._events;
+    }
+
+    set events(value: I.List<dispatcher.Event> | dispatcher.Event[]) {
+        this._events = I.List(value) as I.List<dispatcher.Event>;
+        this.sortEvents();
+    }
+
+    get timers() {
+        return this._timers;
+    }
+
+    set timers(value: I.List<Timer> | Timer[]) {
+        this._timers = I.List(value) as I.List<Timer>;
+        this.sortTimers();
+    }
+
+    get timestamp() {
+        return this.ctx.get('timestamp');
+    }
+
+    set timestamp(value: number) {
+        this.ctx = this.ctx.set('timestamp', value);
+    }
+
     clone(): Context {
-        return new Context(this.ctx, this.events);
+        const clone = new Context(this.ctx, this._events);
+        clone.timers = this.timers;
+        return clone;
     }
 
     get(name: FieldName): FieldValue {
@@ -78,30 +105,33 @@ export class Context {
         return this.set(name, value);
     }
 
-    getTimestamp(): Timestamp {
-        return this.ctx.get('timestamp');
-    }
-
-    setTimestamp(timestamp: Timestamp): Timestamp {
-        this.ctx = this.ctx.set('timestamp', timestamp);
-        return timestamp;
-    }
-
-    setTimer(seconds: number, event: string, data: any) {
-        this.timers = this.timers.push({ seconds, event, data });
+    setTimer(miliseconds: number, event: string, data: any) {
+        this._timers = this._timers.push({ miliseconds, event, data });
         this.sortTimers();
         return this;
     }
 
-    nextEvent(): dispatcher.Event {
-        let firstTimer = this.timers.first();
-        let firstEvent = this.events.first();
+    sendEvent(characterId: number | null, event: string, data: any) {
+        if (!characterId) {
+            this._events.unshift({
+                eventType: event,
+                timestamp: this.timestamp,
+                data
+            });
+        } else {
+            // XXX send outside
+        }
+    }
 
-        if (firstTimer && this.getTimestamp() + firstTimer.seconds * 1000 <= firstEvent.timestamp) {
-            this.timers = this.timers.shift();
+    nextEvent(): dispatcher.Event {
+        let firstTimer = this._timers.first();
+        let firstEvent = this._events.first();
+
+        if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
+            this._timers = this._timers.shift();
             return this.timerEvent(firstTimer);
         } else {
-            this.events = this.events.shift();
+            this._events = this._events.shift();
             return firstEvent;
         }
     }
@@ -143,12 +173,12 @@ export class Context {
     }
 
     decreaseTimers(prevTimestamp: number): void {
-        if (this.timers.isEmpty()) return;
+        if (this._timers.isEmpty()) return;
 
-        let diff = Math.floor((this.getTimestamp() - prevTimestamp) / 1000);
-        this.timers = this.timers.map((t: Timer): Timer => {
+        let diff = this.timestamp - prevTimestamp;
+        this._timers = this._timers.map((t: Timer): Timer => {
             return {
-                seconds: t.seconds - diff,
+                miliseconds: t.miliseconds - diff,
                 event: t.event,
                 data: t.data
             };
@@ -157,18 +187,24 @@ export class Context {
 
     valueOf() {
         let result = this.ctx.toJS();
-        result.timers = this.timers.toJS();
+        result.timers = this._timers.toJS();
         return result;
     }
 
     private sortTimers() {
-        this.timers = this.timers.sort((a, b) => a.seconds - b.seconds) as I.List<Timer>;
+        this._timers = this._timers.sort((a, b) => a.miliseconds - b.miliseconds) as I.List<Timer>;
+    }
+
+    private sortEvents() {
+        this._events = this._events.sort((a: dispatcher.Event, b: dispatcher.Event) => {
+            return a.timestamp - b.timestamp;
+        }) as I.List<dispatcher.Event>;
     }
 
     private timerEvent(timer: Timer): dispatcher.Event {
         return {
             eventType: timer.event,
-            timestamp: this.getTimestamp() + timer.seconds * 1000,
+            timestamp: this.timestamp + timer.miliseconds,
             data: timer.data
         };
     }

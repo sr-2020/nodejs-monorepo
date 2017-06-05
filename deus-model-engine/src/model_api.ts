@@ -29,8 +29,13 @@ export function ModelApiFactory(context: Context) {
             return this;
         }
 
-        setTimer(seconds: number, handle: string, data: any) {
-            context.setTimer(seconds, handle, data)
+        setTimer(miliseconds: number, handle: string, data: any) {
+            context.setTimer(miliseconds, handle, data)
+            return this;
+        }
+
+        sendEvent(characterId: number | null, event: string, data: any) {
+            context.sendEvent(characterId, event, data);
             return this;
         }
 
