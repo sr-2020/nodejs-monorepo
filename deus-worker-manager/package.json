@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "forever start --pidFile deus-worker-manager.pid build/worker_manager_runner.js -c '../config.js'",
     "stop": "forever stop build/worker_manager_runner.js",
-    "dev": "nodemon --config nodemon.json",
+    "dev": "NODE_ENV=develop nodemon --config nodemon.json",
     "db": "ts-node src/db/sync.ts -c ../../config.js"
   },
   "author": "",
