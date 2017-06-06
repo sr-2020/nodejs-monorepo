@@ -1,6 +1,8 @@
 import * as express from 'express'
 import * as http from 'http'
 import * as PouchDB from 'pouchdb';
+import bodyparser = require('body-parser')
+import * as Promise from 'promise'
 
 class App {
   private app: express.Express = express();
@@ -8,6 +10,7 @@ class App {
 
   constructor(private eventsDb: PouchDB.Database<{}>,
     private viewmodelDb: PouchDB.Database<{}>) {
+    this.app.use(bodyparser.json());
     this.app.use((req, res, next) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -31,6 +34,29 @@ class App {
         })
         .catch(err => res.status(404).send("Character with such id is not found"));
     })
+
+    this.app.post('/events/:id', (req, res) => {
+      const id: string = req.params.id;
+      const events = req.body.events;
+      if (!(events instanceof Array)) {
+        res.status(400).send("No events array in request");
+        return;
+      }
+
+      const filterTimestamp = this.latestAcceptedEventTimestamp();
+      events.filter((value: any) => value.timestamp > filterTimestamp);
+
+      events.reduce((p, event) => {
+        p.then(() => {
+          let eventWithCharId = event;
+          eventWithCharId.characterId = id;
+          return eventsDb.post(eventWithCharId);
+        });
+      }, Promise.resolve({}));
+
+      res.send({});
+    })
+
   }
 
   currentTimestamp(): number {
