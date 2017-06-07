@@ -19,7 +19,7 @@ describe('Express app', () => {
   beforeEach(() => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel', { adapter: 'memory' });
-    app = new App(eventsDb, viewModelDb, 300);
+    app = new App(eventsDb, viewModelDb, 20);
     app.listen(port);
   })
   beforeEach(done => {
