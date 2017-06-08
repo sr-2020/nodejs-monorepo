@@ -250,6 +250,22 @@ module.exports = () => {
             this.setTimer('value', 'concat', { value });
         },
 
+        disableImplant(data) {
+            let {id} = data;
+            this.modifiers.forEach(function(m) {
+                if (m.mID == id)
+                    m.enabled = false;
+            });
+        },
+
+        enableImplant(data) {
+            let {id} = data;
+            this.modifiers.forEach(function(m) {
+                if (m.mID == id)
+                    m.enabled = true;
+            });
+        },
+
         usePill(data) {
             this.debug('Processing usePill');
             this.debug(data);
