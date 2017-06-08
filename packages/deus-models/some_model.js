@@ -263,14 +263,13 @@ module.exports = () => {
         disableImplant(data) {
             let {id} = data;
             this.error('### disableImplant ', id)
-            this.update('modifiers[0].enabled', (oldValue) => false);
-            // this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
         },
 
         enableImplant(data) {
             let {id} = data;
             this.error('### enableImplant ', id)
-            // this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
         },
 
         usePill(data) {
