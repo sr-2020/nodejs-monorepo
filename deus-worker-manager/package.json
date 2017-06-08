@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "forever start --pidFile deus-worker-manager.pid build/worker_manager_runner.js -c '../config.js'",
-    "stop": "forever stop build/worker_manager_runner.js",
+    "prestart": "bin/update_models.sh",
+    "start": "bin/start.sh",
+    "stop": "bin/stop.sh",
     "dev": "NODE_ENV=develop nodemon --config nodemon.json",
     "db": "ts-node src/db/sync.ts -c ../../config.js"
   },

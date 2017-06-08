@@ -3,3 +3,5 @@ build/
 node_modules/
 /config.js
 /log/
+/models/
+/test.coffee
