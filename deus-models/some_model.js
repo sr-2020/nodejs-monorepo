@@ -250,8 +250,7 @@ module.exports = () => {
         },
         
         _view(model, viewModel) {
-            //viewModel = JSON.parse(JSON.stringify(getViewModel(model)));
-            viewModel = {_id: 10};
+            return JSON.parse(JSON.stringify(getViewModel(model)));
         }
     };
 };
