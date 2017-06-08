@@ -86,6 +86,7 @@ function getConditionsPage(model) {
         body: {
             title: "Ваши состояния",
             items: model.conditions.map(getConditionsPageItem),
+            filters: ["Физиология", "Психология"],
         },
     };
 }
@@ -120,11 +121,15 @@ function getImplantsPageItem(modifier) {
         details: {
             header: modifier.displayName,
             text: getImplantDetails(modifier),
-        },
-        action: {
-            text: getEnableActionText(modifier.enabled),
-            eventType: modifier.enabled ? "disableImplant" : "enableImplant",
-            data: modifier.mID,
+            actions: [
+                {
+                    text: getEnableActionText(modifier.enabled),
+                    eventType: modifier.enabled ? "disableImplant" : "enableImplant",
+                    data: {
+                        id: modifier.mID,
+                    },
+                },
+            ],
         },
     };
 }
