@@ -122,11 +122,15 @@ function getImplantsPageItem(modifier) {
             header: modifier.displayName,
             text: getImplantDetails(modifier),
         },
-        action: {
-            text: getEnableActionText(modifier.enabled),
-            eventType: modifier.enabled ? "disableImplant" : "enableImplant",
-            data: modifier.mID,
-        },
+        actions: [
+            {
+                text: getEnableActionText(modifier.enabled),
+                eventType: modifier.enabled ? "disableImplant" : "enableImplant",
+                data: {
+                    id: modifier.mID,
+                },
+            },
+        ],
     };
 }
 
