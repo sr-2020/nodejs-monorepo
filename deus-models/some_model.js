@@ -266,13 +266,13 @@ module.exports = () => {
         disableImplant(data) {
             let {id} = data;
             this.error('### disableImplant ', id)
-            this.update(modifiers, (oldModifiers) => setModifierEnabled(oldModifiers, od, false));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, od, false));
         },
 
         enableImplant(data) {
             let {id} = data;
             this.error('### enableImplant ', id)
-            this.update(modifiers, (oldModifiers) => setModifierEnabled(oldModifiers, od, true));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, od, true));
         },
 
         usePill(data) {
