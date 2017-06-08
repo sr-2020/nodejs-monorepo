@@ -19,7 +19,7 @@ module.exports = () => {
 
         delayedConcat(data) {
             let {operand, value, delay} = data;
-            this.setTimer(delay, 'concat', { operand, value });
+            this.setTimer('delayedConcat', delay, 'concat', { operand, value });
         }
     };
 };

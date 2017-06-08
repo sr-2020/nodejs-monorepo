@@ -8,23 +8,30 @@ export type EventHandler = {
 }
 
 export type SerializedConfig = {
-    events: EventHandler[]
+    events: EventHandler[],
+    [name: string]: any
 }
 
 export interface ConfigInterface {
     events: EventHandler[]
+    dictionaries: {
+        [name: string]: any
+    }
 }
 
 export class Config implements ConfigInterface {
-    events: EventHandler[]
-
-    constructor() {
-        this.events = [];
-    }
+    events: EventHandler[] = []
+    dictionaries: { [name: string]: any } = {}
 
     static parse(src: SerializedConfig): Config {
         let config = new Config();
+
         if ('events' in src) config.events = src.events;
+        for (let name in src) {
+            if (name == 'events') {
+                config.dictionaries[name] = src[name];
+            }
+        }
 
         return config;
     }

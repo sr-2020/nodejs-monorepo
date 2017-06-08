@@ -2,6 +2,7 @@ import * as I from 'immutable';
 import * as dispatcher from './dispatcher';
 
 export type Timer = {
+    name: string,
     miliseconds: number,
     event: string,
     data: any
@@ -20,20 +21,25 @@ export type FieldValue = any;
 export type Timestamp = number;
 
 export class Context {
-    private ctx: I.Map<string, any>;
+    private _ctx: I.Map<string, any>;
     private _events: I.List<dispatcher.Event>;
     private _timers: I.List<Timer> = I.List() as I.List<Timer>;
+    private _dictionaries: I.Map<string, any> = I.Map<string, any>();
 
-    constructor(contextSrc: any, events: dispatcher.Event[] | I.List<dispatcher.Event>) {
-        this.ctx = I.fromJS(contextSrc)
+    constructor(contextSrc: any, events: dispatcher.Event[] | I.List<dispatcher.Event>, dictionaries?: any) {
+        this._ctx = I.fromJS(contextSrc)
 
         this._events = I.List(events) as I.List<dispatcher.Event>;
         this.sortEvents();
 
-        if (this.ctx.has('timers')) {
-            this._timers = this.ctx.get('timers').map((t: any) => t.toJS());
+        if (this._ctx.has('timers')) {
+            this._timers = this._ctx.get('timers').map((t: any) => t.toJS());
             this.sortTimers();
-            this.ctx = this.ctx.remove('timers');
+            this._ctx = this._ctx.remove('timers');
+        }
+
+        if (dictionaries) {
+            this._dictionaries = I.fromJS(dictionaries);
         }
     }
 
@@ -56,15 +62,27 @@ export class Context {
     }
 
     get timestamp() {
-        return this.ctx.get('timestamp');
+        return this._ctx.get('timestamp');
     }
 
     set timestamp(value: number) {
-        this.ctx = this.ctx.set('timestamp', value);
+        this._ctx = this._ctx.set('timestamp', value);
+    }
+
+    get modifiers() {
+        return this._ctx.get('modifiers');
+    }
+
+    get effects() {
+        return this._ctx.get('modifiers').map((c: any) => c.get('effects')).flatten();
+    }
+
+    get conditions() {
+        return this._ctx.get('conditions');
     }
 
     clone(): Context {
-        const clone = new Context(this.ctx, this._events);
+        const clone = new Context(this._ctx, this._events, this._dictionaries);
         clone.timers = this.timers;
         return clone;
     }
@@ -72,29 +90,24 @@ export class Context {
     get(name: FieldName): FieldValue {
         let value;
         if (typeof name == 'string') {
-            // XXX сплитить по '.'
-            value = this.ctx.get(name);
-        } else {
-            value = this.ctx.getIn(name);
+            name = name.split('.');
         }
 
-        if (typeof value != 'undefined') {
-            return value.toJS ? value.toJS() : value;
-        } else {
-            return null;
-        }
+        return this._ctx.getIn(name);
     }
 
     set(name: FieldName, value: FieldValue): this {
-        // не модифицировать напрямую id, timestamp, timers, modifiers
+        if (typeof name == 'string') {
+            name = name.split('.');
+        }
+
+        if (['id', 'timestamps', 'timers', 'modifiers'].includes(name[0])) {
+            return this;
+        }
 
         value = I.fromJS(value);
 
-        if (typeof name == 'string') {
-            this.ctx = this.ctx.set(name, value);
-        } else {
-            this.ctx = this.ctx.setIn(name, value);
-        }
+        this._ctx = this._ctx.setIn(name, value);
 
         return this;
     }
@@ -105,13 +118,32 @@ export class Context {
         return this.set(name, value);
     }
 
-    setTimer(miliseconds: number, event: string, data: any) {
-        this._timers = this._timers.push({ miliseconds, event, data });
+    push(name: FieldName, value: FieldValue): this {
+        if (typeof name == 'string') {
+            name = name.split('.');
+        }
+
+        value = I.fromJS(value);
+
+        this._ctx.setIn(name, this._ctx.getIn(name, I.List()).push(value));
+        return this;
+    }
+
+    getDictionary(name: FieldName) {
+        if (typeof name == 'string') {
+            name = name.split('.');
+        }
+
+        return this._dictionaries.getIn(name);
+    }
+
+    setTimer(name: string, miliseconds: number, event: string, data: any) {
+        this._timers = this._timers.push({ name, miliseconds, event, data });
         this.sortTimers();
         return this;
     }
 
-    sendEvent(characterId: number | null, event: string, data: any) {
+    sendEvent(characterId: number | null, event: string, data: any /* delay: number */) {
         if (!characterId) {
             this._events.unshift({
                 eventType: event,
@@ -127,7 +159,7 @@ export class Context {
         let firstTimer = this._timers.first();
         let firstEvent = this._events.first();
 
-        if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
+        if (firstTimer && (!firstEvent || this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp)) {
             this._timers = this._timers.shift();
             return this.timerEvent(firstTimer);
         } else {
@@ -145,7 +177,7 @@ export class Context {
     }
 
     enabledEffectsByType(t: string): Effect[] {
-        return (this.ctx.get('modifiers', I.List()))
+        return (this._ctx.get('modifiers', I.List()))
             .filter((m: any) => Boolean(m.get('enabled')))
             .map((m: any) => m.get('effects'))
             .filter((e: any) => e.get('type') === t && Boolean(e.get('enabled')))
@@ -178,6 +210,7 @@ export class Context {
         let diff = this.timestamp - prevTimestamp;
         this._timers = this._timers.map((t: Timer): Timer => {
             return {
+                name: t.name,
                 miliseconds: t.miliseconds - diff,
                 event: t.event,
                 data: t.data
@@ -186,7 +219,7 @@ export class Context {
     }
 
     valueOf() {
-        let result = this.ctx.toJS();
+        let result = this._ctx.toJS();
         result.timers = this._timers.toJS();
         return result;
     }

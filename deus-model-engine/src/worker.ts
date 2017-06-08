@@ -54,7 +54,7 @@ export class Worker {
     process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): EngineResult {
         Logger.debug('engine', 'processing', events);
 
-        let baseCtx = new Context(context, events);
+        let baseCtx = new Context(context, events, this.config.dictionaries);
         let workingCtx = baseCtx.clone();
 
         //
