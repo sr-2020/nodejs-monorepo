@@ -263,7 +263,7 @@ module.exports = () => {
         disableImplant(data) {
             let {id} = data;
             this.error('### disableImplant ', id)
-            this.update('modifiers[0].enabled', false);
+            this.update('modifiers[0].enabled', (oldValue) => false);
             // this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
         },
 
