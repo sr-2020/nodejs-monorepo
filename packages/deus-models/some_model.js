@@ -226,7 +226,7 @@ function getViewModel(model) {
 }
 
 
-function setModifierEnabled(modifiers, mID, enabled) {
+function setModifierEnabled(modifiers, id, enabled) {
     index = modifiers.findIndex((m) => m.mID == id);
     if (index < 0) {
         return modifiers;
