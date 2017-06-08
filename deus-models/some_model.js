@@ -86,6 +86,7 @@ function getConditionsPage(model) {
         body: {
             title: "Ваши состояния",
             items: model.conditions.map(getConditionsPageItem),
+            filters: ["Физиология", "Психология"],
         },
     };
 }
