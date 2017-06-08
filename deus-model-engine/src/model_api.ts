@@ -69,11 +69,11 @@ export function ModelApiFactory(context: Context) {
             return toJS(modifier);
         }
 
-        getModifierByName(name: string) {
+        getModifiersByName(name: string) {
             return getModifiersBy((m: any) => m.get('name') == name);
         }
 
-        getModifierByClass(className: string) {
+        getModifiersByClass(className: string) {
             return getModifiersBy((m: any) => m.get('class') == className);
         }
 
