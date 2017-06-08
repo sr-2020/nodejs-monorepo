@@ -246,6 +246,8 @@ module.exports = () => {
         },
 
         usePill(data) {
+            this.debug('Processing usePill');
+            this.debug(data);
             this.update('age', (oldValue) => oldValue + 1);
         },
         
