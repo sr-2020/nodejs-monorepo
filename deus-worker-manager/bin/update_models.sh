@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d ./models ]; then
-    git clone git@github.com:sth-larp/deus-models.git models
+    git clone https://github.com/sth-larp/deus-models.git
 else
     cd ./models
     git fetch
