@@ -226,6 +226,19 @@ function getViewModel(model) {
 }
 
 
+function setModifierEnabled(modifiers, mID, enabled) {
+    this.error('### setModifierEnabled');
+    index = modifiers.findIndex((m) => m.mID == id);
+    if (index < 0) {
+        this.error('### modifier not found: %s', mID);
+        return modifiers;
+    }
+    this.error('### setting modifier %s enabled to %b', mID, enabled);
+    modifiers[index].enabled = enabled;
+    return modifiers;
+}
+
+
 module.exports = () => {
     return {
         add(data) {
@@ -248,6 +261,18 @@ module.exports = () => {
         delayedConcat(data) {
             let {value, delay} = data;
             this.setTimer('value', 'concat', { value });
+        },
+
+        disableImplant(data) {
+            let {id} = data;
+            this.error('### disableImplant ', id)
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, od, false));
+        },
+
+        enableImplant(data) {
+            let {id} = data;
+            this.error('### enableImplant ', id)
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, od, true));
         },
 
         usePill(data) {
