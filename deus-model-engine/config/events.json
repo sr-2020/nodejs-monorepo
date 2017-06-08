@@ -26,6 +26,13 @@
             "effects": [
                 "delayedConcat"
             ]
-        }
+        },
+        
+        {
+            "eventType": "usePill",
+            "effects": [
+                "usePill"
+            ]
+        }        
     ]
 }
