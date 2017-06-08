@@ -27,7 +27,7 @@ function getStartPage(model) {
                 },
                 {
                     text: "ID",
-                    value: model.characterId,
+                    value: model._id,
                 },
                 {
                     text: "Пол",
@@ -213,7 +213,7 @@ function getToolbar(model) {
 
 function getViewModel(model) {
     return {
-        _id: model.characterId,
+        _id: model._id,
         timestamp: model.timestamp,
         toolbar: getToolbar(model),
         pages: getPages(model),
