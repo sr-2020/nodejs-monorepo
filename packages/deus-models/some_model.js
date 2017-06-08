@@ -226,14 +226,11 @@ function getViewModel(model) {
 }
 
 
-function setModifierEnabled(thisModule, modifiers, mID, enabled) {
-    thisModule.error('### setModifierEnabled');
+function setModifierEnabled(modifiers, mID, enabled) {
     index = modifiers.findIndex((m) => m.mID == id);
     if (index < 0) {
-        thisModule.error('### modifier not found: %s', mID);
         return modifiers;
     }
-    thisModule.error('### setting modifier %s enabled to %b', mID, enabled);
     modifiers[index].enabled = enabled;
     return modifiers;
 }
@@ -266,13 +263,13 @@ module.exports = () => {
         disableImplant(data) {
             let {id} = data;
             this.error('### disableImplant ', id)
-            this.update('modifiers', (oldModifiers) => setModifierEnabled(this, oldModifiers, id, false));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
         },
 
         enableImplant(data) {
             let {id} = data;
             this.error('### enableImplant ', id)
-            this.update('modifiers', (oldModifiers) => setModifierEnabled(this, oldModifiers, id, true));
+            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
         },
 
         usePill(data) {
