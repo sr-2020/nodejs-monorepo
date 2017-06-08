@@ -74,7 +74,7 @@ function getConditionsPageItem(cond) {
         icon: cond.class,
         details: {
             header: cond.text,
-            text: cond.details,
+            text: cond.details || "",
         },
     };
 }
