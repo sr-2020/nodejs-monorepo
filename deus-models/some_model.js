@@ -245,6 +245,10 @@ module.exports = () => {
             this.setTimer('value', 'concat', { value });
         },
 
+        usePill(data) {
+            this.update('age', (oldValue) => oldValue + 1);
+        },
+        
         _view(model, viewModel) {
             viewModel = getViewModel(model);
         }
