@@ -96,7 +96,7 @@ function getEnabledText(enabled) {
 
 function getEnabledColor(enabled) {
     // TODO: Use magic color provided by the app
-    return enabled ? null : "#FF373F";
+    return enabled ? "" : "#FF373F";
 }
 
 function getEnableActionText(enabled) {
