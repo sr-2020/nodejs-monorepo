@@ -101,7 +101,10 @@ export class Context {
             name = name.split('.');
         }
 
-        if (['id', 'timestamps', 'timers', 'modifiers'].includes(name[0])) {
+        //TODO: исправить временный костыль. 
+        //Из списка убран 'modifiers' т.к. иначе невозможно обновить модификаторы. 
+        //Нужно править API
+        if (['id', 'timestamps', 'timers'].includes(name[0])) {
             return this;
         }
 
