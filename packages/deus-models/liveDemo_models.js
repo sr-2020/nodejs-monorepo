@@ -23,6 +23,8 @@ function loadImplant( name ){
 function loadIllness( id ){
     let illness = this.getCatalogObject("illnesses", id);
     this.debug(`Loaded illness ${illness.displayName}`);
+
+    return illness;
 }
 
 
@@ -138,6 +140,7 @@ module.exports = () => {
 
              if(data.id == "38530a0d-99fc-4866-9653-8aea46ffa47e"){
                 this.debug("Add 2 to HP pill!");
+
                 _changeMaxHP.apply(this, [{ hp: 2 }]);
             }
 
