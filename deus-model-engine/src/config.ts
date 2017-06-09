@@ -28,7 +28,7 @@ export class Config implements ConfigInterface {
 
         if ('events' in src) config.events = src.events;
         for (let name in src) {
-            if (name == 'events') {
+            if (name != 'events') {
                 config.dictionaries[name] = src[name];
             }
         }
