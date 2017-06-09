@@ -42,6 +42,15 @@ function setModifierState(id, enabled) {
     }    
 }
 
+//Показать все симптомы для всех болезней (без проверок)
+function illnessStageShow( data ){
+    for(let ill of getModifiersByClass("illness")){
+        for(let condID of ill.stages[ill.currentStage].conditions){
+            this.addCondition( this.getCatalogObject("conditions", condID) );
+        }
+    }
+}
+
 module.exports = () => {
     return {
 
@@ -122,6 +131,11 @@ module.exports = () => {
                  this.debug("Start illness pill!");
                  _changeMaxHP.apply(this, [{ hp: -10 }]); 
             }
-        }
+        },
+
+        /*
+            Общий эффект для показа симптомов болезней
+        */
+        illnessStageShow
     }
  }
