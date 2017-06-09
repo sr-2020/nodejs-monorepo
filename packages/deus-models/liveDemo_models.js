@@ -2,12 +2,15 @@
 // Модельный код для LiveDemo 10.06.2017
 //=====================================================
 
-function setMaxHP( oldHP, modHP ){
-    let hp = oldHP + modHP;
+function _changeMaxHP( data ){
+    let hp = this.get("hp") + data.hp;
+    let maxHp = this.get("maxHp") + data.hp;
     
     if(hp < 1) { hp = 1;  }
-
-    return hp;
+    if(maxHp < 1) { maxHp = 1;  }
+    
+    this.set("hp", hp);
+    this.set("maxHp", maxHp);
 }
 
 module.exports = () => {
@@ -22,14 +25,14 @@ module.exports = () => {
                 "hp" : xx  //xx целое число (может быть отрицательным)
             }
 
+            TODO: решить вопрос с вызовом эффектов друг из друга!
+
         */
         changeMaxHP(data){
             this.debug("====changeMaxHP()====");
             this.debug(`Change HP: ${data.hp}`);
 
-            let oldHP = this.get()
-
-            this.udpdate("hp", (oldHP) => setMaxHP(oldHP,data.hp) );
+            _changeMaxHP.apply(this, data);
         },
 
         /*
@@ -44,7 +47,7 @@ module.exports = () => {
             
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
                 this.debug("Add 2 to HP pill!");
-                changeMaxHP({ hp: 2 });                   
+                _changeMaxHP.apply(this, { hp: 2 });                   
             }
 
             if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
