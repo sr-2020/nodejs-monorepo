@@ -44,7 +44,7 @@ function setModifierState(id, enabled) {
 
 //Показать все симптомы для всех болезней (без проверок)
 function illnessStageShow( data ){
-    for(let ill of getModifiersByClass("illness")){
+    for(let ill of this.getModifiersByClass("illness")){
         for(let condID of ill.stages[ill.currentStage].conditions){
             this.addCondition( this.getCatalogObject("conditions", condID) );
         }
