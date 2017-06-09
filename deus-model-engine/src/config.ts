@@ -1,3 +1,4 @@
+import Logger from './logger';
 import { requireDir } from './utils';
 
 export type Callback = string;
@@ -26,12 +27,11 @@ export class Config implements ConfigInterface {
     static parse(src: SerializedConfig): Config {
         let config = new Config();
 
-        if ('events' in src) config.events = src.events;
-        for (let name in src) {
-            if (name != 'events') {
-                config.dictionaries[name] = src[name];
-            }
-        }
+        let { events, ...dictionaries } = src;
+        config.events = events;
+        config.dictionaries = dictionaries;
+
+        Logger.debug('engine', 'config loaded: %s', config);
 
         return config;
     }
