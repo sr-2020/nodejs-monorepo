@@ -272,11 +272,11 @@ module.exports = () => {
             this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
         },
 
-        usePill(data) {
+        /*usePill(data) {
             this.debug('Processing usePill');
             this.debug(data);
             this.update('age', (oldValue) => oldValue + 1);
-        },
+        },*/
         
         _view(model, viewModel) {
             return JSON.parse(JSON.stringify(getViewModel(model)));
