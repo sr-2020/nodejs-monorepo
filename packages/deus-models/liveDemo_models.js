@@ -79,7 +79,7 @@ module.exports = () => {
         */
         demoImplantEffect(data){
             this.debug("====demoImplantEffect()====");            
-            this.addCondition( getCatalogObject("conditions", "demoImplantState") );
+            this.addCondition( this.getCatalogObject("conditions", "demoImplantState") );
         },
 
         /*
