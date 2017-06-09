@@ -125,7 +125,7 @@ export class Context {
 
         value = I.fromJS(value);
 
-        this._ctx.setIn(name, this._ctx.getIn(name, I.List()).push(value));
+        this._ctx = this._ctx.setIn(name, this._ctx.getIn(name, I.List()).push(value));
         return this;
     }
 

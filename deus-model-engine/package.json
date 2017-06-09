@@ -5,8 +5,9 @@
   "main": "dist/worker.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run test:integration",
+    "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",
+    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts",
     "postinstall": "npm run build"
   },
   "author": "",
