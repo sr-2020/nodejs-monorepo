@@ -3,17 +3,23 @@
 //=====================================================
 
 function loadImplant( name ){
-    let implant = getCatalogObject("implants", name)
-    let effects = []
+    let implant = this.getCatalogObject("implants", name);
+    let effects = [];
 
-    for (let e in implant.effects) {
-        effects.push(getCatalogObject("effects", e));
+    this.debug(`Implant effects ${implant.effects} `);
+
+    for (let eID of implant.effects) {
+        let effect = this.getCatalogObject("effects", eID);
+        effect.enabled = true;
+        effects.push(effect);
     }
 
-    implant.effects = effects
+    implant.effects = effects;
+    implant.enabled = true;
 
-    return implant
+    return implant;
 }
+
 
 function _changeMaxHP( data ){
     let hp = this.get("hp") + data.hp;
@@ -78,7 +84,12 @@ module.exports = () => {
             
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
                 this.debug("Add 2 to HP pill!");
-                _changeMaxHP.apply(this, [{ hp: 2 }]);                   
+                //_changeMaxHP.apply(this, [{ hp: 2 }]);
+
+                this.debug("====addImplant()====");
+                this.debug("Implant name: HeartHealthBooster");
+
+                this.addModifier( loadImplant.apply(this, ["HeartHealthBooster"]) );   
             }
 
             if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
