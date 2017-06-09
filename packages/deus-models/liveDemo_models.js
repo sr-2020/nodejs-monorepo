@@ -71,7 +71,7 @@ module.exports = () => {
             this.debug("====addImplant()====");
             this.debug(`Implant name: ${data.name}`);
 
-            addModifier( loadImplant.apply(this, [data.name]) );
+            this.addModifier( loadImplant.apply(this, [data.name]) );
         },
 
         /*
@@ -79,7 +79,7 @@ module.exports = () => {
         */
         demoImplantEffect(data){
             this.debug("====demoImplantEffect()====");            
-            addCondition( getCatalogObject("conditions", "demoImplantState") );
+            this.addCondition( getCatalogObject("conditions", "demoImplantState") );
         },
 
         /*
