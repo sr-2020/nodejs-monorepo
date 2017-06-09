@@ -25,6 +25,7 @@ function loadIllness( id ){
     this.debug(`Loaded illness ${illness.displayName}`);
 
     illness.currentStage = 0;
+    illness.timerName = "illTimer" + Math.floor((Math.random() * 100000)).toString();
 
     return illness;
 }
@@ -48,6 +49,24 @@ function setModifierState(id, enabled) {
     if (index >= 0) {
         modifiers[index].enabled = enabled;
         this.set('modifiers', modifiers);
+    }    
+}
+
+//Обработчик таймера болезни
+// Данные {  mID = GUID //mID болезни  }
+function illnessTimerHandler( data ){
+    this.debug(`====illnessTimerHandler() illness: ${data.mID} ====`);
+
+    let modifiers = this.get('modifiers');
+    let index = modifiers.findIndex((m) => m.mID == data.mID);
+
+    if (index >= 0) {
+        if(modifiers[index].currentStage < modifiers[index].stages.length - 1){
+            modifiers[index].currentStage += 1;
+            this.debug(`Set next stage: ${modifiers[index].currentStage}`);
+        
+            this.set('modifiers', modifiers);
+        }
     }    
 }
 
@@ -137,7 +156,11 @@ module.exports = () => {
             if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
                  this.debug("Start illness with name: anthrax");
 
-                 this.addModifier( loadIllness.apply(this, ["anthrax"]) );   
+                 let illness = loadIllness.apply(this, ["anthrax"]);
+                 let _mID = this.addModifier( illness ); 
+                 
+                 this.debug(`Set illness timer with mID: ${_mID} `)
+                 this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
             }
 
              if(data.id == "38530a0d-99fc-4866-9653-8aea46ffa47e"){
@@ -148,6 +171,11 @@ module.exports = () => {
 
             
         },
+
+        /*
+            Обработчик таймера болезни. Переводит болезнь на следующую стадию
+        */
+        illnessTimerHandler,
 
         /*
             Общий эффект для показа симптомов болезней
