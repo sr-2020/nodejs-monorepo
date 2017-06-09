@@ -32,6 +32,16 @@ function _changeMaxHP( data ){
     this.set("maxHp", maxHp);
 }
 
+function setModifierState(id, enabled) {
+    let modifiers = this.get('modifiers');
+    let index = modifiers.findIndex((m) => m.mID == id);
+    
+    if (index >= 0) {
+        modifiers[index].enabled = enabled;
+        this.set('modifiers', modifiers);
+    }    
+}
+
 module.exports = () => {
     return {
 
@@ -70,6 +80,22 @@ module.exports = () => {
         demoImplantEffect(data){
             this.debug("====demoImplantEffect()====");            
             addCondition( getCatalogObject("conditions", "demoImplantState") );
+        },
+
+        /*
+            Отключение и включение импланта
+            {
+                "id" : xx  //mID конкретного импланта
+            }
+        */
+        disableImplant(data) {
+            this.debug("====disableImplant()====");
+            setModifierState.apply(this, [ data.id, false ])
+        },
+
+        enableImplant(data) {
+            this.debug("====enableImplant()====");
+            setModifierState.apply(this, [ data.id, true ])
         },
 
         /*

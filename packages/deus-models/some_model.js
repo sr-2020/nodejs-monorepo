@@ -260,7 +260,7 @@ module.exports = () => {
             this.setTimer('value', 'concat', { value });
         },
 
-        disableImplant(data) {
+        /*disableImplant(data) {
             let {id} = data;
             this.error('### disableImplant ', id)
             this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
@@ -270,7 +270,7 @@ module.exports = () => {
             let {id} = data;
             this.error('### enableImplant ', id)
             this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
-        },
+        },*/
 
         /*usePill(data) {
             this.debug('Processing usePill');
