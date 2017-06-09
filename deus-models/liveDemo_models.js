@@ -2,6 +2,19 @@
 // Модельный код для LiveDemo 10.06.2017
 //=====================================================
 
+function loadImplant( name ){
+    let implant = getCatalogObject("implants", name)
+    let effects = []
+
+    for (let e in implant.effects) {
+        effects.push(getCatalogObject("effects", e));
+    }
+
+    implant.effects = effects
+
+    return implant
+}
+
 function _changeMaxHP( data ){
     let hp = this.get("hp") + data.hp;
     let maxHp = this.get("maxHp") + data.hp;
@@ -24,15 +37,33 @@ module.exports = () => {
             {
                 "hp" : xx  //xx целое число (может быть отрицательным)
             }
-
-            TODO: решить вопрос с вызовом эффектов друг из друга!
-
         */
         changeMaxHP(data){
             this.debug("====changeMaxHP()====");
             this.debug(`Change HP: ${data.hp}`);
 
             _changeMaxHP.apply(this, data);
+        },
+
+        /*
+            Добавление импланта по названию (демо)
+            {
+                "name" : name  //название из справочника 
+            }
+        */
+        addImplant(data){
+            this.debug("====addImplant()====");
+            this.debug(`Implant name: ${data.name}`);
+
+            addModifier( loadImplant.apply(this, [data.name]) );
+        },
+
+        /*
+            Эффект установленного demo-импланта
+        */
+        demoImplantEffect(data){
+            this.debug("====demoImplantEffect()====");            
+            addCondition( getCatalogObject("conditions", "demoImplantState") );
         },
 
         /*
