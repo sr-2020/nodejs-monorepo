@@ -24,6 +24,8 @@ function loadIllness( id ){
     let illness = this.getCatalogObject("illnesses", id);
     this.debug(`Loaded illness ${illness.displayName}`);
 
+    illness.currentStage = 0;
+
     return illness;
 }
 
