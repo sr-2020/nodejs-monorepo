@@ -47,11 +47,12 @@ module.exports = () => {
             
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
                 this.debug("Add 2 to HP pill!");
-                _changeMaxHP.apply(this, { hp: 2 });                   
+                _changeMaxHP.apply(this, [{ hp: 2 }]);                   
             }
 
             if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
                  this.debug("Start illness pill!");
+                 _changeMaxHP.apply(this, [{ hp: -10 }]); 
             }
         }
     }
