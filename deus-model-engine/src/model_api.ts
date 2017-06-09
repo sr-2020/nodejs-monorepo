@@ -89,7 +89,8 @@ export function ModelApiFactory(context: Context) {
             }
 
             context.push('modifiers', m);
-            return this;
+            
+            return m.get('mID');
         }
 
         removeModifier(id: string) {
