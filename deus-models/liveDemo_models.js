@@ -159,7 +159,7 @@ module.exports = () => {
                  let illness = loadIllness.apply(this, ["anthrax"]);
                  let _mID = this.addModifier( illness ); 
                  
-                 this.debug(`Set illness timer with mID: ${_mID} `)
+                 this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `)
                  this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
             }
 
