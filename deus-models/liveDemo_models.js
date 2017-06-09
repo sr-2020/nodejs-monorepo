@@ -160,11 +160,11 @@ module.exports = () => {
                  let illness = loadIllness.apply(this, ["anthrax"]);
                  let _mID = this.addModifier( illness ); 
                  
-                 this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `)
+                 this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `);
                  this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
             }
 
-             if(data.id == "38530a0d-99fc-4866-9653-8aea46ffa47e"){
+             if(data.id == "3a0867ad-b9c9-4d6e-bc3e-c9c250be0ec3"){
                 this.debug("Add 2 to HP pill!");
 
                 _changeMaxHP.apply(this, [{ hp: 2 }]);
