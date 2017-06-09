@@ -20,6 +20,11 @@ function loadImplant( name ){
     return implant;
 }
 
+function loadIllness( id ){
+    let illness = this.getCatalogObject("illnesses", id);
+    this.debug(`Loaded illness ${illness.displayName}`);
+}
+
 
 function _changeMaxHP( data ){
     let hp = this.get("hp") + data.hp;
@@ -120,19 +125,23 @@ module.exports = () => {
             this.debug(`Pill ID: ${data.id}`);
             
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
-                this.debug("Add 2 to HP pill!");
-                //_changeMaxHP.apply(this, [{ hp: 2 }]);
-
-                this.debug("====addImplant()====");
-                this.debug("Implant name: HeartHealthBooster");
+                this.debug("Add implant with name: HeartHealthBooster");
 
                 this.addModifier( loadImplant.apply(this, ["HeartHealthBooster"]) );   
             }
 
             if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
-                 this.debug("Start illness pill!");
-                 _changeMaxHP.apply(this, [{ hp: -10 }]); 
+                 this.debug("Start illness with name: anthrax");
+
+                 this.addModifier( loadIllness.apply(this, ["anthrax"]) );   
             }
+
+             if(data.id == "38530a0d-99fc-4866-9653-8aea46ffa47e"){
+                this.debug("Add 2 to HP pill!");
+                _changeMaxHP.apply(this, [{ hp: 2 }]);
+            }
+
+            
         },
 
         /*
