@@ -32,6 +32,7 @@ function loadIllness( id ){
 
 
 function _changeMaxHP( data ){
+    this.debug(`====_changeMaxHP(): ${data.hp} ====`);
     let hp = this.get("hp") + data.hp;
     let maxHp = this.get("maxHp") + data.hp;
     
