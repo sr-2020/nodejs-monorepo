@@ -52,7 +52,7 @@ export class Worker {
     }
 
     process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): EngineResult {
-        Logger.debug('engine', 'processing', events);
+        Logger.info('engine', 'processing', events);
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
         let workingCtx = baseCtx.clone();
@@ -61,7 +61,7 @@ export class Worker {
         // main loop
         //
         for (let event of baseCtx.iterateEvents()) {
-            Logger.debug('engine', 'run event', event);
+            Logger.info('engine', 'run event', event);
             let prevTimestamp = baseCtx.timestamp;
             baseCtx.decreaseTimers(prevTimestamp);
             this.runEvent(baseCtx, event);
