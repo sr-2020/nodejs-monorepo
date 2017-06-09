@@ -180,11 +180,13 @@ export class Context {
     }
 
     enabledEffectsByType(t: string): Effect[] {
-        return (this._ctx.get('modifiers', I.List()))
+        let result: any = (this._ctx.get('modifiers', I.List()))
             .filter((m: any) => Boolean(m.get('enabled')))
-            .map((m: any) => m.get('effects'))
+            .flatMap((m: any) => m.get('effects'))
             .filter((e: any) => e.get('type') === t && Boolean(e.get('enabled')))
             .toJS();
+
+        return result;
     }
 
     enabledFunctionalEffects() {
