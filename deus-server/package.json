@@ -4,7 +4,7 @@
   "description": "DeusEx LARP Server Backend",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node server.ts",
+    "start": "ts-node main.ts",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "repository": {
