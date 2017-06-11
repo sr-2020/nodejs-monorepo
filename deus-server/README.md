@@ -14,3 +14,15 @@ To run tests:
 To run test in watch (auto-rerun on changes) mode:
 
     npm test -- --watch
+
+To start as a daemon:
+
+    npm run start
+
+To stop:
+
+    npm run stop
+
+To start as attached process:
+
+    npm run build && node build/main.js

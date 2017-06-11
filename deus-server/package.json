@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node main.ts",
+    "start": "npm run build && forever start ./build/main.js",
+    "stop": "forever stop ./build/main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "repository": {
@@ -21,6 +22,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.2",
+    "forever": "^0.15.3",
     "pouchdb": "^6.2.0",
     "promise": "^7.1.1",
     "request": "^2.81.0",
