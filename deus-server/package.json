@@ -24,7 +24,6 @@
     "express": "^4.15.2",
     "forever": "^0.15.3",
     "pouchdb": "^6.2.0",
-    "promise": "^7.1.1",
     "request": "^2.81.0",
     "ts-node": "^3.0.2",
     "typed-event-emitter": "^1.0.3",
