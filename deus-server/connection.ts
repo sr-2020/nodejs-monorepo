@@ -3,12 +3,11 @@ export class StatusAndBody {
   public body: any;
 }
 
-const race = (...promises) =>
-  new Promise((res, rej) => {
+function race<T>(promises: Array<Promise<T>>): Promise<T> {
+  return new Promise((res, rej) => {
     promises.forEach(p => p.then(v => res(v)).catch(err => rej(err)));
   });
-
-
+}
 
 export class Connection {
   private latestSavedEventTimestamp = 0;
@@ -19,7 +18,7 @@ export class Connection {
     private timeout: number,
     private latestExisingTimestamp: number) { }
 
-  async processEvents(id: string, events: any[]): Promise<any> /*Promise<StatusAndBody>*/ {
+  async processEvents(id: string, events: any[]): Promise<StatusAndBody> {
     try {
       await this.viewmodelDb.get(id);
     } catch (e) {
@@ -44,8 +43,8 @@ export class Connection {
       return { status: 202, body: { id: id, serverTime: this.currentTimestamp(), timestamp: this.latestSavedEventTimestamp } };
     }
 
-    return race(this.refreshModelUpdatedResponse(id, this.latestSavedEventTimestamp),
-                this.refreshModelTimeoutResponse(id));
+    return race([this.refreshModelUpdatedResponse(id, this.latestSavedEventTimestamp),
+                 this.refreshModelTimeoutResponse(id)]);
   }
 
   private currentTimestamp(): number {
