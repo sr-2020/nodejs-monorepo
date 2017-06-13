@@ -2,12 +2,14 @@ import * as express from 'express'
 import * as http from 'http'
 import * as PouchDB from 'pouchdb';
 import bodyparser = require('body-parser')
-import { Connection, StatusAndBody } from "./connection";
+import { TSMap } from "typescript-map"
 
+import { Connection, StatusAndBody } from "./connection";
 
 class App {
   private app: express.Express = express();
   private server: http.Server;
+  private connections = new TSMap<string, Connection>();
 
   constructor(private eventsDb: PouchDB.Database<{}>,
     private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
@@ -39,15 +41,21 @@ class App {
 
     this.app.post('/events/:id', (req, res) => {
       const id: string = req.params.id;
+      if (this.connections.has(id)) {
+        res.status(429).send("Multiple connections from one client are not allowed");
+        return;
+      }
+
       const events = req.body.events;
       if (!(events instanceof Array)) {
         res.status(400).send("No events array in request");
         return;
       }
 
-      let connection = new Connection(this.eventsDb, this.viewmodelDb, this.timeout, this.latestExistingEventTimestamp());
-      connection.processEvents(id, events).then((s: StatusAndBody) => {
+      this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout, this.latestExistingEventTimestamp()));
+      this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
         res.status(s.status).send(s.body);
+        this.connections.delete(id);
       });
     });
   }

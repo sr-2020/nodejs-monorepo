@@ -79,7 +79,7 @@ describe('Express app', () => {
         { resolveWithFullResponse: true, simple: false, json: { events: [] } }).promise();
       expect(response.statusCode).to.eq(404);
     });
-    
+
     it('Sets proper header', async () => {
       const response = await rp.post(address + '/events/existing_viewmodel',
         { resolveWithFullResponse: true, json: { events: [] } }).promise();
@@ -147,6 +147,36 @@ describe('Express app', () => {
       expect(response.body.id).to.equal("existing_viewmodel");
       expect(response.body.timestamp).to.equal(4365);
     });
+
+    it('Rejects multiple simultaneous connections from same client', async () => {
+      const event = {
+        eventType: "TestEvent",
+        timestamp: 4365
+      };
+
+      const promises = [{}, {}].map(() => rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise());
+
+      let statusCodes: any[] = [];
+      for (let promise of promises)
+        statusCodes.push((await promise).statusCode);
+      expect(statusCodes).to.have.same.members([202, 429]);
+    });
+
+    it('Handles multiple sequential connections from same client', async () => {
+      const event = {
+        eventType: "TestEvent",
+        timestamp: 4365
+      };
+
+      const response1 = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+      const response2 = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+      expect(response1.statusCode).to.eq(202);
+      expect(response2.statusCode).to.eq(202);
+    });
+
 
     /*
         it('Deduplicates events with same timestamp', done => {
