@@ -147,6 +147,24 @@ describe('Express app', () => {
       expect(response.body.timestamp).to.equal(4365);
     });
 
+    it('Returns timestamp of latest event successfully saved', async () => {
+      const events = [{
+        eventType: "TestEvent",
+        timestamp: 4365
+      }, {
+        eventType: "TestEvent",
+        timestamp: 6666
+      }];
+
+      const response = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, json: { events: events } }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+      expect(response.body.id).to.equal("existing_viewmodel");
+      expect(response.body.timestamp).to.equal(6666);
+    });
+
     it('Rejects multiple simultaneous connections from same client', async () => {
       const event = {
         eventType: "TestEvent",
