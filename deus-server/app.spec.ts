@@ -141,7 +141,6 @@ describe('Express app', () => {
         { resolveWithFullResponse: true, json: { events: [event] } }).promise();
 
       expect(response.statusCode).to.eq(202);
-      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
       expect(response.body.id).to.equal("existing_viewmodel");
       expect(response.body.timestamp).to.equal(4365);
