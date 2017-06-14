@@ -1,6 +1,9 @@
 import * as express from 'express'
 import * as http from 'http'
 import * as PouchDB from 'pouchdb';
+import * as PouchDBUpsert from 'pouchdb-upsert'
+PouchDB.plugin(PouchDBUpsert);
+
 import bodyparser = require('body-parser')
 import { TSMap } from "typescript-map"
 
@@ -12,7 +15,7 @@ class App {
   private connections = new TSMap<string, Connection>();
 
   constructor(private eventsDb: PouchDB.Database<{}>,
-    private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
+    private viewmodelDb: PouchDB.Database<any>,
     private timeout: number) {
     this.app.use(bodyparser.json());
     this.app.use((req, res, next) => {
@@ -59,13 +62,22 @@ class App {
       });
     });
 
+    this.viewmodelDb.putIfNotExists({
+      _id: "_design/web_api_server",
+      views: {
+        by_character_id: {
+          map: "function (doc) { if (doc.timestamp && doc.characterId) emit([doc.characterId, doc.timestamp]);  }"
+        }
+      }
+    });
+
     this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
       if (!change.doc)
         return;
 
       if (this.connections.has(change.doc._id))
         this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
-    }); 
+    });
   }
 
   currentTimestamp(): number {
