@@ -69,7 +69,7 @@ class App {
           map: "function (doc) { if (doc.timestamp && doc.characterId) emit([doc.characterId, doc.timestamp]);  }"
         }
       }
-    });
+    }).catch(err => console.error(err));
 
     this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
       if (!change.doc)
