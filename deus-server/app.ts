@@ -14,8 +14,8 @@ class App {
   private server: http.Server;
   private connections = new TSMap<string, Connection>();
 
-  constructor(private eventsDb: PouchDB.Database<{}>,
-    private viewmodelDb: PouchDB.Database<any>,
+  constructor(private eventsDb: PouchDB.Database<any>,
+    private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
     private timeout: number) {
     this.app.use(bodyparser.json());
     this.app.use((req, res, next) => {
@@ -62,7 +62,7 @@ class App {
       });
     });
 
-    this.viewmodelDb.putIfNotExists({
+    this.eventsDb.putIfNotExists({
       _id: "_design/web_api_server",
       views: {
         by_character_id: {
