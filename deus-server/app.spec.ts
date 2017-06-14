@@ -97,12 +97,11 @@ describe('Express app', () => {
         { resolveWithFullResponse: true, json: { events: [event] } }).promise();
 
       expect(response.statusCode).to.eq(202);
-      return eventsDb.allDocs({ include_docs: true }).then(result => {
-        expect(result.rows.length).to.equal(1);
-        const doc: any = result.rows[0].doc;
-        expect(doc).to.deep.include(event);
-        expect(doc).to.deep.include({ characterId: "existing_viewmodel" });
-      })
+      const docs = await eventsDb.changes({ include_docs: true, view: 'web_api_server/by_character_id' });
+      expect(docs.results.length).to.equal(1);
+      const doc: any = docs.results[0].doc;
+      expect(doc).to.deep.include(event);
+      expect(doc).to.deep.include({ characterId: "existing_viewmodel" });
     });
 
     it('Returns viewmodel in case if processed in time', async () => {
