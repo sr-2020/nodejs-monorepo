@@ -1,3 +1,5 @@
+import { EventEmitter } from "events";
+
 export class StatusAndBody {
   public status: number;
   public body: any;
@@ -11,6 +13,7 @@ function race<T>(promises: Array<Promise<T>>): Promise<T> {
 
 export class Connection {
   private latestSavedEventTimestamp = 0;
+  private viewModelUpdated = new EventEmitter();
 
   constructor(
     private eventsDb: PouchDB.Database<{}>,
@@ -51,14 +54,17 @@ export class Connection {
     return new Date().valueOf();
   }
 
+  public onViewModelUpdate(viewModel: any) {
+    delete viewModel._id;
+    delete viewModel._rev;
+    this.viewModelUpdated.emit('update', viewModel);
+  }
+
   refreshModelUpdatedResponse(id: string, lastEventTimestamp: number): Promise<StatusAndBody> {
     return new Promise((resolve, reject) => {
-      this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true, doc_ids: [id] }).on('change', change => {
-        if (change.doc && change.doc.timestamp == lastEventTimestamp) {
-          delete change.doc._id;
-          delete change.doc._rev;
-          resolve({ status: 200, body: { viewModel: change.doc, id: id, serverTime: this.currentTimestamp() } });
-        }
+      this.viewModelUpdated.addListener('update', viewModel => {
+        if (viewModel.timestamp == lastEventTimestamp)
+          resolve({ status: 200, body: { viewModel: viewModel, id: id, serverTime: this.currentTimestamp() } });
       });
     });
   }

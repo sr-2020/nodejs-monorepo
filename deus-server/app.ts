@@ -58,6 +58,14 @@ class App {
         this.connections.delete(id);
       });
     });
+
+    this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
+      if (!change.doc)
+        return;
+
+      if (this.connections.has(change.doc._id))
+        this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
+    }); 
   }
 
   refreshModelTimeoutResponse(lastEventTimestamp: number): Promise<StatusAndBody> {
