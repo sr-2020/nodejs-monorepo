@@ -68,14 +68,6 @@ class App {
     }); 
   }
 
-  refreshModelTimeoutResponse(lastEventTimestamp: number): Promise<StatusAndBody> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({ status: 202, body: { timestamp: lastEventTimestamp } });
-      }, this.timeout);
-    });
-  }
-
   currentTimestamp(): number {
     return new Date().valueOf();
   }
