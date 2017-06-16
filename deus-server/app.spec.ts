@@ -16,20 +16,20 @@ describe('Express app', () => {
   let eventsDb: PouchDB.Database<{ eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   var db = new PouchDB('dbname', { adapter: 'memory' });
-  beforeEach(() => {
+  beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel', { adapter: 'memory' });
     app = new App(eventsDb, viewModelDb, 20);
-    app.listen(port);
+    await app.listen(port);
   })
   beforeEach(done => {
     viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 }, done);
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     app.stop();
-    viewModelDb.destroy();
-    eventsDb.destroy();
+    await viewModelDb.destroy();
+    await eventsDb.destroy();
   })
 
   describe('/time', () => {
@@ -91,15 +91,16 @@ describe('Express app', () => {
       const event = {
         eventType: "TestEvent",
         timestamp: 4365,
-        data: { foo: "ambar" }
+        data: { foo: "ambar" },
+        mobile: true
       };
       const response = await rp.post(address + '/events/existing_viewmodel',
         { resolveWithFullResponse: true, json: { events: [event] } }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.changes({ include_docs: true, view: 'web_api_server/by_character_id' });
-      expect(docs.results.length).to.equal(1);
-      const doc: any = docs.results[0].doc;
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(1);
+      const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
       expect(doc).to.deep.include({ characterId: "existing_viewmodel" });
     });

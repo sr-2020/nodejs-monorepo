@@ -62,15 +62,6 @@ class App {
       });
     });
 
-    this.eventsDb.putIfNotExists({
-      _id: "_design/web_api_server",
-      views: {
-        by_character_id: {
-          map: "function (doc) { if (doc.timestamp && doc.characterId) emit([doc.characterId, doc.timestamp]);  }"
-        }
-      }
-    }).catch(err => console.error(err));
-
     this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
       if (!change.doc)
         return;
@@ -88,7 +79,19 @@ class App {
     return 0;
   }
 
-  listen(port: number) {
+  async listen(port: number) {
+    try {
+      await this.eventsDb.put({
+        _id: "_design/web_api_server_v2",
+        views: {
+          characterId_timestamp_mobile: {
+            map: "function (doc) { if (doc.timestamp && doc.characterId && doc.mobile) emit([doc.characterId, doc.timestamp]);  }"
+          }
+        }
+      })
+    } catch (err) {
+      console.error(err);
+    }
     this.server = this.app.listen(port);
   }
 
