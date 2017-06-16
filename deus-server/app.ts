@@ -81,7 +81,7 @@ class App {
 
   async listen(port: number) {
     try {
-      await this.eventsDb.put({
+      await this.eventsDb.putIfNotExists({
         _id: "_design/web_api_server_v2",
         views: {
           characterId_timestamp_mobile: {
