@@ -42,7 +42,7 @@ class App {
         .catch(err => res.status(404).send("Character with such id is not found"));
     })
 
-    this.app.post('/events/:id', (req, res) => {
+    this.app.post('/events/:id', async (req, res) => {
       const id: string = req.params.id;
       if (this.connections.has(id)) {
         res.status(429).send("Multiple connections from one client are not allowed");
@@ -55,11 +55,37 @@ class App {
         return;
       }
 
-      this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout, this.latestExistingEventTimestamp()));
-      this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-        res.status(s.status).send(s.body);
-        this.connections.delete(id);
-      });
+      try {
+        const lastTimestamp = await this.latestTimestamp(id);
+        this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout, lastTimestamp));
+        this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
+          res.status(s.status).send(s.body);
+          this.connections.delete(id);
+        });
+      } catch (e) {
+        if (e.status && e.status == 404 && e.reason && e.reason == "missing")
+          res.status(404).send("Character with such id is not found");
+        else
+          throw e;
+      }
+    });
+
+    this.app.get('/events/:id', async (req, res) => {
+      const id: string = req.params.id;
+
+      try {
+        let response = {
+          serverTime: this.currentTimestamp(),
+          id: id,
+          timestamp: await this.latestTimestamp(id)
+        };
+        res.status(200).send(response);
+      } catch (e) {
+        if (e.status && e.status == 404 && e.reason && e.reason == "missing")
+          res.status(404).send("Character with such id is not found");
+        else
+          throw e;
+      }
     });
 
     this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
@@ -75,8 +101,16 @@ class App {
     return new Date().valueOf();
   }
 
-  latestExistingEventTimestamp(): number {
-    return 0;
+  async latestTimestamp(id: string): Promise<number> {
+    const currentViewmodel = await this.viewmodelDb.get(id);
+    const lastEventTimeStamp = await this.latestExistingEventTimestamp(id);
+    return Math.max(currentViewmodel.timestamp, lastEventTimeStamp);
+  }
+
+  async latestExistingEventTimestamp(id: string): Promise<number> {
+    const docs = await this.eventsDb.query('web_api_server_v2/characterId_timestamp_mobile',
+      { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
+    return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
 
   async listen(port: number) {

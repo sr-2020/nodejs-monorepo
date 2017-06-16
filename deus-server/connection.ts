@@ -22,15 +22,6 @@ export class Connection {
     private latestExisingTimestamp: number) { }
 
   async processEvents(id: string, events: any[]): Promise<StatusAndBody> {
-    try {
-      await this.viewmodelDb.get(id);
-    } catch (e) {
-      if (e.status && e.status == 404 && e.reason && e.reason == "missing")
-        return {status: 404, body: "Character with such id is not found"};
-      else
-        throw e;
-    }
-
     events = events.filter((value: any) => value.timestamp > this.latestExisingTimestamp);
 
     try {

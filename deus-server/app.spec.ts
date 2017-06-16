@@ -13,7 +13,7 @@ const address = 'http://localhost:' + port;
 
 describe('Express app', () => {
   let app: App;
-  let eventsDb: PouchDB.Database<{ eventType: string, timestamp: number, data: any }>;
+  let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   var db = new PouchDB('dbname', { adapter: 'memory' });
   beforeEach(async () => {
@@ -164,22 +164,22 @@ describe('Express app', () => {
       expect(response.body.id).to.equal("existing_viewmodel");
       expect(response.body.timestamp).to.equal(6666);
     });
-
-    it('Rejects multiple simultaneous connections from same client', async () => {
-      const event = {
-        eventType: "TestEvent",
-        timestamp: 4365
-      };
-
-      const promises = [{}, {}].map(() => rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise());
-
-      let statusCodes: any[] = [];
-      for (let promise of promises)
-        statusCodes.push((await promise).statusCode);
-      expect(statusCodes).to.have.same.members([202, 429]);
-    });
-
+    /*
+        it('Rejects multiple simultaneous connections from same client', async () => {
+          const event = {
+            eventType: "TestEvent",
+            timestamp: 4365
+          };
+    
+          const promises = [{}, {}].map(() => rp.post(address + '/events/existing_viewmodel',
+            { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise());
+    
+          let statusCodes: any[] = [];
+          for (let promise of promises)
+            statusCodes.push((await promise).statusCode);
+          expect(statusCodes).to.have.same.members([202, 429]);
+        });
+    */
     it('Handles multiple sequential connections from same client', async () => {
       const event = {
         eventType: "TestEvent",
@@ -194,25 +194,63 @@ describe('Express app', () => {
       expect(response2.statusCode).to.eq(202);
     });
 
+    it('Deduplicates events with same timestamp', async () => {
+      const event = {
+        eventType: "TestEvent",
+        timestamp: 4365,
+        mobile: true
+      };
 
-    /*
-        it('Deduplicates events with same timestamp', done => {
-          const event = {
-            eventType: "TestEvent",
-            timestamp: 4365,
-            data: { foo: "ambar" }
-          };
-          request.post(address + '/events/existing_viewmodel', { json: { events: [event] } }, (error, response, body) => {
-            expect(error).to.be.null;
-            expect(response.statusCode).to.eq(202);
-            request.post(address + '/events/existing_viewmodel', { json: { events: [event] } }, (error, response, body) => {
-              eventsDb.allDocs({ include_docs: true }).then(result => {
-                expect(result.rows.length).to.equal(1);
-                done();
-              })
-            });
-          });
-        });
-    */
+      const response1 = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+      const response2 = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+      expect(response1.statusCode).to.eq(202);
+      expect(response2.statusCode).to.eq(202);
+
+      const res = await eventsDb.allDocs({ include_docs: true });
+      // Filter design-docs
+      const events = res.rows.filter(row => row.doc && row.doc.characterId);
+      expect(events.length).to.eq(1);
+    });
+  });
+
+  describe('GET /events', () => {
+    it('Returns 404 for non-existing character', async () => {
+      const response = await rp.get(address + '/events/5555',
+        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns timestamp of viewmodel if no events present', async () => {
+      const response = await rp.get(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body.id).to.equal("existing_viewmodel");
+      expect(response.body.timestamp).to.equal(420);
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+    });
+
+    it('Returns timestamp of latest mobile event', async () => {
+      const events = [{
+        eventType: "TestEvent",
+        timestamp: 4365,
+        mobile: true
+      }, {
+        eventType: "TestEvent",
+        timestamp: 6666,
+        mobile: true
+      }];
+
+      const responsePut = await rp.post(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, json: { events: events } }).promise();
+      expect(responsePut.statusCode).to.eq(202);
+      
+      const response = await rp.get(address + '/events/existing_viewmodel',
+        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+      expect(response.body.id).to.equal("existing_viewmodel");
+      expect(response.body.timestamp).to.equal(6666);
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+    });
   });
 });
