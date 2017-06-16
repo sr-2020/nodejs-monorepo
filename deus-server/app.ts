@@ -49,19 +49,39 @@ class App {
         return;
       }
 
-      const events = req.body.events;
+      let events = req.body.events;
       if (!(events instanceof Array)) {
         res.status(400).send("No events array in request");
         return;
       }
 
+      const isMobileClient = events.some(event => event.eventType == '_RefreshModel');
+      if (isMobileClient)
+        events.forEach(event => event.mobile = true);
+
       try {
-        const lastTimestamp = await this.latestTimestamp(id);
-        this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout, lastTimestamp));
-        this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-          res.status(s.status).send(s.body);
-          this.connections.delete(id);
-        });
+        const cutTimestamp = await this.cutTimestamp(id);
+        if (!isMobileClient && events.some(event => event.timestamp <= cutTimestamp)) {
+          res.status(409).send("Can't accept event with timestamp earlier than cut timestamp");
+          return;
+        }
+        events = events.filter((value: any) => value.timestamp > cutTimestamp);
+        
+        if (isMobileClient) {        
+          this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout));
+          this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
+            res.status(s.status).send(s.body);
+            this.connections.delete(id);
+          });
+        } else {
+          // In this case we don't need to subscribe for viewmodel updates or
+          // block other clients from connecting.
+          // So we don't Connetion to this.connections.
+          let connection = new Connection(this.eventsDb, this.viewmodelDb, 0);
+          connection.processEvents(id, events).then((s: StatusAndBody) => {
+            res.status(s.status).send(s.body);
+          });
+        }
       } catch (e) {
         if (e.status && e.status == 404 && e.reason && e.reason == "missing")
           res.status(404).send("Character with such id is not found");
@@ -77,7 +97,7 @@ class App {
         let response = {
           serverTime: this.currentTimestamp(),
           id: id,
-          timestamp: await this.latestTimestamp(id)
+          timestamp: await this.cutTimestamp(id)
         };
         res.status(200).send(response);
       } catch (e) {
@@ -101,13 +121,13 @@ class App {
     return new Date().valueOf();
   }
 
-  async latestTimestamp(id: string): Promise<number> {
+  async cutTimestamp(id: string): Promise<number> {
     const currentViewmodel = await this.viewmodelDb.get(id);
-    const lastEventTimeStamp = await this.latestExistingEventTimestamp(id);
+    const lastEventTimeStamp = await this.latestExistingMobileEventTimestamp(id);
     return Math.max(currentViewmodel.timestamp, lastEventTimeStamp);
   }
 
-  async latestExistingEventTimestamp(id: string): Promise<number> {
+  async latestExistingMobileEventTimestamp(id: string): Promise<number> {
     const docs = await this.eventsDb.query<any>('web_api_server_v2/characterId_timestamp_mobile',
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
