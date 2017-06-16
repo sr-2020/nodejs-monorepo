@@ -15,7 +15,6 @@ describe('Express app', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
-  var db = new PouchDB('dbname', { adapter: 'memory' });
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel', { adapter: 'memory' });
