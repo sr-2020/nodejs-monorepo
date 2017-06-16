@@ -108,7 +108,7 @@ class App {
   }
 
   async latestExistingEventTimestamp(id: string): Promise<number> {
-    const docs = await this.eventsDb.query('web_api_server_v2/characterId_timestamp_mobile',
+    const docs = await this.eventsDb.query<any>('web_api_server_v2/characterId_timestamp_mobile',
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
