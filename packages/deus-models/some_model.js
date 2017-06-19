@@ -91,6 +91,13 @@ function getConditionsPage(model) {
     };
 }
 
+function getTechnicalInfoPage() {
+    return {
+        pageType: "technical_info",
+        menuTitle: "Техническая инфа"
+    };
+}
+
 function getEnabledText(enabled) {
     return enabled ? "ON" : "OFF";
 }
@@ -207,6 +214,7 @@ function getPages(model) {
         getConditionsPage(model),
         getImplantsPage(model),
         //getBodyPage(model),
+        getTechnicalInfoPage()
     ];
 }
 
