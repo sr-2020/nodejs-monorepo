@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Utilities for QR code content generation and parsing",
   "scripts": {
+    "build": "tsc",
+    "start": "npm run build && forever start ./build/main.js",
+    "stop": "forever stop ./build/main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "repository": {
