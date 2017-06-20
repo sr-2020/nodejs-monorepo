@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && forever start ./build/main.js",
-    "stop": "forever stop ./build/main.js",
+    "start": "npm run build && forever start ./lib/main.js",
+    "stop": "forever stop ./lib/main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "repository": {
