@@ -2,10 +2,10 @@ import * as md5 from 'md5'
 
 export class QrData {
   // TODO: switch to enums
-  type: number;
-  kind: number;
-  validUntil: number;
-  payload: string;
+  public type: number;
+  public kind: number;
+  public validUntil: number;
+  public payload: string;
 }
 
 export class FormatError implements Error {
