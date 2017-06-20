@@ -2,6 +2,8 @@
   "name": "deus-qr-lib",
   "version": "1.0.0",
   "description": "Utilities for QR code content generation and parsing",
+  "main": "qr.js",
+  "typings": "qr",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && forever start ./build/main.js",
