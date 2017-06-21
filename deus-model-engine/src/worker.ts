@@ -112,18 +112,26 @@ export class Worker {
         let workingCtx = baseCtx.clone();
         let api = ModelApiFactory(workingCtx);
 
+        let enabledModifiers = workingCtx.modifiers.filter((m) => m.enabled);
+
         // Functional effects first
-        for (let effect of workingCtx.iterateEnabledFunctionalEffects()) {
-            let f = this.resolveCallback(effect.handler);
-            if (!f) continue;
-            f.call(api);
+        for (let modifier of enabledModifiers) {
+            let effects = modifier.effects.filter((e) => e.enabled && e.type == 'functional');
+            for (let effect of effects) {
+                let f = this.resolveCallback(effect.handler);
+                if (!f) continue;
+                f(api, modifier);
+            }
         }
 
         // Then Normal effects
-        for (let effect of workingCtx.iterateEnabledNormalEffects()) {
-            let f = this.resolveCallback(effect.handler);
-            if (!f) continue;
-            f.call(api);
+        for (let modifier of enabledModifiers) {
+            let effects = modifier.effects.filter((e) => e.enabled && e.type == 'normal');
+            for (let effect of effects) {
+                let f = this.resolveCallback(effect.handler);
+                if (!f) continue;
+                f(api, modifier);
+            }
         }
 
         return workingCtx;
