@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 import { FieldName, FieldValue, Timer, Context } from './context'
 
@@ -34,36 +35,35 @@ export function ModelApiFactory(context: Context) {
         getCatalogObject(catalogName: string, id: string) {
             let catalog = context.getDictionary(catalogName);
             if (catalog) {
-                return catalog.find((c: any) => c.id == id);
+                return catalog.find((c) => c.id == id);
             }
         }
 
         getModifierById(id: string) {
-            let modifier = context.modifiers.find((m: any) => m.get('mID') == id);
-            return modifier;
+            return context.modifiers.find((m) => m.mID == id);
         }
 
         getModifiersByName(name: string) {
-            return getModifiersBy((m: any) => m.get('name') == name);
+            return getModifiersBy((m) => m.name == name);
         }
 
         getModifiersByClass(className: string) {
-            return getModifiersBy((m: any) => m.get('class') == className);
+            return getModifiersBy((m) => m.class == className);
         }
 
         getModifiersBySystem(systemName: string) {
-            return getModifiersBy((m: any) => m.get('system') == systemName);
+            return getModifiersBy((m) => m.system == systemName);
         }
 
         addModifier(modifier: any) {
-            let m = modifier;
+            let m = cloneDeep(modifier);
 
-            if (!m.has('mID')) {
-                m = m.set('mID', cuid());
+            if (!m.mID) {
+                m.mID = cuid();
             }
 
             context.modifiers.push(m);
-            return m.mID;
+            return m;
         }
 
         removeModifier(id: string) {
@@ -72,28 +72,41 @@ export function ModelApiFactory(context: Context) {
         }
 
         getEffectsByName(name: string) {
-            return getEffectsBy((e: any) => e.get('name') == name);
+            return getEffectsBy((e) => e.name == name);
         }
 
         getEffectsByClass(className: string) {
-            return getEffectsBy((e: any) => e.get('class') == className);
+            return getEffectsBy((e) => e.class == className);
         }
 
         getConditionById(id: string) {
-            return context.conditions.find((c: any) => c.get('id') == id);
+            return context.conditions.find((c) => c.id == id);
         }
 
         getConditionsByClass(className: string) {
-            return getConditionsBy((c: any) => c.get('class') == className);
+            return getConditionsBy((c) => c.class == className);
         }
 
         getConditionsByGroup(group: string) {
-            return getConditionsBy((c: any) => c.get('group') == group);
+            return getConditionsBy((c) => c.group == group);
         }
 
         addCondition(condition: any) {
-            context.conditions.push(condition);
-            return this;
+            let c = _.find(context.conditions, (c) => c.id == condition.id);
+
+            if (c) return c;
+
+            c = cloneDeep(condition);
+
+            if (c) {
+                if (!c.mID) {
+                    c.mID = cuid();
+                }
+
+                context.conditions.push(c);
+            }
+
+            return c;
         }
 
         removeCondition(id: string) {
@@ -101,8 +114,8 @@ export function ModelApiFactory(context: Context) {
             return this;
         }
 
-        setTimer(name: string, miliseconds: number, handle: string, data: any) {
-            context.setTimer(name, miliseconds, handle, data)
+        setTimer(name: string, miliseconds: number, eventType: string, data: any) {
+            context.setTimer(name, miliseconds, eventType, data)
             return this;
         }
 

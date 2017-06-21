@@ -5,7 +5,7 @@ import * as dispatcher from './dispatcher';
 export type Timer = {
     name: string,
     miliseconds: number,
-    event: string,
+    eventType: string,
     data: any
 }
 
@@ -136,9 +136,9 @@ export class Context {
         return _.get(this._dictionaries, name, undefined);
     }
 
-    setTimer(name: string, miliseconds: number, event: string, data: any): this {
+    setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
         let timer = {
-            name, miliseconds, event, data
+            name, miliseconds, eventType, data
         };
         if (!this._ctx.timers) this._ctx.timers = {};
         this._ctx.timers[timer.name] = timer;
@@ -219,7 +219,7 @@ export class Context {
             return {
                 name: t.name,
                 miliseconds: t.miliseconds - diff,
-                event: t.event,
+                eventType: t.eventType,
                 data: t.data
             };
         });
@@ -237,7 +237,7 @@ export class Context {
 
     private timerEvent(timer: Timer): dispatcher.Event {
         return {
-            eventType: timer.event,
+            eventType: timer.eventType,
             timestamp: this.timestamp + timer.miliseconds,
             data: timer.data
         };

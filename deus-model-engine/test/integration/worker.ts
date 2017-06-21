@@ -98,7 +98,7 @@ describe('Worker', () => {
         let expectedTimer = {
             name: 'delayedConcat',
             miliseconds: 2000,
-            event: 'concat',
+            eventType: 'concat',
             data: { operand: 'value', value: 'B' }
         }
 
