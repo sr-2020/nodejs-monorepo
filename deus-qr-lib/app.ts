@@ -31,8 +31,11 @@ class App {
     this.app.get('/encode_to_image', (req, res) => {
       try {
         const data: QrData = req.query;
+        console.log(JSON.stringify(data));
+        if (!data.validUntil)
+          data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
         res.redirect(
-          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=1&margin=3&size=400x400&ecc=L`
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=3&size=400x400&ecc=L`
         );
       }
       catch (e) {
