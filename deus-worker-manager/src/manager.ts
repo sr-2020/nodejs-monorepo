@@ -65,8 +65,8 @@ export default class Manager {
 
             const model = await this.modelStorage.find(characterId);
 
-            const events = (await this.eventStorage.range(characterId, model.timestamp + 1, syncEvent.timestamp));
-            // .filter((event: Event) => event.eventType && event.eventType[0] != '_');
+            const events = (await this.eventStorage.range(characterId, model.timestamp + 1, syncEvent.timestamp))
+                .filter((event: Event) => event.eventType != '_NoOp');
 
             this.logger.debug('manager', 'events = %j', events);
 

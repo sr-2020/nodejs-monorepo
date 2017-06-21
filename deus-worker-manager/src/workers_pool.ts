@@ -21,7 +21,10 @@ export default class WorkersPool {
 
     private createWorker = () => {
         this.logger.debug('manager', 'WorkersPool::createWorker');
-        return new Worker(this.logger, this.workerModule, this.args).up();
+        let worker: Worker = new Worker(this.logger, this.workerModule, this.args)
+            .onExit(() => this.pool.destroy(worker))
+            .up();
+        return worker;
     }
 
     private destroyWorker = (worker: Worker) => {

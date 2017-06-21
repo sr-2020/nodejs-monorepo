@@ -23,7 +23,12 @@ export default class Worker extends EventEmitter {
         this.logger.info('manager', "Worker::up", this.workerModule);
         let workerModule = require.resolve(this.workerModule);
         this._child = ChildProcess.fork(workerModule, this.args, { silent: false });
+
         this._child.on('message', this.handleLogMessage);
+        this._child.on('message', this.emitMessage);
+        this._child.on('error', this.emitError);
+        this._child.on('exit', this.emitExit);
+
         return this;
     }
 
@@ -44,18 +49,17 @@ export default class Worker extends EventEmitter {
     }
 
     onMessage(callback: (message: any) => void): this {
-        if (this._child) {
-            this._child.on('message', callback);
-        }
-
+        this.on('message', callback);
         return this;
     }
 
     onError(callback: (err: Error) => void): this {
-        if (this._child) {
-            this._child.on('error', callback);
-        }
+        this.on('error', callback);
+        return this;
+    }
 
+    onExit(callback: (code: number, signal: string) => void): this {
+        this.on('exit', callback);
         return this;
     }
 
@@ -64,6 +68,10 @@ export default class Worker extends EventEmitter {
             this.logger.log(message.source, message.level, message.msg, ...message.params);
         }
     }
+
+    emitMessage = (message: any) => this.emit('message', message)
+    emitError = (err: Error) => this.emit('error', err)
+    emitExit = (code: number, signal: string) => this.emit('exit', code, signal);
 
     async process(syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
         return new Promise<EngineResult>((resolve, reject) => {
@@ -93,7 +101,7 @@ export default class Worker extends EventEmitter {
             this._child.on('message', onResult);
             this._child.on('error', onError);
 
-            this._child.send({ timestamp: syncEvent.timestamp, context: model, events });
+            this._child.send({ context: model, events });
 
             // TODO: handle timeout
         });
