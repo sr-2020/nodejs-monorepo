@@ -51,7 +51,7 @@ export class Worker {
         return this;
     }
 
-    process(timestamp: number, context: WorkerContext, events: dispatcher.Event[]): EngineResult {
+    process(context: WorkerContext, events: dispatcher.Event[]): EngineResult {
         Logger.info('engine', 'processing', events);
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
@@ -62,8 +62,8 @@ export class Worker {
         //
         for (let event of baseCtx.iterateEvents()) {
             Logger.info('engine', 'run event', event);
-            let prevTimestamp = baseCtx.timestamp;
-            baseCtx.decreaseTimers(prevTimestamp);
+
+            baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
             this.runEvent(baseCtx, event);
 
             workingCtx = this.runModifiers(baseCtx);
@@ -71,17 +71,8 @@ export class Worker {
             baseCtx.events = workingCtx.events;
         }
 
-        //
-        // set timestamp
-        //
-        let prevTimestamp = baseCtx.timestamp;
-        baseCtx.timestamp = timestamp;
-        baseCtx.decreaseTimers(prevTimestamp);
-        workingCtx.timestamp = timestamp;
-
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
-        // baseCtxValue.timers = clone(workingCtxValue.timers);
 
         let viewModel = this.runViewModels(workingCtxValue);
 
@@ -95,9 +86,9 @@ export class Worker {
         });
 
         process.on('message', (message: WorkerMessage) => {
-            let { timestamp, context, events } = message;
+            let { context, events } = message;
 
-            let result = this.process(timestamp, context, events);
+            let result = this.process(context, events);
 
             if (process && process.send) {
                 process.send({ type: 'result', ...result });

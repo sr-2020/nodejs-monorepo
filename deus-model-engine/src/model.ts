@@ -1,4 +1,6 @@
-export type Callback = (data: any) => void
+import { ModelApiInterface } from './model_api';
+
+export type Callback = (api: ModelApiInterface, data: any) => void
 
 export type ViewModelCallback = (model: any, viewModel: any) => any;
 

@@ -2,24 +2,24 @@ module.exports = () => {
     return {
         noop() {},
 
-        add(data) {
+        add(api, data) {
             let {operand, value} = data;
-            this.update(operand, (oldValue) => oldValue + Number(value));
+            api.model[operand] += Number(value);
         },
 
-        mul(data) {
+        mul(api, data) {
             let {operand, value} = data;
-            this.update(operand, (oldValue) => oldValue * Number(value));
+            api.model[operand] *= Number(value);
         },
 
-        concat(data) {
+        concat(api, data) {
             let {operand, value} = data;
-            this.update(operand, (oldValue) => '' + oldValue + value);
+            api.model[operand] = '' + api.model[operand] + value;
         },
 
-        delayedConcat(data) {
+        delayedConcat(api, data) {
             let {operand, value, delay} = data;
-            this.setTimer('delayedConcat', delay, 'concat', { operand, value });
+            api.setTimer('delayedConcat', delay, 'concat', { operand, value });
         }
     };
 };

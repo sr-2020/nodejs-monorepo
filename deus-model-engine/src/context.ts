@@ -1,4 +1,5 @@
-import * as I from 'immutable';
+import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import * as dispatcher from './dispatcher';
 
 export type Timer = {
@@ -20,26 +21,66 @@ export type FieldName = string | string[];
 export type FieldValue = any;
 export type Timestamp = number;
 
+type Effect = {
+    enabled: boolean,
+    name: string,
+    class: string,
+    type: 'functional' | 'normal',
+    handler: string
+}
+
+type Modifier = {
+    mID: string,
+    name: string,
+    class: string,
+    system: string,
+    enabled: boolean,
+    effects: Effect[],
+    [key: string]: any
+}
+
+type Condition = {
+    id: string,
+    mID: string,
+    class: string,
+    group?: string,
+    level?: number
+}
+
+type Timers = {
+    [name: string]: Timer
+}
+
+type Character = {
+    characterId: string,
+    timestamp: number,
+
+    modifiers: Modifier[],
+    conditions: Condition[],
+
+    timers: Timers,
+
+    [key: string]: any
+}
+
+type Dictionaries = {
+    [catalog: string]: any[]
+}
+
 export class Context {
-    private _ctx: I.Map<string, any>;
-    private _events: I.List<dispatcher.Event>;
-    private _timers: I.List<Timer> = I.List() as I.List<Timer>;
-    private _dictionaries: I.Map<string, any> = I.Map<string, any>();
+    private _ctx: Character;
+    private _events: dispatcher.Event[];
+    private _dictionaries: Dictionaries = {};
 
-    constructor(contextSrc: any, events: dispatcher.Event[] | I.List<dispatcher.Event>, dictionaries?: any) {
-        this._ctx = I.fromJS(contextSrc)
+    constructor(contextSrc: any, events: dispatcher.Event[], dictionaries?: any) {
+        this._ctx = cloneDeep(contextSrc);
 
-        this._events = I.List(events) as I.List<dispatcher.Event>;
+        this._events = cloneDeep(events);
+
         this.sortEvents();
 
-        if (this._ctx.has('timers')) {
-            this._timers = this._ctx.get('timers').map((t: any) => t.toJS());
-            this.sortTimers();
-            this._ctx = this._ctx.remove('timers');
-        }
-
         if (dictionaries) {
-            this._dictionaries = I.fromJS(dictionaries);
+            this._dictionaries = cloneDeep(dictionaries);
         }
     }
 
@@ -47,38 +88,42 @@ export class Context {
         return this._events;
     }
 
-    set events(value: I.List<dispatcher.Event> | dispatcher.Event[]) {
-        this._events = I.List(value) as I.List<dispatcher.Event>;
+    set events(value: dispatcher.Event[]) {
+        this._events = cloneDeep(value);
         this.sortEvents();
     }
 
-    get timers() {
-        return this._timers;
+    get ctx() { return this._ctx; }
+
+    get timers(): Timers {
+        return _.get(this._ctx, 'timers', {});
     }
 
-    set timers(value: I.List<Timer> | Timer[]) {
-        this._timers = I.List(value) as I.List<Timer>;
-        this.sortTimers();
+    set timers(value: Timers) {
+        this._ctx.timers = cloneDeep(value);
     }
 
     get timestamp() {
-        return this._ctx.get('timestamp');
+        return this._ctx.timestamp;
     }
 
     set timestamp(value: number) {
-        this._ctx = this._ctx.set('timestamp', value);
+        this._ctx.timestamp = value;
     }
 
-    get modifiers() {
-        return this._ctx.get('modifiers');
+    get modifiers(): Modifier[] {
+        if (!this._ctx.modifiers) this._ctx.modifiers = [];
+        return this._ctx.modifiers;
     }
 
     get effects() {
-        return this._ctx.get('modifiers').map((c: any) => c.get('effects')).flatten();
+        let enabledModifiers = this.modifiers.filter((m) => m.enabled)
+        return _.flatMap(enabledModifiers, (c) => c.effects);
     }
 
-    get conditions() {
-        return this._ctx.get('conditions');
+    get conditions(): Condition[] {
+        if (!this._ctx.conditions) this._ctx.conditions = [];
+        return this._ctx.conditions;
     }
 
     clone(): Context {
@@ -87,62 +132,16 @@ export class Context {
         return clone;
     }
 
-    get(name: FieldName): FieldValue {
-        let value;
-        if (typeof name == 'string') {
-            name = name.split('.');
-        }
-
-        return this._ctx.getIn(name);
+    getDictionary(name: FieldName): any[] | undefined {
+        return _.get(this._dictionaries, name, undefined);
     }
 
-    set(name: FieldName, value: FieldValue): this {
-        if (typeof name == 'string') {
-            name = name.split('.');
-        }
-
-        //TODO: исправить временный костыль. 
-        //Из списка убран 'modifiers' т.к. иначе невозможно обновить модификаторы. 
-        //Нужно править API
-        if (['id', 'timestamps', 'timers'].includes(name[0])) {
-            return this;
-        }
-
-        value = I.fromJS(value);
-
-        this._ctx = this._ctx.setIn(name, value);
-
-        return this;
-    }
-
-    update(name: FieldName, updater: (value: FieldValue) => FieldValue): this {
-        let value = this.get(name);
-        value = updater(value);
-        return this.set(name, value);
-    }
-
-    push(name: FieldName, value: FieldValue): this {
-        if (typeof name == 'string') {
-            name = name.split('.');
-        }
-
-        value = I.fromJS(value);
-
-        this._ctx = this._ctx.setIn(name, this._ctx.getIn(name, I.List()).push(value));
-        return this;
-    }
-
-    getDictionary(name: FieldName) {
-        if (typeof name == 'string') {
-            name = name.split('.');
-        }
-
-        return this._dictionaries.getIn(name);
-    }
-
-    setTimer(name: string, miliseconds: number, event: string, data: any) {
-        this._timers = this._timers.push({ name, miliseconds, event, data });
-        this.sortTimers();
+    setTimer(name: string, miliseconds: number, event: string, data: any): this {
+        let timer = {
+            name, miliseconds, event, data
+        };
+        if (!this._ctx.timers) this._ctx.timers = {};
+        this._ctx.timers[timer.name] = timer;
         return this;
     }
 
@@ -158,15 +157,25 @@ export class Context {
         }
     }
 
-    nextEvent(): dispatcher.Event {
-        let firstTimer = this._timers.first();
-        let firstEvent = this._events.first();
+    nextTimer(): Timer | null {
+        return _.reduce(this.timers, (current: Timer | null, t) => {
+            if (!current) return t;
+            if (current.miliseconds > t.miliseconds) return t;
+            return current;
+        }, null);
+    }
 
-        if (firstTimer && (!firstEvent || this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp)) {
-            this._timers = this._timers.shift();
+    nextEvent(): dispatcher.Event | undefined {
+        if (!this._events.length) return;
+
+        let firstTimer = this.nextTimer();
+        let firstEvent = this._events[0];
+
+        if (firstTimer && (this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp)) {
+            delete this._ctx.timers[firstTimer.name];
             return this.timerEvent(firstTimer);
         } else {
-            this._events = this._events.shift();
+            this._events.shift();
             return firstEvent;
         }
     }
@@ -180,13 +189,7 @@ export class Context {
     }
 
     enabledEffectsByType(t: string): Effect[] {
-        let result: any = (this._ctx.get('modifiers', I.List()))
-            .filter((m: any) => Boolean(m.get('enabled')))
-            .flatMap((m: any) => m.get('effects'))
-            .filter((e: any) => e.get('type') === t && Boolean(e.get('enabled')))
-            .toJS();
-
-        return result;
+        return this.effects.filter((e) => e.enabled && e.type == t);
     }
 
     enabledFunctionalEffects() {
@@ -209,34 +212,27 @@ export class Context {
         }
     }
 
-    decreaseTimers(prevTimestamp: number): void {
-        if (this._timers.isEmpty()) return;
+    decreaseTimers(diff: number): void {
+        if (!this._ctx.timers) return;
 
-        let diff = this.timestamp - prevTimestamp;
-        this._timers = this._timers.map((t: Timer): Timer => {
+        this._ctx.timers = _.mapValues(this._ctx.timers, (t) => {
             return {
                 name: t.name,
                 miliseconds: t.miliseconds - diff,
                 event: t.event,
                 data: t.data
             };
-        }) as I.List<Timer>;
+        });
     }
 
     valueOf() {
-        let result = this._ctx.toJS();
-        result.timers = this._timers.toJS();
-        return result;
-    }
-
-    private sortTimers() {
-        this._timers = this._timers.sort((a, b) => a.miliseconds - b.miliseconds) as I.List<Timer>;
+        return cloneDeep(this._ctx);
     }
 
     private sortEvents() {
-        this._events = this._events.sort((a: dispatcher.Event, b: dispatcher.Event) => {
+        this._events.sort((a: dispatcher.Event, b: dispatcher.Event) => {
             return a.timestamp - b.timestamp;
-        }) as I.List<dispatcher.Event>;
+        });
     }
 
     private timerEvent(timer: Timer): dispatcher.Event {
