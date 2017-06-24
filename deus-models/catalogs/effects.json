@@ -1,0 +1,10 @@
+{
+    "effects" : [
+        {        
+            "id"    : "demoEffect",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "demoImplantEffect"
+        } 
+    ]
+}

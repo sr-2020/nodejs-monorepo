@@ -1,0 +1,20 @@
+{
+   "conditions" : [
+        {
+            "id"    : "demoImplantState",
+            "class" : "physiology",
+            "text"  : "Работает новый demo-имплант!",
+            "details" : "Вы ощущаете гордость, что эта хренотень в вашем теле таки работает!"
+        },
+        {
+            "id"    : "illCond01",
+            "class" : "physiology",
+            "text"  : "Вам  плохо! Стадия 1"
+        },
+        {
+            "id"    : "illCond02",
+            "class" : "physiology",
+            "text"  : "Вам очень плохо! Стадия 2"
+        }
+   ]
+}
