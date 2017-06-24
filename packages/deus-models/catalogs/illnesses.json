@@ -1,0 +1,23 @@
+{
+    "illnesses" : [
+        {
+            "id"        : "anthrax",           
+            "displayName" : "Сибирская Язва",                          
+            "system"    : "SkinSystem",
+            "class"     : "illness",         
+                        
+            "stages" : [                    
+                {
+                    "delay" : 30,          
+                    "conditions" : [ "illCond01"  ]   
+                },
+                {
+                    "delay" : 60,          
+                    "conditions" : [ "illCond02"  ]   
+                }
+            ],
+        
+            "effects" : []
+        }
+    ]
+}

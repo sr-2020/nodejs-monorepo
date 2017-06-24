@@ -1,0 +1,13 @@
+{
+    "implants" : [
+        {        
+            "name"        : "HeartHealthBooster",           
+            "displayName" : "Мотор для сердца +2 HP",       
+                        
+            "class"  : "mechanical",                        
+            "system" : "CardioSystem",                      
+                    
+            "effects" : [ "demoEffect" ]
+        } 
+    ]
+}
