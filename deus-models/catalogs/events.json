@@ -1,0 +1,49 @@
+{
+    "events": [
+        {
+            "eventType": "add",
+            "effects": [
+                "add"
+            ]
+        },
+
+        {
+            "eventType": "mul",
+            "effects": [
+                "mul"
+            ]
+        },
+
+        {
+            "eventType": "concat",
+            "effects": [
+                "concat"
+            ]
+        },
+
+        {
+            "eventType": "delayedConcat",
+            "effects": [
+                "delayedConcat"
+            ]
+        },
+        {
+            "eventType": "usePill",
+            "effects": [
+                "usePill"
+            ]
+        },
+        {
+            "eventType": "disableImplant",
+            "effects": [
+                "disableImplant"
+            ]
+        },
+        {
+            "eventType": "enableImplant",
+            "effects": [
+                "enableImplant"
+            ]
+        }
+    ]
+}
