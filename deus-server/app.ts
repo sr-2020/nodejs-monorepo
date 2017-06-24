@@ -7,6 +7,8 @@ PouchDB.plugin(PouchDBUpsert);
 import bodyparser = require('body-parser')
 import { TSMap } from "typescript-map"
 
+import * as basic_auth from 'basic-auth';
+
 import { Connection, StatusAndBody } from "./connection";
 
 class App {
@@ -16,6 +18,7 @@ class App {
 
   constructor(private eventsDb: PouchDB.Database<any>,
     private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
+    private accountsDb: PouchDB.Database<{ password: string }>,
     private timeout: number) {
     this.app.use(bodyparser.json());
     this.app.use((req, res, next) => {
@@ -27,7 +30,23 @@ class App {
       res.send({ serverTime: this.currentTimestamp() });
     })
 
-    this.app.get('/viewmodel/:id', (req, res) => {
+    const auth = async (req, res, next) => {
+      const id: string = req.params.id;
+      const credentials = basic_auth(req);
+      if (credentials && credentials.name == id) {
+        try {
+          const password = (await this.accountsDb.get(id)).password;
+          if (password == credentials.pass) {
+            return next();
+          }
+        }
+        catch (e) {}
+      } 
+      res.header('WWW-Authentificate', 'Basic');
+      res.status(401).send('Access denied');
+    };
+
+    this.app.get('/viewmodel/:id', auth, (req, res) => {
       const id: string = req.params.id;
       this.viewmodelDb.get(id)
         .then(doc => {
@@ -42,7 +61,7 @@ class App {
         .catch(err => res.status(404).send("Character with such id is not found"));
     })
 
-    this.app.post('/events/:id', async (req, res) => {
+    this.app.post('/events/:id', auth, async (req, res) => {
       const id: string = req.params.id;
       if (this.connections.has(id)) {
         res.status(429).send("Multiple connections from one client are not allowed");
@@ -90,7 +109,7 @@ class App {
       }
     });
 
-    this.app.get('/events/:id', async (req, res) => {
+    this.app.get('/events/:id', auth, async (req, res) => {
       const id: string = req.params.id;
 
       try {

@@ -15,16 +15,21 @@ describe('API Server', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
+  let accountsDb: PouchDB.Database<{ password: string }>;
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel', { adapter: 'memory' });
-    app = new App(eventsDb, viewModelDb, 20);
+    accountsDb = new PouchDB('accounts', { adapter: 'memory' });
+    app = new App(eventsDb, viewModelDb, accountsDb, 20);
     await app.listen(port);
     await viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 });
+    await accountsDb.put({ _id: "existing_viewmodel", password: 'qwerty' });
+    await accountsDb.put({ _id: "5555", password: '5555' });
   })
 
   afterEach(async () => {
     app.stop();
+    await accountsDb.destroy();
     await viewModelDb.destroy();
     await eventsDb.destroy();
   })
@@ -43,7 +48,10 @@ describe('API Server', () => {
 
     it('Returns viewmodel of existing character', async () => {
       const response = await rp.get(address + '/viewmodel/existing_viewmodel',
-        { resolveWithFullResponse: true, json: {} }).promise();
+        {
+          resolveWithFullResponse: true, json: {},
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -53,33 +61,106 @@ describe('API Server', () => {
 
     it('Returns 404 for non-existing character', async () => {
       const response = await rp.get(address + '/viewmodel/5555',
-        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '5555', password: '5555' }
+        }).promise();
       expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
+      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {}
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
+      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'wrong one' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '5555', password: '5555' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
   });
 
   describe('POST /events', () => {
     it('Returns 400 if no events field present', async () => {
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { foo: "bar" } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { foo: "bar" },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(400);
     });
 
     it('Returns 400 if events field is not an array', async () => {
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: { foo: "bar" } } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: { foo: "bar" } },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(400);
     });
 
     it('Returns 404 for non-existing character', async () => {
       const response = await rp.post(address + '/events/5555',
-        { resolveWithFullResponse: true, simple: false, json: { events: [] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [] },
+          auth: { username: '5555', password: '5555' }
+        }).promise();
       expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
+      const response = await rp.post(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {}
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
+      const response = await rp.post(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'wrong one' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+      const response = await rp.post(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '5555', password: '5555' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Sets proper header', async () => {
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: [] } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: [] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(202);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
     });
@@ -91,7 +172,10 @@ describe('API Server', () => {
         data: { foo: "ambar" },
       };
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
 
       expect(response.statusCode).to.eq(202);
       const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
@@ -121,7 +205,10 @@ describe('API Server', () => {
       });
 
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
       expect(response.body.id).to.equal("existing_viewmodel");
@@ -135,7 +222,10 @@ describe('API Server', () => {
       };
 
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -153,7 +243,10 @@ describe('API Server', () => {
       }];
 
       const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: events } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: events },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -170,7 +263,10 @@ describe('API Server', () => {
       let promises: any[] = [];
       for (let i = 0; i < 100; ++i)
         promises.push(rp.post(address + '/events/existing_viewmodel',
-          { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise());
+          {
+            resolveWithFullResponse: true, simple: false, json: { events: [event] },
+            auth: { username: 'existing_viewmodel', password: 'qwerty' }
+          }).promise());
 
       const resultStatuses = (await Promise.all(promises)).map(res => res.statusCode);
       const expectedStatuses = Array(100).fill(202);
@@ -187,9 +283,15 @@ describe('API Server', () => {
       };
 
       const response1 = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       const response2 = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
     });
@@ -201,9 +303,15 @@ describe('API Server', () => {
       };
 
       const response1 = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       const response2 = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
 
@@ -220,7 +328,10 @@ describe('API Server', () => {
       };
 
       const response = await rp.post(address + '/events/existing_viewmodel',
-          { resolveWithFullResponse: true, simple: false, json: { events: [event] } }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(409);
     });
   });
@@ -228,13 +339,48 @@ describe('API Server', () => {
   describe('GET /events', () => {
     it('Returns 404 for non-existing character', async () => {
       const response = await rp.get(address + '/events/5555',
-        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '5555', password: '5555' }
+        }).promise();
       expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
+      const response = await rp.get(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {}
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
+      const response = await rp.get(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'wrong one' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+      const response = await rp.get(address + '/events/existing_viewmodel',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '5555', password: '5555' }
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns timestamp of viewmodel if no events present', async () => {
       const response = await rp.get(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.id).to.equal("existing_viewmodel");
       expect(response.body.timestamp).to.equal(420);
@@ -251,11 +397,17 @@ describe('API Server', () => {
       }];
 
       const responsePut = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: events } }).promise();
+        {
+          resolveWithFullResponse: true, json: { events: events },
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(responsePut.statusCode).to.eq(202);
 
       const response = await rp.get(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, simple: false, json: {} }).promise();
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
       expect(response.body.id).to.equal("existing_viewmodel");
       expect(response.body.timestamp).to.equal(6666);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -267,35 +419,40 @@ describe('API Server - long timeout', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
+  let accountsDb: PouchDB.Database<{ password: string }>;
   beforeEach(async () => {
     eventsDb = new PouchDB('events2', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
-    app = new App(eventsDb, viewModelDb, 9000);
+    accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
+    app = new App(eventsDb, viewModelDb, accountsDb, 9000);
     await app.listen(port);
-  });
-  beforeEach(done => {
-    viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 }, done);
+    await viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 });
+    await accountsDb.put({ _id: 'existing_viewmodel', password: 'qwerty' });
   });
 
   afterEach(async () => {
     app.stop();
+    await accountsDb.destroy();
     await viewModelDb.destroy();
     await eventsDb.destroy();
   });
-  
-  it('Does not wait for viewmodel update', async () => {
-      const event = {
-        eventType: "NonMobile",
-        timestamp: 4365
-      };
-      const response = await rp.post(address + '/events/existing_viewmodel',
-        { resolveWithFullResponse: true, json: { events: [event] } }).promise();
 
-      expect(response.statusCode).to.eq(202);
-      const res = await eventsDb.allDocs({ include_docs: true });
-      const events = res.rows.filter(row => row.doc && row.doc.characterId);
-      expect(events.length).to.eq(1);
-      expect(events[0].doc).to.deep.include(event);
-      expect(events[0].doc).to.deep.include({ characterId: "existing_viewmodel" });
-    });
+  it('Does not wait for viewmodel update', async () => {
+    const event = {
+      eventType: "NonMobile",
+      timestamp: 4365
+    };
+    const response = await rp.post(address + '/events/existing_viewmodel',
+      {
+        resolveWithFullResponse: true, json: { events: [event] },
+        auth: { username: 'existing_viewmodel', password: 'qwerty' }
+      }).promise();
+
+    expect(response.statusCode).to.eq(202);
+    const res = await eventsDb.allDocs({ include_docs: true });
+    const events = res.rows.filter(row => row.doc && row.doc.characterId);
+    expect(events.length).to.eq(1);
+    expect(events[0].doc).to.deep.include(event);
+    expect(events[0].doc).to.deep.include({ characterId: "existing_viewmodel" });
+  });
 });
