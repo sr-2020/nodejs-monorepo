@@ -9,7 +9,7 @@
     "start": "bin/start.sh",
     "stop": "bin/stop.sh",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
-    "model-test": "mocha -r ts-node/register -w  --watch-extensions ts,js  ./models/test/*.ts",
+    "model-test": "set NODE_ENV=develop && nodemon --config mocha-nodemon.json",
     "db": "ts-node src/db/sync.ts -c ../../config.js"
   },
   "author": "",

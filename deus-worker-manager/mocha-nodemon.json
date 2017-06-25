@@ -1,0 +1,9 @@
+{
+    "watch": [
+        "models/test"
+    ],
+
+    "ext": "ts,js,json",
+
+    "exec": "mocha -r ts-node/register ./models/test/*.ts"
+}
