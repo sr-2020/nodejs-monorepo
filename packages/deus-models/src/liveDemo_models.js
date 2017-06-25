@@ -2,14 +2,15 @@
 // Модельный код для LiveDemo 10.06.2017
 //=====================================================
 
-function loadImplant( name ){
-    let implant = this.getCatalogObject("implants", name);
+function loadImplant( api, name ){
+    let implant = api.getCatalogObject("implants", name);
     let effects = [];
 
-    this.debug(`Implant effects ${implant.effects} `);
+    api.debug("implant name: " + name + ", JSON: " + JSON.stringify(implant));
+    api.debug(`Implant effects ${implant.effects} `);
 
     for (let eID of implant.effects) {
-        let effect = this.getCatalogObject("effects", eID);
+        let effect = api.getCatalogObject("effects", eID);
         effect.enabled = true;
         effects.push(effect);
     }
@@ -31,16 +32,14 @@ function loadIllness( id ){
 }
 
 
-function _changeMaxHP( data ){
-    this.debug(`====_changeMaxHP(): ${data.hp} ====`);
-    let hp = this.get("hp") + data.hp;
-    let maxHp = this.get("maxHp") + data.hp;
+function _changeMaxHP(api, data ){
+    api.debug(`====_changeMaxHP(): ${data.hp} ====`);
     
-    if(hp < 1) { hp = 1;  }
-    if(maxHp < 1) { maxHp = 1;  }
+    api.model.hp += data.hp;
+    api.model.maxHp += data.hp;
     
-    this.set("hp", hp);
-    this.set("maxHp", maxHp);
+    if(api.model.hp < 1) { api.model.hp = 1;  }
+    if(api.model.maxHp < 1) { api.model.maxHp = 1;  }
 }
 
 function setModifierState(id, enabled) {
@@ -118,8 +117,8 @@ module.exports = () => {
             Эффект установленного demo-импланта
         */
         demoImplantEffect(data){
-            this.debug("====demoImplantEffect()====");            
-            this.addCondition( this.getCatalogObject("conditions", "demoImplantState") );
+            // this.debug("====demoImplantEffect()====");            
+            // this.addCondition( this.getCatalogObject("conditions", "demoImplantState") );
         },
 
         /*
@@ -144,30 +143,30 @@ module.exports = () => {
                 "id" : guid  //id таблетки
             }
         */
-        usePill(data){
-            this.debug("====usePill()====");
-            this.debug(`Pill ID: ${data.id}`);
+        usePill(api, data){
+            api.debug("====usePill()====");
+            api.debug(`Pill ID: ${data.id}`);
             
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
-                this.debug("Add implant with name: HeartHealthBooster");
+                api.debug("Add implant with name: HeartHealthBooster");
 
-                this.addModifier( loadImplant.apply(this, ["HeartHealthBooster"]) );   
+                api.addModifier( loadImplant(api, "HeartHealthBooster") );   
             }
 
-            if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
-                 this.debug("Start illness with name: anthrax");
+            // if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
+            //      this.debug("Start illness with name: anthrax");
 
-                 let illness = loadIllness.apply(this, ["anthrax"]);
-                 let _mID = this.addModifier( illness ); 
+            //      let illness = loadIllness.apply(this, ["anthrax"]);
+            //      let _mID = this.addModifier( illness ); 
                  
-                 this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `);
-                 this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
-            }
+            //      this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `);
+            //      this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
+            // }
 
              if(data.id == "3a0867ad-b9c9-4d6e-bc3e-c9c250be0ec3"){
-                this.debug("Add 2 to HP pill!");
+                api.debug("Add 2 to HP pill!");
 
-                _changeMaxHP.apply(this, [{ hp: 2 }]);
+                _changeMaxHP(api, { hp: 2 });
             }
 
             
