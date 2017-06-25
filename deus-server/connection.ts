@@ -16,7 +16,6 @@ export class Connection {
 
   constructor(
     private eventsDb: PouchDB.Database<{}>,
-    private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
     private timeout: number) { }
 
   async processEvents(id: string, events: any[]): Promise<StatusAndBody> {
@@ -35,7 +34,7 @@ export class Connection {
     }
 
     return race([this.refreshModelUpdatedResponse(id, latestSavedEventTimestamp),
-                 this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp)]);
+    this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp)]);
   }
 
   private currentTimestamp(): number {
@@ -63,5 +62,5 @@ export class Connection {
         resolve({ status: 202, body: { id: id, timestamp: latestSavedEventTimestamp, serverTime: this.currentTimestamp() } });
       }, this.timeout);
     });
-  }  
+  }
 }

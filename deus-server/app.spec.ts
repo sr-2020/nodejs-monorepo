@@ -7,6 +7,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import App from './app'
+import { TSMap } from "typescript-map";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -14,15 +15,28 @@ const address = 'http://localhost:' + port;
 describe('API Server', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
-  let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
+  let mobileViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
+  let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
+
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
-    viewModelDb = new PouchDB('viewmodel', { adapter: 'memory' });
+    mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
+    defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
+    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
+      ([['mobile', mobileViewModelDb],
+      ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
-    app = new App(eventsDb, viewModelDb, accountsDb, 20);
+    app = new App(eventsDb, viewmodelDbs, accountsDb, 20);
     await app.listen(port);
-    await viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 });
+    await mobileViewModelDb.put({
+      _id: "existing_viewmodel", timestamp: 420,
+      updatesCount: 0, mobile: true
+    });
+    await defaultViewModelDb.put({
+      _id: "existing_viewmodel", timestamp: 420,
+      updatesCount: 0, mobile: false
+    });
     await accountsDb.put({ _id: "existing_viewmodel", password: 'qwerty' });
     await accountsDb.put({ _id: "5555", password: '5555' });
   })
@@ -30,7 +44,8 @@ describe('API Server', () => {
   afterEach(async () => {
     app.stop();
     await accountsDb.destroy();
-    await viewModelDb.destroy();
+    await mobileViewModelDb.destroy();
+    await defaultViewModelDb.destroy();
     await eventsDb.destroy();
   })
 
@@ -46,7 +61,20 @@ describe('API Server', () => {
 
   describe('/viewmodel', () => {
 
-    it('Returns viewmodel of existing character', async () => {
+    it('Returns mobile viewmodel of existing character if mobile type is provided', async () => {
+      const response = await rp.get(address + '/viewmodel/existing_viewmodel?type=mobile',
+        {
+          resolveWithFullResponse: true, json: {},
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+      expect(response.body.id).to.equal("existing_viewmodel");
+      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
+    });
+
+    it('Returns default viewmodel of existing character if no type provided', async () => {
       const response = await rp.get(address + '/viewmodel/existing_viewmodel',
         {
           resolveWithFullResponse: true, json: {},
@@ -56,7 +84,16 @@ describe('API Server', () => {
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
       expect(response.body.id).to.equal("existing_viewmodel");
-      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0 });
+      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
+    });
+
+    it('Returns 404 for non-existent viewmodel type', async () => {
+      const response = await rp.get(address + '/viewmodel/existing_viewmodel?type=foo',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'existing_viewmodel', password: 'qwerty' }
+        }).promise();
+      expect(response.statusCode).to.eq(404);
     });
 
     it('Returns 404 for non-existing character', async () => {
@@ -193,8 +230,8 @@ describe('API Server', () => {
       eventsDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
         if (change.doc) {
           const changeDoc = change.doc;
-          viewModelDb.get('existing_viewmodel').then(doc => {
-            viewModelDb.put({
+          mobileViewModelDb.get('existing_viewmodel').then(doc => {
+            mobileViewModelDb.put({
               _id: 'existing_viewmodel',
               _rev: doc._rev,
               timestamp: changeDoc.timestamp,
@@ -423,8 +460,9 @@ describe('API Server - long timeout', () => {
   beforeEach(async () => {
     eventsDb = new PouchDB('events2', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
+    let viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
-    app = new App(eventsDb, viewModelDb, accountsDb, 9000);
+    app = new App(eventsDb, viewmodelDbs, accountsDb, 9000);
     await app.listen(port);
     await viewModelDb.put({ _id: "existing_viewmodel", timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: 'existing_viewmodel', password: 'qwerty' });

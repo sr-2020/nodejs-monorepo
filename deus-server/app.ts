@@ -17,7 +17,7 @@ class App {
   private connections = new TSMap<string, Connection>();
 
   constructor(private eventsDb: PouchDB.Database<any>,
-    private viewmodelDb: PouchDB.Database<{ timestamp: number }>,
+    private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
     private accountsDb: PouchDB.Database<{ password: string }>,
     private timeout: number) {
     this.app.use(bodyparser.json());
@@ -46,25 +46,32 @@ class App {
             return next();
           }
         }
-        catch (e) {}
-      } 
+        catch (e) { }
+      }
       res.header('WWW-Authentificate', 'Basic');
       res.status(401).send('Access denied');
     };
 
     this.app.get('/viewmodel/:id', auth, (req, res) => {
       const id: string = req.params.id;
-      this.viewmodelDb.get(id)
-        .then(doc => {
-          delete doc._id;
-          delete doc._rev;
-          res.send({
-            serverTime: this.currentTimestamp(),
-            id: id,
-            viewModel: doc
+      const type = req.query.type ? req.query.type : 'default';
+      let db = this.viewmodelDbs.get(type);
+      if (!db) {
+        res.status(404).send('Viewmodel type is not found');
+      }
+      else {
+        db.get(id)
+          .then(doc => {
+            delete doc._id;
+            delete doc._rev;
+            res.send({
+              serverTime: this.currentTimestamp(),
+              id: id,
+              viewModel: doc
+            })
           })
-        })
-        .catch(err => res.status(404).send("Character with such id is not found"));
+          .catch(err => res.status(404).send("Character with such id is not found"));
+      }
     })
 
     this.app.post('/events/:id', auth, async (req, res) => {
@@ -91,9 +98,9 @@ class App {
           return;
         }
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
-        
-        if (isMobileClient) {        
-          this.connections.set(id, new Connection(this.eventsDb, this.viewmodelDb, this.timeout));
+
+        if (isMobileClient) {
+          this.connections.set(id, new Connection(this.eventsDb, this.timeout));
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
             res.status(s.status).send(s.body);
             this.connections.delete(id);
@@ -102,7 +109,7 @@ class App {
           // In this case we don't need to subscribe for viewmodel updates or
           // block other clients from connecting.
           // So we don't Connetion to this.connections.
-          let connection = new Connection(this.eventsDb, this.viewmodelDb, 0);
+          let connection = new Connection(this.eventsDb, 0);
           connection.processEvents(id, events).then((s: StatusAndBody) => {
             res.status(s.status).send(s.body);
           });
@@ -133,21 +140,24 @@ class App {
       }
     });
 
-    this.viewmodelDb.changes({ since: 'now', live: true, include_docs: true }).on('change', change => {
-      if (!change.doc)
-        return;
+    this.mobileViewmodelDb().changes({ since: 'now', live: true, include_docs: true })
+      .on('change', change => {
+        if (!change.doc)
+          return;
 
-      if (this.connections.has(change.doc._id))
-        this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
-    });
+        if (this.connections.has(change.doc._id))
+          this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
+      });
   }
 
   currentTimestamp(): number {
     return new Date().valueOf();
   }
 
+  private mobileViewmodelDb() { return this.viewmodelDbs.get('mobile'); }
+
   async cutTimestamp(id: string): Promise<number> {
-    const currentViewmodel = await this.viewmodelDb.get(id);
+    const currentViewmodel = await this.mobileViewmodelDb().get(id);
     const lastEventTimeStamp = await this.latestExistingMobileEventTimestamp(id);
     return Math.max(currentViewmodel.timestamp, lastEventTimeStamp);
   }
