@@ -30,6 +30,12 @@ class App {
       res.send({ serverTime: this.currentTimestamp() });
     })
 
+    this.app.use((req, res, next) => {
+      res.setHeader('Access-Control-Allow-Headers',
+        res.getHeader('Access-Control-Allow-Headers') + ', Authorization');
+      next();
+    });
+
     const auth = async (req, res, next) => {
       const id: string = req.params.id;
       const credentials = basic_auth(req);
