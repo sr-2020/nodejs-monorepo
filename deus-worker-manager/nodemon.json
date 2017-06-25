@@ -1,11 +1,17 @@
 {
     "watch": [
+        "models/catalogs",
+        "models/src",
         "src",
         "config.json",
         "node_modules/deus-model-engine"
     ],
 
-    "ext": "ts,js",
+    "ext": "ts,js,json",
 
-    "exec": "ts-node src/worker_manager_runner.ts -c ../config.js"
+    "exec": "ts-node src/worker_manager_runner.ts -c ../config.js",
+
+    "events": {
+        "restart": "node ./bin/restartHandler.js"
+    }
 }
