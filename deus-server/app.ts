@@ -15,6 +15,13 @@ function IsDocumentNotFoundError(e): Boolean {
   return e.status && e.status == 404 && e.reason && e.reason == "missing";
 }
 
+function ReturnCharacterNotFoundOrRethrow(e: any, res: express.Response) {
+  if (IsDocumentNotFoundError(e))
+    res.status(404).send("Character with such id is not found");
+  else
+    throw e;
+}
+
 class App {
   private app: express.Express = express();
   private server: http.Server;
@@ -79,10 +86,7 @@ class App {
             viewModel: doc
           })
         } catch (e) {
-        if (IsDocumentNotFoundError(e))
-          res.status(404).send("Character with such id is not found");
-        else
-          throw e;
+          ReturnCharacterNotFoundOrRethrow(e, res);
         }
       }
     })
@@ -128,10 +132,7 @@ class App {
           });
         }
       } catch (e) {
-        if (IsDocumentNotFoundError(e))
-          res.status(404).send("Character with such id is not found");
-        else
-          throw e;
+        ReturnCharacterNotFoundOrRethrow(e, res);
       }
     });
 
@@ -146,10 +147,7 @@ class App {
         };
         res.status(200).send(response);
       } catch (e) {
-        if (IsDocumentNotFoundError(e))
-          res.status(404).send("Character with such id is not found");
-        else
-          throw e;
+        ReturnCharacterNotFoundOrRethrow(e, res);
       }
     });
 
