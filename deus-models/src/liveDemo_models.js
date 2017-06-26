@@ -135,7 +135,7 @@ module.exports = () => {
 
         enableImplant(api, data) {
             api.debug(`====enableImplant( mid : ${data.mID} )====`);
-            setModifierState(api, data.mID, false )
+            setModifierState(api, data.mID, true )
         },
 
         /*
