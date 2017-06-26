@@ -8,6 +8,15 @@
             "system" : "CardioSystem",                      
                     
             "effects" : [ "demoEffect" ]
+        },
+        {        
+            "id"        : "TestImplant01",           
+            "displayName" : "Тестовый имплант 01",       
+                        
+            "class"  : "mechanical",                        
+            "system" : "CardioSystem",                      
+                    
+            "effects" : [ "demoEffect" ]
         } 
     ]
 }

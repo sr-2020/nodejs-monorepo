@@ -44,6 +44,12 @@
             "effects": [
                 "enableImplant"
             ]
+        },
+        {
+            "eventType": "illnessTimerHandler",
+            "effects": [
+                "illnessTimerHandler"
+            ]
         }
     ]
 }

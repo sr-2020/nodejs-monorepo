@@ -16,7 +16,7 @@ let hConfig = {
 
 let exModelID = "1111";
 
-let BACKEND_WAIT_TIME = 2000;
+let BACKEND_WAIT_TIME = 1100;
 
 let REFRESH_EVENT_TYPE = "_RefreshModel";
 
@@ -34,7 +34,7 @@ export function testHelper(): string {
 export default testHelper;
 
 export function prepareConnections(){
-    console.log("    prepareConnections(): open DBs connections");
+    //console.log("    prepareConnections(): open DBs connections");
     cons.events = new PouchDB(hConfig.url + hConfig.eventsDB);
     cons.base = new PouchDB(hConfig.url + hConfig.baseModelDB);
     cons.work = new PouchDB(hConfig.url + hConfig.workModelDB);
@@ -42,7 +42,7 @@ export function prepareConnections(){
 }
 
 export function clearConnections(){
-    console.log("    prepareConnections(): close DBs connections");
+    //console.log("    prepareConnections(): close DBs connections");
     if(cons.events) cons.events.close();
     if(cons.base) cons.base.close();
     if(cons.work) cons.work.close();
@@ -50,7 +50,7 @@ export function clearConnections(){
 }
 
 export function sendEvent(eventType: string, data: any, refresh: boolean = true  ): Promise<any> {
-    console.log(`    sendEvent(): send event '${eventType}' to backend, refresh: ${refresh}`);
+    //console.log(`    sendEvent(): send event '${eventType}' to backend, refresh: ${refresh}`);
 
     let docs = [];
 
@@ -85,7 +85,7 @@ export function sendEvent(eventType: string, data: any, refresh: boolean = true 
     }).then( () => {
         //console.log( Date().valueOf() + " Get result model");
 
-        return getBaseModel();  //TODO: change to work
+        return getWorkModel();  //TODO: change to work
     });
 }
 
@@ -111,7 +111,7 @@ function clearOneDB(connection: any): Promise<any> {
 }
 
 export function clearDB(): Promise<any> {
-    console.log("    clearDB(): Clear and prepare DBs");
+    //console.log("    clearDB(): Clear and prepare DBs");
 
     let p1 = clearOneDB(cons.events);
     let p2 = clearOneDB(cons.base);
@@ -126,7 +126,6 @@ export function cteateExampleModel(): Promise<any> {
 
     return cons.base.put(model)
 }
-
 
 function getExampleModel(): any {
 
@@ -167,25 +166,41 @@ function getExampleModel(): any {
 
         password: "P@ssw0rd",
 
-        modifiers: [ ],
-        //     {
-        //         "id": "HeartHealthBooster",
-        //         "displayName": "Мотор для сердца +2 HP",
-        //         "class": "mechanical",
-        //         "system": "CardioSystem",
-        //         "effects": [
-        //             {
-        //                 "id": "demoEffect",
-        //                 "class": "physiology",
-        //                 "type": "normal",
-        //                 "handler": "demoImplantEffect",
-        //                 "enabled": true
-        //             }
-        //         ],
-        //         "enabled": true,
-        //         "mID": "cj3pyoqr00000b3jsog2gsswe"
-        //     }
-        //],
+        modifiers: [
+           {
+                id: "HeartHealthBooster",
+                displayName: "Мотор для сердца +2 HP",
+                class: "mechanical",
+                system: "CardioSystem",
+                effects: [
+                    {
+                        id: "demoEffect",
+                        class: "physiology",
+                        type: "normal",
+                        handler: "demoImplantEffect",
+                        enabled: true
+                    }
+                ],
+                enabled: true,
+                mID: "85a5746cddd447379992d8181a52f4fd"
+            },
+            {
+                id: "_Default",
+                displayName: "Default actions",
+                class: "defaults",
+                effects: [
+                    {
+                        id: "illnessStageShow",
+                        class: "physiology",
+                        type: "normal",
+                        handler: "illnessStageShow",
+                        enabled: true
+                    }
+                ],
+                enabled: true,
+                mID: "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            },
+        ],
         "age": 17,
         "timers": []
     };

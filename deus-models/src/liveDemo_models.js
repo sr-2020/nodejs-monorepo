@@ -2,11 +2,11 @@
 // Модельный код для LiveDemo 10.06.2017
 //=====================================================
 
-function loadImplant( api, name ){
-    let implant = api.getCatalogObject("implants", name);
+function loadImplant( api, id ){
+    let implant = api.getCatalogObject("implants", id);
     let effects = [];
 
-    api.debug("implant name: " + name + ", JSON: " + JSON.stringify(implant));
+    api.debug("implant name: " + id + ", JSON: " + JSON.stringify(implant));
     api.debug(`Implant effects ${implant.effects} `);
 
     for (let eID of implant.effects) {
@@ -21,9 +21,9 @@ function loadImplant( api, name ){
     return implant;
 }
 
-function loadIllness( id ){
-    let illness = this.getCatalogObject("illnesses", id);
-    this.debug(`Loaded illness ${illness.displayName}`);
+function loadIllness( api, id ){
+    let illness = api.getCatalogObject("illnesses", id);
+    api.debug(`Loaded illness ${illness.displayName}`);
 
     illness.currentStage = 0;
     illness.timerName = "illTimer" + Math.floor((Math.random() * 100000)).toString();
@@ -42,41 +42,42 @@ function _changeMaxHP(api, data ){
     if(api.model.maxHp < 1) { api.model.maxHp = 1;  }
 }
 
-function setModifierState(id, enabled) {
-    let modifiers = this.get('modifiers');
-    let index = modifiers.findIndex((m) => m.mID == id);
-    
-    if (index >= 0) {
-        modifiers[index].enabled = enabled;
-        this.set('modifiers', modifiers);
-    }    
+function setModifierState(api, id, enabled) {
+    let modifier = api.getModifierById(id);
+    modifier.enabled = enabled;
 }
 
 //Обработчик таймера болезни
 // Данные {  mID = GUID //mID болезни  }
-function illnessTimerHandler( data ){
-    this.debug(`====illnessTimerHandler() illness: ${data.mID} ====`);
+function illnessTimerHandler( api, data ){
+    api.debug(`====illnessTimerHandler() illness: ${data.mID} ====`);
 
-    let modifiers = this.get('modifiers');
-    let index = modifiers.findIndex((m) => m.mID == data.mID);
+    let modifier = api.getModifierById(data.mID);
 
-    if (index >= 0) {
-        if(modifiers[index].currentStage < modifiers[index].stages.length - 1){
-            modifiers[index].currentStage += 1;
-            this.debug(`Set next stage: ${modifiers[index].currentStage}`);
-        
-            this.set('modifiers', modifiers);
+    if (modifier) {
+        if(modifier.currentStage < modifier.stages.length - 1){
+            modifier.currentStage ++;
+            api.debug(`Set next stage: ${modifier.currentStage}`);
+
+            api.setTimer(modifier.timerName, modifier.stages[modifier.currentStage].delay*1000, "illnessTimerHandler", { mID : modifier.mID });
+        }else if(modifier.currentStage == modifier.stages.length-1){
+            modifier.currentStage ++;
+            api.debug(`Last stage: ${modifier.currentStage}`);
         }
-    }    
+    }
 }
 
 //Показать все симптомы для всех болезней (без проверок)
-function illnessStageShow( data ){
-    this.debug("====illnessStageShow()====");
-    for(let ill of this.getModifiersByClass("illness")){
-        this.debug(`Found illness: ${ill.displayName}`);
-        for(let condID of ill.stages[ill.currentStage].conditions){
-            this.addCondition( this.getCatalogObject("conditions", condID) );
+function illnessStageShow(api, data ){
+    api.debug("====illnessStageShow()====");
+
+    for(let ill of api.getModifiersByClass("illness")){
+        api.debug(`Found illness: ${ill.displayName}, stage ${ill.currentStage}`);
+
+        if(ill.currentStage < ill.stages.length) {
+            for(let condID of ill.stages[ill.currentStage].conditions){
+                api.addCondition( api.getCatalogObject("conditions", condID) );
+            }
         }
     }
 }
@@ -116,9 +117,9 @@ module.exports = () => {
         /*
             Эффект установленного demo-импланта
         */
-        demoImplantEffect(data){
-            // this.debug("====demoImplantEffect()====");            
-            // this.addCondition( this.getCatalogObject("conditions", "demoImplantState") );
+        demoImplantEffect(api, data){
+            api.debug("====demoImplantEffect()====");            
+            api.addCondition( api.getCatalogObject("conditions", "demoImplantState") );
         },
 
         /*
@@ -127,14 +128,14 @@ module.exports = () => {
                 "id" : xx  //mID конкретного импланта
             }
         */
-        disableImplant(data) {
-            this.debug("====disableImplant()====");
-            setModifierState.apply(this, [ data.id, false ])
+        disableImplant(api, data) {
+            api.debug(`====disableImplant( mid : ${data.mID} )====`);
+            setModifierState(api, data.mID, false )
         },
 
-        enableImplant(data) {
-            this.debug("====enableImplant()====");
-            setModifierState.apply(this, [ data.id, true ])
+        enableImplant(api, data) {
+            api.debug(`====enableImplant( mid : ${data.mID} )====`);
+            setModifierState(api, data.mID, false )
         },
 
         /*
@@ -150,18 +151,20 @@ module.exports = () => {
             if(data.id == "f1c4c58e-6c30-4084-87ef-e8ca318b23e7"){
                 api.debug("Add implant with name: HeartHealthBooster");
 
-                api.addModifier( loadImplant(api, "HeartHealthBooster") );   
+                api.addModifier( loadImplant(api, "TestImplant01") );   
             }
 
-            // if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
-            //      this.debug("Start illness with name: anthrax");
+            if(data.id == "dad38bc7-a67c-4d78-895d-975d128b9be8"){
+                 api.debug("Start illness with name: anthrax");
 
-            //      let illness = loadIllness.apply(this, ["anthrax"]);
-            //      let _mID = this.addModifier( illness ); 
+                 let illness = loadIllness(api, "anthrax");
+                 let m = api.addModifier( illness ); 
                  
-            //      this.debug(`Set illness timer ${illness.timerName} with mID: ${_mID} and delay ${illness.stages[0].delay*1000} `);
-            //      this.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mId : _mID });
-            // }
+                 api.debug(`Set illness timer ${illness.timerName} with mID: ${m.mID} and delay ${illness.stages[0].delay*1000} `);
+                 api.setTimer(illness.timerName, illness.stages[0].delay*1000, "illnessTimerHandler", { mID : m.mID });
+
+                 api.debug("  Timers: " + JSON.stringify(api.model.timers));
+            }
 
              if(data.id == "3a0867ad-b9c9-4d6e-bc3e-c9c250be0ec3"){
                 api.debug("Add 2 to HP pill!");

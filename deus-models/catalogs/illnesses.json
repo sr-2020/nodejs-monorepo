@@ -8,11 +8,11 @@
                         
             "stages" : [                    
                 {
-                    "delay" : 30,          
+                    "delay" : 5,          
                     "conditions" : [ "illCond01"  ]   
                 },
                 {
-                    "delay" : 60,          
+                    "delay" : 6,          
                     "conditions" : [ "illCond02"  ]   
                 }
             ],
