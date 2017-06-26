@@ -133,7 +133,7 @@ function getImplantsPageItem(modifier) {
                     text: getEnableActionText(modifier.enabled),
                     eventType: modifier.enabled ? "disableImplant" : "enableImplant",
                     data: {
-                        id: modifier.mID,
+                        mID: modifier.mID,
                     },
                 },
             ],
