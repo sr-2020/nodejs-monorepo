@@ -59,7 +59,7 @@ describe('API Server', () => {
     });
   });
 
-  describe('/viewmodel', () => {
+  describe('GET /viewmodel', () => {
 
     it('Returns mobile viewmodel of existing character if mobile type is provided', async () => {
       const response = await rp.get(address + '/viewmodel/existing_viewmodel?type=mobile',
@@ -96,7 +96,16 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(404);
     });
 
-    it('Returns 404 for non-existing character', async () => {
+    it('Returns 404 for сharacter not existing in accounts DB', async () => {
+      const response = await rp.get(address + '/viewmodel/4444',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '4444', password: '4444' }
+        }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
       const response = await rp.get(address + '/viewmodel/5555',
         {
           resolveWithFullResponse: true, simple: false, json: {},
@@ -154,7 +163,16 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(400);
     });
 
-    it('Returns 404 for non-existing character', async () => {
+    it('Returns 404 for сharacter not existing in accounts DB', async () => {
+      const response = await rp.post(address + '/events/4444',
+        {
+          resolveWithFullResponse: true, simple: false, json: { events: [] },
+          auth: { username: '4444', password: '4444' }
+        }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
       const response = await rp.post(address + '/events/5555',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [] },
@@ -374,7 +392,16 @@ describe('API Server', () => {
   });
 
   describe('GET /events', () => {
-    it('Returns 404 for non-existing character', async () => {
+    it('Returns 404 for сharacter not existing in accounts DB', async () => {
+      const response = await rp.get(address + '/events/4444',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '4444', password: '4444' }
+        }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
       const response = await rp.get(address + '/events/5555',
         {
           resolveWithFullResponse: true, simple: false, json: {},

@@ -46,7 +46,12 @@ class App {
             return next();
           }
         }
-        catch (e) { }
+        catch (e) {
+          if (e.status && e.status == 404 && e.reason && e.reason == "missing") {
+            res.status(404).send("Character with such id is not found");
+            return;
+          }
+        }
       }
       res.header('WWW-Authentificate', 'Basic');
       res.status(401).send('Access denied');
