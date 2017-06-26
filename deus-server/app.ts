@@ -61,7 +61,7 @@ class App {
       res.status(401).send('Access denied');
     };
 
-    this.app.get('/viewmodel/:id', auth, (req, res) => {
+    this.app.get('/viewmodel/:id', auth, async (req, res) => {
       const id: string = req.params.id;
       const type = req.query.type ? req.query.type : 'default';
       let db = this.viewmodelDbs.get(type);
@@ -69,17 +69,21 @@ class App {
         res.status(404).send('Viewmodel type is not found');
       }
       else {
-        db.get(id)
-          .then(doc => {
-            delete doc._id;
-            delete doc._rev;
-            res.send({
-              serverTime: this.currentTimestamp(),
-              id: id,
-              viewModel: doc
-            })
+        try {
+          const doc = (await db.get(id));
+          delete doc._id;
+          delete doc._rev;
+          res.send({
+            serverTime: this.currentTimestamp(),
+            id: id,
+            viewModel: doc
           })
-          .catch(err => res.status(404).send("Character with such id is not found"));
+        } catch (e) {
+        if (IsDocumentNotFoundError(e))
+          res.status(404).send("Character with such id is not found");
+        else
+          throw e;
+        }
       }
     })
 
