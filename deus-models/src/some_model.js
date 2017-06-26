@@ -47,7 +47,7 @@ function getStartPage(model) {
                 },
                 {
                     text: "Hit Points",
-                    value: model.hp,
+                    value: model.hp + " / " + model.maxHp,
                     percent: 100 * model.hp / model.maxHp,
                 },
                 {
@@ -221,6 +221,7 @@ function getPages(model) {
 function getToolbar(model) {
     return {
         hitPoints: model.hp,
+        maxHitPoints: model.maxHp,
     };
 }
 
@@ -285,7 +286,7 @@ module.exports = () => {
             this.debug(data);
             this.update('age', (oldValue) => oldValue + 1);
         },*/
-        
+
         _view(model, viewModel) {
             return JSON.parse(JSON.stringify(getViewModel(model)));
         }
