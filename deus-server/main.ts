@@ -1,7 +1,8 @@
 import App from './app'
 import * as PouchDB from 'pouchdb';
 import { TSMap } from "typescript-map";
-import * as config from '../configs/deus-server'
+
+const config = require("../configs/deus-server");
 
 const authOptions = { auth: { username: config.username, password: config.password } };
 

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && forever start ./build/main.js",
-    "stop": "forever stop ./build/main.js",
+    "start": "npm run build && forever start ./main.js",
+    "stop": "forever stop ./main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "repository": {
