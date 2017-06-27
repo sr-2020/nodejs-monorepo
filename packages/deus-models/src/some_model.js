@@ -225,11 +225,20 @@ function getToolbar(model) {
     };
 }
 
+function getPassportScreen(model) {
+    return {
+        id: model._id,
+        fullName: model.firstName + " " + model.lastName,
+        corporation: model.corporation
+    };
+}
+
 function getViewModel(model) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
         toolbar: getToolbar(model),
+        passportScreen: getPassportScreen(model),
         pages: getPages(model),
     };
 }
