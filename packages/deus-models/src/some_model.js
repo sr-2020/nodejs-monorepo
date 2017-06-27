@@ -229,7 +229,8 @@ function getPassportScreen(model) {
     return {
         id: model._id,
         fullName: model.firstName + " " + model.lastName,
-        corporation: model.corporation
+        corporation: model.corporation,
+        email: model.mail
     };
 }
 
