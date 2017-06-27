@@ -15,7 +15,7 @@ export interface ModelApiInterface {
     error(msg: string, ...params: any[]): void
 }
 
-export function ModelApiFactory(context: Context) {
+export function ModelApiFactory(context: Context): ModelApiInterface {
     function getModifiersBy(predicate: (m: any) => boolean) {
         return context.modifiers.filter(predicate);
     }

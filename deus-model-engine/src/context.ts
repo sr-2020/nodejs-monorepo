@@ -21,15 +21,7 @@ export type FieldName = string | string[];
 export type FieldValue = any;
 export type Timestamp = number;
 
-type Effect = {
-    enabled: boolean,
-    name: string,
-    class: string,
-    type: 'functional' | 'normal',
-    handler: string
-}
-
-type Modifier = {
+export type Modifier = {
     mID: string,
     name: string,
     class: string,
@@ -39,7 +31,7 @@ type Modifier = {
     [key: string]: any
 }
 
-type Condition = {
+export type Condition = {
     id: string,
     mID: string,
     class: string,
@@ -47,11 +39,11 @@ type Condition = {
     level?: number
 }
 
-type Timers = {
+export type Timers = {
     [name: string]: Timer
 }
 
-type Character = {
+export type Character = {
     characterId: string,
     timestamp: number,
 
@@ -63,7 +55,7 @@ type Character = {
     [key: string]: any
 }
 
-type Dictionaries = {
+export type Dictionaries = {
     [catalog: string]: any[]
 }
 

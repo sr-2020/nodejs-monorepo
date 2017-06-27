@@ -8,7 +8,7 @@ export type Event = {
     data: any
 }
 
-type CallbacksList = model.Callback | null | (model.Callback | null)[]
+export type CallbacksList = model.Callback | null | (model.Callback | null)[]
 
 export interface DispatcherInterface {
     on(name: string, callbacks: CallbacksList): void

@@ -84,7 +84,7 @@ describe('Worker', () => {
         expect(result.workingModel.timestamp).to.equal(timestamp);
     })
 
-    it.only("Should leave unprocessed timers intact", () => {
+    it("Should leave unprocessed timers intact", () => {
         const context = { timestamp: 0, "value": '' }
         const timestamp = Date.now();
 
