@@ -98,6 +98,14 @@ function getTechnicalInfoPage() {
     };
 }
 
+function getEconomyPage() {
+    return {
+        pageType: "economy",
+        menuTitle: "Экономика"
+    };
+}
+
+
 function getEnabledText(enabled) {
     return enabled ? "ON" : "OFF";
 }
@@ -214,6 +222,7 @@ function getPages(model) {
         getConditionsPage(model),
         getImplantsPage(model),
         //getBodyPage(model),
+        getEconomyPage(),
         getTechnicalInfoPage()
     ];
 }
