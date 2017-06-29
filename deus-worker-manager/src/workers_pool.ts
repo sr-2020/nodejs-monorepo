@@ -1,12 +1,21 @@
 import * as genericPool from 'generic-pool';
 
-import Logger from './logger';
+import { DIInterface } from './di';
+import { LoggerInterface } from './logger';
+import { PoolConfig } from './config';
+
 import Worker from './worker';
 
-export default class WorkersPool {
+export interface WorkersPoolInterface {
+    aquire(): Promise<Worker>;
+    release(worker: Worker): Promise<any>;
+    withWorker(handler: (worker: Worker) => Promise<void>): Promise<void>
+}
+
+export class WorkersPool implements WorkersPoolInterface {
     private pool: genericPool.Pool<Worker>;
 
-    constructor(private logger: Logger, private workerModule: string, private args?: string[], private opts?: genericPool.Options) {
+    constructor(private config: PoolConfig, private logger: LoggerInterface) {
         this.initPool();
     }
 
@@ -16,12 +25,12 @@ export default class WorkersPool {
             destroy: this.destroyWorker
         };
 
-        this.pool = genericPool.createPool(factory, this.opts);
+        this.pool = genericPool.createPool(factory, this.config.options);
     }
 
     private createWorker = () => {
         this.logger.debug('manager', 'WorkersPool::createWorker');
-        let worker: Worker = new Worker(this.logger, this.workerModule, this.args)
+        let worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
             .onExit(() => this.pool.destroy(worker))
             .up();
         return worker;

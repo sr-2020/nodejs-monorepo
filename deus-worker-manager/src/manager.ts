@@ -1,12 +1,13 @@
-import { Nano, NanoDatabase } from 'nano';
-import nano = require('nano');
+import { DIInterface } from './di';
+
+import { DBConnectorInterface } from './db/interface';
 
 import { Config } from './config';
 import EventsSource, { Event } from './events_source';
 import ModelStorage from './model_storage';
 import EventStorage from './event_storage';
-import WorkersPool from './workers_pool';
-import Logger from './logger';
+import { WorkersPoolInterface } from './workers_pool';
+import { LoggerInterface } from './logger';
 import Worker, { EngineResult } from './worker';
 
 type SyncedModels = {
@@ -14,29 +15,31 @@ type SyncedModels = {
 };
 
 export default class Manager {
-    private nano: Nano;
+    private config: Config;
+    private dbConnector: DBConnectorInterface;
     private eventsSource: EventsSource;
     private modelStorage: ModelStorage;
     private workingModelStorage: ModelStorage;
     private viewModelStorage: { [alias: string]: ModelStorage };
     private eventStorage: EventStorage;
-    private pool: WorkersPool;
-    private logger: Logger;
+    private pool: WorkersPoolInterface;
+    private logger: LoggerInterface;
     private syncedModels: SyncedModels = {};
 
-    constructor(private config: Config) {
-        this.nano = nano(config.db.url);
-        this.eventsSource = new EventsSource(this.nano, config.db.events);
+    constructor(private di: DIInterface) {
+        this.config = di.config;
+        this.dbConnector = di.dbConnector;
+        this.logger = di.logger;
+        this.pool = di.workersPool;
 
-        this.logger = new Logger(this.config);
+        this.modelStorage = new ModelStorage(this.dbConnector.use(this.config.db.models));
+        this.workingModelStorage = new ModelStorage(this.dbConnector.use(this.config.db.workingModels));
 
-        this.modelStorage = new ModelStorage(this.nano.use(config.db.models));
-        this.workingModelStorage = new ModelStorage(this.nano.use(config.db.workingModels));
-        this.eventStorage = new EventStorage(this.nano.use(config.db.events));
+        const eventsDb = this.dbConnector.use(this.config.db.events);
+        this.eventStorage = new EventStorage(eventsDb);
+        this.eventsSource = new EventsSource(eventsDb);
 
         this.initViewModelStorage();
-
-        this.pool = new WorkersPool(this.logger, config.pool.workerModule, config.pool.workerArgs, config.pool.options);
 
         this.eventsSource.refreshModelEvents.subscribe(this.refreshModel);
         this.eventsSource.follow();
@@ -94,7 +97,7 @@ export default class Manager {
         for (let alias in this.config.db) {
             if (['url', 'models', 'workingModels', 'events'].indexOf(alias) != -1) continue;
 
-            let db = this.nano.use(this.config.db[alias]);
+            let db = this.dbConnector.use(this.config.db[alias]);
             this.viewModelStorage[alias] = new ModelStorage(db);
         }
     }

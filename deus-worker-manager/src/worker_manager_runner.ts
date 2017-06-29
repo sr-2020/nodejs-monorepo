@@ -1,5 +1,12 @@
 import * as path from 'path';
 import * as meow from 'meow';
+
+import { DIInterface } from './di';
+import { Config } from './config';
+import { NanoConnector } from './db/nano';
+import { Logger } from './logger';
+import { WorkersPool } from './workers_pool';
+
 import Manager from './manager';
 
 const cli = meow(`
@@ -13,6 +20,14 @@ if (!cli.flags.c) {
 
 const CONFIG_PATH = cli.flags.c;
 
-const CONFIG = require(CONFIG_PATH);
+const config = require(CONFIG_PATH) as Config;
+const logger = new Logger(config.logger);
 
-let manager = new Manager(CONFIG);
+const di: DIInterface = {
+    config,
+    dbConnector: new NanoConnector(config.db.url),
+    logger,
+    workersPool: new WorkersPool(config.pool, logger)
+}
+
+let manager = new Manager(di);

@@ -1,8 +1,7 @@
-import { NanoDocument } from 'nano';
-import { stdCallback } from './utils';
+import { DBInterface } from './db/interface';
 
 export default class EventStorage {
-    constructor(private db: NanoDocument) { }
+    constructor(private db: DBInterface) { }
 
     async range(characterId: string, since: number, till: number) {
         const startkey = [characterId, since];
@@ -15,9 +14,7 @@ export default class EventStorage {
             inclusive_end: true
         };
 
-        let result: any = await new Promise((resolve, reject) => {
-            this.db.view('character', 'by-character-id', params, stdCallback(resolve, reject));
-        });
+        let result = await this.db.view('character', 'by-character-id', params);
 
         return result.rows.map((r: any) => r.doc);
     }

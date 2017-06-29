@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { Nano, Follow, Change } from 'nano';
+import { DBInterface } from './db/interface';
+import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
 
 export interface Event {
@@ -12,28 +13,31 @@ export interface Event {
 
 export default class EventsSource {
     private subject: Rx.Subject<Change<Event>>;
-    private feed: Follow;
+    private feed: EventEmitter;
 
-    constructor(private nano: Nano, readonly dbName: string) {
+    constructor(private db: DBInterface) {
         this.subject = new Rx.Subject();
     }
 
     follow() {
-        this.feed = this.nano.db.follow(this.dbName, { since: 'now', include_docs: true });
+        const params = {
+            since: 'now',
+            include_docs: true,
 
-        this.feed.filter = (doc, req) => {
-            if (doc._deleted) {
-                return false;
+            filter: (doc: any, req: any) => {
+                if (doc._deleted) {
+                    return false;
+                }
+
+                return true;
+            },
+
+            onChange: (change: Change<Event>) => {
+                this.subject.next(change);
             }
+        };
 
-            return true;
-        }
-
-        this.feed.on('change', (change: Change<Event>) => {
-            this.subject.next(change);
-        })
-
-        this.feed.follow();
+        this.feed = this.db.follow(params);
     }
 
     get observable() { return this.subject; }

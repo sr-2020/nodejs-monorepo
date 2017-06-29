@@ -1,31 +1,21 @@
-import { NanoDocument } from 'nano';
+import { DBInterface, Document, ID } from './db/interface';
 import { stdCallback } from './utils';
 
 export default class ModelStorage {
-    constructor(private db: NanoDocument) { };
+    constructor(private db: DBInterface) { };
 
-    async find(id: number | string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.db.get(String(id), {}, stdCallback(resolve, reject))
-        });
+    find(id: ID): Promise<Document> {
+        return this.db.get(id);
     }
 
-    async store(doc: any, id?: number | string) {
-        if (id) {
-            doc._id = id;
-        }
-
+    async store(doc: any): Promise<Document> {
         if (!doc._rev) {
-            try {
-                let stored: any = await new Promise((resolve, reject) => this.db.get(doc._id, {}, stdCallback(resolve, reject)));
-                if (stored) {
-                    doc._rev = stored._rev;
-                }
-            } catch (e) { }
+            let stored = await this.db.getOrNull(doc._id);
+            if (stored) {
+                doc._rev = stored._rev;
+            }
         }
 
-        return new Promise((resolve, reject) => {
-            this.db.insert(doc, {}, stdCallback(resolve, reject));
-        });
+        return this.db.put(doc);
     }
 }

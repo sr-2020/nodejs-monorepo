@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import * as ChildProcess from 'child_process';
 
-import Logger from './logger';
+import { LoggerInterface } from './logger';
 import { Event } from './events_source';
 
 export type EngineResult = {
@@ -13,7 +13,7 @@ export type EngineResult = {
 export default class Worker extends EventEmitter {
     private _child: ChildProcess.ChildProcess | null;
 
-    constructor(private logger: Logger, private workerModule: string, private args?: string[]) {
+    constructor(private logger: LoggerInterface, private workerModule: string, private args?: string[]) {
         super();
     }
 

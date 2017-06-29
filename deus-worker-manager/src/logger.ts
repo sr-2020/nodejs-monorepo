@@ -1,6 +1,6 @@
 import { Container, ContainerInstance } from 'winston';
 
-import { Config } from './config';
+import { LoggerConfig } from './config';
 
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
@@ -11,19 +11,27 @@ function defLevel(level: LogLevel) {
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
-export default class Logger {
+export interface LoggerInterface {
+    log(source: LogSource, level: LogLevel, msg: string, ...rest: any[]): void;
+    debug(source: LogSource, msg: string, ...rest: any[]): void;
+    info(source: LogSource, msg: string, ...rest: any[]): void;
+    warn(source: LogSource, msg: string, ...rest: any[]): void;
+    error(source: LogSource, msg: string, ...rest: any[]): void;
+}
+
+export class Logger implements LoggerInterface {
     private container: ContainerInstance;
 
-    constructor(private config: Config) {
-        this.container = new Container(config.logger.default);
+    constructor(private config: LoggerConfig) {
+        this.container = new Container(this.config.default);
 
-        for (let src in this.config.logger) {
+        for (let src in this.config) {
             if (src == 'default') continue;
-            this.container.add(src, this.config.logger[src]);
+            this.container.add(src, this.config[src]);
         }
     }
 
-    log(source: LogSource, level: string, msg: string, ...rest: any[]) {
+    log(source: LogSource, level: LogLevel, msg: string, ...rest: any[]) {
         this.container.get(source).log(level, msg, ...rest);
     }
 

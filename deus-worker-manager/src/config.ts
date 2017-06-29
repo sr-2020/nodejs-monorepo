@@ -1,4 +1,4 @@
-type DbConfig = {
+export type DbConfig = {
     url: string,
     events: string,
     models: string,
@@ -6,13 +6,13 @@ type DbConfig = {
     [alias: string]: string
 }
 
-type PoolConfig = {
+export type PoolConfig = {
     workerModule: string,
     workerArgs: string[],
     options: any
 }
 
-type LoggerConfig = {
+export type LoggerConfig = {
     [source: string]: any
 }
 
