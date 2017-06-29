@@ -3,7 +3,7 @@ type DbConfig = {
     events: string,
     models: string,
     workingModels: string,
-    viewModels: string
+    [alias: string]: string
 }
 
 type PoolConfig = {

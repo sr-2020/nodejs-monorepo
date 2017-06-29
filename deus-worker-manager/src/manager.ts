@@ -18,7 +18,7 @@ export default class Manager {
     private eventsSource: EventsSource;
     private modelStorage: ModelStorage;
     private workingModelStorage: ModelStorage;
-    private viewModelStorage: ModelStorage;
+    private viewModelStorage: { [alias: string]: ModelStorage };
     private eventStorage: EventStorage;
     private pool: WorkersPool;
     private logger: Logger;
@@ -29,10 +29,13 @@ export default class Manager {
         this.eventsSource = new EventsSource(this.nano, config.db.events);
 
         this.logger = new Logger(this.config);
+
         this.modelStorage = new ModelStorage(this.nano.use(config.db.models));
         this.workingModelStorage = new ModelStorage(this.nano.use(config.db.workingModels));
-        this.viewModelStorage = new ModelStorage(this.nano.use(config.db.viewModels));
         this.eventStorage = new EventStorage(this.nano.use(config.db.events));
+
+        this.initViewModelStorage();
+
         this.pool = new WorkersPool(this.logger, config.pool.workerModule, config.pool.workerArgs, config.pool.options);
 
         this.eventsSource.refreshModelEvents.subscribe(this.refreshModel);
@@ -53,7 +56,7 @@ export default class Manager {
         }
     }
 
-    processModel(characterId: string) {
+    private processModel(characterId: string) {
         this.logger.debug('manager', 'process model %s', characterId);
 
         return async (worker: Worker) => {
@@ -74,15 +77,38 @@ export default class Manager {
 
             this.logger.debug('manager', 'result = %j', result);
 
-            let { baseModel, workingModel, viewModel } = result;
+            let { baseModel, workingModel, viewModels } = result;
             delete workingModel._rev;
-            delete viewModel._rev;
 
             await Promise.all([
                 this.modelStorage.store(baseModel),
                 this.workingModelStorage.store(workingModel),
-                this.viewModelStorage.store(viewModel)
+                this.storeViewModels(viewModels)
             ]);
         }
+    }
+
+    private initViewModelStorage() {
+        this.viewModelStorage = {};
+
+        for (let alias in this.config.db) {
+            if (['url', 'models', 'workingModels', 'events'].indexOf(alias) != -1) continue;
+
+            let db = this.nano.use(this.config.db[alias]);
+            this.viewModelStorage[alias] = new ModelStorage(db);
+        }
+    }
+
+    private async storeViewModels(viewModels: { [alias: string]: any }) {
+        let pending = [];
+        for (let alias in viewModels) {
+            if (!this.viewModelStorage[alias]) continue;
+            let viewModel = viewModels[alias];
+            delete viewModel._rev;
+
+            pending.push(this.viewModelStorage[alias].store(viewModel));
+        }
+
+        return pending;
     }
 }

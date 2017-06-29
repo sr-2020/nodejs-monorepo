@@ -7,7 +7,7 @@ import { Event } from './events_source';
 export type EngineResult = {
     baseModel: any,
     workingModel: any,
-    viewModel: any
+    viewModels: { [alias: string]: any }
 }
 
 export default class Worker extends EventEmitter {
@@ -84,9 +84,9 @@ export default class Worker extends EventEmitter {
                         this._child.removeListener('error', onError);
                     }
 
-                    let { baseModel, workingModel, viewModel } = message;
+                    let { baseModel, workingModel, viewModels } = message;
 
-                    resolve({ baseModel, workingModel, viewModel });
+                    resolve({ baseModel, workingModel, viewModels });
                 }
             }
 
