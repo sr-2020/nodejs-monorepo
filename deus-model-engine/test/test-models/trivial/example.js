@@ -20,6 +20,10 @@ module.exports = () => {
         delayedConcat(api, data) {
             let {operand, value, delay} = data;
             api.setTimer('delayedConcat', delay, 'concat', { operand, value });
+        },
+
+        _view(api, data) {
+            return { value: data.value };
         }
     };
 };

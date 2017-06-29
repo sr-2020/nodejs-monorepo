@@ -1,4 +1,4 @@
-import { clone, assign } from 'lodash'
+import { clone, assign, reduce } from 'lodash'
 import { inspect } from 'util';
 
 import Logger from './logger';
@@ -23,7 +23,7 @@ export type WorkerContext = {
 export type EngineResult = {
     baseModel: any,
     workingModel: any,
-    viewModel: any
+    viewModels: { [base: string]: any }
 }
 
 export class Worker {
@@ -74,9 +74,9 @@ export class Worker {
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
 
-        let viewModel = this.runViewModels(workingCtxValue);
+        let viewModels = this.runViewModels(workingCtx);
 
-        return { baseModel: baseCtxValue, workingModel: workingCtxValue, viewModel };
+        return { baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels };
     }
 
     listen() {
@@ -137,23 +137,38 @@ export class Worker {
         return workingCtx;
     }
 
-    private runViewModels(data: any) {
-        return this.model.viewModelCallbacks.reduce((vm, fn) => {
-            return fn(data, vm);
+    private runViewModels(workingCtx: Context) {
+        let data = workingCtx.valueOf();
+        let api = ModelApiFactory(workingCtx);
+
+        return reduce(this.model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
+            vm[base] = f(api, data);
+            return vm;
         }, {});
     }
 }
 
 function loadModels(dir: string): model.Model {
-    return requireDir(dir, (m: any, src: any) => {
+    return requireDir(dir, (m: model.Model, src: any) => {
         m = clone(m);
         src = clone(src);
-        if (!m.viewModelCallbacks) m.viewModelCallbacks = [];
+
+        if (!m.viewModelCallbacks) m.viewModelCallbacks = {};
+
         if (src._view) {
-            m.viewModelCallbacks.push(src._view);
+            m.viewModelCallbacks.viewModels = src._view;
             delete src._view;
         }
+
+        for (let fname in src) {
+            if (fname.startsWith('view_')) {
+                m.viewModelCallbacks[fname.substr('view_'.length)] = src[fname];
+                delete src[fname];
+            }
+        }
+
         m.callbacks = assign({}, m.callbacks, src);
+
         return m;
     });
 }

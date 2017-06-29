@@ -105,4 +105,19 @@ describe('Worker', () => {
         expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "A", timers: { delayedConcat: expectedTimer } });
         expect(result.workingModel.timestamp).to.equal(timestamp);
     })
+
+    it("Should produce view model", () => {
+        const context = { timestamp: 0, "value": 0 };
+        const timestamp = Date.now();
+
+        const events = [
+            { eventType: "_RefreshModel", timestamp, data: undefined }
+        ];
+
+        let { viewModels } = worker.process(context, events)
+
+        expect(viewModels).to.exist;
+        expect(viewModels).to.has.property('viewModels');
+        expect(viewModels.viewModels).to.deep.equal({ value: 0 });
+    })
 });
