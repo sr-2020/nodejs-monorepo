@@ -1,5 +1,5 @@
 export type DbConfig = {
-    url: string,
+    // url?: string
     events: string,
     models: string,
     workingModels: string,

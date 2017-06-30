@@ -18,7 +18,7 @@ export class NanoConnector implements DBConnectorInterface {
 
         if (this.cache[name]) return this.cache[name];
 
-        return new NanoDb(this.connection, name);
+        return this.cache[name] = new NanoDb(this.connection, name);
     }
 }
 
@@ -31,7 +31,7 @@ export class NanoDb implements DBInterface {
 
     get(id: ID, params: any): Promise<Document> {
         return new Promise((resolve, reject) => {
-            this.db.get(String(id), params, stdCallback(resolve, reject));
+            this.db.get(id, params, stdCallback(resolve, reject));
         }) as Promise<Document>;
     }
 
@@ -47,10 +47,10 @@ export class NanoDb implements DBInterface {
         }
     }
 
-    put(doc: Document): Promise<Document> {
+    put(doc: Document) {
         return new Promise((resolve, reject) => {
             this.db.insert(doc, {}, stdCallback(resolve, reject));
-        }) as Promise<Document>;
+        })
     }
 
     remove(id: ID, rev: string): Promise<any> {
@@ -59,7 +59,7 @@ export class NanoDb implements DBInterface {
                 return reject(new Error('Document id or revision not defined in remove'));
             }
 
-            this.db.destroy(String(id), rev, stdCallback(resolve, reject));
+            this.db.destroy(id, rev, stdCallback(resolve, reject));
         });
     }
 

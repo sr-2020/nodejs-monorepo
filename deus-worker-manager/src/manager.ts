@@ -1,3 +1,5 @@
+import { isNil } from 'lodash';
+
 import { DIInterface } from './di';
 
 import { DBConnectorInterface } from './db/interface';
@@ -82,11 +84,12 @@ export default class Manager {
 
             let { baseModel, workingModel, viewModels } = result;
             delete workingModel._rev;
+            workingModel.timestamp = baseModel.timestamp;
 
             await Promise.all([
                 this.modelStorage.store(baseModel),
                 this.workingModelStorage.store(workingModel),
-                this.storeViewModels(viewModels)
+                this.storeViewModels(characterId, baseModel.timestamp, viewModels)
             ]);
         }
     }
@@ -102,12 +105,17 @@ export default class Manager {
         }
     }
 
-    private async storeViewModels(viewModels: { [alias: string]: any }) {
+    private async storeViewModels(characteId: string, timestamp: number, viewModels: { [alias: string]: any }) {
         let pending = [];
         for (let alias in viewModels) {
             if (!this.viewModelStorage[alias]) continue;
+
             let viewModel = viewModels[alias];
+            viewModel.timestamp = timestamp;
             delete viewModel._rev;
+            if (isNil(viewModel._id)) {
+                viewModel._id = characteId;
+            }
 
             pending.push(this.viewModelStorage[alias].store(viewModel));
         }

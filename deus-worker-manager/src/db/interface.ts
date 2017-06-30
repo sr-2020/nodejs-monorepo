@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-export type ID = number | string;
+export type ID = string;
 export type Document = {
     _id: ID,
     _rev?: string,
@@ -20,7 +20,7 @@ export interface DBConnectorInterface {
 export interface DBInterface {
     get(id: ID, params?: any): Promise<Document>;
     getOrNull(id: ID, params?: any): Promise<Document | null>;
-    put(doc: Document): Promise<Document>;
+    put(doc: Document): Promise<any>;
     remove(id: ID, rev: string): Promise<any>;
     view(design: string, view: string, params: any): Promise<any>
     follow(params: FilterParams): EventEmitter;

@@ -1,0 +1,13 @@
+{
+    "events": [
+        {
+            "eventType": "concat",
+            "effects": ["concat"]
+        },
+        {
+            "eventType": "delayedConcat",
+            "effects": ["delayedConcat"]
+        }
+
+    ]
+}
