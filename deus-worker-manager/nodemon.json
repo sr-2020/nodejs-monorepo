@@ -9,7 +9,7 @@
 
     "ext": "ts,js,json",
 
-    "exec": "ts-node src/worker_manager_runner.ts -c ../config.js",
+    "exec": "node_modules/.bin/ts-node src/worker_manager_runner.ts -c ../config.js",
 
     "events": {
         "restart": "node ./bin/restartHandler.js"
