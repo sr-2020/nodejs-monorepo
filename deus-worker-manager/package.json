@@ -31,7 +31,7 @@
     "@types/glob": "^5.0.30",
     "@types/meow": "^3.6.2",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.33",
+    "@types/node": "^8.0.6",
     "@types/pouchdb": "^6.1.1",
     "@types/pouchdb-adapter-memory": "^6.1.1",
     "@types/winston": "^2.3.3",

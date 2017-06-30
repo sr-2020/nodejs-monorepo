@@ -9,7 +9,7 @@ export type Document = {
 
 export type FilterParams = {
     filter?: string | ((doc: any, req: any) => boolean),
-    onChange?: Function,
+    onChange?: (...params: any[]) => void,
     [key: string]: any
 }
 
