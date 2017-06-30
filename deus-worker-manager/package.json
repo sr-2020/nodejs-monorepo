@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "prestart": "bin/update_models.sh",
     "start": "bin/start.sh",
     "stop": "bin/stop.sh",
     "test": "npm run test:integration",
