@@ -55,7 +55,7 @@ export class WorkersPool implements WorkersPoolInterface {
         } catch (e) {
             this.logger.error('manager', 'Error:', e);
         } finally {
-            return this.release(worker);
+            this.release(worker);
         }
     }
 }

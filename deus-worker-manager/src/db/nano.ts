@@ -23,7 +23,7 @@ export class NanoConnector implements DBConnectorInterface {
 }
 
 export class NanoDb implements DBInterface {
-    private db: NanoDocument
+    private db: NanoDocument;
 
     constructor(private connection: Nano, private dbName: string) {
         this.db = this.connection.use(dbName);
@@ -50,7 +50,7 @@ export class NanoDb implements DBInterface {
     put(doc: Document) {
         return new Promise((resolve, reject) => {
             this.db.insert(doc, {}, stdCallback(resolve, reject));
-        })
+        });
     }
 
     remove(id: ID, rev: string): Promise<any> {

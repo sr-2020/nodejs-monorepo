@@ -1,23 +1,23 @@
-export type DbConfig = {
+export interface DbConfig {
     // url?: string
-    events: string,
-    models: string,
-    workingModels: string,
+    events: string
+    models: string
+    workingModels: string
     [alias: string]: string
 }
 
-export type PoolConfig = {
-    workerModule: string,
-    workerArgs: string[],
+export interface PoolConfig {
+    workerModule: string
+    workerArgs: string[]
     options: any
 }
 
-export type LoggerConfig = {
+export interface LoggerConfig {
     [source: string]: any
 }
 
-export type Config = {
-    db: DbConfig,
-    pool: PoolConfig,
+export interface Config {
+    db: DbConfig
+    pool: PoolConfig
     logger: LoggerConfig
 }

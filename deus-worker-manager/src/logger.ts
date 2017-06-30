@@ -5,10 +5,10 @@ import { LoggerConfig } from './config';
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
         this.log(source, level, msg, ...rest);
-    }
+    };
 }
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
 export interface LoggerInterface {
@@ -35,8 +35,8 @@ export class Logger implements LoggerInterface {
         this.container.get(source).log(level, msg, ...rest);
     }
 
-    debug = defLevel('debug')
-    info = defLevel('info')
-    warn = defLevel('warn')
-    error = defLevel('error')
+    debug = defLevel('debug');
+    info = defLevel('info');
+    warn = defLevel('warn');
+    error = defLevel('error');
 }

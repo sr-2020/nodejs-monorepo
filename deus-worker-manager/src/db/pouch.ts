@@ -85,7 +85,7 @@ export class PouchDb implements DBInterface {
         let feed = this.db.changes(otherParams);
 
         if (onChange) {
-            feed = feed.on("change", onChange as any);
+            feed = feed.on('change', onChange);
         }
 
         return feed;

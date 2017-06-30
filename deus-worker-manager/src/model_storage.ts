@@ -2,7 +2,7 @@ import { DBInterface, Document, ID } from './db/interface';
 import { stdCallback } from './utils';
 
 export default class ModelStorage {
-    constructor(private db: DBInterface) { };
+    constructor(private db: DBInterface) { }
 
     find(id: ID): Promise<Document> {
         return this.db.get(id);

@@ -20,7 +20,7 @@ if (!cli.flags.c) {
 
 const CONFIG_PATH = cli.flags.c;
 
-const config = require(CONFIG_PATH) as Config;
+const config = require(CONFIG_PATH) as Config; // tslint:disable-line
 const logger = new Logger(config.logger);
 
 const di: DIInterface = {
@@ -28,6 +28,6 @@ const di: DIInterface = {
     dbConnector: new NanoConnector(config.db.url),
     logger,
     workersPool: new WorkersPool(config.pool, logger)
-}
+};
 
 let manager = new Manager(di);

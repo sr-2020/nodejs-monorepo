@@ -1,3 +1,5 @@
+/* tslint:disable no-var-requires no-console */
+
 import * as path from 'path';
 import * as meow from 'meow';
 import { Nano, NanoDatabase, NanoDocument } from 'nano';
@@ -58,9 +60,9 @@ const createDbs = () => {
                     console.log(err);
                 }
                 resolve();
-            })
-        })
-    })
+            });
+        });
+    });
 };
 
 async function getOrNull(db: NanoDocument, id: string): Promise<any> {
@@ -78,7 +80,7 @@ async function getOrNull(db: NanoDocument, id: string): Promise<any> {
 async function put(db: NanoDocument, doc: any) {
     return new Promise((resolve, reject) => {
         db.insert(doc, {}, stdCallback(resolve, reject));
-    })
+    });
 }
 
 const createViews = () => {
@@ -89,7 +91,7 @@ const createViews = () => {
         let dbNames = dd.dbs;
         delete (dd.dbs);
 
-        if (typeof dd.version == 'undefined') console.log("Warning: no version in #{dd._id}");
+        if (typeof dd.version == 'undefined') console.log('Warning: no version in #{dd._id}');
 
         try {
             let pending = dbNames.map(async (dbName: string) => {
@@ -109,12 +111,12 @@ const createViews = () => {
 
                 delete dd._rev;
 
-                console.log("Updated:", dbName, dd._id);
+                console.log('Updated:', dbName, dd._id);
             });
 
             return Promise.all(pending);
         } catch (e) {
-            console.log("Error:", e);
+            console.log('Error:', e);
         }
     });
 };

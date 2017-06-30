@@ -12,9 +12,9 @@ import { WorkersPoolInterface } from './workers_pool';
 import { LoggerInterface } from './logger';
 import Worker, { EngineResult } from './worker';
 
-type SyncedModels = {
-    [characterId: string]: Event
-};
+interface SyncedModels {
+    [characterId: string]: Event;
+}
 
 export default class Manager {
     private config: Config;
@@ -55,7 +55,7 @@ export default class Manager {
         if (!this.syncedModels[characterId]) {
             this.syncedModels[characterId] = event;
             await this.pool.withWorker(this.processModel(characterId));
-            delete this.syncedModels[characterId]
+            delete this.syncedModels[characterId];
         } else {
             this.syncedModels[characterId] = event;
         }
@@ -67,7 +67,7 @@ export default class Manager {
         return async (worker: Worker) => {
             const syncEvent = this.syncedModels[characterId];
             if (!syncEvent) {
-                this.logger.warn('manager', 'Sync event lost', { characterId })
+                this.logger.warn('manager', 'Sync event lost', { characterId });
                 return;
             }
 
@@ -91,7 +91,7 @@ export default class Manager {
                 this.workingModelStorage.store(workingModel),
                 this.storeViewModels(characterId, baseModel.timestamp, viewModels)
             ]);
-        }
+        };
     }
 
     private initViewModelStorage() {
