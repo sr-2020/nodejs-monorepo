@@ -1,5 +1,6 @@
+import { QrType } from "./qr.type";
 export declare class QrData {
-    type: number;
+    type: QrType;
     kind: number;
     validUntil: number;
     payload: string;

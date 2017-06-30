@@ -1,8 +1,10 @@
 import * as md5 from 'md5'
+import { QrType } from "./qr.type";
+
+
 
 export class QrData {
-  // TODO: switch to enums
-  public type: number;
+  public type: QrType;
   public kind: number;
   public validUntil: number;
   public payload: string;
@@ -45,7 +47,7 @@ export function decode(content: string): QrData {
     if(e instanceof RangeError){
       throw new FormatError('Format Error: Cannot process content: index out of range');
     }
-    throw e; 
+    throw e;
   }
 }
 

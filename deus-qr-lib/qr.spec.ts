@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import 'mocha';
+import { QrType } from "./qr.type";
 import { decode, encode, FormatError } from "./qr";
 
 describe('QR content encoding/decode', () => {
@@ -30,12 +31,12 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Can decode example content', () => {
-    const decoded = decode('92c2EQ1ybkhZHello');
-    expect(decoded).to.deep.equal({type: 17, kind: 13, validUntil: 1497919090, payload: 'Hello'});
+    const decoded = decode('d810Aw1ybkhZHello');
+    expect(decoded).to.deep.equal({type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello'});
   });
 
   it('Can encode example content', () => {
-    const encoded = encode({type: 17, kind: 13, validUntil: 1497919090, payload: 'Hello'});
-    expect(encoded).to.equal('92c2EQ1ybkhZHello');
-  });  
+    const encoded = encode({type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello'});
+    expect(encoded).to.equal('d810Aw1ybkhZHello');
+  });
 });
