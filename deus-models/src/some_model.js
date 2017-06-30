@@ -266,47 +266,7 @@ function setModifierEnabled(modifiers, id, enabled) {
 
 module.exports = () => {
     return {
-        add(data) {
-            let {value} = data;
-            this.debug('add %d', value);
-            this.update('value', (oldValue) => oldValue + Number(value));
-        },
-
-        mul(data) {
-            let {value} = data;
-            this.debug('times %d', value);
-            this.update('value', (oldValue) => oldValue * Number(value));
-        },
-
-        concat(data) {
-            let {value} = data;
-            this.update(value, (oldValue) => '' + oldValue + value);
-        },
-
-        delayedConcat(data) {
-            let {value, delay} = data;
-            this.setTimer('value', 'concat', { value });
-        },
-
-        /*disableImplant(data) {
-            let {id} = data;
-            this.error('### disableImplant ', id)
-            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, false));
-        },
-
-        enableImplant(data) {
-            let {id} = data;
-            this.error('### enableImplant ', id)
-            this.update('modifiers', (oldModifiers) => setModifierEnabled(oldModifiers, id, true));
-        },*/
-
-        /*usePill(data) {
-            this.debug('Processing usePill');
-            this.debug(data);
-            this.update('age', (oldValue) => oldValue + 1);
-        },*/
-
-        _view(model, viewModel) {
+        _view(api, model) {
             return JSON.parse(JSON.stringify(getViewModel(model)));
         }
     };

@@ -96,7 +96,7 @@ module.exports = {
         api.debug("====changeMaxHP()====");
         api.debug(`Change HP: ${data.hp}`);
 
-        _changeMaxHP.apply(this, data);
+        _changeMaxHP(api, data);
     },
 
     /*
@@ -109,7 +109,7 @@ module.exports = {
         api.debug("====addImplant()====");
         api.debug(`Implant name: ${data.name}`);
 
-        api.addModifier( loadImplant.apply(this, [data.name]) );
+        api.addModifier(loadImplant(api, [data.name]) );
     },
 
     /*
@@ -129,7 +129,7 @@ module.exports = {
     */
     disableImplant(api, data) {
         api.debug(`====disableImplant( mid : ${data.mID} )====`);
-        setModifierState(api, data.mID, false )
+        setModifierState(api, data.mID, false)
     },
 
     enableImplant(api, data) {
