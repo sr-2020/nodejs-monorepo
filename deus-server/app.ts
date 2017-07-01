@@ -125,7 +125,7 @@ class App {
         } else {
           // In this case we don't need to subscribe for viewmodel updates or
           // block other clients from connecting.
-          // So we don't Connetion to this.connections.
+          // So we don't add Connection to this.connections.
           let connection = new Connection(this.eventsDb, 0);
           connection.processEvents(id, events).then((s: StatusAndBody) => {
             res.status(s.status).send(s.body);
