@@ -43,7 +43,7 @@ export default class Manager {
 
         this.initViewModelStorage();
 
-        this.eventsSource.refreshModelEvents.subscribe(this.refreshModel);
+        this.eventsSource.refreshModelEvents.concatMap(this.refreshModel).subscribe();
         this.eventsSource.follow();
     }
 
