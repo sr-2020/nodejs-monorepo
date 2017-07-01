@@ -43,21 +43,30 @@ export default class Manager {
 
         this.initViewModelStorage();
 
-        this.eventsSource.refreshModelEvents.concatMap(this.refreshModel).subscribe();
+        this.eventsSource.refreshModelEvents.subscribe(this.queueEvent);
+
         this.eventsSource.follow();
     }
 
-    refreshModel = async (event: Event) => {
+    queueEvent = (event: Event) => {
         this.logger.info('manager', 'refresh event for %s', event.characterId, event);
 
         const characterId = event.characterId;
 
         if (!this.syncedModels[characterId]) {
             this.syncedModels[characterId] = event;
-            await this.pool.withWorker(this.processModel(characterId));
-            delete this.syncedModels[characterId];
-        } else {
+            setImmediate(this.refreshModel, characterId);
+        } else if (this.syncedModels[characterId].timestamp < event.timestamp) {
             this.syncedModels[characterId] = event;
+        }
+    }
+
+    refreshModel = async (characterId: string) => {
+        let event = await this.pool.withWorker(this.processModel(characterId));
+        if (event.timestamp < this.syncedModels[characterId].timestamp) {
+            setImmediate(this.refreshModel, characterId);
+        } else {
+            delete this.syncedModels[characterId];
         }
     }
 
@@ -65,10 +74,12 @@ export default class Manager {
         this.logger.debug('manager', 'process model %s', characterId);
 
         return async (worker: Worker) => {
+            this.logger.debug('manager', 'worker aquired');
+
             const syncEvent = this.syncedModels[characterId];
             if (!syncEvent) {
                 this.logger.warn('manager', 'Sync event lost', { characterId });
-                return;
+                return Promise.reject('Sync event lost');
             }
 
             const model = await this.modelStorage.find(characterId);
@@ -91,6 +102,8 @@ export default class Manager {
                 this.workingModelStorage.store(workingModel),
                 this.storeViewModels(characterId, baseModel.timestamp, viewModels)
             ]);
+
+            return syncEvent;
         };
     }
 

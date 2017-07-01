@@ -3,13 +3,14 @@ import * as genericPool from 'generic-pool';
 import { DIInterface } from './di';
 import { LoggerInterface } from './logger';
 import { PoolConfig } from './config';
+import { Event } from './events_source';
 
 import Worker from './worker';
 
 export interface WorkersPoolInterface {
     aquire(): Promise<Worker>;
     release(worker: Worker): Promise<any>;
-    withWorker(handler: (worker: Worker) => Promise<void>): Promise<void>
+    withWorker(handler: (worker: Worker) => Promise<Event>): Promise<Event>
 }
 
 export class WorkersPool implements WorkersPoolInterface {
@@ -48,10 +49,10 @@ export class WorkersPool implements WorkersPoolInterface {
         return this.pool.release(worker);
     }
 
-    async withWorker(handler: (worker: Worker) => Promise<void>) {
+    async withWorker(handler: (worker: Worker) => Promise<Event>) {
         const worker = await this.aquire();
         try {
-            await handler(worker);
+            return await handler(worker);
         } catch (e) {
             this.logger.error('manager', 'Error:', e);
         } finally {
