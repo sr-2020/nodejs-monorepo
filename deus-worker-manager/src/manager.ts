@@ -5,12 +5,14 @@ import { Subscription } from 'rxjs';
 import { DBConnectorInterface } from './db/interface';
 
 import { Config } from './config';
-import EventsSource, { Event } from './events_source';
-import ModelStorage from './model_storage';
-import EventStorage from './event_storage';
+import { EventsSource, Event, SyncEvent } from './events_source';
+import { ModelStorage } from './model_storage';
+import { ViewModelStorage } from './view_model_storage';
+import { EventStorage } from './event_storage';
 import { WorkersPoolInterface } from './workers_pool';
 import { LoggerInterface } from './logger';
-import Worker, { EngineResult } from './worker';
+
+import { Processor, ProcessorFactory } from './processor';
 
 interface SyncedModels {
     [characterId: string]: Event;
@@ -18,56 +20,63 @@ interface SyncedModels {
 
 @Inject
 export class Manager {
-    private eventsSource: EventsSource;
-    private modelStorage: ModelStorage;
-    private workingModelStorage: ModelStorage;
-    private viewModelStorage: { [alias: string]: ModelStorage };
-    private eventStorage: EventStorage;
-    private syncedModels: SyncedModels = {};
     private eventsSourceSubscription: Subscription;
+
+    private processors: {
+        [characterId: string]: {
+            current: Processor,
+            pending?: Processor
+        }
+    } = {};
 
     constructor(
         private config: Config,
-        private dbConnector: DBConnectorInterface,
+        private eventsSource: EventsSource,
         private pool: WorkersPoolInterface,
+        private processorFactory: ProcessorFactory,
         private logger: LoggerInterface
     ) { }
 
     init() {
-        this.modelStorage = new ModelStorage(this.dbConnector.use(this.config.db.models));
-        this.workingModelStorage = new ModelStorage(this.dbConnector.use(this.config.db.workingModels));
+        this.subscribeEvents();
+    }
 
-        const eventsDb = this.dbConnector.use(this.config.db.events);
-        this.eventStorage = new EventStorage(eventsDb);
-        this.eventsSource = new EventsSource(eventsDb);
+    subscribeEvents() {
+        this.eventsSourceSubscription = this.eventsSource.syncEvents.subscribe((event: SyncEvent) => {
+            this.logger.info('manager', 'refresh event for %s', event.characterId, event);
+            const characterId = event.characterId;
 
-        this.initViewModelStorage();
+            if (this.processors[characterId]) {
+                const processors = this.processors[characterId];
+                if (processors.current.acceptingEvents()) {
+                    processors.current.pushEvent(event);
+                } else {
+                    if (!processors.pending) {
+                        processors.pending = this.processorFactory();
+                    }
+                    processors.pending.pushEvent(event);
+                }
+            } else {
+                const processor = this.processorFactory();
+                processor.pushEvent(event).run().then(this.processorFinished);
+                this.processors[characterId] = { current: processor };
+            }
+        });
 
-        this.pool.init();
-
-        this.eventsSourceSubscription = this.eventsSource.refreshModelEvents.subscribe(this.queueEvent);
         this.eventsSource.follow();
     }
 
-    queueEvent = (event: Event) => {
-        this.logger.info('manager', 'refresh event for %s', event.characterId, event);
-
+    processorFinished = (event: SyncEvent) => {
         const characterId = event.characterId;
-
-        if (!this.syncedModels[characterId]) {
-            this.syncedModels[characterId] = event;
-            setImmediate(this.refreshModel, characterId);
-        } else if (this.syncedModels[characterId].timestamp < event.timestamp) {
-            this.syncedModels[characterId] = event;
-        }
-    }
-
-    refreshModel = async (characterId: string) => {
-        let event = await this.pool.withWorker(this.processModel(characterId));
-        if (event && event.timestamp < this.syncedModels[characterId].timestamp) {
-            setImmediate(this.refreshModel, characterId);
-        } else {
-            delete this.syncedModels[characterId];
+        if (this.processors[characterId]) {
+            const processors = this.processors[characterId];
+            if (processors.pending) {
+                processors.current = processors.pending;
+                delete processors.pending;
+                processors.current.run().then(this.processorFinished);
+            } else {
+                delete this.processors[characterId];
+            }
         }
     }
 
@@ -76,73 +85,5 @@ export class Manager {
 
         this.eventsSourceSubscription.unsubscribe();
         return this.pool.drain();
-    }
-
-    private processModel(characterId: string) {
-        this.logger.debug('manager', 'process model %s', characterId);
-
-        return async (worker: Worker) => {
-            this.logger.debug('manager', 'worker aquired');
-
-            const syncEvent = this.syncedModels[characterId];
-            if (!syncEvent) {
-                this.logger.warn('manager', 'Sync event lost', { characterId });
-                return Promise.reject('Sync event lost');
-            }
-
-            const model = await this.modelStorage.find(characterId);
-
-            const events = (await this.eventStorage.range(characterId, model.timestamp + 1, syncEvent.timestamp))
-                .filter((event: Event) => event.eventType != '_NoOp');
-
-            this.logger.debug('manager', 'events = %j', events);
-
-            if (!events.length) return syncEvent;
-
-            const result: EngineResult = await worker.process(syncEvent, model, events);
-
-            this.logger.debug('manager', 'result = %j', result);
-
-            let { baseModel, workingModel, viewModels } = result;
-            delete workingModel._rev;
-            workingModel.timestamp = baseModel.timestamp;
-
-            await Promise.all([
-                this.modelStorage.store(baseModel),
-                this.workingModelStorage.store(workingModel),
-                this.storeViewModels(characterId, baseModel.timestamp, viewModels)
-            ]);
-
-            return syncEvent;
-        };
-    }
-
-    private initViewModelStorage() {
-        this.viewModelStorage = {};
-
-        for (let alias in this.config.db) {
-            if (['url', 'models', 'workingModels', 'events'].indexOf(alias) != -1) continue;
-
-            let db = this.dbConnector.use(this.config.db[alias]);
-            this.viewModelStorage[alias] = new ModelStorage(db);
-        }
-    }
-
-    private async storeViewModels(characteId: string, timestamp: number, viewModels: { [alias: string]: any }) {
-        let pending: Array<Promise<any>> = [];
-        for (let alias in viewModels) {
-            if (!this.viewModelStorage[alias]) continue;
-
-            let viewModel = viewModels[alias];
-            viewModel.timestamp = timestamp;
-            delete viewModel._rev;
-            if (isNil(viewModel._id)) {
-                viewModel._id = characteId;
-            }
-
-            pending.push(this.viewModelStorage[alias].store(viewModel));
-        }
-
-        return pending;
     }
 }

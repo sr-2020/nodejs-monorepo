@@ -8,10 +8,17 @@ export interface Event {
     eventType: string,
     timestamp: number,
     characterId: string,
-    data: any
+    data?: any
 }
 
-export default class EventsSource {
+export interface SyncEvent {
+    _id: string,
+    eventType: '_RefreshModel',
+    timestamp: number,
+    characterId: string
+}
+
+export class EventsSource {
     private subject: Rx.Subject<Change<Event>>;
     private feed: EventEmitter;
 
@@ -42,13 +49,13 @@ export default class EventsSource {
 
     get observable() { return this.subject; }
 
-    get events() {
+    get events(): Rx.Observable<Event> {
         return this.subject.map((change) => change.doc);
     }
 
-    get refreshModelEvents() {
+    get syncEvents(): Rx.Observable<SyncEvent> {
         return this.events.filter((e) => {
             return Boolean(e && e.eventType === '_RefreshModel');
-        });
+        }) as any;
     }
 }

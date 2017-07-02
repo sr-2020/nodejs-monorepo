@@ -63,6 +63,11 @@ class Binder<T, Base> {
         return this._releaseInjector();
     }
 
+    singleton() {
+        this.cacheable = true;
+        return this;
+    }
+
     resolve(deps: any[]): T {
         switch (this._type) {
             case BindType.CLASS:

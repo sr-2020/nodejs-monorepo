@@ -10,7 +10,7 @@ export interface EngineResult {
     viewModels: { [alias: string]: any }
 }
 
-export default class Worker extends EventEmitter {
+export class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
     lastOutput: string[] = [];
 

@@ -1,6 +1,6 @@
 import { DBInterface } from './db/interface';
 
-export default class EventStorage {
+export class EventStorage {
     constructor(private db: DBInterface) { }
 
     async range(characterId: string, since: number, till: number) {

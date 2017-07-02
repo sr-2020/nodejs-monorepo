@@ -5,13 +5,13 @@ import { LoggerInterface } from './logger';
 import { Config, PoolConfig } from './config';
 import { Event } from './events_source';
 
-import Worker from './worker';
+import { Worker } from './worker';
 
 export interface WorkersPoolInterface {
     init(): void
     aquire(): Promise<Worker>
     release(worker: Worker): Promise<any>
-    withWorker(handler: (worker: Worker) => Promise<Event>): Promise<Event>
+    withWorker<E>(handler: (worker: Worker) => Promise<E>): Promise<E>
     drain(): Promise<void>
 }
 
@@ -25,6 +25,8 @@ export class WorkersPool implements WorkersPoolInterface {
     constructor(config: Config, logger: LoggerInterface) {
         this.config = config.pool;
         this.logger = logger;
+
+        this.init();
     }
 
     init() {

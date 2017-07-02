@@ -5,7 +5,7 @@ import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi } from '../init'
-import { createModel, pushEvent, getModelVariants } from '../model_helpers';
+import { createModel, pushEvent, getModel, getModelVariants } from '../model_helpers';
 import { delay } from '../helpers';
 
 describe("Green way", function() {
@@ -102,6 +102,46 @@ describe("Green way", function() {
         expect(baseModel.timestamp).to.be.equal(timestamp + 150);
     });
 
+    it('Should continue to process events for the same character', async () => {
+        let model = await createModel(di);
+        let timestamp = Date.now();
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'concat',
+            timestamp: timestamp + 10,
+            data: { value: 'A' }
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 20
+        });
+
+        await delay(100);
+
+        timestamp = Date.now();
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'concat',
+            timestamp: timestamp + 10,
+            data: { value: 'B' }
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 20
+        });
+
+        await delay(100);
+
+        let baseModel = await getModel(di, model._id);
+        expect(baseModel).to.has.property('value', 'AB');
+    })
+
     it('Should process events queued with short intervals', async () => {
         let model = await createModel(di);
         let timestamp = Date.now();
@@ -124,7 +164,7 @@ describe("Green way", function() {
             timestamp: timestamp + 2
         });
 
-        await delay(100);
+        await delay(200);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
 
