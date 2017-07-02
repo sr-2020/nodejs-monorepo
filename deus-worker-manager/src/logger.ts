@@ -1,6 +1,7 @@
+import { Inject } from './di';
 import { Container, ContainerInstance } from 'winston';
 
-import { LoggerConfig } from './config';
+import { Config, LoggerConfig } from './config';
 
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
@@ -19,10 +20,13 @@ export interface LoggerInterface {
     error(source: LogSource, msg: string, ...rest: any[]): void;
 }
 
+@Inject
 export class Logger implements LoggerInterface {
+    private config: LoggerConfig;
     private container: ContainerInstance;
 
-    constructor(private config: LoggerConfig) {
+    constructor(config: Config) {
+        this.config = config.logger;
         this.container = new Container(this.config.default);
 
         for (let src in this.config) {

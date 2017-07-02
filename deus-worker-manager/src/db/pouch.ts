@@ -1,9 +1,11 @@
+import { Inject } from '../di';
 import * as Path from 'path';
 import { isNil, get } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as glob from 'glob';
 import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
 
+@Inject
 export class PouchConnector implements DBConnectorInterface {
     private cache: { [name: string]: PouchDb } = {};
     private views: any;

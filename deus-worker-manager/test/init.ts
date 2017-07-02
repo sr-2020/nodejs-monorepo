@@ -1,13 +1,16 @@
+import { Injector } from '../src/di';
+import { ConfigToken, DBConnectorToken, LoggerToken, WorkersPoolToken, ManagerToken } from '../src/di_tokens';
+
 import { cloneDeep } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
-import { DIInterface } from '../src/di';
 import { Config } from '../src/config';
+import { DBConnectorInterface } from '../src/db/interface';
 import { PouchConnector } from '../src/db/pouch';
 import { Logger, LoggerInterface } from '../src/logger';
-import { WorkersPool } from '../src/workers_pool';
-import Manager from '../src/manager';
+import { WorkersPool, WorkersPoolInterface } from '../src/workers_pool';
+import { Manager } from '../src/manager';
 
 Pouch.plugin(MemoryAdapter);
 
@@ -44,31 +47,20 @@ export function initDb() {
     return new PouchConnector('memory');
 }
 
-export function initLogger(config: Config) {
-    return new Logger(config.logger);
-}
-
-export function initPool(config: Config, logger: LoggerInterface) {
-    return new WorkersPool(config.pool, logger);
-}
-
 let counter = 0;
 
-export function initDi(config: Config = defaultConfig): DIInterface {
-    let logger = initLogger(config);
-
+export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
     for (let alias in config.db) {
         config.db[alias] += '-' + counter;
     }
 
-    counter += 1;
-
-    return {
-        config,
-        logger,
-        dbConnector: initDb(),
-        workersPool: initPool(config, logger)
-    };
+    return Injector
+        .create()
+        .bind(ConfigToken).toValue(config)
+        .bind(LoggerToken).toClass(Logger, ConfigToken)
+        .bind(DBConnectorToken).toValue(initDb())
+        .bind(WorkersPoolToken).toClass(WorkersPool, ConfigToken, LoggerToken)
+        .bind(ManagerToken).toClass(Manager, ConfigToken, DBConnectorToken, WorkersPoolToken, LoggerToken);
 }

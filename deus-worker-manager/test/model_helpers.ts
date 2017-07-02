@@ -1,9 +1,13 @@
 import { merge } from 'lodash';
-import { DIInterface } from '../src/di';
 import { Document } from '../src/db/interface';
+import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 
-export async function createModel(di: DIInterface, id?: string, fields?: any): Promise<Document> {
-    let modelsDb = di.dbConnector.use(di.config.db.models);
+function dbName(di: any, alias: string): String {
+    return di.get(ConfigToken).db[alias];
+}
+
+export async function createModel(di: any, id?: string, fields?: any): Promise<Document> {
+    let modelsDb = di.get(DBConnectorToken).use(dbName(di, 'models'));
 
     if (!fields) {
         fields = { value: '' };
@@ -23,17 +27,17 @@ export async function createModel(di: DIInterface, id?: string, fields?: any): P
     return model;
 }
 
-export function getModel(di: DIInterface, id: string, dbAlias: string = 'models') {
-    let modelsDb = di.dbConnector.use(di.config.db[dbAlias]);
+export function getModel(di: any, id: string, dbAlias: string = 'models') {
+    let modelsDb = di.get(DBConnectorToken).use(dbName(di, dbAlias));
     return modelsDb.getOrNull(id);
 }
 
-export function getModelVariants(di: DIInterface, id: string, aliases: string[] = ['models', 'workingModels', 'viewModels']) {
+export function getModelVariants(di: any, id: string, aliases: string[] = ['models', 'workingModels', 'viewModels']) {
     let pending = aliases.map((alias) => getModel(di, id, alias));
     return Promise.all(pending);
 }
 
-export function pushEvent(di: DIInterface, event: any) {
-    let eventsDb = di.dbConnector.use(di.config.db.events);
+export function pushEvent(di: any, event: any) {
+    let eventsDb = di.get(DBConnectorToken).use(dbName(di, 'events'));
     return eventsDb.put(event);
 }

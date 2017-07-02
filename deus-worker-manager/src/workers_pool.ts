@@ -1,27 +1,33 @@
+import { Inject } from './di';
 import * as genericPool from 'generic-pool';
 
-import { DIInterface } from './di';
 import { LoggerInterface } from './logger';
-import { PoolConfig } from './config';
+import { Config, PoolConfig } from './config';
 import { Event } from './events_source';
 
 import Worker from './worker';
 
 export interface WorkersPoolInterface {
+    init(): void
     aquire(): Promise<Worker>
     release(worker: Worker): Promise<any>
     withWorker(handler: (worker: Worker) => Promise<Event>): Promise<Event>
     drain(): Promise<void>
 }
 
+@Inject
 export class WorkersPool implements WorkersPoolInterface {
+    private logger: LoggerInterface;
+
+    private config: PoolConfig;
     private pool: genericPool.Pool<Worker>;
 
-    constructor(private config: PoolConfig, private logger: LoggerInterface) {
-        this.initPool();
+    constructor(config: Config, logger: LoggerInterface) {
+        this.config = config.pool;
+        this.logger = logger;
     }
 
-    private initPool() {
+    init() {
         const factory: genericPool.Factory<Worker> = {
             create: this.createWorker,
             destroy: this.destroyWorker

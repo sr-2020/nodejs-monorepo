@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import Manager from '../../src/manager';
-import { DIInterface } from '../../src/di';
+import { ManagerToken } from '../../src/di_tokens';
+import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi } from '../init'
@@ -12,11 +12,12 @@ describe("Green way", function() {
     this.timeout(5000);
 
     let manager: Manager;
-    let di: DIInterface;
+    let di;
 
     before(() => {
         di = initDi();
-        manager = new Manager(di);
+        manager = di.get(ManagerToken);
+        manager.init();
         return delay(500);
     });
 

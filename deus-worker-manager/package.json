@@ -9,7 +9,7 @@
     "stop": "bin/stop.sh",
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
-    "test:integration": "mocha --compilers ts:ts-node/register test/integration/**/*.ts",
+    "test:integration": "mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
     "db": "ts-node src/db/sync.ts -c ../../config.js"
   },
   "author": "",
@@ -22,6 +22,7 @@
     "meow": "^3.7.0",
     "nano": "^6.2.0",
     "npm": "^5.0.3",
+    "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.1",
     "winston": "^2.3.1"
   },

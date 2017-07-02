@@ -1,15 +1,21 @@
+import { Inject } from '../di';
 import { isNil } from 'lodash';
 import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import nano = require('nano');
 import { stdCallback } from '../utils';
+import { Config } from '../config';
 
 import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
 
+@Inject
 export class NanoConnector implements DBConnectorInterface {
+    private url: string;
     private connection: Nano;
     private cache: { [name: string]: NanoDb } = {};
 
-    constructor(private url: string) { }
+    constructor(config: Config) {
+        this.url = config.db.url;
+    }
 
     use(name: string) {
         if (!this.connection) {

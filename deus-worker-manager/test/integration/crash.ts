@@ -1,8 +1,8 @@
 import { cloneDeep } from 'lodash';
 import { expect } from 'chai';
 
-import Manager from '../../src/manager';
-import { DIInterface } from '../../src/di';
+import { ManagerToken } from '../../src/di_tokens';
+import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi, defaultConfig } from '../init'
@@ -13,13 +13,14 @@ describe('Crash scenarios', function() {
     this.timeout(5000);
 
     let manager: Manager;
-    let di: DIInterface;
+    let di;
 
     before(() => {
         let config = cloneDeep(defaultConfig);
         config.logger.default = { console: { silent: true } };
         di = initDi(config);
-        manager = new Manager(di);
+        manager = di.get(ManagerToken);
+        manager.init();
         return delay(500);
     });
 

@@ -1,7 +1,6 @@
+import { Inject } from './di';
 import { isNil } from 'lodash';
 import { Subscription } from 'rxjs';
-
-import { DIInterface } from './di';
 
 import { DBConnectorInterface } from './db/interface';
 
@@ -17,25 +16,24 @@ interface SyncedModels {
     [characterId: string]: Event;
 }
 
-export default class Manager {
-    private config: Config;
-    private dbConnector: DBConnectorInterface;
+@Inject
+export class Manager {
     private eventsSource: EventsSource;
     private modelStorage: ModelStorage;
     private workingModelStorage: ModelStorage;
     private viewModelStorage: { [alias: string]: ModelStorage };
     private eventStorage: EventStorage;
-    private pool: WorkersPoolInterface;
-    private logger: LoggerInterface;
     private syncedModels: SyncedModels = {};
     private eventsSourceSubscription: Subscription;
 
-    constructor(private di: DIInterface) {
-        this.config = di.config;
-        this.dbConnector = di.dbConnector;
-        this.logger = di.logger;
-        this.pool = di.workersPool;
+    constructor(
+        private config: Config,
+        private dbConnector: DBConnectorInterface,
+        private pool: WorkersPoolInterface,
+        private logger: LoggerInterface
+    ) { }
 
+    init() {
         this.modelStorage = new ModelStorage(this.dbConnector.use(this.config.db.models));
         this.workingModelStorage = new ModelStorage(this.dbConnector.use(this.config.db.workingModels));
 
@@ -44,6 +42,8 @@ export default class Manager {
         this.eventsSource = new EventsSource(eventsDb);
 
         this.initViewModelStorage();
+
+        this.pool.init();
 
         this.eventsSourceSubscription = this.eventsSource.refreshModelEvents.subscribe(this.queueEvent);
         this.eventsSource.follow();
@@ -129,7 +129,7 @@ export default class Manager {
     }
 
     private async storeViewModels(characteId: string, timestamp: number, viewModels: { [alias: string]: any }) {
-        let pending = [];
+        let pending: Array<Promise<any>> = [];
         for (let alias in viewModels) {
             if (!this.viewModelStorage[alias]) continue;
 
