@@ -10,6 +10,10 @@ module.exports = () => {
             api.setTimer('delayedConcat', delay, 'concat', { value });
         },
 
+        crash(api, data) {
+            throw new Error('bang!');
+        },
+
         _view(api, data) {
             return { value: data.value };
         }

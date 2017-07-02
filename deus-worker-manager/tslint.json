@@ -17,7 +17,8 @@
         "member-ordering": false,
         "object-literal-sort-keys": false,
         "max-classes-per-file": false,
-        "forin": false
+        "forin": false,
+        "max-line-length": false
     },
     "rulesDirectory": []
 }

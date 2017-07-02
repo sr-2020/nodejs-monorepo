@@ -7,7 +7,10 @@
         {
             "eventType": "delayedConcat",
             "effects": ["delayedConcat"]
+        },
+        {
+            "eventType": "crash",
+            "effects": ["crash"]
         }
-
     ]
 }

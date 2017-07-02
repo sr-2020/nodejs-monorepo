@@ -1,4 +1,5 @@
 import { isNil } from 'lodash';
+import { Subscription } from 'rxjs';
 
 import { DIInterface } from './di';
 
@@ -27,6 +28,7 @@ export default class Manager {
     private pool: WorkersPoolInterface;
     private logger: LoggerInterface;
     private syncedModels: SyncedModels = {};
+    private eventsSourceSubscription: Subscription;
 
     constructor(private di: DIInterface) {
         this.config = di.config;
@@ -43,8 +45,7 @@ export default class Manager {
 
         this.initViewModelStorage();
 
-        this.eventsSource.refreshModelEvents.subscribe(this.queueEvent);
-
+        this.eventsSourceSubscription = this.eventsSource.refreshModelEvents.subscribe(this.queueEvent);
         this.eventsSource.follow();
     }
 
@@ -63,11 +64,18 @@ export default class Manager {
 
     refreshModel = async (characterId: string) => {
         let event = await this.pool.withWorker(this.processModel(characterId));
-        if (event.timestamp < this.syncedModels[characterId].timestamp) {
+        if (event && event.timestamp < this.syncedModels[characterId].timestamp) {
             setImmediate(this.refreshModel, characterId);
         } else {
             delete this.syncedModels[characterId];
         }
+    }
+
+    stop() {
+        if (!this.eventsSourceSubscription) return;
+
+        this.eventsSourceSubscription.unsubscribe();
+        return this.pool.drain();
     }
 
     private processModel(characterId: string) {
@@ -88,6 +96,8 @@ export default class Manager {
                 .filter((event: Event) => event.eventType != '_NoOp');
 
             this.logger.debug('manager', 'events = %j', events);
+
+            if (!events.length) return syncEvent;
 
             const result: EngineResult = await worker.process(syncEvent, model, events);
 

@@ -4,6 +4,8 @@ export default class EventStorage {
     constructor(private db: DBInterface) { }
 
     async range(characterId: string, since: number, till: number) {
+        if (since >= till) return [];
+
         const startkey = [characterId, since];
         const endkey = [characterId, till];
         const params = {

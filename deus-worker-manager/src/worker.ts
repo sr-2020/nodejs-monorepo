@@ -12,6 +12,7 @@ export interface EngineResult {
 
 export default class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
+    lastOutput: string[] = [];
 
     constructor(private logger: LoggerInterface, private workerModule: string, private args?: string[]) {
         super();
@@ -20,12 +21,14 @@ export default class Worker extends EventEmitter {
     up(): this {
         this.logger.info('manager', 'Worker::up', this.workerModule);
         let workerModule = require.resolve(this.workerModule);
-        this.child = ChildProcess.fork(workerModule, this.args, { silent: false });
+        this.child = ChildProcess.fork(workerModule, this.args, { silent: true });
 
         this.child.on('message', this.handleLogMessage);
         this.child.on('message', this.emitMessage);
         this.child.on('error', this.emitError);
         this.child.on('exit', this.emitExit);
+        this.child.stdout.on('data', this.handleOutput);
+        this.child.stderr.on('data', this.handleOutput);
 
         return this;
     }
@@ -67,11 +70,16 @@ export default class Worker extends EventEmitter {
         }
     }
 
+    handleOutput = (chunk: string) => {
+        this.lastOutput.push(chunk);
+    }
+
     emitMessage = (message: any) => this.emit('message', message);
     emitError = (err: Error) => this.emit('error', err);
     emitExit = (code: number, signal: string) => this.emit('exit', code, signal);
 
     async process(syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
+        this.lastOutput = [];
         return new Promise<EngineResult>((resolve, reject) => {
             if (!this.child) return reject(new Error('No child process'));
 
@@ -92,12 +100,14 @@ export default class Worker extends EventEmitter {
                 if (this.child) {
                     this.child.removeListener('message', onResult);
                     this.child.removeListener('error', onError);
+                    this.child.removeListener('exit', onError);
                 }
-                reject(err);
+                reject('Worker error');
             };
 
             this.child.on('message', onResult);
             this.child.on('error', onError);
+            this.child.on('exit', onError);
 
             this.child.send({ context: model, events });
 

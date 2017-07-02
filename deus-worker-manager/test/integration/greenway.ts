@@ -9,15 +9,19 @@ import { createModel, pushEvent, getModelVariants } from '../model_helpers';
 import { delay } from '../helpers';
 
 describe("Green way", function() {
-    this.timeout(3000);
+    this.timeout(5000);
 
-    let manager;
+    let manager: Manager;
     let di: DIInterface;
 
     before(() => {
         di = initDi();
         manager = new Manager(di);
         return delay(500);
+    });
+
+    after(() => {
+        return manager.stop();
     });
 
 
@@ -27,14 +31,14 @@ describe("Green way", function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'concat',
-            timestamp: Date.now(),
+            timestamp: Date.now() + 5,
             data: { value: 'A' }
         });
 
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp: Date.now()
+            timestamp: Date.now() + 10
         })
 
         await delay(100);
@@ -119,7 +123,7 @@ describe("Green way", function() {
             timestamp: timestamp + 2
         });
 
-        await delay(200);
+        await delay(100);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
 

@@ -8,9 +8,10 @@ import { Event } from './events_source';
 import Worker from './worker';
 
 export interface WorkersPoolInterface {
-    aquire(): Promise<Worker>;
-    release(worker: Worker): Promise<any>;
+    aquire(): Promise<Worker>
+    release(worker: Worker): Promise<any>
     withWorker(handler: (worker: Worker) => Promise<Event>): Promise<Event>
+    drain(): Promise<void>
 }
 
 export class WorkersPool implements WorkersPoolInterface {
@@ -32,8 +33,10 @@ export class WorkersPool implements WorkersPoolInterface {
     private createWorker = () => {
         this.logger.debug('manager', 'WorkersPool::createWorker');
         let worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
-            .onExit(() => this.pool.destroy(worker))
-            .up();
+            .onExit(() => {
+                this.logger.error('manager', 'Worker exit. Last output:\n %s', worker.lastOutput.join());
+                this.pool.destroy(worker);
+            }).up();
         return worker;
     }
 
@@ -41,15 +44,23 @@ export class WorkersPool implements WorkersPoolInterface {
         worker.down();
     }
 
-    async aquire() {
+    aquire() {
         return this.pool.acquire();
     }
 
     async release(worker: Worker) {
-        return this.pool.release(worker);
+        try {
+            await this.pool.release(worker);
+        } catch (e) {
+            // pass
+        }
     }
 
-    async withWorker(handler: (worker: Worker) => Promise<Event>) {
+    drain() {
+        return this.pool.drain();
+    }
+
+    async withWorker<E>(handler: (worker: Worker) => Promise<E>) {
         const worker = await this.aquire();
         try {
             return await handler(worker);

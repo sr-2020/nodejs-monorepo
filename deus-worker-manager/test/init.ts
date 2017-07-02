@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
@@ -10,7 +11,7 @@ import Manager from '../src/manager';
 
 Pouch.plugin(MemoryAdapter);
 
-const defaultConfig = {
+export const defaultConfig: Config = {
     db: {
         events: 'events-test',
         models: 'models-test',
@@ -51,8 +52,18 @@ export function initPool(config: Config, logger: LoggerInterface) {
     return new WorkersPool(config.pool, logger);
 }
 
+let counter = 0;
+
 export function initDi(config: Config = defaultConfig): DIInterface {
     let logger = initLogger(config);
+
+    config = cloneDeep(config);
+
+    for (let alias in config.db) {
+        config.db[alias] += '-' + counter;
+    }
+
+    counter += 1;
 
     return {
         config,
