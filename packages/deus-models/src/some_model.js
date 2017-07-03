@@ -1,3 +1,7 @@
+function getCharacterName(model) {
+    return model.firstName + " " + model.lastName;
+}
+
 function getRussianSex(sex) {
     switch (sex) {
         case "male":    return "мужской";
@@ -23,7 +27,7 @@ function getStartPage(model) {
             items: [
                 {
                     text: "Имя",
-                    value: model.firstName + " " + model.lastName,
+                    value: getCharacterName(model),
                 },
                 {
                     text: "ID",
@@ -227,6 +231,12 @@ function getPages(model) {
     ];
 }
 
+function getMenu(model) {
+    return {
+        characterName: getCharacterName(model),
+    };
+}
+
 function getToolbar(model) {
     return {
         hitPoints: model.hp,
@@ -247,6 +257,7 @@ function getViewModel(model) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
+        menu: getMenu(model),
         toolbar: getToolbar(model),
         passportScreen: getPassportScreen(model),
         pages: getPages(model),
