@@ -231,6 +231,13 @@ function getPages(model) {
     ];
 }
 
+// General characteristics not tied to any page or UI element.
+function getGeneral(model) {
+    return {
+        maxSecondsInVr: 20 * 60,  // TODO: Get from model
+    };
+}
+
 function getMenu(model) {
     return {
         characterName: getCharacterName(model),
@@ -257,6 +264,7 @@ function getViewModel(model) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
+        general: getGeneral(model),
         menu: getMenu(model),
         toolbar: getToolbar(model),
         passportScreen: getPassportScreen(model),
