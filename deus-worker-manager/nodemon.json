@@ -1,7 +1,7 @@
 {
     "watch": [
-        "models/catalogs",
-        "models/src",
+        "../models/catalogs",
+        "../models/src",
         "src",
         "config.json",
         "node_modules/deus-model-engine"
