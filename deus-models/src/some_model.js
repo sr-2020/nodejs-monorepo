@@ -12,7 +12,7 @@ function getRussianSex(sex) {
 
 function getHandicaps(model) {
     if (model.hp == 0) {
-        return "тяжелое ранение: только лежать";
+        return "только лежать";
     } else {
         return "нет";
     }
