@@ -50,6 +50,12 @@
             "effects": [
                 "illnessTimerHandler"
             ]
+        },
+        {
+            "eventType": "subtractHp",
+            "effects": [
+                "subtractHp"
+            ]
         }
     ]
 }

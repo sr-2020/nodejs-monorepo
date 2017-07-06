@@ -119,6 +119,22 @@ module.exports = {
         api.debug("====demoImplantEffect()====");
         var condition = api.getCatalogObject("conditions", "demoImplantState");
         api.addCondition( condition );
+
+        api.model.maxHp += 2;
+    },
+
+    /*
+       Потеря хитов
+       Параметры:  "hpLost": 3
+    */
+    subtractHp(api, data){
+          api.debug(`====subtractHp( ${data.hpLost} )====`);
+
+          if(model.hp <= data.hpLost){
+              model.hp = 0;
+          }else{
+              model.hp -= data.hpLost;
+          }
     },
 
     /*
