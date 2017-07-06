@@ -219,16 +219,20 @@ function getBodyPage(model) {
 }
 
 function getPages(model) {
-    return [
+    let pages = [
         getStartPage(model),
         // TODO: Add insurance
         getMemoryPage(model),
         getConditionsPage(model),
         getImplantsPage(model),
-        //getBodyPage(model),
-        getEconomyPage(),
-        getTechnicalInfoPage()
+        getEconomyPage()
     ];
+
+    if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
+        pages.push(getTechnicalInfoPage());
+    }
+
+    return pages;
 }
 
 // General characteristics not tied to any page or UI element.
