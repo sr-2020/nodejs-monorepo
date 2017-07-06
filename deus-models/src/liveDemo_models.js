@@ -130,10 +130,10 @@ module.exports = {
     subtractHp(api, data){
           api.debug(`====subtractHp( ${data.hpLost} )====`);
 
-          if(model.hp <= data.hpLost){
-              model.hp = 0;
+          if(api.model.hp <= data.hpLost){
+              api.model.hp = 0;
           }else{
-              model.hp -= data.hpLost;
+              api.model.hp -= data.hpLost;
           }
     },
 
