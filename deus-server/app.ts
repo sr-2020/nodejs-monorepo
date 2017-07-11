@@ -7,6 +7,7 @@ PouchDB.plugin(PouchDBUpsert);
 
 import bodyparser = require('body-parser');
 import { TSMap } from 'typescript-map';
+import * as winston from 'winston';
 
 import * as basic_auth from 'basic-auth';
 
@@ -16,11 +17,8 @@ function IsDocumentNotFoundError(e): boolean {
   return e.status && e.status == 404 && e.reason && e.reason == 'missing';
 }
 
-function ReturnCharacterNotFoundOrRethrow(e: any, res: express.Response) {
-  if (IsDocumentNotFoundError(e))
-    res.status(404).send('Character with such id is not found');
-  else
-    throw e;
+function RequestId(req: express.Request): string {
+  return (req as any).id;
 }
 
 class App {
@@ -28,18 +26,29 @@ class App {
   private server: http.Server;
   private connections = new TSMap<string, Connection>();
 
-  constructor(private eventsDb: PouchDB.Database<any>,
+  constructor(private logger: winston.LoggerInstance,
+              private eventsDb: PouchDB.Database<any>,
               private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
               private accountsDb: PouchDB.Database<{ password: string }>,
               private timeout: number) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
 
-    this.app.use((_req, res, next) => {
+    this.app.use((req, res, next) => {
+      this.logger.info('Accepted new request', {
+        id: RequestId(req),
+        timestamp: this.currentTimestamp(),
+        url: req.url,
+        method: req.method,
+        ip: req.ip,
+      });
+      this.logger.debug('Request body', { id: RequestId(req), body: req.body });
+
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
     });
+
     this.app.get('/time', (_req, res) => {
       res.send({ serverTime: this.currentTimestamp() });
     });
@@ -57,17 +66,18 @@ class App {
         try {
           const password = (await this.accountsDb.get(id)).password;
           if (password == credentials.pass) {
+            this.logger.info(`Authorised user: ${id}`, {id: RequestId(req)});
             return next();
           }
         } catch (e) {
           if (IsDocumentNotFoundError(e)) {
-            res.status(404).send('Character with such id is not found');
+            this.logAndSendResponse(req, res, 404, 'Character with such id is not found');
             return;
           }
         }
       }
       res.header('WWW-Authentificate', 'Basic');
-      res.status(401).send('Access denied');
+      this.logAndSendResponse(req, res, 401, 'Access denied');
     };
 
     this.app.get('/viewmodel/:id', auth, async (req, res) => {
@@ -75,7 +85,7 @@ class App {
       const type = req.query.type ? req.query.type : 'default';
       const db = this.viewmodelDbs.get(type);
       if (!db) {
-        res.status(404).send('Viewmodel type is not found');
+        this.logAndSendResponse(req, res, 404, 'Viewmodel type is not found');
       } else {
         try {
           const doc = (await db.get(id));
@@ -88,7 +98,7 @@ class App {
             viewModel: doc,
           });
         } catch (e) {
-          ReturnCharacterNotFoundOrRethrow(e, res);
+          this.returnCharacterNotFoundOrRethrow(e, req, res);
         }
       }
     });
@@ -96,24 +106,27 @@ class App {
     this.app.post('/events/:id', auth, async (req, res) => {
       const id: string = req.params.id;
       if (this.connections.has(id)) {
-        res.status(429).send('Multiple connections from one client are not allowed');
+        this.logAndSendResponse(req, res, 429, 'Multiple connections from one client are not allowed');
         return;
       }
 
       let events = req.body.events;
       if (!(events instanceof Array)) {
-        res.status(400).send('No events array in request');
+        this.logAndSendResponse(req, res, 400, 'No events array in request');
         return;
       }
 
-      const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
+      const eventTypes: string[] = events.map((event) => event.eventType);
+      this.logger.info('Received events with types', {id: RequestId(req), eventTypes });
+
+      const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
       if (isMobileClient)
         events.forEach((event) => event.mobile = true);
 
       try {
         const cutTimestamp = await this.cutTimestamp(id);
         if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp)) {
-          res.status(409).send("Can't accept event with timestamp earlier than cut timestamp");
+          this.logAndSendResponse(req, res, 409, "Can't accept event with timestamp earlier than cut timestamp");
           return;
         }
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
@@ -121,6 +134,7 @@ class App {
         if (isMobileClient) {
           this.connections.set(id, new Connection(this.eventsDb, this.timeout));
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
+            this.logStatus(req, s.status);
             res.status(s.status).send(s.body);
             this.connections.delete(id);
           });
@@ -130,11 +144,12 @@ class App {
           // So we don't add Connection to this.connections.
           const connection = new Connection(this.eventsDb, 0);
           connection.processEvents(id, events).then((s: StatusAndBody) => {
+            this.logStatus(req, s.status);
             res.status(s.status).send(s.body);
           });
         }
       } catch (e) {
-        ReturnCharacterNotFoundOrRethrow(e, res);
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
     });
 
@@ -149,7 +164,7 @@ class App {
         };
         res.status(200).send(response);
       } catch (e) {
-        ReturnCharacterNotFoundOrRethrow(e, res);
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
     });
 
@@ -201,6 +216,25 @@ class App {
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
+
+  private returnCharacterNotFoundOrRethrow(e: any, req: express.Request, res: express.Response) {
+  if (IsDocumentNotFoundError(e))
+    this.logAndSendResponse(req, res, 404, 'Character with such id is not found');
+  else
+    throw e;
+  }
+
+  private logAndSendResponse(req: express.Request, res: express.Response, status: number, msg: string) {
+    this.logger.info(`Sending response with status ${status} and message ${msg}`,
+      { id: RequestId(req), status, msg, timestamp: this.currentTimestamp() });
+    res.status(status).send(msg);
+  }
+
+  private logStatus(req: express.Request, status: number) {
+    this.logger.info(`Sending response with status ${status}`,
+      { id: RequestId(req), status, timestamp: this.currentTimestamp() });
+  }
+
 }
 
 export default App;

@@ -2,6 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as rp from 'request-promise';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
+import * as winston from 'winston';
 
 import { expect } from 'chai';
 import 'mocha';
@@ -27,7 +28,8 @@ describe('API Server', () => {
       ([['mobile', mobileViewModelDb],
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
-    app = new App(eventsDb, viewmodelDbs, accountsDb, 20);
+    const logger = new winston.Logger({ level: 'warning' });
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: 'existing_viewmodel', timestamp: 420,
@@ -489,7 +491,8 @@ describe('API Server - long timeout', () => {
     viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
-    app = new App(eventsDb, viewmodelDbs, accountsDb, 9000);
+    const logger = new winston.Logger({ level: 'warning' });
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000);
     await app.listen(port);
     await viewModelDb.put({ _id: 'existing_viewmodel', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: 'existing_viewmodel', password: 'qwerty' });
