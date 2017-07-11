@@ -1,13 +1,14 @@
-import App from './app'
 import * as PouchDB from 'pouchdb';
-import { TSMap } from "typescript-map";
+import { TSMap } from 'typescript-map';
+import App from './app';
 
-const config = require("../configs/deus-server");
+// tslint:disable-next-line:no-var-requires
+const config = require('../configs/deus-server');
 
 const authOptions = { auth: { username: config.username, password: config.password } };
 
 const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
-        config.dbs.viewModels.map(v => [v[0], new PouchDB(v[1], authOptions)]));
+        config.dbs.viewModels.map((v) => [v[0], new PouchDB(v[1], authOptions)]));
 
 new App(new PouchDB(config.dbs.events, authOptions),
         viewmodelDbs,
