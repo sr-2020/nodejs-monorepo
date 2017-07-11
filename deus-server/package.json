@@ -31,6 +31,7 @@
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.2",
+    "express-request-id": "^1.4.0",
     "forever": "^0.15.3",
     "pouchdb": "^6.2.0",
     "pouchdb-upsert": "^2.2.0",

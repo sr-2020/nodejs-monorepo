@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as addRequestId from 'express-request-id';
 import * as http from 'http';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
@@ -32,6 +33,8 @@ class App {
               private accountsDb: PouchDB.Database<{ password: string }>,
               private timeout: number) {
     this.app.use(bodyparser.json());
+    this.app.use(addRequestId());
+
     this.app.use((_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
