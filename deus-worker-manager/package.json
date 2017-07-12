@@ -20,10 +20,10 @@
     "generic-pool": "^3.1.7",
     "glob": "^7.1.2",
     "meow": "^3.7.0",
-    "nano": "^6.2.0",
-    "npm": "^5.0.3",
+    "nano": "^6.4.0",
+    "npm": "^5.2.0",
     "reflect-metadata": "^0.1.10",
-    "rxjs": "^5.4.1",
+    "rxjs": "^5.4.2",
     "winston": "^2.3.1"
   },
   "devDependencies": {
@@ -32,17 +32,17 @@
     "@types/glob": "^5.0.30",
     "@types/meow": "^3.6.2",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.0.6",
+    "@types/node": "^8.0.10",
     "@types/pouchdb": "^6.1.1",
     "@types/pouchdb-adapter-memory": "^6.1.1",
     "@types/winston": "^2.3.3",
-    "chai": "^4.0.2",
-    "chai-as-promised": "^7.0.0",
+    "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
     "pouchdb": "^6.2.0",
     "pouchdb-adapter-memory": "^6.2.0",
-    "ts-node": "^3.1.0",
+    "ts-node": "^3.2.0",
     "typescript": "~2.3.4"
   }
 }
