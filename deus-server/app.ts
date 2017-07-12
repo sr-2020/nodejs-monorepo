@@ -35,13 +35,6 @@ class App {
     this.app.use(addRequestId());
 
     this.app.use((req, res, next) => {
-      this.logger.info('Accepted new request', {
-        id: RequestId(req),
-        timestamp: this.currentTimestamp(),
-        url: req.url,
-        method: req.method,
-        ip: req.ip,
-      });
       this.logger.debug('Request body', { id: RequestId(req), body: req.body });
 
       res.header('Access-Control-Allow-Origin', '*');
@@ -66,18 +59,17 @@ class App {
         try {
           const password = (await this.accountsDb.get(id)).password;
           if (password == credentials.pass) {
-            this.logger.info(`Authorised user: ${id}`, {id: RequestId(req)});
             return next();
           }
         } catch (e) {
           if (IsDocumentNotFoundError(e)) {
-            this.logAndSendResponse(req, res, 404, 'Character with such id is not found');
+            this.logAndSendErrorResponse(req, res, 404, 'Character with such id is not found');
             return;
           }
         }
       }
       res.header('WWW-Authentificate', 'Basic');
-      this.logAndSendResponse(req, res, 401, 'Access denied');
+      this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
 
     this.app.get('/viewmodel/:id', auth, async (req, res) => {
@@ -85,7 +77,7 @@ class App {
       const type = req.query.type ? req.query.type : 'default';
       const db = this.viewmodelDbs.get(type);
       if (!db) {
-        this.logAndSendResponse(req, res, 404, 'Viewmodel type is not found');
+        this.logAndSendErrorResponse(req, res, 404, 'Viewmodel type is not found');
       } else {
         try {
           const doc = (await db.get(id));
@@ -106,18 +98,17 @@ class App {
     this.app.post('/events/:id', auth, async (req, res) => {
       const id: string = req.params.id;
       if (this.connections.has(id)) {
-        this.logAndSendResponse(req, res, 429, 'Multiple connections from one client are not allowed');
+        this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
         return;
       }
 
       let events = req.body.events;
       if (!(events instanceof Array)) {
-        this.logAndSendResponse(req, res, 400, 'No events array in request');
+        this.logAndSendErrorResponse(req, res, 400, 'No events array in request');
         return;
       }
 
       const eventTypes: string[] = events.map((event) => event.eventType);
-      this.logger.info('Received events with types', {id: RequestId(req), eventTypes });
 
       const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
       if (isMobileClient)
@@ -126,7 +117,7 @@ class App {
       try {
         const cutTimestamp = await this.cutTimestamp(id);
         if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp)) {
-          this.logAndSendResponse(req, res, 409, "Can't accept event with timestamp earlier than cut timestamp");
+          this.logAndSendErrorResponse(req, res, 409, "Can't accept event with timestamp earlier than cut timestamp");
           return;
         }
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
@@ -134,7 +125,7 @@ class App {
         if (isMobileClient) {
           this.connections.set(id, new Connection(this.eventsDb, this.timeout));
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-            this.logStatus(req, s.status);
+            this.logSuccessfulResponse(req, eventTypes, s.status);
             res.status(s.status).send(s.body);
             this.connections.delete(id);
           });
@@ -144,7 +135,7 @@ class App {
           // So we don't add Connection to this.connections.
           const connection = new Connection(this.eventsDb, 0);
           connection.processEvents(id, events).then((s: StatusAndBody) => {
-            this.logStatus(req, s.status);
+            this.logSuccessfulResponse(req, eventTypes, s.status);
             res.status(s.status).send(s.body);
           });
         }
@@ -218,23 +209,37 @@ class App {
   }
 
   private returnCharacterNotFoundOrRethrow(e: any, req: express.Request, res: express.Response) {
-  if (IsDocumentNotFoundError(e))
-    this.logAndSendResponse(req, res, 404, 'Character with such id is not found');
-  else
-    throw e;
+    if (IsDocumentNotFoundError(e))
+      this.logAndSendErrorResponse(req, res, 404, 'Character with such id is not found');
+    else
+      throw e;
   }
 
-  private logAndSendResponse(req: express.Request, res: express.Response, status: number, msg: string) {
-    this.logger.info(`Sending response with status ${status} and message ${msg}`,
-      { id: RequestId(req), status, msg, timestamp: this.currentTimestamp() });
+  private logAndSendErrorResponse(req: express.Request, res: express.Response, status: number, msg: string) {
+    const logData = this.createLogData(req, status);
+    logData.msg = msg;
+    this.logger.info('Returning error response', logData);
     res.status(status).send(msg);
   }
 
-  private logStatus(req: express.Request, status: number) {
-    this.logger.info(`Sending response with status ${status}`,
-      { id: RequestId(req), status, timestamp: this.currentTimestamp() });
+  private logSuccessfulResponse(req: express.Request, eventTypes: string[], status: number) {
+    const logData = this.createLogData(req, status);
+    logData.eventTypes = eventTypes;
+    this.logger.info('Returning success response', logData);
   }
 
+  private createLogData(req: express.Request, status: number): any {
+    return {
+        requestId: RequestId(req),
+        status,
+        timestamp: this.currentTimestamp(),
+        url: req.url,
+        method: req.method,
+        ip: req.ip,
+        id: req.params.id,
+        query: req.query,
+      };
+  }
 }
 
 export default App;
