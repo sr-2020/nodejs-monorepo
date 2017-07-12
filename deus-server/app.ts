@@ -1,15 +1,17 @@
+import * as basic_auth from 'basic-auth';
+import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as addRequestId from 'express-request-id';
+import * as time from 'express-timestamp';
 import * as http from 'http';
+import * as winston from 'winston';
+import * as moment from 'moment';
+
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import bodyparser = require('body-parser');
 import { TSMap } from 'typescript-map';
-import * as winston from 'winston';
-
-import * as basic_auth from 'basic-auth';
 
 import { Connection, StatusAndBody } from './connection';
 
@@ -33,6 +35,7 @@ class App {
               private timeout: number) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
+    this.app.use(time.init);
 
     this.app.use((req, res, next) => {
       this.logger.debug('Request body', { id: RequestId(req), body: req.body });
@@ -229,10 +232,14 @@ class App {
   }
 
   private createLogData(req: express.Request, status: number): any {
+    const dateFormat = 'YYYY-MM-DD HH:MM:ss.SSS';
+    const responseStartMoment = (req as any).timestamp;
     return {
         requestId: RequestId(req),
         status,
-        timestamp: this.currentTimestamp(),
+        requestTime: responseStartMoment.format(dateFormat),
+        responseTime: moment().format(dateFormat),
+        processingTime: this.currentTimestamp() - responseStartMoment.valueOf(),
         url: req.url,
         method: req.method,
         ip: req.ip,
