@@ -4,11 +4,19 @@ import * as ChildProcess from 'child_process';
 import { LoggerInterface } from './logger';
 import { Event } from './events_source';
 
-export interface EngineResult {
+export type EngineResultOk = {
+    status: 'ok'
     baseModel: any
     workingModel: any
     viewModels: { [alias: string]: any }
 }
+
+export type EngineResultError = {
+    status: 'error'
+    error: any
+}
+
+export type EngineResult = EngineResultOk | EngineResultError;
 
 export class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
@@ -90,9 +98,9 @@ export class Worker extends EventEmitter {
                         this.child.removeListener('error', onError);
                     }
 
-                    let { baseModel, workingModel, viewModels } = message;
+                    let { status, baseModel, workingModel, viewModels } = message;
 
-                    resolve({ baseModel, workingModel, viewModels });
+                    resolve({ status, baseModel, workingModel, viewModels });
                 }
             };
 

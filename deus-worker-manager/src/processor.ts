@@ -70,16 +70,23 @@ export class Processor {
 
                 this.logger.debug('manager', 'result = %j', result);
 
-                let { baseModel, workingModel, viewModels } = result;
-                delete workingModel._rev;
-                workingModel.timestamp = baseModel.timestamp;
+                if (result.status == 'ok') {
+                    let { baseModel, workingModel, viewModels } = result;
 
-                await Promise.all([
-                    this.modelStorage.store(baseModel),
-                    this.workingModelStorage.store(workingModel),
-                    this.storeViewModels(characterId, baseModel.timestamp, viewModels)
-                ]);
+                    delete workingModel._rev;
+                    workingModel.timestamp = baseModel.timestamp;
+
+                    await Promise.all([
+                        this.modelStorage.store(baseModel),
+                        this.workingModelStorage.store(workingModel),
+                        this.storeViewModels(characterId, baseModel.timestamp, viewModels)
+                    ]);
+                } else {
+                    throw result.error;
+                }
             });
+        } catch (e) {
+            return Promise.reject(this.event);
         } finally {
             this.state = 'Done';
         }
