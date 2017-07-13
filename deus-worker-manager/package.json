@@ -10,6 +10,7 @@
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
     "test:integration": "mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
+    "test:integration:realdb": "__USE_REAL_DB=1 mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
     "db": "ts-node src/db/sync.ts -c ../../config.js"
   },
   "author": "",

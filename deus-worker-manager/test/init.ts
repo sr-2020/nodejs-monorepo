@@ -11,6 +11,7 @@ import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
 import { Config } from '../src/config';
 import { DBConnectorInterface } from '../src/db/interface';
+import { NanoConnector } from '../src/db/nano';
 import { PouchConnector } from '../src/db/pouch';
 import { ModelStorage } from '../src/model_storage';
 import { ViewModelStorage } from '../src/view_model_storage';
@@ -25,6 +26,7 @@ Pouch.plugin(MemoryAdapter);
 
 export const defaultConfig: Config = {
     db: {
+        url: 'http://admin:admin@localhost:5984/',
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
@@ -52,8 +54,12 @@ export const defaultConfig: Config = {
 
 Object.freeze(defaultConfig);
 
-export function initDb() {
-    return new PouchConnector('memory');
+export function initDb(config: Config) {
+    if (process.env['__USE_REAL_DB']) {
+        return new NanoConnector(config);
+    } else {
+        return new PouchConnector('memory');
+    }
 }
 
 let counter = 0;
@@ -77,15 +83,17 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
 export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
-    for (let alias in config.db) {
-        config.db[alias] += '-' + counter;
+    if (!process.env['__USE_REAL_DB']) {
+        for (let alias in config.db) {
+            config.db[alias] += '-' + counter;
+        }
     }
 
     return Injector
         .create()
         .bind(ConfigToken).toValue(config)
         .bind(LoggerToken).singleton().toClass(Logger, ConfigToken)
-        .bind(DBConnectorToken).toValue(initDb())
+        .bind(DBConnectorToken).singleton().toFactory(initDb, ConfigToken)
         .bind(ModelStorageToken).singleton().toFactory(modelStorageFactory, ConfigToken, DBConnectorToken)
         .bind(WorkingModelStorageToken).singleton().toFactory(workingModelStorageFactory, ConfigToken, DBConnectorToken)
         .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)

@@ -45,7 +45,7 @@ export class NanoDb implements DBInterface {
         try {
             return await this.get(id, params);
         } catch (e) {
-            if (e.status == 404) {
+            if (e.statusCode == 404 || e.status == 404) {
                 return null;
             } else {
                 throw e;
