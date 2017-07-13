@@ -1,0 +1,42 @@
+{
+  "name": "import-server",
+  "version": "1.0.0",
+  "description": "Import server part",
+  "main": "./dist/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/server.js",
+    "dev": "npm run build:live",
+    "build": "tsc",
+    "build:live": "set NODE_ENV=develop && nodemon --config nodemon.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sth-larp/import-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sth-larp/import-server/issues"
+  },
+  "homepage": "https://github.com/sth-larp/import-server#readme",
+  "dependencies": {
+    "@types/pouchdb": "^6.1.1",
+    "@types/request-promise-native": "^1.0.6",
+    "body-parser": "^1.17.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.15.3",
+    "moment": "^2.18.1",
+    "pouchdb": "^6.3.2",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
+    "rxjs": "^5.4.2",
+    "typescript": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.4",
+    "@types/errorhandler": "0.0.30",
+    "nodemon": "^1.11.0",
+    "ts-node": "^3.2.0"
+  }
+}
