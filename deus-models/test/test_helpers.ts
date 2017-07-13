@@ -14,6 +14,12 @@ export function getWorker() {
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);
 }
 
-export function process(model: any, events: any) {
+export function process_(model: any, events: any) {
     return getWorker().process(model, events);
+}
+
+export function process(model: any, events: any) {
+    let result = process_(model, events);
+    if (result.status == 'error') throw result.error;
+    return result;
 }
