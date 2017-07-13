@@ -20,11 +20,19 @@ export type WorkerContext = {
     [key: string]: any
 }
 
-export type EngineResult = {
+export type EngineResultOk = {
+    status: 'ok'
     baseModel: any,
     workingModel: any,
     viewModels: { [base: string]: any }
 }
+
+export type EngineResultError = {
+    status: 'error',
+    error: any
+}
+
+export type EngineResult = EngineResultOk | EngineResultError;
 
 export class Worker {
     private config: config.ConfigInterface
@@ -64,7 +72,13 @@ export class Worker {
             Logger.info('engine', 'run event', event);
 
             baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
-            this.runEvent(baseCtx, event);
+
+            try {
+                this.runEvent(baseCtx, event);
+            } catch (e) {
+                Logger.error('engine', 'Exception caught when processing event %j: %s', event, e.toString());
+                return { status: 'error', error: e };
+            }
 
             workingCtx = this.runModifiers(baseCtx);
             baseCtx.timers = workingCtx.timers;
@@ -76,7 +90,7 @@ export class Worker {
 
         let viewModels = this.runViewModels(workingCtx);
 
-        return { baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels };
+        return { status: 'ok', baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels };
     }
 
     listen() {
