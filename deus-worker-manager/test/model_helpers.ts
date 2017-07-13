@@ -6,9 +6,7 @@ function dbName(di: any, alias: string): String {
     return di.get(ConfigToken).db[alias];
 }
 
-export async function createModel(di: any, id?: string, fields?: any): Promise<Document> {
-    let modelsDb = di.get(DBConnectorToken).use(dbName(di, 'models'));
-
+export function createModelObj(id?: string, fields?: any) {
     if (!fields) {
         fields = { value: '' };
     }
@@ -22,8 +20,17 @@ export async function createModel(di: any, id?: string, fields?: any): Promise<D
         timestamp: Date.now(),
     }, fields);
 
-    await modelsDb.put(model);
+    return model;
+}
 
+export function saveModel(di: any, model: any) {
+    let modelsDb = di.get(DBConnectorToken).use(dbName(di, 'models'));
+    return modelsDb.put(model);
+}
+
+export async function createModel(di: any, id?: string, fields?: any): Promise<Document> {
+    let model = createModelObj(id, fields);
+    await saveModel(di, model);
     return model;
 }
 

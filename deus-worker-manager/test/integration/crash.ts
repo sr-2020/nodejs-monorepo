@@ -6,7 +6,7 @@ import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi, defaultConfig } from '../init'
-import { createModel, pushEvent, getModel } from '../model_helpers';
+import { createModel, createModelObj, saveModel, pushEvent, getModel } from '../model_helpers';
 import { delay } from '../helpers';
 
 describe('Crash scenarios', function() {
@@ -94,5 +94,26 @@ describe('Crash scenarios', function() {
 
         expect(baseModel).to.has.property('value', 'A');
 
+    });
+
+    it('Shoud not crash if model has no timestamp', async () => {
+        let model = createModelObj();
+        delete model.timestamp;
+        await saveModel(di, model);
+
+        let baseModel = await getModel(di, model._id);
+        expect(baseModel).not.to.has.property('timestamp');
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: Date.now()
+        });
+
+        await delay(200);
+
+        baseModel = await getModel(di, model._id);
+
+        expect(baseModel).to.has.property('timestamp');
     });
 });
