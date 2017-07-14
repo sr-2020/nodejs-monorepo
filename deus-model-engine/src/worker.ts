@@ -9,11 +9,19 @@ import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import { ModelApiFactory } from './model_api';
 
-export type WorkerMessage = {
-    timestamp: number,
-    context: any,
+export type WorkerMessageEvents = {
+    type: 'events'
+    timestamp: number
+    context: any
     events: dispatcher.Event[]
 }
+
+export type WorkerMessageConfigure = {
+    type: 'configure'
+    data: any
+}
+
+export type WorkerMessage = WorkerMessageEvents | WorkerMessageConfigure;
 
 export type WorkerContext = {
     timestamp: number,
@@ -94,22 +102,41 @@ export class Worker {
     }
 
     listen() {
-        process.on('disconnect', () => {
-            console.log('Disconnected');
-            process.exit();
-        });
+        if (process.send) {
+            process.on('disconnect', () => {
+                console.log('Disconnected');
+                process.exit();
+            });
 
-        process.on('message', (message: WorkerMessage) => {
-            let { context, events } = message;
+            process.on('message', (message: WorkerMessage) => {
+                if (message.type == 'configure') {
+                    this.onConfigure(message);
+                } else {
+                    this.onEvents(message);
+                }
+            });
 
-            let result = this.process(context, events);
+            process.send({ type: 'ready' });
 
-            if (process && process.send) {
-                process.send({ type: 'result', ...result });
-            }
-        });
+            Logger.info('engine', 'Worker started: %s', process.pid);
+        } else {
+            throw new Error('process.send is undefined');
+        }
+    }
 
-        Logger.info('engine', 'Worker started: %s', process.pid);
+    private onEvents(message: WorkerMessageEvents) {
+        let { context, events } = message;
+
+        let result = this.process(context, events);
+
+        if (process && process.send) {
+            process.send({ type: 'result', ...result });
+        }
+    }
+
+    private onConfigure(message: WorkerMessageConfigure) {
+        let cfg = config.Config.parse(message.data);
+        this.configure(cfg);
     }
 
     private resolveCallback(callback: config.Callback): model.Callback | null {
