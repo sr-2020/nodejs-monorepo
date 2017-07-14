@@ -35,9 +35,4 @@ export class Config implements ConfigInterface {
 
         return config;
     }
-
-    static load(dir: string): Config {
-        let src = requireDir(dir);
-        return this.parse(src);
-    }
 }
