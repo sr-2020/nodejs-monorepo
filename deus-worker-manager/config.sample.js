@@ -20,38 +20,46 @@ function logger(label) {
 }
 
 module.exports = {
+    // блок настроек базы
     db: {
-        url: "http://admin:admin@localhost:5984/",
-        catalogs: "catalogs-dev",
+        url: "http://admin:admin@localhost:5984/", // адрес для доступа к кочу, с логином и паролем если нужно
+        catalogs: "catalogs-dev",                  // это и далее - пары <alias>: <имя базы в коче>
         events: "events-dev",
         models: "models-dev",
         workingModels: "working-models-dev",
         viewModels: "view-models-dev"
     },
 
+    // блок настроек пула воркеров
     pool: {
-        workerModule: 'deus-model-engine/lib/worker_runner',
-        workerArgs: ['node_modules/deus-model-engine/models'],
-        catalogs: 'db',
-        options: {
-            max: 2,
-            min: 2
+        workerModule: 'deus-model-engine/lib/worker_runner',   // модуль воркера, для которого вызывается ChildProcess.fork
+        workerArgs: ['node_modules/deus-model-engine/models'], // аргументы, передаваемые дочернему процессу при запуске
+        options: {                                             // опции для https://www.npmjs.com/package/generic-pool
+            max: 2,                                            // максимальное число воркеров
+            min: 2                                             // минимальное число воркеров
         }
     },
 
+    // блок настроек загрузки каталогов
     catalogs: {
+
+        // если загрузка производится из базы, используется ключ db
         db: {
-            conditions: 'dict-conditions-dev',
+            conditions: 'dict-conditions-dev', // это и далее - пары <имя каталога>: <имя или алиас базы>
             effects: 'dict-effects-dev',
             events: 'dict-events-dev',
             illnesses: 'dict-illnesses-dev',
             implants: 'dict-implants-dev'
         }
+
+        // если загрузка из файлов, используется ключ path
+        // path: __dirname + '/models/catalogs'
     },
 
+    // блок настроек логирования
     logger: {
-        default: logger(),
-        manager: logger('manager'),
+        default: logger(),          // настройки логгера по-умолчанию. Используются стандартные настройки для Winston
+        manager: logger('manager'), // это и далее - настройки логгеров для отдельных источников
         engine: logger('engine'),
         model: logger('model')
     }
