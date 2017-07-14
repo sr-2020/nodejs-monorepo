@@ -9,6 +9,7 @@ export interface DbConfig {
 export interface PoolConfig {
     workerModule: string
     workerArgs: string[]
+    catalogs: string
     options: any
 }
 

@@ -1,56 +1,128 @@
 import { EventEmitter } from 'events';
 import * as ChildProcess from 'child_process';
+import * as Rx from 'rxjs/Rx';
+import { fromStream } from './utils';
 
-import { LoggerInterface } from './logger';
+import { LoggerInterface, LogLevel } from './logger';
 import { Event } from './events_source';
+import { Catalogs } from './catalogs_storage';
 
-export type EngineResultOk = {
+export interface EngineResultOk {
     status: 'ok'
     baseModel: any
     workingModel: any
     viewModels: { [alias: string]: any }
 }
 
-export type EngineResultError = {
+export interface EngineResultError {
     status: 'error'
     error: any
 }
 
 export type EngineResult = EngineResultOk | EngineResultError;
 
+export type EngineReplyResult = EngineResult & { type: 'result' };
+
+export interface EngineReplyLog {
+    type: 'log',
+    source: string,
+    level: LogLevel,
+    msg: string,
+    params: any[]
+}
+
+export interface EngineReplyReady {
+    type: 'ready'
+}
+
+export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog;
+
+export interface EngineMessageConfigure {
+    type: 'configure'
+    data: any
+}
+
+export interface EngineMessageEvents {
+    type: 'events'
+    context: any
+    events: Event[]
+}
+
+export type EngineMessage = EngineMessageConfigure | EngineMessageEvents;
+
 export class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
+
+    private rx: {
+        message: Rx.Observable<EngineReply>,
+        error: Rx.Observable<any>,
+        exit: Rx.Observable<any>,
+        data: Rx.Observable<string>
+    } | null;
+
     lastOutput: string[] = [];
+    startedAt: number;
 
     constructor(private logger: LoggerInterface, private workerModule: string, private args?: string[]) {
         super();
     }
 
-    up(): this {
+    async up(): Promise<this> {
         this.logger.info('manager', 'Worker::up', this.workerModule);
-        let workerModule = require.resolve(this.workerModule);
-        this.child = ChildProcess.fork(workerModule, this.args, { silent: true });
+        this.startedAt = Date.now();
 
-        this.child.on('message', this.handleLogMessage);
-        this.child.on('message', this.emitMessage);
-        this.child.on('error', this.emitError);
-        this.child.on('exit', this.emitExit);
-        this.child.stdout.on('data', this.handleOutput);
-        this.child.stderr.on('data', this.handleOutput);
+        this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
+            let workerModule = require.resolve(this.workerModule);
+            let child = ChildProcess.fork(workerModule, this.args, { silent: true });
+
+            let error = Rx.Observable.fromEvent(child, 'error');
+            let exit = Rx.Observable.fromEvent(child, 'exit');
+            let stop = error.merge(exit);
+            let message = Rx.Observable.fromEvent(child, 'message').takeUntil(stop);
+            let out = fromStream(child.stdout);
+            let err = fromStream(child.stderr);
+            let data = out.merge(err).takeUntil(stop);
+
+            this.rx = {
+                message, exit, error, data
+            };
+
+            // subscribe for logs early
+            this.rx.message.filter((msg) => msg.type == 'log').subscribe(this.handleLogMessage);
+
+            let ready = this.rx.message.filter((msg) => msg.type == 'ready').first();
+
+            this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
+            this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
+
+            ready.subscribe((msg) => resolve(child));
+        });
+
+        if (!this.rx) throw new Error('Imposible! Observable is not populated.');
+
+        this.rx.message.subscribe(this.emitMessage);
+        this.rx.error.subscribe(this.emitError);
+        this.rx.exit.subscribe(this.emitExit);
+        this.rx.data.subscribe(this.handleOutput);
 
         return this;
     }
 
     down(): this {
         if (this.child) {
-            this.child.kill();
             this.child.removeAllListeners();
+            this.child.kill();
             this.child = null;
+            this.rx = null;
         }
         return this;
     }
 
-    send(message: any): this {
+    configure(catalogs: Catalogs): this {
+        return this.send({ type: 'configure', data: catalogs.data });
+    }
+
+    send(message: EngineMessage): this {
         if (this.child) {
             this.child.send(message);
         }
@@ -67,7 +139,7 @@ export class Worker extends EventEmitter {
         return this;
     }
 
-    onExit(callback: (code: number, signal: string) => void): this {
+    onExit(callback: () => void): this {
         this.on('exit', callback);
         return this;
     }
@@ -84,7 +156,7 @@ export class Worker extends EventEmitter {
 
     emitMessage = (message: any) => this.emit('message', message);
     emitError = (err: Error) => this.emit('error', err);
-    emitExit = (code: number, signal: string) => this.emit('exit', code, signal);
+    emitExit = () => this.emit('exit');
 
     async process(syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
         this.lastOutput = [];
@@ -117,7 +189,7 @@ export class Worker extends EventEmitter {
             this.child.on('error', onError);
             this.child.on('exit', onError);
 
-            this.child.send({ context: model, events });
+            this.send({ type: 'events', context: model, events });
 
             // TODO: handle timeout
         });

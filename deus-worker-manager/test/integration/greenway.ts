@@ -14,10 +14,10 @@ describe("Green way", function() {
     let manager: Manager;
     let di;
 
-    before(() => {
+    before(async () => {
         di = initDi();
         manager = di.get(ManagerToken);
-        manager.init();
+        await manager.init();
         return delay(500);
     });
 

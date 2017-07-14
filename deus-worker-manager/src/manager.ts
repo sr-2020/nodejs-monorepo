@@ -9,6 +9,7 @@ import { EventsSource, Event, SyncEvent } from './events_source';
 import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
+import { CatalogsStorageInterface } from './catalogs_storage';
 import { WorkersPoolInterface } from './workers_pool';
 import { LoggerInterface } from './logger';
 
@@ -38,12 +39,21 @@ export class Manager {
     constructor(
         private config: Config,
         private eventsSource: EventsSource,
+        private catalogsStorage: CatalogsStorageInterface,
         private pool: WorkersPoolInterface,
         private processorFactory: ProcessorFactory,
         private logger: LoggerInterface
     ) { }
 
-    init() {
+    async init() {
+        let catalogs;
+        if (this.config.pool.catalogs == 'db') {
+            catalogs = await this.catalogsStorage.load();
+        } else {
+            catalogs = this.catalogsStorage.loadFromFiles(this.config.pool.catalogs);
+        }
+
+        this.pool.init().setCatalogs(catalogs);
         this.subscribeEvents();
     }
 

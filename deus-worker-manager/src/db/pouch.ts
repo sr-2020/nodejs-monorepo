@@ -54,6 +54,10 @@ export class PouchDb implements DBInterface {
         }
     }
 
+    list(params?: any): Promise<any> {
+        return this.db.allDocs(params);
+    }
+
     put(doc: Document) {
         if (!isNil(doc._id)) {
             return this.db.put(doc);

@@ -4,11 +4,13 @@ import * as genericPool from 'generic-pool';
 import { LoggerInterface } from './logger';
 import { Config, PoolConfig } from './config';
 import { Event } from './events_source';
+import { Catalogs } from './catalogs_storage';
 
 import { Worker } from './worker';
 
 export interface WorkersPoolInterface {
-    init(): void
+    init(): this
+    setCatalogs(catalogs: Catalogs): this
     aquire(): Promise<Worker>
     release(worker: Worker): Promise<any>
     withWorker<E>(handler: (worker: Worker) => Promise<E>): Promise<E>
@@ -21,12 +23,11 @@ export class WorkersPool implements WorkersPoolInterface {
 
     private config: PoolConfig;
     private pool: genericPool.Pool<Worker>;
+    private catalogs: Catalogs;
 
     constructor(config: Config, logger: LoggerInterface) {
         this.config = config.pool;
         this.logger = logger;
-
-        this.init();
     }
 
     init() {
@@ -36,15 +37,33 @@ export class WorkersPool implements WorkersPoolInterface {
         };
 
         this.pool = genericPool.createPool(factory, this.config.options);
+        return this;
     }
 
-    private createWorker = () => {
+    setCatalogs(catalogs: Catalogs) {
+        this.catalogs = catalogs;
+        return this;
+    }
+
+    private createWorker = async () => {
         this.logger.debug('manager', 'WorkersPool::createWorker');
         let worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
             .onExit(() => {
                 this.logger.error('manager', 'Worker exit. Last output:\n %s', worker.lastOutput.join());
                 this.pool.destroy(worker);
-            }).up();
+            });
+
+        try {
+            await worker.up();
+        } catch (e) {
+            this.logger.error('manager', e);
+            throw e;
+        }
+
+        if (this.catalogs) {
+            worker.configure(this.catalogs);
+        }
+
         return worker;
     }
 
@@ -71,6 +90,10 @@ export class WorkersPool implements WorkersPoolInterface {
     async withWorker<E>(handler: (worker: Worker) => Promise<E>) {
         const worker = await this.aquire();
         try {
+            if (this.catalogs && this.catalogs.timestamp > worker.startedAt) {
+                worker.configure(this.catalogs);
+            }
+
             return await handler(worker);
         } catch (e) {
             this.logger.error('manager', 'Error:', e);

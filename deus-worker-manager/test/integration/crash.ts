@@ -15,12 +15,12 @@ describe('Crash scenarios', function() {
     let manager: Manager;
     let di;
 
-    before(() => {
+    before(async () => {
         let config = cloneDeep(defaultConfig);
         config.logger.default = { console: { silent: true } };
         di = initDi(config);
         manager = di.get(ManagerToken);
-        manager.init();
+        await manager.init();
         return delay(500);
     });
 

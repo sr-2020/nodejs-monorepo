@@ -13,7 +13,14 @@ type State = 'New' | 'Waiting for worker' | 'Processing' | 'Done';
 
 export type ProcessorFactory = () => Processor;
 
-export function processorFactory(pool: WorkersPoolInterface, eventStorage: EventStorage, modelStorage: ModelStorage, workingModelStorage: ModelStorage, viewModelStorage: ViewModelStorage, logger: LoggerInterface) {
+export function processorFactory(
+    pool: WorkersPoolInterface,
+    eventStorage: EventStorage,
+    modelStorage: ModelStorage,
+    workingModelStorage: ModelStorage,
+    viewModelStorage: ViewModelStorage,
+    logger: LoggerInterface
+) {
     return () => {
         return new Processor(pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, logger);
     };

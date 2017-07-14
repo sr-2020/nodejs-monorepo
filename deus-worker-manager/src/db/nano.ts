@@ -53,6 +53,12 @@ export class NanoDb implements DBInterface {
         }
     }
 
+    list(params?: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.list(params, stdCallback(resolve, reject));
+        });
+    }
+
     put(doc: Document) {
         return new Promise((resolve, reject) => {
             this.db.insert(doc, {}, stdCallback(resolve, reject));

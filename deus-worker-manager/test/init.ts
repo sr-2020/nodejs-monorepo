@@ -2,7 +2,8 @@ import { Injector } from '../src/di';
 
 import {
     ConfigToken, DBConnectorToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken,
-    EventStorageToken, EventsSourceToken, LoggerToken, WorkersPoolToken, ProcessorFactoryToken, ManagerToken
+    EventStorageToken, EventsSourceToken, CatalogsStorageToken, LoggerToken, WorkersPoolToken,
+    ProcessorFactoryToken, ManagerToken
 } from '../src/di_tokens';
 
 import { cloneDeep } from 'lodash';
@@ -17,6 +18,7 @@ import { ModelStorage } from '../src/model_storage';
 import { ViewModelStorage } from '../src/view_model_storage';
 import { EventStorage } from '../src/event_storage';
 import { EventsSource } from '../src/events_source';
+import { CatalogsStorage, CatalogsStorageInterface } from '../src/catalogs_storage';
 import { Logger, LoggerInterface } from '../src/logger';
 import { WorkersPool, WorkersPoolInterface } from '../src/workers_pool';
 import { processorFactory } from '../src/processor';
@@ -35,7 +37,8 @@ export const defaultConfig: Config = {
 
     pool: {
         workerModule: 'deus-model-engine/lib/worker_runner',
-        workerArgs: [__dirname + '/test-models/trivial/models', '-c', __dirname + '/test-models/trivial/catalogs'],
+        workerArgs: [__dirname + '/test-models/trivial/models'],
+        catalogs: __dirname + '/test-models/trivial/catalogs',
         options: {
             max: 2,
             min: 2
@@ -80,6 +83,14 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
     return new EventsSource(dbConnector.use(config.db.events));
 }
 
+function catalogsStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
+    if (config.db.catalogs) {
+        return new CatalogsStorage(dbConnector.use(config.db.catalogs));
+    } else {
+        return new CatalogsStorage();
+    }
+}
+
 export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
@@ -99,7 +110,8 @@ export function initDi(config: Config = defaultConfig) {
         .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)
         .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
         .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
+        .bind(CatalogsStorageToken).singleton().toFactory(catalogsStorageFactory, ConfigToken, DBConnectorToken)
         .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
         .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
-        .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, /* ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, */ WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
+        .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 }

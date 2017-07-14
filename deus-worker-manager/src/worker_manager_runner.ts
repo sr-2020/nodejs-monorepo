@@ -4,7 +4,8 @@ import * as meow from 'meow';
 import { Injector } from './di';
 import {
     ConfigToken, DBConnectorToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken,
-    EventStorageToken, EventsSourceToken, LoggerToken, WorkersPoolToken, ProcessorFactoryToken, ManagerToken
+    EventStorageToken, EventsSourceToken, CatalogsStorageToken, LoggerToken, WorkersPoolToken,
+    ProcessorFactoryToken, ManagerToken
 } from './di_tokens';
 
 import { Config } from './config';
@@ -14,6 +15,7 @@ import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
+import { CatalogsStorage } from './catalogs_storage';
 import { Logger } from './logger';
 import { WorkersPool } from './workers_pool';
 import { processorFactory } from './processor';
@@ -48,6 +50,14 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
     return new EventsSource(dbConnector.use(config.db.events));
 }
 
+function catalogsStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
+    if (config.db.catalogs) {
+        return new CatalogsStorage(dbConnector.use(config.db.catalogs));
+    } else {
+        return new CatalogsStorage();
+    }
+}
+
 const di = Injector
     .create()
     .bind(ConfigToken).toValue(config)
@@ -58,8 +68,9 @@ const di = Injector
     .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)
     .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
     .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
+    .bind(CatalogsStorageToken).singleton().toFactory(catalogsStorageFactory, ConfigToken, DBConnectorToken)
     .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
     .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
-    .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, /* ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, */ WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
+    .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 
 di.get(ManagerToken).init();

@@ -6,7 +6,7 @@ import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as nano from 'nano';
 import * as glob from 'glob';
 import * as Path from 'path';
-import { stdCallback } from '../utils';
+import { stdCallback } from '../src/utils';
 
 const cli = meow(`
 Usage
@@ -23,12 +23,8 @@ const config = require(CONFIG_PATH);
 
 const connection = nano(config.db.url);
 
-const dbs: { [key: string]: string } = {
-    models: config.db.models,
-    events: config.db.events,
-    workingModels: config.db.workingModels,
-    viewModels: config.db.viewModels
-};
+const dbs = config.db;
+delete dbs.url;
 
 function deepToString(doc: any) {
     let result: any = {};
@@ -47,11 +43,11 @@ function deepToString(doc: any) {
     return result;
 }
 
-const designDocs = glob.sync(Path.join(__dirname, 'design_docs', '*.js'))
+const designDocs = glob.sync(Path.join(__dirname, '..', 'src', 'db', 'design_docs', '*.js'))
     .map((f) => Path.basename(f, Path.extname(f)));
 
 const createDbs = () => {
-    return (Object as any).values(dbs).map((db: string) => {
+    return Object.values(dbs).map((db: string) => {
         return new Promise((resolve, reject) => {
             connection.db.create(db, (err, res) => {
                 if (!err) {
@@ -85,7 +81,7 @@ async function put(db: NanoDocument, doc: any) {
 
 const createViews = () => {
     return designDocs.map(async (docName) => {
-        let dd = deepToString(require('./design_docs/' + docName));
+        let dd = deepToString(require('../src/db/design_docs/' + docName));
         dd._id = `_design/${docName}`;
 
         let dbNames = dd.dbs;
