@@ -20,7 +20,7 @@ function getHandicaps(model) {
 
 function getStartPage(model) {
     return {
-        pageType: "list",
+        __type: "ListPageViewModel",
         menuTitle: "Общая информация",
         body: {
             title: "Общая информация",
@@ -81,7 +81,7 @@ function getConditionsPageItem(cond) {
 
 function getConditionsPage(model) {
     return {
-        pageType: "list",
+        __type: "ListPageViewModel",
         menuTitle: "Состояния",
         body: {
             title: "Ваши состояния",
@@ -93,14 +93,14 @@ function getConditionsPage(model) {
 
 function getTechnicalInfoPage() {
     return {
-        pageType: "technical_info",
+        __type: "TechnicalInfoPageViewModel",
         menuTitle: "Техническая инфа"
     };
 }
 
 function getEconomyPage() {
     return {
-        pageType: "economy",
+        __type: "EconomyPageViewModel",
         menuTitle: "Экономика"
     };
 }
@@ -151,7 +151,7 @@ function getImplantsPageItem(modifier) {
 
 function getImplantsPage(model) {
     return {
-        pageType: "list",
+        __type: "ListPageViewModel",
         menuTitle: "Импланты",
         body: {
             title: "Импланты",
@@ -175,7 +175,7 @@ function getMemoryPageItem(mem) {
 
 function getMemoryPage(model) {
     return {
-        pageType: "list",
+        __type: "ListPageViewModel",
         menuTitle: "Воспоминания",
         body: {
             title: "Воспоминания",
@@ -188,7 +188,7 @@ function getMemoryPage(model) {
 function getBodyPage(model) {
     let systems = model.systems;
     return {
-        pageType: "list",
+        __type: "ListPageViewModel",
         menuTitle: "Тело",
         body: {
             title: "Физиологические системы",
