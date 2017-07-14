@@ -1,49 +1,46 @@
 import * as moment from "moment";
 
+export class ImportRunStats{
+    public importTime: moment.Moment;
+
+    public imported: string[] = []
+    public created: string[] = []
+    public updated: string[] = []
+
+    constructor( t: moment.Moment = moment([1900,0,1]) ) {
+        this.importTime = t;
+    }
+}
+
 export class ImportStats {
+
+    public imports: ImportRunStats[] = [];
     
-    public updatedRecords = 0;
-    public createdRecords = 0;
-    
-    public lastRefreshTime = moment();
-
-    public lastUpdatedTime:any = null;
-    public lastCreatedTime:any = null;
-
-    public lastCreatedName  = "";
-    public lastUpdatedName = "";
-
-    public createdList: string[] = [];
-    public updatedList: string[] = [];
+    public lastRefreshTime = moment([1900,0,1]);
+    //public lastRefreshTime = moment().subtract(3,"hours");
     
     constructor() {}
 
     toString(): string {
-        return JSON.stringify( { created: this.createdRecords, 
-                                    updated: this.updatedRecords, 
-                                    lastUpdate: this.lastRefreshTime.format("DD-MM-YYYY HH:mm:ss") },
-                                    null,
-                                    4
-                                );
+        return JSON.stringify( Array.from(this.imports).reverse(), null, 4)
     }
 
     public updateRefreshTime(){
         this.lastRefreshTime = moment();        
     }
 
-    public addCreated(id: string){
-        this.createdList.push(id);
+    public addImportStats(s:ImportRunStats){
+        this.lastRefreshTime = s.importTime;
 
-        this.lastCreatedName = id;
-        this.lastCreatedTime = moment();
-    }
+        if(s.imported.length == 0){
+            return;
+        }
 
-    public addUpdated(id: string){
-        this.updatedList.push(id);
+        if(this.imports.length > 100){
+            this.imports.shift();
+        }
         
-        this.lastUpdatedName = id;
-        this.lastUpdatedTime = moment();
+        this.imports.push(s);
     }
-
 
 }

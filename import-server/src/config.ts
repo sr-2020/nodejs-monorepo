@@ -10,6 +10,9 @@ export const config = {
         joinListUrl: "http://joinrpg.ru/x-game-api/78/characters",
         joinMetaUrl: "http://joinrpg.ru/x-game-api/78/metadata/fields",
         joinLogin: "Info@deus.rpg.ru",
-        joinPassword: "mustg00n"
+        joinPassword: "mustg00n",
+        importInterval: 300000,
+        importBurstSize: 20,
+        requestTimeout: 60000
     };
 

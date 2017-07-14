@@ -4,7 +4,7 @@ import * as request from 'request-promise-native';
 import { ImportStats } from './stats';
 import { config } from './config';
 
-interface JoinCharacter{
+export interface JoinCharacter{
     CharacterId : number,
     UpdatedAt: string,
     IsActive: boolean,
@@ -61,97 +61,78 @@ export interface JoinData {
     metadata: JoinMetadata
 }
 
-export async function loadJoinRPGData(lastRequestTime:any = null): Promise<JoinData> {
-    console.log( "Start loadJoinRPGData" );
-    
-    //Get token
-    let reqOpts:any = {
-        url: config.joinTokenUrl,
-        method : "POST",
-        form: {
-            grant_type: "password",
-            username: config.joinLogin,
-            password: config.joinPassword
-        },
-        timeout: 30000,
-        json : true
-    }
+export class JoinImporter {
 
-    const access_token = (await request(reqOpts)).access_token;
-    console.log(`Received access token!`);  
+    public access_token = "";
 
+    constructor() {}
 
-    //Get characters list
-    reqOpts = {
-        url: config.joinListUrl,
-        method : "GET",
-        auth : {
-            bearer : access_token
-        },
-        timeout: 30000,
-        json : true
-    };
-
-    let charList:JoinCharacter[] = await request(reqOpts);
-    
-    console.log(`Received character list: ${charList.length} characters`);  
-
-    //TODO: remove in prod
-    //charList = [ charList[0], charList[1], charList[2], charList[3] ];
-
-    //Get Characters details
-    let characters: JoinCharacterDetail[] = [];
-
-    let pooledReq = request.defaults({ 
-            pool: { maxSockets: 50 },
-            timeout: 30000,
-            json : true,
-            auth : { bearer : access_token },
-            method : "GET"
-        });
-
-    let MAX_CONNECTIONS = 20;
-    let awaitArray: Promise<any>[] = [];
-
-    for(let c of charList){
-
-        if(awaitArray.length == MAX_CONNECTIONS){
-            console.log(`Wait for connetions...`);  
-            await Promise.all(awaitArray);
-            awaitArray = [];
+    init():Promise<boolean> {
+         //Get token
+        let reqOpts:any = {
+            url: config.joinTokenUrl,
+            method : "POST",
+            form: {
+                grant_type: "password",
+                username: config.joinLogin,
+                password: config.joinPassword
+            },
+            timeout: config.requestTimeout,
+            json : true
         }
 
-        reqOpts = {
-            url: config.joinBaseUrl + c.CharacterLink,
-        };
-
-        console.log(`Try to import character id: ${c.CharacterId}`);
-        awaitArray.push(
-            pooledReq(reqOpts).then( (character:JoinCharacterDetail) =>{
-                                        console.log(`Imported character: ${character.CharacterId}`); 
-                                        characters.push(character);
-                                    }
-                                )
-        )
+        return request(reqOpts).then( (result:any) => {
+            console.log(`Received access token!`);
+            this.access_token = result.access_token;
+            return true;
+        });
     }
 
-    //Get metadata
-     //Get characters list
-    reqOpts = {
-        url: config.joinMetaUrl,
-        method : "GET",
-        auth : {
-            bearer : access_token
-        },
-        timeout: 30000,
-        json : true
-    };
+    //modifiedSince=2017-07-01
+    getCharacterList(modifiedSince: moment.Moment ):Promise<JoinCharacter[]> {
+        let reqOpts = {
+            url: config.joinListUrl,
+            qs : {
+                modifiedSince: modifiedSince.format("YYYY-MM-DD") + "T" +  modifiedSince.format("HH:mm:00.000")
+            },
+            method : "GET",
+            auth : {
+                bearer : this.access_token
+            },
+            timeout: config.requestTimeout,
+            json : true
+        };
+        console.log("getCharacterList: url=" + reqOpts.url);
+        return request(reqOpts);
+    }
 
-    let metadata:JoinMetadata = await request(reqOpts);
+    async getCharacter(CharacterLink:string):Promise<JoinCharacterDetail> {
+        let reqOpts = {
+            url: config.joinBaseUrl + CharacterLink,
+            method : "GET",
+            auth : {
+                bearer : this.access_token
+            },
+            timeout: config.requestTimeout,
+            json : true
+        };
 
-    //console.log(JSON.stringify(metadata,null,4));
-    
-    console.log( "Finish loadJoinRPGData" );
+        console.log(`Try to import character: ${CharacterLink}`);
+        return request(reqOpts);
+    }
 
-    return { characters: characters, metadata: metadata };
+    async getMetadata():Promise<JoinMetadata> {
+         let reqOpts = {
+            url: config.joinMetaUrl,
+            method : "GET",
+            auth : {
+                bearer : this.access_token
+            },
+            timeout: config.requestTimeout,
+            json : true
+        };
+
+        return request(reqOpts);
+    }
+
 }
