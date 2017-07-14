@@ -21,7 +21,6 @@ describe('Crash scenarios', function() {
         di = initDi(config);
         manager = di.get(ManagerToken);
         await manager.init();
-        return delay(500);
     });
 
     after(() => {

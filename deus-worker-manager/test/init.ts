@@ -38,11 +38,14 @@ export const defaultConfig: Config = {
     pool: {
         workerModule: 'deus-model-engine/lib/worker_runner',
         workerArgs: [__dirname + '/test-models/trivial/models'],
-        catalogs: __dirname + '/test-models/trivial/catalogs',
         options: {
             max: 2,
             min: 2
         }
+    },
+
+    catalogs: {
+        path: __dirname + '/test-models/trivial/catalogs'
     },
 
     logger: {
@@ -83,14 +86,6 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
     return new EventsSource(dbConnector.use(config.db.events));
 }
 
-function catalogsStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
-    if (config.db.catalogs) {
-        return new CatalogsStorage(dbConnector.use(config.db.catalogs));
-    } else {
-        return new CatalogsStorage();
-    }
-}
-
 export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
@@ -110,7 +105,7 @@ export function initDi(config: Config = defaultConfig) {
         .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)
         .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
         .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
-        .bind(CatalogsStorageToken).singleton().toFactory(catalogsStorageFactory, ConfigToken, DBConnectorToken)
+        .bind(CatalogsStorageToken).singleton().toClass(CatalogsStorage, ConfigToken, DBConnectorToken)
         .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
         .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
         .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);

@@ -18,7 +18,6 @@ describe("Green way", function() {
         di = initDi();
         manager = di.get(ManagerToken);
         await manager.init();
-        return delay(500);
     });
 
     after(() => {
@@ -42,7 +41,7 @@ describe("Green way", function() {
             timestamp: Date.now() + 10
         })
 
-        await delay(100);
+        await delay(200);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
 
@@ -92,7 +91,7 @@ describe("Green way", function() {
             timestamp: timestamp + 150
         });
 
-        await delay(100);
+        await delay(200);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
 
@@ -119,7 +118,7 @@ describe("Green way", function() {
             timestamp: timestamp + 20
         });
 
-        await delay(100);
+        await delay(200);
 
         timestamp = Date.now();
 
@@ -136,7 +135,7 @@ describe("Green way", function() {
             timestamp: timestamp + 20
         });
 
-        await delay(100);
+        await delay(200);
 
         let baseModel = await getModel(di, model._id);
         expect(baseModel).to.has.property('value', 'AB');

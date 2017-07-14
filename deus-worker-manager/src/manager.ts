@@ -47,11 +47,7 @@ export class Manager {
 
     async init() {
         let catalogs;
-        if (this.config.pool.catalogs == 'db') {
-            catalogs = await this.catalogsStorage.load();
-        } else {
-            catalogs = this.catalogsStorage.loadFromFiles(this.config.pool.catalogs);
-        }
+        catalogs = await this.catalogsStorage.load();
 
         this.pool.init().setCatalogs(catalogs);
         this.subscribeEvents();

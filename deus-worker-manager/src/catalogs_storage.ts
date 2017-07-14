@@ -1,6 +1,7 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, get } from 'lodash';
 import { Inject } from './di';
-import { DBInterface } from './db/interface';
+import { Config, CatalogsConfigDb, CatalogsConfigFiles } from './config';
+import { DBConnectorInterface } from './db/interface';
 import { requireDir } from './utils';
 
 interface CatalogObject {
@@ -18,39 +19,68 @@ export interface Catalogs {
 export interface CatalogsStorageInterface {
     load(): Promise<Catalogs>
     loadFromFiles(dir: string): Catalogs
+    loadFromDb(): Promise<Catalogs>
 }
 
 @Inject
 export class CatalogsStorage implements CatalogsStorageInterface {
-    constructor(private db?: DBInterface) { }
+    constructor(private config: Config, private dbConnector: DBConnectorInterface) { }
 
-    async load(): Promise<Catalogs> {
-        if (!this.db) throw new Error('Catalogs db is not configured');
+    catalogDbName(catalog: string): string | undefined {
+        let dbName = get<Config, string>(this.config, ['catalogs', 'db', catalog]);
+        if (!dbName) return;
 
-        let records: any[] = (await this.db.list({ include_docs: true })).rows.map((r) => r.doc);
+        if (this.config.db[dbName]) dbName = this.config.db[dbName];
 
-        let data = records.reduce((catalogs, doc) => {
-            if (!doc.catalog) return catalogs;
+        return dbName;
+    }
 
+    async loadCatalog(catalog: string): Promise<CatalogObject[]> {
+        let dbName = this.catalogDbName(catalog);
+        if (!dbName) return [];
+
+        const db = this.dbConnector.use(dbName);
+
+        let records: any[] = (await db.list({ include_docs: true })).rows.map((r) => r.doc);
+
+        let data = records.map((doc) => {
             doc = cloneDeep(doc);
 
-            let catalog = doc.catalog;
             let id = doc._id;
 
             delete doc.catalog;
             delete doc._id;
             delete doc._rev;
 
-            if (!catalogs[catalog]) catalogs[catalog] = [];
-            catalogs[catalog].push(doc);
+            return doc;
+        });
 
-            return catalogs;
-        }, {});
+        return data;
+    }
 
-        return Object.freeze({ timestamp: Date.now(), data });
+    async loadFromDb(): Promise<Catalogs> {
+        if (!('db' in this.config.catalogs)) return { timestamp: Date.now(), data: {} };
+
+        let catalogs = this.config.catalogs as CatalogsConfigDb;
+
+        let data = {};
+
+        for (let catalog in catalogs.db) {
+            data[catalog] = await this.loadCatalog(catalog);
+        }
+
+        return { timestamp: Date.now(), data };
     }
 
     loadFromFiles(dir: string): Catalogs {
         return Object.freeze({ timestamp: Date.now(), data: requireDir(dir) });
+    }
+
+    load() {
+        if ('db' in this.config.catalogs) {
+            return this.loadFromDb();
+        } else {
+            return Promise.resolve(this.loadFromFiles((this.config.catalogs as CatalogsConfigFiles).path));
+        }
     }
 }

@@ -50,14 +50,6 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
     return new EventsSource(dbConnector.use(config.db.events));
 }
 
-function catalogsStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
-    if (config.db.catalogs) {
-        return new CatalogsStorage(dbConnector.use(config.db.catalogs));
-    } else {
-        return new CatalogsStorage();
-    }
-}
-
 const di = Injector
     .create()
     .bind(ConfigToken).toValue(config)
@@ -68,7 +60,7 @@ const di = Injector
     .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)
     .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
     .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
-    .bind(CatalogsStorageToken).singleton().toFactory(catalogsStorageFactory, ConfigToken, DBConnectorToken)
+    .bind(CatalogsStorageToken).singleton().toClass(CatalogsStorage, ConfigToken, DBConnectorToken)
     .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
     .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
     .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);

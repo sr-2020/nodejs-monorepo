@@ -6,10 +6,19 @@ export interface DbConfig {
     [alias: string]: string
 }
 
+export interface CatalogsConfigFiles {
+    path: string
+}
+
+export interface CatalogsConfigDb {
+    db: { [catalog: string]: string }
+}
+
+export type CatalogsConfig = CatalogsConfigFiles | CatalogsConfigDb;
+
 export interface PoolConfig {
     workerModule: string
     workerArgs: string[]
-    catalogs: string
     options: any
 }
 
@@ -20,5 +29,6 @@ export interface LoggerConfig {
 export interface Config {
     db: DbConfig
     pool: PoolConfig
+    catalogs: CatalogsConfig
     logger: LoggerConfig
 }

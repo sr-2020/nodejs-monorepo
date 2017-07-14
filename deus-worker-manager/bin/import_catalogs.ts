@@ -2,13 +2,12 @@
 
 import * as path from 'path';
 import * as meow from 'meow';
-import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as glob from 'glob';
 import * as Path from 'path';
 import { isEmpty, cloneDeep } from 'lodash';
-import { stdCallback } from '../src/utils';
+import { Config, CatalogsConfigDb } from '../src/config';
 import { CatalogsStorage } from '../src/catalogs_storage';
-import { NanoConnector } from '../src/db/nano';
+import { NanoConnector, NanoDb } from '../src/db/nano';
 
 const cli = meow(`
 Usage
@@ -22,15 +21,15 @@ if (!cli.input.length || !cli.flags.c) {
 const CONFIG_PATH = cli.flags.c;
 const CATALOGS_PATH = cli.input[0];
 
-const config = require(CONFIG_PATH);
+const config = require(CONFIG_PATH) as Config;
 
-if (!config.db.catalogs) {
+if (!('db' in config.catalogs)) {
     console.log('Catalogs db is not configured, exiting');
     process.exit(1);
 }
 
 const connection = new NanoConnector(config);
-const catalogsStorage = new CatalogsStorage();
+const catalogsStorage = new CatalogsStorage(config, connection);
 const catalogs = catalogsStorage.loadFromFiles(CATALOGS_PATH);
 
 if (isEmpty(catalogs.data)) {
@@ -38,9 +37,7 @@ if (isEmpty(catalogs.data)) {
     process.exit(1);
 }
 
-const db = connection.use(config.db.catalogs);
-
-async function clearCatalogs() {
+async function clearDb(db: NanoDb) {
     let docs = await db.list();
 
     for (let doc of docs.rows) {
@@ -50,9 +47,31 @@ async function clearCatalogs() {
     }
 }
 
+function catalogDb(catalog: string) {
+    let dbName = catalogsStorage.catalogDbName(catalog);
+    if (!dbName) return;
+
+    return connection.use(dbName);
+}
+
+async function clearCatalogs() {
+    let catalogsConfig = config.catalogs as CatalogsConfigDb;
+    for (let catalog in catalogsConfig.db) {
+        let db = catalogDb(catalog);
+        if (!db) continue;
+        await clearDb(db);
+    }
+}
+
 async function importCatalogs() {
     for (let catalog in catalogs.data) {
         console.log(`Importing ${catalog}`);
+        let db = catalogDb(catalog);
+
+        if (!db) {
+            console.log('  - not configured');
+            continue;
+        }
 
         for (let doc of catalogs.data[catalog] as any[]) {
             if (catalog != 'events' && !doc.id) continue;
@@ -62,7 +81,6 @@ async function importCatalogs() {
             doc = cloneDeep(doc);
             doc._id = doc.id;
             delete doc.id;
-            doc.catalog = catalog;
 
             await db.put(doc);
         }

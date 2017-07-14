@@ -39,6 +39,16 @@ module.exports = {
         }
     },
 
+    catalogs: {
+        db: {
+            conditions: 'dict-conditions-dev',
+            effects: 'dict-effects-dev',
+            events: 'dict-events-dev',
+            illnesses: 'dict-illnesses-dev',
+            implants: 'dict-implants-dev'
+        }
+    },
+
     logger: {
         default: logger(),
         manager: logger('manager'),

@@ -7,6 +7,7 @@ import * as nano from 'nano';
 import * as glob from 'glob';
 import * as Path from 'path';
 import { stdCallback } from '../src/utils';
+import { Config, CatalogsConfigDb } from '../src/config';
 
 const cli = meow(`
 Usage
@@ -19,12 +20,21 @@ if (!cli.flags.c) {
 
 const CONFIG_PATH = cli.flags.c;
 
-const config = require(CONFIG_PATH);
+const config = require(CONFIG_PATH) as Config;
 
 const connection = nano(config.db.url);
 
 const dbs = config.db;
 delete dbs.url;
+
+if (config.catalogs && ('db' in config.catalogs)) {
+    let catalogsConfig = config.catalogs as CatalogsConfigDb;
+
+    for (let dbName of Object.values(catalogsConfig.db)) {
+        if (dbs[dbName]) continue;
+        dbs[dbName] = dbName;
+    }
+}
 
 function deepToString(doc: any) {
     let result: any = {};
