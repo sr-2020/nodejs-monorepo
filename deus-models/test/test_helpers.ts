@@ -1,6 +1,7 @@
 import * as Path from 'path';
 import { Worker } from 'deus-model-engine/lib/worker';
 import { Config } from 'deus-model-engine/lib/config';
+import { requireDir } from 'deus-model-engine/lib/utils';
 
 let WORKER_INSTANCE: Worker | null = null;
 
@@ -10,7 +11,7 @@ export function getWorker() {
     const catalogsPath = Path.resolve(__dirname, '../catalogs');
     const modelsPath = Path.resolve(__dirname, '../src');
 
-    const config = Config.load(catalogsPath);
+    const config = Config.parse(requireDir(catalogsPath));
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);
 }
 
