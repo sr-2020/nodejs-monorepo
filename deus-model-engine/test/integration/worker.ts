@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Worker } from '../../src/worker';
+import { Worker, EngineResultOk } from '../../src/worker';
 import { Config, EventHandler } from '../../src/config';
 
 describe('Worker', () => {
@@ -63,6 +63,9 @@ describe('Worker', () => {
 
         let result = worker.process(context, events)
 
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
+
         expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
         expect(result.workingModel.timestamp).to.equal(timestamp);
     });
@@ -80,6 +83,9 @@ describe('Worker', () => {
 
         let result = worker.process(context, events);
 
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
+
         expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: {} });
         expect(result.workingModel.timestamp).to.equal(timestamp);
     })
@@ -94,6 +100,9 @@ describe('Worker', () => {
         ];
 
         let result = worker.process(context, events);
+
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
 
         let expectedTimer = {
             name: 'delayedConcat',
@@ -114,7 +123,12 @@ describe('Worker', () => {
             { eventType: "_RefreshModel", timestamp, data: undefined }
         ];
 
-        let { viewModels } = worker.process(context, events)
+        let result = worker.process(context, events)
+
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
+
+        let { viewModels } = result;
 
         expect(viewModels).to.exist;
         expect(viewModels).to.has.property('viewModels');
