@@ -13,6 +13,21 @@ import App from './app';
 const port = 3000;
 const address = 'http://localhost:' + port;
 
+/*
+
+There are following characters present in this test:
+id     login                      password  comment
+
+00001  some_user                  qwerty    Has viewmodel, timestamp = 420
+
+55555  user_without_model         hunter2   Has no viewmodel, used to test for corresponding 404 errors
+
+10001  some_lab_technician        research  Has access to some_user methods
+10002  some_fired_lab_technician  beer      Had access to some_user methods, now it's expired
+10003  some_hired_lab_technician  wowsocool Will get access to some_lab_technician methods
+
+*/
+
 describe('API Server', () => {
   let app: App;
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
@@ -20,7 +35,6 @@ describe('API Server', () => {
   let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
   let testStartTime: number;
-
 
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
@@ -34,27 +48,28 @@ describe('API Server', () => {
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20, 1000);
     await app.listen(port);
     await mobileViewModelDb.put({
-      _id: 'some_user', timestamp: 420,
+      _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: true,
     });
     await defaultViewModelDb.put({
-      _id: 'some_user', timestamp: 420,
+      _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
-    await accountsDb.put({ _id: 'some_lab_technician', password: 'research' });
-    await accountsDb.put({ _id: 'some_fired_lab_technician', password: 'beer' });
-    await accountsDb.put({ _id: 'some_hired_lab_technician', password: 'wowsocool' });
+    await accountsDb.put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
+    await accountsDb.put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
+    await accountsDb.put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
 
     testStartTime = app.currentTimestamp();
     await accountsDb.put({
-      _id: 'some_user',
+      _id: '00001',
+      login: 'some_user',
       password: 'qwerty',
       access: [
-        { id: 'some_fired_lab_technician', timestamp: testStartTime - 1 },
-        { id: 'some_lab_technician', timestamp: testStartTime + 60000 },
+        { id: '10002', timestamp: testStartTime - 1 },
+        { id: '10001', timestamp: testStartTime + 60000 },
       ],
     });
-    await accountsDb.put({ _id: 'user_without_model', password: 'hunter2' });
+    await accountsDb.put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
   });
 
   afterEach(async () => {
@@ -86,7 +101,7 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
 
@@ -99,7 +114,7 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
     });
 
@@ -178,7 +193,7 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
     });
   });
@@ -276,7 +291,7 @@ describe('API Server', () => {
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
-      expect(doc).to.deep.include({ characterId: 'some_user' });
+      expect(doc).to.deep.include({ characterId: '00001' });
     });
 
     it('Returns viewmodel in case if processed in time', async () => {
@@ -287,9 +302,9 @@ describe('API Server', () => {
       eventsDb.changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
         if (change.doc) {
           const changeDoc = change.doc;
-          mobileViewModelDb.get('some_user').then((doc) => {
+          mobileViewModelDb.get('00001').then((doc) => {
             mobileViewModelDb.put({
-              _id: 'some_user',
+              _id: '00001',
               _rev: doc._rev,
               timestamp: changeDoc.timestamp,
               updatesCount: doc.updatesCount + 1,
@@ -305,7 +320,7 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 4365, updatesCount: 1 });
     });
 
@@ -323,7 +338,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(4365);
     });
 
@@ -344,7 +359,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(6666);
     });
 
@@ -485,7 +500,7 @@ describe('API Server', () => {
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(420);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
     });
@@ -511,7 +526,7 @@ describe('API Server', () => {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
-      expect(response.body.id).to.equal('some_user');
+      expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(6666);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
     });
@@ -526,8 +541,8 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({access: [
-        { id: 'some_fired_lab_technician', timestamp: testStartTime - 1 },
-        { id: 'some_lab_technician', timestamp: testStartTime + 60000 },
+        { id: '10002', timestamp: testStartTime - 1 },
+        { id: '10001', timestamp: testStartTime + 60000 },
       ]});
     });
 
@@ -564,17 +579,17 @@ describe('API Server', () => {
     it('Can grant access to a new user', async () => {
       const response = await rp.post(address + '/characters/some_lab_technician',
         {
-          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'user_without_model' ] },
+          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_hired_lab_technician' ] },
           auth: { username: 'some_lab_technician', password: 'research' },
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.access.length).to.equal(1);
-      expect(response.body.access[0].id).to.equal('user_without_model');
+      expect(response.body.access[0].id).to.equal('10003');
       expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
 
-      const accessInfo: any = await accountsDb.get('some_lab_technician');
+      const accessInfo: any = await accountsDb.get('10001');
       expect(accessInfo.access.length).to.equal(1);
-      expect(accessInfo.access[0].id).to.equal('user_without_model');
+      expect(accessInfo.access[0].id).to.equal('10003');
       expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
     });
 
@@ -589,7 +604,7 @@ describe('API Server', () => {
       for (const access of response.body.access)
         expect(access.timestamp).to.be.gt(testStartTime);
 
-      const accessInfo: any = await accountsDb.get('some_user');
+      const accessInfo: any = await accountsDb.get('00001');
       expect(accessInfo.access.length).to.equal(2);
       for (const access of (accessInfo.access))
         expect(access.timestamp).to.be.gt(testStartTime);
@@ -603,12 +618,12 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.access.length).to.equal(1);
-      expect(response.body.access[0].id).to.equal('some_fired_lab_technician');
+      expect(response.body.access[0].id).to.equal('10002');
       expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
 
-      const accessInfo: any = await accountsDb.get('some_user');
+      const accessInfo: any = await accountsDb.get('00001');
       expect(accessInfo.access.length).to.equal(1);
-      expect(accessInfo.access[0].id).to.equal('some_fired_lab_technician');
+      expect(accessInfo.access[0].id).to.equal('10002');
       expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
     });
 
@@ -645,8 +660,8 @@ describe('API Server - long timeout', () => {
     const logger = new winston.Logger({ level: 'warning' });
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000, 1000);
     await app.listen(port);
-    await viewModelDb.put({ _id: 'some_user', timestamp: 420, updatesCount: 0 });
-    await accountsDb.put({ _id: 'some_user', password: 'qwerty' });
+    await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
+    await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
   });
 
   afterEach(async () => {
@@ -672,6 +687,6 @@ describe('API Server - long timeout', () => {
     const events = res.rows.filter((row) => row.doc && row.doc.characterId);
     expect(events.length).to.eq(1);
     expect(events[0].doc).to.deep.include(event);
-    expect(events[0].doc).to.deep.include({ characterId: 'some_user' });
+    expect(events[0].doc).to.deep.include({ characterId: '00001' });
   });
 });

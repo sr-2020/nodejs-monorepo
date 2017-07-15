@@ -15,15 +15,17 @@ import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
 
-function IsDocumentNotFoundError(e): boolean {
-  return e.status && e.status == 404 && e.reason && e.reason == 'missing';
+class AuthError extends Error {}
+class LoginNotFoundError extends Error {}
+
+function IsNotFoundError(e): boolean {
+  return (e.status && e.status == 404 && e.reason && e.reason == 'missing') ||
+    (e instanceof LoginNotFoundError);
 }
 
 function RequestId(req: express.Request): string {
   return (req as any).id;
 }
-
-class AuthError extends Error {}
 
 class App {
   private app: express.Express = express();
@@ -33,8 +35,7 @@ class App {
   constructor(private logger: winston.LoggerInstance,
               private eventsDb: PouchDB.Database<any>,
               private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
-              private accountsDb: PouchDB.Database<{ password: string,
-                access: Array<{id: string, timestamp: number}> }>,
+              private accountsDb: PouchDB.Database<any>,
               private timeout: number,
               private accessGrantTime: number) {
     this.app.use(bodyparser.json());
@@ -63,10 +64,12 @@ class App {
       const credentials = basic_auth(req);
       if (credentials) {
         try {
+          credentials.name = await this.canonicalId(credentials.name);
           const password = (await this.accountsDb.get(credentials.name)).password;
           if (password != credentials.pass)
             throw new AuthError('Wrong password');
 
+          req.params.id = await this.canonicalId(req.params.id);
           const id: string = req.params.id;
           if (id == credentials.name)
             return next();
@@ -80,8 +83,8 @@ class App {
             return next();
           throw new AuthError('Trying to access user without proper access rights');
         } catch (e) {
-          if (IsDocumentNotFoundError(e)) {
-            this.logAndSendErrorResponse(req, res, 404, 'Character with such id is not found');
+          if (IsNotFoundError(e)) {
+            this.logAndSendErrorResponse(req, res, 404, 'Character with such id or login is not found');
             return;
           }
         }
@@ -180,12 +183,15 @@ class App {
     this.app.post('/characters/:id', auth(false), async (req, res) => {
       const id: string = req.params.id;
 
-      const grantAccess = req.body.grantAccess ? req.body.grantAccess : Array<string>();
-      const removeAccess = req.body.removeAccess ? req.body.removeAccess : Array<string>();
+      let grantAccess = req.body.grantAccess ? req.body.grantAccess : Array<string>();
+      let removeAccess = req.body.removeAccess ? req.body.removeAccess : Array<string>();
       if (!(grantAccess instanceof Array && removeAccess instanceof Array)) {
         res.status(400).send('Wrong request format');
         return;
       }
+
+      grantAccess = await Promise.all(grantAccess.map((login) => this.canonicalId(login)));
+      removeAccess = await Promise.all(removeAccess.map((login) => this.canonicalId(login)));
 
       try {
         const resultAccess: any[] = [];
@@ -244,6 +250,15 @@ class App {
           },
         },
       });
+      await this.accountsDb.putIfNotExists({
+        _id: '_design/web_api_server_v2',
+        views: {
+          by_login: {
+            // tslint:disable-next-line:max-line-length
+            map: 'function (doc) { if (doc.login) emit(doc.login);  }',
+          },
+        },
+      });
     } catch (err) {
       console.error(err);
     }
@@ -273,8 +288,8 @@ class App {
   }
 
   private returnCharacterNotFoundOrRethrow(e: any, req: express.Request, res: express.Response) {
-    if (IsDocumentNotFoundError(e))
-      this.logAndSendErrorResponse(req, res, 404, 'Character with such id is not found');
+    if (IsNotFoundError(e))
+      this.logAndSendErrorResponse(req, res, 404, 'Character with such id or login is not found');
     else
       throw e;
   }
@@ -307,6 +322,19 @@ class App {
         id: req.params.id,
         query: req.query,
       };
+  }
+
+  private async canonicalId(idOrLogin: string): Promise<string> {
+    if (/^[0-9]*$/.test(idOrLogin))
+      return idOrLogin;
+
+    const docs = await this.accountsDb.query('web_api_server_v2/by_login', { key: idOrLogin });
+    if (docs.rows.length == 0)
+      throw new LoginNotFoundError('No user with such login found');
+    if (docs.rows.length > 1)
+      throw new LoginNotFoundError('Multiple users with such login found');
+
+    return docs.rows[0].id;
   }
 }
 
