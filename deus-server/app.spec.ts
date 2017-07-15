@@ -105,11 +105,24 @@ describe('API Server', () => {
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
 
-    it('Returns default viewmodel of existing character if no type provided', async () => {
+    it('Returns default viewmodel of existing character if no type provided. Use login.', async () => {
       const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, json: {},
           auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+      expect(response.body.id).to.equal('00001');
+      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
+    });
+
+    it('Returns default viewmodel of existing character if no type provided. Use id.', async () => {
+      const response = await rp.get(address + '/viewmodel/00001',
+        {
+          resolveWithFullResponse: true, json: {},
+          auth: { username: '00001', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -576,55 +589,110 @@ describe('API Server', () => {
   });
 
   describe('POST /characters', () => {
-    it('Can grant access to a new user', async () => {
-      const response = await rp.post(address + '/characters/some_lab_technician',
-        {
-          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_hired_lab_technician' ] },
-          auth: { username: 'some_lab_technician', password: 'research' },
-        }).promise();
-      expect(response.statusCode).to.eq(200);
-      expect(response.body.access.length).to.equal(1);
-      expect(response.body.access[0].id).to.equal('10003');
-      expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+    describe('With logins in request', () => {
+      it('Can grant access to a new user', async () => {
+        const response = await rp.post(address + '/characters/some_lab_technician',
+          {
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_hired_lab_technician' ] },
+            auth: { username: 'some_lab_technician', password: 'research' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(1);
+        expect(response.body.access[0].id).to.equal('10003');
+        expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
 
-      const accessInfo: any = await accountsDb.get('10001');
-      expect(accessInfo.access.length).to.equal(1);
-      expect(accessInfo.access[0].id).to.equal('10003');
-      expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+        const accessInfo: any = await accountsDb.get('10001');
+        expect(accessInfo.access.length).to.equal(1);
+        expect(accessInfo.access[0].id).to.equal('10003');
+        expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+      });
+
+      it('Can re-grant access to expired user', async () => {
+        const response = await rp.post(address + '/characters/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_fired_lab_technician' ] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(2);
+        for (const access of response.body.access)
+          expect(access.timestamp).to.be.gt(testStartTime);
+
+        const accessInfo: any = await accountsDb.get('00001');
+        expect(accessInfo.access.length).to.equal(2);
+        for (const access of (accessInfo.access))
+          expect(access.timestamp).to.be.gt(testStartTime);
+      });
+
+      it('Can remove access', async () => {
+        const response = await rp.post(address + '/characters/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { removeAccess: [ 'some_lab_technician' ] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(1);
+        expect(response.body.access[0].id).to.equal('10002');
+        expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
+
+        const accessInfo: any = await accountsDb.get('00001');
+        expect(accessInfo.access.length).to.equal(1);
+        expect(accessInfo.access[0].id).to.equal('10002');
+        expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
+      });
     });
 
-    it('Can re-grant access to expired user', async () => {
-      const response = await rp.post(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_fired_lab_technician' ] },
-          auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-      expect(response.statusCode).to.eq(200);
-      expect(response.body.access.length).to.equal(2);
-      for (const access of response.body.access)
-        expect(access.timestamp).to.be.gt(testStartTime);
+    describe('With id in request', () => {
+      it('Can grant access to a new user', async () => {
+        const response = await rp.post(address + '/characters/some_lab_technician',
+          {
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ '10003' ] },
+            auth: { username: 'some_lab_technician', password: 'research' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(1);
+        expect(response.body.access[0].id).to.equal('10003');
+        expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
 
-      const accessInfo: any = await accountsDb.get('00001');
-      expect(accessInfo.access.length).to.equal(2);
-      for (const access of (accessInfo.access))
-        expect(access.timestamp).to.be.gt(testStartTime);
-    });
+        const accessInfo: any = await accountsDb.get('10001');
+        expect(accessInfo.access.length).to.equal(1);
+        expect(accessInfo.access[0].id).to.equal('10003');
+        expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+      });
 
-    it('Can remove access', async () => {
-      const response = await rp.post(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { removeAccess: [ 'some_lab_technician' ] },
-          auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-      expect(response.statusCode).to.eq(200);
-      expect(response.body.access.length).to.equal(1);
-      expect(response.body.access[0].id).to.equal('10002');
-      expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
+      it('Can re-grant access to expired user', async () => {
+        const response = await rp.post(address + '/characters/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ '10002' ] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(2);
+        for (const access of response.body.access)
+          expect(access.timestamp).to.be.gt(testStartTime);
 
-      const accessInfo: any = await accountsDb.get('00001');
-      expect(accessInfo.access.length).to.equal(1);
-      expect(accessInfo.access[0].id).to.equal('10002');
-      expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
+        const accessInfo: any = await accountsDb.get('00001');
+        expect(accessInfo.access.length).to.equal(2);
+        for (const access of (accessInfo.access))
+          expect(access.timestamp).to.be.gt(testStartTime);
+      });
+
+      it('Can remove access', async () => {
+        const response = await rp.post(address + '/characters/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { removeAccess: [ '10001' ] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise();
+        expect(response.statusCode).to.eq(200);
+        expect(response.body.access.length).to.equal(1);
+        expect(response.body.access[0].id).to.equal('10002');
+        expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
+
+        const accessInfo: any = await accountsDb.get('00001');
+        expect(accessInfo.access.length).to.equal(1);
+        expect(accessInfo.access[0].id).to.equal('10002');
+        expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
+      });
     });
 
     it('Returns 404 for non-existing user', async () => {
