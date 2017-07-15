@@ -4,8 +4,8 @@ import * as express from 'express';
 import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
 import * as http from 'http';
-import * as winston from 'winston';
 import * as moment from 'moment';
+import * as winston from 'winston';
 
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
