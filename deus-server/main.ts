@@ -23,4 +23,5 @@ new App(logger,
         new PouchDB(config.dbs.events, authOptions),
         viewmodelDbs,
         new PouchDB(config.dbs.accounts, authOptions),
-        config.viewmodelUpdateTimeout).listen(config.port);
+        config.viewmodelUpdateTimeout,
+        config.accessGrantTime).listen(config.port);

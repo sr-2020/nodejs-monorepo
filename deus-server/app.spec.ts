@@ -19,6 +19,8 @@ describe('API Server', () => {
   let mobileViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
+  let testStartTime: number;
+
 
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
@@ -29,7 +31,7 @@ describe('API Server', () => {
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20);
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20, 1000);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: 'some_user', timestamp: 420,
@@ -39,7 +41,19 @@ describe('API Server', () => {
       _id: 'some_user', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
-    await accountsDb.put({ _id: 'some_user', password: 'qwerty' });
+    await accountsDb.put({ _id: 'some_lab_technician', password: 'research' });
+    await accountsDb.put({ _id: 'some_fired_lab_technician', password: 'beer' });
+    await accountsDb.put({ _id: 'some_hired_lab_technician', password: 'wowsocool' });
+
+    testStartTime = app.currentTimestamp();
+    await accountsDb.put({
+      _id: 'some_user',
+      password: 'qwerty',
+      access: [
+        { id: 'some_fired_lab_technician', timestamp: testStartTime - 1 },
+        { id: 'some_lab_technician', timestamp: testStartTime + 60000 },
+      ],
+    });
     await accountsDb.put({ _id: 'user_without_model', password: 'hunter2' });
   });
 
@@ -135,7 +149,7 @@ describe('API Server', () => {
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
-    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+    it('Returns 401 and WWW-Authenticate if querying user not providing access ', async () => {
       const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
@@ -143,6 +157,29 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns 401 and WWW-Authenticate if access to user expired ', async () => {
+      const response = await rp.get(address + '/viewmodel/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'some_fired_lab_technician', password: 'beer' },
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+      expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Returns default viewmodel of existing character if accessed by technician', async () => {
+      const response = await rp.get(address + '/viewmodel/some_user',
+        {
+          resolveWithFullResponse: true, json: {},
+          auth: { username: 'some_lab_technician', password: 'research' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+      expect(response.body.id).to.equal('some_user');
+      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
     });
   });
 
@@ -202,7 +239,7 @@ describe('API Server', () => {
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
-    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+    it('Returns 401 and WWW-Authenticate if querying user not providing access', async () => {
       const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
@@ -431,7 +468,7 @@ describe('API Server', () => {
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
-    it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
+    it('Returns 401 and WWW-Authenticate if querying user not providing access', async () => {
       const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
@@ -479,6 +516,120 @@ describe('API Server', () => {
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
     });
   });
+
+  describe('GET /characters', () => {
+    it('Returns requested ACL', async () => {
+      const response = await rp.get(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.deep.equal({access: [
+        { id: 'some_fired_lab_technician', timestamp: testStartTime - 1 },
+        { id: 'some_lab_technician', timestamp: testStartTime + 60000 },
+      ]});
+    });
+
+    it('Returns requested ACL if no explicit access field', async () => {
+      const response = await rp.get(address + '/characters/some_lab_technician',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'some_lab_technician', password: 'research' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.deep.equal({access: []});
+    });
+
+    it('Returns 404 for non-existing user', async () => {
+      const response = await rp.get(address + '/characters/nobody',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'nobody', password: 'nobody' },
+        }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 401 if querying another user (even one allowing access)', async () => {
+      const response = await rp.get(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'some_lab_technician', password: 'research' },
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+    });
+  });
+
+  describe('POST /characters', () => {
+    it('Can grant access to a new user', async () => {
+      const response = await rp.post(address + '/characters/some_lab_technician',
+        {
+          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'user_without_model' ] },
+          auth: { username: 'some_lab_technician', password: 'research' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body.access.length).to.equal(1);
+      expect(response.body.access[0].id).to.equal('user_without_model');
+      expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+
+      const accessInfo: any = await accountsDb.get('some_lab_technician');
+      expect(accessInfo.access.length).to.equal(1);
+      expect(accessInfo.access[0].id).to.equal('user_without_model');
+      expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+    });
+
+    it('Can re-grant access to expired user', async () => {
+      const response = await rp.post(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_fired_lab_technician' ] },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body.access.length).to.equal(2);
+      for (const access of response.body.access)
+        expect(access.timestamp).to.be.gt(testStartTime);
+
+      const accessInfo: any = await accountsDb.get('some_user');
+      expect(accessInfo.access.length).to.equal(2);
+      for (const access of (accessInfo.access))
+        expect(access.timestamp).to.be.gt(testStartTime);
+    });
+
+    it('Can remove access', async () => {
+      const response = await rp.post(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: { removeAccess: [ 'some_lab_technician' ] },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body.access.length).to.equal(1);
+      expect(response.body.access[0].id).to.equal('some_fired_lab_technician');
+      expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
+
+      const accessInfo: any = await accountsDb.get('some_user');
+      expect(accessInfo.access.length).to.equal(1);
+      expect(accessInfo.access[0].id).to.equal('some_fired_lab_technician');
+      expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
+    });
+
+    it('Returns 404 for non-existing user', async () => {
+      const response = await rp.post(address + '/characters/nobody',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'nobody', password: 'nobody' },
+        }).promise();
+      expect(response.statusCode).to.eq(404);
+    });
+
+    it('Returns 401 if querying another user (even one allowing access)', async () => {
+      const response = await rp.post(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'some_lab_technician', password: 'research' },
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+    });
+  });
 });
 
 describe('API Server - long timeout', () => {
@@ -492,7 +643,7 @@ describe('API Server - long timeout', () => {
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000);
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000, 1000);
     await app.listen(port);
     await viewModelDb.put({ _id: 'some_user', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: 'some_user', password: 'qwerty' });

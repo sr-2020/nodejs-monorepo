@@ -23,6 +23,8 @@ function RequestId(req: express.Request): string {
   return (req as any).id;
 }
 
+class AuthError extends Error {}
+
 class App {
   private app: express.Express = express();
   private server: http.Server;
@@ -31,8 +33,10 @@ class App {
   constructor(private logger: winston.LoggerInstance,
               private eventsDb: PouchDB.Database<any>,
               private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
-              private accountsDb: PouchDB.Database<{ password: string }>,
-              private timeout: number) {
+              private accountsDb: PouchDB.Database<{ password: string,
+                access: Array<{id: string, timestamp: number}> }>,
+              private timeout: number,
+              private accessGrantTime: number) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -55,15 +59,26 @@ class App {
       next();
     });
 
-    const auth = async (req, res, next) => {
-      const id: string = req.params.id;
+    const auth = (propagateAccess: boolean) => async (req, res, next) => {
       const credentials = basic_auth(req);
-      if (credentials && credentials.name == id) {
+      if (credentials) {
         try {
-          const password = (await this.accountsDb.get(id)).password;
-          if (password == credentials.pass) {
+          const password = (await this.accountsDb.get(credentials.name)).password;
+          if (password != credentials.pass)
+            throw new AuthError('Wrong password');
+
+          const id: string = req.params.id;
+          if (id == credentials.name)
             return next();
-          }
+
+          if (!propagateAccess)
+            throw new AuthError('Access propagation is disabled, but trying to query another user');
+
+          const allowedAccess = (await this.accountsDb.get(id)).access;
+          if (allowedAccess.some((access) =>
+            access.id == credentials.name && access.timestamp >= this.currentTimestamp()))
+            return next();
+          throw new AuthError('Trying to access user without proper access rights');
         } catch (e) {
           if (IsDocumentNotFoundError(e)) {
             this.logAndSendErrorResponse(req, res, 404, 'Character with such id is not found');
@@ -75,7 +90,7 @@ class App {
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
 
-    this.app.get('/viewmodel/:id', auth, async (req, res) => {
+    this.app.get('/viewmodel/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
       const type = req.query.type ? req.query.type : 'default';
       const db = this.viewmodelDbs.get(type);
@@ -98,7 +113,7 @@ class App {
       }
     });
 
-    this.app.post('/events/:id', auth, async (req, res) => {
+    this.app.post('/events/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
       if (this.connections.has(id)) {
         this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
@@ -147,7 +162,7 @@ class App {
       }
     });
 
-    this.app.get('/events/:id', auth, async (req, res) => {
+    this.app.get('/events/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
 
       try {
@@ -157,6 +172,52 @@ class App {
           timestamp: await this.cutTimestamp(id),
         };
         res.status(200).send(response);
+      } catch (e) {
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
+      }
+    });
+
+    this.app.post('/characters/:id', auth(false), async (req, res) => {
+      const id: string = req.params.id;
+
+      const grantAccess = req.body.grantAccess ? req.body.grantAccess : Array<string>();
+      const removeAccess = req.body.removeAccess ? req.body.removeAccess : Array<string>();
+      if (!(grantAccess instanceof Array && removeAccess instanceof Array)) {
+        res.status(400).send('Wrong request format');
+        return;
+      }
+
+      try {
+        const resultAccess: any[] = [];
+        await this.accountsDb.upsert(id, (doc) => {
+          doc.access = doc.access ? doc.access : [];
+          for (const access of doc.access) {
+            if (removeAccess.some((removeId) => access.id == removeId))
+              continue;
+
+            if (grantAccess.some((grantId) => access.id == grantId))
+              access.timestamp = Math.max(access.timestamp, this.currentTimestamp() + this.accessGrantTime);
+
+            resultAccess.push(access);
+          }
+          for (const access of grantAccess)
+            if (!resultAccess.some((r) => r.id == access))
+              resultAccess.push({id: access, timestamp: this.currentTimestamp() + this.accessGrantTime});
+          doc.access = resultAccess;
+          return doc;
+        });
+        res.send({access: resultAccess});
+      } catch (e) {
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
+      }
+    });
+
+    this.app.get('/characters/:id', auth(false), async (req, res) => {
+      const id: string = req.params.id;
+      try {
+        const allowedAccess = await this.accountsDb.get(id);
+        const access = allowedAccess.access ? allowedAccess.access : [];
+          res.send({access});
       } catch (e) {
         this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
@@ -193,7 +254,7 @@ class App {
     this.server.close();
   }
 
-  private currentTimestamp(): number {
+  public currentTimestamp(): number {
     return new Date().valueOf();
   }
 
