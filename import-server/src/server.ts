@@ -5,7 +5,7 @@ import * as moment from "moment";
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
 import { JoinData, JoinImporter, JoinCharacter,JoinCharacterDetail, JoinMetadata } from './join-importer';
-import {tempDbStoreData, TempDbWriter} from './tempdb-writer'
+import { TempDbWriter} from './tempdb-writer'
 
 
 //Statisticts
@@ -46,12 +46,15 @@ async function importData() {
 
     let metadata:JoinMetadata = await importer.getMetadata();
     console.log(`Received metadata!`);  
+
+    await cacheWriter.saveMetadata(metadata);
+    console.log(`Save metadata to cache!`);  
     
     let charList:JoinCharacter[] = await importer.getCharacterList( stats.lastRefreshTime.subtract(1,"hours") );
     console.log(`Received character list: ${charList.length} characters`);  
 
     //TODO - remove in prod
-    charList = charList.slice(0,10);
+    //charList = charList.slice(0,10);
 
 
     //Пройти по всему списку персонажей
@@ -67,7 +70,7 @@ async function importData() {
                 .retry(3)
                 .mergeMap( (cl:JoinCharacterDetail[]) => Observable.from(cl) ) //Полученные данные группы разбить на отдельные элементы для обработки
                 .do( (c:JoinCharacterDetail) => console.log(`Imported character: ${c.CharacterId}`) )  //Написать в лог
-                .map( (c:JoinCharacterDetail) => cacheWriter.setFieldsNames(c, metadata))       //проставить имена полей в объекте из метаданных
+                //.map( (c:JoinCharacterDetail) => cacheWriter.setFieldsNames(c, metadata))       //проставить имена полей в объекте из метаданных
                 .flatMap( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )             //сохранить в кеш (CouchDB)
                 .do( (c:any)=> {currentsStats.imported.push(c.id)})                         //обновить статистику
                 .subscribe( (c:any) => {

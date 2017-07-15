@@ -53,7 +53,9 @@ export interface JoinFieldMetadata{
 export interface JoinMetadata{
     ProjectId: number,
 	ProjectName: string,
-    Fields : JoinFieldMetadata[]
+    Fields : JoinFieldMetadata[],
+    _id?: string,
+    _rev?: string
 }
 
 export interface JoinData {

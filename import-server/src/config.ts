@@ -1,6 +1,7 @@
 export const config = { 
         url : "https://alice.digital:6984/",
         tempDbName : "join-import",
+        modelDBName: "models-test",
         username : "import",
         password : "4a3n@hEyDL",
         port : 8100,
