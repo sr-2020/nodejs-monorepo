@@ -383,7 +383,7 @@ describe('API Server', () => {
       };
 
       const promises: any[] = [];
-      for (let i = 0; i < 100; ++i)
+      for (let i = 0; i < 20; ++i)
         promises.push(rp.post(address + '/events/some_user',
           {
             resolveWithFullResponse: true, simple: false, json: { events: [event] },
@@ -391,11 +391,11 @@ describe('API Server', () => {
           }).promise());
 
       const resultStatuses = (await Promise.all(promises)).map((res) => res.statusCode);
-      const expectedStatuses = Array(100).fill(202);
+      const expectedStatuses = Array(20).fill(202);
       expect(resultStatuses).to.deep.equal(expectedStatuses);
       const res = await eventsDb.allDocs({ include_docs: true });
       const events = res.rows.filter((row) => row.doc && row.doc.characterId);
-      expect(events.length).to.eq(100);
+      expect(events.length).to.eq(20);
     });
 
     it('Handles multiple sequential connections from same client', async () => {
