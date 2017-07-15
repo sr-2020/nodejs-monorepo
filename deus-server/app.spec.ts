@@ -32,15 +32,15 @@ describe('API Server', () => {
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20);
     await app.listen(port);
     await mobileViewModelDb.put({
-      _id: 'existing_viewmodel', timestamp: 420,
+      _id: 'some_user', timestamp: 420,
       updatesCount: 0, mobile: true,
     });
     await defaultViewModelDb.put({
-      _id: 'existing_viewmodel', timestamp: 420,
+      _id: 'some_user', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
-    await accountsDb.put({ _id: 'existing_viewmodel', password: 'qwerty' });
-    await accountsDb.put({ _id: '5555', password: '5555' });
+    await accountsDb.put({ _id: 'some_user', password: 'qwerty' });
+    await accountsDb.put({ _id: 'user_without_model', password: 'hunter2' });
   });
 
   afterEach(async () => {
@@ -64,36 +64,36 @@ describe('API Server', () => {
   describe('GET /viewmodel', () => {
 
     it('Returns mobile viewmodel of existing character if mobile type is provided', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel?type=mobile',
+      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
         {
           resolveWithFullResponse: true, json: {},
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
 
     it('Returns default viewmodel of existing character if no type provided', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+      const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, json: {},
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
     });
 
     it('Returns 404 for non-existent viewmodel type', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel?type=foo',
+      const response = await rp.get(address + '/viewmodel/some_user?type=foo',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(404);
     });
@@ -108,16 +108,16 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/viewmodel/5555',
+      const response = await rp.get(address + '/viewmodel/user_without_model',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+      const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
         }).promise();
@@ -126,20 +126,20 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+      const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'wrong one' },
+          auth: { username: 'some_user', password: 'wrong one' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
-      const response = await rp.get(address + '/viewmodel/existing_viewmodel',
+      const response = await rp.get(address + '/viewmodel/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
@@ -148,19 +148,19 @@ describe('API Server', () => {
 
   describe('POST /events', () => {
     it('Returns 400 if no events field present', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { foo: 'bar' },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(400);
     });
 
     it('Returns 400 if events field is not an array', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: { foo: 'bar' } },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(400);
     });
@@ -175,16 +175,16 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.post(address + '/events/5555',
+      const response = await rp.post(address + '/events/user_without_model',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [] },
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
         }).promise();
@@ -193,30 +193,30 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'wrong one' },
+          auth: { username: 'some_user', password: 'wrong one' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Sets proper header', async () => {
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: [] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(202);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
@@ -228,10 +228,10 @@ describe('API Server', () => {
         timestamp: 4365,
         data: { foo: 'ambar' },
       };
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
       expect(response.statusCode).to.eq(202);
@@ -239,7 +239,7 @@ describe('API Server', () => {
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
-      expect(doc).to.deep.include({ characterId: 'existing_viewmodel' });
+      expect(doc).to.deep.include({ characterId: 'some_user' });
     });
 
     it('Returns viewmodel in case if processed in time', async () => {
@@ -250,9 +250,9 @@ describe('API Server', () => {
       eventsDb.changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
         if (change.doc) {
           const changeDoc = change.doc;
-          mobileViewModelDb.get('existing_viewmodel').then((doc) => {
+          mobileViewModelDb.get('some_user').then((doc) => {
             mobileViewModelDb.put({
-              _id: 'existing_viewmodel',
+              _id: 'some_user',
               _rev: doc._rev,
               timestamp: changeDoc.timestamp,
               updatesCount: doc.updatesCount + 1,
@@ -261,14 +261,14 @@ describe('API Server', () => {
         }
       });
 
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.viewModel).to.deep.equal({ timestamp: 4365, updatesCount: 1 });
     });
 
@@ -278,15 +278,15 @@ describe('API Server', () => {
         timestamp: 4365,
       };
 
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.timestamp).to.equal(4365);
     });
 
@@ -299,15 +299,15 @@ describe('API Server', () => {
         timestamp: 6666,
       }];
 
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: events },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.timestamp).to.equal(6666);
     });
 
@@ -319,10 +319,10 @@ describe('API Server', () => {
 
       const promises: any[] = [];
       for (let i = 0; i < 100; ++i)
-        promises.push(rp.post(address + '/events/existing_viewmodel',
+        promises.push(rp.post(address + '/events/some_user',
           {
             resolveWithFullResponse: true, simple: false, json: { events: [event] },
-            auth: { username: 'existing_viewmodel', password: 'qwerty' },
+            auth: { username: 'some_user', password: 'qwerty' },
           }).promise());
 
       const resultStatuses = (await Promise.all(promises)).map((res) => res.statusCode);
@@ -339,15 +339,15 @@ describe('API Server', () => {
         timestamp: 4365,
       };
 
-      const response1 = await rp.post(address + '/events/existing_viewmodel',
+      const response1 = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
-      const response2 = await rp.post(address + '/events/existing_viewmodel',
+      const response2 = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
@@ -359,15 +359,15 @@ describe('API Server', () => {
         timestamp: 4365,
       };
 
-      const response1 = await rp.post(address + '/events/existing_viewmodel',
+      const response1 = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
-      const response2 = await rp.post(address + '/events/existing_viewmodel',
+      const response2 = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
@@ -384,10 +384,10 @@ describe('API Server', () => {
         timestamp: 100, // < 420
       };
 
-      const response = await rp.post(address + '/events/existing_viewmodel',
+      const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: { events: [event] },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(409);
     });
@@ -404,16 +404,16 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/events/5555',
+      const response = await rp.get(address + '/events/user_without_model',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.get(address + '/events/existing_viewmodel',
+      const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
         }).promise();
@@ -422,33 +422,33 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.get(address + '/events/existing_viewmodel',
+      const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'wrong one' },
+          auth: { username: 'some_user', password: 'wrong one' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying another user ', async () => {
-      const response = await rp.get(address + '/events/existing_viewmodel',
+      const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '5555', password: '5555' },
+          auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns timestamp of viewmodel if no events present', async () => {
-      const response = await rp.get(address + '/events/existing_viewmodel',
+      const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.timestamp).to.equal(420);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
     });
@@ -462,19 +462,19 @@ describe('API Server', () => {
         timestamp: 6666,
       }];
 
-      const responsePut = await rp.post(address + '/events/existing_viewmodel',
+      const responsePut = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events: events },
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(responsePut.statusCode).to.eq(202);
 
-      const response = await rp.get(address + '/events/existing_viewmodel',
+      const response = await rp.get(address + '/events/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'existing_viewmodel', password: 'qwerty' },
+          auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
-      expect(response.body.id).to.equal('existing_viewmodel');
+      expect(response.body.id).to.equal('some_user');
       expect(response.body.timestamp).to.equal(6666);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
     });
@@ -494,8 +494,8 @@ describe('API Server - long timeout', () => {
     const logger = new winston.Logger({ level: 'warning' });
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000);
     await app.listen(port);
-    await viewModelDb.put({ _id: 'existing_viewmodel', timestamp: 420, updatesCount: 0 });
-    await accountsDb.put({ _id: 'existing_viewmodel', password: 'qwerty' });
+    await viewModelDb.put({ _id: 'some_user', timestamp: 420, updatesCount: 0 });
+    await accountsDb.put({ _id: 'some_user', password: 'qwerty' });
   });
 
   afterEach(async () => {
@@ -510,10 +510,10 @@ describe('API Server - long timeout', () => {
       eventType: 'NonMobile',
       timestamp: 4365,
     };
-    const response = await rp.post(address + '/events/existing_viewmodel',
+    const response = await rp.post(address + '/events/some_user',
       {
         resolveWithFullResponse: true, json: { events: [event] },
-        auth: { username: 'existing_viewmodel', password: 'qwerty' },
+        auth: { username: 'some_user', password: 'qwerty' },
       }).promise();
 
     expect(response.statusCode).to.eq(202);
@@ -521,6 +521,6 @@ describe('API Server - long timeout', () => {
     const events = res.rows.filter((row) => row.doc && row.doc.characterId);
     expect(events.length).to.eq(1);
     expect(events[0].doc).to.deep.include(event);
-    expect(events[0].doc).to.deep.include({ characterId: 'existing_viewmodel' });
+    expect(events[0].doc).to.deep.include({ characterId: 'some_user' });
   });
 });
