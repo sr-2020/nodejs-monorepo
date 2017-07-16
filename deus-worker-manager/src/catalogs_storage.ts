@@ -46,9 +46,7 @@ export class CatalogsStorage implements CatalogsStorageInterface {
         let data = records.map((doc) => {
             doc = cloneDeep(doc);
 
-            let id = doc._id;
-
-            delete doc.catalog;
+            doc.id = doc._id;
             delete doc._id;
             delete doc._rev;
 
