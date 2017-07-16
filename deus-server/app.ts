@@ -312,7 +312,7 @@ class App {
   }
 
   private createLogData(req: express.Request, status: number): any {
-    const dateFormat = 'YYYY-MM-DD HH:MM:ss.SSS';
+    const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
     const responseStartMoment = (req as any).timestamp;
     return {
       requestId: RequestId(req),
