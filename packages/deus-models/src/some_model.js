@@ -21,6 +21,7 @@ function getHandicaps(model) {
 function getStartPage(model) {
     return {
         __type: "ListPageViewModel",
+        viewId: "page:general",
         menuTitle: "Общая информация",
         body: {
             title: "Общая информация",
@@ -82,6 +83,7 @@ function getConditionsPageItem(cond) {
 function getConditionsPage(model) {
     return {
         __type: "ListPageViewModel",
+        viewId: "page:conditions",
         menuTitle: "Состояния",
         body: {
             title: "Ваши состояния",
@@ -94,6 +96,7 @@ function getConditionsPage(model) {
 function getTechnicalInfoPage() {
     return {
         __type: "TechnicalInfoPageViewModel",
+        viewId: "page:technicalInfo",
         menuTitle: "Техническая инфа"
     };
 }
@@ -101,6 +104,7 @@ function getTechnicalInfoPage() {
 function getEconomyPage() {
     return {
         __type: "EconomyPageViewModel",
+        viewId: "page:economy",
         menuTitle: "Экономика"
     };
 }
@@ -152,6 +156,7 @@ function getImplantsPageItem(modifier) {
 function getImplantsPage(model) {
     return {
         __type: "ListPageViewModel",
+        viewId: "page:implants",
         menuTitle: "Импланты",
         body: {
             title: "Импланты",
@@ -176,6 +181,7 @@ function getMemoryPageItem(mem) {
 function getMemoryPage(model) {
     return {
         __type: "ListPageViewModel",
+        viewId: "page:memory",
         menuTitle: "Воспоминания",
         body: {
             title: "Воспоминания",
