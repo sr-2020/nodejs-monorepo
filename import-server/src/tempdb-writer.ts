@@ -90,4 +90,12 @@ export class TempDbWriter {
                         .catch( () => Promise.resolve(null) );
 
     }
+
+    getCacheCharactersList(): Promise<any>{
+        return this.con.allDocs();
+    }
+
+    getCacheCharacter(id: string): Promise<JoinCharacterDetail>{
+        return this.con.get(id);
+    }
 }

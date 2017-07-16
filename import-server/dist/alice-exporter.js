@@ -1,373 +1,290 @@
-import { Observable } from 'rxjs/Rx';
-import * as moment from "moment";
-import * as PouchDB from 'pouchdb';
-import * as request from 'request-promise-native';
-import * as chance from 'chance';
-
-import { ImportStats, ImportRunStats } from './stats';
-import { config } from './config';
-import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue, JoinGroupInfo, JoinMetadata } from './join-importer'
-import { joinValues } from './join-import-tables';
-
-import { DeusModel, MemoryElement, MindData } from './interfaces/model';
-import { DeusModifier } from './interfaces/modifier';
-import { DeusCondition } from './interfaces/condition';
-import { DeusEffect } from './interfaces/effect';
-import { mindModelData } from './mind-model-stub';
-
-interface IAliceAccount {
-    _id: string;
-    password: string;
-    login: string;
-}
-
-
-export class AliceExporter{
-    private con:any = null;
-    
-    private chance:Chance.SeededChance;
-    public model: DeusModel = new DeusModel();
-
-    public account: IAliceAccount = { _id:"", password: "", login: "" };
-
-    constructor(private character: JoinCharacterDetail,
-                private metadata:JoinMetadata,
-                public isUpdate:boolean = true) {
-
-        this.con = new PouchDB(`${config.url}${config.modelDBName}`);
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const PouchDB = require("pouchdb");
+const chance = require("chance");
+const config_1 = require("./config");
+const join_import_tables_1 = require("./join-import-tables");
+const model_1 = require("./interfaces/model");
+const mind_model_stub_1 = require("./mind-model-stub");
+class AliceExporter {
+    constructor(character, metadata, isUpdate = true) {
+        this.character = character;
+        this.metadata = metadata;
+        this.isUpdate = isUpdate;
+        this.con = null;
+        this.model = new model_1.DeusModel();
+        this.account = { _id: "", password: "", login: "" };
+        this.con = new PouchDB(`${config_1.config.url}${config_1.config.modelDBName}`);
         this.chance = new chance(character.CharacterId);
-
         this.createModel();
     }
-
-    export(): Promise<any> {
-
-        if(!this.model._id){
+    export() {
+        if (!this.model._id) {
             return Promise.reject("AliceExporter.export(): Incorrect model ID or problem in conversion!");
         }
-
-        return this.con.get( this.model._id)
-            .then( (oldc:any) =>{ 
-                if(this.isUpdate){
-                    this.model._rev = oldc._rev;
-                    console.log(`Update model with id = ${this.model._id}.`);
-                    return this.con.put(this.model);
-                }
-
-                console.log(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
-                return Promise.resolve("exists");
-            })
-            .catch( () => this.con.put(this.model) );
+        return this.con.get(this.model._id)
+            .then((oldc) => {
+            if (this.isUpdate) {
+                this.model._rev = oldc._rev;
+                console.log(`Update model with id = ${this.model._id}.`);
+                return this.con.put(this.model);
+            }
+            console.log(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
+            return Promise.resolve("exists");
+        })
+            .catch(() => this.con.put(this.model));
     }
-
-    private createModel(){
-        try{
+    createModel() {
+        try {
             console.log(`Try to convert model id=${this.character.CharacterId}`);
-
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
-            this.account._id =  this.model._id;
-
+            this.account._id = this.model._id;
             //Login (e-mail). Field: 1905
             this.model.login = this.findStrFieldValue(1905).split("@")[0];
-
             this.model.mail = this.model.login + "@alice.digital";
             this.account.login = this.model.login;
-
             //Password. Field: 1905
             this.account.password = this.findStrFieldValue(2039);
-            
             //Тип профиля и Поколение. Field: 498. Если не проставлено, выбирается W
             this.setGenerationAndType();
-            
             //Установить имя песрнажа. Field: 496
             this.setFullName();
-            
             //Локация  Field: 501
             this.model.sweethome = this.findStrFieldValue(501);
-
             //Блок данных возможных только для типа профиля "Human"
-            if(this.model.profileType=="human"){    
+            if (this.model.profileType == "human") {
                 //Пол персонажа Field: 696
-                this.model.sex = this.findStrFieldValue(696,true);
-
+                this.model.sex = this.findStrFieldValue(696, true);
                 //Место работы (корпорация). Field: 2017 (1977 Неправильное)
                 this.model.corporation = this.findStrFieldValue(2017);
-
                 //Уровень зарплаты. Field: 1976
                 this.model.salaryLevel = Number.parseInt(this.findStrFieldValue(1976, true));
-
                 //Страховка и ее уровень. Field: 1973, 1975
                 const insurance = this.findNumFieldValue(1973);
-                if(insurance) {
-                    this.model.insurance = insurance
-                    this.model.insuranceLevel = Number.parseInt( this.findStrFieldValue(1975, true) );
+                if (insurance) {
+                    this.model.insurance = insurance;
+                    this.model.insuranceLevel = Number.parseInt(this.findStrFieldValue(1975, true));
                     this.model.insuranceDiplayName = this.findStrFieldValue(1973, true) + `, Уровень: ${this.model.insuranceLevel}`;
                 }
-
                 //TODO: модель сознания. Кубики
                 this.setMindModel();
-
                 //Болезни на начало игры. Field: 1949
                 //TODO: нужно сгенерировать случайные болезни из списка.
                 //Для этого нужен доступный список болезнй в БД, метод поиска по ним и подброра 
-
                 //Геном. Зависит от полей: "Геном" (2042-2053), "Поколение"(498), "Клон"(1948)
                 this.setGenome();
-
                 //Воспоминания. Field: 1845,1846,1847
                 this.setMemories();
-
                 //Профиль хакера
                 //this.model.hackingLogin = this.findStrFieldValue(501);
-
                 //Защта от хакерства  Field: 1649
-                this.model.hackingProtection = Number.parseInt( this.findStrFieldValue(1649, true) );
+                this.model.hackingProtection = Number.parseInt(this.findStrFieldValue(1649, true));
             }
-            
             //Блок данных только для профиля андроида или программы
-            if( this.model.profileType=="robot" ||
-                this.model.profileType=="program") {
-
+            if (this.model.profileType == "robot" ||
+                this.model.profileType == "program") {
                 //Владелец (для андроидов и программ) Field: 1829
                 this.model.owner = this.findStrFieldValue(1829);
-
                 //Модель андроида (или еще чего-нибудь) Field: 1906
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
                 this.model.model = this.findStrFieldValue(1906);
-
                 //Прошивка андроида. Field: 1907
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
-                this.model.firmware = this.findStrFieldValue(1906);    
+                this.model.firmware = this.findStrFieldValue(1906);
             }
-        
             //Импланты на начало игры. Field: 1215
             //TODO: нужно получить список ID имплантов из Join (в деталях полей в метаданных)
             //Загрузить детали из БД со списком имплантов и добавить в модель
             //Нужна БД со список имплантов
             this.setImplants();
-
             //начальное количество хитов
             this.model.maxHp = 2;
             this.model.hp = 2;
-
             //Технические параметры
             this.model.timestamp = Date.now();
-
-        }catch(e){
+        }
+        catch (e) {
             console.log(`Error in converting model id=${this.character.CharacterId}: ` + e);
             this.model._id = "";
         }
     }
-
     //Возвращается DisplayString поля, или ""
     //Если convert==true, то тогда возращается выборка по Value из таблицы подставновки
-    findStrFieldValue(fieldID: number, convert: boolean = false): string {
-        const field = this.character.Fields.find( fi => fi.ProjectFieldId==fieldID);
-
-        if(!field) return "";
-
-        if(!convert){
+    findStrFieldValue(fieldID, convert = false) {
+        const field = this.character.Fields.find(fi => fi.ProjectFieldId == fieldID);
+        if (!field)
+            return "";
+        if (!convert) {
             return field.DisplayString.trim();
-        }else{
-            return joinValues.hasOwnProperty(field.Value)? joinValues[field.Value] : "";
-        }  
+        }
+        else {
+            return join_import_tables_1.joinValues.hasOwnProperty(field.Value) ? join_import_tables_1.joinValues[field.Value] : "";
+        }
     }
-
     //Возвращается Value, которое должно быть цифровым или Number.NaN
-    findNumFieldValue(fieldID: number): number {
-        const field = this.character.Fields.find( fi => fi.ProjectFieldId==fieldID);
-
-        if(field){
-            let value:number = Number.parseInt(field.Value);
-            if(!Number.isNaN(value)){
+    findNumFieldValue(fieldID) {
+        const field = this.character.Fields.find(fi => fi.ProjectFieldId == fieldID);
+        if (field) {
+            let value = Number.parseInt(field.Value);
+            if (!Number.isNaN(value)) {
                 return value;
             }
         }
-
         return Number.NaN;
     }
-
     //Возвращается Value, которое должно быть списком цифр, разделенных запятыми
     //Если в списке встретится что-то не цифровое, в массиве будет Number.NaN
-    findNumListFieldValue(fieldID: number): number[]{
-        const field = this.character.Fields.find( fi => fi.ProjectFieldId==fieldID);
-
-        if(field) {
-            return field.Value.split(',').map( el => Number.parseInt(el) );
+    findNumListFieldValue(fieldID) {
+        const field = this.character.Fields.find(fi => fi.ProjectFieldId == fieldID);
+        if (field) {
+            return field.Value.split(',').map(el => Number.parseInt(el));
         }
-
         return [];
     }
-
     //Поколение. Field: 498. Если не проставлено, выбирается W
     //Поколения бывают: 735, 643, 644, 645 (ValueID из списка)
     setGenerationAndType() {
-        let generation = this.findStrFieldValue(498, true)
-        
-        if(!generation){
+        let generation = this.findStrFieldValue(498, true);
+        if (!generation) {
             generation = "W";
         }
-
         this.model.generation = generation;
-
-        if(generation == "robot"){
-            this.model.profileType = "robot"
-        }else if(generation == "program"){
-            this.model.profileType = "program"
-        }else{
-            this.model.profileType = "human"
+        if (generation == "robot") {
+            this.model.profileType = "robot";
+        }
+        else if (generation == "program") {
+            this.model.profileType = "program";
+        }
+        else {
+            this.model.profileType = "human";
         }
     }
-
     //Создает значение поля Геном для модели. 
     //Геном. Зависит от полей: группы "Геном" (2042-2053), "Поколение"(498), "Клон"(1948)
-    setGenome(){
+    setGenome() {
         //Снача проставить рандомный геном
         this.setRandomGenome();
-
         //Теперь пройти по всем полям и проставить их значения, если они есть.
         const FIELD_BASE = 2042;
-        for(let n=0;n<12;n++){
-            const val = this.findStrFieldValue(FIELD_BASE+n);
-            if(val && this.model.genome){
-                this.model.genome[n] = Number.parseInt( val.split(" ")[0] );
+        for (let n = 0; n < 12; n++) {
+            const val = this.findStrFieldValue(FIELD_BASE + n);
+            if (val && this.model.genome) {
+                this.model.genome[n] = Number.parseInt(val.split(" ")[0]);
             }
         }
-
         //Проставить значение "Клон" если оно есть
-        if(this.findStrFieldValue(1948)){
-            if(this.model.genome) this.model.genome[12] = 1;
+        if (this.findStrFieldValue(1948)) {
+            if (this.model.genome)
+                this.model.genome[12] = 1;
         }
     }
-
     setRandomGenome() {
         //Всего 6 систем (полей генома) которые могут быть предрасположены к болезням
-        let genome: number[] = new Array(13).fill(0);
-
+        let genome = new Array(13).fill(0);
         //Выбрать нужное количество "потенциально больных" систем организма
         let badSystems = 1;
-        if(this.model.generation == "W"){
+        if (this.model.generation == "W") {
             badSystems = 2;
-        }else if(this.model.generation == "Z"){
+        }
+        else if (this.model.generation == "Z") {
             badSystems = 3;
-        }else{
+        }
+        else {
             badSystems = 4;
         }
-        
-        while(badSystems>0){
+        while (badSystems > 0) {
             //Get random system number
-            let n = this.chance.integer({min: 0, max: 5});
-            if(genome[n] == 0){
+            let n = this.chance.integer({ min: 0, max: 5 });
+            if (genome[n] == 0) {
                 genome[n] = 1;
                 badSystems--;
             }
         }
-
         //Проставить случайные значения в остальные позиции
-        for(let i=6;i<12;i++){
-            genome[i] = this.chance.integer({min: 0, max: 2});
-        } 
-
+        for (let i = 6; i < 12; i++) {
+            genome[i] = this.chance.integer({ min: 0, max: 2 });
+        }
         this.model.genome = genome;
     }
-
     //Получить список имплантов и загрузить их в модель. Field: 1215
     //TODO: пока не возвращаеются Details из списка значений будет заглушка
-    setImplants(){
+    setImplants() {
         // this.findNumListFieldValue().map(
         //      (n) => {  }
         // )
-        let idList = ["PA_FriendIn1","S_Snow"];
-        
-
+        let idList = ["PA_FriendIn1", "S_Snow"];
     }
-
     //Установить имя песрнажа. Field: 496
-    setFullName(){
+    setFullName() {
         const name = this.findStrFieldValue(496);
-
         let parts = name.match(/^(.*?)\s\"(.*?)\"\s(.*)$/i);
-
         //Формат имени Имя "Ник" Фамилия
-        if(parts){
+        if (parts) {
             this.model.firstName = parts[1];
             this.model.nicName = parts[2];
             this.model.lastName = parts[3];
             return;
         }
-
         //Формат имени Имя "Ник"
         parts = name.match(/^(.*?)\s\"(.*?)\"\s*$/i);
-
-        if(parts){
+        if (parts) {
             this.model.firstName = parts[1];
             this.model.nicName = parts[2];
             this.model.lastName = "";
             return;
         }
-
         //Формат имени Имя Фамилия
         parts = name.match(/^(.*?)\s(.*)$/i);
-
-        if(parts){
+        if (parts) {
             this.model.firstName = parts[1];
             this.model.lastName = parts[2];
             this.model.nicName = "";
             return;
         }
-        
         //Формат имени - только имя
         this.model.firstName = name;
         this.model.nicName = "";
         this.model.lastName = "";
     }
-
     //Воспоминания. Field: 1845,1846,1847
-    setMemories(){
-        [ this.findStrFieldValue(1845), 
-          this.findStrFieldValue(1846), 
-          this.findStrFieldValue(1847) ]
-        .filter( m => m)
-        .forEach( mem =>
-            this.model.memory.push(
-                {
-                    title: mem.substr(0,30) + (mem.length>30 ? "..." : ""),
-                    text: mem
-                }
-            ));  
+    setMemories() {
+        [this.findStrFieldValue(1845),
+            this.findStrFieldValue(1846),
+            this.findStrFieldValue(1847)]
+            .filter(m => m)
+            .forEach(mem => this.model.memory.push({
+            title: mem.substr(0, 30) + (mem.length > 30 ? "..." : ""),
+            text: mem
+        }));
     }
-
     //Установка модели кубиков сознания. Field value: 2054, 2055
-    setMindModel(){
+    setMindModel() {
         this.model.mind = {};
-
         //Установить случайные значения во все элементы
-        Object.keys(mindModelData).forEach( (line:string) => {
-            this.model.mind[line] = mindModelData[line].names.map( () =>
-                this.chance.integer({min: 40, max: 59})
-            );
-        })
-
+        Object.keys(mind_model_stub_1.mindModelData).forEach((line) => {
+            this.model.mind[line] = mind_model_stub_1.mindModelData[line].names.map(() => this.chance.integer({ min: 40, max: 59 }));
+        });
         //Установить некоторые элементы в зависимости от поколения
-        if(this.model.generation == "W"){
-            this.model.mind.D[4] = this.chance.integer({min: 60, max: 69});
-        }else if(this.model.generation == "Z"){
-            this.model.mind.D[5] = this.chance.integer({min: 30, max: 39});
-        }else if(this.model.generation == "A"){
-            this.model.mind.C[6] = this.chance.integer({min: 30, max: 39});
-            this.model.mind.E[1] = this.chance.integer({min: 60, max: 69});
+        if (this.model.generation == "W") {
+            this.model.mind.D[4] = this.chance.integer({ min: 60, max: 69 });
         }
-
+        else if (this.model.generation == "Z") {
+            this.model.mind.D[5] = this.chance.integer({ min: 30, max: 39 });
+        }
+        else if (this.model.generation == "A") {
+            this.model.mind.C[6] = this.chance.integer({ min: 30, max: 39 });
+            this.model.mind.E[1] = this.chance.integer({ min: 60, max: 69 });
+        }
         //Установить кастомный кубик, если он задан
         let cName = this.findStrFieldValue(2054);
         let cValue = this.findStrFieldValue(2055);
-
-        if(cName && cValue){
+        if (cName && cValue) {
             let value = Number.parseInt(cValue);
-            if(!Number.isNaN(value))
+            if (!Number.isNaN(value))
                 this.model.mind[cName.charAt(0)][Number.parseInt(cName.charAt(1))] = value;
         }
     }
-}   
+}
+exports.AliceExporter = AliceExporter;
+//# sourceMappingURL=alice-exporter.js.map

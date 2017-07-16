@@ -1,37 +1,57 @@
 import * as express from "express";
 import { Observable, BehaviorSubject  } from 'rxjs/Rx';
 import * as moment from "moment";
+import * as commandLineArgs  from 'command-line-args';
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
 import { JoinData, JoinImporter, JoinCharacter,JoinCharacterDetail, JoinMetadata } from './join-importer';
-import { TempDbWriter} from './tempdb-writer'
+import { TempDbWriter} from './tempdb-writer';
+import { AliceExporter } from './alice-exporter';
 
+//Сheck CLI arguments
+const cliDefs = [
+        { name: 'recreate', alias: 'r', type: Boolean }
+];
+const params = commandLineArgs(cliDefs);
+
+//Reenter flag
+let isImportRunning = false;
 
 //Statisticts
 let stats = new ImportStats();
 
-var app = express();
-app.listen(config.port);
 
-app.get('/', function (req, res) {
-    res.send(stats.toString());
-})
+if(params.recreate){
+    console.log("Recreate models from the cache");
+    recreateModels();
+}else{
+    console.log(`Start HTTP-server on port: ${config.port} and run import loop`);
 
-Observable.timer(0, config.importInterval).subscribe( ()=> {
-    console.log("Start import sequence!");
-    importData();   
-});
+    var app = express();
+    app.listen(config.port);
 
-//Reenter flag
-let isImportRunning = false;
-let currentsStats = new ImportRunStats(); 
+    app.get('/', function (req, res) {
+        res.send(stats.toString());
+    })
 
+    Observable.timer(0, config.importInterval).subscribe( ()=> {
+        console.log("Start import sequence!");
+        importData();   
+    });
+}
+
+/**
+ *  Функция для импорта данных из Join, записи в кеш CouchDB 
+ *  и экспорта моделей
+ */
 async function importData() {
     if(isImportRunning) {
         console.log("Import session in progress.. return and wait to next try");
         return;
     }
+
+    let currentsStats = new ImportRunStats(); 
 
     isImportRunning = true;
 
@@ -68,13 +88,24 @@ async function importData() {
                     return Promise.all(promiseArr);
                 }, 1)
                 .retry(3)
+                
                 .mergeMap( (cl:JoinCharacterDetail[]) => Observable.from(cl) ) //Полученные данные группы разбить на отдельные элементы для обработки
                 .do( (c:JoinCharacterDetail) => console.log(`Imported character: ${c.CharacterId}`) )  //Написать в лог
+                
                 //.map( (c:JoinCharacterDetail) => cacheWriter.setFieldsNames(c, metadata))       //проставить имена полей в объекте из метаданных
-                .flatMap( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )             //сохранить в кеш (CouchDB)
+                .do( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )             //сохранить в кеш (CouchDB)
+                
+                .do( (c:JoinCharacterDetail) => console.log(`Character id: ${c._id} saved to cache`) )
+
+                .flatMap( (c:JoinCharacterDetail) => { 
+                        let modelExporter = new AliceExporter(c, metadata, true);
+                        return modelExporter.export();
+                } )
+
                 .do( (c:any)=> {currentsStats.imported.push(c.id)})                         //обновить статистику
+
                 .subscribe( (c:any) => {
-                    console.log( "Saved character: " + JSON.stringify(c) );
+                    console.log( `Exported model for character id = ${c.id}: ` + JSON.stringify(c) );
                 },
                 (error:any) => {
                     console.log( "Error in pipe: " + JSON.stringify(error) );   
@@ -91,3 +122,43 @@ async function importData() {
             );
 }
 
+
+/**
+ *  Функция для ручной перезаливки моделей из кеша
+ */
+async function recreateModels() {
+    
+    let cacheWriter: TempDbWriter = new TempDbWriter();
+
+    let metadata:JoinMetadata = await cacheWriter.getMetadata();
+    console.log(`Loaded metadata from cache!`);  
+
+    let exceptionIds = ["JoinMetadata", "lastImportStats"];
+
+    Observable.fromPromise(cacheWriter.getCacheCharactersList())
+        .do( (c:any) => console.log(JSON.stringify(c, null, 4)) )
+        .flatMap( (result:any) => Observable.from(result.rows) )
+
+        .filter( (doc:any) => !exceptionIds.find(e => e == doc.id ) )
+        .flatMap( (doc:any) => cacheWriter.getCacheCharacter(doc.id), 10 )
+        
+        .flatMap( (c:JoinCharacterDetail) => { 
+                        let modelExporter = new AliceExporter(c, metadata, true);
+                        return modelExporter.export();
+                } )
+
+        .retry(3)
+
+        .subscribe( (c:any) => {
+                    console.log( `Update model for character id = ${c.id}: ` + JSON.stringify(c) );
+                },
+                (error:any) => {
+                    console.log( "Error in pipe: " + JSON.stringify(error) );   
+                     process.exit(1);
+                },
+                () => {
+                     console.log( "Update sequence completed!" );
+                     process.exit(0);
+                }
+         );
+}
