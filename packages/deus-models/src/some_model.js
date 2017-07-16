@@ -286,7 +286,7 @@ function setModifierEnabled(modifiers, id, enabled) {
 module.exports = () => {
     return {
         _view(api, model) {
-            return JSON.parse(JSON.stringify(getViewModel(model)));
+            return getViewModel(model);
         }
     };
 };

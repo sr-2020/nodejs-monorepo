@@ -4,6 +4,7 @@ function randomId() {
 
 export const getExampleModel = (id?: string) => ({
     _id: id || randomId(),
+    mail: "vasya2045@mail.ru",
     memory: [
         {
             title: "Название воспоминания №1",
