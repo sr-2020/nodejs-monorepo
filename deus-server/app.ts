@@ -148,7 +148,7 @@ class App {
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
 
         if (isMobileClient) {
-          this.connections.set(id, new Connection(this.eventsDb, this.settings.timeout));
+          this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
             this.logSuccessfulResponse(req, eventTypes, s.status);
             res.status(s.status).send(s.body);

@@ -46,7 +46,7 @@ describe('API Server', () => {
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    const settings: Settings = { timeout: 20, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    const settings: Settings = { viewmodelUpdateTimeout: 20, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await mobileViewModelDb.put({
@@ -754,7 +754,7 @@ describe('API Server - long timeout', () => {
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    const settings: Settings = { timeout: 9000, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    const settings: Settings = { viewmodelUpdateTimeout: 9000, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
