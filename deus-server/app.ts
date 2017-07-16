@@ -14,9 +14,10 @@ PouchDB.plugin(PouchDBUpsert);
 import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
+import { Settings } from "./settings";
 
-class AuthError extends Error {}
-class LoginNotFoundError extends Error {}
+class AuthError extends Error { }
+class LoginNotFoundError extends Error { }
 
 function IsNotFoundError(e): boolean {
   return (e.status && e.status == 404 && e.reason && e.reason == 'missing') ||
@@ -36,8 +37,7 @@ class App {
               private eventsDb: PouchDB.Database<any>,
               private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
               private accountsDb: PouchDB.Database<any>,
-              private timeout: number,
-              private accessGrantTime: number) {
+              private settings: Settings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -132,8 +132,12 @@ class App {
       const eventTypes: string[] = events.map((event) => event.eventType);
 
       const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
-      if (isMobileClient)
+      if (isMobileClient) {
         events.forEach((event) => event.mobile = true);
+        const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
+        events = events.filter((value: any) =>
+          value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
+      }
 
       try {
         const cutTimestamp = await this.cutTimestamp(id);
@@ -144,7 +148,7 @@ class App {
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
 
         if (isMobileClient) {
-          this.connections.set(id, new Connection(this.eventsDb, this.timeout));
+          this.connections.set(id, new Connection(this.eventsDb, this.settings.timeout));
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
             this.logSuccessfulResponse(req, eventTypes, s.status);
             res.status(s.status).send(s.body);
@@ -202,17 +206,17 @@ class App {
               continue;
 
             if (grantAccess.some((grantId) => access.id == grantId))
-              access.timestamp = Math.max(access.timestamp, this.currentTimestamp() + this.accessGrantTime);
+              access.timestamp = Math.max(access.timestamp, this.currentTimestamp() + this.settings.accessGrantTime);
 
             resultAccess.push(access);
           }
           for (const access of grantAccess)
             if (!resultAccess.some((r) => r.id == access))
-              resultAccess.push({id: access, timestamp: this.currentTimestamp() + this.accessGrantTime});
+              resultAccess.push({ id: access, timestamp: this.currentTimestamp() + this.settings.accessGrantTime });
           doc.access = resultAccess;
           return doc;
         });
-        res.send({access: resultAccess});
+        res.send({ access: resultAccess });
       } catch (e) {
         this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
@@ -223,7 +227,7 @@ class App {
       try {
         const allowedAccess = await this.accountsDb.get(id);
         const access = allowedAccess.access ? allowedAccess.access : [];
-          res.send({access});
+        res.send({ access });
       } catch (e) {
         this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
@@ -311,17 +315,17 @@ class App {
     const dateFormat = 'YYYY-MM-DD HH:MM:ss.SSS';
     const responseStartMoment = (req as any).timestamp;
     return {
-        requestId: RequestId(req),
-        status,
-        requestTime: responseStartMoment.format(dateFormat),
-        responseTime: moment().format(dateFormat),
-        processingTime: this.currentTimestamp() - responseStartMoment.valueOf(),
-        url: req.url,
-        method: req.method,
-        ip: req.ip,
-        id: req.params.id,
-        query: req.query,
-      };
+      requestId: RequestId(req),
+      status,
+      requestTime: responseStartMoment.format(dateFormat),
+      responseTime: moment().format(dateFormat),
+      processingTime: this.currentTimestamp() - responseStartMoment.valueOf(),
+      url: req.url,
+      method: req.method,
+      ip: req.ip,
+      id: req.params.id,
+      query: req.query,
+    };
   }
 
   private async canonicalId(idOrLogin: string): Promise<string> {

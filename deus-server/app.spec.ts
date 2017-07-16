@@ -9,6 +9,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
+import { Settings } from "./settings";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -45,7 +46,8 @@ describe('API Server', () => {
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 20, 1000);
+    const settings: Settings = { timeout: 20, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: '00001', timestamp: 420,
@@ -307,6 +309,30 @@ describe('API Server', () => {
       expect(doc).to.deep.include({ characterId: '00001' });
     });
 
+    it('Filters _RefreshModels too far in future', async () => {
+      const timestamp = app.currentTimestamp() + 60000;
+      const events = [{
+        eventType: 'TestEvent',
+        timestamp: timestamp,
+      },
+      {
+        eventType: '_RefreshModel',
+        timestamp: timestamp + 1,
+      }];
+      const response = await rp.post(address + '/events/some_user',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(1);
+      const doc: any = docs.rows[0].doc;
+      expect(doc).to.deep.include(events[0]);
+      expect(doc).to.deep.include({ characterId: '00001' });
+    });
+
     it('Returns viewmodel in case if processed in time', async () => {
       const event = {
         eventType: '_RefreshModel',
@@ -553,10 +579,12 @@ describe('API Server', () => {
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
-      expect(response.body).to.deep.equal({access: [
-        { id: '10002', timestamp: testStartTime - 1 },
-        { id: '10001', timestamp: testStartTime + 60000 },
-      ]});
+      expect(response.body).to.deep.equal({
+        access: [
+          { id: '10002', timestamp: testStartTime - 1 },
+          { id: '10001', timestamp: testStartTime + 60000 },
+        ]
+      });
     });
 
     it('Returns requested ACL if no explicit access field', async () => {
@@ -566,7 +594,7 @@ describe('API Server', () => {
           auth: { username: 'some_lab_technician', password: 'research' },
         }).promise();
       expect(response.statusCode).to.eq(200);
-      expect(response.body).to.deep.equal({access: []});
+      expect(response.body).to.deep.equal({ access: [] });
     });
 
     it('Returns 404 for non-existing user', async () => {
@@ -593,7 +621,7 @@ describe('API Server', () => {
       it('Can grant access to a new user', async () => {
         const response = await rp.post(address + '/characters/some_lab_technician',
           {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_hired_lab_technician' ] },
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['some_hired_lab_technician'] },
             auth: { username: 'some_lab_technician', password: 'research' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -610,7 +638,7 @@ describe('API Server', () => {
       it('Can re-grant access to expired user', async () => {
         const response = await rp.post(address + '/characters/some_user',
           {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ 'some_fired_lab_technician' ] },
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['some_fired_lab_technician'] },
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -627,7 +655,7 @@ describe('API Server', () => {
       it('Can remove access', async () => {
         const response = await rp.post(address + '/characters/some_user',
           {
-            resolveWithFullResponse: true, simple: false, json: { removeAccess: [ 'some_lab_technician' ] },
+            resolveWithFullResponse: true, simple: false, json: { removeAccess: ['some_lab_technician'] },
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -646,7 +674,7 @@ describe('API Server', () => {
       it('Can grant access to a new user', async () => {
         const response = await rp.post(address + '/characters/some_lab_technician',
           {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ '10003' ] },
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['10003'] },
             auth: { username: 'some_lab_technician', password: 'research' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -663,7 +691,7 @@ describe('API Server', () => {
       it('Can re-grant access to expired user', async () => {
         const response = await rp.post(address + '/characters/some_user',
           {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: [ '10002' ] },
+            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['10002'] },
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -680,7 +708,7 @@ describe('API Server', () => {
       it('Can remove access', async () => {
         const response = await rp.post(address + '/characters/some_user',
           {
-            resolveWithFullResponse: true, simple: false, json: { removeAccess: [ '10001' ] },
+            resolveWithFullResponse: true, simple: false, json: { removeAccess: ['10001'] },
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise();
         expect(response.statusCode).to.eq(200);
@@ -726,7 +754,8 @@ describe('API Server - long timeout', () => {
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, 9000, 1000);
+    const settings: Settings = { timeout: 9000, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
