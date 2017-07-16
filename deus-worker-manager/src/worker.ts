@@ -89,6 +89,7 @@ export class Worker extends EventEmitter {
 
             // subscribe for logs early
             this.rx.message.filter((msg) => msg.type == 'log').subscribe(this.handleLogMessage);
+            this.rx.data.subscribe(this.handleOutput);
 
             let ready = this.rx.message.filter((msg) => msg.type == 'ready').first();
 
@@ -103,7 +104,6 @@ export class Worker extends EventEmitter {
         this.rx.message.subscribe(this.emitMessage);
         this.rx.error.subscribe(this.emitError);
         this.rx.exit.subscribe(this.emitExit);
-        this.rx.data.subscribe(this.handleOutput);
 
         return this;
     }
