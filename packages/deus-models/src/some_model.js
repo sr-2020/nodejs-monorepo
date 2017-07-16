@@ -70,6 +70,7 @@ function getRussianConditionTag(tag) {
 
 function getConditionsPageItem(cond) {
     return {
+        viewId: "id:" + cond.id,
         text: cond.text,
         tag: getRussianConditionTag(cond.class),
         icon: cond.class,
