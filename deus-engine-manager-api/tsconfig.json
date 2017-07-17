@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "lib": ["es2017", "dom"],
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "preserveConstEnums": true
+    },
+    "files": ["index.d.ts"]
+}
