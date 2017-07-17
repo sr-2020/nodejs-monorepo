@@ -1,9 +1,10 @@
 import { Inject } from './di';
 import * as genericPool from 'generic-pool';
 
+import { Event } from 'deus-engine-manager-api';
+
 import { LoggerInterface } from './logger';
 import { Config, PoolConfig } from './config';
-import { Event } from './events_source';
 import { Catalogs } from './catalogs_storage';
 
 import { Worker } from './worker';

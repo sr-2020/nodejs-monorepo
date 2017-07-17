@@ -2,10 +2,12 @@ import { Inject } from './di';
 import { isNil } from 'lodash';
 import { Subscription } from 'rxjs';
 
+import { Event, SyncEvent } from 'deus-engine-manager-api';
+
 import { DBConnectorInterface } from './db/interface';
 
 import { Config } from './config';
-import { EventsSource, Event, SyncEvent } from './events_source';
+import { EventsSource /* , Event, SyncEvent */ } from './events_source';
 import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';

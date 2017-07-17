@@ -1,13 +1,16 @@
 import { Inject } from './di';
 import { isNil } from 'lodash';
 
+import { Event, SyncEvent, EngineResult } from 'deus-engine-manager-api';
+
 import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
 import { WorkersPoolInterface } from './workers_pool';
-import { Worker, EngineResult } from './worker';
+import { Worker } from './worker';
 import { LoggerInterface } from './logger';
-import { Event, SyncEvent } from './events_source';
+
+// import { Event, SyncEvent } from './events_source';
 
 type State = 'New' | 'Waiting for worker' | 'Processing' | 'Done';
 

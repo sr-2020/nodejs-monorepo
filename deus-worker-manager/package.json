@@ -17,6 +17,7 @@
   "author": "",
   "license": "Apache2",
   "dependencies": {
+    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
     "deus-model-engine": "github:sth-larp/deus-model-engine",
     "forever": "^0.15.3",
     "generic-pool": "^3.1.7",

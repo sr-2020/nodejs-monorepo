@@ -15,10 +15,10 @@ export function stdCallback(resolve: AnyFunc, reject: AnyFunc) {
     };
 }
 
-export function fromStream(stream, finishEventName = 'end', dataEventName = 'data') {
+export function fromStream<T>(stream, finishEventName = 'end', dataEventName = 'data') {
     stream.pause();
 
-    return new Rx.Observable((observer) => {
+    return new Rx.Observable<T>((observer) => {
         function dataHandler(data) {
             observer.next(data);
         }

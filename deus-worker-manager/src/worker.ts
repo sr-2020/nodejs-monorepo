@@ -3,52 +3,11 @@ import * as ChildProcess from 'child_process';
 import * as Rx from 'rxjs/Rx';
 import { fromStream } from './utils';
 
+import { Event, EngineMessage, EngineReply, EngineResult } from 'deus-engine-manager-api';
+
 import { LoggerInterface, LogLevel } from './logger';
-import { Event } from './events_source';
+// import { Event } from './events_source';
 import { Catalogs } from './catalogs_storage';
-
-export interface EngineResultOk {
-    status: 'ok'
-    baseModel: any
-    workingModel: any
-    viewModels: { [alias: string]: any }
-}
-
-export interface EngineResultError {
-    status: 'error'
-    error: any
-}
-
-export type EngineResult = EngineResultOk | EngineResultError;
-
-export type EngineReplyResult = EngineResult & { type: 'result' };
-
-export interface EngineReplyLog {
-    type: 'log',
-    source: string,
-    level: LogLevel,
-    msg: string,
-    params: any[]
-}
-
-export interface EngineReplyReady {
-    type: 'ready'
-}
-
-export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog;
-
-export interface EngineMessageConfigure {
-    type: 'configure'
-    data: any
-}
-
-export interface EngineMessageEvents {
-    type: 'events'
-    context: any
-    events: Event[]
-}
-
-export type EngineMessage = EngineMessageConfigure | EngineMessageEvents;
 
 export class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
@@ -78,9 +37,9 @@ export class Worker extends EventEmitter {
             let error = Rx.Observable.fromEvent(child, 'error');
             let exit = Rx.Observable.fromEvent(child, 'exit');
             let stop = error.merge(exit);
-            let message = Rx.Observable.fromEvent(child, 'message').takeUntil(stop);
-            let out = fromStream(child.stdout);
-            let err = fromStream(child.stderr);
+            let message = Rx.Observable.fromEvent<EngineReply>(child, 'message').takeUntil(stop);
+            let out = fromStream<string>(child.stdout);
+            let err = fromStream<string>(child.stderr);
             let data = out.merge(err).takeUntil(stop);
 
             this.rx = {

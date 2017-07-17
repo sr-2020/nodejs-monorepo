@@ -3,19 +3,19 @@ import { DBInterface } from './db/interface';
 import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
 
-export interface Event {
-    _id: string,
-    eventType: string,
-    timestamp: number,
-    characterId: string,
-    data?: any
-}
+import { Event, SyncEvent } from 'deus-engine-manager-api';
+import { Document } from './db/interface';
 
-export interface SyncEvent {
-    _id: string,
-    eventType: '_RefreshModel',
-    timestamp: number,
-    characterId: string
+type EventDocument = Document & Event;
+type SyncEventDocument = Document & SyncEvent;
+
+function docToEvent(e: EventDocument): Event {
+    return {
+        characterId: e.characterId,
+        eventType: e.eventType,
+        timestamp: e.timestamp,
+        data: e.data
+    };
 }
 
 export class EventsSource {
@@ -50,7 +50,7 @@ export class EventsSource {
     get observable() { return this.subject; }
 
     get events(): Rx.Observable<Event> {
-        return this.subject.map((change) => change.doc);
+        return this.subject.map((change) => change.doc).map(docToEvent);
     }
 
     get syncEvents(): Rx.Observable<SyncEvent> {
