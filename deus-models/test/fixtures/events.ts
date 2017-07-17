@@ -1,3 +1,5 @@
+import { Event } from 'deus-engine-manager-api';
+
 const REFRESH_EVENT_TYPE = "_RefreshModel";
 
 export const getEvent = (characterId: string, eventType: string, data: any, timestamp = Date.now()): Event => ({
@@ -13,12 +15,6 @@ export const getRefreshEvent = (characterId: string, timestamp = Date.now()): Ev
     timestamp
 });
 
-type Event = {
-    characterId: string,
-    eventType: string,
-    timestamp: number,
-    data?: any
-}
 type PartialEvent = { eventType: string, data: any }
 
 export const getEvents = (characterId: string, events: PartialEvent[], timestamp = Date.now(), withRefresh = true): Event[] => {
