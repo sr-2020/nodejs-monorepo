@@ -14,9 +14,15 @@ import { DeusModifier } from './interfaces/modifier';
 import { DeusCondition } from './interfaces/condition';
 import { DeusEffect } from './interfaces/effect';
 import { mindModelData } from './mind-model-stub';
+import { CatalogsLoader } from './catalogs-loader';
+
+
+//Временное
+//  Error in converting model id=11711: TypeError: Cannot set property '1' of undefined 
 
 interface IAliceAccount {
     _id: string;
+    _rev?: string;
     password: string;
     login: string;
 }
@@ -24,6 +30,8 @@ interface IAliceAccount {
 
 export class AliceExporter{
     private con:any = null;
+    private accCon:any = null;
+    
     
     private chance:Chance.SeededChance;
     public model: DeusModel = new DeusModel();
@@ -31,10 +39,12 @@ export class AliceExporter{
     public account: IAliceAccount = { _id:"", password: "", login: "" };
 
     constructor(private character: JoinCharacterDetail,
-                private metadata:JoinMetadata,
-                public isUpdate:boolean = true) {
+                private metadata: JoinMetadata,
+                private catalogs: CatalogsLoader,
+                public isUpdate: boolean = true) {
 
         this.con = new PouchDB(`${config.url}${config.modelDBName}`);
+        this.accCon = new PouchDB(`${config.url}${config.accountDBName}`);        
 
         this.chance = new chance(character.CharacterId);
 
@@ -47,18 +57,39 @@ export class AliceExporter{
             return Promise.reject("AliceExporter.export(): Incorrect model ID or problem in conversion!");
         }
 
-        return this.con.get( this.model._id)
-            .then( (oldc:any) =>{ 
-                if(this.isUpdate){
-                    this.model._rev = oldc._rev;
-                    console.log(`Update model with id = ${this.model._id}.`);
-                    return this.con.put(this.model);
-                }
+        //Create or update Profile 
+        let profilePromise = this.con.get( this.model._id)
+                        .then( (oldc:any) =>{ 
+                            if(this.isUpdate){
+                                this.model._rev = oldc._rev;
+                                console.log(`Update model with id = ${this.model._id}.`);
+                                return this.con.put(this.model);
+                            }
 
-                console.log(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
-                return Promise.resolve("exists");
-            })
-            .catch( () => this.con.put(this.model) );
+                            console.log(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
+                            return Promise.resolve("exists");
+                        })
+                        .catch( () => this.con.put(this.model) );
+
+        if(!this.account.login || this.account.password){
+            return Promise.all([profilePromise, Promise.resolve(false)]);;
+        }
+        
+        //Create or update account record
+         let accPromise = this.accCon.get( this.account._id)
+                .then( (oldc:any) =>{ 
+                    if(this.isUpdate){
+                        this.account._rev = oldc._rev;
+                        console.log(`Update account with id = ${this.account._id}.`);
+                        return this.accCon.put(this.account);
+                    }
+
+                    console.log(`Acount with id = ${this.account._id} is exists in DB. Updates is disabled!`);
+                    return Promise.resolve("exists");
+                })
+                .catch( () => this.accCon.put(this.account) );
+
+        return Promise.all([profilePromise, accPromise]);
     }
 
     private createModel(){
@@ -71,9 +102,13 @@ export class AliceExporter{
 
             //Login (e-mail). Field: 1905
             this.model.login = this.findStrFieldValue(1905).split("@")[0];
-
-            this.model.mail = this.model.login + "@alice.digital";
             this.account.login = this.model.login;
+
+            if(this.model.login){
+                this.model.mail = this.model.login + "@alice.digital";
+            }else{
+                this.model.mail = "";
+            }
 
             //Password. Field: 1905
             this.account.password = this.findStrFieldValue(2039);
@@ -117,10 +152,10 @@ export class AliceExporter{
                 this.setGenome();
 
                 //Воспоминания. Field: 1845,1846,1847
-                this.setMemories();
+                this.setMemories([1845,1846,1847]);
 
-                //Профиль хакера
-                //this.model.hackingLogin = this.findStrFieldValue(501);
+                //Профиль хакера. Field: 1652
+                this.model.hackingLogin = this.findStrFieldValue(1652);
 
                 //Защта от хакерства  Field: 1649
                 this.model.hackingProtection = Number.parseInt( this.findStrFieldValue(1649, true) );
@@ -130,8 +165,11 @@ export class AliceExporter{
             if( this.model.profileType=="robot" ||
                 this.model.profileType=="program") {
 
-                //Владелец (для андроидов и программ) Field: 1829
-                this.model.owner = this.findStrFieldValue(1829);
+                //Создатель (для андроидов и программ) Field: 1829
+                this.model.creator = this.findStrFieldValue(1829);
+
+                //Владелец (для андроидов и программ) Field: 1830
+                this.model.owner = this.findStrFieldValue(1830);
 
                 //Модель андроида (или еще чего-нибудь) Field: 1906
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
@@ -140,6 +178,9 @@ export class AliceExporter{
                 //Прошивка андроида. Field: 1907
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
                 this.model.firmware = this.findStrFieldValue(1906);    
+
+                //Сохраненные данные. Field: 1845,1846,1847
+                this.setMemories([1848,1849,1850]);
             }
         
             //Импланты на начало игры. Field: 1215
@@ -324,12 +365,9 @@ export class AliceExporter{
         this.model.lastName = "";
     }
 
-    //Воспоминания. Field: 1845,1846,1847
-    setMemories(){
-        [ this.findStrFieldValue(1845), 
-          this.findStrFieldValue(1846), 
-          this.findStrFieldValue(1847) ]
-        .filter( m => m)
+    //Воспоминания/сохраненные данные. Список полей передается
+    setMemories( fields: number[] ){
+        fields.map( n => this.findStrFieldValue(n) ).filter( m => m)
         .forEach( mem =>
             this.model.memory.push(
                 {

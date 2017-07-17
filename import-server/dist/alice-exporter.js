@@ -7,14 +7,17 @@ const join_import_tables_1 = require("./join-import-tables");
 const model_1 = require("./interfaces/model");
 const mind_model_stub_1 = require("./mind-model-stub");
 class AliceExporter {
-    constructor(character, metadata, isUpdate = true) {
+    constructor(character, metadata, catalogs, isUpdate = true) {
         this.character = character;
         this.metadata = metadata;
+        this.catalogs = catalogs;
         this.isUpdate = isUpdate;
         this.con = null;
+        this.accCon = null;
         this.model = new model_1.DeusModel();
         this.account = { _id: "", password: "", login: "" };
         this.con = new PouchDB(`${config_1.config.url}${config_1.config.modelDBName}`);
+        this.accCon = new PouchDB(`${config_1.config.url}${config_1.config.accountDBName}`);
         this.chance = new chance(character.CharacterId);
         this.createModel();
     }
@@ -22,7 +25,8 @@ class AliceExporter {
         if (!this.model._id) {
             return Promise.reject("AliceExporter.export(): Incorrect model ID or problem in conversion!");
         }
-        return this.con.get(this.model._id)
+        //Create or update Profile 
+        let profilePromise = this.con.get(this.model._id)
             .then((oldc) => {
             if (this.isUpdate) {
                 this.model._rev = oldc._rev;
@@ -33,6 +37,23 @@ class AliceExporter {
             return Promise.resolve("exists");
         })
             .catch(() => this.con.put(this.model));
+        if (!this.account.login || this.account.password) {
+            return Promise.all([profilePromise, Promise.resolve(false)]);
+            ;
+        }
+        //Create or update account record
+        let accPromise = this.accCon.get(this.account._id)
+            .then((oldc) => {
+            if (this.isUpdate) {
+                this.account._rev = oldc._rev;
+                console.log(`Update account with id = ${this.account._id}.`);
+                return this.accCon.put(this.account);
+            }
+            console.log(`Acount with id = ${this.account._id} is exists in DB. Updates is disabled!`);
+            return Promise.resolve("exists");
+        })
+            .catch(() => this.accCon.put(this.account));
+        return Promise.all([profilePromise, accPromise]);
     }
     createModel() {
         try {
@@ -42,8 +63,13 @@ class AliceExporter {
             this.account._id = this.model._id;
             //Login (e-mail). Field: 1905
             this.model.login = this.findStrFieldValue(1905).split("@")[0];
-            this.model.mail = this.model.login + "@alice.digital";
             this.account.login = this.model.login;
+            if (this.model.login) {
+                this.model.mail = this.model.login + "@alice.digital";
+            }
+            else {
+                this.model.mail = "";
+            }
             //Password. Field: 1905
             this.account.password = this.findStrFieldValue(2039);
             //Тип профиля и Поколение. Field: 498. Если не проставлено, выбирается W
@@ -75,23 +101,27 @@ class AliceExporter {
                 //Геном. Зависит от полей: "Геном" (2042-2053), "Поколение"(498), "Клон"(1948)
                 this.setGenome();
                 //Воспоминания. Field: 1845,1846,1847
-                this.setMemories();
-                //Профиль хакера
-                //this.model.hackingLogin = this.findStrFieldValue(501);
+                this.setMemories([1845, 1846, 1847]);
+                //Профиль хакера. Field: 1652
+                this.model.hackingLogin = this.findStrFieldValue(1652);
                 //Защта от хакерства  Field: 1649
                 this.model.hackingProtection = Number.parseInt(this.findStrFieldValue(1649, true));
             }
             //Блок данных только для профиля андроида или программы
             if (this.model.profileType == "robot" ||
                 this.model.profileType == "program") {
-                //Владелец (для андроидов и программ) Field: 1829
-                this.model.owner = this.findStrFieldValue(1829);
+                //Создатель (для андроидов и программ) Field: 1829
+                this.model.creator = this.findStrFieldValue(1829);
+                //Владелец (для андроидов и программ) Field: 1830
+                this.model.owner = this.findStrFieldValue(1830);
                 //Модель андроида (или еще чего-нибудь) Field: 1906
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
                 this.model.model = this.findStrFieldValue(1906);
                 //Прошивка андроида. Field: 1907
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
                 this.model.firmware = this.findStrFieldValue(1906);
+                //Сохраненные данные. Field: 1845,1846,1847
+                this.setMemories([1848, 1849, 1850]);
             }
             //Импланты на начало игры. Field: 1215
             //TODO: нужно получить список ID имплантов из Join (в деталях полей в метаданных)
@@ -247,12 +277,9 @@ class AliceExporter {
         this.model.nicName = "";
         this.model.lastName = "";
     }
-    //Воспоминания. Field: 1845,1846,1847
-    setMemories() {
-        [this.findStrFieldValue(1845),
-            this.findStrFieldValue(1846),
-            this.findStrFieldValue(1847)]
-            .filter(m => m)
+    //Воспоминания/сохраненные данные. Список полей передается
+    setMemories(fields) {
+        fields.map(n => this.findStrFieldValue(n)).filter(m => m)
             .forEach(mem => this.model.memory.push({
             title: mem.substr(0, 30) + (mem.length > 30 ? "..." : ""),
             text: mem

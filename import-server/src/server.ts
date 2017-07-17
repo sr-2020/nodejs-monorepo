@@ -8,10 +8,12 @@ import { config } from './config';
 import { JoinData, JoinImporter, JoinCharacter,JoinCharacterDetail, JoinMetadata } from './join-importer';
 import { TempDbWriter} from './tempdb-writer';
 import { AliceExporter } from './alice-exporter';
+import { CatalogsLoader } from './catalogs-loader'
 
 //Сheck CLI arguments
 const cliDefs = [
-        { name: 'recreate', alias: 'r', type: Boolean }
+        { name: 'recreate', alias: 'r', type: Boolean },
+        { name: 'id', alias: 'i', type: String },
 ];
 const params = commandLineArgs(cliDefs);
 
@@ -24,6 +26,7 @@ let stats = new ImportStats();
 
 if(params.recreate){
     console.log("Recreate models from the cache");
+    console.log(JSON.stringify(params,null,4));
     recreateModels();
 }else{
     console.log(`Start HTTP-server on port: ${config.port} and run import loop`);
@@ -57,24 +60,36 @@ async function importData() {
 
     let importer:JoinImporter = new JoinImporter();
     let cacheWriter: TempDbWriter = new TempDbWriter();
+    let catalogsLoader: CatalogsLoader = new CatalogsLoader();
 
     //Получить статистику последнего импорта (если была)
     stats.lastRefreshTime = (await cacheWriter.getLastStats()).importTime;
     console.log("Last import time set to: " + stats.lastRefreshTime.format("L LTS"));
 
+    //Иницировать загрузчик данных из Join(токен)
     await importer.init();
 
+    //Загрузить метаднные
     let metadata:JoinMetadata = await importer.getMetadata();
     console.log(`Received metadata!`);  
 
+    //Сохранить метаднные в кеше
     await cacheWriter.saveMetadata(metadata);
     console.log(`Save metadata to cache!`);  
     
+    //Получить список обновленных персонажей для загрузки
     let charList:JoinCharacter[] = await importer.getCharacterList( stats.lastRefreshTime.subtract(1,"hours") );
     console.log(`Received character list: ${charList.length} characters`);  
 
-    //TODO - remove in prod
-    //charList = charList.slice(0,10);
+    //Если список не нулевой загрузить каталоги
+    if(charList.length){
+        await catalogsLoader.load();
+
+        Object.keys(catalogsLoader.catalogs).forEach( (name) => {
+            console.log(`Loaded catalog: ${name}, elements: ${catalogsLoader.catalogs[name].length}`);  
+        })
+
+    }
 
 
     //Пройти по всему списку персонажей
@@ -98,14 +113,14 @@ async function importData() {
                 .do( (c:JoinCharacterDetail) => console.log(`Character id: ${c._id} saved to cache`) )
 
                 .flatMap( (c:JoinCharacterDetail) => { 
-                        let modelExporter = new AliceExporter(c, metadata, true);
+                        let modelExporter = new AliceExporter(c, metadata, catalogsLoader, true);
                         return modelExporter.export();
                 } )
 
                 .do( (c:any)=> {currentsStats.imported.push(c.id)})                         //обновить статистику
 
                 .subscribe( (c:any) => {
-                    console.log( `Exported model for character id = ${c.id}: ` + JSON.stringify(c) );
+                    console.log( `Exported model for character id = ${c[0].id}: ` + JSON.stringify(c) );
                 },
                 (error:any) => {
                     console.log( "Error in pipe: " + JSON.stringify(error) );   
@@ -133,24 +148,36 @@ async function recreateModels() {
     let metadata:JoinMetadata = await cacheWriter.getMetadata();
     console.log(`Loaded metadata from cache!`);  
 
+    let catalogsLoader: CatalogsLoader = new CatalogsLoader();
+    await catalogsLoader.load();
+    Object.keys(catalogsLoader.catalogs).forEach( (name) => {
+        console.log(`Loaded catalog: ${name}, elements: ${catalogsLoader.catalogs[name].length}`);  
+    })
+
     let exceptionIds = ["JoinMetadata", "lastImportStats"];
 
-    Observable.fromPromise(cacheWriter.getCacheCharactersList())
-        .do( (c:any) => console.log(JSON.stringify(c, null, 4)) )
-        .flatMap( (result:any) => Observable.from(result.rows) )
+    let src:Observable<any> = null;
 
-        .filter( (doc:any) => !exceptionIds.find(e => e == doc.id ) )
-        .flatMap( (doc:any) => cacheWriter.getCacheCharacter(doc.id), 10 )
-        
-        .flatMap( (c:JoinCharacterDetail) => { 
-                        let modelExporter = new AliceExporter(c, metadata, true);
+    if(params.hasOwnProperty("id")){
+        src = Observable.fromPromise(cacheWriter.getCacheCharacter(params.id))
+
+    }else{
+        src = Observable.fromPromise(cacheWriter.getCacheCharactersList())
+                .do( (c:any) => console.log(JSON.stringify(c, null, 4)) )
+                .flatMap( (result:any) => Observable.from(result.rows) )
+                .filter( (doc:any) => !exceptionIds.find(e => e == doc.id ) )
+                .flatMap( (doc:any) => cacheWriter.getCacheCharacter(doc.id), 10 );
+    }
+
+        src.flatMap( (c:JoinCharacterDetail) => { 
+                        let modelExporter = new AliceExporter(c, metadata, catalogsLoader, true);
                         return modelExporter.export();
                 } )
 
         .retry(3)
 
         .subscribe( (c:any) => {
-                    console.log( `Update model for character id = ${c.id}: ` + JSON.stringify(c) );
+                    console.log( `Update model for character id = ${c[0].id}: ` + JSON.stringify(c) );
                 },
                 (error:any) => {
                     console.log( "Error in pipe: " + JSON.stringify(error) );   

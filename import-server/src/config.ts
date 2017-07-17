@@ -1,7 +1,8 @@
 export const config = { 
         url : "https://alice.digital:6984/",
         tempDbName : "join-import",
-        modelDBName: "models",
+        modelDBName: "models-test",
+        accountDBName: "accounts-test",
         username : "import",
         password : "4a3n@hEyDL",
         port : 8100,
@@ -13,7 +14,13 @@ export const config = {
         joinLogin: "Info@deus.rpg.ru",
         joinPassword: "mustg00n",
         importInterval: 300000,
-        importBurstSize: 20,
-        requestTimeout: 60000
+        importBurstSize: 10,
+        requestTimeout: 120000,
+
+        catalogs: {
+            effects: "dict-effects",
+            illnesses: "dict-illnesses",
+            implants:  "dict-implants"
+        }
     };
 

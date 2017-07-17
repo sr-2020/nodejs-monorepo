@@ -58,7 +58,8 @@ export class DeusModel{
     mind: MindData;         //TODO - пока не сделано
 
 //Only android or programm
-    owner?: string;          //Владелец андроида/программы (или создатель?)
+    owner?: string;          //Владелец андроида/программы
+    creator?: string;       //Создатель андроида/программы
     model?: string;      //Модель андроида или программа
     firmware?: string;   //Прошивка андроида. Временное. 
 
