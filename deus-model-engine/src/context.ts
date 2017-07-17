@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import * as dispatcher from './dispatcher';
 
+import { Event } from 'deus-engine-manager-api';
+
 export type Timer = {
     name: string,
     miliseconds: number,
@@ -61,10 +63,10 @@ export type Dictionaries = {
 
 export class Context {
     private _ctx: Character;
-    private _events: dispatcher.Event[];
+    private _events: Event[];
     private _dictionaries: Dictionaries = {};
 
-    constructor(contextSrc: any, events: dispatcher.Event[], dictionaries?: any) {
+    constructor(contextSrc: any, events: Event[], dictionaries?: any) {
         this._ctx = cloneDeep(contextSrc);
 
         this._events = cloneDeep(events);
@@ -80,7 +82,7 @@ export class Context {
         return this._events;
     }
 
-    set events(value: dispatcher.Event[]) {
+    set events(value: Event[]) {
         this._events = cloneDeep(value);
         this.sortEvents();
     }
@@ -140,6 +142,7 @@ export class Context {
     sendEvent(characterId: number | null, event: string, data: any /* delay: number */) {
         if (!characterId) {
             this._events.unshift({
+                characterId: this._ctx.characterId,
                 eventType: event,
                 timestamp: this.timestamp,
                 data
@@ -157,7 +160,7 @@ export class Context {
         }, null);
     }
 
-    nextEvent(): dispatcher.Event | undefined {
+    nextEvent(): Event | undefined {
         if (!this._events.length) return;
 
         let firstTimer = this.nextTimer();
@@ -172,7 +175,7 @@ export class Context {
         }
     }
 
-    *iterateEvents(): Iterable<dispatcher.Event> {
+    *iterateEvents(): Iterable<Event> {
         let event = this.nextEvent();
         while (event) {
             yield event;
@@ -222,13 +225,14 @@ export class Context {
     }
 
     private sortEvents() {
-        this._events.sort((a: dispatcher.Event, b: dispatcher.Event) => {
+        this._events.sort((a: Event, b: Event) => {
             return a.timestamp - b.timestamp;
         });
     }
 
-    private timerEvent(timer: Timer): dispatcher.Event {
+    private timerEvent(timer: Timer): Event {
         return {
+            characterId: this._ctx.characterId,
             eventType: timer.eventType,
             timestamp: this.timestamp + timer.miliseconds,
             data: timer.data

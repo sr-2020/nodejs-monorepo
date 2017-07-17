@@ -2,11 +2,7 @@ import * as model from './model'
 import { Context } from './context'
 import { ModelApiFactory } from './model_api'
 
-export type Event = {
-    eventType: string,
-    timestamp: number,
-    data: any
-}
+import { Event } from 'deus-engine-manager-api';
 
 export type CallbacksList = model.Callback | null | (model.Callback | null)[]
 

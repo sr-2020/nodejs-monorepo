@@ -1,6 +1,8 @@
 import { clone, assign, reduce } from 'lodash'
 import { inspect } from 'util';
 
+import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult } from 'deus-engine-manager-api';
+
 import Logger from './logger';
 import { requireDir } from './utils';
 import * as config from './config';
@@ -8,39 +10,6 @@ import * as model from './model';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import { ModelApiFactory } from './model_api';
-
-export type WorkerMessageEvents = {
-    type: 'events'
-    timestamp: number
-    context: any
-    events: dispatcher.Event[]
-}
-
-export type WorkerMessageConfigure = {
-    type: 'configure'
-    data: any
-}
-
-export type WorkerMessage = WorkerMessageEvents | WorkerMessageConfigure;
-
-export type WorkerContext = {
-    timestamp: number,
-    [key: string]: any
-}
-
-export type EngineResultOk = {
-    status: 'ok'
-    baseModel: any,
-    workingModel: any,
-    viewModels: { [base: string]: any }
-}
-
-export type EngineResultError = {
-    status: 'error',
-    error: any
-}
-
-export type EngineResult = EngineResultOk | EngineResultError;
 
 export class Worker {
     private config: config.ConfigInterface
@@ -67,7 +36,7 @@ export class Worker {
         return this;
     }
 
-    process(context: WorkerContext, events: dispatcher.Event[]): EngineResult {
+    process(context: EngineContext, events: Event[]): EngineResult {
         Logger.info('engine', 'processing', events);
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
@@ -108,7 +77,7 @@ export class Worker {
                 process.exit();
             });
 
-            process.on('message', (message: WorkerMessage) => {
+            process.on('message', (message: EngineMessage) => {
                 if (message.type == 'configure') {
                     this.onConfigure(message);
                 } else {
@@ -124,7 +93,7 @@ export class Worker {
         }
     }
 
-    private onEvents(message: WorkerMessageEvents) {
+    private onEvents(message: EngineMessageEvents) {
         let { context, events } = message;
 
         let result = this.process(context, events);
@@ -134,7 +103,7 @@ export class Worker {
         }
     }
 
-    private onConfigure(message: WorkerMessageConfigure) {
+    private onConfigure(message: EngineMessageConfigure) {
         let cfg = config.Config.parse(message.data);
         this.configure(cfg);
     }
@@ -143,7 +112,7 @@ export class Worker {
         return this.model.callbacks[callback];
     }
 
-    private runEvent(context: Context, event: dispatcher.Event): number {
+    private runEvent(context: Context, event: Event): number {
         this.dispatcher.dispatch(event, context);
         return context.timestamp = event.timestamp;
     }
