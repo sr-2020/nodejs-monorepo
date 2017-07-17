@@ -11,6 +11,7 @@ export const config = {
         joinTokenUrl: "http://joinrpg.ru/x-api/token",
         joinListUrl: "http://joinrpg.ru/x-game-api/78/characters",
         joinMetaUrl: "http://joinrpg.ru/x-game-api/78/metadata/fields",
+        joinCharactersBasePath: "/x-game-api/78/characters",
         joinLogin: "Info@deus.rpg.ru",
         joinPassword: "mustg00n",
         importInterval: 300000,

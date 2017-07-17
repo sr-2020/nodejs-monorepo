@@ -12,8 +12,9 @@ import { CatalogsLoader } from './catalogs-loader'
 
 //Сheck CLI arguments
 const cliDefs = [
-        { name: 'recreate', alias: 'r', type: Boolean },
-        { name: 'id', alias: 'i', type: String },
+        { name: 'create', type: Boolean },
+        { name: 'import', type: Boolean },
+        { name: 'id', type: String },
 ];
 const params = commandLineArgs(cliDefs);
 
@@ -24,11 +25,18 @@ let isImportRunning = false;
 let stats = new ImportStats();
 
 
-if(params.recreate){
-    console.log("Recreate models from the cache");
+if(params.create){
+
+    console.log("(Re)create models from the cache");
     console.log(JSON.stringify(params,null,4));
-    recreateModels();
-}else{
+    createModels();
+
+}else if(params.import && params.hasOwnProperty("id")){
+
+    console.log(`Import character ${params.id} from JoinRPG`);
+    importCharacter(params.id).then(()=> process.exit(0));
+
+} else{
     console.log(`Start HTTP-server on port: ${config.port} and run import loop`);
 
     var app = express();
@@ -40,7 +48,7 @@ if(params.recreate){
 
     Observable.timer(0, config.importInterval).subscribe( ()=> {
         console.log("Start import sequence!");
-        importData();   
+        importAndCreate();   
     });
 }
 
@@ -48,7 +56,7 @@ if(params.recreate){
  *  Функция для импорта данных из Join, записи в кеш CouchDB 
  *  и экспорта моделей
  */
-async function importData() {
+async function importAndCreate() {
     if(isImportRunning) {
         console.log("Import session in progress.. return and wait to next try");
         return;
@@ -80,6 +88,10 @@ async function importData() {
     //Получить список обновленных персонажей для загрузки
     let charList:JoinCharacter[] = await importer.getCharacterList( stats.lastRefreshTime.subtract(1,"hours") );
     console.log(`Received character list: ${charList.length} characters`);  
+
+    //Теmp
+    console.log(JSON.stringify(charList),null,4);
+    charList = [];
 
     //Если список не нулевой загрузить каталоги
     if(charList.length){
@@ -137,11 +149,42 @@ async function importData() {
             );
 }
 
+/**
+ *  Функция для ручного обновления одной модели в кеше
+ */
+async function importCharacter(id: number) {
+    if(isImportRunning) {
+        console.log("Import session in progress.. return");
+        return;
+    }
+
+    let currentsStats = new ImportRunStats(); 
+
+    let importer:JoinImporter = new JoinImporter();
+    let cacheWriter: TempDbWriter = new TempDbWriter();
+
+    //Иницировать загрузчик данных из Join(токен)
+    await importer.init();
+
+    //Загрузить метаднные
+    let metadata:JoinMetadata = await importer.getMetadata();
+    console.log(`Received metadata!`);  
+
+    //Сохранить метаднные в кеше
+    await cacheWriter.saveMetadata(metadata);
+    console.log(`Save metadata to cache!`);  
+    
+    return importer.getCharacterByID(id.toString())
+                .then( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )
+                .then( () => console.log(`Imported character:${id}`) )
+                .catch( (err:any) => console.log("Error in save: " + JSON.stringify(err)) );
+}
+
 
 /**
  *  Функция для ручной перезаливки моделей из кеша
  */
-async function recreateModels() {
+async function createModels() {
     
     let cacheWriter: TempDbWriter = new TempDbWriter();
 

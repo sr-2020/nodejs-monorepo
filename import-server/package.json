@@ -10,9 +10,10 @@
     "dev": "npm run build:live",
     "build": "tsc",
     "build:live": "set NODE_ENV=develop && nodemon --config nodemon.json",
-    "recreate": "tsc && node ./dist/server.js -- --recreate",
+    "recreate": "tsc && node ./dist/server.js -- --create",
+    "reimport": "tsc && node ./dist/server.js -- --import",
     "debug": "node --inspect-brk=127.0.0.1:9229 ./dist/server.js -- --recreate --id=11711",
-    "import:test": "ts-node src/implants-importer.ts"
+    "import:test": "ts-node src/tables-importer.ts"
   },
   "repository": {
     "type": "git",

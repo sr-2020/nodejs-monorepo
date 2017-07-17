@@ -20,18 +20,23 @@ const alice_exporter_1 = require("./alice-exporter");
 const catalogs_loader_1 = require("./catalogs-loader");
 //Сheck CLI arguments
 const cliDefs = [
-    { name: 'recreate', alias: 'r', type: Boolean },
-    { name: 'id', alias: 'i', type: String },
+    { name: 'create', type: Boolean },
+    { name: 'import', type: Boolean },
+    { name: 'id', type: String },
 ];
 const params = commandLineArgs(cliDefs);
 //Reenter flag
 let isImportRunning = false;
 //Statisticts
 let stats = new stats_1.ImportStats();
-if (params.recreate) {
-    console.log("Recreate models from the cache");
+if (params.create) {
+    console.log("(Re)create models from the cache");
     console.log(JSON.stringify(params, null, 4));
-    recreateModels();
+    createModels();
+}
+else if (params.import && params.hasOwnProperty("id")) {
+    console.log(`Import character ${params.id} from JoinRPG`);
+    importCharacter(params.id).then(() => process.exit(0));
 }
 else {
     console.log(`Start HTTP-server on port: ${config_1.config.port} and run import loop`);
@@ -42,14 +47,14 @@ else {
     });
     Rx_1.Observable.timer(0, config_1.config.importInterval).subscribe(() => {
         console.log("Start import sequence!");
-        importData();
+        importAndCreate();
     });
 }
 /**
  *  Функция для импорта данных из Join, записи в кеш CouchDB
  *  и экспорта моделей
  */
-function importData() {
+function importAndCreate() {
     return __awaiter(this, void 0, void 0, function* () {
         if (isImportRunning) {
             console.log("Import session in progress.. return and wait to next try");
@@ -74,6 +79,9 @@ function importData() {
         //Получить список обновленных персонажей для загрузки
         let charList = yield importer.getCharacterList(stats.lastRefreshTime.subtract(1, "hours"));
         console.log(`Received character list: ${charList.length} characters`);
+        //Теmp
+        console.log(JSON.stringify(charList), null, 4);
+        charList = [];
         //Если список не нулевой загрузить каталоги
         if (charList.length) {
             yield catalogsLoader.load();
@@ -116,9 +124,35 @@ function importData() {
     });
 }
 /**
+ *  Функция для ручного обновления одной модели в кеше
+ */
+function importCharacter(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (isImportRunning) {
+            console.log("Import session in progress.. return");
+            return;
+        }
+        let currentsStats = new stats_1.ImportRunStats();
+        let importer = new join_importer_1.JoinImporter();
+        let cacheWriter = new tempdb_writer_1.TempDbWriter();
+        //Иницировать загрузчик данных из Join(токен)
+        yield importer.init();
+        //Загрузить метаднные
+        let metadata = yield importer.getMetadata();
+        console.log(`Received metadata!`);
+        //Сохранить метаднные в кеше
+        yield cacheWriter.saveMetadata(metadata);
+        console.log(`Save metadata to cache!`);
+        return importer.getCharacterByID(id.toString())
+            .then((c) => cacheWriter.saveCharacter(c))
+            .then(() => console.log(`Imported character:${id}`))
+            .catch((err) => console.log("Error in save: " + JSON.stringify(err)));
+    });
+}
+/**
  *  Функция для ручной перезаливки моделей из кеша
  */
-function recreateModels() {
+function createModels() {
     return __awaiter(this, void 0, void 0, function* () {
         let cacheWriter = new tempdb_writer_1.TempDbWriter();
         let metadata = yield cacheWriter.getMetadata();

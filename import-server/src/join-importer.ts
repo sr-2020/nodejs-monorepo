@@ -123,6 +123,11 @@ export class JoinImporter {
         return request(reqOpts);
     }
 
+    async getCharacterByID(id:string):Promise<JoinCharacterDetail> {
+        let url = `${config.joinCharactersBasePath}/${id}/`;
+        return this.getCharacter(url);
+    }
+
     async getMetadata():Promise<JoinMetadata> {
          let reqOpts = {
             url: config.joinMetaUrl,

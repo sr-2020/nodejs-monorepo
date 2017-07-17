@@ -9,7 +9,7 @@ let sheets = google.sheets('v4');
 
 
 
-export class ImplantsImporter{
+export class TablesImporter{
     constructor() {}
 
 
@@ -52,7 +52,7 @@ export class ImplantsImporter{
 }
 
 
-let importer = new ImplantsImporter();
+let importer = new TablesImporter();
 
 importer.import().subscribe((result) => { 
             console.log("Import finished: " + JSON.stringify(result, null, 4));

@@ -65,6 +65,12 @@ class JoinImporter {
             return request(reqOpts);
         });
     }
+    getCharacterByID(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let url = `${config_1.config.joinCharactersBasePath}/${id}/`;
+            return this.getCharacter(url);
+        });
+    }
     getMetadata() {
         return __awaiter(this, void 0, void 0, function* () {
             let reqOpts = {
