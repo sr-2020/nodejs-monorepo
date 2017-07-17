@@ -31,8 +31,6 @@ export class Config implements ConfigInterface {
         config.events = events;
         config.dictionaries = dictionaries;
 
-        Logger.debug('engine', 'config loaded: %s', config);
-
         return config;
     }
 }
