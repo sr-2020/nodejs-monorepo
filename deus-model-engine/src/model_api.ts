@@ -6,12 +6,28 @@ import { FieldName, FieldValue, Timer, Context } from './context'
 import Logger from './logger';
 
 export interface ModelApiInterface {
-    model: any,
-    getCatalogObject(catalog: string, id: string): any,
-    setTimer(name: string, seconds: number, handle: string, data: any): this,
-    debug(msg: string, ...params: any[]): void,
-    info(msg: string, ...params: any[]): void,
-    warn(msg: string, ...params: any[]): void,
+    model: any
+    getCatalogObject(catalog: string, id: string): any
+    getModifierById(id: string): any
+    getModifiersByName(name: string): any[]
+    getModifiersByClass(className: string): any[]
+    getModifiersBySystem(systemName: string): any[]
+    addModifier(modifier: any): any
+    removeModifier(modifier: any): this
+    getEffectsByName(name: string): any[]
+    getEffectsByClass(className: string): any[]
+    getConditionById(id: string): any
+    getConditionsByClass(className: string): any[]
+    getConditionsByGroup(group: string): any[]
+    addCondition(condition: any): any
+    removeCondition(id: string): this
+    setTimer(name: string, seconds: number, handle: string, data: any): this
+    getTimer(name: string): any
+    removeTimer(name: string): this
+    sendEvent(characterId: string | null, event: string, data: any): this
+    debug(msg: string, ...params: any[]): void
+    info(msg: string, ...params: any[]): void
+    warn(msg: string, ...params: any[]): void
     error(msg: string, ...params: any[]): void
 }
 
