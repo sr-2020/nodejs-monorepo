@@ -162,7 +162,7 @@ module.exports = {
 
         addChange(api, {
             mID: uuidv4(),
-            test: "Выключен имплант",
+            text: "Выключен имплант",
         });
     },
 
@@ -172,7 +172,7 @@ module.exports = {
 
         addChange(api, {
             mID: uuidv4(),
-            test: "Включен имплант",
+            text: "Включен имплант",
         });
     },
 
