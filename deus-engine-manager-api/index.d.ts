@@ -32,7 +32,8 @@ export type EngineResultOk = {
     status: 'ok'
     baseModel: any,
     workingModel: any,
-    viewModels: { [base: string]: any }
+    viewModels: { [base: string]: any },
+    events: Event[]
 }
 
 export type EngineResultError = {
