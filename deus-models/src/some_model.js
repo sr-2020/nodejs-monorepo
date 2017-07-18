@@ -60,6 +60,7 @@ function getStartPage(model) {
     };
 }
 
+
 function getRussianConditionTag(tag) {
     switch (tag) {
         case "physiology":  return "Физиология";
@@ -221,6 +222,26 @@ function getBodyPage(model) {
     };
 }
 
+function getChangesPageItem(change) {
+    return {
+        viewId: "mid:" + change.mID,
+        text: change.text,
+    };
+}
+
+function getChangesPage(model) {
+    return {
+        __type: "ListPageViewModel",
+        viewId: "page:changes",
+        menuTitle: "Изменения",
+        body: {
+            title: "Изменения",
+            items: model.changes.map(getChangesPageItem),
+        },
+    };
+}
+
+
 function getPages(model) {
     let pages = [
         getStartPage(model),
@@ -228,7 +249,8 @@ function getPages(model) {
         getMemoryPage(model),
         getConditionsPage(model),
         getImplantsPage(model),
-        getEconomyPage()
+        getEconomyPage(),
+        getChangesPage(model),
     ];
 
     if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
