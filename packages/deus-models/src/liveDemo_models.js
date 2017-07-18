@@ -2,6 +2,19 @@
 // Модельный код для LiveDemo 10.06.2017
 //=====================================================
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+function addChange(api, change) {
+    if (!api.model.changes)  // TODO: delete
+        api.model.changes = []
+    api.model.changes.push(change);
+}
+
 function loadImplant( api, id ){
     let implant = api.getCatalogObject("implants", id);
     let effects = [];
@@ -146,11 +159,21 @@ module.exports = {
     disableImplant(api, data) {
         api.debug(`====disableImplant( mid : ${data.mID} )====`);
         setModifierState(api, data.mID, false)
+
+        addChange(api, {
+            mID: uuidv4(),
+            test: "Выключен имплант",
+        });
     },
 
     enableImplant(api, data) {
         api.debug(`====enableImplant( mid : ${data.mID} )====`);
         setModifierState(api, data.mID, true )
+
+        addChange(api, {
+            mID: uuidv4(),
+            test: "Включен имплант",
+        });
     },
 
     /*
