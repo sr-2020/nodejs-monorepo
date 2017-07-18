@@ -236,7 +236,7 @@ function getChangesPage(model) {
         menuTitle: "Изменения",
         body: {
             title: "Изменения",
-            items: model.changes.map(getChangesPageItem),
+            items: model.changes.reverse().map(getChangesPageItem),
         },
     };
 }
