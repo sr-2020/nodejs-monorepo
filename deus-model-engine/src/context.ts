@@ -158,7 +158,7 @@ export class Context {
     }
 
     sendEvent(characterId: string | null, eventType: string, data: any) {
-        if (!characterId) {
+        if (!characterId || characterId == this._ctx.characterId) {
             this._events.unshift({
                 characterId: this._ctx.characterId,
                 eventType,
