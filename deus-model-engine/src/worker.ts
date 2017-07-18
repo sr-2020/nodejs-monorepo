@@ -67,7 +67,7 @@ export class Worker {
 
         let viewModels = this.runViewModels(workingCtx);
 
-        return { status: 'ok', baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels };
+        return { status: 'ok', baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels, events: baseCtx.outboundEvents };
     }
 
     listen() {

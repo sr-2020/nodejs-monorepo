@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Worker, EngineResultOk } from '../../src/worker';
+import { EngineResultOk } from 'deus-engine-manager-api';
+import { Worker } from '../../src/worker';
 import { Config, EventHandler } from '../../src/config';
 
 describe('Worker', () => {
@@ -40,6 +41,13 @@ describe('Worker', () => {
                 effects: [
                     "delayedConcat"
                 ]
+            },
+
+            {
+                eventType: "sendMessage",
+                effects: [
+                    "sendMessage"
+                ]
             }
         ];
 
@@ -56,9 +64,9 @@ describe('Worker', () => {
         const timestamp = Date.now();
 
         const events = [
-            { eventType: "add", data: { operand: "value", value: "2" }, timestamp: timestamp - 2000 },
-            { eventType: "add", data: { operand: "value", value: "3" }, timestamp: timestamp - 1000 },
-            { eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
+            { characterId: '0000', eventType: "add", data: { operand: "value", value: "2" }, timestamp: timestamp - 2000 },
+            { characterId: '0000', eventType: "add", data: { operand: "value", value: "3" }, timestamp: timestamp - 1000 },
+            { characterId: '0000', eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
         ];
 
         let result = worker.process(context, events)
@@ -75,10 +83,10 @@ describe('Worker', () => {
         const timestamp = Date.now();
 
         const events = [
-            { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 10000 },
-            { eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 10000 },
-            { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 9000 },
-            { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
+            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 10000 },
+            { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 10000 },
+            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 9000 },
+            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
 
         let result = worker.process(context, events);
@@ -95,8 +103,8 @@ describe('Worker', () => {
         const timestamp = Date.now();
 
         const events = [
-            { eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 1000 },
-            { eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
+            { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 1000 },
+            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
 
         let result = worker.process(context, events);
@@ -120,7 +128,7 @@ describe('Worker', () => {
         const timestamp = Date.now();
 
         const events = [
-            { eventType: "_RefreshModel", timestamp, data: undefined }
+            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
         ];
 
         let result = worker.process(context, events)
@@ -133,5 +141,25 @@ describe('Worker', () => {
         expect(viewModels).to.exist;
         expect(viewModels).to.has.property('viewModels');
         expect(viewModels.viewModels).to.deep.equal({ value: 0 });
+    })
+
+    it("Should return outbound events", () => {
+        const context = { timestamp: 0, "value": 0 };
+        const timestamp = Date.now();
+
+        const events = [
+            { characterId: '0000', eventType: "sendMessage", timestamp, data: { receiver: '0001', message: 'test message' } },
+            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
+        ];
+
+        let result = worker.process(context, events)
+
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
+
+        expect(result).to.has.property('events');
+        expect(result.events[0].characterId).to.equals('0001');
+        expect(result.events[0].eventType).to.equals('message');
+        expect(result.events[0].data.message).to.equals('test message');
     })
 });

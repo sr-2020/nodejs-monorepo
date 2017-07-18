@@ -128,7 +128,7 @@ export function ModelApiFactory(context: Context): ModelApiInterface {
             return this;
         }
 
-        sendEvent(characterId: number | null, event: string, data: any) {
+        sendEvent(characterId: string | null, event: string, data: any) {
             context.sendEvent(characterId, event, data);
             return this;
         }

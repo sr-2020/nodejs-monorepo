@@ -22,6 +22,11 @@ module.exports = () => {
             api.setTimer('delayedConcat', delay, 'concat', { operand, value });
         },
 
+        sendMessage(api, data) {
+            let {receiver, message} = data;
+            api.sendEvent(receiver, 'message', { message });
+        },
+
         _view(api, data) {
             return { value: data.value };
         }

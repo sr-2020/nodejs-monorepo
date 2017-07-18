@@ -61,21 +61,35 @@ export type Dictionaries = {
     [catalog: string]: any[]
 }
 
+export class OutboundEvents {
+    private events: Event[] = [];
+
+    push(e: Event) {
+        this.events.push(e);
+    }
+
+    valueOf() {
+        return cloneDeep(this.events);
+    }
+}
+
 export class Context {
     private _ctx: Character;
     private _events: Event[];
     private _dictionaries: Dictionaries = {};
+    private _outboundEvents: OutboundEvents;
 
-    constructor(contextSrc: any, events: Event[], dictionaries?: any) {
+    constructor(contextSrc: any, events: Event[], dictionaries?: any, outboundEvents?: OutboundEvents) {
         this._ctx = cloneDeep(contextSrc);
 
         this._events = cloneDeep(events);
-
         this.sortEvents();
 
         if (dictionaries) {
             this._dictionaries = cloneDeep(dictionaries);
         }
+
+        this._outboundEvents = outboundEvents || new OutboundEvents();
     }
 
     get events() {
@@ -120,8 +134,12 @@ export class Context {
         return this._ctx.conditions;
     }
 
+    get outboundEvents(): Event[] {
+        return this._outboundEvents.valueOf();
+    }
+
     clone(): Context {
-        const clone = new Context(this._ctx, this._events, this._dictionaries);
+        const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents);
         clone.timers = this.timers;
         return clone;
     }
@@ -139,16 +157,21 @@ export class Context {
         return this;
     }
 
-    sendEvent(characterId: number | null, event: string, data: any /* delay: number */) {
+    sendEvent(characterId: string | null, eventType: string, data: any) {
         if (!characterId) {
             this._events.unshift({
                 characterId: this._ctx.characterId,
-                eventType: event,
+                eventType,
                 timestamp: this.timestamp,
                 data
             });
         } else {
-            // XXX send outside
+            this._outboundEvents.push({
+                characterId,
+                eventType,
+                timestamp: this.timestamp,
+                data
+            })
         }
     }
 
