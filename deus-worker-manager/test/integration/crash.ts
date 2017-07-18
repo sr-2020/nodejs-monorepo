@@ -87,12 +87,11 @@ describe('Crash scenarios', function() {
             timestamp: timestamp + 50
         })
 
-        await delay(100);
+        await delay(200);
 
         let baseModel = await getModel(di, model._id);
 
         expect(baseModel).to.has.property('value', 'A');
-
     });
 
     it('Shoud not crash if model has no timestamp', async () => {

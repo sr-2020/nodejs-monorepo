@@ -1,9 +1,12 @@
-import { DBInterface } from './db/interface';
+import { pick } from 'lodash';
+import { Event } from 'deus-engine-manager-api';
+
+import { DBInterface, Document } from './db/interface';
 
 export class EventStorage {
     constructor(private db: DBInterface) { }
 
-    async range(characterId: string, since: number, till: number) {
+    async range(characterId: string, since: number, till: number): Promise<Document[]> {
         if (since >= till) return [];
 
         const startkey = [characterId, since];
@@ -19,5 +22,9 @@ export class EventStorage {
         let result = await this.db.view('character', 'by-character-id', params);
 
         return result.rows.map((r: any) => r.doc);
+    }
+
+    store(event: any) {
+        return this.db.put(event);
     }
 }

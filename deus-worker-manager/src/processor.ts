@@ -1,5 +1,5 @@
 import { Inject } from './di';
-import { isNil } from 'lodash';
+import { isNil, keyBy, cloneDeep } from 'lodash';
 
 import { Event, SyncEvent, EngineResult } from 'deus-engine-manager-api';
 
@@ -70,7 +70,7 @@ export class Processor {
                 if (model.timestamp > this.event.timestamp) return;
 
                 const events = (await this.eventStorage.range(characterId, model.timestamp, this.event.timestamp))
-                    .filter((event: Event) => event.eventType[0] != '_');
+                    .filter((event) => event.eventType[0] != '_') as any;
 
                 events.push(this.event);
 
@@ -81,7 +81,7 @@ export class Processor {
                 this.logger.debug('manager', 'result = %j', result);
 
                 if (result.status == 'ok') {
-                    let { baseModel, workingModel, viewModels } = result;
+                    let { baseModel, workingModel, viewModels, events: outboundEvents } = result;
 
                     delete workingModel._rev;
                     workingModel.timestamp = baseModel.timestamp;
@@ -89,7 +89,8 @@ export class Processor {
                     await Promise.all([
                         this.modelStorage.store(baseModel),
                         this.workingModelStorage.store(workingModel),
-                        this.storeViewModels(characterId, baseModel.timestamp, viewModels)
+                        this.storeViewModels(characterId, baseModel.timestamp, viewModels),
+                        this.storeOutboundEvents(outboundEvents)
                     ]);
                 } else {
                     throw result.error;
@@ -116,6 +117,26 @@ export class Processor {
 
             pending.push(this.viewModelStorage.store(alias, viewModel));
         }
+
+        return pending;
+    }
+
+    private async storeOutboundEvents(outboundEvents: Event[]) {
+        if (!outboundEvents) return;
+
+        let characterIds = outboundEvents.map((e) => e.characterId);
+        let models = keyBy(await this.modelStorage.findAll(characterIds), (m) => m.characterId);
+
+        let pending = outboundEvents.map((event) => {
+            let model = models[event.characterId];
+            if (!model) return;
+            event = cloneDeep(event);
+
+            // XXX есть шанс что эта модель сейчас обрабатывается и тогда все пропало
+            event.timestamp = Math.max(event.timestamp, model.timestamp + 1);
+
+            return this.eventStorage.store(event);
+        });
 
         return pending;
     }
