@@ -3,8 +3,6 @@ import { Worker } from 'deus-model-engine/lib/worker';
 import { Config } from 'deus-model-engine/lib/config';
 import { requireDir } from 'deus-model-engine/lib/utils';
 
-import { EngineContext, Event, EngineResult, EngineResultOk } from 'deus-engine-manager-api';
-
 let WORKER_INSTANCE: Worker | null = null;
 
 export function getWorker() {
@@ -17,11 +15,11 @@ export function getWorker() {
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);
 }
 
-export function process_(model: EngineContext, events: Event[]): EngineResult {
+export function process_(model: any, events: any) {
     return getWorker().process(model, events);
 }
 
-export function process(model: EngineContext, events: Event[]): EngineResultOk {
+export function process(model: any, events: any) {
     let result = process_(model, events);
     if (result.status == 'error') throw result.error;
     return result;
