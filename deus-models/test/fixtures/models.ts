@@ -39,7 +39,7 @@ export const getExampleModel = (id?: string) => ({
     ],
 
     password: "P@ssw0rd",
-
+    maxSecondsInVr: 1200,
     modifiers: [
         {
             id: "HeartHealthBooster",

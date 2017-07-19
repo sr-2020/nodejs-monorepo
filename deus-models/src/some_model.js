@@ -263,7 +263,7 @@ function getPages(model) {
 // General characteristics not tied to any page or UI element.
 function getGeneral(model) {
     return {
-        maxSecondsInVr: 20 * 60,  // TODO: Get from model
+        maxSecondsInVr: model.maxSecondsInVr
     };
 }
 
