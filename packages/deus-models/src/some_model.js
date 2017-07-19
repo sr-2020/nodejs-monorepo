@@ -254,7 +254,10 @@ function getMessagesPageItem(message) {
     return {
         viewId: "mid:" + message.mID,
         text: message.title,
-        details: message.text,
+        details: {
+            header: message.title,
+            text: message.text,
+        },
     };
 }
 
