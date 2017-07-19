@@ -37,7 +37,9 @@ export interface WriteModelApiInterface {
     sendEvent(characterId: string | null, event: string, data: any): this
 }
 
-export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface { }
+export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface {
+    baseModel: any
+}
 
 export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface { }
 
@@ -179,10 +181,18 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
     }
 }
 
+class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
+    constructor(contextGetter: () => Context, protected baseContextGetter: () => Context) {
+        super(contextGetter);
+    }
+
+    get baseModel() { return this.baseContextGetter().ctx }
+}
+
 export function ModelApiFactory(context: Context): ModelApiInterface {
     return new ModelApi(() => context);
 }
 
-export function ViewModelApiFactory(context: Context): ViewModelApiInterface {
-    return new ReadModelApi(() => context);
+export function ViewModelApiFactory(context: Context, baseContext: Context): ViewModelApiInterface {
+    return new ViewModelApi(() => context, () => baseContext);
 }

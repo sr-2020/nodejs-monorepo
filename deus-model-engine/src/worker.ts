@@ -64,7 +64,7 @@ export class Worker {
 
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
-        let viewModels = this.runViewModels(workingCtx);
+        let viewModels = this.runViewModels(workingCtx, baseCtx);
 
         return {
             status: 'ok',
@@ -153,9 +153,9 @@ export class Worker {
         return workingCtx;
     }
 
-    private runViewModels(workingCtx: Context) {
+    private runViewModels(workingCtx: Context, baseCtx: Context) {
         let data = workingCtx.valueOf();
-        let api = ViewModelApiFactory(workingCtx);
+        let api = ViewModelApiFactory(workingCtx, baseCtx);
 
         return reduce(this.model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
             vm[base] = f(api, data);
