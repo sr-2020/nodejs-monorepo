@@ -43,6 +43,13 @@ if (config.viewModels) {
     }
 }
 
+if (config.objects) {
+    for (let dbName of Object.values(config.objects)) {
+        if (dbs[dbName]) continue;
+        dbs[dbName] = dbName;
+    }
+}
+
 function deepToString(doc: any) {
     let result: any = {};
 

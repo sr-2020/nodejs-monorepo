@@ -23,11 +23,9 @@ module.exports = {
     // блок настроек базы
     db: {
         url: "http://admin:admin@localhost:5984/", // адрес для доступа к кочу, с логином и паролем если нужно
-        catalogs: "catalogs-dev",                  // это и далее - пары <alias>: <имя базы в коче>
-        events: "events-dev",
+        events: "events-dev",                      // это и далее - пары <alias>: <имя базы в коче>
         models: "models-dev",
-        workingModels: "working-models-dev",
-        viewModels: "view-models-dev"
+        workingModels: "working-models-dev"
     },
 
     // блок настроек пула воркеров
@@ -54,6 +52,16 @@ module.exports = {
 
         // если загрузка из файлов, используется ключ path
         // path: __dirname + '/models/catalogs'
+    },
+
+    // блок настроек баз для вью-моделей
+    viewModels: {
+        default: "view-models-dev" // пары <alias>: <имя базы или алиас из списка db>
+    },
+
+    // блок настроек баз для общих объектов
+    objects: {
+        'counters': 'obj-counters' // пары <alias>: <имя базы или алиас из списка db>
     },
 
     // блок настроек логирования
