@@ -10,11 +10,9 @@ function uuidv4() {
 }
 
 function addChange(api, change) {
-    const maxChanges = 25;
-    if (!api.model.changes)  // for transition period, TODO: delete
-        api.model.changes = [];
+    if (!api.model.changes)  // TODO: delete
+        api.model.changes = []
     api.model.changes.push(change);
-    api.model.changes = api.model.changes.slice(0, maxChanges);
 }
 
 function loadImplant( api, id ){

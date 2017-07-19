@@ -75,19 +75,7 @@ export const getExampleModel = (id?: string) => ({
             mID: "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
         },
     ],
-    changes: [
-        {
-        "mID": "4485090f-55a3-4d4f-8218-d0ca57fae110",
-        "text": "Включен имплант"
-        },
-    ],
-    messages: [
-        {
-            "mID": "00000000-1111-2222-3333-444444444444",
-            "title": "Важная информация!",
-            "text": "42"
-        },
-    ],
+    changes: [],
     "age": 17,
     "timers": []
 });
