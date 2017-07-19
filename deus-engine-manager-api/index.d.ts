@@ -26,14 +26,22 @@ export type EngineMessageConfigure = {
     data: any
 }
 
-export type EngineMessage = EngineMessageEvents | EngineMessageConfigure;
+export type EngineMessageAquired = {
+    type: 'aquired'
+    data: {
+        [fullId: string]: any
+    }
+}
+
+export type EngineMessage = EngineMessageEvents | EngineMessageConfigure | EngineMessageAquired;
 
 export type EngineResultOk = {
     status: 'ok'
     baseModel: any,
     workingModel: any,
     viewModels: { [base: string]: any },
-    events: Event[]
+    aquired?: { [key: string]: any },
+    events?: Event[]
 }
 
 export type EngineResultError = {
@@ -45,16 +53,21 @@ export type EngineResult = EngineResultOk | EngineResultError;
 
 export type EngineReplyResult = EngineResult & { type: 'result' };
 
-export interface EngineReplyLog {
-    type: 'log',
-    source: string,
-    level: LogLevel,
-    msg: string,
+export type EngineReplyLog = {
+    type: 'log'
+    source: string
+    level: LogLevel
+    msg: string
     params: any[]
 }
 
-export interface EngineReplyReady {
+export type EngineReplyAquire = {
+    type: 'aquire'
+    keys: string[]
+}
+
+export type EngineReplyReady = {
     type: 'ready'
 }
 
-export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog;
+export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog | EngineReplyAquire;
