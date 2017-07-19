@@ -10,15 +10,15 @@ export interface CatalogsConfigFiles {
     path: string
 }
 
+export interface DbMappingConfig {
+    [alias: string]: string
+}
+
 export interface CatalogsConfigDb {
-    db: { [catalog: string]: string }
+    db: DbMappingConfig
 }
 
 export type CatalogsConfig = CatalogsConfigFiles | CatalogsConfigDb;
-
-export interface ViewModelsConfig {
-    [alias: string]: string
-}
 
 export interface PoolConfig {
     workerModule: string
@@ -34,6 +34,7 @@ export interface Config {
     db: DbConfig
     pool: PoolConfig
     catalogs: CatalogsConfig
-    viewModels: ViewModelsConfig
+    viewModels: DbMappingConfig
+    objects: DbMappingConfig
     logger: LoggerConfig
 }

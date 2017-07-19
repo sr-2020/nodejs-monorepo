@@ -4,7 +4,7 @@ import * as meow from 'meow';
 import { Injector } from './di';
 import {
     ConfigToken, DBConnectorToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken,
-    EventStorageToken, EventsSourceToken, CatalogsStorageToken, LoggerToken, WorkersPoolToken,
+    EventStorageToken, EventsSourceToken, CatalogsStorageToken, ObjectStorageToken, LoggerToken, WorkersPoolToken,
     ProcessorFactoryToken, ManagerToken
 } from './di_tokens';
 
@@ -16,6 +16,7 @@ import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
 import { CatalogsStorage } from './catalogs_storage';
+import { ObjectStorage } from './object_storage';
 import { Logger } from './logger';
 import { WorkersPool } from './workers_pool';
 import { processorFactory } from './processor';
@@ -61,8 +62,9 @@ const di = Injector
     .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
     .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
     .bind(CatalogsStorageToken).singleton().toClass(CatalogsStorage, ConfigToken, DBConnectorToken)
+    .bind(ObjectStorageToken).singleton().toClass(ObjectStorage, ConfigToken, DBConnectorToken)
     .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
-    .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
+    .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
     .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 
 di.get(ManagerToken).init();

@@ -48,3 +48,13 @@ export function pushEvent(di: any, event: any) {
     let eventsDb = di.get(DBConnectorToken).use(dbName(di, 'events'));
     return eventsDb.put(event);
 }
+
+export function saveObject(di: any, dbAlias: string, doc: any) {
+    let db = di.get(DBConnectorToken).use(dbName(di, dbAlias));
+    return db.put(doc);
+}
+
+export function getObject(di: any, dbAlias: string, id: string) {
+    let db = di.get(DBConnectorToken).use(dbName(di, dbAlias));
+    return db.getOrNull(id);
+}

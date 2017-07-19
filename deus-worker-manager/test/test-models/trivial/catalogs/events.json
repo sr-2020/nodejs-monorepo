@@ -11,6 +11,10 @@
         {
             "eventType": "crash",
             "effects": ["crash"]
+        },
+        {
+            "eventType": "externalCounter",
+            "effects": ["externalCounter"]
         }
     ]
 }

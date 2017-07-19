@@ -6,11 +6,10 @@ import { Event, SyncEvent, EngineResult } from 'deus-engine-manager-api';
 import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
+import { ObjectStorageInterface, BoundObjectStorage } from './object_storage';
 import { WorkersPoolInterface } from './workers_pool';
 import { Worker } from './worker';
 import { LoggerInterface } from './logger';
-
-// import { Event, SyncEvent } from './events_source';
 
 type State = 'New' | 'Waiting for worker' | 'Processing' | 'Done';
 
@@ -22,10 +21,11 @@ export function processorFactory(
     modelStorage: ModelStorage,
     workingModelStorage: ModelStorage,
     viewModelStorage: ViewModelStorage,
+    objectStorage: ObjectStorageInterface,
     logger: LoggerInterface
 ) {
     return () => {
-        return new Processor(pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, logger);
+        return new Processor(pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, objectStorage, logger);
     };
 }
 
@@ -39,6 +39,7 @@ export class Processor {
         private modelStorage: ModelStorage,
         private workingModelStorage: ModelStorage,
         private viewModelStorage: ViewModelStorage,
+        private objectStorage: ObjectStorageInterface,
         private logger: LoggerInterface
     ) { }
 
@@ -76,12 +77,13 @@ export class Processor {
 
                 this.logger.debug('manager', 'events = %j', events);
 
-                const result: EngineResult = await worker.process(this.event, model, events);
+                const objectStorage = new BoundObjectStorage(this.objectStorage);
+                const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
                 this.logger.debug('manager', 'result = %j', result);
 
                 if (result.status == 'ok') {
-                    let { baseModel, workingModel, viewModels, events: outboundEvents } = result;
+                    let { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
 
                     delete workingModel._rev;
                     workingModel.timestamp = baseModel.timestamp;
@@ -90,7 +92,8 @@ export class Processor {
                         this.modelStorage.store(baseModel),
                         this.workingModelStorage.store(workingModel),
                         this.storeViewModels(characterId, baseModel.timestamp, viewModels),
-                        this.storeOutboundEvents(outboundEvents)
+                        this.storeOutboundEvents(outboundEvents),
+                        this.storeAquiredObjects(objectStorage, aquired)
                     ]);
                 } else {
                     throw result.error;
@@ -121,8 +124,8 @@ export class Processor {
         return pending;
     }
 
-    private async storeOutboundEvents(outboundEvents: Event[]) {
-        if (!outboundEvents) return;
+    private async storeOutboundEvents(outboundEvents: Event[] | undefined) {
+        if (!outboundEvents || !outboundEvents.length) return;
 
         let characterIds = outboundEvents.map((e) => e.characterId);
         let models = keyBy(await this.modelStorage.findAll(characterIds), (m) => m.characterId);
@@ -138,6 +141,16 @@ export class Processor {
             return this.eventStorage.store(event);
         });
 
-        return pending;
+        return Promise.all(pending);
+    }
+
+    private async storeAquiredObjects(objectStorage: BoundObjectStorage, aquired: any) {
+        try {
+            await objectStorage.store(aquired);
+        } catch (e) {
+            this.logger.error('manager', "Can't store aquired objects: %j %j", aquired, e);
+        } finally {
+            objectStorage.release();
+        }
     }
 }

@@ -2,7 +2,7 @@ import { Injector } from '../src/di';
 
 import {
     ConfigToken, DBConnectorToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken,
-    EventStorageToken, EventsSourceToken, CatalogsStorageToken, LoggerToken, WorkersPoolToken,
+    EventStorageToken, EventsSourceToken, CatalogsStorageToken, ObjectStorageToken, LoggerToken, WorkersPoolToken,
     ProcessorFactoryToken, ManagerToken
 } from '../src/di_tokens';
 
@@ -19,6 +19,7 @@ import { ViewModelStorage } from '../src/view_model_storage';
 import { EventStorage } from '../src/event_storage';
 import { EventsSource } from '../src/events_source';
 import { CatalogsStorage, CatalogsStorageInterface } from '../src/catalogs_storage';
+import { ObjectStorage } from '../src/object_storage';
 import { Logger, LoggerInterface } from '../src/logger';
 import { WorkersPool, WorkersPoolInterface } from '../src/workers_pool';
 import { processorFactory } from '../src/processor';
@@ -32,7 +33,8 @@ export const defaultConfig: Config = {
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
-        defaultViewModels: 'view-models-test'
+        defaultViewModels: 'view-models-test',
+        counters: 'counters'
     },
 
     pool: {
@@ -46,6 +48,10 @@ export const defaultConfig: Config = {
 
     catalogs: {
         path: __dirname + '/test-models/trivial/catalogs'
+    },
+
+    objects: {
+        'counters': 'counters'
     },
 
     viewModels: { default: 'defaultViewModels' },
@@ -108,7 +114,8 @@ export function initDi(config: Config = defaultConfig) {
         .bind(EventStorageToken).singleton().toFactory(eventStorageFactory, ConfigToken, DBConnectorToken)
         .bind(EventsSourceToken).singleton().toFactory(eventsSourceFactory, ConfigToken, DBConnectorToken)
         .bind(CatalogsStorageToken).singleton().toClass(CatalogsStorage, ConfigToken, DBConnectorToken)
+        .bind(ObjectStorageToken).singleton().toClass(ObjectStorage, ConfigToken, DBConnectorToken)
         .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
-        .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, LoggerToken)
+        .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
         .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 }

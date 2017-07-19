@@ -5,7 +5,7 @@ import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi } from '../init'
-import { createModel, pushEvent, getModel, getModelVariants } from '../model_helpers';
+import { createModel, pushEvent, getModel, getModelVariants, saveObject, getObject } from '../model_helpers';
 import { delay } from '../helpers';
 
 describe("Green way", function() {
@@ -170,5 +170,50 @@ describe("Green way", function() {
         if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
 
         expect(baseModel.timestamp).to.be.equal(timestamp + 2);
+    })
+
+    it('Should be able to aquire external objects', async () => {
+        let model = await createModel(di);
+        let timestamp = Date.now();
+
+        await saveObject(di, 'counters', {
+            _id: 'abc',
+            value: 0
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'externalCounter',
+            timestamp: timestamp + 10
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 20
+        });
+
+        await delay(200);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'externalCounter',
+            timestamp: timestamp + 30
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 50
+        });
+
+        await delay(200);
+
+        let abc = await getObject(di, 'counters', 'abc');
+
+        expect(abc).to.exist;
+        if (!abc) throw new Error('Imposible!');
+
+        expect(abc.value).to.equals(2);
     })
 });

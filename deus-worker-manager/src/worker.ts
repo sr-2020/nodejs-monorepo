@@ -3,10 +3,11 @@ import * as ChildProcess from 'child_process';
 import * as Rx from 'rxjs/Rx';
 import { fromStream } from './utils';
 
-import { Event, EngineMessage, EngineReply, EngineResult, EngineResultOk, EngineResultError } from 'deus-engine-manager-api';
+import { Event, EngineMessage, EngineReply, EngineReplyAquire, EngineResult, EngineResultOk, EngineResultError } from 'deus-engine-manager-api';
 
 import { LoggerInterface, LogLevel } from './logger';
 import { Catalogs } from './catalogs_storage';
+import { BoundObjectStorage } from './object_storage';
 
 export class Worker extends EventEmitter {
     private child: ChildProcess.ChildProcess | null;
@@ -22,7 +23,11 @@ export class Worker extends EventEmitter {
     lastOutput: string[] = [];
     startedAt: number;
 
-    constructor(private logger: LoggerInterface, private workerModule: string, private args?: string[]) {
+    constructor(
+        private logger: LoggerInterface,
+        private workerModule: string,
+        private args?: string[]
+    ) {
         super();
     }
 
@@ -117,7 +122,7 @@ export class Worker extends EventEmitter {
     emitError = (err: Error) => this.emit('error', err);
     emitExit = () => this.emit('exit');
 
-    async process(syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
+    async process(objectStorage: BoundObjectStorage, syncEvent: Event, model: any, events: Event[]): Promise<EngineResult> {
         this.lastOutput = [];
 
         return new Promise<EngineResult>((resolve, reject) => {
@@ -125,6 +130,13 @@ export class Worker extends EventEmitter {
 
             let result = this.rx.message.filter((m) => m.type == 'result') as Rx.Observable<EngineResult>;
             result.first().subscribe(resolve);
+
+            let aquire = this.rx.message.filter((m) => m.type == 'aquire') as Rx.Observable<EngineReplyAquire>;
+            aquire.takeUntil(Rx.Observable.merge(result, this.rx.stop)).subscribe(async (msg: EngineReplyAquire) => {
+                let data = await objectStorage.aquire(msg.keys);
+                this.send({ type: 'aquired', data });
+            });
+
             this.rx.stop.takeUntil(result).take(1).subscribe(() => reject('Worker error'));
 
             this.send({ type: 'events', context: model, events });

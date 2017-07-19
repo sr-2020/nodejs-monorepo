@@ -1,5 +1,4 @@
 import { DBInterface, Document, ID } from './db/interface';
-import { stdCallback } from './utils';
 
 export class ModelStorage {
     constructor(private db: DBInterface) { }
