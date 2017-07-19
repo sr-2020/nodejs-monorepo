@@ -253,8 +253,8 @@ function getChangesPage(model) {
 function getMessagesPageItem(message) {
     return {
         viewId: "mid:" + message.mID,
-        text: change.title,
-        details: change.text,
+        text: message.title,
+        details: message.text,
     };
 }
 
@@ -265,7 +265,7 @@ function getMessagesPage(model) {
         menuTitle: "Сообщения",
         body: {
             title: "Мастерские сообщения",
-            items: model.changes.reverse().map(getMessagesPageItem),
+            items: model.messages.reverse().map(getMessagesPageItem),
         },
     };
 }
