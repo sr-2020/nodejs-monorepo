@@ -250,6 +250,26 @@ function getChangesPage(model) {
     };
 }
 
+function getMessagesPageItem(message) {
+    return {
+        viewId: "mid:" + message.mID,
+        text: change.title,
+        details: change.text,
+    };
+}
+
+function getMessagesPage(model) {
+    return {
+        __type: "ListPageViewModel",
+        viewId: "page:messages",
+        menuTitle: "Сообщения",
+        body: {
+            title: "Мастерские сообщения",
+            items: model.changes.reverse().map(getMessagesPageItem),
+        },
+    };
+}
+
 
 function getPages(model) {
     let pages = [
