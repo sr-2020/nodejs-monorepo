@@ -30,7 +30,6 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
-    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
     "tsconfig": "^6.0.0"
   }
 }
