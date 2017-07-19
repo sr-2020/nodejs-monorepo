@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha -r ts-node/register ./test/*.ts",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
-    "start": "tsc && node ./dist/server.js",
+    "start": "tsc && forever start ./dist/server.js",
+    "stop": "forever stop ./dist/server.js",
     "dev": "npm run build:live",
     "build": "tsc",
     "build:live": "set NODE_ENV=develop && nodemon --config nodemon.json",

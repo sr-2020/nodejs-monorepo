@@ -4,6 +4,7 @@ const express = require("express");
 const Rx_1 = require("rxjs/Rx");
 const moment = require("moment");
 const commandLineArgs = require("command-line-args");
+const winston = require("winston");
 const stats_1 = require("./stats");
 const config_1 = require("./config");
 const join_importer_1 = require("./join-importer");
@@ -34,24 +35,26 @@ const cliDefs = [
     { name: 'refresh', type: Boolean },
 ];
 const params = commandLineArgs(cliDefs);
+//start logging
+configureLogger();
 //Reenter flag
 let isImportRunning = false;
 //Statisticts
 let stats = new stats_1.ImportStats();
-console.log(JSON.stringify(params));
+winston.info(JSON.stringify(params));
 if (params.export || params.import || params.id || params.test || params.list || params.refresh) {
     let _id = params.id ? params.id : 0;
     let since = params.since ? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
     importAndCreate(_id, (params.import == true), (params.export == true), (params.list == true), false, (params.refresh == true), since)
         .subscribe((data) => { }, (error) => {
-        //process.exit(1);
+        process.exit(1);
     }, () => {
-        console.log("Finished!");
-        // process.exit(0);
+        winston.info("Finished!");
+        process.exit(0);
     });
 }
 else {
-    console.log(`Start HTTP-server on port: ${config_1.config.port} and run import loop`);
+    winston.info(`Start HTTP-server on port: ${config_1.config.port} and run import loop`);
     var app = express();
     app.listen(config_1.config.port);
     app.get('/', function (req, res) {
@@ -62,7 +65,7 @@ else {
         .subscribe((data) => { }, (error) => {
         process.exit(1);
     }, () => {
-        console.log("Finished!");
+        winston.info("Finished!");
         process.exit(0);
     });
 }
@@ -78,13 +81,13 @@ function prepareForImport() {
     })
         .flatMap(() => data.importer.init())
         .flatMap(() => data.importer.getMetadata())
-        .do(() => console.log(`Received metadata!`))
+        .do(() => winston.info(`Received metadata!`))
         .flatMap(() => data.cacheWriter.saveMetadata(data.importer.metadata))
-        .do(() => console.log(`Save metadata to cache!`))
+        .do(() => winston.info(`Save metadata to cache!`))
         .flatMap(() => data.catalogsLoader.load())
         .do(() => {
         Object.keys(data.catalogsLoader.catalogs).forEach((name) => {
-            console.log(`Loaded catalog: ${name}, elements: ${data.catalogsLoader.catalogs[name].length}`);
+            winston.info(`Loaded catalog: ${name}, elements: ${data.catalogsLoader.catalogs[name].length}`);
         });
     })
         .flatMap(() => Rx_1.Observable.from([data]));
@@ -105,7 +108,7 @@ function loadCharacterListFomJoin(data) {
 function loadCharacterListFromCache(data) {
     return Rx_1.Observable.fromPromise(data.cacheWriter.getCacheCharactersList()
         .then((c) => {
-        console.log("Debug: " + JSON.stringify(c));
+        winston.info("Debug: " + JSON.stringify(c));
         data.charList = c;
         return data;
     }));
@@ -115,7 +118,7 @@ function loadCharacterListFromCache(data) {
  */
 function saveCharacterToCache(char, data) {
     return Rx_1.Observable.fromPromise(data.cacheWriter.saveCharacter(char))
-        .do((c) => console.log(`Character id: ${c.id} saved to cache`))
+        .do((c) => winston.info(`Character id: ${c.id} saved to cache`))
         .map(() => char);
 }
 /**
@@ -125,7 +128,7 @@ function exportCharacterModel(char, data) {
     let model = new alice_exporter_1.AliceExporter(char, data.metadata, data.catalogsLoader, true);
     return Rx_1.Observable.fromPromise(model.export())
         .map((c) => {
-        console.log(`Exported model for character id = ${c[0].id}: ` + JSON.stringify(c));
+        winston.info(`Exported model for character id = ${c[0].id}: ` + JSON.stringify(c));
         return char;
     });
 }
@@ -135,7 +138,7 @@ function exportCharacterModel(char, data) {
 function sendModelRefresh(char, data) {
     return Rx_1.Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char._id))
         .map((c) => {
-        console.log(`Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c));
+        winston.info(`Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c));
         return char;
     });
 }
@@ -147,7 +150,7 @@ function loadCharactersFromJoin(data) {
     return Rx_1.Observable.from(data.charList)
         .bufferCount(config_1.config.importBurstSize) //Порезать на группы по 20
         .mergeMap((cl) => {
-        console.log(`##=====================================\n` +
+        winston.info(`##=====================================\n` +
             `## Process buffer ${bufferCounter}, size=${config_1.config.importBurstSize}: ${cl.map(d => d.CharacterId).join(',')}` +
             `\n##=====================================`);
         bufferCounter++;
@@ -157,7 +160,7 @@ function loadCharactersFromJoin(data) {
     }, 1)
         .retry(3)
         .mergeMap((cl) => Rx_1.Observable.from(cl)) //Полученные данные группы разбить на отдельные элементы для обработки
-        .do((c) => console.log(`Imported character: ${c.CharacterId}`)); //Написать в лог
+        .do((c) => winston.info(`Imported character: ${c.CharacterId}`)); //Написать в лог
 }
 /**
  * Получение потока данных персонажей из кэша (выполняется с уже подготовленной ModelImportData)
@@ -167,7 +170,7 @@ function loadCharactersFromCache(data) {
     return Rx_1.Observable.from(data.charList)
         .bufferCount(config_1.config.importBurstSize) //Порезать на группы по 20
         .mergeMap((cl) => {
-        console.log(`##=====================================\n` +
+        winston.info(`##=====================================\n` +
             `## Process buffer ${bufferCounter}, size=${config_1.config.importBurstSize}: ${cl.map(d => d.CharacterId).join(',')}` +
             `\n##=====================================`);
         bufferCounter++;
@@ -177,7 +180,7 @@ function loadCharactersFromCache(data) {
     }, 1)
         .retry(3)
         .mergeMap((cl) => Rx_1.Observable.from(cl)) //Полученные данные группы разбить на отдельные элементы для обработки
-        .do((c) => console.log(`Imported character: ${c.CharacterId}`)); //Написать в лог
+        .do((c) => winston.info(`Imported character: ${c.CharacterId}`)); //Написать в лог
 }
 /**
  *  Функция для импорта данных из Join, записи в кеш CouchDB, создания и экспорта моделей
@@ -185,10 +188,10 @@ function loadCharactersFromCache(data) {
  */
 function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList = false, updateStats = true, refreshModel = true, updatedSince) {
     let sinceText = updatedSince ? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
-    console.log(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, updateSince=${sinceText}`);
+    winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, updateSince=${sinceText}`);
     let workData;
     if (isImportRunning) {
-        console.log("Import session in progress.. return and wait to next try");
+        winston.info("Import session in progress.. return and wait to next try");
         return Rx_1.Observable.from([]);
     }
     isImportRunning = true;
@@ -197,7 +200,7 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
         if (updatedSince) {
             data.lastRefreshTime = updatedSince;
         }
-        console.log("Using update since time: " + data.lastRefreshTime.format("DD-MM-YYYY HH:mm:SS"));
+        winston.info("Using update since time: " + data.lastRefreshTime.format("DD-MM-YYYY HH:mm:SS"));
         return data;
     })
         .flatMap((data) => {
@@ -214,7 +217,7 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
     })
         .map((data) => {
         workData = data;
-        console.log(`Received character list: ${data.charList.length} characters`);
+        winston.info(`Received character list: ${data.charList.length} characters`);
         if (onlyList) {
             workData.charList = [];
         }
@@ -222,11 +225,11 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
     })
         .flatMap((data) => {
         if (importJoin) {
-            console.log("Load characters from JoinRPG");
+            winston.info("Load characters from JoinRPG");
             return loadCharactersFromJoin(data);
         }
         else {
-            console.log("Load characters from CouchDB cache");
+            winston.info("Load characters from CouchDB cache");
             return loadCharactersFromCache(data);
         }
     })
@@ -257,14 +260,24 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
         .do(() => {
         workData.importCouter++;
     }, (error) => {
-        console.log("Error in pipe: " + JSON.stringify(error));
+        winston.info("Error in pipe: " + JSON.stringify(error));
         isImportRunning = false;
     }, () => {
         isImportRunning = false;
         if (updateStats) {
             workData.cacheWriter.saveLastStats(new stats_1.ImportRunStats(moment.utc()));
         }
-        console.log(`Import sequence completed. Imported ${workData.importCouter} models!`);
+        winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
     });
+}
+function configureLogger() {
+    winston.add(winston.transports.File, { filename: config_1.config.logFileName });
+    winston.handleExceptions(new winston.transports.File({
+        filename: 'path/to/exceptions.log',
+        handleExceptions: true,
+        humanReadableUnhandledException: true,
+        level: 'debug',
+        json: false
+    }));
 }
 //# sourceMappingURL=server.js.map

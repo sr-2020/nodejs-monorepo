@@ -20,6 +20,7 @@ exports.config = {
     importInterval: 300000,
     importBurstSize: 10,
     requestTimeout: 120000,
+    logFileName: "import-server.log",
     catalogs: {
         effects: "dict-effects",
         illnesses: "dict-illnesses",

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const PouchDB = require("pouchdb");
 const chance = require("chance");
+const winston = require("winston");
 const config_1 = require("./config");
 const join_import_tables_1 = require("./join-import-tables");
 const model_1 = require("./interfaces/model");
@@ -36,10 +37,10 @@ class AliceExporter {
             .then((oldc) => {
             if (this.isUpdate) {
                 this.model._rev = oldc._rev;
-                console.log(`Update model with id = ${this.model._id}.`);
+                winston.info(`Update model with id = ${this.model._id}.`);
                 return this.con.put(this.model);
             }
-            console.log(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
+            winston.info(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
             return Promise.resolve("exists");
         })
             .catch(() => this.con.put(this.model));
@@ -52,10 +53,10 @@ class AliceExporter {
             .then((oldc) => {
             if (this.isUpdate) {
                 this.account._rev = oldc._rev;
-                console.log(`Update account with id = ${this.account._id}.`);
+                winston.info(`Update account with id = ${this.account._id}.`);
                 return this.accCon.put(this.account);
             }
-            console.log(`Acount with id = ${this.account._id} is exists in DB. Updates is disabled!`);
+            winston.info(`Acount with id = ${this.account._id} is exists in DB. Updates is disabled!`);
             return Promise.resolve("exists");
         })
             .catch(() => this.accCon.put(this.account));
@@ -63,7 +64,7 @@ class AliceExporter {
     }
     createModel() {
         try {
-            console.log(`Try to convert model id=${this.character.CharacterId}`);
+            winston.info(`Try to convert model id=${this.character.CharacterId}`);
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
             this.account._id = this.model._id;
@@ -71,7 +72,7 @@ class AliceExporter {
             //Защита от цифрового логина
             this.model.login = this.findStrFieldValue(1905).split("@")[0];
             if (this.model.login && this.model.login.match(/^\d+$/i)) {
-                console.log(`ERROR: can't convert id=${this.character.CharacterId} login=${this.model.login}`);
+                winston.info(`ERROR: can't convert id=${this.character.CharacterId} login=${this.model.login}`);
                 this.model._id = "";
                 return;
             }
@@ -151,7 +152,7 @@ class AliceExporter {
             this.model.timestamp = Date.now();
         }
         catch (e) {
-            console.log(`Error in converting model id=${this.character.CharacterId}: ` + e);
+            winston.info(`Error in converting model id=${this.character.CharacterId}: ` + e);
             this.model._id = "";
         }
     }
