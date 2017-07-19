@@ -43,7 +43,7 @@ class App {
         if (!data.validUntil)
           data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
         res.redirect(
-          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=3&size=400x400&ecc=L`
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=0&margin=0&size=300x300&ecc=L&format=svg`
         );
       }
       catch (e) {
