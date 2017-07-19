@@ -29,7 +29,9 @@ export type EngineMessageConfigure = {
 export type EngineMessageAquired = {
     type: 'aquired'
     data: {
-        [fullId: string]: any
+        [db: string]: {
+            [id: string]: any
+        }
     }
 }
 
@@ -63,7 +65,7 @@ export type EngineReplyLog = {
 
 export type EngineReplyAquire = {
     type: 'aquire'
-    keys: string[]
+    keys: [string, string][]
 }
 
 export type EngineReplyReady = {
