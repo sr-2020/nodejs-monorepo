@@ -280,6 +280,7 @@ function getPages(model) {
         getImplantsPage(model),
         getEconomyPage(),
         getChangesPage(model),
+        getMessagesPage(model),
     ];
 
     if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
