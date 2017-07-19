@@ -39,7 +39,7 @@ export function getModel(di: any, id: string, dbAlias: string = 'models') {
     return modelsDb.getOrNull(id);
 }
 
-export function getModelVariants(di: any, id: string, aliases: string[] = ['models', 'workingModels', 'viewModels']) {
+export function getModelVariants(di: any, id: string, aliases: string[] = ['models', 'workingModels', 'defaultViewModels']) {
     let pending = aliases.map((alias) => getModel(di, id, alias));
     return Promise.all(pending);
 }

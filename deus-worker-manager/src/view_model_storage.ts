@@ -13,10 +13,11 @@ export class ViewModelStorage {
     constructor(config: Config, dbConnector: DBConnectorInterface) {
         this.aliases = {};
 
-        for (let alias in config.db) {
-            if (['url', 'models', 'workingModels', 'events'].indexOf(alias) != -1) continue;
+        for (let alias in config.viewModels) {
+            let dbName = config.viewModels[alias];
+            if (config.db[dbName]) dbName = config.db[dbName];
 
-            let db = dbConnector.use(config.db[alias]);
+            let db = dbConnector.use(dbName);
             this.aliases[alias] = new ModelStorage(db);
         }
     }

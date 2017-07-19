@@ -16,6 +16,10 @@ export interface CatalogsConfigDb {
 
 export type CatalogsConfig = CatalogsConfigFiles | CatalogsConfigDb;
 
+export interface ViewModelsConfig {
+    [alias: string]: string
+}
+
 export interface PoolConfig {
     workerModule: string
     workerArgs: string[]
@@ -30,5 +34,6 @@ export interface Config {
     db: DbConfig
     pool: PoolConfig
     catalogs: CatalogsConfig
+    viewModels: ViewModelsConfig
     logger: LoggerConfig
 }

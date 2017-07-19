@@ -43,7 +43,7 @@ describe("Green way", function() {
 
         await delay(200);
 
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
+        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
         expect(baseModel).to.exist;
         expect(workingModel).to.exist;
@@ -93,7 +93,7 @@ describe("Green way", function() {
 
         await delay(200);
 
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
+        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
         if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
 
@@ -165,7 +165,7 @@ describe("Green way", function() {
 
         await delay(200);
 
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'viewModels']);
+        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
         if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
 

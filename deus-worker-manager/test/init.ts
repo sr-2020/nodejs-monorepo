@@ -32,7 +32,7 @@ export const defaultConfig: Config = {
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
-        viewModels: 'view-models-test'
+        defaultViewModels: 'view-models-test'
     },
 
     pool: {
@@ -47,6 +47,8 @@ export const defaultConfig: Config = {
     catalogs: {
         path: __dirname + '/test-models/trivial/catalogs'
     },
+
+    viewModels: { default: 'defaultViewModels' },
 
     logger: {
         default: {
