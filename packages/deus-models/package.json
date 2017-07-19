@@ -23,14 +23,12 @@
     "@types/node": "^8.0.4",
     "chai": "^4.0.2",
     "chokidar-cli": "^1.2.0",
+    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
     "deus-model-engine": "github:sth-larp/deus-model-engine",
     "mocha": "^3.4.2",
     "node-tsconfig-paths": "^0.4.2",
     "ts-node": "^3.0.6",
     "typescript": "^2.2.2"
   },
-  "dependencies": {
-    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
-    "tsconfig": "^6.0.0"
-  }
+  "dependencies": {}
 }

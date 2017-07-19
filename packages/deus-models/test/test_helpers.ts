@@ -17,12 +17,12 @@ export function getWorker() {
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);
 }
 
-export function process_(model: EngineContext, events: Event[]): EngineResult {
+export function process_(model: EngineContext, events: Event[]): Promise<EngineResult> {
     return getWorker().process(model, events);
 }
 
-export function process(model: EngineContext, events: Event[]): EngineResultOk {
-    let result = process_(model, events);
+export async function process(model: EngineContext, events: Event[]): Promise<EngineResultOk> {
+    let result = await process_(model, events);
     if (result.status == 'error') throw result.error;
     return result;
 }
