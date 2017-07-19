@@ -38,7 +38,7 @@ export interface WriteModelApiInterface {
 }
 
 export interface PreprocessApiInterface extends ReadModelApiInterface, LogApiInterface {
-    aquire(key: string): this
+    aquire(db: string, id: string): this
 }
 
 export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface {
@@ -46,7 +46,7 @@ export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInte
 }
 
 export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface {
-    aquired(key: string): any
+    aquired(db: string, id: string): any
 }
 
 class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
@@ -143,8 +143,8 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
         return m;
     }
 
-    aquired(key: string): any {
-        return this.contextGetter().aquired[key];
+    aquired(db: string, id: string): any {
+        return _.get(this.contextGetter(), ['aquired', db, id]);
     }
 
     removeModifier(id: string) {
@@ -200,8 +200,8 @@ class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
 }
 
 class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {
-    aquire(key: string) {
-        this.contextGetter().pendingAquire.push(key);
+    aquire(db: string, id: string) {
+        this.contextGetter().pendingAquire.push([db, id]);
         return this;
     }
 }

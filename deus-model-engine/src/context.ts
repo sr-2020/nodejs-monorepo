@@ -74,7 +74,9 @@ export class OutboundEvents {
 }
 
 export type AquiredObjects = {
-    [key: string]: any
+    [db: string]: {
+        [id: string]: any
+    }
 }
 
 export class Context {
@@ -82,7 +84,7 @@ export class Context {
     private _events: Event[];
     private _dictionaries: Dictionaries = {};
     private _outboundEvents: OutboundEvents;
-    private _pendingAquire: string[];
+    private _pendingAquire: [string, string][];
     private _aquired: AquiredObjects;
 
     constructor(
@@ -90,7 +92,7 @@ export class Context {
         events: Event[],
         dictionaries?: any,
         outboundEvents?: OutboundEvents,
-        pendingAquire?: string[],
+        pendingAquire?: [string, string][],
         aquired?: AquiredObjects
     ) {
         this._ctx = cloneDeep(contextSrc);
@@ -161,7 +163,7 @@ export class Context {
         this._aquired = value;
     }
 
-    get pendingAquire(): string[] {
+    get pendingAquire(): [string, string][] {
         return this._pendingAquire;
     }
 

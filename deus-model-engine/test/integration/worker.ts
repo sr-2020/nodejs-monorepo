@@ -58,7 +58,7 @@ describe('Worker', () => {
         worker = Worker.load(`${__dirname}/../test-models/trivial`).configure(config);
     });
 
-    it("Should process some models", () => {
+    it("Should process some models", async () => {
         const context = { timestamp: 0, "value": 0 };
 
         const timestamp = Date.now();
@@ -69,7 +69,7 @@ describe('Worker', () => {
             { characterId: '0000', eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
         ];
 
-        let result = worker.process(context, events)
+        let result = await worker.process(context, events)
 
         expect(result.status).to.equals('ok');
         result = result as EngineResultOk;
@@ -78,7 +78,7 @@ describe('Worker', () => {
         expect(result.workingModel.timestamp).to.equal(timestamp);
     });
 
-    it("Should process some timers", () => {
+    it("Should process some timers", async () => {
         const context = { timestamp: 0, "value": '' }
         const timestamp = Date.now();
 
@@ -89,7 +89,7 @@ describe('Worker', () => {
             { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
 
-        let result = worker.process(context, events);
+        let result = await worker.process(context, events);
 
         expect(result.status).to.equals('ok');
         result = result as EngineResultOk;
@@ -98,7 +98,7 @@ describe('Worker', () => {
         expect(result.workingModel.timestamp).to.equal(timestamp);
     })
 
-    it("Should leave unprocessed timers intact", () => {
+    it("Should leave unprocessed timers intact", async () => {
         const context = { timestamp: 0, "value": '' }
         const timestamp = Date.now();
 
@@ -107,7 +107,7 @@ describe('Worker', () => {
             { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
         ];
 
-        let result = worker.process(context, events);
+        let result = await worker.process(context, events);
 
         expect(result.status).to.equals('ok');
         result = result as EngineResultOk;
@@ -123,7 +123,7 @@ describe('Worker', () => {
         expect(result.workingModel.timestamp).to.equal(timestamp);
     })
 
-    it("Should produce view model", () => {
+    it("Should produce view model", async () => {
         const context = { timestamp: 0, "value": 0 };
         const timestamp = Date.now();
 
@@ -131,7 +131,7 @@ describe('Worker', () => {
             { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
         ];
 
-        let result = worker.process(context, events)
+        let result = await worker.process(context, events)
 
         expect(result.status).to.equals('ok');
         result = result as EngineResultOk;
@@ -139,11 +139,11 @@ describe('Worker', () => {
         let { viewModels } = result;
 
         expect(viewModels).to.exist;
-        expect(viewModels).to.has.property('viewModels');
-        expect(viewModels.viewModels).to.deep.equal({ value: 0 });
+        expect(viewModels).to.has.property('default');
+        expect(viewModels.default).to.deep.equal({ value: 0 });
     })
 
-    it("Should return outbound events", () => {
+    it("Should return outbound events", async () => {
         const context = { timestamp: 0, "value": 0 };
         const timestamp = Date.now();
 
@@ -152,14 +152,16 @@ describe('Worker', () => {
             { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
         ];
 
-        let result = worker.process(context, events)
+        let result = await worker.process(context, events)
 
         expect(result.status).to.equals('ok');
         result = result as EngineResultOk;
 
         expect(result).to.has.property('events');
-        expect(result.events[0].characterId).to.equals('0001');
-        expect(result.events[0].eventType).to.equals('message');
-        expect(result.events[0].data.message).to.equals('test message');
+
+        let event = (result as any).events[0];
+        expect(event.characterId).to.equals('0001');
+        expect(event.eventType).to.equals('message');
+        expect(event.data.message).to.equals('test message');
     })
 });
