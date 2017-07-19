@@ -9,7 +9,7 @@ import * as config from './config';
 import * as model from './model';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
-import { ModelApiFactory } from './model_api';
+import { ModelApiFactory, ViewModelApiFactory } from './model_api';
 
 export class Worker {
     private config: config.ConfigInterface
@@ -64,10 +64,15 @@ export class Worker {
 
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
-
         let viewModels = this.runViewModels(workingCtx);
 
-        return { status: 'ok', baseModel: baseCtxValue, workingModel: workingCtxValue, viewModels, events: baseCtx.outboundEvents };
+        return {
+            status: 'ok',
+            baseModel: baseCtxValue,
+            workingModel: workingCtxValue,
+            viewModels,
+            events: baseCtx.outboundEvents
+        };
     }
 
     listen() {
@@ -78,10 +83,11 @@ export class Worker {
             });
 
             process.on('message', (message: EngineMessage) => {
-                if (message.type == 'configure') {
-                    this.onConfigure(message);
-                } else {
-                    this.onEvents(message);
+                switch (message.type) {
+                    case 'configure':
+                        return this.onConfigure(message);
+                    case 'events':
+                        return this.onEvents(message);
                 }
             });
 
@@ -149,7 +155,7 @@ export class Worker {
 
     private runViewModels(workingCtx: Context) {
         let data = workingCtx.valueOf();
-        let api = ModelApiFactory(workingCtx);
+        let api = ViewModelApiFactory(workingCtx);
 
         return reduce(this.model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
             vm[base] = f(api, data);
