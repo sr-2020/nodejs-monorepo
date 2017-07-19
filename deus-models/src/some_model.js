@@ -250,6 +250,29 @@ function getChangesPage(model) {
     };
 }
 
+function getMessagesPageItem(message) {
+    return {
+        viewId: "mid:" + message.mID,
+        text: message.title,
+        details: {
+            header: message.title,
+            text: message.text,
+        },
+    };
+}
+
+function getMessagesPage(model) {
+    return {
+        __type: "ListPageViewModel",
+        viewId: "page:messages",
+        menuTitle: "Сообщения",
+        body: {
+            title: "Мастерские сообщения",
+            items: model.messages.reverse().map(getMessagesPageItem),
+        },
+    };
+}
+
 
 function getPages(model) {
     let pages = [
@@ -260,6 +283,7 @@ function getPages(model) {
         getImplantsPage(model),
         getEconomyPage(),
         getChangesPage(model),
+        getMessagesPage(model),
     ];
 
     if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
