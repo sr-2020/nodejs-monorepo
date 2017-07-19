@@ -8,13 +8,36 @@ import { config } from './config';
 import { JoinData, JoinImporter, JoinCharacter,JoinCharacterDetail, JoinMetadata } from './join-importer';
 import { TempDbWriter} from './tempdb-writer';
 import { AliceExporter } from './alice-exporter';
-import { CatalogsLoader } from './catalogs-loader'
+import { CatalogsLoader } from './catalogs-loader';
+import { ModelRefresher } from './model-refresher';
+
+class ModelImportData{
+    importer:JoinImporter = new JoinImporter();
+    cacheWriter: TempDbWriter = new TempDbWriter();
+    catalogsLoader: CatalogsLoader = new CatalogsLoader();
+    modelRefresher:ModelRefresher = new ModelRefresher();
+
+    currentStats = new ImportRunStats();
+
+    lastRefreshTime = moment([1900,0,1]);
+
+    metadata:JoinMetadata;
+    charList:JoinCharacter[] = [];
+
+    importCouter: number = 0;
+
+    constructor() {} 
+}
 
 //Сheck CLI arguments
 const cliDefs = [
-        { name: 'create', type: Boolean },
+        { name: 'export', type: Boolean },
         { name: 'import', type: Boolean },
+        { name: 'test', type: Boolean },
         { name: 'id', type: String },
+        { name: 'since', type: String },
+        { name: 'list', type: Boolean },
+        { name: 'refresh', type: Boolean },
 ];
 const params = commandLineArgs(cliDefs);
 
@@ -24,19 +47,24 @@ let isImportRunning = false;
 //Statisticts
 let stats = new ImportStats();
 
+console.log(JSON.stringify(params));
 
-if(params.create){
-
-    console.log("(Re)create models from the cache");
-    console.log(JSON.stringify(params,null,4));
-    createModels();
-
-}else if(params.import && params.hasOwnProperty("id")){
-
-    console.log(`Import character ${params.id} from JoinRPG`);
-    importCharacter(params.id).then(()=> process.exit(0));
-
-} else{
+if(params.export || params.import || params.id || params.test || params.list || params.refresh){
+    let _id = params.id? params.id : 0;
+    let since = params.since? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
+    
+    importAndCreate(_id, (params.import == true), (params.export==true), (params.list==true), 
+                            false, (params.refresh==true), since)
+    .subscribe( (data:JoinCharacterDetail) => {},
+                (error:any) => {
+                    //process.exit(1);
+                },
+                () => {
+                    console.log("Finished!");
+                   // process.exit(0);
+                }
+    );
+}else{
     console.log(`Start HTTP-server on port: ${config.port} and run import loop`);
 
     var app = express();
@@ -46,189 +74,254 @@ if(params.create){
         res.send(stats.toString());
     })
 
-    Observable.timer(0, config.importInterval).subscribe( ()=> {
-        console.log("Start import sequence!");
-        importAndCreate();   
-    });
+    Observable.timer(0, config.importInterval).
+        flatMap( () => importAndCreate() )
+        .subscribe( (data:JoinCharacterDetail) => {},
+            (error:any) => {
+                process.exit(1);
+            },
+            () => {
+                console.log("Finished!");
+                process.exit(0);
+            }
+        );
 }
 
 /**
- *  Функция для импорта данных из Join, записи в кеш CouchDB 
- *  и экспорта моделей
+ * Предвартельные операции для импорта (токен, заливка метаданных, каталоги и т.д)
  */
-async function importAndCreate() {
-    if(isImportRunning) {
-        console.log("Import session in progress.. return and wait to next try");
-        return;
-    }
+function prepareForImport():Observable<ModelImportData> {
+    let data = new ModelImportData();
 
-    let currentsStats = new ImportRunStats(); 
+    return Observable.fromPromise(data.cacheWriter.getLastStats())
+            .map( (loadedStats) => {
+                data.lastRefreshTime = loadedStats.importTime;
+                return data;
+            })
+            .flatMap( () => data.importer.init() )
+            .flatMap( () => data.importer.getMetadata() )
+            .do( () => console.log(`Received metadata!`) )
+            .flatMap( () => data.cacheWriter.saveMetadata(data.importer.metadata) )
+            .do( () => console.log(`Save metadata to cache!`) )
+            .flatMap( () => data.catalogsLoader.load() )
+            .do( () => {
+                Object.keys(data.catalogsLoader.catalogs).forEach( (name) => {
+                    console.log(`Loaded catalog: ${name}, elements: ${data.catalogsLoader.catalogs[name].length}`);  
+                })
+            })
+            .flatMap( () => Observable.from([data]) );                           
+}
 
-    isImportRunning = true;
-
-    let importer:JoinImporter = new JoinImporter();
-    let cacheWriter: TempDbWriter = new TempDbWriter();
-    let catalogsLoader: CatalogsLoader = new CatalogsLoader();
-
-    //Получить статистику последнего импорта (если была)
-    stats.lastRefreshTime = (await cacheWriter.getLastStats()).importTime;
-    console.log("Last import time set to: " + stats.lastRefreshTime.format("L LTS"));
-
-    //Иницировать загрузчик данных из Join(токен)
-    await importer.init();
-
-    //Загрузить метаднные
-    let metadata:JoinMetadata = await importer.getMetadata();
-    console.log(`Received metadata!`);  
-
-    //Сохранить метаднные в кеше
-    await cacheWriter.saveMetadata(metadata);
-    console.log(`Save metadata to cache!`);  
-    
-    //Получить список обновленных персонажей для загрузки
-    let charList:JoinCharacter[] = await importer.getCharacterList( stats.lastRefreshTime.subtract(1,"hours") );
-    console.log(`Received character list: ${charList.length} characters`);  
-
-    //Теmp
-    console.log(JSON.stringify(charList),null,4);
-    charList = [];
-
-    //Если список не нулевой загрузить каталоги
-    if(charList.length){
-        await catalogsLoader.load();
-
-        Object.keys(catalogsLoader.catalogs).forEach( (name) => {
-            console.log(`Loaded catalog: ${name}, elements: ${catalogsLoader.catalogs[name].length}`);  
-        })
-
-    }
+/**
+ * Получение списка обновленных персонажей (выполняется с уже подготовленной ModelImportData)
+ */
+function loadCharacterListFomJoin(data: ModelImportData): Observable<ModelImportData> {
+    return Observable.fromPromise( 
+                data.importer.getCharacterList(data.lastRefreshTime.subtract(5,"minutes"))
+                .then( ( c:JoinCharacter[] ) => {
+                            data.charList = c;
+                            return data;   
+                 })
+            );
+}
 
 
-    //Пройти по всему списку персонажей
-    Observable.from(charList)
-                .bufferCount(config.importBurstSize)   //Порезать на группы по 20
-                .mergeMap( (cl:JoinCharacter[]) => {        //Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
-                    console.log(`Process buffer!`);
-
-                    let promiseArr: Promise<JoinCharacterDetail>[] = [];
-                    cl.forEach( c => promiseArr.push(importer.getCharacter(c.CharacterLink)) );
-                    return Promise.all(promiseArr);
-                }, 1)
-                .retry(3)
-                
-                .mergeMap( (cl:JoinCharacterDetail[]) => Observable.from(cl) ) //Полученные данные группы разбить на отдельные элементы для обработки
-                .do( (c:JoinCharacterDetail) => console.log(`Imported character: ${c.CharacterId}`) )  //Написать в лог
-                
-                //.map( (c:JoinCharacterDetail) => cacheWriter.setFieldsNames(c, metadata))       //проставить имена полей в объекте из метаданных
-                .do( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )             //сохранить в кеш (CouchDB)
-                
-                .do( (c:JoinCharacterDetail) => console.log(`Character id: ${c._id} saved to cache`) )
-
-                .flatMap( (c:JoinCharacterDetail) => { 
-                        let modelExporter = new AliceExporter(c, metadata, catalogsLoader, true);
-                        return modelExporter.export();
-                } )
-
-                .do( (c:any)=> {currentsStats.imported.push(c.id)})                         //обновить статистику
-
-                .subscribe( (c:any) => {
-                    console.log( `Exported model for character id = ${c[0].id}: ` + JSON.stringify(c) );
-                },
-                (error:any) => {
-                    console.log( "Error in pipe: " + JSON.stringify(error) );   
-                    isImportRunning = false;
-                },
-                () => {
-                    currentsStats.importTime = moment();
-                    cacheWriter.saveLastStats(currentsStats).then(() => {
-                        stats.addImportStats(currentsStats);
-                        isImportRunning = false;
-                        console.log( "Import sequence completed!" );
-                    })
-                }
+/**
+ * Получение списка персонажей в кеше (выполняется с уже подготовленной ModelImportData)
+ */
+function loadCharacterListFromCache(data: ModelImportData): Observable<ModelImportData> {
+    return Observable.fromPromise( 
+                data.cacheWriter.getCacheCharactersList()
+                .then( ( c:JoinCharacter[] ) => {
+                            console.log("Debug: " + JSON.stringify(c));
+                            data.charList = c;
+                            return data;   
+                 })
             );
 }
 
 /**
- *  Функция для ручного обновления одной модели в кеше
+ * Сохранение данных о персонаже из Join в кеш на CouchDB
  */
-async function importCharacter(id: number) {
-    if(isImportRunning) {
-        console.log("Import session in progress.. return");
-        return;
-    }
+function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
+    return Observable.fromPromise( data.cacheWriter.saveCharacter(char) )
+            .do( (c:any) => console.log(`Character id: ${c.id} saved to cache`) )
+            .map( () => char)
+}
 
-    let currentsStats = new ImportRunStats(); 
+/**
+ * Создание модели персонажа по данным из Join и экспорт в Model-базу
+ */
+function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
+    let model = new AliceExporter(char, data.metadata, data.catalogsLoader, true);
 
-    let importer:JoinImporter = new JoinImporter();
-    let cacheWriter: TempDbWriter = new TempDbWriter();
-
-    //Иницировать загрузчик данных из Join(токен)
-    await importer.init();
-
-    //Загрузить метаднные
-    let metadata:JoinMetadata = await importer.getMetadata();
-    console.log(`Received metadata!`);  
-
-    //Сохранить метаднные в кеше
-    await cacheWriter.saveMetadata(metadata);
-    console.log(`Save metadata to cache!`);  
-    
-    return importer.getCharacterByID(id.toString())
-                .then( (c:JoinCharacterDetail) => cacheWriter.saveCharacter(c) )
-                .then( () => console.log(`Imported character:${id}`) )
-                .catch( (err:any) => console.log("Error in save: " + JSON.stringify(err)) );
+    return Observable.fromPromise(model.export())
+            .map( (c:any) => { 
+                    console.log( `Exported model for character id = ${c[0].id}: ` + JSON.stringify(c) );
+                    return char;
+            });
+}          
+        
+/**
+ * Посылка события Refresh-модели
+ */
+function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
+    return Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char._id))
+            .map( (c:any) => { 
+                    console.log( `Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c) );
+                    return char;
+            });
 }
 
 
 /**
- *  Функция для ручной перезаливки моделей из кеша
+ * Получение потока данных персонажей (выполняется с уже подготовленной ModelImportData)
  */
-async function createModels() {
+function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacterDetail>{
+    let bufferCounter = 0;
+
+    return Observable.from(data.charList)
+            .bufferCount(config.importBurstSize)        //Порезать на группы по 20
+            .mergeMap( (cl:JoinCharacter[]) => {        //Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
+                console.log( `##=====================================\n` +
+                             `## Process buffer ${bufferCounter}, size=${config.importBurstSize}: ${cl.map(d => d.CharacterId).join(',')}` +
+                             `\n##=====================================`);
+                bufferCounter++;
+
+                let promiseArr: Promise<JoinCharacterDetail>[] = [];
+                cl.forEach( c => promiseArr.push(data.importer.getCharacter(c.CharacterLink)) );
+
+                return Promise.all(promiseArr);
+            }, 1)
+            .retry(3)
+            
+            .mergeMap( (cl:JoinCharacterDetail[]) => Observable.from(cl) ) //Полученные данные группы разбить на отдельные элементы для обработки
+            .do( (c:JoinCharacterDetail) => console.log(`Imported character: ${c.CharacterId}`) )  //Написать в лог
+}
+
+/**
+ * Получение потока данных персонажей из кэша (выполняется с уже подготовленной ModelImportData)
+ */
+function loadCharactersFromCache(data: ModelImportData): Observable<JoinCharacterDetail>{
+    let bufferCounter = 0;
+
+    return Observable.from(data.charList)
+            .bufferCount(config.importBurstSize)        //Порезать на группы по 20
+            .mergeMap( (cl:JoinCharacter[]) => {        //Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
+                console.log( `##=====================================\n` +
+                             `## Process buffer ${bufferCounter}, size=${config.importBurstSize}: ${cl.map(d => d.CharacterId).join(',')}` +
+                             `\n##=====================================`);
+                bufferCounter++;
+
+                let promiseArr: Promise<JoinCharacterDetail>[] = [];
+                cl.forEach( c => promiseArr.push(data.cacheWriter.getCacheCharacter(c.CharacterId.toString())) );
+
+                return Promise.all(promiseArr);
+            }, 1)
+            .retry(3)
+            
+            .mergeMap( (cl:JoinCharacterDetail[]) => Observable.from(cl) ) //Полученные данные группы разбить на отдельные элементы для обработки
+            .do( (c:JoinCharacterDetail) => console.log(`Imported character: ${c.CharacterId}`) )  //Написать в лог
+}
+
+/**
+ *  Функция для импорта данных из Join, записи в кеш CouchDB, создания и экспорта моделей 
+ *  (т.е. вся цепочка)
+ */
+function importAndCreate(   id:number = 0,
+                            importJoin:boolean = true, 
+                            exportModel:boolean = true,
+                            onlyList:boolean = false, 
+                            updateStats:boolean = true,
+                            refreshModel:boolean = true,
+                            updatedSince?: moment.Moment ): Observable<JoinCharacterDetail> {
+
     
-    let cacheWriter: TempDbWriter = new TempDbWriter();
+    let sinceText = updatedSince? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
+    console.log(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, updateSince=${sinceText}` )
 
-    let metadata:JoinMetadata = await cacheWriter.getMetadata();
-    console.log(`Loaded metadata from cache!`);  
+    let workData: ModelImportData;
 
-    let catalogsLoader: CatalogsLoader = new CatalogsLoader();
-    await catalogsLoader.load();
-    Object.keys(catalogsLoader.catalogs).forEach( (name) => {
-        console.log(`Loaded catalog: ${name}, elements: ${catalogsLoader.catalogs[name].length}`);  
-    })
-
-    let exceptionIds = ["JoinMetadata", "lastImportStats"];
-
-    let src:Observable<any> = null;
-
-    if(params.hasOwnProperty("id")){
-        src = Observable.fromPromise(cacheWriter.getCacheCharacter(params.id))
-
-    }else{
-        src = Observable.fromPromise(cacheWriter.getCacheCharactersList())
-                .do( (c:any) => console.log(JSON.stringify(c, null, 4)) )
-                .flatMap( (result:any) => Observable.from(result.rows) )
-                .filter( (doc:any) => !exceptionIds.find(e => e == doc.id ) )
-                .flatMap( (doc:any) => cacheWriter.getCacheCharacter(doc.id), 10 );
+    if(isImportRunning) {
+        console.log("Import session in progress.. return and wait to next try");
+        return Observable.from([]);
     }
 
-        src.flatMap( (c:JoinCharacterDetail) => { 
-                        let modelExporter = new AliceExporter(c, metadata, catalogsLoader, true);
-                        return modelExporter.export();
-                } )
+    isImportRunning = true;
 
-        .retry(3)
-
-        .subscribe( (c:any) => {
-                    console.log( `Update model for character id = ${c[0].id}: ` + JSON.stringify(c) );
-                },
-                (error:any) => {
-                    console.log( "Error in pipe: " + JSON.stringify(error) );   
-                     process.exit(1);
-                },
-                () => {
-                     console.log( "Update sequence completed!" );
-                     process.exit(0);
+    return prepareForImport()
+    //Установить дату с которой загружать персонажей (если задано)
+        .map( (data) => { 
+            if(updatedSince){ data.lastRefreshTime = updatedSince; }
+            console.log("Using update since time: " +  data.lastRefreshTime.format("DD-MM-YYYY HH:mm:SS")) 
+            return data;
+        })
+    //Загрузить список персонажей (Join или кэш), если не задан ID
+        .flatMap( (data:ModelImportData) => {
+                if(id){
+                    data.charList.push( JoinImporter.createJoinCharacter(id) );
+                    return Observable.from([data]);
+                }else if(importJoin){
+                    return loadCharacterListFomJoin(data); 
+                }else{
+                    return loadCharacterListFromCache(data);
                 }
-         );
+        })
+    //Запись в консоль
+        .map( (data) => {
+                workData = data;
+                console.log(`Received character list: ${data.charList.length} characters`);
+                if(onlyList){
+                    workData.charList = [];
+                }
+                return workData;
+        })
+    //Загрузить данные из Join или из кеша
+        .flatMap( (data:ModelImportData) => {
+                        if(importJoin) {
+                            console.log("Load characters from JoinRPG");
+                            return loadCharactersFromJoin(data);
+                        }else{
+                            console.log("Load characters from CouchDB cache");
+                            return loadCharactersFromCache(data);
+                        }
+        })
+    //Сохранить данные в кеш (если надо)
+        .flatMap( (c: JoinCharacterDetail) => { 
+                    if(importJoin) {
+                        return saveCharacterToCache(c, workData);
+                    }else{
+                        return Observable.from([c]);
+                    }
+            })
+    //Экспортировать модель в БД (если надо)
+        .flatMap( (c: JoinCharacterDetail) => {
+                    if(exportModel) {
+                        return exportCharacterModel(c, workData);
+                    }else{
+                        return Observable.from([c]);
+                    } 
+        })
+        .flatMap( (c: JoinCharacterDetail) => { 
+                if(refreshModel) {
+                    return sendModelRefresh(c, workData);
+                }else{
+                    return Observable.from([c]);
+                }
+        })
+        .do( ()=>{
+                workData.importCouter++;
+             },
+             (error)=>{
+                console.log( "Error in pipe: " + JSON.stringify(error) );  
+                isImportRunning = false;
+            },
+            () => {
+                isImportRunning = false;
+                if(updateStats){
+                    workData.cacheWriter.saveLastStats( new ImportRunStats(moment.utc()) );
+                }
+                console.log(`Import sequence completed. Imported ${workData.importCouter} models!`);
+            }
+        )
 }

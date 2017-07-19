@@ -6,8 +6,8 @@ import { config } from './config';
 
 export interface JoinCharacter{
     CharacterId : number,
-    UpdatedAt: string,
-    IsActive: boolean,
+    UpdatedAt?: string,
+    IsActive?: boolean,
     CharacterLink: string
 }
 
@@ -67,6 +67,8 @@ export class JoinImporter {
 
     public access_token = "";
 
+    public metadata: JoinMetadata;
+
     constructor() {}
 
     init():Promise<boolean> {
@@ -90,6 +92,13 @@ export class JoinImporter {
         });
     }
 
+    static createJoinCharacter(id: number):JoinCharacter {
+        return {
+            CharacterId: id,
+            CharacterLink: `${config.joinCharactersBasePath}/${id}/`
+        };
+    }
+
     //modifiedSince=2017-07-01
     getCharacterList(modifiedSince: moment.Moment ):Promise<JoinCharacter[]> {
         let reqOpts = {
@@ -104,11 +113,10 @@ export class JoinImporter {
             timeout: config.requestTimeout,
             json : true
         };
-        console.log("getCharacterList: url=" + reqOpts.url);
         return request(reqOpts);
     }
 
-    async getCharacter(CharacterLink:string):Promise<JoinCharacterDetail> {
+    getCharacter(CharacterLink:string):Promise<JoinCharacterDetail> {
         let reqOpts = {
             url: config.joinBaseUrl + CharacterLink,
             method : "GET",
@@ -119,16 +127,15 @@ export class JoinImporter {
             json : true
         };
 
-        console.log(`Try to import character: ${CharacterLink}`);
         return request(reqOpts);
     }
 
-    async getCharacterByID(id:string):Promise<JoinCharacterDetail> {
+    getCharacterByID(id:string):Promise<JoinCharacterDetail> {
         let url = `${config.joinCharactersBasePath}/${id}/`;
         return this.getCharacter(url);
     }
 
-    async getMetadata():Promise<JoinMetadata> {
+    getMetadata():Promise<JoinMetadata> {
          let reqOpts = {
             url: config.joinMetaUrl,
             method : "GET",
@@ -139,7 +146,10 @@ export class JoinImporter {
             json : true
         };
 
-        return request(reqOpts);
+        return request(reqOpts).then( (m:JoinMetadata) => {
+            this.metadata = m;
+            return m;
+        });
     }
 
 }

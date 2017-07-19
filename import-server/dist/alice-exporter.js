@@ -16,14 +16,20 @@ class AliceExporter {
         this.accCon = null;
         this.model = new model_1.DeusModel();
         this.account = { _id: "", password: "", login: "" };
-        this.con = new PouchDB(`${config_1.config.url}${config_1.config.modelDBName}`);
-        this.accCon = new PouchDB(`${config_1.config.url}${config_1.config.accountDBName}`);
+        const ajaxOpts = {
+            auth: {
+                username: config_1.config.username,
+                password: config_1.config.password
+            }
+        };
+        this.con = new PouchDB(`${config_1.config.url}${config_1.config.modelDBName}`, ajaxOpts);
+        this.accCon = new PouchDB(`${config_1.config.url}${config_1.config.accountDBName}`, ajaxOpts);
         this.chance = new chance(character.CharacterId);
         this.createModel();
     }
     export() {
         if (!this.model._id) {
-            return Promise.reject("AliceExporter.export(): Incorrect model ID or problem in conversion!");
+            return Promise.reject(`AliceExporter.export(): ${this.character._id} Incorrect model ID or problem in conversion!`);
         }
         //Create or update Profile 
         let profilePromise = this.con.get(this.model._id)
@@ -37,7 +43,7 @@ class AliceExporter {
             return Promise.resolve("exists");
         })
             .catch(() => this.con.put(this.model));
-        if (!this.account.login || this.account.password) {
+        if (!this.account.login || !this.account.password) {
             return Promise.all([profilePromise, Promise.resolve(false)]);
             ;
         }
@@ -62,7 +68,13 @@ class AliceExporter {
             this.model._id = this.character.CharacterId.toString();
             this.account._id = this.model._id;
             //Login (e-mail). Field: 1905
+            //Защита от цифрового логина
             this.model.login = this.findStrFieldValue(1905).split("@")[0];
+            if (this.model.login && this.model.login.match(/^\d+$/i)) {
+                console.log(`ERROR: can't convert id=${this.character.CharacterId} login=${this.model.login}`);
+                this.model._id = "";
+                return;
+            }
             this.account.login = this.model.login;
             if (this.model.login) {
                 this.model.mail = this.model.login + "@alice.digital";
@@ -106,6 +118,10 @@ class AliceExporter {
                 this.model.hackingLogin = this.findStrFieldValue(1652);
                 //Защта от хакерства  Field: 1649
                 this.model.hackingProtection = Number.parseInt(this.findStrFieldValue(1649, true));
+                //Поля для хакеров (ставим всем)
+                this.model.lockReduction = 100;
+                this.model.proxyRegen = 100;
+                this.model.maxProxy = 100;
             }
             //Блок данных только для профиля андроида или программы
             if (this.model.profileType == "robot" ||

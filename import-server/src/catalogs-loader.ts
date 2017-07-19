@@ -14,8 +14,15 @@ export class CatalogsLoader {
 
     public async load(){
 
+        const ajaxOpts = {
+            auth:{
+                username: config.username,
+                password: config.password
+            }
+        };
+
         for(let alias in config.catalogs){
-            let db = new PouchDB(`${config.url}${config.catalogs[alias]}`);
+            let db = new PouchDB(`${config.url}${config.catalogs[alias]}`, ajaxOpts);
             let docs = await db.allDocs( {include_docs: true} );
 
             this.catalogs[alias] = docs.rows;

@@ -31,20 +31,20 @@ export interface MindData {
 }
 
 export class DeusModel{
-    _id: string;
-    _rev: string;
-    mail: string;
-    login: string;  //Temporary (move to Accounts)
+    _id: string;        //id в БД == JoinRPG ID
+    _rev: string;       //rev в БД техническое  
+    mail: string;       //loging@alice.digital
+    login: string;      //login
     profileType: string;    //Тип профиля (human/robot/program)
-    firstName: string;
-    nicName?: string;
-    lastName?:  string;
+    firstName: string;      //имя
+    nicName?: string;       //ник-нейм
+    lastName?:  string;     //фамилия
     sweethome?: string;  //Родная локация
-    hp: number;
-    maxHp: number;
+    hp: number;         //количество хитов
+    maxHp: number;      //макстмальное количество хитов персонажа
 
-//Only Human
-    sex?: string;
+//Только для типа профиля "human"
+    sex?: string;            //пол
     generation?: string;     //Поколение (A / W / Z / X/Y)
     corporation?: string;    //Место работы
     salaryLevel?: number;    //Уровень зарплаты
@@ -55,7 +55,7 @@ export class DeusModel{
     memory: Array<MemoryElement> = [];  //Воспоминания
     hackingLogin?: string;           //логин хакеров  TODO - не сделано
     hackingProtection?: number;      //Уровень защиты от хакеров
-    mind: MindData;         //TODO - пока не сделано
+    mind?: MindData;                  //кубики сознания
 
 //Only android or programm
     owner?: string;          //Владелец андроида/программы
@@ -63,9 +63,16 @@ export class DeusModel{
     model?: string;      //Модель андроида или программа
     firmware?: string;   //Прошивка андроида. Временное. 
 
-    skills?: Array<any>; 
-    timestamp: number = 0;
-    conditions: Array<DeusCondition> = [];
-    modifiers: Array<DeusModifier> = [];
-    timers: Array<any> = [];
+//Хакеры
+    lockReduction?: number;
+    proxyRegen?: number;
+    maxProxy?: number;
+
+//Техническое
+    validateErrors?: string[];
+    skills?: Array<any>;            //если бует использоваться
+    timestamp: number = 0;          //дата обновление модели
+    conditions: Array<DeusCondition> = [];     //состояния
+    modifiers: Array<DeusModifier> = [];       //модификаторы (импланты\болезни)
+    timers: Array<any> = [];        //таймеры в модели
 }

@@ -16,8 +16,14 @@ class CatalogsLoader {
     }
     load() {
         return __awaiter(this, void 0, void 0, function* () {
+            const ajaxOpts = {
+                auth: {
+                    username: config_1.config.username,
+                    password: config_1.config.password
+                }
+            };
             for (let alias in config_1.config.catalogs) {
-                let db = new PouchDB(`${config_1.config.url}${config_1.config.catalogs[alias]}`);
+                let db = new PouchDB(`${config_1.config.url}${config_1.config.catalogs[alias]}`, ajaxOpts);
                 let docs = yield db.allDocs({ include_docs: true });
                 this.catalogs[alias] = docs.rows;
             }

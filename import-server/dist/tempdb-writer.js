@@ -4,12 +4,21 @@ const moment = require("moment");
 const PouchDB = require("pouchdb");
 const stats_1 = require("./stats");
 const config_1 = require("./config");
+const join_importer_1 = require("./join-importer");
 class TempDbWriter {
     constructor() {
         this.con = null;
+        this.exceptionIds = ["JoinMetadata", "lastImportStats"];
         this.lastStatsDocID = "lastImportStats";
         this.metadataDocID = "JoinMetadata";
-        this.con = new PouchDB(`${config_1.config.url}${config_1.config.tempDbName}`);
+        //PouchDB.plugin(pouchdbAuth);
+        const ajaxOpts = {
+            auth: {
+                username: config_1.config.username,
+                password: config_1.config.password
+            }
+        };
+        this.con = new PouchDB(`${config_1.config.url}${config_1.config.tempDbName}`, ajaxOpts);
     }
     setFieldsNames(c, metadata) {
         c.Fields.forEach((f) => {
@@ -30,7 +39,7 @@ class TempDbWriter {
     saveLastStats(s) {
         let stats = {
             _id: this.lastStatsDocID,
-            importTime: s.importTime.format("x"),
+            importTime: s.importTime.format("YYYY-MM-DDTHH:mm"),
             imported: s.imported,
             created: s.created,
             updated: s.updated
@@ -44,7 +53,7 @@ class TempDbWriter {
     }
     getLastStats() {
         return this.con.get(this.lastStatsDocID).then((s) => {
-            let ret = new stats_1.ImportRunStats(moment(s.importTime, "x"));
+            let ret = new stats_1.ImportRunStats(moment(s.importTime, "YYYY-MM-DDTHH:mm"));
             ret.created = s.created;
             ret.imported = s.imported;
             ret.updated = s.updated;
@@ -59,6 +68,7 @@ class TempDbWriter {
         return this.con.get(this.metadataDocID)
             .then((oldc) => {
             s._rev = oldc._rev;
+            console.log("Metadata saved!");
             return this.con.put(s);
         })
             .catch(() => this.con.put(s));
@@ -68,7 +78,11 @@ class TempDbWriter {
             .catch(() => Promise.resolve(null));
     }
     getCacheCharactersList() {
-        return this.con.allDocs();
+        return this.con.allDocs().then((docs) => {
+            return docs.rows
+                .filter((doc) => !this.exceptionIds.find(e => e == doc.id))
+                .map((doc) => join_importer_1.JoinImporter.createJoinCharacter(doc.id));
+        });
     }
     getCacheCharacter(id) {
         return this.con.get(id);

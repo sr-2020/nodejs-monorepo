@@ -20,7 +20,7 @@ class ImportStats {
         return JSON.stringify(Array.from(this.imports).reverse(), null, 4);
     }
     updateRefreshTime() {
-        this.lastRefreshTime = moment();
+        this.lastRefreshTime = moment.utc();
     }
     addImportStats(s) {
         this.lastRefreshTime = s.importTime;

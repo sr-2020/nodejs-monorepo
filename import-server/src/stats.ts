@@ -26,7 +26,7 @@ export class ImportStats {
     }
 
     public updateRefreshTime(){
-        this.lastRefreshTime = moment();        
+        this.lastRefreshTime = moment.utc();        
     }
 
     public addImportStats(s:ImportRunStats){

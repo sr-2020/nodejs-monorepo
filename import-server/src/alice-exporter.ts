@@ -32,7 +32,6 @@ export class AliceExporter{
     private con:any = null;
     private accCon:any = null;
     
-    
     private chance:Chance.SeededChance;
     public model: DeusModel = new DeusModel();
 
@@ -43,8 +42,16 @@ export class AliceExporter{
                 private catalogs: CatalogsLoader,
                 public isUpdate: boolean = true) {
 
-        this.con = new PouchDB(`${config.url}${config.modelDBName}`);
-        this.accCon = new PouchDB(`${config.url}${config.accountDBName}`);        
+        const ajaxOpts = {
+                auth:{
+                    username: config.username,
+                    password: config.password
+                }
+        };
+
+        this.con = new PouchDB(`${config.url}${config.modelDBName}`, ajaxOpts);
+
+        this.accCon = new PouchDB(`${config.url}${config.accountDBName}`, ajaxOpts);        
 
         this.chance = new chance(character.CharacterId);
 
@@ -54,7 +61,7 @@ export class AliceExporter{
     export(): Promise<any> {
 
         if(!this.model._id){
-            return Promise.reject("AliceExporter.export(): Incorrect model ID or problem in conversion!");
+            return Promise.reject(`AliceExporter.export(): ${this.character._id} Incorrect model ID or problem in conversion!`);
         }
 
         //Create or update Profile 
@@ -71,7 +78,7 @@ export class AliceExporter{
                         })
                         .catch( () => this.con.put(this.model) );
 
-        if(!this.account.login || this.account.password){
+        if(!this.account.login || !this.account.password){
             return Promise.all([profilePromise, Promise.resolve(false)]);;
         }
         
@@ -101,7 +108,15 @@ export class AliceExporter{
             this.account._id =  this.model._id;
 
             //Login (e-mail). Field: 1905
-            this.model.login = this.findStrFieldValue(1905).split("@")[0];
+            //Защита от цифрового логина
+             this.model.login = this.findStrFieldValue(1905).split("@")[0];
+
+            if(this.model.login && this.model.login.match(/^\d+$/i)){
+                console.log(`ERROR: can't convert id=${this.character.CharacterId} login=${this.model.login}`);
+                this.model._id = "";
+                return;
+            }
+           
             this.account.login = this.model.login;
 
             if(this.model.login){
@@ -159,6 +174,11 @@ export class AliceExporter{
 
                 //Защта от хакерства  Field: 1649
                 this.model.hackingProtection = Number.parseInt( this.findStrFieldValue(1649, true) );
+
+                //Поля для хакеров (ставим всем)
+                this.model.lockReduction = 100;
+                this.model.proxyRegen = 100;
+                this.model.maxProxy = 100;
             }
             
             //Блок данных только для профиля андроида или программы

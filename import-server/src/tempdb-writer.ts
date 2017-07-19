@@ -1,22 +1,34 @@
 import { Observable } from 'rxjs/Rx';
 import * as moment from "moment";
 import * as PouchDB from 'pouchdb';
+//import * as pouchdbAuth from 'pouchdb-authentication';
 import * as request from 'request-promise-native';
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
-import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue, JoinGroupInfo, JoinMetadata } from './join-importer'
+import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue,
+         JoinGroupInfo, JoinMetadata, JoinImporter, JoinCharacter } from './join-importer'
 
 
 
 export class TempDbWriter {
 
-   private con:any = null;
+    private con:any = null;
+
+    private exceptionIds = ["JoinMetadata", "lastImportStats"];
 
     constructor() {
-        this.con = new PouchDB(`${config.url}${config.tempDbName}`);
-    }
+        //PouchDB.plugin(pouchdbAuth);
+        const ajaxOpts = {
+                auth:{
+                    username: config.username,
+                    password: config.password
+                }
+        };
 
+        this.con = new PouchDB(`${config.url}${config.tempDbName}`, ajaxOpts);
+    }
+    
     setFieldsNames(c: JoinCharacterDetail, metadata: JoinMetadata): JoinCharacterDetail{
         c.Fields.forEach( (f) => {
             let fmeta = metadata.Fields.find( v => v.ProjectFieldId == f.ProjectFieldId );
@@ -43,7 +55,7 @@ export class TempDbWriter {
 
         let stats:any = {
             _id: this.lastStatsDocID,
-            importTime: s.importTime.format("x"),
+            importTime: s.importTime.format("YYYY-MM-DDTHH:mm"),
             imported: s.imported,
             created: s.created,
             updated: s.updated
@@ -60,7 +72,7 @@ export class TempDbWriter {
 
     getLastStats():Promise<ImportRunStats>{
         return this.con.get(this.lastStatsDocID).then((s:any) => {
-            let ret = new ImportRunStats( moment(s.importTime, "x") );
+            let ret = new ImportRunStats( moment(s.importTime, "YYYY-MM-DDTHH:mm") );
             ret.created = s.created;
             ret.imported = s.imported;
             ret.updated = s.updated;
@@ -79,6 +91,7 @@ export class TempDbWriter {
         return this.con.get(this.metadataDocID)
                         .then( (oldc:JoinMetadata) =>{ 
                             s._rev = oldc._rev;
+                            console.log("Metadata saved!");
                             return this.con.put(s);
                         })
                         .catch( () => this.con.put(s) );
@@ -91,8 +104,12 @@ export class TempDbWriter {
 
     }
 
-    getCacheCharactersList(): Promise<any>{
-        return this.con.allDocs();
+    getCacheCharactersList(): Promise<JoinCharacter[]>{
+        return this.con.allDocs().then( (docs) => {
+            return docs.rows
+            .filter( (doc:any) => !this.exceptionIds.find(e => e == doc.id ) )
+            .map( (doc) => JoinImporter.createJoinCharacter(doc.id) );
+        })
     }
 
     getCacheCharacter(id: string): Promise<JoinCharacterDetail>{
