@@ -9,7 +9,7 @@ import * as config from './config';
 import * as model from './model';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
-import { ModelApiFactory, ViewModelApiFactory } from './model_api';
+import { ModelApiFactory, ViewModelApiFactory, PreprocessApiFactory } from './model_api';
 
 export class Worker {
     private config: config.ConfigInterface
@@ -36,10 +36,18 @@ export class Worker {
         return this;
     }
 
-    process(context: EngineContext, events: Event[]): EngineResult {
-        Logger.info('engine', 'processing', events);
+    async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
+        Logger.info('engine', 'processing %j', events);
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
+
+        this.runPreprocess(baseCtx, events);
+
+        if (baseCtx.pendingAquire.length) {
+            await this.waitAquire(baseCtx);
+            Logger.debug('engine', 'aquired: %j', baseCtx.aquired);
+        }
+
         let workingCtx = baseCtx.clone();
 
         //
@@ -71,6 +79,7 @@ export class Worker {
             baseModel: baseCtxValue,
             workingModel: workingCtxValue,
             viewModels,
+            aquired: baseCtx.aquired,
             events: baseCtx.outboundEvents
         };
     }
@@ -86,6 +95,7 @@ export class Worker {
                 switch (message.type) {
                     case 'configure':
                         return this.onConfigure(message);
+
                     case 'events':
                         return this.onEvents(message);
                 }
@@ -99,10 +109,10 @@ export class Worker {
         }
     }
 
-    private onEvents(message: EngineMessageEvents) {
+    private async onEvents(message: EngineMessageEvents) {
         let { context, events } = message;
 
-        let result = this.process(context, events);
+        let result = await this.process(context, events);
 
         if (process && process.send) {
             process.send({ type: 'result', ...result });
@@ -162,6 +172,44 @@ export class Worker {
             return vm;
         }, {});
     }
+
+    private runPreprocess(baseCtx: Context, events: Event[]) {
+        if (!this.model.preprocessCallbacks.length) return;
+
+        const ctx = baseCtx.clone();
+        const api = PreprocessApiFactory(ctx);
+
+        for (let f of this.model.preprocessCallbacks) {
+            f(api, events);
+        }
+
+        baseCtx.events = ctx.events;
+    }
+
+    private async waitAquire(baseCtx: Context) {
+        Logger.debug('engine', 'waitAquire %j', baseCtx.pendingAquire);
+
+        return new Promise((resolve, reject) => {
+            if (process && process.send) {
+                process.once('message', (msg: EngineMessage) => {
+                    if (msg.type == 'aquired') {
+                        baseCtx.aquired = msg.data;
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                })
+
+                process.send({
+                    type: 'aquire',
+                    keys: baseCtx.pendingAquire
+                })
+            } else {
+                reject();
+            }
+        });
+
+    }
 }
 
 function loadModels(dir: string): model.Model {
@@ -170,10 +218,16 @@ function loadModels(dir: string): model.Model {
         src = clone(src);
 
         if (!m.viewModelCallbacks) m.viewModelCallbacks = {};
+        if (!m.preprocessCallbacks) m.preprocessCallbacks = [];
 
         if (src._view) {
-            m.viewModelCallbacks.viewModels = src._view;
+            m.viewModelCallbacks.default = src._view;
             delete src._view;
+        }
+
+        if (src._preprocess) {
+            m.preprocessCallbacks.push(src._preprocess);
+            delete src._preprocess;
         }
 
         for (let fname in src) {

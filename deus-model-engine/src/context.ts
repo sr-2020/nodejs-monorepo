@@ -73,13 +73,26 @@ export class OutboundEvents {
     }
 }
 
+export type AquiredObjects = {
+    [key: string]: any
+}
+
 export class Context {
     private _ctx: Character;
     private _events: Event[];
     private _dictionaries: Dictionaries = {};
     private _outboundEvents: OutboundEvents;
+    private _pendingAquire: string[];
+    private _aquired: AquiredObjects;
 
-    constructor(contextSrc: any, events: Event[], dictionaries?: any, outboundEvents?: OutboundEvents) {
+    constructor(
+        contextSrc: any,
+        events: Event[],
+        dictionaries?: any,
+        outboundEvents?: OutboundEvents,
+        pendingAquire?: string[],
+        aquired?: AquiredObjects
+    ) {
         this._ctx = cloneDeep(contextSrc);
 
         this._events = cloneDeep(events);
@@ -90,6 +103,8 @@ export class Context {
         }
 
         this._outboundEvents = outboundEvents || new OutboundEvents();
+        this._pendingAquire = pendingAquire || [];
+        this._aquired = aquired || {};
     }
 
     get events() {
@@ -138,8 +153,20 @@ export class Context {
         return this._outboundEvents.valueOf();
     }
 
+    get aquired(): any {
+        return this._aquired;
+    }
+
+    set aquired(value: any) {
+        this._aquired = value;
+    }
+
+    get pendingAquire(): string[] {
+        return this._pendingAquire;
+    }
+
     clone(): Context {
-        const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents);
+        const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
         clone.timers = this.timers;
         return clone;
     }

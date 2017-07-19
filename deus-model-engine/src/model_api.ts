@@ -37,11 +37,17 @@ export interface WriteModelApiInterface {
     sendEvent(characterId: string | null, event: string, data: any): this
 }
 
+export interface PreprocessApiInterface extends ReadModelApiInterface, LogApiInterface {
+    aquire(key: string): this
+}
+
 export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface {
     baseModel: any
 }
 
-export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface { }
+export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface {
+    aquired(key: string): any
+}
 
 class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
     constructor(protected contextGetter: () => Context) { }
@@ -137,6 +143,10 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
         return m;
     }
 
+    aquired(key: string): any {
+        return this.contextGetter().aquired[key];
+    }
+
     removeModifier(id: string) {
         _.remove(this.contextGetter().modifiers, (m) => m.mID == id);
         return this;
@@ -189,10 +199,21 @@ class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
     get baseModel() { return this.baseContextGetter().ctx }
 }
 
+class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {
+    aquire(key: string) {
+        this.contextGetter().pendingAquire.push(key);
+        return this;
+    }
+}
+
 export function ModelApiFactory(context: Context): ModelApiInterface {
     return new ModelApi(() => context);
 }
 
 export function ViewModelApiFactory(context: Context, baseContext: Context): ViewModelApiInterface {
     return new ViewModelApi(() => context, () => baseContext);
+}
+
+export function PreprocessApiFactory(context: Context): PreprocessApiInterface {
+    return new PreprocessApi(() => context);
 }
