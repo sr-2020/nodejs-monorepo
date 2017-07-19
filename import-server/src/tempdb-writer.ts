@@ -3,6 +3,8 @@ import * as moment from "moment";
 import * as PouchDB from 'pouchdb';
 //import * as pouchdbAuth from 'pouchdb-authentication';
 import * as request from 'request-promise-native';
+import * as winston from 'winston';
+
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';

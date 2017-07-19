@@ -44,7 +44,8 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "rxjs": "^5.4.2",
-    "typescript": "^2.4.1"
+    "typescript": "^2.4.1",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.4",

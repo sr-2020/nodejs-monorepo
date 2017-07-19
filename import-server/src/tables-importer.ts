@@ -4,6 +4,8 @@ import * as moment from "moment";
 import * as PouchDB from 'pouchdb';
 import * as request from 'request-promise-native';
 import * as google from 'googleapis';
+import * as winston from 'winston';
+
 
 let sheets = google.sheets('v4');
 
