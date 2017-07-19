@@ -1,3 +1,4 @@
+import { get, set, flatten } from 'lodash';
 import { Inject } from './di';
 import { DBConnectorInterface, Document, ID } from './db/interface';
 import { Config } from './config';
@@ -6,7 +7,7 @@ const DB_SEPARATOR = '/';
 
 export interface ObjectStorageInterface {
     newId(): number
-    aquire(lockId: number, keys: string[]): Promise<{ [key: string]: Document }>
+    aquire(lockId: number, keys: [string, string][]): Promise<{ [key: string]: Document }>
     store(lockId: number, aquired: any): Promise<void>
     release(lockId: number): void
 }
@@ -14,9 +15,11 @@ export interface ObjectStorageInterface {
 @Inject
 export class ObjectStorage implements ObjectStorageInterface {
     private storage: {
-        [key: string]: {
-            lockId: number,
-            obj: Document | null | undefined
+        [db: string]: {
+            [id: string]: {
+                lockId: number,
+                obj: Document | null | undefined
+            }
         }
     } = {};
 
@@ -26,16 +29,15 @@ export class ObjectStorage implements ObjectStorageInterface {
 
     newId() { return this.nextId++; }
 
-    async aquireOne(lockId: number, key: string): Promise<Document | null | undefined> {
-        if (this.storage[key]) {
-            if (this.storage[key].lockId == lockId) {
-                return this.storage[key].obj;
+    async aquireOne(lockId: number, alias: string, id: string): Promise<Document | null | undefined> {
+        let locked = get<any>(this.storage, [alias, id]);
+        if (locked) {
+            if (locked.lockId == lockId) {
+                return locked;
             } else {
                 return;
             }
         }
-
-        let [alias, id] = key.split(DB_SEPARATOR, 2);
 
         let dbName = this.config.objects[alias];
 
@@ -46,18 +48,18 @@ export class ObjectStorage implements ObjectStorageInterface {
 
         let obj = await db.getOrNull(id);
 
-        this.storage[key] = { lockId, obj };
+        set(this.storage, [alias, id], { lockId, obj });
 
         return obj;
     }
 
-    async aquire(lockId: number, keys: string[]) {
-        let result: { [key: string]: Document } = {};
+    async aquire(lockId: number, keys: [string, string][]) {
+        let result: { [db: string]: { [id: string]: Document } } = {};
 
         let pending = keys.map(async (key) => {
-            let obj = await this.aquireOne(lockId, key);
+            let obj = await this.aquireOne(lockId, key[0], key[1]);
             if (obj) {
-                result[key] = obj;
+                set(result, key, obj);
             }
         });
 
@@ -66,12 +68,11 @@ export class ObjectStorage implements ObjectStorageInterface {
         return result;
     }
 
-    storeOne(lockId: number, key: string, obj: any): Promise<void> {
-        if (!this.storage[key] || !(this.storage[key].lockId == lockId)) {
+    storeOne(lockId: number, alias: string, id: string, obj: any): Promise<void> {
+        let locked = get<any>(this.storage, [alias, id]);
+        if (!locked || !(locked.lockId == lockId)) {
             return Promise.reject(null);
         }
-
-        let [alias, id] = key.split(DB_SEPARATOR, 2);
 
         let dbName = this.config.objects[alias];
 
@@ -84,16 +85,20 @@ export class ObjectStorage implements ObjectStorageInterface {
     }
 
     store(lockId: number, aquired: any) {
-        let pending = Object.keys(aquired).map((key) => {
-            return this.storeOne(lockId, key, aquired[key]);
+        let pending = Object.keys(aquired).map((db) => {
+            return Object.keys(aquired[db]).map((id) => {
+                return this.storeOne(lockId, db, id, aquired[db][id]);
+            });
         });
 
-        return Promise.all(pending).then(() => { });
+        return Promise.all(flatten(pending)).then(() => { });
     }
 
     release(lockId: number) {
-        for (let key in this.storage) {
-            if (this.storage[key].lockId == lockId) delete this.storage[key];
+        for (let db in this.storage) {
+            for (let id in this.storage[db]) {
+                if (this.storage[db][id].lockId == lockId) delete this.storage[db][id];
+            }
         }
     }
 }
@@ -105,7 +110,7 @@ export class BoundObjectStorage {
         this.lockId = lockId || objectStorage.newId();
     }
 
-    aquire(keys: string[]) {
+    aquire(keys: [string, string][]) {
         return this.objectStorage.aquire(this.lockId, keys);
     }
 
