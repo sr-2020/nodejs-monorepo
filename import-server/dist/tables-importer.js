@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Rx_1 = require("rxjs/Rx");
 const google = require("googleapis");
+const winston = require("winston");
 let sheets = google.sheets('v4');
 class TablesImporter {
     constructor() { }
@@ -21,7 +22,7 @@ class TablesImporter {
     import() {
         return Rx_1.Observable.fromPromise(this.authorize())
             .flatMap((authClient) => {
-            console.log("Authorization success!");
+            winston.info("Authorization success!");
             return this.importImpl(authClient);
         });
     }
@@ -40,8 +41,8 @@ class TablesImporter {
 exports.TablesImporter = TablesImporter;
 let importer = new TablesImporter();
 importer.import().subscribe((result) => {
-    console.log("Import finished: " + JSON.stringify(result, null, 4));
+    winston.info("Import finished: " + JSON.stringify(result, null, 4));
 }, (err) => {
-    console.log('Authentication failed because of ', err);
+    winston.info('Authentication failed because of ', err);
 });
 //# sourceMappingURL=tables-importer.js.map

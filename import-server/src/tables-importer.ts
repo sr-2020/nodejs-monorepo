@@ -33,7 +33,7 @@ export class TablesImporter{
     import(): Observable<any> {
         return Observable.fromPromise(this.authorize())
                 .flatMap((authClient) => {
-                    console.log("Authorization success!");
+                    winston.info("Authorization success!");
                     return this.importImpl(authClient)
                 });
     }
@@ -57,9 +57,9 @@ export class TablesImporter{
 let importer = new TablesImporter();
 
 importer.import().subscribe((result) => { 
-            console.log("Import finished: " + JSON.stringify(result, null, 4));
+            winston.info("Import finished: " + JSON.stringify(result, null, 4));
         },
         (err) => {
-            console.log('Authentication failed because of ', err);
+            winston.info('Authentication failed because of ', err);
         });
 

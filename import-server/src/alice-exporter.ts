@@ -29,6 +29,13 @@ interface IAliceAccount {
     login: string;
 }
 
+export interface INameParts{
+    firstName: string,
+    nicName:  string,
+    lastName: string,
+    fullName: string
+};
+
 
 export class AliceExporter{
     private con:any = null;
@@ -224,10 +231,11 @@ export class AliceExporter{
         }
     }
 
-    //Возвращается DisplayString поля, или ""
-    //Если convert==true, то тогда возращается выборка по Value из таблицы подставновки
-    findStrFieldValue(fieldID: number, convert: boolean = false): string {
-        const field = this.character.Fields.find( fi => fi.ProjectFieldId==fieldID);
+    public static joinStrFieldValue(character: JoinCharacterDetail, 
+                                    fieldID: number,
+                                    convert: boolean = false): string {
+
+        const field = character.Fields.find( fi => fi.ProjectFieldId==fieldID);
 
         if(!field) return "";
 
@@ -237,10 +245,10 @@ export class AliceExporter{
             return joinValues.hasOwnProperty(field.Value)? joinValues[field.Value] : "";
         }  
     }
+    public static joinNumFieldValue(character: JoinCharacterDetail, 
+                                    fieldID: number ): number {
 
-    //Возвращается Value, которое должно быть цифровым или Number.NaN
-    findNumFieldValue(fieldID: number): number {
-        const field = this.character.Fields.find( fi => fi.ProjectFieldId==fieldID);
+        const field = character.Fields.find( fi => fi.ProjectFieldId==fieldID);
 
         if(field){
             let value:number = Number.parseInt(field.Value);
@@ -249,7 +257,18 @@ export class AliceExporter{
             }
         }
 
-        return Number.NaN;
+        return Number.NaN; 
+    }
+
+    //Возвращается DisplayString поля, или ""
+    //Если convert==true, то тогда возращается выборка по Value из таблицы подставновки
+    findStrFieldValue(fieldID: number, convert: boolean = false): string {
+        return AliceExporter.joinStrFieldValue(this.character, fieldID, convert);
+    }
+
+    //Возвращается Value, которое должно быть цифровым или Number.NaN
+    findNumFieldValue(fieldID: number): number {
+        return AliceExporter.joinNumFieldValue(this.character, fieldID);
     }
 
     //Возвращается Value, которое должно быть списком цифр, разделенных запятыми
@@ -347,44 +366,60 @@ export class AliceExporter{
 
     }
 
-    //Установить имя песрнажа. Field: 496
     setFullName(){
         const name = this.findStrFieldValue(496);
+        let nameParts:INameParts = AliceExporter.parseFullName(name);
+
+        this.model.firstName = nameParts.firstName;
+        this.model.nicName = nameParts.nicName;
+        this.model.lastName = nameParts.lastName;
+    }
+
+    //Установить имя песрнажа. Field: 496
+    public static parseFullName(name:string): INameParts{
+        let ret:INameParts = {
+            firstName: "",
+            nicName:  "",
+            lastName: "",
+            fullName: name
+        };
 
         let parts = name.match(/^(.*?)\s\"(.*?)\"\s(.*)$/i);
 
         //Формат имени Имя "Ник" Фамилия
         if(parts){
-            this.model.firstName = parts[1];
-            this.model.nicName = parts[2];
-            this.model.lastName = parts[3];
-            return;
+            ret.firstName = parts[1];
+            ret.nicName = parts[2];
+            ret.lastName = parts[3];
+            return ret;
         }
 
         //Формат имени Имя "Ник"
         parts = name.match(/^(.*?)\s\"(.*?)\"\s*$/i);
 
         if(parts){
-            this.model.firstName = parts[1];
-            this.model.nicName = parts[2];
-            this.model.lastName = "";
-            return;
+            ret.firstName = parts[1];
+            ret.nicName = parts[2];
+            ret.lastName = "";
+            return ret;
         }
 
         //Формат имени Имя Фамилия
         parts = name.match(/^(.*?)\s(.*)$/i);
 
         if(parts){
-            this.model.firstName = parts[1];
-            this.model.lastName = parts[2];
-            this.model.nicName = "";
-            return;
+            ret.firstName = parts[1];
+            ret.lastName = parts[2];
+            ret.nicName = "";
+            return ret;
         }
         
         //Формат имени - только имя
-        this.model.firstName = name;
-        this.model.nicName = "";
-        this.model.lastName = "";
+        ret.firstName = name;
+        ret.nicName = "";
+        ret.lastName = "";
+
+        return ret;
     }
 
     //Воспоминания/сохраненные данные. Список полей передается

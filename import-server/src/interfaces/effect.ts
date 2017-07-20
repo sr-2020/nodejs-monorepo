@@ -5,3 +5,4 @@ export interface DeusEffect {
     handler: string,
     enabled: boolean
 }
+

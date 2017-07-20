@@ -12,15 +12,18 @@ const tempdb_writer_1 = require("./tempdb-writer");
 const alice_exporter_1 = require("./alice-exporter");
 const catalogs_loader_1 = require("./catalogs-loader");
 const model_refresher_1 = require("./model-refresher");
+const mail_provision_1 = require("./mail-provision");
 class ModelImportData {
     constructor() {
         this.importer = new join_importer_1.JoinImporter();
         this.cacheWriter = new tempdb_writer_1.TempDbWriter();
         this.catalogsLoader = new catalogs_loader_1.CatalogsLoader();
         this.modelRefresher = new model_refresher_1.ModelRefresher();
+        this.mailProvision = new mail_provision_1.MailProvision();
         this.currentStats = new stats_1.ImportRunStats();
         this.lastRefreshTime = moment([1900, 0, 1]);
         this.charList = [];
+        this.charDetails = [];
         this.importCouter = 0;
     }
 }
@@ -33,6 +36,7 @@ const cliDefs = [
     { name: 'since', type: String },
     { name: 'list', type: Boolean },
     { name: 'refresh', type: Boolean },
+    { name: 'mail', type: Boolean },
 ];
 const params = commandLineArgs(cliDefs);
 //start logging
@@ -42,10 +46,10 @@ let isImportRunning = false;
 //Statisticts
 let stats = new stats_1.ImportStats();
 winston.info(JSON.stringify(params));
-if (params.export || params.import || params.id || params.test || params.list || params.refresh) {
+if (params.export || params.import || params.id || params.test || params.list || params.refresh || params.mail) {
     let _id = params.id ? params.id : 0;
     let since = params.since ? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
-    importAndCreate(_id, (params.import == true), (params.export == true), (params.list == true), false, (params.refresh == true), since)
+    importAndCreate(_id, (params.import == true), (params.export == true), (params.list == true), false, (params.refresh == true), (params.mail == true), since)
         .subscribe((data) => { }, (error) => {
         process.exit(1);
     }, () => {
@@ -72,8 +76,7 @@ else {
 /**
  * Предвартельные операции для импорта (токен, заливка метаданных, каталоги и т.д)
  */
-function prepareForImport() {
-    let data = new ModelImportData();
+function prepareForImport(data) {
     return Rx_1.Observable.fromPromise(data.cacheWriter.getLastStats())
         .map((loadedStats) => {
         data.lastRefreshTime = loadedStats.importTime;
@@ -143,6 +146,17 @@ function sendModelRefresh(char, data) {
     });
 }
 /**
+ * Создание e-mail адресов и учеток для всех персонажей
+ */
+function provisionMailAddreses(data) {
+    //winston.info(`provisionMailAddreses: ` + data.charDetails.map(c=>c._id).join(','));
+    return Rx_1.Observable.fromPromise(data.mailProvision.createEmails(data.charDetails))
+        .map((c) => {
+        winston.info(`Reques for mail creation was sent for: ${data.charDetails.map(c => c._id).join(',')}, result: ${JSON.stringify(c)}`);
+        return data.charDetails;
+    });
+}
+/**
  * Получение потока данных персонажей (выполняется с уже подготовленной ModelImportData)
  */
 function loadCharactersFromJoin(data) {
@@ -186,16 +200,19 @@ function loadCharactersFromCache(data) {
  *  Функция для импорта данных из Join, записи в кеш CouchDB, создания и экспорта моделей
  *  (т.е. вся цепочка)
  */
-function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList = false, updateStats = true, refreshModel = true, updatedSince) {
+function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList = false, updateStats = true, refreshModel = true, mailProvision = true, updatedSince) {
     let sinceText = updatedSince ? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
-    winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, updateSince=${sinceText}`);
-    let workData;
+    winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
+        `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, mailProvision=${mailProvision}, ` +
+        `updateSince=${sinceText}`);
+    let workData = new ModelImportData();
     if (isImportRunning) {
         winston.info("Import session in progress.. return and wait to next try");
         return Rx_1.Observable.from([]);
     }
     isImportRunning = true;
-    return prepareForImport()
+    let returnSubject = new Rx_1.BehaviorSubject("start");
+    prepareForImport(workData)
         .map((data) => {
         if (updatedSince) {
             data.lastRefreshTime = updatedSince;
@@ -216,7 +233,6 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
         }
     })
         .map((data) => {
-        workData = data;
         winston.info(`Received character list: ${data.charList.length} characters`);
         if (onlyList) {
             workData.charList = [];
@@ -241,6 +257,7 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
             return Rx_1.Observable.from([c]);
         }
     })
+        .do((c) => workData.charDetails.push(c))
         .flatMap((c) => {
         if (exportModel) {
             return exportCharacterModel(c, workData);
@@ -257,18 +274,32 @@ function importAndCreate(id = 0, importJoin = true, exportModel = true, onlyList
             return Rx_1.Observable.from([c]);
         }
     })
-        .do(() => {
+        .subscribe(() => {
         workData.importCouter++;
     }, (error) => {
         winston.info("Error in pipe: " + JSON.stringify(error));
         isImportRunning = false;
     }, () => {
+        //Отправить общий запрос на создание Почтовых адресов
         isImportRunning = false;
         if (updateStats) {
             workData.cacheWriter.saveLastStats(new stats_1.ImportRunStats(moment.utc()));
         }
         winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
+        if (mailProvision) {
+            provisionMailAddreses(workData).subscribe(() => { }, (err) => {
+                winston.error(`Error in e-mail creation request: ${err}`);
+                returnSubject.complete();
+            }, () => {
+                winston.info(`E-mail creation request sent!`);
+                returnSubject.complete();
+            });
+        }
+        else {
+            returnSubject.complete();
+        }
     });
+    return returnSubject;
 }
 function configureLogger() {
     winston.add(winston.transports.File, { filename: config_1.config.logFileName });

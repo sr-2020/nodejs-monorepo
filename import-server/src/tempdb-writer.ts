@@ -93,7 +93,7 @@ export class TempDbWriter {
         return this.con.get(this.metadataDocID)
                         .then( (oldc:JoinMetadata) =>{ 
                             s._rev = oldc._rev;
-                            console.log("Metadata saved!");
+                            winston.info("Metadata saved!");
                             return this.con.put(s);
                         })
                         .catch( () => this.con.put(s) );

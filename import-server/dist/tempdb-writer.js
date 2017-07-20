@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const moment = require("moment");
 const PouchDB = require("pouchdb");
+const winston = require("winston");
 const stats_1 = require("./stats");
 const config_1 = require("./config");
 const join_importer_1 = require("./join-importer");
@@ -68,7 +69,7 @@ class TempDbWriter {
         return this.con.get(this.metadataDocID)
             .then((oldc) => {
             s._rev = oldc._rev;
-            console.log("Metadata saved!");
+            winston.info("Metadata saved!");
             return this.con.put(s);
         })
             .catch(() => this.con.put(s));

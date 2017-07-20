@@ -11,12 +11,14 @@ import { TempDbWriter} from './tempdb-writer';
 import { AliceExporter } from './alice-exporter';
 import { CatalogsLoader } from './catalogs-loader';
 import { ModelRefresher } from './model-refresher';
+import { MailProvision } from './mail-provision';
 
 class ModelImportData{
     importer:JoinImporter = new JoinImporter();
     cacheWriter: TempDbWriter = new TempDbWriter();
     catalogsLoader: CatalogsLoader = new CatalogsLoader();
-    modelRefresher:ModelRefresher = new ModelRefresher();
+    modelRefresher: ModelRefresher = new ModelRefresher();
+    mailProvision: MailProvision = new MailProvision(); 
 
     currentStats = new ImportRunStats();
 
@@ -24,6 +26,7 @@ class ModelImportData{
 
     metadata:JoinMetadata;
     charList:JoinCharacter[] = [];
+    charDetails:JoinCharacterDetail[] = [];
 
     importCouter: number = 0;
 
@@ -39,6 +42,7 @@ const cliDefs = [
         { name: 'since', type: String },
         { name: 'list', type: Boolean },
         { name: 'refresh', type: Boolean },
+        { name: 'mail', type: Boolean },        
 ];
 const params = commandLineArgs(cliDefs);
 
@@ -53,13 +57,13 @@ let stats = new ImportStats();
 
 winston.info(JSON.stringify(params));
 
-if(params.export || params.import || params.id || params.test || params.list || params.refresh){
+if(params.export || params.import || params.id || params.test || params.list || params.refresh || params.mail){
     let _id = params.id? params.id : 0;
     let since = params.since? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
     
     importAndCreate(_id, (params.import == true), (params.export==true), (params.list==true), 
-                            false, (params.refresh==true), since)
-    .subscribe( (data:JoinCharacterDetail) => {},
+                            false, (params.refresh==true), (params.mail==true), since)
+    .subscribe( (data:string) => {},
                 (error:any) => {
                     process.exit(1);
                 },
@@ -80,7 +84,7 @@ if(params.export || params.import || params.id || params.test || params.list || 
 
     Observable.timer(0, config.importInterval).
         flatMap( () => importAndCreate() )
-        .subscribe( (data:JoinCharacterDetail) => {},
+        .subscribe( (data:string) => {},
             (error:any) => {
                 process.exit(1);
             },
@@ -94,8 +98,7 @@ if(params.export || params.import || params.id || params.test || params.list || 
 /**
  * Предвартельные операции для импорта (токен, заливка метаданных, каталоги и т.д)
  */
-function prepareForImport():Observable<ModelImportData> {
-    let data = new ModelImportData();
+function prepareForImport(data:ModelImportData):Observable<ModelImportData> {
 
     return Observable.fromPromise(data.cacheWriter.getLastStats())
             .map( (loadedStats) => {
@@ -177,6 +180,19 @@ function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Obs
             });
 }
 
+        
+/**
+ * Создание e-mail адресов и учеток для всех персонажей
+ */
+function provisionMailAddreses(data: ModelImportData): Observable<JoinCharacterDetail[]> {
+    //winston.info(`provisionMailAddreses: ` + data.charDetails.map(c=>c._id).join(','));
+    return Observable.fromPromise(data.mailProvision.createEmails(data.charDetails))
+            .map( (c:any) => { 
+                    winston.info( `Reques for mail creation was sent for: ${data.charDetails.map(c=>c._id).join(',')}, result: ${JSON.stringify(c)}`);
+                    return data.charDetails;
+            });
+}
+
 
 /**
  * Получение потока данных персонажей (выполняется с уже подготовленной ModelImportData)
@@ -238,13 +254,17 @@ function importAndCreate(   id:number = 0,
                             onlyList:boolean = false, 
                             updateStats:boolean = true,
                             refreshModel:boolean = true,
-                            updatedSince?: moment.Moment ): Observable<JoinCharacterDetail> {
+                            mailProvision:boolean = true,
+                            updatedSince?: moment.Moment ): Observable<string> {
 
     
     let sinceText = updatedSince? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
-    winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, updateSince=${sinceText}` )
 
-    let workData: ModelImportData;
+    winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
+                  `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, mailProvision=${mailProvision}, ` + 
+                  `updateSince=${sinceText}` )
+
+    let workData = new ModelImportData();
 
     if(isImportRunning) {
         winston.info("Import session in progress.. return and wait to next try");
@@ -253,7 +273,9 @@ function importAndCreate(   id:number = 0,
 
     isImportRunning = true;
 
-    return prepareForImport()
+    let returnSubject = new BehaviorSubject("start"); 
+
+    prepareForImport(workData)
     //Установить дату с которой загружать персонажей (если задано)
         .map( (data) => { 
             if(updatedSince){ data.lastRefreshTime = updatedSince; }
@@ -273,7 +295,6 @@ function importAndCreate(   id:number = 0,
         })
     //Запись в консоль
         .map( (data) => {
-                workData = data;
                 winston.info(`Received character list: ${data.charList.length} characters`);
                 if(onlyList){
                     workData.charList = [];
@@ -298,6 +319,8 @@ function importAndCreate(   id:number = 0,
                         return Observable.from([c]);
                     }
             })
+    //Сохранить данные по персонажу в общий список
+        .do( (c:JoinCharacterDetail) => workData.charDetails.push(c) )
     //Экспортировать модель в БД (если надо)
         .flatMap( (c: JoinCharacterDetail) => {
                     if(exportModel) {
@@ -306,6 +329,7 @@ function importAndCreate(   id:number = 0,
                         return Observable.from([c]);
                     } 
         })
+    //Послать модели Refresh соообщение для создания Work и View-моделей
         .flatMap( (c: JoinCharacterDetail) => { 
                 if(refreshModel) {
                     return sendModelRefresh(c, workData);
@@ -313,7 +337,7 @@ function importAndCreate(   id:number = 0,
                     return Observable.from([c]);
                 }
         })
-        .do( ()=>{
+        .subscribe( ()=>{
                 workData.importCouter++;
              },
              (error)=>{
@@ -321,13 +345,32 @@ function importAndCreate(   id:number = 0,
                 isImportRunning = false;
             },
             () => {
+                
+                //Отправить общий запрос на создание Почтовых адресов
                 isImportRunning = false;
                 if(updateStats){
                     workData.cacheWriter.saveLastStats( new ImportRunStats(moment.utc()) );
                 }
                 winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
+                
+                if(mailProvision){
+                    provisionMailAddreses(workData).subscribe( 
+                        ()=> {}, 
+                        (err) => {
+                            winston.error(`Error in e-mail creation request: ${err}`);  
+                            returnSubject.complete();
+                        },
+                        () => {              
+                            winston.info(`E-mail creation request sent!`);  
+                            returnSubject.complete();
+                        })
+                }else{
+                     returnSubject.complete();
+                }
             }
         )
+
+    return returnSubject;
 }
 
 function configureLogger(){

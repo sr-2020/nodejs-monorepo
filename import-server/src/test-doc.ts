@@ -12,8 +12,8 @@ import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFi
 let con = new PouchDB(`${config.url}${config.tempDbName}`);
 
 con.get("10244").then( (doc) => {
-     console.log(JSON.stringify(doc));
+     winston.info(JSON.stringify(doc));
 })
 .catch( (e) => {
-    console.log("error: " + JSON.stringify(e));
+    winston.info("error: " + JSON.stringify(e));
 });

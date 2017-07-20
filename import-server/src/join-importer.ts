@@ -87,7 +87,7 @@ export class JoinImporter {
         }
 
         return request(reqOpts).then( (result:any) => {
-            console.log(`Received access token!`);
+            winston.info(`Received access token!`);
             this.access_token = result.access_token;
             return true;
         });

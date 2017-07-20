@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request-promise-native");
+const winston = require("winston");
 const config_1 = require("./config");
 class JoinImporter {
     constructor() {
@@ -20,7 +21,7 @@ class JoinImporter {
             json: true
         };
         return request(reqOpts).then((result) => {
-            console.log(`Received access token!`);
+            winston.info(`Received access token!`);
             this.access_token = result.access_token;
             return true;
         });

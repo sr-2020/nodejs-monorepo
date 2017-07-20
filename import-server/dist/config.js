@@ -21,6 +21,7 @@ exports.config = {
     importBurstSize: 10,
     requestTimeout: 120000,
     logFileName: "import-server.log",
+    mailServerAPIUrl: "https://alice.digital:8100/mailbox",
     catalogs: {
         effects: "dict-effects",
         illnesses: "dict-illnesses",
