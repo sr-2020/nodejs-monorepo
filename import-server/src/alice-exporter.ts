@@ -122,8 +122,9 @@ export class AliceExporter{
 
             if( !this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,16}$/i) || this.model.login.match(/^\d+$/i) ) {
                 winston.info(`ERROR: can't convert id=${this.character.CharacterId} incorrect login=${this.model.login}`);
-                this.model._id = "";
-                return;
+                //this.model._id = "";
+                //return;
+                this.model.login = "";
             }
            
             this.account.login = this.model.login;
