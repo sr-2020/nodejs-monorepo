@@ -41,7 +41,12 @@ export class Worker {
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
 
-        this.runPreprocess(baseCtx, events);
+        try {
+            this.runPreprocess(baseCtx, events);
+        } catch (e) {
+            Logger.error('engine', 'Exception caught when running preproces: %s', event, e.toString());
+            return { status: 'error', error: e };
+        }
 
         if (baseCtx.pendingAquire.length) {
             await this.waitAquire(baseCtx);
@@ -65,14 +70,27 @@ export class Worker {
                 return { status: 'error', error: e };
             }
 
-            workingCtx = this.runModifiers(baseCtx);
+            try {
+                workingCtx = this.runModifiers(baseCtx);
+            } catch (e) {
+                Logger.error('engine', 'Exception caught when applying modifiers: %s', e.toString());
+                return { status: 'error', error: e };
+            }
+
             baseCtx.timers = workingCtx.timers;
             baseCtx.events = workingCtx.events;
         }
 
         let baseCtxValue = baseCtx.valueOf()
         let workingCtxValue = workingCtx.valueOf()
-        let viewModels = this.runViewModels(workingCtx, baseCtx);
+        let viewModels;
+
+        try {
+            viewModels = this.runViewModels(workingCtx, baseCtx);
+        } catch (e) {
+            Logger.error('engine', 'Exception caught when running view models: %s', e.toString());
+            return { status: 'error', error: e };
+        }
 
         return {
             status: 'ok',
