@@ -245,7 +245,7 @@ function getChangesPage(model) {
         menuTitle: "Изменения",
         body: {
             title: "Изменения",
-            items: model.changes.reverse().map(getChangesPageItem),
+            items: model.changes ? model.changes.reverse().map(getChangesPageItem) : [],
         },
     };
 }
@@ -268,7 +268,7 @@ function getMessagesPage(model) {
         menuTitle: "Сообщения",
         body: {
             title: "Мастерские сообщения",
-            items: model.messages.reverse().map(getMessagesPageItem),
+            items: model.changes ? model.messages.reverse().map(getMessagesPageItem) : [],
         },
     };
 }
