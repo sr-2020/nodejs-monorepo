@@ -7,6 +7,8 @@ class DeusModel {
         this.conditions = []; //состояния
         this.modifiers = []; //модификаторы (импланты\болезни)
         this.timers = []; //таймеры в модели
+        this.changes = []; //Изменения в модели
+        this.messages = []; //Сообщения игроку
     }
 }
 exports.DeusModel = DeusModel;

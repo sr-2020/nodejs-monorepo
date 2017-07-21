@@ -147,6 +147,7 @@ export class AliceExporter{
             //Локация  Field: 501
             this.model.sweethome = this.findStrFieldValue(501);
 
+
             //Блок данных возможных только для типа профиля "Human"
             if(this.model.profileType=="human"){    
                 //Пол персонажа Field: 696
@@ -189,6 +190,9 @@ export class AliceExporter{
                 this.model.lockReduction = 100;
                 this.model.proxyRegen = 100;
                 this.model.maxProxy = 100;
+
+                //Максимальное время в VR (секунды)
+                this.model.maxSecondsInVr = 1200;
             }
             
             //Блок данных только для профиля андроида или программы
@@ -211,6 +215,9 @@ export class AliceExporter{
 
                 //Сохраненные данные. Field: 1845,1846,1847
                 this.setMemories([1848,1849,1850]);
+
+                //Максимальное время в VR (секунды)
+                this.model.maxSecondsInVr = 82800;
             }
         
             //Импланты на начало игры. Field: 1215

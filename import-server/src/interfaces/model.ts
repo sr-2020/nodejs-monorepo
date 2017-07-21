@@ -54,7 +54,7 @@ export class DeusModel{
     sweethome?: string;  //Родная локация
     hp: number;         //количество хитов
     maxHp: number;      //макстмальное количество хитов персонажа
-    maxSecondsInVr: number = 1200;  //Максимальное время в VR
+    maxSecondsInVr: number;  //Максимальное время в VR
 
 //Только для типа профиля "human"
     sex?: string;            //пол
