@@ -40,7 +40,7 @@ function getStartPage(model) {
                 },
                 {
                     text: "Возраст",
-                    value: model.age.toString(),
+                    value: model.age + '',
                 },
                 {
                     text: "Корпорация",
