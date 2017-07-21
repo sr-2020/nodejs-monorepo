@@ -9,8 +9,8 @@ export class EventStorage {
     async range(characterId: string, since: number, till: number): Promise<Document[]> {
         if (since >= till) return [];
 
-        const startkey = [characterId, since];
-        const endkey = [characterId, till];
+        const startkey = [characterId, Number(since)];
+        const endkey = [characterId, Number(till)];
         const params = {
             startkey,
             endkey,
@@ -25,6 +25,7 @@ export class EventStorage {
     }
 
     store(event: any) {
+        event.timestamp = Number(event.timestamp);
         return this.db.put(event);
     }
 }
