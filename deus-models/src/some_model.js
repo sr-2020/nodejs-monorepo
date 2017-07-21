@@ -268,7 +268,7 @@ function getMessagesPage(model) {
         menuTitle: "Сообщения",
         body: {
             title: "Мастерские сообщения",
-            items: model.changes ? model.messages.reverse().map(getMessagesPageItem) : [],
+            items: model.messages ? model.messages.reverse().map(getMessagesPageItem) : [],
         },
     };
 }
