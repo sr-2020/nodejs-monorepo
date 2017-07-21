@@ -30,6 +30,18 @@ export interface MindData {
     [index: string]: number[];
 }
 
+export interface ChangesElement {
+    mID: string,
+    text: string,
+    timestamp: string
+}
+
+export interface Message {
+    mID: string,
+    title: string,
+    text: string
+}
+
 export class DeusModel{
     _id: string;        //id в БД == JoinRPG ID
     _rev: string;       //rev в БД техническое  
@@ -42,6 +54,7 @@ export class DeusModel{
     sweethome?: string;  //Родная локация
     hp: number;         //количество хитов
     maxHp: number;      //макстмальное количество хитов персонажа
+    maxSecondsInVr: 1200;  //Максимальное время в VR
 
 //Только для типа профиля "human"
     sex?: string;            //пол
@@ -69,10 +82,12 @@ export class DeusModel{
     maxProxy?: number;
 
 //Техническое
-    validateErrors?: string[];
+    validateErrors?: string[];      //Ошибки валидации (если не пустое, в БД модель не пишутся)
     skills?: Array<any>;            //если бует использоваться
     timestamp: number = 0;          //дата обновление модели
     conditions: Array<DeusCondition> = [];     //состояния
     modifiers: Array<DeusModifier> = [];       //модификаторы (импланты\болезни)
-    timers: Array<any> = [];        //таймеры в модели
+    timers: Array<any> = [];      //таймеры в модели
+    changes: ChangesElement[] = [];  //Изменения в модели
+    messages: Message[] = [];   //Сообщения игроку
 }
