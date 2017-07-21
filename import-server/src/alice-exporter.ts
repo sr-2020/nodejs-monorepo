@@ -118,10 +118,10 @@ export class AliceExporter{
 
             //Login (e-mail). Field: 1905
             //Защита от цифрового логина
-             this.model.login = this.findStrFieldValue(1905).split("@")[0];
+             this.model.login = this.findStrFieldValue(1905).split("@")[0].toLowerCase();
 
-            if(this.model.login && this.model.login.match(/^\d+$/i)){
-                winston.info(`ERROR: can't convert id=${this.character.CharacterId} login=${this.model.login}`);
+            if( !this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,16}$/i) || this.model.login.match(/^\d+$/i) ) {
+                winston.info(`ERROR: can't convert id=${this.character.CharacterId} incorrect login=${this.model.login}`);
                 this.model._id = "";
                 return;
             }
