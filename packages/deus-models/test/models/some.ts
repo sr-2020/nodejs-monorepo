@@ -11,7 +11,9 @@ describe("some", () => {
         it("_view doesn't produce null or undefined fields", async function() {
             const model = getExampleModel();
             const viewModel = await getViewModel(model);
-            expect(viewModel).deep.equal(JSON.parse(JSON.stringify(viewModel)));
+            expect(viewModel).to.be.deep.equal(JSON.parse(JSON.stringify(viewModel)));
+            expect(viewModel).to.have.property("_id");
+            expect(viewModel).to.have.property("timestamp");
         });
     });
 });

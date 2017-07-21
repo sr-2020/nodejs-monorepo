@@ -245,7 +245,7 @@ function getChangesPage(model) {
         menuTitle: "Изменения",
         body: {
             title: "Изменения",
-            items: model.changes ? model.changes.reverse().map(getChangesPageItem) : [],
+            items: model.changes.reverse().map(getChangesPageItem),
         },
     };
 }
@@ -268,7 +268,7 @@ function getMessagesPage(model) {
         menuTitle: "Сообщения",
         body: {
             title: "Мастерские сообщения",
-            items: model.messages ? model.messages.reverse().map(getMessagesPageItem) : [],
+            items: model.messages.reverse().map(getMessagesPageItem),
         },
     };
 }
@@ -348,7 +348,13 @@ function setModifierEnabled(modifiers, id, enabled) {
 module.exports = () => {
     return {
         _view(api, model) {
-            return getViewModel(model);
+            try {
+                return getViewModel(model);
+            }
+            catch(err) {
+                // The app would display error message when ViewModel is incorrect
+                return {};
+            }
         }
     };
 };
