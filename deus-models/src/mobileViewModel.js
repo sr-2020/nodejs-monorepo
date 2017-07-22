@@ -147,6 +147,7 @@ function getImplantsPageItem(modifier) {
                     text: getEnableActionText(modifier.enabled),
                     eventType: modifier.enabled ? "disableImplant" : "enableImplant",
                     needsQr: false,
+                    dangerous: false,
                     data: {
                         mID: modifier.mID,
                     },
