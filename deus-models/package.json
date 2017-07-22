@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers ts:ts-node/register test/models/**/*.ts",
-    "test:watch": "chokidar 'src/**/*' catalogs/**/* test/**/* -c 'npm test'"
+    "test:watch": "chokidar src/**/* catalogs/**/* test/**/* -c \"npm test\""
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,10 @@
     "ts-node": "^3.0.6",
     "typescript": "^2.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fs.realpath": "^1.0.0",
+    "inflight": "^1.0.6",
+    "source-map-support": "^0.4.15",
+    "yn": "^2.0.0"
+  }
 }
