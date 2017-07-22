@@ -1,7 +1,8 @@
 export interface DeusCondition
 {
-    id: string,
+    id?: string,
+    _id?: string,
     class?: string,
-    text: string,
+    text?: string,
     details?: string
 }

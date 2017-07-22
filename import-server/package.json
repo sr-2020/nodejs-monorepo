@@ -32,6 +32,7 @@
     "@types/command-line-args": "^4.0.0",
     "@types/pouchdb": "^6.1.1",
     "@types/request-promise-native": "^1.0.6",
+    "array-unique": "^0.3.2",
     "body-parser": "^1.17.2",
     "chance": "^1.0.10",
     "command-line-args": "^4.0.6",

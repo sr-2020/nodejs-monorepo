@@ -19,9 +19,6 @@ import { mindModelData } from './mind-model-stub';
 import { CatalogsLoader } from './catalogs-loader';
 
 
-//Временное
-//  Error in converting model id=11711: TypeError: Cannot set property '1' of undefined 
-
 interface IAliceAccount {
     _id: string;
     _rev?: string;

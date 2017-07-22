@@ -74,8 +74,9 @@ class AliceExporter {
             this.model.login = this.findStrFieldValue(1905).split("@")[0].toLowerCase();
             if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,16}$/i) || this.model.login.match(/^\d+$/i)) {
                 winston.info(`ERROR: can't convert id=${this.character.CharacterId} incorrect login=${this.model.login}`);
-                this.model._id = "";
-                return;
+                //this.model._id = "";
+                //return;
+                this.model.login = "";
             }
             this.account.login = this.model.login;
             if (this.model.login) {
@@ -124,6 +125,8 @@ class AliceExporter {
                 this.model.lockReduction = 100;
                 this.model.proxyRegen = 100;
                 this.model.maxProxy = 100;
+                //Максимальное время в VR (секунды)
+                this.model.maxSecondsInVr = 1200;
             }
             //Блок данных только для профиля андроида или программы
             if (this.model.profileType == "robot" ||
@@ -140,6 +143,8 @@ class AliceExporter {
                 this.model.firmware = this.findStrFieldValue(1906);
                 //Сохраненные данные. Field: 1845,1846,1847
                 this.setMemories([1848, 1849, 1850]);
+                //Максимальное время в VR (секунды)
+                this.model.maxSecondsInVr = 82800;
             }
             //Импланты на начало игры. Field: 1215
             //TODO: нужно получить список ID имплантов из Join (в деталях полей в метаданных)
