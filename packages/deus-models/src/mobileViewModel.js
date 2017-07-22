@@ -155,6 +155,7 @@ function getImplantsPageItem(modifier) {
                     text: "Отдать гопнику (не работает)",
                     eventType: "giveAway",
                     needsQr: true,
+                    dangerous: true,
                     data: {
                         mID: modifier.mID,
                     },
