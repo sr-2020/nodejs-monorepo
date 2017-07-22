@@ -9,7 +9,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { Settings } from "./settings";
+import { Settings } from './settings';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -416,7 +416,7 @@ describe('API Server', () => {
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise());
 
-      const resultStatuses = (await Promise.all(promises)).map((res) => res.statusCode);
+      const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
       const expectedStatuses = Array(20).fill(202);
       expect(resultStatuses).to.deep.equal(expectedStatuses);
       const res = await eventsDb.allDocs({ include_docs: true });
@@ -583,7 +583,7 @@ describe('API Server', () => {
         access: [
           { id: '10002', timestamp: testStartTime - 1 },
           { id: '10001', timestamp: testStartTime + 60000 },
-        ]
+        ],
       });
     });
 

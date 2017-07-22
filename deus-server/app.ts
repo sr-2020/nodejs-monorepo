@@ -14,7 +14,7 @@ PouchDB.plugin(PouchDBUpsert);
 import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
-import { Settings } from "./settings";
+import { Settings } from './settings';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
