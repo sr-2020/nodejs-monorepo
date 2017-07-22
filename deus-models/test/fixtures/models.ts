@@ -4,7 +4,6 @@ function randomId() {
 
 export const getExampleModel = (id?: string) => ({
     _id: id || randomId(),
-    mail: "vasya2045@mail.ru",
     memory: [
         {
             title: "Название воспоминания №1",
@@ -16,18 +15,42 @@ export const getExampleModel = (id?: string) => ({
             url: "http://link-to-local-server.local/url2"
         }
     ],
-    firstName: "Имя",
-    lastName: "Фамилия",
     skills: [],
-    sex: "male",
-    corporation: "Skynet",
     hp: 4,
     maxHp: 5,
+
+    login: "john.smith",
+    mail: "john.smith@alice.digital",
+    generation: "W",
+    profileType: "human",
+    firstName: "Джон",
+    nicName: "",
+    lastName: "Смит",
+    sweethome: "Жилые комплексы PanAm",
+    sex: "male",
+    corporation: "Корпорация Pan American Sunrise Technology Corp.",
+    salaryLevel: 2,
+    insurance: 2057,
+    insuranceLevel: 1,
+    insuranceDiplayName: "Pan American Sunrise Technology Corp., Уровень: 1",
+    hackingLogin: "octopus",
+    hackingProtection: 1,
+    lockReduction: 100,
+    proxyRegen: 100,
+    maxProxy: 100,
+    maxSecondsInVr: 1200,
+
     mind: {
-        "A": [0, 1, 2, 3, 2, 1],
-        "B": [0, 1, 2, 3],
-        "C": [1, 2, 4]
+        "A": [ 53, 47,56 ],
+        "B":[50,57,40,55,55,46,51,54,55,54],
+        "C":[56,49,41,43,55,53,46,41],
+        "D":[48,42,44,44,60,49,49,56,54],
+        "E":[54,57,55,41,55,46,53],
+        "F":[47,58,41,56]
     },
+
+    genome: [1,0,0,1,0,0,0,0,0,1,2,0,0],
+
     timestamp: 0,
     conditions: [
         {
@@ -39,7 +62,6 @@ export const getExampleModel = (id?: string) => ({
     ],
 
     password: "P@ssw0rd",
-    maxSecondsInVr: 1200,
     modifiers: [
         {
             id: "HeartHealthBooster",
@@ -88,6 +110,5 @@ export const getExampleModel = (id?: string) => ({
             "text": "42"
         },
     ],
-    "age": 17,
     "timers": []
 });
