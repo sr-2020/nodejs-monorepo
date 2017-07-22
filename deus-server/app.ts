@@ -129,6 +129,23 @@ class App {
         return;
       }
 
+      const tokenUpdatedEvents = events.filter((event) => event.eventType == 'tokenUpdated');
+      if (tokenUpdatedEvents.length > 0) {
+       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token;
+        const existingCharacterWithThatToken = await accountsDb.query('web_api_server_v2/by_push_token', { key: token});
+        for (const existingCharacter of existingCharacterWithThatToken.rows) {
+          await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
+            delete accountInfo.pushToken;
+            return accountInfo;
+          });
+        }
+        await this.accountsDb.upsert(id, (accountInfo) => {
+          accountInfo.pushToken = token;
+          return accountInfo;
+        });
+      }
+      events = events.filter((event) => event.eventType != 'tokenUpdated');
+
       const eventTypes: string[] = events.map((event) => event.eventType);
 
       const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
@@ -245,23 +262,32 @@ class App {
 
   public async listen(port: number) {
     try {
-      await this.eventsDb.putIfNotExists({
-        _id: '_design/web_api_server_v2',
-        views: {
-          characterId_timestamp_mobile: {
-            // tslint:disable-next-line:max-line-length
-            map: 'function (doc) { if (doc.timestamp && doc.characterId && doc.mobile) emit([doc.characterId, doc.timestamp]);  }',
+      await this.eventsDb.upsert('_design/web_api_server_v2', () => {
+        return {
+          _id: '_design/web_api_server_v2',
+          views: {
+            characterId_timestamp_mobile: {
+              // tslint:disable-next-line:max-line-length
+              map: 'function (doc) { if (doc.timestamp && doc.characterId && doc.mobile) emit([doc.characterId, doc.timestamp]);  }',
+            },
           },
-        },
+        };
       });
-      await this.accountsDb.putIfNotExists({
-        _id: '_design/web_api_server_v2',
-        views: {
-          by_login: {
-            // tslint:disable-next-line:max-line-length
-            map: 'function (doc) { if (doc.login) emit(doc.login);  }',
+
+      await this.accountsDb.upsert('_design/web_api_server_v2', () => {
+        return {
+          _id: '_design/web_api_server_v2',
+          views: {
+            by_login: {
+              // tslint:disable-next-line:max-line-length
+              map: 'function (doc) { if (doc.login) emit(doc.login);  }',
+            },
+            by_push_token: {
+              // tslint:disable-next-line:max-line-length
+              map: 'function (doc) { if (doc.pushToken) emit(doc.pushToken);  }',
+            },
           },
-        },
+        };
       });
     } catch (err) {
       console.error(err);

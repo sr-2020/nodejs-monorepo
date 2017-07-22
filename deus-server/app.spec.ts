@@ -19,7 +19,8 @@ const address = 'http://localhost:' + port;
 There are following characters present in this test:
 id     login                      password  comment
 
-00001  some_user                  qwerty    Has viewmodel, timestamp = 420
+00001  some_user                  qwerty    Has viewmodel, timestamp = 420. Also have push token.
+00002  some_other_user            asdfg     Has viewmodel, timestamp = 420.
 
 55555  user_without_model         hunter2   Has no viewmodel, used to test for corresponding 404 errors
 
@@ -57,6 +58,14 @@ describe('API Server', () => {
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
+    await defaultViewModelDb.put({
+      _id: '00002', timestamp: 420,
+      updatesCount: 0, mobile: false,
+    });
+    await mobileViewModelDb.put({
+      _id: '00002', timestamp: 420,
+      updatesCount: 0, mobile: true,
+    });
     await accountsDb.put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
     await accountsDb.put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
     await accountsDb.put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
@@ -66,11 +75,13 @@ describe('API Server', () => {
       _id: '00001',
       login: 'some_user',
       password: 'qwerty',
+      pushToken: '00001spushtoken',
       access: [
         { id: '10002', timestamp: testStartTime - 1 },
         { id: '10001', timestamp: testStartTime + 60000 },
       ],
     });
+    await accountsDb.put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
     await accountsDb.put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
   });
 
@@ -306,6 +317,33 @@ describe('API Server', () => {
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
+      expect(doc).to.deep.include({ characterId: '00001' });
+    });
+
+    it('Filters out tokenUpdated events', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        // tslint:disable-next-line:max-line-length
+        data: { token: 'cFA60K00jtY:APA91bGtjF4t8R4hEiu7Z1oowRU1ZH8YQaL2HwjhuY4mIO9yD1gKcxEX8l6c2vEtRn4fGxgQnqzTwmMq8wQ15Vpve6QbQAOMm-ds1qwXKED1HABlhxinnQFVKWKty7dlhEQsnpA0w9ye' },
+      },
+      {
+        eventType: '_RefreshModel',
+        timestamp: 4565,
+        data: { foo: 'ambar' },
+      }];
+
+      const response = await rp.post(address + '/events/some_user',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(1);
+      const doc: any = docs.rows[0].doc;
+      expect(doc).to.deep.include(events[1]);
       expect(doc).to.deep.include({ characterId: '00001' });
     });
 
@@ -741,6 +779,126 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(401);
     });
   });
+
+  describe('Push notifications handling', () => {
+    it('Can query by push token', async () => {
+      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00001');
+    });
+
+    it('Token from tokenUpdated event is saved into db', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        data: { token: '00002snewtoken' },
+      }];
+
+      const response = await rp.post(address + '/events/00002',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: '00002', password: 'asdfg' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+
+      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewtoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00002');
+    });
+
+    it('Token from LAST tokenUpdated event is saved into db', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        data: { token: '00002snewtoken' },
+      },
+      {
+      eventType: 'tokenUpdated',
+        timestamp: 9953,
+        data: { token: '00002snewesttoken' },
+      }];
+
+      const response = await rp.post(address + '/events/00002',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: '00002', password: 'asdfg' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+
+      let docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewesttoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00002');
+
+      docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewtoken' });
+      expect(docs.rows).to.be.empty;
+    });
+
+    it('Token from tokenUpdated event overwrites existing one', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        data: { token: '00001snewtoken' },
+      }];
+
+      const response = await rp.post(address + '/events/00001',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: '00001', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+
+      let docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001snewtoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00001');
+
+      docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      expect(docs.rows).to.be.empty;
+    });
+
+    it('If token from tokenUpdated event associated with other character, this association is removed', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        data: { token: '00001spushtoken' },
+      }];
+
+      const response = await rp.post(address + '/events/00002',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: '00002', password: 'asdfg' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+
+      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00002');
+    });
+
+    it('If token from tokenUpdated event associated with same character, nothing changes', async () => {
+      const events = [{
+      eventType: 'tokenUpdated',
+        timestamp: 4365,
+        data: { token: '00001spushtoken' },
+      }];
+
+      const response = await rp.post(address + '/events/00001',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: '00001', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+
+      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].id).to.equal('00001');
+    });
+  });
+
 });
 
 describe('API Server - long timeout', () => {
