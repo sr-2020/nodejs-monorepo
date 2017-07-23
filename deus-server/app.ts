@@ -5,6 +5,7 @@ import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
 import * as http from 'http';
 import * as moment from 'moment';
+import * as rp from 'request-promise';
 import * as winston from 'winston';
 
 import * as PouchDB from 'pouchdb';
@@ -245,6 +246,37 @@ class App {
         const allowedAccess = await this.accountsDb.get(id);
         const access = allowedAccess.access ? allowedAccess.access : [];
         res.send({ access });
+      } catch (e) {
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
+      }
+    });
+
+    const pushAuth = (req, res, next) => {
+      const credentials = basic_auth(req);
+      if (credentials &&
+        credentials.name == settings.pushSettings.username && credentials.pass == settings.pushSettings.password)
+          return next();
+      res.header('WWW-Authentificate', 'Basic');
+      this.logAndSendErrorResponse(req, res, 401, 'Access denied');
+    };
+
+    this.app.post('/push/:id', pushAuth, async (req, res) => {
+      const id: string = await this.canonicalId(req.params.id);
+      try {
+        const pushToken = (await this.accountsDb.get(id)).pushToken;
+        if (!pushToken) {
+          res.status(404).send('No push token for this character');
+          return;
+        }
+
+        const fcmRequest = req.body;
+        fcmRequest.to = pushToken;
+
+        await rp.post('https://fcm.googleapis.com/fcm/send', { resolveWithFullResponse: true,
+            headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
+            json: fcmRequest,
+        });
+        res.status(200).send({});
       } catch (e) {
         this.returnCharacterNotFoundOrRethrow(e, req, res);
       }

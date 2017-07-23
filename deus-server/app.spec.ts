@@ -2,6 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as rp from 'request-promise';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
+import * as nock from 'nock';
 import * as winston from 'winston';
 
 import { expect } from 'chai';
@@ -9,7 +10,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { Settings } from './settings';
+import { PushSettings, Settings } from './settings';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -47,7 +48,11 @@ describe('API Server', () => {
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    const settings: Settings = { viewmodelUpdateTimeout: 20, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
+    const settings: Settings = {
+      viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
+      tooFarInFutureFilterTime: 30000, pushSettings,
+    };
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await mobileViewModelDb.put({
@@ -69,6 +74,7 @@ describe('API Server', () => {
     await accountsDb.put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
     await accountsDb.put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
     await accountsDb.put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
+    await accountsDb.put({ _id: '99999', login: 'admin', password: 'admin' });
 
     testStartTime = app.currentTimestamp();
     await accountsDb.put({
@@ -322,7 +328,7 @@ describe('API Server', () => {
 
     it('Filters out tokenUpdated events', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         // tslint:disable-next-line:max-line-length
         data: { token: 'cFA60K00jtY:APA91bGtjF4t8R4hEiu7Z1oowRU1ZH8YQaL2HwjhuY4mIO9yD1gKcxEX8l6c2vEtRn4fGxgQnqzTwmMq8wQ15Vpve6QbQAOMm-ds1qwXKED1HABlhxinnQFVKWKty7dlhEQsnpA0w9ye' },
@@ -780,7 +786,7 @@ describe('API Server', () => {
     });
   });
 
-  describe('Push notifications handling', () => {
+  describe('tokenUpdated events handling', () => {
     it('Can query by push token', async () => {
       const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
@@ -789,7 +795,7 @@ describe('API Server', () => {
 
     it('Token from tokenUpdated event is saved into db', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         data: { token: '00002snewtoken' },
       }];
@@ -809,12 +815,12 @@ describe('API Server', () => {
 
     it('Token from LAST tokenUpdated event is saved into db', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         data: { token: '00002snewtoken' },
       },
       {
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 9953,
         data: { token: '00002snewesttoken' },
       }];
@@ -837,7 +843,7 @@ describe('API Server', () => {
 
     it('Token from tokenUpdated event overwrites existing one', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         data: { token: '00001snewtoken' },
       }];
@@ -860,7 +866,7 @@ describe('API Server', () => {
 
     it('If token from tokenUpdated event associated with other character, this association is removed', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         data: { token: '00001spushtoken' },
       }];
@@ -880,7 +886,7 @@ describe('API Server', () => {
 
     it('If token from tokenUpdated event associated with same character, nothing changes', async () => {
       const events = [{
-      eventType: 'tokenUpdated',
+        eventType: 'tokenUpdated',
         timestamp: 4365,
         data: { token: '00001spushtoken' },
       }];
@@ -899,6 +905,93 @@ describe('API Server', () => {
     });
   });
 
+  describe('Generic push notification send', () => {
+
+    afterEach(() => {
+      nock.cleanAll();
+    });
+
+    it('Can send push', async () => {
+      const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
+        .post('/fcm/send', {
+          to: '00001spushtoken',
+          foo: 'bar',
+        })
+        .reply(200);
+
+      const response = await rp.post(address + '/push/00001',
+        {
+          resolveWithFullResponse: true, json: { foo: 'bar' },
+          auth: { username: 'pushadmin', password: 'pushpassword' },
+        }).promise();
+      expect(response.statusCode).to.equal(200);
+
+      expect(fcm.isDone()).to.be.true;
+    });
+
+    it('Can send push using login instead of id', async () => {
+      const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
+        .post('/fcm/send', {
+          to: '00001spushtoken',
+          foo: 'bar',
+        })
+        .reply(200);
+
+      const response = await rp.post(address + '/push/some_user',
+        {
+          resolveWithFullResponse: true, json: { foo: 'bar' },
+          auth: { username: 'pushadmin', password: 'pushpassword' },
+        }).promise();
+      expect(response.statusCode).to.equal(200);
+
+      expect(fcm.isDone()).to.be.true;
+    });
+
+    it('Returns 401 if sending push without auth', async () => {
+      const response = await rp.post(address + '/push/00001',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+        }).promise();
+      expect(response.statusCode).to.equal(401);
+    });
+
+    it('Returns 401 if sending push with non-admin user', async () => {
+      const response = await rp.post(address + '/push/00001',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: '00001', password: 'qwerty' },
+        }).promise();
+      expect(response.statusCode).to.equal(401);
+    });
+
+    it('Returns 401 if sending push with wrong admin password', async () => {
+      const response = await rp.post(address + '/push/00001',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'pushadmin', password: 'asdsa' },
+        }).promise();
+      expect(response.statusCode).to.equal(401);
+    });
+
+    it('Returns 404 if sending push to non-existing user', async () => {
+      const response = await rp.post(address + '/push/54674',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'pushadmin', password: 'pushpassword' },
+        }).promise();
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it('Returns 404 if sending push to user without a token', async () => {
+      const response = await rp.post(address + '/push/00002',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'pushadmin', password: 'pushpassword' },
+        }).promise();
+      expect(response.statusCode).to.equal(404);
+    });
+
+  });
 });
 
 describe('API Server - long timeout', () => {
@@ -912,7 +1005,11 @@ describe('API Server - long timeout', () => {
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
-    const settings: Settings = { viewmodelUpdateTimeout: 9000, accessGrantTime: 1000, tooFarInFutureFilterTime: 30000 };
+    const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
+    const settings: Settings = {
+      viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
+      tooFarInFutureFilterTime: 30000, pushSettings,
+    };
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
