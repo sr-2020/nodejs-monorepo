@@ -244,10 +244,10 @@ function getAdminsPage(model) {
                 {
                     text: "Правая рука",
                     subtext: "007, 12, 13",
-                    subitems: {
+                    sublist: {
                         title: "Админы: Правая рука",
                         eventType: "setAdmins",
-                        eventFirstArg: "rightHand",
+                        eventTag: "rightHand",
                         items: [
                             {
                                 text: "007",
