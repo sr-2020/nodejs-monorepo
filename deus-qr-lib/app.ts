@@ -1,3 +1,4 @@
+import * as basic_auth from 'basic-auth';
 import * as express from 'express'
 import * as http from 'http'
 
@@ -21,12 +22,32 @@ class App {
   private app: express.Express = express();
   private server: http.Server;
 
-  constructor() {
+  constructor(private _user: string, private _password: string) {
     this.app.use(bodyparser.json());
     this.app.use((req, res, next) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
+    });
+
+    this.app.get('/decode', (req, res) => {
+      try {
+        const decoded: any = decode(req.query.content)
+        res.send(decoded);
+      }
+      catch (e) {
+        console.warn('exception in /decode: ', e);
+        res.status(400).send('Wrong data format');
+      }
+    })
+
+    this.app.use((req, res, next) => {
+      const credentials = basic_auth(req);
+      if (credentials && credentials.name == this._user && credentials.pass == this._password) {
+        return next();
+      }
+      res.header('WWW-Authentificate', 'Basic');
+      res.status(401).send('Access denied');
     });
 
     this.app.get('/encode', (req, res) => {
@@ -52,17 +73,6 @@ class App {
       }
       catch (e) {
         console.warn('exception in /encode: ', e);
-        res.status(400).send('Wrong data format');
-      }
-    })
-
-    this.app.get('/decode', (req, res) => {
-      try {
-        const decoded: any = decode(req.query.content)
-        res.send(decoded);
-      }
-      catch (e) {
-        console.warn('exception in /decode: ', e);
         res.status(400).send('Wrong data format');
       }
     })
