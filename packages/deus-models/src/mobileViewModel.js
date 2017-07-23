@@ -238,6 +238,7 @@ function getAdminsPage(model) {
     return {
         __type: "ListPageViewModel",
         menuTitle: "Администраторы",
+        viewId: "page:admins",
         body: {
             title: "Администраторы",
             items: [
