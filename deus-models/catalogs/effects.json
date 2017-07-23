@@ -5,6 +5,12 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "demoImplantEffect"
+        },
+        {        
+            "id"    : "showCondition",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "showCondition"
         } 
     ]
 }
