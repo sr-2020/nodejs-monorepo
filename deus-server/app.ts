@@ -260,7 +260,7 @@ class App {
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
 
-    this.app.post('/push/visible:id', pushAuth, async (req, res) => {
+    this.app.post('/push_visible:id', pushAuth, async (req, res) => {
       await this.sendGenericPushNotification(req, res, {
         notification: {
           title: req.body.title,
