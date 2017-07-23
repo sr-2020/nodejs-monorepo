@@ -132,7 +132,7 @@ class App {
 
       const tokenUpdatedEvents = events.filter((event) => event.eventType == 'tokenUpdated');
       if (tokenUpdatedEvents.length > 0) {
-       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token;
+       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
         const existingCharacterWithThatToken = await accountsDb.query('web_api_server_v2/by_push_token', { key: token});
         for (const existingCharacter of existingCharacterWithThatToken.rows) {
           await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
@@ -272,7 +272,7 @@ class App {
         const fcmRequest = req.body;
         fcmRequest.to = pushToken;
 
-        await rp.post('https://fcm.googleapis.com/fcm/send', { resolveWithFullResponse: true,
+        await rp.post('https://fcm.googleapis.com/fcm/send', {
             headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
             json: fcmRequest,
         });

@@ -797,7 +797,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: '00002snewtoken' },
+        data: { token: { registrationId: '00002snewtoken'} },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -817,12 +817,12 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: '00002snewtoken' },
+        data: { token: { registrationId: '00002snewtoken'} },
       },
       {
         eventType: 'tokenUpdated',
         timestamp: 9953,
-        data: { token: '00002snewesttoken' },
+        data: { token: { registrationId: '00002snewesttoken'} },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -845,7 +845,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: '00001snewtoken' },
+        data: { token: { registrationId: '00001snewtoken'} },
       }];
 
       const response = await rp.post(address + '/events/00001',
@@ -868,7 +868,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: '00001spushtoken' },
+        data: { token: { registrationId: '00001spushtoken'} },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -888,7 +888,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: '00001spushtoken' },
+        data: { token: { registrationId: '00001spushtoken'} },
       }];
 
       const response = await rp.post(address + '/events/00001',
