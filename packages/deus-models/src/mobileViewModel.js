@@ -237,6 +237,7 @@ function getChangesPageItem(change) {
     return {
         viewId: "mid:" + change.mID,
         text: change.text,
+        unixSecondsValue: change.timestamp
     };
 }
 
