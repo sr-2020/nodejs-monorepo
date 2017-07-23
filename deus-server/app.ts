@@ -269,14 +269,15 @@ class App {
           return;
         }
 
-        const fcmRequest = req.body;
-        fcmRequest.to = pushToken;
+        const fcmRequestBody = req.body;
+        fcmRequestBody.to = pushToken;
 
-        await rp.post('https://fcm.googleapis.com/fcm/send', {
+        const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
+            resolveWithFullResponse: true, simple: false,
             headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
-            json: fcmRequest,
+            json: fcmRequestBody,
         });
-        res.status(200).send({});
+        res.status(fcmResponse.statusCode).send(fcmResponse.body);
       } catch (e) {
         this.returnCharacterNotFoundOrRethrow(e, req, res);
       }
