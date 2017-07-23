@@ -28,6 +28,13 @@ describe('Meidc and Mind ViewModel Generation', () => {
         expect(result.genome[10]).is.equal(2);
     });
 
+    it("medical systems", async function() {
+        expect(result).has.nested.property("systems");
+        expect(result.systems).is.a("array");
+        expect(result.systems.length).is.equal(6);
+        expect(result.systems[3]).is.equal(1);
+    });
+
     it("memory", async function() {
         //api.model.memory
         expect(result).has.nested.property("memory");
@@ -60,7 +67,7 @@ describe('Meidc and Mind ViewModel Generation', () => {
         expect(result.mindBase.F[3]).is.equal(56);
      });
 
-    it("print out view model", async function() {
-        console.log(JSON.stringify(result, null, 4));
-    });
+    // it("print out view model", async function() {
+    //     console.log(JSON.stringify(result, null, 4));
+    // });
 });

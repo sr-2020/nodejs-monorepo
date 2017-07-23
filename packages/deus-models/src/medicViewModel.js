@@ -41,6 +41,10 @@ function getViewModel(api, data) {
         ret.genome = Array.from(api.model.genome)
     }
 
+    if(api.model.systems){
+        ret.systems = Array.from(api.model.systems)
+    }
+
     if(api.model.memory){
         ret.memory = Array.from(api.model.memory, m => ({
             title : m.title, 

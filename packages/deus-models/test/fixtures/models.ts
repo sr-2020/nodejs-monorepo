@@ -51,6 +51,8 @@ export const getExampleModel = (id?: string) => ({
 
     genome: [1,0,0,1,0,0,0,0,0,1,2,0,0],
 
+    systems: [1,1,1,1,1,1],
+
     timestamp: 0,
     conditions: [
         {
@@ -79,23 +81,23 @@ export const getExampleModel = (id?: string) => ({
             ],
             enabled: true,
             mID: "85a5746cddd447379992d8181a52f4fd"
-        },
-        {
-            id: "_Default",
-            displayName: "Default actions",
-            class: "defaults",
-            effects: [
-                {
-                    id: "illnessStageShow",
-                    class: "physiology",
-                    type: "normal",
-                    handler: "illnessStageShow",
-                    enabled: true
-                }
-            ],
-            enabled: true,
-            mID: "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        },
+        }
+        // {
+        //     id: "_Default",
+        //     displayName: "Default actions",
+        //     class: "defaults",
+        //     effects: [
+        //         {
+        //             id: "illnessStageShow",
+        //             class: "physiology",
+        //             type: "normal",
+        //             handler: "illnessStageShow",
+        //             enabled: true
+        //         }
+        //     ],
+        //     enabled: true,
+        //     mID: "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        // },
     ],
     changes: [
         {
