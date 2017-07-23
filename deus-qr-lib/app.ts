@@ -41,15 +41,16 @@ class App {
       }
     })
 
-    this.app.use((req, res, next) => {
-      const credentials = basic_auth(req);
-      if (credentials && credentials.name == this._user && credentials.pass == this._password) {
-        return next();
-      }
-      res.header('WWW-Authentificate', 'Basic');
-      res.status(401).send('Access denied');
-    });
-
+    if (this._user) {
+      this.app.use((req, res, next) => {
+        const credentials = basic_auth(req);
+        if (credentials && credentials.name == this._user && credentials.pass == this._password) {
+          return next();
+        }
+        res.header('WWW-Authentificate', 'Basic');
+        res.status(401).send('Access denied');
+      });
+    }
     this.app.get('/encode', (req, res) => {
       try {
         const data = QrDataFromQuery(req.query);
