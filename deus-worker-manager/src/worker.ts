@@ -38,6 +38,7 @@ export class Worker extends EventEmitter {
         this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
             let workerModule = require.resolve(this.workerModule);
             let child = ChildProcess.fork(workerModule, this.args, { silent: true });
+            child.setMaxListeners(20);
 
             let error = Rx.Observable.fromEvent(child, 'error');
             let exit = Rx.Observable.fromEvent(child, 'exit');
@@ -51,11 +52,11 @@ export class Worker extends EventEmitter {
                 message, exit, error, stop, data
             };
 
-            // subscribe for logs early
-            this.rx.message.filter((msg) => msg.type == 'log').subscribe(this.handleLogMessage);
-            this.rx.data.subscribe(this.handleOutput);
-
             let ready = this.rx.message.filter((msg) => msg.type == 'ready').take(1);
+
+            // subscribe for logs early
+            this.rx.message.filter((msg) => msg.type == 'log').takeUntil(ready).subscribe(this.handleLogMessage());
+            this.rx.data.subscribe(this.handleOutput);
 
             this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
             this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
@@ -108,8 +109,12 @@ export class Worker extends EventEmitter {
         return this;
     }
 
-    handleLogMessage = (message: any) => {
+    handleLogMessage = (syncEvent?: Event) => (message: any) => {
         if (message.type == 'log') {
+            if (syncEvent) {
+                message.characterId = syncEvent.characterId;
+                message.eventTimestamp = syncEvent.timestamp;
+            }
             this.logger.log(message.source, message.level, message.msg, ...message.params);
         }
     }
@@ -136,6 +141,8 @@ export class Worker extends EventEmitter {
                 let data = await objectStorage.aquire(msg.keys);
                 this.send({ type: 'aquired', data });
             });
+
+            this.rx.message.filter((msg) => msg.type == 'log').takeUntil(result).subscribe(this.handleLogMessage(syncEvent));
 
             this.rx.stop.takeUntil(result).take(1).subscribe(() => reject('Worker error'));
 
