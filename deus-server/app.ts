@@ -5,11 +5,11 @@ import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
 import * as http from 'http';
 import * as moment from 'moment';
-import * as rp from 'request-promise';
-import * as winston from 'winston';
-
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
+import * as rp from 'request-promise';
+import * as uuid from 'uuid/v4';
+import * as winston from 'winston';
 PouchDB.plugin(PouchDBUpsert);
 
 import { TSMap } from 'typescript-map';
@@ -261,16 +261,11 @@ class App {
     };
 
     this.app.post('/push/visible/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotification(req, res, {
-        notification: {
-          title: req.body.title,
-          body: req.body.body ? req.body.body : ' ',
-          sound: 'default',
-        },
-        aps: {
-          sound: 'default',
-        },
-      });
+      await this.sendGenericPushNotification(req, res, this.makeVisibleNotificationPayload(req.body));
+    });
+
+    this.app.post('/push/refresh/:id', pushAuth, async (req, res) => {
+      await this.sendGenericPushNotification(req, res, this.makeSilentRefreshNotificationPayload());
     });
 
     this.app.post('/push/:id', pushAuth, async (req, res) => {
@@ -392,6 +387,33 @@ class App {
       throw new LoginNotFoundError('Multiple users with such login found');
 
     return docs.rows[0].id;
+  }
+
+  private makeVisibleNotificationPayload(requestBody: any): any {
+    return {
+        notification: {
+          title: requestBody.title,
+          body: requestBody.body ? requestBody.body : ' ',
+          sound: 'default',
+        },
+        aps: {
+          sound: 'default',
+        },
+      };
+  }
+
+  private makeSilentRefreshNotificationPayload(): any {
+    return {
+        apps: {
+          'content-available': 1,
+        },
+        content_available: true,
+        notId: uuid(),
+        data: {
+          'refresh': true,
+          'content-available': 1,
+        },
+    };
   }
 
   private async sendGenericPushNotification(req: express.Request, res: express.Response, payload: any) {
