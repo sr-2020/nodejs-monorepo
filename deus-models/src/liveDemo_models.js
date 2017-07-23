@@ -13,6 +13,8 @@ function addChange(api, change) {
     const maxChanges = 25;
     if (!api.model.changes)  // for transition period, TODO: delete
         api.model.changes = [];
+    // TODO: Change it to be model time rather than now (but also unix seconds, UTC)
+    change.timestamp = Math.floor(Date.now() / 1000);  // Unix seconds, UTC
     api.model.changes.push(change);
     api.model.changes = api.model.changes.slice(-maxChanges);
 }

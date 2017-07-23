@@ -100,7 +100,8 @@ export const getExampleModel = (id?: string) => ({
     changes: [
         {
         "mID": "4485090f-55a3-4d4f-8218-d0ca57fae110",
-        "text": "Включен имплант"
+        "text": "Включен имплант",
+        "timestamp": 1483228800,
         },
     ],
     messages: [
