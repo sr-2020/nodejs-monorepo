@@ -260,27 +260,21 @@ class App {
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
 
+    this.app.post('/push/visible:id', pushAuth, async (req, res) => {
+      await this.sendGenericPushNotification(req, res, {
+        notification: {
+          title: req.body.title,
+          body: req.body.body ? req.body.body : ' ',
+          sound: 'default',
+        },
+        aps: {
+          sound: 'default',
+        },
+      });
+    });
+
     this.app.post('/push/:id', pushAuth, async (req, res) => {
-      const id: string = await this.canonicalId(req.params.id);
-      try {
-        const pushToken = (await this.accountsDb.get(id)).pushToken;
-        if (!pushToken) {
-          res.status(404).send('No push token for this character');
-          return;
-        }
-
-        const fcmRequestBody = req.body;
-        fcmRequestBody.to = pushToken;
-
-        const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
-            resolveWithFullResponse: true, simple: false,
-            headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
-            json: fcmRequestBody,
-        });
-        res.status(fcmResponse.statusCode).send(fcmResponse.body);
-      } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
-      }
+      await this.sendGenericPushNotification(req, res, req.body);
     });
 
     this.mobileViewmodelDb().changes({ since: 'now', live: true, include_docs: true })
@@ -399,6 +393,29 @@ class App {
 
     return docs.rows[0].id;
   }
+
+  private async sendGenericPushNotification(req: express.Request, res: express.Response, payload: any) {
+      const id: string = await this.canonicalId(req.params.id);
+      try {
+        const pushToken = (await this.accountsDb.get(id)).pushToken;
+        if (!pushToken) {
+          res.status(404).send('No push token for this character');
+          return;
+        }
+
+        payload.to = pushToken;
+
+        const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
+            resolveWithFullResponse: true, simple: false,
+            headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
+            json: payload,
+        });
+        res.status(fcmResponse.statusCode).send(fcmResponse.body);
+      } catch (e) {
+        this.returnCharacterNotFoundOrRethrow(e, req, res);
+      }
+  }
+
 }
 
 export default App;
