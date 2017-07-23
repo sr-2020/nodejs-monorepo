@@ -8,8 +8,12 @@ import { QrType } from "./qr.type";
 
 
 function QrDataFromQuery(query: any): QrData {
-  if (typeof query.type == 'string')
+  if (/^[0-9]*$/.test(query.type)) {
+    query.type = Number(query.type);
+  }
+  else {
     query.type = QrType[query.type];
+  }
   return query;
 }
 
@@ -55,7 +59,6 @@ class App {
     this.app.get('/decode', (req, res) => {
       try {
         const decoded: any = decode(req.query.content)
-        decoded.type = QrType[decoded.type];
         res.send(decoded);
       }
       catch (e) {
@@ -67,6 +70,10 @@ class App {
 
   listen(port: number) {
     this.server = this.app.listen(port);
+  }
+
+  stop() {
+    this.server.close();
   }
 }
 
