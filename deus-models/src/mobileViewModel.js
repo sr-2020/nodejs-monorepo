@@ -146,7 +146,6 @@ function getImplantsPageItem(modifier) {
                 {
                     text: getEnableActionText(modifier.enabled),
                     eventType: modifier.enabled ? "disableImplant" : "enableImplant",
-                    needsQr: false,
                     destructive: false,
                     data: {
                         mID: modifier.mID,
@@ -155,7 +154,7 @@ function getImplantsPageItem(modifier) {
                 {
                     text: "Отдать гопнику (не работает)",
                     eventType: "giveAway",
-                    needsQr: true,
+                    needsQr: 100,
                     destructive: true,
                     data: {
                         mID: modifier.mID,
