@@ -233,6 +233,48 @@ function getBodyPage(model) {
     };
 }
 
+// TODO: Get data from model
+function getAdminsPage(model) {
+    return {
+        __type: "ListPageViewModel",
+        menuTitle: "Администраторы",
+        body: {
+            title: "Администраторы",
+            items: [
+                {
+                    text: "Правая рука",
+                    subtext: "007, 12, 13",
+                    subitems: {
+                        title: "Админы: Правая рука",
+                        eventType: "setAdmins",
+                        eventFirstArg: "rightHand",
+                        items: [
+                            {
+                                text: "007",
+                                deletable: false,
+                            },
+                            {
+                                text: "12",
+                                deletable: true,
+                            },
+                            {
+                                text: "13",
+                                deletable: true,
+                            },
+                        ],
+                        addAction: {
+                            buttonText: "Добавить",
+                            inputDialogTitle: "ID администратора",
+                            inputDialogMessage: "Укажите ID нового администратора для системы <b>Правая рука</b>",
+                            inputType: "number",
+                        },
+                    },
+                },
+            ],
+        },
+    };
+}
+
 function getChangesPageItem(change) {
     return {
         viewId: "mid:" + change.mID,
@@ -285,6 +327,7 @@ function getPages(model) {
         getConditionsPage(model),
         getImplantsPage(model),
         getEconomyPage(),
+        getAdminsPage(model),
         getChangesPage(model),
         getMessagesPage(model),
     ];
