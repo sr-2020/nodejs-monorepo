@@ -129,7 +129,7 @@ export class Worker extends EventEmitter {
             if (!this.child) return reject(new Error('No child process'));
 
             let result = this.rx.message.filter((m) => m.type == 'result') as Rx.Observable<EngineResult>;
-            result.first().subscribe(resolve);
+            result.take(1).subscribe(resolve);
 
             let aquire = this.rx.message.filter((m) => m.type == 'aquire') as Rx.Observable<EngineReplyAquire>;
             aquire.takeUntil(Rx.Observable.merge(result, this.rx.stop)).subscribe(async (msg: EngineReplyAquire) => {

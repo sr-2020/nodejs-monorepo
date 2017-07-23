@@ -114,4 +114,71 @@ describe('Crash scenarios', function() {
 
         expect(baseModel).to.has.property('timestamp');
     });
+
+    it('Should not crash if worker was somehow killed', async () => {
+        let model = await createModel(di);
+        let timestamp = Date.now() + 10;
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'kill',
+            timestamp: timestamp
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 2
+        });
+
+        await delay(100);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 3
+        });
+
+        await delay(100);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 4
+        });
+
+        await delay(100);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 4
+        });
+
+        await delay(100);
+
+        // now let's try normal operation
+
+        model = await createModel(di);
+        timestamp = Date.now();
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'concat',
+            timestamp: timestamp,
+            data: { value: 'A' }
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 50
+        })
+
+        await delay(200);
+
+        let baseModel = await getModel(di, model._id);
+
+        expect(baseModel).to.has.property('value', 'A');
+    });
 });

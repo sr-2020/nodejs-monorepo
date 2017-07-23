@@ -13,6 +13,10 @@
             "effects": ["crash"]
         },
         {
+            "eventType": "kill",
+            "effects": ["kill"]
+        },
+        {
             "eventType": "externalCounter",
             "effects": ["externalCounter"]
         }

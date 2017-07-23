@@ -14,6 +14,10 @@ module.exports = () => {
             throw new Error('bang!');
         },
 
+        kill() {
+            process.exit(1);
+        },
+
         externalCounter(api) {
             let abc = api.aquired('counters', 'abc');
             if (abc) {
