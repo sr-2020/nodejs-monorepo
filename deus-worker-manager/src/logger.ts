@@ -4,8 +4,11 @@ import * as winston from 'winston';
 import * as Graylog from 'winston-graylog2';
 
 import { Config, LoggerConfig } from './config';
+import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
+// Set default winston config
 (winston.transports as any).Graylog2 = Graylog;
+winston.setLevels(winston.config.syslog.levels);
 
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
@@ -13,13 +16,11 @@ function defLevel(level: LogLevel) {
     };
 }
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-export type LogSource = 'default' | 'manager' | 'engine' | 'model';
-
 export interface LoggerInterface {
     log(source: LogSource, level: LogLevel, msg: string, ...rest: any[]): void;
     debug(source: LogSource, msg: string, ...rest: any[]): void;
     info(source: LogSource, msg: string, ...rest: any[]): void;
+    notice(source: LogSource, msg: string, ...rest: any[]): void;
     warn(source: LogSource, msg: string, ...rest: any[]): void;
     error(source: LogSource, msg: string, ...rest: any[]): void;
 }
@@ -46,6 +47,7 @@ export class Logger implements LoggerInterface {
 
     debug = defLevel('debug');
     info = defLevel('info');
-    warn = defLevel('warn');
+    notice = defLevel('notice');
+    warn = defLevel('warning');
     error = defLevel('error');
 }

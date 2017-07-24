@@ -56,15 +56,14 @@ export class Processor {
     }
 
     async run() {
-        this.logger.debug('manager', 'processing model %s', this.event.characterId);
+        this.logger.info('manager', 'processing model %s', this.event.characterId, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
         this.state = 'Waiting for worker';
 
         try {
             await this.pool.withWorker(async (worker: Worker) => {
                 this.state = 'Processing';
 
-                this.logger.debug('manager', 'worker aquired');
-                this.logger.debug('manager', 'processing with event %j', this.event);
+                this.logger.info('manager', 'worker aquired', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
                 const characterId = this.event.characterId;
                 const model = await this.modelStorage.find(characterId);
 
@@ -75,12 +74,13 @@ export class Processor {
 
                 events.push(this.event);
 
-                this.logger.debug('manager', 'events = %j', events);
+                this.logger.debug('manager', 'events = %j', events, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
 
                 const objectStorage = new BoundObjectStorage(this.objectStorage);
                 const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
-                this.logger.debug('manager', 'result = %j', result);
+                this.logger.info('manager', 'model processing finished', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.debug('manager', 'result = %j', result, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
 
                 if (result.status == 'ok') {
                     let { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
@@ -88,14 +88,21 @@ export class Processor {
                     delete workingModel._rev;
                     workingModel.timestamp = baseModel.timestamp;
 
-                    await Promise.all([
-                        this.modelStorage.store(baseModel),
-                        this.workingModelStorage.store(workingModel),
-                        this.storeViewModels(characterId, baseModel.timestamp, viewModels),
-                        this.storeOutboundEvents(outboundEvents),
-                        this.storeAquiredObjects(objectStorage, aquired)
-                    ]);
+                    try {
+                        await Promise.all([
+                            this.modelStorage.store(baseModel),
+                            this.workingModelStorage.store(workingModel),
+                            this.storeViewModels(characterId, baseModel.timestamp, viewModels),
+                            this.storeOutboundEvents(outboundEvents),
+                            this.storeAquiredObjects(objectStorage, aquired)
+                        ]);
+
+                        this.logger.info('manager', 'all data stored', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                    } finally {
+                        objectStorage.release();
+                    }
                 } else {
+                    objectStorage.release();
                     throw result.error;
                 }
             });
@@ -121,7 +128,7 @@ export class Processor {
             pending.push(this.viewModelStorage.store(alias, viewModel));
         }
 
-        return pending;
+        return Promise.all(pending);
     }
 
     private async storeOutboundEvents(outboundEvents: Event[] | undefined) {
@@ -149,8 +156,6 @@ export class Processor {
             await objectStorage.store(aquired);
         } catch (e) {
             this.logger.error('manager', "Can't store aquired objects: %j %j", aquired, e);
-        } finally {
-            objectStorage.release();
         }
     }
 }

@@ -5,7 +5,7 @@ import { fromStream } from './utils';
 
 import { Event, EngineMessage, EngineReply, EngineReplyAquire, EngineResult, EngineResultOk, EngineResultError } from 'deus-engine-manager-api';
 
-import { LoggerInterface, LogLevel } from './logger';
+import { LoggerInterface } from './logger';
 import { Catalogs } from './catalogs_storage';
 import { BoundObjectStorage } from './object_storage';
 
@@ -112,8 +112,11 @@ export class Worker extends EventEmitter {
     handleLogMessage = (syncEvent?: Event) => (message: any) => {
         if (message.type == 'log') {
             if (syncEvent) {
-                message.characterId = syncEvent.characterId;
-                message.eventTimestamp = syncEvent.timestamp;
+                message.params = message.params || [];
+                message.params.push({
+                    characterId: syncEvent.characterId,
+                    eventTimestamp: syncEvent.timestamp
+                });
             }
             this.logger.log(message.source, message.level, message.msg, ...message.params);
         }
