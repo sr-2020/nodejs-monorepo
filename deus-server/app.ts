@@ -273,8 +273,8 @@ class App {
       await this.sendGenericPushNotificationAndRespond(req, res, req.body);
     });
 
-    const deleteMeLogFn = (id: string, result: StatusAndBody) => {
-      this.logger.info(`Sending notification to ${id}`, { result });
+    const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
+      result.then((r) => this.logger.info(`Sending notification to ${id}`, { r })).catch(() => {});
     };
 
     if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyTitle) {
@@ -283,7 +283,7 @@ class App {
       setInterval(async () => {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
-        inactiveIDs.map(async (id) => deleteMeLogFn(id, await this.sendGenericPushNotification(id,
+        inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
           this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
       }, autoNotifySettings.performOncePerMs);
     }
@@ -293,7 +293,7 @@ class App {
       setInterval(async () => {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
-        inactiveIDs.map(async (id) => deleteMeLogFn(id, await this.sendGenericPushNotification(id,
+        inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
           this.makeSilentRefreshNotificationPayload())));
       }, autoRefreshSettings.performOncePerMs);
     }
