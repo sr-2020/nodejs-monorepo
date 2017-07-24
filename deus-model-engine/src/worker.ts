@@ -37,20 +37,25 @@ export class Worker {
     }
 
     async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
-        Logger.info('engine', 'processing %j', events);
+        Logger.info('engine', 'processing model %s', context.characterId, events);
 
         let baseCtx = new Context(context, events, this.config.dictionaries);
 
         try {
-            this.runPreprocess(baseCtx, events);
+            Logger.logStep('engine', 'info', 'preprocess')(() => this.runPreprocess(baseCtx, events));
         } catch (e) {
             Logger.error('engine', 'Exception caught when running preproces: %s', event, e.toString());
             return { status: 'error', error: e };
         }
 
         if (baseCtx.pendingAquire.length) {
-            await this.waitAquire(baseCtx);
-            Logger.debug('engine', 'aquired: %j', baseCtx.aquired);
+            try {
+                await Logger.logAsyncStep('engine', 'info', 'wait for aquired objects: %j', baseCtx.pendingAquire)(() => this.waitAquire(baseCtx));
+                Logger.debug('engine', 'aquired: %j', baseCtx.aquired);
+            } catch (e) {
+                Logger.error('engine', 'Exception caught when aquiring external objects: %s', e.toString());
+                return { status: 'error', error: e };
+            }
         }
 
         let workingCtx = baseCtx.clone();
@@ -59,19 +64,20 @@ export class Worker {
         // main loop
         //
         for (let event of baseCtx.iterateEvents()) {
-            Logger.info('engine', 'run event', event);
-
             baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
 
             try {
-                this.runEvent(baseCtx, event);
+                Logger.logStep('engine', 'info', 'run event %s', event.eventType)(() => {
+                    Logger.debug('engine', 'event: %j', event);
+                    this.runEvent(baseCtx, event);
+                });
             } catch (e) {
                 Logger.error('engine', 'Exception caught when processing event %j: %s', event, e.toString());
                 return { status: 'error', error: e };
             }
 
             try {
-                workingCtx = this.runModifiers(baseCtx);
+                workingCtx = Logger.logStep('engine', 'info', 'run modifiers')(() => this.runModifiers(baseCtx));
             } catch (e) {
                 Logger.error('engine', 'Exception caught when applying modifiers: %s', e.toString());
                 return { status: 'error', error: e };
@@ -86,7 +92,7 @@ export class Worker {
         let viewModels;
 
         try {
-            viewModels = this.runViewModels(workingCtx, baseCtx);
+            viewModels = Logger.logStep('engine', 'info', 'run view models')(() => this.runViewModels(workingCtx, baseCtx));
         } catch (e) {
             Logger.error('engine', 'Exception caught when running view models: %s', e.toString());
             return { status: 'error', error: e };
@@ -174,7 +180,9 @@ export class Worker {
             for (let effect of effects) {
                 let f = this.resolveCallback(effect.handler);
                 if (!f) continue;
-                f(api, modifier);
+                Logger.logStep('engine', 'info', 'run effect %s on modifier %s', effect.name, modifier.name)(() => {
+                    (f as any)(api, modifier);
+                });
             }
         }
 

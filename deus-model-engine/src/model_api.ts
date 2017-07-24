@@ -122,6 +122,10 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
         Logger.info('model', msg, ...params);
     }
 
+    notice(msg: string, ...params: any[]) {
+        Logger.notice('model', msg, ...params);
+    }
+
     warn(msg: string, ...params: any[]) {
         Logger.warn('model', msg, ...params);
     }

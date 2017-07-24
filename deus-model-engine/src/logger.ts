@@ -1,8 +1,7 @@
 import * as Winston from 'winston';
 (Winston as any).level = 'debug';
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
-export type LogSource = 'engine' | 'model';
+import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
 function log(source: LogSource, level: LogLevel, msg: string, ...params: any[]) {
     if (process && process.send) {
@@ -18,6 +17,24 @@ function log(source: LogSource, level: LogLevel, msg: string, ...params: any[]) 
     }
 }
 
+function logStep(source: LogSource, level: LogLevel, step: string, ...params: any[]) {
+    return (stepBody: Function) => {
+        log(source, level, step + ' -- started', ...params);
+        let result = stepBody();
+        log(source, level, step + ' -- finished');
+        return result;
+    }
+}
+
+function logAsyncStep(source: LogSource, level: LogLevel, step: string, ...params: any[]) {
+    return async (stepBody: Function) => {
+        log(source, level, step + ' -- started', ...params);
+        let result = await stepBody();
+        log(source, level, step + ' -- finished');
+        return result;
+    }
+}
+
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
         log(source, level, msg, ...rest);
@@ -26,8 +43,12 @@ function defLevel(level: LogLevel) {
 
 export default {
     log,
+    logStep,
+    logAsyncStep,
     debug: defLevel('debug'),
     info: defLevel('info'),
-    warn: defLevel('warn'),
-    error: defLevel('error')
+    notice: defLevel('notice'),
+    warn: defLevel('warning'),
+    error: defLevel('error'),
+    crit: defLevel('crit')
 }
