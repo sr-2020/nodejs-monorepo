@@ -10,13 +10,18 @@ function logger(label) {
             filename: __dirname + '/log/operation.log'
         },
 
-        // graylog2: {
-        //     level: 'debug',
-        //     facility: 'alice-dev'
-        //     servers: [
-        //         {host: 'mon01.alice.local', port: 12201}
-        //     ]
-        // }
+        graylog2: {
+            level: 'debug',
+            graylog: {
+                servers: [
+                    {host: 'mon01.alice.local', port: 12201}
+                ]
+            },
+            staticMeta: {
+                env: 'development',
+                label
+            }
+        }
     };
 
     if (label) {
