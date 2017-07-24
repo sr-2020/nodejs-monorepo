@@ -277,7 +277,8 @@ class App {
     });
 
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
-      result.then((r) => this.logger.info(`Sending notification to ${id}`, { r })).catch(() => {});
+      result.then((r) => this.logger.info(`Sending notification to ${id}`, { r }))
+        .catch((err) => this.logger.warn(err));
     };
 
     if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyTitle) {
@@ -491,6 +492,7 @@ class App {
     } catch (e) {
       if (IsNotFoundError(e))
         return { status: 404, body: 'Character with such id or login is not found' };
+      this.logger.error(e);
       throw e;
     }
   }
