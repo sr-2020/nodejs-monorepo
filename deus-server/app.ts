@@ -285,10 +285,14 @@ class App {
       const autoNotifySettings = this.settings.pushSettings.autoNotify;
       const autoNotifyTitle = this.settings.pushSettings.autoNotifyTitle;
       this.cancelAutoNotify = setInterval(async () => {
+        try {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
           this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
+        } catch (e) {
+          this.logger.error(e);
+        }
       }, autoNotifySettings.performOncePerMs);
     }
 
