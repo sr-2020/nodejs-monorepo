@@ -277,14 +277,14 @@ class App {
       this.logger.info(`Sending notification to ${id}`, { result });
     };
 
-    if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyBody) {
+    if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyTitle) {
       const autoNotifySettings = this.settings.pushSettings.autoNotify;
-      const autoNotifyBody = this.settings.pushSettings.autoNotifyBody;
+      const autoNotifyTitle = this.settings.pushSettings.autoNotifyTitle;
       setInterval(async () => {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map(async (id) => deleteMeLogFn(id, await this.sendGenericPushNotification(id,
-          this.makeVisibleNotificationPayload(autoNotifyBody, this.settings.pushSettings.autoNotifyTitle))));
+          this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
       }, autoNotifySettings.performOncePerMs);
     }
 
