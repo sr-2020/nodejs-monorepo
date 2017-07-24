@@ -8,7 +8,15 @@ function logger(label) {
         file: {
             level: 'info',
             filename: __dirname + '/log/operation.log'
-        }
+        },
+
+        // graylog2: {
+        //     level: 'debug',
+        //     facility: 'alice-dev'
+        //     servers: [
+        //         {host: 'mon01.alice.local', port: 12201}
+        //     ]
+        // }
     };
 
     if (label) {

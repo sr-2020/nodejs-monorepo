@@ -1,7 +1,11 @@
 import { Inject } from './di';
 import { Container, ContainerInstance } from 'winston';
+import * as winston from 'winston';
+import * as Graylog from 'winston-graylog2';
 
 import { Config, LoggerConfig } from './config';
+
+(winston.transports as any).Graylog2 = Graylog;
 
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, ...rest: any[]) {
@@ -27,6 +31,7 @@ export class Logger implements LoggerInterface {
 
     constructor(config: Config) {
         this.config = config.logger;
+
         this.container = new Container(this.config.default);
 
         for (let src in this.config) {
