@@ -25,7 +25,7 @@ describe('Mass push notifications', () => {
   const pushSettings: PushSettings = {
     username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey',
     autoRefresh: {
-      notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 25,
+      notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 160,
     },
   };
 
@@ -90,7 +90,7 @@ describe('Mass push notifications', () => {
       .reply(200);
     app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
     await app.listen(port);
-    await delay(30);
+    await delay(300);
     expect(fcm.isDone()).is.true;
   });
 });
