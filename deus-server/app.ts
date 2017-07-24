@@ -261,15 +261,15 @@ class App {
     };
 
     this.app.post('/push/visible/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotification(req, res, this.makeVisibleNotificationPayload(req.body));
+      await this.sendGenericPushNotificationAndRespond(req, res, this.makeVisibleNotificationPayload(req.body));
     });
 
     this.app.post('/push/refresh/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotification(req, res, this.makeSilentRefreshNotificationPayload());
+      await this.sendGenericPushNotificationAndRespond(req, res, this.makeSilentRefreshNotificationPayload());
     });
 
     this.app.post('/push/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotification(req, res, req.body);
+      await this.sendGenericPushNotificationAndRespond(req, res, req.body);
     });
 
     this.mobileViewmodelDb().changes({ since: 'now', live: true, include_docs: true })
@@ -416,14 +416,17 @@ class App {
     };
   }
 
-  private async sendGenericPushNotification(req: express.Request, res: express.Response, payload: any) {
+  private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
       const id: string = await this.canonicalId(req.params.id);
+      const statusAndBody = await this.sendGenericPushNotification(id, payload);
+      res.status(statusAndBody.status).send(statusAndBody.body);
+  }
+
+  private async sendGenericPushNotification(id: string, payload: any): Promise<StatusAndBody> {
       try {
         const pushToken = (await this.accountsDb.get(id)).pushToken;
-        if (!pushToken) {
-          res.status(404).send('No push token for this character');
-          return;
-        }
+        if (!pushToken)
+          return {status: 404, body: 'No push token for this character'};
 
         payload.to = pushToken;
 
@@ -432,9 +435,11 @@ class App {
             headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
             json: payload,
         });
-        res.status(fcmResponse.statusCode).send(fcmResponse.body);
+        return {status: fcmResponse.statusCode, body: fcmResponse.body };
       } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
+        if (IsNotFoundError(e))
+          return {status: 404, body: 'Character with such id or login is not found'};
+        throw e;
       }
   }
 
