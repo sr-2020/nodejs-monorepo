@@ -9,7 +9,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { PushSettings, Settings } from './settings';
+import { PushSettings, ApplicationSettings } from './settings';
 
 const port = 3000;
 
@@ -29,7 +29,7 @@ describe('Mass push notifications', () => {
     },
   };
 
-  const settings: Settings = {
+  const settings: ApplicationSettings = {
     viewmodelUpdateTimeout: 20, accessGrantTime: 200,
     tooFarInFutureFilterTime: 30000, pushSettings,
   };

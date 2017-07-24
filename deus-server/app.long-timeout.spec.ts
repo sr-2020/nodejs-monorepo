@@ -10,7 +10,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { PushSettings, Settings } from './settings';
+import { PushSettings, ApplicationSettings } from './settings';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -27,7 +27,7 @@ describe('API Server - long timeout', () => {
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     const logger = new winston.Logger({ level: 'warning' });
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
-    const settings: Settings = {
+    const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };

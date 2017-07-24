@@ -15,7 +15,7 @@ PouchDB.plugin(PouchDBUpsert);
 import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
-import { Settings } from './settings';
+import { ApplicationSettings } from './settings';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -40,7 +40,7 @@ class App {
               private eventsDb: PouchDB.Database<any>,
               private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
               private accountsDb: PouchDB.Database<any>,
-              private settings: Settings) {
+              private settings: ApplicationSettings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
