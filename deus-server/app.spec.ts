@@ -21,7 +21,7 @@ There are following characters present in this test:
 id     login                      password  comment
 
 00001  some_user                  qwerty    Has viewmodel, timestamp = 420. Also have push token.
-00002  some_other_user            asdfg     Has viewmodel, timestamp = 420.
+00002  some_other_user            asdfg     Has viewmodel, timestamp = 10000.
 
 55555  user_without_model         hunter2   Has no viewmodel, used to test for corresponding 404 errors
 
@@ -64,11 +64,11 @@ describe('API Server', () => {
       updatesCount: 0, mobile: false,
     });
     await defaultViewModelDb.put({
-      _id: '00002', timestamp: 420,
+      _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: false,
     });
     await mobileViewModelDb.put({
-      _id: '00002', timestamp: 420,
+      _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: true,
     });
     await accountsDb.put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
@@ -797,7 +797,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: { registrationId: '00002snewtoken'} },
+        data: { token: { registrationId: '00002snewtoken' } },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -817,12 +817,12 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: { registrationId: '00002snewtoken'} },
+        data: { token: { registrationId: '00002snewtoken' } },
       },
       {
         eventType: 'tokenUpdated',
         timestamp: 9953,
-        data: { token: { registrationId: '00002snewesttoken'} },
+        data: { token: { registrationId: '00002snewesttoken' } },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -845,7 +845,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: { registrationId: '00001snewtoken'} },
+        data: { token: { registrationId: '00001snewtoken' } },
       }];
 
       const response = await rp.post(address + '/events/00001',
@@ -868,7 +868,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: { registrationId: '00001spushtoken'} },
+        data: { token: { registrationId: '00001spushtoken' } },
       }];
 
       const response = await rp.post(address + '/events/00002',
@@ -888,7 +888,7 @@ describe('API Server', () => {
       const events = [{
         eventType: 'tokenUpdated',
         timestamp: 4365,
-        data: { token: { registrationId: '00001spushtoken'} },
+        data: { token: { registrationId: '00001spushtoken' } },
       }];
 
       const response = await rp.post(address + '/events/00001',
@@ -991,6 +991,20 @@ describe('API Server', () => {
       expect(response.statusCode).to.equal(404);
     });
 
+  });
+
+  describe('Periodic notification sending', () => {
+    it('Can sort characters by timestamp', async () => {
+      const docsOld = await mobileViewModelDb.query('web_api_server_v2/by_timestamp',
+        { startkey: 0, endkey: 1000 });
+      expect(docsOld.rows.length).to.equal(1);
+      expect(docsOld.rows[0].id).to.equal('00001');
+
+      const docsNew = await mobileViewModelDb.query('web_api_server_v2/by_timestamp',
+        { startkey: 1000, endkey: 999999 });
+      expect(docsNew.rows.length).to.equal(1);
+      expect(docsNew.rows[0].id).to.equal('00002');
+    });
   });
 });
 

@@ -35,10 +35,10 @@ class App {
   private connections = new TSMap<string, Connection>();
 
   constructor(private logger: winston.LoggerInstance,
-              private eventsDb: PouchDB.Database<any>,
-              private viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>,
-              private accountsDb: PouchDB.Database<any>,
-              private settings: Settings) {
+    private eventsDb: PouchDB.Database<any>,
+    private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
+    private accountsDb: PouchDB.Database<any>,
+    private settings: Settings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -132,8 +132,8 @@ class App {
 
       const tokenUpdatedEvents = events.filter((event) => event.eventType == 'tokenUpdated');
       if (tokenUpdatedEvents.length > 0) {
-       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
-        const existingCharacterWithThatToken = await accountsDb.query('web_api_server_v2/by_push_token', { key: token});
+        const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
+        const existingCharacterWithThatToken = await accountsDb.query('web_api_server_v2/by_push_token', { key: token });
         for (const existingCharacter of existingCharacterWithThatToken.rows) {
           await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
             delete accountInfo.pushToken;
@@ -255,13 +255,14 @@ class App {
       const credentials = basic_auth(req);
       if (credentials &&
         credentials.name == settings.pushSettings.username && credentials.pass == settings.pushSettings.password)
-          return next();
+        return next();
       res.header('WWW-Authentificate', 'Basic');
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
 
     this.app.post('/push/visible/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotificationAndRespond(req, res, this.makeVisibleNotificationPayload(req.body));
+      await this.sendGenericPushNotificationAndRespond(req, res,
+        this.makeVisibleNotificationPayload(req.body.title, req.body.body));
     });
 
     this.app.post('/push/refresh/:id', pushAuth, async (req, res) => {
@@ -271,6 +272,31 @@ class App {
     this.app.post('/push/:id', pushAuth, async (req, res) => {
       await this.sendGenericPushNotificationAndRespond(req, res, req.body);
     });
+
+    const deleteMeLogFn = (id: string, result: StatusAndBody) => {
+      this.logger.info(`Sending notification to ${id}`, { result });
+    };
+
+    if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyBody) {
+      const autoNotifySettings = this.settings.pushSettings.autoNotify;
+      const autoNotifyBody = this.settings.pushSettings.autoNotifyBody;
+      setInterval(async () => {
+        const inactiveIDs =
+          await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
+        inactiveIDs.map(async (id) => deleteMeLogFn(id, await this.sendGenericPushNotification(id,
+          this.makeVisibleNotificationPayload(autoNotifyBody, this.settings.pushSettings.autoNotifyTitle))));
+      }, autoNotifySettings.performOncePerMs);
+    }
+
+    if (this.settings.pushSettings.autoRefresh) {
+      const autoRefreshSettings = this.settings.pushSettings.autoRefresh;
+      setInterval(async () => {
+        const inactiveIDs =
+          await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
+        inactiveIDs.map(async (id) => deleteMeLogFn(id, await this.sendGenericPushNotification(id,
+          this.makeSilentRefreshNotificationPayload())));
+      }, autoRefreshSettings.performOncePerMs);
+    }
 
     this.mobileViewmodelDb().changes({ since: 'now', live: true, include_docs: true })
       .on('change', (change) => {
@@ -311,6 +337,17 @@ class App {
           },
         };
       });
+
+      await this.mobileViewmodelDb().upsert('_design/web_api_server_v2', () => {
+        return {
+          _id: '_design/web_api_server_v2',
+          views: {
+            by_timestamp: {
+              map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
+            },
+          },
+        };
+      });
     } catch (err) {
       console.error(err);
     }
@@ -337,6 +374,12 @@ class App {
     const docs = await this.eventsDb.query<any>('web_api_server_v2/characterId_timestamp_mobile',
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
+  }
+
+  private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
+    const docs = await this.mobileViewmodelDb().query('web_api_server_v2/by_timestamp',
+      { startkey: 0, endkey: this.currentTimestamp() - ms });
+    return docs.rows.map((doc) => doc.id);
   }
 
   private returnCharacterNotFoundOrRethrow(e: any, req: express.Request, res: express.Response) {
@@ -389,58 +432,58 @@ class App {
     return docs.rows[0].id;
   }
 
-  private makeVisibleNotificationPayload(requestBody: any): any {
+  private makeVisibleNotificationPayload(title: string, body?: string): any {
     return {
-        notification: {
-          title: requestBody.title,
-          body: requestBody.body ? requestBody.body : ' ',
-          sound: 'default',
-        },
-        aps: {
-          sound: 'default',
-        },
-      };
+      notification: {
+        title: title,
+        body: body ? body : ' ',
+        sound: 'default',
+      },
+      aps: {
+        sound: 'default',
+      },
+    };
   }
 
   private makeSilentRefreshNotificationPayload(): any {
     return {
-        apps: {
-          'content-available': 1,
-        },
-        content_available: true,
-        notId: uuid(),
-        data: {
-          'refresh': true,
-          'content-available': 1,
-        },
+      apps: {
+        'content-available': 1,
+      },
+      content_available: true,
+      notId: uuid(),
+      data: {
+        'refresh': true,
+        'content-available': 1,
+      },
     };
   }
 
   private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
-      const id: string = await this.canonicalId(req.params.id);
-      const statusAndBody = await this.sendGenericPushNotification(id, payload);
-      res.status(statusAndBody.status).send(statusAndBody.body);
+    const id: string = await this.canonicalId(req.params.id);
+    const statusAndBody = await this.sendGenericPushNotification(id, payload);
+    res.status(statusAndBody.status).send(statusAndBody.body);
   }
 
   private async sendGenericPushNotification(id: string, payload: any): Promise<StatusAndBody> {
-      try {
-        const pushToken = (await this.accountsDb.get(id)).pushToken;
-        if (!pushToken)
-          return {status: 404, body: 'No push token for this character'};
+    try {
+      const pushToken = (await this.accountsDb.get(id)).pushToken;
+      if (!pushToken)
+        return { status: 404, body: 'No push token for this character' };
 
-        payload.to = pushToken;
+      payload.to = pushToken;
 
-        const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
-            resolveWithFullResponse: true, simple: false,
-            headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
-            json: payload,
-        });
-        return {status: fcmResponse.statusCode, body: fcmResponse.body };
-      } catch (e) {
-        if (IsNotFoundError(e))
-          return {status: 404, body: 'Character with such id or login is not found'};
-        throw e;
-      }
+      const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
+        resolveWithFullResponse: true, simple: false,
+        headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
+        json: payload,
+      });
+      return { status: fcmResponse.statusCode, body: fcmResponse.body };
+    } catch (e) {
+      if (IsNotFoundError(e))
+        return { status: 404, body: 'Character with such id or login is not found' };
+      throw e;
+    }
   }
 
 }
