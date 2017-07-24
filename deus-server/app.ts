@@ -33,12 +33,14 @@ class App {
   private app: express.Express = express();
   private server: http.Server;
   private connections = new TSMap<string, Connection>();
+  private cancelAutoNotify: NodeJS.Timer;
+  private cancelAutoRefresh: NodeJS.Timer;
 
   constructor(private logger: winston.LoggerInstance,
-    private eventsDb: PouchDB.Database<any>,
-    private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
-    private accountsDb: PouchDB.Database<any>,
-    private settings: Settings) {
+              private eventsDb: PouchDB.Database<any>,
+              private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
+              private accountsDb: PouchDB.Database<any>,
+              private settings: Settings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -133,7 +135,8 @@ class App {
       const tokenUpdatedEvents = events.filter((event) => event.eventType == 'tokenUpdated');
       if (tokenUpdatedEvents.length > 0) {
         const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
-        const existingCharacterWithThatToken = await accountsDb.query('web_api_server_v2/by_push_token', { key: token });
+        const existingCharacterWithThatToken =
+          await accountsDb.query('web_api_server_v2/by_push_token', { key: token });
         for (const existingCharacter of existingCharacterWithThatToken.rows) {
           await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
             delete accountInfo.pushToken;
@@ -280,7 +283,7 @@ class App {
     if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyTitle) {
       const autoNotifySettings = this.settings.pushSettings.autoNotify;
       const autoNotifyTitle = this.settings.pushSettings.autoNotifyTitle;
-      setInterval(async () => {
+      this.cancelAutoNotify = setInterval(async () => {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
@@ -290,7 +293,7 @@ class App {
 
     if (this.settings.pushSettings.autoRefresh) {
       const autoRefreshSettings = this.settings.pushSettings.autoRefresh;
-      setInterval(async () => {
+      this.cancelAutoRefresh = setInterval(async () => {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
@@ -356,6 +359,12 @@ class App {
 
   public stop() {
     this.server.close();
+    if (this.cancelAutoNotify) {
+      clearInterval(this.cancelAutoNotify);
+    }
+    if (this.cancelAutoRefresh) {
+      clearInterval(this.cancelAutoRefresh);
+    }
   }
 
   public currentTimestamp(): number {
