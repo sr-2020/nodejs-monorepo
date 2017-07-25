@@ -23,12 +23,16 @@ export class ModelRefresher{
     }
 
     //Послать _Refresh событие для экспортрованной модели, что бы сформировалась Work/ViewModel
-    sentRefreshEvent(id: string): Promise<any>{
-        let timestamp:string = Date.now().toString();
+    sentRefreshEvent(char: JoinCharacterDetail): Promise<any>{
+        let timestamp = Date.now();
+
+        if(char.model && char.model.timestamp){
+            timestamp = char.model.timestamp + 1000;
+        }
 
         let event =   {
-                characterId: id,
-                timestamp: timestamp,
+                characterId: char._id,
+                timestamp,
                 eventType: "_RefreshModel",
                 data: ""
             };

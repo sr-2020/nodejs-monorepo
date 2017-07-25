@@ -15,8 +15,10 @@ import { DeusModel, MemoryElement, MindData } from './interfaces/model';
 import { DeusModifier } from './interfaces/modifier';
 import { DeusCondition } from './interfaces/condition';
 import { DeusEffect } from './interfaces/effect';
+import { DeusEvent } from './interfaces/events';
 import { mindModelData } from './mind-model-stub';
 import { CatalogsLoader } from './catalogs-loader';
+import { saveObject } from './helpers'
 
 const PHYS_SYSTEMS_NUMBER = 6;
 
@@ -38,9 +40,13 @@ export interface INameParts{
 export class AliceExporter{
     private con:any = null;
     private accCon:any = null;
+    private eventsCon:any = null;
+    
     
     private chance:Chance.SeededChance;
     public model: DeusModel = new DeusModel();
+
+    private eventsToSend: DeusEvent[] = [];
 
     public account: IAliceAccount = { _id:"", password: "", login: "" };
 
@@ -57,8 +63,8 @@ export class AliceExporter{
         };
 
         this.con = new PouchDB(`${config.url}${config.modelDBName}`, ajaxOpts);
-
-        this.accCon = new PouchDB(`${config.url}${config.accountDBName}`, ajaxOpts);        
+        this.accCon = new PouchDB(`${config.url}${config.accountDBName}`, ajaxOpts);
+        this.eventsCon = new PouchDB(`${config.url}${config.eventsDBName}`, ajaxOpts);      
 
         this.chance = new chance(character.CharacterId);
 
@@ -72,43 +78,26 @@ export class AliceExporter{
         }
 
         //Create or update Profile 
-        let profilePromise = this.con.get( this.model._id)
-                        .then( (oldc:any) =>{ 
-                            if(this.isUpdate){
-                                this.model._rev = oldc._rev;
-                                winston.info(`Update model with id = ${this.model._id}.`);
-                                return this.con.put(this.model);
-                            }
+        let profilePromise = saveObject(this.con, this.model, this.isUpdate);
 
-                            winston.info(`Model with id = ${this.model._id} is exists in DB. Updates is disabled!`);
-                            return Promise.resolve("exists");
-                        })
-                        .catch( () => this.con.put(this.model) );
+        //Put events for model
+        let eventsPromise = Promise.resolve([]);
+        if(this.eventsToSend.length) { eventsPromise = this.eventsCon.bulkDocs(this.eventsToSend) }
 
-        if(!this.account.login || !this.account.password){
-            return Promise.all([profilePromise, Promise.resolve(false)]);;
+        //Create or update account record
+        let accPromise = Promise.resolve(false);
+        if(this.account.login && this.account.password){
+            accPromise = saveObject(this.accCon, this.account, this.isUpdate);
         }
         
-        //Create or update account record
-         let accPromise = this.accCon.get( this.account._id)
-                .then( (oldc:any) =>{ 
-                    if(this.isUpdate){
-                        this.account._rev = oldc._rev;
-                        winston.info(`Update account with id = ${this.account._id}.`);
-                        return this.accCon.put(this.account);
-                    }
-
-                    winston.info(`Acount with id = ${this.account._id} is exists in DB. Updates is disabled!`);
-                    return Promise.resolve("exists");
-                })
-                .catch( () => this.accCon.put(this.account) );
-
-        return Promise.all([profilePromise, accPromise]);
+        return Promise.all([profilePromise, accPromise, eventsPromise]);
     }
 
     private createModel(){
         try{
             winston.info(`Try to convert model id=${this.character.CharacterId}`);
+
+            this.model.timestamp = Date.now();
 
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
@@ -231,9 +220,7 @@ export class AliceExporter{
             //начальное количество хитов
             this.model.maxHp = 2;
             this.model.hp = 2;
-
-            //Технические параметры
-            this.model.timestamp = Date.now();
+ 
 
         }catch(e){
             winston.info(`Error in converting model id=${this.character.CharacterId}: ` + e);
@@ -383,17 +370,37 @@ export class AliceExporter{
 
     //Получить список имплантов и загрузить их в модель. Field: 2015
     setImplants(){
+        let time =  this.model.timestamp + 100;
+        
         this.findNumListFieldValue(2015)
                 .map( id => this.convertToDescription(2015, id) )
                 .filter( sId => sId )
-                .map( sId => this.catalogs.findElement("implants",sId) )
-                .forEach( implant => { 
-                    if(implant) {
-                        implant.mID = uuid();
-                        implant.gID = uuid();
-                        this.model.modifiers.push(implant)
-                    }
-                });
+                .forEach( sID => this.eventsToSend.push( {
+                            characterId : this.model._id,
+                            eventType : "add-implant",
+                            timestamp : time+=1,
+                            data : { id: sID }
+                        }));
+
+                // .map( sId => this.catalogs.findElement("implants",sId) )
+                // .forEach( implant => { 
+                //     if(implant) {
+                //         console.log(implant.effects);
+                //         implant.effects = implant.effects.map( eId => this.catalogs.findElement("effects",eId) )
+                //                                     .filter( effData => effData );
+
+                //         console.log(implant.effects);
+                //         implant.effects.forEach( e => e.enabled = true);
+
+                //         console.log(implant.effects);
+
+                //         implant.enabled = true;
+                    
+                //         implant.mID = uuid();
+                //         implant.gID = uuid();
+                //         this.model.modifiers.push(implant)
+                //     }
+                // });
     }
 
     setFullName(){

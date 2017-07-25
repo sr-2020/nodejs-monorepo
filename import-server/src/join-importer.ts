@@ -4,6 +4,7 @@ import * as winston from 'winston';
 
 import { ImportStats } from './stats';
 import { config } from './config';
+import { DeusModel } from './interfaces/model';
 
 export interface JoinCharacter{
     CharacterId : number,
@@ -35,6 +36,7 @@ export interface JoinCharacterDetail{
     PlayerUserId: string,
     _id?: string,
     _rev?: string
+    model?: DeusModel
 }
 
 export interface JoinFieldValue{

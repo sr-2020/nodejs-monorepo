@@ -17,7 +17,7 @@ let unique = arrayUnique.immutable;
 let sheets = google.sheets('v4');
 
 const effectNames = {
-    simpleString: "showCondition",
+    simpleString: "show-condition",
     notImplemented: "not-implemented",
     changeMindCube: "inst_changeMindCube"
 };

@@ -3,6 +3,9 @@ import * as moment from "moment";
 import * as PouchDB from 'pouchdb';
 import * as request from 'request-promise-native';
 import * as winston from 'winston';
+import * as clones from 'clones';
+import * as ignoreCase from 'ignore-case';
+
 
 import { config } from './config';
 
@@ -27,18 +30,20 @@ export class CatalogsLoader {
             let docs = await db.allDocs( {include_docs: true} );
 
             this.catalogs[alias] = docs.rows.map((row:any) => {
-                            let id = row.doc._id;
-                            delete row.doc._id;
-                            delete row.doc._rev;
-                            return  { id, ...row.doc }; 
+                            let doc = clones(row.doc);
+                            doc.id = doc._id;
+                            delete doc._id;
+                            delete doc._rev;
+                            return  doc; 
                         });
         }
     }   
 
     findElement( catalogName: string, id: string ): any {
-        let idl = id.toLowerCase();
+        //console.log(`findElements: ${catalogName}  ${id}`);
+        //if(catalogName == "effects") { console.log( this.catalogs[catalogName].map(e => e.id).join(","))  };
         if(this.catalogs[catalogName]){
-            return this.catalogs[catalogName].find( e => e.id==idl)
+            return this.catalogs[catalogName].find( e => ignoreCase.equals(e.id, id) );
         }
 
         return undefined ;

@@ -156,8 +156,15 @@ function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData):
 
     return Observable.fromPromise(model.export())
             .map( (c:any) => { 
-                    let result = c.map( e => e.ok ? "saved" : "ERROR: not saved" );
-                    winston.info( `Exported model and account for character id = ${c[0].id}: ` + result );
+                    //let result = c.map( e => e.ok ? "saved" : "ERROR: not saved" );
+                    let result = [];
+                    result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
+                    result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
+                    result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
+
+                    winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
+                   
+                    char.model = model.model;
                     return char;
             });
 }          
@@ -166,7 +173,7 @@ function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData):
  * Посылка события Refresh-модели
  */
 function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
-    return Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char._id))
+    return Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char))
             .map( (c:any) => { 
                     winston.info( `Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c) );
                     return char;
