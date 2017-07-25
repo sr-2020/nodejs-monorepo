@@ -61,7 +61,7 @@ function checkPredicate(api, mID, effectName){
 
 function isMindCumeMatch(api, variable, condition){
     let parts = variable.match(/^([A-G])(\d)/i);
-    
+    //console.log(`isMindCumeMatch: ${variable}`);
     if(parts){
         let cube = parts[1];
         let index = Number(parts[2]) - 1;
