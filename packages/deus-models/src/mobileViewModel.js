@@ -353,7 +353,7 @@ function getPages(model) {
         getConditionsPage(model),
         getImplantsPage(model),
         getEconomyPage(),
-        getAdminsPage(model),
+        //getAdminsPage(model),
         getChangesPage(model),
         getMessagesPage(model),
     ];
