@@ -23,12 +23,12 @@
             "displayName": "Киберпротез ноги «Стабильность»",
             "class": "cyber-implant",
             "system": "musculoskeletal",
-            "effects": ["showCondition"],
+            "effects": ["show-condition"],
             "predicates": [
                 {
                     "variable": "Z7",
                     "value": "0",
-                    "effect": "showCondition",
+                    "effect": "show-condition",
                     "params": {
                         "condition": "s_stability-0"
                     }
@@ -36,7 +36,7 @@
                 {
                     "variable": "Z7",
                     "value": "1",
-                    "effect": "showCondition",
+                    "effect": "show-condition",
                     "params": {
                         "condition": "s_stability-1"
                     }
@@ -44,7 +44,7 @@
                 {
                     "variable": "Z7",
                     "value": "4",
-                    "effect": "showCondition",
+                    "effect": "show-condition",
                     "params": {
                         "condition": "s_stability-2"
                     }

@@ -7,7 +7,7 @@
             "handler" : "demoImplantEffect"
         },
         {        
-            "id"    : "showCondition",       
+            "id"    : "show-condition",       
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "showCondition"

@@ -3,7 +3,7 @@
  * Хелперы для разных моделей
  */
 function loadImplant(api, id){
-    let implant = api.getCatalogObject("implants", id);
+    let implant = api.getCatalogObject("implants", id.toLowerCase());
 
     if(!implant){
         api.error(`loadImplant: implant id=${id} not found!`)
@@ -13,7 +13,7 @@ function loadImplant(api, id){
     let effects = [];
 
     implant.effects.forEach( eID => {
-        let effect = api.getCatalogObject("effects", eID);
+        let effect = api.getCatalogObject("effects", eID.toLowerCase());
         if(effect){
             effect.enabled = true;
             effects.push(effect);

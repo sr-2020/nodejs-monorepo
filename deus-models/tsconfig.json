@@ -9,6 +9,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": false,
+        "allowJs": true,
         "outDir": "./test-build"
     },
     "include": ["./test/**/*.ts"]
