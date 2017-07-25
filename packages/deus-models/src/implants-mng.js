@@ -54,7 +54,7 @@ function removeImplant( api, data ){
 function instantInstallEffect(api, implant){
     let params = helpers().checkPredicate(api, implant.mID, "install_changeMindCube");
     if(params && api.model.mind && params.change){
-        helpers().modifyMindCubes(api.model.mind, params.change);
+        helpers().modifyMindCubes(api, api.model.mind, params.change);
     }
 }
 
