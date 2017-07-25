@@ -13,5 +13,7 @@ describe("mobileViewModel", () => {
         expect(viewModel).to.be.deep.equal(JSON.parse(JSON.stringify(viewModel)));
         expect(viewModel).to.have.property("_id");
         expect(viewModel).to.have.property("timestamp");
+
+        console.log(JSON.stringify(viewModel, null, 4));
     });
 });

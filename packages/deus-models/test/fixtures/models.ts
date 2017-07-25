@@ -12,6 +12,7 @@ export const getExampleModel = (id?: string) => ({
         },
         {
             title: "Название воспоминания №2",
+            text: "Название воспоминания №2.",
             url: "http://link-to-local-server.local/url2"
         }
     ],

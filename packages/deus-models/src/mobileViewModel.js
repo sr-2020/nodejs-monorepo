@@ -85,7 +85,7 @@ function getConditionsPageItem(cond) {
     let header = cond.text;
     let details = cond.details ? cond.details : header;
 
-    if(details == header){
+    if(details == header || details == (header + ".")){
         header = "Состояние";
     }
 
@@ -212,14 +212,21 @@ function getImplantsPage(model) {
 }
 
 function getMemoryPageItem(mem) {
-    let textPieces = [];
-    if (mem.text) textPieces.push(mem.text);
-    if (mem.url) textPieces.push(mem.url);
+    let header = mem.title;
+
+    if(mem.text == mem.title || mem.text == (mem.title + ".") ){
+        header = "Воспоминание";
+    }
+
+    let details = "";
+    if (mem.text) details += `<p>${mem.text}</p>`;
+    if (mem.url) details+= `<p><a href="${mem.url}">${mem.url}</a></p>`
+
     return {
         text: mem.title,
         details: {
-            header: mem.title,
-            text: textPieces.join("\n"),
+            header: header,
+            text: details
         },
     };
 }
