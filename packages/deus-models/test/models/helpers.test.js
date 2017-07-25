@@ -1,4 +1,4 @@
-import * as helpers from '../../helpers/model-helper.js'; 
+let helpers = require('../../helpers/model-helper.js');
 import { expect } from 'chai';
 
 describe('Helpers: ', () => {

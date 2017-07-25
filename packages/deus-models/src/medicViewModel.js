@@ -32,7 +32,7 @@
 
 
 function getViewModel(api, data) {
-    let props = [ '_id', 'login', 'mail', 'profileType', 'firstName', 'lastNam', 'hp', 'maxHp', 'sex','generation'];
+    let props = [ '_id', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex','generation'];
     let ret = {}
 
     props.forEach( e => { ret[e] = api.model[e] ? api.model[e] : ""});
