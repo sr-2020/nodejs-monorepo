@@ -46,7 +46,6 @@ function removeImplant( api, data ){
     }
 }
 
-
 /**
  * Обработчик мгновенного эффекта при установке импланта
  * Пока умеет обрабатывать только install_changeMindCube
@@ -58,10 +57,45 @@ function instantInstallEffect(api, implant){
     }
 }
 
+/**
+ * Обработчик события "отключить имплант"
+ * { mId: implant-model-id }
+ */
+function disableImplant(api, data){
+    api.info(`!!!!!! Disabled implant:  mID=${data.mID}` );
+
+     if(data.mID){
+        let implant = api.getModifierById(data.mID);
+        if(implant){
+            implant.enabled = false;
+            helpers().addChangeRecord(api, `Выключен имплант: ${implant.displayName}`);
+            api.info(`Disabled implant:  mID=${implant.mID} ${implant.displayName}` );
+        }
+     }
+}   
+
+/**
+ * Обработчик события "включить имплант"
+ * { mId: implant-model-id }
+ */
+function enableImplant(api, data){
+    if(data.mID){
+        let implant = api.getModifierById(data.mID);
+        if(implant){
+            implant.enabled = true;
+            helpers().addChangeRecord(api, `Включен имплант: ${implant.displayName}`);
+            api.info(`Enabled implant:  mID=${implant.mID} ${implant.displayName}` );
+        }
+     }
+}
+
+
 module.exports = () => {
     return {
         addImplant,
-        removeImplant
+        removeImplant,
+        disableImplant,
+        enableImplant
     };
 };
 
