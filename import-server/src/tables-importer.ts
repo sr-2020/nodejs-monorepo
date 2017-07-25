@@ -16,6 +16,12 @@ let unique = arrayUnique.immutable;
 
 let sheets = google.sheets('v4');
 
+const effectNames = {
+    simpleString: "showCondition",
+    notImplemented: "not-implemented",
+    changeMindCube: "inst_changeMindCube"
+};
+
 const implantClasses = {
     "кибер" : "cyber-implant",
     "биологический" : "bio-implant",
@@ -156,7 +162,8 @@ interface TablesData{
 
 export class TablesImporter{
 
-    private con:any = null;
+    private implantDB:any = null;
+    private conditionDB:any = null;
 
 
     tablesData :TablesData = { 
@@ -176,7 +183,8 @@ export class TablesImporter{
                 }
         };
 
-        this.con = new PouchDB(`${config.url}${config.modelDBName}`, ajaxOpts);
+        this.implantDB = new PouchDB(`${config.url}${config.catalogs.implants}`, ajaxOpts);
+        this.conditionDB = new PouchDB(`${config.url}${config.catalogs.condition}`, ajaxOpts);
     }
 
 
@@ -235,16 +243,18 @@ export class TablesImporter{
                     winston.info("Illneses table loaded!");
                     return this.tablesData;
                 })
-                .map( () =>{
-                    this.createImplants();
+                .do( () => this.createImplants() )
+                .flatMap( () => this.saveImplants() )
+                .flatMap( () => this.saveConditions() )
+                .map( () =>{ 
                     return this;
-                })  
+                })
     }
 
     private implantsDataImport(authClient): Observable<any>{
          var request = {
             spreadsheetId: '1703sXU-akDfn9dsnt19zQjvRrSs7kePPGDkcX0Zz-bY',
-            range: 'Implants!A5:O1000',
+            range: 'Implants!A5:R1000',
             valueRenderOption: 'FORMATTED_VALUE',
             dateTimeRenderOption: 'SERIAL_NUMBER',
             auth: authClient,
@@ -270,20 +280,41 @@ export class TablesImporter{
     }
 
     
-    // private saveImplants(): Observable<any>{
-    //     return Observable.from( this.implants )
-    //         .do( implant => {
-    //             return this.con.get(implant._id).then( existImp => { 
-    //                 implant._rev = existImp._rev;
-    //                 return this.con.put(implant);
-    //             })
-    //             .catch( () => { 
-    //                 this.con.put(implant);
-    //             } )
-    //         })
-    //         .flatMap(  )
+    private saveImplants(): Promise<any[]>{
+         return Observable.from( this.implants )
+            .flatMap( implant => {
+                return this.implantDB.get(implant._id).then( existImp => { 
+                    implant._rev = existImp._rev;
+                    return this.implantDB.put(implant);
+                })
+                .catch( () => { 
+                    return this.implantDB.put(implant);
+                } )
+            })
+            .toArray()
+            .do( (results)=>{
+                winston.info(`Saved ${results.length} implants`);
+            })
+            .toPromise();
+    }   
 
-    // }   
+    private saveConditions(): Promise<any[]>{
+         return Observable.from( this.impConditions )
+            .flatMap( condition => {
+                return this.conditionDB.get(condition._id).then( existImp => { 
+                    condition._rev = existImp._rev;
+                    return this.conditionDB.put(condition);
+                })
+                .catch( () => { 
+                    return this.conditionDB.put(condition);
+                } )
+            })
+            .toArray()
+            .do( (results)=>{
+                winston.info(`Saved ${results.length} conditions`);
+            })
+            .toPromise();
+    } 
 
     //Верификация данных по импланту
     private verifyImplantData(d: ImplantData): boolean{
@@ -363,6 +394,12 @@ export class TablesImporter{
                     //Нати данные по "эффету" для данной пары. Если надо создать дополнительные состояния
                     [p.effect, p.params] = this.findGenEffect(e, i, impData);
 
+                     if(p.effect){
+                        if(!implant.effects.find( e => e == p.effect)){
+                            implant.effects.push(p.effect);
+                        }
+                    }
+
                     implant.predicates.push(p);
                 });
 
@@ -379,6 +416,12 @@ export class TablesImporter{
                     //Нати данные по "эффету" для данной пары. Если надо создать дополнительные состояния
                     [p.effect, p.params] = this.findMindEffect(e, i, impData);
 
+                    if(p.effect && p.effect != effectNames.changeMindCube){
+                        if(!implant.effects.find( e => e == p.effect)){
+                            implant.effects.push(p.effect);
+                        }
+                    }
+                    
                     implant.predicates.push(p);
                 });
 
@@ -396,25 +439,25 @@ export class TablesImporter{
             let conditionName = `${impData.id}-${i}`;
             this.createCondition(conditionName, null, effData.conditionText, effData.conditionType);
 
-            return ["simpleString", { condition: conditionName } ];
+            return [effectNames.simpleString, { condition: conditionName } ];
         }
 
-        return ["not_implemented", {}];
+        return ["", {}];
     }
 
     //Находит параметры эффекта под класс пришедший из данных. Создает дополнительные записи conditions если нужно
-    private findMindEffect( effData: MindEffectData, i: number, impData:ImplantData ): [string, any]{        
+    private findMindEffect( effData: MindEffectData, i: number, impData:ImplantData ): [string, any]{   
         if(effData.effectClass == "changeMindCube"){
             let changeText = effData.text.toUpperCase().replace(/\s/ig,'');
 
             if(this.validateChangeMindText(changeText)){
-                return ["install_changeMindCube", { change: changeText } ];            
+                return [effectNames.changeMindCube, { change: changeText } ];            
             }else{
                 winston.error(`Incorrect change mind cube text in ${impData.id}: ${changeText}`);
             }
         }
 
-        return ["not_implemented", {}];
+        return ["", {}];
     }
 
     private validateChangeMindText(text: string): boolean{
@@ -452,11 +495,11 @@ let importer = new TablesImporter();
 importer.import().subscribe((result) => { 
             winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}` );
             //winston.info(JSON.stringify(result.implantsData.slice(0,10), null, 4));
-            winston.info(JSON.stringify(result.implants.slice(2,20),null, 4));
-            winston.info(JSON.stringify(result.impConditions.slice(0,30),null, 4));
+            winston.info(JSON.stringify(result.implants.slice(0,2),null, 4));
+            //winston.info(JSON.stringify(result.impConditions.slice(0,30),null, 4));
             
         },
         (err) => {
-            winston.info('Authentication failed because of ', err);
+            winston.info('Error in import process: ', err);
         });
 

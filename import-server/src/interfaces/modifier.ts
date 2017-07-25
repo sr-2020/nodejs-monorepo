@@ -8,7 +8,7 @@ export interface DeusModifier {
     displayName?: string,
     class?: string,
     system?: string,
-    effects?: Array<DeusEffect>,
+    effects?: string[],
     enabled?: boolean,
     predicates?: Predicate[],
     mID?: string

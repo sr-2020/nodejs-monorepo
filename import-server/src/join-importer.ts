@@ -40,7 +40,8 @@ export interface JoinCharacterDetail{
 export interface JoinFieldValue{
     ProjectFieldVariantId: number,
     Label: string,
-    IsActive: boolean
+    IsActive: boolean,
+    Description: string
 }
 
 export interface JoinFieldMetadata{

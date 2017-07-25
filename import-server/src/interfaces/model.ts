@@ -69,6 +69,7 @@ export class DeusModel{
     hackingLogin?: string;           //логин хакеров  TODO - не сделано
     hackingProtection?: number;      //Уровень защиты от хакеров
     mind?: MindData;                  //кубики сознания
+    systems?: number[];         //физиологические системы организма
 
 //Only android or programm
     owner?: string;          //Владелец андроида/программы

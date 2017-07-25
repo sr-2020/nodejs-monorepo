@@ -26,13 +26,19 @@ export class CatalogsLoader {
             let db = new PouchDB(`${config.url}${config.catalogs[alias]}`, ajaxOpts);
             let docs = await db.allDocs( {include_docs: true} );
 
-            this.catalogs[alias] = docs.rows;
+            this.catalogs[alias] = docs.rows.map((row:any) => {
+                            let id = row.doc._id;
+                            delete row.doc._id;
+                            delete row.doc._rev;
+                            return  { id, ...row.doc }; 
+                        });
         }
     }   
 
     findElement( catalogName: string, id: string ): any {
+        let idl = id.toLowerCase();
         if(this.catalogs[catalogName]){
-            return this.catalogs[catalogName].find( e => e._id==id )
+            return this.catalogs[catalogName].find( e => e.id==idl)
         }
 
         return undefined ;

@@ -24,7 +24,8 @@ export const config = {
         catalogs: {
             effects: "dict-effects",
             illnesses: "dict-illnesses",
-            implants:  "dict-implants"
+            implants:  "dict-implants",
+            condition: "dict-conditions"
         }
     };
 

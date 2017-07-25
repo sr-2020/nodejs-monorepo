@@ -4,7 +4,7 @@ import * as PouchDB from 'pouchdb';
 import * as request from 'request-promise-native';
 import * as chance from 'chance';
 import * as winston from 'winston';
-
+import * as uuid from 'uuid/v4';
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
@@ -18,6 +18,7 @@ import { DeusEffect } from './interfaces/effect';
 import { mindModelData } from './mind-model-stub';
 import { CatalogsLoader } from './catalogs-loader';
 
+const PHYS_SYSTEMS_NUMBER = 6;
 
 interface IAliceAccount {
     _id: string;
@@ -147,6 +148,10 @@ export class AliceExporter{
 
             //Блок данных возможных только для типа профиля "Human"
             if(this.model.profileType=="human"){    
+                //Физиология - системы
+                this.model.systems = new Array<number>(PHYS_SYSTEMS_NUMBER);
+                this.model.systems.fill(1);
+
                 //Пол персонажа Field: 696
                 this.model.sex = this.findStrFieldValue(696,true);
 
@@ -288,6 +293,22 @@ export class AliceExporter{
         return [];
     }
 
+    //Конвертирует числовое ID значения поля мультивыбора в Description для этого значения
+    //при конвертации убирает HTML-теги
+    convertToDescription(fieldID: number, variantID: number): string {
+        let field = this.metadata.Fields.find( f => f.ProjectFieldId == fieldID );
+
+        if(field && field.ValueList){
+
+            let value = field.ValueList.find( fv => fv.ProjectFieldVariantId == variantID );
+            if(value){
+                return value.Description.replace(/\<(.*?)\>/ig, '')
+            }
+        }
+
+        return null;
+    }
+
     //Поколение. Field: 498. Если не проставлено, выбирается W
     //Поколения бывают: 735, 643, 644, 645 (ValueID из списка)
     setGenerationAndType() {
@@ -360,15 +381,19 @@ export class AliceExporter{
         this.model.genome = genome;
     }
 
-    //Получить список имплантов и загрузить их в модель. Field: 1215
-    //TODO: пока не возвращаеются Details из списка значений будет заглушка
+    //Получить список имплантов и загрузить их в модель. Field: 2015
     setImplants(){
-        // this.findNumListFieldValue().map(
-        //      (n) => {  }
-        // )
-        let idList = ["PA_FriendIn1","S_Snow"];
-        
-
+        this.findNumListFieldValue(2015)
+                .map( id => this.convertToDescription(2015, id) )
+                .filter( sId => sId )
+                .map( sId => this.catalogs.findElement("implants",sId) )
+                .forEach( implant => { 
+                    if(implant) {
+                        implant.mID = uuid();
+                        implant.gID = uuid();
+                        this.model.modifiers.push(implant)
+                    }
+                });
     }
 
     setFullName(){
