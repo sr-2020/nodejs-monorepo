@@ -171,7 +171,7 @@ function modifyMindCubes(api, mind, changeText){
                 mind[cube][index] = 100;
             }
 
-            api.debug(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}` );
+            api.log(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}` );
         }
     })
 }
