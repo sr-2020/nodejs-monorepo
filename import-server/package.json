@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register ./test/*.ts",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
-    "start": "tsc && forever start ./dist/server.js",
+    "start": "tsc && forever start ./dist/server.js --server",
     "stop": "forever stop ./dist/server.js",
     "dev": "tsc && node ./dist/server.js",
     "build": "tsc",
@@ -36,6 +36,7 @@
     "body-parser": "^1.17.2",
     "chance": "^1.0.10",
     "command-line-args": "^4.0.6",
+    "command-line-usage": "^4.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.15.3",
     "google-auth-library": "^0.10.0",
@@ -47,6 +48,7 @@
     "request-promise-native": "^1.0.4",
     "rxjs": "^5.4.2",
     "typescript": "^2.4.1",
+    "uuid": "^3.1.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
