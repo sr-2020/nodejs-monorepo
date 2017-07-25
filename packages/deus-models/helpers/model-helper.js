@@ -2,6 +2,9 @@
 /**
  * Хелперы для разных моделей
  */
+
+ const MAX_CHANGE_LINES = 30;
+
 function loadImplant(api, id){
     let implant = api.getCatalogObject("implants", id.toLowerCase());
 
@@ -31,6 +34,8 @@ function loadImplant(api, id){
 //TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord( api, text ){
     if(text){
+        if(api.model.changes.length >= MAX_CHANGE_LINES) api.model.changes.shift();
+
         api.model.changes.push({
             mID: uuidv4(),
             text: text,

@@ -34,18 +34,6 @@
             ]
         },
         {
-            "eventType": "disableImplant",
-            "effects": [
-                "disableImplant"
-            ]
-        },
-        {
-            "eventType": "enableImplant",
-            "effects": [
-                "enableImplant"
-            ]
-        },
-        {
             "eventType": "illnessTimerHandler",
             "effects": [
                 "illnessTimerHandler"
@@ -67,6 +55,18 @@
             "eventType": "remove-implant",
             "effects": [
                 "removeImplant"
+            ]
+        },
+        {
+            "eventType": "disable-implant",
+            "effects": [
+                "disableImplant"
+            ]
+        },
+        {
+            "eventType": "enable-implant",
+            "effects": [
+                "enableImplant"
             ]
         }
     ]

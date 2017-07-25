@@ -14,6 +14,6 @@ describe("mobileViewModel", () => {
         expect(viewModel).to.have.property("_id");
         expect(viewModel).to.have.property("timestamp");
 
-        console.log(JSON.stringify(viewModel, null, 4));
+        //console.log(JSON.stringify(viewModel, null, 4));
     });
 });

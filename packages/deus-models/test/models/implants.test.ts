@@ -111,4 +111,36 @@ describe('Implants: ', () => {
         expect( baseModel.mind.C[2]).is.equal(20);
     });
 
+    it("Enable & Disable implant", async function() {
+        let eventData = { id: "s_stability" };
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+
+        let { baseModel } = await process(model, events);
+
+        let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant).to.has.property('enabled', true);
+
+        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID : implant.mID } }], baseModel.timestamp + 100, true);
+        ({ baseModel } = await process(baseModel, events));  
+
+        console.log(JSON.stringify(baseModel, null, 4));
+
+        implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant.enabled).is.false;
+
+        events = getEvents(baseModel._id, [{ eventType: 'enable-implant', data: { mID : implant.mID } }], baseModel.timestamp + 100, true);
+        ({ baseModel } = await process(baseModel, events));  
+        
+        implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant.enabled).is.equal(true);
+
+    });
+
 });
