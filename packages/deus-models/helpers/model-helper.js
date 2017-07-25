@@ -45,11 +45,11 @@ function checkPredicate(api, mID, effectName){
     let implant = api.getModifierById(mID)
 
     if(implant){
-        api.info(`checkPredicate for ${mID}, effect: ${effectName}`);
-
         let p = implant.predicates.filter( p => p.effect == effectName)
                     .find( p => isGenomeMatch(api, p.variable, p.value) || 
                                 isMindCumeMatch(api, p.variable, p.value) );
+
+        api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
 
         if(p){
             return p.params;
@@ -171,7 +171,7 @@ function modifyMindCubes(api, mind, changeText){
                 mind[cube][index] = 100;
             }
 
-            api.log(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}` );
+            api.info(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}` );
         }
     })
 }
