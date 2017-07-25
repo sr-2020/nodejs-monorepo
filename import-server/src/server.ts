@@ -318,6 +318,7 @@ function importAndCreate(   id:number = 0,
     //Собрать из всех обработанных данных всех персонажей общий массив и передать дальше как один элемент
         .toArray()
     //Отправить запрос на создание почтовых ящиков для всхе персонажей
+        .filter( () => workData.charDetails.length > 0 )
         .flatMap( c => mailProvision ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
         .subscribe( ()=> {},
             (error)=>{

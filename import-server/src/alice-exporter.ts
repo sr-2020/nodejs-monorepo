@@ -454,14 +454,16 @@ export class AliceExporter{
 
     //Воспоминания/сохраненные данные. Список полей передается
     setMemories( fields: number[] ){
-        fields.map( n => this.findStrFieldValue(n) ).filter( m => m)
-        .forEach( mem =>
-            this.model.memory.push(
-                {
-                    title: mem.substr(0,30) + (mem.length>30 ? "..." : ""),
-                    text: mem
-                }
-            ));  
+        fields.map( n => this.findStrFieldValue(n) )
+        .filter( m => m)
+        .forEach( m => m.split("#######################").forEach( mem => 
+                            this.model.memory.push(
+                                {
+                                    title: mem.substr(0,60) + (mem.length>60 ? "..." : ""),
+                                    text: mem
+                                }
+                            ))
+        );  
     }
 
     //Установка модели кубиков сознания. Field value: 2054, 2055
