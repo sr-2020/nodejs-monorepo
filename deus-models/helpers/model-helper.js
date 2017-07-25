@@ -138,7 +138,7 @@ function isGenomeMatch(api, variable, value){
  * Предполагается что текст инструкции уже нормализован 
  * (верхний регистр, без пробелов, через запятую)
  */
-function modifyMindCubes(mind, changeText){
+function modifyMindCubes(api, mind, changeText){
     changeText.split(',').forEach( exp => {
 
         //console.log(`MMC:  Part: ${exp}`);
@@ -151,6 +151,7 @@ function modifyMindCubes(mind, changeText){
             let mod = Number(exParts[4]);
 
             //console.log(`MMC parsed: ${cube}${index} ${op} ${mod}`);
+            let beforeOp = mind[cube][index];
 
             if(mind[cube] && index < mind[cube].length){
                 switch(op){
@@ -169,6 +170,8 @@ function modifyMindCubes(mind, changeText){
             if(mind[cube][index] > 100 ){
                 mind[cube][index] = 100;
             }
+
+            api.debug(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}` );
         }
     })
 }
