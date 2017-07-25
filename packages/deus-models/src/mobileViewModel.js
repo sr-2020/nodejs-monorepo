@@ -82,14 +82,21 @@ function getRussianConditionTag(tag) {
 }
 
 function getConditionsPageItem(cond) {
+    let header = cond.text;
+    let details = cond.details ? cond.details : header;
+
+    if(details == header){
+        header = "Состояние";
+    }
+
     return {
         viewId: "id:" + cond.id,
         text: cond.text,
         tag: getRussianConditionTag(cond.class),
         icon: cond.class,
         details: {
-            header: cond.text,
-            text: cond.details || "",
+            header,
+            text: details
         },
     };
 }
@@ -306,7 +313,11 @@ function getChangesPageItem(change) {
     return {
         viewId: "mid:" + change.mID,
         text: change.text,
-        unixSecondsValue: change.timestamp
+        unixSecondsValue: change.timestamp,
+        details: {
+            header: "Изменение",
+            text: change.text
+        }
     };
 }
 
@@ -339,7 +350,7 @@ function getMessagesPage(model) {
         viewId: "page:messages",
         menuTitle: "Сообщения",
         body: {
-            title: "Мастерские сообщения",
+            title: "Сообщения",
             items: model.messages.reverse().map(getMessagesPageItem),
         },
     };
