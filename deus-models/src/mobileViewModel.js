@@ -35,17 +35,29 @@ function getStartPage(model) {
                     value: model._id,
                 },
                 {
+                    text: "e-mail",
+                    value: model.mail,
+                },
+                {
                     text: "Пол",
                     value: getRussianSex(model.sex),
                 },
                 {
-                    text: "Возраст",
-                    value: model.age + '',
+                    text: "Поколение",
+                    value: model.generation,
                 },
                 {
-                    text: "Корпорация",
+                    text: "Родной район",
+                    value: model.sweethome,
+                },
+                {
+                    text: "Работа",
                     value: model.corporation,
                 },
+                {
+                    text: "Страховка",
+                    value: model.insuranceDiplayName,
+                },                
                 {
                     text: "Hit Points",
                     value: model.hp + " / " + model.maxHp,
@@ -125,13 +137,27 @@ function getEnableActionText(enabled) {
     return enabled ? "Выключить" : "Включить";
 }
 
+
+const implantsClasses = [ "cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual" ]
+
 function isImplant(modifier) {
-    return modifier.class == "mechanical" ||
-           modifier.class == "biological";
+    return implantsClasses.find( c => modifier.class == c)
 }
 
-function getImplantDetails(modifier) {
-    return modifier.details || ("Имплант " + modifier.displayName);
+const systemNames = {
+    "musculoskeletal" : "опорно-двигательная",
+    "cardiovascular"  : "сердечно-сосудистая",
+    "respiratory" : "дыхательная", 
+    "endocrine" : "эндокринная", 
+    "lymphatic" : "лимфатическая",
+    "nervous"  : "нервная",
+}
+
+function getImplantDetails(modifier) {    
+    let desc = modifier.desc || "подробного описания нет";
+    let details = `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${desc}</p>`;
+
+    return details;
 }
 
 function getImplantsPageItem(modifier) {
@@ -150,16 +176,16 @@ function getImplantsPageItem(modifier) {
                     data: {
                         mID: modifier.mID,
                     },
-                },
-                {
-                    text: "Отдать гопнику (не работает)",
-                    eventType: "giveAway",
-                    needsQr: 100,
-                    destructive: true,
-                    data: {
-                        mID: modifier.mID,
-                    },
-                },
+                }
+                // {
+                //     text: "Отдать гопнику (не работает)",
+                //     eventType: "giveAway",
+                //     needsQr: 100,
+                //     destructive: true,
+                //     data: {
+                //         mID: modifier.mID,
+                //     },
+                // },
             ],
         },
     };
