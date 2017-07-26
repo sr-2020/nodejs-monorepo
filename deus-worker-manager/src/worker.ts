@@ -58,8 +58,8 @@ export class Worker extends EventEmitter {
             this.rx.message.filter((msg) => msg.type == 'log').takeUntil(ready).subscribe(this.handleLogMessage());
             this.rx.data.subscribe(this.handleOutput);
 
-            this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
-            this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Could't start child process")));
+            this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
+            this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
 
             ready.subscribe((msg) => resolve(child));
         });

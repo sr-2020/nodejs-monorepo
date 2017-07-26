@@ -58,6 +58,7 @@ export class WorkersPool implements WorkersPoolInterface {
             await worker.up();
         } catch (e) {
             this.logger.error('manager', e);
+            this.logger.error('manager', worker.lastOutput.join());
             throw e;
         }
 
