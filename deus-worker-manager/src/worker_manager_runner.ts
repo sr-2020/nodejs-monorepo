@@ -65,6 +65,7 @@ const di = Injector
     .bind(ObjectStorageToken).singleton().toClass(ObjectStorage, ConfigToken, DBConnectorToken)
     .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
     .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
-    .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
+    .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, ModelStorageToken, EventStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 
-di.get(ManagerToken).init();
+const manager = di.get(ManagerToken);
+manager.init().then(() => manager.retryAll());

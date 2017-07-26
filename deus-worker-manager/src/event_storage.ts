@@ -1,5 +1,5 @@
-import { pick } from 'lodash';
-import { Event } from 'deus-engine-manager-api';
+import { pick, merge } from 'lodash';
+import { Event, SyncEvent } from 'deus-engine-manager-api';
 
 import { DBInterface, Document } from './db/interface';
 
@@ -22,6 +22,23 @@ export class EventStorage {
         let result = await this.db.view('character', 'by-character-id', params);
 
         return result.rows.map((r: any) => r.doc);
+    }
+
+    async lastRefresh(characterId: string): Promise<SyncEvent | null> {
+        let result = await this.db.view('character', 'last-refresh-event', { key: characterId, reduce: true });
+
+        if (result.rows.length) {
+            return result.rows[0].value;
+        } else {
+            return null;
+        }
+    }
+
+    async listLastRefresh(params?: any): Promise<SyncEvent[]> {
+        params = merge({}, params, { reduce: true, group: true });
+        let result = await this.db.view('character', 'last-refresh-event', params);
+        console.log('>>>', result, params);
+        return result.rows.map((r) => r.value);
     }
 
     store(event: any) {

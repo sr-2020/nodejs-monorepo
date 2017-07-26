@@ -7,7 +7,7 @@ const DB_SEPARATOR = '/';
 
 export interface ObjectStorageInterface {
     newId(): number
-    aquire(lockId: number, keys: [string, string][]): Promise<{ [key: string]: Document }>
+    aquire(lockId: number, keys: [string, string][]): Promise<{ [db: string]: { [key: string]: Document } }>
     store(lockId: number, aquired: any): Promise<void>
     release(lockId: number): void
 }

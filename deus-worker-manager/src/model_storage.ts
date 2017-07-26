@@ -7,8 +7,12 @@ export class ModelStorage {
         return this.db.get(id);
     }
 
-    async findAll(ids: ID[]): Promise<Document[]> {
-        let result = await this.db.list({ keys: ids, include_docs: true });
+    async findAll(ids?: ID[]): Promise<Document[]> {
+        let params: any = { include_docs: true };
+        if (ids) {
+            params.keys = ids;
+        }
+        let result = await this.db.list(params);
         return result.rows.map((r) => r.doc);
     }
 

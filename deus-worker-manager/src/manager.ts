@@ -1,5 +1,5 @@
 import { Inject } from './di';
-import { isNil } from 'lodash';
+import { isNil, keyBy } from 'lodash';
 import { Subscription } from 'rxjs';
 
 import { Event, SyncEvent } from 'deus-engine-manager-api';
@@ -42,6 +42,8 @@ export class Manager {
         private config: Config,
         private eventsSource: EventsSource,
         private catalogsStorage: CatalogsStorageInterface,
+        private modelStorage: ModelStorage,
+        private eventStorage: EventStorage,
         private pool: WorkersPoolInterface,
         private processorFactory: ProcessorFactory,
         private logger: LoggerInterface
@@ -55,34 +57,46 @@ export class Manager {
         this.subscribeEvents();
     }
 
+    async retryAll() {
+        let models = keyBy(await this.modelStorage.findAll(), '_id');
+        let refresh = await this.eventStorage.listLastRefresh();
+
+        for (let event of refresh) {
+            if (models[event.characterId] && models[event.characterId].timestamp < event.timestamp) {
+                this.onSyncEvent(event);
+            }
+        }
+    }
+
     subscribeEvents() {
-        this.eventsSourceSubscription = this.eventsSource.syncEvents.subscribe((event: SyncEvent) => {
-            this.logger.info('manager', 'refresh event for %s', event.characterId, event);
-            const characterId = event.characterId;
-
-            if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
-                this.logger.warn('manager', 'character exceed MAX_ERRORS value');
-                return;
-            }
-
-            if (this.processors[characterId]) {
-                const processors = this.processors[characterId];
-                if (processors.current.acceptingEvents()) {
-                    processors.current.pushEvent(event);
-                } else {
-                    if (!processors.pending) {
-                        processors.pending = this.processorFactory();
-                    }
-                    processors.pending.pushEvent(event);
-                }
-            } else {
-                const processor = this.processorFactory();
-                this.processors[characterId] = { current: processor };
-                processor.pushEvent(event).run().then(this.processorFulfilled, this.processorRejected);
-            }
-        });
-
+        this.eventsSourceSubscription = this.eventsSource.syncEvents.subscribe(this.onSyncEvent);
         this.eventsSource.follow();
+    }
+
+    onSyncEvent = (event: SyncEvent) => {
+        this.logger.info('manager', 'refresh event for %s', event.characterId, event);
+        const characterId = event.characterId;
+
+        if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
+            this.logger.warn('manager', 'character exceed MAX_ERRORS value');
+            return;
+        }
+
+        if (this.processors[characterId]) {
+            const processors = this.processors[characterId];
+            if (processors.current.acceptingEvents()) {
+                processors.current.pushEvent(event);
+            } else {
+                if (!processors.pending) {
+                    processors.pending = this.processorFactory();
+                }
+                processors.pending.pushEvent(event);
+            }
+        } else {
+            const processor = this.processorFactory();
+            this.processors[characterId] = { current: processor };
+            processor.pushEvent(event).run().then(this.processorFulfilled, this.processorRejected);
+        }
     }
 
     processorFulfilled = (event: SyncEvent) => {

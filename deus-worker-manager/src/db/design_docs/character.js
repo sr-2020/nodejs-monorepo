@@ -1,7 +1,7 @@
 module.exports = {
     dbs: ['events'],
 
-    version: 0,
+    version: 3,
 
     views: {
         'by-character-id': {
@@ -11,6 +11,36 @@ module.exports = {
                 }
             },
             reduce: '_count'
+        },
+
+        'refresh-events': {
+            map: function(doc) {
+                if (doc.eventType == '_RefreshModel' && doc.timestamp && doc.characterId) {
+                    emit([doc.characterId, doc.timestamp]);
+                }
+            }
+        },
+
+        'last-refresh-event': {
+            map: function(doc) {
+                if (doc.eventType == '_RefreshModel' && doc.timestamp && doc.characterId) {
+                    emit(doc.characterId, doc);
+                }
+            },
+
+            reduce: function(key, values, rereduce) {
+                var last = null;
+                var current;
+
+                for (var i = 0; i < values.length; i++) {
+                    current = values[i];
+                    if (!last || current.timestamp > last.timestamp) {
+                        last = current;
+                    }
+                }
+
+                return last;
+            }
         }
     }
 };
