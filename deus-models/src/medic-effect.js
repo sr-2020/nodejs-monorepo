@@ -142,6 +142,8 @@ function killRandomSystem(api, data){
 function damageEffect(api, modifier){
     let curMaxHP = medHelpers().calcMaxHP(api);
 
+    api.model.maxHp = curMaxHP;
+
     let deadSystems = false;
 
     //Проходим по всем системам и показываем состояния что система дохлая
