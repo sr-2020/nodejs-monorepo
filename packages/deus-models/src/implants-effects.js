@@ -19,11 +19,9 @@ let helpers = require('../helpers/model-helper');
 function showCondition(api, modifier){
     let params = helpers().checkPredicate(api, modifier.mID, "show-condition");
     api.info("showCondition: start, predicate: " + JSON.stringify(params));
+
     if(params){
-        let condition = api.getCatalogObject("conditions", params.condition);
-        if(condition){
-            api.addCondition(condition);
-        }
+        helpers().addCharacterCondition(api, params.condition);
     }
 }
 

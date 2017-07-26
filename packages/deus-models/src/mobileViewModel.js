@@ -77,7 +77,7 @@ function getRussianConditionTag(tag) {
     switch (tag) {
         case "physiology":  return "Физиология";
         case "mind":        return "Психология";
-        default:            return "";
+        default:            return "Физиология";
     }
 }
 
@@ -409,7 +409,8 @@ function getPassportScreen(model) {
         id: model._id,
         fullName: model.firstName + " " + model.lastName,
         corporation: model.corporation,
-        email: model.mail
+        email: model.mail,
+        insurance: model.insuranceDiplayName
     };
 }
 

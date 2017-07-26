@@ -68,6 +68,24 @@
             "effects": [
                 "enableImplant"
             ]
+        },
+        {
+            "eventType": "subtractHp",
+            "effects": [
+                "getDamage"
+            ]
+        },
+        {
+            "eventType": "addHp",
+            "effects": [
+                "restoreDamage"
+            ]
+        },
+        {
+            "eventType": "kill-random-system",
+            "effects": [
+                "killRandomSystem"
+            ]
         }
     ]
 }

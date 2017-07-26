@@ -18,7 +18,9 @@ export const getExampleModel = (id?: string) => ({
     ],
     skills: [],
     hp: 4,
-    maxHp: 5,
+    maxHp: 4,
+
+    randomSeed: 12345678,
 
     login: "john.smith",
     mail: "john.smith@alice.digital",
@@ -82,6 +84,23 @@ export const getExampleModel = (id?: string) => ({
             ],
             enabled: true,
             mID: "85a5746cddd447379992d8181a52f4fd"
+        },
+        {
+            id: "_damage",
+            displayName: "internal damage modificator",
+            class: "_internal",
+            effects: [
+                {
+                    id: "damage-effect",
+                    class: "physiology",
+                    type: "normal",
+                    handler: "damageEffect",
+                    enabled: true
+                }
+            ],
+            damage: 0,
+            enabled: true,
+            mID: "_internal_damage"
         }
         // {
         //     id: "_Default",

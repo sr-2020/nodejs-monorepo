@@ -1,29 +1,31 @@
 {
-    "implants" : [
-        {        
-            "id"        : "HeartHealthBooster",           
-            "displayName" : "Мотор для сердца +2 HP",       
-                        
-            "class"  : "mechanical",                        
-            "system" : "CardioSystem",                      
-                    
-            "effects" : [ "demoEffect" ]
+    "implants": [
+        {
+            "id": "HeartHealthBooster",
+            "displayName": "Мотор для сердца +2 HP",
+            "class": "mechanical",
+            "system": "CardioSystem",
+            "effects": [
+                "demoEffect"
+            ]
         },
-        {        
-            "id"        : "TestImplant01",           
-            "displayName" : "Тестовый имплант 01",       
-                        
-            "class"  : "mechanical",                        
-            "system" : "CardioSystem",                      
-                    
-            "effects" : [ "demoEffect" ]
+        {
+            "id": "TestImplant01",
+            "displayName": "Тестовый имплант 01",
+            "class": "mechanical",
+            "system": "CardioSystem",
+            "effects": [
+                "demoEffect"
+            ]
         },
         {
             "id": "s_stability",
             "displayName": "Киберпротез ноги «Стабильность»",
             "class": "cyber-implant",
             "system": "musculoskeletal",
-            "effects": ["show-condition"],
+            "effects": [
+                "show-condition"
+            ],
             "predicates": [
                 {
                     "variable": "Z7",
@@ -63,6 +65,122 @@
                     "effect": "inst_changeMindCube",
                     "params": {
                         "change": "A1+10,B2-10,C3=20"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "s_orphey",
+            "displayName": "Киберпротез руки «Орфей»",
+            "class": "cyber-implant",
+            "system": "musculoskeletal",
+            "effects": [],
+            "predicates": [
+                {
+                    "variable": "Z7",
+                    "value": "0",
+                    "effect": "change-max-hp",
+                    "params": {
+                        "maxHp": 1
+                    }
+                },
+                {
+                    "variable": "Z7",
+                    "value": "1",
+                    "effect": "change-max-hp",
+                    "params": {
+                        "maxHp": 1
+                    }
+                },
+                {
+                    "variable": "Z7",
+                    "value": "2",
+                    "effect": "change-max-hp",
+                    "params": {
+                        "maxHp": 1
+                    }
+                },
+                {
+                    "variable": "Z7",
+                    "value": "3",
+                    "effect": "change-max-hp",
+                    "params": {
+                        "maxHp": 1
+                    }
+                },
+                {
+                    "variable": "Z7",
+                    "value": "4",
+                    "effect": "change-max-hp",
+                    "params": {
+                        "maxHp": 1
+                    }
+                },
+                {
+                    "variable": "D8",
+                    "value": "0-49",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "D8+20,E0+10"
+                    }
+                },
+                {
+                    "variable": "D8",
+                    "value": "50-79",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "D8+10,E3+10"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "s_steelheart",
+            "displayName": "Киберсердце «Железный дровосек» ",
+            "class": "cyber-implant",
+            "system": "cardiovascular",
+            "effects": [
+                "show-condition"
+            ],
+            "predicates": [
+                {
+                    "variable": "Z8",
+                    "value": "0",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "s_steelheart-0"
+                    }
+                },
+                {
+                    "variable": "Z8",
+                    "value": "1",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "s_steelheart-1"
+                    }
+                },
+                {
+                    "variable": "Z8",
+                    "value": "4",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "s_steelheart-2"
+                    }
+                },
+                {
+                    "variable": "D8",
+                    "value": "0-49",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "D8+20"
+                    }
+                },
+                {
+                    "variable": "D8",
+                    "value": "50-79",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "D8+10"
                     }
                 }
             ]

@@ -25,6 +25,29 @@ describe('Implants: ', () => {
         
     });
 
+     it("Add duble implant", async function() {
+        let eventData = { id: "s_stability" };
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+
+        let {baseModel, workingModel } = await process(model, events);
+
+        let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant).to.has.property('enabled', true);
+
+        let changeRecord = baseModel.changes.find( (e:any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»" )
+        expect(changeRecord).to.exist;
+
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825800, true);
+        ({baseModel, workingModel } = await process(baseModel, events));
+
+        let implants = baseModel.modifiers.filter((e: any) => e.id == "s_stability");
+
+        expect(implants.length).is.equal(1);
+    });
+
      it("Remove implant", async function() {
         let eventData = { id: "s_stability" };
         let model = getExampleModel();
@@ -57,6 +80,9 @@ describe('Implants: ', () => {
 
         let { baseModel, workingModel } = await process(model, events);
 
+
+        //console.log(JSON.stringify(workingModel, null, 4));
+
         //Genome[6] = 0
         let condition = workingModel.conditions.find((e: any) => e.id == "s_stability-0");
         expect(condition).to.exist;
@@ -79,7 +105,7 @@ describe('Implants: ', () => {
 
         //Genome[6] = 2 (no conditions)
         baseModel.genome[6] = 2;
-        events =  [getRefreshEvent(model._id,1500825920)];
+        events =  [getRefreshEvent(model._id,1500825940)];
         ({ baseModel, workingModel } = await process(baseModel, events));  
 
         condition = workingModel.conditions.find((e: any) => e.id.startsWith("s_stability"));
@@ -126,7 +152,7 @@ describe('Implants: ', () => {
         events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID : implant.mID } }], baseModel.timestamp + 100, true);
         ({ baseModel } = await process(baseModel, events));  
 
-        console.log(JSON.stringify(baseModel, null, 4));
+        //console.log(JSON.stringify(baseModel, null, 4));
 
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 

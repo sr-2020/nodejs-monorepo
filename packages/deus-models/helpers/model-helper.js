@@ -2,8 +2,7 @@
 /**
  * Хелперы для разных моделей
  */
-
- const MAX_CHANGE_LINES = 30;
+let consts = require('./constants');
 
 function loadImplant(api, id){
     let implant = api.getCatalogObject("implants", id.toLowerCase());
@@ -34,7 +33,7 @@ function loadImplant(api, id){
 //TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord( api, text ){
     if(text){
-        if(api.model.changes.length >= MAX_CHANGE_LINES) api.model.changes.shift();
+        if(api.model.changes.length >= consts().MAX_CHANGES_LINES) api.model.changes.shift();
 
         api.model.changes.push({
             mID: uuidv4(),
@@ -49,12 +48,12 @@ function addChangeRecord( api, text ){
 function checkPredicate(api, mID, effectName){
     let implant = api.getModifierById(mID)
 
-    if(implant){
+    if(implant && implant.predicates){
         let p = implant.predicates.filter( p => p.effect == effectName)
                     .find( p => isGenomeMatch(api, p.variable, p.value) || 
                                 isMindCumeMatch(api, p.variable, p.value) );
 
-        api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
+       // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
 
         if(p){
             return p.params;
@@ -188,6 +187,42 @@ function uuidv4() {
   });
 }
 
+/**
+ *  Устанавливает значение состояния системы в модели по ее имени (англоязычному)
+ */
+function addCharacterCondition( api, condId ){
+    if(condId){
+        let condition = api.getCatalogObject("conditions", condId);
+
+        if(condition){
+            api.addCondition(condition);
+        }
+    }
+}
+
+/**
+ * Проверка - можно ли устанавливать имплант в модель
+ * На ОДН и НС па слота, на остальные - по дному
+ * Так же нельзя установить один имплант два раза
+ */
+
+ function isImpantCanBeInstalled(api, implant){
+    if(implant && implant.system){
+        let systemInfo = consts().medicSystems.find( s => s.name == implant.system);
+
+        if(systemInfo){
+            let existingImplants = api.getModifiersBySystem( implant.system );
+            
+            if(!existingImplants.find( m => m.id == implant.id) &&  
+                systemInfo.slots > existingImplants.length){
+                    return true;
+            } 
+        }
+    }
+
+    return false;
+}
+
  
 module.exports = () => {
     return {
@@ -198,7 +233,9 @@ module.exports = () => {
         isMindCumeMatch,
         isGenomeMatch,
         checkPredicate,
-        modifyMindCubes
+        modifyMindCubes,
+        addCharacterCondition,
+        isImpantCanBeInstalled
     };
 };
 
