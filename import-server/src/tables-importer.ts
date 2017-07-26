@@ -26,7 +26,7 @@ const implantClasses = {
     "кибер" : "cyber-implant",
     "биологический" : "bio-implant",
     "подпольный кибер" : "illegal-cyber-implant",
-    "подпольный био" : "illegal-cyber-implant",
+    "подпольный био" : "illegal-bio-implant",
     "вирт" : "virtual"
 };
 

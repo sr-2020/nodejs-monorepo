@@ -107,7 +107,7 @@ export class AliceExporter{
             //Защита от цифрового логина
              this.model.login = this.findStrFieldValue(1905).split("@")[0].toLowerCase();
 
-            if( !this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,16}$/i) || this.model.login.match(/^\d+$/i) ) {
+            if( !this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,30}$/i) || this.model.login.match(/^\d+$/i) ) {
                 winston.info(`ERROR: can't convert id=${this.character.CharacterId} incorrect login=${this.model.login}`);
                 //this.model._id = "";
                 //return;
