@@ -41,17 +41,19 @@ class App {
       }
     })
 
-    if (this._user) {
-      this.app.use((req, res, next) => {
-        const credentials = basic_auth(req);
-        if (credentials && credentials.name == this._user && credentials.pass == this._password) {
-          return next();
-        }
-        res.header('WWW-Authentificate', 'Basic');
-        res.status(401).send('Access denied');
-      });
+    const auth = (req: express.Request, res: express.Response, next: any) => {
+      console.warn(this._user);
+      if (!this._user)
+        return next();
+      const credentials = basic_auth(req);
+      if (credentials && credentials.name == this._user && credentials.pass == this._password) {
+        return next();
+      }
+      res.header('WWW-Authentificate', 'Basic');
+      res.status(401).send('Access denied');
     }
-    this.app.get('/encode', (req, res) => {
+
+    this.app.get('/encode', auth, (req, res) => {
       try {
         const data = QrDataFromQuery(req.query);
         res.send({ content: encode(data) });
@@ -62,7 +64,7 @@ class App {
       }
     })
 
-    this.app.get('/encode_to_image', (req, res) => {
+    this.app.get('/encode_to_image', auth, (req, res) => {
       try {
         const data = QrDataFromQuery(req.query);
         console.log(JSON.stringify(data));
