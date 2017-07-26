@@ -84,6 +84,7 @@ function getRussianConditionTag(tag) {
 function getConditionsPageItem(cond) {
     let header = cond.text;
     let details = cond.details ? cond.details : header;
+    let condClass = cond.class ? cond.class : "physiology";
 
     if(details == header || details == (header + ".")){
         header = "Состояние";
@@ -92,8 +93,8 @@ function getConditionsPageItem(cond) {
     return {
         viewId: "id:" + cond.id,
         text: cond.text,
-        tag: getRussianConditionTag(cond.class),
-        icon: cond.class,
+        tag: getRussianConditionTag(condClass),
+        icon: condClass,
         details: {
             header,
             text: details
