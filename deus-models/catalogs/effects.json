@@ -11,6 +11,12 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "showCondition"
+        },
+        {        
+            "id"    : "damage-effect",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "damageEffect"
         } 
     ]
 }

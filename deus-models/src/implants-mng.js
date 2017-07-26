@@ -5,6 +5,8 @@
 //import * as helpers from '../helpers/model-helper';
 
 let helpers = require('../helpers/model-helper');
+let medHelpers = require('../helpers/medic-helper');
+
 
 /**
  * Обработчик события
@@ -15,18 +17,28 @@ let helpers = require('../helpers/model-helper');
 function addImplant( api, data ){
     if(data.id){
         let implant = helpers().loadImplant(api, data.id);
+
         if(implant){
-            implant.gID = helpers().uuidv4();
+            if(helpers().isImpantCanBeInstalled(api, implant)){
+                api.info(`Install implant: ${implant.displayName}`);
 
-            //Установка импланта
-            implant = api.addModifier(implant);
+                implant.gID = helpers().uuidv4();
 
-            //Добавление сообщения об этом в список изменений в модели
-            helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`);
+                //Установка импланта
+                implant = api.addModifier(implant);
 
-            //Выполнение мгновенного эффекта установки (изменение кубиков сознания пока)
-            instantInstallEffect(api, implant);
-        }
+                //Установка системы на которой стоит имплант в "мертвую"
+                medHelpers().setMedSystem(api, implant.system, 0);
+
+                //Добавление сообщения об этом в список изменений в модели
+                helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`);
+
+                //Выполнение мгновенного эффекта установки (изменение кубиков сознания пока)
+                instantInstallEffect(api, implant);
+            }else{
+                api.info(`Can't install implant (not enough slots or doubling): ${implant.displayName}`);
+            }
+        }   
     }
 }
 
@@ -62,8 +74,6 @@ function instantInstallEffect(api, implant){
  * { mId: implant-model-id }
  */
 function disableImplant(api, data){
-    api.info(`!!!!!! Disabled implant:  mID=${data.mID}` );
-
      if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){
