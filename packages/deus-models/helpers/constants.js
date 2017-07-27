@@ -1,5 +1,8 @@
 const DAMAGE_MODIFIER_MID = "_internal_damage";
 
+const HP_LEAK_TIMER = "_hp-leak-timer";
+const HP_LEAK_DELAY = 600000;
+
 const MAX_CHANGES_LINES = 30;
 
 const medicSystems = [
@@ -17,7 +20,9 @@ module.exports = () => {
     return {
         DAMAGE_MODIFIER_MID,
         medicSystems,
-        MAX_CHANGES_LINES
+        MAX_CHANGES_LINES,
+        HP_LEAK_TIMER,
+        HP_LEAK_DELAY
     };
 };
 

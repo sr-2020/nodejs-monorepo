@@ -65,6 +65,25 @@ function restoreDamageEvent(api, data, event ){
 }
 
 /**
+ * Функция события leak-hp, которое запускается по таймеру при потери хитов
+ * Этот обаботчик должен в случае, если damage >0 списывать один хит 
+ * (если нет каких-то имплантов или модификаторов этому препятствующих )
+ */
+function leakHpEvent(api, data, event){
+    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+
+    if(m && m.damage){
+        m.damage += 1;
+        api.info(`leakHpEvent: damage +1 => ${m.damage}`);
+
+        api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
+        console.log(JSON.stringify(api.model.timers, null, 4));
+
+        helpers().addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
+    }
+}  
+
+/**
  * Обработчик события kill-random-system
  * Вызывается когда хиты доходят до нуля
  */
@@ -148,6 +167,7 @@ function damageEffect(api, modifier){
 
     let deadSystems = false;
 
+    //Индикация для клиента, что системы организма не работают!
     //Проходим по всем системам и показываем состояния что система дохлая
     //Для андроидов видимо какая-то иная логика работы
     if(api.model.systems){
@@ -191,6 +211,21 @@ function damageEffect(api, modifier){
         }
     }
 
+    if((api.model.hp < api.model.maxHp) && !deadSystems){
+        //Установить таймер для утечки хитов, либо если он уже есть - не трогать
+        //console.log(JSON.stringify(api.model.timers, null, 4));
+
+        if(!api.getTimer(consts().HP_LEAK_TIMER)){
+            api.info(`damageEffect: damage detected ==> start leak HP timer!`);        
+            api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
+        }
+    }else{
+        //Отключить таймер если нет повреждений
+        if(api.getTimer(consts().HP_LEAK_TIMER)){
+            api.info(`damageEffect: damage was healed ==> stop leak HP timer!`);        
+            api.removeTimer(consts().HP_LEAK_TIMER);
+        }
+    }
 }  
 
 module.exports = () => {
@@ -198,7 +233,8 @@ module.exports = () => {
         getDamageEvent,
         damageEffect,
         restoreDamageEvent,
-        killRandomSystemEvent
+        killRandomSystemEvent,
+        leakHpEvent
     };
 };
 
