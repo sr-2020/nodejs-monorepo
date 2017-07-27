@@ -63,49 +63,57 @@
                 "killRandomSystem"
             ]
         },
-               {
+        {
+            "id": "put-condition",      
             "eventType": "put-condition",
             "effects": [
                 "putConditionEvent"
             ]
         },
         {
+            "id": "remove-condition",
             "eventType": "remove-condition",
             "effects": [
                 "removeConditionEvent"
             ]
         },
         {
+            "id": "send-message",
             "eventType": "send-message",
             "effects": [
                 "sendMessageEvent"
             ]
         },
         {
+            "id": "change-model-variable",
             "eventType": "change-model-variable",
             "effects": [
                 "changeModelVariableEvent"
             ]
         },
         {
+            "id": "change-mind-cube",
             "eventType": "change-mind-cube",
             "effects": [
                 "changeMindCubeEvent"
             ]
         },
         {
+            "id": "change-android-owner",
             "eventType": "change-android-owner",
             "effects": [
                 "changeAndroidOwnerEvent"
             ]
         },
         {
+            "id": "change-memory",
             "eventType": "change-memory",
             "effects": [
                 "changeMemory"
             ]
         },
         {
+            "id": "leak-hp",
             "eventType": "leak-hp",
             "effects": [
                 "leakHpEvent"
