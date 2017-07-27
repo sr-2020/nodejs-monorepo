@@ -171,5 +171,49 @@ describe('Medicine: ', () => {
         //console.log(JSON.stringify(workingModel, null, 4));
     });
 
+    it.only("Reduce HP and bleeding (hp leak)", async function() {
+        let eventData = { id: "s_orphey" };
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp+100, true);
+
+        let { baseModel, workingModel } = await process(model, events);
+    
+    //Нанесли повреждения
+        events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp+100, true);
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        //Check HP: model(4) + impant(1) - damage (2)
+        expect(workingModel.hp).is.equal(3);
+
+    //Прошло 10 минут (должен списаться хит)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+700000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        //Check HP: model(4) + impant(1) - damage (2) - leak(1)
+        expect(workingModel.hp).is.equal(2);
+
+        console.log(JSON.stringify(baseModel.timers, null, 4));
+
+    //Прошло 20 минут (должно списаться еще 2 хита)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 1200*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        //Check HP: model(4) + impant(1) - damage (2) - leak(2)
+        expect(workingModel.hp).is.equal(0);
+
+        //И должна быть убита одна система (в тестах 1)
+        expect(baseModel.systems[1]).is.equal(0);
+
+    //Прошло еще 10 минут (не должно ничего списываться т.е. одна из систем уничтожена и по идее должен запускаться таймер на умирание)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 650*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        //Уничтожена одна система -> хитов нет
+        expect(workingModel.hp).is.equal(0);
+
+        console.log(JSON.stringify(baseModel, null, 4));
+        
+    });
+
 
 });
