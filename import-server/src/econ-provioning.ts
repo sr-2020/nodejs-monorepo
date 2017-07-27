@@ -70,7 +70,7 @@ export class EconomyProvision {
                 json: true
             };
 
-            winston.info(`Economy account register: ${JSON.stringify(accData, null, 4)}`);
+            //winston.info(`Economy account register: ${JSON.stringify(accData, null, 4)}`);
             
             return request(reqOpts).catch( err => {
                 winston.error(  `Can't register economy account: ${err}!`);
