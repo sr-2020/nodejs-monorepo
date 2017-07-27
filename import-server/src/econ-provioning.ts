@@ -73,12 +73,12 @@ export class EconomyProvision {
             //winston.info(`Economy account register: ${JSON.stringify(accData, null, 4)}`);
             
             return request(reqOpts).catch( err => {
-                winston.error(  `Can't register economy account: ${err}!`);
-                return false;
+                //winston.error(  `Can't register economy account: ${err}!`);
+                return `Can't register economy account: ${err}!`;
             })
         }
 
-        winston.error(`Can't register economy account: no login or password!`);
+        //winston.error(`Can't register economy account: no login or password!`);
         return Promise.resolve("Can't register economy account: no login or password");
     }
 }
