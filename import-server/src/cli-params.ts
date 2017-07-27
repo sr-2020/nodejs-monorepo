@@ -13,6 +13,7 @@ const cliParamsDef = [
         { name: 'list', type: Boolean, description: 'Only list characters for import (dry run)'},
         { name: 'refresh', type: Boolean, description: 'Send _Refresh event after import'},
         { name: 'mail', type: Boolean, description: 'Create e-mail after import' },  
+        { name: 'econ', type: Boolean, description: 'Register economy account' },          
         { name: 'id', type: String, typeLabel: '[underline]{characterId}', description: 'ID of single character for import'},
         { name: 'since', type: String, typeLabel: '[underline]{YYYY-MM-DDTHH:mm}', description: 'import characters modified after that time' },
         { name: 'server', type: Boolean, description: 'Run as a server' },
@@ -38,7 +39,7 @@ export function processCliParams(): any{
     try{
         let p = commandLineArgs(cliParamsDef);
 
-        let setSteps = p.export || p.import || p.list || p.refresh || p.mail || p.since;
+        let setSteps = p.export || p.import || p.list || p.refresh || p.mail || p.since || p.econ;
 
         if(!setSteps && !p.server && !p.id){
             throw "error combinations";
@@ -54,6 +55,7 @@ export function processCliParams(): any{
             p.import = true;
             p.refresh = true;
             p.mail = true;
+            p.econ = true;
         }
 
         return p;

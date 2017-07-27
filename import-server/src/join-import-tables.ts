@@ -35,4 +35,12 @@ export let joinValues:any = {
     1821: "1",
     1822: "2",
     1823: "3"
-}
+};
+
+export let insuranceSourceIT:any = {
+    2053: "Govt",
+    2055: "Serenity",
+    2056: "JJ",
+    2057: "Panam",
+    2058: "Supervip",
+};

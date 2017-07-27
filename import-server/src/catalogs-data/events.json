@@ -62,6 +62,54 @@
             "effects": [
                 "killRandomSystem"
             ]
+        },
+               {
+            "eventType": "put-condition",
+            "effects": [
+                "putConditionEvent"
+            ]
+        },
+        {
+            "eventType": "remove-condition",
+            "effects": [
+                "removeConditionEvent"
+            ]
+        },
+        {
+            "eventType": "send-message",
+            "effects": [
+                "sendMessageEvent"
+            ]
+        },
+        {
+            "eventType": "change-model-variable",
+            "effects": [
+                "changeModelVariableEvent"
+            ]
+        },
+        {
+            "eventType": "change-mind-cube",
+            "effects": [
+                "changeMindCubeEvent"
+            ]
+        },
+        {
+            "eventType": "change-android-owner",
+            "effects": [
+                "changeAndroidOwnerEvent"
+            ]
+        },
+        {
+            "eventType": "change-memory",
+            "effects": [
+                "changeMemory"
+            ]
+        },
+        {
+            "eventType": "leak-hp",
+            "effects": [
+                "leakHpEvent"
+            ]
         }
     ]
 }

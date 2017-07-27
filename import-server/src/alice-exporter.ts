@@ -9,7 +9,7 @@ import * as uuid from 'uuid/v4';
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
 import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue, JoinGroupInfo, JoinMetadata } from './join-importer'
-import { joinValues } from './join-import-tables';
+import { joinValues, insuranceSourceIT } from './join-import-tables';
 
 import { DeusModel, MemoryElement, MindData } from './interfaces/model';
 import { DeusModifier } from './interfaces/modifier';
@@ -145,16 +145,20 @@ export class AliceExporter{
                 //Пол персонажа Field: 696
                 this.model.sex = this.findStrFieldValue(696,true);
 
-                //Место работы (корпорация). Field: 2017 (1977 Неправильное)
-                this.model.corporation = this.findStrFieldValue(2017);
+                //Место работы (корпорация). Field: 2017 
+                const corpVar = this.findNumFieldValue(2017);
+                if(corpVar){                
+                    this.model.corporation = this.findStrFieldValue(2017);
+                    this.model.corporationId = this.convertToDescription(2017,corpVar);
+                }
 
                 //Уровень зарплаты. Field: 1976
                 this.model.salaryLevel = Number.parseInt(this.findStrFieldValue(1976, true));
 
                 //Страховка и ее уровень. Field: 1973, 1975
-                const insurance = this.findNumFieldValue(1973);
-                if(insurance) {
-                    this.model.insurance = insurance
+                const insuranceVal = this.findNumFieldValue(1973);
+                if(insuranceVal) {
+                    this.model.insurance = insuranceSourceIT[insuranceVal];
                     this.model.insuranceLevel = Number.parseInt( this.findStrFieldValue(1975, true) );
                     this.model.insuranceDiplayName = this.findStrFieldValue(1973, true) + `, Уровень: ${this.model.insuranceLevel}`;
                 }

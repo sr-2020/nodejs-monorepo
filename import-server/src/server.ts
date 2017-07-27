@@ -12,6 +12,7 @@ import { CatalogsLoader } from './catalogs-loader';
 import { ModelRefresher } from './model-refresher';
 import { MailProvision } from './mail-provision';
 import { processCliParams } from './cli-params';
+import { EconomyProvision } from './econ-provioning';
 
 class ModelImportData{
     importer:JoinImporter = new JoinImporter();
@@ -19,6 +20,7 @@ class ModelImportData{
     catalogsLoader: CatalogsLoader = new CatalogsLoader();
     modelRefresher: ModelRefresher = new ModelRefresher();
     mailProvision: MailProvision = new MailProvision(); 
+    economyProvision: EconomyProvision = new EconomyProvision(); 
 
     currentStats = new ImportRunStats();
 
@@ -49,12 +51,12 @@ let isImportRunning = false;
 //Statisticts
 let stats = new ImportStats();
 
-if(params.export || params.import || params.id || params.test || params.list || params.refresh || params.mail){
+if(params.export || params.import || params.id || params.test || params.list || params.refresh || params.mail || params.econ){
     let _id = params.id? params.id : 0;
     let since = params.since? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
     
     importAndCreate(_id, (params.import == true), (params.export==true), (params.list==true), 
-                            false, (params.refresh==true), (params.mail==true), since)
+                            false, (params.refresh==true), (params.mail==true), (params.econ==true), since)
     .subscribe( (data:string) => {},
                 (error:any) => {
                     process.exit(1);
@@ -151,22 +153,25 @@ function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData):
 /**
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
-function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
+function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, exportModel: boolean = true): Observable<JoinCharacterDetail> {
     let model = new AliceExporter(char, data.importer.metadata, data.catalogsLoader, true);
+    char.model = model.model;
 
-    return Observable.fromPromise(model.export())
-            .map( (c:any) => { 
-                    //let result = c.map( e => e.ok ? "saved" : "ERROR: not saved" );
-                    let result = [];
-                    result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
-                    result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
-                    result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
+    if(exportModel){
+        return Observable.fromPromise(model.export())
+                .map( (c:any) => { 
+                        let result = [];
+                        result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
+                        result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
+                        result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
 
-                    winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
-                   
-                    char.model = model.model;
-                    return char;
-            });
+                        winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
+                    
+                        return char;
+                });
+    }else{
+        return Observable.from([char]);
+    }
 }          
         
 /**
@@ -176,6 +181,17 @@ function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Obs
     return Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char))
             .map( (c:any) => { 
                     winston.info( `Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c) );
+                    return char;
+            });
+}
+
+/**
+ * Регистрация аккаунта в экономике
+ */
+function registerEconAccount(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
+    return Observable.fromPromise(data.economyProvision.regiterAccount(char))
+            .map( (c:any) => { 
+                    winston.info( `Registered economy account for character id = ${char._id}: ` + JSON.stringify(c) );
                     return char;
             });
 }
@@ -256,6 +272,7 @@ function importAndCreate(   id:number = 0,
                             updateStats:boolean = true,
                             refreshModel:boolean = true,
                             mailProvision:boolean = true,
+                            econProvision:boolean = true,
                             updatedSince?: moment.Moment ): Observable<string> {
 
     
@@ -263,7 +280,7 @@ function importAndCreate(   id:number = 0,
 
     winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
                   `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, mailProvision=${mailProvision}, ` + 
-                  `updateSince=${sinceText}` )
+                   `econProvision=${econProvision}, + updateSince=${sinceText}` )
 
 
     //Объект с рабочими данными при импорте - экспорте
@@ -314,10 +331,13 @@ function importAndCreate(   id:number = 0,
         .do( c => workData.charDetails.push(c) )
 
     //Экспортировать модель в БД (если надо)
-        .flatMap( c  => exportModel ? exportCharacterModel(c, workData) : Observable.from([c]) )
+        .flatMap( c  =>  exportCharacterModel(c, workData, exportModel) )
 
     //Послать модели Refresh соообщение для создания Work и View-моделей
         .flatMap( c => refreshModel ? sendModelRefresh(c, workData) : Observable.from([c]) )
+
+    //Отправить запрос на регистрацию аккаунта в экономике
+        .flatMap( c => econProvision ? registerEconAccount(c, workData)  : Observable.from([c]) )
 
     //Посчитать статистику
         .do( () => workData.importCouter++ )

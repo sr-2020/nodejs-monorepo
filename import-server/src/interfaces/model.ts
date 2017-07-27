@@ -61,8 +61,9 @@ export class DeusModel{
     sex?: string;            //пол
     generation?: string;     //Поколение (A / W / Z / X/Y)
     corporation?: string;    //Место работы
+    corporationId?: string;    //Место работы (ID компании для экономики)
     salaryLevel?: number;    //Уровень зарплаты
-    insurance?: number;      //кто выдал страховку (Value из Join)
+    insurance: string;      //кто выдал страховку (формат для внешних систем)
     insuranceDiplayName?: string; //Название того кто выдал страховку для отображения
     insuranceLevel?: number;      //Уровень страховки (1-4)
     genome?: number[];       //Геном массив из 13 значений

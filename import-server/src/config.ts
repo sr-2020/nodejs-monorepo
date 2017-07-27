@@ -22,6 +22,11 @@ export const config = {
         supportLogFileName: "import-support-server.log",
         mailServerAPIUrl: "https://alice.digital:8100/mailbox",
 
+        economicsApiUrl: "https://alice.digital/econ/api",
+        economicsLogin: "admin",
+        economicsPassword: "123456",
+        economicsStartCash: 100,
+
         catalogs: {
             effects: "dict-effects",
             illnesses: "dict-illnesses",
