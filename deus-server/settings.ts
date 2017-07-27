@@ -10,6 +10,18 @@ export class CheckForInactivitySettings {
   // are considered inactive
   @JsonMember({isRequired: true, type: Number})
   public notifyIfInactiveForMoreThanMs: number;
+
+  // If set, check will be performed only
+  // when Date().getHours() (returns current hour of day, from 0 to 23)
+  // is greater than allowFromHour
+  @JsonMember
+  public allowFromHour?: number;
+
+  // If set, check will be performed only
+  // when Date().getHours() (returns current hour of day, from 0 to 23)
+  // is lesser than allowToHour
+  @JsonMember
+  public allowToHour?: number;
 }
 
 @JsonObject

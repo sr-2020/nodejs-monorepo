@@ -9,7 +9,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { PushSettings, ApplicationSettings } from './settings';
+import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
 
 const port = 3000;
 
@@ -34,16 +34,22 @@ describe('Mass push notifications', () => {
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
 
-  const eventsDb = new PouchDB('events', { adapter: 'memory' });
-  const mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
-  const defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
-  const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
-    ([['mobile', mobileViewModelDb],
-    ['default', defaultViewModelDb]]);
-  const accountsDb = new PouchDB('accounts', { adapter: 'memory' });
   const logger = new winston.Logger({ level: 'warning' });
+  let eventsDb: PouchDB.Database<{}>;
+  let mobileViewModelDb: PouchDB.Database<{}>;
+  let defaultViewModelDb: PouchDB.Database<{}>;
+  let viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>;
+  let accountsDb: PouchDB.Database<{}>;
 
   beforeEach(async () => {
+    eventsDb = new PouchDB('events', { adapter: 'memory' });
+    mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
+    defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
+    viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
+      ([['mobile', mobileViewModelDb],
+      ['default', defaultViewModelDb]]);
+    accountsDb = new PouchDB('accounts', { adapter: 'memory' });
+
     await mobileViewModelDb.put({
       _id: '00001', timestamp: testStartTime, mobile: true,
     });
@@ -93,4 +99,21 @@ describe('Mass push notifications', () => {
     await delay(300);
     expect(fcm.isDone()).is.true;
   });
+
+  it('Does not send notifications after allowed time', async () => {
+    (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = new Date().getHours() + 1;
+    (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = 25;
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
+    await app.listen(port);
+    await delay(300);
+  });
+
+  it('Does not send notifications before allowed time', async () => {
+    (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = -1;
+    (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = new Date().getHours() - 1;
+    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
+    await app.listen(port);
+    await delay(300);
+  });
+
 });

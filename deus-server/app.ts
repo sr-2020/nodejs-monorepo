@@ -285,6 +285,11 @@ class App {
       const autoNotifySettings = this.settings.pushSettings.autoNotify;
       const autoNotifyTitle = this.settings.pushSettings.autoNotifyTitle;
       this.cancelAutoNotify = setInterval(async () => {
+        const currentHour = new Date().getHours();
+        if (autoNotifySettings.allowFromHour && autoNotifySettings.allowFromHour > currentHour)
+          return;
+        if (autoNotifySettings.allowToHour && autoNotifySettings.allowToHour < currentHour)
+          return;
         try {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
@@ -295,10 +300,16 @@ class App {
         }
       }, autoNotifySettings.performOncePerMs);
     }
+    console.error('autoRefreshSettings.allowFromHour');
 
     if (this.settings.pushSettings.autoRefresh) {
       const autoRefreshSettings = this.settings.pushSettings.autoRefresh;
       this.cancelAutoRefresh = setInterval(async () => {
+        const currentHour = new Date().getHours();
+        if (autoRefreshSettings.allowFromHour && autoRefreshSettings.allowFromHour > currentHour)
+          return;
+        if (autoRefreshSettings.allowToHour && autoRefreshSettings.allowToHour < currentHour)
+          return;
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
