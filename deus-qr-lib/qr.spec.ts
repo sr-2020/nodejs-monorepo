@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { QrType } from "./qr.type";
-import { decode, encode, FormatError } from "./qr";
+import { decode, encode, FormatError, QrData } from "./qr";
 
 describe('QR content encoding/decode', () => {
   it('Throws format error if too short', () => {
@@ -38,5 +38,10 @@ describe('QR content encoding/decode', () => {
   it('Can encode example content', () => {
     const encoded = encode({type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello'});
     expect(encoded).to.equal('d810Aw1ybkhZHello');
+  });
+
+  it('Can encode and decode example content with cyrillic characters', () => {
+    const data: QrData = {type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Рыба'};
+    expect(decode(encode(data))).to.deep.equal(data);
   });
 });

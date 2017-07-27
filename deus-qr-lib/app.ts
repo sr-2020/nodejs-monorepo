@@ -41,6 +41,23 @@ class App {
       }
     })
 
+    this.app.get('/encode_bill', (req, res) => {
+      try {
+        const receiver: string = req.query.receiver;
+        const amount: string = req.query.amount;
+        const comment: string = req.query.comment;
+        const content = encode({type: QrType.Bill, kind: 0, validUntil: 1700000000,
+          payload: [receiver, amount, comment].join(',')});
+        res.redirect(
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=1&margin=1&size=300x300&ecc=L`
+        );
+      }
+      catch (e) {
+        console.warn('exception in /encode_bill: ', e);
+        res.status(400).send('Wrong data format');
+      }
+    });
+
     const auth = (req: express.Request, res: express.Response, next: any) => {
       if (!this._user)
         return next();
