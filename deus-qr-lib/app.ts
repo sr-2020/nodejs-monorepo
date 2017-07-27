@@ -42,7 +42,6 @@ class App {
     })
 
     const auth = (req: express.Request, res: express.Response, next: any) => {
-      console.warn(this._user);
       if (!this._user)
         return next();
       const credentials = basic_auth(req);
