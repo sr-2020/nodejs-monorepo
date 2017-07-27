@@ -180,7 +180,7 @@ function changeAndroidOwnerEvent ( api, data, event ){
  *      ]
  * }
  */
-function changeMemory( api, data, event ){
+function changeMemoryEvent( api, data, event ){
     if(data.remove){
         data.remove.forEach( mID => {
                 api.info(`changeMemory: remove element with ${mID}` );
@@ -212,6 +212,6 @@ module.exports = () => {
         changeModelVariableEvent,
         changeMindCubeEvent,
         changeAndroidOwnerEvent,
-        changeMemory
+        changeMemoryEvent
     };
 };
