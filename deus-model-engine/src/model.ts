@@ -1,7 +1,7 @@
 import { Event } from 'deus-engine-manager-api';
 import { ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from './model_api';
 
-export type Callback = (api: ModelApiInterface, data: any) => void
+export type Callback = (api: ModelApiInterface, data: any, event?: Event) => void
 
 export type ViewModelCallback = (api: ViewModelApiInterface, model: any) => any;
 
