@@ -26,3 +26,22 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
             })
             .catch( () => connection.put(doc) );
 }
+
+
+export class DamageModifier  {
+        id = "_damage";
+        displayName = "internal damage modificator";
+        class = "_internal";
+        effects = [
+            {
+                id: "damage-effect",
+                class: "physiology",
+                type: "normal",
+                handler: "damageEffect",
+                enabled: true
+            }
+        ];
+        damage = 0;
+        enabled = true;
+        mID = "_internal_damage";
+};

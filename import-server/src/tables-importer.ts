@@ -12,6 +12,8 @@ import { DeusModifier } from './interfaces/modifier';
 import { DeusCondition } from './interfaces/condition';
 import { Predicate } from './interfaces/predicate';
 
+import { saveObject } from './helpers'
+
 let unique = arrayUnique.immutable;
 
 let sheets = google.sheets('v4');
@@ -19,7 +21,12 @@ let sheets = google.sheets('v4');
 const effectNames = {
     simpleString: "show-condition",
     notImplemented: "not-implemented",
-    changeMindCube: "inst_changeMindCube"
+    changeMindCube: "inst_changeMindCube",
+    changeMaxHp: "change-max-hp",
+    changeSex: "change-sex",
+    recoveryHp: "recovery-hp",
+    recoveryFromZero: "recovery-from-zero"
+
 };
 
 const implantClasses = {
@@ -280,17 +287,12 @@ export class TablesImporter{
     }
 
     
+    /**
+     *  Сохранить импланты в БД, с обновлением существующих
+     */
     private saveImplants(): Promise<any[]>{
          return Observable.from( this.implants )
-            .flatMap( implant => {
-                return this.implantDB.get(implant._id).then( existImp => { 
-                    implant._rev = existImp._rev;
-                    return this.implantDB.put(implant);
-                })
-                .catch( () => { 
-                    return this.implantDB.put(implant);
-                } )
-            })
+            .flatMap( implant => saveObject(this.implantDB, implant))
             .toArray()
             .do( (results)=>{
                 winston.info(`Saved ${results.length} implants`);
@@ -298,17 +300,12 @@ export class TablesImporter{
             .toPromise();
     }   
 
+    /**
+     *  Сохранить созданные Conditions в БД, с обновлением существующих
+     */
     private saveConditions(): Promise<any[]>{
          return Observable.from( this.impConditions )
-            .flatMap( condition => {
-                return this.conditionDB.get(condition._id).then( existImp => { 
-                    condition._rev = existImp._rev;
-                    return this.conditionDB.put(condition);
-                })
-                .catch( () => { 
-                    return this.conditionDB.put(condition);
-                } )
-            })
+            .flatMap( condition =>  saveObject(this.conditionDB, condition))
             .toArray()
             .do( (results)=>{
                 winston.info(`Saved ${results.length} conditions`);
@@ -378,29 +375,34 @@ export class TablesImporter{
                     displayName: impData.name,
                     class: impData.class,
                     system: impData.system,
+                    details: impData.desc,
                     effects: [],
                     predicates: []
                 };
 
                 //Пройти по всем эффектам зависящим от генома
                 impData.genEffect.forEach( (e, i) => {
-                    //Создать новый предикат для пары условие-эффект
-                    let p: Predicate = { variable: "", value: "", effect: "", params : null  };
-                    if(e.position && e.value){
-                        p.variable = `Z${e.position}`;
-                        p.value = e.value;
-                    }
 
-                    //Нати данные по "эффету" для данной пары. Если надо создать дополнительные состояния
-                    [p.effect, p.params] = this.findGenEffect(e, i, impData);
-
-                     if(p.effect){
-                        if(!implant.effects.find( e => e == p.effect)){
-                            implant.effects.push(p.effect);
+                    //Получить все эффекты, зависимые от этой позиции в геноме 
+                    //(список опредяется тем, что импортировано из таблицы - класс и описание эффекта)
+                    this.findGenEffect(e, i, impData).forEach( (effectData, i) => {
+                        let p: Predicate = { 
+                                variable: `Z${e.position}`,
+                                value: e.value, 
+                                effect: effectData.name, 
+                                params : effectData.params
+                            };
+                        
+                        //Нати данные по "эффету" для данной пары. Если надо - добавить в список эффектов
+                        if(p.effect != effectNames.changeMaxHp){
+                            if(!implant.effects.find( e => e == p.effect)){
+                                implant.effects.push(p.effect);
+                            }
                         }
-                    }
-
-                    implant.predicates.push(p);
+                        
+                        //Добавить предикат в общий список для импланта
+                        implant.predicates.push(p);
+                    })
                 });
 
                 //Пройти по всем эффектам зависящим от сознания (постоянным)
@@ -414,6 +416,7 @@ export class TablesImporter{
                     }
 
                     //Нати данные по "эффету" для данной пары. Если надо создать дополнительные состояния
+                    //TODO: Переделать распакову в группу предикатов
                     [p.effect, p.params] = this.findMindEffect(e, i, impData);
 
                     if(p.effect && p.effect != effectNames.changeMindCube){
@@ -434,15 +437,61 @@ export class TablesImporter{
 
 
     //Находит параметры эффекта под класс пришедший из данных. Создает дополнительные записи conditions если нужно
-    private findGenEffect( effData: GenEffectData, i: number, impData:ImplantData ): [string, any]{
-        if(effData.effectClass == "simpleString"){
+    //Обновление: возвращается массив [{ effectName, params },...{ effectName, params }]
+    private findGenEffect( effData: GenEffectData, i: number, impData:ImplantData ): {name:string, params:any}[] {
+        let ret = [];
+        
+        //Предполагаем, что если в описании эффект заполнено поле conditionText то оно означает показываемое состояние
+        //и не зависит от остальных типов эффектов
+        if(effData.conditionText){
             let conditionName = `${impData.id}-${i}`;
             this.createCondition(conditionName, null, effData.conditionText, effData.conditionType);
 
-            return [effectNames.simpleString, { condition: conditionName } ];
+            ret.push( {name: effectNames.simpleString, params: { condition: conditionName }} );
         }
 
-        return ["", {}];
+        //Изменение HP. Реализуются псевдо-эффектом "change-max-hp"
+        if(effData.effectClass == "changeMaxHp"){
+            if(effData.effectText){
+                let parts = effData.effectText.replace(/\s/i,'').match(/^maxHP\+(\d)/i);
+                if(parts){
+                    ret.push( {name: effectNames.changeMaxHp, params: { maxHp: Number(parts[1]) }} );
+                }
+            }
+        }
+
+        //Изменение поля. Реализуются эффектом "change-sex"
+        if(effData.effectClass == "changeSex"){
+            if(effData.effectText){
+                let parts = effData.effectText.replace(/\s/i,'').match(/^sex=(male|female|agender)/i);
+                if(parts){
+                    ret.push( {name: effectNames.changeSex, params: { sex: parts[1] }} );
+                }
+            }
+        }
+
+        //Восставновление HP в легком ранении
+        if(effData.effectClass == "HealingHp"){
+            if(effData.effectText){
+                let parts = effData.effectText.replace(/\s/i,'').match(/^recoveryRate=(\d+)/i);
+                if(parts){
+                    ret.push( {name: effectNames.recoveryHp, params: { recoveryRate: Number(parts[1]) }} );
+                }
+            }
+        }
+
+        //Восставновление HP в тяжелом ранении 
+        if(effData.effectClass == "HealigFromZero"){
+            if(effData.effectText){
+                let parts = effData.effectText.replace(/\s/i,'').match(/^recoveryTime=(\d+)/i);
+                if(parts){
+                    ret.push( {name: effectNames.recoveryFromZero, params: { recoveryTime: Number(parts[1]) }} );
+                }
+            }
+        }
+
+
+        return ret;
     }
 
     //Находит параметры эффекта под класс пришедший из данных. Создает дополнительные записи conditions если нужно
@@ -478,9 +527,7 @@ export class TablesImporter{
             cond.text = details.split(".")[0];
         }
 
-        if(condType){
-            cond.class = condType;
-        }
+        cond.class = condType ? condType : "physiology";
 
         this.impConditions.push(cond);
         
@@ -495,7 +542,17 @@ let importer = new TablesImporter();
 importer.import().subscribe((result) => { 
             winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}` );
             //winston.info(JSON.stringify(result.implantsData.slice(0,10), null, 4));
-            winston.info(JSON.stringify(result.implants.slice(0,2),null, 4));
+
+            result.implants.filter(imp => imp._id == "x_rip").forEach(imp => 
+                        winston.info(JSON.stringify(imp, null, 4))   
+                    );
+
+            result.impConditions.filter(cond => cond._id.startsWith("x_rip")).forEach(cond => 
+                    winston.info(JSON.stringify(cond, null, 4))   
+                );
+
+
+            //winston.info(JSON.stringify(result.implants.slice(0,10), null, 4));
             //winston.info(JSON.stringify(result.impConditions.slice(0,30),null, 4));
             
         },

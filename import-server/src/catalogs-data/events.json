@@ -1,0 +1,67 @@
+{
+    "events": [
+        {
+            "id": "usePill",            
+            "eventType": "usePill",
+            "effects": [
+                "usePill"
+            ]
+        },
+        {
+            "id": "illnessTimerHandler",
+            "eventType": "illnessTimerHandler",
+            "effects": [
+                "illnessTimerHandler"
+            ]
+        },
+        {
+            "id": "add-implant",
+            "eventType": "add-implant",
+            "effects": [
+                "addImplant"
+            ]
+        },
+        {
+            "id": "remove-implant",
+            "eventType": "remove-implant",
+            "effects": [
+                "removeImplant"
+            ]
+        },
+        {
+            "id" : "disable-implant",
+            "eventType": "disable-implant",
+            "effects": [
+                "disableImplant"
+            ]
+        },
+        {
+            "id": "enable-implant",
+            "eventType": "enable-implant",
+            "effects": [
+                "enableImplant"
+            ]
+        },
+        {
+            "id": "subtractHp",
+            "eventType": "subtractHp",
+            "effects": [
+                "getDamage"
+            ]
+        },
+        {
+            "id": "addHp",
+            "eventType": "addHp",
+            "effects": [
+                "restoreDamage"
+            ]
+        },
+        {
+            "id": "kill-random-system",
+            "eventType": "kill-random-system",
+            "effects": [
+                "killRandomSystem"
+            ]
+        }
+    ]
+}

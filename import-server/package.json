@@ -15,7 +15,8 @@
     "reimport": "tsc && node ./dist/server.js -- --import",
     "debug": "tsc && node --inspect-brk=127.0.0.1:9229 ./dist/server.js -- --mail --id=10643",
     "import:tables": "ts-node src/tables-importer.ts",
-    "import:test": "tsc && node ./dist/server.js -- --test"
+    "import:test": "tsc && node ./dist/server.js -- --test",
+    "import:db" :  "ts-node src/db-docs-creator.ts"
   },
   "repository": {
     "type": "git",

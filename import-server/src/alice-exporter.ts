@@ -18,7 +18,7 @@ import { DeusEffect } from './interfaces/effect';
 import { DeusEvent } from './interfaces/events';
 import { mindModelData } from './mind-model-stub';
 import { CatalogsLoader } from './catalogs-loader';
-import { saveObject } from './helpers'
+import { saveObject, DamageModifier } from './helpers'
 
 const PHYS_SYSTEMS_NUMBER = 6;
 
@@ -98,6 +98,7 @@ export class AliceExporter{
             winston.info(`Try to convert model id=${this.character.CharacterId}`);
 
             this.model.timestamp = Date.now();
+            this.model.modifiers.push( new DamageModifier() );
 
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
@@ -183,7 +184,7 @@ export class AliceExporter{
                 this.model.maxProxy = 100;
 
                 //Максимальное время в VR (секунды)
-                this.model.maxSecondsInVr = 1200;
+                this.model.maxSecondsInVr = 7200;
             }
             
             //Блок данных только для профиля андроида или программы
@@ -467,7 +468,8 @@ export class AliceExporter{
                             this.model.memory.push(
                                 {
                                     title: mem.substr(0,60) + (mem.length>60 ? "..." : ""),
-                                    text: mem
+                                    text: mem,
+                                    mID: uuid()
                                 }
                             ))
         );  

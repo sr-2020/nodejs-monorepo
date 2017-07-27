@@ -6,9 +6,10 @@ export interface DeusModifier {
     _id?: string,
     _rev?: string,
     displayName?: string,
+    details?: string,
     class?: string,
     system?: string,
-    effects?: string[],
+    effects?: any[],
     enabled?: boolean,
     predicates?: Predicate[],
     mID?: string

@@ -23,7 +23,8 @@ import { DeusCondition } from './condition';
 export interface MemoryElement {
     title: string,
     text?: string,
-    url?: string
+    url?: string,
+    mID?: string,
 }
 
 export interface MindData {
@@ -66,7 +67,7 @@ export class DeusModel{
     insuranceLevel?: number;      //Уровень страховки (1-4)
     genome?: number[];       //Геном массив из 13 значений
     memory: Array<MemoryElement> = [];  //Воспоминания
-    hackingLogin?: string;           //логин хакеров  TODO - не сделано
+    hackingLogin?: string;           //логин хакеров
     hackingProtection?: number;      //Уровень защиты от хакеров
     mind?: MindData;                  //кубики сознания
     systems?: number[];         //физиологические системы организма
