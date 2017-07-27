@@ -149,7 +149,7 @@ function damageEffect(api, modifier){
     let deadSystems = false;
 
     //Проходим по всем системам и показываем состояния что система дохлая
-    api.info(`damageEffect: systems ${api.model.systems.join(',')}`);       
+    //api.info(`damageEffect: systems ${api.model.systems.join(',')}`);       
 
     api.model.systems.forEach( (sys,i) => {
         let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
