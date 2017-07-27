@@ -69,7 +69,7 @@ function restoreDamageEvent(api, data, event ){
  * Вызывается когда хиты доходят до нуля
  */
 function killRandomSystemEvent(api, data, event){
-    if(data.from && data.from == "self"){
+    if(data.from && data.from == "self" && api.model.profileType=="human"){
         console.log("killRandomSystem: event handler start!");
 
         let chance = new Chance();
@@ -149,19 +149,23 @@ function damageEffect(api, modifier){
     let deadSystems = false;
 
     //Проходим по всем системам и показываем состояния что система дохлая
-    //api.info(`damageEffect: systems ${api.model.systems.join(',')}`);       
+    //Для андроидов видимо какая-то иная логика работы
+    if(api.model.systems){
 
-    api.model.systems.forEach( (sys,i) => {
-        let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+        api.info(`damageEffect: systems ${api.model.systems.join(',')}`);       
 
-        //api.info(`system: ${sys}, implants: ${implants.map(x=>x.id).join(',')}`);
-        if(!sys && !implants.length){
-            helpers().addCharacterCondition(api, `system_damage_${i}`);
+        api.model.systems.forEach( (sys,i) => {
+            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
 
-            api.info(`damageEffect: system ${consts().medicSystems[i].name} is dead!`); 
-            deadSystems = true;
-        }
-    });
+            //api.info(`system: ${sys}, implants: ${implants.map(x=>x.id).join(',')}`);
+            if(!sys && !implants.length){
+                helpers().addCharacterCondition(api, `system_damage_${i}`);
+
+                api.info(`damageEffect: system ${consts().medicSystems[i].name} is dead!`); 
+                deadSystems = true;
+            }
+        });
+    }
 
     //Если есть "мертвые системы" то HP == 0 всегда
     if(deadSystems){
@@ -173,12 +177,16 @@ function damageEffect(api, modifier){
 
         api.info(`damageEffect: maxHP: ${curMaxHP}, Damage: ${modifier.damage} ==>  hp = ${api.model.hp}`);        
 
-        //Если оказалось, что <=0 хитов, то послать событие грохнуть систему организама и поставить ==0 
-        if(api.model.hp <=0 ) {
-            //Послать событие - грохнуть случайную систему организма
-            api.info(`damageEffect: hp = ${api.model.hp} ==> send "kill-random-system" event!`);        
+        //Если оказалось, что <=0 хитов, то послать событие грохнуть систему организама и поставить ==0
+        //только для хуманов 
+        if(api.model.hp <=0) {
 
-            api.sendEvent(null, "kill-random-system", { from: "self" });
+            //Послать событие - грохнуть случайную систему организма
+            if(api.model.profileType=="human"){
+                api.info(`damageEffect: hp = ${api.model.hp} ==> send "kill-random-system" event!`);        
+                api.sendEvent(null, "kill-random-system", { from: "self" });
+            }
+
             api.model.hp = 0 
         }
     }
