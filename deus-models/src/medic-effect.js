@@ -48,7 +48,7 @@ let medHelpers = require('../helpers/medic-helper');
  * Функция вызывается событием "subtractHp" когда игрок нажимает кнопку снятия хитов
  *  "data": { "hpLost": 1  }
  */
-function getDamage(api, data){
+function getDamageEvent(api, data, event){
     if(Number(data.hpLost) && api.model.hp){
         medHelpers().addDamage(api, Number(data.hpLost));
      }
@@ -58,7 +58,7 @@ function getDamage(api, data){
  * Функция вызывается тестоым событием "addHp" 
  *  "data": { "hpAdd": 1  }
  */
-function restoreDamage(api, data ){
+function restoreDamageEvent(api, data, event ){
     if(Number(data.hpAdd) && api.model.hp){
         medHelpers().restoreDamage(api, Number(data.hpAdd));
      }
@@ -68,7 +68,7 @@ function restoreDamage(api, data ){
  * Обработчик события kill-random-system
  * Вызывается когда хиты доходят до нуля
  */
-function killRandomSystem(api, data){
+function killRandomSystemEvent(api, data, event){
     if(data.from && data.from == "self"){
         console.log("killRandomSystem: event handler start!");
 
@@ -89,7 +89,9 @@ function killRandomSystem(api, data){
             //Если система работала и импланта не было, то убить систему
             if(api.model.systems[sys]){
                 api.model.systems[sys] = 0;
-                helpers().addChangeRecord(api, `Необратимо повреждена ${consts().medicSystems[sys].label} система! Необходима срочная замена на имплант!`)
+                helpers().addChangeRecord(api, 
+                        `Необратимо повреждена ${consts().medicSystems[sys].label} система! Необходима срочная замена на имплант!`,
+                         event.timestamp)
 
                  console.log(`killRandomSystem: ${consts().medicSystems[sys].label} ==> dead`);
 
@@ -102,7 +104,7 @@ function killRandomSystem(api, data){
                     if(implants.length == 1){ sys = -1; }
 
                     api.removeModifier(implants[0].mID);
-                    helpers().addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`);
+                    helpers().addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, event.timestamp);
                     
                     console.log(`killRandomSystem: kill system ${implants[0].displayName} ==> destroyed`);
                 }
@@ -185,10 +187,10 @@ function damageEffect(api, modifier){
 
 module.exports = () => {
     return {
-        getDamage,
+        getDamageEvent,
         damageEffect,
-        restoreDamage,
-        killRandomSystem
+        restoreDamageEvent,
+        killRandomSystemEvent
     };
 };
 

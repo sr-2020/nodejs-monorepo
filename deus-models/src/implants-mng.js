@@ -6,7 +6,8 @@
 
 let helpers = require('../helpers/model-helper');
 let medHelpers = require('../helpers/medic-helper');
-
+let Chance = require('chance');
+let chance = new Chance();
 
 /**
  * Обработчик события
@@ -14,7 +15,7 @@ let medHelpers = require('../helpers/medic-helper');
  * { id: implant-id }
  * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию 
  */
-function addImplant( api, data ){
+function addImplantEvent( api, data, event ){
     if(data.id){
         let implant = helpers().loadImplant(api, data.id);
 
@@ -31,7 +32,7 @@ function addImplant( api, data ){
                 medHelpers().setMedSystem(api, implant.system, 0);
 
                 //Добавление сообщения об этом в список изменений в модели
-                helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`);
+                helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
 
                 //Выполнение мгновенного эффекта установки (изменение кубиков сознания пока)
                 instantInstallEffect(api, implant);
@@ -45,14 +46,14 @@ function addImplant( api, data ){
 /**
  * Обработчик события
  * Удвляет имплант из модели
- * { mId: implant-model-id }
+ * { mID: implant-model-id }
  * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию 
  */
-function removeImplant( api, data ){
+function removeImplantEvent( api, data, event ){
      if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){
-            helpers().addChangeRecord(api, `Удален имплант: ${implant.displayName}`);
+            helpers().addChangeRecord(api, `Удален имплант: ${implant.displayName}`, event.timestamp);
             api.removeModifier(data.mID);
         }
     }
@@ -71,29 +72,36 @@ function instantInstallEffect(api, implant){
 
 /**
  * Обработчик события "отключить имплант"
- * { mId: implant-model-id }
+ * { mID: implant-model-id, duration: xxxx }
+ * параметр duration задается в секундах, и он опционален.
+ * Если задан - имплант отключается на это время 
  */
-function disableImplant(api, data){
+function disableImplantEvent(api, data, event){
      if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){
             implant.enabled = false;
-            helpers().addChangeRecord(api, `Выключен имплант: ${implant.displayName}`);
+            helpers().addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, event.timestamp);
             api.info(`Disabled implant:  mID=${implant.mID} ${implant.displayName}` );
+
+            if(data.duration && Number.isInteger(data.duration)){
+                duration_ms = Number(data.duration)*1000;
+                helpers().addDelayedEvent(api, duration_ms, "enable-implant", {mID: implant.mID}, `enable-${implant.mID}` );            
+            }
         }
      }
 }   
 
 /**
  * Обработчик события "включить имплант"
- * { mId: implant-model-id }
+ * { mID: implant-model-id }
  */
-function enableImplant(api, data){
+function enableImplantEvent(api, data, event){
     if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){
             implant.enabled = true;
-            helpers().addChangeRecord(api, `Включен имплант: ${implant.displayName}`);
+            helpers().addChangeRecord(api, `Включен имплант: ${implant.displayName}`, event.timestamp);
             api.info(`Enabled implant:  mID=${implant.mID} ${implant.displayName}` );
         }
      }
@@ -102,10 +110,10 @@ function enableImplant(api, data){
 
 module.exports = () => {
     return {
-        addImplant,
-        removeImplant,
-        disableImplant,
-        enableImplant
+        addImplantEvent,
+        removeImplantEvent,
+        disableImplantEvent,
+        enableImplantEvent
     };
 };
 

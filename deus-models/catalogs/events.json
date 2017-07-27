@@ -40,51 +40,87 @@
             ]
         },
         {
-            "eventType": "subtractHp",
-            "effects": [
-                "subtractHp"
-            ]
-        },
-        {
             "eventType": "add-implant",
             "effects": [
-                "addImplant"
+                "addImplantEvent"
             ]
         },
         {
             "eventType": "remove-implant",
             "effects": [
-                "removeImplant"
+                "removeImplantEvent"
             ]
         },
         {
             "eventType": "disable-implant",
             "effects": [
-                "disableImplant"
+                "disableImplantEvent"
             ]
         },
         {
             "eventType": "enable-implant",
             "effects": [
-                "enableImplant"
+                "enableImplantEvent"
             ]
         },
         {
             "eventType": "subtractHp",
             "effects": [
-                "getDamage"
+                "getDamageEvent"
             ]
         },
         {
             "eventType": "addHp",
             "effects": [
-                "restoreDamage"
+                "restoreDamageEvent"
             ]
         },
         {
             "eventType": "kill-random-system",
             "effects": [
-                "killRandomSystem"
+                "killRandomSystemEvent"
+            ]
+        },
+        {
+            "eventType": "put-condition",
+            "effects": [
+                "putConditionEvent"
+            ]
+        },
+        {
+            "eventType": "remove-condition",
+            "effects": [
+                "removeConditionEvent"
+            ]
+        },
+        {
+            "eventType": "send-message",
+            "effects": [
+                "sendMessageEvent"
+            ]
+        },
+        {
+            "eventType": "change-model-variable",
+            "effects": [
+                "changeModelVariableEvent"
+            ]
+        },
+        {
+            "eventType": "change-mind-cube",
+            "effects": [
+                "changeMindCubeEvent"
+            ]
+        },
+        {
+            "eventType": "change-android-owner",
+            "effects": [
+                "changeAndroidOwnerEvent"
+            ]
+        },
+        {
+            "eventType": "change-memory",
+            "effects": [
+                "changeMemory"
             ]
         }
     ]
