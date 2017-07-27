@@ -26,3 +26,7 @@ export async function process(model: EngineContext, events: Event[]): Promise<En
     if (result.status == 'error') throw result.error;
     return result;
 }
+
+export function printModel( model:any ){
+    console.log(JSON.stringify(model, null, 4));
+}

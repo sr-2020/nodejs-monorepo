@@ -169,4 +169,47 @@ describe('Implants: ', () => {
 
     });
 
+    it("Disable implant with duration", async function() {
+        let duration = 300   //5 minutes
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_stability" } }], model.timestamp + 100, true);
+
+        let { baseModel, workingModel } = await process(model, events);
+
+        let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant).to.has.property('enabled', true);
+
+        //Отключаем имплант на время
+        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID : implant.mID, duration  } }], 
+                                                baseModel.timestamp + 100, true);
+
+        ({ baseModel, workingModel } = await process(baseModel, events));  
+
+        implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant.enabled).is.false;
+
+        //Проверяем состояние импланта до истечения времени
+        events =  [ getRefreshEvent(baseModel._id, baseModel.timestamp + Math.round(duration*1000/2)) ];
+        ({ baseModel, workingModel } = await process(baseModel, events));  
+
+        implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant.enabled).is.false;
+
+        //Проверяем состояние импланта после истечения времени
+        events =  [ getRefreshEvent(baseModel._id, baseModel.timestamp + duration*1000 + 100 ) ];
+
+        ({ baseModel, workingModel } = await process(baseModel, events));  
+
+        implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
+
+        expect(implant).to.exist;
+        expect(implant.enabled).is.true;
+    });
+
 });

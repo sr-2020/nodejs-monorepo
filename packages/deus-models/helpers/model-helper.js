@@ -3,6 +3,8 @@
  * Хелперы для разных моделей
  */
 let consts = require('./constants');
+let Chance = require('chance');
+let chance = new Chance();
 
 function loadImplant(api, id){
     let implant = api.getCatalogObject("implants", id.toLowerCase());
@@ -31,14 +33,14 @@ function loadImplant(api, id){
  }
 
 //TODO проверить какой timestamp в модели в момент обработки changes
-function addChangeRecord( api, text ){
+function addChangeRecord( api, text, timestamp ){
     if(text){
         if(api.model.changes.length >= consts().MAX_CHANGES_LINES) api.model.changes.shift();
 
         api.model.changes.push({
             mID: uuidv4(),
             text: text,
-            timestamp: api.model.timestamp
+            timestamp
         });
     }
 }
@@ -195,9 +197,11 @@ function addCharacterCondition( api, condId ){
         let condition = api.getCatalogObject("conditions", condId);
 
         if(condition){
-            api.addCondition(condition);
+            return api.addCondition(condition);
         }
     }
+
+    return null;
 }
 
 /**
@@ -223,6 +227,42 @@ function addCharacterCondition( api, condId ){
     return false;
 }
 
+/**
+ *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
+ *  Задержка (duration) задается в миллисекундах
+ */
+function addDelayedEvent( api, duration, eventType, data, prefix = "delayed" ){
+    if(api && duration && eventType && data){
+        let timerName = `${prefix}-${chance.natural({min: 0, max: 999999})}`
+        
+        api.setTimer( timerName, Number(duration), eventType, data );
+        
+        api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms` );            
+    }
+}
+
+/**
+ * Удалить элемент по mID из списка 
+ * 
+ * Проходит по массиву, если в элементе есть поле mID и оно равно переданному, 
+ * элемент удаляется (ищется только первый подходящий жлемент)
+ * 
+ * Функция возращает удаленный элемент или null
+ */
+function removeElementByMID( list, mID  ){
+    if(list){
+        let i = list.findIndex( e => e.mID ? ( e.mID == mID ) : false );
+        if(i != -1){
+            let e = list[i];
+            
+            list.slice(i, 1);
+
+            return e; 
+        }
+    }
+
+    return null;
+}
  
 module.exports = () => {
     return {
@@ -235,7 +275,9 @@ module.exports = () => {
         checkPredicate,
         modifyMindCubes,
         addCharacterCondition,
-        isImpantCanBeInstalled
+        isImpantCanBeInstalled,
+        addDelayedEvent,
+        removeElementByMID
     };
 };
 

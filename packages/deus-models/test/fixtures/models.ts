@@ -8,12 +8,14 @@ export const getExampleModel = (id?: string) => ({
         {
             title: "Название воспоминания №1",
             text: "Какие-то воспоминания о хрен знает чем...",
-            url: "http://link-to-local-server.local/url"
+            url: "http://link-to-local-server.local/url",
+            mID: "6acf27a6-fd6e-4477-b526-e1fbe25c416b"
         },
         {
             title: "Название воспоминания №2",
             text: "Название воспоминания №2.",
-            url: "http://link-to-local-server.local/url2"
+            url: "http://link-to-local-server.local/url2",
+            mID: "82eb411a-51cb-478d-9f90-5f6f52660a0d"
         }
     ],
     skills: [],
@@ -42,6 +44,7 @@ export const getExampleModel = (id?: string) => ({
     proxyRegen: 100,
     maxProxy: 100,
     maxSecondsInVr: 1200,
+    owner: "",
 
     mind: {
         "A": [ 53, 47,56 ],
