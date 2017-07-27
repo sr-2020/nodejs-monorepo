@@ -18,49 +18,49 @@
             "id": "add-implant",
             "eventType": "add-implant",
             "effects": [
-                "addImplant"
+                "addImplantEvent"
             ]
         },
         {
             "id": "remove-implant",
             "eventType": "remove-implant",
             "effects": [
-                "removeImplant"
+                "removeImplantEvent"
             ]
         },
         {
             "id" : "disable-implant",
             "eventType": "disable-implant",
             "effects": [
-                "disableImplant"
+                "disableImplantEvent"
             ]
         },
         {
             "id": "enable-implant",
             "eventType": "enable-implant",
             "effects": [
-                "enableImplant"
+                "enableImplantEvent"
             ]
         },
         {
             "id": "subtractHp",
             "eventType": "subtractHp",
             "effects": [
-                "getDamage"
+                "getDamageEvent"
             ]
         },
         {
             "id": "addHp",
             "eventType": "addHp",
             "effects": [
-                "restoreDamage"
+                "restoreDamageEvent"
             ]
         },
         {
             "id": "kill-random-system",
             "eventType": "kill-random-system",
             "effects": [
-                "killRandomSystem"
+                "killRandomSystemEvent"
             ]
         },
         {
@@ -109,7 +109,7 @@
             "id": "change-memory",
             "eventType": "change-memory",
             "effects": [
-                "changeMemory"
+                "changeMemoryEvent"
             ]
         },
         {
