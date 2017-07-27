@@ -38,19 +38,19 @@ describe('API Server', () => {
 
   it('Encode fails without credentials', async () => {
     const response = await rp.get(address + '/encode?type=10&kind=26&validUntil=1697919090&payload=UUID',
-    { json: {}, resolveWithFullResponse: true, simple: false }).promise();
+      { json: {}, resolveWithFullResponse: true, simple: false }).promise();
     expect(response.statusCode).to.equal(401);
   });
 
   it('Encode fails with credentials for wrong user', async () => {
     const response = await rp.get(address + '/encode?type=10&kind=26&validUntil=1697919090&payload=UUID',
-    { json: {}, auth: { username: 'not_user', password: 'qwerty' }, resolveWithFullResponse: true, simple: false }).promise();
+      { json: {}, auth: { username: 'not_user', password: 'qwerty' }, resolveWithFullResponse: true, simple: false }).promise();
     expect(response.statusCode).to.equal(401);
   });
 
   it('Encode fails with credentials with wrong password', async () => {
     const response = await rp.get(address + '/encode?type=10&kind=26&validUntil=1697919090&payload=UUID',
-    { json: {}, auth: { username: 'some_user', password: 'asdfg' }, resolveWithFullResponse: true, simple: false }).promise();
+      { json: {}, auth: { username: 'some_user', password: 'asdfg' }, resolveWithFullResponse: true, simple: false }).promise();
     expect(response.statusCode).to.equal(401);
   });
 })
