@@ -95,6 +95,38 @@ class App {
         res.status(400).send('Wrong data format');
       }
     })
+
+    this.app.get('/', (req, res) => {
+      res.send(`
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    Генератор ценников
+  </title>
+</head>
+
+<body>
+
+  <form target="_blank" action="/encode_bill">
+    Продавец (получатель платежа)<br>
+    <input type="text" name="receiver" value="">
+    <br> Цена:
+    <br>
+    <input type="text" name="amount" value="">
+    <br> Комментарий:
+    <br>
+    <input type="text" name="comment" value="">
+    <br><br>
+    <input type="submit" value="Сгенерировать QR-код">
+  </form>
+
+</body>
+
+</html>
+      `);
+    });
   }
 
   listen(port: number) {
