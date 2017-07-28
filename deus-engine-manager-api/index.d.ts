@@ -9,6 +9,7 @@ export type Event = {
 }
 
 export type SyncEvent = Event & { eventType: '_RefreshModel' }
+export type RetryEvent = Event & { eventType: '_RetryRefresh' }
 
 export type EngineContext = {
     timestamp: number,
