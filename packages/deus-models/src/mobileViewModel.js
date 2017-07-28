@@ -14,12 +14,12 @@ function getHandicaps(model) {
     if (model.hp == 0) {
         return "только лежать";
     } else {
-        return "нет";
+        "";
     }
 }
 
 function getStartPage(model) {
-    return {
+    let pageInfo =  {
         __type: "ListPageViewModel",
         viewId: "page:general",
         menuTitle: "Общая информация",
@@ -57,19 +57,33 @@ function getStartPage(model) {
                 {
                     text: "Страховка",
                     value: model.insuranceDiplayName,
-                },                
-                {
-                    text: "Hit Points",
-                    value: model.hp + " / " + model.maxHp,
-                    percent: 100 * model.hp / model.maxHp,
-                },
-                {
-                    text: "Ограничения движения",
-                    value: getHandicaps(model),
-                },
+                }
             ],
         },
     };
+
+    let hpRow = {
+        text: "Hit Points",
+        value: model.hp + " / " + model.maxHp,
+        percent: 100 * model.hp / model.maxHp,
+    };
+
+    if(model.hp == 0){
+         hpRow.valueColor = "#ff565c";
+    }
+
+    pageInfo.body.items.push(hpRow);    
+
+    let handicaps = getHandicaps(model);
+    if(handicaps){
+        pageInfo.body.items.push( {
+            text: "Ограничения движения",
+            value: getHandicaps(model),
+            valueColor: "#ff565c"
+        } )
+    }
+
+    return pageInfo;
 }
 
 
@@ -321,7 +335,7 @@ function getChangesPageItem(change) {
     return {
         viewId: "mid:" + change.mID,
         text: change.text,
-        unixSecondsValue: change.timestamp,
+        unixSecondsValue: Math.round(change.timestamp/1000),
         details: {
             header: "Изменение",
             text: change.text
@@ -377,6 +391,11 @@ function getPages(model) {
         getChangesPage(model),
         getMessagesPage(model),
     ];
+
+    if(model.adminTestUser){
+        pages.push(getAdminsPage(model));
+    }
+
 
     if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
         pages.push(getTechnicalInfoPage());
