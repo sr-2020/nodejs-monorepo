@@ -109,7 +109,7 @@ class App {
 
 <body>
 
-  <form target="_blank" action="/encode_bill">
+  <form target="_blank" action="https://alice.digital/app/qr/encode_bill">
     Продавец (получатель платежа)<br>
     <input type="text" name="receiver" value="">
     <br> Цена:
