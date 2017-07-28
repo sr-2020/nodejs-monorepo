@@ -1,8 +1,8 @@
 import { Inject } from './di';
 import { isNil, keyBy } from 'lodash';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs/Rx';
 
-import { Event, SyncEvent } from 'deus-engine-manager-api';
+import { Event, SyncEvent, RetryEvent } from 'deus-engine-manager-api';
 
 import { DBConnectorInterface } from './db/interface';
 
@@ -25,7 +25,7 @@ const MAX_ERRORS = 3;
 
 @Inject
 export class Manager {
-    private eventsSourceSubscription: Subscription;
+    private stopped: Subject<{}> = new Subject();
 
     private processors: {
         [characterId: string]: {
@@ -69,18 +69,49 @@ export class Manager {
     }
 
     subscribeEvents() {
-        this.eventsSourceSubscription = this.eventsSource.syncEvents.subscribe(this.onSyncEvent);
+        this.eventsSource.syncEvents
+            .takeUntil(this.stopped)
+            .do(this.logEvent)
+            .filter(this.filterErroredModels)
+            .subscribe(this.onSyncEvent);
+
+        this.eventsSource.retryEvents
+            .takeUntil(this.stopped)
+            .do(this.logEvent)
+            .flatMap(this.queryLastRefresh)
+            .subscribe(this.onSyncEvent);
+
         this.eventsSource.follow();
     }
 
-    onSyncEvent = (event: SyncEvent) => {
-        this.logger.info('manager', 'refresh event for %s', event.characterId, event);
+    logEvent = (event: Event) => {
+        switch (event.eventType) {
+            case '_RefreshModel':
+                this.logger.info('manager', 'refresh event for %s', event.characterId, event);
+                break;
+            case '_RetryRefresh':
+                this.logger.info('manager', 'retry event for %s', event.characterId, event);
+                break;
+            default:
+                this.logger.warn('manager', 'unexpected event for %s', event.characterId, event);
+        }
+    }
+
+    filterErroredModels = (event: Event) => {
         const characterId = event.characterId;
 
         if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
             this.logger.warn('manager', 'character exceed MAX_ERRORS value');
-            return;
+            return false;
         }
+
+        return true;
+    }
+
+    queryLastRefresh = (event: Event) => Observable.fromPromise(this.eventStorage.lastRefresh(event.characterId))
+
+    onSyncEvent = (event: SyncEvent) => {
+        const characterId = event.characterId;
 
         if (this.processors[characterId]) {
             const processors = this.processors[characterId];
@@ -103,27 +134,29 @@ export class Manager {
         const characterId = event.characterId;
 
         delete this.errors[characterId];
-
-        if (this.processors[characterId]) {
-            const processors = this.processors[characterId];
-            if (processors.pending) {
-                processors.current = processors.pending;
-                delete processors.pending;
-                processors.current.run().then(this.processorFulfilled);
-            } else {
-                delete this.processors[characterId];
-            }
-        }
+        this.rotateProcessors(characterId);
     }
 
     processorRejected = (event: SyncEvent) => {
         this.errors[event.characterId] = (this.errors[event.characterId] || 0) + 1;
+        this.rotateProcessors(event.characterId);
+    }
+
+    rotateProcessors(characterId: string) {
+        if (!this.processors[characterId]) return;
+
+        const processors = this.processors[characterId];
+        if (processors.pending) {
+            processors.current = processors.pending;
+            delete processors.pending;
+            processors.current.run().then(this.processorFulfilled, this.processorRejected);
+        } else {
+            delete this.processors[characterId];
+        }
     }
 
     stop() {
-        if (!this.eventsSourceSubscription) return;
-
-        this.eventsSourceSubscription.unsubscribe();
+        this.stopped.next({});
         return this.pool.drain();
     }
 }

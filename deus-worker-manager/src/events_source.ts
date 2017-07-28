@@ -3,8 +3,11 @@ import { DBInterface } from './db/interface';
 import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
 
-import { Event, SyncEvent } from 'deus-engine-manager-api';
+import { Event, SyncEvent, RetryEvent } from 'deus-engine-manager-api';
 import { Document } from './db/interface';
+
+const SYNC_EVENT_TYPE = '_RefreshModel';
+const RETRY_EVENT_TYPE = '_RetryRefresh';
 
 type EventDocument = Document & Event;
 type SyncEventDocument = Document & SyncEvent;
@@ -19,12 +22,10 @@ function docToEvent(e: EventDocument): Event {
 }
 
 export class EventsSource {
-    private subject: Rx.Subject<Change<Event>>;
+    private subject: Rx.Subject<Change<Event>> = new Rx.Subject();
     private feed: EventEmitter;
 
-    constructor(private db: DBInterface) {
-        this.subject = new Rx.Subject();
-    }
+    constructor(private db: DBInterface) { }
 
     follow() {
         const params = {
@@ -54,8 +55,10 @@ export class EventsSource {
     }
 
     get syncEvents(): Rx.Observable<SyncEvent> {
-        return this.events.filter((e) => {
-            return Boolean(e && e.eventType === '_RefreshModel');
-        }) as any;
+        return this.events.filter((e) => Boolean(e.eventType === SYNC_EVENT_TYPE)) as any;
+    }
+
+    get retryEvents(): Rx.Observable<RetryEvent> {
+        return this.events.filter((e) => Boolean(e.eventType === RETRY_EVENT_TYPE)) as any;
     }
 }

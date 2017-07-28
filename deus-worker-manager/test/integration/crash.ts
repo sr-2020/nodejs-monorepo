@@ -29,7 +29,7 @@ describe('Crash scenarios', function() {
 
     it('Should not crash if model crashes', async () => {
         let model = await createModel(di);
-        let timestamp = Date.now() + 10;
+        let timestamp = Date.now();
 
         await pushEvent(di, {
             characterId: model._id,
@@ -180,5 +180,55 @@ describe('Crash scenarios', function() {
         let baseModel = await getModel(di, model._id);
 
         expect(baseModel).to.has.property('value', 'A');
+    });
+
+    it('should handle _RetryRefresh event', async () => {
+        let model = await createModel(di);
+        let timestamp = Date.now();
+
+        let crash = await pushEvent(di, {
+            characterId: model._id,
+            eventType: 'crash',
+            timestamp: timestamp + 1
+        });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 2
+        });
+
+        await delay(100);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 3
+        });
+
+        await delay(100);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 4
+        });
+
+        await delay(100);
+
+        expect((manager as any).errors[model._id]).to.exist;
+        expect((manager as any).errors[model._id]).to.equals(3);
+
+        await pushEvent(di, { _id: crash.id, _rev: crash.rev, _deleted: true });
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RetryRefresh',
+            timestamp: Date.now()
+        });
+
+        await delay(100);
+
+        expect((manager as any).errors[model._id]).not.to.exist;
     });
 });
