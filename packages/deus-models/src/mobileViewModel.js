@@ -47,7 +47,7 @@ function getStartPage(model) {
                     value: model.generation,
                 },
                 {
-                    text: "Родной район",
+                    text: "Проживание ",
                     value: model.sweethome,
                 },
                 {
@@ -428,8 +428,8 @@ function getPassportScreen(model) {
     return {
         id: model._id,
         fullName: model.firstName + " " + model.lastName,
-        corporation: model.corporation,
-        email: model.mail,
+        corporation: model.corporation ? model.corporation : "",
+        email: model.mail ? model.mail : "",
         insurance: model.insuranceDiplayName
     };
 }
