@@ -227,6 +227,10 @@ function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacter
 
     return Observable.from(data.charList)
             .bufferCount(config.importBurstSize)        //Порезать на группы по 20
+        
+            //Добавить задержку между обработкой записей
+            .flatMap( c => Observable.from([c]).delay(config.importBurstDelay), 1 )
+
             .mergeMap( (cl:JoinCharacter[]) => {        //Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
                 winston.info( `##=====================================\n` +
                              `## Process buffer ${bufferCounter}, size=${config.importBurstSize}: ${cl.map(d => d.CharacterId).join(',')}` +

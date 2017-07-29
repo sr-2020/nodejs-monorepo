@@ -22,6 +22,7 @@ export const config = {
         importInterval: 300000,
         importBurstSize: 10,
         requestTimeout: 120000,
+        importBurstDelay: 1000,
 
         logFileName: "import-server.log",
         supportLogFileName: "import-support-server.log",
