@@ -58,6 +58,7 @@ export class EconomyProvision {
 
             if(char.model.corporationAdmin){
                 //TODO - добавить передачу галочки о том, что персонаж админ
+                accData.IsAdmin = true;
             }
 
             
