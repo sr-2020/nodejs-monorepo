@@ -7,162 +7,23 @@ import * as google from 'googleapis';
 import * as winston from 'winston';
 import * as arrayUnique from 'array-unique';
 
-import { config } from './config';
-import { DeusModifier } from './interfaces/modifier';
-import { DeusCondition } from './interfaces/condition';
-import { Predicate } from './interfaces/predicate';
-
-import { saveObject } from './helpers'
+import { config } from '../config';
+import { DeusModifier } from '../interfaces/modifier';
+import { DeusCondition } from '../interfaces/condition';
+import { Predicate } from '../interfaces/predicate';
+import { saveObject } from '../helpers'
+import { effectNames, conditionTypes, implantClasses, implantCorp, implantSystems } from './constants'
+import { GenEffectData, MindEffectData, ImplantData } from './ImplantData';
+import { ConditionData } from './conditionData'
 
 let unique = arrayUnique.immutable;
 
 let sheets = google.sheets('v4');
 
-const effectNames = {
-    simpleString: "show-condition",
-    notImplemented: "not-implemented",
-    changeMindCube: "inst_changeMindCube",
-    changeMaxHp: "change-max-hp",
-    recoveryHp: "recovery-hp",
-    recoveryFromZero: "recovery-from-zero",
-    changeProperties: "change-properties"
-};
-
-const implantClasses = {
-    "кибер" : "cyber-implant",
-    "биологический" : "bio-implant",
-    "подпольный кибер" : "illegal-cyber-implant",
-    "подпольный био" : "illegal-bio-implant",
-    "вирт" : "virtual"
-};
-
-
-const implantSystems = {
-    "для опорно-двигательной системы" : "musculoskeletal",
-    "для сердечно-сосудистой системы" : "cardiovascular",
-    "для дыхательной системы" : "respiratory",
-    "для эндокринной системы" : "endocrine",
-    "для лимфатической системы" : "lymphatic",
-    "для нервной системы" : "nervous",
-    "нервная система" : "nervous"
-};
-
-const implantCorp = {
-    "jj" : "JJ",
-    "s" : "Serenity",
-    "pa" : "Panam",
-    "lab" : "IllegalLab",
-    "5" : "5Corp",
-    "x" : "Special"
-}
-
-const conditionTypes = {
-    "Физиология" : "physiology",
-    "Разум"      : "mind"
-}
-
-interface GenEffectData{
-    position?: string
-    value?: string;
-    conditionText?: string;
-    effectText?: string;
-    effectClass?: string;
-    conditionType?: string;
-}
-
-interface MindEffectData{
-    cube?: string;
-    value?: string;
-    text?: string;
-    effectClass?: string;
-}
-
-class ImplantData{
-    id: string = "";
-    name: string  = "";
-    class: string  = "";
-    system: string  = "";
-    desc: string  = "";
-    vendor: string = "";
-
-    genEffect: GenEffectData[] = [];
-
-    mindEffect: MindEffectData[] = [];
-
-    rowNumbers: number[] = [];
-    
-
-    constructor( row: string[] = null, rowNumber:number = -1 ){
-        if(row){
-            this.genEffect.push( {} );
-            this.mindEffect.push( {});
-
-            this.rowNumbers.push(rowNumber);
-
-            [,this.id, this.name, this.class, this.system, this.desc, 
-                this.genEffect[0].position, this.genEffect[0].value, this.genEffect[0].conditionText,this.genEffect[0].effectText, this.genEffect[0].conditionType, this.genEffect[0].effectClass,
-                this.mindEffect[0].cube, this.mindEffect[0].value, this.mindEffect[0].text, this.mindEffect[0].effectClass  ] = row;
-            
-            this.updateCalcFields();
-        }
-    }
-
-    public join(d: ImplantData): ImplantData{
-        let ret = new ImplantData();
-
-        let fields = ["id","name","class","system","desc"];
-        fields.forEach( f => this.joinField(f, ret, d) );
-
-        ret.genEffect = Array.from(this.genEffect).concat(d.genEffect).filter( e => (e.effectText || e.conditionText) )
-        ret.mindEffect = Array.from(this.mindEffect).concat(d.mindEffect).filter(e => e.text)
-        ret.rowNumbers = Array.from(this.rowNumbers).concat( d.rowNumbers );
-
-        ret.updateCalcFields();
-
-        return ret;
-    }
-
-    private joinField(f: string, t: ImplantData, d: ImplantData){
-        t[f] = this[f] ? this[f] : d[f];
-    }
-
-    public updateCalcFields(){
-        if(this.id){
-            let parts = this.id.split("_");
-            if(parts.length>1){
-                this.vendor = implantCorp[parts[0].toLowerCase()];
-            }
-        }
-    }
-
-    public normolize(){
-        this.id = this.id.toLocaleLowerCase();
-        this.class = this.class.toLocaleLowerCase();
-        this.system = this.system.toLocaleLowerCase();
-        this.class = implantClasses[this.class] ? implantClasses[this.class] : "";
-        this.system = implantSystems[this.system] ? implantSystems[this.system] : "";
-        
-        this.desc = this.desc ? this.desc.trim() : "";
-
-        this.genEffect.forEach( eff=>{
-            eff.conditionText = eff.conditionText ? eff.conditionText.trim() : "";
-            eff.effectText = eff.effectText ? eff.effectText.trim() : "";
-            eff.effectClass = eff.effectClass ? eff.effectClass.trim() : "";  
-            eff.conditionType = eff.conditionType ? conditionTypes[eff.conditionType] : ""; 
-        });
-
-        this.mindEffect.forEach( eff=>{
-            eff.text = eff.text ? eff.text.trim() : "";
-            eff.value = eff.value ? eff.value.toUpperCase().replace(/\s/ig,'') : "";
-            eff.cube = eff.cube ? eff.cube.toUpperCase() : "";
-            eff.effectClass = eff.effectClass ? eff.effectClass.trim() : "";  
-        });
-    }
-}
-
 interface TablesData{
     implantsData: ImplantData[];
     illnessesData: any[];
+    conditionsData: any[];
 }
 
 
@@ -174,7 +35,8 @@ export class TablesImporter{
 
     tablesData :TablesData = { 
         implantsData : [],
-        illnessesData : []
+        illnessesData : [],
+        conditionsData : []
     };
 
     //Созданные в результате импорта объекты имплантов и состояний
@@ -244,14 +106,21 @@ export class TablesImporter{
                     winston.info("Implants table loaded!");
                     return this.illnessesDataImport(authClient);
                 })
-                .map( illnesses => {
+                .flatMap( illnesses => {
                     this.tablesData.illnessesData = illnesses[0].values.filter(row => row[0] == "ready" );
                     winston.info("Illneses table loaded!");
+                    return this.conditionsDataLoad(authClient)
+                })
+                .map( conditions => {
+                    this.tablesData.conditionsData = conditions[0].values.map((row,i) => new ConditionData(row, i) )
+                                                                        .filter( condData => condData.title );
+                    winston.info("Conditions table loaded!");
+
                     return this.tablesData;
                 })
                 .do( () => this.createImplants() )
-                .flatMap( () => this.saveImplants() )
-                .flatMap( () => this.saveConditions() )
+               // .flatMap( () => this.saveImplants() )
+               // .flatMap( () => this.saveConditions() )
                 .map( () =>{ 
                     return this;
                 })
@@ -277,7 +146,21 @@ export class TablesImporter{
             range: "illnesses!A4:S100",
             valueRenderOption: 'FORMATTED_VALUE',
             dateTimeRenderOption: 'SERIAL_NUMBER',
-            auth: authClient,
+            auth: authClient
+        };
+
+        let sheetsGet = <Function>Observable.bindNodeCallback(sheets.spreadsheets.values.get);
+
+        return sheetsGet(request);
+    }
+
+    private conditionsDataLoad(authClient): Observable<any>{
+        var request = {
+            spreadsheetId: '1703sXU-akDfn9dsnt19zQjvRrSs7kePPGDkcX0Zz-bY',
+            range: "Conditions!A4:S100",
+            valueRenderOption: 'FORMATTED_VALUE',
+            dateTimeRenderOption: 'SERIAL_NUMBER',
+            auth: authClient
         };
 
         let sheetsGet = <Function>Observable.bindNodeCallback(sheets.spreadsheets.values.get);
