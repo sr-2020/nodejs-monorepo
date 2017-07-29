@@ -212,7 +212,7 @@ describe('Implants: ', () => {
         expect(implant.enabled).is.true;
     });
 
-    it("Change-properties effect", async function() {
+    it.only("Change-properties effect", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "lab_maninthemiddle" } }], model.timestamp+100, true);
         
@@ -234,6 +234,11 @@ describe('Implants: ', () => {
         expect(implant).to.has.property('enabled', true);
 
         expect(workingModel.sex).is.equal("female");
+
+        let condition = workingModel.conditions.find((c: any) => c.id == "jj_i_am_girl-2");
+
+        expect(condition).is.exist;
+
 
         printModel(workingModel);
     });
