@@ -1,7 +1,12 @@
 const DAMAGE_MODIFIER_MID = "_internal_damage";
 
-const HP_LEAK_TIMER = "_hp-leak-timer";
+//Задержка для списания хитов при ранении
 const HP_LEAK_DELAY = 600000;
+const HP_LEAK_TIMER = "_hp-leak-timer";
+
+//Задержка между HP == 0 и смертью
+const DEATH_DELAY = 1200*1000;
+const DEATH_TIMER = "_dead-timer";
 
 const MAX_CHANGES_LINES = 30;
 
@@ -22,7 +27,9 @@ module.exports = () => {
         medicSystems,
         MAX_CHANGES_LINES,
         HP_LEAK_TIMER,
-        HP_LEAK_DELAY
+        HP_LEAK_DELAY,
+        DEATH_DELAY,
+        DEATH_TIMER
     };
 };
 

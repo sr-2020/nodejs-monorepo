@@ -45,6 +45,7 @@ export const getExampleModel = (id?: string) => ({
     maxProxy: 100,
     maxSecondsInVr: 1200,
     owner: "",
+    isAlive: true,
 
     mind: {
         "A": [ 53, 47,56 ],

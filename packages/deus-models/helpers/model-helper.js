@@ -3,8 +3,10 @@
  * Хелперы для разных моделей
  */
 let consts = require('./constants');
+let type = require('type-detect');
 let Chance = require('chance');
 let chance = new Chance();
+
 
 function loadImplant(api, id){
     let implant = api.getCatalogObject("implants", id.toLowerCase());
@@ -263,6 +265,90 @@ function removeElementByMID( list, mID  ){
 
     return null;
 }
+
+let restrictedVars = ["_id", "id", "hp", "maxHp", "login", "mail", "profileType", "timestamp",
+                    "mind", "genome", "systems", "conditions", "modifiers", "changes", "messages", "timers" ];
+
+
+/**
+ * Изменить простые свойства модели по инструкциям в переданной строке вида
+ *  propertyName1+X,propertyName2-Y,propertyName3=Z
+ * 
+ * Можно менять только простые переменные (string/number), не входящие в структуры
+ * Нельзя менять ключевые поля, меняемые через специальные события и методы
+ */
+function modifyModelProperties(api, operations){
+    if(operations){
+        operations.replace(/\s/i,'').split(',').forEach( op => { 
+            let parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
+
+            if(parts){
+                result = false;
+                
+                if(parts[1]){
+                    result = modifyModelDigitProperty(api, parts[1], parts[2], parts[3]);
+                }else{
+                    result = modifyModelStringProperty(api, parts[4], parts[5]);
+                }
+
+                if(result){
+                    let varName = parts[1] || parts[4];
+                    api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
+                }else{
+                    api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
+                }
+            }
+        });
+    }
+}
+
+function modifyModelStringProperty(api, varName, value){
+    if(restrictedVars.find( v => varName == v)){
+        return false;
+    }
+
+    if(!api.model.hasOwnProperty(varName)){
+        return false;
+    }
+
+    let t = type(api.model[varName]); 
+
+    if( t!="string" && t!="null" && t!="undefined" ){
+        return false;
+    }
+
+    api.model[varName] = value;
+
+    return true;
+}
+
+function modifyModelDigitProperty(api, varName, op, value){
+    if(restrictedVars.find( v => varName == v)){
+        return false;
+    }
+
+    if(!api.model.hasOwnProperty(varName)){
+        return false;
+    }
+
+    let t = type(api.model[varName]); 
+
+    if( t != "number" || Number(value).isNaN ){
+        return false;
+    }
+
+    switch(op){
+        case "+":   api.model[varName] += Number(value);
+                    break;
+        case "-":   api.model[varName] -= Number(value);
+                    break;
+        case "=":   api.model[varName] = Number(value)
+                    break;
+        default:    return false;
+    }
+
+    return true;
+}
  
 module.exports = () => {
     return {
@@ -277,7 +363,8 @@ module.exports = () => {
         addCharacterCondition,
         isImpantCanBeInstalled,
         addDelayedEvent,
-        removeElementByMID
+        removeElementByMID,
+        modifyModelProperties
     };
 };
 

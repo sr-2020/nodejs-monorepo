@@ -72,7 +72,7 @@ function restoreDamageEvent(api, data, event ){
 function leakHpEvent(api, data, event){
     let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
 
-    if(m && m.damage){
+    if(m && m.damage && api.model.isAlive){
         m.damage += 1;
         api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
@@ -82,6 +82,39 @@ function leakHpEvent(api, data, event){
         helpers().addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
     }
 }  
+
+/**
+ * Обработчик события "character-death"
+ * Смерть персонажа по медицинским причинам.
+ * Запускается по таймеру, когда персонаж переходит в тяж. раненние (отключается системы)
+ * При срабатывании проверяет есть ли отключенные системы на которых нет включенных имплантов, 
+ * и если нет - ничего не делает (значит уже вылечили)
+ * если все еще есть - умирает
+ */
+function characterDeathEvent(api, data, event){
+    //проверить системы и импланты на них (все только для Human'ов пока)
+    if(api.model.systems){
+        let deadSystem = null;
+
+        api.info(`characterDeath: systems ${api.model.systems.join(',')}`);       
+
+        api.model.systems.forEach( (sys,i) => {
+            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+
+            if(!sys && !implants.length){
+                api.info(`characterDeath: system ${consts().medicSystems[i].name} is dead. Kill the character!`); 
+                deadSystem = consts().medicSystems[i].label;
+            }
+        });
+
+        if(deadSystem){
+            api.model.isAlive = false;
+            api.info(`characterDeath: character id=${api.model._id} login=${api.model.login || ""} id dead!`); 
+            helpers().addChangeRecord(api, `Вы умерли. Отказала ${deadSystem} система организма.`, event.timestamp);
+        }
+    }
+
+}
 
 /**
  * Обработчик события kill-random-system
@@ -161,6 +194,14 @@ function killRandomSystemEvent(api, data, event){
  * Предполагается что никакие другие импланты не вносят корректировки в HP
  */
 function damageEffect(api, modifier){
+
+    //Если персонаж мертв ничего больше не делаем
+    if(!api.model.isAlive){
+        api.model.maxHp = 0;
+        api.model.hp = 0;        
+        return;
+    }
+
     let curMaxHP = medHelpers().calcMaxHP(api);
 
     api.model.maxHp = curMaxHP;
@@ -187,10 +228,15 @@ function damageEffect(api, modifier){
         });
     }
 
-    //Если есть "мертвые системы" то HP == 0 всегда
+    //Если есть "мертвые системы" то HP == 0 всегда и запускаем таймер на умирание (если ранее не запущен)
     if(deadSystems){
         api.model.hp = 0;      
-        api.info(`damageEffect: dead systems ==> hp = 0`);        
+        api.info(`damageEffect: dead systems ==> hp = 0`);    
+
+        if(!api.getTimer(consts().DEATH_TIMER)){
+            api.info(`damageEffect: start death timer!`);        
+            api.setTimer( consts().DEATH_TIMER, consts().DEATH_DELAY, "character-death", {} );
+        }
     }else{
         //Иначе надо учитывать повреждения (хранящиеся в данном объекте)
         api.model.hp = curMaxHP - modifier.damage;
@@ -220,13 +266,56 @@ function damageEffect(api, modifier){
             api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
         }
     }else{
-        //Отключить таймер если нет повреждений
+        //Отключить таймер если нет повреждений или есть мертвы системы (тогда работает таймер на умирание)
         if(api.getTimer(consts().HP_LEAK_TIMER)){
-            api.info(`damageEffect: damage was healed ==> stop leak HP timer!`);        
+            api.info(`damageEffect: damage was healed or system was dead ==> stop leak HP timer!`);        
             api.removeTimer(consts().HP_LEAK_TIMER);
         }
     }
-}  
+} 
+
+/**
+ * Обработчик отладочного события "character-resurect"
+ * Восстанавливает "жизнь" мертвого персонажа.
+ * 
+ * 1. Находит все импланты и включает их
+ * 2. Находит все мертвые системы, для которых нет имплантов и делает их живыми
+ * 3. Сбрасывает damage в 0 (на всякий случай)
+ * 4. Ставит флаг isAlive в true
+ */
+function characterResurectEvent(api, data, event){
+    //проверить системы и импланты на них (все только для Human'ов пока)
+    if(api.model.systems && !api.model.isAlive){
+
+        api.info(`characterResurectEvent: systems ${api.model.systems.join(',')}`);       
+
+        api.model.systems = api.model.systems.map( (sys,i) => {
+                    let implants = api.getModifiersBySystem(consts().medicSystems[i].name);
+                    let retVar = 1;
+
+                    //Если есть импланты для системы - включить их все.
+                    if(implants.length){
+                        retVar = 0;
+                        implants.forEach( e => e.enabled = true )
+                    }
+
+                    return retVar;
+                });
+
+        api.info(`characterResurectEvent: systems after ${api.model.systems.join(',')}`);       
+        
+        let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+        if(m){
+            m.damage = 0;
+        }
+
+        api.model.isAlive = true;
+
+        api.info(`characterResurectEvent: character id=${api.model._id} login=${api.model.login || ""} is live again!`);       
+    }
+
+}
+
 
 module.exports = () => {
     return {
@@ -234,7 +323,9 @@ module.exports = () => {
         damageEffect,
         restoreDamageEvent,
         killRandomSystemEvent,
-        leakHpEvent
+        leakHpEvent,
+        characterDeathEvent,
+        characterResurectEvent
     };
 };
 

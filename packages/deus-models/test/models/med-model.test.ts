@@ -171,7 +171,7 @@ describe('Medicine: ', () => {
         //console.log(JSON.stringify(workingModel, null, 4));
     });
 
-    it.only("Reduce HP and bleeding (hp leak)", async function() {
+    it("Reduce HP and bleeding (hp leak)", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp+100, true);
@@ -211,9 +211,45 @@ describe('Medicine: ', () => {
         //Уничтожена одна система -> хитов нет
         expect(workingModel.hp).is.equal(0);
 
-        console.log(JSON.stringify(baseModel, null, 4));
-        
+        console.log(JSON.stringify(baseModel.timers, null, 4));
     });
 
+    it("Reduce HP and death and resurect", async function() {
+        let eventData = { id: "s_orphey" };
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp+100, true);
+
+        let { baseModel, workingModel } = await process(model, events);
+    
+    //Нанесли повреждения
+        events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp+100, true);
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        //Check HP: model(4) + impant(1) - damage (2)
+        expect(workingModel.hp).is.equal(3);
+        expect(baseModel.isAlive).is.true;
+
+    //Прошло 30 минут (должно списаться 3 хита)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+30*60*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        //Check HP: model(4) + impant(1) - damage (2) - leak(3)
+        expect(workingModel.hp).is.equal(0);
+
+    //Прошло еще 25 минут - персонаж умирает 
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+25*60*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        let cond = baseModel.changes.find( (c:any) => c.text.startsWith("Вы умерли") );
+
+        expect(baseModel.isAlive).is.false;
+        expect(cond).is.exist;
+
+    //Вернуть персонажа к жизни
+        events = getEvents(model._id, [{ eventType: 'character-resurect', data: {} }], baseModel.timestamp+100, true);
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        expect(baseModel.isAlive).is.true;
+    });
 
 });
