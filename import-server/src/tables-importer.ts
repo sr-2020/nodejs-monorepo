@@ -23,10 +23,9 @@ const effectNames = {
     notImplemented: "not-implemented",
     changeMindCube: "inst_changeMindCube",
     changeMaxHp: "change-max-hp",
-    changeSex: "change-sex",
     recoveryHp: "recovery-hp",
-    recoveryFromZero: "recovery-from-zero"
-
+    recoveryFromZero: "recovery-from-zero",
+    changeProperties: "change-properties"
 };
 
 const implantClasses = {
@@ -460,16 +459,6 @@ export class TablesImporter{
             }
         }
 
-        //Изменение поля. Реализуются эффектом "change-sex"
-        if(effData.effectClass == "changeSex"){
-            if(effData.effectText){
-                let parts = effData.effectText.replace(/\s/i,'').match(/^sex=(male|female|agender)/i);
-                if(parts){
-                    ret.push( {name: effectNames.changeSex, params: { sex: parts[1] }} );
-                }
-            }
-        }
-
         //Восставновление HP в легком ранении
         if(effData.effectClass == "HealingHp"){
             if(effData.effectText){
@@ -478,7 +467,7 @@ export class TablesImporter{
                     ret.push( {name: effectNames.recoveryHp, params: { recoveryRate: Number(parts[1]) }} );
                 }
             }
-        }
+        }  
 
         //Восставновление HP в тяжелом ранении 
         if(effData.effectClass == "HealigFromZero"){
@@ -486,6 +475,20 @@ export class TablesImporter{
                 let parts = effData.effectText.replace(/\s/i,'').match(/^recoveryTime=(\d+)/i);
                 if(parts){
                     ret.push( {name: effectNames.recoveryFromZero, params: { recoveryTime: Number(parts[1]) }} );
+                }
+            }
+        }
+
+        //Эффекты типа "изменить простую переменную в модели"
+         if(effData.effectClass == "change-properties"){
+            if(effData.effectText){
+                let operations = effData.effectText.replace(/\s/i,'');
+                let correct = operations.split(',').every( op => op.match(/^([\w\d]+)[\+\-\=](\d+)$|^([\w\d]+)\=\"(.*)\"$/i) != null );
+
+                if(correct){
+                    ret.push( {name: effectNames.changeProperties, params: { operations }} );
+                }else{
+                    winston.error(`Can't validate change-properties operations "${operations}" for: ${impData.id}`);
                 }
             }
         }
@@ -543,11 +546,11 @@ importer.import().subscribe((result) => {
             winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}` );
             //winston.info(JSON.stringify(result.implantsData.slice(0,10), null, 4));
 
-            result.implants.filter(imp => imp._id == "x_rip").forEach(imp => 
+            result.implants.filter(imp => imp._id == "lab_maninthemiddle").forEach(imp => 
                         winston.info(JSON.stringify(imp, null, 4))   
                     );
 
-            result.impConditions.filter(cond => cond._id.startsWith("x_rip")).forEach(cond => 
+            result.impConditions.filter(cond => cond._id.startsWith("lab_maninthemiddle")).forEach(cond => 
                     winston.info(JSON.stringify(cond, null, 4))   
                 );
 

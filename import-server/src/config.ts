@@ -1,12 +1,15 @@
 export const config = { 
+        port : 8100,
+        importDelay: 200,
+
         url : "https://alice.digital:6984/",
+        username : "import",
+        password : "4a3n5hEyDL",     
         tempDbName : "join-import",
         modelDBName: "models",
         accountDBName: "accounts",
         eventsDBName: "events",
-        username : "import",
-        password : "4a3n5hEyDL",
-        port : 8100,
+
         joinGameId: "78",
         joinBaseUrl: "http://joinrpg.ru",
         joinTokenUrl: "http://joinrpg.ru/x-api/token",
@@ -15,16 +18,19 @@ export const config = {
         joinCharactersBasePath: "/x-game-api/78/characters",
         joinLogin: "Info@deus.rpg.ru",
         joinPassword: "mustg00n",
+
         importInterval: 300000,
         importBurstSize: 10,
         requestTimeout: 120000,
+
         logFileName: "import-server.log",
         supportLogFileName: "import-support-server.log",
+
         mailServerAPIUrl: "https://alice.digital:8100/mailbox",
 
         economicsApiUrl: "https://alice.digital/econ/api",
-        economicsLogin: "admin",
-        economicsPassword: "123456",
+        economicsLogin: "alice",
+        economicsPassword: "mechanus7534",
         economicsStartCash: 100,
 
         catalogs: {

@@ -16,7 +16,7 @@
     "debug": "tsc && node --inspect-brk=127.0.0.1:9229 ./dist/server.js -- --mail --id=10643",
     "import:tables": "ts-node src/tables-importer.ts",
     "import:test": "tsc && node ./dist/server.js -- --test",
-    "import:db" :  "ts-node src/db-docs-creator.ts"
+    "import:db": "ts-node src/db-docs-creator.ts"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "@types/chance": "^0.7.33",
     "@types/command-line-args": "^4.0.0",
     "@types/pouchdb": "^6.1.1",
+    "@types/pouchdb-find": "^6.3.0",
     "@types/request-promise-native": "^1.0.6",
     "array-unique": "^0.3.2",
     "body-parser": "^1.17.2",
@@ -47,6 +48,7 @@
     "moment": "^2.18.1",
     "pouchdb": "^6.3.2",
     "pouchdb-authentication": "^0.5.5",
+    "pouchdb-find": "^6.3.4",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "rxjs": "^5.4.2",

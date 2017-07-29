@@ -2,6 +2,8 @@ import * as express from "express";
 import { Observable, BehaviorSubject  } from 'rxjs/Rx';
 import * as moment from "moment";
 import * as winston from 'winston';
+import * as PouchDB from 'pouchdb';
+import * as pouchDBFind from 'pouchdb-find';
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
@@ -13,6 +15,8 @@ import { ModelRefresher } from './model-refresher';
 import { MailProvision } from './mail-provision';
 import { processCliParams } from './cli-params';
 import { EconomyProvision } from './econ-provioning';
+
+PouchDB.plugin(pouchDBFind);
 
 class ModelImportData{
     importer:JoinImporter = new JoinImporter();
@@ -33,6 +37,8 @@ class ModelImportData{
 
     constructor() {} 
 }
+
+
 
 const params = processCliParams();
 
@@ -161,12 +167,15 @@ function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, 
         return Observable.fromPromise(model.export())
                 .map( (c:any) => { 
                         let result = [];
-                        result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
-                        result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
-                        result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
+                        // result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
+                        // result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
+                        // result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
 
-                        winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
-                    
+                        // winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
+
+                        //winston.info( `Exported model and account for character id = ${c[0].id}: ` + JSON.stringify(c, null, 4));
+                        winston.info( `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
+
                         return char;
                 });
     }else{
@@ -270,7 +279,7 @@ function importAndCreate(   id:number = 0,
                             exportModel:boolean = true,
                             onlyList:boolean = false, 
                             updateStats:boolean = true,
-                            refreshModel:boolean = true,
+                            refreshModel:boolean = false,
                             mailProvision:boolean = true,
                             econProvision:boolean = true,
                             updatedSince?: moment.Moment ): Observable<string> {
@@ -323,7 +332,10 @@ function importAndCreate(   id:number = 0,
 
     //Загрузить данные из Join или из кеша
         .flatMap( (data:ModelImportData) => importJoin ? loadCharactersFromJoin(data) : loadCharactersFromCache(data) )
-                    
+
+    //Добавить задержку между обработкой записей
+        .flatMap( c => Observable.from([c]).delay(config.importDelay), 1 )
+
     //Сохранить данные в кеш (если надо)
         .flatMap( c => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]) )
 

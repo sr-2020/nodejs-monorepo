@@ -5,6 +5,7 @@ import * as request from 'request-promise-native';
 import * as chance from 'chance';
 import * as winston from 'winston';
 import * as uuid from 'uuid/v4';
+import * as clones from 'clones';
 
 import { ImportStats, ImportRunStats } from './stats';
 import { config } from './config';
@@ -77,20 +78,81 @@ export class AliceExporter{
             return Promise.reject(`AliceExporter.export(): ${this.character._id} Incorrect model ID or problem in conversion!`);
         }
 
-        //Create or update Profile 
-        let profilePromise = saveObject(this.con, this.model, this.isUpdate);
+        let results:any = {
+            clearEvents: null,
+            account: null,
+            model: null,
+            saveEvents: null
+        };
 
-        //Put events for model
-        let eventsPromise = Promise.resolve([]);
-        if(this.eventsToSend.length) { eventsPromise = this.eventsCon.bulkDocs(this.eventsToSend) }
+        let refreshEvent = {
+                            characterId : this.model._id,
+                            eventType : "_RefreshModel",
+                            timestamp : this.model.timestamp+100,
+                            data : {}
+                        };
 
-        //Create or update account record
-        let accPromise = Promise.resolve(false);
-        if(this.account.login && this.account.password){
-            accPromise = saveObject(this.accCon, this.account, this.isUpdate);
+        if(this.eventsToSend.length){
+            refreshEvent.timestamp = this.eventsToSend[ this.eventsToSend.length-1 ].timestamp+100;
         }
+
+        this.eventsToSend.push(refreshEvent);
+
+        //Очистить очередь
+        return Observable.from([this])
+                    .flatMap( () => this.clearEvents() )
+                    .do( result => results.clearEvents = result.length )
+
+                    .flatMap( () => saveObject(this.con, this.model, this.isUpdate) )
+                    .do( result => results.model = result.ok ? "ok" : "error" )
+                    
+                    .flatMap( () => this.eventsToSend.length ? this.eventsCon.bulkDocs(this.eventsToSend) : Observable.from([ [] ]) )
+                    .do( (result:any) => results.saveEvents = result.length )
+
+                    .flatMap( () => (this.account.login && this.account.password) ? saveObject(this.accCon, this.account, this.isUpdate) : Promise.resolve(false) )
+                    .do( result => results.account = result.ok ? "ok" : "error" )
+                    
+                    .map( result => results )
+                    .toPromise();
+
+
+        // //Create or update Profile 
+        // let profilePromise = saveObject(this.con, this.model, this.isUpdate);
+
+        // //Put events for model
+        // let eventsPromise = Promise.resolve([]);
+        // if(this.eventsToSend.length) { eventsPromise = this.eventsCon.bulkDocs(this.eventsToSend) }
+
+        // //Create or update account record
+        // let accPromise = Promise.resolve(false);
+        // if(this.account.login && this.account.password){
+        //     accPromise = saveObject(this.accCon, this.account, this.isUpdate);
+        // }
         
-        return Promise.all([profilePromise, accPromise, eventsPromise]);
+        // return Promise.all([profilePromise, accPromise, eventsPromise]);
+    }
+
+    /**
+     * Очистка очереди события для данного персонажа (если они были)
+     */
+    clearEvents(): Observable<any> {
+         let selector = {
+                selector:{ characterId: this.model._id },
+                sort: [  {characterId :"desc"},
+                         {timestamp :"desc"} ],
+                limit: 10000
+            };
+
+        return Observable.from( this.eventsCon.find(selector) )
+                    .flatMap( (result:any) => {
+                            return this.eventsCon.bulkDocs(
+                                result.docs.map( (x) =>  {
+                                                let x2 = clones(x);
+                                                x2._deleted = true
+                                                return x2;
+                                            })
+                            );
+                    })
     }
 
     private createModel(){
@@ -103,6 +165,9 @@ export class AliceExporter{
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
             this.account._id =  this.model._id;
+
+            //Персонаж жив
+            this.model.isAlive = true;
 
             //Login (e-mail). Field: 1905
             //Защита от цифрового логина
@@ -150,6 +215,10 @@ export class AliceExporter{
                 if(corpVar){                
                     this.model.corporation = this.findStrFieldValue(2017);
                     this.model.corporationId = this.convertToDescription(2017,corpVar);
+
+                    if(this.findBoolFieldValue(2070)){
+                        this.model.corporationAdmin = true;
+                    }
                 }
 
                 //Уровень зарплаты. Field: 1976
@@ -273,6 +342,13 @@ export class AliceExporter{
         return AliceExporter.joinNumFieldValue(this.character, fieldID);
     }
 
+    //Возвращается Value, которое должно булевым. 
+    //Если значение поля "on" => true, иначе false
+    findBoolFieldValue(fieldID: number): boolean {
+        let text  = AliceExporter.joinStrFieldValue(this.character, fieldID, false);
+        return (text == 'on');  
+    }
+
     //Возвращается Value, которое должно быть списком цифр, разделенных запятыми
     //Если в списке встретится что-то не цифровое, в массиве будет Number.NaN
     findNumListFieldValue(fieldID: number): number[]{
@@ -374,6 +450,7 @@ export class AliceExporter{
     }
 
     //Получить список имплантов и загрузить их в модель. Field: 2015
+    //Фактически посылает персонажу набор событий add-implant для добавления при первом рефреше
     setImplants(){
         let time =  this.model.timestamp + 100;
         
@@ -386,26 +463,6 @@ export class AliceExporter{
                             timestamp : time+=1,
                             data : { id: sID }
                         }));
-
-                // .map( sId => this.catalogs.findElement("implants",sId) )
-                // .forEach( implant => { 
-                //     if(implant) {
-                //         console.log(implant.effects);
-                //         implant.effects = implant.effects.map( eId => this.catalogs.findElement("effects",eId) )
-                //                                     .filter( effData => effData );
-
-                //         console.log(implant.effects);
-                //         implant.effects.forEach( e => e.enabled = true);
-
-                //         console.log(implant.effects);
-
-                //         implant.enabled = true;
-                    
-                //         implant.mID = uuid();
-                //         implant.gID = uuid();
-                //         this.model.modifiers.push(implant)
-                //     }
-                // });
     }
 
     setFullName(){

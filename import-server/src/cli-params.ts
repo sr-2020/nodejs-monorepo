@@ -53,7 +53,6 @@ export function processCliParams(): any{
         if(!setSteps && !p.server && p.id){
             p.export = true;
             p.import = true;
-            p.refresh = true;
             p.mail = true;
             p.econ = true;
         }

@@ -56,6 +56,10 @@ export class EconomyProvision {
                 accData.SalaryLevel = char.model.salaryLevel; 
             }
 
+            if(char.model.corporationAdmin){
+                //TODO - добавить передачу галочки о том, что персонаж админ
+            }
+
             
             let reqOpts = {
                 url: config.economicsApiUrl + "/accounts/register",

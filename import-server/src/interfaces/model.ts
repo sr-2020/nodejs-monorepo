@@ -56,6 +56,7 @@ export class DeusModel{
     hp: number;         //количество хитов
     maxHp: number;      //макстмальное количество хитов персонажа
     maxSecondsInVr: number;  //Максимальное время в VR
+    isAlive: boolean = true;  //Если false = персонаж мертв
 
 //Только для типа профиля "human"
     sex?: string;            //пол
@@ -63,6 +64,7 @@ export class DeusModel{
     corporation?: string;    //Место работы
     corporationId?: string;    //Место работы (ID компании для экономики)
     salaryLevel?: number;    //Уровень зарплаты
+    corporationAdmin?: boolean; //Является администратором места работы (для экономики)
     insurance: string;      //кто выдал страховку (формат для внешних систем)
     insuranceDiplayName?: string; //Название того кто выдал страховку для отображения
     insuranceLevel?: number;      //Уровень страховки (1-4)

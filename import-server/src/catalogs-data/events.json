@@ -118,6 +118,20 @@
             "effects": [
                 "leakHpEvent"
             ]
+        },
+        {
+            "id" : "character-death",
+            "eventType": "character-death",
+            "effects": [
+                "characterDeathEvent"
+            ]
+        },
+        {
+            "id": "character-resurect",
+            "eventType": "character-resurect",
+            "effects": [
+                "characterResurectEvent"
+            ]
         }
     ]
 }
