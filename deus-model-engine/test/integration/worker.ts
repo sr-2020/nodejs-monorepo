@@ -164,4 +164,35 @@ describe('Worker', () => {
         expect(event.eventType).to.equals('message');
         expect(event.data.message).to.equals('test message');
     })
+
+    it('Should run modifiers', async () => {
+        const context = {
+            timestamp: 0,
+            value: '',
+            modifiers: [{
+                id: 'test modifier',
+                enabled: true,
+                operand: 'value', value: 'A',
+                effects: [
+                    { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
+                    { id: 'add A', type: 'normal', enabled: true, handler: 'concat' }
+                ]
+            }]
+        };
+
+        const timestamp = Date.now();
+
+        const events = [
+            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
+        ];
+
+        let result = await worker.process(context, events)
+
+        expect(result.status).to.equals('ok');
+        result = result as EngineResultOk;
+
+        let { workingModel } = result;
+
+        expect(workingModel.value).to.equals('AA');
+    })
 });
