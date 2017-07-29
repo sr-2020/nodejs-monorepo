@@ -29,8 +29,10 @@ function addImplantEvent( api, data, event ){
                 implant = api.addModifier(implant);
 
                 //Установка системы на которой стоит имплант в "мертвую"
-                medHelpers().setMedSystem(api, implant.system, 0);
-
+                if(implant.system != "nervous"){
+                    medHelpers().setMedSystem(api, implant.system, 0);
+                }
+                
                 //Добавление сообщения об этом в список изменений в модели
                 helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
 

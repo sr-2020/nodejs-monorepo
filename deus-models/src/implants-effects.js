@@ -25,8 +25,31 @@ function showCondition(api, modifier){
     }
 }
 
+/**
+ * Универсальный эффект "изменение свойства модели" (change-properties)
+ * Эффект позволяет импланту изменить любое простое свойство в модели (или несоклько )
+ * на то время пока он действует.
+ * Функционально аналогичен событию changeModelVariableEvent, за исключением того
+ * что может менять несколько переменных сразу
+ * Использует предикаты для определения что и как менять
+ * 
+ * В предикате в параметрах должна быть строка вида:
+ *  propertyName1+X,propertyName2-Y,propertyName3=Z
+ *  
+ */
+function changeProperties(api, modifier){
+    let params = helpers().checkPredicate(api, modifier.mID, "change-properties");
+    api.info("changeProperties: start, predicate: " + JSON.stringify(params));
+
+    if(params){
+        helpers().modifyModelProperties(api, params.operations);
+    }
+}
+
+
 module.exports = () => {
     return {
         showCondition,
+        changeProperties
     };
 };

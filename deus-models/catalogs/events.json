@@ -120,13 +120,25 @@
         {
             "eventType": "change-memory",
             "effects": [
-                "changeMemory"
+                "changeMemoryEvent"
             ]
         },
         {
             "eventType": "leak-hp",
             "effects": [
                 "leakHpEvent"
+            ]
+        },
+        {
+            "eventType": "character-death",
+            "effects": [
+                "characterDeathEvent"
+            ]
+        },
+        {
+            "eventType": "character-resurect",
+            "effects": [
+                "characterResurectEvent"
             ]
         }
     ]

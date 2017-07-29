@@ -1,7 +1,7 @@
 //Тесты для моделей управления имплантами
 
 import { expect } from 'chai';
-import { process } from '../test_helpers';
+import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -210,6 +210,32 @@ describe('Implants: ', () => {
 
         expect(implant).to.exist;
         expect(implant.enabled).is.true;
+    });
+
+    it("Change-properties effect", async function() {
+        let model = getExampleModel();
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "lab_maninthemiddle" } }], model.timestamp+100, true);
+        
+        let { baseModel, workingModel } = await process(model, events);
+
+        let implant = baseModel.modifiers.find((e: any) => e.id == "lab_maninthemiddle");
+
+        expect(implant).to.exist;
+        expect(implant).to.has.property('enabled', true);
+
+        expect(workingModel.maxProxy).is.equal(102);
+
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "jj_i_am_girl" } }], baseModel.timestamp+100, true);
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
+        implant = baseModel.modifiers.find((e: any) => e.id == "jj_i_am_girl");
+
+        expect(implant).to.exist;
+        expect(implant).to.has.property('enabled', true);
+
+        expect(workingModel.sex).is.equal("female");
+
+        printModel(workingModel);
     });
 
 });
