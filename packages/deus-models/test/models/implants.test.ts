@@ -237,10 +237,10 @@ describe('Implants: ', () => {
 
         let condition = workingModel.conditions.find((c: any) => c.id == "jj_i_am_girl-2");
 
+        printModel(workingModel);
+        
         expect(condition).is.exist;
 
-
-        printModel(workingModel);
     });
 
 });
