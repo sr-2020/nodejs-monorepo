@@ -8,6 +8,8 @@ let helpers = require('../helpers/model-helper');
 let medHelpers = require('../helpers/medic-helper');
 let Chance = require('chance');
 let chance = new Chance();
+let clones = require("clones");
+
 
 /**
  * Обработчик события
@@ -17,13 +19,17 @@ let chance = new Chance();
  */
 function addImplantEvent( api, data, event ){
     if(data.id){
-        let implant = helpers().loadImplant(api, data.id);
+        let _implant = helpers().loadImplant(api, data.id);
 
-        if(implant){
+        if(_implant){
+            let implant = clones(_implant)
             if(helpers().isImpantCanBeInstalled(api, implant)){
                 api.info(`Install implant: ${implant.displayName}`);
 
                 implant.gID = helpers().uuidv4();
+
+                //Убрать предикаты из модели
+                delete implant.predicates;
 
                 //Установка импланта
                 implant = api.addModifier(implant);
