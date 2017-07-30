@@ -49,22 +49,38 @@ function addChangeRecord( api, text, timestamp ){
 
 //Проверка предиката и возвращение данных для работы эффекта
 //Вовращается объект Params (если он есть)
-function checkPredicate(api, mID, effectName){
+function checkPredicate(api, mID, effectName, multi = false){
     let implant = api.getModifierById(mID)
 
-    if(implant && implant.predicates){
-        let p = implant.predicates.filter( p => p.effect == effectName)
-                    .find( p => isGenomeMatch(api, p.variable, p.value) || 
-                                isMindCumeMatch(api, p.variable, p.value) );
+    if(implant){
+        let predicates = implant.predicates;
 
-       // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
+        //Если предикатов нет внутри импланта, попробовать загрузить имплант из БД
+        if(!predicates){
+            let catalogImplant = api.getCatalogObject("implants", implant.id);
+            if(catalogImplant) {
+                predicates = catalogImplant.predicates;
+            }
+        }
 
-        if(p){
-            return p.params;
-        }else{
-            return null;
+        if(predicates){
+            let p = predicates.filter( p => p.effect == effectName)
+                        .filter( p => isGenomeMatch(api, p.variable, p.value) || 
+                                    isMindCumeMatch(api, p.variable, p.value) );
+
+        // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
+
+            if(p && p.length){
+                if(!multi){
+                    return p[0].params;
+                }else{
+                    return p.map( element => element.params );
+                }
+            }
         }
     }
+
+    return null;
 }
 
 function isMindCumeMatch(api, variable, condition){
