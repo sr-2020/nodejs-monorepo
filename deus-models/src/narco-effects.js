@@ -112,11 +112,10 @@ function applyNarcoEffect(api, data, event)
             addTemporaryConditons(api, narco);
         }
     
-    if (narco.history_record)
-        {
-            api.debug("Narco will add history record " + narco.history_record)
-            helpers().addChangeRecord(api, narco.history_record, event.timestamp);
-        }
+    narco.history_record = narco.history_record || 'Вы приняли таблетку.';
+    
+    api.debug("Narco will add history record " + narco.history_record)
+    helpers().addChangeRecord(api, narco.history_record, event.timestamp);       
 }
 
 /**

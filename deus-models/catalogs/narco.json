@@ -4,7 +4,7 @@
         {
             "id":"altnarco",
             "duration": 18000,
-            "mindCubePermanent" : "F2+6",
+            "mindCubePermanent" : "F3+6",
             "mindCubeTemp" : "E1+65,C5-60"
         },
         {
@@ -18,10 +18,81 @@
             "id":"cometa",
             "duration": 18000,
             "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
+            "mindCubePermanent" : "F2+7",
             "conditions":
             [
                 "euphoria-condition"
             ]
+        },
+        {
+            "id":"quasar",
+            "duration": 18000,
+            "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
+            "mindCubePermanent" : "F2+7",
+            "conditions":
+            [
+                "durman-condition"
+            ]
+        },
+        {
+            "id":"pulsar",
+            "duration": 18000,
+            "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
+            "mindCubePermanent" : "F2+7",
+            "conditions":
+            [
+                "stream-condition"
+            ],
+            "_comment": "TODO пульсар кулдаун возвращения в VR, но мы пока этого не обсчитываем"
+        },
+        {
+            "id":"janus",
+            "duration": 18000,
+            "conditions":
+            [
+                "janus-condition"
+            ],
+            "_comment": "TODO Янус и СКВТ-16 могли бы модельно понимать, есть ли дополнительная личность например по тексту воспоминаний."
+        },
+        {
+            "id":"skvt16",
+            "duration": 18000,
+            "conditions":
+            [
+                "skvt16-condition"
+            ]
+        },
+        {
+            "id":"occam-pill",
+            "duration": 18000,
+            "mindCubeTemp" : "С1+3",
+            "conditions" : [ "occam-condition"]
+        },
+        {
+            "id":"talker-pill",
+            "duration": 18000,
+            "mindCubeTemp" : "E5+25,D3+25",
+            "mindCubePermanent" : "E5+2,D3+2",
+            "mindCubePushbackEnabled" : true
+        },
+        {
+            "id":"passion-pill",
+            "duration": 18000,
+            "mindCubeTemp" : "C2-25,A0+15",
+            "mindCubePermanent" : "C2-2,A0+1",
+            "mindCubePushbackEnabled" : true
+        },
+        {
+            "id":"pacific-pill",
+            "duration": 18000,
+            "mindCubeTemp" : "A1+15,C4+25",
+            "mindCubePermanent" : "A1+1,C4+2",
+            "mindCubePushbackEnabled" : true
+        },
+        {
+            "id":"zagrey-pill",
+            "duration": 1800,
+            "mindCubePermanent" : "B1-45,B2-42"
         }
     ]
 }
