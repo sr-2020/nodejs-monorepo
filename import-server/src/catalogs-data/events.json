@@ -141,6 +141,7 @@
             ]
         },
         {
+            "id": "recover-hp",
             "eventType": "recover-hp",
             "effects": [
                 "recoverHpEvent"

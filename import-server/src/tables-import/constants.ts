@@ -3,7 +3,7 @@ export const effectNames = {
     notImplemented: "not-implemented",
     changeMindCube: "inst_changeMindCube",
     changeMaxHp: "change-max-hp",
-    recoveryHp: "recovery-hp",
+    recoveryHp: "timed-recover-hp",
     recoveryFromZero: "recovery-from-zero",
     changeProperties: "change-properties"
 };
