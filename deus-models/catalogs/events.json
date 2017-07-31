@@ -140,6 +140,18 @@
             "effects": [
                 "characterResurectEvent"
             ]
+        },
+        {
+            "eventType": "take-narco",
+            "effects": [
+                "applyNarcoEffect"
+            ]
+        },
+        {
+            "eventType": "stop-narco-modifier",
+            "effects": [
+                "removeNarcoEffect"
+            ]
         }
     ]
 }

@@ -8,6 +8,8 @@ const HP_LEAK_TIMER = "_hp-leak-timer";
 const DEATH_DELAY = 1200*1000;
 const DEATH_TIMER = "_dead-timer";
 
+const NARCO_TIME_PREFIX = "_narco_timer_";
+
 const MAX_CHANGES_LINES = 30;
 
 const medicSystems = [
@@ -29,7 +31,8 @@ module.exports = () => {
         HP_LEAK_TIMER,
         HP_LEAK_DELAY,
         DEATH_DELAY,
-        DEATH_TIMER
+        DEATH_TIMER,
+        NARCO_TIME_PREFIX
     };
 };
 

@@ -23,6 +23,12 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "changeProperties"
-        } 
+        },
+        {        
+            "id"      : "change-mind-cube-effect",       
+            "class"   : "mind",    
+            "type"    : "normal",        
+            "handler" : "changeMindCubesEffect"
+        }
     ]
 }

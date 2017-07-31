@@ -161,8 +161,11 @@ function isGenomeMatch(api, variable, value){
  * 
  * Предполагается что текст инструкции уже нормализован 
  * (верхний регистр, без пробелов, через запятую)
+ * 
+ * scaleFactor = 100 (default) to apply normal change
  */
-function modifyMindCubes(api, mind, changeText){
+function modifyMindCubes(api, mind, changeText, scaleFactor){
+    scaleFactor = scaleFactor || 100;
     changeText.split(',').forEach( exp => {
 
         //console.log(`MMC:  Part: ${exp}`);
@@ -172,7 +175,7 @@ function modifyMindCubes(api, mind, changeText){
             let cube = exParts[1];
             let index = Number(exParts[2]);
             let op = exParts[3];
-            let mod = Number(exParts[4]);
+            let mod = Math.trunc(Number(exParts[4]) * scaleFactor / 100);
 
             //console.log(`MMC parsed: ${cube}${index} ${op} ${mod}`);
             let beforeOp = mind[cube][index];
