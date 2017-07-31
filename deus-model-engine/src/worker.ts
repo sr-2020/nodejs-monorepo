@@ -180,7 +180,7 @@ export class Worker {
             for (let effect of effects) {
                 let f = this.resolveCallback(effect.handler);
                 if (!f) continue;
-                Logger.logStep('engine', 'info', 'run effect %s on modifier %s', effect.name, modifier.name)(() => {
+                Logger.logStep('engine', 'info', 'run effect %s on modifier %s', effect.id, modifier.id)(() => {
                     (f as any)(api, modifier);
                 });
             }
