@@ -2,6 +2,8 @@ import { Observable } from 'rxjs/Rx';
 import * as PouchDB from 'pouchdb';
 import * as winston from 'winston';
 
+import { DeusModifier } from "./interfaces/modifier"
+
 
 /**
  * Сохранить в БД (connection) переданный объект (doc) 
@@ -15,9 +17,6 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
     if(!doc._id){
         return Observable.fromPromise( connection.post(doc) );
     }
-
-    //console.log(`Saving saveObject`);
-    
 
     return Observable.fromPromise(connection.get( doc._id ))
         .flatMap( (oldDoc:any) => { 
@@ -66,4 +65,21 @@ export class DamageModifier  {
         damage = 0;
         enabled = true;
         mID = "_internal_damage";
+};
+
+export class MindCubesModifier implements DeusModifier  {
+        id = "mindcubes_showdata";
+        displayName = "internal mind cube conditions modifier";
+        class = "_internal";
+        effects = [
+            {        
+                "id"    : "show-condition",       
+                "class"   : "physiology",    
+                "type"    : "normal",        
+                "handler" : "showCondition",
+                enabled : true
+            },
+        ];
+        enabled = true;
+        mID = "_internal_mindcubes";
 };

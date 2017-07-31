@@ -11,7 +11,7 @@ import { config } from '../config';
 import { DeusModifier } from '../interfaces/modifier';
 import { DeusCondition } from '../interfaces/condition';
 import { Predicate } from '../interfaces/predicate';
-import { saveObject } from '../helpers'
+import { saveObject, MindCubesModifier } from '../helpers'
 import { effectNames, conditionTypes, implantClasses, implantCorp, implantSystems } from './constants'
 import { GenEffectData, MindEffectData, ImplantData } from './ImplantData';
 import { ConditionData } from './conditionData'
@@ -31,17 +31,23 @@ export class TablesImporter{
 
     private implantDB:any = null;
     private conditionDB:any = null;
-
-
+ 
     tablesData :TablesData = { 
         implantsData : [],
         illnessesData : [],
         conditionsData : []
     };
 
-    //Созданные в результате импорта объекты имплантов и состояний
+    //Созданные в результате импорта объекты имплантов, состояний и "модификатор" для показа состояний кубиков сознания
     implants: DeusModifier[] = [];
-    impConditions: DeusCondition[] = [];
+    conditions: DeusCondition[] = [];
+    mindCubeModifier:DeusModifier = {         
+        _id : "mindcubes_showdata",
+        displayName : "internal mind cube conditions modifier",
+        class : "_internal",
+        effects : [ "show-condition" ], 
+        predicates : []
+    };
 
     constructor() {
         const ajaxOpts = {
@@ -119,8 +125,13 @@ export class TablesImporter{
                     return this.tablesData;
                 })
                 .do( () => this.createImplants() )
-               // .flatMap( () => this.saveImplants() )
-               // .flatMap( () => this.saveConditions() )
+                .do( () => {
+                        //СДелать из импортрованных данных записи состояний и предикаты для псевдо-модификатора
+                        this.createMindConditions();
+                        this.implants.push(this.mindCubeModifier);
+                    })
+                    .flatMap( () => this.saveImplants() )
+                    .flatMap( () => this.saveConditions() )
                 .map( () =>{ 
                     return this;
                 })
@@ -157,7 +168,7 @@ export class TablesImporter{
     private conditionsDataLoad(authClient): Observable<any>{
         var request = {
             spreadsheetId: '1703sXU-akDfn9dsnt19zQjvRrSs7kePPGDkcX0Zz-bY',
-            range: "Conditions!A4:S100",
+            range: "Conditions!A6:H250",
             valueRenderOption: 'FORMATTED_VALUE',
             dateTimeRenderOption: 'SERIAL_NUMBER',
             auth: authClient
@@ -186,7 +197,7 @@ export class TablesImporter{
      *  Сохранить созданные Conditions в БД, с обновлением существующих
      */
     private saveConditions(): Promise<any[]>{
-         return Observable.from( this.impConditions )
+         return Observable.from( this.conditions )
             .flatMap( condition =>  saveObject(this.conditionDB, condition))
             .toArray()
             .do( (results)=>{
@@ -194,6 +205,75 @@ export class TablesImporter{
             })
             .toPromise();
     } 
+
+    /**
+     * Обработать данные по "состояниям" кубиков
+     */
+    private createMindConditions(){
+        let condIdTable:any = {};
+
+        //Пройти по всем импортированным строчкам состояний (для кубиков сознания и не только, если будут)
+        this.tablesData.conditionsData.forEach( (condData:ConditionData) => {
+            if((condData.title && condData.cube) || (condData.title && condData.id) ){
+                let id = condData.id;
+
+                //Если в строке нет ID для состояния, то сгенерировать его из названия кубика
+                if(!id){
+                    let nextNum = condIdTable[condData.cube];
+                    if(!nextNum){
+                        nextNum = 1;
+                        condIdTable[condData.cube] = nextNum;
+                    }
+
+                    id = `mcube-condition-${condData.cube}-${nextNum}`;
+                    condIdTable[condData.cube] += 1;
+                }
+
+                //Создать объект "состояния" и положить его в список состояний для записи в БД (общий с состояниями имплнатов)
+                this.createCondition(id, condData.title,condData.details,"mind");
+
+                //Если это было состояния для кубика сознания, то записать в предикаты для общего модификатора показа состояний
+                //запись про показ данного сосояния при данном наборе кубиков
+                //Перед этим еще проверить параметры состояния на валидность
+                if(condData.cube && this.verirfyMindConditionData(condData)){
+                    let p: Predicate = { 
+                            variable: condData.cube,
+                            value: condData.value, 
+                            effect: effectNames.simpleString, 
+                            params : { condition: id }
+                        }
+
+                    this.mindCubeModifier.predicates.push(p);
+                }
+            }
+        });
+
+        //console.log( JSON.stringify(this.mindCubeModifier.predicates, null, 4) );
+        //console.log( JSON.stringify(this.conditions.filter( c => c._id.startsWith("mcube-condition-A0")), null, 4) );
+    }
+
+    /**
+     *  Верификация данных по одному значению кубика сознания 
+     */
+    private verirfyMindConditionData(d: ConditionData):boolean{
+        if(d.id && !d.id.match(/^[\w\-]+$/i)){
+            winston.error(`Condition ${d.id} incorrect id`);
+            return false;
+        }
+
+        if(d.cube && !d.cube.match(/^[A-G]\d$/i)){
+            winston.error(`Condition ${d.cube} incorrect mind cube selector`);
+            return false;
+        }
+
+        if(d.value && !d.value.match(/^\d\d?-\d\d?\d?$/i)){
+            winston.error(`Condition ${d.value} incorrect selector value`);
+            return false;
+        }
+
+        return true;
+    }
+
 
     //Верификация данных по импланту
     private verifyImplantData(d: ImplantData): boolean{
@@ -415,7 +495,7 @@ export class TablesImporter{
 
         cond.class = condType ? condType : "physiology";
 
-        this.impConditions.push(cond);
+        this.conditions.push(cond);
         
         return cond;
     }
@@ -429,13 +509,13 @@ importer.import().subscribe((result) => {
             winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}` );
             //winston.info(JSON.stringify(result.implantsData.slice(0,10), null, 4));
 
-            result.implants.filter(imp => imp._id == "lab_maninthemiddle").forEach(imp => 
-                        winston.info(JSON.stringify(imp, null, 4))   
-                    );
+            // result.implants.filter(imp => imp._id == "lab_maninthemiddle").forEach(imp => 
+            //             winston.info(JSON.stringify(imp, null, 4))   
+            //         );
 
-            result.impConditions.filter(cond => cond._id.startsWith("lab_maninthemiddle")).forEach(cond => 
-                    winston.info(JSON.stringify(cond, null, 4))   
-                );
+            // result.conditions.filter(cond => cond._id.startsWith("lab_maninthemiddle")).forEach(cond => 
+            //         winston.info(JSON.stringify(cond, null, 4))   
+            //     );
 
 
             //winston.info(JSON.stringify(result.implants.slice(0,10), null, 4));

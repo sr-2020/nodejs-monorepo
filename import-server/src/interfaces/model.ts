@@ -57,6 +57,7 @@ export class DeusModel{
     maxHp: number;      //макстмальное количество хитов персонажа
     maxSecondsInVr: number;  //Максимальное время в VR
     isAlive: boolean = true;  //Если false = персонаж мертв
+    inGame: boolean = false; //Если true - персонаж в игре, и обновлять при импорте эту модель нельзя
 
 //Только для типа профиля "human"
     sex?: string;            //пол

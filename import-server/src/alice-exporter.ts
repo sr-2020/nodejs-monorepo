@@ -19,7 +19,7 @@ import { DeusEffect } from './interfaces/effect';
 import { DeusEvent } from './interfaces/events';
 import { mindModelData } from './mind-model-stub';
 import { CatalogsLoader } from './catalogs-loader';
-import { saveObject, DamageModifier } from './helpers'
+import { saveObject, DamageModifier, MindCubesModifier } from './helpers'
 
 const PHYS_SYSTEMS_NUMBER = 6;
 
@@ -98,8 +98,18 @@ export class AliceExporter{
 
         this.eventsToSend.push(refreshEvent);
 
-        //Очистить очередь
-        return Observable.from([this])
+        return Observable.fromPromise( this.con.get(this.model._id) )
+                    .catch( err =>  {
+                        winston.info("Model doesnt exsit");
+                        return Observable.from([this.model]); 
+                    })            
+                    .filter( (oldModel:DeusModel) => { 
+                        if(oldModel.inGame) { 
+                            winston.info(`Character model ${this.model._id} already in game!`); 
+                        }
+                        return !oldModel.inGame; 
+                    })
+
                     .flatMap( () => this.clearEvents() )
                     .do( result => results.clearEvents = result.length )
 
@@ -115,21 +125,6 @@ export class AliceExporter{
                     .map( result => results )
                     .toPromise();
 
-
-        // //Create or update Profile 
-        // let profilePromise = saveObject(this.con, this.model, this.isUpdate);
-
-        // //Put events for model
-        // let eventsPromise = Promise.resolve([]);
-        // if(this.eventsToSend.length) { eventsPromise = this.eventsCon.bulkDocs(this.eventsToSend) }
-
-        // //Create or update account record
-        // let accPromise = Promise.resolve(false);
-        // if(this.account.login && this.account.password){
-        //     accPromise = saveObject(this.accCon, this.account, this.isUpdate);
-        // }
-        
-        // return Promise.all([profilePromise, accPromise, eventsPromise]);
     }
 
     /**
@@ -161,6 +156,7 @@ export class AliceExporter{
 
             this.model.timestamp = Date.now();
             this.model.modifiers.push( new DamageModifier() );
+            this.model.modifiers.push( new MindCubesModifier() )
 
             //ID Alice. CharacterId
             this.model._id = this.character.CharacterId.toString();
@@ -168,6 +164,9 @@ export class AliceExporter{
 
             //Персонаж жив
             this.model.isAlive = true;
+
+            //Состояние "в игре"
+            this.model.inGame = this.character.InGame;
 
             //Login (e-mail). Field: 1905
             //Защита от цифрового логина

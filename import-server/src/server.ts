@@ -166,15 +166,12 @@ function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, 
     if(exportModel){
         return Observable.fromPromise(model.export())
                 .map( (c:any) => { 
-                        let result = [];
-                        // result.push(c[0].ok ? "Model saved" : "ERROR: model not saved");
-                        // result.push(c[1].ok ? "Account saved" : "ERROR: account not saved");
-                        // result.push(Array.isArray(c[2]) ? `Events saved: ${c[2].length}` : "ERROR in events save");
-
-                        // winston.info( `Exported model and account for character id = ${c[0].id}: ` + result.join(", ") );
-
-                        //winston.info( `Exported model and account for character id = ${c[0].id}: ` + JSON.stringify(c, null, 4));
-                        winston.info( `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
+                        if(c) {
+                            winston.info( `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
+                        }else{
+                            winston.info( `Model and account for character ${char._id} not exported: model alredy IN THE GAME` );
+                            char.finalInGame = true;    //Отметить что эта модель дальше не надо обрабатывать
+                        }
 
                         return char;
                 });
@@ -343,11 +340,14 @@ function importAndCreate(   id:number = 0,
     //Сохранить данные в кеш (если надо)
         .flatMap( c => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]) )
 
-    //Сохранить данные по персонажу в общий список
-        .do( c => workData.charDetails.push(c) )
-
     //Экспортировать модель в БД (если надо)
         .flatMap( c  =>  exportCharacterModel(c, workData, exportModel) )
+
+    //Если персонаж "В игре" остановить дальнейшую обработку
+        .filter( c => (!c.finalInGame) )
+
+    //Сохранить данные по персонажу в общий список
+        .do( c => workData.charDetails.push(c) )
 
     //Послать модели Refresh соообщение для создания Work и View-моделей
         .flatMap( c => refreshModel ? sendModelRefresh(c, workData) : Observable.from([c]) )
