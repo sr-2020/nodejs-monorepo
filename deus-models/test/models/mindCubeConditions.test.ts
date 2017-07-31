@@ -8,7 +8,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 describe('Mind Cubes conditions tests: ', () => {
     let result:any = null;
 
-    it.only("Show condition #1", async function() {
+    it("Show condition #1", async function() {
         let model = getExampleModel();
 
         model.mind.A[0] = 19;       //mcube-condition-A0-2
