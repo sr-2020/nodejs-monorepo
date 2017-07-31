@@ -30,6 +30,22 @@ function showCondition(api, modifier){
 }
 
 /**
+ * Эффект, показывающий состояния, вне зависимости от предикатов
+ * modifier.conditions = ["cond-id"]
+ */
+
+function showAlwaysCondition(api, modifier){
+    api.debug("Show always condition " + JSON.stringify(modifier.conditions));
+    if(modifier.conditions){
+        //Пройти по всем совпадаениям в предикатах и показать все состояния
+        modifier.conditions.forEach(condition => {
+            helpers().addCharacterCondition(api, condition);
+        });
+    }
+}
+
+
+/**
  * Универсальный эффект "изменение свойства модели" (change-properties)
  * Эффект позволяет импланту изменить любое простое свойство в модели (или несоклько )
  * на то время пока он действует.
@@ -54,6 +70,7 @@ function changeProperties(api, modifier){
 module.exports = () => {
     return {
         showCondition,
-        changeProperties
+        changeProperties,
+        showAlwaysCondition
     };
 };

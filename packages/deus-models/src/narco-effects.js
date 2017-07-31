@@ -12,14 +12,19 @@ function loadNarco(api, id)
     return api.getCatalogObject("narco", id.toLowerCase());
 }
 
-function startTemporaryCubeChange(api, cubeChange, revertAfter)
+function startTemporaryCubeChange(api, narco)
 {    
     api.debug("Narco will add modifier")
     //Изменение должно быть временным. Накладываем эффект
 
-    var targetTimerId = helpers().uuidv4();
-
     var effect = api.getCatalogObject("effects", "change-mind-cube-effect");
+    
+    if (!effect)
+        {
+            api.warning("Can't load effect change-mind-cube-effect");
+            return;
+        }
+
     effect.enabled = true;
     var modifier = { 
         id: "narcoEffects",
@@ -30,8 +35,42 @@ function startTemporaryCubeChange(api, cubeChange, revertAfter)
             effect
         ],
         enabled: true,
-        mindCubeChange: cubeChange.change,
-        pushbackDuration: revertAfter * 100
+        mindCubeChange: narco.mindCubeTemp,
+    };
+
+    modifier.pushbackDuration =  narco.mindCubePushbackEnabled ? narco.duration * 100 : 0;
+
+    //Установка модификатора
+    modifier = api.addModifier(modifier);
+
+    api.debug(modifier);
+
+    setTimerToKillModifier(api, modifier, narco.duration * 1000 + modifier.pushbackDuration)
+}
+
+function addTemporaryConditons(api, narco)
+{    
+    api.debug("Narco will add modifier")
+    //Изменение должно быть временным. Накладываем эффект
+
+    var effect = api.getCatalogObject("effects", "show-always-condition");
+    
+    if (!effect)
+        {
+            api.warning("Can't load effect change-mind-cube-effect");
+            return;
+        }
+
+    effect.enabled = true;
+    var modifier = { 
+        id: "narcoEffectsCondition",
+        displayName: "Воздействие каких-то таблеток",
+        class: "narco",
+        effects: [
+            effect
+        ],
+        enabled: true,
+        conditions: narco.conditions
     };
 
     //Установка модификатора
@@ -39,27 +78,44 @@ function startTemporaryCubeChange(api, cubeChange, revertAfter)
 
     api.debug(modifier);
 
-    api.setTimer(consts().NARCO_TIME_PREFIX + modifier.mID, revertAfter * 1100 - 1, "stop-narco-modifier", {mID : modifier.mID} );
+    setTimerToKillModifier(api, modifier, narco.duration * 1000)
+}
+
+function setTimerToKillModifier(api, modifier, timestamp)
+{
+    api.setTimer(
+        consts().NARCO_TIME_PREFIX + modifier.mID,
+        timestamp - 1, 
+        "stop-narco-modifier", 
+        {mID : modifier.mID} );
 }
 
 function applyNarcoEffect(api, data, event)
 {
     api.info(`Taking narco effect: ${event.data}`);
     let narco = loadNarco(api, event.data);
-    if (narco.mindCubeChanges)
+    api.debug(JSON.stringify(narco));
+    if (narco.mindCubePermanent)
         {
-            narco.mindCubeChanges.forEach(function(cubeChange) {
-                if (cubeChange.permanent)
-                    {
-                        //Изменение должно быть постоянным. Меняем базовую модель
-                        helpers().modifyMindCubes(api, api.model.mind, cubeChange.change);
-                    }
-                    else {
-                        //Изменение должно быть временным. Накладываем эффект
-                        startTemporaryCubeChange(api, cubeChange, narco.revertAfter);
-                    }
-                
-            }, this);
+            //Изменение должно быть постоянным. Меняем базовую модель
+            helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
+        }
+    
+    if (narco.mindCubeTemp)
+        {
+            //Изменение должно быть временным. Накладываем эффект
+            startTemporaryCubeChange(api, narco);
+        }
+
+    if (narco.conditions)
+        {
+            addTemporaryConditons(api, narco);
+        }
+    
+    if (narco.history_record)
+        {
+            api.debug("Narco will add history record " + narco.history_record)
+            helpers().addChangeRecord(api, narco.history_record, event.timestamp);
         }
 }
 

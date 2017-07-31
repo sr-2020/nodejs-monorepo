@@ -16,15 +16,16 @@ function changeMindCubesEffect(api, modifier){
 
     let timerValue = api.getTimer(consts().NARCO_TIME_PREFIX + modifier.mID);
 
-    api.debug("Timer: " + JSON.stringify(timerValue) );
+    if (timerValue){
+        api.debug("Timer: " + JSON.stringify(timerValue) );
 
-    var scale = timerValue.miliseconds < modifier.pushbackDuration ? -10 : 100;
+        var scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
 
-    if(changeCommand){
-        helpers().modifyMindCubes(api, api.model.mind, changeCommand, scale);
+        if(changeCommand){
+            helpers().modifyMindCubes(api, api.model.mind, changeCommand, scale);
+        }
     }
 }
-
 
 module.exports = () => {
     return {
