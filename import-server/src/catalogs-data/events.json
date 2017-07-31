@@ -134,6 +134,7 @@
             ]
         },
         {
+            "id": "change-insurance",
             "eventType": "change-insurance",
             "effects": [
                 "changeInsuranceEvent"
