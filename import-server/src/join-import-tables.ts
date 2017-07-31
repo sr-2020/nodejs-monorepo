@@ -6,11 +6,11 @@ export let joinValues:any = {
     2068: "3",
     
 //Источник страховки
-    2053: "США, штат Золотые Ворота",
-    2055: "Serenity / Kintsugi Group",
+    2053: "Правительство США",
+    2055: "Serenity/Kintsugi",
     2056: "Johnson & Johnson",
-    2057: " Pan American Sunrise Technology Corp.",
-    2058: "Special",
+    2057: "Pan American",
+    2058: "SuperVIP",
 
 //Уровни стаховки
     2059: "1",

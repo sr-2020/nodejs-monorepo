@@ -132,6 +132,12 @@
             "effects": [
                 "characterResurectEvent"
             ]
+        },
+        {
+            "eventType": "change-insurance",
+            "effects": [
+                "changeInsuranceEvent"
+            ]
         }
     ]
 }

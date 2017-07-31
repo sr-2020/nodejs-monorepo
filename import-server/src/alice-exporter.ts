@@ -228,7 +228,7 @@ export class AliceExporter{
                 if(insuranceVal) {
                     this.model.insurance = insuranceSourceIT[insuranceVal];
                     this.model.insuranceLevel = Number.parseInt( this.findStrFieldValue(1975, true) );
-                    this.model.insuranceDiplayName = this.findStrFieldValue(1973, true) + `, Уровень: ${this.model.insuranceLevel}`;
+                    this.model.insuranceDiplayName = this.findStrFieldValue(1973, true) + `, L: ${this.model.insuranceLevel}`;
                 }
 
                 //TODO: модель сознания. Кубики
