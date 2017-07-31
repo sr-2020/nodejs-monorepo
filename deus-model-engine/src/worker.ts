@@ -1,4 +1,5 @@
 import { clone, assign, reduce } from 'lodash'
+import * as _ from 'lodash';
 import { inspect } from 'util';
 
 import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult } from 'deus-engine-manager-api';
@@ -10,6 +11,8 @@ import * as model from './model';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import { ModelApiFactory, ViewModelApiFactory, PreprocessApiFactory } from './model_api';
+
+declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {
     private config: config.ConfigInterface
@@ -230,8 +233,18 @@ export class Worker {
                     type: 'aquire',
                     keys: baseCtx.pendingAquire
                 })
+            } else if (TEST_EXTERNAL_OBJECTS) {
+                let result = baseCtx.pendingAquire.reduce<any>((aquired, [db, id]) => {
+                    let obj = _.get(TEST_EXTERNAL_OBJECTS, [db, id]);
+                    if (obj) _.set(aquired, [db, id], obj);
+                    return aquired;
+                }, {});
+
+                baseCtx.aquired = result;
+
+                resolve();
             } else {
-                reject();
+                reject(new Error('Called in wrong context'));
             }
         });
 
