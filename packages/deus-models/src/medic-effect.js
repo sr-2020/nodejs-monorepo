@@ -50,7 +50,7 @@ let medHelpers = require('../helpers/medic-helper');
  */
 function getDamageEvent(api, data, event){
     if(Number(data.hpLost) && api.model.hp){
-        medHelpers().addDamage(api, Number(data.hpLost));
+        medHelpers().addDamage(api, Number(data.hpLost), event.timestamp);
      }
 }  
 
@@ -60,7 +60,7 @@ function getDamageEvent(api, data, event){
  */
 function restoreDamageEvent(api, data, event ){
     if(Number(data.hpAdd) && api.model.hp){
-        medHelpers().restoreDamage(api, Number(data.hpAdd));
+        medHelpers().restoreDamage(api, Number(data.hpAdd), event.timestamp);
      }
 }
 

@@ -65,8 +65,13 @@ function getStartPage(model) {
     let hpRow = {
         text: "Hit Points",
         value: model.hp + " / " + model.maxHp,
-        percent: 100 * model.hp / model.maxHp,
     };
+
+    if(model.maxHp){
+        hpRow.percent = 100 * model.hp / model.maxHp
+    }else{
+        hpRow.percent = 0;
+    }
 
     if(model.hp == 0){
          hpRow.valueColor = "#ff565c";
