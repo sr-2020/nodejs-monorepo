@@ -113,7 +113,7 @@ describe('Implants: ', () => {
     });
 
     it("Instant install effects", async function() {
-        //С7 == 46  => С7+20
+        //С7 == 41  => С7+20 = 61
 
         let eventData = { id: "s_stability" };
         let model = getExampleModel();
@@ -121,20 +121,19 @@ describe('Implants: ', () => {
 
         let { baseModel, workingModel } = await process(model, events);
         
-        let cubeVal = baseModel.mind.C[6];
-        expect(cubeVal).is.equal(66);
+        let cubeVal = baseModel.mind.C[7];
+        expect(cubeVal).is.equal(61);
 
 
-        //С7 == 63  => С7+10,D2-10
-        //D2 = 42
+        //С7 == 63  => A1+10,B2-10,C3=20
         model = getExampleModel();
-        model.mind.C[6] = 63;
+        model.mind.C[7] = 63;
         events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
         ({ baseModel, workingModel } = await process(model, events));
         
-        expect(baseModel.mind.A[0]).is.equal(63);
-        expect( baseModel.mind.B[1]).is.equal(47);
-        expect( baseModel.mind.C[2]).is.equal(20);
+        expect(baseModel.mind.A[1]).is.equal(57);
+        expect( baseModel.mind.B[2]).is.equal(30);
+        expect( baseModel.mind.C[3]).is.equal(20);
     });
 
     it("Enable & Disable implant", async function() {

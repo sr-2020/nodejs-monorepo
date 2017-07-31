@@ -73,23 +73,6 @@ export const getExampleModel = (id?: string) => ({
     password: "P@ssw0rd",
     modifiers: [
         {
-            id: "HeartHealthBooster",
-            displayName: "Мотор для сердца +2 HP",
-            class: "mechanical",
-            system: "CardioSystem",
-            effects: [
-                {
-                    id: "demoEffect",
-                    class: "physiology",
-                    type: "normal",
-                    handler: "demoImplantEffect",
-                    enabled: true
-                }
-            ],
-            enabled: true,
-            mID: "85a5746cddd447379992d8181a52f4fd"
-        },
-        {
             id: "_damage",
             displayName: "internal damage modificator",
             class: "_internal",
@@ -105,23 +88,23 @@ export const getExampleModel = (id?: string) => ({
             damage: 0,
             enabled: true,
             mID: "_internal_damage"
+        },
+        {
+                id: "mindcubes_showdata",
+                displayName: "internal mind cube conditions modifier",
+                class: "_internal",
+                effects: [
+                    {        
+                        "id"    : "show-condition",       
+                        "class"   : "physiology",    
+                        "type"    : "normal",        
+                        "handler" : "showCondition",
+                        enabled: true
+                    },
+                ],
+                enabled: true,
+                mID: "_internal_mindcubes"
         }
-        // {
-        //     id: "_Default",
-        //     displayName: "Default actions",
-        //     class: "defaults",
-        //     effects: [
-        //         {
-        //             id: "illnessStageShow",
-        //             class: "physiology",
-        //             type: "normal",
-        //             handler: "illnessStageShow",
-        //             enabled: true
-        //         }
-        //     ],
-        //     enabled: true,
-        //     mID: "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        // },
     ],
     changes: [
         {
