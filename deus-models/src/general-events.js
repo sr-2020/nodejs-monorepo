@@ -4,6 +4,7 @@
 
 let type = require('type-detect');
 let helpers = require('../helpers/model-helper');
+let consts = require('../helpers/constants');
 let Chance = require('chance');
 let chance = new Chance();
 
@@ -202,6 +203,34 @@ function changeMemoryEvent( api, data, event ){
     }
 }
 
+/**
+ * Обработчик события "change-insurance"
+ * Позволяет изменить страховку
+ * 
+ * Игрок видит в списке изменний информацию об данном событии
+ * 
+ * {
+ *   "Insurance": "JJ",
+ *   "Level": 2
+ * }
+ */
+function changeInsuranceEvent ( api, data, event ){
+    if(data.Insurance && data.Level){  
+        api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}` );
+
+        api.model.insurance = data.Insurance;
+
+        if(api.model.insurance.toLowerCase() != "none"){
+            api.model.insuranceLevel = data.Level;
+            api.model.insuranceDiplayName = `${consts().InsuranceDisplay[api.model.insurance]}, L: ${api.model.insuranceLevel}`;
+        }else{
+            api.model.insuranceLevel = 0;
+            api.model.insuranceDiplayName = "Нет";
+        }
+
+        helpers().addChangeRecord(api, `Заменена страховка. Новая страховка: ${api.model.insuranceDiplayName}`, event.timestamp);
+    }
+}
 
 
 module.exports = () => {
@@ -212,6 +241,7 @@ module.exports = () => {
         changeModelVariableEvent,
         changeMindCubeEvent,
         changeAndroidOwnerEvent,
-        changeMemoryEvent
+        changeMemoryEvent,
+        changeInsuranceEvent
     };
 };

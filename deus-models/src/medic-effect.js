@@ -72,12 +72,22 @@ function restoreDamageEvent(api, data, event ){
 function leakHpEvent(api, data, event){
     let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
 
+    //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
+    //если такие импланты есть, то тогда хиты списывать не надо
+    let imp = api.model. modifiers.filter(m => m.enabled)
+                            .find( m => helpers().checkPredicate(api, m.mID, "timed-recover-hp") );
+
+    if(imp){
+        api.info(`leakHpEvent: Installed recovery HP implant: ${imp.id}, don't reduce HP`);
+        return;
+    }
+
     if(m && m.damage && api.model.isAlive){
         m.damage += 1;
         api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
         api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
-        console.log(JSON.stringify(api.model.timers, null, 4));
+        //console.log(JSON.stringify(api.model.timers, null, 4));
 
         helpers().addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
     }
@@ -316,6 +326,53 @@ function characterResurectEvent(api, data, event){
 
 }
 
+/**
+ * Обработчик эффекта "timed-recover-hp"
+ * Этот эффект на реализует механику имплантов "автоматическое восстаноаление хитов в случае легкого ранения"
+ * Эффект зависит от предикатов, в параметрах которых должно быть:
+ *  { "recoveryRate": x }
+ * 
+ * Где x = время восстановления одного хита в секундах (0 означает, что хиты просто не теряются, но не восстанавливаются)
+ * 
+ * Логика работы:
+ * если damage >0 то поставить таймер, событие по которому прибавит хит
+ * Если это был не последний хит, то таймер само обновится.
+ * Название таймера хранится внутри импланта
+ */
+function timedRecoveryEffect(api, modifier){
+    let params = helpers().checkPredicate(api, modifier.mID, "timed-recover-hp");    
+    api.info("timedRecoveryEffect: start, predicate: " + JSON.stringify(params));
+
+    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+
+    if(m && m.damage && api.model.isAlive && params && params.recoveryRate){
+        let timerName = "hpRecovery-" + modifier.mID;
+
+        if(!api.getTimer(timerName)){
+            api.info(`timedRecoveryEffect: damage detected ==> set HP recovery timer, with name ${timerName} to ${params.recoveryRate}sec!`);        
+            api.setTimer( timerName, params.recoveryRate*1000, "recover-hp", {} );
+        }
+    }
+}
+
+/**
+ * Обработчик события recover-hp
+ * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-hp
+ * Обработчик уменьшает damage на 1 и перевзводит таймер. Если это был последний хит, то следюущий вызов
+ * просто отключит таймер (повреждения в минус уйти не могут) 
+ */
+function recoverHpEvent(api, data, event){
+    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+
+    if(m && m.damage && api.model.isAlive){
+        m.damage -= 1;
+        api.info(`recoverHpEvent: damage-1 => damage == ${m.damage}`);
+
+        helpers().addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
+    }
+}  
+
+
 
 module.exports = () => {
     return {
@@ -325,7 +382,9 @@ module.exports = () => {
         killRandomSystemEvent,
         leakHpEvent,
         characterDeathEvent,
-        characterResurectEvent
+        characterResurectEvent,
+        timedRecoveryEffect,
+        recoverHpEvent
     };
 };
 
