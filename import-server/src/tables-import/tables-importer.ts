@@ -130,8 +130,8 @@ export class TablesImporter{
                         this.createMindConditions();
                         this.implants.push(this.mindCubeModifier);
                     })
-                    .flatMap( () => this.saveImplants() )
-                    .flatMap( () => this.saveConditions() )
+                .flatMap( () => this.saveImplants() )
+                .flatMap( () => this.saveConditions() )
                 .map( () =>{ 
                     return this;
                 })

@@ -17,6 +17,12 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "changeProperties"
+        },
+        {        
+            "id"    : "timed-recover-hp",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "timedRecoveryEffect"
         } 
     ]
 }
