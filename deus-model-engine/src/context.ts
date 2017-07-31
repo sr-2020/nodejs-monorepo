@@ -13,7 +13,7 @@ export type Timer = {
 
 export type Effect = {
     enabled: boolean,
-    name: string,
+    id: string,
     class: string,
     type: 'normal' | 'functional',
     handler: string
