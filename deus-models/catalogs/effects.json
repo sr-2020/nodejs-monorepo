@@ -13,6 +13,12 @@
             "handler" : "showCondition"
         },
         {        
+            "id"    : "show-always-condition",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "showAlwaysCondition"
+        },
+        {        
             "id"    : "damage-effect",       
             "class"   : "physiology",    
             "type"    : "normal",        
@@ -35,6 +41,6 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "timedRecoveryEffect"
-        } 
+        }
     ]
 }

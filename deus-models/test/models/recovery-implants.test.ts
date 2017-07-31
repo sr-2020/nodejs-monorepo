@@ -4,7 +4,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Recovery Implants: ', () => {
-    it.only("Reduce HP && auto-recover HP", async function() {
+    it("Reduce HP && auto-recover HP", async function() {
         let model = getExampleModel();
         model.hp = 3;
         model.maxHp = 3;
