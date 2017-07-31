@@ -103,12 +103,13 @@ export class AliceExporter{
                         winston.info("Model doesnt exsit");
                         return Observable.from([this.model]); 
                     })            
-                    .filter( (oldModel:DeusModel) => { 
-                        if(oldModel.inGame) { 
-                            winston.info(`Character model ${this.model._id} already in game!`); 
-                        }
-                        return !oldModel.inGame; 
-                    })
+        //===== Проверка InGame ===============================================
+                    // .filter( (oldModel:DeusModel) => { 
+                    //     if(oldModel.inGame) { 
+                    //         winston.info(`Character model ${this.model._id} already in game!`); 
+                    //     }
+                    //     return !oldModel.inGame; 
+                    // })
 
                     .flatMap( () => this.clearEvents() )
                     .do( result => results.clearEvents = result.length )
