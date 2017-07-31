@@ -17,11 +17,15 @@ let helpers = require('../helpers/model-helper');
  */
 
 function showCondition(api, modifier){
-    let params = helpers().checkPredicate(api, modifier.mID, "show-condition");
+    //Получить СПИСОК предикатов для показа (может быть несколько состояний)
+    let params = helpers().checkPredicate(api, modifier.mID, "show-condition", true);
     api.info("showCondition: start, predicate: " + JSON.stringify(params));
 
     if(params){
-        helpers().addCharacterCondition(api, params.condition);
+        //Пройти по всем совпадаениям в предикатах и показать все состояния
+        params.forEach( data => {
+            helpers().addCharacterCondition(api, data.condition);
+        });
     }
 }
 

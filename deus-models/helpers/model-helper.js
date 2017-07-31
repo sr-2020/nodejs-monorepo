@@ -88,7 +88,7 @@ function isMindCumeMatch(api, variable, condition){
     //console.log(`isMindCumeMatch: ${variable}`);
     if(parts){
         let cube = parts[1];
-        let index = Number(parts[2]) - 1;
+        let index = Number(parts[2]);
 
         //console.log(`isMindCumeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
 
@@ -170,7 +170,7 @@ function modifyMindCubes(api, mind, changeText){
         let exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
         if(exParts){
             let cube = exParts[1];
-            let index = Number(exParts[2]) - 1;
+            let index = Number(exParts[2]);
             let op = exParts[3];
             let mod = Number(exParts[4]);
 

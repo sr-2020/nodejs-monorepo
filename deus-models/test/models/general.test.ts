@@ -82,15 +82,15 @@ describe('General events: ', () => {
 
     it("Change mind cube", async function() {
         let eventData = {
-            operations: "A3+20, B4-5, F1=27"
+            operations: "A2+20, B4-5, F1=27"
         }
         let model = getExampleModel();
         let events = getEvents(model._id, [ {eventType: 'change-mind-cube', data: eventData} ], model.timestamp + 100);
         let {baseModel, workingModel } = await process(model, events);
 
         expect(baseModel.mind.A[2]).is.equal(76);
-        expect(baseModel.mind.B[3]).is.equal(50);
-        expect(baseModel.mind.F[0]).is.equal(27);
+        expect(baseModel.mind.B[4]).is.equal(50);
+        expect(baseModel.mind.F[1]).is.equal(27);
     });
 
     it("Change android owner", async function() {
