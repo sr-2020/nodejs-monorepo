@@ -1,0 +1,18 @@
+{
+    "narco":
+    [
+        {
+            "id":"altnarco",
+            "mindCubeChanges":
+            [
+                {
+                    "change": "E1+65,C5-60",
+                    "revertAfter": 18000
+                },
+                {
+                    "change": "F2+6"
+                }
+            ]
+        }
+    ]
+}
