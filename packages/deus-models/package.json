@@ -1,7 +1,7 @@
 {
   "name": "deus-models",
   "version": "0.0.1",
-  "description": "",
+  "description": "Deus Ex Model Server — handlers that process events.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers ts:ts-node/register test/models/**/*.ts test/models/**/*.js",
