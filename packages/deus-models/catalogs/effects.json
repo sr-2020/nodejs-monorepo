@@ -29,6 +29,12 @@
             "class"   : "mind",    
             "type"    : "normal",        
             "handler" : "changeMindCubesEffect"
-        }
+        },
+        {
+            "id"    : "timed-recover-hp",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "timedRecoveryEffect"
+        } 
     ]
 }

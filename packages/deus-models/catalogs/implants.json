@@ -1555,6 +1555,83 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "jj_biolymph",
+            "displayName": "Клон лимфатической системы \"БиоЛимф\" ",
+            "class": "bio-implant",
+            "system": "lymphatic",
+            "details": "Помогает при легком ранении.",
+            "effects": [
+                "timed-recover-hp",
+                "show-condition"
+            ],
+            "predicates": [
+                {
+                    "variable": "Z11",
+                    "value": "0",
+                    "effect": "timed-recover-hp",
+                    "params": {
+                        "recoveryRate": 1200
+                    }
+                },
+                {
+                    "variable": "Z11",
+                    "value": "1",
+                    "effect": "timed-recover-hp",
+                    "params": {
+                        "recoveryRate": 900
+                    }
+                },
+                {
+                    "variable": "Z11",
+                    "value": "2",
+                    "effect": "timed-recover-hp",
+                    "params": {
+                        "recoveryRate": 600
+                    }
+                },
+                {
+                    "variable": "Z11",
+                    "value": "3",
+                    "effect": "timed-recover-hp",
+                    "params": {
+                        "recoveryRate": 600
+                    }
+                },
+                {
+                    "variable": "Z11",
+                    "value": "4",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_biolymph-4"
+                    }
+                },
+                {
+                    "variable": "Z11",
+                    "value": "4",
+                    "effect": "recovery-hp",
+                    "params": {
+                        "recoveryRate": 600
+                    }
+                },
+                {
+                    "variable": "E4",
+                    "value": "0-49",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "E4+20,C2-10"
+                    }
+                },
+                {
+                    "variable": "E4",
+                    "value": "50-79",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "E4+10,C2-10"
+                    }
+                }
+            ]
         }
     ]
 }

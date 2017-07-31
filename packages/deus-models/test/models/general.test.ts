@@ -144,6 +144,18 @@ describe('General events: ', () => {
 
     });
 
+    it("Change insurance", async function() {
+        let model = getExampleModel();
+
+        let events = getEvents(model._id, [ {eventType: 'change-insurance', data: {  Insurance: "JJ", Level: 2 } } ], model.timestamp + 100);
+        let {baseModel, workingModel } = await process(model, events);
+
+        expect(baseModel.insurance).is.equal("JJ");
+        expect(baseModel.insuranceLevel).is.equal(2);
+        expect(baseModel.insuranceDiplayName).is.equal("Johnson & Johnson, L: 2");
+        
+        //printModel(baseModel);
+    });
 
 
 });

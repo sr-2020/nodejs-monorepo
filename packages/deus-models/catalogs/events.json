@@ -152,6 +152,18 @@
             "effects": [
                 "removeNarcoEffect"
             ]
+        },
+        {
+            "eventType": "change-insurance",
+            "effects": [
+                "changeInsuranceEvent"
+            ]
+        },
+        {
+            "eventType": "recover-hp",
+            "effects": [
+                "recoverHpEvent"
+            ]
         }
     ]
 }
