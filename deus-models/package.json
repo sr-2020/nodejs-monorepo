@@ -35,6 +35,7 @@
     "clones": "^1.1.0",
     "fs.realpath": "^1.0.0",
     "inflight": "^1.0.6",
+    "lodash": "^4.17.4",
     "source-map-support": "^0.4.15",
     "type-detect": "^4.0.3",
     "yn": "^2.0.0"

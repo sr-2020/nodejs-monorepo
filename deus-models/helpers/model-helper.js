@@ -12,7 +12,7 @@ function loadImplant(api, id){
     let implant = api.getCatalogObject("implants", id.toLowerCase());
 
     if(!implant){
-        api.error(`loadImplant: implant id=${id} not found!`)
+        api.error(`loadImplant: implant id=${id} not found!`);
         return null;
     }
 
@@ -23,10 +23,10 @@ function loadImplant(api, id){
         if(effect){
             effect.enabled = true;
             effects.push(effect);
-        }else{
-            api.error(`loadImplant: effect id=${eID} not found!`)
+        } else {
+            api.error(`loadImplant: effect id=${eID} not found!`);
         }
-    })
+    });
 
     implant.effects = effects;
     implant.enabled = true;
@@ -65,8 +65,8 @@ function checkPredicate(api, mID, effectName, multi = false){
 
         if(predicates){
             let p = predicates.filter( p => p.effect == effectName)
-                        .filter( p => isGenomeMatch(api, p.variable, p.value) || 
-                                    isMindCumeMatch(api, p.variable, p.value) );
+                        .filter( p => isGenomeMatch(api, p.variable, p.value) ||
+                                    isMindCubeMatch(api, p.variable, p.value) );
 
         // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
 
@@ -83,14 +83,14 @@ function checkPredicate(api, mID, effectName, multi = false){
     return null;
 }
 
-function isMindCumeMatch(api, variable, condition){
+function isMindCubeMatch(api, variable, condition){
     let parts = variable.match(/^([A-G])(\d)/i);
-    //console.log(`isMindCumeMatch: ${variable}`);
+    //console.log(`isMindCubeMatch: ${variable}`);
     if(parts){
         let cube = parts[1];
         let index = Number(parts[2]);
 
-        //console.log(`isMindCumeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
+        //console.log(`isMindCubeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
 
         if(api.model.mind && api.model.mind[cube]){
             if(checkValue( api.model.mind[cube][index], condition)){
@@ -102,7 +102,7 @@ function isMindCumeMatch(api, variable, condition){
     return false;
 }
 
-//Condition это условие для проверки value. 
+//Condition это условие для проверки value.
 //имеет форматы: <X, >Y, A-B, X
 function checkValue(value, condition){
     let l = -1;
@@ -114,12 +114,12 @@ function checkValue(value, condition){
     if( !Number.isNaN(l) ){
         h = l;
     }
-    
+
     if( (parts = condition.match(/^(\d+)\-(\d+)$/i)) ){
         l = Number.parseInt(parts[1]);
         h = Number.parseInt(parts[2]);
-    } 
-    
+    }
+
     if( (parts = condition.match(/^([<>])(\d+)$/i) ) ){
         if(parts[1] == ">" ){
             l = Number.parseInt(parts[2]) + 1;
@@ -129,7 +129,7 @@ function checkValue(value, condition){
             l = 0;
         }
     }
-    
+
     //console.log(`checkValue: ${l} ..  ${v} .. ${h}`)
 
     if(v >= l && v <= h ){
@@ -157,9 +157,9 @@ function isGenomeMatch(api, variable, value){
  * Модифицирует кубики сознания в переданном объекте Mind,
  * в соответствии с "инструкцией"
  * Формат инструкции из таблицы имплантов:
- * A1+X,B2-Y,C2=Z 
- * 
- * Предполагается что текст инструкции уже нормализован 
+ * A1+X,B2-Y,C2=Z
+ *
+ * Предполагается что текст инструкции уже нормализован
  * (верхний регистр, без пробелов, через запятую)
  * 
  * scaleFactor = 100 (default) to apply normal change
@@ -237,11 +237,11 @@ function addCharacterCondition( api, condId ){
 
         if(systemInfo){
             let existingImplants = api.getModifiersBySystem( implant.system );
-            
-            if(!existingImplants.find( m => m.id == implant.id) &&  
+
+            if(!existingImplants.find( m => m.id == implant.id) &&
                 systemInfo.slots > existingImplants.length){
                     return true;
-            } 
+            }
         }
     }
 
@@ -254,20 +254,20 @@ function addCharacterCondition( api, condId ){
  */
 function addDelayedEvent( api, duration, eventType, data, prefix = "delayed" ){
     if(api && duration && eventType && data){
-        let timerName = `${prefix}-${chance.natural({min: 0, max: 999999})}`
-        
+        let timerName = `${prefix}-${chance.natural({min: 0, max: 999999})}`;
+
         api.setTimer( timerName, Number(duration), eventType, data );
-        
-        api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms` );            
+
+        api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms` );
     }
 }
 
 /**
- * Удалить элемент по mID из списка 
- * 
- * Проходит по массиву, если в элементе есть поле mID и оно равно переданному, 
+ * Удалить элемент по mID из списка
+ *
+ * Проходит по массиву, если в элементе есть поле mID и оно равно переданному,
  * элемент удаляется (ищется только первый подходящий жлемент)
- * 
+ *
  * Функция возращает удаленный элемент или null
  */
 function removeElementByMID( list, mID  ){
@@ -275,10 +275,10 @@ function removeElementByMID( list, mID  ){
         let i = list.findIndex( e => e.mID ? ( e.mID == mID ) : false );
         if(i != -1){
             let e = list[i];
-            
+
             list.slice(i, 1);
 
-            return e; 
+            return e;
         }
     }
 
@@ -292,18 +292,18 @@ let restrictedVars = ["_id", "id", "hp", "maxHp", "login", "mail", "profileType"
 /**
  * Изменить простые свойства модели по инструкциям в переданной строке вида
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
- * 
+ *
  * Можно менять только простые переменные (string/number), не входящие в структуры
  * Нельзя менять ключевые поля, меняемые через специальные события и методы
  */
 function modifyModelProperties(api, operations){
     if(operations){
-        operations.replace(/\s/i,'').split(',').forEach( op => { 
+        operations.replace(/\s/i,'').split(',').forEach( op => {
             let parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
             if(parts){
                 result = false;
-                
+
                 if(parts[1]){
                     result = modifyModelDigitProperty(api, parts[1], parts[2], parts[3]);
                 }else{
@@ -330,7 +330,7 @@ function modifyModelStringProperty(api, varName, value){
         return false;
     }
 
-    let t = type(api.model[varName]); 
+    let t = type(api.model[varName]);
 
     if( t!="string" && t!="null" && t!="undefined" ){
         return false;
@@ -350,7 +350,7 @@ function modifyModelDigitProperty(api, varName, op, value){
         return false;
     }
 
-    let t = type(api.model[varName]); 
+    let t = type(api.model[varName]);
 
     if( t != "number" || Number(value).isNaN ){
         return false;
@@ -368,14 +368,14 @@ function modifyModelDigitProperty(api, varName, op, value){
 
     return true;
 }
- 
+
 module.exports = () => {
     return {
         loadImplant,
         addChangeRecord,
         uuidv4,
         checkValue,
-        isMindCumeMatch,
+        isMindCubeMatch,
         isGenomeMatch,
         checkPredicate,
         modifyMindCubes,
