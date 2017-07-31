@@ -12,7 +12,7 @@ describe('Narco effects: ', () => {
         let events = getEvents(model._id, [ {eventType: 'take-narco', data: "altnarco"} ], model.timestamp);
         let {baseModel, workingModel } = await process(model, events);
 
-        expect(baseModel.mind.F[2]).is.equal(47);
+        expect(baseModel.mind.F[3]).is.equal(62);
         expect(workingModel.mind.E[1]).is.equal(100);
         expect(baseModel.mind.E[1]).is.equal(57);
 
@@ -28,7 +28,7 @@ describe('Narco effects: ', () => {
         events.push(getRefreshEvent(model._id, model.timestamp +   18000 * 1101 ));
         let {baseModel, workingModel } = await process(model, events);
 
-        expect(baseModel.mind.F[2]).is.equal(47); //permanent change is here
+        expect(baseModel.mind.F[3]).is.equal(62); //permanent change is here
         expect(workingModel.mind.E[1]).is.equal(57); //temporary change rolled back
 
         let modifiers = baseModel.modifiers.filter((e: any) => e.id == "narcoEffects");
