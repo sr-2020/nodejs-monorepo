@@ -47,6 +47,10 @@ export const getExampleModel = (id?: string) => ({
     owner: "",
     isAlive: true,
 
+    lastVREnterTimestamp: 0,
+    lastVREnterDuration: 0,
+    totalSpentInVR: 0,
+
     mind: {
         "A": [ 53, 47,56 ],
         "B":[50,57,40,55,55,46,51,54,55,54],

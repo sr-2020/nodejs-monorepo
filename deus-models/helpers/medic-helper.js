@@ -7,13 +7,15 @@ let helpers = require('./model-helper');
 let consts = require('./constants');
 
 
-function addDamage(api, hpLost){
+function addDamage(api, hpLost, timestamp){
     if(hpLost && api.model.hp){
         let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
         
         if(m){
             m.damage += hpLost;
             api.info(`HP Lost: ${hpLost}, summary damage: ${m.damage}` );
+
+            helpers().addChangeRecord(api, `Вы потеряли ${hpLost} HP`, timestamp);
         }
      }
 }  
@@ -23,7 +25,7 @@ function addDamage(api, hpLost){
  * Т.е. если на данный момент maxHP < damage, то надо скорректировать damage так, 
  * что бы лечение начиналось с 0 хитов
  */
-function restoreDamage(api, hpHeal){
+function restoreDamage(api, hpHeal, timestamp){
 
     console.log(`removeDamage: ${hpHeal}`);
 
@@ -35,10 +37,13 @@ function restoreDamage(api, hpHeal){
 
             if(m.damage > maxHP){  m.damage = maxHP; }
 
+            let dmgBefore = m.damage;
+
             m.damage -= hpHeal;
             if(m.damage < 0)  { m.damage = 0; }
 
             api.info(`HP heal: ${hpHeal}, summary damage: ${m.damage}` );
+            helpers().addChangeRecord(api, `Вы восстановили ${m.damage - dmgBefore} HP`, timestamp);
         }
      }
 }  
