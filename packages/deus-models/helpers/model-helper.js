@@ -369,6 +369,15 @@ function modifyModelDigitProperty(api, varName, op, value){
     return true;
 }
 
+function setTimerToKillModifier(api, modifier, timestamp)
+{
+    api.setTimer(
+        consts().NARCO_TIME_PREFIX + modifier.mID,
+        timestamp - 1, 
+        "stop-narco-modifier", 
+        {mID : modifier.mID} );
+}
+
 module.exports = () => {
     return {
         loadImplant,
@@ -383,7 +392,8 @@ module.exports = () => {
         isImpantCanBeInstalled,
         addDelayedEvent,
         removeElementByMID,
-        modifyModelProperties
+        modifyModelProperties,
+        setTimerToKillModifier
     };
 };
 
