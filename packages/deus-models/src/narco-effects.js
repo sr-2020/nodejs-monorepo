@@ -91,7 +91,7 @@ function performAscend(api)
 }
 
 function dieHorribleDeath(api) {
-    api.warn("Death is not a option. for now..");
+    api.error ("Death is not a option. for now..");
 }
 
 function applyNarcoEffect(api, data, event)
