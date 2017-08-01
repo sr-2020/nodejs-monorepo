@@ -49,11 +49,12 @@ function startTemporaryCubeChange(api, narco)
     var modifier = createEffectModifier(api, "change-mind-cube-effect", "narcoEffects");
     if (!modifier)  { return; }
 
+    let duration = narco.duration * 1000;
     modifier.mindCubeChange =  narco.mindCubeTemp,
-    modifier.pushbackDuration =  narco.mindCubePushbackEnabled ? narco.duration * 100 : 0;
+    modifier.pushbackDuration =  narco.mindCubePushbackEnabled ? duration / 10 : 0;
 
     //Установка модификатора
-    addModifierTemporary(api, modifier, narco.duration * 1000 + modifier.pushbackDuration)
+    addModifierTemporary(api, modifier, duration + modifier.pushbackDuration)
 }
 
 function addTemporaryConditons(api, narco)
