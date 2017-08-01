@@ -9,12 +9,17 @@ let consts = require('../helpers/constants');
 
 function loadNarco(api, id)
 {
-    return api.getCatalogObject("narco", id.toLowerCase());
+    let drug =  api.getCatalogObject("pills", id);
+    if (drug && drug.pillType == 'narco') {
+        return drug;
+    } else {
+        return null;
+    }
 }
 
 function createEffectModifier(api, effectName, modifierId) {
     var effect = api.getCatalogObject("effects", effectName);
-    
+
     if (!effect) {
         api.warn("Can't load effect " + effectName);
         return;
@@ -22,7 +27,7 @@ function createEffectModifier(api, effectName, modifierId) {
 
     effect.enabled = true;
 
-    var modifier = { 
+    var modifier = {
         id: modifierId,
         name: modifierId,
         displayName: "Воздействие каких-то таблеток",
@@ -42,7 +47,7 @@ function addModifierTemporary(api, modifier, duration){
 }
 
 function startTemporaryCubeChange(api, narco)
-{    
+{
     api.debug("Narco will add modifier")
     //Изменение должно быть временным. Накладываем эффект
 
@@ -58,7 +63,7 @@ function startTemporaryCubeChange(api, narco)
 }
 
 function addTemporaryConditons(api, narco)
-{    
+{
     api.debug("Narco will add modifier")
 
     let modifier = createEffectModifier(api, "show-always-condition", "narcoEffectsCondition");
@@ -83,7 +88,7 @@ function performAscend(api)
     if (!modifier) {return;}
 
     modifier.conditions = ["ascend-condition"];
-    
+
     modifier = api.addModifier(modifier);
     api.debug(modifier);
 }
@@ -97,15 +102,19 @@ function dieHorribleDeath(api) {
 
 function applyNarcoEffect(api, data, event)
 {
-    api.info(`Taking narco effect: ${event.data}`);
-    let narco = loadNarco(api, event.data);
+    api.info(`Taking narco effect: ${event.data.id}`);
+
+    let narco = event.data.narco || loadNarco(api, event.data.id);;
+
     api.debug(JSON.stringify(narco));
-    
+
+    if (!narco) return;
+
     if (narco.mindCubePermanent) {
         //Изменение должно быть постоянным. Меняем базовую модель
         helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
     }
-    
+
     if (narco.mindCubeTemp) {
         //Изменение должно быть временным. Накладываем эффект
         startTemporaryCubeChange(api, narco);
@@ -122,11 +131,11 @@ function applyNarcoEffect(api, data, event)
             dieHorribleDeath(api);
         }
     }
-    
+
     narco.history_record = narco.history_record || 'Вы приняли таблетку.';
-    
-    api.debug("Narco will add history record " + narco.history_record)
-    helpers().addChangeRecord(api, narco.history_record, event.timestamp);       
+
+    api.debug("Narco will add history record " + narco.history_record);
+    helpers().addChangeRecord(api, narco.history_record, event.timestamp);
 }
 
 /**
@@ -134,7 +143,7 @@ function applyNarcoEffect(api, data, event)
  */
 function removeNarcoEffect(api, data, event)
 {
-    api.info(`Removing narco effect ${data.mID}`)
+    api.info(`Removing narco effect ${data.mID}`);
     if(data.mID){
         let modifier = api.getModifierById(data.mID);
         if(modifier){

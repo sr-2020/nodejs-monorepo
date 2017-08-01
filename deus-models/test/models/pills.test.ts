@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
+import { find } from 'lodash';
 
 interface Global {
     TEST_EXTERNAL_OBJECTS: any
@@ -14,6 +15,11 @@ global.TEST_EXTERNAL_OBJECTS = {
         '111-111': {
             _id: '111-111',
             pillId: 'firstAid1'
+        },
+
+        '111-112': {
+            _id: '111-112',
+            pillId: 'cometa'
         }
     }
 };
@@ -33,5 +39,25 @@ describe('Pills', () => {
         expect(workingModel.usedPills).to.has.property('firstAid1');
 
         expect(global.TEST_EXTERNAL_OBJECTS.pills['111-111']).to.has.property('usedBy', model._id);
+    });
+
+    it('Applies narco', async () => {
+        let model = getExampleModel();
+
+        let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
+        expect(effect).to.exist;
+    });
+
+    it('Should apply pills with qr-codes', async () => {
+        let model = getExampleModel();
+
+        let events = getEvents(model._id, [{ eventType: 'scanQR', data: { type: 1, payload: '111-112' } }], Date.now(), true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
+        expect(effect).to.exist;
     });
 });
