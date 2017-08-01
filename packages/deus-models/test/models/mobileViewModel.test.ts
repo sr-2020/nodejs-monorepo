@@ -178,7 +178,7 @@ describe("mobileViewModel", () => {
         //console.log(JSON.stringify(viewModel, null, 4));
     });
 
-     it.only("_view for robot is not so complicated", async function() {
+     it("_view for robot is not so complicated", async function() {
         let  model = getExampleModel("1000");
         model.profileType = "robot";
         const viewModel = await getViewModel(model);

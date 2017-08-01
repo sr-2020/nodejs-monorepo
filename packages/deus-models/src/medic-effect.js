@@ -223,7 +223,7 @@ function damageEffect(api, modifier){
     //Индикация для клиента, что системы организма не работают!
     //Проходим по всем системам и показываем состояния что система дохлая
     //Для андроидов видимо какая-то иная логика работы
-    if(api.model.systems && isHuman){
+    if(api.model.systems){
 
         api.info(`damageEffect: systems ${medHelpers().getSystemsStateString(api)}`);       
 
