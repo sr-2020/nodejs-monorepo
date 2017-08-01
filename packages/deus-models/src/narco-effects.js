@@ -72,7 +72,7 @@ function addTemporaryConditons(api, narco)
 function canAscend(api)
 {
     let genome = api.model.genome;
-    return (genome && genome["Z2"] == 0 && genomre["Z7"] == 3 && genome["Z10"] == 3 && genome["Z12"] == 3);
+    return (genome && genome[2] == 0 && genome[7] == 3 && genome[10] == 3 && genome[12] == 3);
 }
 
 function performAscend(api)
@@ -82,7 +82,7 @@ function performAscend(api)
     let modifier = createEffectModifier(api, "show-always-condition", "narcoAscendCondition");
     if (!modifier) {return;}
 
-    modifier.conditions = ["ascend-condtion"];
+    modifier.conditions = ["ascend-condition"];
 
     //TODO: add 2 max hp
     
@@ -99,22 +99,20 @@ function applyNarcoEffect(api, data, event)
     api.info(`Taking narco effect: ${event.data}`);
     let narco = loadNarco(api, event.data);
     api.debug(JSON.stringify(narco));
-    if (narco.mindCubePermanent)
-        {
-            //Изменение должно быть постоянным. Меняем базовую модель
-            helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
-        }
     
-    if (narco.mindCubeTemp)
-        {
-            //Изменение должно быть временным. Накладываем эффект
-            startTemporaryCubeChange(api, narco);
-        }
+    if (narco.mindCubePermanent) {
+        //Изменение должно быть постоянным. Меняем базовую модель
+        helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
+    }
+    
+    if (narco.mindCubeTemp) {
+        //Изменение должно быть временным. Накладываем эффект
+        startTemporaryCubeChange(api, narco);
+    }
 
-    if (narco.conditions)
-        {
-            addTemporaryConditons(api, narco);
-        }
+    if (narco.conditions) {
+        addTemporaryConditons(api, narco);
+    }
 
     if (narco.magicAscend) {
         if (canAscend(api)) {
