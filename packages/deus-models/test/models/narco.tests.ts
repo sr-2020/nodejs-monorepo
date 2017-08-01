@@ -116,8 +116,31 @@ describe('Narco effects: ', () => {
         model.genome[12] = 2;
         
         let events = getEvents(model._id, [ {eventType: 'take-narco', data: "ascend-apostle-pill"} ], model.timestamp, true );
+
         let {baseModel, workingModel } = await process(model, events);
 
         expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(0);
+    });
+
+    it.skip("Narco ascend failed and leads to death", async function(){
+        let model = getExampleModel();
+
+        model.genome[0] = 0;
+        model.genome[7] = 3;
+        model.genome[10] = 3;
+        model.genome[12] = 2;
+        
+        let events = getEvents(model._id, [ {eventType: 'take-narco', data: "ascend-apostle-pill"} ], model.timestamp, true );
+
+        let {baseModel, workingModel } = await process(model, events);
+
+        let refresh = [getRefreshEvent(model._id, 60* 60 * 24 * 1000) ];
+        let result = await process(baseModel, refresh);
+
+        baseModel = result.baseModel;
+        workingModel = result.workingModel;
+
+        expect(baseModel.isAlive).is.false;
+
     });
 });

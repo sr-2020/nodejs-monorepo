@@ -91,7 +91,10 @@ function performAscend(api)
 }
 
 function dieHorribleDeath(api) {
-    api.error ("Death is not a option. for now..");
+    api.info ("Anscension failed, death awaits..");
+    api.sendEvent (null, "start-illness", {"id" : "AnkylosingSpondylitis"});
+    api.sendEvent (null, "start-illness", {"id" : "DiseaseItsenkoKushinga"});
+    api.sendEvent (null, "start-illness", {"id" : "Dementia"});
 }
 
 function applyNarcoEffect(api, data, event)
