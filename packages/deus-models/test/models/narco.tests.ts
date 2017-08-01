@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import { process, printModel} from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
+import * as fs from 'async-file';
 
 describe('Narco effects: ', () => {
     it("Change mind cube", async function() {
@@ -73,5 +74,22 @@ describe('Narco effects: ', () => {
 
         expect(workingModel.changes.filter((e: any) => e.text == "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.").length)
             .is.equal(1);
+    });
+
+    it("All narcos parsed", async function(){
+        let all_narcos = JSON.parse(await fs.readTextFile("catalogs/narco.json")).narco;
+        let conditions = JSON.parse(await fs.readTextFile("catalogs/conditions.json")).conditions;
+
+        all_narcos.forEach((narco: any) => {
+            if (narco.conditions) {
+                narco.conditions.forEach((condition: string) => {
+                    let conditionObj = conditions.filter((c: any) => c.id == condition);
+                    expect(conditionObj.length).is.equal(1);
+                });
+            
+            expect(narco.id).is.exist;
+            expect(narco.duration).is.exist;
+            }
+        });
     });
 });
