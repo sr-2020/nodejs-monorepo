@@ -98,8 +98,8 @@ describe('Narco effects: ', () => {
 
         model.genome[0] = 0;
         model.genome[7] = 3;
-        model.genome[10] = 3;
-        model.genome[12] = 3;
+        model.genome[10] = 2;
+        model.genome[12] = 1;
         
         let events = getEvents(model._id, [ {eventType: 'take-narco', data: "ascend-apostle-pill"} ], model.timestamp, true );
         let {baseModel, workingModel } = await process(model, events);
