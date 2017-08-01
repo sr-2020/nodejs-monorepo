@@ -132,7 +132,9 @@ class App {
         return;
       }
 
-      const tokenUpdatedEvents = events.filter((event) => event.eventType == 'tokenUpdated');
+      const tokenUpdatedEvents = events.filter(
+        (event) => event.eventType == 'tokenUpdated' && event.data &&
+          event.data.token && event.data.token.registrationId);
       if (tokenUpdatedEvents.length > 0) {
         const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
         const existingCharacterWithThatToken =
