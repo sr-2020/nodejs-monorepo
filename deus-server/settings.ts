@@ -14,13 +14,13 @@ export class CheckForInactivitySettings {
   // If set, check will be performed only
   // when Date().getHours() (returns current hour of day, from 0 to 23)
   // is greater than allowFromHour
-  @JsonMember
+  @JsonMember({type: Number})
   public allowFromHour?: number;
 
   // If set, check will be performed only
   // when Date().getHours() (returns current hour of day, from 0 to 23)
   // is lesser than allowToHour
-  @JsonMember
+  @JsonMember({type: Number})
   public allowToHour?: number;
 }
 
