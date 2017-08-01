@@ -27,7 +27,7 @@ export class Worker {
     }
 
     configure(config: config.ConfigInterface): Worker {
-        Logger.debug('engine', 'config loaded: %j', config);
+        Logger.debug('engine', 'config loaded: %s', inspect(config));
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 

@@ -41,7 +41,7 @@ export class Dispatcher implements DispatcherInterface {
     dispatch(event: Event, context: Context): Context {
         if (!this.store[event.eventType]) return context;
 
-        const api = ModelApiFactory(context);
+        const api = ModelApiFactory(context, event);
         const handlers = this.store[event.eventType];
 
         handlers.forEach((f) => f(api, event.data, event));

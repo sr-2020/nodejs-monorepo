@@ -186,19 +186,19 @@ export class Context {
         return this;
     }
 
-    sendEvent(characterId: string | null, eventType: string, data: any) {
+    sendEvent(characterId: string | null, eventType: string, timestamp: number, data: any) {
         if (!characterId || characterId == this._ctx.characterId) {
             this._events.unshift({
                 characterId: this._ctx.characterId,
                 eventType,
-                timestamp: this.timestamp,
+                timestamp: timestamp,
                 data
             });
         } else {
             this._outboundEvents.push({
                 characterId,
                 eventType,
-                timestamp: this.timestamp,
+                timestamp: timestamp,
                 data
             })
         }

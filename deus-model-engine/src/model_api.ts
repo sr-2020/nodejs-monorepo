@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
-import { FieldName, FieldValue, Timer, Context } from './context'
+import { Event } from 'deus-engine-manager-api';
 
+import { FieldName, FieldValue, Timer, Context } from './context'
 import Logger from './logger';
 
 export interface ReadModelApiInterface {
@@ -136,6 +137,10 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
 }
 
 class ModelApi extends ReadModelApi implements ModelApiInterface {
+    constructor(contextGetter: () => Context, private currentEvent?: Event) {
+        super(contextGetter);
+    }
+
     addModifier(modifier: any) {
         let m = cloneDeep(modifier);
 
@@ -190,7 +195,8 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
     }
 
     sendEvent(characterId: string | null, event: string, data: any) {
-        this.contextGetter().sendEvent(characterId, event, data);
+        let timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+        this.contextGetter().sendEvent(characterId, event, timestamp, data);
         return this;
     }
 }
@@ -210,8 +216,8 @@ class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {
     }
 }
 
-export function ModelApiFactory(context: Context): ModelApiInterface {
-    return new ModelApi(() => context);
+export function ModelApiFactory(context: Context, event?: Event): ModelApiInterface {
+    return new ModelApi(() => context, event);
 }
 
 export function ViewModelApiFactory(context: Context, baseContext: Context): ViewModelApiInterface {
