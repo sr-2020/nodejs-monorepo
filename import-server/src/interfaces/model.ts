@@ -59,6 +59,10 @@ export class DeusModel{
     isAlive: boolean = true;  //Если false = персонаж мертв
     inGame: boolean = false; //Если true - персонаж в игре, и обновлять при импорте эту модель нельзя
 
+    lastVREnterTimestamp: number;
+    lastVREnterDuration: number;
+    totalSpentInVR: number;
+
 //Только для типа профиля "human"
     sex?: string;            //пол
     generation?: string;     //Поколение (A / W / Z / X/Y)

@@ -146,6 +146,20 @@
             "effects": [
                 "recoverHpEvent"
             ]
+        },
+        {
+            "id": "enterVr",
+            "eventType": "enterVr",
+            "effects": [
+                "enterVREvent"
+            ]
+        },
+        {
+            "id": "exitVr",
+            "eventType": "exitVr",
+            "effects": [
+                "exitVREvent"
+            ]
         }
     ]
 }
