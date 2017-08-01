@@ -72,7 +72,7 @@ function addTemporaryConditons(api, narco)
 function canAscend(api)
 {
     let genome = api.model.genome;
-    return (genome && genome[2] == 0 && genome[7] == 3 && genome[10] == 3 && genome[12] == 3);
+    return (genome && genome[2] == 0 && genome[7] == 3 && genome[10] == 2 && genome[12] == 1);
 }
 
 function performAscend(api)
@@ -83,8 +83,6 @@ function performAscend(api)
     if (!modifier) {return;}
 
     modifier.conditions = ["ascend-condition"];
-
-    //TODO: add 2 max hp
     
     modifier = api.addModifier(modifier);
     api.debug(modifier);
