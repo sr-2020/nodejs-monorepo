@@ -53,11 +53,15 @@ function getRobotViewModel()
                         "value": "мужской"
                     },
                     {
-                        "text": "Поколение",
-                        "value": "W"
+                        "text": "Создатель",
+                        "value": "Господь Бог"
                     },
                     {
-                        "text": "Проживание ",
+                        "text": "Владелец",
+                        "value": "ничей"
+                    },
+                    {
+                        "text": "Проживание",
                         "value": "Жилые комплексы PanAm"
                     },
                     {
@@ -181,6 +185,8 @@ describe("mobileViewModel", () => {
      it("_view for robot is not so complicated", async function() {
         let  model = getExampleModel("1000");
         model.profileType = "robot";
+        model.owner = "ничей";
+        model.creator = "Господь Бог";
         const viewModel = await getViewModel(model);
         expect(viewModel).to.be.deep.equal(getRobotViewModel());
     });
