@@ -43,7 +43,7 @@ export class EconomyProvision {
                 Email: char.model.login,
                 Password: password,
                 Fullname: this.createFullName(char.model),
-                Cash: config.economicsStartCash
+                //Cash: config.economicsStartCash
             }
 
             if(char.model.insurance && char.model.insuranceLevel){
