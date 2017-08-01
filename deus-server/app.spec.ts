@@ -326,6 +326,94 @@ describe('API Server', () => {
       expect(doc).to.deep.include({ characterId: '00001' });
     });
 
+    it('Puts only last _RefreshModel event to db', async () => {
+      const events = [{
+        eventType: '_RefreshModel',
+        timestamp: 4365,
+      },
+      {
+        eventType: '_RefreshModel',
+        timestamp: 4366,
+      },
+      {
+        eventType: 'TestEvent',
+        timestamp: 4367,
+      }]
+      const response = await rp.post(address + '/events/some_user',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(2);
+      expect(docs.rows[0].doc).to.deep.include(events[1]);
+      expect(docs.rows[1].doc).to.deep.include(events[2]);
+    });
+
+    it('Puts only last _RefreshModel event to db - 2', async () => {
+      const events = [
+        {
+          eventType: 'TestEvent',
+          timestamp: 4365,
+        },
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4366,
+        },
+        {
+          eventType: 'TestEvent',
+          timestamp: 4367,
+        },
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4368,
+        }];
+      const response = await rp.post(address + '/events/some_user',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(3);
+      expect(docs.rows[0].doc).to.deep.include(events[0]);
+      expect(docs.rows[1].doc).to.deep.include(events[2]);
+      expect(docs.rows[2].doc).to.deep.include(events[3]);
+    });
+
+    it('Puts only last _RefreshModel event to db - 3', async () => {
+      const events = [
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4365,
+        },
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4366,
+        },
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4367,
+        },
+        {
+          eventType: '_RefreshModel',
+          timestamp: 4368,
+        }];
+      const response = await rp.post(address + '/events/some_user',
+        {
+          resolveWithFullResponse: true, json: { events },
+          auth: { username: 'some_user', password: 'qwerty' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(202);
+      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      expect(docs.rows.length).to.equal(1);
+      expect(docs.rows[0].doc).to.deep.include(events[3]);
+    });
+
     it('Filters out tokenUpdated events', async () => {
       const events = [{
         eventType: 'tokenUpdated',

@@ -151,13 +151,19 @@ class App {
       events = events.filter((event) => event.eventType != 'tokenUpdated');
 
       const eventTypes: string[] = events.map((event) => event.eventType);
-
       const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
       if (isMobileClient) {
         events.forEach((event) => event.mobile = true);
         const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
         events = events.filter((value: any) =>
           value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
+        const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
+
+        const lastRefreshModelEventTimestamp =
+          Math.max(...refreshModelEvents.map((event) => event.timestamp));
+        console.warn(lastRefreshModelEventTimestamp);
+        events = events.filter((value: any) =>
+          value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
       }
 
       try {
