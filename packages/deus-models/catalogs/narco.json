@@ -1,14 +1,23 @@
 {
-    "narco":
+    "pills":
     [
         {
+            "id": "firstAid1",
+            "pillType": "aid",
+            "affectedGenomePos": 1,
+            "affectedGenomeVal": 1
+        },
+
+        {
             "id":"altnarco",
+            "pillType": "narco",
             "duration": 18000,
             "mindCubePermanent" : "F3+6",
             "mindCubeTemp" : "E1+65,C5-60"
         },
         {
             "id":"altnarco_with_pushback",
+            "pillType": "narco",
             "duration": 18000,
             "mindCubePushbackEnabled" : true,
             "mindCubePermanent" : "F2+6",
@@ -16,6 +25,7 @@
         },
         {
             "id":"cometa",
+            "pillType": "narco",
             "duration": 7200,
             "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
             "mindCubePermanent" : "F2+7",
@@ -26,6 +36,7 @@
         },
         {
             "id":"quasar",
+            "pillType": "narco",
             "duration": 7200,
             "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
             "mindCubePermanent" : "F2+7",
@@ -36,6 +47,7 @@
         },
         {
             "id":"pulsar",
+            "pillType": "narco",
             "duration": 7200,
             "history_record": "Таблетка начала действовать. Надень браслет и следуй указаниям дилера.",
             "mindCubePermanent" : "F2+7",
@@ -47,6 +59,7 @@
         },
         {
             "id":"janus",
+            "pillType": "narco",
             "duration": 7200,
             "conditions":
             [
@@ -56,6 +69,7 @@
         },
         {
             "id":"skvt16",
+            "pillType": "narco",
             "duration": 7200,
             "conditions":
             [
@@ -64,18 +78,21 @@
         },
         {
             "id":"occam-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp" : "С1+3",
             "conditions" : [ "occam-condition"]
         },
         {
             "id": "ascend-apostle-pill",
+            "pillType": "narco",
             "duration": 7200,
             "magicAscend": true,
             "_comment": "TODO How to death"
         },
         {
             "id":"talker-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp" : "E5+25,D3+25",
             "mindCubePermanent" : "E5+2,D3+2",
@@ -83,6 +100,7 @@
         },
         {
             "id":"passion-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp" : "C2-25,A0+15",
             "mindCubePermanent" : "C2-2,A0+1",
@@ -90,6 +108,7 @@
         },
         {
             "id":"pacific-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp" : "A1+15,C4+25",
             "mindCubePermanent" : "A1+1,C4+2",
@@ -97,11 +116,13 @@
         },
         {
             "id":"zagrey-pill",
+            "pillType": "narco",
             "duration": 1800,
             "mindCubePermanent" : "B1-45,B2-42"
         },
         {
             "id": "unlock-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp": "C1-30,E2-25",
             "mindCubePushbackEnabled": true,
@@ -109,6 +130,7 @@
         },
         {
             "id": "memory-pill",
+            "pillType": "narco",
             "duration": 7200,
             "mindCubeTemp": "F0-35,B2+50",
             "mindCubePushbackEnabled": true,
@@ -116,6 +138,7 @@
         },
         {
             "id": "apollo-geracle-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubePushbackEnabled": true,
             "mindCubeTemp": "B0+50",
@@ -124,6 +147,7 @@
         },
         {
             "id": "apollo-geracle-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubePushbackEnabled": true,
             "mindCubeTemp": "B0+50",
@@ -132,6 +156,7 @@
         },
         {
             "id": "apollo-freeze-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubePushbackEnabled": true,
             "mindCubeTemp": "B0+50",
@@ -140,6 +165,7 @@
         },
         {
             "id": "apollo-thunder-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubePushbackEnabled": true,
             "mindCubeTemp": "B5+50",
@@ -148,6 +174,7 @@
         },
         {
             "id": "apollo-berserk-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubePushbackEnabled": true,
             "mindCubeTemp": "C4-25",
@@ -156,24 +183,28 @@
         },
         {
             "id": "tanatos-belmo-pill",
+            "pillType": "narco",
             "duration": 600,
             "mindCubeTemp": "B3-40",
             "mindCubePermanent": "B3-2"
         },
         {
             "id": "tanatos-staz-pill",
+            "pillType": "narco",
             "duration": 600,
             "mindCubeTemp": "B0-37",
             "mindCubePermanent": "B0-2"
         },
         {
             "id": "tanatos-afazia-pill",
+            "pillType": "narco",
             "duration": 750,
             "mindCubeTemp": "B1-35",
             "mindCubePermanent": "B1-2"
         },
         {
             "id": "tanatos-buran-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubeTemp": "C6+17",
             "mindCubePermanent": "C6+1",
@@ -182,6 +213,7 @@
         },
         {
             "id": "tanatos-papuas-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubeTemp": "E1-34, D1+24",
             "mindCubePermanent": "E1+3",
@@ -189,6 +221,7 @@
         },
         {
             "id": "emotional-pill",
+            "pillType": "narco",
             "duration": 3600,
             "mindCubeTemp": "С1-35,E4-25",
             "mindCubePermanent": "E4+2",

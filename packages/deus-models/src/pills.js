@@ -22,6 +22,11 @@ function useAid(api, pill) {
     }
 }
 
+function useNarco(api, pill) {
+    if (api.model.profileType !== 'human') return;
+    api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
+}
+
 function usePill(api, data, event) {
     if (!api.model.isAlive) return;
 
@@ -41,6 +46,12 @@ function usePill(api, data, event) {
     case 'aid':
         useAid(api, pill);
         break;
+    case 'narco':
+        useNarco(api, pill);
+        break;
+
+    default:
+        return;
     }
 
     _.set(api.model, ['usedPills', pill.id], event.timestamp);

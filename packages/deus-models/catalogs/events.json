@@ -188,6 +188,12 @@
             "effects": [
                 "recoverSystemsEvent"
             ]
+        },
+        {
+            "eventType": "scanQR",
+            "effects": [
+                "scanQR"
+            ]
         }
     ]
 }

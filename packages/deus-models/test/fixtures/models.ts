@@ -53,17 +53,17 @@ export const getExampleModel = (id?: string) => ({
     totalSpentInVR: 0,
 
     mind: {
-        "A": [ 53, 47,56 ],
-        "B":[50,57,40,55,55,46,51,54,55,54],
-        "C":[56,49,41,43,55,53,46,41],
-        "D":[48,42,44,44,60,49,49,56,54],
-        "E":[54,57,55,41,55,46,53],
-        "F":[47,58,41,56]
+        "A": [53, 47, 56],
+        "B": [50, 57, 40, 55, 55, 46, 51, 54, 55, 54],
+        "C": [56, 49, 41, 43, 55, 53, 46, 41],
+        "D": [48, 42, 44, 44, 60, 49, 49, 56, 54],
+        "E": [54, 57, 55, 41, 55, 46, 53],
+        "F": [47, 58, 41, 56]
     },
 
-    genome: [1,0,0,1,0,0,0,0,0,1,2,0,0],
+    genome: [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 2, 0, 0],
 
-    systems: [1,1,1,1,1,1],
+    systems: [1, 1, 1, 1, 1, 1],
 
     timestamp: 0,
     conditions: [
@@ -95,27 +95,27 @@ export const getExampleModel = (id?: string) => ({
             mID: "_internal_damage"
         },
         {
-                id: "mindcubes_showdata",
-                displayName: "internal mind cube conditions modifier",
-                class: "_internal",
-                effects: [
-                    {        
-                        "id"    : "show-condition",       
-                        "class"   : "physiology",    
-                        "type"    : "normal",        
-                        "handler" : "showCondition",
-                        enabled: true
-                    },
-                ],
-                enabled: true,
-                mID: "_internal_mindcubes"
+            id: "mindcubes_showdata",
+            displayName: "internal mind cube conditions modifier",
+            class: "_internal",
+            effects: [
+                {
+                    "id": "show-condition",
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "showCondition",
+                    enabled: true
+                },
+            ],
+            enabled: true,
+            mID: "_internal_mindcubes"
         }
     ],
     changes: [
         {
-        "mID": "4485090f-55a3-4d4f-8218-d0ca57fae110",
-        "text": "Включен имплант",
-        "timestamp": 1483228800,
+            "mID": "4485090f-55a3-4d4f-8218-d0ca57fae110",
+            "text": "Включен имплант",
+            "timestamp": 1483228800,
         },
     ],
     messages: [
