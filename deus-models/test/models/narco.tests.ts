@@ -92,4 +92,32 @@ describe('Narco effects: ', () => {
             }
         });
     });
+
+    it("Narco ascend", async function(){
+        let model = getExampleModel();
+
+        model.genome[0] = 0;
+        model.genome[7] = 3;
+        model.genome[10] = 3;
+        model.genome[12] = 3;
+        
+        let events = getEvents(model._id, [ {eventType: 'take-narco', data: "ascend-apostle-pill"} ], model.timestamp, true );
+        let {baseModel, workingModel } = await process(model, events);
+
+        expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(1);
+    });
+
+    it("Narco ascend failed", async function(){
+        let model = getExampleModel();
+
+        model.genome[0] = 0;
+        model.genome[7] = 3;
+        model.genome[10] = 3;
+        model.genome[12] = 2;
+        
+        let events = getEvents(model._id, [ {eventType: 'take-narco', data: "ascend-apostle-pill"} ], model.timestamp, true );
+        let {baseModel, workingModel } = await process(model, events);
+
+        expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(0);
+    });
 });

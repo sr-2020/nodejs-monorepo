@@ -218,7 +218,11 @@ function addCharacterCondition( api, condId ){
         let condition = api.getCatalogObject("conditions", condId);
 
         if(condition){
+            api.debug(JSON.stringify(condition));
             return api.addCondition(condition);
+        }
+        else {
+            api.info("Couldn't find condition " + condId);
         }
     }
 
