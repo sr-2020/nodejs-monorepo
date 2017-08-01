@@ -291,16 +291,15 @@ class App {
         if (autoNotifySettings.allowToHour && autoNotifySettings.allowToHour < currentHour)
           return;
         try {
-        const inactiveIDs =
-          await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
-        inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
-          this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
+          const inactiveIDs =
+            await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
+          inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
+            this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
         } catch (e) {
           this.logger.error(e);
         }
       }, autoNotifySettings.performOncePerMs);
     }
-    console.error('autoRefreshSettings.allowFromHour');
 
     if (this.settings.pushSettings.autoRefresh) {
       const autoRefreshSettings = this.settings.pushSettings.autoRefresh;
