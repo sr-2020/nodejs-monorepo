@@ -59,6 +59,9 @@ function calcMaxHP(api){
  
 }
 
+/**
+ * Поставить состояние системы по названию
+ */
 function setMedSystem(api, system, value){
     let i = consts().medicSystems.findIndex( m => m.name == system );
 
@@ -67,12 +70,55 @@ function setMedSystem(api, system, value){
     }
 }
 
+/**
+ * Проверить: есть ли в организме неработающие системы, на которых нет включенных имплантов 
+ * (т.е. в тяжелом ли ранении персонаж)
+ * Возвращает массив с номерами таких систем (пустой, если таких систем нет) 
+ * Если у персонажа нет систем - возвращает пустой массив
+ */
+function getDeadSystems(api){
+    let ret = [];
+
+    if(api.model.systems){
+        api.model.systems.forEach( (sys,i) => {
+            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+
+            if(!sys && !implants.length){
+                ret.push(i);
+            }
+        });
+    }
+
+    return ret;
+}
+
+/**
+ * Вернуть строку описывающую состояние систем
+ */
+function getSystemsStateString(api){
+    if(api.model.systems){
+        let systemsStr = api.model.systems.map( (s, i) => { 
+            let imps = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+            let impDat = imps.length ? ` (+${imps.length})` : '';
+
+            return `${consts().medicSystems[i].name.substring(0,3)}: ${s}${impDat}`
+        }).join(',')
+            
+        return  "[ " + systemsStr + " ]";
+    }
+
+    return "";
+}
+
+
 module.exports = () => {
     return {
         addDamage,
         restoreDamage,
         calcMaxHP,
-        setMedSystem
+        setMedSystem,
+        getDeadSystems,
+        getSystemsStateString
     };
 };
 

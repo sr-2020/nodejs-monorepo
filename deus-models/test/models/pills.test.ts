@@ -13,9 +13,7 @@ global.TEST_EXTERNAL_OBJECTS = {
     pills: {
         '111-111': {
             _id: '111-111',
-            pillType: 'aid',
-            affectedGenomePos: 1,
-            affectedGenomeVal: 1
+            pillId: 'firstAid1'
         }
     }
 };
@@ -32,5 +30,8 @@ describe('Pills', () => {
 
         ({ baseModel, workingModel } = await process(baseModel, events));
         expect(workingModel.hp).to.equals(3);
+        expect(workingModel.usedPills).to.has.property('firstAid1');
+
+        expect(global.TEST_EXTERNAL_OBJECTS.pills['111-111']).to.has.property('usedBy', model._id);
     });
 });

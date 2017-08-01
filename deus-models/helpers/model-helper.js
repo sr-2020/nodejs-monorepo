@@ -298,7 +298,7 @@ let restrictedVars = ["_id", "id", "hp", "maxHp", "login", "mail", "profileType"
  */
 function modifyModelProperties(api, operations){
     if(operations){
-        operations.replace(/\s/i,'').split(',').forEach( op => {
+        operations.replace(/\s/ig,'').split(',').forEach( op => {
             let parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
             if(parts){
@@ -378,6 +378,28 @@ function setTimerToKillModifier(api, modifier, timestamp)
         {mID : modifier.mID} );
 }
 
+
+const implantClasses = [
+    "cyber-implant",
+    "bio-implant",
+    "illegal-cyber-implant",
+    "illegal-bio-implant",
+    "virtual"
+];
+
+/**
+ * Проверяет класс модификатора и возращается true если это имплант 
+ */
+function isImplant(modifier){
+    if(modifier.class && implantClasses.find(c => c == modifier.class)){
+        return true;
+    }
+
+    return false;
+}
+
+
+ 
 module.exports = () => {
     return {
         loadImplant,
@@ -393,7 +415,8 @@ module.exports = () => {
         addDelayedEvent,
         removeElementByMID,
         modifyModelProperties,
-        setTimerToKillModifier
+        setTimerToKillModifier,
+        isImplant
     };
 };
 

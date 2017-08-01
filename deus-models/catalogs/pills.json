@@ -1,0 +1,10 @@
+{
+    "pills": [
+        {
+            "id": "firstAid1",
+            "pillType": "aid",
+            "affectedGenomePos": 1,
+            "affectedGenomeVal": 1
+        }
+    ]
+}

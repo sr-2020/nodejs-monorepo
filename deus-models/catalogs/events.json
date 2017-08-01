@@ -176,6 +176,12 @@
             "effects": [
                 "exitVREvent"
             ]
+        },
+        {
+            "eventType": "recover-systems",
+            "effects": [
+                "recoverSystemsEvent"
+            ]
         }
     ]
 }
