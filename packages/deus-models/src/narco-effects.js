@@ -21,7 +21,7 @@ function startTemporaryCubeChange(api, narco)
     
     if (!effect)
         {
-            api.warning("Can't load effect change-mind-cube-effect");
+            api.warn("Can't load effect change-mind-cube-effect");
             return;
         }
 
@@ -57,7 +57,7 @@ function addTemporaryConditons(api, narco)
     
     if (!effect)
         {
-            api.warning("Can't load effect change-mind-cube-effect");
+            api.warn("Can't load effect change-mind-cube-effect");
             return;
         }
 
