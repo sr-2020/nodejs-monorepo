@@ -50,17 +50,24 @@ function getStartPage(model) {
                     text: "Проживание ",
                     value: model.sweethome,
                 },
-                {
-                    text: "Работа",
-                    value: model.corporation,
-                },
-                {
-                    text: "Страховка",
-                    value: model.insuranceDiplayName,
-                }
             ],
         },
     };
+
+    let workRow  = {
+        text: "Работа",
+        value: model.corporation,
+    };
+
+    let insuranceRow = {
+        text: "Страховка",
+        value: model.insuranceDiplayName,
+    };
+
+    if (model.profileType=="human"){
+        pageInfo.body.items.push(workRow);
+        pageInfo.body.items.push(insuranceRow);
+    }
 
     let hpRow = {
         text: "Hit Points",
@@ -77,7 +84,7 @@ function getStartPage(model) {
          hpRow.valueColor = "#ff565c";
     }
 
-    pageInfo.body.items.push(hpRow);    
+    pageInfo.body.items.push(hpRow);  
 
     let handicaps = getHandicaps(model);
     if(handicaps){
@@ -385,17 +392,17 @@ function getMessagesPage(model) {
 
 
 function getPages(model) {
-    let pages = [
-        getStartPage(model),
-        // TODO: Add insurance
-        getMemoryPage(model),
-        getConditionsPage(model),
-        getImplantsPage(model),
-        getEconomyPage(),
-        //getAdminsPage(model),
-        getChangesPage(model),
-        getMessagesPage(model),
-    ];
+    let pages = [];
+
+    pages.push(getStartPage(model));
+    pages.push(getMemoryPage(model));
+    pages.push(getConditionsPage(model));
+    pages.push(getImplantsPage(model));
+    if (model.profileType == "human") {
+        pages.push(getEconomyPage(model));
+    }
+    pages.push(getChangesPage(model));
+    pages.push(getMessagesPage(model));
 
     if(model.adminTestUser){
         pages.push(getAdminsPage(model));
