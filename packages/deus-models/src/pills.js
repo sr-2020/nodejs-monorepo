@@ -1,5 +1,8 @@
-var _ = require('lodash');
-var medicHelpers = require('../helpers/medic-helper.js')();
+const _ = require('lodash');
+const medicHelpers = require('../helpers/medic-helper.js')();
+
+const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
+
 
 function useCure(api, pill) {
     // нет болезней - нет лечения
@@ -36,22 +39,26 @@ function usePill(api, data, event) {
     let pill = api.getCatalogObject('pills', code.pillId);
     if (!pill) return;
 
-    switch (pill.pillType) {
-    case 'cure':
-        useCure(api, pill);
-        break;
-    case 'stamm':
-        useStamm(api, pill);
-        break;
-    case 'aid':
-        useAid(api, pill);
-        break;
-    case 'narco':
-        useNarco(api, pill);
-        break;
+    const previousUsage = _.get(api.model, ['usedPills', pill.id]);
 
-    default:
-        return;
+    if (!previousUsage || event.timestamp - previousUsage > PILL_TIMEOUT) {
+        switch (pill.pillType) {
+        case 'cure':
+            useCure(api, pill);
+            break;
+        case 'stamm':
+            useStamm(api, pill);
+            break;
+        case 'aid':
+            useAid(api, pill);
+            break;
+        case 'narco':
+            useNarco(api, pill);
+            break;
+
+        default:
+            return;
+        }
     }
 
     _.set(api.model, ['usedPills', pill.id], event.timestamp);
