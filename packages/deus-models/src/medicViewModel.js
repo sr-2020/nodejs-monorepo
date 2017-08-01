@@ -49,7 +49,8 @@ function getViewModel(api, data) {
         ret.memory = Array.from(api.model.memory, m => ({
             title : m.title, 
             text : m.text ? m.text : "",
-            url : m.url ? m.url : ""
+            url : m.url ? m.url : "",
+            mID : m.mID
         }));
     }
 

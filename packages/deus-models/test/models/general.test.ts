@@ -119,12 +119,21 @@ describe('General events: ', () => {
             title: "Новое воспоминание 2",
             text:  "Текст нового воспоминания 2"
         };
+        
+        let data3 = {
+            mID: "82eb411a-51cb-478d-9f90-5f6f52660a0d",
+            title: "Обновленное воспоминание №2",
+            text:  "Текст Обновленное воспоминание №2"
+        };
 
         let modelData = {
-            remove: [ "6acf27a6-fd6e-4477-b526-e1fbe25c416b", "82eb411a-51cb-478d-9f90-5f6f52660a0d" ],
+            remove: [ "6acf27a6-fd6e-4477-b526-e1fbe25c416b" ],
             add: [
                 data1,
-                data2
+                data2,
+            ],
+            update: [
+                data3
             ]
         }
 
@@ -132,16 +141,19 @@ describe('General events: ', () => {
         let events = getEvents(model._id, [ {eventType: 'change-memory', data: modelData} ], model.timestamp + 100);
         let {baseModel, workingModel } = await process(model, events);
 
-        printModel(baseModel);
+        //printModel(baseModel);
 
         let msg1 = baseModel.memory.find((c: any) => c.title == "Название воспоминания №1");
         let msg2 = baseModel.memory.find((c: any) => c.title == "Новое воспоминание 1");
         let msg3 = baseModel.memory.find((c: any) => c.title == "Новое воспоминание 2");
+        let msg4 = baseModel.memory.find((c: any) => c.title == "Обновленное воспоминание №2");
+
 
         expect(msg1).is.not.exist;
         expect(msg2).is.exist;
         expect(msg3).is.exist;
-
+        expect(msg4).is.exist;
+        expect(msg4.text).is.equal("Текст Обновленное воспоминание №2");
     });
 
     it("Change insurance", async function() {

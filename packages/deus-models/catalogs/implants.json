@@ -1632,6 +1632,119 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "jj_meditation",
+            "displayName": "Клон щитовидной железы \"Медитация\"",
+            "class": "bio-implant",
+            "system": "endocrine",
+            "details": "Восстановление хитов после тяжелого ранения.",
+            "effects": [
+                "show-condition",
+                "timed-recover-systems"
+            ],
+            "predicates": [
+                {
+                    "variable": "Z10",
+                    "value": "0",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_meditation-0"
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "0",
+                    "effect": "timed-recover-systems",
+                    "params": {
+                        "recoveryTime": 1200,
+                        "hpRemain": 2
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "1",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_meditation-1"
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "1",
+                    "effect": "timed-recover-systems",
+                    "params": {
+                        "recoveryTime": 900,
+                        "hpRemain": 2
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "2",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_meditation-2"
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "2",
+                    "effect": "timed-recover-systems",
+                    "params": {
+                        "recoveryTime": 600,
+                        "hpRemain": 3
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "3",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_meditation-3"
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "3",
+                    "effect": "timed-recover-systems",
+                    "params": {
+                        "recoveryTime": 600,
+                        "hpRemain": 4
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "4",
+                    "effect": "show-condition",
+                    "params": {
+                        "condition": "jj_meditation-4"
+                    }
+                },
+                {
+                    "variable": "Z10",
+                    "value": "4",
+                    "effect": "timed-recover-systems",
+                    "params": {
+                        "recoveryTime": 300
+                    }
+                },
+                {
+                    "variable": "C7",
+                    "value": "0-49",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "C7+20,D2-10"
+                    }
+                },
+                {
+                    "variable": "C7",
+                    "value": "50-79",
+                    "effect": "inst_changeMindCube",
+                    "params": {
+                        "change": "C7+10,D2-10"
+                    }
+                }
+            ]
         }
     ]
 }

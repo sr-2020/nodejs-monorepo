@@ -99,7 +99,7 @@ function sendMessageEvent ( api, data, event ){
  */
 function changeMindCubeEvent( api, data, event ){
     if(data.operations){
-        let norm = data.operations.toUpperCase().replace(/\s/i,'');
+        let norm = data.operations.toUpperCase().replace(/\s/ig,'');
         helpers().modifyMindCubes(api, api.model.mind, norm);
     }
 }
@@ -186,6 +186,19 @@ function changeMemoryEvent( api, data, event ){
         data.remove.forEach( mID => {
                 api.info(`changeMemory: remove element with ${mID}` );
                 api.model.memory = api.model.memory.filter( mem => mem.mID ? ( mem.mID != mID ) : true );
+        });
+    }
+
+    if(data.update){
+        data.update.forEach( mem => { 
+            if(mem.title && mem.mID){
+                let elem = api.model.memory.find( e => e.mID == mem.mID );
+                if(elem){
+                    elem.title = mem.title;
+                    if(mem.text) { elem.text = mem.text }
+                    if(mem.url)  { elem.url = mem.url }
+                }
+            }
         });
     }
 
