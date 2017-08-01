@@ -38,7 +38,7 @@ export function implantsDataLoad(authClient): Promise<any> {
 }
 
 export function illnessesDataLoad(authClient): Promise<any> {
-    const request = defaultParams({ auth: authClient, range: "Illnesses!A4:S100" });
+    const request = defaultParams({ auth: authClient, range: "Illnesses!A4:T100" });
     return getValues(request);
 }
 

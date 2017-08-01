@@ -14,6 +14,7 @@ import { Predicate } from '../interfaces/predicate';
 import { saveObject, MindCubesModifier } from '../helpers'
 import { effectNames, conditionTypes, implantClasses, implantCorp, systems, implantSystems } from './constants'
 import { GenEffectData, MindEffectData, ImplantData } from './ImplantData';
+import { IllnessData } from './illnessData'
 import { ConditionData } from './conditionData'
 import { PillData, parsePill } from './pillsData';
 import * as loaders from './loaders';
@@ -32,6 +33,7 @@ export class TablesImporter {
     private implantDB: any = null;
     private conditionDB: any = null;
     private pillsDB: any = null;
+    private illnessesDB: any = null;
 
     tablesData: TablesData = {
         implantsData: [],
@@ -50,6 +52,7 @@ export class TablesImporter {
         effects: ["show-condition"],
         predicates: []
     };
+    illnesses: DeusCondition[] = [];
 
     constructor() {
         const ajaxOpts = {
@@ -62,6 +65,7 @@ export class TablesImporter {
         this.implantDB = new PouchDB(`${config.url}${config.catalogs.implants}`, ajaxOpts);
         this.conditionDB = new PouchDB(`${config.url}${config.catalogs.condition}`, ajaxOpts);
         this.pillsDB = new PouchDB(`${config.url}${config.catalogs.pills}`, ajaxOpts);
+        this.illnessesDB = new PouchDB(`${config.url}${config.catalogs.illnesses}`, ajaxOpts);
     }
 
 
@@ -83,8 +87,11 @@ export class TablesImporter {
     private async importImplants(authClient: any) {
         const implants = await loaders.implantsDataLoad(authClient);
 
+       // console.log(JSON.stringify(Object.keys(implants),null,4));
+
+
         // Превратить в список объектов ImplantData
-        this.tablesData.implantsData = implants[0].values
+        this.tablesData.implantsData = implants.values
             .filter(row => row[0] == "ready")
             .map((row, i, arr) => new ImplantData(row, i));
 
@@ -109,14 +116,20 @@ export class TablesImporter {
 
     private async importIllnesses(authClient: any) {
         const illnesses = await loaders.illnessesDataLoad(authClient);
-        this.tablesData.illnessesData = illnesses[0].values.filter(row => row[0] == "ready");
+
+        this.tablesData.illnessesData = illnesses.values
+                .filter(row => row[0] == "ready")
+                .map((row, i) => new IllnessData(row, i));
+
         winston.info("Illneses table loaded!");
     }
 
     private async importConditions(authClient: any) {
         const conditions = await loaders.conditionsDataLoad(authClient);
 
-        this.tablesData.conditionsData = conditions[0].values
+        console.log(JSON.stringify(Object.keys(conditions),null,4));
+
+        this.tablesData.conditionsData = conditions.values
             .map((row, i) => new ConditionData(row, i))
             .filter(condData => condData.title);
 
@@ -144,10 +157,12 @@ export class TablesImporter {
             this.createImplants();
             this.createMindConditions();
             this.implants.push(this.mindCubeModifier);
+            this.createIllnesses();
 
             await this.saveImplants();
             await this.saveConditions();
-            await this.savePills();
+           // await this.savePills();
+            await this.saveIlnesses();
 
             return this;
         }
@@ -181,12 +196,61 @@ export class TablesImporter {
             .toPromise();
     }
 
+    /**
+     *  Сохранить болезни в БД, с обновлением существующих
+     */
+    private saveIlnesses(): Promise<any[]> {
+        return Observable.from(this.illnesses)
+            .flatMap(ill => saveObject(this.illnessesDB, ill))
+            .toArray()
+            .do((results) => {
+                winston.info(`Saved ${results.length} illnesses`);
+            })
+            .toPromise();
+    }
+
     private savePills(): Promise<any[]> {
         return Observable.from(this.tablesData.pillsData)
             .flatMap((pill) => saveObject(this.pillsDB, pill))
             .toArray()
             .do((results) => winston.info(`Saved ${results.length} pills`))
             .toPromise();
+    }
+    
+    /**
+     * Создать болезни из загруженных из гугла данных 
+     */
+    private createIllnesses(){
+        //Преобразовать данные из таблицы в структуры болезней (модификаторов)
+        this.illnesses = this.tablesData.illnessesData
+            .filter( (data:IllnessData) => data.id && data.displayName && data.system )
+            .map( (data:IllnessData) => {  
+                let illness: DeusModifier = {
+                        _id: data.id,
+                        displayName: data.displayName,
+                        class: "illness",
+                        system: data.system,
+                        currentStage: 0
+                    };
+                
+                //Создать этапы болезни и записать их в модификатор
+                illness.illnessStages =  data.stages.filter( s => (s.duration || s.duration) )
+                            .map( (s,i) => {
+                                let condId = `${illness._id}-${i}`
+
+                                let stage:any = {
+                                    duration : Number(s.duration) ? Number(s.duration)*60 : 0,
+                                    condition: condId
+                                }
+
+                                let title = s.text.split('.')[0];
+                                this.createCondition(condId, title, s.text, "physiology");
+
+                                return stage;
+                            });
+
+                return illness;
+            });
     }
 
     /**
@@ -398,7 +462,7 @@ export class TablesImporter {
         //Изменение HP. Реализуются псевдо-эффектом "change-max-hp"
         if (effData.effectClass == "changeMaxHp") {
             if (effData.effectText) {
-                let parts = effData.effectText.replace(/\s/i, '').match(/^maxHP\+(\d)/i);
+                let parts = effData.effectText.replace(/\s/ig, '').match(/^maxHP\+(\d)/i);
                 if (parts) {
                     ret.push({ name: effectNames.changeMaxHp, params: { maxHp: Number(parts[1]) } });
                 }
@@ -408,7 +472,7 @@ export class TablesImporter {
         //Восставновление HP в легком ранении
         if (effData.effectClass == "HealingHp") {
             if (effData.effectText) {
-                let parts = effData.effectText.replace(/\s/i, '').match(/^recoveryRate=(\d+)/i);
+                let parts = effData.effectText.replace(/\s/ig, '').match(/^recoveryRate=(\d+)/i);
                 if (parts) {
                     ret.push({ name: effectNames.recoveryHp, params: { recoveryRate: Number(parts[1]) } });
                 }
@@ -418,9 +482,23 @@ export class TablesImporter {
         //Восставновление HP в тяжелом ранении 
         if (effData.effectClass == "HealigFromZero") {
             if (effData.effectText) {
-                let parts = effData.effectText.replace(/\s/i, '').match(/^recoveryTime=(\d+)/i);
-                if (parts) {
-                    ret.push({ name: effectNames.recoveryFromZero, params: { recoveryTime: Number(parts[1]) } });
+                let params:any = { }
+
+                effData.effectText.replace(/\s/ig, '').split(',').forEach( s => {
+                    let match1 = s.match(/^recoveryTime=(\d+)/i);
+                    let match2 = s.match(/^hpRemain=(\d)/i);
+
+                    if(match1){
+                        params.recoveryTime = Number(match1[1]);
+                    }
+
+                    if(match2){
+                        params.hpRemain = Number(match2[1]);
+                    }
+                })
+
+                if(params.recoveryTime) {
+                    ret.push({ name: effectNames.recoveryFromZero, params });
                 }
             }
         }
@@ -428,7 +506,7 @@ export class TablesImporter {
         //Эффекты типа "изменить простую переменную в модели"
         if (effData.effectClass == "change-properties") {
             if (effData.effectText) {
-                let operations = effData.effectText.replace(/\s/i, '');
+                let operations = effData.effectText.replace(/\s/ig, '');
                 let correct = operations.split(',').every(op => op.match(/^([\w\d]+)[\+\-\=](\d+)$|^([\w\d]+)\=\"(.*)\"$/i) != null);
 
                 if (correct) {
@@ -490,6 +568,12 @@ let importer = new TablesImporter();
 
 importer.import().subscribe((result) => {
     winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}`);
+    
+    //winston.info( JSON.stringify( result.illnesses, null , 4 ) );
+
+    // winston.info( JSON.stringify( result.illnesses.find( m => m._id == "diseaseitsenkokushinga"), null, 4)  );
+    // winston.info( JSON.stringify( result.conditions.filter( m => m._id.startsWith("diseaseitsenkokushinga")), null, 4)  );
+
     //winston.info(JSON.stringify(result.implantsData.slice(0,10), null, 4));
 
     // result.implants.filter(imp => imp._id == "lab_maninthemiddle").forEach(imp => 
@@ -504,8 +588,9 @@ importer.import().subscribe((result) => {
     //winston.info(JSON.stringify(result.implants.slice(0,10), null, 4));
     //winston.info(JSON.stringify(result.impConditions.slice(0,30),null, 4));
 
-},
+    },
     (err) => {
         winston.info('Error in import process: ', err);
-    });
+    }
+);
 

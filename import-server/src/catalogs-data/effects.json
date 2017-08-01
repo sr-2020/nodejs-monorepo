@@ -23,6 +23,18 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "timedRecoveryEffect"
-        } 
+        },
+        {        
+            "id"    : "show-always-condition",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "showAlwaysCondition"
+        },
+        {        
+            "id"    : "timed-recover-systems",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "timedRecoverSystemsEffect"
+        }
     ]
 }

@@ -12,5 +12,7 @@ export interface DeusModifier {
     effects?: any[],
     enabled?: boolean,
     predicates?: Predicate[],
-    mID?: string
+    mID?: string,
+    illnessStages?: { duration: number, condition: string }[]; 
+    currentStage?: number;
 }

@@ -4,7 +4,7 @@ export const effectNames = {
     changeMindCube: "inst_changeMindCube",
     changeMaxHp: "change-max-hp",
     recoveryHp: "timed-recover-hp",
-    recoveryFromZero: "recovery-from-zero",
+    recoveryFromZero: "timed-recover-systems",
     changeProperties: "change-properties"
 };
 

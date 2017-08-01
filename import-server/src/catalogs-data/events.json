@@ -160,6 +160,27 @@
             "effects": [
                 "exitVREvent"
             ]
+        },
+        {
+            "id": "recover-systems",
+            "eventType": "recover-systems",
+            "effects": [
+                "recoverSystemsEvent"
+            ]
+        },
+        {
+            "id" : "take-narco",
+            "eventType": "take-narco",
+            "effects": [
+                "applyNarcoEffect"
+            ]
+        },
+        {
+            "id" : "stop-narco-modifier",
+            "eventType": "stop-narco-modifier",
+            "effects": [
+                "removeNarcoEffect"
+            ]
         }
     ]
 }
