@@ -260,6 +260,42 @@ describe('Medicine: ', () => {
         expect(baseModel.systems[1]).is.equal(1);
     });
 
+    it("Reduce HP and regen  for robots", async function() {
+        let model = getExampleModel();
+        model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
+
+        //Нанесли повреждения
+        let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp+100, true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        //Check HP: model(4)- damage (2)
+        expect(workingModel.hp).is.equal(2);
+
+        //Прошло 20 минут (все на месте)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 1200*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        expect(workingModel.hp).is.equal(4);
+    });
+
+      it("Reduce HP and regen for robots from zero", async function() {
+        let model = getExampleModel();
+        model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
+
+        //Нанесли повреждения
+        let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp+100, true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        //Check HP: model(4)- damage (0)
+        expect(workingModel.hp).is.equal(0);
+
+        //Прошло 40 минут (все на месте)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 2400*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        expect(workingModel.hp).is.equal(4);
+    });
+
     it("Reduce HP and death and resurect", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();

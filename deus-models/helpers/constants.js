@@ -4,6 +4,11 @@ const DAMAGE_MODIFIER_MID = "_internal_damage";
 const HP_LEAK_DELAY = 600000;
 const HP_LEAK_TIMER = "_hp-leak-timer";
 
+//Задержка для регенерации хитов андроидов
+const HP_REGEN_DELAY = 10 * 60 * 1000;
+const HP_REGEN_TIMER = "_hp-recover-timer";
+
+
 //Задержка между HP == 0 и смертью
 const DEATH_DELAY = 1200*1000;
 const DEATH_TIMER = "_dead-timer";
@@ -36,6 +41,8 @@ module.exports = () => {
         MAX_CHANGES_LINES,
         HP_LEAK_TIMER,
         HP_LEAK_DELAY,
+        HP_REGEN_TIMER,
+        HP_REGEN_DELAY,
         DEATH_DELAY,
         DEATH_TIMER,
         NARCO_TIME_PREFIX,
