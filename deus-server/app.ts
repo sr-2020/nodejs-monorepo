@@ -139,11 +139,13 @@ class App {
           await accountsDb.query('web_api_server_v2/by_push_token', { key: token });
         for (const existingCharacter of existingCharacterWithThatToken.rows) {
           await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
+            this.logger.info(`Removing token from character ${existingCharacter.id} to give it to ${id}`)
             delete accountInfo.pushToken;
             return accountInfo;
           });
         }
         await this.accountsDb.upsert(id, (accountInfo) => {
+          this.logger.info(`Saving token for ${id}`)
           accountInfo.pushToken = token;
           return accountInfo;
         });
