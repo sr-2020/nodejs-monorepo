@@ -443,7 +443,7 @@ class App {
       processingTime: this.currentTimestamp() - responseStartMoment.valueOf(),
       url: req.url,
       method: req.method,
-      ip: req.ip,
+      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
       id: req.params.id,
       query: req.query,
     };
