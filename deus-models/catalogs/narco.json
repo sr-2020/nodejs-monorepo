@@ -99,6 +99,93 @@
             "id":"zagrey-pill",
             "duration": 1800,
             "mindCubePermanent" : "B1-45,B2-42"
+        },
+        {
+            "id": "unlock-pill",
+            "duration": 7200,
+            "mindCubeTemp": "C1-30,E2-25",
+            "mindCubePushbackEnabled": true,
+            "mindCubePermanent": "C1-3,E2-2"
+        },
+        {
+            "id": "memory-pill",
+            "duration": 7200,
+            "mindCubeTemp": "F0-35,B2+50",
+            "mindCubePushbackEnabled": true,
+            "mindCubePermanent": "B2-3"
+        },
+        {
+            "id": "apollo-geracle-pill",
+            "duration": 3600,
+            "mindCubePushbackEnabled": true,
+            "mindCubeTemp": "B0+50",
+            "mindCubePermanent": "B0-3",
+            "conditions": ["apollo-geracle-condition"]
+        },
+        {
+            "id": "apollo-geracle-pill",
+            "duration": 3600,
+            "mindCubePushbackEnabled": true,
+            "mindCubeTemp": "B0+50",
+            "mindCubePermanent": "B0-3",
+            "conditions": ["apollo-geracle-condition"]
+        },
+        {
+            "id": "apollo-freeze-pill",
+            "duration": 3600,
+            "mindCubePushbackEnabled": true,
+            "mindCubeTemp": "B0+50",
+            "mindCubePermanent": "B0-3",
+            "conditions": ["apollo-freeze-condition"]
+        },
+        {
+            "id": "apollo-thunder-pill",
+            "duration": 3600,
+            "mindCubePushbackEnabled": true,
+            "mindCubeTemp": "B5+50",
+            "mindCubePermanent": "B5-3",
+            "conditions": ["apollo-thunder-condition"]
+        },
+        {
+            "id": "apollo-berserk-pill",
+            "duration": 3600,
+            "mindCubePushbackEnabled": true,
+            "mindCubeTemp": "C4-25",
+            "mindCubePermanent": "C4-3",
+            "conditions": ["apollo-berserk-condition"]
+        },
+        {
+            "id": "tanatos-belmo-pill",
+            "duration": 600,
+            "mindCubeTemp": "B3-40",
+            "mindCubePermanent": "B3-2"
+        },
+        {
+            "id": "tanatos-staz-pill",
+            "duration": 600,
+            "mindCubeTemp": "B0-37",
+            "mindCubePermanent": "B0-2"
+        },
+        {
+            "id": "tanatos-afazia-pill",
+            "duration": 750,
+            "mindCubeTemp": "B1-35",
+            "mindCubePermanent": "B1-2"
+        },
+        {
+            "id": "tanatos-buran-pill",
+            "duration": 3600,
+            "mindCubeTemp": "C6+17",
+            "mindCubePermanent": "C6+1",
+            "conditions": ["no-vr-condition"],
+            "_comment": "TODO: переделать на модификацию переменной"
+        },
+        {
+            "id": "tanatos-papuas-pill",
+            "duration": 3600,
+            "mindCubeTemp": "E1-34, D1+24",
+            "mindCubePermanent": "E1+3",
+            "mindCubePushbackEnabled": true
         }
     ]
 }
