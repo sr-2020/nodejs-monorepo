@@ -270,6 +270,10 @@ export class AliceExporter {
                 //Владелец (для андроидов и программ) Field: 1830
                 this.model.owner = this.findStrFieldValue(1830);
 
+                if (this.model.owner == "0")                     {
+                    this.model.owner = "ничей";
+                }
+
                 //Модель андроида (или еще чего-нибудь) Field: 1906
                 //TODO: это точно надо переделывать в какой-то внятный список ID моделей
                 this.model.model = this.findStrFieldValue(1906);
