@@ -372,8 +372,6 @@ function recoverHpEvent(api, data, event){
     }
 }  
 
-
-
 module.exports = () => {
     return {
         getDamageEvent,
