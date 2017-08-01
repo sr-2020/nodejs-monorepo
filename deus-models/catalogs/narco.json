@@ -186,6 +186,13 @@
             "mindCubeTemp": "E1-34, D1+24",
             "mindCubePermanent": "E1+3",
             "mindCubePushbackEnabled": true
+        },
+        {
+            "id": "emotional-pill",
+            "duration": 3600,
+            "mindCubeTemp": "С1-35,E4-25",
+            "mindCubePermanent": "E4+2",
+            "mindCubePushbackEnabled" : true
         }
     ]
 }
