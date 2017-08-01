@@ -222,7 +222,7 @@ function addCharacterCondition( api, condId ){
             return api.addCondition(condition);
         }
         else {
-            api.info("Couldn't find condition " + condId);
+            api.error("Couldn't find condition " + condId);
         }
     }
 
