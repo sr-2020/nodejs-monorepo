@@ -166,6 +166,12 @@
             ]
         },
         {
+            "eventType": "regen-hp",
+            "effects": [
+                "regenHpEvent"
+            ]
+        },
+        {
             "eventType": "enterVr",
             "effects": [
                 "enterVREvent"
