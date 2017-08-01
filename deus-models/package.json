@@ -31,6 +31,7 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
+    "async-file": "^2.0.2",
     "chance": "^1.0.10",
     "clones": "^1.1.0",
     "fs.realpath": "^1.0.0",
