@@ -212,6 +212,8 @@ function damageEffect(api, modifier){
         return;
     }
 
+    let isHuman = api.model.profileType=="human";
+
     let curMaxHP = medHelpers().calcMaxHP(api);
 
     api.model.maxHp = curMaxHP;
@@ -221,7 +223,7 @@ function damageEffect(api, modifier){
     //Индикация для клиента, что системы организма не работают!
     //Проходим по всем системам и показываем состояния что система дохлая
     //Для андроидов видимо какая-то иная логика работы
-    if(api.model.systems){
+    if(api.model.systems && isHuman){
 
         api.info(`damageEffect: systems ${medHelpers().getSystemsStateString(api)}`);       
 
@@ -258,7 +260,7 @@ function damageEffect(api, modifier){
         if(api.model.hp <=0) {
 
             //Послать событие - грохнуть случайную систему организма
-            if(api.model.profileType=="human"){
+            if(isHuman){
                 api.info(`damageEffect: hp = ${api.model.hp} ==> send "kill-random-system" event!`);        
                 api.sendEvent(null, "kill-random-system", { from: "self" });
             }
@@ -267,22 +269,38 @@ function damageEffect(api, modifier){
         }
     }
 
+    if (isHuman) {
+        handleHumansWounded(api, deadSystems);
+    }
+} 
+
+function handleHumansWounded(api, deadSystems)
+{
     if((api.model.hp < api.model.maxHp) && !deadSystems){
         //Установить таймер для утечки хитов, либо если он уже есть - не трогать
         //console.log(JSON.stringify(api.model.timers, null, 4));
+        startLeakTimerIfRequired(api);
+       
+    }else{
+        //Отключить таймер если нет повреждений или есть мертвы системы (тогда работает таймер на умирание)
+        stopLeakTimerIfRequired(api);
+    }
+}
 
-        if(!api.getTimer(consts().HP_LEAK_TIMER)){
+function startLeakTimerIfRequired(api)
+{
+     if(!api.getTimer(consts().HP_LEAK_TIMER)){
             api.info(`damageEffect: damage detected ==> start leak HP timer!`);        
             api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
         }
-    }else{
-        //Отключить таймер если нет повреждений или есть мертвы системы (тогда работает таймер на умирание)
-        if(api.getTimer(consts().HP_LEAK_TIMER)){
-            api.info(`damageEffect: damage was healed or system was dead ==> stop leak HP timer!`);        
-            api.removeTimer(consts().HP_LEAK_TIMER);
-        }
+}
+
+function stopLeakTimerIfRequired(api) {
+    if(api.getTimer(consts().HP_LEAK_TIMER)){
+        api.info(`damageEffect: damage was healed or system was dead ==> stop leak HP timer!`);        
+        api.removeTimer(consts().HP_LEAK_TIMER);
     }
-} 
+}
 
 /**
  * Обработчик отладочного события "character-resurect"

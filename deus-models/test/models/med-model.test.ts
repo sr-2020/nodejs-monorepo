@@ -214,6 +214,52 @@ describe('Medicine: ', () => {
         console.log(JSON.stringify(baseModel.timers, null, 4));
     });
 
+    it("Reduce HP and no bleeding  for non-humans", async function() {
+        let model = getExampleModel();
+        model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
+
+        //Нанесли повреждения
+        let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp+100, true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        //Check HP: model(4)- damage (2)
+        expect(workingModel.hp).is.equal(2);
+
+        //Прошло 10 минут (хиты не утекают))
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+700000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        //Check HP: model(4) - damage (2) 
+        expect(workingModel.hp).is.equal(2);
+
+        //Прошло 20 минут (все на месте)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 1200*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        //Check HP: model(4) - damage (2)
+        expect(workingModel.hp).is.equal(2);
+
+        expect(baseModel.systems[1]).is.equal(1);
+    });
+
+    it("Reduce HP and no system death for non-humans", async function() {
+        let model = getExampleModel();
+        model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
+
+        //Нанесли повреждения
+        let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp+100, true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        //Check HP: model(4)- damage (4)
+        expect(workingModel.hp).is.equal(0);
+
+        //Прошло 20 минут (все на месте)
+        events =  [getRefreshEvent(model._id,baseModel.timestamp+ 1200*1000)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+        
+        expect(baseModel.systems[1]).is.equal(1);
+    });
+
     it("Reduce HP and death and resurect", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();
