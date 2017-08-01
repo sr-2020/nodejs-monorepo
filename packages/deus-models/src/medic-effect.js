@@ -64,6 +64,12 @@ function restoreDamageEvent(api, data, event ){
      }
 }
 
+function hasAnyEffect(api, effectName) {
+    return api.model. modifiers.filter(m => m.enabled)
+                            .find( m => helpers().checkPredicate(api, m.mID, effectName) );
+
+}
+
 /**
  * Функция события leak-hp, которое запускается по таймеру при потери хитов
  * Этот обаботчик должен в случае, если damage >0 списывать один хит 
@@ -74,8 +80,7 @@ function leakHpEvent(api, data, event){
 
     //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
     //если такие импланты есть, то тогда хиты списывать не надо
-    let imp = api.model. modifiers.filter(m => m.enabled)
-                            .find( m => helpers().checkPredicate(api, m.mID, "timed-recover-hp") );
+    let imp = hasAnyEffect(api, "timed-recover-hp");
 
     if(imp){
         api.info(`leakHpEvent: Installed recovery HP implant: ${imp.id}, don't reduce HP`);
@@ -87,9 +92,33 @@ function leakHpEvent(api, data, event){
         api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
         api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
-        //console.log(JSON.stringify(api.model.timers, null, 4));
 
         helpers().addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
+    }
+}  
+
+/**
+ * Функция события regen-hp, которое запускается по таймеру при потери хитов у Андроидов
+ * Этот обаботчик должен в случае, если damage >0 восстанавливать один хит
+ * (если нет каких-то имплантов или модификаторов этому препятствующих )
+ */
+function regenHpEvent(api, data, event){
+    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+
+    //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
+    //если такие импланты есть, то тогда хиты списывать не надо
+    if(hasAnyEffect(api, "timed-recover-hp")){
+        api.info(`regenHpEvent: Installed recovery HP implant: overrides regen`);
+        return;
+    }
+
+    if(m && m.damage && api.model.isAlive){
+        m.damage -= 1;
+        api.info(`regenHpEvent: damage -1 => ${m.damage}`);
+
+        api.setTimer( consts().HP_REGEN_TIMER, consts().HP_REGEN_DELAY, "regen-hp", {} );
+
+        helpers().addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
     }
 }  
 
@@ -272,7 +301,36 @@ function damageEffect(api, modifier){
     if (isHuman) {
         handleHumansWounded(api, deadSystems);
     }
-} 
+
+    if (api.model.profileType=="robot") {
+        handleDroidsWounded(api);
+    }
+}
+
+function handleDroidsWounded(api)
+{
+    if((api.model.hp < api.model.maxHp)){
+        startRegenTimerIfRequired(api);
+       
+    }else{
+        stopRegenTimerIfRequired(api);
+    }
+}
+
+function startRegenTimerIfRequired(api)
+{
+     if(!api.getTimer(consts().HP_REGEN_TIMER)){
+            api.info(`damageEffect: damage detected ==> start regen HP timer!`);        
+            api.setTimer( consts().HP_REGEN_TIMER, consts().HP_LEAK_DELAY, "regen-hp", {} );
+        }
+}
+
+function stopRegenTimerIfRequired(api) {
+    if(api.getTimer(consts().HP_REGEN_TIMER)){
+        api.info(`damageEffect: damage was healed ==> stop regen HP timer!`);        
+        api.removeTimer(consts().HP_REGEN_TIMER);
+    }
+}
 
 function handleHumansWounded(api, deadSystems)
 {
@@ -512,6 +570,7 @@ module.exports = () => {
         characterResurectEvent,
         timedRecoveryEffect,
         recoverHpEvent,
+        regenHpEvent,
         timedRecoverSystemsEffect,
         recoverSystemsEvent
     };
