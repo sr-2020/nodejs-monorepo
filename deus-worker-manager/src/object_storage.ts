@@ -57,6 +57,7 @@ export class ObjectStorage implements ObjectStorageInterface {
         let result: { [db: string]: { [id: string]: Document } } = {};
 
         let pending = keys.map(async (key) => {
+            if (get(result, key)) return;
             let obj = await this.aquireOne(lockId, key[0], key[1]);
             if (obj) {
                 set(result, key, obj);
