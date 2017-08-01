@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers ts:ts-node/register test/models/**/*.ts test/models/**/*.js",
-    "test:watch": "chokidar src/**/* catalogs/**/* test/**/* -c \"npm test\""
+    "test:watch": "chokidar src/**/* catalogs/**/* test/**/* helpers/**/* package.json -c \"npm test\""
   },
   "repository": {
     "type": "git",
