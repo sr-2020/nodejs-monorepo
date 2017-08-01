@@ -45,6 +45,7 @@ export const getExampleModel = (id?: string) => ({
     maxProxy: 100,
     maxSecondsInVr: 1200,
     owner: "",
+    creator: "",
     isAlive: true,
 
     lastVREnterTimestamp: 0,

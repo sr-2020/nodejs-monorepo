@@ -19,6 +19,7 @@ function getHandicaps(model) {
 }
 
 function getStartPage(model) {
+    let isHuman = model.profileType=="human";
     let pageInfo =  {
         __type: "ListPageViewModel",
         viewId: "page:general",
@@ -42,17 +43,20 @@ function getStartPage(model) {
                     text: "Пол",
                     value: getRussianSex(model.sex),
                 },
-                {
-                    text: "Поколение",
-                    value: model.generation,
-                },
-                {
-                    text: "Проживание ",
-                    value: model.sweethome,
-                },
             ],
         },
     };
+
+    if (model.profileType == "robot") {
+        pageInfo.body.items.push({text: "Создатель", value: model.creator})
+        pageInfo.body.items.push({text: "Владелец", value: model.owner})
+    }
+
+    if (isHuman){
+        pageInfo.body.items.push({text: "Поколение", value: model.generation})
+    }
+
+    pageInfo.body.items.push({text: "Проживание", value: model.sweethome})
 
     let workRow  = {
         text: "Работа",
@@ -64,7 +68,7 @@ function getStartPage(model) {
         value: model.insuranceDiplayName,
     };
 
-    if (model.profileType=="human"){
+    if (isHuman){
         pageInfo.body.items.push(workRow);
         pageInfo.body.items.push(insuranceRow);
     }
