@@ -183,6 +183,7 @@
             ]
         },
         {
+            "id": "scanQR",
             "eventType": "scanQR",
             "effects": [
                 "scanQR"
