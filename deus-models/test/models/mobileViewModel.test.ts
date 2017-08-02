@@ -212,7 +212,15 @@ function getProgramViewModel()
                     {
                         "text": "e-mail",
                         "value": "john.smith@alice.digital"
-                    },         
+                    },
+                    {
+                        "text": "Создатель",
+                        "value": "Господь Бог"
+                    },
+                    {
+                        "text": "Владелец",
+                        "value": "ничей"
+                    }         
                 ]
             }
         },
