@@ -51,7 +51,7 @@ function startIllnessEvent( api, data, event ){
             api.setTimer( timerName, illness.illnessStages[0].duration*1000, 
                             "illness-next-stage", { mID: illness.mID } );
         }else{
-            api.error(`startIllnessEvent: can't load illness: ${_illness.displayName}`);
+            api.error(`startIllnessEvent: can't load illness: ${data.id}`);
         }
     }
 }

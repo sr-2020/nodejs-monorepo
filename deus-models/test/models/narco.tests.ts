@@ -122,7 +122,7 @@ describe('Narco effects: ', () => {
         expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(0);
     });
 
-    it.skip("Narco ascend failed and leads to death", async function() {
+    it("Narco ascend failed and leads to death", async function() {
         let model = getExampleModel();
 
         model.genome[0] = 0;
