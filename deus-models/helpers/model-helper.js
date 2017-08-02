@@ -34,6 +34,26 @@ function loadImplant(api, id){
     return implant;
  }
 
+ /**
+  * Загружает болезнь и ее эффект из каталога 
+  */
+function loadIllness(api, id){
+    let illness = api.getCatalogObject("illnesses", id.toLowerCase());
+
+    if(!illness){
+        api.error(`loadIllness: illness id=${id} not found!`);
+        return null;
+    }
+
+    let effect = api.getCatalogObject("effects", consts().ILLNESS_EFFECT_NAME);
+    effect.enabled = true;
+
+    illness.effects = [ effect ];
+    illness.enabled = true;
+
+    return illness;
+ }
+
 //TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord( api, text, timestamp ){
     if(text){
@@ -402,6 +422,9 @@ function isImplant(modifier){
     return false;
 }
 
+function getImplantsBySystem(api, systemName){
+    return api.getModifiersBySystem(systemName).filter( m => isImplant(m) );
+}
 
  
 module.exports = () => {
@@ -420,7 +443,9 @@ module.exports = () => {
         removeElementByMID,
         modifyModelProperties,
         setTimerToKillModifier,
-        isImplant
+        isImplant,
+        loadIllness,
+        getImplantsBySystem
     };
 };
 
