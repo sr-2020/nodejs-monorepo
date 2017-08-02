@@ -427,13 +427,13 @@ export class AliceExporter {
         let genome: number[] = new Array(13).fill(0);
 
         //Выбрать нужное количество "потенциально больных" систем организма
-        let badSystems = 1;
+        let badSystems = 6; //XY
         if (this.model.generation == "W") {
             badSystems = 2;
         } else if (this.model.generation == "Z") {
             badSystems = 3;
-        } else {
-            badSystems = 4;
+        } else if (this.model.generation == "A") {
+            badSystems = 1;
         }
 
         while (badSystems > 0) {
