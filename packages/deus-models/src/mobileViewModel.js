@@ -49,7 +49,7 @@ function getStartPage(model) {
         pageInfo.body.items.push({text: "Пол",value: getRussianSex(model.sex)});
     }
 
-    if (model.profileType == "robot") {
+    if (model.profileType == "robot" || isProgram) {
         pageInfo.body.items.push({text: "Создатель", value: model.creator})
         pageInfo.body.items.push({text: "Владелец", value: model.owner})
     }
