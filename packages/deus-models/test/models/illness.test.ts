@@ -4,7 +4,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Illnesses: ', () => {
-    it.only("Start Illness and check illness life path", async function() {
+    it("Start Illness and check illness life path", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
@@ -67,7 +67,7 @@ describe('Illnesses: ', () => {
         expect(cond).is.exist;
     });
 
-    it.only("Start Illness and check delay event", async function() {
+    it("Start Illness and check delay event", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
