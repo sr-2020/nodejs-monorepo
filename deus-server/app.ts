@@ -170,6 +170,9 @@ class App {
         const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
         events = events.filter((value: any) =>
           value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
+        if (events.length == 0) {
+          this.logger.warning(`All events received from id ${id} are from future!`);
+        }
         const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
 
         const lastRefreshModelEventTimestamp =
