@@ -16,7 +16,7 @@
             "mindCubePermanent" : "F2+6",
             "mindCubeTemp" : "E1+65,C5-60",
             "$comment": "TODO!!!! Убрать."
-      
+
         },
         {
             "id":"cometa",
@@ -190,7 +190,7 @@
             "pillType": "narco",
             "duration": 3600,
             "mindCubeTemp": "E1-35, D1+25",
-            "mindCubePermanent": "D1+5",
+            "mindCubePermanent": "D1+5"
         },
         {
             "id": "emotional-pill",
