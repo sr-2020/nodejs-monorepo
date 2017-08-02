@@ -19,7 +19,8 @@ function getHandicaps(model) {
 }
 
 function getStartPage(model) {
-    let isHuman = model.profileType=="human";
+    let isHuman = model.profileType == "human";
+    let isProgram = model.profileType == "program";
     let pageInfo =  {
         __type: "ListPageViewModel",
         viewId: "page:general",
@@ -39,13 +40,14 @@ function getStartPage(model) {
                     text: "e-mail",
                     value: model.mail,
                 },
-                {
-                    text: "Пол",
-                    value: getRussianSex(model.sex),
-                },
+
             ],
         },
     };
+
+    if (!isProgram) {
+        pageInfo.body.items.push({text: "Пол",value: getRussianSex(model.sex)});
+    }
 
     if (model.profileType == "robot") {
         pageInfo.body.items.push({text: "Создатель", value: model.creator})
@@ -56,7 +58,9 @@ function getStartPage(model) {
         pageInfo.body.items.push({text: "Поколение", value: model.generation})
     }
 
-    pageInfo.body.items.push({text: "Проживание", value: model.sweethome})
+    if (!isProgram){
+        pageInfo.body.items.push({text: "Проживание", value: model.sweethome})    
+    }
 
     let workRow  = {
         text: "Работа",
@@ -73,22 +77,25 @@ function getStartPage(model) {
         pageInfo.body.items.push(insuranceRow);
     }
 
-    let hpRow = {
-        text: "Hit Points",
-        value: model.hp + " / " + model.maxHp,
-    };
+    if (!isProgram) {
 
-    if(model.maxHp){
-        hpRow.percent = 100 * model.hp / model.maxHp
-    }else{
-        hpRow.percent = 0;
+        let hpRow = {
+            text: "Hit Points",
+            value: model.hp + " / " + model.maxHp,
+        };
+
+        if(model.maxHp){
+            hpRow.percent = 100 * model.hp / model.maxHp
+        }else{
+            hpRow.percent = 0;
+        }
+
+        if(model.hp == 0){
+            hpRow.valueColor = "#ff565c";
+        }
+
+        pageInfo.body.items.push(hpRow);  
     }
-
-    if(model.hp == 0){
-         hpRow.valueColor = "#ff565c";
-    }
-
-    pageInfo.body.items.push(hpRow);  
 
     let handicaps = getHandicaps(model);
     if(handicaps){
@@ -396,11 +403,17 @@ function getMessagesPage(model) {
 function getPages(model) {
     let pages = [];
 
+    let isHuman = model.profileType == "human";
+    let isProgram = model.profileType == "program";
+
+
     pages.push(getStartPage(model));
     pages.push(getMemoryPage(model));
-    pages.push(getConditionsPage(model));
-    pages.push(getImplantsPage(model));
-    if (model.profileType == "human") {
+    if (!isProgram) {
+        pages.push(getConditionsPage(model));
+        pages.push(getImplantsPage(model));
+        }
+    if (isHuman) {
         pages.push(getEconomyPage(model));
     }
     pages.push(getChangesPage(model));
