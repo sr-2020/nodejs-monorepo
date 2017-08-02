@@ -190,7 +190,7 @@
             ]
         },
         {
-            "eventType": "scanQR",
+            "eventType": "scanQr",
             "effects": [
                 "scanQR"
             ]

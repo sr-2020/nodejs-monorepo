@@ -11,7 +11,7 @@ function aquirePills(api, events) {
     if (!api.model.isAlive) return;
 
     events
-        .filter((event) => event.eventType == 'scanQR' && event.data.type == 1)
+        .filter((event) => event.eventType == 'scanQr' && event.data.type == 1)
         .forEach((event) => api.aquire('pills', event.data.payload));
 }
 
