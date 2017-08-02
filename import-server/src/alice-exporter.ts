@@ -258,6 +258,9 @@ export class AliceExporter {
 
                 //Максимальное время в VR (секунды)
                 this.model.maxSecondsInVr = 7200;
+
+                //Импланты на начало игры. Field: 1215
+                this.setImplants( this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)) );
             }
 
             //Блок данных только для профиля андроида или программы
@@ -287,13 +290,14 @@ export class AliceExporter {
 
                 //Максимальное время в VR (секунды)
                 this.model.maxSecondsInVr = 82800;
+
+                //Прошивки на начало игры. Field: 2056 и 2057
+                //let FWs = [ this.convertToDescription(2056, this.findNumFieldValue(2056)).toLowerCase() ];
+                //FWs.concat( this.findNumListFieldValue(2057).map(id => this.convertToDescription(2057, id).toLowerCase()) );
+
+                //this.setImplants( FWs );
             }
 
-            //Импланты на начало игры. Field: 1215
-            //TODO: нужно получить список ID имплантов из Join (в деталях полей в метаданных)
-            //Загрузить детали из БД со списком имплантов и добавить в модель
-            //Нужна БД со список имплантов
-            this.setImplants();
 
             //начальное количество хитов
             this.model.maxHp = 2;
@@ -455,12 +459,12 @@ export class AliceExporter {
 
     //Получить список имплантов и загрузить их в модель. Field: 2015
     //Фактически посылает персонажу набор событий add-implant для добавления при первом рефреше
-    setImplants() {
+    setImplants( ids: string[] ) {
         let time = this.model.timestamp + 100;
 
-        this.findNumListFieldValue(2015)
-            .map(id => this.convertToDescription(2015, id))
-            .filter(sId => sId)
+//        this.findNumListFieldValue(2015)
+//           .map(id => this.convertToDescription(2015, id))
+        ids.filter(sId => sId)
             .forEach(sID => this.eventsToSend.push({
                 characterId: this.model._id,
                 eventType: "add-implant",
