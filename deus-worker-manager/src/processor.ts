@@ -69,7 +69,7 @@ export class Processor {
 
                 if (model.timestamp > this.event.timestamp) return;
 
-                const events = (await this.eventStorage.range(characterId, model.timestamp, this.event.timestamp))
+                const events = (await this.eventStorage.range(characterId, model.timestamp + 1, this.event.timestamp))
                     .filter((event) => event.eventType[0] != '_') as any;
 
                 events.push(this.event);
