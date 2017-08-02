@@ -27,7 +27,7 @@ function addDamage(api, hpLost, timestamp){
  */
 function restoreDamage(api, hpHeal, timestamp){
 
-    console.log(`removeDamage: ${hpHeal}`);
+    api.info(`removeDamage: ${hpHeal}`);
 
     if(hpHeal && api.model.hp){
         let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
