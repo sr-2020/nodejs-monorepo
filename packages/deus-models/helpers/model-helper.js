@@ -284,6 +284,10 @@ function addDelayedEvent( api, duration, eventType, data, prefix = "delayed" ){
 
         api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms` );
     }
+    else
+    {
+        api.error("Not enough params");
+    }
 }
 
 /**

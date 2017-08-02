@@ -77,7 +77,7 @@ function addTemporaryConditons(api, narco)
 function canAscend(api)
 {
     let genome = api.model.genome;
-    return (genome && genome[2] == 0 && genome[7] == 3 && genome[10] == 2 && genome[12] == 1);
+    return (genome && genome[2-1] == 0 && genome[7-1] == 3 && genome[10-1] == 2 && genome[12-1] == 1);
 }
 
 function performAscend(api)
@@ -91,13 +91,18 @@ function performAscend(api)
 
     modifier = api.addModifier(modifier);
     api.debug(modifier);
+
+    api.model.genome[7-1] = 4;
+    api.model.genome[10-1] = 4;
+    api.model.genome[12-1] = 4;
 }
 
 function dieHorribleDeath(api) {
     api.info ("Anscension failed, death awaits..");
-    api.sendEvent (null, "start-illness", {"id" : "ankylosingspondylitis"});
-    api.sendEvent (null, "start-illness", {"id" : "DiseaseItsenkoKushinga"});
-    api.sendEvent (null, "start-illness", {"id" : "Dementia"});
+    let deathAwaitTimeMs = 42 * 60 * 1000;
+    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "ankylosingspondylitis"});
+    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "DiseaseItsenkoKushinga"});
+    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "Dementia"});
 }
 
 function applyNarcoEffect(api, data, event)

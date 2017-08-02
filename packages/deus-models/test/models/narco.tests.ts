@@ -96,24 +96,28 @@ describe('Narco effects: ', () => {
     it("Narco ascend", async function() {
         let model = getExampleModel();
 
-        model.genome[0] = 0;
-        model.genome[7] = 3;
-        model.genome[10] = 2;
-        model.genome[12] = 1;
+        model.genome[2-1] = 0;
+        model.genome[7-1] = 3;
+        model.genome[10-1] = 2;
+        model.genome[12-1] = 1;
 
         let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "ascend-apostle-pill" } }], model.timestamp, true);
         let { baseModel, workingModel } = await process(model, events);
 
         expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(1);
+
+        expect(baseModel.genome[7-1]).is.equal(4);
+        expect(baseModel.genome[10-1]).is.equal(4);
+        expect(baseModel.genome[12-1]).is.equal(4);
     });
 
     it("Narco ascend failed", async function() {
         let model = getExampleModel();
 
-        model.genome[0] = 0;
-        model.genome[7] = 3;
-        model.genome[10] = 3;
-        model.genome[12] = 2;
+        model.genome[2-1] = 0;
+        model.genome[7-1] = 3;
+        model.genome[10-1] = 2;
+        model.genome[12-1] = 2;
 
         let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "ascend-apostle-pill" } }], model.timestamp, true);
 
@@ -122,13 +126,36 @@ describe('Narco effects: ', () => {
         expect(workingModel.conditions.filter((e: any) => e.id == "ascend-condition").length).is.equal(0);
     });
 
+    it("Narco ascend no immediate lllness", async function() {
+        let model = getExampleModel();
+
+        model.genome[2-1] = 0;
+        model.genome[7-1] = 3;
+        model.genome[10-1] = 2;
+        model.genome[12-1] = 2;
+
+        let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "ascend-apostle-pill" } }], model.timestamp, true);
+
+        let { baseModel, workingModel } = await process(model, events);
+
+        let refresh = [getRefreshEvent(model._id, 1)];
+        let result = await process(baseModel, refresh);
+
+        baseModel = result.baseModel;
+        workingModel = result.workingModel;
+        
+        let illness = workingModel.modifiers.filter( (m:any) => m.id == "ankylosingspondylitis");
+
+        expect(illness.length).is.equal(0);
+    });
+
     it("Narco ascend failed and leads to death", async function() {
         let model = getExampleModel();
 
-        model.genome[0] = 0;
-        model.genome[7] = 3;
-        model.genome[10] = 3;
-        model.genome[12] = 2;
+        model.genome[2-1] = 0;
+        model.genome[7-1] = 3;
+        model.genome[10-1] = 2;
+        model.genome[12-1] = 2;
 
         let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "ascend-apostle-pill" } }], model.timestamp, true);
 
