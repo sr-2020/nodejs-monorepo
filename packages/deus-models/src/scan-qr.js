@@ -1,4 +1,5 @@
 function scanQR(api, data) {
+    api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`)
     switch (data.type) {
     case 1:
         if (!api.model.isAlive) return;
