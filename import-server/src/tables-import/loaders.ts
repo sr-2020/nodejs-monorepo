@@ -51,3 +51,8 @@ export function pillsDataLoad(authClient): Promise<any> {
     const request = defaultParams({ auth: authClient, range: "Pills!A4:G70" });
     return getValues(request);
 }
+
+export function firmwareDataLoad(authClient): Promise<any> {
+    const request = defaultParams({ auth: authClient, range: "Firmware!A5:C37" });
+    return getValues(request);
+}

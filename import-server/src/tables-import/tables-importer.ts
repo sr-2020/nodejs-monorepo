@@ -17,6 +17,8 @@ import { GenEffectData, MindEffectData, ImplantData } from './ImplantData';
 import { IllnessData } from './illnessData'
 import { ConditionData } from './conditionData'
 import { PillData, parsePill } from './pillsData';
+import { FirmwareData, parseFirmware } from './firmwareData';
+
 import * as loaders from './loaders';
 
 let unique = arrayUnique.immutable;
@@ -26,6 +28,7 @@ interface TablesData {
     illnessesData: any[]
     conditionsData: any[]
     pillsData: PillData[]
+    firmwareData: FirmwareData[]
 }
 
 export class TablesImporter {
@@ -39,7 +42,8 @@ export class TablesImporter {
         implantsData: [],
         illnessesData: [],
         conditionsData: [],
-        pillsData: []
+        pillsData: [],
+        firmwareData: []
     };
 
     //Созданные в результате импорта объекты имплантов, состояний и "модификатор" для показа состояний кубиков сознания
@@ -87,7 +91,7 @@ export class TablesImporter {
     private async importImplants(authClient: any) {
         const implants = await loaders.implantsDataLoad(authClient);
 
-       // console.log(JSON.stringify(Object.keys(implants),null,4));
+        // console.log(JSON.stringify(Object.keys(implants),null,4));
 
 
         // Превратить в список объектов ImplantData
@@ -118,8 +122,8 @@ export class TablesImporter {
         const illnesses = await loaders.illnessesDataLoad(authClient);
 
         this.tablesData.illnessesData = illnesses.values
-                .filter(row => row[0] == "ready")
-                .map((row, i) => new IllnessData(row, i));
+            .filter(row => row[0] == "ready")
+            .map((row, i) => new IllnessData(row, i));
 
         winston.info("Illneses table loaded!");
     }
@@ -127,7 +131,7 @@ export class TablesImporter {
     private async importConditions(authClient: any) {
         const conditions = await loaders.conditionsDataLoad(authClient);
 
-        console.log(JSON.stringify(Object.keys(conditions),null,4));
+        console.log(JSON.stringify(Object.keys(conditions), null, 4));
 
         this.tablesData.conditionsData = conditions.values
             .map((row, i) => new ConditionData(row, i))
@@ -142,6 +146,12 @@ export class TablesImporter {
         winston.info("Pills table loaded!");
     }
 
+    private async importFirmware(authClient: any) {
+        const firmwareData = await loaders.firmwareDataLoad(authClient);
+        this.tablesData.firmwareData = firmwareData.values.map(parseFirmware);
+        winston.info("Firmware table loaded!");
+    }
+
     import(): Observable<TablesImporter> {
         const promise = async () => {
             const authClient = await this.authorize();
@@ -151,17 +161,19 @@ export class TablesImporter {
                 this.importImplants(authClient),
                 this.importIllnesses(authClient),
                 this.importConditions(authClient),
-                this.importPills(authClient)
+                // this.importPills(authClient),
+                this.importFirmware(authClient)
             ]);
 
             this.createImplants();
             this.createMindConditions();
             this.implants.push(this.mindCubeModifier);
             this.createIllnesses();
+            this.createFirmware();
 
             await this.saveImplants();
             await this.saveConditions();
-           // await this.savePills();
+            // await this.savePills();
             await this.saveIlnesses();
 
             return this;
@@ -216,38 +228,38 @@ export class TablesImporter {
             .do((results) => winston.info(`Saved ${results.length} pills`))
             .toPromise();
     }
-    
+
     /**
      * Создать болезни из загруженных из гугла данных 
      */
-    private createIllnesses(){
+    private createIllnesses() {
         //Преобразовать данные из таблицы в структуры болезней (модификаторов)
         this.illnesses = this.tablesData.illnessesData
-            .filter( (data:IllnessData) => data.id && data.displayName && data.system )
-            .map( (data:IllnessData) => {  
+            .filter((data: IllnessData) => data.id && data.displayName && data.system)
+            .map((data: IllnessData) => {
                 let illness: DeusModifier = {
-                        _id: data.id,
-                        displayName: data.displayName,
-                        class: "illness",
-                        system: data.system,
-                        currentStage: 0
-                    };
-                
+                    _id: data.id,
+                    displayName: data.displayName,
+                    class: "illness",
+                    system: data.system,
+                    currentStage: 0
+                };
+
                 //Создать этапы болезни и записать их в модификатор
-                illness.illnessStages =  data.stages.filter( s => (s.duration || s.duration) )
-                            .map( (s,i) => {
-                                let condId = `${illness._id}-${i}`
+                illness.illnessStages = data.stages.filter(s => (s.duration || s.duration))
+                    .map((s, i) => {
+                        let condId = `${illness._id}-${i}`
 
-                                let stage:any = {
-                                    duration : Number(s.duration) ? Number(s.duration)*60 : 0,
-                                    condition: condId
-                                }
+                        let stage: any = {
+                            duration: Number(s.duration) ? Number(s.duration) * 60 : 0,
+                            condition: condId
+                        }
 
-                                let title = s.text.split('.')[0];
-                                this.createCondition(condId, title, s.text, "physiology");
+                        let title = s.text.split('.')[0];
+                        this.createCondition(condId, title, s.text, "physiology");
 
-                                return stage;
-                            });
+                        return stage;
+                    });
 
                 return illness;
             });
@@ -482,22 +494,22 @@ export class TablesImporter {
         //Восставновление HP в тяжелом ранении 
         if (effData.effectClass == "HealigFromZero") {
             if (effData.effectText) {
-                let params:any = { }
+                let params: any = {}
 
-                effData.effectText.replace(/\s/ig, '').split(',').forEach( s => {
+                effData.effectText.replace(/\s/ig, '').split(',').forEach(s => {
                     let match1 = s.match(/^recoveryTime=(\d+)/i);
                     let match2 = s.match(/^hpRemain=(\d)/i);
 
-                    if(match1){
+                    if (match1) {
                         params.recoveryTime = Number(match1[1]);
                     }
 
-                    if(match2){
+                    if (match2) {
                         params.hpRemain = Number(match2[1]);
                     }
                 })
 
-                if(params.recoveryTime) {
+                if (params.recoveryTime) {
                     ret.push({ name: effectNames.recoveryFromZero, params });
                 }
             }
@@ -561,6 +573,23 @@ export class TablesImporter {
         return cond;
     }
 
+    private createFirmware() {
+        for (let fw of this.tablesData.firmwareData) {
+            let conditionId = 'fw_' + fw._id;
+            this.createCondition(conditionId, fw.name, fw.effect, 'physiology');
+
+            let implant: DeusModifier = {
+                _id: fw._id,
+                displayName: fw.name,
+                details: fw.effect,
+                class: 'firmware',
+                effects: ['show-always-condition'],
+                conditions: [conditionId]
+            };
+
+            this.implants.push(implant);
+        }
+    }
 }
 
 
@@ -568,7 +597,7 @@ let importer = new TablesImporter();
 
 importer.import().subscribe((result) => {
     winston.info(`Import finished. Implants: ${result.tablesData.implantsData.length}, Ilnesses: ${result.tablesData.illnessesData.length}`);
-    
+
     //winston.info( JSON.stringify( result.illnesses, null , 4 ) );
 
     // winston.info( JSON.stringify( result.illnesses.find( m => m._id == "diseaseitsenkokushinga"), null, 4)  );
@@ -588,7 +617,7 @@ importer.import().subscribe((result) => {
     //winston.info(JSON.stringify(result.implants.slice(0,10), null, 4));
     //winston.info(JSON.stringify(result.impConditions.slice(0,30),null, 4));
 
-    },
+},
     (err) => {
         winston.info('Error in import process: ', err);
     }
