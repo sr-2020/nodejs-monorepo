@@ -17,6 +17,11 @@ const NARCO_TIME_PREFIX = "_narco_timer_";
 
 const MAX_CHANGES_LINES = 30;
 
+//Болезни
+const ILLNESS_EFFECT_NAME = "illness-effect"
+const ILLNESS_EVENT_NAME = "illness-next-stage"
+
+
 const medicSystems = [
     { name: "musculoskeletal", label: "опорно-двигательная", slots: 2},
     { name: "cardiovascular", label: "сердечно-сосудистая", slots: 1},
@@ -46,7 +51,8 @@ module.exports = () => {
         DEATH_DELAY,
         DEATH_TIMER,
         NARCO_TIME_PREFIX,
-        InsuranceDisplay
+        InsuranceDisplay,
+        ILLNESS_EFFECT_NAME
     };
 };
 

@@ -1,23 +1,86 @@
 {
-    "illnesses" : [
+    "illnesses": [
         {
-            "id"        : "anthrax",           
-            "displayName" : "Сибирская Язва",                          
-            "system"    : "SkinSystem",
-            "class"     : "illness",         
-                        
-            "stages" : [                    
+            "id": "affectivebipolardisorder",
+            "displayName": "Биполярное аффектиное расстройство",
+            "class": "illness",
+            "system": "nervous",
+            "currentStage": 0,
+            "illnessStages": [
                 {
-                    "delay" : 5,          
-                    "conditions" : [ "illCond01"  ]   
+                    "duration": 7200,
+                    "condition": "affectivebipolardisorder-0"
                 },
                 {
-                    "delay" : 6,          
-                    "conditions" : [ "illCond02"  ]   
+                    "duration": 5400,
+                    "condition": "affectivebipolardisorder-1"
+                },
+                {
+                    "duration": 3600,
+                    "condition": "affectivebipolardisorder-2"
+                },
+                {
+                    "duration": 2700,
+                    "condition": "affectivebipolardisorder-3"
+                },
+                {
+                    "duration": 1800,
+                    "condition": "affectivebipolardisorder-4"
+                },
+                {
+                    "duration": 900,
+                    "condition": "affectivebipolardisorder-5"
+                },
+                {
+                    "duration": 600,
+                    "condition": "affectivebipolardisorder-6"
+                },
+                {
+                    "duration": 0,
+                    "condition": "affectivebipolardisorder-7"
                 }
-            ],
-        
-            "effects" : []
+            ]
+        },
+        {
+            "id": "arthritis",
+            "displayName": "Артрит",
+            "class": "illness",
+            "system": "musculoskeletal",
+            "currentStage": 0,
+            "illnessStages": [
+                {
+                    "duration": 7200,
+                    "condition": "arthritis-0"
+                },
+                {
+                    "duration": 5400,
+                    "condition": "arthritis-1"
+                },
+                {
+                    "duration": 3600,
+                    "condition": "arthritis-2"
+                },
+                {
+                    "duration": 2700,
+                    "condition": "arthritis-3"
+                },
+                {
+                    "duration": 1800,
+                    "condition": "arthritis-4"
+                },
+                {
+                    "duration": 900,
+                    "condition": "arthritis-5"
+                },
+                {
+                    "duration": 600,
+                    "condition": "arthritis-6"
+                },
+                {
+                    "duration": 0,
+                    "condition": "arthritis-7"
+                }
+            ]
         }
     ]
 }

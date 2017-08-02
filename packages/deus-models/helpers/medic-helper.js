@@ -43,7 +43,7 @@ function restoreDamage(api, hpHeal, timestamp){
             if(m.damage < 0)  { m.damage = 0; }
 
             api.info(`HP heal: ${hpHeal}, summary damage: ${m.damage}` );
-            helpers().addChangeRecord(api, `Вы восстановили ${m.damage - dmgBefore} HP`, timestamp);
+            helpers().addChangeRecord(api, `Вы восстановили ${dmgBefore - m.damage} HP`, timestamp);
         }
      }
 }  
@@ -81,7 +81,7 @@ function getDeadSystems(api){
 
     if(api.model.systems){
         api.model.systems.forEach( (sys,i) => {
-            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers().getImplantsBySystem(api,consts().medicSystems[i].name).filter( m => m.enabled );
 
             if(!sys && !implants.length){
                 ret.push(i);
@@ -98,7 +98,7 @@ function getDeadSystems(api){
 function getSystemsStateString(api){
     if(api.model.systems){
         let systemsStr = api.model.systems.map( (s, i) => { 
-            let imps = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+            let imps = helpers().getImplantsBySystem(api, consts().medicSystems[i].name).filter( m => m.enabled );
             let impDat = imps.length ? ` (+${imps.length})` : '';
 
             return `${consts().medicSystems[i].name.substring(0,3)}: ${s}${impDat}`
@@ -110,6 +110,17 @@ function getSystemsStateString(api){
     return "";
 }
 
+function getSystemID(name){
+    return consts().medicSystems.findIndex( s => s.name == name );
+}
+
+function isSystemAlive(api, name){
+    let i = consts().medicSystems.findIndex( s => s.name == name );
+    if(i != -1 && api.model.systems){
+        return (api.model.systems[i] == 1);
+    }
+}
+
 
 module.exports = () => {
     return {
@@ -118,7 +129,9 @@ module.exports = () => {
         calcMaxHP,
         setMedSystem,
         getDeadSystems,
-        getSystemsStateString
+        getSystemsStateString,
+        getSystemID,
+        isSystemAlive
     };
 };
 

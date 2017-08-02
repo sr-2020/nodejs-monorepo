@@ -47,6 +47,13 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "timedRecoverSystemsEffect"
-        } 
+        },
+        {        
+            "id"    : "illness-effect",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "illnessEffect"
+        }
+
     ]
 }

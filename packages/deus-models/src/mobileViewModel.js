@@ -192,10 +192,8 @@ const systemNames = {
 }
 
 function getImplantDetails(modifier) {    
-    let desc = modifier.desc || "подробного описания нет";
-    let details = `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${desc}</p>`;
-
-    return details;
+    let details = modifier.details || "подробного описания нет";
+    return  `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
 }
 
 function getImplantsPageItem(modifier) {

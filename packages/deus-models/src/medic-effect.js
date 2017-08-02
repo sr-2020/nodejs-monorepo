@@ -138,7 +138,7 @@ function characterDeathEvent(api, data, event){
         api.info(`characterDeath: systems ${medHelpers().getSystemsStateString(api)}`);       
 
         api.model.systems.forEach( (sys,i) => {
-            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers().getImplantsBySystem(api, consts().medicSystems[i].name).filter( m => m.enabled );
 
             if(!sys && !implants.length){
                 api.info(`characterDeath: system ${consts().medicSystems[i].name} is dead. Kill the character!`); 
@@ -257,7 +257,7 @@ function damageEffect(api, modifier){
         api.info(`damageEffect: systems ${medHelpers().getSystemsStateString(api)}`);       
 
         api.model.systems.forEach( (sys,i) => {
-            let implants = api.getModifiersBySystem(consts().medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers().getImplantsBySystem(api, consts().medicSystems[i].name).filter( m => m.enabled );
 
             //api.info(`system: ${sys}, implants: ${implants.map(x=>x.id).join(',')}`);
             if(!sys && !implants.length){
@@ -277,6 +277,8 @@ function damageEffect(api, modifier){
         if(!api.getTimer(consts().DEATH_TIMER)){
             api.info(`damageEffect: start death timer!`);        
             api.setTimer( consts().DEATH_TIMER, consts().DEATH_DELAY, "character-death", {} );
+            //Debug
+            //api.info(JSON.stringify(api.model.timers));
         }
     }else{
         //Иначе надо учитывать повреждения (хранящиеся в данном объекте)

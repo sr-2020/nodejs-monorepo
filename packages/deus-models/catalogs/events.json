@@ -190,6 +190,24 @@
             ]
         },
         {
+            "eventType": "start-illness",
+            "effects": [
+                "startIllnessEvent"
+            ]
+        },
+        {
+            "eventType": "illness-next-stage",
+            "effects": [
+                "illnessNextStageEvent"
+            ]
+        },
+        {
+            "eventType": "delay-illness",
+            "effects": [
+                "delayIllnessEvent"
+            ]
+        },
+        {
             "eventType": "scanQr",
             "effects": [
                 "scanQR"
