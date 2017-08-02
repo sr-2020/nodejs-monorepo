@@ -81,6 +81,129 @@
                     "condition": "arthritis-7"
                 }
             ]
-        }
+        },
+        {
+            "id": "ankylosingspondylitis",
+            "displayName": "Анкилозирующий спондилоартрит",
+            "class": "illness",
+            "system": "musculoskeletal",
+            "currentStage": 0,
+            "illnessStages": [
+                {
+                "duration": 7200,
+                "condition": "ankylosingspondylitis-0"
+                },
+                {
+                "duration": 5400,
+                "condition": "ankylosingspondylitis-1"
+                },
+                {
+                "duration": 3600,
+                "condition": "ankylosingspondylitis-2"
+                },
+                {
+                "duration": 2700,
+                "condition": "ankylosingspondylitis-3"
+                },
+                {
+                "duration": 1800,
+                "condition": "ankylosingspondylitis-4"
+                },
+                {
+                "duration": 900,
+                "condition": "ankylosingspondylitis-5"
+                },
+                {
+                "duration": 600,
+                "condition": "ankylosingspondylitis-6"
+                },
+                {
+                "duration": 0,
+                "condition": "ankylosingspondylitis-7"
+                }
+            ]
+        },
+        {
+            "id": "dementia",
+            "displayName": "Деменция",
+            "class": "illness",
+            "system": "nervous",
+            "currentStage": 0,
+            "illnessStages": [
+                {
+                "duration": 7200,
+                "condition": "dementia-0"
+                },
+                {
+                "duration": 5400,
+                "condition": "dementia-1"
+                },
+                {
+                "duration": 3600,
+                "condition": "dementia-2"
+                },
+                {
+                "duration": 2700,
+                "condition": "dementia-3"
+                },
+                {
+                "duration": 1800,
+                "condition": "dementia-4"
+                },
+                {
+                "duration": 900,
+                "condition": "dementia-5"
+                },
+                {
+                "duration": 600,
+                "condition": "dementia-6"
+                },
+                {
+                "duration": 0,
+                "condition": "dementia-7"
+                }
+            ]
+        },
+        {
+            "id": "diseaseitsenkokushinga",
+            "displayName": "Болезнь Иценко-Кушинга",
+            "class": "illness",
+            "system": "endocrine",
+            "currentStage": 0,
+            "illnessStages": [
+                {
+                "duration": 7200,
+                "condition": "diseaseitsenkokushinga-0"
+                },
+                {
+                "duration": 5400,
+                "condition": "diseaseitsenkokushinga-1"
+                },
+                {
+                "duration": 3600,
+                "condition": "diseaseitsenkokushinga-2"
+                },
+                {
+                "duration": 2700,
+                "condition": "diseaseitsenkokushinga-3"
+                },
+                {
+                "duration": 1800,
+                "condition": "diseaseitsenkokushinga-4"
+                },
+                {
+                "duration": 900,
+                "condition": "diseaseitsenkokushinga-5"
+                },
+                {
+                "duration": 600,
+                "condition": "diseaseitsenkokushinga-6"
+                },
+                {
+                "duration": 0,
+                "condition": "diseaseitsenkokushinga-7"
+                }
+            ]
+            }
     ]
 }
