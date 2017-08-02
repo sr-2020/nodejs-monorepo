@@ -29,6 +29,16 @@ function RequestId(req: express.Request): string {
   return (req as any).id;
 }
 
+function CleanEventsForLogging(events: any[]) {
+  return events.map((event) => {
+    return {
+      type: event.eventType,
+      timestamp: event.timestamp
+    }
+  });
+}
+
+
 class App {
   private app: express.Express = express();
   private server: http.Server;
@@ -153,9 +163,8 @@ class App {
         });
       }
       events = events.filter((event) => event.eventType != 'tokenUpdated');
-
-      const eventTypes: string[] = events.map((event) => event.eventType);
-      const isMobileClient = eventTypes.some((eventType) => eventType == '_RefreshModel');
+      const eventsForLogBefore = CleanEventsForLogging(events);
+      const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
       if (isMobileClient) {
         events.forEach((event) => event.mobile = true);
         const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
@@ -165,7 +174,6 @@ class App {
 
         const lastRefreshModelEventTimestamp =
           Math.max(...refreshModelEvents.map((event) => event.timestamp));
-        console.warn(lastRefreshModelEventTimestamp);
         events = events.filter((value: any) =>
           value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
       }
@@ -180,8 +188,12 @@ class App {
 
         if (isMobileClient) {
           this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
+          const eventsForLogAfter = CleanEventsForLogging(events);
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-            this.logSuccessfulResponse(req, eventTypes, s.status);
+            if (s.status == 200) 
+              this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
+            else
+              this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
             res.status(s.status).send(s.body);
             this.connections.delete(id);
           });
@@ -191,7 +203,7 @@ class App {
           // So we don't add Connection to this.connections.
           const connection = new Connection(this.eventsDb, 0);
           connection.processEvents(id, events).then((s: StatusAndBody) => {
-            this.logSuccessfulResponse(req, eventTypes, s.status);
+            this.logSuccessfulResponse(req, eventsForLogBefore, [], s.status);
             res.status(s.status).send(s.body);
           });
         }
@@ -426,14 +438,24 @@ class App {
   private logAndSendErrorResponse(req: express.Request, res: express.Response, status: number, msg: string) {
     const logData = this.createLogData(req, status);
     logData.msg = msg;
-    this.logger.info('Returning error response', logData);
+    this.logger.error('Returning error response', logData);
     res.status(status).send(msg);
   }
 
-  private logSuccessfulResponse(req: express.Request, eventTypes: string[], status: number) {
+  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[], 
+      eventTypesAfter: any[], status: number) {
     const logData = this.createLogData(req, status);
-    logData.eventTypes = eventTypes;
-    this.logger.info('Returning success response', logData);
+    logData.eventTypesBefore = eventTypesBefore;
+    logData.eventTypesAfter = eventTypesAfter
+    this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
+  }
+
+  private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[], 
+      eventTypesAfter: any[], status: number) {
+    const logData = this.createLogData(req, status);
+    logData.eventTypesBefore = eventTypesBefore;
+    logData.eventTypesAfter = eventTypesAfter
+    this.logger.info('Successfully processed all events and answered back to clien', logData);
   }
 
   private createLogData(req: express.Request, status: number): any {
