@@ -37,13 +37,16 @@ export class EconomyProvision {
 
         console.log(`pass ${password}, ${char.model}`);
 
+        if(char.model.profileType != 'human') {
+            return Promise.resolve("Skipping, because not human.");
+        }
+
         if(char.model && char.model.login && password ){
             let accData:any = {
                 Login: char.model._id,
                 Email: char.model.login,
                 Password: password,
                 Fullname: this.createFullName(char.model),
-                //Cash: config.economicsStartCash
             }
 
             if(char.model.insurance && char.model.insuranceLevel){
