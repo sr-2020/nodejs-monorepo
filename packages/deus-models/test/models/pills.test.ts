@@ -54,7 +54,7 @@ describe('Pills', () => {
     it('Should apply pills with qr-codes', async () => {
         let model = getExampleModel();
 
-        let events = getEvents(model._id, [{ eventType: 'scanQR', data: { type: 1, payload: '111-112' } }], Date.now(), true);
+        let events = getEvents(model._id, [{ eventType: 'scanQr', data: { type: 1, payload: '111-112' } }], Date.now(), true);
         let { baseModel, workingModel } = await process(model, events);
 
         let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
