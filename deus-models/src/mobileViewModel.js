@@ -218,15 +218,15 @@ function getImplantsPageItem(modifier) {
             header: modifier.displayName,
             text: getImplantDetails(modifier),
             actions: [
-                {
-                    text: getEnableActionText(modifier.enabled),
-                    eventType: modifier.enabled ? "disable-implant" : "enable-implant",
-                    dangerous: modifier.enabled ? true : false,
-                    needsQr: false,
-                    data: {
-                        mID: modifier.mID,
-                    },
-                }
+                // {
+                //     text: getEnableActionText(modifier.enabled),
+                //     eventType: modifier.enabled ? "disable-implant" : "enable-implant",
+                //     dangerous: modifier.enabled ? true : false,
+                //     needsQr: false,
+                //     data: {
+                //         mID: modifier.mID,
+                //     },
+                // }
                 // {
                 //     text: "Отдать гопнику (не работает)",
                 //     eventType: "giveAway",
