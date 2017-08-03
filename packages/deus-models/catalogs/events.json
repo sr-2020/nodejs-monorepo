@@ -212,6 +212,10 @@
             "effects": [
                 "scanQR"
             ]
+        },
+        {
+            "eventType" : "roll-illness",
+            "effects": ["rollForInfection"]
         }
     ]
 }
