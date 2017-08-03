@@ -71,7 +71,7 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
     getCatalogObject(catalogName: string, id: string) {
         let catalog = this.contextGetter().getDictionary(catalogName);
         if (catalog) {
-            return catalog.find((c) => c.id == id);
+            return cloneDeep(catalog.find((c) => c.id == id));
         }
     }
 
