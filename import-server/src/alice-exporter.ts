@@ -267,7 +267,16 @@ export class AliceExporter {
                 this.model.maxSecondsInVr = 7200;
 
                 //Импланты на начало игры. Field: 1215
+<<<<<<< HEAD
                 this.setImplants(this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)));
+=======
+                this.setImplants( this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)) );
+
+                
+                //начальное количество хитов
+                this.model.maxHp = 2;
+                this.model.hp = 2;
+>>>>>>> Доделан импорт андроидов
             }
 
             //Блок данных только для профиля андроида или программы
@@ -284,13 +293,16 @@ export class AliceExporter {
                     this.model.owner = "ничей";
                 }
 
-                //Модель андроида (или еще чего-нибудь) Field: 1906
-                //TODO: это точно надо переделывать в какой-то внятный список ID моделей
-                this.model.model = this.findStrFieldValue(1906);
+                //Модель андроида (или еще чего-нибудь) Field: 1980
+                this.model.model = this.findStrFieldValue(1980);
 
-                //Прошивка андроида. Field: 1907
-                //TODO: это точно надо переделывать в какой-то внятный список ID моделей
-                this.model.firmware = this.findStrFieldValue(1906);
+                if(this.model.model && this.model.model == 'DEX'){
+                    this.model.maxHp = 5;
+                    this.model.hp = 5;
+                }else{
+                    this.model.maxHp = 3;
+                    this.model.hp = 3;
+                }
 
                 //Сохраненные данные. Field: 1845,1846,1847
                 this.setMemories([1848, 1849, 1850]);
@@ -299,17 +311,16 @@ export class AliceExporter {
                 this.model.maxSecondsInVr = 82800;
 
                 //Прошивки на начало игры. Field: 2056 и 2057
-                //let FWs = [ this.convertToDescription(2056, this.findNumFieldValue(2056)).toLowerCase() ];
-                //FWs.concat( this.findNumListFieldValue(2057).map(id => this.convertToDescription(2057, id).toLowerCase()) );
+                let baseFW = this.convertToDescription(2056, this.findNumFieldValue(2056));
+                let addFW = this.findNumListFieldValue(2057).map(id => this.convertToDescription(2057, id));
 
-                //this.setImplants( FWs );
+                let FWs = [];
+                
+                if(baseFW) { FWs.push(baseFW.toLowerCase())  }
+                addFW.filter( fw => fw ).forEach( fw => FWs.push(fw.toLowerCase()) );
+
+                this.setImplants( FWs );
             }
-
-
-            //начальное количество хитов
-            this.model.maxHp = 2;
-            this.model.hp = 2;
-
 
         } catch (e) {
             winston.info(`Error in converting model id=${this.character.CharacterId}: ` + e);
