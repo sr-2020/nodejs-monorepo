@@ -49,6 +49,12 @@ function getStartPage(model) {
         pageInfo.body.items.push({text: "Пол",value: getRussianSex(model.sex)});
     }
 
+    if(!model.isAlive){
+        pageInfo.body.items.unshift({
+            text: "Состояние персонажа", value: "Вы мертвы!", valueColor : "#ff565c"
+        });
+    }
+
     if (model.profileType == "robot" || isProgram) {
         pageInfo.body.items.push({text: "Создатель", value: model.creator})
         pageInfo.body.items.push({text: "Владелец", value: model.owner})
@@ -69,7 +75,7 @@ function getStartPage(model) {
 
     let insuranceRow = {
         text: "Страховка",
-        value: model.insuranceDiplayName,
+        value: model.insuranceDiplayName
     };
 
     if (isHuman){
@@ -445,10 +451,16 @@ function getMenu(model) {
 }
 
 function getToolbar(model) {
-    return {
+    let ret =  {
         hitPoints: model.hp,
         maxHitPoints: model.maxHp,
     };
+
+    if(model.maxHp == 0){
+        ret.maxHitPoints = 1;
+    }
+
+    return ret;
 }
 
 function getPassportScreen(model) {
