@@ -13,6 +13,7 @@ let mapper: MapperInterface = new Mapper();
 
 let processor = new Processor(mapper);
 
-processor.run().then(() => {
+processor.run().then((total: number) => {
+    console.log('=== processed ' + total + ' models')
     console.log('=== Done');
 });

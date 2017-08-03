@@ -18,6 +18,8 @@ export class Processor {
 
     async run() {
         let lastId;
+        let total = 0;
+
         while (true) {
             let params: any = {
                 include_docs: true,
@@ -43,7 +45,14 @@ export class Processor {
                 .filter((doc) => this.mapper.filter(doc))
                 .map((doc) => this.mapper.map(doc));
 
-            await Promise.all(pending);
+            total += pending.length;
+
+            try {
+                await Promise.all(pending);
+            } catch (e) {
+                console.log(e);
+                throw e;
+            }
 
             if (docs.rows.length < 100) {
                 break;
@@ -51,5 +60,7 @@ export class Processor {
 
             lastId = docs.rows[docs.rows.length - 1].doc._id;
         }
+
+        return total;
     }
 }
