@@ -50,7 +50,10 @@ function useNarco(api, pill) {
 }
 
 function usePill(api, data, event) {
-    if (!api.model.isAlive) return;
+    if (!api.model.isAlive) {
+        api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
+        return;
+    }
 
     let code = api.aquired('pills', data.id);
     if (!code) {
