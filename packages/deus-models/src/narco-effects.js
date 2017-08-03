@@ -21,7 +21,7 @@ function createEffectModifier(api, effectName, modifierId) {
     var effect = api.getCatalogObject("effects", effectName);
 
     if (!effect) {
-        api.warn("Can't load effect " + effectName);
+        api.error("Can't load effect " + effectName);
         return;
     }
 
@@ -67,7 +67,7 @@ function addTemporaryConditons(api, narco)
     api.debug("Narco will add modifier")
 
     let modifier = createEffectModifier(api, "show-always-condition", "narcoEffectsCondition");
-    if (!modifier)  { return; }
+    if (!modifier)  { return; }b
 
     modifier.conditions = narco.conditions;
 
