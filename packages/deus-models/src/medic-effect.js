@@ -161,7 +161,7 @@ function characterDeathEvent(api, data, event){
  */
 function killRandomSystemEvent(api, data, event){
     if(data.from && data.from == "self" && api.model.profileType=="human"){
-        console.log("killRandomSystem: event handler start!");
+        api.info("killRandomSystem: event handler start!");
 
         let chance = new Chance();
         //debug seedind
@@ -175,7 +175,7 @@ function killRandomSystemEvent(api, data, event){
          do {
             sys = chance.integer({min: 0, max: 4});
             
-             console.log(`killRandomSystem: kill system ${consts().medicSystems[sys].label}`);
+             api.info(`killRandomSystem: kill system ${consts().medicSystems[sys].label}`);
 
             //Если система работала и импланта не было, то убить систему
             if(api.model.systems[sys]){
@@ -184,7 +184,7 @@ function killRandomSystemEvent(api, data, event){
                         `Необратимо повреждена ${consts().medicSystems[sys].label} система! Необходима срочная замена на имплант!`,
                          event.timestamp)
 
-                 console.log(`killRandomSystem: ${consts().medicSystems[sys].label} ==> dead`);
+                 api.info(`killRandomSystem: ${consts().medicSystems[sys].label} ==> dead`);
 
                 //делать так, что бы точно не пойти на второй круг (Если это была ОДС)
                 sys = -1;
@@ -197,7 +197,7 @@ function killRandomSystemEvent(api, data, event){
                     api.removeModifier(implants[0].mID);
                     helpers().addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, event.timestamp);
                     
-                    console.log(`killRandomSystem: kill system ${implants[0].displayName} ==> destroyed`);
+                    api.info(`killRandomSystem: kill system ${implants[0].displayName} ==> destroyed`);
                 }
 
             }
@@ -207,7 +207,7 @@ function killRandomSystemEvent(api, data, event){
         //Сбросить счетчик повреждений HP в 0, т.к. теперь отключена одна система целиком
         let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
         if(m){
-            console.log(`killRandomSystem: set damage == 0`);
+            api.info(`killRandomSystem: set damage == 0`);
             m.damage = 0;
         }
     }
@@ -338,7 +338,7 @@ function handleHumansWounded(api, deadSystems)
 {
     if((api.model.hp < api.model.maxHp) && !deadSystems){
         //Установить таймер для утечки хитов, либо если он уже есть - не трогать
-        //console.log(JSON.stringify(api.model.timers, null, 4));
+        //api.info(JSON.stringify(api.model.timers, null, 4));
         startLeakTimerIfRequired(api);
        
     }else{
