@@ -341,7 +341,12 @@ function importAndCreate(   id:number = 0,
         .flatMap( c => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]) )
 
     //Остановить обработку, если в модели нет флага InGame (игра началась и дальше импортировать что-то левое не нужно)
-        .filter( c => c.InGame)
+        .filter( c => { 
+            if(!c.InGame){
+                winston.error(`Character id=${c._id} have no flag "InGame", and not imported`);
+            }
+            return c.InGame;
+         })
 
     //Экспортировать модель в БД (если надо)
         .flatMap( c  =>  exportCharacterModel(c, workData, exportModel) )
