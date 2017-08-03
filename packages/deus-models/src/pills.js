@@ -101,6 +101,9 @@ function usePill(api, data, event) {
             return;
         }
     }
+    else {
+        api.info(`Pill of type ${pill.id} already used lately, cooldown not expired.`)
+    }
 
     _.set(api.model, ['usedPills', pill.id], event.timestamp);
     code.usedAt = event.timestamp;
