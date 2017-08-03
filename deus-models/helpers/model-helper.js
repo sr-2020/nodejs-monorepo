@@ -45,7 +45,13 @@ function loadIllness(api, id){
         return null;
     }
 
-    let effect = api.getCatalogObject("effects", consts().ILLNESS_EFFECT_NAME);
+    let effectName = consts().ILLNESS_EFFECT_NAME;
+    let effect = api.getCatalogObject("effects", effectName);
+
+    if (!effect) {
+        api.error(`loadIllness: effect id = ${effectName} not found`);
+        return null;
+    }
     effect.enabled = true;
 
     illness.effects = [ effect ];
