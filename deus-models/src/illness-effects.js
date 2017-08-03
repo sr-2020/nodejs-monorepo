@@ -6,6 +6,7 @@ let consts = require('../helpers/constants');
 let helpers = require('../helpers/model-helper');
 let medHelpers = require('../helpers/medic-helper');
 let clones = require("clones");
+let infection = require('../helpers/infection-illness');
 
 
 /**
@@ -129,13 +130,52 @@ function delayIllnessEvent( api, data, event ){
     }
 }
 
+const illneses = [
+    "acromegaly", "affectivebipolardisorder", "ankylosingspondylitis", "ankylosis", "arthritis",
+    "asphyxia", "bronchialasthma", "burkittlymphoma", "coronaryheartdisease", "dementia",
+    "diabetes", "diseaseitsenkokushinga", "dupuytrencontracture", "endocarditis", "heartdisease", 
+    "hypertension", "hyperthyroidism", "menieredisease", "mononucleosis", "multiplesclerosis", 
+    "myocarditis", "osteolysis", "pancreatitis", "pleurisy", "pneumonia", "schizophrenia", 
+    "sjogrensyndrome", "splenitis", "systemiclupuserythematosus", "tracheitis", "tuberculosis"
+];
+
+function rollForInfection(api, data,event) {
+    api.debug("Start rolling for infection");
+    if(api.model.profileType == "human") {    
+        let systemId = infection.whatSystemShouldBeInfected(api.model);
+
+        if (systemId > -1) {
+            let systemName = consts().medicSystems[systemId].name;
+
+            api.info("Roll for infection: will infect " + systemName + " system.");
+
+            let chance = helpers().getChanceFromModel(api.model);
+
+            let illnessModels = chance.pickone(illneses
+                .map(i => api.getCatalogObject("illnesses", i))
+                .filter(i => i.system == systemName));
+
+            api.debug("Roll for infection: will start illness " + illnessModels.id);
+
+            let deathAwaitTimeMs = chance.natural({min:0, max:3 * 60 * 60 * 1000});
+            
+            helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : illnessModels.id});
+            api.sendEvent(null, "start-illness", { id: illnessModels.id });
+        }
+        else{
+            api.info("Roll for infection: nothing will happen");
+        }
+    }
+}
+
 
 module.exports = () => {
     return {
         startIllnessEvent,
         illnessEffect,
         illnessNextStageEvent,
-        delayIllnessEvent
+        delayIllnessEvent,
+        rollForInfection
     };
 };
 

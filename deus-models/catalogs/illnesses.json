@@ -1,209 +1,1298 @@
 {
-    "illnesses": [
+    "illnesses":[
         {
-            "id": "affectivebipolardisorder",
-            "displayName": "Биполярное аффектиное расстройство",
-            "class": "illness",
-            "system": "nervous",
-            "currentStage": 0,
-            "illnessStages": [
+            "id":"acromegaly",
+            "displayName":"Акромегалия",
+            "class":"illness",
+            "system":"endocrine",
+            "currentStage":0,
+            "illnessStages":[
                 {
-                    "duration": 7200,
-                    "condition": "affectivebipolardisorder-0"
+                    "duration":7200,
+                    "condition":"acromegaly-0"
                 },
                 {
-                    "duration": 5400,
-                    "condition": "affectivebipolardisorder-1"
+                    "duration":5400,
+                    "condition":"acromegaly-1"
                 },
                 {
-                    "duration": 3600,
-                    "condition": "affectivebipolardisorder-2"
+                    "duration":3600,
+                    "condition":"acromegaly-2"
                 },
                 {
-                    "duration": 2700,
-                    "condition": "affectivebipolardisorder-3"
+                    "duration":2700,
+                    "condition":"acromegaly-3"
                 },
                 {
-                    "duration": 1800,
-                    "condition": "affectivebipolardisorder-4"
+                    "duration":1800,
+                    "condition":"acromegaly-4"
                 },
                 {
-                    "duration": 900,
-                    "condition": "affectivebipolardisorder-5"
+                    "duration":900,
+                    "condition":"acromegaly-5"
                 },
                 {
-                    "duration": 600,
-                    "condition": "affectivebipolardisorder-6"
+                    "duration":600,
+                    "condition":"acromegaly-6"
                 },
                 {
-                    "duration": 0,
-                    "condition": "affectivebipolardisorder-7"
+                    "duration":0,
+                    "condition":"acromegaly-7"
                 }
             ]
         },
         {
-            "id": "arthritis",
-            "displayName": "Артрит",
-            "class": "illness",
-            "system": "musculoskeletal",
-            "currentStage": 0,
-            "illnessStages": [
+            "id":"affectivebipolardisorder",
+            "displayName":"Биполярное аффектиное расстройство",
+            "class":"illness",
+            "system":"nervous",
+            "currentStage":0,
+            "illnessStages":[
                 {
-                    "duration": 7200,
-                    "condition": "arthritis-0"
+                    "duration":7200,
+                    "condition":"affectivebipolardisorder-0"
                 },
                 {
-                    "duration": 5400,
-                    "condition": "arthritis-1"
+                    "duration":5400,
+                    "condition":"affectivebipolardisorder-1"
                 },
                 {
-                    "duration": 3600,
-                    "condition": "arthritis-2"
+                    "duration":3600,
+                    "condition":"affectivebipolardisorder-2"
                 },
                 {
-                    "duration": 2700,
-                    "condition": "arthritis-3"
+                    "duration":2700,
+                    "condition":"affectivebipolardisorder-3"
                 },
                 {
-                    "duration": 1800,
-                    "condition": "arthritis-4"
+                    "duration":1800,
+                    "condition":"affectivebipolardisorder-4"
                 },
                 {
-                    "duration": 900,
-                    "condition": "arthritis-5"
+                    "duration":900,
+                    "condition":"affectivebipolardisorder-5"
                 },
                 {
-                    "duration": 600,
-                    "condition": "arthritis-6"
+                    "duration":600,
+                    "condition":"affectivebipolardisorder-6"
                 },
                 {
-                    "duration": 0,
-                    "condition": "arthritis-7"
+                    "duration":0,
+                    "condition":"affectivebipolardisorder-7"
                 }
             ]
         },
         {
-            "id": "ankylosingspondylitis",
-            "displayName": "Анкилозирующий спондилоартрит",
-            "class": "illness",
-            "system": "musculoskeletal",
-            "currentStage": 0,
-            "illnessStages": [
+            "id":"ankylosingspondylitis",
+            "displayName":"Анкилозирующий спондилоартрит",
+            "class":"illness",
+            "system":"musculoskeletal",
+            "currentStage":0,
+            "illnessStages":[
                 {
-                "duration": 7200,
-                "condition": "ankylosingspondylitis-0"
+                    "duration":7200,
+                    "condition":"ankylosingspondylitis-0"
                 },
                 {
-                "duration": 5400,
-                "condition": "ankylosingspondylitis-1"
+                    "duration":5400,
+                    "condition":"ankylosingspondylitis-1"
                 },
                 {
-                "duration": 3600,
-                "condition": "ankylosingspondylitis-2"
+                    "duration":3600,
+                    "condition":"ankylosingspondylitis-2"
                 },
                 {
-                "duration": 2700,
-                "condition": "ankylosingspondylitis-3"
+                    "duration":2700,
+                    "condition":"ankylosingspondylitis-3"
                 },
                 {
-                "duration": 1800,
-                "condition": "ankylosingspondylitis-4"
+                    "duration":1800,
+                    "condition":"ankylosingspondylitis-4"
                 },
                 {
-                "duration": 900,
-                "condition": "ankylosingspondylitis-5"
+                    "duration":900,
+                    "condition":"ankylosingspondylitis-5"
                 },
                 {
-                "duration": 600,
-                "condition": "ankylosingspondylitis-6"
+                    "duration":600,
+                    "condition":"ankylosingspondylitis-6"
                 },
                 {
-                "duration": 0,
-                "condition": "ankylosingspondylitis-7"
+                    "duration":0,
+                    "condition":"ankylosingspondylitis-7"
                 }
             ]
         },
         {
-            "id": "dementia",
-            "displayName": "Деменция",
-            "class": "illness",
-            "system": "nervous",
-            "currentStage": 0,
-            "illnessStages": [
+            "id":"ankylosis",
+            "displayName":"Анкилоз",
+            "class":"illness",
+            "system":"musculoskeletal",
+            "currentStage":0,
+            "illnessStages":[
                 {
-                "duration": 7200,
-                "condition": "dementia-0"
+                    "duration":7200,
+                    "condition":"ankylosis-0"
                 },
                 {
-                "duration": 5400,
-                "condition": "dementia-1"
+                    "duration":5400,
+                    "condition":"ankylosis-1"
                 },
                 {
-                "duration": 3600,
-                "condition": "dementia-2"
+                    "duration":3600,
+                    "condition":"ankylosis-2"
                 },
                 {
-                "duration": 2700,
-                "condition": "dementia-3"
+                    "duration":2700,
+                    "condition":"ankylosis-3"
                 },
                 {
-                "duration": 1800,
-                "condition": "dementia-4"
+                    "duration":1800,
+                    "condition":"ankylosis-4"
                 },
                 {
-                "duration": 900,
-                "condition": "dementia-5"
+                    "duration":900,
+                    "condition":"ankylosis-5"
                 },
                 {
-                "duration": 600,
-                "condition": "dementia-6"
+                    "duration":600,
+                    "condition":"ankylosis-6"
                 },
                 {
-                "duration": 0,
-                "condition": "dementia-7"
+                    "duration":0,
+                    "condition":"ankylosis-7"
                 }
             ]
         },
         {
-            "id": "diseaseitsenkokushinga",
-            "displayName": "Болезнь Иценко-Кушинга",
-            "class": "illness",
-            "system": "endocrine",
-            "currentStage": 0,
-            "illnessStages": [
+            "id":"anthrax",
+            "displayName":"Сибирская Язва",
+            "system":"SkinSystem",
+            "class":"illness",
+            "stages":[
                 {
-                "duration": 7200,
-                "condition": "diseaseitsenkokushinga-0"
+                    "delay":5,
+                    "conditions":[
+                        "illCond01"
+                    ]
                 },
                 {
-                "duration": 5400,
-                "condition": "diseaseitsenkokushinga-1"
+                    "delay":6,
+                    "conditions":[
+                        "illCond02"
+                    ]
+                }
+            ],
+            "effects":[
+
+            ]
+        },
+        {
+            "id":"arthritis",
+            "displayName":"Артрит",
+            "class":"illness",
+            "system":"musculoskeletal",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"arthritis-0"
                 },
                 {
-                "duration": 3600,
-                "condition": "diseaseitsenkokushinga-2"
+                    "duration":5400,
+                    "condition":"arthritis-1"
                 },
                 {
-                "duration": 2700,
-                "condition": "diseaseitsenkokushinga-3"
+                    "duration":3600,
+                    "condition":"arthritis-2"
                 },
                 {
-                "duration": 1800,
-                "condition": "diseaseitsenkokushinga-4"
+                    "duration":2700,
+                    "condition":"arthritis-3"
                 },
                 {
-                "duration": 900,
-                "condition": "diseaseitsenkokushinga-5"
+                    "duration":1800,
+                    "condition":"arthritis-4"
                 },
                 {
-                "duration": 600,
-                "condition": "diseaseitsenkokushinga-6"
+                    "duration":900,
+                    "condition":"arthritis-5"
                 },
                 {
-                "duration": 0,
-                "condition": "diseaseitsenkokushinga-7"
+                    "duration":600,
+                    "condition":"arthritis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"arthritis-7"
                 }
             ]
-            }
+        },
+        {
+            "id":"asphyxia",
+            "displayName":"Асфиксия",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"asphyxia-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"asphyxia-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"asphyxia-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"asphyxia-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"asphyxia-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"asphyxia-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"asphyxia-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"asphyxia-7"
+                }
+            ]
+        },
+        {
+            "id":"bronchialasthma",
+            "displayName":"Бронхиальная астма",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"bronchialasthma-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"bronchialasthma-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"bronchialasthma-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"bronchialasthma-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"bronchialasthma-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"bronchialasthma-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"bronchialasthma-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"bronchialasthma-7"
+                }
+            ]
+        },
+        {
+            "id":"burkittlymphoma",
+            "displayName":"Лимфома Беркитта",
+            "class":"illness",
+            "system":"lymphatic",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"burkittlymphoma-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"burkittlymphoma-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"burkittlymphoma-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"burkittlymphoma-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"burkittlymphoma-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"burkittlymphoma-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"burkittlymphoma-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"burkittlymphoma-7"
+                }
+            ]
+        },
+        {
+            "id":"coronaryheartdisease",
+            "displayName":"Ишемическая болезнь сердца",
+            "class":"illness",
+            "system":"cardiovascular",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"coronaryheartdisease-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"coronaryheartdisease-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"coronaryheartdisease-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"coronaryheartdisease-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"coronaryheartdisease-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"coronaryheartdisease-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"coronaryheartdisease-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"coronaryheartdisease-7"
+                }
+            ]
+        },
+        {
+            "id":"dementia",
+            "displayName":"Деменция",
+            "class":"illness",
+            "system":"nervous",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"dementia-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"dementia-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"dementia-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"dementia-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"dementia-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"dementia-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"dementia-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"dementia-7"
+                }
+            ]
+        },
+        {
+            "id":"diabetes",
+            "displayName":"Сахарный диабет",
+            "class":"illness",
+            "system":"endocrine",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"diabetes-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"diabetes-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"diabetes-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"diabetes-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"diabetes-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"diabetes-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"diabetes-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"diabetes-7"
+                }
+            ]
+        },
+        {
+            "id":"diseaseitsenkokushinga",
+            "displayName":"Болезнь Иценко-Кушинга",
+            "class":"illness",
+            "system":"endocrine",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"diseaseitsenkokushinga-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"diseaseitsenkokushinga-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"diseaseitsenkokushinga-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"diseaseitsenkokushinga-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"diseaseitsenkokushinga-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"diseaseitsenkokushinga-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"diseaseitsenkokushinga-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"diseaseitsenkokushinga-7"
+                }
+            ]
+        },
+        {
+            "id":"dupuytrencontracture",
+            "displayName":"Контрактура Дюпюитрена",
+            "class":"illness",
+            "system":"musculoskeletal",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"dupuytrencontracture-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"dupuytrencontracture-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"dupuytrencontracture-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"dupuytrencontracture-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"dupuytrencontracture-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"dupuytrencontracture-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"dupuytrencontracture-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"dupuytrencontracture-7"
+                }
+            ]
+        },
+        {
+            "id":"endocarditis",
+            "displayName":"Эндокардит",
+            "class":"illness",
+            "system":"cardiovascular",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"endocarditis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"endocarditis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"endocarditis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"endocarditis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"endocarditis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"endocarditis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"endocarditis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"endocarditis-7"
+                }
+            ]
+        },
+        {
+            "id":"heartdisease",
+            "displayName":"Порок сердца",
+            "class":"illness",
+            "system":"cardiovascular",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"heartdisease-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"heartdisease-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"heartdisease-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"heartdisease-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"heartdisease-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"heartdisease-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"heartdisease-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"heartdisease-7"
+                }
+            ]
+        },
+        {
+            "id":"hypertension",
+            "displayName":"Гипертоническая болезнь",
+            "class":"illness",
+            "system":"cardiovascular",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"hypertension-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"hypertension-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"hypertension-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"hypertension-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"hypertension-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"hypertension-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"hypertension-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"hypertension-7"
+                }
+            ]
+        },
+        {
+            "id":"hyperthyroidism",
+            "displayName":"Гипертиреоз",
+            "class":"illness",
+            "system":"endocrine",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"hyperthyroidism-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"hyperthyroidism-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"hyperthyroidism-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"hyperthyroidism-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"hyperthyroidism-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"hyperthyroidism-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"hyperthyroidism-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"hyperthyroidism-7"
+                }
+            ]
+        },
+        {
+            "id":"menieredisease",
+            "displayName":"Болезнь Меньера",
+            "class":"illness",
+            "system":"nervous",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"menieredisease-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"menieredisease-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"menieredisease-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"menieredisease-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"menieredisease-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"menieredisease-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"menieredisease-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"menieredisease-7"
+                }
+            ]
+        },
+        {
+            "id":"mononucleosis",
+            "displayName":"Мононуклеоз",
+            "class":"illness",
+            "system":"lymphatic",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"mononucleosis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"mononucleosis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"mononucleosis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"mononucleosis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"mononucleosis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"mononucleosis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"mononucleosis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"mononucleosis-7"
+                }
+            ]
+        },
+        {
+            "id":"multiplesclerosis",
+            "displayName":"Рассеянный склероз",
+            "class":"illness",
+            "system":"nervous",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"multiplesclerosis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"multiplesclerosis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"multiplesclerosis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"multiplesclerosis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"multiplesclerosis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"multiplesclerosis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"multiplesclerosis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"multiplesclerosis-7"
+                }
+            ]
+        },
+        {
+            "id":"myocarditis",
+            "displayName":"Миокардит",
+            "class":"illness",
+            "system":"cardiovascular",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"myocarditis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"myocarditis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"myocarditis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"myocarditis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"myocarditis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"myocarditis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"myocarditis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"myocarditis-7"
+                }
+            ]
+        },
+        {
+            "id":"osteolysis",
+            "displayName":"Остеолизис",
+            "class":"illness",
+            "system":"musculoskeletal",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"osteolysis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"osteolysis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"osteolysis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"osteolysis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"osteolysis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"osteolysis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"osteolysis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"osteolysis-7"
+                }
+            ]
+        },
+        {
+            "id":"pancreatitis",
+            "displayName":"Панкреатит",
+            "class":"illness",
+            "system":"endocrine",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"pancreatitis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"pancreatitis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"pancreatitis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"pancreatitis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"pancreatitis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"pancreatitis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"pancreatitis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"pancreatitis-7"
+                }
+            ]
+        },
+        {
+            "id":"pleurisy",
+            "displayName":"Плеврит",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"pleurisy-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"pleurisy-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"pleurisy-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"pleurisy-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"pleurisy-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"pleurisy-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"pleurisy-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"pleurisy-7"
+                }
+            ]
+        },
+        {
+            "id":"pneumonia",
+            "displayName":"Пневмония",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"pneumonia-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"pneumonia-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"pneumonia-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"pneumonia-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"pneumonia-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"pneumonia-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"pneumonia-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"pneumonia-7"
+                }
+            ]
+        },
+        {
+            "id":"schizophrenia",
+            "displayName":"Шизофрения",
+            "class":"illness",
+            "system":"nervous",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"schizophrenia-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"schizophrenia-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"schizophrenia-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"schizophrenia-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"schizophrenia-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"schizophrenia-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"schizophrenia-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"schizophrenia-7"
+                }
+            ]
+        },
+        {
+            "id":"sjogrensyndrome",
+            "displayName":"Синдром Шегрена",
+            "class":"illness",
+            "system":"lymphatic",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"sjogrensyndrome-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"sjogrensyndrome-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"sjogrensyndrome-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"sjogrensyndrome-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"sjogrensyndrome-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"sjogrensyndrome-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"sjogrensyndrome-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"sjogrensyndrome-7"
+                }
+            ]
+        },
+        {
+            "id":"splenitis",
+            "displayName":"Спленит",
+            "class":"illness",
+            "system":"lymphatic",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"splenitis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"splenitis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"splenitis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"splenitis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"splenitis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"splenitis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"splenitis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"splenitis-7"
+                }
+            ]
+        },
+        {
+            "id":"systemiclupuserythematosus",
+            "displayName":"Системная красная волчанка",
+            "class":"illness",
+            "system":"lymphatic",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"systemiclupuserythematosus-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"systemiclupuserythematosus-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"systemiclupuserythematosus-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"systemiclupuserythematosus-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"systemiclupuserythematosus-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"systemiclupuserythematosus-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"systemiclupuserythematosus-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"systemiclupuserythematosus-7"
+                }
+            ]
+        },
+        {
+            "id":"tracheitis",
+            "displayName":"Трахеит",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"tracheitis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"tracheitis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"tracheitis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"tracheitis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"tracheitis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"tracheitis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"tracheitis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"tracheitis-7"
+                }
+            ]
+        },
+        {
+            "id":"tuberculosis",
+            "displayName":"Туберкулез",
+            "class":"illness",
+            "system":"respiratory",
+            "currentStage":0,
+            "illnessStages":[
+                {
+                    "duration":7200,
+                    "condition":"tuberculosis-0"
+                },
+                {
+                    "duration":5400,
+                    "condition":"tuberculosis-1"
+                },
+                {
+                    "duration":3600,
+                    "condition":"tuberculosis-2"
+                },
+                {
+                    "duration":2700,
+                    "condition":"tuberculosis-3"
+                },
+                {
+                    "duration":1800,
+                    "condition":"tuberculosis-4"
+                },
+                {
+                    "duration":900,
+                    "condition":"tuberculosis-5"
+                },
+                {
+                    "duration":600,
+                    "condition":"tuberculosis-6"
+                },
+                {
+                    "duration":0,
+                    "condition":"tuberculosis-7"
+                }
+            ]
+        }
     ]
 }

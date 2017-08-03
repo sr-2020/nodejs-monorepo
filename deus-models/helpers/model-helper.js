@@ -430,6 +430,10 @@ function getImplantsBySystem(api, systemName){
     return api.getModifiersBySystem(systemName).filter( m => isImplant(m) );
 }
 
+function getChanceFromModel (model) {
+    return  (model.randomSeed) ?  new Chance(model.randomSeed) : new Chance();
+}
+
  
 module.exports = () => {
     return {
@@ -449,7 +453,8 @@ module.exports = () => {
         setTimerToKillModifier,
         isImplant,
         loadIllness,
-        getImplantsBySystem
+        getImplantsBySystem,
+        getChanceFromModel
     };
 };
 
