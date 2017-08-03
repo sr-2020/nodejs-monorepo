@@ -261,8 +261,8 @@ function getMemoryPageItem(mem) {
     }
 
     let details = "";
-    if (mem.text) details += `<p>${mem.text}</p>`;
-    if (mem.url) details+= `<p><a href="${mem.url}">${mem.url}</a></p>`
+    if (mem.text) details += `<p>${mem.text.replace(/\s/g,' ')}</p>`;
+    if (mem.url) details += `<p><a href="${mem.url}">${mem.url}</a></p>`
 
     return {
         text: mem.title,
