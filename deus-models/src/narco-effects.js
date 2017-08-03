@@ -67,7 +67,7 @@ function addTemporaryConditons(api, narco)
     api.debug("Narco will add modifier")
 
     let modifier = createEffectModifier(api, "show-always-condition", "narcoEffectsCondition");
-    if (!modifier)  { return; }b
+    if (!modifier)  { return; }
 
     modifier.conditions = narco.conditions;
 
