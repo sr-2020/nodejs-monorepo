@@ -98,18 +98,26 @@ export class AliceExporter {
 
         this.eventsToSend.push(refreshEvent);
 
-        return Observable.fromPromise(this.con.get(this.model._id))
-            .catch(err => {
-                winston.info("Model doesnt exsit");
-                return Observable.from([this.model]);
-            })
-          // ===== Проверка InGame для для случая обновления ==============================
-            .filter((oldModel: DeusModel) => {
-                if (oldModel.inGame) {
+        let oldModel = Observable
+            .fromPromise(this.con.get(this.model._id))
+            .catch((err) => {
+                winston.info("Model doesnt exist");
+                return Observable.of(null);
+            });
+
+        let thisModel = Observable.of(this.model);
+
+        return Observable.zip(thisModel, oldModel, (a, b) => [a, b])
+            // ===== Проверка InGame для для случая обновления ==============================
+            .filter(([thisModel, oldModel]: [DeusModel, DeusModel | null]) => {
+                if (oldModel && oldModel.inGame) {
                     winston.info(`Character model ${this.model._id} already in game!`);
+                    return false;
                 }
-                return !oldModel.inGame;
+                return true;
             })
+
+            .map(([thisModel, oldModel]) => thisModel)
 
             .flatMap(() => this.clearEvents())
             .do(result => results.clearEvents = result.length)
@@ -125,7 +133,6 @@ export class AliceExporter {
 
             .map(result => results)
             .toPromise();
-
     }
 
     /**
@@ -260,7 +267,7 @@ export class AliceExporter {
                 this.model.maxSecondsInVr = 7200;
 
                 //Импланты на начало игры. Field: 1215
-                this.setImplants( this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)) );
+                this.setImplants(this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)));
             }
 
             //Блок данных только для профиля андроида или программы
@@ -273,7 +280,7 @@ export class AliceExporter {
                 //Владелец (для андроидов и программ) Field: 1830
                 this.model.owner = this.findStrFieldValue(1830);
 
-                if (this.model.owner == "0")                     {
+                if (this.model.owner == "0") {
                     this.model.owner = "ничей";
                 }
 
@@ -459,11 +466,11 @@ export class AliceExporter {
 
     //Получить список имплантов и загрузить их в модель. Field: 2015
     //Фактически посылает персонажу набор событий add-implant для добавления при первом рефреше
-    setImplants( ids: string[] ) {
+    setImplants(ids: string[]) {
         let time = this.model.timestamp + 100;
 
-//        this.findNumListFieldValue(2015)
-//           .map(id => this.convertToDescription(2015, id))
+        //        this.findNumListFieldValue(2015)
+        //           .map(id => this.convertToDescription(2015, id))
         ids.filter(sId => sId)
             .forEach(sID => this.eventsToSend.push({
                 characterId: this.model._id,
