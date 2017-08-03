@@ -23,6 +23,22 @@ function addImplantEvent( api, data, event ){
 
         if(_implant){
             let implant = clones(_implant)
+
+            //Импланты (прошивки) для андроидов
+            if(implant.class == "robot"){
+                if(api.model.profileType == "robot"){
+                    api.info(`Install implant (robot fw): ${implant.displayName}`);
+                    implant = api.addModifier(implant);
+
+                    //Добавление сообщения об этом в список изменений в модели
+                    helpers().addChangeRecord(api, `Установлена прошивка: ${implant.displayName}`, event.timestamp);
+                }else{
+                    api.info(`Can't install implant fw to human: ${implant.displayName}`);
+                }
+
+                return;
+            }
+
             if(helpers().isImpantCanBeInstalled(api, implant)){
                 api.info(`Install implant: ${implant.displayName}`);
 
