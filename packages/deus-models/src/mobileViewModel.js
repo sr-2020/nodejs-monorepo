@@ -57,7 +57,7 @@ function getStartPage(model) {
     }
 
     if(model.profileType == "robot" ){
-        pageInfo.body.items.unshift({ text: "Тип системы:", value: "Андроид" });
+        pageInfo.body.items.unshift({ text: "Тип системы:", value: `Андроид ${model.model}` });
     }
 
     if(isProgram){
@@ -215,7 +215,12 @@ const systemNames = {
 
 function getImplantDetails(modifier) {    
     let details = modifier.details || "подробного описания нет";
-    return  `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
+
+    if(modifier.system){
+        return  `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
+    }else{
+        return  `<p><b>Описание:</b></p><p>${details}</p>`;
+    }
 }
 
 function getImplantsPageItem(modifier) {
