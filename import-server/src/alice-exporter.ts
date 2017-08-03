@@ -103,7 +103,7 @@ export class AliceExporter {
                 winston.info("Model doesnt exsit");
                 return Observable.from([this.model]);
             })
-          //  ===== Проверка InGame ===============================================
+          // ===== Проверка InGame для для случая обновления ==============================
             .filter((oldModel: DeusModel) => {
                 if (oldModel.inGame) {
                     winston.info(`Character model ${this.model._id} already in game!`);

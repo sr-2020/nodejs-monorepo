@@ -170,7 +170,7 @@ function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, 
                             winston.info( `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
                         }else{
                             winston.info( `Model and account for character ${char._id} not exported: model alredy IN THE GAME` );
-                            char.finalInGame = true;    //Отметить что эта модель дальше не надо обрабатывать
+                            char.finalInGame = true;    //Отметить что эту модель дальше не надо обрабатывать
                         }
 
                         return char;
@@ -339,6 +339,9 @@ function importAndCreate(   id:number = 0,
 
     //Сохранить данные в кеш (если надо)
         .flatMap( c => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]) )
+
+    //Остановить обработку, если в модели нет флага InGame (игра началась и дальше импортировать что-то левое не нужно)
+        .filter( c => c.InGame)
 
     //Экспортировать модель в БД (если надо)
         .flatMap( c  =>  exportCharacterModel(c, workData, exportModel) )
