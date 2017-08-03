@@ -71,11 +71,11 @@ export class Worker {
 
             try {
                 Logger.logStep('engine', 'info', 'run event %s', event.eventType)(() => {
-                    Logger.debug('engine', 'event: %j', event);
+                    Logger.debug('engine', 'event: %s', event.eventType, event);
                     this.runEvent(baseCtx, event);
                 });
             } catch (e) {
-                Logger.error('engine', 'Exception caught when processing event %j: %s', event, e.toString());
+                Logger.error('engine', 'Exception caught when processing event %s: %s', event.eventType, e.toString(), event);
                 return { status: 'error', error: e };
             }
 
