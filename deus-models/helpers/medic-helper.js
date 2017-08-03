@@ -52,11 +52,12 @@ function restoreDamage(api, hpHeal, timestamp){
  *  Посчитать текущее MaxHP для всех имплантов вида "+2 хита" и базовых хитов персонажа
  */
 function calcMaxHP(api){
-    return api.model.modifiers.filter( m => m.enabled )
+    let maxHP = api.model.modifiers.filter( m => m.enabled )
                         .map( m => helpers().checkPredicate(api, m.mID, "change-max-hp") )
                         .map( p => p ? p.maxHp : 0)
                         .reduce( (acc, val) => acc + val, api.model.hp );
  
+    return (maxHP <= 6 ? maxHP : 6);
 }
 
 /**

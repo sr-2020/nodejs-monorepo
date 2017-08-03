@@ -78,11 +78,15 @@ function addChangeRecord( api, text, timestamp ){
 function checkPredicate(api, mID, effectName, multi = false){
     let implant = api.getModifierById(mID)
 
+    //api.info("checkPredicate: " + JSON.stringify(implant));
+
     if(implant){
         let predicates = implant.predicates;
 
         //Если предикатов нет внутри импланта, попробовать загрузить имплант из БД
         if(!predicates){
+            //api.info("checkPredicate: try to load predicates from catalog");
+
             let catalogImplant = api.getCatalogObject("implants", implant.id);
             if(catalogImplant) {
                 predicates = catalogImplant.predicates;
@@ -261,22 +265,22 @@ function addCharacterCondition( api, condId ){
  * Так же нельзя установить один имплант два раза
  */
 
- function isImpantCanBeInstalled(api, implant){
-    if(implant && implant.system){
-        let systemInfo = consts().medicSystems.find( s => s.name == implant.system);
+//  function isImpantCanBeInstalled(api, implant){
+//     if(implant && implant.system){
+//         let systemInfo = consts().medicSystems.find( s => s.name == implant.system);
 
-        if(systemInfo){
-            let existingImplants = api.getModifiersBySystem( implant.system );
+//         if(systemInfo){
+//             let existingImplants = helpers().getImplantsBySystem( implant.system );
 
-            if(!existingImplants.find( m => m.id == implant.id) &&
-                systemInfo.slots > existingImplants.length){
-                    return true;
-            }
-        }
-    }
+//             if(!existingImplants.find( m => m.id == implant.id) &&
+//                 systemInfo.slots >= existingImplants.length){
+//                     return true;
+//             }
+//         }
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 /**
  *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
@@ -452,7 +456,6 @@ module.exports = () => {
         checkPredicate,
         modifyMindCubes,
         addCharacterCondition,
-        isImpantCanBeInstalled,
         addDelayedEvent,
         removeElementByMID,
         modifyModelProperties,

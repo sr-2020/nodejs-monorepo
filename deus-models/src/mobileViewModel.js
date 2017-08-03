@@ -6,7 +6,8 @@ function getRussianSex(sex) {
     switch (sex) {
         case "male":    return "мужской";
         case "female":  return "женский";
-        default:        return sex;
+        case "agender":  return "агендер";
+        default:        return "---";
     }
 }
 
@@ -53,6 +54,14 @@ function getStartPage(model) {
         pageInfo.body.items.unshift({
             text: "Состояние персонажа", value: "Вы мертвы!", valueColor : "#ff565c"
         });
+    }
+
+    if(model.profileType == "robot" ){
+        pageInfo.body.items.unshift({ text: "Тип системы:", value: "Андроид" });
+    }
+
+    if(isProgram){
+        pageInfo.body.items.unshift({ text: "Тип системы:", value: "Программа" });
     }
 
     if (model.profileType == "robot" || isProgram) {
@@ -189,7 +198,7 @@ function getEnableActionText(enabled) {
 }
 
 
-const implantsClasses = [ "cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual" ]
+const implantsClasses = [ "cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual", "firmware" ];
 
 function isImplant(modifier) {
     return implantsClasses.find( c => modifier.class == c)
@@ -242,12 +251,14 @@ function getImplantsPageItem(modifier) {
 }
 
 function getImplantsPage(model) {
+    let pageTitle = model.profileType == "human" ? "Импланты" : "Прошивки";
+
     return {
         __type: "ListPageViewModel",
         viewId: "page:implants",
-        menuTitle: "Импланты",
+        menuTitle: pageTitle,
         body: {
-            title: "Импланты",
+            title: pageTitle,
             items: model.modifiers.filter(isImplant).map(getImplantsPageItem),
         },
     };
