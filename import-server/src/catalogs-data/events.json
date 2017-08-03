@@ -169,6 +169,32 @@
             ]
         },
         {
+            "id": "start-illness",
+            "eventType": "start-illness",
+            "effects": [
+                "startIllnessEvent"
+            ]
+        },
+        {
+            "id": "illness-next-stage",
+            "eventType": "illness-next-stage",
+            "effects": [
+                "illnessNextStageEvent"
+            ]
+        },
+        {
+            "id": "delay-illness",
+            "eventType": "delay-illness",
+            "effects": [
+                "delayIllnessEvent"
+            ]
+        },
+        {
+            "id" : "roll-illness",
+            "eventType" : "roll-illness",
+            "effects": ["rollForInfection"]
+        },
+        {
             "id" : "take-narco",
             "eventType": "take-narco",
             "effects": [
@@ -183,8 +209,8 @@
             ]
         },
         {
-            "id": "scanQR",
-            "eventType": "scanQR",
+            "id": "scanQr",
+            "eventType": "scanQr",
             "effects": [
                 "scanQR"
             ]
