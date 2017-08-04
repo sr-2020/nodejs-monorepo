@@ -35,7 +35,10 @@ function exitVREvent( api, data, event ){
 
         api.model.totalSpentInVR += api.model.lastVREnterDuration;
 
-        helpers().addChangeRecord(api, `Вы вышли из VR. Время нахождения в VR: ${Math.round(api.model.totalSpentInVR/1000/60)} мин.`, event.timestamp);
+        helpers().addChangeRecord(api, `Вы вышли из VR. Время нахождения в VR: ${Math.round(api.model.lastVREnterDuration/1000/60)} мин.`, event.timestamp);
+    }
+    else{
+        api.error(`При обработке выхода из VR время входа ${api.model.lastVREnterTimestamp}; сейчас ${event.timestamp}`);
     }
 }
 

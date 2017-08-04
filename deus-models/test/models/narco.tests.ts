@@ -7,7 +7,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 import * as fs from 'async-file';
 
 describe('Narco effects: ', () => {
-    it.only("Change mind cube", async function() {
+    it("Change mind cube", async function() {
 
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "altnarco" } }], model.timestamp);
