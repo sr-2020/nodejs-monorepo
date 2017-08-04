@@ -3,7 +3,7 @@ import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
-describe('Illnesses: ', () => {
+describe('Illnesses: ', () => { 
     it("Start Illness and check illness life path", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);
