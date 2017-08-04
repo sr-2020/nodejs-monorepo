@@ -336,6 +336,9 @@ describe('Medicine: ', () => {
         
         //Check HP: model(4) + impant(1) - damage (2) - leak(3)
         expect(workingModel.hp).is.equal(0);
+        
+        let change = workingModel.changes.find( (c:any) => c.text.startsWith("Тяжелое повреждение организма") );
+        expect(change).is.exist;
 
     //Прошло еще 25 минут - персонаж умирает 
         events =  [getRefreshEvent(model._id,baseModel.timestamp+25*60*1000)];

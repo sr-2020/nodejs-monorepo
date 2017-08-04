@@ -278,8 +278,8 @@ function damageEffect(api, modifier){
             api.info(`damageEffect: start death timer!`);        
             api.setTimer( consts.DEATH_TIMER, consts.DEATH_DELAY, "character-death", {} );
 
-            helpers.addChangeRecord(api, `Тяжелое повреждение организма! Требуется немедленная реанимация, возможна смерть в течении 20 минут`, event.timestamp);
-
+            api.sendEvent(null, "add-change-record", { text: `Тяжелое повреждение организма! Требуется немедленная реанимация, возможна смерть в течении 20 минут`, timestamp: api.model.timestamp } );
+        
             //Debug
             //api.info(JSON.stringify(api.model.timers));
         }

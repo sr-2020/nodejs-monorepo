@@ -104,6 +104,22 @@ function changeMindCubeEvent( api, data, event ){
     }
 }
 
+
+/**
+ * Обработчик события "add-change-record"
+ * Событие позволяет добавить состояние в список состояний 
+ * 
+ * {
+ *   text: string,
+ *   timestamp: number
+ * }
+ */
+function addChangeRecord( api, data, event ){
+    if(data.text && data.timestamp){
+        helpers().addChangeRecord(api, data.text, data.timestamp)
+    }
+}
+
 /**
  * Обработчик события "change-model-variable"
  * Универсальное событие для изменения любой простой (т.е. не внутри каких-то вложенных структур)
@@ -255,6 +271,7 @@ module.exports = () => {
         changeMindCubeEvent,
         changeAndroidOwnerEvent,
         changeMemoryEvent,
-        changeInsuranceEvent
+        changeInsuranceEvent,
+        addChangeRecord
     };
 };

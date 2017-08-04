@@ -216,6 +216,11 @@
         {
             "eventType" : "roll-illness",
             "effects": ["rollForInfection"]
+        },
+        {
+            "id": "add-change-record",
+            "eventType" : "add-change-record",
+            "effects": ["addChangeRecord"]
         }
     ]
 }
