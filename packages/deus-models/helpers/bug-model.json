@@ -1,0 +1,336 @@
+{
+    "_id": "11697",
+    "_rev": "222-a39dd8cfe63aa3c3079b892ae0bfab78",
+    "isAlive": false,
+    "inGame": true,
+    "memory": [],
+    "timestamp": 1501805071902,
+    "conditions": [],
+    "modifiers": [
+        {
+            "id": "_damage",
+            "displayName": "internal damage modificator",
+            "class": "_internal",
+            "effects": [
+                {
+                    "id": "damage-effect",
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "damageEffect",
+                    "enabled": true
+                }
+            ],
+            "damage": 0,
+            "enabled": true,
+            "mID": "_internal_damage"
+        },
+        {
+            "id": "mindcubes_showdata",
+            "displayName": "internal mind cube conditions modifier",
+            "class": "_internal",
+            "effects": [
+                {
+                    "id": "show-condition",
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "showCondition",
+                    "enabled": true
+                }
+            ],
+            "enabled": true,
+            "mID": "_internal_mindcubes"
+        },
+        {
+            "displayName": "Нейроимплант \"Инженер\"",
+            "class": "virtual",
+            "system": "nervous",
+            "details": "Нейроимплант для инженеров Моста.",
+            "effects": [
+                {
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "showCondition",
+                    "id": "show-condition",
+                    "enabled": true
+                }
+            ],
+            "id": "5_implantbridge",
+            "enabled": true,
+            "gID": "80a4440c-87fe-4fc4-9d54-51bd100b147c",
+            "mID": "cj5vhsebx013vtj9m9jwdd798"
+        },
+        {
+            "displayName": "Плеврит",
+            "class": "illness",
+            "system": "respiratory",
+            "currentStage": 7,
+            "illnessStages": [
+                {
+                    "duration": 7200,
+                    "condition": "pleurisy-0"
+                },
+                {
+                    "duration": 5400,
+                    "condition": "pleurisy-1"
+                },
+                {
+                    "duration": 3600,
+                    "condition": "pleurisy-2"
+                },
+                {
+                    "duration": 2700,
+                    "condition": "pleurisy-3"
+                },
+                {
+                    "duration": 1800,
+                    "condition": "pleurisy-4"
+                },
+                {
+                    "duration": 900,
+                    "condition": "pleurisy-5"
+                },
+                {
+                    "duration": 600,
+                    "condition": "pleurisy-6"
+                },
+                {
+                    "duration": 0,
+                    "condition": "pleurisy-7"
+                }
+            ],
+            "id": "pleurisy",
+            "effects": [
+                {
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "illnessEffect",
+                    "id": "illness-effect",
+                    "enabled": true
+                }
+            ],
+            "enabled": true,
+            "startTime": 1501776226704,
+            "mID": "cj5wnl9030005y19mzzo9jqcm"
+        },
+        {
+            "displayName": "Плеврит",
+            "class": "illness",
+            "system": "respiratory",
+            "currentStage": 7,
+            "illnessStages": [
+                {
+                    "duration": 7200,
+                    "condition": "pleurisy-0"
+                },
+                {
+                    "duration": 5400,
+                    "condition": "pleurisy-1"
+                },
+                {
+                    "duration": 3600,
+                    "condition": "pleurisy-2"
+                },
+                {
+                    "duration": 2700,
+                    "condition": "pleurisy-3"
+                },
+                {
+                    "duration": 1800,
+                    "condition": "pleurisy-4"
+                },
+                {
+                    "duration": 900,
+                    "condition": "pleurisy-5"
+                },
+                {
+                    "duration": 600,
+                    "condition": "pleurisy-6"
+                },
+                {
+                    "duration": 0,
+                    "condition": "pleurisy-7"
+                }
+            ],
+            "id": "pleurisy",
+            "effects": [
+                {
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "illnessEffect",
+                    "id": "illness-effect",
+                    "enabled": true
+                }
+            ],
+            "enabled": true,
+            "startTime": 1501776606998,
+            "mID": "cj5wnl90k0009y19may95wlpf"
+        },
+        {
+            "displayName": "Плеврит",
+            "class": "illness",
+            "system": "respiratory",
+            "currentStage": 7,
+            "illnessStages": [
+                {
+                    "duration": 7200,
+                    "condition": "pleurisy-0"
+                },
+                {
+                    "duration": 5400,
+                    "condition": "pleurisy-1"
+                },
+                {
+                    "duration": 3600,
+                    "condition": "pleurisy-2"
+                },
+                {
+                    "duration": 2700,
+                    "condition": "pleurisy-3"
+                },
+                {
+                    "duration": 1800,
+                    "condition": "pleurisy-4"
+                },
+                {
+                    "duration": 900,
+                    "condition": "pleurisy-5"
+                },
+                {
+                    "duration": 600,
+                    "condition": "pleurisy-6"
+                },
+                {
+                    "duration": 0,
+                    "condition": "pleurisy-7"
+                }
+            ],
+            "id": "pleurisy",
+            "effects": [
+                {
+                    "class": "physiology",
+                    "type": "normal",
+                    "handler": "illnessEffect",
+                    "id": "illness-effect",
+                    "enabled": true
+                }
+            ],
+            "enabled": true,
+            "startTime": 1501778194331,
+            "mID": "cj5wo4f0600zx2j9mxpgdt1lt"
+        }
+    ],
+    "timers": {},
+    "changes": [
+        {
+            "mID": "fece79b9-4956-4736-b953-e7830648befd",
+            "text": "Установлен имплант: Нейроимплант \"Инженер\"",
+            "timestamp": 1501707359372
+        },
+        {
+            "mID": "eedcd887-554d-4e1f-8a38-a8eccad4ba8e",
+            "text": "Вы вошли в VR",
+            "timestamp": 1501776945070
+        },
+        {
+            "mID": "343ad06f-4c7e-4c4e-80be-1772a45dcfdd",
+            "text": "Вы вышли из VR. Время нахождения в VR: 16 мин.",
+            "timestamp": 1501777890849
+        },
+        {
+            "mID": "41f1db04-302a-4d3e-9435-959186764a29",
+            "text": "Вы вошли в VR",
+            "timestamp": 1501797494272
+        },
+        {
+            "mID": "62de448b-a6b4-44f9-91d2-26cc882b8f14",
+            "text": "Вы вышли из VR. Время нахождения в VR: 29 мин.",
+            "timestamp": 1501798317685
+        },
+        {
+            "mID": "34729067-db60-4413-a8ef-77198fd543de",
+            "text": "Вы умерли. Отказала дыхательная система организма.",
+            "timestamp": 1501799627704
+        }
+    ],
+    "messages": [],
+    "login": "cathrin.orlova",
+    "mail": "cathrin.orlova@alice.digital",
+    "generation": "Z",
+    "profileType": "human",
+    "firstName": "Кэтрин",
+    "nicName": "",
+    "lastName": "Орлова",
+    "sweethome": "Поместья Небесного Города",
+    "systems": [ 1, 1, 0, 1, 1, 1 ],
+    "sex": "female",
+    "corporation": "SunLight/government",
+    "corporationId": "sungov",
+    "salaryLevel": 2,
+    "mind": {
+        "A": [
+            47,
+            52,
+            40
+        ],
+        "B": [
+            59,
+            47,
+            48,
+            59,
+            52,
+            55,
+            51,
+            67,
+            53,
+            53
+        ],
+        "C": [
+            48,
+            56,
+            47,
+            53,
+            42,
+            48,
+            57,
+            57
+        ],
+        "D": [
+            41,
+            54,
+            50,
+            48,
+            56,
+            33,
+            45,
+            54,
+            21
+        ],
+        "E": [
+            46,
+            51,
+            58,
+            55,
+            45,
+            55,
+            53
+        ],
+        "F": [
+            44,
+            47,
+            54,
+            49
+        ]
+    },
+    "genome": [ 0, 0, 1, 1, 0, 1, 2, 1, 1, 1, 0, 0, 0 ],
+    "hackingLogin": "",
+    "hackingProtection": 1,
+    "lockReduction": 100,
+    "proxyRegen": 100,
+    "maxProxy": 100,
+    "maxSecondsInVr": 7200,
+    "maxHp": 2,
+    "hp": 2,
+    "lastVREnterTimestamp": 1501797494272,
+    "lastVREnterDuration": 823413,
+    "totalSpentInVR": 1769192
+}

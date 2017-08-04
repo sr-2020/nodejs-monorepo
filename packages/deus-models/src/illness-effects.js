@@ -45,7 +45,7 @@ function startIllnessEvent( api, data, event ){
             illness.currentStage = 0;
 
             //Запуск таймера болезни
-            let timerName = `${illness._id}-${illness.mID}`
+            let timerName = `${illness.id}-${illness.mID}`
 
             api.info(`startIllnessEvent: start timer: ${timerName} to ${illness.illnessStages[0].duration} sec (stage 0)`);
 

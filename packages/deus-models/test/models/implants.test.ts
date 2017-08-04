@@ -6,7 +6,11 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Implants: ', () => {
+<<<<<<< HEAD
     let result: any = null;
+=======
+    let result:any = null;
+>>>>>>> новый Resurect и разные фиксы
 
     it("Add implant", async function() {
         let eventData = { id: "s_stability" };
@@ -116,7 +120,11 @@ describe('Implants: ', () => {
     });
 
     it("Add implant and stop illness 2", async function() {
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> новый Resurect и разные фиксы
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "acromegaly" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);

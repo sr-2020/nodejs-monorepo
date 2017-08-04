@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { process } from '../test_helpers';
+import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -313,14 +313,22 @@ describe('Medicine: ', () => {
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp+100, true);
 
         let { baseModel, workingModel } = await process(model, events);
+
+        printModel(baseModel);
     
-    //Нанесли повреждения
-        events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp+100, true);
+    //Нанесли повреждения и добавили болезнь
+        events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } },
+                                       { eventType: 'start-illness', data: { id: "acromegaly" } }], baseModel.timestamp+100, true);
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         //Check HP: model(4) + impant(1) - damage (2)
         expect(workingModel.hp).is.equal(3);
         expect(baseModel.isAlive).is.true;
+
+        let illness = baseModel.modifiers.find( (m:any) => m.id == "acromegaly" );
+
+        expect(illness).is.exist;
+        expect(illness.class).is.equal("illness");
 
     //Прошло 30 минут (должно списаться 3 хита)
         events =  [getRefreshEvent(model._id,baseModel.timestamp+30*60*1000)];
@@ -343,6 +351,12 @@ describe('Medicine: ', () => {
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         expect(baseModel.isAlive).is.true;
+
+        illness = baseModel.modifiers.find( (m:any) => m.id == "acromegaly" );
+
+        expect(illness).is.not.exist;
+
+        printModel(baseModel);
     });
 
 });

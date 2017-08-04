@@ -122,6 +122,26 @@ function isSystemAlive(api, name){
     }
 }
 
+/**
+ * Удалить болезь 
+ */
+function removeIllness(api, mID){
+    if(mID){
+        let index = api.model.modifiers.findIndex( m => m.mID == mID );
+
+        if(index != -1){
+            let ill = api.model.modifiers[index];
+
+            api.info(`removeIllness: remove ${ill.id} and timer ${ill.id}-${ill.mID}`);
+                        
+            api.removeTimer(`${ill.id}-${ill.mID}`);
+            api.model.modifiers.splice(index,1);        
+        }else{
+            api.error(`removeIllness: illness ${mID} not found!`);
+        }
+    }
+}
+ 
 
 module.exports = () => {
     return {
@@ -132,7 +152,8 @@ module.exports = () => {
         getDeadSystems,
         getSystemsStateString,
         getSystemID,
-        isSystemAlive
+        isSystemAlive,
+        removeIllness
     };
 };
 

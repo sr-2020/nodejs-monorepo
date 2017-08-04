@@ -436,6 +436,18 @@ function isImplant(modifier){
     return false;
 }
 
+/**
+ * Проверяет класс модификатора и возращается true если это болезнь 
+ */
+function isIllness(modifier){
+    if(modifier.class && modifier.class == "illness"){
+        return true;
+    }
+
+    return false;
+}
+
+
 function getImplantsBySystem(api, systemName){
     return api.getModifiersBySystem(systemName).filter( m => isImplant(m) );
 }
@@ -444,7 +456,7 @@ function getChanceFromModel (model) {
     return  (model.randomSeed) ?  new Chance(model.randomSeed) : new Chance();
 }
 
- 
+
 module.exports = () => {
     return {
         loadImplant,
@@ -463,7 +475,8 @@ module.exports = () => {
         isImplant,
         loadIllness,
         getImplantsBySystem,
-        getChanceFromModel
+        getChanceFromModel,
+        isIllness
     };
 };
 
