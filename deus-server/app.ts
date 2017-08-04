@@ -174,7 +174,7 @@ class App {
             events = events.filter((event) => event.eventType != 'tokenUpdated');
 
             const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
-            if (isMobileClient && this.connections.has(id)) {
+            if (this.connections.has(id)) {
                 this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
                 return;
             }
