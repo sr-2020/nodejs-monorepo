@@ -165,7 +165,13 @@ export class Worker {
         let workingCtx = baseCtx.clone();
         let api = ModelApiFactory(workingCtx);
 
-        let enabledModifiers = workingCtx.modifiers.filter((m) => m.enabled);
+        let enabledModifiers = workingCtx.modifiers
+            .filter((m) => m.enabled)
+            .sort((a, b) => {
+                if (a.class != '_internal' && b.class == '_internal') return -1;
+                if (a.class == '_internal' && b.class != '_internal') return 1;
+                return 0;
+            });
 
         // Functional effects first
         for (let modifier of enabledModifiers) {
