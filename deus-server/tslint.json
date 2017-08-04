@@ -16,7 +16,10 @@
         "triple-equals": false,
         "no-empty": false,
         "object-literal-shorthand": false,
-
+        "trailing-comma": false,
+        "semicolon": [true, "always", "ignore-interfaces"],
+        "interface-name": [true, "never-prefix"],
+        "max-line-length": false,
         "no-unused-expression": false,
         "no-unused": true
     },
