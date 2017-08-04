@@ -1,7 +1,7 @@
 module.exports = {
     dbs: ['models'],
 
-    version: 1,
+    version: 2,
 
     views: {
         'by-class': {
@@ -12,6 +12,7 @@ module.exports = {
                         if (mod.class != '_internal') {
                             emit(mod.class, {
                                 _id: doc._id,
+                                login: doc.login,
                                 class: mod.class,
                                 system: mod.system,
                                 implantId: mod.id,
@@ -34,6 +35,7 @@ module.exports = {
                         if (mod.class != '_internal') {
                             emit(mod.id, {
                                 _id: doc._id,
+                                login: doc.login,
                                 class: mod.class,
                                 system: mod.system,
                                 implantId: mod.id,
