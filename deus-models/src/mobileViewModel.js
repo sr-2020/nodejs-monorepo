@@ -112,6 +112,24 @@ function getStartPage(model) {
         pageInfo.body.items.push(hpRow);  
     }
 
+    let illnesses = model.modifiers.filter(e => e.class == "illness" && e.currentStage > 2);
+
+    if (illnesses && illnesses.length) {
+        pageInfo.body.items.push({
+            text: "Внимание!", 
+            value: "Вы больны, рекомендуем обратиться к врачу",
+            valueColor: "#ff565c",
+            percent: 100
+        });
+    }
+    else if (isHuman) {
+        pageInfo.body.items.push({
+            text: "Информация", 
+            value: "Регулярная проверка A.L.I.C.E. — залог долгой жизни",
+        });
+
+    }
+
     let handicaps = getHandicaps(model);
     if(handicaps){
         pageInfo.body.items.push( {
