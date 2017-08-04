@@ -31,6 +31,7 @@ export const getExampleModel = (id?: string) => ({
     firstName: "Джон",
     nicName: "",
     lastName: "Смит",
+    model: "",  //For droids
     sweethome: "Жилые комплексы PanAm",
     sex: "male",
     corporation: "Корпорация Pan American Sunrise Technology Corp.",
