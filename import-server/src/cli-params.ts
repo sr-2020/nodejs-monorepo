@@ -17,7 +17,9 @@ const cliParamsDef = [
         { name: 'id', type: String, typeLabel: '[underline]{characterId}', description: 'ID of single character for import'},
         { name: 'since', type: String, typeLabel: '[underline]{YYYY-MM-DDTHH:mm}', description: 'import characters modified after that time' },
         { name: 'server', type: Boolean, description: 'Run as a server' },
-        { name: 'test', type: Boolean, description: 'Testing'},      
+        { name: 'filter', type: String, description: 'Filter for imported characters (==robot for androids)' },
+        { name: 'ignoreInGame', type: Boolean, description: 'Ignore inGame flag for re-export' },
+        //{ name: 'test', type: Boolean, description: 'Testing'},      
 ];
 
 const usageSections = [

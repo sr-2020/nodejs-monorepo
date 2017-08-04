@@ -62,7 +62,7 @@ if(params.export || params.import || params.id || params.test || params.list || 
     let since = params.since? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
     
     importAndCreate(_id, (params.import == true), (params.export==true), (params.list==true), 
-                            false, (params.refresh==true), (params.mail==true), (params.econ==true), since)
+                            false, (params.refresh==true), (params.mail==true), (params.econ==true), since, params.filter)
     .subscribe( (data:string) => {},
                 (error:any) => {
                     process.exit(1);
@@ -160,7 +160,7 @@ function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData):
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
 function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, exportModel: boolean = true): Observable<JoinCharacterDetail> {
-    let model = new AliceExporter(char, data.importer.metadata, data.catalogsLoader, true);
+    let model = new AliceExporter(char, data.importer.metadata, data.catalogsLoader, true, params.ignoreInGame);
     char.model = model.model;
 
     if(exportModel){
@@ -283,14 +283,16 @@ function importAndCreate(   id:number = 0,
                             refreshModel:boolean = false,
                             mailProvision:boolean = true,
                             econProvision:boolean = true,
-                            updatedSince?: moment.Moment ): Observable<string> {
+                            updatedSince?: moment.Moment,
+                            filter? : string    
+                        ): Observable<string> {
 
     
     let sinceText = updatedSince? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
 
     winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
                   `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, mailProvision=${mailProvision}, ` + 
-                   `econProvision=${econProvision}, + updateSince=${sinceText}` )
+                   `econProvision=${econProvision}, updateSince=${sinceText}, filter=${filter}` )
 
 
     //Объект с рабочими данными при импорте - экспорте
@@ -334,6 +336,27 @@ function importAndCreate(   id:number = 0,
     //Загрузить данные из Join или из кеша
         .flatMap( (data:ModelImportData) => importJoin ? loadCharactersFromJoin(data) : loadCharactersFromCache(data) )
 
+     //Переданный фильтр
+        .filter( c => {
+            if(!filter){
+                return true;
+            }
+
+            let generation = AliceExporter.joinStrFieldValue(c, 498, true);
+            let isRobot =  generation == "robot";
+            let isProgramm = generation == "program";
+
+            if(filter == "robot" && isRobot){
+                winston.info(`Filter selection: robot   id=${c._id}`);
+                return true;
+            }else{
+                return false;
+            }
+        }) 
+
+    //Временно пропустить все дальше
+    //    .filter( c => false )
+    
     //Добавить задержку между обработкой записей
         .flatMap( c => Observable.from([c]).delay(config.importDelay), 1 )
 
@@ -350,6 +373,7 @@ function importAndCreate(   id:number = 0,
 
     //Экспортировать модель в БД (если надо)
         .flatMap( c  =>  exportCharacterModel(c, workData, exportModel) )
+
 
     //Если персонаж "В игре" остановить дальнейшую обработку
         .filter( c => (!c.finalInGame) )

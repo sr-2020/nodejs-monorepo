@@ -54,7 +54,8 @@ export class AliceExporter {
     constructor(private character: JoinCharacterDetail,
         private metadata: JoinMetadata,
         private catalogs: CatalogsLoader,
-        public isUpdate: boolean = true) {
+        public isUpdate: boolean = true,
+        public ignoreInGame: boolean = false) {
 
         const ajaxOpts = {
             auth: {
@@ -99,11 +100,16 @@ export class AliceExporter {
         this.eventsToSend.push(refreshEvent);
 
         let oldModel = Observable
-            .fromPromise(this.con.get(this.model._id))
-            .catch((err) => {
-                winston.info("Model doesnt exist");
-                return Observable.of(null);
-            });
+        .fromPromise(this.con.get(this.model._id))
+        .catch((err) => {
+            winston.info("Model doesnt exist");
+            return Observable.of(null);
+        });
+
+        if(this.ignoreInGame){
+            winston.info(`Ovveride inGame flag for id=${this.model._id}`);
+            oldModel = Observable.of(null);
+        }
 
         let thisModel = Observable.of(this.model);
 
@@ -133,6 +139,7 @@ export class AliceExporter {
 
             .map(result => results)
             .toPromise();
+
     }
 
     /**
@@ -267,16 +274,11 @@ export class AliceExporter {
                 this.model.maxSecondsInVr = 7200;
 
                 //Импланты на начало игры. Field: 1215
-<<<<<<< HEAD
-                this.setImplants(this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)));
-=======
                 this.setImplants( this.findNumListFieldValue(2015).map(id => this.convertToDescription(2015, id)) );
-
                 
                 //начальное количество хитов
                 this.model.maxHp = 2;
                 this.model.hp = 2;
->>>>>>> Доделан импорт андроидов
             }
 
             //Блок данных только для профиля андроида или программы
@@ -289,7 +291,7 @@ export class AliceExporter {
                 //Владелец (для андроидов и программ) Field: 1830
                 this.model.owner = this.findStrFieldValue(1830);
 
-                if (this.model.owner == "0") {
+                if (this.model.owner == "0")                     {
                     this.model.owner = "ничей";
                 }
 
@@ -477,11 +479,11 @@ export class AliceExporter {
 
     //Получить список имплантов и загрузить их в модель. Field: 2015
     //Фактически посылает персонажу набор событий add-implant для добавления при первом рефреше
-    setImplants(ids: string[]) {
+    setImplants( ids: string[] ) {
         let time = this.model.timestamp + 100;
 
-        //        this.findNumListFieldValue(2015)
-        //           .map(id => this.convertToDescription(2015, id))
+//        this.findNumListFieldValue(2015)
+//           .map(id => this.convertToDescription(2015, id))
         ids.filter(sId => sId)
             .forEach(sID => this.eventsToSend.push({
                 characterId: this.model._id,
