@@ -117,15 +117,15 @@ function getStartPage(model) {
     if (illnesses && illnesses.length) {
         pageInfo.body.items.push({
             text: "Внимание!", 
-            value: "Вы больны, рекомендуем обратиться к врачу",
+            value: "Больно и плохо, врача!",
             valueColor: "#ff565c",
             percent: 100
         });
     }
     else if (isHuman) {
         pageInfo.body.items.push({
-            text: "Информация", 
-            value: "Регулярная проверка A.L.I.C.E. — залог долгой жизни",
+            text: "Инфо:", 
+            value: "Проверяй ALICE часто",
         });
 
     }
