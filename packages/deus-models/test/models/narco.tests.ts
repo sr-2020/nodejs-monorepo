@@ -7,7 +7,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 import * as fs from 'async-file';
 
 describe('Narco effects: ', () => {
-    it("Change mind cube", async function() {
+    it.only("Change mind cube", async function() {
 
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "altnarco" } }], model.timestamp);
@@ -19,6 +19,10 @@ describe('Narco effects: ', () => {
 
         let modifiers = workingModel.modifiers.filter((e: any) => e.id == "narcoEffects");
         expect(modifiers.length).is.equal(1);
+
+        let conditions = workingModel.conditions.filter((e:any) => e.id == "mcube-condition-F3-1");
+
+        expect(conditions.length).is.equal(1);
     });
 
     it("Change mind cube back", async function() {
