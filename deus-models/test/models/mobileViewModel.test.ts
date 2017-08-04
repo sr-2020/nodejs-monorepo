@@ -36,6 +36,10 @@ function getRobotViewModel() {
                     "title": "Общая информация",
                     "items": [
                         {
+                            "text": "Тип системы:",
+                            "value": "Андроид Sex-droid"
+                        },
+                        {
                             "text": "Имя",
                             "value": "Джон Смит"
                         },
@@ -303,8 +307,9 @@ describe("mobileViewModel", () => {
         //console.log(JSON.stringify(viewModel, null, 4));
     });
 
-     it.skip("_view for robot is not so complicated", async function() {
+     it("_view for robot is not so complicated", async function() {
         let  model = getExampleModel("1000");
+        model.model = "Sex-droid";
         model.profileType = "robot";
         model.owner = "ничей";
         model.creator = "Господь Бог";
@@ -312,8 +317,9 @@ describe("mobileViewModel", () => {
         expect(viewModel).to.be.deep.equal(getRobotViewModel());
     });
 
-    it.skip("_view for programs is really dumb", async function() {
+    it("_view for programs is really dumb", async function() {
         let  model = getExampleModel("1000");
+        
         model.profileType = "program";
         model.owner = "ничей";
         model.creator = "Господь Бог";
