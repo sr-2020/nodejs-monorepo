@@ -5,8 +5,8 @@ import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
-describe.only('Implants: ', () => {
-    let result:any = null;
+describe('Implants: ', () => {
+    let result: any = null;
 
     it("Add implant", async function() {
         let eventData = { id: "s_stability" };
@@ -20,18 +20,18 @@ describe.only('Implants: ', () => {
         expect(implant).to.exist;
         expect(implant).to.has.property('enabled', true);
 
-        let changeRecord = baseModel.changes.find( (e:any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»" )
+        let changeRecord = baseModel.changes.find((e: any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»")
         expect(changeRecord).to.exist;
-        
+
     });
 
-    
+
     it("Add implant to robot", async function() {
         let model = getExampleModel();
 
         model.profileType = "robot";
 
-        let events = getEvents(model._id, [{ eventType: 'add-implant', data: {id: "s_and_basic"} }]);
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_and_basic" } }]);
 
         let { baseModel } = await process(model, events);
 
@@ -41,28 +41,28 @@ describe.only('Implants: ', () => {
         expect(implant).to.has.property('enabled', true);
         //printModel(baseModel);
 
-        let changeRecord = baseModel.changes.find( (e:any) => e.text.startsWith( "Установлено системное ПО" ) );
+        let changeRecord = baseModel.changes.find((e: any) => e.text.startsWith("Установлено системное ПО"));
         expect(changeRecord).to.exist;
 
     });
 
-     it("Add duble implant", async function() {
+    it("Add duble implant", async function() {
         let eventData = { id: "s_stability" };
         let model = getExampleModel();
-        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }],  model.timestamp+100, true);
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
-        let {baseModel, workingModel } = await process(model, events);
+        let { baseModel, workingModel } = await process(model, events);
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
         expect(implant).to.exist;
         expect(implant).to.has.property('enabled', true);
 
-        let changeRecord = baseModel.changes.find( (e:any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»" )
+        let changeRecord = baseModel.changes.find((e: any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»")
         expect(changeRecord).to.exist;
 
-        events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], baseModel.timestamp+100, true);
-        ({baseModel, workingModel } = await process(baseModel, events));
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], baseModel.timestamp + 100, true);
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         let implants = baseModel.modifiers.filter((e: any) => e.id == "s_stability");
 
@@ -71,10 +71,10 @@ describe.only('Implants: ', () => {
 
     it("Add two implants for one system", async function() {
         let model = getExampleModel();
-        let events = getEvents(model._id, [{ eventType: 'add-implant', data: {id: "s_stability"} },
-                                           { eventType: 'add-implant', data: {id: "s_orphey"} } ], model.timestamp+100);
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_stability" } },
+        { eventType: 'add-implant', data: { id: "s_orphey" } }], model.timestamp + 100);
 
-        let {baseModel, workingModel } = await process(model, events);
+        let { baseModel, workingModel } = await process(model, events);
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
         let implant2 = baseModel.modifiers.find((e: any) => e.id == "s_orphey");
@@ -84,30 +84,30 @@ describe.only('Implants: ', () => {
         expect(implant2).to.exist;
         expect(implant2).to.has.property('enabled', true);
 
-        let changeRecord = baseModel.changes.find( (e:any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»" )
+        let changeRecord = baseModel.changes.find((e: any) => e.text == "Установлен имплант: Киберпротез ноги «Стабильность»")
         expect(changeRecord).to.exist;
 
-        changeRecord = baseModel.changes.find( (e:any) => e.text == "Установлен имплант: Киберпротез руки «Орфей»" )
+        changeRecord = baseModel.changes.find((e: any) => e.text == "Установлен имплант: Киберпротез руки «Орфей»")
         expect(changeRecord).to.exist;
     });
 
     it("Add implant and stop illness", async function() {
-        
+
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
 
-        let illness = baseModel.modifiers.find( (m:any) => m.id == "arthritis");
+        let illness = baseModel.modifiers.find((m: any) => m.id == "arthritis");
         expect(illness).is.exist;
 
-        let cond = workingModel.conditions.find( (c:any) => c.id == "arthritis-0");
+        let cond = workingModel.conditions.find((c: any) => c.id == "arthritis-0");
         expect(cond).is.exist;
 
-        events = getEvents(model._id, [{ eventType: 'add-implant', data: {id: "s_stability"}}], baseModel.timestamp+100);
-        ({baseModel, workingModel } = await process(baseModel, events));
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_stability" } }], baseModel.timestamp + 100);
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
-        illness = baseModel.modifiers.find( (m:any) => m.id == "arthritis");
+        illness = baseModel.modifiers.find((m: any) => m.id == "arthritis");
 
         expect(implant).to.exist;
         expect(implant).to.has.property('enabled', true);
@@ -115,23 +115,23 @@ describe.only('Implants: ', () => {
         expect(illness).to.not.exist;
     });
 
-    it.only("Add implant and stop illness 2", async function() {
-        
+    it("Add implant and stop illness 2", async function() {
+
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "acromegaly" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
 
-        let illness = baseModel.modifiers.find( (m:any) => m.id == "acromegaly");
+        let illness = baseModel.modifiers.find((m: any) => m.id == "acromegaly");
         expect(illness).is.exist;
 
-        let cond = workingModel.conditions.find( (c:any) => c.id == "acromegaly-0");
+        let cond = workingModel.conditions.find((c: any) => c.id == "acromegaly-0");
         expect(cond).is.exist;
 
-        events = getEvents(model._id, [{ eventType: 'add-implant', data: {id: "jj_i_am_girl"}}], baseModel.timestamp+100);
-        ({baseModel, workingModel } = await process(baseModel, events));
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "jj_i_am_girl" } }], baseModel.timestamp + 100);
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "jj_i_am_girl");
-        illness = baseModel.modifiers.find( (m:any) => m.id == "acromegaly");
+        illness = baseModel.modifiers.find((m: any) => m.id == "acromegaly");
 
         expect(implant).to.exist;
         expect(implant).to.has.property('enabled', true);
@@ -140,7 +140,7 @@ describe.only('Implants: ', () => {
     });
 
 
-     it("Remove implant", async function() {
+    it("Remove implant", async function() {
         let eventData = { id: "s_stability" };
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
@@ -148,10 +148,10 @@ describe.only('Implants: ', () => {
         let { baseModel } = await process(model, events);
         let implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
-        
+
         //console.log(JSON.stringify(baseModel, null, 4));
 
-        events = getEvents(model._id, [{ eventType: 'remove-implant', data:  { mID: implant.mID } }], 1500825900, true);
+        events = getEvents(model._id, [{ eventType: 'remove-implant', data: { mID: implant.mID } }], 1500825900, true);
         baseModel = (await process(baseModel, events)).baseModel;
 
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
@@ -159,9 +159,9 @@ describe.only('Implants: ', () => {
 
         expect(implant).to.not.exist;
 
-        let changeRecord = baseModel.changes.find( (e:any) => e.text == "Удален имплант: Киберпротез ноги «Стабильность»" )
+        let changeRecord = baseModel.changes.find((e: any) => e.text == "Удален имплант: Киберпротез ноги «Стабильность»")
         expect(changeRecord).to.exist;
-        
+
     });
 
 
@@ -181,24 +181,24 @@ describe.only('Implants: ', () => {
 
         //Genome[6] = 1
         baseModel.genome[6] = 1;
-        events =  [getRefreshEvent(model._id,1500825900)];
-        ({ baseModel, workingModel } = await process(baseModel, events));  
-        
+        events = [getRefreshEvent(model._id, 1500825900)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
         condition = workingModel.conditions.find((e: any) => e.id == "s_stability-1");
         expect(condition).to.exist;
 
         //Genome[6] = 4
         baseModel.genome[6] = 4;
-        events =  [getRefreshEvent(model._id,1500825920)];
-        ({ baseModel, workingModel } = await process(baseModel, events));  
-        
+        events = [getRefreshEvent(model._id, 1500825920)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
+
         condition = workingModel.conditions.find((e: any) => e.id == "s_stability-2");
         expect(condition).to.exist;
 
         //Genome[6] = 2 (no conditions)
         baseModel.genome[6] = 2;
-        events =  [getRefreshEvent(model._id,1500825940)];
-        ({ baseModel, workingModel } = await process(baseModel, events));  
+        events = [getRefreshEvent(model._id, 1500825940)];
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         condition = workingModel.conditions.find((e: any) => e.id.startsWith("s_stability"));
         expect(condition).to.not.exist;
@@ -212,7 +212,7 @@ describe.only('Implants: ', () => {
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
         let { baseModel, workingModel } = await process(model, events);
-        
+
         let cubeVal = baseModel.mind.C[7];
         expect(cubeVal).is.equal(61);
 
@@ -222,10 +222,10 @@ describe.only('Implants: ', () => {
         model.mind.C[7] = 63;
         events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
         ({ baseModel, workingModel } = await process(model, events));
-        
+
         expect(baseModel.mind.A[1]).is.equal(57);
-        expect( baseModel.mind.B[2]).is.equal(30);
-        expect( baseModel.mind.C[3]).is.equal(20);
+        expect(baseModel.mind.B[2]).is.equal(30);
+        expect(baseModel.mind.C[3]).is.equal(20);
     });
 
     it("Enable & Disable implant", async function() {
@@ -240,8 +240,8 @@ describe.only('Implants: ', () => {
         expect(implant).to.exist;
         expect(implant).to.has.property('enabled', true);
 
-        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID : implant.mID } }], baseModel.timestamp + 100, true);
-        ({ baseModel } = await process(baseModel, events));  
+        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID: implant.mID } }], baseModel.timestamp + 100, true);
+        ({ baseModel } = await process(baseModel, events));
 
         //console.log(JSON.stringify(baseModel, null, 4));
 
@@ -250,9 +250,9 @@ describe.only('Implants: ', () => {
         expect(implant).to.exist;
         expect(implant.enabled).is.false;
 
-        events = getEvents(baseModel._id, [{ eventType: 'enable-implant', data: { mID : implant.mID } }], baseModel.timestamp + 100, true);
-        ({ baseModel } = await process(baseModel, events));  
-        
+        events = getEvents(baseModel._id, [{ eventType: 'enable-implant', data: { mID: implant.mID } }], baseModel.timestamp + 100, true);
+        ({ baseModel } = await process(baseModel, events));
+
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
         expect(implant).to.exist;
@@ -273,10 +273,10 @@ describe.only('Implants: ', () => {
         expect(implant).to.has.property('enabled', true);
 
         //Отключаем имплант на время
-        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID : implant.mID, duration  } }], 
-                                                baseModel.timestamp + 100, true);
+        events = getEvents(baseModel._id, [{ eventType: 'disable-implant', data: { mID: implant.mID, duration } }],
+            baseModel.timestamp + 100, true);
 
-        ({ baseModel, workingModel } = await process(baseModel, events));  
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
@@ -284,8 +284,8 @@ describe.only('Implants: ', () => {
         expect(implant.enabled).is.false;
 
         //Проверяем состояние импланта до истечения времени
-        events =  [ getRefreshEvent(baseModel._id, baseModel.timestamp + Math.round(duration*1000/2)) ];
-        ({ baseModel, workingModel } = await process(baseModel, events));  
+        events = [getRefreshEvent(baseModel._id, baseModel.timestamp + Math.round(duration * 1000 / 2))];
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
@@ -293,9 +293,9 @@ describe.only('Implants: ', () => {
         expect(implant.enabled).is.false;
 
         //Проверяем состояние импланта после истечения времени
-        events =  [ getRefreshEvent(baseModel._id, baseModel.timestamp + duration*1000 + 100 ) ];
+        events = [getRefreshEvent(baseModel._id, baseModel.timestamp + duration * 1000 + 100)];
 
-        ({ baseModel, workingModel } = await process(baseModel, events));  
+        ({ baseModel, workingModel } = await process(baseModel, events));
 
         implant = baseModel.modifiers.find((e: any) => e.id == "s_stability");
 
@@ -307,8 +307,8 @@ describe.only('Implants: ', () => {
         let model = getExampleModel();
         model.genome[9] = 2;
 
-        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "lab_maninthemiddle" } }], model.timestamp+100, true);
-        
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "lab_maninthemiddle" } }], model.timestamp + 100, true);
+
         let { baseModel, workingModel } = await process(model, events);
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "lab_maninthemiddle");
@@ -318,7 +318,7 @@ describe.only('Implants: ', () => {
 
         expect(workingModel.maxProxy).is.equal(102);
 
-        events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "jj_i_am_girl" } }], baseModel.timestamp+100, true);
+        events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "jj_i_am_girl" } }], baseModel.timestamp + 100, true);
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         implant = baseModel.modifiers.find((e: any) => e.id == "jj_i_am_girl");
