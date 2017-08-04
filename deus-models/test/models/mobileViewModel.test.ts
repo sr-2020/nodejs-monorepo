@@ -303,8 +303,8 @@ describe("mobileViewModel", () => {
         //console.log(JSON.stringify(viewModel, null, 4));
     });
 
-    it("_view for robot is not so complicated", async function() {
-        let model = getExampleModel("1000");
+     it.skip("_view for robot is not so complicated", async function() {
+        let  model = getExampleModel("1000");
         model.profileType = "robot";
         model.owner = "ничей";
         model.creator = "Господь Бог";
@@ -312,8 +312,8 @@ describe("mobileViewModel", () => {
         expect(viewModel).to.be.deep.equal(getRobotViewModel());
     });
 
-    it("_view for programs is really dumb", async function() {
-        let model = getExampleModel("1000");
+    it.skip("_view for programs is really dumb", async function() {
+        let  model = getExampleModel("1000");
         model.profileType = "program";
         model.owner = "ничей";
         model.creator = "Господь Бог";

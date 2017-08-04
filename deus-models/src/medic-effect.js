@@ -4,9 +4,9 @@
 
 let Chance = require('chance');
 
-let consts = require('../helpers/constants');
-let helpers = require('../helpers/model-helper');
-let medHelpers = require('../helpers/medic-helper');
+let consts = require('../helpers/constants')();
+let helpers = require('../helpers/model-helper')();
+let medHelpers = require('../helpers/medic-helper')();
 
 
 /**
@@ -50,7 +50,7 @@ let medHelpers = require('../helpers/medic-helper');
  */
 function getDamageEvent(api, data, event){
     if(Number(data.hpLost) && api.model.hp){
-        medHelpers().addDamage(api, Number(data.hpLost), event.timestamp);
+        medHelpers.addDamage(api, Number(data.hpLost), event.timestamp);
      }
 }  
 
@@ -60,13 +60,13 @@ function getDamageEvent(api, data, event){
  */
 function restoreDamageEvent(api, data, event ){
     if(Number(data.hpAdd) && api.model.hp){
-        medHelpers().restoreDamage(api, Number(data.hpAdd), event.timestamp);
+        medHelpers.restoreDamage(api, Number(data.hpAdd), event.timestamp);
      }
 }
 
 function hasAnyEffect(api, effectName) {
     return api.model. modifiers.filter(m => m.enabled)
-                            .find( m => helpers().checkPredicate(api, m.mID, effectName) );
+                            .find( m => helpers.checkPredicate(api, m.mID, effectName) );
 
 }
 
@@ -76,7 +76,7 @@ function hasAnyEffect(api, effectName) {
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function leakHpEvent(api, data, event){
-    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+    let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
     //если такие импланты есть, то тогда хиты списывать не надо
@@ -91,9 +91,9 @@ function leakHpEvent(api, data, event){
         m.damage += 1;
         api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
-        api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
+        api.setTimer( consts.HP_LEAK_TIMER, consts.HP_LEAK_DELAY, "leak-hp", {} );
 
-        helpers().addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
+        helpers.addChangeRecord(api, "Вы потеряли 1 hp", event.timestamp);
     }
 }  
 
@@ -103,7 +103,7 @@ function leakHpEvent(api, data, event){
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function regenHpEvent(api, data, event){
-    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+    let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
     //если такие импланты есть, то тогда хиты списывать не надо
@@ -116,9 +116,9 @@ function regenHpEvent(api, data, event){
         m.damage -= 1;
         api.info(`regenHpEvent: damage -1 => ${m.damage}`);
 
-        api.setTimer( consts().HP_REGEN_TIMER, consts().HP_REGEN_DELAY, "regen-hp", {} );
+        api.setTimer( consts.HP_REGEN_TIMER, consts.HP_REGEN_DELAY, "regen-hp", {} );
 
-        helpers().addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
+        helpers.addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
     }
 }  
 
@@ -135,21 +135,21 @@ function characterDeathEvent(api, data, event){
     if(api.model.systems){
         let deadSystem = null;
 
-        api.info(`characterDeath: systems ${medHelpers().getSystemsStateString(api)}`);       
+        api.info(`characterDeath: systems ${medHelpers.getSystemsStateString(api)}`);       
 
         api.model.systems.forEach( (sys,i) => {
-            let implants = helpers().getImplantsBySystem(api, consts().medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter( m => m.enabled );
 
             if(!sys && !implants.length){
-                api.info(`characterDeath: system ${consts().medicSystems[i].name} is dead. Kill the character!`); 
-                deadSystem = consts().medicSystems[i].label;
+                api.info(`characterDeath: system ${consts.medicSystems[i].name} is dead. Kill the character!`); 
+                deadSystem = consts.medicSystems[i].label;
             }
         });
 
         if(deadSystem){
             api.model.isAlive = false;
             api.info(`characterDeath: character id=${api.model._id} login=${api.model.login || ""} id dead!`); 
-            helpers().addChangeRecord(api, `Вы умерли. Отказала ${deadSystem} система организма.`, event.timestamp);
+            helpers.addChangeRecord(api, `Вы умерли. Отказала ${deadSystem} система организма.`, event.timestamp);
         }
     }
 
@@ -175,27 +175,27 @@ function killRandomSystemEvent(api, data, event){
          do {
             sys = chance.integer({min: 0, max: 4});
             
-             api.info(`killRandomSystem: kill system ${consts().medicSystems[sys].label}`);
+             api.info(`killRandomSystem: kill system ${consts.medicSystems[sys].label}`);
 
             //Если система работала и импланта не было, то убить систему
             if(api.model.systems[sys]){
                 api.model.systems[sys] = 0;
-                helpers().addChangeRecord(api, 
-                        `Необратимо повреждена ${consts().medicSystems[sys].label} система! Необходима срочная замена на имплант!`,
+                helpers.addChangeRecord(api, 
+                        `Необратимо повреждена ${consts.medicSystems[sys].label} система! Необходима срочная замена на имплант!`,
                          event.timestamp)
 
-                 api.info(`killRandomSystem: ${consts().medicSystems[sys].label} ==> dead`);
+                 api.info(`killRandomSystem: ${consts.medicSystems[sys].label} ==> dead`);
 
                 //делать так, что бы точно не пойти на второй круг (Если это была ОДС)
                 sys = -1;
             }else{
             //Если система уже дохлая, но на ней есть имплант - он уничтожается (если больше одного - первый)
-                let implants = api.getModifiersBySystem(consts().medicSystems[sys].name);
+                let implants = api.getModifiersBySystem(consts.medicSystems[sys].name);
                 if(implants[0]){
                     if(implants.length == 1){ sys = -1; }
 
                     api.removeModifier(implants[0].mID);
-                    helpers().addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, event.timestamp);
+                    helpers.addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, event.timestamp);
                     
                     api.info(`killRandomSystem: kill system ${implants[0].displayName} ==> destroyed`);
                 }
@@ -205,7 +205,7 @@ function killRandomSystemEvent(api, data, event){
          }while(sys==0)
 
         //Сбросить счетчик повреждений HP в 0, т.к. теперь отключена одна система целиком
-        let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+        let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
         if(m){
             api.info(`killRandomSystem: set damage == 0`);
             m.damage = 0;
@@ -243,7 +243,7 @@ function damageEffect(api, modifier){
 
     let isHuman = api.model.profileType=="human";
 
-    let curMaxHP = medHelpers().calcMaxHP(api);
+    let curMaxHP = medHelpers.calcMaxHP(api);
 
     api.model.maxHp = curMaxHP;
 
@@ -254,16 +254,16 @@ function damageEffect(api, modifier){
     //Для андроидов видимо какая-то иная логика работы
     if(api.model.systems){
 
-        api.info(`damageEffect: systems ${medHelpers().getSystemsStateString(api)}`);       
+        api.info(`damageEffect: systems ${medHelpers.getSystemsStateString(api)}`);       
 
         api.model.systems.forEach( (sys,i) => {
-            let implants = helpers().getImplantsBySystem(api, consts().medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter( m => m.enabled );
 
             //api.info(`system: ${sys}, implants: ${implants.map(x=>x.id).join(',')}`);
             if(!sys && !implants.length){
-                helpers().addCharacterCondition(api, `system_damage_${i}`);
+                helpers.addCharacterCondition(api, `system_damage_${i}`);
 
-                api.info(`damageEffect: system ${consts().medicSystems[i].name} is dead!`); 
+                api.info(`damageEffect: system ${consts.medicSystems[i].name} is dead!`); 
                 deadSystems = true;
             }
         });
@@ -274,9 +274,9 @@ function damageEffect(api, modifier){
         api.model.hp = 0;      
         api.info(`damageEffect: dead systems ==> hp = 0`);    
 
-        if(!api.getTimer(consts().DEATH_TIMER)){
+        if(!api.getTimer(consts.DEATH_TIMER)){
             api.info(`damageEffect: start death timer!`);        
-            api.setTimer( consts().DEATH_TIMER, consts().DEATH_DELAY, "character-death", {} );
+            api.setTimer( consts.DEATH_TIMER, consts.DEATH_DELAY, "character-death", {} );
             //Debug
             //api.info(JSON.stringify(api.model.timers));
         }
@@ -321,16 +321,16 @@ function handleDroidsWounded(api)
 
 function startRegenTimerIfRequired(api)
 {
-     if(!api.getTimer(consts().HP_REGEN_TIMER)){
+     if(!api.getTimer(consts.HP_REGEN_TIMER)){
             api.info(`damageEffect: damage detected ==> start regen HP timer!`);        
-            api.setTimer( consts().HP_REGEN_TIMER, consts().HP_LEAK_DELAY, "regen-hp", {} );
+            api.setTimer( consts.HP_REGEN_TIMER, consts.HP_LEAK_DELAY, "regen-hp", {} );
         }
 }
 
 function stopRegenTimerIfRequired(api) {
-    if(api.getTimer(consts().HP_REGEN_TIMER)){
+    if(api.getTimer(consts.HP_REGEN_TIMER)){
         api.info(`damageEffect: damage was healed ==> stop regen HP timer!`);        
-        api.removeTimer(consts().HP_REGEN_TIMER);
+        api.removeTimer(consts.HP_REGEN_TIMER);
     }
 }
 
@@ -349,16 +349,16 @@ function handleHumansWounded(api, deadSystems)
 
 function startLeakTimerIfRequired(api)
 {
-     if(!api.getTimer(consts().HP_LEAK_TIMER)){
+     if(!api.getTimer(consts.HP_LEAK_TIMER)){
             api.info(`damageEffect: damage detected ==> start leak HP timer!`);        
-            api.setTimer( consts().HP_LEAK_TIMER, consts().HP_LEAK_DELAY, "leak-hp", {} );
+            api.setTimer( consts.HP_LEAK_TIMER, consts.HP_LEAK_DELAY, "leak-hp", {} );
         }
 }
 
 function stopLeakTimerIfRequired(api) {
-    if(api.getTimer(consts().HP_LEAK_TIMER)){
+    if(api.getTimer(consts.HP_LEAK_TIMER)){
         api.info(`damageEffect: damage was healed or system was dead ==> stop leak HP timer!`);        
-        api.removeTimer(consts().HP_LEAK_TIMER);
+        api.removeTimer(consts.HP_LEAK_TIMER);
     }
 }
 
@@ -375,24 +375,38 @@ function characterResurectEvent(api, data, event){
     //проверить системы и импланты на них (все только для Human'ов пока)
     if(api.model.systems && !api.model.isAlive){
 
-        api.info(`characterResurectEvent: systems ${medHelpers().getSystemsStateString(api)}`);       
+        api.info(`characterResurectEvent: systems ${medHelpers.getSystemsStateString(api)}`);       
 
-        api.model.systems = api.model.systems.map( (sys,i) => {
-                    let implants = api.getModifiersBySystem(consts().medicSystems[i].name);
-                    let retVar = 1;
+        //Пройти по всем системам
+        api.model.systems = api.model.systems.map( (sys,systemID) => {
+            //Найти все модификаторы для системы
+            let systemName = consts.medicSystems[systemID].name;
+            let modifiers = api.getModifiersBySystem(systemName);
+            let systemState = 1;
 
-                    //Если есть импланты для системы - включить их все.
-                    if(implants.length){
-                        retVar = 0;
-                        implants.forEach( e => e.enabled = true )
-                    }
+            //Убить все болезни
+            modifiers.filter( m => helpers.isIllness(m) ).forEach( ill => medHelpers.removeIllness(api, ill.mID) );
+ 
+            //Включить все импланты
+            modifiers = modifiers.filter( m =>helpers.isImplant(m)  )
+                                    .forEach( m => {
+                                        m.enabled = true;
+                                        api.info(`characterResurectEvent: enable ${m.id} implant`);
+                                        systemState = 0;
+                                    });
 
-                    return retVar;
-                });
 
-        api.info(`characterResurectEvent: systems after ${medHelpers().getSystemsStateString(api)}`);       
+            //Если это нервная система, то она не может быть "отключенной"
+            if(systemName == "nervous"){
+                systemState = 1;
+            }          
+           
+            return systemState;
+        });
+
+        api.info(`characterResurectEvent: systems after ${medHelpers.getSystemsStateString(api)}`);       
         
-        let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+        let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
         if(m){
             m.damage = 0;
         }
@@ -423,10 +437,10 @@ function timedRecoveryEffect(api, modifier){
         return;
     }
 
-    let params = helpers().checkPredicate(api, modifier.mID, "timed-recover-hp");    
+    let params = helpers.checkPredicate(api, modifier.mID, "timed-recover-hp");    
     api.info("timedRecoveryEffect: start, predicate: " + JSON.stringify(params));
 
-    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+    let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     if(m && m.damage && params && params.recoveryRate){
         let timerName = "hpRecovery-" + modifier.mID;
@@ -445,13 +459,13 @@ function timedRecoveryEffect(api, modifier){
  * просто отключит таймер (повреждения в минус уйти не могут) 
  */
 function recoverHpEvent(api, data, event){
-    let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+    let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     if(m && m.damage && api.model.isAlive){
         m.damage -= 1;
         api.info(`recoverHpEvent: damage-1 => damage == ${m.damage}`);
 
-        helpers().addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
+        helpers.addChangeRecord(api, "Вы восстановили 1 hp", event.timestamp);
     }
 }  
 
@@ -475,13 +489,13 @@ function timedRecoverSystemsEffect(api, modifier){
         return;
     }
 
-    let params = helpers().checkPredicate(api, modifier.mID, "timed-recover-systems");    
+    let params = helpers.checkPredicate(api, modifier.mID, "timed-recover-systems");    
     api.info("timedRecoverSystemsEffect: start, predicate: " + JSON.stringify(params));
 
-    let deadSystems = medHelpers().getDeadSystems(api);
+    let deadSystems = medHelpers.getDeadSystems(api);
     
     if(deadSystems.length){
-        api.info(`timedRecoverSystemsEffect: has dead systems ${medHelpers().getSystemsStateString(api)}`);
+        api.info(`timedRecoverSystemsEffect: has dead systems ${medHelpers.getSystemsStateString(api)}`);
 
         let hpRemain = params.hpRemain ? params.hpRemain : 0;
         let timerName = "hpRecoverySys-" + modifier.mID;
@@ -519,7 +533,7 @@ function recoverSystemsEvent(api, data, event){
     if(modifier.count){
         if(modifier.count > 2){
             api.info(`recoverSystemsEvent: counter ${modifier.count} > 2, implant is not working. Stop processing`)
-            helpers().addChangeRecord(api, `Ресурсы импланта ${modifier._id} исчерпаны. Необходимо срочное медицинское вмешательство`, event.timestamp);
+            helpers.addChangeRecord(api, `Ресурсы импланта ${modifier._id} исчерпаны. Необходимо срочное медицинское вмешательство`, event.timestamp);
             return;
         }else{
            modifier.count += 1; 
@@ -529,34 +543,34 @@ function recoverSystemsEvent(api, data, event){
     }
 
     if(api.model.systems){
-        api.info(`recoverSystemsEvent: counter ${modifier.count}, systems before ${medHelpers().getSystemsStateString(api)}`)
+        api.info(`recoverSystemsEvent: counter ${modifier.count}, systems before ${medHelpers.getSystemsStateString(api)}`)
 
         //Найти все отключенные системы организма, для которых нет имплантов и "починить их"
-        let deadSystems = medHelpers().getDeadSystems(api);
+        let deadSystems = medHelpers.getDeadSystems(api);
 
         deadSystems.forEach( si => {
-            api.info(`recoverSystemsEvent: Recovering system ${consts().medicSystems[si].name}`)
+            api.info(`recoverSystemsEvent: Recovering system ${consts.medicSystems[si].name}`)
             api.model.systems[si] = 1;
         });
     }
 
     //Включить все импланты
-    api.model.modifiers.filter( m => helpers().isImplant(m) )
+    api.model.modifiers.filter( m => helpers.isImplant(m) )
                         .forEach( m => m.enabled = true );
 
     //Проставить повреждения (восстановление не с полными хитами) 
     //Повреждения выставляются "примерно" т.к. внутри обработчика события нельзя понять точно MaxHP персонажа
     //Если hpRemain не передается или ==0 то персонаж восстанавливается с полными хитами
     if(data.hpRemain){
-        let maxHP = medHelpers().calcMaxHP(api);
-        let dmgMod =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
+        let maxHP = medHelpers.calcMaxHP(api);
+        let dmgMod =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
         dmgMod.damage = maxHP - data.hpRemain;
 
         api.info(`recoverSystemsEvent: hpRemain: ${data.hpRemain}, maxHP: ${maxHP} ==> damage: ${dmgMod.damage}`);
     }
 
-    helpers().addChangeRecord(api, `Имплант ${modifier._id} провел восстановление организма.`, event.timestamp);
+    helpers.addChangeRecord(api, `Имплант ${modifier._id} провел восстановление организма.`, event.timestamp);
 }  
 
 
