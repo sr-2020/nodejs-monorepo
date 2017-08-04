@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs/Rx';
 import * as PouchDB from 'pouchdb';
 import * as winston from 'winston';
+import * as clones from 'clones';
 
 import { DeusModifier } from "./interfaces/modifier"
 
@@ -13,6 +14,8 @@ import { DeusModifier } from "./interfaces/modifier"
  */
 export function saveObject( connection: any, doc: any, update:boolean = true ): Observable<any> {
 
+    doc = clones(doc);
+
     //Если в объекте не установлен _id => то его можно просто сохранять, проставится автоматически 
     if(!doc._id){
         return Observable.fromPromise( connection.post(doc) );
@@ -20,7 +23,7 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
 
     return Observable.fromPromise(connection.get( doc._id ))
         .flatMap( (oldDoc:any) => { 
-            //console.log(`try to save: ${doc._id}`);
+            console.log(`try to save: ${doc._id}`);
             if(update){
                 doc._rev = oldDoc._rev;
                 return connection.put(doc);
@@ -28,9 +31,8 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
                 Promise.resolve({ status: "exist", oldDoc: oldDoc });
             }
         })
-        .retry(3)
-        .catch( () => {
-            //console.log(`catch object`);
+        .catch( (err) => {
+            console.log(`catch object: `, err);
             return connection.put(doc)
         } );
 

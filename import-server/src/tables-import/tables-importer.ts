@@ -199,7 +199,14 @@ export class TablesImporter {
      *  Сохранить созданные Conditions в БД, с обновлением существующих
      */
     private saveConditions(): Promise<any[]> {
-        return Observable.from(this.conditions)
+
+        let sortedConditions = this.conditions.sort( (a, b) => { 
+                if(a._id == b._id) return 0;
+                return a._id < b._id ? -1 : 1;
+          });
+
+        return Observable.from(sortedConditions)
+            //.do( c => winston.info(c._id))
             .flatMap(condition => saveObject(this.conditionDB, condition))
             .toArray()
             .do((results) => {
@@ -567,6 +574,11 @@ export class TablesImporter {
         }
 
         cond.class = condType ? condType : "physiology";
+
+        if(this.conditions.find( c => c._id == id)){
+            winston.error(`Double condition: ${id}`)
+            return;
+        }
 
         this.conditions.push(cond);
 
