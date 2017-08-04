@@ -277,6 +277,9 @@ function damageEffect(api, modifier){
         if(!api.getTimer(consts.DEATH_TIMER)){
             api.info(`damageEffect: start death timer!`);        
             api.setTimer( consts.DEATH_TIMER, consts.DEATH_DELAY, "character-death", {} );
+
+            helpers.addChangeRecord(api, `Тяжелое повреждение организма! Требуется немедленная реанимация, возможна смерть в течении 20 минут`, event.timestamp);
+
             //Debug
             //api.info(JSON.stringify(api.model.timers));
         }
@@ -414,6 +417,8 @@ function characterResurectEvent(api, data, event){
         api.model.isAlive = true;
 
         api.info(`characterResurectEvent: character id=${api.model._id} login=${api.model.login || ""} is live again!`);       
+    
+        helpers.addChangeRecord(api, `Базовые функции жизнедеятельности организма восстановлены`, event.timestamp);
     }
 
 }
