@@ -14,6 +14,11 @@ let consts = require('../helpers/constants');
  * 
  */
 function enterVREvent( api, data, event ){  
+    if (!api.model.isAlive) {
+        api.error("Dead can't enter VR. Or any other location.");
+        helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+        return;
+    }
     api.model.lastVREnterTimestamp = event.timestamp;
     helpers().addChangeRecord(api, "Вы вошли в VR", event.timestamp);
 }
@@ -26,6 +31,11 @@ function enterVREvent( api, data, event ){
  * (время события - время выхода)
  */
 function exitVREvent( api, data, event ){
+    if (!api.model.isAlive) {
+        api.error("Dead can't exit VR. Or any other location.");
+        helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+        return;
+    }
     if(api.model.lastVREnterTimestamp && api.model.lastVREnterTimestamp < event.timestamp){
         api.model.lastVREnterDuration = event.timestamp - api.model.lastVREnterTimestamp;
         

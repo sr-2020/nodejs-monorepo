@@ -20,6 +20,12 @@ let clones = require("clones");
  */
 function addImplantEvent( api, data, event ){
     if(data.id){
+     
+        if (!api.model.isAlive) {
+            api.error("Can't install implant to deadman. Why are you doing this...");
+            helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+            return;
+        }
         let implant = helpers().loadImplant(api, data.id);
 
         if(implant){
