@@ -6,7 +6,7 @@ import { LogLevel, LogSource } from 'deus-engine-manager-api';
 function log(source: LogSource, level: LogLevel, msg: string, ...params: any[]) {
     if (process && process.send) {
         params = params ? params : [];
-        params.push({ timestamp: Date.now() });
+        params.push({ timestamp: Date.now(), pid: process.pid });
         process.send({
             type: 'log',
             source,
