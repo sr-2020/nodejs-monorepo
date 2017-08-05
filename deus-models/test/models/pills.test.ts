@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
@@ -10,7 +11,7 @@ interface Global {
 
 declare var global: Global;
 
-global.TEST_EXTERNAL_OBJECTS = {
+global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
     pills: {
         '111-111': {
             _id: '111-111',
@@ -28,7 +29,7 @@ global.TEST_EXTERNAL_OBJECTS = {
         }
 
     }
-};
+});
 
 describe('Pills', () => {
     it('Cures HP with firstAid pill', async () => {

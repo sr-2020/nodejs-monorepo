@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import { expect } from 'chai';
 import { process, printModel, findModifier, findChangeRecord } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
@@ -7,6 +8,21 @@ const { pills } = require('../../catalogs/narco.json');
 
 const STEP1 = pills.find((p: any) => p.id == 'jj-immortal-one');
 const STEP2 = pills.find((p: any) => p.id == 'jj-immortal-two');
+
+interface Global {
+    TEST_EXTERNAL_OBJECTS: any
+}
+
+declare var global: Global;
+
+global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
+    pills: {
+        'jj-immortality': {
+            _id: 'jj-immortality',
+            pillId: 'jj-immortal-one'
+        }
+    }
+});
 
 describe('JJ Immortality', () => {
     it("Use step one pill", async function() {
@@ -76,5 +92,17 @@ describe('JJ Immortality', () => {
 
         expect(findModifier('jj-immortal-one', baseModel)).not.to.exist;
         expect(findChangeRecord(STEP2.stages[1], workingModel)).to.exist;
+    });
+
+    it('Usable with pill', async function() {
+        let model = getExampleModel();
+        model.changes = [];
+        let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
+
+        let { baseModel, workingModel } = await process(model, events);
+
+        let jjOne = findModifier('jj-immortal-one', baseModel);
+        expect(jjOne).to.exist;
+        expect(jjOne.currentStage).to.equals(0);
     });
 });
