@@ -35,7 +35,7 @@ function loadImplant(api, id){
  }
 
  /**
-  * Загружает болезнь и ее эффект из каталога 
+  * Загружает болезнь и ее эффект из каталога
   */
 function loadIllness(api, id){
     let illness = api.getCatalogObject("illnesses", id.toLowerCase());
@@ -191,7 +191,7 @@ function isGenomeMatch(api, variable, value){
  *
  * Предполагается что текст инструкции уже нормализован
  * (верхний регистр, без пробелов, через запятую)
- * 
+ *
  * scaleFactor = 100 (default) to apply normal change
  */
 function modifyMindCubes(api, mind, changeText, scaleFactor){
@@ -411,8 +411,8 @@ function setTimerToKillModifier(api, modifier, timestamp)
 {
     api.setTimer(
         consts().NARCO_TIME_PREFIX + modifier.mID,
-        timestamp - 1, 
-        "stop-narco-modifier", 
+        timestamp - 1,
+        "stop-narco-modifier",
         {mID : modifier.mID} );
 }
 
@@ -426,7 +426,7 @@ const implantClasses = [
 ];
 
 /**
- * Проверяет класс модификатора и возращается true если это имплант 
+ * Проверяет класс модификатора и возращается true если это имплант
  */
 function isImplant(modifier){
     if(modifier.class && implantClasses.find(c => c == modifier.class)){
@@ -437,7 +437,7 @@ function isImplant(modifier){
 }
 
 /**
- * Проверяет класс модификатора и возращается true если это болезнь 
+ * Проверяет класс модификатора и возращается true если это болезнь
  */
 function isIllness(modifier){
     if(modifier.class && modifier.class == "illness"){
@@ -510,6 +510,7 @@ module.exports = () => {
         getImplantsBySystem,
         getChanceFromModel,
         removeImplant,
+        isImplant,
         getAllImplants,
         getAllIlnesses,
         createEffectModifier,

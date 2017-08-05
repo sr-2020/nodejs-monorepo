@@ -231,6 +231,26 @@
             "id" : "add-change-record",
             "eventType" : "add-change-record",
             "effects": ["addChangeRecord"]
+        },
+        {
+            "id": "jj-immortal-one-start",
+            "eventType": "jj-immortal-one-start",
+            "effects": ["jjImmortalOneStartEvent"]
+        },
+        {
+            "id": "jj-immortal-one-next-stage",
+            "eventType": "jj-immortal-one-next-stage",
+            "effects": ["jjImmortalOneNextStageEvent"]
+        },
+        {
+            "id": "jj-immortal-two-start",
+            "eventType": "jj-immortal-two-start",
+            "effects": ["jjImmortalTwoStartEvent"]
+        },
+        {
+            "id": "jj-immortal-two-awake",
+            "eventType": "jj-immortal-two-awake",
+            "effects": ["jjImmortalTwoAwakeEvent"]
         }
        
     ]

@@ -27,6 +27,14 @@ export async function process(model: EngineContext, events: Event[]): Promise<En
     return result;
 }
 
-export function printModel( model:any ){
+export function printModel(model: any) {
     console.log(JSON.stringify(model, null, 4));
+}
+
+export function findModifier(id: string, model: any): any {
+    return model.modifiers.find((m: any) => m.id == id);
+}
+
+export function findChangeRecord(text: string, model: any): any {
+    return model.changes.find((c: any) => c.text.startsWith(text));
 }
