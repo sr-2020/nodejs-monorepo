@@ -53,13 +53,13 @@ function useImmortal (api, pill, event) {
     if (api.model.profileType != 'human') return;
     api.model.profileType = "exhuman-program";
 
-    helpers().modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
+    helpers.modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
 
-    helpers().getAllImplants(api).forEach(implant => helpers.removeImplant(api, implant, event.timestamp));
+    helpers.getAllImplants(api).forEach(implant => helpers.removeImplant(api, implant, event.timestamp));
     model.genome = null;
     helpers.getAllIlnesses(api).forEach( ill => medicHelpers.removeIllness(api, ill.mID) );
 
-    let modifier = helpers().createEffectModifier(
+    let modifier = helpers.createEffectModifier(
         api,
         "show-always-condition",
         "ImmortalProgram",
