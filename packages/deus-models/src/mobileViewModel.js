@@ -23,6 +23,10 @@ function getStartPage(model) {
     let isHuman = model.profileType == "human";
     let isProgram = model.profileType == "program";
     let isExHumanProgram = model.profileType == "exhuman-program";
+    let isRobot = model.profileType == "robot";
+    let isExHumanRobot = model.profileType == "ex-human-robot";
+    
+
     let pageInfo =  {
         __type: "ListPageViewModel",
         viewId: "page:general",
@@ -57,7 +61,7 @@ function getStartPage(model) {
         });
     }
 
-    if(model.profileType == "robot" ){
+    if(isRobot || isExHumanRobot ){
         pageInfo.body.items.unshift({ text: "Тип системы:", value: `Андроид ${model.model}` });
     }
 
@@ -88,7 +92,7 @@ function getStartPage(model) {
         value: model.insuranceDiplayName
     };
 
-    if (isHuman || isExHumanProgram){
+    if (isHuman || isExHumanProgram || isExHumanRobot){
         pageInfo.body.items.push(workRow);
         pageInfo.body.items.push(insuranceRow);
     }
