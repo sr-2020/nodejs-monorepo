@@ -60,10 +60,10 @@ function useImmortal (api, pill, event) {
     helpers.getAllIlnesses(api).forEach( ill => medicHelpers.removeIllness(api, ill.mID) );
 
     let modifier = helpers().createEffectModifier(
-        api, 
+        api,
         "show-always-condition",
         "ImmortalProgram",
-        "Эффект бессмертия", 
+        "Эффект бессмертия",
         "immortal"
     );
 
@@ -72,6 +72,10 @@ function useImmortal (api, pill, event) {
     modifier.conditions = ["pa_cyberg0-1", "lab_becomehacker-3", "pa-immortal-condition"];
     modifier = api.addModifier(modifier);
     api.info("IMMORTAL PANAM");
+}
+
+function useGeneric(api, pill) {
+    api.sendEvent(null, pill.eventType, {pill});
 }
 
 function usePill(api, data, event) {
@@ -127,12 +131,15 @@ function usePill(api, data, event) {
         case "immortal-panam":
             useImmortal(api, pill, event);
             break;
+        case "generic":
+            useGeneric(api, pill);
+            break;
         default:
             return;
         }
     }
     else {
-        api.info(`Pill of type ${pill.id} already used lately, cooldown not expired.`)
+        api.info(`Pill of type ${pill.id} already used lately, cooldown not expired.`);
     }
 
     _.set(api.model, ['usedPills', pill.id], event.timestamp);
