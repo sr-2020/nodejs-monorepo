@@ -342,6 +342,7 @@ describe('Medicine: ', () => {
         expect(illness.class).is.equal("illness");
 
     //Прошло 30 минут (должно списаться 3 хита)
+        console.log("========== pass 30 minutes ===========================")
         events =  [getRefreshEvent(model._id,baseModel.timestamp+30*60*1000)];
         ({ baseModel, workingModel } = await process(baseModel, events));
         
@@ -352,6 +353,7 @@ describe('Medicine: ', () => {
         expect(change).is.exist;
 
     //Прошло еще 25 минут - персонаж умирает 
+        console.log("========== pass 25 minutes ===========================")
         events =  [getRefreshEvent(model._id,baseModel.timestamp+25*60*1000)];
         ({ baseModel, workingModel } = await process(baseModel, events));
 

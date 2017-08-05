@@ -21,7 +21,7 @@ export const getExampleModel = (id?: string) => ({
     skills: [],
     hp: 4,
     maxHp: 4,
-
+    
     randomSeed: 12345678,
 
     login: "john.smith",

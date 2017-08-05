@@ -512,7 +512,9 @@ module.exports = () => {
         removeImplant,
         getAllImplants,
         getAllIlnesses,
-        createEffectModifier
+        createEffectModifier,
+        isImplant,
+        isIllness
     };
 };
 

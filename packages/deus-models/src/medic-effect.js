@@ -242,7 +242,8 @@ function damageEffect(api, modifier){
     }
 
     let isHuman = api.model.profileType=="human";
-
+    let isRobot = (api.model.profileType=="robot" || api.model.profileType=="ex-human-robot");
+    
     let curMaxHP = medHelpers.calcMaxHP(api);
 
     api.model.maxHp = curMaxHP;

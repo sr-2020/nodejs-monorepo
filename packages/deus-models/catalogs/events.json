@@ -218,9 +218,20 @@
             "effects": ["rollForInfection"]
         },
         {
-            "id": "add-change-record",
+            "id" : "serenity_immortality_ready",
+            "eventType" : "serenity_immortality_ready",
+            "effects": ["serenityImmortalityReadyEvent"]
+        },
+        {
+            "id" : "serenity_immortality_go",
+            "eventType" : "serenity_immortality_go",
+            "effects": ["serenityImmortalityGoEvent"]
+        },
+        {
+            "id" : "add-change-record",
             "eventType" : "add-change-record",
             "effects": ["addChangeRecord"]
         }
+       
     ]
 }
