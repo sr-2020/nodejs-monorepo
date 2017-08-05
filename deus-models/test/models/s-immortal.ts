@@ -62,6 +62,9 @@ describe('Serenity immortality: ', () => {
 
         expect(baseModel.systems).is.not.exist;
         expect(baseModel.generation).is.not.exist;
+
+        expect(baseModel.mind.C[7]).is.eqls(100);
+        expect(baseModel.mind.D[8]).is.eqls(100);
     });
 
     it("Install first stage implant and try install another", async function() {
