@@ -61,8 +61,12 @@ function getStartPage(model) {
         });
     }
 
-    if(isRobot || isExHumanRobot ){
+    if(isRobot){
         pageInfo.body.items.unshift({ text: "Тип системы:", value: `Андроид ${model.model}` });
+    }
+
+    if(isExHumanRobot){
+        pageInfo.body.items.unshift({ text: "Тип системы:", value: model.model });
     }
 
     if(isProgram){
@@ -451,14 +455,20 @@ function getPages(model) {
     let isHuman = model.profileType == "human";
     let isProgram = model.profileType == "program";
     let isExHumanProgram = model.profileType == "exhuman-program";
+    let isExHumanRobot = model.profileType == "ex-human-robot";
 
     pages.push(getStartPage(model));
     pages.push(getMemoryPage(model));
+
     if (!isProgram) {
         pages.push(getConditionsPage(model));
+    }
+
+    if(!isProgram && !isExHumanRobot){
         pages.push(getImplantsPage(model));
-        }
-    if (isHuman || isExHumanProgram) {
+    }
+
+    if (isHuman || isExHumanProgram || isExHumanRobot) {
         pages.push(getEconomyPage(model));
     }
     pages.push(getChangesPage(model));
