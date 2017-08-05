@@ -69,7 +69,7 @@ function getStartPage(model) {
         pageInfo.body.items.unshift({ text: "Тип системы:", value: model.model });
     }
 
-    if(isProgram){
+    if(isProgram || isExHumanProgram){
         pageInfo.body.items.unshift({ text: "Тип системы:", value: "Программа" });
     }
 
@@ -82,7 +82,7 @@ function getStartPage(model) {
         pageInfo.body.items.push({text: "Поколение", value: model.generation})
     }
 
-    if (!isProgram){
+    if (!isProgram && !isExHumanProgram){
         pageInfo.body.items.push({text: "Проживание", value: model.sweethome})    
     }
 
@@ -464,7 +464,7 @@ function getPages(model) {
         pages.push(getConditionsPage(model));
     }
 
-    if(!isProgram && !isExHumanRobot){
+    if(!isProgram && !isExHumanRobot && !isExHumanProgram){
         pages.push(getImplantsPage(model));
     }
 
