@@ -452,10 +452,44 @@ function getImplantsBySystem(api, systemName){
     return api.getModifiersBySystem(systemName).filter( m => isImplant(m) );
 }
 
+function getAllImplants(api) {
+    return api.model.modifiers.filter( m => isImplant(m) )
+}
+
+function getAllIlnesses(api) {
+    return api.model.modifiers.filter( m => isIllness(m) )
+}
+
 function getChanceFromModel (model) {
     return  (model.randomSeed) ?  new Chance(model.randomSeed) : new Chance();
 }
 
+function removeImplant (api, implantForRemove, timestamp) {
+    api.removeModifier( implantForRemove.mID );
+    addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
+}
+
+function createEffectModifier(api, effectName, modifierId, displayName, modifierClass) {
+    var effect = api.getCatalogObject("effects", effectName);
+
+    if (!effect) {
+        api.error("Can't load effect " + effectName);
+        return;
+    }
+
+    effect.enabled = true;
+
+    var modifier = {
+        id: modifierId,
+        name: modifierId,
+        displayName: displayName,
+        class: modifierClass,
+        effects: [ effect ],
+        enabled: true,
+    };
+
+    return modifier;
+}
 
 module.exports = () => {
     return {
@@ -472,11 +506,13 @@ module.exports = () => {
         removeElementByMID,
         modifyModelProperties,
         setTimerToKillModifier,
-        isImplant,
         loadIllness,
         getImplantsBySystem,
         getChanceFromModel,
-        isIllness
+        removeImplant,
+        getAllImplants,
+        getAllIlnesses,
+        createEffectModifier
     };
 };
 

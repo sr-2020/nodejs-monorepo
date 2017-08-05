@@ -13,30 +13,13 @@ function loadNarco(api, id)
     if (drug && drug.pillType == 'narco') {
         return drug;
     } else {
+        api.error(`Can't find drug ${id}`);
         return null;
     }
 }
 
-function createEffectModifier(api, effectName, modifierId) {
-    var effect = api.getCatalogObject("effects", effectName);
-
-    if (!effect) {
-        api.error("Can't load effect " + effectName);
-        return;
-    }
-
-    effect.enabled = true;
-
-    var modifier = {
-        id: modifierId,
-        name: modifierId,
-        displayName: "Воздействие каких-то таблеток",
-        class: "narco",
-        effects: [ effect ],
-        enabled: true,
-    };
-
-    return modifier;
+function createNarcoEffectModifier(api, effectName, modifierId) {
+    return helpers().createEffectModifier(api, effectName, modifierId, "Воздействие каких-то таблеток", "narco");
 }
 
 function addModifierTemporary(api, modifier, duration){
@@ -51,7 +34,7 @@ function startTemporaryCubeChange(api, narco)
     api.debug("Narco will add modifier")
     //Изменение должно быть временным. Накладываем эффект
 
-    var modifier = createEffectModifier(api, "change-mind-cube-effect", "narcoEffects");
+    var modifier = createNarcoEffectModifier(api, "change-mind-cube-effect", "narcoEffects");
     if (!modifier)  { return; }
 
     let duration = narco.duration * 1000;
@@ -66,7 +49,7 @@ function addTemporaryConditons(api, narco)
 {
     api.debug("Narco will add modifier")
 
-    let modifier = createEffectModifier(api, "show-always-condition", "narcoEffectsCondition");
+    let modifier = createNarcoEffectModifier(api, "show-always-condition", "narcoEffectsCondition");
     if (!modifier)  { return; }
 
     modifier.conditions = narco.conditions;
@@ -84,7 +67,7 @@ function performAscend(api)
 {
     api.info("ASCENDING NOW ***** ******");
 
-    let modifier = createEffectModifier(api, "show-always-condition", "narcoAscendCondition");
+    let modifier = createNarcoEffectModifier(api, "show-always-condition", "narcoAscendCondition");
     if (!modifier) {return;}
 
     modifier.conditions = ["ascend-condition"];

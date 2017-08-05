@@ -49,6 +49,29 @@ function useNarco(api, pill) {
     api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
 }
 
+function useImmortal (api, pill, event) {
+    if (api.model.profileType != 'human') return;
+    api.model.profileType = "exhuman-program";
+
+    helpers().modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
+
+    helpers().getAllImplants(api).forEach(implant => helpers.removeImplant(api, implant, event.timestamp));
+    model.genome = null;
+    helpers.getAllIlnesses(api).forEach( ill => medicHelpers.removeIllness(api, ill.mID) );
+
+    let modifier = helpers().createEffectModifier(
+        api, 
+        "show-always-condition",
+        "ImmortalProgram",
+        "Эффект бессмертия", 
+        "immortal"
+    );
+
+    if (!modifier) {return};
+
+    modifier.conditions = [];
+}
+
 function usePill(api, data, event) {
     if (!api.model.isAlive) {
         api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
@@ -99,7 +122,9 @@ function usePill(api, data, event) {
         case 'narco':
             useNarco(api, pill, event);
             break;
-
+        case "immortal-panam":
+            useImmortal(api, pill, event);
+            break;
         default:
             return;
         }
