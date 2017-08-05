@@ -176,6 +176,7 @@ function jjImmortalTwoAwakeEvent(api, data, event) {
     });
 
     api.model.systems = api.model.systems.map(() => 1);
+    this.model.genome[12] = 1;
 
     api.info('jjImmortalTwoAwakeEvent: set cubes');
     helpers.modifyMindCubes(api, api.model.mind, pill.cubes);
