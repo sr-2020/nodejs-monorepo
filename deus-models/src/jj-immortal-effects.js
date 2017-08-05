@@ -175,6 +175,8 @@ function jjImmortalTwoAwakeEvent(api, data, event) {
         medicHelpers.removeIllness(api, m.mID);
     });
 
+    api.model.systems = api.model.systems.map(() => 1);
+
     api.info('jjImmortalTwoAwakeEvent: set cubes');
     helpers.modifyMindCubes(api, api.model.mind, pill.cubes);
 
