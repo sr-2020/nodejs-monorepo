@@ -388,10 +388,10 @@ function characterResurectEvent(api, data, event){
             let systemState = 1;
 
             //Убить все болезни
-            modifiers.filter( m => helpers.isIllness(m) ).forEach( ill => medHelpers.removeIllness(api, ill.mID) );
+            helpers.getAllIlnesses(api).forEach( ill => medHelpers.removeIllness(api, ill.mID) );
  
             //Включить все импланты
-            modifiers = modifiers.filter( m =>helpers.isImplant(m)  )
+            modifiers = helpers.getAllImplants(api)
                                     .forEach( m => {
                                         m.enabled = true;
                                         api.info(`characterResurectEvent: enable ${m.id} implant`);
@@ -560,8 +560,7 @@ function recoverSystemsEvent(api, data, event){
     }
 
     //Включить все импланты
-    api.model.modifiers.filter( m => helpers.isImplant(m) )
-                        .forEach( m => m.enabled = true );
+    helpers.getAllImplants(api).forEach( m => m.enabled = true );
 
     //Проставить повреждения (восстановление не с полными хитами) 
     //Повреждения выставляются "примерно" т.к. внутри обработчика события нельзя понять точно MaxHP персонажа

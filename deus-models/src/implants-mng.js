@@ -70,15 +70,14 @@ function addImplantEvent( api, data, event ){
                     implantForRemove = oldDoubleImplant;
                     api.info(`addImplantEvent: remove doubleimplant: ${implantForRemove.displayName}`); 
                 }else if(systemInfo.slots == existingImplants.length){
-                //Если слоты кончилить - удалить первый
+                //Если слоты кончилиcь - удалить первый
                     implantForRemove = existingImplants[0];
                     api.info(`addImplantEvent: not enough slots, remove: ${implantForRemove.displayName}`); 
                 }
 
                 //Если нашли что-то на удаление - удалить это
                 if(implantForRemove){
-                    api.removeModifier( implantForRemove.mID );
-                    helpers().addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, event.timestamp);
+                    helpers().removeImplant(api, implantForRemove, event.timestamp);
                 }
              
                 //Установка импланта
