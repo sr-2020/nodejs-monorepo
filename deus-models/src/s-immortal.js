@@ -24,7 +24,7 @@ function installSImmortalStage1(api, implant){
         api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
         if(!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)){
-            api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 3600*1000, "serenity_immortality_ready", { mID: implant.mID })
+            api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600*1000, "serenity_immortality_ready", { mID: implant.mID })
         }
     }
 }

@@ -16,7 +16,7 @@ describe('Serenity immortality: ', () => {
 
         console.log("================Pass 60 minutes ===============")
 
-        events = [getRefreshEvent(model._id, baseModel.timestamp + 3700*1000)];
+        events = [getRefreshEvent(model._id, baseModel.timestamp + 700*1000)];
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         cond = workingModel.conditions.find( (c:any) => c.id == "serenity_immortality_ready")
@@ -30,7 +30,7 @@ describe('Serenity immortality: ', () => {
                                             { eventType: 'add-implant', data: { id: "s_immortal01" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
 
-        events = [getRefreshEvent(model._id, baseModel.timestamp + 3700*1000)];
+        events = [getRefreshEvent(model._id, baseModel.timestamp + 700*1000)];
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         console.log("============ Damage and illness ===============")
