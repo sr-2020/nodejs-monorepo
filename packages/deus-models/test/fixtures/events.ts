@@ -15,7 +15,7 @@ export const getRefreshEvent = (characterId: string, timestamp = Date.now()): Ev
     timestamp
 });
 
-type PartialEvent = { eventType: string, data: any }
+type PartialEvent = { eventType: string, data?: any }
 
 export const getEvents = (characterId: string, events: PartialEvent[], timestamp = Date.now(), withRefresh = true): Event[] => {
     let result: Event[] = events.map((e, i) => ({
