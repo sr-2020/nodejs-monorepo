@@ -107,6 +107,9 @@ function serenityImmortalityGoEvent(api, data, event){
     api.model.model = "Serenity ExHuman 1.0";
     api.model.maxSecondsInVr = 86400;
 
+    //Поправить кубики сознания
+    api.model.mind.C[7]=100;
+    api.model.mind.D[8]=100;
 
     helpers.addChangeRecord(api, "Модернизация организма завершена", event.timestamp)
 }
