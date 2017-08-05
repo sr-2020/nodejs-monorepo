@@ -42,7 +42,7 @@ function serenityImmortalityReadyEvent(api, data, event){
         implant.immortalityReady = "true";
 
         api.info(`serenityImmortalityReady: Serenity "Stage01" implant set to ready state`);
-        helpers.addChangeRecord(api, "«Обучение кибернетической нейронной сети завершено", event.timestamp)
+        helpers.addChangeRecord(api, "Обучение кибернетической нейронной сети завершено", event.timestamp)
     }
 }
 
