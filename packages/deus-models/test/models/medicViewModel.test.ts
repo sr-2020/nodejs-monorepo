@@ -12,7 +12,6 @@ describe('Meidc and Mind ViewModel Generation', () => {
         result = (await process(model, [events])).viewModels.medic_viewmodel;
     });
 
-
     it("Creation and _id, login, generation", async function() {
         expect(result).is.not.null;
         expect(result).has.nested.property('_id',"1234");

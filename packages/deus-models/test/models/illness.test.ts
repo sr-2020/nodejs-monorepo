@@ -67,6 +67,19 @@ describe('Illnesses: ', () => {
         expect(cond).is.exist;
     });
 
+    it("Start Illness ignored for exhuman-program", async function() {
+        let model = getExampleModel();
+        model.profileType = "exhuman-program";
+        let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);
+        let { baseModel, workingModel } = await process(model, events);
+
+        printModel(workingModel.conditions);
+
+        let illness = baseModel.modifiers.find( (m:any) => m.id == "arthritis");
+        expect(illness).is.not.exist;
+
+    });
+
     it("Start Illness and check delay event", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "arthritis" } }], model.timestamp + 100);

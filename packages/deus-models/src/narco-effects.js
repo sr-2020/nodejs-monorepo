@@ -98,6 +98,12 @@ function applyNarcoEffect(api, data, event)
 
     if (!narco) return;
 
+    if (api.model.profileType != "human") {
+        api.error("Only humans can use narcotics");
+        narco.history_record = 'Таблетки могут есть только люди.';
+        return;
+    }
+
     if (narco.mindCubePermanent) {
         //Изменение должно быть постоянным. Меняем базовую модель
         helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);

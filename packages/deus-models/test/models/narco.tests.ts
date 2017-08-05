@@ -6,6 +6,19 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import * as fs from 'async-file';
 
+function expectNarcoIgnoredForProfileType(profileType: string)
+{
+    it(`Narco ignored for ${profileType}`, async function() {
+        let model = getExampleModel();
+        model.profileType = profileType;
+        let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: "altnarco" } }], model.timestamp);
+        let { baseModel, workingModel } = await process(model, events);
+
+        let modifiers = workingModel.modifiers.filter((e: any) => e.id == "narcoEffects");
+        expect(modifiers.length).is.equal(0);
+    });
+}
+
 describe('Narco effects: ', () => {
     it("Change mind cube", async function() {
 
@@ -24,6 +37,11 @@ describe('Narco effects: ', () => {
 
         expect(conditions.length).is.equal(1);
     });
+
+    expectNarcoIgnoredForProfileType("robot");
+    expectNarcoIgnoredForProfileType("program");
+    expectNarcoIgnoredForProfileType("exhuman-program");
+    expectNarcoIgnoredForProfileType("exhuman-robot");
 
     it("Change mind cube back", async function() {
 
