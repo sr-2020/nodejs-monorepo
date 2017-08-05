@@ -33,8 +33,11 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
         })
         .catch( (err) => {
             console.log(`catch object: `, err);
-            return connection.put(doc)
-        } );
+
+            if(err.status && err.status == 404){
+                return connection.put(doc)
+            }
+        });
 
 
 

@@ -214,6 +214,11 @@
             "effects": [
                 "scanQR"
             ]
+        },
+        {
+            "id": "add-change-record",
+            "eventType" : "add-change-record",
+            "effects": ["addChangeRecord"]
         }
     ]
 }
