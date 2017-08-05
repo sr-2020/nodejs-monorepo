@@ -84,9 +84,10 @@ describe('Medicine: ', () => {
     it("Reduce HP below 0", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();
+        model.maxHp = 2;
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
-        model.hp = 1;
+        //model.hp = 1;
 
         let { baseModel, workingModel } = await process(model, events);
 
@@ -103,16 +104,17 @@ describe('Medicine: ', () => {
     it("Reduce HP below 0 and disable implant", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();
-        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+        model.maxHp = 2;
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp+100, true);
 
-        model.hp = 1;
+        //model.hp = 1;
 
         let { baseModel, workingModel } = await process(model, events);
 
         let implant = baseModel.modifiers.find((e: any) => e.id == "s_orphey");
 
         events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 3 } },
-                                       { eventType: 'disable-implant', data: { mID: implant.mID } }], 1500825800, true);
+                                       { eventType: 'disable-implant', data: { mID: implant.mID } }], baseModel.timestamp+100, true);
         ({ baseModel, workingModel } = await process(baseModel, events));
 
         //Должно показывать HP == 0 (две мертвые системы)
@@ -136,7 +138,7 @@ describe('Medicine: ', () => {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
-        model.hp = 1;
+        //model.hp = 1;
 
         let { baseModel, workingModel } = await process(model, events);
 
@@ -155,7 +157,7 @@ describe('Medicine: ', () => {
     it("Reduce HP below 0, install another implant and enable existed", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();
-        model.hp = 1;
+        //model.hp = 1;
 
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
         let { baseModel, workingModel } = await process(model, events);
