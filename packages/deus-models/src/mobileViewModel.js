@@ -22,6 +22,7 @@ function getHandicaps(model) {
 function getStartPage(model) {
     let isHuman = model.profileType == "human";
     let isProgram = model.profileType == "program";
+    let isExHumanProgram = model.profileType == "exhuman-program";
     let pageInfo =  {
         __type: "ListPageViewModel",
         viewId: "page:general",
@@ -46,7 +47,7 @@ function getStartPage(model) {
         },
     };
 
-    if (!isProgram) {
+    if (!isProgram && !isExHumanProgram) {
         pageInfo.body.items.push({text: "Пол",value: getRussianSex(model.sex)});
     }
 
@@ -87,12 +88,12 @@ function getStartPage(model) {
         value: model.insuranceDiplayName
     };
 
-    if (isHuman){
+    if (isHuman || isExHumanProgram){
         pageInfo.body.items.push(workRow);
         pageInfo.body.items.push(insuranceRow);
     }
 
-    if (!isProgram) {
+    if (!isProgram && !isExHumanProgram) {
 
         let hpRow = {
             text: "Hit Points",
@@ -445,7 +446,7 @@ function getPages(model) {
 
     let isHuman = model.profileType == "human";
     let isProgram = model.profileType == "program";
-
+    let isExHumanProgram = model.profileType == "exhuman-program";
 
     pages.push(getStartPage(model));
     pages.push(getMemoryPage(model));
@@ -453,7 +454,7 @@ function getPages(model) {
         pages.push(getConditionsPage(model));
         pages.push(getImplantsPage(model));
         }
-    if (isHuman) {
+    if (isHuman || isExHumanProgram) {
         pages.push(getEconomyPage(model));
     }
     pages.push(getChangesPage(model));
