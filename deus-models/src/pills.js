@@ -56,7 +56,7 @@ function useImmortal (api, pill, event) {
     helpers.modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
 
     helpers.getAllImplants(api).forEach(implant => helpers.removeImplant(api, implant, event.timestamp));
-    model.genome = null;
+    api.model.genome = null;
     helpers.getAllIlnesses(api).forEach( ill => medicHelpers.removeIllness(api, ill.mID) );
 
     let modifier = helpers.createEffectModifier(
