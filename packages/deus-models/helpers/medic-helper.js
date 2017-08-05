@@ -59,7 +59,7 @@ function calcMaxHP(api){
     let maxHP = api.model.modifiers.filter( m => m.enabled )
                         .map( m => helpers().checkPredicate(api, m.mID, "change-max-hp") )
                         .map( p => p ? p.maxHp : 0)
-                        .reduce( (acc, val) => acc + val, api.model.hp );
+                        .reduce( (acc, val) => acc + val, api.model.maxHp );
  
     return (maxHP <= 6 ? maxHP : 6);
 }
