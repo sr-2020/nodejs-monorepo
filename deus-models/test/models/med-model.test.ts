@@ -51,6 +51,17 @@ describe('Medicine: ', () => {
         expect(workingModel.hp).is.equal(4);
     });
 
+    it("Reduce HP event for exhuman-program ignored", async function() {
+        let model = getExampleModel();
+
+        model.profileType = "exhuman-program";
+
+        let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
+        let { baseModel, workingModel } = await process(model, events);
+
+        expect(workingModel.hp).is.equal(4);
+    });
+
     it("Reduce HP event and heal +5", async function() {
         let eventData = { id: "s_orphey" };
         let model = getExampleModel();

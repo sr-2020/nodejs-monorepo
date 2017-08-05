@@ -46,5 +46,29 @@ describe('Infecton: ', () => {
          let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
 
          let {baseModel, workingModel} = await process(model, events);
+
+         events =[getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
+
+         ({baseModel, workingModel} = await process(baseModel, events));
+
+         expect(baseModel.isAlive).is.false;
+    });
+
+    it("Roll for infection for exhuman program", async () => {
+        let model = getExampleModel();
+        
+         model.generation = "X/Y";
+         model.genome = [];
+         model.profileType = "exhuman-program";
+
+         let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
+
+         let {baseModel, workingModel} = await process(model, events);
+
+         events =[getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
+
+         ({baseModel, workingModel} = await process(baseModel, events));
+
+         expect(baseModel.isAlive).is.true;
     });
 });

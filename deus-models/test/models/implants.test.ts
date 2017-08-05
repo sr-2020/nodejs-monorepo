@@ -25,6 +25,20 @@ describe('Implants: ', () => {
 
     });
 
+    it("Add implant to exhuman-program", async function() {
+        let model = getExampleModel();
+
+        model.profileType = "exhuman-program";
+
+        let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_and_basic" } }]);
+
+        let { baseModel } = await process(model, events);
+
+        let implant = baseModel.modifiers.find((e: any) => e.id == "s_and_basic");
+
+        expect(implant).to.not.exist;
+    });
+
 
     it("Add implant to robot", async function() {
         let model = getExampleModel();
@@ -46,7 +60,7 @@ describe('Implants: ', () => {
 
     });
 
-    it("Add duble implant", async function() {
+    it("Add double implant", async function() {
         let eventData = { id: "s_stability" };
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
