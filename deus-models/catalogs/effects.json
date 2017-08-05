@@ -53,6 +53,12 @@
             "class"   : "physiology",    
             "type"    : "normal",        
             "handler" : "illnessEffect"
+        },
+        {        
+            "id"    : "serenity_immortality_s01",       
+            "class"   : "physiology",    
+            "type"    : "normal",        
+            "handler" : "serenityImmortalityS01Effect"
         }
 
     ]

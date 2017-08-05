@@ -21,6 +21,10 @@ const MAX_CHANGES_LINES = 30;
 const ILLNESS_EFFECT_NAME = "illness-effect"
 const ILLNESS_EVENT_NAME = "illness-next-stage"
 
+//Бессмертие
+const S_IMMORTAL_NAME_01 = "s_immortal01"
+const S_IMMORTAL_TIMER_NAME = "_s_immortal01_timer"
+
 
 const medicSystems = [
     { name: "musculoskeletal", label: "опорно-двигательная", slots: 2},
@@ -52,7 +56,9 @@ module.exports = () => {
         DEATH_TIMER,
         NARCO_TIME_PREFIX,
         InsuranceDisplay,
-        ILLNESS_EFFECT_NAME
+        ILLNESS_EFFECT_NAME,
+        S_IMMORTAL_NAME_01,
+        S_IMMORTAL_TIMER_NAME
     };
 };
 

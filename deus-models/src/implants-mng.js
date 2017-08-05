@@ -4,9 +4,10 @@
 
 //import * as helpers from '../helpers/model-helper';
 
-let consts = require('../helpers/constants');
-let helpers = require('../helpers/model-helper');
-let medHelpers = require('../helpers/medic-helper');
+let consts = require('../helpers/constants')();
+let helpers = require('../helpers/model-helper')();
+let medHelpers = require('../helpers/medic-helper')();
+let simmortal = require('./s-immortal')();
 let Chance = require('chance');
 let chance = new Chance();
 let clones = require("clones");
@@ -23,17 +24,18 @@ function addImplantEvent( api, data, event ){
      
         if (!api.model.isAlive) {
             api.error("Can't install implant to deadman. Why are you doing this...");
-            helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+            helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
             return;
         }
-        let implant = helpers().loadImplant(api, data.id);
+        let implant = helpers.loadImplant(api, data.id);
 
         if(implant){
             //let implant = clones(_implant);
+            //Клонирование перенесено в loadImplant()
 
             //Убрать предикаты из модели
             delete implant.predicates;
-            implant.gID = helpers().uuidv4();
+            implant.gID = helpers.uuidv4();
 
             //Импланты (прошивки) для андроидов
             if(api.model.profileType == "robot"){
@@ -42,7 +44,7 @@ function addImplantEvent( api, data, event ){
                     implant = api.addModifier(implant);
 
                     //Добавление сообщения об этом в список изменений в модели
-                    helpers().addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, event.timestamp);
+                    helpers.addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, event.timestamp);
                 
                     return;
                 }
@@ -55,10 +57,10 @@ function addImplantEvent( api, data, event ){
                 api.info(`addImplantEvent: Install implant: ${implant.displayName}`);
 
                 //Получить все существующие импланты на эту систему
-                let existingImplants = helpers().getImplantsBySystem(api, implant.system );
+                let existingImplants = helpers.getImplantsBySystem(api, implant.system );
                 
                 //Информация про систему
-                let systemInfo = consts().medicSystems.find( s => s.name == implant.system);
+                let systemInfo = consts.medicSystems.find( s => s.name == implant.system);
 
                 let implantForRemove = null;
 
@@ -69,6 +71,7 @@ function addImplantEvent( api, data, event ){
                 if(oldDoubleImplant){
                     implantForRemove = oldDoubleImplant;
                     api.info(`addImplantEvent: remove doubleimplant: ${implantForRemove.displayName}`); 
+
                 }else if(systemInfo.slots == existingImplants.length){
                 //Если слоты кончилиcь - удалить первый
                     implantForRemove = existingImplants[0];
@@ -77,7 +80,12 @@ function addImplantEvent( api, data, event ){
 
                 //Если нашли что-то на удаление - удалить это
                 if(implantForRemove){
-                    helpers().removeImplant(api, implantForRemove, event.timestamp);
+                    if(!implantForRemove.unremovable){
+                         helpers.removeImplant(api, implantForRemove, event.timestamp);
+                    }else{
+                        api.error(`addImplantEvent: implant: ${implantForRemove.id} is unremovable. Can't remove old and install new implant. Stop processing!`);
+                        return;
+                    }
                 }
              
                 //Установка импланта
@@ -86,7 +94,7 @@ function addImplantEvent( api, data, event ){
 
                 //Установка системы на которой стоит имплант в "мертвую"
                 if(implant.system != "nervous"){
-                    medHelpers().setMedSystem(api, implant.system, 0);
+                    medHelpers.setMedSystem(api, implant.system, 0);
                     api.info(`addImplantEvent: set system ${implant.system} to 0 (dead)!`);
                 }
 
@@ -99,7 +107,7 @@ function addImplantEvent( api, data, event ){
                 });
                 
                 //Добавление сообщения об этом в список изменений в модели
-                helpers().addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
+                helpers.addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
 
                 //Выполнение мгновенного эффекта установки (изменение кубиков сознания пока)
                 instantInstallEffect(api, implant);
@@ -121,9 +129,13 @@ function addImplantEvent( api, data, event ){
 function removeImplantEvent( api, data, event ){
      if(data.mID){
         let implant = api.getModifierById(data.mID);
-        if(implant){
-            helpers().addChangeRecord(api, `Удален имплант: ${implant.displayName}`, event.timestamp);
+
+        if(implant && helpers.isImplant(implant) && !implant.unremovable){
+
+            helpers.addChangeRecord(api, `Удален имплант: ${implant.displayName}`, event.timestamp);
             api.removeModifier(data.mID);
+        }else{
+            api.error(`removeImplantEvent: can't remove implant/modifier: ${data.mID}`);
         }
     }
 }
@@ -133,9 +145,14 @@ function removeImplantEvent( api, data, event ){
  * Пока умеет обрабатывать только install_changeMindCube
  */
 function instantInstallEffect(api, implant){
-    let params = helpers().checkPredicate(api, implant.mID, "inst_changeMindCube");
+    let params = helpers.checkPredicate(api, implant.mID, "inst_changeMindCube");
     if(params && api.model.mind && params.change){
-        helpers().modifyMindCubes(api, api.model.mind, params.change);
+        helpers.modifyMindCubes(api, api.model.mind, params.change);
+    }
+
+    //Бессмертие от серенити
+    if(implant.id == consts.S_IMMORTAL_NAME_01){
+        simmortal.installSImmortalStage1(api, implant);
     }
 }
 
@@ -150,12 +167,12 @@ function disableImplantEvent(api, data, event){
         let implant = api.getModifierById(data.mID);
         if(implant){
             implant.enabled = false;
-            helpers().addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, event.timestamp);
+            helpers.addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, event.timestamp);
             api.info(`Disabled implant:  mID=${implant.mID} ${implant.displayName}` );
 
             if(data.duration && Number.isInteger(data.duration)){
                 duration_ms = Number(data.duration)*1000;
-                helpers().addDelayedEvent(api, duration_ms, "enable-implant", {mID: implant.mID}, `enable-${implant.mID}` );            
+                helpers.addDelayedEvent(api, duration_ms, "enable-implant", {mID: implant.mID}, `enable-${implant.mID}` );            
             }
         }
      }
@@ -170,7 +187,7 @@ function enableImplantEvent(api, data, event){
         let implant = api.getModifierById(data.mID);
         if(implant){
             implant.enabled = true;
-            helpers().addChangeRecord(api, `Включен имплант: ${implant.displayName}`, event.timestamp);
+            helpers.addChangeRecord(api, `Включен имплант: ${implant.displayName}`, event.timestamp);
             api.info(`Enabled implant:  mID=${implant.mID} ${implant.displayName}` );
         }
      }
