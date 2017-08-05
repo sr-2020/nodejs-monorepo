@@ -8,7 +8,11 @@ let consts = require('./constants');
 
 
 function addDamage(api, hpLost, timestamp){
-    if(hpLost && api.model.hp && api.model.profileType != "program"){
+    if(hpLost
+        && api.model.hp
+        && api.model.profileType != "program"
+        && api.model.profileType != "exhuman-program"
+    ){
         let m =  api.getModifierById(consts().DAMAGE_MODIFIER_MID);
         
         if(m){

@@ -36,6 +36,11 @@ function exitVREvent( api, data, event ){
         helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
         return;
     }
+    if (api.model.profileType == "exhuman-program" || api.model.profileType == "program") {
+        api.error("Program can't exit hard drives.");
+        helpers().addChangeRecord(api, `Операция невозможна для программ.`, event.timestamp);
+        return;
+    }
     if(api.model.lastVREnterTimestamp && api.model.lastVREnterTimestamp < event.timestamp){
         api.model.lastVREnterDuration = event.timestamp - api.model.lastVREnterTimestamp;
         

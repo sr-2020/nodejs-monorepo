@@ -69,7 +69,9 @@ function useImmortal (api, pill, event) {
 
     if (!modifier) {return};
 
-    modifier.conditions = [];
+    modifier.conditions = ["pa_cyberg0-1", "lab_becomehacker-3", "pa-immortal-condition"];
+    modifier = api.addModifier(modifier);
+    api.info("IMMORTAL PANAM");
 }
 
 function usePill(api, data, event) {
