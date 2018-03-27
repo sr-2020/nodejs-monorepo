@@ -9,19 +9,6 @@ function logger(label) {
             level: 'info',
             filename: __dirname + '/log/operation.log'
         },
-
-        graylog2: {
-            level: 'debug',
-            graylog: {
-                servers: [
-                    {host: 'mon01.alice.local', port: 12201}
-                ]
-            },
-            staticMeta: {
-                env: 'development',
-                label
-            }
-        }
     };
 
     if (label) {
@@ -36,15 +23,15 @@ module.exports = {
     // блок настроек базы
     db: {
         url: "http://admin:admin@localhost:5984/", // адрес для доступа к кочу, с логином и паролем если нужно
-        events: "events-dev",                      // это и далее - пары <alias>: <имя базы в коче>
-        models: "models-dev",
-        workingModels: "working-models-dev"
+        events: "events",                      // это и далее - пары <alias>: <имя базы в коче>
+        models: "models",
+        workingModels: "work-models"
     },
 
     // блок настроек пула воркеров
     pool: {
         workerModule: 'deus-model-engine/lib/worker_runner',   // модуль воркера, для которого вызывается ChildProcess.fork
-        workerArgs: ['node_modules/deus-model-engine/models'], // аргументы, передаваемые дочернему процессу при запуске
+        workerArgs: ['../deus-models/src'],                    // аргументы, передаваемые дочернему процессу при запуске
         options: {                                             // опции для https://www.npmjs.com/package/generic-pool
             max: 2,                                            // максимальное число воркеров
             min: 2                                             // минимальное число воркеров
@@ -56,11 +43,11 @@ module.exports = {
 
         // если загрузка производится из базы, используется ключ db
         db: {
-            conditions: 'dict-conditions-dev', // это и далее - пары <имя каталога>: <имя или алиас базы>
-            effects: 'dict-effects-dev',
-            events: 'dict-events-dev',
-            illnesses: 'dict-illnesses-dev',
-            implants: 'dict-implants-dev'
+            conditions: 'dict-conditions', // это и далее - пары <имя каталога>: <имя или алиас базы>
+            effects: 'dict-effects',
+            events: 'dict-events',
+            illnesses: 'dict-illnesses',
+            implants: 'dict-implants'
         }
 
         // если загрузка из файлов, используется ключ path
@@ -69,7 +56,7 @@ module.exports = {
 
     // блок настроек баз для вью-моделей
     viewModels: {
-        default: "view-models-dev" // пары <alias>: <имя базы или алиас из списка db>
+        default: "view-models" // пары <alias>: <имя базы или алиас из списка db>
     },
 
     // блок настроек баз для общих объектов
