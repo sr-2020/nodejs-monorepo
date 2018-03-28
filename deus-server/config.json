@@ -1,0 +1,25 @@
+{
+    "databases": {
+        "username": "admin",
+        "password": "admin",
+        "accounts": "http://localhost:5984/accounts",
+        "events": "http://localhost:5984/events",
+        "viewModels": [
+          {"type": "mobile", "url": "http://localhost:5984/view-models"},
+          {"type": "default", "url": "http://localhost:5984/accounts"}
+        ]
+    },
+
+    "port": 8157,
+
+    "settings" : {
+        "viewmodelUpdateTimeout": 150000,
+        "accessGrantTime": 60000,
+        "tooFarInFutureFilterTime": 1800000,
+        "pushSettings": {
+            "username": "",
+            "password": "",
+            "serverKey": ""
+        }
+    }
+}

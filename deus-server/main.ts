@@ -14,7 +14,7 @@ const logger = new winston.Logger({
 });
 
 // tslint:disable-next-line:no-var-requires
-const configUnparsed = require('../configs/deus-server');
+const configUnparsed = require('./config');
 
 try {
   const config = TypedJSON.parse(JSON.stringify(configUnparsed), Configuration);
