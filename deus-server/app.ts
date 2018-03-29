@@ -352,48 +352,6 @@ class App {
   }
 
   public async listen(port: number) {
-    try {
-      await this.eventsDb.upsert('_design/web_api_server_v2', () => {
-        return {
-          _id: '_design/web_api_server_v2',
-          views: {
-            characterId_timestamp_mobile: {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.timestamp && doc.characterId && doc.mobile) emit([doc.characterId, doc.timestamp]);  }',
-            },
-          },
-        };
-      });
-
-      await this.accountsDb.upsert('_design/web_api_server_v2', () => {
-        return {
-          _id: '_design/web_api_server_v2',
-          views: {
-            by_login: {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.login) emit(doc.login);  }',
-            },
-            by_push_token: {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.pushToken) emit(doc.pushToken);  }',
-            },
-          },
-        };
-      });
-
-      await this.mobileViewmodelDb().upsert('_design/web_api_server_v2', () => {
-        return {
-          _id: '_design/web_api_server_v2',
-          views: {
-            by_timestamp: {
-              map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
-            },
-          },
-        };
-      });
-    } catch (err) {
-      console.error(err);
-    }
     this.server = this.app.listen(port);
   }
 
