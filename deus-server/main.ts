@@ -30,6 +30,8 @@ try {
     new PouchDB(databasesConfig.accounts, authOptions),
     config.settings).listen(config.port);
 
+  logger.info('Ready to accept requests.');
+
 } catch (e) {
   logger.error('Error during server startup: ' + e);
 }
