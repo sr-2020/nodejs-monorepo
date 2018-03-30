@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as meow from 'meow';
+import * as waitOn from 'wait-on';
 
 import { Injector } from './di';
 import {
@@ -67,5 +68,26 @@ const di = Injector
     .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
     .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, ModelStorageToken, EventStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 
-const manager = di.get(ManagerToken);
-manager.init().then(() => manager.retryAll());
+const requiredDbNames = [config.db.events, config.db.models, config.db.workingModels];
+if (config.catalogs && ('db' in config.catalogs)) {
+    for (let catalog in config.catalogs['db']) {
+        requiredDbNames.push(config.catalogs['db'][catalog]);
+    }
+}
+for (let viewModel in config.viewModels) {
+    requiredDbNames.push(config.viewModels[viewModel]);
+}
+
+const requiredDbUrls = requiredDbNames.map((name) => config.db.url + name);
+
+const opts = {
+    resources: requiredDbUrls,
+};
+
+waitOn(opts, (err) => {
+    if (err) {
+        throw err;
+    }
+    const manager = di.get(ManagerToken);
+    manager.init().then(() => manager.retryAll());
+});

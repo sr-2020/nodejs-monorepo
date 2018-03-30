@@ -27,6 +27,7 @@
     "npm": "^5.2.0",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.2",
+    "wait-on": "^2.0.1",
     "winston": "^2.3.1",
     "winston-graylog2": "^0.6.0"
   },
