@@ -27,7 +27,7 @@
     "@types/node": "^7.0.29",
     "@types/pouchdb": "^6.1.0",
     "@types/pouchdb-upsert": "^2.0.2",
-    "@types/request": "0.0.43",
+    "@types/request": "^2.47.0",
     "@types/request-promise": "^4.1.33",
     "@types/uuid": "^3.4.0",
     "@types/winston": "^2.3.3",
@@ -51,6 +51,7 @@
     "typescript": "^2.2.2",
     "typescript-map": "0.0.3",
     "uuid": "^3.1.0",
+    "wait-on": "^2.1.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
