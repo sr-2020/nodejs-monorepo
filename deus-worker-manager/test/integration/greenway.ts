@@ -42,7 +42,7 @@ describe('Green way', function() {
             timestamp: Date.now() + 10
         });
 
-        await delay(200);
+        await delay(400);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
@@ -92,7 +92,7 @@ describe('Green way', function() {
             timestamp: timestamp + 150
         });
 
-        await delay(200);
+        await delay(400);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
@@ -119,7 +119,7 @@ describe('Green way', function() {
             timestamp: timestamp + 20
         });
 
-        await delay(200);
+        await delay(400);
 
         timestamp = Date.now();
 
@@ -136,7 +136,7 @@ describe('Green way', function() {
             timestamp: timestamp + 20
         });
 
-        await delay(200);
+        await delay(400);
 
         let baseModel = await getModel(di, model._id);
         expect(baseModel).to.has.property('value', 'AB');
@@ -164,7 +164,7 @@ describe('Green way', function() {
             timestamp: timestamp + 2
         });
 
-        await delay(200);
+        await delay(400);
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
@@ -194,7 +194,7 @@ describe('Green way', function() {
             timestamp: timestamp + 20
         });
 
-        await delay(200);
+        await delay(400);
 
         await pushEvent(di, {
             characterId: model._id,
@@ -208,7 +208,7 @@ describe('Green way', function() {
             timestamp: timestamp + 50
         });
 
-        await delay(200);
+        await delay(400);
 
         let abc = await getObject(di, 'counters', 'abc');
 
