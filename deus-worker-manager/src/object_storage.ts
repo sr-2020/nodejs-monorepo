@@ -30,7 +30,7 @@ export class ObjectStorage implements ObjectStorageInterface {
     newId() { return this.nextId++; }
 
     async aquireOne(lockId: number, alias: string, id: string): Promise<Document | null | undefined> {
-        let locked = get<any>(this.storage, [alias, id]);
+        let locked = get(this.storage, [alias, id]);
         if (locked) {
             if (locked.lockId == lockId) {
                 return locked;
@@ -70,7 +70,7 @@ export class ObjectStorage implements ObjectStorageInterface {
     }
 
     storeOne(lockId: number, alias: string, id: string, obj: any): Promise<void> {
-        let locked = get<any>(this.storage, [alias, id]);
+        let locked = get(this.storage, [alias, id]);
         if (!locked || !(locked.lockId == lockId)) {
             return Promise.reject(null);
         }
@@ -92,7 +92,7 @@ export class ObjectStorage implements ObjectStorageInterface {
             });
         });
 
-        return Promise.all(flatten(pending)).then(() => { });
+        return Promise.all(flatten(pending)).then(() => { /* pass */ });
     }
 
     release(lockId: number) {

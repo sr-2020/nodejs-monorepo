@@ -27,7 +27,7 @@ export class CatalogsStorage implements CatalogsStorageInterface {
     constructor(private config: Config, private dbConnector: DBConnectorInterface) { }
 
     catalogDbName(catalog: string): string | undefined {
-        let dbName = get<Config, string>(this.config, ['catalogs', 'db', catalog]);
+        let dbName: string = get(this.config, ['catalogs', 'db', catalog]);
         if (!dbName) return;
 
         if (this.config.db[dbName]) dbName = this.config.db[dbName];
