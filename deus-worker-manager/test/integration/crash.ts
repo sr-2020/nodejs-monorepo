@@ -229,7 +229,7 @@ describe('Crash scenarios', function() {
             timestamp: Date.now()
         });
 
-        await delay(100);
+        await delay(400);
 
         expect((manager as any).errors[model._id]).not.to.exist;
     });
