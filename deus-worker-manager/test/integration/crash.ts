@@ -200,7 +200,7 @@ describe('Crash scenarios', function() {
             timestamp: timestamp + 2
         });
 
-        await delay(100);
+        await delay(200);
 
         await pushEvent(di, {
             characterId: model._id,
@@ -208,7 +208,7 @@ describe('Crash scenarios', function() {
             timestamp: timestamp + 3
         });
 
-        await delay(100);
+        await delay(200);
 
         await pushEvent(di, {
             characterId: model._id,
@@ -216,7 +216,7 @@ describe('Crash scenarios', function() {
             timestamp: timestamp + 4
         });
 
-        await delay(100);
+        await delay(200);
 
         expect((manager as any).errors[model._id]).to.exist;
         expect((manager as any).errors[model._id]).to.equals(3);

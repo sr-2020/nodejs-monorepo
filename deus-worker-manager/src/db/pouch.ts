@@ -3,6 +3,7 @@ import * as Path from 'path';
 import { isNil, get } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as glob from 'glob';
+import { EventEmitter } from 'events';
 import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
 
 @Inject
@@ -25,7 +26,7 @@ export class PouchConnector implements DBConnectorInterface {
         }, {});
     }
 
-    use(name: string) {
+    use(name: string): DBInterface {
         if (this.cache[name]) return this.cache[name];
         return this.cache[name] = new PouchDb(name, this.adapter, this.views);
     }
@@ -85,7 +86,7 @@ export class PouchDb implements DBInterface {
         return Promise.reject(new Error(`No such view: ${design}/${view}`));
     }
 
-    follow(params: FilterParams) {
+    follow(params: FilterParams): EventEmitter {
         let { onChange, ...otherParams } = params;
         otherParams.live = true;
         let feed = this.db.changes(otherParams);
@@ -94,6 +95,6 @@ export class PouchDb implements DBInterface {
             feed = feed.on('change', onChange);
         }
 
-        return feed;
+        return feed as any;
     }
 }

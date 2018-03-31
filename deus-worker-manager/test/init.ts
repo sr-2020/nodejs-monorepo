@@ -68,7 +68,7 @@ export const defaultConfig: Config = {
 
 Object.freeze(defaultConfig);
 
-export function initDb(config: Config) {
+export function initDb(config: Config): DBConnectorInterface {
     // tslint:disable-next-line:no-string-literal
     if (process.env['__USE_REAL_DB']) {
         return new NanoConnector(config);

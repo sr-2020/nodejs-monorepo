@@ -85,8 +85,9 @@ export class WorkersPool implements WorkersPoolInterface {
         }
     }
 
-    drain() {
-        return this.pool.drain();
+    async drain() {
+        await this.pool.drain();
+        return this.pool.clear();
     }
 
     async withWorker<E>(handler: (worker: Worker) => Promise<E>) {

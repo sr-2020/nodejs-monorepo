@@ -11,6 +11,7 @@ module.exports = () => {
         },
 
         crash(api, data) {
+            console.log('>>>');
             throw new Error('bang!');
         },
 
