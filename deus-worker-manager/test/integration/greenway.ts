@@ -1,14 +1,16 @@
+// tslint:disable:no-unused-expression
+
 import { expect } from 'chai';
 
 import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
-import { initDi } from '../init'
+import { initDi } from '../init';
 import { createModel, pushEvent, getModel, getModelVariants, saveObject, getObject } from '../model_helpers';
 import { delay } from '../helpers';
 
-describe("Green way", function() {
+describe('Green way', function() {
     this.timeout(5000);
 
     let manager: Manager;
@@ -24,7 +26,6 @@ describe("Green way", function() {
         return manager.stop();
     });
 
-
     it('Should process events', async () => {
         let model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
 
@@ -39,7 +40,7 @@ describe("Green way", function() {
             characterId: model._id,
             eventType: '_RefreshModel',
             timestamp: Date.now() + 10
-        })
+        });
 
         await delay(200);
 
@@ -49,7 +50,7 @@ describe("Green way", function() {
         expect(workingModel).to.exist;
         expect(viewModel).to.exist;
 
-        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
+        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
         expect(baseModel).to.has.property('value', 'A');
         expect(baseModel).to.has.property('otherValue', 'some useless info');
@@ -95,7 +96,7 @@ describe("Green way", function() {
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
-        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
+        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
         expect(baseModel).to.has.property('value', 'BA');
         expect(baseModel.timestamp).to.be.equal(timestamp + 150);
@@ -139,7 +140,7 @@ describe("Green way", function() {
 
         let baseModel = await getModel(di, model._id);
         expect(baseModel).to.has.property('value', 'AB');
-    })
+    });
 
     it('Should process events queued with short intervals', async () => {
         let model = await createModel(di);
@@ -148,7 +149,7 @@ describe("Green way", function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp
+            timestamp
         });
 
         await pushEvent(di, {
@@ -167,10 +168,10 @@ describe("Green way", function() {
 
         let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
 
-        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!')
+        if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
         expect(baseModel.timestamp).to.be.equal(timestamp + 2);
-    })
+    });
 
     it('Should be able to aquire external objects', async () => {
         let model = await createModel(di);
@@ -215,5 +216,5 @@ describe("Green way", function() {
         if (!abc) throw new Error('Imposible!');
 
         expect(abc.value).to.equals(2);
-    })
+    });
 });

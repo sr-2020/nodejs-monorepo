@@ -51,7 +51,7 @@ export const defaultConfig: Config = {
     },
 
     objects: {
-        'counters': 'counters'
+        counters: 'counters'
     },
 
     viewModels: { default: 'defaultViewModels' },
@@ -69,6 +69,7 @@ export const defaultConfig: Config = {
 Object.freeze(defaultConfig);
 
 export function initDb(config: Config) {
+    // tslint:disable-next-line:no-string-literal
     if (process.env['__USE_REAL_DB']) {
         return new NanoConnector(config);
     } else {
@@ -97,6 +98,7 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
 export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
+    // tslint:disable-next-line:no-string-literal
     if (!process.env['__USE_REAL_DB']) {
         for (let alias in config.db) {
             config.db[alias] += '-' + counter;

@@ -1,3 +1,5 @@
+// tslint:disable:no-unused-expression
+
 import { cloneDeep } from 'lodash';
 import { expect } from 'chai';
 
@@ -5,7 +7,7 @@ import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
-import { initDi, defaultConfig } from '../init'
+import { initDi, defaultConfig } from '../init';
 import { createModel, createModelObj, saveModel, pushEvent, getModel } from '../model_helpers';
 import { delay } from '../helpers';
 
@@ -34,7 +36,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'crash',
-            timestamp: timestamp
+            timestamp,
         });
 
         await pushEvent(di, {
@@ -77,7 +79,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'concat',
-            timestamp: timestamp,
+            timestamp,
             data: { value: 'A' }
         });
 
@@ -85,7 +87,7 @@ describe('Crash scenarios', function() {
             characterId: model._id,
             eventType: '_RefreshModel',
             timestamp: timestamp + 50
-        })
+        });
 
         await delay(200);
 
@@ -122,7 +124,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'kill',
-            timestamp: timestamp
+            timestamp
         });
 
         await pushEvent(di, {
@@ -165,7 +167,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'concat',
-            timestamp: timestamp,
+            timestamp,
             data: { value: 'A' }
         });
 
@@ -173,7 +175,7 @@ describe('Crash scenarios', function() {
             characterId: model._id,
             eventType: '_RefreshModel',
             timestamp: timestamp + 50
-        })
+        });
 
         await delay(200);
 

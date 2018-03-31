@@ -2,7 +2,7 @@ import { merge } from 'lodash';
 import { Document } from '../src/db/interface';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 
-function dbName(di: any, alias: string): String {
+function dbName(di: any, alias: string): string {
     return di.get(ConfigToken).db[alias];
 }
 

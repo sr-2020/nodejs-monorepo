@@ -1,3 +1,5 @@
+// tslint:disable:no-shadowed-variable
+
 import * as path from 'path';
 import * as meow from 'meow';
 import * as waitOn from 'wait-on';

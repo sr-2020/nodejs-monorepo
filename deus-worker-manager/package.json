@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "lint": "tslint -p tsconfig.json --exclude node_modules",
     "start": "bin/start.sh",
     "stop": "bin/stop.sh",
     "test": "npm run test:integration",
@@ -48,6 +49,7 @@
     "pouchdb": "^6.4.3",
     "pouchdb-adapter-memory": "^6.4.3",
     "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
     "typescript": "^2.8.1"
   }
 }
