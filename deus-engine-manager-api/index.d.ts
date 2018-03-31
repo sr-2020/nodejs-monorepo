@@ -74,3 +74,47 @@ export type EngineReplyReady = {
 }
 
 export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog | EngineReplyAquire;
+
+export interface ReadModelApiInterface {
+    model: any
+    getCatalogObject(catalog: string, id: string): any
+    getModifierById(id: string): any
+    getModifiersByName(name: string): any[]
+    getModifiersByClass(className: string): any[]
+    getModifiersBySystem(systemName: string): any[]
+    getEffectsByName(name: string): any[]
+    getEffectsByClass(className: string): any[]
+    getConditionById(id: string): any
+    getConditionsByClass(className: string): any[]
+    getConditionsByGroup(group: string): any[]
+    getTimer(name: string): any
+}
+
+export interface LogApiInterface {
+    debug(msg: string, ...params: any[]): void
+    info(msg: string, ...params: any[]): void
+    warn(msg: string, ...params: any[]): void
+    error(msg: string, ...params: any[]): void
+}
+
+export interface WriteModelApiInterface {
+    addModifier(modifier: any): any
+    removeModifier(modifier: any): this
+    addCondition(condition: any): any
+    removeCondition(id: string): this
+    setTimer(name: string, seconds: number, handle: string, data: any): this
+    removeTimer(name: string): this
+    sendEvent(characterId: string | null, event: string, data: any): this
+}
+
+export interface PreprocessApiInterface extends ReadModelApiInterface, LogApiInterface {
+    aquire(db: string, id: string): this
+}
+
+export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface {
+    baseModel: any
+}
+
+export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface {
+    aquired(db: string, id: string): any
+}
