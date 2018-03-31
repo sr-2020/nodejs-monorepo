@@ -1,5 +1,4 @@
-import { Event } from 'deus-engine-manager-api';
-import { ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from './model_api';
+import { Event, ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from 'deus-engine-manager-api';
 
 export type Callback = (api: ModelApiInterface, data: any, event?: Event) => void
 
