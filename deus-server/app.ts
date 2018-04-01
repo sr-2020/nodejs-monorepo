@@ -193,7 +193,7 @@ class App {
           this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
           const eventsForLogAfter = CleanEventsForLogging(events);
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-            if (s.status == 200) 
+            if (s.status == 200)
               this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
             else
               this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
@@ -447,16 +447,16 @@ class App {
     res.status(status).send(msg);
   }
 
-  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[], 
-      eventTypesAfter: any[], status: number) {
+  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
+    eventTypesAfter: any[], status: number) {
     const logData = this.createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
     this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
   }
 
-  private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[], 
-      eventTypesAfter: any[], status: number) {
+  private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
+    eventTypesAfter: any[], status: number) {
     const logData = this.createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
