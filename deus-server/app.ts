@@ -41,10 +41,10 @@ function CleanEventsForLogging(events: any[]) {
 
 class App {
   private app: express.Express = express();
-  private server: http.Server;
+  private server: http.Server | null = null;
   private connections = new TSMap<string, Connection>();
-  private cancelAutoNotify: NodeJS.Timer;
-  private cancelAutoRefresh: NodeJS.Timer;
+  private cancelAutoNotify: NodeJS.Timer | null = null;
+  private cancelAutoRefresh: NodeJS.Timer | null = null;
 
   constructor(private logger: winston.LoggerInstance,
               private eventsDb: PouchDB.Database<any>,
@@ -398,6 +398,7 @@ class App {
   }
 
   public stop() {
+    if (!this.server) return;
     this.server.close();
     if (this.cancelAutoNotify) {
       clearInterval(this.cancelAutoNotify);
