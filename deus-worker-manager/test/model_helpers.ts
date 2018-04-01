@@ -1,6 +1,7 @@
 import { merge } from 'lodash';
 import { Document } from '../src/db/interface';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
+import { delay } from './helpers';
 
 function dbName(di: any, alias: string): string {
     return di.get(ConfigToken).db[alias];
@@ -39,8 +40,23 @@ export function getModel(di: any, id: string, dbAlias: string = 'models') {
     return modelsDb.getOrNull(id);
 }
 
+// Waits until model with given timestamp will be generated
+export async function getModelAtTimestamp(di: any, id: string, timestamp: number, dbAlias: string = 'models') {
+    while(true) {
+        const model = await getModel(di, id, dbAlias);
+        if (model && 'timestamp' in model && model.timestamp == timestamp)
+            return model;
+        await delay(10);
+    }
+}
+
 export function getModelVariants(di: any, id: string, aliases: string[] = ['models', 'workingModels', 'defaultViewModels']) {
     let pending = aliases.map((alias) => getModel(di, id, alias));
+    return Promise.all(pending);
+}
+
+export function getModelVariantsAtTimestamp(di: any, id: string, timestamp: number, aliases: string[] = ['models', 'workingModels', 'defaultViewModels']) {
+    let pending = aliases.map((alias) => getModelAtTimestamp(di, id, timestamp, alias));
     return Promise.all(pending);
 }
 

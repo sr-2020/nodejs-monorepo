@@ -7,7 +7,8 @@ import { Manager } from '../../src/manager';
 import { Document } from '../../src/db/interface';
 
 import { initDi } from '../init';
-import { createModel, pushEvent, getModel, getModelVariants, saveObject, getObject } from '../model_helpers';
+import { createModel, pushEvent, getModel, getModelAtTimestamp,
+    getModelVariants, getModelVariantsAtTimestamp, saveObject, getObject } from '../model_helpers';
 import { delay } from '../helpers';
 
 describe('Green way', function() {
@@ -28,23 +29,23 @@ describe('Green way', function() {
 
     it('Should process events', async () => {
         let model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
+        const timestamp = model.timestamp;
 
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'concat',
-            timestamp: Date.now() + 5,
+            timestamp: timestamp + 5,
             data: { value: 'A' }
         });
 
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp: Date.now() + 10
+            timestamp: timestamp + 10
         });
 
-        await delay(400);
-
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
+        let [baseModel, workingModel, viewModel] =
+            await getModelVariantsAtTimestamp(di, model._id, timestamp + 10, ['models', 'workingModels', 'defaultViewModels']);
 
         expect(baseModel).to.exist;
         expect(workingModel).to.exist;
@@ -63,7 +64,7 @@ describe('Green way', function() {
 
     it('Should sort events by timestamp', async () => {
         let model = await createModel(di);
-        let timestamp = Date.now();
+        let timestamp = model.timestamp;
 
         await pushEvent(di, {
             characterId: model._id,
@@ -92,9 +93,8 @@ describe('Green way', function() {
             timestamp: timestamp + 150
         });
 
-        await delay(400);
-
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
+        let [baseModel, workingModel, viewModel] =
+            await getModelVariantsAtTimestamp(di, model._id, timestamp + 150, ['models', 'workingModels', 'defaultViewModels']);
 
         if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
@@ -104,7 +104,7 @@ describe('Green way', function() {
 
     it('Should continue to process events for the same character', async () => {
         let model = await createModel(di);
-        let timestamp = Date.now();
+        let timestamp = model.timestamp;
 
         await pushEvent(di, {
             characterId: model._id,
@@ -136,15 +136,13 @@ describe('Green way', function() {
             timestamp: timestamp + 20
         });
 
-        await delay(400);
-
-        let baseModel = await getModel(di, model._id);
+        let baseModel = await getModelAtTimestamp(di, model._id, timestamp + 20);
         expect(baseModel).to.has.property('value', 'AB');
     });
 
     it('Should process events queued with short intervals', async () => {
         let model = await createModel(di);
-        let timestamp = Date.now();
+        let timestamp = model.timestamp + 1;
 
         await pushEvent(di, {
             characterId: model._id,
@@ -164,9 +162,8 @@ describe('Green way', function() {
             timestamp: timestamp + 2
         });
 
-        await delay(400);
-
-        let [baseModel, workingModel, viewModel] = await getModelVariants(di, model._id, ['models', 'workingModels', 'defaultViewModels']);
+        let [baseModel, workingModel, viewModel] =
+            await getModelVariantsAtTimestamp(di, model._id, timestamp + 2, ['models', 'workingModels', 'defaultViewModels']);
 
         if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
@@ -175,7 +172,7 @@ describe('Green way', function() {
 
     it('Should be able to aquire external objects', async () => {
         let model = await createModel(di);
-        let timestamp = Date.now();
+        let timestamp = model.timestamp;
 
         await saveObject(di, 'counters', {
             _id: 'abc',
