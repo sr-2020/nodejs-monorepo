@@ -414,8 +414,10 @@ class App {
   private mobileViewmodelDb() { return this.viewmodelDbs.get('mobile'); }
 
   private async cutTimestamp(id: string): Promise<number> {
-    const currentViewmodel = await this.mobileViewmodelDb().get(id);
-    const lastEventTimeStamp = await this.latestExistingMobileEventTimestamp(id);
+    const [currentViewmodel, lastEventTimeStamp] = await Promise.all([
+      this.mobileViewmodelDb().get(id),
+      this.latestExistingMobileEventTimestamp(id)
+    ]);
     return Math.max(currentViewmodel.timestamp, lastEventTimeStamp);
   }
 
