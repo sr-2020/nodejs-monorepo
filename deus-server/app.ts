@@ -47,10 +47,10 @@ class App {
   private cancelAutoRefresh: NodeJS.Timer | null = null;
 
   constructor(private logger: winston.LoggerInstance,
-              private eventsDb: PouchDB.Database<any>,
-              private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
-              private accountsDb: PouchDB.Database<any>,
-              private settings: ApplicationSettings) {
+    private eventsDb: PouchDB.Database<any>,
+    private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
+    private accountsDb: PouchDB.Database<any>,
+    private settings: ApplicationSettings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -129,94 +129,7 @@ class App {
       }
     });
 
-    this.app.post('/events/:id', auth(true), async (req, res) => {
-      const id: string = req.params.id;
-
-      let events = req.body.events;
-      if (!(events instanceof Array)) {
-        this.logAndSendErrorResponse(req, res, 400, 'No events array in request');
-        return;
-      }
-
-      const tokenUpdatedEvents = events.filter(
-        (event) => event.eventType == 'tokenUpdated' && event.data &&
-          event.data.token && event.data.token.registrationId);
-      if (tokenUpdatedEvents.length > 0) {
-        const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
-        const existingCharacterWithThatToken =
-          await accountsDb.query('web_api_server_v2/by_push_token', { key: token });
-        for (const existingCharacter of existingCharacterWithThatToken.rows) {
-          await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
-            this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
-            delete accountInfo.pushToken;
-            return accountInfo;
-          });
-        }
-        await this.accountsDb.upsert(id, (accountInfo) => {
-          this.logger.info(`Saving token for ${id}`)
-          accountInfo.pushToken = token;
-          return accountInfo;
-        });
-      }
-      events = events.filter((event) => event.eventType != 'tokenUpdated');
-
-      const eventsForLogBefore = CleanEventsForLogging(events);
-      const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
-
-      if (isMobileClient) {
-        events.forEach((event) => event.mobile = true);
-        const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
-        events = events.filter((value: any) =>
-          value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
-        if (events.length == 0) {
-          this.logger.warning(`All events received from id ${id} are from future!`);
-        }
-        const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
-
-        const lastRefreshModelEventTimestamp =
-          Math.max(...refreshModelEvents.map((event) => event.timestamp));
-        events = events.filter((value: any) =>
-          value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
-      }
-
-      try {
-        const cutTimestamp = await this.cutTimestamp(id);
-        if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp)) {
-          this.logAndSendErrorResponse(req, res, 409, "Can't accept event with timestamp earlier than cut timestamp");
-          return;
-        }
-        events = events.filter((value: any) => value.timestamp > cutTimestamp);
-
-        if (isMobileClient) {
-          if (this.connections.has(id)) {
-            this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
-            return;
-          }
-          this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
-
-          const eventsForLogAfter = CleanEventsForLogging(events);
-          this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-            if (s.status == 200)
-              this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
-            else
-              this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
-            res.status(s.status).send(s.body);
-            this.connections.delete(id);
-          });
-        } else {
-          // In this case we don't need to subscribe for viewmodel updates or
-          // block other clients from connecting.
-          // So we don't add Connection to this.connections.
-          const connection = new Connection(this.eventsDb, 0);
-          connection.processEvents(id, events).then((s: StatusAndBody) => {
-            this.logSuccessfulResponse(req, eventsForLogBefore, [], s.status);
-            res.status(s.status).send(s.body);
-          });
-        }
-      } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
-      }
-    });
+    this.app.post('/events/:id', auth(true), (req, res) => this.postEvents(req, res));
 
     this.app.get('/events/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
@@ -413,6 +326,107 @@ class App {
 
   public currentTimestamp(): number {
     return new Date().valueOf();
+  }
+
+  private async postEvents(req: express.Request, res: express.Response) {
+    const id: string = req.params.id;
+
+    let events = req.body.events;
+    if (!(events instanceof Array)) {
+      this.logAndSendErrorResponse(req, res, 400, 'No events array in request');
+      return;
+    }
+
+    events = await this.processTokenUpdateEvents(id, events);
+
+    const eventsForLogBefore = CleanEventsForLogging(events);
+
+    const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
+    if (isMobileClient) {
+      events = this.filterRefreshModelEventsByTimestamp(id, events);
+    }
+
+    try {
+      const cutTimestamp = await this.cutTimestamp(id);
+      if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp)) {
+        this.logAndSendErrorResponse(req, res, 409,
+          "Can't accept event with timestamp earlier than cut timestamp: they won't get processed!");
+        return;
+      }
+      events = events.filter((value: any) => value.timestamp > cutTimestamp);
+
+      if (isMobileClient) {
+        if (this.connections.has(id)) {
+          this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
+          return;
+        }
+        this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
+
+        const eventsForLogAfter = CleanEventsForLogging(events);
+        this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
+          if (s.status == 200)
+            this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
+          else
+            this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
+          res.status(s.status).send(s.body);
+          this.connections.delete(id);
+        });
+      } else {
+        // In this case we don't need to subscribe for viewmodel updates or
+        // block other clients from connecting.
+        // So we don't add Connection to this.connections.
+        const connection = new Connection(this.eventsDb, 0);
+        connection.processEvents(id, events).then((s: StatusAndBody) => {
+          this.logSuccessfulResponse(req, eventsForLogBefore, [], s.status);
+          res.status(s.status).send(s.body);
+        });
+      }
+    } catch (e) {
+      this.returnCharacterNotFoundOrRethrow(e, req, res);
+    }
+  }
+
+  private async processTokenUpdateEvents(id: string, events: any[]) {
+    const tokenUpdatedEvents = events.filter(
+      (event) => event.eventType == 'tokenUpdated' && event.data &&
+        event.data.token && event.data.token.registrationId);
+    if (tokenUpdatedEvents.length > 0) {
+      const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
+      const existingCharacterWithThatToken =
+        await this.accountsDb.query('web_api_server_v2/by_push_token', { key: token });
+      for (const existingCharacter of existingCharacterWithThatToken.rows) {
+        await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
+          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
+          delete accountInfo.pushToken;
+          return accountInfo;
+        });
+      }
+      await this.accountsDb.upsert(id, (accountInfo) => {
+        this.logger.info(`Saving token for ${id}`)
+        accountInfo.pushToken = token;
+        return accountInfo;
+      });
+    }
+    return events.filter((event) => event.eventType != 'tokenUpdated');
+  }
+
+  // Removes _RefreshModel events which are too far in future
+  // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
+  // Then removes all _RefreshModel events except latest one.
+  private filterRefreshModelEventsByTimestamp(id, events: any[]): any[] {
+    events.forEach((event) => event.mobile = true);
+    const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
+    events = events.filter((value: any) =>
+      value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
+    if (events.length == 0) {
+      this.logger.warning(`All events received from id ${id} are from future!`);
+    }
+    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
+
+    const lastRefreshModelEventTimestamp =
+      Math.max(...refreshModelEvents.map((event) => event.timestamp));
+    return events.filter((value: any) =>
+      value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
   }
 
   private mobileViewmodelDb() { return this.viewmodelDbs.get('mobile'); }
