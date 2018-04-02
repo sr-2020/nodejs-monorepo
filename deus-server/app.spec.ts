@@ -556,6 +556,38 @@ describe('API Server', () => {
       expect(events.length).to.eq(20);
     });
 
+    it('Handles mobile + non-mobile connection simultaneously', async () => {
+      const mobileEvent = {
+        eventType: '_RefreshModel',
+        timestamp: 4364,
+      };
+      const promises: any[] = [
+        rp.post(address + '/events/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { events: [mobileEvent] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise()
+      ];
+
+      const event = {
+        eventType: 'TestEvent',
+        timestamp: 4365,
+      };
+      for (let i = 0; i < 20; ++i)
+        promises.push(rp.post(address + '/events/some_user',
+          {
+            resolveWithFullResponse: true, simple: false, json: { events: [event] },
+            auth: { username: 'some_user', password: 'qwerty' },
+          }).promise());
+
+      const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
+      const expectedStatuses = Array(21).fill(202);
+      expect(resultStatuses).to.deep.equal(expectedStatuses);
+      const res = await eventsDb.allDocs({ include_docs: true });
+      const events = res.rows.filter((row) => row.doc && row.doc.characterId);
+      expect(events.length).to.eq(21);
+    });
+
     it('Handles multiple sequential connections from same client', async () => {
       const event = {
         eventType: 'TestEvent',

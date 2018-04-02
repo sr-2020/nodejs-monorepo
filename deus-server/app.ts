@@ -131,10 +131,6 @@ class App {
 
     this.app.post('/events/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
-      if (this.connections.has(id)) {
-        this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
-        return;
-      }
 
       let events = req.body.events;
       if (!(events instanceof Array)) {
@@ -163,8 +159,10 @@ class App {
         });
       }
       events = events.filter((event) => event.eventType != 'tokenUpdated');
+
       const eventsForLogBefore = CleanEventsForLogging(events);
       const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
+
       if (isMobileClient) {
         events.forEach((event) => event.mobile = true);
         const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
@@ -190,7 +188,12 @@ class App {
         events = events.filter((value: any) => value.timestamp > cutTimestamp);
 
         if (isMobileClient) {
+          if (this.connections.has(id)) {
+            this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
+            return;
+          }
           this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
+
           const eventsForLogAfter = CleanEventsForLogging(events);
           this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
             if (s.status == 200)
