@@ -8,7 +8,6 @@ import * as moment from 'moment';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 import * as rp from 'request-promise';
-import * as uuid from 'uuid/v4';
 import * as winston from 'winston';
 PouchDB.plugin(PouchDBUpsert);
 
@@ -16,6 +15,7 @@ import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
 import { ApplicationSettings } from './settings';
+import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -293,11 +293,11 @@ class App {
 
     this.app.post('/push/visible/:id', pushAuth, async (req, res) => {
       await this.sendGenericPushNotificationAndRespond(req, res,
-        this.makeVisibleNotificationPayload(req.body.title, req.body.body));
+        makeVisibleNotificationPayload(req.body.title, req.body.body));
     });
 
     this.app.post('/push/refresh/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotificationAndRespond(req, res, this.makeSilentRefreshNotificationPayload());
+      await this.sendGenericPushNotificationAndRespond(req, res, makeSilentRefreshNotificationPayload());
     });
 
     this.app.post('/push/:id', pushAuth, async (req, res) => {
@@ -322,7 +322,7 @@ class App {
           const inactiveIDs =
             await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
           inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
-            this.makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
+            makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
         } catch (e) {
           this.logger.error(e);
         }
@@ -340,7 +340,7 @@ class App {
         const inactiveIDs =
           await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
         inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
-          this.makeSilentRefreshNotificationPayload())));
+          makeSilentRefreshNotificationPayload())));
       }, autoRefreshSettings.performOncePerMs);
     }
 
@@ -495,33 +495,6 @@ class App {
       throw new LoginNotFoundError('Multiple users with such login found');
 
     return docs.rows[0].id;
-  }
-
-  private makeVisibleNotificationPayload(title: string, body?: string): any {
-    return {
-      notification: {
-        title: title,
-        body: body ? body : ' ',
-        sound: 'default',
-      },
-      aps: {
-        sound: 'default',
-      },
-    };
-  }
-
-  private makeSilentRefreshNotificationPayload(): any {
-    return {
-      apps: {
-        'content-available': 1,
-      },
-      content_available: true,
-      notId: uuid(),
-      data: {
-        'refresh': true,
-        'content-available': 1,
-      },
-    };
   }
 
   private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
