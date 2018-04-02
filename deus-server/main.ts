@@ -3,14 +3,18 @@ import { TypedJSON } from 'typedjson/js/typed-json';
 import { TSMap } from 'typescript-map';
 import * as waitOn from 'wait-on';
 import * as winston from 'winston';
+import { LoggingWinston } from '@google-cloud/logging-winston';
 import App from './app';
 import { Configuration } from './settings';
+
+const loggingWinston = new LoggingWinston();
 
 const logger = new winston.Logger({
   level: 'info',
   transports: [
     new (winston.transports.Console)(),
     new (winston.transports.File)({ filename: 'log.txt' }),
+    loggingWinston
   ],
 });
 
