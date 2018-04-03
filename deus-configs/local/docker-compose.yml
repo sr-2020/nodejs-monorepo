@@ -1,5 +1,6 @@
 version: '3.2'
 services:
+# Components we own
   deus-server:
     image: "deus-server"
     networks:
@@ -21,6 +22,8 @@ services:
       - type: volume
         source: models_src
         target: /app
+# Components we don't own, but depend on
+# CouchDB
   couchdb:
     image: "apache/couchdb"
     environment:
@@ -36,11 +39,53 @@ services:
         target: /opt/couchdb/data
         volume:
           nocopy: true
+# ELK stack (Elasticksearch + Logstash + Kibana)
+  elasticsearch:
+    build:
+      context: ../elk/elasticsearch/
+    volumes:
+      - ../elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - elastic_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - overlay
+  logstash:
+    build:
+      context: ../elk/logstash/
+    volumes:
+      - ../elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ../elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - overlay
+    depends_on:
+      - elasticsearch
+  kibana:
+    build:
+      context: ../elk/kibana/
+    volumes:
+      - ../elk/kibana/config/:/usr/share/kibana/config:ro
+    ports:
+      - "5601:5601"
+    networks:
+      - overlay
+    depends_on:
+      - elasticsearch
 
 volumes:
   couchdb_data:
     external: true
   models_src:
+  elastic_data:
+    external: true
 
 networks:
   overlay:
+
