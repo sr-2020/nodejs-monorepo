@@ -1,9 +1,15 @@
 function logger(label) {
     let cfg =  {
         console: {
-            level: 'debug',
+            level: 'info',
             colorize: true
         },
+        elasticsearch: {
+            level: 'debug',
+            clientOpts: {
+                host: 'elasticsearch:9200'
+            }
+        }
     };
 
     if (label) {

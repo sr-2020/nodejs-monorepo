@@ -1,13 +1,13 @@
 import { Inject } from './di';
 import { Container, ContainerInstance } from 'winston';
 import * as winston from 'winston';
-import * as Graylog from 'winston-graylog2';
+import * as Elasticsearch from 'winston-elasticsearch';
 
 import { Config, LoggerConfig } from './config';
 import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
 // Set default winston config
-(winston.transports as any).Graylog2 = Graylog;
+(winston.transports as any).Elasticsearch = Elasticsearch;
 winston.setLevels(winston.config.syslog.levels);
 
 function defLevel(level: LogLevel) {

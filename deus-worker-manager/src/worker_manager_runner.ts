@@ -80,10 +80,12 @@ for (let viewModel in config.viewModels) {
     requiredDbNames.push(config.viewModels[viewModel]);
 }
 
-const requiredDbUrls = requiredDbNames.map((name) => config.db.url + name);
+const requiredUrls = requiredDbNames.map((name) => config.db.url + name);
+
+requiredUrls.push('http://elasticsearch:9200');
 
 const opts = {
-    resources: requiredDbUrls,
+    resources: requiredUrls,
 };
 
 waitOn(opts, (err) => {
