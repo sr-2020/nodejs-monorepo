@@ -6,17 +6,9 @@ import * as winston from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 import App from './app';
 import { Configuration } from './settings';
+import Elasticsearch = require('winston-elasticsearch');
 
 const loggingWinston = new LoggingWinston();
-
-const logger = new winston.Logger({
-  level: 'info',
-  transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.File)({ filename: 'log.txt' }),
-    loggingWinston
-  ],
-});
 
 // tslint:disable-next-line:no-var-requires
 const configUnparsed = require('./config');
@@ -26,17 +18,26 @@ try {
   const databasesConfig = config.databases;
   const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
 
-  const requiredDbUrls = databasesConfig.viewModels.map((v) => v.url);
-  requiredDbUrls.push(databasesConfig.events, databasesConfig.accounts);
+  const requiredUrls = databasesConfig.viewModels.map((v) => v.url);
+  requiredUrls.push(databasesConfig.events, databasesConfig.accounts);
+  requiredUrls.push('http://elasticsearch:9200');
 
   const opts = {
-    resources: requiredDbUrls,
+    resources: requiredUrls,
   };
 
   waitOn(opts, (err) => {
     if (err)
       throw err;
     else {
+      const logger = new winston.Logger({
+        level: 'info',
+        transports: [
+          new (winston.transports.Console)(),
+          new (Elasticsearch)({ level: "debug", clientOpts: { host: 'elasticsearch:9200' } }),
+        ],
+      });
+
       const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
         databasesConfig.viewModels.map((v) => [v.type, new PouchDB(v.url, authOptions)]));
 
@@ -50,5 +51,5 @@ try {
     }
   });
 } catch (e) {
-  logger.error('Error during server startup: ' + e);
+  console.error('Error during server startup: ' + e);
 }
