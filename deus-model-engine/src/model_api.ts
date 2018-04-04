@@ -2,9 +2,9 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 import { Event, ReadModelApiInterface, LogApiInterface,
-    ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface  } from 'deus-engine-manager-api';
+    ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface, Condition  } from 'deus-engine-manager-api';
 
-import { FieldName, FieldValue, Timer, Context } from './context'
+import { FieldName, FieldValue, Context } from './context'
 import Logger from './logger';
 
 class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
@@ -118,7 +118,7 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
         return this;
     }
 
-    addCondition(condition: any) {
+    addCondition(condition: Condition): Condition {
         let c = _.find(this.contextGetter().conditions, (c) => c.id == condition.id);
 
         if (c) return c;
