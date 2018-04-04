@@ -45,7 +45,7 @@ services:
       context: ../elk/elasticsearch/
     volumes:
       - ../elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - elastic_data:/usr/share/elasticsearch/data
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -83,7 +83,7 @@ volumes:
   couchdb_data:
     external: true
   models_src:
-  elastic_data:
+  elasticsearch_data:
     external: true
 
 networks:
