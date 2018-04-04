@@ -2,10 +2,11 @@
 
 
 let type = require('type-detect');
-let helpers = require('../helpers/model-helper');
-let Chance = require('chance');
+import helpers = require('../helpers/model-helper');
+import Chance = require('chance');
 let chance = new Chance();
-let consts = require('../helpers/constants');
+import consts = require('../helpers/constants');
+import { Modifier } from "deus-engine-manager-api";
 
 function loadNarco(api, id)
 {
@@ -18,14 +19,14 @@ function loadNarco(api, id)
     }
 }
 
-function createNarcoEffectModifier(api, effectName, modifierId) {
-    return helpers().createEffectModifier(api, effectName, modifierId, "Воздействие каких-то таблеток", "narco");
+function createNarcoEffectModifier(api, effectName, modifierId): Modifier | undefined {
+    return helpers.createEffectModifier(api, effectName, modifierId, "Воздействие каких-то таблеток", "narco");
 }
 
 function addModifierTemporary(api, modifier, duration){
     modifier = api.addModifier(modifier);
     api.debug(modifier);
-    helpers().setTimerToKillModifier(api, modifier, duration)
+    helpers.setTimerToKillModifier(api, modifier, duration)
     return modifier;
 }
 
@@ -83,9 +84,9 @@ function performAscend(api)
 function dieHorribleDeath(api) {
     api.info ("Anscension failed, death awaits..");
     let deathAwaitTimeMs = 42 * 60 * 1000;
-    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "ankylosingspondylitis"});
-    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "DiseaseItsenkoKushinga"});
-    helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "Dementia"});
+    helpers.addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "ankylosingspondylitis"});
+    helpers.addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "DiseaseItsenkoKushinga"});
+    helpers.addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "Dementia"});
 }
 
 function applyNarcoEffect(api, data, event)
@@ -106,7 +107,7 @@ function applyNarcoEffect(api, data, event)
 
     if (narco.mindCubePermanent) {
         //Изменение должно быть постоянным. Меняем базовую модель
-        helpers().modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
+        helpers.modifyMindCubes(api, api.model.mind, narco.mindCubePermanent);
     }
 
     if (narco.mindCubeTemp) {
@@ -129,7 +130,7 @@ function applyNarcoEffect(api, data, event)
     narco.history_record = narco.history_record || 'Вы приняли таблетку.';
 
     api.debug("Narco will add history record " + narco.history_record);
-    helpers().addChangeRecord(api, narco.history_record, event.timestamp);
+    helpers.addChangeRecord(api, narco.history_record, event.timestamp);
 }
 
 /**

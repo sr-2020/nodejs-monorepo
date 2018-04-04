@@ -4,7 +4,8 @@
   "description": "Deus Ex Model Server — handlers that process events.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers ts:ts-node/register test/models/**/*.ts test/models/**/*.js",
+    "build": "tsc",
+    "test": "npm run build && mocha --compilers ts:ts-node/register test/**/*.ts",
     "test:watch": "chokidar src/**/* catalogs/**/* test/**/* helpers/**/* package.json -c \"npm test\""
   },
   "repository": {
@@ -31,10 +32,12 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
+    "@types/chance": "^1.0.0",
+    "@types/clone": "^0.1.30",
     "@types/lodash": "^4.14.106",
     "async-file": "^2.0.2",
     "chance": "^1.0.10",
-    "clones": "^1.1.0",
+    "clone": "^1.0.4",
     "fs.realpath": "^1.0.0",
     "inflight": "^1.0.6",
     "lodash": "^4.17.4",

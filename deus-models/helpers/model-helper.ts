@@ -16,7 +16,7 @@ function loadImplant(api, id){
         return null;
     }
 
-    let effects = [];
+    let effects: any[] = [];
 
     implant.effects.forEach( eID => {
         let effect = api.getCatalogObject("effects", eID.toLowerCase());
@@ -45,7 +45,7 @@ function loadIllness(api, id){
         return null;
     }
 
-    let effectName = consts().ILLNESS_EFFECT_NAME;
+    let effectName = consts.ILLNESS_EFFECT_NAME;
     let effect = api.getCatalogObject("effects", effectName);
 
     if (!effect) {
@@ -63,7 +63,7 @@ function loadIllness(api, id){
 //TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord( api, text, timestamp ){
     if(text){
-        if(api.model.changes.length >= consts().MAX_CHANGES_LINES) api.model.changes.shift();
+        if(api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
 
         api.model.changes.push({
             mID: uuidv4(),
@@ -155,7 +155,7 @@ function checkValue(value, condition){
             l = Number.parseInt(parts[2]) + 1;
             h = Number.MAX_VALUE;
         }else{
-            h = parts[2] - 1
+            h = Number.parseInt(parts[2]) - 1
             l = 0;
         }
     }
@@ -194,11 +194,12 @@ function isGenomeMatch(api, variable, value){
  *
  * scaleFactor = 100 (default) to apply normal change
  */
-function modifyMindCubes(api, mind, changeText, scaleFactor){
+function modifyMindCubes(api, mind, changeText, scaleFactor?){
     scaleFactor = scaleFactor || 100;
+    api.error('=======================================================');
     changeText.split(',').forEach( exp => {
 
-        //console.log(`MMC:  Part: ${exp}`);
+        api.error(`MMC:  Part: ${exp}`);
 
         let exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
         if(exParts){
@@ -267,10 +268,10 @@ function addCharacterCondition( api, condId ){
 
 //  function isImpantCanBeInstalled(api, implant){
 //     if(implant && implant.system){
-//         let systemInfo = consts().medicSystems.find( s => s.name == implant.system);
+//         let systemInfo = consts.medicSystems.find( s => s.name == implant.system);
 
 //         if(systemInfo){
-//             let existingImplants = helpers().getImplantsBySystem( implant.system );
+//             let existingImplants = helpers.getImplantsBySystem( implant.system );
 
 //             if(!existingImplants.find( m => m.id == implant.id) &&
 //                 systemInfo.slots >= existingImplants.length){
@@ -340,7 +341,7 @@ function modifyModelProperties(api, operations){
             let parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
             if(parts){
-                result = false;
+                let result = false;
 
                 if(parts[1]){
                     result = modifyModelDigitProperty(api, parts[1], parts[2], parts[3]);
@@ -390,7 +391,7 @@ function modifyModelDigitProperty(api, varName, op, value){
 
     let t = type(api.model[varName]);
 
-    if( t != "number" || Number(value).isNaN ){
+    if( t != "number" ){
         return false;
     }
 
@@ -410,7 +411,7 @@ function modifyModelDigitProperty(api, varName, op, value){
 function setTimerToKillModifier(api, modifier, timestamp)
 {
     api.setTimer(
-        consts().NARCO_TIME_PREFIX + modifier.mID,
+        consts.NARCO_TIME_PREFIX + modifier.mID,
         timestamp - 1,
         "stop-narco-modifier",
         {mID : modifier.mID} );
@@ -491,8 +492,7 @@ function createEffectModifier(api, effectName, modifierId, displayName, modifier
     return modifier;
 }
 
-module.exports = () => {
-    return {
+export = {
         loadImplant,
         addChangeRecord,
         uuidv4,
@@ -514,8 +514,6 @@ module.exports = () => {
         getAllImplants,
         getAllIlnesses,
         createEffectModifier,
-        isImplant,
         isIllness
-    };
 };
 

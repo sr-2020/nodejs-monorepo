@@ -1,12 +1,12 @@
 /**
- * Эффекты и события для работы болезней 
+ * Эффекты и события для работы болезней
  */
 
-let consts = require('../helpers/constants');
-let helpers = require('../helpers/model-helper');
-let medHelpers = require('../helpers/medic-helper');
-let clones = require("clones");
-let infection = require('../helpers/infection-illness');
+import consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import medhelpers = require('../helpers/medic-helper');
+import clone = require("clone");
+import infection = require('../helpers/infection-illness');
 
 
 /**
@@ -18,27 +18,27 @@ function startIllnessEvent( api, data, event ){
     if(data.id && api.model.profileType ==  "human"){
         api.info(`startIllnessEvent: try to start illness: ${data.id}`);
 
-        let _illness = helpers().loadIllness(api, data.id);
+        let _illness = helpers.loadIllness(api, data.id);
 
         if(_illness && _illness.illnessStages && _illness.illnessStages.length){
-        
+
             //Если система уже мертвая - то болезнь не запускается
-            if( !medHelpers().isSystemAlive(api, _illness.system) ){
+            if( !medhelpers.isSystemAlive(api, _illness.system) ){
                 api.info(`startIllnessEvent: system: ${_illness.system} is dead. Stop processing`);
                 return;
             }
 
             //Есть ли импланты на этой системе
             //Проверка для нервной системы фактически, остальные "умирают" при установке импланта
-            if(helpers().getImplantsBySystem(api, _illness.system).length){
+            if(helpers.getImplantsBySystem(api, _illness.system).length){
                 api.info(`startIllnessEvent: system: ${_illness.system} have implants. Stop processing`);
                 return;
             }
 
-            let illness = clones(_illness);
+            let illness = clone(_illness);
             illness.startTime = event.timestamp;
             api.info(`startIllnessEvent: Add illness: ${illness.displayName}`);
-            
+
             //Установка болезни
             illness = api.addModifier(illness);
 
@@ -49,7 +49,7 @@ function startIllnessEvent( api, data, event ){
 
             api.info(`startIllnessEvent: start timer: ${timerName} to ${illness.illnessStages[0].duration} sec (stage 0)`);
 
-            api.setTimer( timerName, illness.illnessStages[0].duration*1000, 
+            api.setTimer( timerName, illness.illnessStages[0].duration*1000,
                             "illness-next-stage", { mID: illness.mID } );
         }else{
             api.error(`startIllnessEvent: can't load illness: ${data.id}`);
@@ -59,19 +59,19 @@ function startIllnessEvent( api, data, event ){
 
 /**
  * Эффект "болезни". Название эффекта "illness-effect"
- * Отображает состояние для данного этапа - симптомы. 
+ * Отображает состояние для данного этапа - симптомы.
  */
 function illnessEffect( api, modifier ){
-    if(modifier.class == "illness"){        
+    if(modifier.class == "illness"){
         api.info(`illnessEffect: illness: ${modifier.displayName}, stage: ${modifier.currentStage}`);
-        
+
         //Отладка
         let timer = api.getTimer(`${modifier.id}-${modifier.mID}`);
         let remain = timer ? timer.miliseconds : 0;
         api.info(`illnessEffect:  ${modifier.illnessStages[modifier.currentStage].condition}, time to next stage: ${Math.round(remain/1000)}`);
 
         //Показать состояние, связанное с текущей стадией
-        helpers().addCharacterCondition(api, modifier.illnessStages[modifier.currentStage].condition);
+        helpers.addCharacterCondition(api, modifier.illnessStages[modifier.currentStage].condition);
     }
 }
 
@@ -88,7 +88,7 @@ function illnessNextStageEvent( api, data, event ){
              //Если это промежуточный этап, просто перевести на следующий и поставить таймер
             if(illness.currentStage < illness.illnessStages.length - 1){
                 illness.currentStage += 1;
-                
+
                 let duration = illness.illnessStages[ illness.currentStage ].duration || 1;
                 let timerName = `${illness.id}-${illness.mID}`
 
@@ -99,7 +99,7 @@ function illnessNextStageEvent( api, data, event ){
             //Если это последний этап, то убить систему
                 let totalTime = Math.round((event.timestamp - illness.startTime)/1000);
                 api.info(`startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`);
-                api.model.systems[ medHelpers().getSystemID(illness.system) ] = 0;  
+                api.model.systems[ medhelpers.getSystemID(illness.system) ] = 0;
 
             }
          }
@@ -109,7 +109,7 @@ function illnessNextStageEvent( api, data, event ){
 /**
  * Удлинить текущий этап болезни. Событие delay-illness
  * { system: systemName, delay: ms }
- * 
+ *
  * Работает так:
  * 1. Находит все болезни для данной системы
  * 2. Берет текущее значение таймера для каждой из болезни и увеличивает его значение на delay миллисекунд
@@ -120,7 +120,7 @@ function delayIllnessEvent( api, data, event ){
         //console.log(JSON.stringify(api.model.modifiers, null, 4));
         api.model.modifiers.filter( m => (m.system == data.system && m.class == "illness") ).forEach( m => {
             api.info( `delayIllness: found illness=${m.id}, try to change timer` )
-            
+
             let timer = api.getTimer(`${m.id}-${m.mID}`);
             if(timer){
                 api.info( `delayIllness: change timer for illness=${m.id}. Current: ${Math.round(timer.miliseconds/1000)}sec, update:  +${Math.round(data.delay/1000)} sec` )
@@ -133,23 +133,23 @@ function delayIllnessEvent( api, data, event ){
 const illneses = [
     "acromegaly", "affectivebipolardisorder", "ankylosingspondylitis", "ankylosis", "arthritis",
     "asphyxia", "bronchialasthma", "burkittlymphoma", "coronaryheartdisease", "dementia",
-    "diabetes", "diseaseitsenkokushinga", "dupuytrencontracture", "endocarditis", "heartdisease", 
-    "hypertension", "hyperthyroidism", "menieredisease", "mononucleosis", "multiplesclerosis", 
-    "myocarditis", "osteolysis", "pancreatitis", "pleurisy", "pneumonia", "schizophrenia", 
+    "diabetes", "diseaseitsenkokushinga", "dupuytrencontracture", "endocarditis", "heartdisease",
+    "hypertension", "hyperthyroidism", "menieredisease", "mononucleosis", "multiplesclerosis",
+    "myocarditis", "osteolysis", "pancreatitis", "pleurisy", "pneumonia", "schizophrenia",
     "sjogrensyndrome", "splenitis", "systemiclupuserythematosus", "tracheitis", "tuberculosis"
 ];
 
 function rollForInfection(api, data,event) {
     api.debug("Start rolling for infection");
-    if(api.model.profileType == "human") {    
+    if(api.model.profileType == "human") {
         let systemId = infection.whatSystemShouldBeInfected(api.model);
 
-        if (systemId > -1) {
-            let systemName = consts().medicSystems[systemId].name;
+        if (systemId && systemId > -1) {
+            let systemName = consts.medicSystems[systemId].name;
 
             api.info("Roll for infection: will infect " + systemName + " system.");
 
-            let chance = helpers().getChanceFromModel(api.model);
+            let chance = helpers.getChanceFromModel(api.model);
 
             let illnessModels = chance.pickone(illneses
                 .map(i => api.getCatalogObject("illnesses", i))
@@ -158,8 +158,8 @@ function rollForInfection(api, data,event) {
             api.debug("Roll for infection: will start illness " + illnessModels.id);
 
             let deathAwaitTimeMs = chance.natural({min:0, max:3 * 60 * 60 * 1000});
-            
-            helpers().addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : illnessModels.id});
+
+            helpers.addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : illnessModels.id});
             api.sendEvent(null, "start-illness", { id: illnessModels.id });
         }
         else{

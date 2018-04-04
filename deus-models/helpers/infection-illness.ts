@@ -1,11 +1,11 @@
-let consts = require('../helpers/constants');
-let Chance = require('chance');
-const _ = require('lodash');
-let helpers = require('../helpers/model-helper');
+import consts = require('../helpers/constants');
+import Chance = require('chance');
+import _ = require('lodash');
+import helpers = require('../helpers/model-helper');
 
-let systemCount = consts().medicSystems.length;
+let systemCount = consts.medicSystems.length;
 
-function getSystemFailureChance(generation)
+export function getSystemFailureChance(generation: string)
 {
     if (generation == "A") {
         return 1;
@@ -22,25 +22,25 @@ function getSystemFailureChance(generation)
     return 100;
 }
 
-function getPotentialSystemsIds(model)
+export function getPotentialSystemsIds(model)
 {
     let systems = _.zip(_.take(model.genome, systemCount), [0,1,2,3,4,5]);
-    
+
     return systems.filter(s => s[0] == 1).map(val => {
         return val[1];
     })
 }
 
-function getTotalChance (model) {
-    let systemFailureChance = getSystemFailureChance(model.generation); 
+export function getTotalChance (model) {
+    let systemFailureChance = getSystemFailureChance(model.generation);
     return 1 - Math.pow((1 - systemFailureChance / 100), getPotentialSystemsIds(model).length);
 }
 
-function whatSystemShouldBeInfected(model){
-    
+export function whatSystemShouldBeInfected(model) {
+
     let failureChance = getTotalChance(model);
 
-    let chance = helpers().getChanceFromModel(model);
+    let chance = helpers.getChanceFromModel(model);
 
     if (chance.floating({min:0, max:1}) < failureChance) {
         let candidates = getPotentialSystemsIds(model);
@@ -55,8 +55,3 @@ function whatSystemShouldBeInfected(model){
     }
 }
 
-module.exports = { 
-    getTotalChance,
-    whatSystemShouldBeInfected,
-    getPotentialSystemsIds
-};

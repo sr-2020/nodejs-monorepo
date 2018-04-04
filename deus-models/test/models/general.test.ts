@@ -11,7 +11,7 @@ describe('General events: ', () => {
         let eventData = {
             text: "Test1",
             details: "Test 1 details" ,
-            class: "mind"  
+            class: "mind"
         };
 
         let eventData2 = {
@@ -95,7 +95,7 @@ describe('General events: ', () => {
 
     it("Change android owner", async function() {
         let model = getExampleModel();
-        
+
         model.profileType = "robot";
         model.owner = "ivan.ivanovich";
 
@@ -103,7 +103,7 @@ describe('General events: ', () => {
         let {baseModel, workingModel } = await process(model, events);
 
         expect(baseModel.owner).is.equal("vasya.pupkin");
-        
+
         //printModel(baseModel);
     });
 
@@ -119,7 +119,7 @@ describe('General events: ', () => {
             title: "Новое воспоминание 2",
             text:  "Текст нового воспоминания 2"
         };
-        
+
         let data3 = {
             mID: "82eb411a-51cb-478d-9f90-5f6f52660a0d",
             title: "Обновленное воспоминание №2",
@@ -165,7 +165,7 @@ describe('General events: ', () => {
         expect(baseModel.insurance).is.equal("JJ");
         expect(baseModel.insuranceLevel).is.equal(2);
         expect(baseModel.insuranceDiplayName).is.equal("Johnson & Johnson, L: 2");
-        
+
         //printModel(baseModel);
     });
 

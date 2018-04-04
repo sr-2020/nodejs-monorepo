@@ -1,13 +1,27 @@
+interface PageViewModel {
+  menuTitle: string;
+  __type: string;
+  viewId: string;
+}
+
+
+interface Row {
+    text: string,
+    value: string,
+    percent?: number,
+    valueColor?: string
+};
+
 function getCharacterName(model) {
     return model.firstName + " " + model.lastName;
 }
 
 function getRussianSex(sex) {
     switch (sex) {
-        case "male":    return "мужской";
-        case "female":  return "женский";
-        case "agender":  return "агендер";
-        default:        return "---";
+        case "male": return "мужской";
+        case "female": return "женский";
+        case "agender": return "агендер";
+        default: return "---";
     }
 }
 
@@ -15,7 +29,7 @@ function getHandicaps(model) {
     if (model.hp == 0) {
         return "только лежать";
     } else {
-        "";
+        return "";
     }
 }
 
@@ -25,68 +39,69 @@ function getStartPage(model) {
     let isExHumanProgram = model.profileType == "exhuman-program";
     let isRobot = model.profileType == "robot";
     let isExHumanRobot = model.profileType == "ex-human-robot";
-    
 
-    let pageInfo =  {
+    const items: Row[] = [
+        {
+            text: "Имя",
+            value: getCharacterName(model),
+        },
+        {
+            text: "ID",
+            value: model._id,
+        },
+        {
+            text: "e-mail",
+            value: model.mail,
+        },
+
+    ];
+
+    let pageInfo = {
         __type: "ListPageViewModel",
         viewId: "page:general",
         menuTitle: "Общая информация",
         body: {
             title: "Общая информация",
-            items: [
-                {
-                    text: "Имя",
-                    value: getCharacterName(model),
-                },
-                {
-                    text: "ID",
-                    value: model._id,
-                },
-                {
-                    text: "e-mail",
-                    value: model.mail,
-                },
-
-            ],
+            items: items
         },
     };
 
     if (!isProgram && !isExHumanProgram) {
-        pageInfo.body.items.push({text: "Пол",value: getRussianSex(model.sex)});
+        pageInfo.body.items.push({ text: "Пол", value: getRussianSex(model.sex) });
     }
 
-    if(!model.isAlive){
+    if (!model.isAlive) {
         pageInfo.body.items.unshift({
-            text: "Состояние персонажа", value: "Вы мертвы!", valueColor : "#ff565c"
+            text: "Состояние персонажа", value: "Вы мертвы!", valueColor: "#ff565c"
         });
     }
 
-    if(isRobot){
+    if (isRobot) {
         pageInfo.body.items.unshift({ text: "Тип системы:", value: `Андроид ${model.model}` });
     }
 
-    if(isExHumanRobot){
+    if (isExHumanRobot) {
         pageInfo.body.items.unshift({ text: "Тип системы:", value: model.model });
     }
 
-    if(isProgram || isExHumanProgram){
+    if (isProgram || isExHumanProgram) {
         pageInfo.body.items.unshift({ text: "Тип системы:", value: "Программа" });
     }
 
     if (model.profileType == "robot" || isProgram) {
-        pageInfo.body.items.push({text: "Создатель", value: model.creator})
-        pageInfo.body.items.push({text: "Владелец", value: model.owner})
+        pageInfo.body.items.push({ text: "Создатель", value: model.creator })
+        pageInfo.body.items.push({ text: "Владелец", value: model.owner })
     }
 
-    if (isHuman){
-        pageInfo.body.items.push({text: "Поколение", value: model.generation})
+    if (isHuman) {
+        pageInfo.body.items.push({ text: "Поколение", value: model.generation })
     }
 
-    if (!isProgram && !isExHumanProgram){
-        pageInfo.body.items.push({text: "Проживание", value: model.sweethome})    
+    if (!isProgram && !isExHumanProgram) {
+        pageInfo.body.items.push({ text: "Проживание", value: model.sweethome })
     }
 
-    let workRow  = {
+    let workRow = {
         text: "Работа",
         value: model.corporation,
     };
@@ -96,36 +111,35 @@ function getStartPage(model) {
         value: model.insuranceDiplayName
     };
 
-    if (isHuman || isExHumanProgram || isExHumanRobot){
+    if (isHuman || isExHumanProgram || isExHumanRobot) {
         pageInfo.body.items.push(workRow);
         pageInfo.body.items.push(insuranceRow);
     }
 
     if (!isProgram && !isExHumanProgram) {
 
-        let hpRow = {
+        let hpRow: Row = {
             text: "Hit Points",
             value: model.hp + " / " + model.maxHp,
+            percent: 0,
         };
 
-        if(model.maxHp){
+        if (model.maxHp) {
             hpRow.percent = 100 * model.hp / model.maxHp
-        }else{
-            hpRow.percent = 0;
         }
 
-        if(model.hp == 0){
+        if (model.hp == 0) {
             hpRow.valueColor = "#ff565c";
         }
 
-        pageInfo.body.items.push(hpRow);  
+        pageInfo.body.items.push(hpRow);
     }
 
     let illnesses = model.modifiers.filter(e => e.class == "illness" && e.currentStage > 2);
 
     if (illnesses && illnesses.length) {
         pageInfo.body.items.push({
-            text: "Внимание!", 
+            text: "Внимание!",
             value: "Больно и плохо, врача!",
             valueColor: "#ff565c",
             percent: 100
@@ -133,19 +147,19 @@ function getStartPage(model) {
     }
     else if (isHuman) {
         pageInfo.body.items.push({
-            text: "Инфо:", 
+            text: "Инфо:",
             value: "Проверяй ALICE часто",
         });
 
     }
 
     let handicaps = getHandicaps(model);
-    if(handicaps){
-        pageInfo.body.items.push( {
+    if (handicaps) {
+        pageInfo.body.items.push({
             text: "Ограничения движения",
             value: getHandicaps(model),
             valueColor: "#ff565c"
-        } )
+        })
     }
 
     return pageInfo;
@@ -154,9 +168,9 @@ function getStartPage(model) {
 
 function getRussianConditionTag(tag) {
     switch (tag) {
-        case "physiology":  return "Физиология";
-        case "mind":        return "Психология";
-        default:            return "Физиология";
+        case "physiology": return "Физиология";
+        case "mind": return "Психология";
+        default: return "Физиология";
     }
 }
 
@@ -165,7 +179,7 @@ function getConditionsPageItem(cond) {
     let details = cond.details ? cond.details : header;
     let condClass = cond.class ? cond.class : "physiology";
 
-    if(details == header || details == (header + ".")){
+    if (details == header || details == (header + ".")) {
         header = "Состояние";
     }
 
@@ -225,28 +239,28 @@ function getEnableActionText(enabled) {
 }
 
 
-const implantsClasses = [ "cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual", "firmware" ];
+const implantsClasses = ["cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual", "firmware"];
 
 function isImplant(modifier) {
-    return implantsClasses.find( c => modifier.class == c)
+    return implantsClasses.find(c => modifier.class == c)
 }
 
 const systemNames = {
-    "musculoskeletal" : "опорно-двигательная",
-    "cardiovascular"  : "сердечно-сосудистая",
-    "respiratory" : "дыхательная", 
-    "endocrine" : "эндокринная", 
-    "lymphatic" : "лимфатическая",
-    "nervous"  : "нервная",
+    "musculoskeletal": "опорно-двигательная",
+    "cardiovascular": "сердечно-сосудистая",
+    "respiratory": "дыхательная",
+    "endocrine": "эндокринная",
+    "lymphatic": "лимфатическая",
+    "nervous": "нервная",
 }
 
-function getImplantDetails(modifier) {    
+function getImplantDetails(modifier) {
     let details = modifier.details || "подробного описания нет";
 
-    if(modifier.system){
-        return  `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
-    }else{
-        return  `<p><b>Описание:</b></p><p>${details}</p>`;
+    if (modifier.system) {
+        return `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
+    } else {
+        return `<p><b>Описание:</b></p><p>${details}</p>`;
     }
 }
 
@@ -299,12 +313,12 @@ function getImplantsPage(model) {
 function getMemoryPageItem(mem) {
     let header = mem.title;
 
-    if(mem.text == mem.title || mem.text == (mem.title + ".") ){
+    if (mem.text == mem.title || mem.text == (mem.title + ".")) {
         header = "Воспоминание";
     }
 
     let details = "";
-    if (mem.text) details += `<p>${mem.text.replace(/\s/g,' ')}</p>`;
+    if (mem.text) details += `<p>${mem.text.replace(/\s/g, ' ')}</p>`;
     if (mem.url) details += `<p><a href="${mem.url}">${mem.url}</a></p>`
 
     return {
@@ -405,7 +419,7 @@ function getChangesPageItem(change) {
     return {
         viewId: "mid:" + change.mID,
         text: change.text,
-        unixSecondsValue: Math.round(change.timestamp/1000),
+        unixSecondsValue: Math.round(change.timestamp / 1000),
         details: {
             header: "Изменение",
             text: change.text
@@ -450,7 +464,7 @@ function getMessagesPage(model) {
 
 
 function getPages(model) {
-    let pages = [];
+    let pages: PageViewModel[] = [];
 
     let isHuman = model.profileType == "human";
     let isProgram = model.profileType == "program";
@@ -464,22 +478,22 @@ function getPages(model) {
         pages.push(getConditionsPage(model));
     }
 
-    if(!isProgram && !isExHumanRobot && !isExHumanProgram){
+    if (!isProgram && !isExHumanRobot && !isExHumanProgram) {
         pages.push(getImplantsPage(model));
     }
 
     if (isHuman || isExHumanProgram || isExHumanRobot) {
-        pages.push(getEconomyPage(model));
+        pages.push(getEconomyPage());
     }
     pages.push(getChangesPage(model));
     pages.push(getMessagesPage(model));
 
-    if(model.adminTestUser){
+    if (model.adminTestUser) {
         pages.push(getAdminsPage(model));
     }
 
 
-    if(model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo){
+    if (model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo) {
         pages.push(getTechnicalInfoPage());
     }
 
@@ -500,12 +514,12 @@ function getMenu(model) {
 }
 
 function getToolbar(model) {
-    let ret =  {
+    let ret = {
         hitPoints: model.hp,
         maxHitPoints: model.maxHp,
     };
 
-    if(model.maxHp == 0){
+    if (model.maxHp == 0) {
         ret.maxHitPoints = 1;
     }
 
@@ -536,7 +550,7 @@ function getViewModel(model) {
 
 
 function setModifierEnabled(modifiers, id, enabled) {
-    index = modifiers.findIndex((m) => m.mID == id);
+    const index = modifiers.findIndex((m) => m.mID == id);
     if (index < 0) {
         return modifiers;
     }
@@ -551,7 +565,7 @@ module.exports = () => {
             try {
                 return getViewModel(model);
             }
-            catch(err) {
+            catch (err) {
                 // The app would display error message when ViewModel is incorrect
                 return {};
             }

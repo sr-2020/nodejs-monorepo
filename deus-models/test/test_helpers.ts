@@ -11,7 +11,7 @@ export function getWorker() {
     if (WORKER_INSTANCE) return WORKER_INSTANCE;
 
     const catalogsPath = Path.resolve(__dirname, '../catalogs');
-    const modelsPath = Path.resolve(__dirname, '../src');
+    const modelsPath = Path.resolve(__dirname, '../build/src');
 
     const config = Config.parse(requireDir(catalogsPath));
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);
@@ -32,7 +32,7 @@ export function printModel(model: any) {
 }
 
 export function findModifier(id: string, model: any): any {
-    return model.modifiers.find((m: any) => m.id == id);
+    return model.modifiers.find((m: any) => m.name == id);
 }
 
 export function findChangeRecord(text: string, model: any): any {

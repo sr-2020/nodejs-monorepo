@@ -4,24 +4,24 @@
 
 //import * as helpers from '../helpers/model-helper';
 
-let consts = require('../helpers/constants')();
-let helpers = require('../helpers/model-helper')();
-let medHelpers = require('../helpers/medic-helper')();
-let simmortal = require('./s-immortal')();
-let Chance = require('chance');
-let chance = new Chance();
-let clones = require("clones");
+import immortal = require('./s-immortal');
+import consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import medhelpers = require('../helpers/medic-helper');
+import Chance = require('chance');
+const chance = new Chance();
+import clone = require("clone");
 
 
 /**
  * Обработчик события
  * Добавляет имплант в модель
  * { id: implant-id }
- * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию 
+ * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
 function addImplantEvent( api, data, event ){
     if(data.id){
-     
+
         if (!api.model.isAlive) {
             api.error("Can't install implant to deadman. Why are you doing this...");
             helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
@@ -45,7 +45,7 @@ function addImplantEvent( api, data, event ){
 
                     //Добавление сообщения об этом в список изменений в модели
                     helpers.addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, event.timestamp);
-                
+
                     return;
                 }
 
@@ -58,24 +58,27 @@ function addImplantEvent( api, data, event ){
 
                 //Получить все существующие импланты на эту систему
                 let existingImplants = helpers.getImplantsBySystem(api, implant.system );
-                
+
                 //Информация про систему
                 let systemInfo = consts.medicSystems.find( s => s.name == implant.system);
-
-                let implantForRemove = null;
+                if (!systemInfo) {
+                    api.error('Implants affects non-existant system');
+                    return;
+                }
 
                 //Проверить на дубль - два одинаковых импланта поставить нельзя (старый будет удален)
                 //И проверить количество слотов на одной системе
                 let oldDoubleImplant = existingImplants.find( m => m.id == implant.id);
 
+                let implantForRemove: any = null;
                 if(oldDoubleImplant){
                     implantForRemove = oldDoubleImplant;
-                    api.info(`addImplantEvent: remove doubleimplant: ${implantForRemove.displayName}`); 
+                    api.info(`addImplantEvent: remove doubleimplant: ${oldDoubleImplant.displayName}`);
 
-                }else if(systemInfo.slots == existingImplants.length){
+                } else if(systemInfo.slots == existingImplants.length){
                 //Если слоты кончилиcь - удалить первый
                     implantForRemove = existingImplants[0];
-                    api.info(`addImplantEvent: not enough slots, remove: ${implantForRemove.displayName}`); 
+                    api.info(`addImplantEvent: not enough slots, remove: ${existingImplants[0].displayName}`);
                 }
 
                 //Если нашли что-то на удаление - удалить это
@@ -87,14 +90,14 @@ function addImplantEvent( api, data, event ){
                         return;
                     }
                 }
-             
+
                 //Установка импланта
                 implant = api.addModifier(implant);
                 api.info(`addImplantEvent: installed implant: ${implant.displayName}!`);
 
                 //Установка системы на которой стоит имплант в "мертвую"
                 if(implant.system != "nervous"){
-                    medHelpers.setMedSystem(api, implant.system, 0);
+                    medhelpers.setMedSystem(api, implant.system, 0);
                     api.info(`addImplantEvent: set system ${implant.system} to 0 (dead)!`);
                 }
 
@@ -105,7 +108,7 @@ function addImplantEvent( api, data, event ){
                     api.removeTimer(`${ill._id}-${ill.mID}`);
                     api.info(`addImplantEvent: remove illness ${ill.id}!`);
                 });
-                
+
                 //Добавление сообщения об этом в список изменений в модели
                 helpers.addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
 
@@ -124,7 +127,7 @@ function addImplantEvent( api, data, event ){
  * Обработчик события
  * Удвляет имплант из модели
  * { mID: implant-model-id }
- * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию 
+ * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
 function removeImplantEvent( api, data, event ){
      if(data.mID){
@@ -141,6 +144,32 @@ function removeImplantEvent( api, data, event ){
 }
 
 /**
+ *  TODO для подключения
+ *  1. Добавить импланты: s_immortal01
+ *  2. Добавить события: serenity_immortality_ready, serenity_immortality_go
+ *  3. Доработать функцию instantInstallEffect для добавления вызова installSImmortalStage1 при установке
+ *  4. Добавить состояние "serenity_immortality_ready" (готовность к модернизации)
+ *  5. Добавить эффект serenityImmortalityS01Effect
+ */
+
+/**
+ * Обработчик мгновенного эффекта установки импланта s_immortal01
+ * (бессмертие от Серенити Stage #1)
+ *
+ * При установке имплант появляется на нервной системе и не делает ничего
+ * Через час выводится сообщение
+ */
+function installSImmortalStage1(api, implant){
+    if(implant && implant.id == consts.S_IMMORTAL_NAME_01){
+        api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
+
+        if(!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)){
+            api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600*1000, "serenity_immortality_ready", { mID: implant.mID })
+        }
+    }
+}
+
+/**
  * Обработчик мгновенного эффекта при установке импланта
  * Пока умеет обрабатывать только install_changeMindCube
  */
@@ -152,7 +181,7 @@ function instantInstallEffect(api, implant){
 
     //Бессмертие от серенити
     if(implant.id == consts.S_IMMORTAL_NAME_01){
-        simmortal.installSImmortalStage1(api, implant);
+        installSImmortalStage1(api, implant);
     }
 }
 
@@ -160,7 +189,7 @@ function instantInstallEffect(api, implant){
  * Обработчик события "отключить имплант"
  * { mID: implant-model-id, duration: xxxx }
  * параметр duration задается в секундах, и он опционален.
- * Если задан - имплант отключается на это время 
+ * Если задан - имплант отключается на это время
  */
 function disableImplantEvent(api, data, event){
      if(data.mID){
@@ -171,12 +200,12 @@ function disableImplantEvent(api, data, event){
             api.info(`Disabled implant:  mID=${implant.mID} ${implant.displayName}` );
 
             if(data.duration && Number.isInteger(data.duration)){
-                duration_ms = Number(data.duration)*1000;
-                helpers.addDelayedEvent(api, duration_ms, "enable-implant", {mID: implant.mID}, `enable-${implant.mID}` );            
+                const duration_ms = Number(data.duration)*1000;
+                helpers.addDelayedEvent(api, duration_ms, "enable-implant", {mID: implant.mID}, `enable-${implant.mID}` );
             }
         }
      }
-}   
+}
 
 /**
  * Обработчик события "включить имплант"

@@ -3,7 +3,7 @@ import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
-describe('Serenity immortality: ', () => { 
+describe('Serenity immortality: ', () => {
     it("Install first stage implant", async function() {
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: "s_immortal01" } }], model.timestamp + 100);
@@ -53,7 +53,7 @@ describe('Serenity immortality: ', () => {
 
         expect(baseModel.profileType).is.equal("ex-human-robot");
         expect(workingModel.hp).is.equal(4);
-        
+
         ill = baseModel.modifiers.find((m:any) => m.class=="illness");
         expect(ill).is.not.exist;
 
@@ -77,7 +77,7 @@ describe('Serenity immortality: ', () => {
         let imp = baseModel.modifiers.find((m:any) => m.id=="s_immortal01");
         let imp2 = baseModel.modifiers.find((m:any) => m.id=="lab_maninthemiddle");
         let imp3 = baseModel.modifiers.find((m:any) => m.id=="lab_maninthemiddle2");
-    
+
         expect(imp).is.exist;
         expect(imp2).is.exist;
         expect(imp3).is.not.exist;
