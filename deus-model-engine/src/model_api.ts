@@ -113,8 +113,8 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
         return _.get(this.contextGetter(), ['aquired', db, id]);
     }
 
-    removeModifier(id: string) {
-        _.remove(this.contextGetter().modifiers, (m) => m.mID == id);
+    removeModifier(mID: string) {
+        _.remove(this.contextGetter().modifiers, (m) => m.mID == mID);
         return this;
     }
 

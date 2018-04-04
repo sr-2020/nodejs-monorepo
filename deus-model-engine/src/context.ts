@@ -2,44 +2,11 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import * as dispatcher from './dispatcher';
 
-import { Event } from 'deus-engine-manager-api';
-
-export type Timer = {
-    name: string,
-    miliseconds: number,
-    eventType: string,
-    data: any
-}
-
-export type Effect = {
-    enabled: boolean,
-    id: string,
-    class: string,
-    type: 'normal' | 'functional',
-    handler: string
-}
+import { Event, Timer, Effect, Modifier, Condition } from 'deus-engine-manager-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
 export type Timestamp = number;
-
-export type Modifier = {
-    mID: string,
-    name: string,
-    class: string,
-    system: string,
-    enabled: boolean,
-    effects: Effect[],
-    [key: string]: any
-}
-
-export type Condition = {
-    id: string,
-    mID: string,
-    class: string,
-    group?: string,
-    level?: number
-}
 
 export type Timers = {
     [name: string]: Timer
