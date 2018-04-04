@@ -11,6 +11,39 @@ export type Event = {
 export type SyncEvent = Event & { eventType: '_RefreshModel' }
 export type RetryEvent = Event & { eventType: '_RetryRefresh' }
 
+export type Timer = {
+    name: string,
+    miliseconds: number,
+    eventType: string,
+    data: any
+}
+
+export type Effect = {
+    enabled: boolean,
+    id: string,
+    class: string,
+    type: 'normal' | 'functional',
+    handler: string
+}
+
+export type Modifier = {
+    mID: string,
+    name: string,
+    class: string,
+    system: string,
+    enabled: boolean,
+    effects: Effect[],
+    [key: string]: any
+}
+
+export type Condition = {
+    id: string,
+    mID: string,
+    class: string,
+    group?: string,
+    level?: number
+}
+
 export type EngineContext = {
     timestamp: number,
     [key: string]: any
@@ -77,17 +110,22 @@ export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog 
 
 export interface ReadModelApiInterface {
     model: any
+
     getCatalogObject(catalog: string, id: string): any
-    getModifierById(id: string): any
-    getModifiersByName(name: string): any[]
-    getModifiersByClass(className: string): any[]
-    getModifiersBySystem(systemName: string): any[]
-    getEffectsByName(name: string): any[]
-    getEffectsByClass(className: string): any[]
-    getConditionById(id: string): any
-    getConditionsByClass(className: string): any[]
-    getConditionsByGroup(group: string): any[]
-    getTimer(name: string): any
+
+    getModifierById(id: string): Modifier | undefined
+    getModifiersByName(name: string): Modifier[]
+    getModifiersByClass(className: string): Modifier[]
+    getModifiersBySystem(systemName: string): Modifier[]
+
+    getEffectsByName(name: string): Effect[]
+    getEffectsByClass(className: string): Effect[]
+
+    getConditionById(id: string): Condition | undefined
+    getConditionsByClass(className: string): Condition[]
+    getConditionsByGroup(group: string): Condition[]
+
+    getTimer(name: string): Timer | undefined
 }
 
 export interface LogApiInterface {
@@ -98,12 +136,30 @@ export interface LogApiInterface {
 }
 
 export interface WriteModelApiInterface {
-    addModifier(modifier: any): any
-    removeModifier(modifier: any): this
-    addCondition(condition: any): any
+    // If modifier.mID is not present, will generate new unique one.
+    // Returns added modifier.
+    addModifier(modifier: Modifier): Modifier
+    // Will do nothing if no modifier with such mID is present.
+    removeModifier(mID: string): this
+
+    // If condition with same id is present, will do nothing
+    // and return existing condition.
+    // If condition.mID is not present, will generate new unique one.
+    // Returns added condition.
+    addCondition(condition: Condition): Condition
+    // Will do nothing if no condition with such id is present.
     removeCondition(id: string): this
-    setTimer(name: string, seconds: number, handle: string, data: any): this
+
+    // Schedules delayed event for current character.
+    // name should be unique - in other case new timer will override existing one.
+    setTimer(name: string, miliseconds: number, eventType: string, data: any): this
+    // Cancels existing timer.
+    // NB: timer must exist!
     removeTimer(name: string): this
+
+    // Adds event to events queue of characterId. If characterId is null,
+    // event is send to currently processed character. Timestamp of event
+    // is "now", i.e. equals to timestamp of event currently being processed.
     sendEvent(characterId: string | null, event: string, data: any): this
 }
 
