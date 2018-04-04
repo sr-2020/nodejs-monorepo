@@ -2,19 +2,19 @@
  * Эффекты, воздействующие на мозг
  */
 
-let helpers = require('../helpers/model-helper');
-let consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import consts = require('../helpers/constants');
 
 /**
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)
  * Аналогичен changeMindCubeEvent
  */
 function changeMindCubesEffect(api, modifier){
-    
+
     api.debug("changeMindCubesEffect: start, change: " + JSON.stringify(modifier));
     let changeCommand = modifier.mindCubeChange;
 
-    let timerValue = api.getTimer(consts().NARCO_TIME_PREFIX + modifier.mID);
+    let timerValue = api.getTimer(consts.NARCO_TIME_PREFIX + modifier.mID);
 
     if (timerValue){
         api.debug("Timer: " + JSON.stringify(timerValue) );
@@ -22,7 +22,7 @@ function changeMindCubesEffect(api, modifier){
         var scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
 
         if(changeCommand){
-            helpers().modifyMindCubes(api, api.model.mind, changeCommand, scale);
+            helpers.modifyMindCubes(api, api.model.mind, changeCommand, scale);
         }
     }
 }

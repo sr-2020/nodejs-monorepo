@@ -1,7 +1,8 @@
-const _ = require('lodash');
-const medicHelpers = require('../helpers/medic-helper.js')();
-const helpers = require('../helpers/model-helper.js')();
-const consts = require('../helpers/constants.js')();
+import _ = require('lodash');
+import medichelpers = require('../helpers/medic-helper');
+import helpers = require('../helpers/model-helper');
+import consts = require('../helpers/constants');
+import { Modifier } from "deus-engine-manager-api";
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -26,7 +27,7 @@ function useStamm(api, pill) {
 function useAid(api, pill, event) {
     if (api.model.profileType != 'human') return;
 
-    medicHelpers.restoreDamage(api, 1, event.timestamp);
+    medichelpers.restoreDamage(api, 1, event.timestamp);
     if (api.model.genome && _.get(api.model, ['usedPills', pill.id])) {
         _.set(api.model, ['genome', pill.affectedGenomePos - 1], pill.affectedGenomeVal);
     }
@@ -59,9 +60,9 @@ function useImmortal (api, pill, event) {
     delete api.model.genome;
     delete api.model.systems;
     delete api.model.generation;
-    helpers.getAllIlnesses(api).forEach( ill => medicHelpers.removeIllness(api, ill.mID) );
+    helpers.getAllIlnesses(api).forEach( ill => medichelpers.removeIllness(api, ill.mID) );
 
-    let modifier = helpers.createEffectModifier(
+    let modifier: Modifier | undefined = helpers.createEffectModifier(
         api,
         "show-always-condition",
         "ImmortalProgram",
@@ -116,10 +117,10 @@ function usePill(api, data, event) {
     if (!previousUsage || event.timestamp - previousUsage > PILL_TIMEOUT) {
         switch (pill.pillType) {
         case 'cure':
-            useCure(api, pill, event);
+            useCure(api, pill);
             break;
         case 'stamm':
-            useStamm(api, pill, event);
+            useStamm(api, pill);
             break;
         case 'aid':
             useAid(api, pill, event);
@@ -128,7 +129,7 @@ function usePill(api, data, event) {
             useLastChance(api, pill);
             break;
         case 'narco':
-            useNarco(api, pill, event);
+            useNarco(api, pill);
             break;
         case "immortal-panam":
             useImmortal(api, pill, event);

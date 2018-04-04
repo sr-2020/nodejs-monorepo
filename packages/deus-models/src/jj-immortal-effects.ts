@@ -1,6 +1,7 @@
-const _ = require('lodash');
-const helpers = require('../helpers/model-helper')();
-const medicHelpers = require('../helpers/medic-helper')();
+import _ = require('lodash');
+import helpers = require('../helpers/model-helper');
+import medichelpers = require('../helpers/medic-helper');
+import { ModelApiInterface, Modifier } from "deus-engine-manager-api";
 
 /*
   modifier jj-immortal-one: {
@@ -26,7 +27,7 @@ const medicHelpers = require('../helpers/medic-helper')();
 */
 
 // Событие jj-immortal-one-start
-function jjImmortalOneStartEvent(api, data, event) {
+function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
     api.info('jjImmortalOneStartEvent');
 
     if (api.model.profileType != 'human') {
@@ -46,11 +47,12 @@ function jjImmortalOneStartEvent(api, data, event) {
         return;
     }
 
-    let modifier = {
-        id: 'jj-immortal-one',
+    let modifier: Modifier = {
+        name: 'jj-immortal-one',
         currentStage: 0,
         stages: pill.stages,
         startTime: event.timestamp,
+        enabled: true,
         effects: []
     };
 
@@ -102,7 +104,7 @@ function jjImmortalOneNextStageEvent(api, data, event) {
 }
 
 // Событие jj-immortal-two-start
-function jjImmortalTwoStartEvent(api, data, event) {
+function jjImmortalTwoStartEvent(api: ModelApiInterface, data, event) {
     api.info('jjImmortalOneStartEvent');
 
     if (api.model.profileType != 'human') {
@@ -116,18 +118,20 @@ function jjImmortalTwoStartEvent(api, data, event) {
     }
 
     if (!data.pill || data.pill.id != 'jj-immortal-two') {
-        api.error('jjImmortalOneStartEvent: wrong pill %j', api.data.pill);
+        api.error('jjImmortalOneStartEvent: wrong pill %j', data.pill);
         return;
     }
 
-    const jjOne = api.model.modifiers.find((m) => m.id == 'jj-immortal-one');
+    const jjOnes = api.getModifiersByName('jj-immortal-one');
 
-    if (!jjOne) {
-        api.error("jjImmortalTwoStartEvent: can't find jj-immortal-one modifier");
+    if (jjOnes.length != 1) {
+        api.error("jjImmortalTwoStartEvent: can't find jj-immortal-one modifier " + jjOnes.length);
         return;
     }
 
-    if (!jjOne.currentStage == 2) {
+    const jjOne = jjOnes[0];
+
+    if (jjOne.currentStage != 2) {
         api.error('jjImmortalTwoStartEvent: wrong jj-immortal-one stage: %s', jjOne.currentStage);
         return;
     }
@@ -158,7 +162,14 @@ function jjImmortalTwoAwakeEvent(api, data, event) {
         return;
     }
 
-    const jjOne = api.model.modifiers.find((m) => m.id == 'jj-immortal-one');
+    const jjOnes = api.getModifiersByName('jj-immortal-one');
+
+    if (jjOnes.length != 1) {
+        api.error("jjImmortalTwoStartEvent: can't find jj-immortal-one modifier " + jjOnes.length);
+        return;
+    }
+
+    const jjOne = jjOnes[0];
 
     if (!jjOne) {
         api.error("jjImmortalTwoAwakeEvent: can't find jj-immortal-one modifier");
@@ -172,7 +183,7 @@ function jjImmortalTwoAwakeEvent(api, data, event) {
 
     api.info('jjImmortalTwoAwakeEvent: remove illnesses');
     helpers.getAllIlnesses(api).forEach((m) => {
-        medicHelpers.removeIllness(api, m.mID);
+        medichelpers.removeIllness(api, m.mID);
     });
 
     api.model.systems = api.model.systems.map(() => 1);

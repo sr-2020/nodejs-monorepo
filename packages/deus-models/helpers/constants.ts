@@ -29,8 +29,8 @@ const S_IMMORTAL_TIMER_NAME = "_s_immortal01_timer"
 const medicSystems = [
     { name: "musculoskeletal", label: "опорно-двигательная", slots: 2},
     { name: "cardiovascular", label: "сердечно-сосудистая", slots: 1},
-    { name: "respiratory", label: "дыхательная", slots: 1}, 
-    { name: "endocrine", label: "эндокринная", slots: 1}, 
+    { name: "respiratory", label: "дыхательная", slots: 1},
+    { name: "endocrine", label: "эндокринная", slots: 1},
     { name: "lymphatic", label: "лимфатическая", slots: 1},
     { name: "nervous", label: "нервная", slots: 2},
 ];
@@ -43,8 +43,7 @@ const InsuranceDisplay = {
     SuperVip: "SuperVIP"
 }
 
-module.exports = () => {
-    return {
+export = {
         DAMAGE_MODIFIER_MID,
         medicSystems,
         MAX_CHANGES_LINES,
@@ -59,6 +58,5 @@ module.exports = () => {
         ILLNESS_EFFECT_NAME,
         S_IMMORTAL_NAME_01,
         S_IMMORTAL_TIMER_NAME
-    };
 };
 

@@ -2,8 +2,8 @@
  * Универсальные события связанные с VR
  */
 
-let helpers = require('../helpers/model-helper');
-let consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import consts = require('../helpers/constants');
 
 
 /**
@@ -11,16 +11,16 @@ let consts = require('../helpers/constants');
  *
  * Сохраняет информацию о времени входа в VR в модели
  * (время события - время входа)
- * 
+ *
  */
-function enterVREvent( api, data, event ){  
+function enterVREvent( api, data, event ){
     if (!api.model.isAlive) {
         api.error("Dead can't enter VR. Or any other location.");
-        helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+        helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
         return;
     }
     api.model.lastVREnterTimestamp = event.timestamp;
-    helpers().addChangeRecord(api, "Вы вошли в VR", event.timestamp);
+    helpers.addChangeRecord(api, "Вы вошли в VR", event.timestamp);
 }
 
 /**
@@ -33,24 +33,24 @@ function enterVREvent( api, data, event ){
 function exitVREvent( api, data, event ){
     if (!api.model.isAlive) {
         api.error("Dead can't exit VR. Or any other location.");
-        helpers().addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+        helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
         return;
     }
     if (api.model.profileType == "exhuman-program" || api.model.profileType == "program") {
         api.error("Program can't exit hard drives.");
-        helpers().addChangeRecord(api, `Операция невозможна для программ.`, event.timestamp);
+        helpers.addChangeRecord(api, `Операция невозможна для программ.`, event.timestamp);
         return;
     }
     if(api.model.lastVREnterTimestamp && api.model.lastVREnterTimestamp < event.timestamp){
         api.model.lastVREnterDuration = event.timestamp - api.model.lastVREnterTimestamp;
-        
+
         if(!api.model.totalSpentInVR){
             api.model.totalSpentInVR = 0;
         }
 
         api.model.totalSpentInVR += api.model.lastVREnterDuration;
 
-        helpers().addChangeRecord(api, `Вы вышли из VR. Время нахождения в VR: ${Math.round(api.model.lastVREnterDuration/1000/60)} мин.`, event.timestamp);
+        helpers.addChangeRecord(api, `Вы вышли из VR. Время нахождения в VR: ${Math.round(api.model.lastVREnterDuration/1000/60)} мин.`, event.timestamp);
     }
     else{
         api.error(`При обработке выхода из VR время входа ${api.model.lastVREnterTimestamp}; сейчас ${event.timestamp}`);

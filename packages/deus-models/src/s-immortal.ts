@@ -1,43 +1,17 @@
-let consts = require('../helpers/constants')();
-let helpers = require('../helpers/model-helper')();
-let medHelpers = require('../helpers/medic-helper')();
-let clones = require("clones");
-
-/**
- *  TODO для подключения
- *  1. Добавить импланты: s_immortal01
- *  2. Добавить события: serenity_immortality_ready, serenity_immortality_go
- *  3. Доработать функцию instantInstallEffect для добавления вызова installSImmortalStage1 при установке
- *  4. Добавить состояние "serenity_immortality_ready" (готовность к модернизации)
- *  5. Добавить эффект serenityImmortalityS01Effect
- */
-
-/**
- * Обработчик мгновенного эффекта установки импланта s_immortal01
- * (бессмертие от Серенити Stage #1)
- * 
- * При установке имплант появляется на нервной системе и не делает ничего
- * Через час выводится сообщение
- */
-function installSImmortalStage1(api, implant){
-    if(implant && implant.id == consts.S_IMMORTAL_NAME_01){
-        api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
-
-        if(!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)){
-            api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600*1000, "serenity_immortality_ready", { mID: implant.mID })
-        }
-    }
-}
+import consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import medhelpers = require('../helpers/medic-helper');
+import clone = require("clone");
 
 /**
  * Обработчик события "serenity_immortality_ready"
- * 
+ *
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
 function serenityImmortalityReadyEvent(api, data, event){
     let implant = api.getModifierById(data.mID);
-    
+
     if(implant){
         implant.immortalityReady = "true";
 
@@ -61,7 +35,7 @@ function serenityImmortalityS01Effect(api, implant){
 
 /**
  * Обработчик события "serenity_immortality_go"
- * 
+ *
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
@@ -92,7 +66,7 @@ function serenityImmortalityGoEvent(api, data, event){
 
     //Убрать все болезни
     let illnesses = api.model.modifiers.filter( m => helpers.isIllness(m) );
-    illnesses.forEach( ill => medHelpers.removeIllness(api, ill.mID) );
+    illnesses.forEach( ill => medhelpers.removeIllness(api, ill.mID) );
 
     //Убрать все импланты
     api.model.modifiers = api.model.modifiers.filter( m => !helpers.isImplant(m) )
@@ -117,7 +91,6 @@ function serenityImmortalityGoEvent(api, data, event){
 
 module.exports = () => {
     return {
-        installSImmortalStage1,
         serenityImmortalityReadyEvent,
         serenityImmortalityS01Effect,
         serenityImmortalityGoEvent

@@ -1,4 +1,6 @@
-function scanQR(api, data) {
+import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
+
+function scanQR(api: ModelApiInterface, data: any) {
     api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`)
     switch (data.type) {
     case 1:
@@ -8,7 +10,7 @@ function scanQR(api, data) {
     }
 }
 
-function aquirePills(api, events) {
+function aquirePills(api: PreprocessApiInterface, events: Event[]) {
     if (!api.model.isAlive) return;
 
     events
