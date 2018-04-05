@@ -22,12 +22,12 @@ export class Worker {
 
     static load(dir: string): Worker {
         let model = loadModels(dir);
-        Logger.debug('engine', 'model loaded: %s', inspect(model));
+        Logger.debug('engine', 'model loaded: %s', inspect(model, false, null));
         return new Worker(model);
     }
 
     configure(config: config.ConfigInterface): Worker {
-        Logger.debug('engine', 'config loaded: %s', inspect(config));
+        Logger.debug('engine', 'config loaded: %s', inspect(config, false, null));
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 
