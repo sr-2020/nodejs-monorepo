@@ -43,9 +43,13 @@ module.exports = {
 
         // если загрузка производится из базы, используется ключ db
         db: {
+            // Model Engine использует эту базу, чтоб сопоставить тип события и его обработчик.
+            // Модельный код в нее лазить не должен.
+            events: 'dict-events',
+            // К этим базам обращается модельный код непосредственно
+            // (через ReadModelApi.getCatalogObject).
             conditions: 'dict-conditions', // это и далее - пары <имя каталога>: <имя или алиас базы>
             effects: 'dict-effects',
-            events: 'dict-events',
             illnesses: 'dict-illnesses',
             implants: 'dict-implants'
         }
