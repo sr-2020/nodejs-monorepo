@@ -27,7 +27,7 @@ export type Effect = {
 }
 
 export type Modifier = {
-    mID?: string,
+    mID: string,
     name?: string,
     class?: string,
     system?: string,
@@ -37,9 +37,11 @@ export type Modifier = {
 }
 
 export type Condition = {
-    id: string,
     mID: string,
+    id: string,
     class: string,
+    text: string,
+    details?: string,
     group?: string,
     level?: number
 }
