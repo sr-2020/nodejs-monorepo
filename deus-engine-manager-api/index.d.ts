@@ -27,10 +27,10 @@ export type Effect = {
 }
 
 export type Modifier = {
-    mID: string,
-    name: string,
-    class: string,
-    system: string,
+    mID?: string,
+    name?: string,
+    class?: string,
+    system?: string,
     enabled: boolean,
     effects: Effect[],
     [key: string]: any
