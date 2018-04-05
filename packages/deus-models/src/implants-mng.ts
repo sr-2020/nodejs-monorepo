@@ -11,6 +11,7 @@ import medhelpers = require('../helpers/medic-helper');
 import Chance = require('chance');
 const chance = new Chance();
 import clone = require("clone");
+import { ModelApiInterface } from 'deus-engine-manager-api';
 
 
 /**
@@ -19,7 +20,7 @@ import clone = require("clone");
  * { id: implant-id }
  * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
-function addImplantEvent( api, data, event ){
+function addImplantEvent( api: ModelApiInterface, data, event ){
     if(data.id){
 
         if (!api.model.isAlive) {
@@ -129,7 +130,7 @@ function addImplantEvent( api, data, event ){
  * { mID: implant-model-id }
  * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
-function removeImplantEvent( api, data, event ){
+function removeImplantEvent( api: ModelApiInterface, data, event ){
      if(data.mID){
         let implant = api.getModifierById(data.mID);
 
@@ -159,7 +160,7 @@ function removeImplantEvent( api, data, event ){
  * При установке имплант появляется на нервной системе и не делает ничего
  * Через час выводится сообщение
  */
-function installSImmortalStage1(api, implant){
+function installSImmortalStage1(api: ModelApiInterface, implant){
     if(implant && implant.id == consts.S_IMMORTAL_NAME_01){
         api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
@@ -173,7 +174,7 @@ function installSImmortalStage1(api, implant){
  * Обработчик мгновенного эффекта при установке импланта
  * Пока умеет обрабатывать только install_changeMindCube
  */
-function instantInstallEffect(api, implant){
+function instantInstallEffect(api: ModelApiInterface, implant){
     let params = helpers.checkPredicate(api, implant.mID, "inst_changeMindCube");
     if(params && api.model.mind && params.change){
         helpers.modifyMindCubes(api, api.model.mind, params.change);
@@ -191,7 +192,7 @@ function instantInstallEffect(api, implant){
  * параметр duration задается в секундах, и он опционален.
  * Если задан - имплант отключается на это время
  */
-function disableImplantEvent(api, data, event){
+function disableImplantEvent(api: ModelApiInterface, data, event){
      if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){
@@ -211,7 +212,7 @@ function disableImplantEvent(api, data, event){
  * Обработчик события "включить имплант"
  * { mID: implant-model-id }
  */
-function enableImplantEvent(api, data, event){
+function enableImplantEvent(api: ModelApiInterface, data, event){
     if(data.mID){
         let implant = api.getModifierById(data.mID);
         if(implant){

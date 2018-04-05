@@ -2,12 +2,12 @@ import _ = require('lodash');
 import medichelpers = require('../helpers/medic-helper');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { Modifier } from "deus-engine-manager-api";
+import { Modifier, ModelApiInterface, PreprocessApiInterface } from "deus-engine-manager-api";
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 
 
-function useCure(api, pill) {
+function useCure(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
 
     api.sendEvent(null, 'delay-illness', {system: pill.curedSystem, delay: pill.duration * 1000});
@@ -16,7 +16,7 @@ function useCure(api, pill) {
     }
 }
 
-function useStamm(api, pill) {
+function useStamm(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
 
     if (api.model.genome) {
@@ -24,7 +24,7 @@ function useStamm(api, pill) {
     }
 }
 
-function useAid(api, pill, event) {
+function useAid(api: ModelApiInterface, pill, event) {
     if (api.model.profileType != 'human') return;
 
     medichelpers.restoreDamage(api, 1, event.timestamp);
@@ -33,7 +33,7 @@ function useAid(api, pill, event) {
     }
 }
 
-function useLastChance(api, pill) {
+function useLastChance(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
 
     let deathTimer = api.getTimer(consts.DEATH_TIMER);
@@ -45,12 +45,12 @@ function useLastChance(api, pill) {
     }
 }
 
-function useNarco(api, pill) {
+function useNarco(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
     api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
 }
 
-function useImmortal (api, pill, event) {
+function useImmortal (api: ModelApiInterface, pill, event) {
     if (api.model.profileType != 'human') return;
     api.model.profileType = "exhuman-program";
 
@@ -77,11 +77,11 @@ function useImmortal (api, pill, event) {
     api.info("IMMORTAL PANAM");
 }
 
-function useGeneric(api, pill) {
+function useGeneric(api: ModelApiInterface, pill) {
     api.sendEvent(null, pill.eventType, {pill});
 }
 
-function usePill(api, data, event) {
+function usePill(api: ModelApiInterface, data, event) {
     if (!api.model.isAlive) {
         api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
         return;
@@ -150,7 +150,7 @@ function usePill(api, data, event) {
     code.usedBy = api.model._id;
 }
 
-function aquirePills(api, events) {
+function aquirePills(api: PreprocessApiInterface, events) {
     if (!api.model.isAlive) return;
 
     events

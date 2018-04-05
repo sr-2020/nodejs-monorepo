@@ -1,3 +1,5 @@
+import { ModelApiInterface, ViewModelApiInterface } from "deus-engine-manager-api";
+
 /**
  *  В ViewModel для медиков и психологов должны входить:
  *    _id: string;        //id в БД == JoinRPG ID
@@ -32,7 +34,7 @@ interface MemoryElement {
 }
 
 
-function getViewModel(api, data) {
+function getViewModel(api: ViewModelApiInterface, data) {
     let props = ['_id', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
     let ret: any = {}
 
@@ -88,7 +90,7 @@ function getViewModel(api, data) {
 
 module.exports = () => {
     return {
-        view_medic_viewmodel(api, model) {
+        view_medic_viewmodel(api: ViewModelApiInterface, model) {
             return getViewModel(api, model);
         }
     }

@@ -4,12 +4,13 @@
 
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
+import { ModelApiInterface } from 'deus-engine-manager-api';
 
 /**
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)
  * Аналогичен changeMindCubeEvent
  */
-function changeMindCubesEffect(api, modifier){
+function changeMindCubesEffect(api: ModelApiInterface, modifier){
 
     api.debug("changeMindCubesEffect: start, change: " + JSON.stringify(modifier));
     let changeCommand = modifier.mindCubeChange;

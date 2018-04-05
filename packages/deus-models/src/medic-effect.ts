@@ -59,13 +59,13 @@ function getDamageEvent(api: ModelApiInterface, data, event: Event){
  * Функция вызывается тестоым событием "addHp"
  *  "data": { "hpAdd": 1  }
  */
-function restoreDamageEvent(api, data, event ){
+function restoreDamageEvent(api: ModelApiInterface, data, event ){
     if(Number(data.hpAdd) && api.model.hp){
         medhelpers.restoreDamage(api, Number(data.hpAdd), event.timestamp);
      }
 }
 
-function hasAnyEffect(api, effectName) {
+function hasAnyEffect(api: ModelApiInterface, effectName) {
     return api.model. modifiers.filter(m => m.enabled)
                             .find( m => helpers.checkPredicate(api, m.mID, effectName) );
 
@@ -76,7 +76,7 @@ function hasAnyEffect(api, effectName) {
  * Этот обаботчик должен в случае, если damage >0 списывать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function leakHpEvent(api, data, event){
+function leakHpEvent(api: ModelApiInterface, data, event){
     let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -103,7 +103,7 @@ function leakHpEvent(api, data, event){
  * Этот обаботчик должен в случае, если damage >0 восстанавливать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function regenHpEvent(api, data, event){
+function regenHpEvent(api: ModelApiInterface, data, event){
     let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -131,7 +131,7 @@ function regenHpEvent(api, data, event){
  * и если нет - ничего не делает (значит уже вылечили)
  * если все еще есть - умирает
  */
-function characterDeathEvent(api, data, event){
+function characterDeathEvent(api: ModelApiInterface, data, event){
     //проверить системы и импланты на них (все только для Human'ов пока)
     if(api.model.systems){
         let deadSystem: any = null;
@@ -160,7 +160,7 @@ function characterDeathEvent(api, data, event){
  * Обработчик события kill-random-system
  * Вызывается когда хиты доходят до нуля
  */
-function killRandomSystemEvent(api, data, event){
+function killRandomSystemEvent(api: ModelApiInterface, data, event){
     if(data.from && data.from == "self" && api.model.profileType=="human"){
         api.info("killRandomSystem: event handler start!");
 
@@ -233,7 +233,7 @@ function killRandomSystemEvent(api, data, event){
  *
  * Предполагается что никакие другие импланты не вносят корректировки в HP
  */
-function damageEffect(api, modifier){
+function damageEffect(api: ModelApiInterface, modifier){
 
     //Если персонаж мертв ничего больше не делаем
     if(!api.model.isAlive){
@@ -339,7 +339,7 @@ function stopRegenTimerIfRequired(api) {
     }
 }
 
-function handleHumansWounded(api, deadSystems)
+function handleHumansWounded(api: ModelApiInterface, deadSystems)
 {
     if((api.model.hp < api.model.maxHp) && !deadSystems){
         //Установить таймер для утечки хитов, либо если он уже есть - не трогать
@@ -376,7 +376,7 @@ function stopLeakTimerIfRequired(api) {
  * 3. Сбрасывает damage в 0 (на всякий случай)
  * 4. Ставит флаг isAlive в true
  */
-function characterResurectEvent(api, data, event){
+function characterResurectEvent(api: ModelApiInterface, data, event){
     //проверить системы и импланты на них (все только для Human'ов пока)
     if(api.model.systems && !api.model.isAlive){
 
@@ -438,7 +438,7 @@ function characterResurectEvent(api, data, event){
  * Если это был не последний хит, то таймер само обновится.
  * Название таймера хранится внутри импланта
  */
-function timedRecoveryEffect(api, modifier){
+function timedRecoveryEffect(api: ModelApiInterface, modifier){
     if(!api.model.isAlive){
         api.info("timedRecoveryEffect: character already dead. Stop processing");
         return;
@@ -465,7 +465,7 @@ function timedRecoveryEffect(api, modifier){
  * Обработчик уменьшает damage на 1 и перевзводит таймер. Если это был последний хит, то следюущий вызов
  * просто отключит таймер (повреждения в минус уйти не могут)
  */
-function recoverHpEvent(api, data, event){
+function recoverHpEvent(api: ModelApiInterface, data, event){
     let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     if(m && m.damage && api.model.isAlive){
@@ -490,7 +490,7 @@ function recoverHpEvent(api, data, event){
  * 1. вылечит все отключенные системы, на которых нет имплантов
  * 2. выставить повреждения в зависимости от параметров
  */
-function timedRecoverSystemsEffect(api, modifier){
+function timedRecoverSystemsEffect(api: ModelApiInterface, modifier){
     if(!api.model.isAlive){
         api.info("timedRecoverSystemsEffect: character already dead. Stop processing");
         return;
@@ -521,7 +521,7 @@ function timedRecoverSystemsEffect(api, modifier){
  * Обработчик события recover-systems
  * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-systems
  */
-function recoverSystemsEvent(api, data, event){
+function recoverSystemsEvent(api: ModelApiInterface, data, event){
     let modifier = api.getModifierById(data.mID);
 
     if(!modifier || !modifier.enabled){
@@ -570,7 +570,10 @@ function recoverSystemsEvent(api, data, event){
     if(data.hpRemain){
         let maxHP = medhelpers.calcMaxHP(api);
         let dmgMod =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
-
+        if (!dmgMod) {
+            api.error(`Damage modifier (with id=${consts.DAMAGE_MODIFIER_MID} not found`)
+            return;
+        }
         dmgMod.damage = maxHP - data.hpRemain;
 
         api.info(`recoverSystemsEvent: hpRemain: ${data.hpRemain}, maxHP: ${maxHP} ==> damage: ${dmgMod.damage}`);

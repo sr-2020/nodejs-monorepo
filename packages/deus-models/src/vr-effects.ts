@@ -4,6 +4,7 @@
 
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
+import { ModelApiInterface } from 'deus-engine-manager-api';
 
 
 /**
@@ -13,7 +14,7 @@ import consts = require('../helpers/constants');
  * (время события - время входа)
  *
  */
-function enterVREvent( api, data, event ){
+function enterVREvent( api: ModelApiInterface, data, event ){
     if (!api.model.isAlive) {
         api.error("Dead can't enter VR. Or any other location.");
         helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
@@ -30,7 +31,7 @@ function enterVREvent( api, data, event ){
  * И увеличивает счетчик суммарного нахождения в VR для персонажа
  * (время события - время выхода)
  */
-function exitVREvent( api, data, event ){
+function exitVREvent( api: ModelApiInterface, data, event ){
     if (!api.model.isAlive) {
         api.error("Dead can't exit VR. Or any other location.");
         helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
