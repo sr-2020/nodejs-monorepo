@@ -4,7 +4,7 @@ import { process, printModel, findModifier, findChangeRecord } from '../test_hel
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
-const { pills } = require('../../catalogs/narco.json');
+const { pills } = require('../../../catalogs/narco.json');
 
 const STEP1 = pills.find((p: any) => p.id == 'jj-immortal-one');
 const STEP2 = pills.find((p: any) => p.id == 'jj-immortal-two');
