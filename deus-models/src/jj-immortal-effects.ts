@@ -48,6 +48,7 @@ function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
     }
 
     let modifier: Modifier = {
+        mID: "",
         name: 'jj-immortal-one',
         currentStage: 0,
         stages: pill.stages,
@@ -68,7 +69,7 @@ function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
 }
 
 // Событие jj-immortal-one-next-stage
-function jjImmortalOneNextStageEvent(api, data, event) {
+function jjImmortalOneNextStageEvent(api: ModelApiInterface, data, event) {
     if (!data.mID) {
         api.error('jjImmortalOneNextStage: no mID');
         return;
@@ -142,7 +143,7 @@ function jjImmortalTwoStartEvent(api: ModelApiInterface, data, event) {
 }
 
 // Событие jj-immortal-two-awake
-function jjImmortalTwoAwakeEvent(api, data, event) {
+function jjImmortalTwoAwakeEvent(api: ModelApiInterface, data, event) {
     api.info('jjImmortalOneAwakeEvent');
 
     if (api.model.profileType != 'human') {

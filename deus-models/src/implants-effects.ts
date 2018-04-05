@@ -3,6 +3,7 @@
  */
 
 import helpers = require('../helpers/model-helper');
+import { ModelApiInterface } from 'deus-engine-manager-api';
 
 
 /**
@@ -16,7 +17,7 @@ import helpers = require('../helpers/model-helper');
  * }
  */
 
-function showCondition(api, modifier){
+function showCondition(api: ModelApiInterface, modifier){
     //Получить СПИСОК предикатов для показа (может быть несколько состояний)
     let params = helpers.checkPredicate(api, modifier.mID, "show-condition", true);
     api.info("showCondition: start, predicate: " + JSON.stringify(params));
@@ -34,7 +35,7 @@ function showCondition(api, modifier){
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api, modifier){
+function showAlwaysCondition(api: ModelApiInterface, modifier){
     api.debug("Show always condition " + JSON.stringify(modifier.conditions));
     if(modifier.conditions){
         //Пройти по всем совпадаениям в предикатах и показать все состояния
@@ -57,7 +58,7 @@ function showAlwaysCondition(api, modifier){
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
  *
  */
-function changeProperties(api, modifier){
+function changeProperties(api: ModelApiInterface, modifier){
     let params = helpers.checkPredicate(api, modifier.mID, "change-properties");
     api.info("changeProperties: start, predicate: " + JSON.stringify(params));
 

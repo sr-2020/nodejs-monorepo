@@ -1,3 +1,5 @@
+import { ViewModelApiInterface } from "deus-engine-manager-api";
+
 interface PageViewModel {
   menuTitle: string;
   __type: string;
@@ -561,7 +563,7 @@ function setModifierEnabled(modifiers, id, enabled) {
 
 module.exports = () => {
     return {
-        _view(api, model) {
+        _view(api: ViewModelApiInterface, model) {
             try {
                 return getViewModel(model);
             }

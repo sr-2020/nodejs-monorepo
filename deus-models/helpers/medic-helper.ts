@@ -1,3 +1,5 @@
+import { ModelApiInterface } from "deus-engine-manager-api";
+
 
 /**
  * Хелперы для медицинских моделей
@@ -7,7 +9,7 @@ let helpers = require('./model-helper');
 let consts = require('./constants');
 
 
-function addDamage(api, hpLost, timestamp){
+function addDamage(api: ModelApiInterface, hpLost, timestamp){
     if(hpLost
         && api.model.hp
         && api.model.profileType != "program"
@@ -29,7 +31,7 @@ function addDamage(api, hpLost, timestamp){
  * Т.е. если на данный момент maxHP < damage, то надо скорректировать damage так,
  * что бы лечение начиналось с 0 хитов
  */
-function restoreDamage(api, hpHeal, timestamp){
+function restoreDamage(api: ModelApiInterface, hpHeal, timestamp){
 
     api.info(`removeDamage: ${hpHeal}`);
 
@@ -67,7 +69,7 @@ function calcMaxHP(api){
 /**
  * Поставить состояние системы по названию
  */
-function setMedSystem(api, system, value){
+function setMedSystem(api: ModelApiInterface, system, value){
     let i = consts.medicSystems.findIndex( m => m.name == system );
 
     if((i != -1) && api.model.systems){
@@ -86,7 +88,7 @@ function getDeadSystems(api){
 
     if(api.model.systems){
         api.model.systems.forEach( (sys,i) => {
-            let implants = helpers.getImplantsBySystem(api,consts.medicSystems[i].name).filter( m => m.enabled );
+            let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter( m => m.enabled );
 
             if(!sys && !implants.length){
                 ret.push(i);
@@ -119,7 +121,7 @@ function getSystemID(name){
     return consts.medicSystems.findIndex( s => s.name == name );
 }
 
-function isSystemAlive(api, name){
+function isSystemAlive(api: ModelApiInterface, name){
     let i = consts.medicSystems.findIndex( s => s.name == name );
     if(i != -1 && api.model.systems){
         return (api.model.systems[i] == 1);
@@ -129,7 +131,7 @@ function isSystemAlive(api, name){
 /**
  * Удалить болезь
  */
-function removeIllness(api, mID){
+function removeIllness(api: ModelApiInterface, mID){
     if(mID){
         let index = api.model.modifiers.findIndex( m => m.mID == mID );
 

@@ -6,9 +6,9 @@ import helpers = require('../helpers/model-helper');
 import Chance = require('chance');
 let chance = new Chance();
 import consts = require('../helpers/constants');
-import { Modifier } from "deus-engine-manager-api";
+import { Modifier, ModelApiInterface } from "deus-engine-manager-api";
 
-function loadNarco(api, id)
+function loadNarco(api: ModelApiInterface, id)
 {
     let drug =  api.getCatalogObject("pills", id);
     if (drug && drug.pillType == 'narco') {
@@ -19,18 +19,18 @@ function loadNarco(api, id)
     }
 }
 
-function createNarcoEffectModifier(api, effectName, modifierId): Modifier | undefined {
+function createNarcoEffectModifier(api: ModelApiInterface, effectName, modifierId): Modifier | undefined {
     return helpers.createEffectModifier(api, effectName, modifierId, "Воздействие каких-то таблеток", "narco");
 }
 
-function addModifierTemporary(api, modifier, duration){
+function addModifierTemporary(api: ModelApiInterface, modifier, duration){
     modifier = api.addModifier(modifier);
     api.debug(modifier);
     helpers.setTimerToKillModifier(api, modifier, duration)
     return modifier;
 }
 
-function startTemporaryCubeChange(api, narco)
+function startTemporaryCubeChange(api: ModelApiInterface, narco)
 {
     api.debug("Narco will add modifier")
     //Изменение должно быть временным. Накладываем эффект
@@ -46,7 +46,7 @@ function startTemporaryCubeChange(api, narco)
     addModifierTemporary(api, modifier, duration + modifier.pushbackDuration)
 }
 
-function addTemporaryConditons(api, narco)
+function addTemporaryConditons(api: ModelApiInterface, narco)
 {
     api.debug("Narco will add modifier")
 
@@ -89,7 +89,7 @@ function dieHorribleDeath(api) {
     helpers.addDelayedEvent(api, deathAwaitTimeMs , "start-illness", {"id" : "Dementia"});
 }
 
-function applyNarcoEffect(api, data, event)
+function applyNarcoEffect(api: ModelApiInterface, data, event)
 {
     api.info(`Taking narco effect: ${event.data.id}`);
 
@@ -136,7 +136,7 @@ function applyNarcoEffect(api, data, event)
 /**
  * Remove narco modifier by id
  */
-function removeNarcoEffect(api, data, event)
+function removeNarcoEffect(api: ModelApiInterface, data, event)
 {
     api.info(`Removing narco effect ${data.mID}`);
     if(data.mID){
