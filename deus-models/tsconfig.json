@@ -12,5 +12,8 @@
         "allowJs": true,
         "outDir": "./build"
     },
-    "include": ["src/*.ts", "helper/*.ts"]
+    "typeRoots": [
+        "./node_modules/@types"
+      ],
+    "include": ["**/*.ts"]
 }

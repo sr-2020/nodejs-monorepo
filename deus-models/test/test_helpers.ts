@@ -10,8 +10,8 @@ let WORKER_INSTANCE: Worker | null = null;
 export function getWorker() {
     if (WORKER_INSTANCE) return WORKER_INSTANCE;
 
-    const catalogsPath = Path.resolve(__dirname, '../catalogs');
-    const modelsPath = Path.resolve(__dirname, '../build/src');
+    const catalogsPath = Path.resolve(__dirname, '../../catalogs');
+    const modelsPath = Path.resolve(__dirname, '../src');
 
     const config = Config.parse(requireDir(catalogsPath));
     return WORKER_INSTANCE = Worker.load(modelsPath).configure(config);

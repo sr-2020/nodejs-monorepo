@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && mocha --compilers ts:ts-node/register test/**/*.ts",
-    "test:watch": "chokidar src/**/* catalogs/**/* test/**/* helpers/**/* package.json -c \"npm test\""
+    "test": "npm run build && mocha build/test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +28,7 @@
     "mocha": "^3.4.2",
     "node-tsconfig-paths": "^0.4.2",
     "ts-node": "^3.0.6",
-    "typescript": "^2.2.2"
+    "typescript": "^2.6.2"
   },
   "dependencies": {
     "@types/chance": "^1.0.0",
