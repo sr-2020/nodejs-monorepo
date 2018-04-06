@@ -31,7 +31,7 @@ module.exports = {
     // блок настроек пула воркеров
     pool: {
         workerModule: 'deus-model-engine/lib/worker_runner',   // модуль воркера, для которого вызывается ChildProcess.fork
-        workerArgs: ['/deus-models/src'],                       // аргументы, передаваемые дочернему процессу при запуске
+        workerArgs: ['../deus-models/build/src'],              // аргументы, передаваемые дочернему процессу при запуске
         options: {                                             // опции для https://www.npmjs.com/package/generic-pool
             max: 2,                                            // максимальное число воркеров
             min: 2                                             // минимальное число воркеров
