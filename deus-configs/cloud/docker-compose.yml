@@ -21,7 +21,7 @@ services:
     volumes:
       - type: volume
         source: models_src
-        target: /app
+        target: /app/build
 # Components we don't own, but depend on
 # CouchDB
   couchdb:
