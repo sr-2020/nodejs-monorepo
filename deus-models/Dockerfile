@@ -14,5 +14,7 @@ RUN npm install
 
 COPY . .
 
+RUN ["npm", "run", "build"]
+
 # We don't need to stay alive, just copy data into volume
 CMD [ "true" ]
