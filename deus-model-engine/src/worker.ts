@@ -178,7 +178,10 @@ export class Worker {
             let effects = modifier.effects.filter((e) => e.enabled && e.type == 'functional');
             for (let effect of effects) {
                 let f = this.resolveCallback(effect.handler);
-                if (!f) continue;
+                if (!f) {
+                    Logger.error('model', `Unable to find handler ${effect.handler}`);
+                    continue;
+                }
                 f(api, modifier);
             }
         }
@@ -188,7 +191,10 @@ export class Worker {
             let effects = modifier.effects.filter((e) => e.enabled && e.type == 'normal');
             for (let effect of effects) {
                 let f = this.resolveCallback(effect.handler);
-                if (!f) continue;
+                if (!f) {
+                    Logger.error('model', `Unable to find handler ${effect.handler}`);
+                    continue;
+                }
                 Logger.logStep('engine', 'info', 'run effect %s on modifier %s', effect.id, modifier.id)(() => {
                     (f as any)(api, modifier);
                 });
