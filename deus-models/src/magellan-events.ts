@@ -38,7 +38,7 @@ function leaveShip(api: ModelApiInterface, unused_data: any, event: Event) {
 
 function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
   const c: Condition = {
-    mID: uuid(), id: "on-the-ship", class: 'location',
+    mID: uuid(), id: "on-the-ship", class: 'physiology',
     text: `Вы находитесь на корабле номер ${modifier.shipId}`
   };
   api.addCondition(c);
