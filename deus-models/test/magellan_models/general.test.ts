@@ -6,7 +6,7 @@ import { getExampleMagellanModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import consts = require('../../helpers/constants');
 
-describe.only('General Magellan events: ', () => {
+describe('General Magellan events: ', () => {
 
     it("No-op refresh model", async function() {
 
