@@ -7,6 +7,12 @@ services:
       - overlay
     ports:
      - "8157:8157"
+    environment:
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
+      - PUSH_USER
+      - PUSH_PASSWORD
+      - PUSH_SERVERKEY
   deus-worker-manager:
     image: "alexeyeremin/deus-worker-manager"
     volumes:
@@ -16,6 +22,9 @@ services:
         read_only: true
     networks:
       - overlay
+    environment:
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
   deus-models:
     image: "alexeyeremin/deus-models"
     volumes:
