@@ -2,7 +2,7 @@
 
 Initialize docker volume couchdb_data with example data:
 
-    docker run --mount src=couchdb_data,target=/data --name couchdb_init alexeyeremin/deus-couchdb-init:latest
+    docker run -v couchdb_data:/data --name couchdb_init alexeyeremin/deus-couchdb-init:latest
     docker rm couchdb_init
 
 First command starts couchdb_init container using alexeyeremin/deus-couchdb-init:latest image and copies /data folder from it to couchdb_data volume.
