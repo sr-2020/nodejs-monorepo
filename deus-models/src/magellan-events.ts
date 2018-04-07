@@ -25,10 +25,9 @@ interface OnTheShipModifier extends Modifier {
 }
 
 function enterShip(api: ModelApiInterface, data: number, event: Event) {
-  api.debug("Entership");
   leaveShip(api, {}, event);
   // TODO: move to config
-  const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'location', type: 'normal', handler: 'onTheShip' };
+  const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'physiology', type: 'normal', handler: 'onTheShip' };
   const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data }
   api.addModifier(m);
 }
@@ -38,7 +37,6 @@ function leaveShip(api: ModelApiInterface, unused_data: any, event: Event) {
 }
 
 function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
-  api.debug("onTheShip");
   const c: Condition = {
     mID: uuid(), id: "on-the-ship", class: 'location',
     text: `Вы находитесь на корабле номер ${modifier.shipId}`
