@@ -47,7 +47,7 @@ export class WorkersPool implements WorkersPoolInterface {
     }
 
     private createWorker = async () => {
-        this.logger.debug('manager', 'WorkersPool::createWorker');
+        this.logger.info('manager', 'WorkersPool::createWorker');
         let worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
             .onExit(() => {
                 this.logger.error('manager', 'Worker exit. Last output:\n %s', worker.lastOutput.join());
@@ -57,8 +57,8 @@ export class WorkersPool implements WorkersPoolInterface {
         try {
             await worker.up();
         } catch (e) {
-            this.logger.error('manager', e);
-            this.logger.error('manager', worker.lastOutput.join());
+            this.logger.error('manager', `Error while trying to start worker: ${e}`);
+            this.logger.error('manager', `Last output: ${worker.lastOutput.join()}`);
             throw e;
         }
 
@@ -99,7 +99,7 @@ export class WorkersPool implements WorkersPoolInterface {
 
             return await handler(worker);
         } catch (e) {
-            this.logger.error('manager', 'Error:', e);
+            this.logger.error('manager', `Error while configuring worker: ${e}`);
             throw e;
         } finally {
             this.release(worker);
