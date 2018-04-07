@@ -277,7 +277,7 @@ function getBodyPage(model) {
     const items: any[] = [];
     let result = {
         __type: "ListPageViewModel",
-        menuTitle: "Тело",
+        menuTitle: "Доктор Хаус",
         viewId: "page:body",
         body: {
             title: "Доктор Хаус",
@@ -288,7 +288,7 @@ function getBodyPage(model) {
         result.body.items.push({
             viewId: "mid:" + consts.medicSystems[i].name,
             text: consts.medicSystems[i].label,
-            value: model.systems[i]
+            value: model.systems[i].toString()
         });
     }
     return result;
