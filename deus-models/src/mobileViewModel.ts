@@ -1,4 +1,5 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
+import consts = require('../helpers/constants');
 
 interface PageViewModel {
   menuTitle: string;
@@ -240,78 +241,6 @@ function getEnableActionText(enabled) {
     return enabled ? "Выключить" : "Включить";
 }
 
-
-const implantsClasses = ["cyber-implant", "bio-implant", "illegal-cyber-implant", "illegal-bio-implant", "virtual", "firmware"];
-
-function isImplant(modifier) {
-    return implantsClasses.find(c => modifier.class == c)
-}
-
-const systemNames = {
-    "musculoskeletal": "опорно-двигательная",
-    "cardiovascular": "сердечно-сосудистая",
-    "respiratory": "дыхательная",
-    "endocrine": "эндокринная",
-    "lymphatic": "лимфатическая",
-    "nervous": "нервная",
-}
-
-function getImplantDetails(modifier) {
-    let details = modifier.details || "подробного описания нет";
-
-    if (modifier.system) {
-        return `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
-    } else {
-        return `<p><b>Описание:</b></p><p>${details}</p>`;
-    }
-}
-
-function getImplantsPageItem(modifier) {
-    return {
-        text: modifier.displayName,
-        value: getEnabledText(modifier.enabled),
-        valueColor: getEnabledColor(modifier.enabled),
-        details: {
-            header: modifier.displayName,
-            text: getImplantDetails(modifier),
-            actions: [
-                // {
-                //     text: getEnableActionText(modifier.enabled),
-                //     eventType: modifier.enabled ? "disable-implant" : "enable-implant",
-                //     dangerous: modifier.enabled ? true : false,
-                //     needsQr: false,
-                //     data: {
-                //         mID: modifier.mID,
-                //     },
-                // }
-                // {
-                //     text: "Отдать гопнику (не работает)",
-                //     eventType: "giveAway",
-                //     needsQr: 100,
-                //     destructive: true,
-                //     data: {
-                //         mID: modifier.mID,
-                //     },
-                // },
-            ],
-        },
-    };
-}
-
-function getImplantsPage(model) {
-    let pageTitle = model.profileType == "human" ? "Импланты" : "Прошивки";
-
-    return {
-        __type: "ListPageViewModel",
-        viewId: "page:implants",
-        menuTitle: pageTitle,
-        body: {
-            title: pageTitle,
-            items: model.modifiers.filter(isImplant).map(getImplantsPageItem),
-        },
-    };
-}
-
 function getMemoryPageItem(mem) {
     let header = mem.title;
 
@@ -344,77 +273,25 @@ function getMemoryPage(model) {
     };
 }
 
-// TODO: Can new systems be added dynamically?
 function getBodyPage(model) {
-    let systems = model.systems;
-    return {
+    const items: any[] = [];
+    let result = {
         __type: "ListPageViewModel",
         menuTitle: "Тело",
+        viewId: "page:body",
         body: {
-            title: "Физиологические системы",
-            items: [
-                {
-                    text: "Нервная система",
-                    value: systems.NervousSystem,
-                },
-                {
-                    text: "Сердечно-сосудистая система",
-                    value: systems.CardioSystem,
-                },
-                {
-                    text: "Руки",
-                    value: systems.Hands,
-                },
-                {
-                    text: "Ноги",
-                    value: systems.Legs,
-                },
-            ],
+            title: "Доктор Хаус",
+            items
         },
     };
-}
-
-// TODO: Get data from model
-function getAdminsPage(model) {
-    return {
-        __type: "ListPageViewModel",
-        menuTitle: "Администраторы",
-        viewId: "page:admins",
-        body: {
-            title: "Администраторы",
-            items: [
-                {
-                    text: "Правая рука",
-                    subtext: "007, 12, 13",
-                    sublist: {
-                        title: "Админы: Правая рука",
-                        eventType: "setAdmins",
-                        eventTag: "rightHand",
-                        items: [
-                            {
-                                text: "007",
-                                deletable: false,
-                            },
-                            {
-                                text: "12",
-                                deletable: true,
-                            },
-                            {
-                                text: "13",
-                                deletable: true,
-                            },
-                        ],
-                        addAction: {
-                            buttonText: "Добавить",
-                            inputDialogTitle: "ID администратора",
-                            inputDialogMessage: "Укажите ID нового администратора для системы <b>Правая рука</b>",
-                            inputType: "number",
-                        },
-                    },
-                },
-            ],
-        },
-    };
+    for (let i = 0; i < consts.medicSystems.length; ++i) {
+        result.body.items.push({
+            viewId: "mid:" + consts.medicSystems[i].name,
+            text: consts.medicSystems[i].label,
+            value: model.systems[i]
+        });
+    }
+    return result;
 }
 
 function getChangesPageItem(change) {
@@ -441,59 +318,20 @@ function getChangesPage(model) {
     };
 }
 
-function getMessagesPageItem(message) {
-    return {
-        viewId: "mid:" + message.mID,
-        text: message.title,
-        details: {
-            header: message.title,
-            text: message.text,
-        },
-    };
-}
-
-function getMessagesPage(model) {
-    return {
-        __type: "ListPageViewModel",
-        viewId: "page:messages",
-        menuTitle: "Сообщения",
-        body: {
-            title: "Сообщения",
-            items: model.messages.reverse().map(getMessagesPageItem),
-        },
-    };
-}
-
-
 function getPages(model) {
     let pages: PageViewModel[] = [];
 
-    let isHuman = model.profileType == "human";
-    let isProgram = model.profileType == "program";
-    let isExHumanProgram = model.profileType == "exhuman-program";
-    let isExHumanRobot = model.profileType == "ex-human-robot";
 
     pages.push(getStartPage(model));
     pages.push(getMemoryPage(model));
 
-    if (!isProgram) {
-        pages.push(getConditionsPage(model));
-    }
+    pages.push(getConditionsPage(model));
+    pages.push(getBodyPage(model));
 
-    if (!isProgram && !isExHumanRobot && !isExHumanProgram) {
-        pages.push(getImplantsPage(model));
-    }
+    // TODO: Enable when server is ready
+    // pages.push(getEconomyPage());
 
-    if (isHuman || isExHumanProgram || isExHumanRobot) {
-        pages.push(getEconomyPage());
-    }
     pages.push(getChangesPage(model));
-    pages.push(getMessagesPage(model));
-
-    if (model.adminTestUser) {
-        pages.push(getAdminsPage(model));
-    }
-
 
     if (model.hasOwnProperty("showTechnicalInfo") && model.showTechnicalInfo) {
         pages.push(getTechnicalInfoPage());
@@ -505,7 +343,6 @@ function getPages(model) {
 // General characteristics not tied to any page or UI element.
 function getGeneral(model) {
     return {
-        maxSecondsInVr: model.maxSecondsInVr
     };
 }
 
@@ -534,7 +371,6 @@ function getPassportScreen(model) {
         fullName: model.firstName + " " + model.lastName,
         corporation: model.corporation ? model.corporation : "",
         email: model.mail ? model.mail : "",
-        insurance: model.insuranceDiplayName
     };
 }
 
@@ -551,16 +387,6 @@ function getViewModel(model) {
 }
 
 
-function setModifierEnabled(modifiers, id, enabled) {
-    const index = modifiers.findIndex((m) => m.mID == id);
-    if (index < 0) {
-        return modifiers;
-    }
-    modifiers[index].enabled = enabled;
-    return modifiers;
-}
-
-
 module.exports = () => {
     return {
         _view(api: ViewModelApiInterface, model) {
@@ -569,6 +395,7 @@ module.exports = () => {
             }
             catch (err) {
                 // The app would display error message when ViewModel is incorrect
+                console.error(err);
                 return {};
             }
         }
