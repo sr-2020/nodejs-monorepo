@@ -56,7 +56,7 @@ class App {
     this.app.use(time.init);
 
     this.app.use((req, res, next) => {
-      this.logger.debug('Request body', { id: RequestId(req), body: req.body });
+      this.logger.debug('Request body', { requestId: RequestId(req), body: req.body, source: 'api' });
 
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -218,8 +218,8 @@ class App {
     });
 
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
-      result.then((r) => this.logger.info(`Sending notification to ${id}`, { r }))
-        .catch((err) => this.logger.warn(err));
+      result.then((r) => this.logger.info(`Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
+        .catch((err) => this.logger.warn(`Failed to send notification: ${err}`, { characterId: id, source: 'api' }));
     };
 
     if (this.settings.pushSettings.autoNotify && this.settings.pushSettings.autoNotifyTitle) {
@@ -237,7 +237,7 @@ class App {
           inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
             makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
         } catch (e) {
-          this.logger.error(e);
+          this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
         }
       }, autoNotifySettings.performOncePerMs);
     }
@@ -250,10 +250,14 @@ class App {
           return;
         if (autoRefreshSettings.allowToHour && autoRefreshSettings.allowToHour < currentHour)
           return;
-        const inactiveIDs =
-          await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
-        inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
-          makeSilentRefreshNotificationPayload())));
+        try {
+          const inactiveIDs =
+            await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
+          inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
+            makeSilentRefreshNotificationPayload())));
+        } catch (e) {
+          this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
+        }
       }, autoRefreshSettings.performOncePerMs);
     }
 
@@ -402,7 +406,7 @@ class App {
         });
       }
       await this.accountsDb.upsert(id, (accountInfo) => {
-        this.logger.info(`Saving token for ${id}`)
+        this.logger.info(`Saving push token`, {characterId: id, source: 'api'})
         accountInfo.pushToken = token;
         return accountInfo;
       });
@@ -419,7 +423,7 @@ class App {
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
     if (events.length == 0) {
-      this.logger.warning(`All events received from id ${id} are from future!`);
+      this.logger.warning(`All received events are from the future!`, {characterId: id, source: 'api'});
     }
     const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
 
@@ -493,8 +497,9 @@ class App {
       url: req.url,
       method: req.method,
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-      id: req.params.id,
+      characterId: req.params.id,
       query: req.query,
+      source: 'api'
     };
   }
 
@@ -534,7 +539,7 @@ class App {
     } catch (e) {
       if (IsNotFoundError(e))
         return { status: 404, body: 'Character with such id or login is not found' };
-      this.logger.error(e);
+      this.logger.error(`Error while sending push notification via FCM: ${e}`, {characterId: id, source: 'api'});
       throw e;
     }
   }

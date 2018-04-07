@@ -45,7 +45,7 @@ try {
         new PouchDB(databasesConfig.accounts, authOptions),
         config.settings).listen(config.port);
 
-      logger.info('Ready to accept requests.');
+      logger.info('Ready to accept requests.', { source: 'api' });
     }
   });
 } catch (e) {
