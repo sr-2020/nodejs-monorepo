@@ -49,7 +49,7 @@ class App {
         const content = encode({type: QrType.Bill, kind: 0, validUntil: 1700000000,
           payload: [receiver, amount, comment].join(',')});
         res.redirect(
-          `https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=1&margin=1&size=300x300&ecc=L`
+          `https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=10&margin=1&size=300x300&ecc=L`
         );
       }
       catch (e) {
@@ -87,7 +87,7 @@ class App {
         if (!data.validUntil)
           data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
         res.redirect(
-          `https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=0&margin=0&size=300x300&ecc=L&format=svg`
+          `https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=0&size=300x300&ecc=L&format=svg`
         );
       }
       catch (e) {
