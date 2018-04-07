@@ -22,7 +22,10 @@ try {
   const opts = {
     resources: requiredUrls,
     interval: 2000,
-    auth: authOptions
+    auth: {
+      user: databasesConfig.username,
+      pass: databasesConfig.password,
+    }
   };
 
   waitOn(opts, (err) => {
