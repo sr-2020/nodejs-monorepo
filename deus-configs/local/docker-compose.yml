@@ -22,6 +22,12 @@ services:
       - type: volume
         source: models_src
         target: /app
+  deus-qr-lib:
+    image: "deus-qr-lib"
+    networks:
+      - overlay
+    ports:
+      - "8159:8159"
 # Components we don't own, but depend on
 # CouchDB
   couchdb:
