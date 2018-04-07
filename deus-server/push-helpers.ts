@@ -10,6 +10,7 @@ export function makeVisibleNotificationPayload(title: string, body?: string): an
     aps: {
       sound: 'default',
     },
+    priority: "high"
   };
 }
 
@@ -24,5 +25,6 @@ export function makeSilentRefreshNotificationPayload(): any {
       'refresh': true,
       'content-available': 1,
     },
+    priority: "high"
   };
 }
