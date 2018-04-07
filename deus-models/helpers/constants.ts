@@ -43,6 +43,8 @@ const InsuranceDisplay = {
     SuperVip: "SuperVIP"
 }
 
+const MAGELLAN_TICK_MILLISECONDS = 60 * 1000;
+
 export = {
         DAMAGE_MODIFIER_MID,
         medicSystems,
@@ -57,6 +59,7 @@ export = {
         InsuranceDisplay,
         ILLNESS_EFFECT_NAME,
         S_IMMORTAL_NAME_01,
-        S_IMMORTAL_TIMER_NAME
+        S_IMMORTAL_TIMER_NAME,
+        MAGELLAN_TICK_MILLISECONDS
 };
 

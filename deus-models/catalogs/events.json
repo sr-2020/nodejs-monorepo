@@ -251,7 +251,23 @@
             "id": "jj-immortal-two-awake",
             "eventType": "jj-immortal-two-awake",
             "effects": ["jjImmortalTwoAwakeEvent"]
+        },
+        {
+            "eventType": "modify-systems-instant",
+            "effects": ["modifySystemsInstant"]
+        },
+        {
+            "eventType": "use-magellan-pill",
+            "effects": ["useMagellanPill"]
+        },
+
+        {
+            "eventType": "enter-ship",
+            "effects": ["enterShip"]
+        },
+        {
+            "eventType": "leave-ship",
+            "effects": ["leaveShip"]
         }
-       
-    ]
+]
 }
