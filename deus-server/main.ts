@@ -22,6 +22,7 @@ try {
   const opts = {
     resources: requiredUrls,
     interval: 2000,
+    auth: authOptions
   };
 
   waitOn(opts, (err) => {
