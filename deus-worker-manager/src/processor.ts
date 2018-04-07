@@ -56,7 +56,7 @@ export class Processor {
     }
 
     async run() {
-        this.logger.info('manager', `processing model ${this.event.characterId}`, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+        this.logger.info('manager', 'processing model %s', this.event.characterId, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
         this.state = 'Waiting for worker';
 
         try {
@@ -74,13 +74,13 @@ export class Processor {
 
                 events.push(this.event);
 
-                this.logger.debug('manager', 'Processing events', {events, characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.debug('manager', 'events = %j', events, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
 
                 const objectStorage = new BoundObjectStorage(this.objectStorage);
                 const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
                 this.logger.info('manager', 'model processing finished', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
-                this.logger.debug('manager', 'Got result', {result, characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.debug('manager', 'result = %j', result, { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
 
                 if (result.status == 'ok') {
                     let { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
@@ -155,7 +155,7 @@ export class Processor {
         try {
             await objectStorage.store(aquired);
         } catch (e) {
-            this.logger.error('manager', "Can't store aquired objects", {aquired, e});
+            this.logger.error('manager', "Can't store aquired objects: %j %j", aquired, e);
         }
     }
 }
