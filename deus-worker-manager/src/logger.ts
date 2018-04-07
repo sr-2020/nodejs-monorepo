@@ -11,18 +11,18 @@ import { LogLevel, LogSource } from 'deus-engine-manager-api';
 winston.setLevels(winston.config.syslog.levels);
 
 function defLevel(level: LogLevel) {
-    return function(source: LogSource, msg: string, ...rest: any[]) {
-        this.log(source, level, msg, ...rest);
+    return function(source: LogSource, msg: string, data?: any) {
+        this.log(source, level, msg, data);
     };
 }
 
 export interface LoggerInterface {
-    log(source: LogSource, level: LogLevel, msg: string, ...rest: any[]): void;
-    debug(source: LogSource, msg: string, ...rest: any[]): void;
-    info(source: LogSource, msg: string, ...rest: any[]): void;
-    notice(source: LogSource, msg: string, ...rest: any[]): void;
-    warn(source: LogSource, msg: string, ...rest: any[]): void;
-    error(source: LogSource, msg: string, ...rest: any[]): void;
+    log(source: LogSource, level: LogLevel, msg: string, data?: any): void;
+    debug(source: LogSource, msg: string, data?: any): void;
+    info(source: LogSource, msg: string, data?: any): void;
+    notice(source: LogSource, msg: string, data?: any): void;
+    warn(source: LogSource, msg: string, data?: any): void;
+    error(source: LogSource, msg: string, data?: any): void;
 }
 
 @Inject
@@ -41,8 +41,9 @@ export class Logger implements LoggerInterface {
         }
     }
 
-    log(source: LogSource, level: LogLevel, msg: string, ...rest: any[]) {
-        this.container.get(source).log(level, msg, ...rest);
+    log(source: LogSource, level: LogLevel, msg: string, data?: any) {
+        data['source'] = source;
+        this.container.get(source).log(level, msg, data);
     }
 
     debug = defLevel('debug');
