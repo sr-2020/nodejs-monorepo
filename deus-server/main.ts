@@ -7,14 +7,11 @@ import { LoggingWinston } from '@google-cloud/logging-winston';
 import App from './app';
 import { Configuration } from './settings';
 import Elasticsearch = require('winston-elasticsearch');
+import { config } from './config';
 
 const loggingWinston = new LoggingWinston();
 
-// tslint:disable-next-line:no-var-requires
-const configUnparsed = require('./config');
-
 try {
-  const config = TypedJSON.parse(JSON.stringify(configUnparsed), Configuration);
   const databasesConfig = config.databases;
   const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
 
