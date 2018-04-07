@@ -21,6 +21,7 @@ try {
 
   const opts = {
     resources: requiredUrls,
+    interval: 2000,
   };
 
   waitOn(opts, (err) => {
