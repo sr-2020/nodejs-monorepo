@@ -2,7 +2,7 @@ import { clone, assign, reduce } from 'lodash'
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult } from 'deus-engine-manager-api';
+import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult, Modifier } from 'deus-engine-manager-api';
 
 import Logger from './logger';
 import { requireDir } from './utils';
@@ -22,12 +22,12 @@ export class Worker {
 
     static load(dir: string): Worker {
         let model = loadModels(dir);
-        Logger.debug('engine', 'model loaded: %s', inspect(model, false, null));
+        Logger.debug('engine', 'Loaded model', { model: inspect(model, false, null) });
         return new Worker(model);
     }
 
     configure(config: config.ConfigInterface): Worker {
-        Logger.debug('engine', 'config loaded: %s', inspect(config, false, null));
+        Logger.debug('engine', 'Loaded config', { config: inspect(config, false, null) });
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 
@@ -40,23 +40,30 @@ export class Worker {
     }
 
     async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
-        Logger.info('engine', 'processing model %s', context.characterId, events);
-
         let baseCtx = new Context(context, events, this.config.dictionaries);
+        const characterId = baseCtx.ctx.characterId;
+
+        Logger.info('engine', 'Processing model', { characterId, events });
 
         try {
-            Logger.logStep('engine', 'info', 'preprocess')(() => this.runPreprocess(baseCtx, events));
+            Logger.logStep('engine', 'info', 'Preprocess', { characterId })
+                (() => this.runPreprocess(baseCtx, events));
         } catch (e) {
-            Logger.error('engine', 'Exception caught when running preproces: %s', event, e.toString());
+            Logger.error('engine', `Exception ${e.toString()} caught when running preproces`,
+                { event, characterId });
             return { status: 'error', error: e };
         }
 
         if (baseCtx.pendingAquire.length) {
             try {
-                await Logger.logAsyncStep('engine', 'info', 'wait for aquired objects: %j', baseCtx.pendingAquire)(() => this.waitAquire(baseCtx));
-                Logger.debug('engine', 'aquired: %j', baseCtx.aquired);
+                await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects',
+                    { pendingAquire: baseCtx.pendingAquire, characterId })
+                    (() => this.waitAquire(baseCtx));
+                Logger.debug('engine', 'Aquired objects',
+                    { aquired: baseCtx.aquired, characterId });
             } catch (e) {
-                Logger.error('engine', 'Exception caught when aquiring external objects: %s', e.toString());
+                Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`,
+                    { characterId });
                 return { status: 'error', error: e };
             }
         }
@@ -70,19 +77,17 @@ export class Worker {
             baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
 
             try {
-                Logger.logStep('engine', 'info', 'run event %s', event.eventType)(() => {
-                    Logger.debug('engine', 'event: %s', event.eventType, event);
-                    this.runEvent(baseCtx, event);
-                });
+                Logger.logStep('engine', 'info', 'Running event', { event, characterId })
+                    (() => this.runEvent(baseCtx, event));
             } catch (e) {
-                Logger.error('engine', 'Exception caught when processing event %s: %s', event.eventType, e.toString(), event);
+                Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, characterId });
                 return { status: 'error', error: e };
             }
 
             try {
-                workingCtx = Logger.logStep('engine', 'info', 'run modifiers')(() => this.runModifiers(baseCtx));
+                workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })(() => this.runModifiers(baseCtx));
             } catch (e) {
-                Logger.error('engine', 'Exception caught when applying modifiers: %s', e.toString());
+                Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { characterId });
                 return { status: 'error', error: e };
             }
 
@@ -95,9 +100,9 @@ export class Worker {
         let viewModels;
 
         try {
-            viewModels = Logger.logStep('engine', 'info', 'run view models')(() => this.runViewModels(workingCtx, baseCtx));
+            viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })(() => this.runViewModels(workingCtx, baseCtx));
         } catch (e) {
-            Logger.error('engine', 'Exception caught when running view models: %s', e.toString());
+            Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { characterId });
             return { status: 'error', error: e };
         }
 
@@ -160,44 +165,37 @@ export class Worker {
         return context.timestamp = event.timestamp;
     }
 
-    private runModifiers(baseCtx: Context): Context {
-        let timestamp = baseCtx.timestamp;
-        let workingCtx = baseCtx.clone();
-        let api = ModelApiFactory(workingCtx);
-
-        let enabledModifiers = workingCtx.modifiers
+    private getEnabledModifiers(workingCtx: Context): Modifier[] {
+        return workingCtx.modifiers
             .filter((m) => m.enabled)
             .sort((a, b) => {
                 if (a.class != '_internal' && b.class == '_internal') return -1;
                 if (a.class == '_internal' && b.class != '_internal') return 1;
                 return 0;
             });
+    }
 
-        // Functional effects first
-        for (let modifier of enabledModifiers) {
-            let effects = modifier.effects.filter((e) => e.enabled && e.type == 'functional');
-            for (let effect of effects) {
-                let f = this.resolveCallback(effect.handler);
-                if (!f) {
-                    Logger.error('model', `Unable to find handler ${effect.handler}`);
-                    continue;
-                }
-                f(api, modifier);
-            }
-        }
+    private runModifiers(baseCtx: Context): Context {
+        let timestamp = baseCtx.timestamp;
+        let workingCtx = baseCtx.clone();
+        const characterId = workingCtx.ctx.characterId;
+        let api = ModelApiFactory(workingCtx);
 
-        // Then Normal effects
-        for (let modifier of enabledModifiers) {
-            let effects = modifier.effects.filter((e) => e.enabled && e.type == 'normal');
-            for (let effect of effects) {
-                let f = this.resolveCallback(effect.handler);
-                if (!f) {
-                    Logger.error('model', `Unable to find handler ${effect.handler}`);
-                    continue;
+        // First process all functional events, then all normal ones.
+        for (const effectType of ['functional', 'normal']) {
+            for (let modifier of this.getEnabledModifiers(workingCtx)) {
+                let effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
+                for (let effect of effects) {
+                    let f = this.resolveCallback(effect.handler);
+                    if (!f) {
+                        Logger.error('model', `Unable to find handler ${effect.handler}`);
+                        continue;
+                    }
+                    Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.id}`, { characterId })(() => {
+                        Logger.debug('engine', 'debug', 'Full effect and modifier data', { effect, modifier, characterId });
+                        (f as any)(api, modifier);
+                    });
                 }
-                Logger.logStep('engine', 'info', 'run effect %s on modifier %s', effect.id, modifier.id)(() => {
-                    (f as any)(api, modifier);
-                });
             }
         }
 
@@ -228,7 +226,8 @@ export class Worker {
     }
 
     private async waitAquire(baseCtx: Context) {
-        Logger.debug('engine', 'waitAquire %j', baseCtx.pendingAquire);
+        Logger.debug('engine', 'Waitin to aquire',
+            { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
 
         return new Promise((resolve, reject) => {
             if (process && process.send) {
