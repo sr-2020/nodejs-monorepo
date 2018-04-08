@@ -191,7 +191,7 @@ export class Worker {
                         Logger.error('model', `Unable to find handler ${effect.handler}`);
                         continue;
                     }
-                    Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.id}`, { characterId })(() => {
+                    Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {
                         Logger.debug('engine', 'debug', 'Full effect and modifier data', { effect, modifier, characterId });
                         (f as any)(api, modifier);
                     });
