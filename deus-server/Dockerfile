@@ -17,4 +17,4 @@ COPY . .
 RUN [ "npm", "run", "build" ]
 
 EXPOSE 8157
-CMD [ "node", "main.js" ]
+CMD [ "node", "--trace-warnings", "main.js" ]

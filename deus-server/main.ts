@@ -29,6 +29,7 @@ try {
   };
 
   waitOn(opts, (err) => {
+
     if (err)
       throw err;
     else {
@@ -38,6 +39,10 @@ try {
           new (winston.transports.Console)(),
           new (Elasticsearch)({ level: "debug", clientOpts: { host: 'elasticsearch:9200' } }),
         ],
+      });
+
+      process.on('unhandledRejection', (reason, p) => {
+        logger.error(`Unhandled Rejection at: Promise ${p.toString()} reason: ${reason.toString()}`, reason.stack);
       });
 
       const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
