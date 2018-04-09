@@ -11,6 +11,7 @@ import 'mocha';
 import { TSMap } from 'typescript-map';
 import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
+import { characterIdTimestampOnlyRefreshesView } from './consts';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -38,6 +39,12 @@ describe('API Server', () => {
   let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
   let testStartTime: number;
+
+  async function allNonDesignDocsSortedByTimestamp(): Promise<any[]> {
+    return (await eventsDb.allDocs({ include_docs: true })).rows
+      .filter((row) => row.id[0] != '_')
+      .sort((row1, row2) => (row1.doc ? row1.doc.timestamp : 0) - (row2.doc ? row2.doc.timestamp : 0));
+  }
 
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
@@ -89,6 +96,16 @@ describe('API Server', () => {
     });
     await accountsDb.put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
     await accountsDb.put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
+
+    await (eventsDb as PouchDB.Database<any>).put({
+      _id: '_design/character',
+      views: {
+        'refresh-events': {
+          // tslint:disable-next-line:max-line-length
+          map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
+        },
+      },
+    });
   });
 
   afterEach(async () => {
@@ -319,7 +336,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      const docs = await eventsDb.query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
@@ -332,11 +349,11 @@ describe('API Server', () => {
         timestamp: 4365,
       },
       {
-        eventType: '_RefreshModel',
+        eventType: 'TestEvent',
         timestamp: 4366,
       },
       {
-        eventType: 'TestEvent',
+        eventType: '_RefreshModel',
         timestamp: 4367,
       }]
       const response = await rp.post(address + '/events/some_user',
@@ -346,10 +363,10 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
-      expect(docs.rows.length).to.equal(2);
-      expect(docs.rows[0].doc).to.deep.include(events[1]);
-      expect(docs.rows[1].doc).to.deep.include(events[2]);
+      const docs = await allNonDesignDocsSortedByTimestamp();
+      expect(docs.length).to.equal(2);
+      expect(docs[0].doc).to.deep.include(events[1]);
+      expect(docs[1].doc).to.deep.include(events[2]);
     });
 
     it('Puts only last _RefreshModel event to db - 2', async () => {
@@ -377,11 +394,11 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
-      expect(docs.rows.length).to.equal(3);
-      expect(docs.rows[0].doc).to.deep.include(events[0]);
-      expect(docs.rows[1].doc).to.deep.include(events[2]);
-      expect(docs.rows[2].doc).to.deep.include(events[3]);
+      const docs = await allNonDesignDocsSortedByTimestamp();
+      expect(docs.length).to.equal(3);
+      expect(docs[0].doc).to.deep.include(events[0]);
+      expect(docs[1].doc).to.deep.include(events[2]);
+      expect(docs[2].doc).to.deep.include(events[3]);
     });
 
     it('Puts only last _RefreshModel event to db - 3', async () => {
@@ -409,9 +426,9 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].doc).to.deep.include(events[3]);
+      const docs = await allNonDesignDocsSortedByTimestamp();
+      expect(docs.length).to.equal(1);
+      expect(docs[0].doc).to.deep.include(events[3]);
     });
 
     it('Filters out tokenUpdated events', async () => {
@@ -434,7 +451,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
+      const docs = await eventsDb.query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(events[1]);
@@ -458,9 +475,9 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query('web_api_server_v2/characterId_timestamp_mobile', { include_docs: true });
-      expect(docs.rows.length).to.equal(1);
-      const doc: any = docs.rows[0].doc;
+      const docs = await allNonDesignDocsSortedByTimestamp();
+      expect(docs.length).to.equal(1);
+      const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[0]);
       expect(doc).to.deep.include({ characterId: '00001' });
     });

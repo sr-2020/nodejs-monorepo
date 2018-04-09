@@ -16,6 +16,7 @@ import { TSMap } from 'typescript-map';
 import { Connection, StatusAndBody } from './connection';
 import { ApplicationSettings } from './settings';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
+import { characterIdTimestampOnlyRefreshesView } from './consts';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -273,18 +274,6 @@ class App {
 
   public async listen(port: number) {
     try {
-      await this.eventsDb.upsert('_design/web_api_server_v2', () => {
-        return {
-          _id: '_design/web_api_server_v2',
-          views: {
-            characterId_timestamp_mobile: {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.timestamp && doc.characterId && doc.mobile) emit([doc.characterId, doc.timestamp]);  }',
-            },
-          },
-        };
-      });
-
       await this.accountsDb.upsert('_design/web_api_server_v2', () => {
         return {
           _id: '_design/web_api_server_v2',
@@ -418,7 +407,6 @@ class App {
   // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
   // Then removes all _RefreshModel events except latest one.
   private filterRefreshModelEventsByTimestamp(id, events: any[]): any[] {
-    events.forEach((event) => event.mobile = true);
     const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
@@ -444,7 +432,7 @@ class App {
   }
 
   private async latestExistingMobileEventTimestamp(id: string): Promise<number> {
-    const docs = await this.eventsDb.query<any>('web_api_server_v2/characterId_timestamp_mobile',
+    const docs = await this.eventsDb.query<any>(characterIdTimestampOnlyRefreshesView,
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
