@@ -5,8 +5,8 @@ import { ModelApiInterface } from "deus-engine-manager-api";
  * Хелперы для медицинских моделей
  */
 
-let helpers = require('./model-helper');
-let consts = require('./constants');
+import helpers = require('./model-helper');
+import consts = require('./constants');
 
 
 function addDamage(api: ModelApiInterface, hpLost, timestamp){

@@ -5,9 +5,9 @@ import { MindData } from "../src/medicViewModel";
 /**
  * Хелперы для разных моделей
  */
-let consts = require('./constants');
-let type = require('type-detect');
-let Chance = require('chance');
+import consts = require('./constants');
+import type = require('type-detect');
+import Chance = require('chance');
 let chance = new Chance();
 
 
