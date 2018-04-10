@@ -34,8 +34,10 @@ export class Connection {
         timestamp: latestSavedEventTimestamp } };
     }
 
-    return race([this.refreshModelUpdatedResponse(id, latestSavedEventTimestamp),
-    this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp)]);
+    return race([
+      this.refreshModelUpdatedResponse(id, latestSavedEventTimestamp),
+      this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp)
+    ]);
   }
 
   public onViewModelUpdate(viewModel: any) {
