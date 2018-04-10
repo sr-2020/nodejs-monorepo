@@ -42,8 +42,8 @@ services:
   couchdb:
     image: "apache/couchdb"
     environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
     networks:
       - overlay
     ports:
