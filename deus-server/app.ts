@@ -356,11 +356,16 @@ class App {
         this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
 
         const eventsForLogAfter = CleanEventsForLogging(events);
-        this.connections.get(id).processEvents(id, events).then((s: StatusAndBody) => {
-          if (s.status == 200)
+
+        const viewModelTimestampBefore = await this.latestExistingMobileEventTimestamp(id);
+        this.connections.get(id).processEvents(id, events).then(async (s: StatusAndBody) => {
+          if (s.status == 200) {
+            await this.sendPushNotifications(viewModelTimestampBefore, s.body.viewModel);
             this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
-          else
+          }
+          else {
             this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
+          }
           res.status(s.status).send(s.body);
           this.connections.delete(id);
         });
@@ -423,12 +428,16 @@ class App {
 
   private mobileViewmodelDb() { return this.viewmodelDbs.get('mobile'); }
 
+  private async latestViewmodelTimestamp(id: string): Promise<number> {
+    return (await this.mobileViewmodelDb().get(id)).timestamp;
+  }
+
   private async cutTimestamp(id: string): Promise<number> {
-    const [currentViewmodel, lastEventTimeStamp] = await Promise.all([
-      this.mobileViewmodelDb().get(id),
+    const [currentViewmodelTimestamp, lastEventTimeStamp] = await Promise.all([
+      this.latestViewmodelTimestamp(id),
       this.latestExistingMobileEventTimestamp(id)
     ]);
-    return Math.max(currentViewmodel.timestamp, lastEventTimeStamp);
+    return Math.max(currentViewmodelTimestamp, lastEventTimeStamp);
   }
 
   private async latestExistingMobileEventTimestamp(id: string): Promise<number> {
@@ -502,6 +511,18 @@ class App {
       throw new LoginNotFoundError('Multiple users with such login found');
 
     return docs.rows[0].id;
+  }
+
+  private async sendPushNotifications(timestampBefore: number, updatedViewModel: any): Promise<void> {
+    // TODO: Rework this horror
+    if (!updatedViewModel.pages) return;
+    const changesPage = (updatedViewModel.pages as any[]).find(page => page.viewId == "page:changes");
+    if (!changesPage) return;
+    await Promise.all(
+      (changesPage.body.items as any[])
+      .filter(item => item.unixSecondsValue * 1000 > timestampBefore).map(item => {
+          return this.sendGenericPushNotification(updatedViewModel.passportScreen.id, makeVisibleNotificationPayload(item.details.header, item.details.text));
+        }));
   }
 
   private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
