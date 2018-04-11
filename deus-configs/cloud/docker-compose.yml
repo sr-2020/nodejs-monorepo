@@ -1,4 +1,4 @@
-version: '3.2'
+version: '2.3'
 services:
 # Components we own
   deus-server:
@@ -13,6 +13,13 @@ services:
       - PUSH_USER
       - PUSH_PASSWORD
       - PUSH_SERVERKEY
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8157/time"]
+    depends_on:
+      couchdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
   deus-worker-manager:
     image: "alexeyeremin/deus-worker-manager"
     volumes:
@@ -25,6 +32,11 @@ services:
     environment:
       - COUCHDB_USER
       - COUCHDB_PASSWORD
+    depends_on:
+      couchdb:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
   deus-models:
     image: "alexeyeremin/deus-models"
     volumes:
@@ -37,6 +49,8 @@ services:
       - overlay
     ports:
       - "8159:8159"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8159/"]
 # Components we don't own, but depend on
 # CouchDB
   couchdb:
@@ -54,6 +68,8 @@ services:
         target: /opt/couchdb/data
         volume:
           nocopy: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5984/_up"]
 # ELK stack (Elasticksearch + Logstash + Kibana)
   elasticsearch:
     build:
@@ -68,6 +84,8 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - overlay
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/"]
   logstash:
     build:
       context: ../elk/logstash/
@@ -91,6 +109,8 @@ services:
       - "5601:5601"
     networks:
       - overlay
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601/status"]
     depends_on:
       - elasticsearch
 
