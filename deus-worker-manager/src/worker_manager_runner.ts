@@ -2,7 +2,6 @@
 
 import * as path from 'path';
 import * as meow from 'meow';
-import * as waitOn from 'wait-on';
 
 import { Injector } from './di';
 import {
@@ -80,19 +79,5 @@ for (let viewModel in config.viewModels) {
     requiredDbNames.push(config.viewModels[viewModel]);
 }
 
-const requiredUrls = requiredDbNames.map((name) => config.db.url + name);
-
-requiredUrls.push('http://elasticsearch:9200');
-
-const opts = {
-    resources: requiredUrls,
-    interval: 2000,
-};
-
-waitOn(opts, (err) => {
-    if (err) {
-        throw err;
-    }
-    const manager = di.get(ManagerToken);
-    manager.init().then(() => manager.retryAll());
-});
+const manager = di.get(ManagerToken);
+manager.init().then(() => manager.retryAll());
