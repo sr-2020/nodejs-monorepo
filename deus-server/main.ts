@@ -14,19 +14,6 @@ const loggingWinston = new LoggingWinston();
 const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
 
-const requiredUrls = databasesConfig.viewModels.map((v) => v.url);
-requiredUrls.push(databasesConfig.events, databasesConfig.accounts);
-requiredUrls.push('http://elasticsearch:9200');
-
-const opts = {
-  resources: requiredUrls,
-  interval: 2000,
-  auth: {
-    user: databasesConfig.username,
-    pass: databasesConfig.password,
-  }
-};
-
 const logger = new winston.Logger({
   level: 'info',
   transports: [
