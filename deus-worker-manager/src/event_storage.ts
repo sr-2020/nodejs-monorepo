@@ -24,6 +24,14 @@ export class EventStorage {
         return result.rows.map((r: any) => r.doc);
     }
 
+    async removeOlderThan(characterId: string, till: number): Promise<void> {
+        const docs = await this.range(characterId, 0, till);
+        await Promise.all(docs.map((doc) => {
+            if (doc._rev)
+                this.db.remove(doc._id, doc._rev);
+        }));
+    }
+
     async lastRefresh(characterId: string): Promise<SyncEvent | null> {
         let result = await this.db.view('character', 'last-refresh-event', { key: characterId, reduce: true });
 

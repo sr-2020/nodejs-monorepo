@@ -30,6 +30,10 @@ export interface LoggerConfig {
     [source: string]: any
 }
 
+export interface ProcessorConfig {
+    deleteEventsOlderThanMs: number
+}
+
 export interface Config {
     db: DbConfig
     pool: PoolConfig
@@ -37,4 +41,5 @@ export interface Config {
     viewModels: DbMappingConfig
     objects: DbMappingConfig
     logger: LoggerConfig
+    processor: ProcessorConfig
 }

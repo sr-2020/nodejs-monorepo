@@ -10,12 +10,14 @@ import { ObjectStorageInterface, BoundObjectStorage } from './object_storage';
 import { WorkersPoolInterface } from './workers_pool';
 import { Worker } from './worker';
 import { LoggerInterface } from './logger';
+import { Config } from './config';
 
 type State = 'New' | 'Waiting for worker' | 'Processing' | 'Done';
 
 export type ProcessorFactory = () => Processor;
 
 export function processorFactory(
+    config: Config,
     pool: WorkersPoolInterface,
     eventStorage: EventStorage,
     modelStorage: ModelStorage,
@@ -25,7 +27,7 @@ export function processorFactory(
     logger: LoggerInterface
 ) {
     return () => {
-        return new Processor(pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, objectStorage, logger);
+        return new Processor(config, pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, objectStorage, logger);
     };
 }
 
@@ -34,6 +36,7 @@ export class Processor {
     private event: SyncEvent;
 
     constructor(
+        private config: Config,
         private pool: WorkersPoolInterface,
         private eventStorage: EventStorage,
         private modelStorage: ModelStorage,
@@ -98,6 +101,8 @@ export class Processor {
                             this.storeOutboundEvents(outboundEvents),
                             this.storeAquiredObjects(objectStorage, aquired)
                         ]);
+
+                        await this.eventStorage.removeOlderThan(characterId, baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
 
                         this.logger.info('manager', 'All data stored', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
                     } finally {
