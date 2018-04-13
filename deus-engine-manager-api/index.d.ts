@@ -131,10 +131,10 @@ export interface ReadModelApiInterface {
 }
 
 export interface LogApiInterface {
-    debug(msg: string, additionalData: any): void
-    info(msg: string, additionalData: any): void
-    warn(msg: string, additionalData: any): void
-    error(msg: string, additionalData: any): void
+    debug(msg: string, additionalData?: any): void
+    info(msg: string, additionalData?: any): void
+    warn(msg: string, additionalData?: any): void
+    error(msg: string, additionalData?: any): void
 }
 
 export interface WriteModelApiInterface {
