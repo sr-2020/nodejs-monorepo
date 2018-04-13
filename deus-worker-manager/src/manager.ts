@@ -87,13 +87,13 @@ export class Manager {
     logEvent = (event: Event) => {
         switch (event.eventType) {
             case '_RefreshModel':
-                this.logger.info('manager', 'Found refresh event for %s', event.characterId, event);
+                this.logger.info('manager', `Found refresh event for ${event.characterId}`, {characterId: event.characterId, event});
                 break;
             case '_RetryRefresh':
-                this.logger.info('manager', 'Found retry event for %s', event.characterId, event);
+                this.logger.info('manager', `Found retry event for ${event.characterId}`, {characterId: event.characterId, event});
                 break;
             default:
-                this.logger.warn('manager', 'Unexpected event for %s', event.characterId, event);
+                this.logger.warn('manager', `Unexpected event for ${event.characterId}`, {characterId: event.characterId, event});
         }
     }
 

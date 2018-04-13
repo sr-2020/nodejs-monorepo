@@ -118,7 +118,7 @@ export class Worker extends EventEmitter {
                     eventTimestamp: syncEvent.timestamp
                 });
             }
-            this.logger.log(message.source, message.level, message.msg, ...message.params);
+            this.logger.log(message.source, message.level, message.msg, message.additionalData);
         }
     }
 
