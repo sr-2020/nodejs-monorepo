@@ -39,7 +39,7 @@ function useLastChance(api: ModelApiInterface, pill) {
     let deathTimer = api.getTimer(consts.DEATH_TIMER);
     if (deathTimer) {
         deathTimer.miliseconds += 20 * 60 * 1000;
-        api.info('new death timer: %s', deathTimer.miliseconds);
+        api.info(`new death timer: ${deathTimer.miliseconds}`);
     } else {
         api.error('death timer not found');
     }
@@ -94,7 +94,7 @@ function usePill(api: ModelApiInterface, data, event) {
     }
 
     if (code.usedAt) {
-        api.error('usePill: allready used %s', data.id);
+        api.error(`usePill: allready used ${data.id$}`);
         return;
     }
 

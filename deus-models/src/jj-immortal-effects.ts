@@ -43,7 +43,7 @@ function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
     const pill = data.pill;
 
     if (pill.id != 'jj-immortal-one') {
-        api.error('jjImmortalOneStartEvent: wrong pill %s', pill.id);
+        api.error(`jjImmortalOneStartEvent: wrong pill ${pill.id}`);
         return;
     }
 
@@ -64,7 +64,7 @@ function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
 
     const timerName = 'jj-immortal-one-' + modifier.mID;
 
-    api.info('jjImmortalOneStartEvent: set timer %s', timerName);
+    api.info(`jjImmortalOneStartEvent: set timer ${timerName}`);
     api.setTimer(timerName, modifier.stages[0].duration * 1000, 'jj-immortal-one-next-stage', {mID: modifier.mID});
 }
 
@@ -99,7 +99,7 @@ function jjImmortalOneNextStageEvent(api: ModelApiInterface, data, event) {
         api.info('jjImmortalOneStartEvent: last stage reached, remove modifier');
         api.removeModifier(modifier.mID);
     } else {
-        api.info('jjImmortalOneStartEvent: start timer %s', timerName);
+        api.info(`jjImmortalOneStartEvent: start timer ${timerName}`);
         api.setTimer(timerName, duration * 1000, 'jj-immortal-one-next-stage', {mID: modifier.mID});
     }
 }
@@ -119,7 +119,7 @@ function jjImmortalTwoStartEvent(api: ModelApiInterface, data, event) {
     }
 
     if (!data.pill || data.pill.id != 'jj-immortal-two') {
-        api.error('jjImmortalOneStartEvent: wrong pill %j', data.pill);
+        api.error(`jjImmortalOneStartEvent: wrong pill ${data.pill}`);
         return;
     }
 
@@ -133,7 +133,7 @@ function jjImmortalTwoStartEvent(api: ModelApiInterface, data, event) {
     const jjOne = jjOnes[0];
 
     if (jjOne.currentStage != 2) {
-        api.error('jjImmortalTwoStartEvent: wrong jj-immortal-one stage: %s', jjOne.currentStage);
+        api.error(`jjImmortalTwoStartEvent: wrong jj-immortal-one stage: ${jjOne.currentStage}`);
         return;
     }
 
@@ -159,7 +159,7 @@ function jjImmortalTwoAwakeEvent(api: ModelApiInterface, data, event) {
     const pill = data.pill || {};
 
     if (pill.id != 'jj-immortal-two') {
-        api.error('jjImmortalOneAwakeEvent: wrong pill %s', pill.id);
+        api.error(`jjImmortalOneAwakeEvent: wrong pill ${pill.id}`);
         return;
     }
 
