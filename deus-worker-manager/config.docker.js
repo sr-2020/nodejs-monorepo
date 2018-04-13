@@ -74,5 +74,9 @@ module.exports = {
         manager: logger('manager'), // это и далее - настройки логгеров для отдельных источников
         engine: logger('engine'),
         model: logger('model')
+    },
+
+    processor: {
+        deleteEventsOlderThanMs: 30 * 60 * 1000 // 30 минут
     }
 };
