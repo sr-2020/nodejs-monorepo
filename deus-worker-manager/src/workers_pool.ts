@@ -50,7 +50,7 @@ export class WorkersPool implements WorkersPoolInterface {
         this.logger.info('manager', 'WorkersPool::createWorker');
         let worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
             .onExit(() => {
-                this.logger.error('manager', 'Worker exit. Last output:\n %s', worker.lastOutput.join());
+                this.logger.error('manager', `Worker exit. Last output:\n ${worker.lastOutput.join()}`);
                 this.pool.destroy(worker);
             });
 
