@@ -12,6 +12,7 @@ winston.setLevels(winston.config.syslog.levels);
 
 function defLevel(level: LogLevel) {
     return function(source: LogSource, msg: string, additionalData?: any) {
+        additionalData = additionalData ? additionalData : {};
         additionalData.source = source;
         this.log(source, level, msg, additionalData);
     };

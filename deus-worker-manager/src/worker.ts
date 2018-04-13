@@ -32,7 +32,7 @@ export class Worker extends EventEmitter {
     }
 
     async up(): Promise<this> {
-        this.logger.info('manager', 'Worker::up', this.workerModule);
+        this.logger.info('manager', 'Worker::up', {worker: this.workerModule});
         this.startedAt = Date.now();
 
         this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {

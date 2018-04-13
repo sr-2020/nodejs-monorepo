@@ -59,6 +59,7 @@ export class WorkersPool implements WorkersPoolInterface {
         } catch (e) {
             this.logger.error('manager', `Error while trying to start worker: ${e}`);
             this.logger.error('manager', `Last output: ${worker.lastOutput.join()}`);
+            console.error(e);
             throw e;
         }
 
