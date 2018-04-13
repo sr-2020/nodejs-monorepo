@@ -3,7 +3,7 @@ import * as Winston from 'winston';
 
 import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
-function log(source: LogSource, level: LogLevel, msg: string, additionalData: any) {
+function log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
     if (process && process.send) {
         additionalData = additionalData ? additionalData : {};
         additionalData.timestamp = Date.now();
@@ -20,26 +20,26 @@ function log(source: LogSource, level: LogLevel, msg: string, additionalData: an
     }
 }
 
-function logStep(source: LogSource, level: LogLevel, step: string, additionalData: any) {
+function logStep(source: LogSource, level: LogLevel, step: string, additionalData?: any) {
     return (stepBody: Function) => {
         log(source, level, step + ' -- started', additionalData);
         let result = stepBody();
-        log(source, level, step + ' -- finished', {});
+        log(source, level, step + ' -- finished');
         return result;
     }
 }
 
-function logAsyncStep(source: LogSource, level: LogLevel, step: string, additionalData: any) {
+function logAsyncStep(source: LogSource, level: LogLevel, step: string, additionalData?: any) {
     return async (stepBody: Function) => {
         log(source, level, step + ' -- started', additionalData);
         let result = await stepBody();
-        log(source, level, step + ' -- finished', {});
+        log(source, level, step + ' -- finished');
         return result;
     }
 }
 
 function defLevel(level: LogLevel) {
-    return function(source: LogSource, msg: string, additionalData: any) {
+    return function(source: LogSource, msg: string, additionalData?: any) {
         log(source, level, msg, additionalData);
     }
 }

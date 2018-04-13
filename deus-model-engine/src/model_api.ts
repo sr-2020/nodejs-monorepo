@@ -72,24 +72,24 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
         return this.contextGetter().timers[name];
     }
 
-    debug(msg: string, ...params: any[]) {
-        Logger.debug('model', msg, ...params);
+    debug(msg: string, additionalData?: any) {
+        Logger.debug('model', msg, additionalData);
     }
 
-    info(msg: string, ...params: any[]) {
-        Logger.info('model', msg, ...params);
+    info(msg: string, additionalData?: any) {
+        Logger.info('model', msg, additionalData);
     }
 
-    notice(msg: string, ...params: any[]) {
-        Logger.notice('model', msg, ...params);
+    notice(msg: string, additionalData?: any) {
+        Logger.notice('model', msg, additionalData);
     }
 
-    warn(msg: string, ...params: any[]) {
-        Logger.warn('model', msg, ...params);
+    warn(msg: string, additionalData?: any) {
+        Logger.warn('model', msg, additionalData);
     }
 
-    error(msg: string, ...params: any[]) {
-        Logger.error('model', msg, ...params);
+    error(msg: string, additionalData?: any) {
+        Logger.error('model', msg, additionalData);
     }
 }
 
