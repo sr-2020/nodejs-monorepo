@@ -4,7 +4,7 @@ import * as Winston from 'winston';
 import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
 function log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
-    if (process && process.send) {
+    /*if (process && process.send) {
         additionalData = additionalData ? additionalData : {};
         additionalData.timestamp = Date.now();
         additionalData.pid = process.pid;
@@ -17,7 +17,7 @@ function log(source: LogSource, level: LogLevel, msg: string, additionalData?: a
         })
     } else {
         Winston.log(level, msg, additionalData);
-    }
+    }*/
 }
 
 function logStep(source: LogSource, level: LogLevel, step: string, additionalData?: any) {
