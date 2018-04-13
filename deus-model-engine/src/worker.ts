@@ -135,7 +135,7 @@ export class Worker {
 
             process.send({ type: 'ready' });
 
-            Logger.info('engine', 'Worker started: %s', process.pid);
+            Logger.info('engine', 'Worker started');
         } else {
             throw new Error('process.send is undefined');
         }

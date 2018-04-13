@@ -4,10 +4,10 @@ import * as Winston from 'winston';
 import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
 function log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
+    additionalData = additionalData ? additionalData : {};
+    additionalData.timestamp = Date.now();
+    additionalData.pid = process.pid;
     if (process && process.send) {
-        additionalData = additionalData ? additionalData : {};
-        additionalData.timestamp = Date.now();
-        additionalData.pid = process.pid;
         process.send({
             type: 'log',
             source,
