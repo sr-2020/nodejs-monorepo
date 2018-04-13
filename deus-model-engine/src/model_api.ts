@@ -73,7 +73,7 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
     }
 
     debug(msg: string, additionalData?: any) {
-        Logger.debug('model', msg, additionalData);
+        //Logger.debug('model', msg, additionalData);
     }
 
     info(msg: string, additionalData?: any) {

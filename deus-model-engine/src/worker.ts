@@ -22,12 +22,12 @@ export class Worker {
 
     static load(dir: string): Worker {
         let model = loadModels(dir);
-        Logger.debug('engine', 'Loaded model', { model: inspect(model, false, null) });
+        //Logger.debug('engine', 'Loaded model', { model: inspect(model, false, null) });
         return new Worker(model);
     }
 
     configure(config: config.ConfigInterface): Worker {
-        Logger.debug('engine', 'Loaded config', { config: inspect(config, false, null) });
+        //Logger.debug('engine', 'Loaded config', { config: inspect(config, false, null) });
         this.config = config;
         this.dispatcher = new dispatcher.Dispatcher()
 
@@ -59,8 +59,8 @@ export class Worker {
                 await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects',
                     { pendingAquire: baseCtx.pendingAquire, characterId })
                     (() => this.waitAquire(baseCtx));
-                Logger.debug('engine', 'Aquired objects',
-                    { aquired: baseCtx.aquired, characterId });
+                //Logger.debug('engine', 'Aquired objects',
+                 //   { aquired: baseCtx.aquired, characterId });
             } catch (e) {
                 Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`,
                     { characterId });
@@ -192,7 +192,7 @@ export class Worker {
                         continue;
                     }
                     Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {
-                        Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, characterId });
+                       // Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, characterId });
                         (f as any)(api, modifier);
                     });
                 }
@@ -226,8 +226,8 @@ export class Worker {
     }
 
     private async waitAquire(baseCtx: Context) {
-        Logger.debug('engine', 'Waitin to aquire',
-            { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
+        //Logger.debug('engine', 'Waitin to aquire',
+         //   { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
 
         return new Promise((resolve, reject) => {
             if (process && process.send) {
