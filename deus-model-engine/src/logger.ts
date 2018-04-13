@@ -3,43 +3,44 @@ import * as Winston from 'winston';
 
 import { LogLevel, LogSource } from 'deus-engine-manager-api';
 
-function log(source: LogSource, level: LogLevel, msg: string, ...params: any[]) {
+function log(source: LogSource, level: LogLevel, msg: string, additionalData: any) {
     if (process && process.send) {
-        params = params ? params : [];
-        params.push({ timestamp: Date.now(), pid: process.pid });
+        additionalData = additionalData ? additionalData : {};
+        additionalData.timestamp = Date.now();
+        additionalData.pid = process.pid;
         process.send({
             type: 'log',
             source,
             level,
             msg,
-            params
+            additionalData
         })
     } else {
-        Winston.log(level, msg, ...params);
+        Winston.log(level, msg, additionalData);
     }
 }
 
-function logStep(source: LogSource, level: LogLevel, step: string, ...params: any[]) {
+function logStep(source: LogSource, level: LogLevel, step: string, additionalData: any) {
     return (stepBody: Function) => {
-        log(source, level, step + ' -- started', ...params);
+        log(source, level, step + ' -- started', additionalData);
         let result = stepBody();
-        log(source, level, step + ' -- finished');
+        log(source, level, step + ' -- finished', {});
         return result;
     }
 }
 
-function logAsyncStep(source: LogSource, level: LogLevel, step: string, ...params: any[]) {
+function logAsyncStep(source: LogSource, level: LogLevel, step: string, additionalData: any) {
     return async (stepBody: Function) => {
-        log(source, level, step + ' -- started', ...params);
+        log(source, level, step + ' -- started', additionalData);
         let result = await stepBody();
-        log(source, level, step + ' -- finished');
+        log(source, level, step + ' -- finished', {});
         return result;
     }
 }
 
 function defLevel(level: LogLevel) {
-    return function(source: LogSource, msg: string, ...rest: any[]) {
-        log(source, level, msg, ...rest);
+    return function(source: LogSource, msg: string, additionalData: any) {
+        log(source, level, msg, additionalData);
     }
 }
 

@@ -188,11 +188,11 @@ export class Worker {
                 for (let effect of effects) {
                     let f = this.resolveCallback(effect.handler);
                     if (!f) {
-                        Logger.error('model', `Unable to find handler ${effect.handler}`);
+                        Logger.error('model', `Unable to find handler ${effect.handler}`, {});
                         continue;
                     }
                     Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {
-                        Logger.debug('engine', 'debug', 'Full effect and modifier data', { effect, modifier, characterId });
+                        Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, characterId });
                         (f as any)(api, modifier);
                     });
                 }
