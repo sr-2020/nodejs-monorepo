@@ -6,7 +6,7 @@ import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as nano from 'nano';
 import { stdCallback, requireDir } from '../utils';
 import { Config, CatalogsConfigDb } from '../config';
-import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel } from './util';
+import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel, dbName } from './util';
 import { CatalogsStorage } from '../catalogs_storage';
 import { NanoConnector } from '../db/nano';
 import * as express from 'express';
@@ -60,7 +60,7 @@ async function createDesignDoc(doc: any): Promise<void> {
     let dbNames = doc.dbs;
     delete (doc.dbs);
     const designDocFunctionsStringified = deepToString(doc);
-    await Promise.all(dbNames.map(dbName => updateIfDifferent(connection.use(dbName), designDocFunctionsStringified)));
+    await Promise.all(dbNames.map(alias => updateIfDifferent(connection.use(dbName(config, alias)), designDocFunctionsStringified)));
 }
 
 const catalogsPath = path.join(config.pool.workerArgs[0], '..', '..', 'catalogs');

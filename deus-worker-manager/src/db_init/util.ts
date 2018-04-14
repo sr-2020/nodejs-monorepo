@@ -4,6 +4,12 @@ import deepEqual = require('deep-equal')
 import { CatalogsStorage, Catalogs } from "../catalogs_storage";
 import { NanoDb, NanoConnector } from "../db/nano";
 import { cloneDeep } from "lodash";
+import { Config } from "../config";
+
+export function dbName(config: Config, alias: string): string {
+    if (alias == 'defaultViewModels') return config.viewModels['default'];
+    return config.db[alias] || config.objects[alias];
+}
 
 export function deepToString(doc: any) {
     let result: any = {};

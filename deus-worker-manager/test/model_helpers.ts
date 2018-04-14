@@ -2,11 +2,10 @@ import { merge } from 'lodash';
 import { Document } from '../src/db/interface';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 import { delay } from './helpers';
+import { dbName } from '../src/db_init/util';
 
-function dbName(di: any, alias: string): string {
-    const config = di.get(ConfigToken);
-    if (alias == 'defaultViewModels') return config.viewModels['default'];
-    return config.db[alias] || config.objects[alias];
+function testDbName(di: any, alias: string): string {
+    return dbName(di.get(ConfigToken), alias);
 }
 
 export function createModelObj(id?: string, fields?: any) {
@@ -27,7 +26,7 @@ export function createModelObj(id?: string, fields?: any) {
 }
 
 export function saveModel(di: any, model: any) {
-    let modelsDb = di.get(DBConnectorToken).use(dbName(di, 'models'));
+    let modelsDb = di.get(DBConnectorToken).use(testDbName(di, 'models'));
     return modelsDb.put(model);
 }
 
@@ -38,7 +37,7 @@ export async function createModel(di: any, id?: string, fields?: any): Promise<D
 }
 
 export function getModel(di: any, id: string, dbAlias: string = 'models') {
-    let modelsDb = di.get(DBConnectorToken).use(dbName(di, dbAlias));
+    let modelsDb = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return modelsDb.getOrNull(id);
 }
 
@@ -63,16 +62,16 @@ export function getModelVariantsAtTimestamp(di: any, id: string, timestamp: numb
 }
 
 export function pushEvent(di: any, event: any) {
-    let eventsDb = di.get(DBConnectorToken).use(dbName(di, 'events'));
+    let eventsDb = di.get(DBConnectorToken).use(testDbName(di, 'events'));
     return eventsDb.put(event);
 }
 
 export function saveObject(di: any, dbAlias: string, doc: any) {
-    let db = di.get(DBConnectorToken).use(dbName(di, dbAlias));
+    let db = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return db.put(doc);
 }
 
 export function getObject(di: any, dbAlias: string, id: string) {
-    let db = di.get(DBConnectorToken).use(dbName(di, dbAlias));
+    let db = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return db.getOrNull(id);
 }
