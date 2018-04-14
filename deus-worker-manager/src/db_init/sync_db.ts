@@ -11,6 +11,7 @@ import { Config, CatalogsConfigDb } from '../config';
 import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel } from './util';
 import { CatalogsStorage } from '../catalogs_storage';
 import { NanoConnector } from '../db/nano';
+import * as express from 'express';
 
 const cli = meow(`
 Usage
@@ -73,10 +74,12 @@ async function createSampleData() {
     const modelTemplate = require(Path.join(dataSamplePath, 'model.json'));
     const viewModelTemplate = require(Path.join(dataSamplePath, 'view-model.json'));
     for (let index = 0; index < 100; ++index) {
-        await createAccount(connection.use(config.db.accounts), index);
-        await createModel(connection.use(config.db.models), modelTemplate, index);
-        // TODO: Support case of many viewmodel
-        await createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index);
+        await Promise.all([
+            createAccount(connection.use(config.db.accounts), index),
+            createModel(connection.use(config.db.models), modelTemplate, index),
+            // TODO: Support case of many viewmodel
+            createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index)
+        ]);
     }
 }
 
@@ -84,6 +87,11 @@ Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
     .then(() => Promise.all(designDocs.map(createDesignDoc)))
     .then(() => importCatalogs(connection, catalogsStorage, catalogs))
     .then(() => createSampleData())
-    .then(() => console.log('Done!'));
+    .then(() => {
+        const app = express();
+        app.get('/', (req, res) => res.status(200).send('Done!'));
+        app.listen(80);
+    })
+    .then(() => console.log('Done!'))
 
 
