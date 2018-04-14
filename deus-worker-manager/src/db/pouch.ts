@@ -5,6 +5,7 @@ import * as Pouch from 'pouchdb';
 import * as glob from 'glob';
 import { EventEmitter } from 'events';
 import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
+import { getAllDesignDocs } from '../db_init/design_docs_helper';
 
 @Inject
 export class PouchConnector implements DBConnectorInterface {
@@ -16,12 +17,11 @@ export class PouchConnector implements DBConnectorInterface {
     }
 
     private initViews() {
-        let viewFiles = glob.sync(Path.join(__dirname, '..', 'db_init', 'design_docs', '*.js'))
-            .map((f) => Path.basename(f, Path.extname(f)));
+        const designDocs = getAllDesignDocs();
 
-        this.views = viewFiles.reduce((vs: any, f) => {
-            let { views } = require(`../db_init/design_docs/${f}`);
-            vs[f] = views;
+        this.views = designDocs.reduce((vs: any, doc) => {
+            let { views } = doc;
+            vs[(doc._id as string).slice('_design/'.length)] = views;
             return vs;
         }, {});
     }

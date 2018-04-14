@@ -4,14 +4,13 @@ import * as path from 'path';
 import * as meow from 'meow';
 import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as nano from 'nano';
-import * as glob from 'glob';
-import * as Path from 'path';
 import { stdCallback, requireDir } from '../utils';
 import { Config, CatalogsConfigDb } from '../config';
 import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel } from './util';
 import { CatalogsStorage } from '../catalogs_storage';
 import { NanoConnector } from '../db/nano';
 import * as express from 'express';
+import { getAllDesignDocs } from './design_docs_helper';
 
 const cli = meow(`
 Usage
@@ -53,29 +52,25 @@ if (config.objects) {
 console.log("Following DBs should be present:");
 console.log(dbNames);
 
-const designDocs = glob.sync(Path.join(__dirname, 'design_docs', '*.js'))
-    .map((f) => Path.basename(f, Path.extname(f)));
-
+const designDocs = getAllDesignDocs();
 console.log("Found following design docs:");
-console.log(designDocs);
+console.log(designDocs.map((doc) => doc._id));
 
-async function createDesignDoc(docName: string): Promise<void> {
-    const designDocObject = require('./design_docs/' + docName);
-    const designDocFunctionsStringified = deepToString(designDocObject);
-    designDocFunctionsStringified._id = `_design/${docName}`;
-    let dbNames = designDocObject.dbs;
-    delete (designDocFunctionsStringified.dbs);
+async function createDesignDoc(doc: any): Promise<void> {
+    let dbNames = doc.dbs;
+    delete (doc.dbs);
+    const designDocFunctionsStringified = deepToString(doc);
     await Promise.all(dbNames.map(dbName => updateIfDifferent(connection.use(dbName), designDocFunctionsStringified)));
 }
 
-const catalogsPath = Path.join(config.pool.workerArgs[0], '..', '..', 'catalogs');
+const catalogsPath = path.join(config.pool.workerArgs[0], '..', '..', 'catalogs');
 const catalogsStorage = new CatalogsStorage(config, connector);
 const catalogs = catalogsStorage.loadFromFiles(catalogsPath);
-const dataSamplePath = Path.join(process.cwd(), config.pool.workerArgs[0], '..', '..', 'data_samples');
+const dataSamplePath = path.join(process.cwd(), config.pool.workerArgs[0], '..', '..', 'data_samples');
 
 async function createSampleData() {
-    const modelTemplate = require(Path.join(dataSamplePath, 'model.json'));
-    const viewModelTemplate = require(Path.join(dataSamplePath, 'view-model.json'));
+    const modelTemplate = require(path.join(dataSamplePath, 'model.json'));
+    const viewModelTemplate = require(path.join(dataSamplePath, 'view-model.json'));
     for (let index = 0; index < 100; ++index) {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
