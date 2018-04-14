@@ -11,6 +11,7 @@ import 'mocha';
 import { TSMap } from 'typescript-map';
 import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
+import { createViews } from './test-helper';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -35,15 +36,7 @@ describe('API Server - long timeout', () => {
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
-    await (eventsDb as PouchDB.Database<any>).put({
-      _id: '_design/character',
-      views: {
-        'refresh-events': {
-          // tslint:disable-next-line:max-line-length
-          map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
-        },
-      },
-    });
+    await createViews(accountsDb, viewModelDb, eventsDb);
   });
 
   afterEach(async () => {
@@ -93,15 +86,7 @@ describe('API Server - medium timeout', () => {
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
-    await (eventsDb as PouchDB.Database<any>).put({
-      _id: '_design/character',
-      views: {
-        'refresh-events': {
-          // tslint:disable-next-line:max-line-length
-          map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
-        },
-      },
-    });
+    await createViews(accountsDb, viewModelDb, eventsDb);
   });
 
   afterEach(async () => {

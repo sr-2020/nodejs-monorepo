@@ -274,15 +274,15 @@ class App {
 
   public async listen(port: number) {
     try {
-      await this.accountsDb.upsert('_design/web_api_server_v2', () => {
+      await this.accountsDb.upsert('_design/account', () => {
         return {
-          _id: '_design/web_api_server_v2',
+          _id: '_design/account',
           views: {
-            by_login: {
+            'by-login': {
               // tslint:disable-next-line:max-line-length
               map: 'function (doc) { if (doc.login) emit(doc.login);  }',
             },
-            by_push_token: {
+            'by-push-token': {
               // tslint:disable-next-line:max-line-length
               map: 'function (doc) { if (doc.pushToken) emit(doc.pushToken);  }',
             },
@@ -290,11 +290,11 @@ class App {
         };
       });
 
-      await this.mobileViewmodelDb().upsert('_design/web_api_server_v2', () => {
+      await this.mobileViewmodelDb().upsert('_design/viewmodel', () => {
         return {
-          _id: '_design/web_api_server_v2',
+          _id: '_design/viewmodel',
           views: {
-            by_timestamp: {
+            'by-timestamp': {
               map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
             },
           },
@@ -391,7 +391,7 @@ class App {
     if (tokenUpdatedEvents.length > 0) {
       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
       const existingCharacterWithThatToken =
-        await this.accountsDb.query('web_api_server_v2/by_push_token', { key: token });
+        await this.accountsDb.query('account/by-push-token', { key: token });
       for (const existingCharacter of existingCharacterWithThatToken.rows) {
         await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
           this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
@@ -447,7 +447,7 @@ class App {
   }
 
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
-    const docs = await this.mobileViewmodelDb().query('web_api_server_v2/by_timestamp',
+    const docs = await this.mobileViewmodelDb().query('viewmodel/by-timestamp',
       { startkey: 0, endkey: this.currentTimestamp() - ms });
     return docs.rows.map((doc) => doc.id);
   }
@@ -504,7 +504,7 @@ class App {
     if (/^[0-9]*$/.test(idOrLogin))
       return idOrLogin;
 
-    const docs = await this.accountsDb.query('web_api_server_v2/by_login', { key: idOrLogin });
+    const docs = await this.accountsDb.query('account/by-login', { key: idOrLogin });
     if (docs.rows.length == 0)
       throw new LoginNotFoundError('No user with such login found');
     if (docs.rows.length > 1)

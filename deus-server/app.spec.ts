@@ -12,6 +12,7 @@ import { TSMap } from 'typescript-map';
 import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
+import { createViews } from './test-helper';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -97,15 +98,7 @@ describe('API Server', () => {
     await accountsDb.put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
     await accountsDb.put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
 
-    await (eventsDb as PouchDB.Database<any>).put({
-      _id: '_design/character',
-      views: {
-        'refresh-events': {
-          // tslint:disable-next-line:max-line-length
-          map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
-        },
-      },
-    });
+    await createViews(accountsDb, mobileViewModelDb, eventsDb);
   });
 
   afterEach(async () => {
@@ -925,7 +918,7 @@ describe('API Server', () => {
 
   describe('tokenUpdated events handling', () => {
     it('Can query by push token', async () => {
-      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
     });
@@ -945,7 +938,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewtoken' });
+      const docs = await accountsDb.query('account/by-push-token', { key: '00002snewtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
     });
@@ -970,11 +963,11 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewesttoken' });
+      let docs = await accountsDb.query('account/by-push-token', { key: '00002snewesttoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
 
-      docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00002snewtoken' });
+      docs = await accountsDb.query('account/by-push-token', { key: '00002snewtoken' });
       expect(docs.rows).to.be.empty;
     });
 
@@ -993,11 +986,11 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001snewtoken' });
+      let docs = await accountsDb.query('account/by-push-token', { key: '00001snewtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
 
-      docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows).to.be.empty;
     });
 
@@ -1016,7 +1009,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
     });
@@ -1036,7 +1029,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('web_api_server_v2/by_push_token', { key: '00001spushtoken' });
+      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
     });
@@ -1132,12 +1125,12 @@ describe('API Server', () => {
 
   describe('Periodic notification sending', () => {
     it('Can sort characters by timestamp', async () => {
-      const docsOld = await mobileViewModelDb.query('web_api_server_v2/by_timestamp',
+      const docsOld = await mobileViewModelDb.query('viewmodel/by-timestamp',
         { startkey: 0, endkey: 1000 });
       expect(docsOld.rows.length).to.equal(1);
       expect(docsOld.rows[0].id).to.equal('00001');
 
-      const docsNew = await mobileViewModelDb.query('web_api_server_v2/by_timestamp',
+      const docsNew = await mobileViewModelDb.query('viewmodel/by-timestamp',
         { startkey: 1000, endkey: 999999 });
       expect(docsNew.rows.length).to.equal(1);
       expect(docsNew.rows[0].id).to.equal('00002');
