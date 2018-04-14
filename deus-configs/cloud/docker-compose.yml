@@ -16,7 +16,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8157/time"]
     depends_on:
-      couchdb:
+      deus-couchdb-init:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
       - COUCHDB_USER
       - COUCHDB_PASSWORD
     depends_on:
-      couchdb:
+      deus-couchdb-init:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
@@ -51,6 +51,23 @@ services:
       - "8159:8159"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8159/"]
+  deus-couchdb-init:
+    image: "alexeyeremin/deus-couchdb-init"
+    volumes:
+      - type: volume
+        source: models_src
+        target: /deus-models
+        read_only: true
+    networks:
+      - overlay
+    environment:
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
+    depends_on:
+      couchdb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
 # Components we don't own, but depend on
 # CouchDB
   couchdb:
