@@ -5,9 +5,9 @@ import * as meow from 'meow';
 import * as glob from 'glob';
 import * as Path from 'path';
 import { isEmpty, cloneDeep } from 'lodash';
-import { Config, CatalogsConfigDb } from '../src/config';
-import { CatalogsStorage } from '../src/catalogs_storage';
-import { NanoConnector, NanoDb } from '../src/db/nano';
+import { Config, CatalogsConfigDb } from '../config';
+import { CatalogsStorage } from '../catalogs_storage';
+import { NanoConnector, NanoDb } from '../db/nano';
 
 const cli = meow(`
 Usage

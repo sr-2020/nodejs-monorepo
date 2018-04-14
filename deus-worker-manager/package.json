@@ -11,13 +11,13 @@
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
     "test:integration": "mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
-    "test:integration:realdb": "__USE_REAL_DB=1 mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
-    "db": "ts-node bin/sync_db.ts -c ../config.js",
-    "catalogs:import": "ts-node bin/import_catalogs.ts -c ../config.js"
+    "test:integration:realdb": "__USE_REAL_DB=1 mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts"
   },
   "author": "",
   "license": "Apache2",
   "dependencies": {
+    "@types/deep-equal": "^1.0.1",
+    "deep-equal": "^1.0.1",
     "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
     "deus-model-engine": "github:sth-larp/deus-model-engine",
     "forever": "^0.15.3",

@@ -1,9 +1,9 @@
 export interface DbConfig {
-    // url?: string
+    url: string
     events: string
     models: string
     workingModels: string
-    [alias: string]: string
+    accounts: string
 }
 
 export interface CatalogsConfigFiles {
