@@ -25,7 +25,8 @@ module.exports = {
         url: `http://${process.env.COUCHDB_USER}:${process.env.COUCHDB_PASSWORD}@couchdb:5984/`, // адрес для доступа к кочу, с логином и паролем если нужно
         events: "events",                      // это и далее - пары <alias>: <имя базы в коче>
         models: "models",
-        workingModels: "work-models"
+        workingModels: "work-models",
+        accounts: "accounts"
     },
 
     // блок настроек пула воркеров
