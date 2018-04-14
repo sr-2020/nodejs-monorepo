@@ -33,8 +33,7 @@ export const defaultConfig: Config = {
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
-        defaultViewModels: 'view-models-test',
-        counters: 'counters'
+        accounts: '',
     },
 
     pool: {

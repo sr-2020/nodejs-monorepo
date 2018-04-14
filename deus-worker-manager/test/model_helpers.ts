@@ -4,7 +4,9 @@ import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 import { delay } from './helpers';
 
 function dbName(di: any, alias: string): string {
-    return di.get(ConfigToken).db[alias];
+    const config = di.get(ConfigToken);
+    if (alias == 'defaultViewModels') return config.viewModels['default'];
+    return config.db[alias] || config.objects[alias];
 }
 
 export function createModelObj(id?: string, fields?: any) {
