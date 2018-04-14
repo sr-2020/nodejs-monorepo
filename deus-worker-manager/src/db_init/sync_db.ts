@@ -29,7 +29,10 @@ const config = require(CONFIG_PATH) as Config;
 const connection = nano(config.db.url);
 const connector = new NanoConnector(config);
 
-const dbNames: string[] = [config.db.events, config.db.models, config.db.workingModels, config.db.accounts];
+const dbNames: string[] = [
+    '_global_changes', '_metadata', '_replicator', '_users',
+    config.db.events, config.db.models, config.db.workingModels, config.db.accounts
+];
 
 if (config.catalogs && ('db' in config.catalogs)) {
     const dbMappingConfig = (config.catalogs as CatalogsConfigDb).db;
