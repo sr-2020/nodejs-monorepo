@@ -16,11 +16,11 @@ export class PouchConnector implements DBConnectorInterface {
     }
 
     private initViews() {
-        let viewFiles = glob.sync(Path.join(__dirname, 'design_docs', '*.js'))
+        let viewFiles = glob.sync(Path.join(__dirname, '..', 'db_init', 'design_docs', '*.js'))
             .map((f) => Path.basename(f, Path.extname(f)));
 
         this.views = viewFiles.reduce((vs: any, f) => {
-            let { views } = require(`./design_docs/${f}`);
+            let { views } = require(`../db_init/design_docs/${f}`);
             vs[f] = views;
             return vs;
         }, {});

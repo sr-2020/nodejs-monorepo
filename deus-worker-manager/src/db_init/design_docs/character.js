@@ -6,7 +6,7 @@ module.exports = {
     views: {
         'by-character-id': {
             map: function(doc) {
-                if (doc.timestamp1 && doc.characterId) {
+                if (doc.timestamp && doc.characterId) {
                     emit([doc.characterId, doc.timestamp]);
                 }
             },
