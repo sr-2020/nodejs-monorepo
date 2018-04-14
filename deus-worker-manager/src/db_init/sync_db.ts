@@ -72,7 +72,7 @@ const dataSamplePath = Path.join(process.cwd(), config.pool.workerArgs[0], '..',
 async function createSampleData() {
     const modelTemplate = require(Path.join(dataSamplePath, 'model.json'));
     const viewModelTemplate = require(Path.join(dataSamplePath, 'view-model.json'));
-    for (let index = 0; index < 10; ++index) {
+    for (let index = 0; index < 100; ++index) {
         await createAccount(connection.use(config.db.accounts), index);
         await createModel(connection.use(config.db.models), modelTemplate, index);
         // TODO: Support case of many viewmodel
