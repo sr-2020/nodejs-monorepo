@@ -87,13 +87,3 @@ Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
     .then(() => console.log('Done!'));
 
 
-/*
-
-PS D:\Dev\magellan2018\deus-worker-manager> docker stop couchdb
-couchdb
-PS D:\Dev\magellan2018\deus-worker-manager> docker rm couchdb
-couchdb
-PS D:\Dev\magellan2018\deus-worker-manager> docker run -d -p 5984:5984 --name couchdb apache/couchdb:latest
-
-
-*/
