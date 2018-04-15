@@ -7,6 +7,7 @@ import App from './app';
 import { Configuration } from './settings';
 import Elasticsearch = require('winston-elasticsearch');
 import { config } from './config';
+import * as rp from 'request-promise';
 
 const loggingWinston = new LoggingWinston();
 
@@ -34,5 +35,12 @@ new App(logger,
   viewmodelDbs,
   new PouchDB(databasesConfig.accounts, authOptions),
   config.settings).listen(config.port);
+
+if (databasesConfig.compactEventsViewEveryMs) {
+  setInterval(async () => {
+    await rp.post(`${databasesConfig.events}/_compact/character`, { auth: authOptions.auth, json: {} });
+  }, databasesConfig.compactEventsViewEveryMs);
+}
+
 
 logger.info('Ready to accept requests.', { source: 'api' });

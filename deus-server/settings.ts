@@ -110,6 +110,10 @@ export class DatabasesSettings {
   @JsonMember({isRequired: true, type: String})
   public events: string;
 
+  // URL to access events DB
+  @JsonMember({type: Number})
+  public compactEventsViewEveryMs?: number
+
   // Settings for ViewModel databases
   @JsonMember({isRequired: true, elements: ViewModelDbSettings})
   public viewModels: ViewModelDbSettings[];

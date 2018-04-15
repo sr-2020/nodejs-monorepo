@@ -6,6 +6,7 @@ export const config: Configuration = {
         password: process.env.COUCHDB_PASSWORD,
         accounts: "http://couchdb:5984/accounts",
         events: "http://couchdb:5984/events",
+        compactEventsViewEveryMs: 5 * 60 * 1000,
         viewModels: [
           {type: "mobile", url: "http://couchdb:5984/view-models"},
           {type: "default", url: "http://couchdb:5984/accounts"}
