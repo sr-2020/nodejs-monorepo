@@ -1,8 +1,6 @@
 module.exports = {
     dbs: ['events'],
 
-    version: 3,
-
     views: {
         'by-character-id': {
             map: function(doc) {
