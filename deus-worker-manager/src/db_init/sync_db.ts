@@ -60,8 +60,7 @@ async function createDesignDoc(doc: any): Promise<void> {
     let dbNames = doc.dbs;
     delete (doc.dbs);
     const designDocFunctionsStringified = deepToString(doc);
-    await Promise.all(dbNames.map(
-        async (alias) => await updateIfDifferent(connection.use(dbName(config, alias)), designDocFunctionsStringified)));
+    await Promise.all(dbNames.map(alias => updateIfDifferent(connection.use(dbName(config, alias)), designDocFunctionsStringified)));
 }
 
 const catalogsPath = path.join(config.pool.workerArgs[0], '..', '..', 'catalogs');
