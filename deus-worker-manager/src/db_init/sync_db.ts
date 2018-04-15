@@ -69,8 +69,10 @@ const catalogs = catalogsStorage.loadFromFiles(catalogsPath);
 const dataSamplePath = path.join(process.cwd(), config.pool.workerArgs[0], '..', '..', 'data_samples');
 
 async function createSampleData() {
+    console.log("Creating sample data");
     const modelTemplate = require(path.join(dataSamplePath, 'model.json'));
     const viewModelTemplate = require(path.join(dataSamplePath, 'view-model.json'));
+    console.log(`Using following templates: model=${JSON.stringify(modelTemplate)}, viewmodel=${JSON.stringify(viewModelTemplate)}`);
     for (let index = 0; index < 100; ++index) {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
