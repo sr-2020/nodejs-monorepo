@@ -90,9 +90,9 @@ services:
 # ELK stack (Elasticksearch + Logstash + Kibana)
   elasticsearch:
     build:
-      context: ../elk/elasticsearch/
+      context: ./elk/elasticsearch/
     volumes:
-      - ../elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
@@ -105,10 +105,10 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9200/"]
   logstash:
     build:
-      context: ../elk/logstash/
+      context: ./elk/logstash/
     volumes:
-      - ../elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ../elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
     ports:
       - "5000:5000"
     environment:
@@ -119,9 +119,9 @@ services:
       - elasticsearch
   kibana:
     build:
-      context: ../elk/kibana/
+      context: ./elk/kibana/
     volumes:
-      - ../elk/kibana/config/:/usr/share/kibana/config:ro
+      - ./elk/kibana/config/:/usr/share/kibana/config:ro
     ports:
       - "5601:5601"
     networks:
