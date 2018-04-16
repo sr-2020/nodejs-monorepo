@@ -81,7 +81,7 @@ describe('Mass push notifications', () => {
     await accountsDb.put({
       _id: '00003',
     });
-    await createViews(accountsDb, defaultViewModelDb, eventsDb);
+    await createViews(accountsDb, mobileViewModelDb, eventsDb);
   });
 
   afterEach(async () => {
