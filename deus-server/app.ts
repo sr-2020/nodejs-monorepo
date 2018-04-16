@@ -273,36 +273,6 @@ class App {
   }
 
   public async listen(port: number) {
-    try {
-      await this.accountsDb.upsert('_design/account', () => {
-        return {
-          _id: '_design/account',
-          views: {
-            'by-login': {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.login) emit(doc.login);  }',
-            },
-            'by-push-token': {
-              // tslint:disable-next-line:max-line-length
-              map: 'function (doc) { if (doc.pushToken) emit(doc.pushToken);  }',
-            },
-          },
-        };
-      });
-
-      await this.mobileViewmodelDb().upsert('_design/viewmodel', () => {
-        return {
-          _id: '_design/viewmodel',
-          views: {
-            'by-timestamp': {
-              map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
-            },
-          },
-        };
-      });
-    } catch (err) {
-      console.error(err);
-    }
     this.server = this.app.listen(port);
   }
 
