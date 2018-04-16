@@ -59,7 +59,14 @@ async function getOrNull(db: NanoDocument, id: string): Promise<any> {
 
 async function put(db: NanoDocument, doc: any) {
     return new Promise((resolve, reject) => {
-        db.insert(doc, {}, stdCallback(resolve, reject));
+        db.insert(doc, {}, (err: any, data: any) => {
+            if (err) {
+                console.error('Error while putting document into db: ', err);
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
     });
 }
 
