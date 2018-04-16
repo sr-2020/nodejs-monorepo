@@ -10,6 +10,7 @@ import 'mocha';
 import { TSMap } from 'typescript-map';
 import App from './app';
 import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
+import { createViews } from './test-helper';
 
 const port = 3000;
 
@@ -80,6 +81,7 @@ describe('Mass push notifications', () => {
     await accountsDb.put({
       _id: '00003',
     });
+    await createViews(accountsDb, defaultViewModelDb, eventsDb);
   });
 
   afterEach(async () => {
