@@ -65,3 +65,9 @@ export function requireDir(dir: string, merge = _merge): any {
         return merge(m, src);
     }, {});
 }
+
+export function delay(t: number) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => resolve(), t);
+    });
+}

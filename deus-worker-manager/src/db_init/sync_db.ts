@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as meow from 'meow';
 import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as nano from 'nano';
-import { stdCallback, requireDir } from '../utils';
+import { stdCallback, requireDir, delay } from '../utils';
 import { Config, CatalogsConfigDb } from '../config';
 import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel, dbName } from './util';
 import { CatalogsStorage } from '../catalogs_storage';
@@ -49,6 +49,8 @@ if (config.objects) {
         dbNames.push(config.objects[dbName]);
 }
 
+console.log("HEEEEEELLLLOOOOOOOO");
+
 console.log("Following DBs should be present:");
 console.log(dbNames);
 
@@ -62,6 +64,16 @@ async function createDesignDoc(doc: any): Promise<void> {
     const designDocFunctionsStringified = deepToString(doc);
     await Promise.all(dbNames.map(alias => updateIfDifferent(connection.use(dbName(config, alias)), designDocFunctionsStringified)));
 }
+
+async function createDesignDocs(): Promise<void> {
+    await delay(10000);
+    for (const ddoc of designDocs) {
+        console.log(JSON.stringify(ddoc));
+        await delay(3000);
+        await createDesignDoc(ddoc);
+    }
+}
+
 
 const catalogsPath = path.join(config.pool.workerArgs[0], '..', '..', 'catalogs');
 const catalogsStorage = new CatalogsStorage(config, connector);
@@ -84,7 +96,7 @@ async function createSampleData() {
 }
 
 Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
-    .then(() => Promise.all(designDocs.map(createDesignDoc)))
+    .then(() => createDesignDocs())
     .then(() => importCatalogs(connection, catalogsStorage, catalogs))
     .then(() => createSampleData())
     .then(() => {

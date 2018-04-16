@@ -9,7 +9,7 @@ import { Document } from '../../src/db/interface';
 import { initDi } from '../init';
 import { createModel, pushEvent, getModel, getModelAtTimestamp,
     getModelVariants, getModelVariantsAtTimestamp, saveObject, getObject } from '../model_helpers';
-import { delay } from '../helpers';
+import { delay } from '../../src/utils';
 
 describe('Green way', function() {
     this.timeout(5000);

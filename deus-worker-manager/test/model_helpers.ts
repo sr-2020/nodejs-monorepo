@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 import { Document } from '../src/db/interface';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
-import { delay } from './helpers';
+import { delay } from '../src/utils';
 import { dbName } from '../src/db_init/util';
 
 function testDbName(di: any, alias: string): string {

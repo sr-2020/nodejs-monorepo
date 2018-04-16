@@ -17,4 +17,4 @@ COPY . .
 RUN [ "npm", "run", "build" ]
 
 EXPOSE 80
-CMD [ "node", "build/src/db_init/sync_db.js", "-c", "../../../config.docker.js" ]
+CMD [ "node", "build/db_init/sync_db.js", "-c", "../../config.docker.js" ]

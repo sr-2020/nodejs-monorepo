@@ -9,7 +9,7 @@ import { Document } from '../../src/db/interface';
 
 import { initDi, defaultConfig } from '../init';
 import { createModel, createModelObj, saveModel, pushEvent, getModel, getModelAtTimestamp } from '../model_helpers';
-import { delay } from '../helpers';
+import { delay } from '../../src/utils';
 
 describe('Crash scenarios', function() {
     this.timeout(5000);
