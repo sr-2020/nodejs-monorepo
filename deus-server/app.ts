@@ -262,7 +262,8 @@ class App {
       }, autoRefreshSettings.performOncePerMs);
     }
 
-    this.mobileViewmodelDb().changes({ since: 'now', live: true, include_docs: true })
+    const options = { since: 'now', live: true, include_docs: true, return_docs: false };
+    this.mobileViewmodelDb().changes(options)
       .on('change', (change) => {
         if (!change.doc)
           return;
