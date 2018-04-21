@@ -20,6 +20,7 @@ import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
 import {createExpressServer, useExpressServer} from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
+import { DatabasesContainer } from './db-container';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -51,9 +52,7 @@ class App {
   private cancelAutoRefresh: NodeJS.Timer | null = null;
 
   constructor(private logger: winston.LoggerInstance,
-    private eventsDb: PouchDB.Database<any>,
-    private viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
-    private accountsDb: PouchDB.Database<any>,
+    private dbContainer: DatabasesContainer,
     private settings: ApplicationSettings) {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
@@ -83,7 +82,7 @@ class App {
       if (credentials) {
         try {
           credentials.name = await this.canonicalId(credentials.name);
-          const password = (await this.accountsDb.get(credentials.name)).password;
+          const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
           if (password != credentials.pass)
             throw new AuthError('Wrong password');
 
@@ -95,7 +94,7 @@ class App {
           if (!propagateAccess)
             throw new AuthError('Access propagation is disabled, but trying to query another user');
 
-          const allowedAccess = (await this.accountsDb.get(id)).access;
+          const allowedAccess = (await this.dbContainer.accountsDb().get(id)).access;
           if (allowedAccess.some((access) =>
             access.id == credentials.name && access.timestamp >= this.currentTimestamp()))
             return next();
@@ -114,7 +113,7 @@ class App {
     this.app.get('/viewmodel/:id', auth(true), async (req, res) => {
       const id: string = req.params.id;
       const type = req.query.type ? req.query.type : 'default';
-      const db = this.viewmodelDbs.get(type);
+      const db = this.dbContainer.viewModelDb(type);
       if (!db) {
         this.logAndSendErrorResponse(req, res, 404, 'Viewmodel type is not found');
       } else {
@@ -166,7 +165,7 @@ class App {
 
       try {
         const resultAccess: any[] = [];
-        await this.accountsDb.upsert(id, (doc) => {
+        await this.dbContainer.accountsDb().upsert(id, (doc) => {
           doc.access = doc.access ? doc.access : [];
           for (const access of doc.access) {
             if (removeAccess.some((removeId) => access.id == removeId))
@@ -192,7 +191,7 @@ class App {
     this.app.get('/characters/:id', auth(false), async (req, res) => {
       const id: string = req.params.id;
       try {
-        const allowedAccess = await this.accountsDb.get(id);
+        const allowedAccess = await this.dbContainer.accountsDb().get(id);
         const access = allowedAccess.access ? allowedAccess.access : [];
         res.send({ access });
       } catch (e) {
@@ -328,7 +327,7 @@ class App {
           this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
           return;
         }
-        this.connections.set(id, new Connection(this.eventsDb, this.settings.viewmodelUpdateTimeout));
+        this.connections.set(id, new Connection(this.dbContainer.eventsDb(), this.settings.viewmodelUpdateTimeout));
 
         const eventsForLogAfter = CleanEventsForLogging(events);
 
@@ -348,7 +347,7 @@ class App {
         // In this case we don't need to subscribe for viewmodel updates or
         // block other clients from connecting.
         // So we don't add Connection to this.connections.
-        const connection = new Connection(this.eventsDb, 0);
+        const connection = new Connection(this.dbContainer.eventsDb(), 0);
         connection.processEvents(id, events).then((s: StatusAndBody) => {
           this.logSuccessfulResponse(req, eventsForLogBefore, [], s.status);
           res.status(s.status).send(s.body);
@@ -366,15 +365,15 @@ class App {
     if (tokenUpdatedEvents.length > 0) {
       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
       const existingCharacterWithThatToken =
-        await this.accountsDb.query('account/by-push-token', { key: token });
+        await this.dbContainer.accountsDb().query('account/by-push-token', { key: token });
       for (const existingCharacter of existingCharacterWithThatToken.rows) {
-        await this.accountsDb.upsert(existingCharacter.id, (accountInfo) => {
+        await this.dbContainer.accountsDb().upsert(existingCharacter.id, (accountInfo) => {
           this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
           delete accountInfo.pushToken;
           return accountInfo;
         });
       }
-      await this.accountsDb.upsert(id, (accountInfo) => {
+      await this.dbContainer.accountsDb().upsert(id, (accountInfo) => {
         this.logger.info(`Saving push token`, {characterId: id, source: 'api'})
         accountInfo.pushToken = token;
         return accountInfo;
@@ -401,7 +400,7 @@ class App {
       value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
   }
 
-  private mobileViewmodelDb() { return this.viewmodelDbs.get('mobile'); }
+  private mobileViewmodelDb() { return this.dbContainer.viewModelDb('mobile'); }
 
   private async latestViewmodelTimestamp(id: string): Promise<number> {
     return (await this.mobileViewmodelDb().get(id)).timestamp;
@@ -416,7 +415,7 @@ class App {
   }
 
   private async latestExistingMobileEventTimestamp(id: string): Promise<number> {
-    const docs = await this.eventsDb.query<any>(characterIdTimestampOnlyRefreshesView,
+    const docs = await this.dbContainer.eventsDb().query<any>(characterIdTimestampOnlyRefreshesView,
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
@@ -479,7 +478,7 @@ class App {
     if (/^[0-9]*$/.test(idOrLogin))
       return idOrLogin;
 
-    const docs = await this.accountsDb.query('account/by-login', { key: idOrLogin });
+    const docs = await this.dbContainer.accountsDb().query('account/by-login', { key: idOrLogin });
     if (docs.rows.length == 0)
       throw new LoginNotFoundError('No user with such login found');
     if (docs.rows.length > 1)
@@ -508,7 +507,7 @@ class App {
 
   private async sendGenericPushNotification(id: string, payload: any): Promise<StatusAndBody> {
     try {
-      const pushToken = (await this.accountsDb.get(id)).pushToken;
+      const pushToken = (await this.dbContainer.accountsDb().get(id)).pushToken;
       if (!pushToken)
         return { status: 404, body: 'No push token for this character' };
 

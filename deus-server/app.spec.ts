@@ -13,6 +13,7 @@ import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
+import { DatabasesContainer } from './db-container';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -61,7 +62,7 @@ describe('API Server', () => {
       viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
-    app = new App(logger, eventsDb, viewmodelDbs, accountsDb, settings);
+    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: '00001', timestamp: 420,

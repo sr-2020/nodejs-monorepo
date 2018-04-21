@@ -7,6 +7,7 @@ import { Configuration } from './settings';
 import Elasticsearch = require('winston-elasticsearch');
 import { config } from './config';
 import * as rp from 'request-promise';
+import { DatabasesContainer } from './db-container';
 
 const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
@@ -27,9 +28,11 @@ const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
   databasesConfig.viewModels.map((v) => [v.type, new PouchDB(v.url, authOptions)]));
 
 new App(logger,
-  new PouchDB(databasesConfig.events, authOptions),
-  viewmodelDbs,
-  new PouchDB(databasesConfig.accounts, authOptions),
+  new DatabasesContainer(
+    new PouchDB(databasesConfig.events, authOptions),
+    viewmodelDbs,
+    new PouchDB(databasesConfig.accounts, authOptions)
+  ),
   config.settings).listen(config.port);
 
 if (databasesConfig.compactEventsViewEveryMs) {
