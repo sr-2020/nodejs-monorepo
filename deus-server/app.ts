@@ -17,6 +17,9 @@ import { Connection, StatusAndBody } from './connection';
 import { ApplicationSettings } from './settings';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
+import "reflect-metadata"; // this shim is required
+import {createExpressServer, useExpressServer} from "routing-controllers";
+import { TimeController } from './controllers/time.controller';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -64,15 +67,16 @@ class App {
       next();
     });
 
-    this.app.get('/time', (_req, res) => {
-      res.send({ serverTime: this.currentTimestamp() });
-    });
-
     this.app.use((_req, res, next) => {
       res.setHeader('Access-Control-Allow-Headers',
         res.getHeader('Access-Control-Allow-Headers') + ', Authorization');
       next();
     });
+
+    useExpressServer(this.app, createExpressServer({
+      controllers: [TimeController],
+      cors: true,
+    }));
 
     const auth = (propagateAccess: boolean) => async (req, res, next) => {
       const credentials = basic_auth(req);
