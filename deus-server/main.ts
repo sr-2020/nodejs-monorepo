@@ -2,15 +2,11 @@ import * as PouchDB from 'pouchdb';
 import { TypedJSON } from 'typedjson/js/typed-json';
 import { TSMap } from 'typescript-map';
 import * as winston from 'winston';
-import { LoggingWinston } from '@google-cloud/logging-winston';
 import App from './app';
 import { Configuration } from './settings';
 import Elasticsearch = require('winston-elasticsearch');
 import { config } from './config';
 import * as rp from 'request-promise';
-
-const loggingWinston = new LoggingWinston();
-
 
 const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
