@@ -14,6 +14,7 @@ import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
 import { DatabasesContainer } from './db-container';
+import { currentTimestamp } from './utils';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -85,7 +86,7 @@ describe('API Server', () => {
     await accountsDb.put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
     await accountsDb.put({ _id: '99999', login: 'admin', password: 'admin' });
 
-    testStartTime = app.currentTimestamp();
+    testStartTime = currentTimestamp();
     await accountsDb.put({
       _id: '00001',
       login: 'some_user',
@@ -458,7 +459,7 @@ describe('API Server', () => {
     });
 
     it('Filters _RefreshModels too far in future', async () => {
-      const timestamp = app.currentTimestamp() + 60000;
+      const timestamp = currentTimestamp() + 60000;
       const events = [{
         eventType: 'TestEvent',
         timestamp: timestamp,
@@ -810,12 +811,12 @@ describe('API Server', () => {
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10003');
-        expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+        expect(response.body.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
 
         const accessInfo: any = await accountsDb.get('10001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10003');
-        expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+        expect(accessInfo.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
       });
 
       it('Can re-grant access to expired user', async () => {
@@ -863,12 +864,12 @@ describe('API Server', () => {
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10003');
-        expect(response.body.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+        expect(response.body.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
 
         const accessInfo: any = await accountsDb.get('10001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10003');
-        expect(accessInfo.access[0].timestamp).to.be.approximately(app.currentTimestamp() + 1000, 200);
+        expect(accessInfo.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
       });
 
       it('Can re-grant access to expired user', async () => {

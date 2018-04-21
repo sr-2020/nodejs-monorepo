@@ -21,6 +21,7 @@ import "reflect-metadata"; // this shim is required
 import {createExpressServer, useExpressServer} from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
 import { DatabasesContainer } from './db-container';
+import { currentTimestamp } from './utils';
 
 class AuthError extends Error { }
 class LoginNotFoundError extends Error { }
@@ -96,7 +97,7 @@ class App {
 
           const allowedAccess = (await this.dbContainer.accountsDb().get(id)).access;
           if (allowedAccess.some((access) =>
-            access.id == credentials.name && access.timestamp >= this.currentTimestamp()))
+            access.id == credentials.name && access.timestamp >= currentTimestamp()))
             return next();
           throw new AuthError('Trying to access user without proper access rights');
         } catch (e) {
@@ -122,7 +123,7 @@ class App {
           delete doc._id;
           delete doc._rev;
           res.send({
-            serverTime: this.currentTimestamp(),
+            serverTime: currentTimestamp(),
             // tslint:disable-next-line:object-literal-shorthand
             id: id,
             viewModel: doc,
@@ -140,7 +141,7 @@ class App {
 
       try {
         const response = {
-          serverTime: this.currentTimestamp(),
+          serverTime: currentTimestamp(),
           id,
           timestamp: await this.cutTimestamp(id),
         };
@@ -172,13 +173,13 @@ class App {
               continue;
 
             if (grantAccess.some((grantId) => access.id == grantId))
-              access.timestamp = Math.max(access.timestamp, this.currentTimestamp() + this.settings.accessGrantTime);
+              access.timestamp = Math.max(access.timestamp, currentTimestamp() + this.settings.accessGrantTime);
 
             resultAccess.push(access);
           }
           for (const access of grantAccess)
             if (!resultAccess.some((r) => r.id == access))
-              resultAccess.push({ id: access, timestamp: this.currentTimestamp() + this.settings.accessGrantTime });
+              resultAccess.push({ id: access, timestamp: currentTimestamp() + this.settings.accessGrantTime });
           doc.access = resultAccess;
           return doc;
         });
@@ -291,10 +292,6 @@ class App {
     }
   }
 
-  public currentTimestamp(): number {
-    return new Date().valueOf();
-  }
-
   private async postEvents(req: express.Request, res: express.Response) {
     const id: string = req.params.id;
 
@@ -386,7 +383,7 @@ class App {
   // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
   // Then removes all _RefreshModel events except latest one.
   private filterRefreshModelEventsByTimestamp(id, events: any[]): any[] {
-    const tooFarInFuturetimestamp = this.currentTimestamp() + this.settings.tooFarInFutureFilterTime;
+    const tooFarInFuturetimestamp = currentTimestamp() + this.settings.tooFarInFutureFilterTime;
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
     if (events.length == 0) {
@@ -422,7 +419,7 @@ class App {
 
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
     const docs = await this.mobileViewmodelDb().query('viewmodel/by-timestamp',
-      { startkey: 0, endkey: this.currentTimestamp() - ms });
+      { startkey: 0, endkey: currentTimestamp() - ms });
     return docs.rows.map((doc) => doc.id);
   }
 
@@ -464,7 +461,7 @@ class App {
       status,
       requestTime: responseStartMoment.format(dateFormat),
       responseTime: moment().format(dateFormat),
-      processingTime: this.currentTimestamp() - responseStartMoment.valueOf(),
+      processingTime: currentTimestamp() - responseStartMoment.valueOf(),
       url: req.url,
       method: req.method,
       ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
