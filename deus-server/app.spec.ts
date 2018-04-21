@@ -168,6 +168,7 @@ describe('API Server', () => {
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Viewmodel type is not found');
     });
 
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
@@ -177,6 +178,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -186,6 +188,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
@@ -267,6 +270,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -276,6 +280,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
@@ -667,6 +672,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -676,6 +682,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
@@ -779,6 +786,7 @@ describe('API Server', () => {
           auth: { username: 'nobody', password: 'nobody' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {
@@ -905,6 +913,7 @@ describe('API Server', () => {
           auth: { username: 'nobody', password: 'nobody' },
         }).promise();
       expect(response.statusCode).to.eq(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {
@@ -1111,6 +1120,7 @@ describe('API Server', () => {
           auth: { username: 'pushadmin', password: 'pushpassword' },
         }).promise();
       expect(response.statusCode).to.equal(404);
+      expect(response.body).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 if sending push to user without a token', async () => {
@@ -1120,6 +1130,7 @@ describe('API Server', () => {
           auth: { username: 'pushadmin', password: 'pushpassword' },
         }).promise();
       expect(response.statusCode).to.equal(404);
+      expect(response.body).to.eq('No push token for this character');
     });
 
   });
