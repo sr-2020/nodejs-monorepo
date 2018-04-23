@@ -10,3 +10,13 @@ export class DatabasesContainer {
   public accountsDb() { return this._accountsDb; }
   public viewModelDb(type: string = 'default') { return this._viewmodelDbs.get(type); }
 }
+
+let _dbContainer: DatabasesContainer;
+
+export function setDatabaseContainer(dbContainer: DatabasesContainer) {
+  _dbContainer = dbContainer;
+}
+
+export function getDatabaseContainer() {
+  return _dbContainer;
+}

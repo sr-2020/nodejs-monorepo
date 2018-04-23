@@ -18,22 +18,14 @@ import { ApplicationSettings } from './settings';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
-import {createExpressServer, useExpressServer} from "routing-controllers";
+import {createExpressServer, useExpressServer, Action, UnauthorizedError} from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
-import { DatabasesContainer } from './db-container';
-import { currentTimestamp } from './utils';
+import { DatabasesContainer, setDatabaseContainer } from './db-container';
+import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
+import { ViewModelController } from './controllers/view-mode.controller';
+import { LoggingErrorHandler } from './middleware/error-handler'
 
 class AuthError extends Error { }
-class LoginNotFoundError extends Error { }
-
-function IsNotFoundError(e): boolean {
-  return (e.status && e.status == 404 && e.reason && e.reason == 'missing') ||
-    (e instanceof LoginNotFoundError);
-}
-
-function RequestId(req: express.Request): string {
-  return (req as any).id;
-}
 
 function CleanEventsForLogging(events: any[]) {
   return events.map((event) => {
@@ -55,6 +47,8 @@ class App {
   constructor(private logger: winston.LoggerInstance,
     private dbContainer: DatabasesContainer,
     private settings: ApplicationSettings) {
+    setDatabaseContainer(dbContainer);
+
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -73,21 +67,41 @@ class App {
       next();
     });
 
-    useExpressServer(this.app, createExpressServer({
-      controllers: [TimeController],
+    useExpressServer(this.app, {
+      currentUserChecker: async (action: Action) => {
+        const credentials = basic_auth(action.request);
+        if (!credentials)
+          throw new UnauthorizedError('No authorization provided');;
+
+        if (credentials) {
+          try {
+            credentials.name = await canonicalId(this.dbContainer, credentials.name);
+            const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
+            if (password != credentials.pass)
+              throw new UnauthorizedError('Wrong password');
+            return credentials.name;
+          } catch (e) {
+            returnCharacterNotFoundOrRethrow(e);
+          }
+        }
+      },
+      controllers: [
+        TimeController, ViewModelController
+      ],
+      middlewares: [LoggingErrorHandler],
       cors: true,
-    }));
+    });
 
     const auth = (propagateAccess: boolean) => async (req, res, next) => {
       const credentials = basic_auth(req);
       if (credentials) {
         try {
-          credentials.name = await this.canonicalId(credentials.name);
+          credentials.name = await canonicalId(this.dbContainer, credentials.name);
           const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
           if (password != credentials.pass)
             throw new AuthError('Wrong password');
 
-          req.params.id = await this.canonicalId(req.params.id);
+          req.params.id = await canonicalId(this.dbContainer, req.params.id);
           const id: string = req.params.id;
           if (id == credentials.name)
             return next();
@@ -110,29 +124,6 @@ class App {
       res.header('WWW-Authentificate', 'Basic');
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');
     };
-
-    this.app.get('/viewmodel/:id', auth(true), async (req, res) => {
-      const id: string = req.params.id;
-      const type = req.query.type ? req.query.type : 'default';
-      const db = this.dbContainer.viewModelDb(type);
-      if (!db) {
-        this.logAndSendErrorResponse(req, res, 404, 'Viewmodel type is not found');
-      } else {
-        try {
-          const doc = (await db.get(id));
-          delete doc._id;
-          delete doc._rev;
-          res.send({
-            serverTime: currentTimestamp(),
-            // tslint:disable-next-line:object-literal-shorthand
-            id: id,
-            viewModel: doc,
-          });
-        } catch (e) {
-          this.returnCharacterNotFoundOrRethrow(e, req, res);
-        }
-      }
-    });
 
     this.app.post('/events/:id', auth(true), (req, res) => this.postEvents(req, res));
 
@@ -161,8 +152,8 @@ class App {
         return;
       }
 
-      grantAccess = await Promise.all(grantAccess.map((login) => this.canonicalId(login)));
-      removeAccess = await Promise.all(removeAccess.map((login) => this.canonicalId(login)));
+      grantAccess = await Promise.all(grantAccess.map((login) => canonicalId(this.dbContainer, login)));
+      removeAccess = await Promise.all(removeAccess.map((login) => canonicalId(this.dbContainer, login)));
 
       try {
         const resultAccess: any[] = [];
@@ -431,7 +422,7 @@ class App {
   }
 
   private logAndSendErrorResponse(req: express.Request, res: express.Response, status: number, msg: string) {
-    const logData = this.createLogData(req, status);
+    const logData = createLogData(req, status);
     logData.msg = msg;
     this.logger.error('Returning error response', logData);
     res.status(status).send(msg);
@@ -439,7 +430,7 @@ class App {
 
   private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
     eventTypesAfter: any[], status: number) {
-    const logData = this.createLogData(req, status);
+    const logData = createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
     this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
@@ -447,41 +438,10 @@ class App {
 
   private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
     eventTypesAfter: any[], status: number) {
-    const logData = this.createLogData(req, status);
+    const logData = createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
     this.logger.info('Successfully processed all events and answered back to clien', logData);
-  }
-
-  private createLogData(req: express.Request, status: number): any {
-    const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
-    const responseStartMoment = (req as any).timestamp;
-    return {
-      requestId: RequestId(req),
-      status,
-      requestTime: responseStartMoment.format(dateFormat),
-      responseTime: moment().format(dateFormat),
-      processingTime: currentTimestamp() - responseStartMoment.valueOf(),
-      url: req.url,
-      method: req.method,
-      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-      characterId: req.params.id,
-      query: req.query,
-      source: 'api'
-    };
-  }
-
-  private async canonicalId(idOrLogin: string): Promise<string> {
-    if (/^[0-9]*$/.test(idOrLogin))
-      return idOrLogin;
-
-    const docs = await this.dbContainer.accountsDb().query('account/by-login', { key: idOrLogin });
-    if (docs.rows.length == 0)
-      throw new LoginNotFoundError('No user with such login found');
-    if (docs.rows.length > 1)
-      throw new LoginNotFoundError('Multiple users with such login found');
-
-    return docs.rows[0].id;
   }
 
   private async sendPushNotifications(timestampBefore: number, updatedViewModel: any): Promise<void> {
@@ -497,7 +457,7 @@ class App {
   }
 
   private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
-    const id: string = await this.canonicalId(req.params.id);
+    const id: string = await canonicalId(this.dbContainer, req.params.id);
     const statusAndBody = await this.sendGenericPushNotification(id, payload);
     res.status(statusAndBody.status).send(statusAndBody.body);
   }

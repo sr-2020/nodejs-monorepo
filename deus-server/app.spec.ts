@@ -19,6 +19,11 @@ import { currentTimestamp } from './utils';
 const port = 3000;
 const address = 'http://localhost:' + port;
 
+// Express spams console on errors if it's not set.
+// See https://github.com/expressjs/express/blob/c0136d8b48dd3526c58b2ad8666fb4b12b55116c/lib/application.js#L630
+// and https://github.com/mochajs/mocha/issues/185
+process.env.NODE_ENV = 'test'
+
 /*
 
 There are following characters present in this test:
@@ -169,7 +174,7 @@ describe('API Server', () => {
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Viewmodel type is not found');
+      expect(response.body.message).to.eq('Viewmodel type is not found');
     });
 
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
@@ -179,7 +184,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -189,7 +194,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
