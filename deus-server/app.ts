@@ -20,7 +20,7 @@ import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
 import {createExpressServer, useExpressServer, Action, UnauthorizedError} from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
-import { DatabasesContainer, setDatabaseContainer } from './services/db-container';
+import { DatabasesContainerToken } from './services/db-container';
 import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
 import { ViewModelController } from './controllers/view-mode.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
@@ -46,11 +46,10 @@ class App {
   private cancelAutoNotify: NodeJS.Timer | null = null;
   private cancelAutoRefresh: NodeJS.Timer | null = null;
   private logger = Container.get(LoggerToken);
+  private dbContainer = Container.get(DatabasesContainerToken);
 
   constructor(
-    private dbContainer: DatabasesContainer,
     private settings: ApplicationSettings) {
-    setDatabaseContainer(dbContainer);
 
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
@@ -113,7 +112,7 @@ class App {
             throw new AuthError('Access propagation is disabled, but trying to query another user');
 
           const allowedAccess = (await this.dbContainer.accountsDb().get(id)).access;
-          if (allowedAccess.some((access) =>
+          if (allowedAccess && allowedAccess.some((access) =>
             access.id == credentials.name && access.timestamp >= currentTimestamp()))
             return next();
           throw new AuthError('Trying to access user without proper access rights');

@@ -8,7 +8,7 @@ import Elasticsearch = require('winston-elasticsearch');
 import { config } from './config';
 import { LoggerInterface, LoggerToken, WinstonLogger } from './services/logger'
 import * as rp from 'request-promise';
-import { DatabasesContainer } from './services/db-container';
+import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { Container, Token } from "typedi";
 
 const databasesConfig = config.databases;
@@ -29,13 +29,15 @@ process.on('unhandledRejection', (reason, p) => {
 const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
   databasesConfig.viewModels.map((v) => [v.type, new PouchDB(v.url, authOptions)]));
 
-new App(
-  new DatabasesContainer(
-    new PouchDB(databasesConfig.events, authOptions),
-    viewmodelDbs,
-    new PouchDB(databasesConfig.accounts, authOptions)
-  ),
-  config.settings).listen(config.port);
+
+Container.set(DatabasesContainerToken, new DatabasesContainer(
+  new PouchDB(databasesConfig.events, authOptions),
+  viewmodelDbs,
+  new PouchDB(databasesConfig.accounts, authOptions)
+));
+
+
+new App(config.settings).listen(config.port);
 
 if (databasesConfig.compactEventsViewEveryMs) {
   setInterval(async () => {

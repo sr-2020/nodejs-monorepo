@@ -11,7 +11,7 @@ import { TSMap } from 'typescript-map';
 import App from './app';
 import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
 import { createViews } from './test-helper';
-import { DatabasesContainer } from './services/db-container';
+import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { Container } from "typedi";
 import { LoggerToken, WinstonLogger } from "./services/logger";
 
@@ -85,6 +85,7 @@ describe('Mass push notifications', () => {
       _id: '00003',
     });
     await createViews(accountsDb, mobileViewModelDb, eventsDb);
+    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
   });
 
   afterEach(async () => {
@@ -99,7 +100,8 @@ describe('Mass push notifications', () => {
     const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
       .post('/fcm/send', (body) => body.to == '00002spushtoken')
       .reply(200);
-    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+
+    app = new App(settings);
     await app.listen(port);
     await delay(300);
     expect(fcm.isDone()).is.true;
@@ -108,7 +110,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications after allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = new Date().getHours() + 1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = 25;
-    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(settings);
     await app.listen(port);
     await delay(300);
   });
@@ -116,7 +118,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications before allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = -1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = new Date().getHours() - 1;
-    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(settings);
     await app.listen(port);
     await delay(300);
   });

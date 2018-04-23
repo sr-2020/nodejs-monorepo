@@ -13,7 +13,7 @@ import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
-import { DatabasesContainer } from './services/db-container';
+import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { currentTimestamp } from './utils';
 import { Container } from "typedi";
 import { LoggerToken, WinstonLogger } from "./services/logger";
@@ -70,7 +70,8 @@ describe('API Server', () => {
       viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
-    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
+    app = new App(settings);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: '00001', timestamp: 420,

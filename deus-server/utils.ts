@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as moment from 'moment';
 
-import { DatabasesContainer } from "./services/db-container";
+import { DatabasesContainerInterface } from "./services/db-container";
 import { NotFoundError, UnauthorizedError } from "routing-controllers";
 
 class LoginNotFoundError extends Error { }
@@ -10,7 +10,7 @@ export function currentTimestamp(): number {
   return new Date().valueOf();
 }
 
-export async function canonicalId(dbContainer: DatabasesContainer, idOrLogin: string): Promise<string> {
+export async function canonicalId(dbContainer: DatabasesContainerInterface, idOrLogin: string): Promise<string> {
   if (/^[0-9]*$/.test(idOrLogin))
     return idOrLogin;
 
@@ -57,12 +57,12 @@ export function createLogData(req: express.Request, status: number): any {
   };
 }
 
-export async function checkAccess(dbContainer: DatabasesContainer, from: string, to: string) {
+export async function checkAccess(dbContainer: DatabasesContainerInterface, from: string, to: string) {
   if (from == to)
     return;
   try {
     const allowedAccess = (await dbContainer.accountsDb().get(to)).access;
-    if (allowedAccess.some((access) => access.id == from && access.timestamp >= currentTimestamp()))
+    if (allowedAccess && allowedAccess.some((access) => access.id == from && access.timestamp >= currentTimestamp()))
       return;
     else
       throw new UnauthorizedError('Trying to access user without proper access rights');
