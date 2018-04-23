@@ -1,14 +1,21 @@
 import { TSMap } from "typescript-map";
-/*
-export interface DatabasesContainer {
+import * as PouchDB from 'pouchdb';
 
+export interface Account {
+  password: string,
+  access?: {id: string, timestamp: number}[],
+  pushToken?: string,
 }
-*/
+
+export interface ViewModel {
+  timestamp: number,
+}
+
 export class DatabasesContainer {
   constructor(
-    private _eventsDb: PouchDB.Database<any>,
-    private _viewmodelDbs: TSMap<string, PouchDB.Database<any>>,
-    private _accountsDb: PouchDB.Database<any>){}
+    private _eventsDb: PouchDB.Database<{}>,
+    private _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
+    private _accountsDb: PouchDB.Database<Account>){}
 
   public eventsDb() { return this._eventsDb; }
   public accountsDb() { return this._accountsDb; }
