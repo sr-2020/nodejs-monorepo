@@ -11,7 +11,7 @@ import { TSMap } from 'typescript-map';
 import App from './app';
 import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
 import { createViews } from './test-helper';
-import { DatabasesContainer } from './db-container';
+import { DatabasesContainer } from './services/db-container';
 import { Container } from "typedi";
 import { LoggerToken, WinstonLogger } from "./services/logger";
 

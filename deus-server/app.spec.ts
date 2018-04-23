@@ -13,7 +13,7 @@ import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
-import { DatabasesContainer } from './db-container';
+import { DatabasesContainer } from './services/db-container';
 import { currentTimestamp } from './utils';
 import { Container } from "typedi";
 import { LoggerToken, WinstonLogger } from "./services/logger";

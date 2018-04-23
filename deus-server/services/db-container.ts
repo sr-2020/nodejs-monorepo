@@ -1,5 +1,9 @@
 import { TSMap } from "typescript-map";
+/*
+export interface DatabasesContainer {
 
+}
+*/
 export class DatabasesContainer {
   constructor(
     private _eventsDb: PouchDB.Database<any>,

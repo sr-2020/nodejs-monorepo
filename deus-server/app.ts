@@ -20,7 +20,7 @@ import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
 import {createExpressServer, useExpressServer, Action, UnauthorizedError} from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
-import { DatabasesContainer, setDatabaseContainer } from './db-container';
+import { DatabasesContainer, setDatabaseContainer } from './services/db-container';
 import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
 import { ViewModelController } from './controllers/view-mode.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'

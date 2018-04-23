@@ -12,7 +12,7 @@ import { TSMap } from 'typescript-map';
 import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { createViews } from './test-helper';
-import { DatabasesContainer } from './db-container';
+import { DatabasesContainer } from './services/db-container';
 import { LoggerToken, WinstonLogger } from "./services/logger";
 import { Container } from "typedi";
 

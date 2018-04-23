@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as moment from 'moment';
 
-import { DatabasesContainer } from "./db-container";
+import { DatabasesContainer } from "./services/db-container";
 import { NotFoundError, UnauthorizedError } from "routing-controllers";
 
 class LoginNotFoundError extends Error { }

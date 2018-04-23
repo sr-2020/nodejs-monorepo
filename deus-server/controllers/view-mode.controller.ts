@@ -1,5 +1,5 @@
 import { JsonController, Param, Body, Get, Post, Put, Delete, QueryParam, NotFoundError, CurrentUser } from "routing-controllers";
-import { DatabasesContainer, getDatabaseContainer } from "../db-container";
+import { DatabasesContainer, getDatabaseContainer } from "../services/db-container";
 import { currentTimestamp, canonicalId, returnCharacterNotFoundOrRethrow, checkAccess } from "../utils";
 
 @JsonController()

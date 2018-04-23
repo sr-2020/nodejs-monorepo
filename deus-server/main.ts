@@ -8,7 +8,7 @@ import Elasticsearch = require('winston-elasticsearch');
 import { config } from './config';
 import { LoggerInterface, LoggerToken, WinstonLogger } from './services/logger'
 import * as rp from 'request-promise';
-import { DatabasesContainer } from './db-container';
+import { DatabasesContainer } from './services/db-container';
 import { Container, Token } from "typedi";
 
 const databasesConfig = config.databases;

@@ -1,4 +1,6 @@
 import * as PouchDB from 'pouchdb';
+import * as PouchDBUpsert from 'pouchdb-upsert';
+PouchDB.plugin(PouchDBUpsert);
 
 export async function createViews(
   accountsDb: PouchDB.Database<any>,
