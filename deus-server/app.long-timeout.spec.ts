@@ -117,8 +117,6 @@ describe('API Server - medium timeout', () => {
       }).promise()
     ]);
 
-    console.log(responses[0].statusCode, responses[1].statusCode);
-
     if (responses[0].statusCode == 429) {
       // Swap to make response[0] successful one
       [responses[0], responses[1]] = [responses[1], responses[0]];
