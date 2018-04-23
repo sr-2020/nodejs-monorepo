@@ -12,6 +12,8 @@ import App from './app';
 import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
 import { createViews } from './test-helper';
 import { DatabasesContainer } from './db-container';
+import { Container } from "typedi";
+import { LoggerToken, WinstonLogger } from "./services/logger";
 
 const port = 3000;
 
@@ -36,7 +38,7 @@ describe('Mass push notifications', () => {
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
 
-  const logger = new winston.Logger({ level: 'warning' });
+  Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
   let eventsDb: PouchDB.Database<{}>;
   let mobileViewModelDb: PouchDB.Database<{}>;
   let defaultViewModelDb: PouchDB.Database<{}>;
@@ -97,7 +99,7 @@ describe('Mass push notifications', () => {
     const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
       .post('/fcm/send', (body) => body.to == '00002spushtoken')
       .reply(200);
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await delay(300);
     expect(fcm.isDone()).is.true;
@@ -106,7 +108,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications after allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = new Date().getHours() + 1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = 25;
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await delay(300);
   });
@@ -114,7 +116,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications before allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = -1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = new Date().getHours() - 1;
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await delay(300);
   });

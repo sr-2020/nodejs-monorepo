@@ -15,6 +15,8 @@ import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
 import { DatabasesContainer } from './db-container';
 import { currentTimestamp } from './utils';
+import { Container } from "typedi";
+import { LoggerToken, WinstonLogger } from "./services/logger";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -62,13 +64,13 @@ describe('API Server', () => {
       ([['mobile', mobileViewModelDb],
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
-    const logger = new winston.Logger({ level: 'warning' });
+    Container.set(LoggerToken, new WinstonLogger({ level: 'warn' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: '00001', timestamp: 420,

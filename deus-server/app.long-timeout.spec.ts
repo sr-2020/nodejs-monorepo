@@ -13,6 +13,8 @@ import App from './app';
 import { PushSettings, ApplicationSettings } from './settings';
 import { createViews } from './test-helper';
 import { DatabasesContainer } from './db-container';
+import { LoggerToken, WinstonLogger } from "./services/logger";
+import { Container } from "typedi";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -27,13 +29,13 @@ describe('API Server - long timeout', () => {
     viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
-    const logger = new winston.Logger({ level: 'warning' });
+    Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
@@ -77,13 +79,13 @@ describe('API Server - medium timeout', () => {
     viewModelDb = new PouchDB('viewmodel3', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
     accountsDb = new PouchDB('accounts3', { adapter: 'memory' });
-    const logger = new winston.Logger({ level: 'warning' });
+    Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
-    app = new App(logger, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
+    app = new App(new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb), settings);
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });

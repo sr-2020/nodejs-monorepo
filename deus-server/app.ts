@@ -24,6 +24,8 @@ import { DatabasesContainer, setDatabaseContainer } from './db-container';
 import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
 import { ViewModelController } from './controllers/view-mode.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
+import { Container } from "typedi";
+import { LoggerToken } from "./services/logger";
 
 class AuthError extends Error { }
 
@@ -43,8 +45,9 @@ class App {
   private connections = new TSMap<string, Connection>();
   private cancelAutoNotify: NodeJS.Timer | null = null;
   private cancelAutoRefresh: NodeJS.Timer | null = null;
+  private logger = Container.get(LoggerToken);
 
-  constructor(private logger: winston.LoggerInstance,
+  constructor(
     private dbContainer: DatabasesContainer,
     private settings: ApplicationSettings) {
     setDatabaseContainer(dbContainer);
@@ -378,7 +381,7 @@ class App {
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
     if (events.length == 0) {
-      this.logger.warning(`All received events are from the future!`, {characterId: id, source: 'api'});
+      this.logger.warn(`All received events are from the future!`, {characterId: id, source: 'api'});
     }
     const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
 
