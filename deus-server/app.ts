@@ -14,7 +14,6 @@ PouchDB.plugin(PouchDBUpsert);
 import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
-import { ApplicationSettings } from './settings';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
@@ -26,6 +25,8 @@ import { ViewModelController } from './controllers/view-mode.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
 import { Container } from "typedi";
 import { LoggerToken } from "./services/logger";
+import { CharactersController } from "./controllers/characters.controller";
+import { ApplicationSettingsToken } from "./services/settings";
 
 class AuthError extends Error { }
 
@@ -47,10 +48,9 @@ class App {
   private cancelAutoRefresh: NodeJS.Timer | null = null;
   private logger = Container.get(LoggerToken);
   private dbContainer = Container.get(DatabasesContainerToken);
+  private settings = Container.get(ApplicationSettingsToken);
 
-  constructor(
-    private settings: ApplicationSettings) {
-
+  constructor() {
     this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
@@ -88,7 +88,7 @@ class App {
         }
       },
       controllers: [
-        TimeController, ViewModelController
+        TimeController, ViewModelController, CharactersController
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
@@ -144,59 +144,10 @@ class App {
       }
     });
 
-    this.app.post('/characters/:id', auth(false), async (req, res) => {
-      const id: string = req.params.id;
-
-      let grantAccess = req.body.grantAccess ? req.body.grantAccess : Array<string>();
-      let removeAccess = req.body.removeAccess ? req.body.removeAccess : Array<string>();
-      if (!(grantAccess instanceof Array && removeAccess instanceof Array)) {
-        res.status(400).send('Wrong request format');
-        return;
-      }
-
-      grantAccess = await Promise.all(grantAccess.map((login) => canonicalId(this.dbContainer, login)));
-      removeAccess = await Promise.all(removeAccess.map((login) => canonicalId(this.dbContainer, login)));
-
-      try {
-        const resultAccess: any[] = [];
-        await this.dbContainer.accountsDb().upsert(id, (doc) => {
-          doc.access = doc.access ? doc.access : [];
-          for (const access of doc.access) {
-            if (removeAccess.some((removeId) => access.id == removeId))
-              continue;
-
-            if (grantAccess.some((grantId) => access.id == grantId))
-              access.timestamp = Math.max(access.timestamp, currentTimestamp() + this.settings.accessGrantTime);
-
-            resultAccess.push(access);
-          }
-          for (const access of grantAccess)
-            if (!resultAccess.some((r) => r.id == access))
-              resultAccess.push({ id: access, timestamp: currentTimestamp() + this.settings.accessGrantTime });
-          doc.access = resultAccess;
-          return doc;
-        });
-        res.send({ access: resultAccess });
-      } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
-      }
-    });
-
-    this.app.get('/characters/:id', auth(false), async (req, res) => {
-      const id: string = req.params.id;
-      try {
-        const allowedAccess = await this.dbContainer.accountsDb().get(id);
-        const access = allowedAccess.access ? allowedAccess.access : [];
-        res.send({ access });
-      } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
-      }
-    });
-
     const pushAuth = (req, res, next) => {
       const credentials = basic_auth(req);
       if (credentials &&
-        credentials.name == settings.pushSettings.username && credentials.pass == settings.pushSettings.password)
+        credentials.name == this.settings.pushSettings.username && credentials.pass == this.settings.pushSettings.password)
         return next();
       res.header('WWW-Authentificate', 'Basic');
       this.logAndSendErrorResponse(req, res, 401, 'Access denied');

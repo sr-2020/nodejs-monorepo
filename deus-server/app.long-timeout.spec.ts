@@ -10,11 +10,12 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { PushSettings, ApplicationSettings } from './settings';
+import { PushSettings, ApplicationSettings } from './services/settings';
 import { createViews } from './test-helper';
 import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { LoggerToken, WinstonLogger } from "./services/logger";
 import { Container } from "typedi";
+import { ApplicationSettingsToken } from "./services/settings";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -35,8 +36,9 @@ describe('API Server - long timeout', () => {
       viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
+    Container.set(ApplicationSettingsToken, settings);
     Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
@@ -86,8 +88,9 @@ describe('API Server - medium timeout', () => {
       viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
+    Container.set(ApplicationSettingsToken, settings);
     Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });

@@ -24,7 +24,7 @@ export class WinstonLogger implements LoggerInterface {
     this._logger.info(msg, data);
   }
   warn(msg: string, data?: any) {
-    this._logger.warning(msg, data);
+    this._logger.warn(msg, data);
   }
   error(msg: string, data?: any) {
     this._logger.error(msg, data);

@@ -10,13 +10,13 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { PushSettings, ApplicationSettings } from './settings';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { createViews } from './test-helper';
 import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { currentTimestamp } from './utils';
 import { Container } from "typedi";
 import { LoggerToken, WinstonLogger } from "./services/logger";
+import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "./services/settings";
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -70,8 +70,9 @@ describe('API Server', () => {
       viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
+    Container.set(ApplicationSettingsToken, settings);
     Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await mobileViewModelDb.put({
       _id: '00001', timestamp: 420,
@@ -795,7 +796,7 @@ describe('API Server', () => {
           auth: { username: 'nobody', password: 'nobody' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {
@@ -922,7 +923,7 @@ describe('API Server', () => {
           auth: { username: 'nobody', password: 'nobody' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {

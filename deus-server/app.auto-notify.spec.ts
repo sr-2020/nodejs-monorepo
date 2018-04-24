@@ -9,7 +9,7 @@ import 'mocha';
 
 import { TSMap } from 'typescript-map';
 import App from './app';
-import { ApplicationSettings, PushSettings, CheckForInactivitySettings } from './settings';
+import { ApplicationSettings, PushSettings, CheckForInactivitySettings, ApplicationSettingsToken } from './services/settings';
 import { createViews } from './test-helper';
 import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { Container } from "typedi";
@@ -37,6 +37,7 @@ describe('Mass push notifications', () => {
     viewmodelUpdateTimeout: 20, accessGrantTime: 200,
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
+  Container.set(ApplicationSettingsToken, settings);
 
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
   let eventsDb: PouchDB.Database<{}>;
@@ -101,7 +102,7 @@ describe('Mass push notifications', () => {
       .post('/fcm/send', (body) => body.to == '00002spushtoken')
       .reply(200);
 
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await delay(300);
     expect(fcm.isDone()).is.true;
@@ -110,7 +111,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications after allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = new Date().getHours() + 1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = 25;
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await delay(300);
   });
@@ -118,7 +119,7 @@ describe('Mass push notifications', () => {
   it('Does not send notifications before allowed time', async () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = -1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = new Date().getHours() - 1;
-    app = new App(settings);
+    app = new App();
     await app.listen(port);
     await delay(300);
   });

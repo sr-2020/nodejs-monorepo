@@ -54,7 +54,6 @@
     "tslint-consistent-codestyle": "^1.5.1",
     "typed-event-emitter": "^1.0.3",
     "typedi": "^0.7.2",
-    "typedjson": "git+https://github.com/sth-larp/TypedJSON.git",
     "typescript": "^2.2.2",
     "typescript-map": "0.0.3",
     "uuid": "^3.1.0",

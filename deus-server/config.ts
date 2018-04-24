@@ -1,4 +1,4 @@
-import { Configuration } from "./settings";
+import { Configuration } from "./services/settings";
 
 export const config: Configuration = {
     databases: {
