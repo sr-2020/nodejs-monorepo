@@ -1067,7 +1067,7 @@ describe('API Server', () => {
           to: '00001spushtoken',
           foo: 'bar',
         })
-        .reply(200);
+        .reply(200, 'Ok!');
 
       const response = await rp.post(address + '/push/00001',
         {
@@ -1085,7 +1085,7 @@ describe('API Server', () => {
           to: '00001spushtoken',
           foo: 'bar',
         })
-        .reply(200);
+        .reply(200, 'Ok!');
 
       const response = await rp.post(address + '/push/some_user',
         {
@@ -1130,7 +1130,7 @@ describe('API Server', () => {
           auth: { username: 'pushadmin', password: 'pushpassword' },
         }).promise();
       expect(response.statusCode).to.equal(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 if sending push to user without a token', async () => {
@@ -1140,7 +1140,24 @@ describe('API Server', () => {
           auth: { username: 'pushadmin', password: 'pushpassword' },
         }).promise();
       expect(response.statusCode).to.equal(404);
-      expect(response.body).to.eq('No push token for this character');
+      expect(response.body.message).to.eq('No push token for this character');
+    });
+
+    it('Propagates FCM error', async () => {
+      const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
+        .post('/fcm/send', {
+          to: '00001spushtoken',
+          foo: 'bar',
+        })
+        .reply(400, 'Nope!');
+
+      const response = await rp.post(address + '/push/00001',
+        {
+          resolveWithFullResponse: true, simple: false, json: { foo: 'bar' },
+          auth: { username: 'pushadmin', password: 'pushpassword' },
+        }).promise();
+      expect(response.statusCode).to.equal(400);
+      expect(response.body.message).to.eq('Nope!');
     });
 
   });

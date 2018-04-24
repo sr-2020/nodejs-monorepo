@@ -14,10 +14,10 @@ PouchDB.plugin(PouchDBUpsert);
 import { TSMap } from 'typescript-map';
 
 import { Connection, StatusAndBody } from './connection';
-import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from './push-helpers';
+import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload, sendGenericPushNotification } from './push-helpers';
 import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
-import {createExpressServer, useExpressServer, Action, UnauthorizedError} from "routing-controllers";
+import { createExpressServer, useExpressServer, Action, UnauthorizedError } from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
 import { DatabasesContainerToken } from './services/db-container';
 import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
@@ -27,6 +27,7 @@ import { Container } from "typedi";
 import { LoggerToken } from "./services/logger";
 import { CharactersController } from "./controllers/characters.controller";
 import { ApplicationSettingsToken } from "./services/settings";
+import { PushController } from "./controllers/push.controller";
 
 class AuthError extends Error { }
 
@@ -88,7 +89,7 @@ class App {
         }
       },
       controllers: [
-        TimeController, ViewModelController, CharactersController
+        TimeController, ViewModelController, CharactersController, PushController
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
@@ -144,28 +145,6 @@ class App {
       }
     });
 
-    const pushAuth = (req, res, next) => {
-      const credentials = basic_auth(req);
-      if (credentials &&
-        credentials.name == this.settings.pushSettings.username && credentials.pass == this.settings.pushSettings.password)
-        return next();
-      res.header('WWW-Authentificate', 'Basic');
-      this.logAndSendErrorResponse(req, res, 401, 'Access denied');
-    };
-
-    this.app.post('/push/visible/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotificationAndRespond(req, res,
-        makeVisibleNotificationPayload(req.body.title, req.body.body));
-    });
-
-    this.app.post('/push/refresh/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotificationAndRespond(req, res, makeSilentRefreshNotificationPayload());
-    });
-
-    this.app.post('/push/:id', pushAuth, async (req, res) => {
-      await this.sendGenericPushNotificationAndRespond(req, res, req.body);
-    });
-
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
       result.then((r) => this.logger.info(`Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
         .catch((err) => this.logger.warn(`Failed to send notification: ${err}`, { characterId: id, source: 'api' }));
@@ -183,7 +162,7 @@ class App {
         try {
           const inactiveIDs =
             await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
-          inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
+          inactiveIDs.map((id) => deleteMeLogFn(id, sendGenericPushNotification(id,
             makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
         } catch (e) {
           this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
@@ -202,7 +181,7 @@ class App {
         try {
           const inactiveIDs =
             await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
-          inactiveIDs.map((id) => deleteMeLogFn(id, this.sendGenericPushNotification(id,
+          inactiveIDs.map((id) => deleteMeLogFn(id, sendGenericPushNotification(id,
             makeSilentRefreshNotificationPayload())));
         } catch (e) {
           this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
@@ -315,7 +294,7 @@ class App {
         });
       }
       await this.dbContainer.accountsDb().upsert(id, (accountInfo) => {
-        this.logger.info(`Saving push token`, {characterId: id, source: 'api'})
+        this.logger.info(`Saving push token`, { characterId: id, source: 'api' })
         accountInfo.pushToken = token;
         return accountInfo;
       });
@@ -331,7 +310,7 @@ class App {
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
     if (events.length == 0) {
-      this.logger.warn(`All received events are from the future!`, {characterId: id, source: 'api'});
+      this.logger.warn(`All received events are from the future!`, { characterId: id, source: 'api' });
     }
     const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
 
@@ -404,39 +383,11 @@ class App {
     if (!changesPage) return;
     await Promise.all(
       (changesPage.body.items as any[])
-      .filter(item => item.unixSecondsValue * 1000 > timestampBefore).map(item => {
-          return this.sendGenericPushNotification(updatedViewModel.passportScreen.id, makeVisibleNotificationPayload(item.details.header, item.details.text));
+        .filter(item => item.unixSecondsValue * 1000 > timestampBefore).map(item => {
+          return sendGenericPushNotification(updatedViewModel.passportScreen.id,
+            makeVisibleNotificationPayload(item.details.header, item.details.text));
         }));
   }
-
-  private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
-    const id: string = await canonicalId(req.params.id);
-    const statusAndBody = await this.sendGenericPushNotification(id, payload);
-    res.status(statusAndBody.status).send(statusAndBody.body);
-  }
-
-  private async sendGenericPushNotification(id: string, payload: any): Promise<StatusAndBody> {
-    try {
-      const pushToken = (await this.dbContainer.accountsDb().get(id)).pushToken;
-      if (!pushToken)
-        return { status: 404, body: 'No push token for this character' };
-
-      payload.to = pushToken;
-
-      const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
-        resolveWithFullResponse: true, simple: false,
-        headers: { Authorization: 'key=' + this.settings.pushSettings.serverKey },
-        json: payload,
-      });
-      return { status: fcmResponse.statusCode, body: fcmResponse.body };
-    } catch (e) {
-      if (IsNotFoundError(e))
-        return { status: 404, body: 'Character with such id or login is not found' };
-      this.logger.error(`Error while sending push notification via FCM: ${e}`, {characterId: id, source: 'api'});
-      throw e;
-    }
-  }
-
 }
 
 export default App;
