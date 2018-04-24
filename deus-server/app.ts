@@ -21,7 +21,7 @@ import {createExpressServer, useExpressServer, Action, UnauthorizedError} from "
 import { TimeController } from './controllers/time.controller';
 import { DatabasesContainerToken } from './services/db-container';
 import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
-import { ViewModelController } from './controllers/view-mode.controller';
+import { ViewModelController } from './controllers/viewmodel.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
 import { Container } from "typedi";
 import { LoggerToken } from "./services/logger";
