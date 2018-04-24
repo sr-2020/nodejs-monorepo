@@ -77,7 +77,7 @@ class App {
 
         if (credentials) {
           try {
-            credentials.name = await canonicalId(this.dbContainer, credentials.name);
+            credentials.name = await canonicalId(credentials.name);
             const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
             if (password != credentials.pass)
               throw new UnauthorizedError('Wrong password');
@@ -98,12 +98,12 @@ class App {
       const credentials = basic_auth(req);
       if (credentials) {
         try {
-          credentials.name = await canonicalId(this.dbContainer, credentials.name);
+          credentials.name = await canonicalId(credentials.name);
           const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
           if (password != credentials.pass)
             throw new AuthError('Wrong password');
 
-          req.params.id = await canonicalId(this.dbContainer, req.params.id);
+          req.params.id = await canonicalId(req.params.id);
           const id: string = req.params.id;
           if (id == credentials.name)
             return next();
@@ -410,7 +410,7 @@ class App {
   }
 
   private async sendGenericPushNotificationAndRespond(req: express.Request, res: express.Response, payload: any) {
-    const id: string = await canonicalId(this.dbContainer, req.params.id);
+    const id: string = await canonicalId(req.params.id);
     const statusAndBody = await this.sendGenericPushNotification(id, payload);
     res.status(statusAndBody.status).send(statusAndBody.body);
   }

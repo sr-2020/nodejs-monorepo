@@ -10,8 +10,8 @@ export class ViewModelController {
   async get(@CurrentUser() user: string, @Param("id") id: string, @QueryParam("type") type: string = 'default') {
     try {
       const dbContainer = Container.get(DatabasesContainerToken);
-      id = await canonicalId(dbContainer, id);
-      await checkAccess(dbContainer, user, id);
+      id = await canonicalId(id);
+      await checkAccess(user, id);
       const db = dbContainer.viewModelDb(type);
       if (!db) {
         throw new NotFoundError('Viewmodel type is not found');

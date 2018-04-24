@@ -1,8 +1,9 @@
 import * as express from 'express';
 import * as moment from 'moment';
 
-import { DatabasesContainerInterface } from "./services/db-container";
+import { DatabasesContainerToken } from "./services/db-container";
 import { NotFoundError, UnauthorizedError } from "routing-controllers";
+import { Container } from "typedi";
 
 class LoginNotFoundError extends Error { }
 
@@ -10,17 +11,21 @@ export function currentTimestamp(): number {
   return new Date().valueOf();
 }
 
-export async function canonicalId(dbContainer: DatabasesContainerInterface, idOrLogin: string): Promise<string> {
+export async function canonicalId(idOrLogin: string): Promise<string> {
   if (/^[0-9]*$/.test(idOrLogin))
     return idOrLogin;
 
-  const docs = await dbContainer.accountsDb().query('account/by-login', { key: idOrLogin });
+  const docs = await Container.get(DatabasesContainerToken).accountsDb().query('account/by-login', { key: idOrLogin });
   if (docs.rows.length == 0)
     throw new LoginNotFoundError('No user with such login found');
   if (docs.rows.length > 1)
     throw new LoginNotFoundError('Multiple users with such login found');
 
   return docs.rows[0].id;
+}
+
+export async function canonicalIds(ids?: string[]): Promise<string[]> {
+  return ids ? Promise.all(ids.map((id) => canonicalId(id))) : [];
 }
 
 export function IsNotFoundError(e): boolean {
@@ -57,11 +62,11 @@ export function createLogData(req: express.Request, status: number): any {
   };
 }
 
-export async function checkAccess(dbContainer: DatabasesContainerInterface, from: string, to: string) {
+export async function checkAccess(from: string, to: string) {
   if (from == to)
     return;
   try {
-    const allowedAccess = (await dbContainer.accountsDb().get(to)).access;
+    const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;
     if (allowedAccess && allowedAccess.some((access) => access.id == from && access.timestamp >= currentTimestamp()))
       return;
     else

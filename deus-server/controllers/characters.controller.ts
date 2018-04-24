@@ -1,5 +1,5 @@
 import { JsonController, Get, CurrentUser, Param, Post, Body, UnauthorizedError } from "routing-controllers";
-import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow } from "../utils";
+import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, canonicalIds } from "../utils";
 import { DatabasesContainerToken } from "../services/db-container";
 import { Container } from "typedi";
 import * as PouchDB from 'pouchdb';
@@ -19,7 +19,7 @@ export class CharactersController {
   async get( @CurrentUser() user: string, @Param("id") id: string) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
-      id = await canonicalId(dbContainer, id);
+      id = await canonicalId(id);
       if (id != user)
         throw new UnauthorizedError('Trying to access another user');
       const allowedAccess = await dbContainer.accountsDb().get(id);
@@ -34,16 +34,12 @@ export class CharactersController {
   async post( @CurrentUser() user: string, @Param("id") id: string, @Body() req: ChangeAccessRightRequest) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
-      id = await canonicalId(dbContainer, id);
+      id = await canonicalId(id);
       if (id != user)
         throw new UnauthorizedError('Trying to access another user');
 
-      const grantAccess = req.grantAccess ?
-        await Promise.all(req.grantAccess.map((login) => canonicalId(dbContainer, login)))
-        : [];
-      const removeAccess = req.removeAccess ?
-        await Promise.all(req.removeAccess.map((login) => canonicalId(dbContainer, login)))
-        : [];
+      const grantAccess = await canonicalIds(req.grantAccess);
+      const removeAccess = await canonicalIds(req.removeAccess);
 
       const resultAccess: any[] = [];
       await dbContainer.accountsDb().upsert(id, (doc) => {
