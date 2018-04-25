@@ -280,7 +280,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -290,7 +290,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
@@ -682,7 +682,7 @@ describe('API Server', () => {
           auth: { username: '4444', password: '4444' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
@@ -692,7 +692,7 @@ describe('API Server', () => {
           auth: { username: 'user_without_model', password: 'hunter2' },
         }).promise();
       expect(response.statusCode).to.eq(404);
-      expect(response.body).to.eq('Character with such id or login is not found');
+      expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {

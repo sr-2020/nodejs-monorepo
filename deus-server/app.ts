@@ -28,23 +28,11 @@ import { LoggerToken } from "./services/logger";
 import { CharactersController } from "./controllers/characters.controller";
 import { ApplicationSettingsToken } from "./services/settings";
 import { PushController } from "./controllers/push.controller";
-
-class AuthError extends Error { }
-
-function CleanEventsForLogging(events: any[]) {
-  return events.map((event) => {
-    return {
-      type: event.eventType,
-      timestamp: event.timestamp
-    }
-  });
-}
-
+import { EventsController } from "./controllers/events.controller";
 
 class App {
   private app: express.Express = express();
   private server: http.Server | null = null;
-  private connections = new TSMap<string, Connection>();
   private cancelAutoNotify: NodeJS.Timer | null = null;
   private cancelAutoRefresh: NodeJS.Timer | null = null;
   private logger = Container.get(LoggerToken);
@@ -58,7 +46,6 @@ class App {
 
     this.app.use((req, res, next) => {
       this.logger.debug('Request body', { requestId: RequestId(req), body: req.body, source: 'api' });
-
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
@@ -89,60 +76,10 @@ class App {
         }
       },
       controllers: [
-        TimeController, ViewModelController, CharactersController, PushController
+        TimeController, ViewModelController, CharactersController, PushController, EventsController
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
-    });
-
-    const auth = (propagateAccess: boolean) => async (req, res, next) => {
-      const credentials = basic_auth(req);
-      if (credentials) {
-        try {
-          credentials.name = await canonicalId(credentials.name);
-          const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
-          if (password != credentials.pass)
-            throw new AuthError('Wrong password');
-
-          req.params.id = await canonicalId(req.params.id);
-          const id: string = req.params.id;
-          if (id == credentials.name)
-            return next();
-
-          if (!propagateAccess)
-            throw new AuthError('Access propagation is disabled, but trying to query another user');
-
-          const allowedAccess = (await this.dbContainer.accountsDb().get(id)).access;
-          if (allowedAccess && allowedAccess.some((access) =>
-            access.id == credentials.name && access.timestamp >= currentTimestamp()))
-            return next();
-          throw new AuthError('Trying to access user without proper access rights');
-        } catch (e) {
-          if (IsNotFoundError(e)) {
-            this.logAndSendErrorResponse(req, res, 404, 'Character with such id or login is not found');
-            return;
-          }
-        }
-      }
-      res.header('WWW-Authentificate', 'Basic');
-      this.logAndSendErrorResponse(req, res, 401, 'Access denied');
-    };
-
-    this.app.post('/events/:id', auth(true), (req, res) => this.postEvents(req, res));
-
-    this.app.get('/events/:id', auth(true), async (req, res) => {
-      const id: string = req.params.id;
-
-      try {
-        const response = {
-          serverTime: currentTimestamp(),
-          id,
-          timestamp: await this.cutTimestamp(id),
-        };
-        res.status(200).send(response);
-      } catch (e) {
-        this.returnCharacterNotFoundOrRethrow(e, req, res);
-      }
     });
 
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
@@ -188,16 +125,6 @@ class App {
         }
       }, autoRefreshSettings.performOncePerMs);
     }
-
-    const options = { since: 'now', live: true, include_docs: true, return_docs: false };
-    this.mobileViewmodelDb().changes(options)
-      .on('change', (change) => {
-        if (!change.doc)
-          return;
-
-        if (this.connections.has(change.doc._id))
-          this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
-      });
   }
 
   public async listen(port: number) {
@@ -215,178 +142,12 @@ class App {
     }
   }
 
-  private async postEvents(req: express.Request, res: express.Response) {
-    const id: string = req.params.id;
-
-    let events = req.body.events;
-    if (!(events instanceof Array)) {
-      this.logAndSendErrorResponse(req, res, 400, 'No events array in request');
-      return;
-    }
-
-    events = await this.processTokenUpdateEvents(id, events);
-
-    const eventsForLogBefore = CleanEventsForLogging(events);
-
-    const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
-    if (isMobileClient) {
-      events = this.filterRefreshModelEventsByTimestamp(id, events);
-    }
-
-    try {
-      const cutTimestamp = await this.cutTimestamp(id);
-      if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp)) {
-        this.logAndSendErrorResponse(req, res, 409,
-          "Can't accept event with timestamp earlier than cut timestamp: they won't get processed!");
-        return;
-      }
-      events = events.filter((value: any) => value.timestamp > cutTimestamp);
-
-      if (isMobileClient) {
-        if (this.connections.has(id)) {
-          this.logAndSendErrorResponse(req, res, 429, 'Multiple connections from one client are not allowed');
-          return;
-        }
-        this.connections.set(id, new Connection(this.dbContainer.eventsDb(), this.settings.viewmodelUpdateTimeout));
-
-        const eventsForLogAfter = CleanEventsForLogging(events);
-
-        const viewModelTimestampBefore = await this.latestExistingMobileEventTimestamp(id);
-        this.connections.get(id).processEvents(id, events).then(async (s: StatusAndBody) => {
-          if (s.status == 200) {
-            await this.sendPushNotifications(viewModelTimestampBefore, s.body.viewModel);
-            this.logSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
-          }
-          else {
-            this.logHalfSuccessfulResponse(req, eventsForLogBefore, eventsForLogAfter, s.status);
-          }
-          res.status(s.status).send(s.body);
-          this.connections.delete(id);
-        });
-      } else {
-        // In this case we don't need to subscribe for viewmodel updates or
-        // block other clients from connecting.
-        // So we don't add Connection to this.connections.
-        const connection = new Connection(this.dbContainer.eventsDb(), 0);
-        connection.processEvents(id, events).then((s: StatusAndBody) => {
-          this.logSuccessfulResponse(req, eventsForLogBefore, [], s.status);
-          res.status(s.status).send(s.body);
-        });
-      }
-    } catch (e) {
-      this.returnCharacterNotFoundOrRethrow(e, req, res);
-    }
-  }
-
-  private async processTokenUpdateEvents(id: string, events: any[]) {
-    const tokenUpdatedEvents = events.filter(
-      (event) => event.eventType == 'tokenUpdated' && event.data &&
-        event.data.token && event.data.token.registrationId);
-    if (tokenUpdatedEvents.length > 0) {
-      const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
-      const existingCharacterWithThatToken =
-        await this.dbContainer.accountsDb().query('account/by-push-token', { key: token });
-      for (const existingCharacter of existingCharacterWithThatToken.rows) {
-        await this.dbContainer.accountsDb().upsert(existingCharacter.id, (accountInfo) => {
-          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
-          delete accountInfo.pushToken;
-          return accountInfo;
-        });
-      }
-      await this.dbContainer.accountsDb().upsert(id, (accountInfo) => {
-        this.logger.info(`Saving push token`, { characterId: id, source: 'api' })
-        accountInfo.pushToken = token;
-        return accountInfo;
-      });
-    }
-    return events.filter((event) => event.eventType != 'tokenUpdated');
-  }
-
-  // Removes _RefreshModel events which are too far in future
-  // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
-  // Then removes all _RefreshModel events except latest one.
-  private filterRefreshModelEventsByTimestamp(id, events: any[]): any[] {
-    const tooFarInFuturetimestamp = currentTimestamp() + this.settings.tooFarInFutureFilterTime;
-    events = events.filter((value: any) =>
-      value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
-    if (events.length == 0) {
-      this.logger.warn(`All received events are from the future!`, { characterId: id, source: 'api' });
-    }
-    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
-
-    const lastRefreshModelEventTimestamp =
-      Math.max(...refreshModelEvents.map((event) => event.timestamp));
-    return events.filter((value: any) =>
-      value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
-  }
-
   private mobileViewmodelDb() { return this.dbContainer.viewModelDb('mobile'); }
-
-  private async latestViewmodelTimestamp(id: string): Promise<number> {
-    return (await this.mobileViewmodelDb().get(id)).timestamp;
-  }
-
-  private async cutTimestamp(id: string): Promise<number> {
-    const [currentViewmodelTimestamp, lastEventTimeStamp] = await Promise.all([
-      this.latestViewmodelTimestamp(id),
-      this.latestExistingMobileEventTimestamp(id)
-    ]);
-    return Math.max(currentViewmodelTimestamp, lastEventTimeStamp);
-  }
-
-  private async latestExistingMobileEventTimestamp(id: string): Promise<number> {
-    const docs = await this.dbContainer.eventsDb().query<any>(characterIdTimestampOnlyRefreshesView,
-      { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
-    return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
-  }
 
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
     const docs = await this.mobileViewmodelDb().query('viewmodel/by-timestamp',
       { startkey: 0, endkey: currentTimestamp() - ms });
     return docs.rows.map((doc) => doc.id);
-  }
-
-  private returnCharacterNotFoundOrRethrow(e: any, req: express.Request, res: express.Response) {
-    if (IsNotFoundError(e))
-      this.logAndSendErrorResponse(req, res, 404, 'Character with such id or login is not found');
-    else
-      throw e;
-  }
-
-  private logAndSendErrorResponse(req: express.Request, res: express.Response, status: number, msg: string) {
-    const logData = createLogData(req, status);
-    logData.msg = msg;
-    this.logger.error('Returning error response', logData);
-    res.status(status).send(msg);
-  }
-
-  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
-    eventTypesAfter: any[], status: number) {
-    const logData = createLogData(req, status);
-    logData.eventTypesBefore = eventTypesBefore;
-    logData.eventTypesAfter = eventTypesAfter
-    this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
-  }
-
-  private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
-    eventTypesAfter: any[], status: number) {
-    const logData = createLogData(req, status);
-    logData.eventTypesBefore = eventTypesBefore;
-    logData.eventTypesAfter = eventTypesAfter
-    this.logger.info('Successfully processed all events and answered back to clien', logData);
-  }
-
-  private async sendPushNotifications(timestampBefore: number, updatedViewModel: any): Promise<void> {
-    // TODO: Rework this horror
-    if (!updatedViewModel.pages) return;
-    const changesPage = (updatedViewModel.pages as any[]).find(page => page.viewId == "page:changes");
-    if (!changesPage) return;
-    await Promise.all(
-      (changesPage.body.items as any[])
-        .filter(item => item.unixSecondsValue * 1000 > timestampBefore).map(item => {
-          return sendGenericPushNotification(updatedViewModel.passportScreen.id,
-            makeVisibleNotificationPayload(item.details.header, item.details.text));
-        }));
   }
 }
 
