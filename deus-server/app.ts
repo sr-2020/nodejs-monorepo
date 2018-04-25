@@ -1,26 +1,16 @@
 import * as basic_auth from 'basic-auth';
-import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
 import * as http from 'http';
-import * as moment from 'moment';
-import * as PouchDB from 'pouchdb';
-import * as PouchDBUpsert from 'pouchdb-upsert';
-import * as rp from 'request-promise';
-import * as winston from 'winston';
-PouchDB.plugin(PouchDBUpsert);
 
-import { TSMap } from 'typescript-map';
-
-import { Connection, StatusAndBody } from './connection';
+import { StatusAndBody } from './connection';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload, sendGenericPushNotification } from './push-helpers';
-import { characterIdTimestampOnlyRefreshesView } from './consts';
 import "reflect-metadata"; // this shim is required
-import { createExpressServer, useExpressServer, Action, UnauthorizedError } from "routing-controllers";
+import { useExpressServer, Action, UnauthorizedError } from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
 import { DatabasesContainerToken } from './services/db-container';
-import { currentTimestamp, canonicalId, IsNotFoundError, RequestId, createLogData, returnCharacterNotFoundOrRethrow } from './utils';
+import { currentTimestamp, canonicalId, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 import { ViewModelController } from './controllers/viewmodel.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
 import { Container } from "typedi";
@@ -40,7 +30,6 @@ class App {
   private settings = Container.get(ApplicationSettingsToken);
 
   constructor() {
-    this.app.use(bodyparser.json());
     this.app.use(addRequestId());
     this.app.use(time.init);
 
@@ -51,28 +40,20 @@ class App {
       next();
     });
 
-    this.app.use((_req, res, next) => {
-      res.setHeader('Access-Control-Allow-Headers',
-        res.getHeader('Access-Control-Allow-Headers') + ', Authorization');
-      next();
-    });
-
     useExpressServer(this.app, {
       currentUserChecker: async (action: Action) => {
         const credentials = basic_auth(action.request);
         if (!credentials)
           throw new UnauthorizedError('No authorization provided');;
 
-        if (credentials) {
-          try {
-            credentials.name = await canonicalId(credentials.name);
-            const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
-            if (password != credentials.pass)
-              throw new UnauthorizedError('Wrong password');
-            return credentials.name;
-          } catch (e) {
-            returnCharacterNotFoundOrRethrow(e);
-          }
+        try {
+          credentials.name = await canonicalId(credentials.name);
+          const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
+          if (password != credentials.pass)
+            throw new UnauthorizedError('Wrong password');
+          return credentials.name;
+        } catch (e) {
+          returnCharacterNotFoundOrRethrow(e);
         }
       },
       controllers: [
@@ -142,10 +123,8 @@ class App {
     }
   }
 
-  private mobileViewmodelDb() { return this.dbContainer.viewModelDb('mobile'); }
-
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
-    const docs = await this.mobileViewmodelDb().query('viewmodel/by-timestamp',
+    const docs = await this.dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
       { startkey: 0, endkey: currentTimestamp() - ms });
     return docs.rows.map((doc) => doc.id);
   }
