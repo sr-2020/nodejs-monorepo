@@ -86,11 +86,14 @@ export class DatabasesSettings {
   // URL to access events DB
   public events: string;
 
-  // URL to access events DB
+  // How often to run compactions in events database
   public compactEventsViewEveryMs?: number
 
   // Settings for ViewModel databases
   public viewModels: ViewModelDbSettings[];
+
+  // URL to access economy DB
+  public economy: string;
 }
 
 export class Configuration {

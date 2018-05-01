@@ -20,7 +20,8 @@ const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
 Container.set(DatabasesContainerToken, new DatabasesContainer(
   new PouchDB(databasesConfig.events, authOptions),
   viewmodelDbs,
-  new PouchDB(databasesConfig.accounts, authOptions)
+  new PouchDB(databasesConfig.accounts, authOptions),
+  new PouchDB(databasesConfig.economy, authOptions)
 ));
 Container.set(LoggerToken, new WinstonLogger({
   level: 'info',

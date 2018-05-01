@@ -7,6 +7,7 @@ export const config: Configuration = {
         accounts: "http://couchdb:5984/accounts",
         events: "http://couchdb:5984/events",
         compactEventsViewEveryMs: 5 * 60 * 1000,
+        economy: "http://couchdb:5984/economy",
         viewModels: [
           {type: "mobile", url: "http://couchdb:5984/view-models"},
           {type: "default", url: "http://couchdb:5984/accounts"}
