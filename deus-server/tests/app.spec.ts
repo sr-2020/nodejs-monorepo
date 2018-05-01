@@ -9,14 +9,15 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { TSMap } from 'typescript-map';
-import App from './app';
-import { characterIdTimestampOnlyRefreshesView } from './consts';
-import { createViews } from './test-helper';
-import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
-import { currentTimestamp } from './utils';
 import { Container } from "typedi";
-import { LoggerToken, WinstonLogger } from "./services/logger";
-import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "./services/settings";
+
+import App from '../app';
+import { characterIdTimestampOnlyRefreshesView } from '../consts';
+import { createViews } from '../test-helper';
+import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
+import { currentTimestamp } from '../utils';
+import { LoggerToken, WinstonLogger } from "../services/logger";
+import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "../services/settings";
 
 const port = 3000;
 const address = 'http://localhost:' + port;

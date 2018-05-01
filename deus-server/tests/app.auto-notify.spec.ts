@@ -8,12 +8,14 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { TSMap } from 'typescript-map';
-import App from './app';
-import { ApplicationSettings, PushSettings, CheckForInactivitySettings, ApplicationSettingsToken } from './services/settings';
-import { createViews } from './test-helper';
-import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { Container } from "typedi";
-import { LoggerToken, WinstonLogger } from "./services/logger";
+
+import App from '../app';
+import { ApplicationSettings, PushSettings, CheckForInactivitySettings,
+  ApplicationSettingsToken } from '../services/settings';
+import { createViews } from '../test-helper';
+import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
+import { LoggerToken, WinstonLogger } from "../services/logger";
 
 const port = 3000;
 
