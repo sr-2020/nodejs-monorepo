@@ -44,10 +44,10 @@ export class DatabasesContainer implements DatabasesContainerInterface{
   public connections = new TSMap<string, Connection>();
 
   constructor(
-    private _eventsDb: PouchDB.Database<{}>,
-    private _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
-    private _accountsDb: PouchDB.Database<Account>,
-    private _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>){
+    protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
+    protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
+    protected _accountsDb: PouchDB.Database<Account>,
+    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>){
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
         .on('change', (change) => {

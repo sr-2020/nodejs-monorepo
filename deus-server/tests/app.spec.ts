@@ -14,10 +14,11 @@ import { Container } from "typedi";
 import App from '../app';
 import { characterIdTimestampOnlyRefreshesView } from '../consts';
 import { createViews } from '../test-helper';
-import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
+import { DatabasesContainer, DatabasesContainerToken, DatabasesContainerInterface } from '../services/db-container';
 import { currentTimestamp } from '../utils';
 import { LoggerToken, WinstonLogger } from "../services/logger";
 import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "../services/settings";
+import { TestDatabasesContainer } from './test-db-container';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
@@ -45,27 +46,10 @@ id     login                      password  comment
 
 describe('API Server', () => {
   let app: App;
-  let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
-  let mobileViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
-  let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
-  let accountsDb: PouchDB.Database<{ password: string }>;
-  let economyDb = new PouchDB('economy', { adapter: 'memory' });
   let testStartTime: number;
-
-  async function allNonDesignDocsSortedByTimestamp(): Promise<any[]> {
-    return (await eventsDb.allDocs({ include_docs: true })).rows
-      .filter((row) => row.id[0] != '_')
-      .sort((row1, row2) => (row1.doc ? row1.doc.timestamp : 0) - (row2.doc ? row2.doc.timestamp : 0));
-  }
+  let dbContainer: TestDatabasesContainer;
 
   beforeEach(async () => {
-    eventsDb = new PouchDB('events', { adapter: 'memory' });
-    mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
-    defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
-    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
-      ([['mobile', mobileViewModelDb],
-      ['default', defaultViewModelDb]]);
-    accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     Container.set(LoggerToken, new WinstonLogger({ level: 'warn' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
@@ -73,33 +57,33 @@ describe('API Server', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, 
-      new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
+    dbContainer = new TestDatabasesContainer();
+    Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
     await app.listen(port);
-    await mobileViewModelDb.put({
+    await dbContainer.viewModelDb('mobile').put({
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: true,
     });
-    await defaultViewModelDb.put({
+    await dbContainer.viewModelDb('default').put({
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
-    await defaultViewModelDb.put({
+    await dbContainer.viewModelDb('default').put({
       _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: false,
     });
-    await mobileViewModelDb.put({
+    await dbContainer.viewModelDb('mobile').put({
       _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: true,
     });
-    await accountsDb.put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
-    await accountsDb.put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
-    await accountsDb.put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
-    await accountsDb.put({ _id: '99999', login: 'admin', password: 'admin' });
+    await dbContainer.accountsDb().put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
+    await dbContainer.accountsDb().put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
+    await dbContainer.accountsDb().put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
+    await dbContainer.accountsDb().put({ _id: '99999', login: 'admin', password: 'admin' });
 
     testStartTime = currentTimestamp();
-    await accountsDb.put({
+    await dbContainer.accountsDb().put({
       _id: '00001',
       login: 'some_user',
       password: 'qwerty',
@@ -109,18 +93,15 @@ describe('API Server', () => {
         { id: '10001', timestamp: testStartTime + 60000 },
       ],
     });
-    await accountsDb.put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
-    await accountsDb.put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
+    await dbContainer.accountsDb().put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
+    await dbContainer.accountsDb().put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
 
-    await createViews(accountsDb, mobileViewModelDb, eventsDb);
+    await createViews(dbContainer.accountsDb(), dbContainer.viewModelDb('mobile'), dbContainer.eventsDb());
   });
 
   afterEach(async () => {
     app.stop();
-    await accountsDb.destroy();
-    await mobileViewModelDb.destroy();
-    await defaultViewModelDb.destroy();
-    await eventsDb.destroy();
+    await dbContainer.destroyDatabases();
   });
 
   describe('/time', () => {
@@ -348,7 +329,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
+      const docs = await dbContainer.eventsDb().query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(event);
@@ -375,7 +356,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await allNonDesignDocsSortedByTimestamp();
+      const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(2);
       expect(docs[0].doc).to.deep.include(events[1]);
       expect(docs[1].doc).to.deep.include(events[2]);
@@ -406,7 +387,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await allNonDesignDocsSortedByTimestamp();
+      const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(3);
       expect(docs[0].doc).to.deep.include(events[0]);
       expect(docs[1].doc).to.deep.include(events[2]);
@@ -438,7 +419,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await allNonDesignDocsSortedByTimestamp();
+      const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(1);
       expect(docs[0].doc).to.deep.include(events[3]);
     });
@@ -463,7 +444,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await eventsDb.query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
+      const docs = await dbContainer.eventsDb().query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
       expect(docs.rows.length).to.equal(1);
       const doc: any = docs.rows[0].doc;
       expect(doc).to.deep.include(events[1]);
@@ -487,7 +468,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await allNonDesignDocsSortedByTimestamp();
+      const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(1);
       const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[0]);
@@ -499,11 +480,12 @@ describe('API Server', () => {
         eventType: '_RefreshModel',
         timestamp: 4365,
       };
-      eventsDb.changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
+      dbContainer.eventsDb().changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
         if (change.doc) {
           const changeDoc = change.doc;
-          mobileViewModelDb.get('00001').then((doc) => {
-            mobileViewModelDb.put({
+          const viewModelDb = dbContainer.viewModelDb('mobile') as PouchDB.Database<any>;
+          viewModelDb.get('00001').then((doc) => {
+            viewModelDb.put({
               _id: '00001',
               _rev: doc._rev,
               timestamp: changeDoc.timestamp,
@@ -580,9 +562,8 @@ describe('API Server', () => {
       const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
       const expectedStatuses = Array(20).fill(202);
       expect(resultStatuses).to.deep.equal(expectedStatuses);
-      const res = await eventsDb.allDocs({ include_docs: true });
-      const events = res.rows.filter((row) => row.doc && row.doc.characterId);
-      expect(events.length).to.eq(20);
+      const res = await dbContainer.allEventsSortedByTimestamp();
+      expect(res.length).to.eq(20);
     });
 
     it('Handles mobile + non-mobile connection simultaneously', async () => {
@@ -612,8 +593,7 @@ describe('API Server', () => {
       const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
       const expectedStatuses = Array(21).fill(202);
       expect(resultStatuses).to.deep.equal(expectedStatuses);
-      const res = await eventsDb.allDocs({ include_docs: true });
-      const events = res.rows.filter((row) => row.doc && row.doc.characterId);
+      const events = await dbContainer.allEventsSortedByTimestamp();
       expect(events.length).to.eq(21);
     });
 
@@ -656,9 +636,9 @@ describe('API Server', () => {
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
 
-      const res = await eventsDb.allDocs({ include_docs: true });
+      const res = await dbContainer.eventsDb().allDocs({ include_docs: true });
       // Filter design-docs
-      const events = res.rows.filter((row) => row.doc && row.doc.characterId);
+      const events = await dbContainer.allEventsSortedByTimestamp();
       expect(events.length).to.eq(1);
     });
 
@@ -825,7 +805,7 @@ describe('API Server', () => {
         expect(response.body.access[0].id).to.equal('10003');
         expect(response.body.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
 
-        const accessInfo: any = await accountsDb.get('10001');
+        const accessInfo: any = await dbContainer.accountsDb().get('10001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10003');
         expect(accessInfo.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
@@ -842,7 +822,7 @@ describe('API Server', () => {
         for (const access of response.body.access)
           expect(access.timestamp).to.be.gt(testStartTime);
 
-        const accessInfo: any = await accountsDb.get('00001');
+        const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(2);
         for (const access of (accessInfo.access))
           expect(access.timestamp).to.be.gt(testStartTime);
@@ -859,7 +839,7 @@ describe('API Server', () => {
         expect(response.body.access[0].id).to.equal('10002');
         expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
 
-        const accessInfo: any = await accountsDb.get('00001');
+        const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10002');
         expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
@@ -878,7 +858,7 @@ describe('API Server', () => {
         expect(response.body.access[0].id).to.equal('10003');
         expect(response.body.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
 
-        const accessInfo: any = await accountsDb.get('10001');
+        const accessInfo: any = await dbContainer.accountsDb().get('10001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10003');
         expect(accessInfo.access[0].timestamp).to.be.approximately(currentTimestamp() + 1000, 200);
@@ -895,7 +875,7 @@ describe('API Server', () => {
         for (const access of response.body.access)
           expect(access.timestamp).to.be.gt(testStartTime);
 
-        const accessInfo: any = await accountsDb.get('00001');
+        const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(2);
         for (const access of (accessInfo.access))
           expect(access.timestamp).to.be.gt(testStartTime);
@@ -912,7 +892,7 @@ describe('API Server', () => {
         expect(response.body.access[0].id).to.equal('10002');
         expect(response.body.access[0].timestamp).to.equal(testStartTime - 1);
 
-        const accessInfo: any = await accountsDb.get('00001');
+        const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(1);
         expect(accessInfo.access[0].id).to.equal('10002');
         expect(accessInfo.access[0].timestamp).to.equal(testStartTime - 1);
@@ -941,7 +921,7 @@ describe('API Server', () => {
 
   describe('tokenUpdated events handling', () => {
     it('Can query by push token', async () => {
-      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
+      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
     });
@@ -961,7 +941,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('account/by-push-token', { key: '00002snewtoken' });
+      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
     });
@@ -986,11 +966,11 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await accountsDb.query('account/by-push-token', { key: '00002snewesttoken' });
+      let docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewesttoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
 
-      docs = await accountsDb.query('account/by-push-token', { key: '00002snewtoken' });
+      docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewtoken' });
       expect(docs.rows).to.be.empty;
     });
 
@@ -1009,11 +989,11 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await accountsDb.query('account/by-push-token', { key: '00001snewtoken' });
+      let docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001snewtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
 
-      docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
+      docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows).to.be.empty;
     });
 
@@ -1032,7 +1012,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
+      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00002');
     });
@@ -1052,7 +1032,7 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await accountsDb.query('account/by-push-token', { key: '00001spushtoken' });
+      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
       expect(docs.rows.length).to.equal(1);
       expect(docs.rows[0].id).to.equal('00001');
     });
@@ -1167,12 +1147,12 @@ describe('API Server', () => {
 
   describe('Periodic notification sending', () => {
     it('Can sort characters by timestamp', async () => {
-      const docsOld = await mobileViewModelDb.query('viewmodel/by-timestamp',
+      const docsOld = await dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
         { startkey: 0, endkey: 1000 });
       expect(docsOld.rows.length).to.equal(1);
       expect(docsOld.rows[0].id).to.equal('00001');
 
-      const docsNew = await mobileViewModelDb.query('viewmodel/by-timestamp',
+      const docsNew = await dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
         { startkey: 1000, endkey: 999999 });
       expect(docsNew.rows.length).to.equal(1);
       expect(docsNew.rows[0].id).to.equal('00002');
