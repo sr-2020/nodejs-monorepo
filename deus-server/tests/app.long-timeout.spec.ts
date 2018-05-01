@@ -13,25 +13,19 @@ import { Container } from "typedi";
 
 import App from '../app';
 import { PushSettings, ApplicationSettings } from '../services/settings';
-import { createViews } from '../test-helper';
 import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from "../services/logger";
 import { ApplicationSettingsToken } from "../services/settings";
+import { TestDatabasesContainer } from './test-db-container';
 
 const port = 3000;
 const address = 'http://localhost:' + port;
 
 describe('API Server - long timeout', () => {
   let app: App;
-  let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
-  let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
-  let accountsDb: PouchDB.Database<{ password: string }>;
-  let economyDb = new PouchDB('economy', { adapter: 'memory' });
+  let dbContainer: TestDatabasesContainer;
+
   beforeEach(async () => {
-    eventsDb = new PouchDB('events2', { adapter: 'memory' });
-    viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
-    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
-    accountsDb = new PouchDB('accounts2', { adapter: 'memory' });
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
@@ -39,19 +33,18 @@ describe('API Server - long timeout', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
+    dbContainer = new TestDatabasesContainer();
+    Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
     await app.listen(port);
-    await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
-    await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
-    await createViews(accountsDb, viewModelDb, eventsDb);
+    await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
+    await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
+    await dbContainer.createViews();
   });
 
   afterEach(async () => {
     app.stop();
-    await accountsDb.destroy();
-    await viewModelDb.destroy();
-    await eventsDb.destroy();
+    await dbContainer.destroyDatabases();
   });
 
   it('Does not wait for viewmodel update', async () => {
@@ -66,8 +59,7 @@ describe('API Server - long timeout', () => {
       }).promise();
 
     expect(response.statusCode).to.eq(202);
-    const res = await eventsDb.allDocs({ include_docs: true });
-    const events = res.rows.filter((row) => row.doc && row.doc.characterId);
+    const events = await dbContainer.allEventsSortedByTimestamp();
     expect(events.length).to.eq(1);
     expect(events[0].doc).to.deep.include(event);
     expect(events[0].doc).to.deep.include({ characterId: '00001' });
@@ -76,15 +68,9 @@ describe('API Server - long timeout', () => {
 
 describe('API Server - medium timeout', () => {
   let app: App;
-  let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
-  let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
-  let accountsDb: PouchDB.Database<{ password: string }>;
-  let economyDb = new PouchDB('economy', { adapter: 'memory' });
+  let dbContainer: TestDatabasesContainer;
+
   beforeEach(async () => {
-    eventsDb = new PouchDB('events3', { adapter: 'memory' });
-    viewModelDb = new PouchDB('viewmodel3', { adapter: 'memory' });
-    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', viewModelDb]]);
-    accountsDb = new PouchDB('accounts3', { adapter: 'memory' });
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
@@ -92,19 +78,18 @@ describe('API Server - medium timeout', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
+    dbContainer = new TestDatabasesContainer();
+    Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
     await app.listen(port);
-    await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
-    await accountsDb.put({ _id: '00001', login: 'some_user', password: 'qwerty' });
-    await createViews(accountsDb, viewModelDb, eventsDb);
+    await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
+    await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
+    await dbContainer.createViews();
   });
 
   afterEach(async () => {
     app.stop();
-    await accountsDb.destroy();
-    await viewModelDb.destroy();
-    await eventsDb.destroy();
+    await dbContainer.destroyDatabases();
   });
 
   it('Forbids two simultaneous mobile connections', async () => {

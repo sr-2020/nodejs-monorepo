@@ -13,9 +13,9 @@ import { Container } from "typedi";
 import App from '../app';
 import { ApplicationSettings, PushSettings, CheckForInactivitySettings,
   ApplicationSettingsToken } from '../services/settings';
-import { createViews } from '../test-helper';
 import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from "../services/logger";
+import { TestDatabasesContainer } from './test-db-container';
 
 const port = 3000;
 
@@ -26,6 +26,7 @@ function delay(ms: number) {
 describe('Mass push notifications', () => {
 
   let app: App;
+  let dbContainer: TestDatabasesContainer;
   const testStartTime: number = new Date().valueOf();
 
   const pushSettings: PushSettings = {
@@ -40,65 +41,51 @@ describe('Mass push notifications', () => {
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
-
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
-  let eventsDb: PouchDB.Database<{}>;
-  let mobileViewModelDb: PouchDB.Database<{}>;
-  let defaultViewModelDb: PouchDB.Database<{}>;
-  let viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>;
-  let accountsDb: PouchDB.Database<{}>;
-  let economyDb: PouchDB.Database<{}>;
 
   beforeEach(async () => {
-    eventsDb = new PouchDB('events', { adapter: 'memory' });
-    mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
-    defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
-    viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
-      ([['mobile', mobileViewModelDb],
-      ['default', defaultViewModelDb]]);
-    accountsDb = new PouchDB('accounts', { adapter: 'memory' });
-    economyDb = new PouchDB('economy', { adapter: 'memory' });
+    dbContainer = new TestDatabasesContainer();
 
-    await mobileViewModelDb.put({
+    await dbContainer.viewModelDb('mobile').put({
       _id: '00001', timestamp: testStartTime, mobile: true,
     });
-    await defaultViewModelDb.put({
+    await dbContainer.viewModelDb('default').put({
       _id: '00001', timestamp: testStartTime, mobile: false,
     });
-    await defaultViewModelDb.put({
+    await dbContainer.viewModelDb('default').put({
       _id: '00002', timestamp: testStartTime - 20000, mobile: false,
     });
-    await mobileViewModelDb.put({
+    await dbContainer.viewModelDb('mobile').put({
       _id: '00002', timestamp: testStartTime - 20000, mobile: true,
     });
-    await defaultViewModelDb.put({
+    await dbContainer.viewModelDb('default').put({
       _id: '00003', timestamp: testStartTime - 20000, mobile: false,
     });
-    await mobileViewModelDb.put({
+    await dbContainer.viewModelDb('mobile').put({
       _id: '00003', timestamp: testStartTime - 20000, mobile: true,
     });
 
-    await accountsDb.put({
+    await dbContainer.accountsDb().put({
       _id: '00001',
       pushToken: '00001spushtoken',
+      password: ''
     });
-    await accountsDb.put({
+    await dbContainer.accountsDb().put({
       _id: '00002',
       pushToken: '00002spushtoken',
+      password: ''
     });
-    await accountsDb.put({
+    await dbContainer.accountsDb().put({
       _id: '00003',
+      password: ''
     });
-    await createViews(accountsDb, mobileViewModelDb, eventsDb);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
+    await dbContainer.createViews();
+    Container.set(DatabasesContainerToken, dbContainer);
   });
 
   afterEach(async () => {
     app.stop();
-    await accountsDb.destroy();
-    await mobileViewModelDb.destroy();
-    await defaultViewModelDb.destroy();
-    await eventsDb.destroy();
+    await dbContainer.destroyDatabases();
   });
 
   it('Sends refresh notification to inactive users with push tokens', async () => {

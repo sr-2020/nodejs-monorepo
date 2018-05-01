@@ -13,7 +13,6 @@ import { Container } from "typedi";
 
 import App from '../app';
 import { characterIdTimestampOnlyRefreshesView } from '../consts';
-import { createViews } from '../test-helper';
 import { DatabasesContainer, DatabasesContainerToken, DatabasesContainerInterface } from '../services/db-container';
 import { currentTimestamp } from '../utils';
 import { LoggerToken, WinstonLogger } from "../services/logger";
@@ -96,7 +95,7 @@ describe('API Server', () => {
     await dbContainer.accountsDb().put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
     await dbContainer.accountsDb().put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
 
-    await createViews(dbContainer.accountsDb(), dbContainer.viewModelDb('mobile'), dbContainer.eventsDb());
+    await dbContainer.createViews();
   });
 
   afterEach(async () => {
