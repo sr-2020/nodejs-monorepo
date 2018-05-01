@@ -4,6 +4,7 @@ import { Token } from "typedi";
 import { Connection } from "../connection";
 
 export interface Account {
+  login?: string,
   password: string,
   access?: {id: string, timestamp: number}[],
   pushToken?: string,

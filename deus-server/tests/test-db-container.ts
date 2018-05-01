@@ -72,6 +72,8 @@ export class TestDatabasesContainer extends DatabasesContainer {
         },
       };
     });
+
+    await (this.economyDb() as PouchDB.Database<any>).put({_id: 'balances'});
   }  
 }
 
