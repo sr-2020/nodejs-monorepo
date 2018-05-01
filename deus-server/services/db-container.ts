@@ -13,6 +13,21 @@ export interface ViewModel {
   timestamp: number,
 }
 
+export interface TransactionRequest {
+  sender: string;
+  receiver: string;
+  amount: number;
+  description?: string;
+}
+
+export interface TransactionDocument extends TransactionRequest {
+  timestamp: number;
+}
+
+export interface BalancesDocument {
+  [key: string]: number;
+}
+
 export interface DatabasesContainerInterface {
   // TODO: Make private, provide accessors
   connections: TSMap<string, Connection>,
@@ -20,6 +35,7 @@ export interface DatabasesContainerInterface {
   eventsDb(): PouchDB.Database<{}>,
   accountsDb(): PouchDB.Database<Account>,
   viewModelDb(type: string): PouchDB.Database<ViewModel>,
+  economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument>,
 }
 
 export const DatabasesContainerToken = new Token<DatabasesContainerInterface>();
@@ -30,7 +46,8 @@ export class DatabasesContainer implements DatabasesContainerInterface{
   constructor(
     private _eventsDb: PouchDB.Database<{}>,
     private _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
-    private _accountsDb: PouchDB.Database<Account>){
+    private _accountsDb: PouchDB.Database<Account>,
+    private _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>){
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
         .on('change', (change) => {
@@ -45,4 +62,5 @@ export class DatabasesContainer implements DatabasesContainerInterface{
   public eventsDb() { return this._eventsDb; }
   public accountsDb() { return this._accountsDb; }
   public viewModelDb(type: string = 'default') { return this._viewmodelDbs.get(type); }
+  public economyDb() { return this._economyDb; }
 }

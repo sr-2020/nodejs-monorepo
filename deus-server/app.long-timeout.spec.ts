@@ -25,6 +25,7 @@ describe('API Server - long timeout', () => {
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
+  let economyDb = new PouchDB('economy', { adapter: 'memory' });
   beforeEach(async () => {
     eventsDb = new PouchDB('events2', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel2', { adapter: 'memory' });
@@ -37,7 +38,7 @@ describe('API Server - long timeout', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
+    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
     app = new App();
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });
@@ -77,6 +78,7 @@ describe('API Server - medium timeout', () => {
   let eventsDb: PouchDB.Database<{ characterId: string, eventType: string, timestamp: number, data: any }>;
   let viewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
+  let economyDb = new PouchDB('economy', { adapter: 'memory' });
   beforeEach(async () => {
     eventsDb = new PouchDB('events3', { adapter: 'memory' });
     viewModelDb = new PouchDB('viewmodel3', { adapter: 'memory' });
@@ -89,7 +91,7 @@ describe('API Server - medium timeout', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
+    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
     app = new App();
     await app.listen(port);
     await viewModelDb.put({ _id: '00001', timestamp: 420, updatesCount: 0 });

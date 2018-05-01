@@ -45,6 +45,7 @@ describe('Mass push notifications', () => {
   let defaultViewModelDb: PouchDB.Database<{}>;
   let viewmodelDbs: TSMap<string, PouchDB.Database<{ timestamp: number }>>;
   let accountsDb: PouchDB.Database<{}>;
+  let economyDb: PouchDB.Database<{}>;
 
   beforeEach(async () => {
     eventsDb = new PouchDB('events', { adapter: 'memory' });
@@ -54,6 +55,7 @@ describe('Mass push notifications', () => {
       ([['mobile', mobileViewModelDb],
       ['default', defaultViewModelDb]]);
     accountsDb = new PouchDB('accounts', { adapter: 'memory' });
+    economyDb = new PouchDB('economy', { adapter: 'memory' });
 
     await mobileViewModelDb.put({
       _id: '00001', timestamp: testStartTime, mobile: true,
@@ -86,7 +88,7 @@ describe('Mass push notifications', () => {
       _id: '00003',
     });
     await createViews(accountsDb, mobileViewModelDb, eventsDb);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
+    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
   });
 
   afterEach(async () => {

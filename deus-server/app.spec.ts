@@ -48,6 +48,7 @@ describe('API Server', () => {
   let mobileViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let defaultViewModelDb: PouchDB.Database<{ timestamp: number, updatesCount: number }>;
   let accountsDb: PouchDB.Database<{ password: string }>;
+  let economyDb = new PouchDB('economy', { adapter: 'memory' });
   let testStartTime: number;
 
   async function allNonDesignDocsSortedByTimestamp(): Promise<any[]> {
@@ -71,7 +72,8 @@ describe('API Server', () => {
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
-    Container.set(DatabasesContainerToken, new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb));
+    Container.set(DatabasesContainerToken, 
+      new DatabasesContainer(eventsDb, viewmodelDbs, accountsDb, economyDb));
     app = new App();
     await app.listen(port);
     await mobileViewModelDb.put({
