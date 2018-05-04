@@ -328,8 +328,7 @@ function getPages(model) {
     pages.push(getConditionsPage(model));
     pages.push(getBodyPage(model));
 
-    // TODO: Enable when server is ready
-    // pages.push(getEconomyPage());
+    pages.push(getEconomyPage());
 
     pages.push(getChangesPage(model));
 
