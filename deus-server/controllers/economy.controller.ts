@@ -5,14 +5,14 @@ PouchDB.plugin(PouchDBUpsert);
 import { JsonController, Post, CurrentUser, Body, BadRequestError, Get, Param } from "routing-controllers";
 import { Container } from "typedi";
 
-import { DatabasesContainerToken, TransactionRequest, BalancesDocument } from "../services/db-container";
+import { DatabasesContainerToken, TransactionRequest, BalancesDocument, TransactionDocument } from "../services/db-container";
 import { returnCharacterNotFoundOrRethrow, canonicalId, checkAccess, currentTimestamp } from "../utils";
 
 
 @JsonController()
 export class EconomyController {
   @Post("/economy/transfer")
-  async transfer(@CurrentUser() user: string, @Body() body: TransactionRequest) {
+  async transfer( @CurrentUser() user: string, @Body() body: TransactionRequest) {
     try {
       body.sender = await canonicalId(body.sender);
       await checkAccess(user, body.sender);
@@ -35,7 +35,9 @@ export class EconomyController {
         receiver: body.receiver,
         amount: body.amount,
         timestamp: currentTimestamp(),
+        description: body.description
       });
+      return {};
     }
     catch (e) {
       returnCharacterNotFoundOrRethrow(e);
@@ -43,11 +45,20 @@ export class EconomyController {
   }
 
   @Get("/economy/:id")
-  async get(@CurrentUser() user: string, @Param("id") id: string){
+  async get( @CurrentUser() user: string, @Param("id") id: string) {
     id = await canonicalId(id);
     await checkAccess(user, id);
     const db = Container.get(DatabasesContainerToken).economyDb();
     const doc = await db.get('balances') as BalancesDocument;
-    return { balance: doc[id] || 0 };
+
+    const docs = await Container.get(DatabasesContainerToken).economyDb().query('economy/by-id', { key: id, include_docs: true });
+    return {
+      balance: doc[id],
+      history: docs.rows.map((row: any) => {
+        delete row.doc._id;
+        delete row.doc._rev;
+        return row.doc;
+      }).sort((l: any, r: any) => l.timestamp - r.timestamp)
+    };
   }
 }

@@ -8,7 +8,7 @@ import { DatabasesContainer } from "../services/db-container";
 
 
 export class TestDatabasesContainer extends DatabasesContainer {
-  
+
   constructor() {
     const eventsDb = new PouchDB('events', { adapter: 'memory' });
     const mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
@@ -33,7 +33,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
     await this._eventsDb.destroy();
     for (const db of this._viewmodelDbs.values())
       await db.destroy();
-  }    
+  }
 
   public async createViews() {
     await (this.eventsDb() as PouchDB.Database<any>).put({
@@ -45,7 +45,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
         },
       },
     });
-  
+
     await (this.accountsDb() as PouchDB.Database<any>).upsert('_design/account', () => {
       return {
         _id: '_design/account',
@@ -61,7 +61,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
         },
       };
     });
-  
+
     await (this.viewModelDb('mobile') as PouchDB.Database<any>).upsert('_design/viewmodel', () => {
       return {
         _id: '_design/viewmodel',
@@ -73,7 +73,16 @@ export class TestDatabasesContainer extends DatabasesContainer {
       };
     });
 
-    await (this.economyDb() as PouchDB.Database<any>).put({_id: 'balances'});
-  }  
+    await (this.economyDb() as PouchDB.Database<any>).upsert('_design/economy', () => {
+      return {
+        _id: '_design/economy',
+        views: {
+          'by-id': {
+            map: 'function (doc) { if (doc.sender && doc.receiver) { emit(doc.sender); emit(doc.receiver); } }',
+          },
+        },
+      };
+    });
+  }
 }
 
