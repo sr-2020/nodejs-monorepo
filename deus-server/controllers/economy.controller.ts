@@ -18,14 +18,14 @@ export class EconomyController {
       await checkAccess(user, body.sender);
       body.receiver = await canonicalId(body.receiver);
       if (body.amount <= 0)
-        throw new BadRequestError("Transaction amount should be positive.")
+        throw new BadRequestError("Величина транзакции должна быть положительной.")
       if (body.sender == body.receiver)
-        throw new BadRequestError("Can't transfer to yourself.")
+        throw new BadRequestError("Нельзя переводить деньги самому себе.")
 
       const db = Container.get(DatabasesContainerToken).economyDb();
       await db.upsert("balances", (doc) => {
         if (doc[body.sender] < body.amount)
-          throw new BadRequestError("Not enough money")
+          throw new BadRequestError("Недостаточно денег.")
         doc[body.sender] -= body.amount;
         doc[body.receiver] += body.amount;
         return doc;
