@@ -7,6 +7,7 @@ import { Container } from "typedi";
 
 import { DatabasesContainerToken, TransactionRequest, BalancesDocument, TransactionDocument } from "../services/db-container";
 import { returnCharacterNotFoundOrRethrow, canonicalId, checkAccess, currentTimestamp } from "../utils";
+import { sendGenericPushNotification, makeVisibleNotificationPayload } from "../push-helpers";
 
 
 @JsonController()
@@ -37,6 +38,8 @@ export class EconomyController {
         timestamp: currentTimestamp(),
         description: body.description
       });
+      await sendGenericPushNotification(body.receiver,
+        makeVisibleNotificationPayload(`Получен платеж: ${body.amount}`, `Отправитель платежа: ${body.sender}`));
       return {};
     }
     catch (e) {
