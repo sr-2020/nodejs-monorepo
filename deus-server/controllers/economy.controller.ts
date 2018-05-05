@@ -58,7 +58,7 @@ export class EconomyController {
         delete row.doc._id;
         delete row.doc._rev;
         return row.doc;
-      }).sort((l: any, r: any) => l.timestamp - r.timestamp)
+      }).sort((l: any, r: any) => r.timestamp - l.timestamp)
     };
   }
 }

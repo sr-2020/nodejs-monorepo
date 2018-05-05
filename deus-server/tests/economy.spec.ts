@@ -110,14 +110,15 @@ const address = `http://localhost:${port}`
     const history = response.body.history;
     expect(history).to.exist
     expect(history.length).to.equal(2);
-    expect(history[0].timestamp).to.be.lessThan(history[1].timestamp);
+    expect(history[0].timestamp).to.be.greaterThan(history[1].timestamp);
     expect(history[0].timestamp).to.be.approximately(currentTimestamp(), 1000);
     expect(history[1].timestamp).to.be.approximately(currentTimestamp(), 1000);
     delete history[0].timestamp;
     delete history[1].timestamp;
     expect(history).to.deep.equal([
+      { sender: '00002', receiver: '00001', amount: 5, description: 'For dark side' },
       { sender: '00001', receiver: '00002', amount: 15, description: 'For cookies' },
-      { sender: '00002', receiver: '00001', amount: 5, description: 'For dark side' }]);
+    ]);
   });
 
   it('Can process simultaneous transfers', async () => {
