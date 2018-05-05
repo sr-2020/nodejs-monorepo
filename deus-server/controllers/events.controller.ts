@@ -198,6 +198,6 @@ export class EventsController {
     const logData = createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
-    this.logger.info('Successfully processed all events and answered back to clien', logData);
+    this.logger.info('Successfully processed all events and answered back to client', logData);
   }
 }
