@@ -140,3 +140,13 @@ export async function createViewModel(db: NanoDocument, viewModelTemplate: any, 
     delete viewModel._rev;
     await updateIfDifferent(db, viewModel);
 }
+
+export async function createBalanceRecord(db: NanoDocument, index: number) {
+    let doc = await getOrNull(db, 'balances');
+    if (!doc) {
+        doc = { _id: 'balances' }
+    }
+    doc[getId(index)] = 9000;
+    await put(db, doc);
+}
+

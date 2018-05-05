@@ -26,7 +26,8 @@ module.exports = {
         events: "events",                      // это и далее - пары <alias>: <имя базы в коче>
         models: "models",
         workingModels: "work-models",
-        accounts: "accounts"
+        accounts: "accounts",
+        economy: "economy",
     },
 
     // блок настроек пула воркеров

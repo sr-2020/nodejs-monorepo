@@ -6,7 +6,7 @@ import { Nano, NanoDatabase, NanoDocument } from 'nano';
 import * as nano from 'nano';
 import { stdCallback, requireDir, delay } from '../utils';
 import { Config, CatalogsConfigDb } from '../config';
-import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel, dbName } from './util';
+import { createDbIfNotExists, deepToString, updateIfDifferent, importCatalogs, createAccount, createModel, createViewModel, dbName, createBalanceRecord } from './util';
 import { CatalogsStorage } from '../catalogs_storage';
 import { NanoConnector } from '../db/nano';
 import * as express from 'express';
@@ -30,7 +30,7 @@ const connector = new NanoConnector(config);
 
 const dbNames: string[] = [
     '_global_changes', '_metadata', '_replicator', '_users',
-    config.db.events, config.db.models, config.db.workingModels, config.db.accounts
+    config.db.events, config.db.models, config.db.workingModels, config.db.accounts, config.db.economy
 ];
 
 if (config.catalogs && ('db' in config.catalogs)) {
@@ -90,7 +90,8 @@ async function createSampleData() {
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), modelTemplate, index),
             // TODO: Support case of many viewmodel
-            createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index)
+            createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index),
+            createBalanceRecord(connection.use(config.db.economy), index),
         ]);
     }
 }

@@ -4,6 +4,7 @@ export interface DbConfig {
     models: string
     workingModels: string
     accounts: string
+    economy: string
 }
 
 export interface CatalogsConfigFiles {
