@@ -193,4 +193,14 @@ const address = `http://localhost:${port}`
     expect(response.statusCode).to.eq(400);
   });
 
+  // TODO(https://deus2017.atlassian.net/browse/DEM-314)
+  it.skip('Get 400 if amount is not a number', async () => {
+    let response = await rp.post(address + '/economy/transfer', {
+      resolveWithFullResponse: true, simple: false,
+      json: { sender: 'first', receiver: 'second', amount: '15', description: 'For cookies' },
+      auth: { username: 'first', password: '1' },
+    }).promise();
+    expect(response.statusCode).to.eq(400);
+  });
+
 });
