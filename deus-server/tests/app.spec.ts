@@ -50,7 +50,7 @@ describe('API Server', () => {
 
   beforeEach(async () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warn' }));
-    const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
+    const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
@@ -1082,7 +1082,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/00001',
         {
           resolveWithFullResponse: true, json: { foo: 'bar' },
-          auth: { username: 'pushadmin', password: 'pushpassword' },
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.equal(200);
 
@@ -1100,7 +1100,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/some_user',
         {
           resolveWithFullResponse: true, json: { foo: 'bar' },
-          auth: { username: 'pushadmin', password: 'pushpassword' },
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.equal(200);
 
@@ -1128,7 +1128,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/00001',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'pushadmin', password: 'asdsa' },
+          auth: { username: 'admin', password: 'asdsa' },
         }).promise();
       expect(response.statusCode).to.equal(401);
     });
@@ -1137,7 +1137,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/54674',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'pushadmin', password: 'pushpassword' },
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.equal(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
@@ -1147,7 +1147,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/00002',
         {
           resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'pushadmin', password: 'pushpassword' },
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.equal(404);
       expect(response.body.message).to.eq('No push token for this character');
@@ -1164,7 +1164,7 @@ describe('API Server', () => {
       const response = await rp.post(address + '/push/00001',
         {
           resolveWithFullResponse: true, simple: false, json: { foo: 'bar' },
-          auth: { username: 'pushadmin', password: 'pushpassword' },
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.equal(400);
       expect(response.body.message).to.eq('Nope!');

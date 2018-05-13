@@ -27,7 +27,7 @@ describe('API Server - long timeout', () => {
 
   beforeEach(async () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
-    const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
+    const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
@@ -72,7 +72,7 @@ describe('API Server - medium timeout', () => {
 
   beforeEach(async () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
-    const pushSettings: PushSettings = { username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey' };
+    const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
       viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,

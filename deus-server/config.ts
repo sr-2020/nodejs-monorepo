@@ -21,8 +21,6 @@ export const config: Configuration = {
         accessGrantTime: 60000,
         tooFarInFutureFilterTime: 1800000,
         pushSettings: {
-            username: process.env.PUSH_USER,
-            password: process.env.PUSH_PASSWORD,
             serverKey: process.env.PUSH_SERVERKEY,
         }
     }

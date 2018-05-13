@@ -30,7 +30,7 @@ describe('Mass push notifications', () => {
   const testStartTime: number = new Date().valueOf();
 
   const pushSettings: PushSettings = {
-    username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey',
+    serverKey: 'fakeserverkey',
     autoRefresh: {
       notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 160,
     },

@@ -20,13 +20,6 @@ export class CheckForInactivitySettings {
 }
 
 export class PushSettings {
-  // Users of push-related methods must use HTTP Basic Auth with following credentials:
-  // Username to access push-related methods
-  public username: string;
-
-  // Password to access push-related methods
-  public password: string;
-
   // Firebase Cloud Messaging server key to send push notifications
   public serverKey: string;
 

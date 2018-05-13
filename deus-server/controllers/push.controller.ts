@@ -1,7 +1,7 @@
-import { JsonController, Get, Post, Req, Param, Body, UseBefore } from "routing-controllers";
+import { JsonController, Get, Post, Req, Param, Body, UseBefore, CurrentUser } from "routing-controllers";
 import { sendGenericPushNotificationThrowOnError, makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload } from "../push-helpers";
-import { canonicalId } from "../utils";
-import { PushAuthMiddleware } from "../middleware/push-auth";
+import { canonicalId, AccessPropagation, checkAccess } from "../utils";
+import { Account } from "../services/db-container";
 
 interface Notification {
   title: string,
@@ -9,23 +9,25 @@ interface Notification {
 }
 
 @JsonController()
-@UseBefore(PushAuthMiddleware)
 export class PushController {
 
   @Post("/push/visible/:id")
-  async postVisible(@Param("id") id: string, @Body() notification: Notification) {
+  async postVisible(@CurrentUser() user: Account, @Param("id") id: string, @Body() notification: Notification) {
+    await checkAccess(user, id, AccessPropagation.AdminOnly);
     return await sendGenericPushNotificationThrowOnError(await canonicalId(id),
       makeVisibleNotificationPayload(notification.title, notification.body));
   }
 
   @Post("/push/refresh/:id")
-  async postRefresh(@Param("id") id: string) {
+  async postRefresh(@CurrentUser() user: Account, @Param("id") id: string) {
+    await checkAccess(user, id, AccessPropagation.AdminOnly);
     return await sendGenericPushNotificationThrowOnError(await canonicalId(id),
       makeSilentRefreshNotificationPayload());
   }
 
   @Post("/push/:id")
-  async postGeneric(@Param("id") id: string, @Body() payload: any) {
+  async postGeneric(@CurrentUser() user: Account, @Param("id") id: string, @Body() payload: any) {
+    await checkAccess(user, id, AccessPropagation.AdminOnly);
     return await sendGenericPushNotificationThrowOnError(await canonicalId(id), payload);
   }
 }

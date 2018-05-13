@@ -30,10 +30,10 @@ const address = `http://localhost:${port}`
   const testStartTime: number = currentTimestamp()
 
   const pushSettings: PushSettings = {
-    username: 'pushadmin', password: 'pushpassword', serverKey: 'fakeserverkey',
     autoRefresh: {
       notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 160,
     },
+    serverKey: 'fakeserverkey',
   };
 
   const settings: ApplicationSettings = {
