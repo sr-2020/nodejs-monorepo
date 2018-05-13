@@ -127,7 +127,7 @@ export async function createAccount(db: NanoDocument, index: number) {
         roles.push('admin');
     }
     // First accounts get logins a, b, c, ..., z
-    if (index <= 26) login = String.fromCharCode(96 + index);
+    if (index > 0 && index <= 26) login = String.fromCharCode(96 + index);
     await updateIfDifferent(db,
     {
         _id: getId(index),
