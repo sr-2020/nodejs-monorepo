@@ -101,6 +101,7 @@ describe('General Magellan events: ', () => {
         let cond = workingModel.conditions.find( (c:any) => c.id == "on-the-ship");
         expect(cond).is.exist;
         expect(cond.text).to.contain('17');
+        expect(workingModel.location).to.equal('ship_17');
 
         events = getEvents(baseModel._id, [ {eventType: 'enter-ship', data: 22 } ]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
@@ -109,11 +110,13 @@ describe('General Magellan events: ', () => {
         expect(cond).is.exist;
         expect(cond.text).to.contain('22');
         expect(cond.text).not.to.contain('17');
+        expect(workingModel.location).to.equal('ship_22');
 
         events = getEvents(baseModel._id, [ {eventType: 'leave-ship', data: {} } ]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
 
         expect(workingModel.conditions).not.exist;
+        expect(workingModel.location).not.exist;
     });
 
     it("Enter and leave ship QR", async function() {
@@ -128,12 +131,14 @@ describe('General Magellan events: ', () => {
         let cond = workingModel.conditions.find( (c:any) => c.id == "on-the-ship");
         expect(cond).is.exist;
         expect(cond.text).to.contain('17');
+        expect(workingModel.location).to.equal('ship_17');
 
         events = getEvents(baseModel._id,
             [ {eventType: 'scanQr', data: {type: 6, kind: 0, validUntil: 0, payload: '' } }]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
 
         expect(workingModel.conditions).not.exist;
+        expect(workingModel.location).not.exist;
     });
 
 

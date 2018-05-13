@@ -43,6 +43,7 @@ function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
     text: `Вы находитесь на корабле номер ${modifier.shipId}`
   };
   api.addCondition(c);
+  api.model.location = `ship_${modifier.shipId}`;
 }
 
 module.exports = () => {
