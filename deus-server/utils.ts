@@ -62,12 +62,24 @@ export function createLogData(req: express.Request, status: number): any {
   };
 }
 
-export async function checkAccess(from: Account, to: string) {
+export enum AccessPropagation {
+  Default,
+  AdminOnly,
+  NoPropagation,
+}
+
+export async function checkAccess(from: Account, to: string, accessPropagation: AccessPropagation = AccessPropagation.Default) {
   if (from.roles && from.roles.includes('admin'))
     return;
 
+  if (accessPropagation == AccessPropagation.AdminOnly)
+    throw new UnauthorizedError('Only admins can access this method');
+
   if (from._id == to)
     return;
+
+  if (accessPropagation == AccessPropagation.NoPropagation)
+    throw new UnauthorizedError('Trying to access method of another user, but access propagation is not allowed');
 
   try {
     const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;

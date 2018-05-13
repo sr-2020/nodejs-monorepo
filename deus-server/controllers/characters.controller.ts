@@ -1,5 +1,5 @@
 import { JsonController, Get, CurrentUser, Param, Post, Body, UnauthorizedError } from "routing-controllers";
-import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, canonicalIds } from "../utils";
+import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, canonicalIds, AccessPropagation, checkAccess } from "../utils";
 import { DatabasesContainerToken, Account } from "../services/db-container";
 import { Container } from "typedi";
 import * as PouchDB from 'pouchdb';
@@ -20,8 +20,7 @@ export class CharactersController {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
-      if (id != user._id)
-        throw new UnauthorizedError('Trying to access another user');
+      await checkAccess(user, id, AccessPropagation.NoPropagation);
       const allowedAccess = await dbContainer.accountsDb().get(id);
       const access = allowedAccess.access ? allowedAccess.access : [];
       return { access };
@@ -35,8 +34,7 @@ export class CharactersController {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
-      if (id != user._id)
-        throw new UnauthorizedError('Trying to access another user');
+      await checkAccess(user, id, AccessPropagation.NoPropagation);
 
       const grantAccess = await canonicalIds(req.grantAccess);
       const removeAccess = await canonicalIds(req.removeAccess);

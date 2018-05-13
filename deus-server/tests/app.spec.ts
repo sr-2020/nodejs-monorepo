@@ -798,6 +798,16 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(401);
     });
+
+    it('Admin can access anybody', async () => {
+      const response = await rp.get(address + '/characters/some_lab_technician',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.deep.equal({ access: [] });
+    });
   });
 
   describe('POST /characters', () => {
@@ -924,6 +934,15 @@ describe('API Server', () => {
           auth: { username: 'some_lab_technician', password: 'research' },
         }).promise();
       expect(response.statusCode).to.eq(401);
+    });
+
+    it('Admin can access anybody', async () => {
+      const response = await rp.post(address + '/characters/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
     });
   });
 
