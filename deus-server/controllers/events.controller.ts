@@ -14,18 +14,19 @@ import { Connection, StatusAndBody } from "../connection";
 import { sendGenericPushNotification, makeVisibleNotificationPayload } from "../push-helpers";
 
 interface Event {
-  eventType: string,
-  timestamp: number
+  eventType: string;
+  timestamp: number;
+  data?: any;
 }
 
-interface EventsRequest {
+export interface EventsRequest {
   events: Event[]
 }
 
-function CleanEventsForLogging(events: any[]) {
+function CleanEventsForLogging(events: Event[]): Event[] {
   return events.map((event) => {
     return {
-      type: event.eventType,
+      eventType: event.eventType,
       timestamp: event.timestamp
     }
   });
@@ -52,7 +53,7 @@ export class EventsController {
   }
 
   @Post("/events/:id")
-  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() body: any,
+  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() body: EventsRequest,
     @Req() req: express.Request, @Res() res: express.Response)
   {
     try {
@@ -130,7 +131,7 @@ export class EventsController {
     return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
   }
 
-  private async processTokenUpdateEvents(id: string, events: any[]) {
+  private async processTokenUpdateEvents(id: string, events: Event[]) {
     const tokenUpdatedEvents = events.filter(
       (event) => event.eventType == 'tokenUpdated' && event.data &&
         event.data.token && event.data.token.registrationId);
@@ -157,7 +158,7 @@ export class EventsController {
   // Removes _RefreshModel events which are too far in future
   // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
   // Then removes all _RefreshModel events except latest one.
-  private filterRefreshModelEventsByTimestamp(id, events: any[]): any[] {
+  private filterRefreshModelEventsByTimestamp(id, events: Event[]): Event[] {
     const tooFarInFuturetimestamp = currentTimestamp() + Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
@@ -185,7 +186,7 @@ export class EventsController {
         }));
   }
 
-  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
+  private logHalfSuccessfulResponse(req: express.Request, eventTypesBefore: Event[],
     eventTypesAfter: any[], status: number) {
     const logData = createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
@@ -193,8 +194,8 @@ export class EventsController {
     this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
   }
 
-  private logSuccessfulResponse(req: express.Request, eventTypesBefore: any[],
-    eventTypesAfter: any[], status: number) {
+  private logSuccessfulResponse(req: express.Request, eventTypesBefore: Event[],
+    eventTypesAfter: Event[], status: number) {
     const logData = createLogData(req, status);
     logData.eventTypesBefore = eventTypesBefore;
     logData.eventTypesAfter = eventTypesAfter
