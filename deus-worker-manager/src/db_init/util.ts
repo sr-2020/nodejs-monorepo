@@ -117,12 +117,23 @@ function getId(index: number): string {
 }
 
 export async function createAccount(db: NanoDocument, index: number) {
+    let login = 't' + getId(index);
+    let password = '1';
+    const roles: string[] = [];
+    // TODO: Get password from environment variable?
+    if (index == 0) {
+        login = 'admin';
+        password = 'admin';
+        roles.push('admin');
+    }
+    // First accounts get logins a, b, c, ..., z
+    if (index <= 26) login = String.fromCharCode(96 + index);
     await updateIfDifferent(db,
     {
         _id: getId(index),
-        // First accounts get logins a, b, c, ..., z
-        login: (index > 26) ? ('t' + getId(index)) : String.fromCharCode(97 + index),
-        password: '1',
+        login,
+        password,
+        roles,
     });
 }
 
