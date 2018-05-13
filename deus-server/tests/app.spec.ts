@@ -79,7 +79,7 @@ describe('API Server', () => {
     await dbContainer.accountsDb().put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
     await dbContainer.accountsDb().put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
     await dbContainer.accountsDb().put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
-    await dbContainer.accountsDb().put({ _id: '99999', login: 'admin', password: 'admin' });
+    await dbContainer.accountsDb().put({ _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
 
     testStartTime = currentTimestamp();
     await dbContainer.accountsDb().put({
@@ -221,6 +221,15 @@ describe('API Server', () => {
         }).promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
+    });
+
+    it('Admin can access anybody', async () => {
+      const response = await rp.get(address + '/viewmodel/some_user',
+        {
+          resolveWithFullResponse: true, simple: false, json: {},
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
     });
 
     it('Returns default viewmodel of existing character if accessed by technician', async () => {

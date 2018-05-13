@@ -63,8 +63,12 @@ export function createLogData(req: express.Request, status: number): any {
 }
 
 export async function checkAccess(from: Account, to: string) {
+  if (from.roles && from.roles.includes('admin'))
+    return;
+
   if (from._id == to)
     return;
+
   try {
     const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;
     if (allowedAccess && allowedAccess.some((access) => access.id == from._id && access.timestamp >= currentTimestamp()))
