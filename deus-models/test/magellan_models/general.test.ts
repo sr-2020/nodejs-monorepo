@@ -129,9 +129,6 @@ describe('General Magellan events: ', () => {
         expect(cond).is.exist;
         expect(cond.text).to.contain('17');
 
-        console.log('=================================================>');
-        console.log(JSON.stringify(viewModels));
-
         events = getEvents(baseModel._id,
             [ {eventType: 'scanQr', data: {type: 6, kind: 0, validUntil: 0, payload: '' } }]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
