@@ -1,5 +1,5 @@
 module.exports = {
-    dbs: ['models'],
+    dbs: ['workingModels'],
 
     views: {
         'by-location': {
