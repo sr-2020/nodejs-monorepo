@@ -3,11 +3,18 @@ import * as PouchDB from 'pouchdb';
 import { Token } from "typedi";
 import { Connection } from "../connection";
 
+export interface AccessEntry {
+  id: string;
+  timestamp: number;
+}
+
 export interface Account {
+  _id: string;
   login?: string,
   password: string,
-  access?: {id: string, timestamp: number}[],
+  access?: AccessEntry[],
   pushToken?: string,
+  roles?: string[];
 }
 
 export interface ViewModel {

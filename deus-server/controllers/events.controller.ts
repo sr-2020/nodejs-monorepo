@@ -7,7 +7,7 @@ import { JsonController, Get, CurrentUser, Param, Post, Body, HttpError, Res, Ba
 import { canonicalId, returnCharacterNotFoundOrRethrow, currentTimestamp, checkAccess, createLogData } from "../utils";
 import { characterIdTimestampOnlyRefreshesView } from "../consts";
 import { Container } from "typedi";
-import { DatabasesContainerToken } from "../services/db-container";
+import { DatabasesContainerToken, Account } from "../services/db-container";
 import { LoggerToken } from "../services/logger";
 import { ApplicationSettingsToken } from "../services/settings";
 import { Connection, StatusAndBody } from "../connection";
@@ -36,7 +36,7 @@ export class EventsController {
   private logger = Container.get(LoggerToken);
 
   @Get("/events/:id")
-  async get( @CurrentUser() user: string, @Param("id") id: string) {
+  async get( @CurrentUser() user: Account, @Param("id") id: string) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -52,7 +52,7 @@ export class EventsController {
   }
 
   @Post("/events/:id")
-  async post( @CurrentUser() user: string, @Param("id") id: string, @Body() body: any,
+  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() body: any,
     @Req() req: express.Request, @Res() res: express.Response)
   {
     try {

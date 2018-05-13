@@ -5,7 +5,7 @@ PouchDB.plugin(PouchDBUpsert);
 import { JsonController, Post, CurrentUser, Body, BadRequestError, Get, Param } from "routing-controllers";
 import { Container } from "typedi";
 
-import { DatabasesContainerToken, TransactionRequest, BalancesDocument, TransactionDocument } from "../services/db-container";
+import { DatabasesContainerToken, TransactionRequest, BalancesDocument, TransactionDocument, Account } from "../services/db-container";
 import { returnCharacterNotFoundOrRethrow, canonicalId, checkAccess, currentTimestamp } from "../utils";
 import { sendGenericPushNotification, makeVisibleNotificationPayload } from "../push-helpers";
 
@@ -13,7 +13,7 @@ import { sendGenericPushNotification, makeVisibleNotificationPayload } from "../
 @JsonController()
 export class EconomyController {
   @Post("/economy/transfer")
-  async transfer( @CurrentUser() user: string, @Body() body: TransactionRequest) {
+  async transfer( @CurrentUser() user: Account, @Body() body: TransactionRequest) {
     try {
       body.sender = await canonicalId(body.sender);
       await checkAccess(user, body.sender);
@@ -48,7 +48,7 @@ export class EconomyController {
   }
 
   @Get("/economy/:id")
-  async get( @CurrentUser() user: string, @Param("id") id: string) {
+  async get( @CurrentUser() user: Account, @Param("id") id: string) {
     id = await canonicalId(id);
     await checkAccess(user, id);
     const db = Container.get(DatabasesContainerToken).economyDb();

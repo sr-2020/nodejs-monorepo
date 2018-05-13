@@ -9,7 +9,7 @@ import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload, s
 import "reflect-metadata"; // this shim is required
 import { useExpressServer, Action, UnauthorizedError } from "routing-controllers";
 import { TimeController } from './controllers/time.controller';
-import { DatabasesContainerToken } from './services/db-container';
+import { DatabasesContainerToken, Account } from './services/db-container';
 import { currentTimestamp, canonicalId, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 import { ViewModelController } from './controllers/viewmodel.controller';
 import { LoggingErrorHandler } from './middleware/error-handler'
@@ -42,17 +42,17 @@ class App {
     });
 
     useExpressServer(this.app, {
-      currentUserChecker: async (action: Action) => {
+      currentUserChecker: async (action: Action): Promise<Account | undefined> => {
         const credentials = basic_auth(action.request);
         if (!credentials)
           throw new UnauthorizedError('No authorization provided');;
 
         try {
           credentials.name = await canonicalId(credentials.name);
-          const password = (await this.dbContainer.accountsDb().get(credentials.name)).password;
-          if (password != credentials.pass)
+          const account: Account = await this.dbContainer.accountsDb().get(credentials.name);
+          if (account.password != credentials.pass)
             throw new UnauthorizedError('Wrong password');
-          return credentials.name;
+          return account;
         } catch (e) {
           returnCharacterNotFoundOrRethrow(e);
         }

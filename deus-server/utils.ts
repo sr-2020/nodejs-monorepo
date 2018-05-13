@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as moment from 'moment';
 
-import { DatabasesContainerToken } from "./services/db-container";
+import { DatabasesContainerToken, Account } from "./services/db-container";
 import { NotFoundError, UnauthorizedError } from "routing-controllers";
 import { Container } from "typedi";
 
@@ -62,12 +62,12 @@ export function createLogData(req: express.Request, status: number): any {
   };
 }
 
-export async function checkAccess(from: string, to: string) {
-  if (from == to)
+export async function checkAccess(from: Account, to: string) {
+  if (from._id == to)
     return;
   try {
     const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;
-    if (allowedAccess && allowedAccess.some((access) => access.id == from && access.timestamp >= currentTimestamp()))
+    if (allowedAccess && allowedAccess.some((access) => access.id == from._id && access.timestamp >= currentTimestamp()))
       return;
     else
       throw new UnauthorizedError('Trying to access user without proper access rights');

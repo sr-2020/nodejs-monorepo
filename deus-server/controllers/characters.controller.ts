@@ -1,6 +1,6 @@
 import { JsonController, Get, CurrentUser, Param, Post, Body, UnauthorizedError } from "routing-controllers";
 import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, canonicalIds } from "../utils";
-import { DatabasesContainerToken } from "../services/db-container";
+import { DatabasesContainerToken, Account } from "../services/db-container";
 import { Container } from "typedi";
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
@@ -16,11 +16,11 @@ interface ChangeAccessRightRequest {
 @JsonController()
 export class CharactersController {
   @Get("/characters/:id")
-  async get( @CurrentUser() user: string, @Param("id") id: string) {
+  async get( @CurrentUser() user: Account, @Param("id") id: string) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
-      if (id != user)
+      if (id != user._id)
         throw new UnauthorizedError('Trying to access another user');
       const allowedAccess = await dbContainer.accountsDb().get(id);
       const access = allowedAccess.access ? allowedAccess.access : [];
@@ -31,11 +31,11 @@ export class CharactersController {
   }
 
   @Post("/characters/:id")
-  async post( @CurrentUser() user: string, @Param("id") id: string, @Body() req: ChangeAccessRightRequest) {
+  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() req: ChangeAccessRightRequest) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
-      if (id != user)
+      if (id != user._id)
         throw new UnauthorizedError('Trying to access another user');
 
       const grantAccess = await canonicalIds(req.grantAccess);
