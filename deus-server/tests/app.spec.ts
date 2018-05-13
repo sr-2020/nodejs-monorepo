@@ -59,14 +59,20 @@ describe('API Server', () => {
     Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
     await app.listen();
-    await dbContainer.viewModelDb('mobile').put({
-      _id: '00001', timestamp: 420,
-      updatesCount: 0, mobile: true,
-    });
+
     await dbContainer.viewModelDb('default').put({
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: false,
     });
+    await dbContainer.viewModelDb('mobile').put({
+      _id: '00001', timestamp: 420,
+      updatesCount: 0, mobile: true,
+    });
+    await dbContainer.viewModelDb('model').put({
+      _id: '00001', timestamp: 420,
+      location: 'ship_BSG',
+    });
+
     await dbContainer.viewModelDb('default').put({
       _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: false,
@@ -75,6 +81,11 @@ describe('API Server', () => {
       _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: true,
     });
+    await dbContainer.viewModelDb('model').put({
+      _id: '00002', timestamp: 10000,
+      location: 'ship_MilleniumFalcon',
+    });
+
     await dbContainer.accountsDb().put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
     await dbContainer.accountsDb().put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
     await dbContainer.accountsDb().put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
@@ -750,6 +761,46 @@ describe('API Server', () => {
       expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(6666);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
+    });
+  });
+
+  describe('POST /location_events', () => {
+    it('Puts event into db', async () => {
+      const event = {
+        eventType: 'whatever',
+        data: { foo: 'ambar' },
+      };
+      const response = await rp.post(address + '/location_events/ship_BSG',
+        {
+          resolveWithFullResponse: true, json: { events: [event] },
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.deep.equal({receivers: ['00001']});
+      const docs = await dbContainer.allEventsSortedByTimestamp();
+      expect(docs.length).to.equal(1);
+      const doc = docs[0].doc;
+      expect(doc).to.deep.include(event);
+      expect(doc).to.deep.include({ characterId: '00001' });
+      expect(doc.timestamp).to.be.approximately(currentTimestamp() + 2000, 200);
+    });
+
+    it('Does nothing if no one in the location', async () => {
+      const event = {
+        eventType: 'whatever',
+        data: { foo: 'ambar' },
+      };
+      const response = await rp.post(address + '/location_events/ship_DeathStar',
+        {
+          resolveWithFullResponse: true, json: { events: [event] },
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+
+      expect(response.statusCode).to.eq(200);
+      expect(response.body).to.deep.equal({receivers: []});
+      const docs = await dbContainer.allEventsSortedByTimestamp();
+      expect(docs).to.be.empty;
     });
   });
 

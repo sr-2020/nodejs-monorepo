@@ -18,7 +18,8 @@ export interface Account {
 }
 
 export interface ViewModel {
-  timestamp: number,
+  timestamp: number;
+  [key: string]: any;
 }
 
 export interface TransactionRequest {

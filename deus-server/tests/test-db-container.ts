@@ -13,9 +13,11 @@ export class TestDatabasesContainer extends DatabasesContainer {
     const eventsDb = new PouchDB('events', { adapter: 'memory' });
     const mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
     const defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
+    const modelDb = new PouchDB('viewmodel_model', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
       ([['mobile', mobileViewModelDb],
-      ['default', defaultViewModelDb]]);
+      ['default', defaultViewModelDb],
+      ['model', modelDb]]);
     const accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const economyDb = new PouchDB('economy', { adapter: 'memory' });
     super(eventsDb, viewmodelDbs, accountsDb, economyDb)
@@ -68,6 +70,17 @@ export class TestDatabasesContainer extends DatabasesContainer {
         views: {
           'by-timestamp': {
             map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
+          },
+        },
+      };
+    });
+
+    await (this.viewModelDb('model') as PouchDB.Database<any>).upsert('_design/model', () => {
+      return {
+        _id: '_design/model',
+        views: {
+          'by-location': {
+            map: 'function (doc) { if (doc.location) emit(doc.location);  }',
           },
         },
       };

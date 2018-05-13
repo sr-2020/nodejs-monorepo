@@ -10,7 +10,8 @@ export const config: Configuration = {
         economy: "http://couchdb:5984/economy",
         viewModels: [
           {type: "mobile", url: "http://couchdb:5984/view-models"},
-          {type: "default", url: "http://couchdb:5984/accounts"}
+          {type: "default", url: "http://couchdb:5984/accounts"},
+          {type: "model", url: "http://couchdb:5984/models"},
         ]
     },
 

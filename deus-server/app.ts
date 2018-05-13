@@ -20,6 +20,7 @@ import { ApplicationSettingsToken } from "./services/settings";
 import { PushController } from "./controllers/push.controller";
 import { EventsController } from "./controllers/events.controller";
 import { EconomyController } from './controllers/economy.controller';
+import { LocationEventsController } from "./controllers/location-events.controller";
 
 class App {
   private app: express.Express = express();
@@ -58,7 +59,8 @@ class App {
         }
       },
       controllers: [
-        TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController
+        TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
+        LocationEventsController
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
