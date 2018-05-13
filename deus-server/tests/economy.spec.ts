@@ -20,10 +20,9 @@ import { LoggerToken, WinstonLogger } from "../services/logger";
 import { TestDatabasesContainer } from './test-db-container';
 import { currentTimestamp } from '../utils';
 
-const port = 3000;
-const address = `http://localhost:${port}`
+const address = `http://localhost:3000`
 
- describe('Economy', () => {
+describe('Economy', () => {
 
   let app: App;
   let dbContainer: TestDatabasesContainer;
@@ -37,7 +36,7 @@ const address = `http://localhost:${port}`
   };
 
   const settings: ApplicationSettings = {
-    viewmodelUpdateTimeout: 20, accessGrantTime: 200,
+    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200,
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
@@ -60,7 +59,7 @@ const address = `http://localhost:${port}`
     Container.set(DatabasesContainerToken, dbContainer);
 
     app = new App();
-    await app.listen(port);
+    await app.listen();
   });
 
   afterEach(async () => {

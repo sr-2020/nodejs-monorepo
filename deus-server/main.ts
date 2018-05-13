@@ -36,7 +36,7 @@ process.on('unhandledRejection', (reason, p) => {
   Container.get(LoggerToken).error(`Unhandled Rejection at: Promise ${p.toString()} reason: ${reason.toString()}`, reason.stack);
 });
 
-new App().listen(config.port);
+new App().listen();
 
 if (databasesConfig.compactEventsViewEveryMs) {
   setInterval(async () => {

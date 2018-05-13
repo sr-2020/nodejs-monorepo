@@ -17,8 +17,6 @@ import { DatabasesContainer, DatabasesContainerToken } from '../services/db-cont
 import { LoggerToken, WinstonLogger } from "../services/logger";
 import { TestDatabasesContainer } from './test-db-container';
 
-const port = 3000;
-
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -37,7 +35,7 @@ describe('Mass push notifications', () => {
   };
 
   const settings: ApplicationSettings = {
-    viewmodelUpdateTimeout: 20, accessGrantTime: 200,
+    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200,
     tooFarInFutureFilterTime: 30000, pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
@@ -94,7 +92,7 @@ describe('Mass push notifications', () => {
       .reply(200);
 
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await delay(300);
     expect(fcm.isDone()).is.true;
   });
@@ -103,7 +101,7 @@ describe('Mass push notifications', () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = new Date().getHours() + 1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = 25;
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await delay(300);
   });
 
@@ -111,7 +109,7 @@ describe('Mass push notifications', () => {
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowFromHour = -1;
     (settings.pushSettings.autoRefresh as CheckForInactivitySettings).allowToHour = new Date().getHours() - 1;
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await delay(300);
   });
 

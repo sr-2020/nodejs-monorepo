@@ -109,8 +109,8 @@ class App {
     }
   }
 
-  public async listen(port: number) {
-    this.server = this.app.listen(port);
+  public async listen() {
+    this.server = this.app.listen(this.settings.port);
   }
 
   public stop() {

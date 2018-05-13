@@ -41,6 +41,9 @@ export class PushSettings {
 }
 
 export class ApplicationSettings {
+  // Port to listen on
+  public port: number;
+
   // If model server has not put updated viewmodel to DB
   // during this period, we send 202 to user.
   public viewmodelUpdateTimeout: number;
@@ -90,9 +93,6 @@ export class DatabasesSettings {
 }
 
 export class Configuration {
-  // Port to listen on
-  public port: number;
-
   // Settings for databases access
   public databases: DatabasesSettings;
 

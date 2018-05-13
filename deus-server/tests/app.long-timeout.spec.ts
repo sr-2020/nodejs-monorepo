@@ -18,8 +18,7 @@ import { LoggerToken, WinstonLogger } from "../services/logger";
 import { ApplicationSettingsToken } from "../services/settings";
 import { TestDatabasesContainer } from './test-db-container';
 
-const port = 3000;
-const address = 'http://localhost:' + port;
+const address = 'http://localhost:3000';
 
 describe('API Server - long timeout', () => {
   let app: App;
@@ -29,14 +28,14 @@ describe('API Server - long timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
+      port: 3000, viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
     Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
     await dbContainer.createViews();
@@ -74,14 +73,14 @@ describe('API Server - medium timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
+      port: 3000, viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
     Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
     await dbContainer.createViews();

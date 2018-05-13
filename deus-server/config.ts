@@ -14,9 +14,8 @@ export const config: Configuration = {
         ]
     },
 
-    port: 8157,
-
     settings: {
+        port: 8157,
         viewmodelUpdateTimeout: 15000,
         accessGrantTime: 60000,
         tooFarInFutureFilterTime: 1800000,

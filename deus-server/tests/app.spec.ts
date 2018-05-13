@@ -19,8 +19,7 @@ import { LoggerToken, WinstonLogger } from "../services/logger";
 import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "../services/settings";
 import { TestDatabasesContainer } from './test-db-container';
 
-const port = 3000;
-const address = 'http://localhost:' + port;
+const address = 'http://localhost:3000';
 
 // Express spams console on errors if it's not set.
 // See https://github.com/expressjs/express/blob/c0136d8b48dd3526c58b2ad8666fb4b12b55116c/lib/application.js#L630
@@ -52,14 +51,14 @@ describe('API Server', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warn' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
+      port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
       tooFarInFutureFilterTime: 30000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
     Container.set(DatabasesContainerToken, dbContainer);
     app = new App();
-    await app.listen(port);
+    await app.listen();
     await dbContainer.viewModelDb('mobile').put({
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: true,
