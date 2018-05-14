@@ -47,17 +47,8 @@ describe('Mass push notifications', () => {
     await dbContainer.viewModelDb('mobile').put({
       _id: '00001', timestamp: testStartTime, mobile: true,
     });
-    await dbContainer.viewModelDb('default').put({
-      _id: '00001', timestamp: testStartTime, mobile: false,
-    });
-    await dbContainer.viewModelDb('default').put({
-      _id: '00002', timestamp: testStartTime - 20000, mobile: false,
-    });
     await dbContainer.viewModelDb('mobile').put({
       _id: '00002', timestamp: testStartTime - 20000, mobile: true,
-    });
-    await dbContainer.viewModelDb('default').put({
-      _id: '00003', timestamp: testStartTime - 20000, mobile: false,
     });
     await dbContainer.viewModelDb('mobile').put({
       _id: '00003', timestamp: testStartTime - 20000, mobile: true,

@@ -60,28 +60,20 @@ describe('API Server', () => {
     app = new App();
     await app.listen();
 
-    await dbContainer.viewModelDb('default').put({
-      _id: '00001', timestamp: 420,
-      updatesCount: 0, mobile: false,
-    });
     await dbContainer.viewModelDb('mobile').put({
       _id: '00001', timestamp: 420,
       updatesCount: 0, mobile: true,
     });
-    await dbContainer.viewModelDb('model').put({
+    await dbContainer.modelsDb().put({
       _id: '00001', timestamp: 420,
       location: 'ship_BSG',
     });
 
-    await dbContainer.viewModelDb('default').put({
-      _id: '00002', timestamp: 10000,
-      updatesCount: 0, mobile: false,
-    });
     await dbContainer.viewModelDb('mobile').put({
       _id: '00002', timestamp: 10000,
       updatesCount: 0, mobile: true,
     });
-    await dbContainer.viewModelDb('model').put({
+    await dbContainer.modelsDb().put({
       _id: '00002', timestamp: 10000,
       location: 'ship_MilleniumFalcon',
     });
@@ -138,30 +130,24 @@ describe('API Server', () => {
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
 
-    it('Returns default viewmodel of existing character if no type provided. Use login.', async () => {
+    it('Returns 404 if no type provided. Use login.', async () => {
       const response = await rp.get(address + '/viewmodel/some_user',
         {
-          resolveWithFullResponse: true, json: {},
+          resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
-      expect(response.statusCode).to.eq(200);
-      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
-      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('00001');
-      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
+      expect(response.statusCode).to.eq(404);
+      expect(response.body.message).to.eq('Viewmodel type is not found');
     });
 
-    it('Returns default viewmodel of existing character if no type provided. Use id.', async () => {
+    it('Returns 404 if no type provided. Use id.', async () => {
       const response = await rp.get(address + '/viewmodel/00001',
         {
-          resolveWithFullResponse: true, json: {},
+          resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: '00001', password: 'qwerty' },
         }).promise();
-      expect(response.statusCode).to.eq(200);
-      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
-      expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
-      expect(response.body.id).to.equal('00001');
-      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
+        expect(response.statusCode).to.eq(404);
+        expect(response.body.message).to.eq('Viewmodel type is not found');
     });
 
     it('Returns 404 for non-existent viewmodel type', async () => {
@@ -185,7 +171,7 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/viewmodel/user_without_model',
+      const response = await rp.get(address + '/viewmodel/user_without_model?type=mobile',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
@@ -234,7 +220,7 @@ describe('API Server', () => {
     });
 
     it('Admin can access anybody', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'admin', password: 'admin' },
@@ -242,8 +228,8 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(200);
     });
 
-    it('Returns default viewmodel of existing character if accessed by technician', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+    it('Returns viewmodel of existing character if accessed by technician', async () => {
+      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
         {
           resolveWithFullResponse: true, json: {},
           auth: { username: 'some_lab_technician', password: 'research' },
@@ -252,7 +238,7 @@ describe('API Server', () => {
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
       expect(response.body.id).to.equal('00001');
-      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: false });
+      expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
   });
 

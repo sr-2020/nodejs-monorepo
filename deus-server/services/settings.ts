@@ -85,6 +85,9 @@ export class DatabasesSettings {
   // How often to run compactions in events database
   public compactEventsViewEveryMs?: number
 
+  // URL to access models DB
+  public models: string;
+
   // Settings for ViewModel databases
   public viewModels: ViewModelDbSettings[];
 

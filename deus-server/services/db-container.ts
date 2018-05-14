@@ -41,9 +41,11 @@ export interface DatabasesContainerInterface {
   // TODO: Make private, provide accessors
   connections: TSMap<string, Connection>,
 
-  eventsDb(): PouchDB.Database<{}>,
   accountsDb(): PouchDB.Database<Account>,
+  modelsDb(): PouchDB.Database<{}>,
   viewModelDb(type: string): PouchDB.Database<ViewModel>,
+  eventsDb(): PouchDB.Database<{ timestamp: number }>,
+
   economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument>,
 }
 
@@ -53,9 +55,10 @@ export class DatabasesContainer implements DatabasesContainerInterface{
   public connections = new TSMap<string, Connection>();
 
   constructor(
-    protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
-    protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _accountsDb: PouchDB.Database<Account>,
+    protected _modelsDb: PouchDB.Database<{}>,
+    protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
+    protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
     protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>){
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
@@ -68,8 +71,9 @@ export class DatabasesContainer implements DatabasesContainerInterface{
         });
     }
 
-  public eventsDb() { return this._eventsDb; }
   public accountsDb() { return this._accountsDb; }
-  public viewModelDb(type: string = 'default') { return this._viewmodelDbs.get(type); }
+  public modelsDb() { return this._modelsDb; }
+  public eventsDb() { return this._eventsDb; }
+  public viewModelDb(type: string) { return this._viewmodelDbs.get(type); }
   public economyDb() { return this._economyDb; }
 }

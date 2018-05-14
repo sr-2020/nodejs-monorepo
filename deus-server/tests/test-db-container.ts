@@ -11,16 +11,12 @@ export class TestDatabasesContainer extends DatabasesContainer {
 
   constructor() {
     const eventsDb = new PouchDB('events', { adapter: 'memory' });
-    const mobileViewModelDb = new PouchDB('viewmodel_mobile', { adapter: 'memory' });
-    const defaultViewModelDb = new PouchDB('viewmodel_default', { adapter: 'memory' });
-    const modelDb = new PouchDB('viewmodel_model', { adapter: 'memory' });
-    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>
-      ([['mobile', mobileViewModelDb],
-      ['default', defaultViewModelDb],
-      ['model', modelDb]]);
+    const mobileViewModelDb = new PouchDB('viewmodels_mobile', { adapter: 'memory' });
+    const modelDb = new PouchDB('models', { adapter: 'memory' });
+    const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', mobileViewModelDb]]);
     const accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const economyDb = new PouchDB('economy', { adapter: 'memory' });
-    super(eventsDb, viewmodelDbs, accountsDb, economyDb)
+    super(accountsDb, modelDb, viewmodelDbs, eventsDb, economyDb)
   }
 
   async allEventsSortedByTimestamp(): Promise<any[]> {
@@ -33,6 +29,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
     await this._accountsDb.destroy();
     await this._economyDb.destroy();
     await this._eventsDb.destroy();
+    await this._modelsDb.destroy();
     for (const db of this._viewmodelDbs.values())
       await db.destroy();
   }
@@ -75,7 +72,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
       };
     });
 
-    await (this.viewModelDb('model') as PouchDB.Database<any>).upsert('_design/model', () => {
+    await (this.modelsDb() as PouchDB.Database<any>).upsert('_design/model', () => {
       return {
         _id: '_design/model',
         views: {

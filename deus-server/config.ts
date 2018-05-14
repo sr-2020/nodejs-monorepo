@@ -5,13 +5,12 @@ export const config: Configuration = {
         username: process.env.COUCHDB_USER,
         password: process.env.COUCHDB_PASSWORD,
         accounts: "http://couchdb:5984/accounts",
+        models: "http://couchdb:5984/work-models",
         events: "http://couchdb:5984/events",
         compactEventsViewEveryMs: 5 * 60 * 1000,
         economy: "http://couchdb:5984/economy",
         viewModels: [
           {type: "mobile", url: "http://couchdb:5984/view-models"},
-          {type: "default", url: "http://couchdb:5984/accounts"},
-          {type: "model", url: "http://couchdb:5984/work-models"},
         ]
     },
 

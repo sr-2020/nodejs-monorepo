@@ -23,7 +23,7 @@ export class LocationEventsController {
           event.timestamp = timestamp++;
       }
 
-      const modelDb = Container.get(DatabasesContainerToken).viewModelDb('model');
+      const modelDb = Container.get(DatabasesContainerToken).modelsDb();
       const charactersInLocation = await modelDb.query('model/by-location', { key: locationId });
       const eventsEndpoint = `http://localhost:${Container.get(ApplicationSettingsToken).port}/events/`;
 
