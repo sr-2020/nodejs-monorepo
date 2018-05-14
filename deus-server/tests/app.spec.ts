@@ -118,7 +118,7 @@ describe('API Server', () => {
   describe('GET /viewmodel', () => {
 
     it('Returns mobile viewmodel of existing character if mobile type is provided', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, json: {},
           auth: { username: 'some_user', password: 'qwerty' },
@@ -130,28 +130,8 @@ describe('API Server', () => {
       expect(response.body.viewModel).to.deep.equal({ timestamp: 420, updatesCount: 0, mobile: true });
     });
 
-    it('Returns 404 if no type provided. Use login.', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-      expect(response.statusCode).to.eq(404);
-      expect(response.body.message).to.eq('Viewmodel type is not found');
-    });
-
-    it('Returns 404 if no type provided. Use id.', async () => {
-      const response = await rp.get(address + '/viewmodel/00001',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '00001', password: 'qwerty' },
-        }).promise();
-        expect(response.statusCode).to.eq(404);
-        expect(response.body.message).to.eq('Viewmodel type is not found');
-    });
-
     it('Returns 404 for non-existent viewmodel type', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user?type=foo',
+      const response = await rp.get(address + '/viewmodel/foo/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'some_user', password: 'qwerty' },
@@ -161,7 +141,7 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
-      const response = await rp.get(address + '/viewmodel/4444',
+      const response = await rp.get(address + '/viewmodel/mobile/4444',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: '4444', password: '4444' },
@@ -171,7 +151,7 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/viewmodel/user_without_model?type=mobile',
+      const response = await rp.get(address + '/viewmodel/mobile/user_without_model',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
@@ -181,7 +161,7 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
         }).promise();
@@ -190,7 +170,7 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'some_user', password: 'wrong one' },
@@ -200,7 +180,7 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if querying user not providing access ', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
@@ -210,7 +190,7 @@ describe('API Server', () => {
     });
 
     it('Returns 401 and WWW-Authenticate if access to user expired ', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'some_fired_lab_technician', password: 'beer' },
@@ -220,7 +200,7 @@ describe('API Server', () => {
     });
 
     it('Admin can access anybody', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, simple: false, json: {},
           auth: { username: 'admin', password: 'admin' },
@@ -229,7 +209,7 @@ describe('API Server', () => {
     });
 
     it('Returns viewmodel of existing character if accessed by technician', async () => {
-      const response = await rp.get(address + '/viewmodel/some_user?type=mobile',
+      const response = await rp.get(address + '/viewmodel/mobile/some_user',
         {
           resolveWithFullResponse: true, json: {},
           auth: { username: 'some_lab_technician', password: 'research' },

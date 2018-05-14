@@ -1,4 +1,4 @@
-import { JsonController, Param, Body, Get, Post, Put, Delete, QueryParam, NotFoundError, CurrentUser } from "routing-controllers";
+import { JsonController, Param, Body, Get, Post, Put, Delete, NotFoundError, CurrentUser } from "routing-controllers";
 import { DatabasesContainerToken, Account } from "../services/db-container";
 import { currentTimestamp, canonicalId, returnCharacterNotFoundOrRethrow, checkAccess } from "../utils";
 import { Container } from "typedi";
@@ -6,8 +6,8 @@ import { Container } from "typedi";
 @JsonController()
 export class ViewModelController {
 
-  @Get("/viewmodel/:id")
-  async get(@CurrentUser() user: Account, @Param("id") id: string, @QueryParam("type") type: string = 'default') {
+  @Get("/viewmodel/:type/:id")
+  async get(@CurrentUser() user: Account, @Param("type") type: string, @Param("id") id: string) {
     try {
       const dbContainer = Container.get(DatabasesContainerToken);
       id = await canonicalId(id);
