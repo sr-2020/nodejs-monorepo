@@ -743,7 +743,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(200);
-      expect(response.body).to.deep.equal({receivers: ['00001']});
+      expect(response.body).to.deep.equal({ receivers: ['00001'] });
       const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(1);
       const doc = docs[0].doc;
@@ -764,7 +764,7 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(200);
-      expect(response.body).to.deep.equal({receivers: []});
+      expect(response.body).to.deep.equal({ receivers: [] });
       const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs).to.be.empty;
     });
@@ -964,9 +964,9 @@ describe('API Server', () => {
 
   describe('tokenUpdated events handling', () => {
     it('Can query by push token', async () => {
-      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00001');
+      const docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00001spushtoken' } });
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00001');
     });
 
     it('Token from tokenUpdated event is saved into db', async () => {
@@ -984,9 +984,9 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewtoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00002');
+      const docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00002snewtoken' } });
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00002');
     });
 
     it('Token from LAST tokenUpdated event is saved into db', async () => {
@@ -1009,12 +1009,12 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewesttoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00002');
+      let docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00002snewesttoken' } });
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00002');
 
-      docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00002snewtoken' });
-      expect(docs.rows).to.be.empty;
+      docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00002snewtoken' } });
+      expect(docs.docs).to.be.empty;
     });
 
     it('Token from tokenUpdated event overwrites existing one', async () => {
@@ -1032,12 +1032,13 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      let docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001snewtoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00001');
+      let docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00001snewtoken' } });
 
-      docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
-      expect(docs.rows).to.be.empty;
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00001');
+
+      docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00001spushtoken' } });
+      expect(docs.docs).to.be.empty;
     });
 
     it('If token from tokenUpdated event associated with other character, this association is removed', async () => {
@@ -1055,9 +1056,9 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00002');
+      const docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00001spushtoken' } });
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00002');
     });
 
     it('If token from tokenUpdated event associated with same character, nothing changes', async () => {
@@ -1075,9 +1076,9 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
 
-      const docs = await dbContainer.accountsDb().query('account/by-push-token', { key: '00001spushtoken' });
-      expect(docs.rows.length).to.equal(1);
-      expect(docs.rows[0].id).to.equal('00001');
+      const docs = await dbContainer.accountsDb().find({ selector: { pushToken: '00001spushtoken' } });
+      expect(docs.docs.length).to.equal(1);
+      expect(docs.docs[0]._id).to.equal('00001');
     });
   });
 
@@ -1190,15 +1191,23 @@ describe('API Server', () => {
 
   describe('Periodic notification sending', () => {
     it('Can sort characters by timestamp', async () => {
-      const docsOld = await dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
-        { startkey: 0, endkey: 1000 });
-      expect(docsOld.rows.length).to.equal(1);
-      expect(docsOld.rows[0].id).to.equal('00001');
+      const docsOld = await dbContainer.viewModelDb('mobile').find({
+        selector: { timestamp: { $lt: 1000 } }
+      });
+      expect(docsOld.docs.length).to.equal(1);
+      expect(docsOld.docs[0]._id).to.equal('00001');
 
-      const docsNew = await dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
-        { startkey: 1000, endkey: 999999 });
-      expect(docsNew.rows.length).to.equal(1);
-      expect(docsNew.rows[0].id).to.equal('00002');
+      const docsNew = await dbContainer.viewModelDb('mobile').find({
+        selector: {
+          $and: [
+            { timestamp: {$gt: 1000} },
+            { timestamp: {$lt: 9999999} }
+          ]
+        }
+      });
+
+      expect(docsNew.docs.length).to.equal(1);
+      expect(docsNew.docs[0]._id).to.equal('00002');
     });
   });
 });

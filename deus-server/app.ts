@@ -3,6 +3,9 @@ import * as express from 'express';
 import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
 import * as http from 'http';
+import * as PouchDB from 'pouchdb';
+import * as PouchDBFind from 'pouchdb-find';
+PouchDB.plugin(PouchDBFind);
 
 import { StatusAndBody } from './connection';
 import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload, sendGenericPushNotification } from './push-helpers';
@@ -127,9 +130,11 @@ class App {
   }
 
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
-    const docs = await this.dbContainer.viewModelDb('mobile').query('viewmodel/by-timestamp',
-      { startkey: 0, endkey: currentTimestamp() - ms });
-    return docs.rows.map((doc) => doc.id);
+    const docs = await this.dbContainer.viewModelDb('mobile').find({
+      selector: { timestamp: { $lt: currentTimestamp() - ms } }
+    });
+
+    return docs.docs.map((doc) => doc._id);
   }
 }
 

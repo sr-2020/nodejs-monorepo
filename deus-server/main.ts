@@ -37,12 +37,13 @@ process.on('unhandledRejection', (reason, p) => {
   Container.get(LoggerToken).error(`Unhandled Rejection at: Promise ${p.toString()} reason: ${reason.toString()}`, reason.stack);
 });
 
-new App().listen();
-
 if (databasesConfig.compactEventsViewEveryMs) {
   setInterval(async () => {
     await rp.post(`${databasesConfig.events}/_compact/character`, { auth: authOptions.auth, json: {} });
   }, databasesConfig.compactEventsViewEveryMs);
 }
 
-Container.get(LoggerToken).info('Ready to accept requests.', { source: 'api' });
+Container.get(DatabasesContainerToken).createIndices().then(() => {
+  new App().listen();
+  Container.get(LoggerToken).info('Ready to accept requests.', { source: 'api' });
+});

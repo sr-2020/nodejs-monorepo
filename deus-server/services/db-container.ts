@@ -1,5 +1,7 @@
 import { TSMap } from "typescript-map";
 import * as PouchDB from 'pouchdb';
+import * as PouchDBFind from 'pouchdb-find';
+PouchDB.plugin(PouchDBFind);
 import { Token } from "typedi";
 import { Connection } from "../connection";
 
@@ -41,6 +43,8 @@ export interface DatabasesContainerInterface {
   // TODO: Make private, provide accessors
   connections: TSMap<string, Connection>,
 
+  createIndices(): Promise<void>;
+
   accountsDb(): PouchDB.Database<Account>,
   modelsDb(): PouchDB.Database<{}>,
   viewModelDb(type: string): PouchDB.Database<ViewModel>,
@@ -70,6 +74,30 @@ export class DatabasesContainer implements DatabasesContainerInterface{
             this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
         });
     }
+
+  public async createIndices(): Promise<void> {
+    await this.accountsDb().createIndex({
+      index: {fields: ['login']}
+    });
+
+    await this.accountsDb().createIndex({
+      index: {fields: ['pushToken']}
+    });
+
+    await this.economyDb().createIndex({
+      index: {fields: ['sender']}
+    });
+    await this.economyDb().createIndex({
+      index: {fields: ['receiver']}
+    });
+    await this.viewModelDb('mobile').createIndex({
+      index: {fields: ['timestamp']}
+    });
+
+    await this.modelsDb().createIndex({
+      index: {fields: ['location']}
+    });
+  }
 
   public accountsDb() { return this._accountsDb; }
   public modelsDb() { return this._modelsDb; }

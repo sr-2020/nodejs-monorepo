@@ -1,7 +1,9 @@
 import * as express from 'express';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
+import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBUpsert);
+PouchDB.plugin(PouchDBFind);
 
 import { JsonController, Get, CurrentUser, Param, Post, Body, HttpError, Res, BadRequestError, Req } from "routing-controllers";
 import { canonicalId, returnCharacterNotFoundOrRethrow, currentTimestamp, checkAccess, createLogData } from "../utils";
@@ -138,10 +140,10 @@ export class EventsController {
     if (tokenUpdatedEvents.length > 0) {
       const token = tokenUpdatedEvents[tokenUpdatedEvents.length - 1].data.token.registrationId;
       const existingCharacterWithThatToken =
-        await this.dbContainer().accountsDb().query('account/by-push-token', { key: token });
-      for (const existingCharacter of existingCharacterWithThatToken.rows) {
-        await this.dbContainer().accountsDb().upsert(existingCharacter.id, (accountInfo) => {
-          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter.id} to give it to ${id}`)
+        await this.dbContainer().accountsDb().find({ selector: { pushToken: token } });
+      for (const existingCharacter of existingCharacterWithThatToken.docs) {
+        await this.dbContainer().accountsDb().upsert(existingCharacter._id, (accountInfo) => {
+          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter._id} to give it to ${id}`)
           delete accountInfo.pushToken;
           return accountInfo;
         });

@@ -1,6 +1,8 @@
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
+import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBUpsert);
+PouchDB.plugin(PouchDBFind);
 
 import { JsonController, Post, CurrentUser, Body, BadRequestError, Get, Param } from "routing-controllers";
 import { Container } from "typedi";
@@ -54,13 +56,26 @@ export class EconomyController {
     const db = Container.get(DatabasesContainerToken).economyDb();
     const doc = await db.get('balances') as BalancesDocument;
 
-    const docs = await Container.get(DatabasesContainerToken).economyDb().query('economy/by-id', { key: id, include_docs: true });
+    // For whatever reason, Mongo query $or fails to use indices,
+    // so we do concatenation manually.
+    const docs =
+      (await Container.get(DatabasesContainerToken).economyDb().find({
+        selector: {
+          sender: id
+        }
+      })).docs.concat(
+        (await Container.get(DatabasesContainerToken).economyDb().find({
+          selector: {
+            receiver: id
+          }
+        })).docs)
+
     return {
       balance: doc[id],
-      history: docs.rows.map((row: any) => {
-        delete row.doc._id;
-        delete row.doc._rev;
-        return row.doc;
+      history: docs.map((document) => {
+        delete document._id;
+        delete (document as any)._rev;
+        return document;
       }).sort((l: any, r: any) => r.timestamp - l.timestamp)
     };
   }

@@ -1,5 +1,8 @@
 import * as express from 'express';
 import * as moment from 'moment';
+import * as PouchDB from 'pouchdb';
+import * as PouchDBFind from 'pouchdb-find';
+PouchDB.plugin(PouchDBFind);
 
 import { DatabasesContainerToken, Account } from "./services/db-container";
 import { NotFoundError, UnauthorizedError } from "routing-controllers";
@@ -15,13 +18,16 @@ export async function canonicalId(idOrLogin: string): Promise<string> {
   if (/^[0-9]*$/.test(idOrLogin))
     return idOrLogin;
 
-  const docs = await Container.get(DatabasesContainerToken).accountsDb().query('account/by-login', { key: idOrLogin });
-  if (docs.rows.length == 0)
+  const docs = await Container.get(DatabasesContainerToken).accountsDb().find({
+    selector: { login: idOrLogin }
+  });
+
+  if (docs.docs.length == 0)
     throw new LoginNotFoundError('No user with such login found');
-  if (docs.rows.length > 1)
+  if (docs.docs.length > 1)
     throw new LoginNotFoundError('Multiple users with such login found');
 
-  return docs.rows[0].id;
+  return docs.docs[0]._id;
 }
 
 export async function canonicalIds(ids?: string[]): Promise<string[]> {

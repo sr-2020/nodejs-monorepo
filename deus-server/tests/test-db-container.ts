@@ -35,6 +35,8 @@ export class TestDatabasesContainer extends DatabasesContainer {
   }
 
   public async createViews() {
+    await this.createIndices();
+
     await (this.eventsDb() as PouchDB.Database<any>).put({
       _id: '_design/character',
       views: {
@@ -43,55 +45,6 @@ export class TestDatabasesContainer extends DatabasesContainer {
           map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
         },
       },
-    });
-
-    await (this.accountsDb() as PouchDB.Database<any>).upsert('_design/account', () => {
-      return {
-        _id: '_design/account',
-        views: {
-          'by-login': {
-            // tslint:disable-next-line:max-line-length
-            map: 'function (doc) { if (doc.login) emit(doc.login);  }',
-          },
-          'by-push-token': {
-            // tslint:disable-next-line:max-line-length
-            map: 'function (doc) { if (doc.pushToken) emit(doc.pushToken);  }',
-          },
-        },
-      };
-    });
-
-    await (this.viewModelDb('mobile') as PouchDB.Database<any>).upsert('_design/viewmodel', () => {
-      return {
-        _id: '_design/viewmodel',
-        views: {
-          'by-timestamp': {
-            map: 'function (doc) { if (doc.timestamp) emit(doc.timestamp);  }',
-          },
-        },
-      };
-    });
-
-    await (this.modelsDb() as PouchDB.Database<any>).upsert('_design/model', () => {
-      return {
-        _id: '_design/model',
-        views: {
-          'by-location': {
-            map: 'function (doc) { if (doc.location) emit(doc.location);  }',
-          },
-        },
-      };
-    });
-
-    await (this.economyDb() as PouchDB.Database<any>).upsert('_design/economy', () => {
-      return {
-        _id: '_design/economy',
-        views: {
-          'by-id': {
-            map: 'function (doc) { if (doc.sender && doc.receiver) { emit(doc.sender); emit(doc.receiver); } }',
-          },
-        },
-      };
     });
   }
 }
