@@ -42,9 +42,8 @@ export class EventStorage {
         }
     }
 
-    async listLastRefresh(params?: any): Promise<SyncEvent[]> {
-        params = merge({}, params, { reduce: true, group: true });
-        let result = await this.db.view('character', 'last-refresh-event', params);
+    async listLastRefresh(): Promise<SyncEvent[]> {
+        let result = await this.db.view('character', 'last-refresh-event', { reduce: true, group: true });
         return result.rows.map((r) => r.value);
     }
 
