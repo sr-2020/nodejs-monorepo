@@ -14,7 +14,7 @@ import { AuthService } from 'src/services/auth.service';
 import { MainComponent } from 'src/app/main/main.component';
 import { DataService } from 'src/services/data.service';
 import { HistoryComponent } from 'src/app/history/history.component';
-import { QrReaderComponent } from 'src/app/qrreader/qrreader.component';
+import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 
 
 @NgModule({

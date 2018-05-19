@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 @Component({
-  selector: 'app-qrreader',
-  templateUrl: './qrreader.component.html',
-  styleUrls: ['./qrreader.component.css']
+  selector: 'app-qr-reader',
+  templateUrl: './qr-reader.component.html',
+  styleUrls: ['./qr-reader.component.css']
 })
 export class QrReaderComponent implements OnInit {
   @ViewChild('scanner')
@@ -19,7 +19,7 @@ export class QrReaderComponent implements OnInit {
   ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
       this.hasCameras = true;
-      console.log('Devices: ', devices.length);
+      console.log('Devices: ', devices);
       this.availableDevices = devices;
       this.selectedDevice = this.availableDevices[0];
     });

@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from "src/app/login/login.component";
 import { MainComponent } from 'src/app/main/main.component';
 import { HistoryComponent } from 'src/app/history/history.component';
-import { QrReaderComponent } from 'src/app/qrreader/qrreader.component';
+import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 
 
 // TODO: Set route guards to check if user logged in
