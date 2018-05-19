@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from 'src/services/auth.service';
 import { DataService } from 'src/services/data.service';
+import { currentTimestamp } from 'src/app/util';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,14 @@ export class LoginComponent {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       console.log(JSON.stringify(v));
       // TODO: Set received viewmodel
-      this._dataService.setViewModel({availableTests: [], patientHistory: []});
+      this._dataService.setViewModel({availableTests: [], patientHistory: [
+        {
+          timestamp: currentTimestamp(),
+          patientId: "9005",
+          patientFullName: "Петя Васечки",
+          text: "Lorem ipsum",
+        }
+      ]});
       this._router.navigate(['main']);
     }
     catch (err) {
