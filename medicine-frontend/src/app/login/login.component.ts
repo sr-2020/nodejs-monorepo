@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from 'src/services/auth.service';
@@ -12,6 +13,7 @@ import { DataService } from 'src/services/data.service';
 export class LoginComponent {
 
   constructor(
+    private _router: Router,
     private _matSnackBar: MatSnackBar,
     private _authService: AuthService,
     private _dataService: DataService) { }
@@ -25,7 +27,7 @@ export class LoginComponent {
       console.log(JSON.stringify(v));
       // TODO: Set received viewmodel
       this._dataService.setViewModel({availableTests: [], patientHistory: []});
-      // TODO: Redirect to main page
+      this._router.navigate(['main']);
     }
     catch (err) {
       console.warn(JSON.stringify(err));

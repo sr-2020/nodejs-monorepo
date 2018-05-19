@@ -9,12 +9,15 @@ import { LoginComponent } from 'src/app/login/login.component';
 import { AppRoutingModule } from 'src/app/core/app.routing.module';
 import { CustomMaterialModule } from 'src/app/core/material.module';
 import { AuthService } from 'src/services/auth.service';
+import { MainComponent } from 'src/app/main/main.component';
+import { DataService } from 'src/services/data.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +29,7 @@ import { AuthService } from 'src/services/auth.service';
   ],
   providers: [
     AuthService,
+    DataService
   ],
   bootstrap: [AppComponent]
 })
