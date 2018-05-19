@@ -12,7 +12,7 @@ export class MainComponent {
   ) { }
 
   public newLabTest() {
-    // TODO: Implement
+    this._router.navigate(['choose-lab-tests']);
   }
 
   public labTestHistory() {

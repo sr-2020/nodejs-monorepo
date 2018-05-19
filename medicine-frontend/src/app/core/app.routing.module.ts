@@ -5,6 +5,7 @@ import { LoginComponent } from "src/app/login/login.component";
 import { MainComponent } from 'src/app/main/main.component';
 import { HistoryComponent } from 'src/app/history/history.component';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
+import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tests.component';
 
 
 // TODO: Set route guards to check if user logged in
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path : 'login', component : LoginComponent},
   {path : 'main', component : MainComponent},
   {path : 'history', component : HistoryComponent},
+  {path : 'choose-lab-tests', component : ChooseLabTestsComponent},
   {path : 'qrreader', component : QrReaderComponent},
 ];
 
