@@ -214,4 +214,24 @@ describe('Green way', function() {
 
         expect(abc.value).to.equals(2);
     });
+
+    it('Do not save undefined viewmodels', async () => {
+        let model = await createModel(di, undefined, { skipFromViewmodel: true });
+        const timestamp = model.timestamp;
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 1
+        });
+
+        let [baseModel, workingModel] =
+            await getModelVariantsAtTimestamp(di, model._id, timestamp + 1, ['models', 'workingModels']);
+
+        expect(baseModel).to.exist;
+        expect(workingModel).to.exist;
+        
+        let [viewModel] = await getModelVariants(di, model._id, ['defaultViewModels']);
+        expect(viewModel).not.to.exist;
+    });
 });

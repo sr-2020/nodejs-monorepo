@@ -35,6 +35,8 @@ module.exports = () => {
         },
 
         _view(api, data) {
+            if (data.skipFromViewmodel)
+                return undefined;
             return { value: data.value };
         }
     };
