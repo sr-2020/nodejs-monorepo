@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList, MatListOption } from '@angular/material';
+import { MatSelectionList, MatListOption, MatExpansionPanel } from '@angular/material';
 
 import { DataService } from 'src/services/data.service';
 import { LabTest } from 'src/datatypes/viewmodel';
@@ -25,5 +25,20 @@ export class ChooseLabTestsComponent implements OnInit {
       .filter((item: MatListOption) => this.tests.selectedOptions.isSelected(item))
       .map((item: MatListOption, index: number) => this.availableTests[index].name);
     console.log(JSON.stringify(checkedTests));
+  }
+
+  expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {
+    event.stopPropagation(); // Preventing event bubbling
+
+    if (!this._isExpansionIndicator(event.target)) {
+      matExpansionPanel.toggle(); // Here's the magic
+    }
+  }
+
+  private _isExpansionIndicator(target: EventTarget): boolean {
+    // TODO: Make clickable area bigger
+    // TODO: Toggle checkbox otherwise
+    const expansionIndicatorClass = 'mat-expansion-indicator';
+    return (target.classList && target.classList.contains(expansionIndicatorClass) );
   }
 }

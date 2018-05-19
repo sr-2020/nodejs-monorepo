@@ -11,6 +11,8 @@ import {
   MatSnackBarModule,
   MatListModule,
   MatIconModule,
+  MatExpansionModule,
+  MatCheckboxModule,
 } from '@angular/material';
 
 @NgModule({
@@ -26,6 +28,8 @@ import {
     MatSnackBarModule,
     MatListModule,
     MatIconModule,
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
   exports: [
     CommonModule,
@@ -39,6 +43,8 @@ import {
     MatSnackBarModule,
     MatListModule,
     MatIconModule,
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
 })
 export class CustomMaterialModule { }

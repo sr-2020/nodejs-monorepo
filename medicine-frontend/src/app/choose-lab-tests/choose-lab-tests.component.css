@@ -1,0 +1,10 @@
+.labcontent {
+  margin: 1em;
+}
+.labcost {
+  /* TODO: Align right */
+}
+.labbuttoncontainer {
+  padding: 1em 0 0 0;
+  float: right;
+}

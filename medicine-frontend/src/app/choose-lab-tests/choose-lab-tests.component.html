@@ -1,7 +1,16 @@
-<mat-selection-list #tests>
-  <mat-list-option *ngFor="let test of availableTests">
-    {{test.displayableName}}
-  </mat-list-option>
-</mat-selection-list>
-
-<button mat-raised-button (click)="applyChoice()" color="primary">Поехали</button>
+<div class="labcontent">
+  <mat-expansion-panel #matExpansionPanel *ngFor="let test of availableTests">
+    <mat-expansion-panel-header (click)="expandPanel(matExpansionPanel, $event)">
+      <mat-panel-title>
+        <mat-checkbox>{{test.displayableName}}</mat-checkbox>
+      </mat-panel-title>
+      <mat-panel-description class="labcost">
+        100 ⌛&#xFE0E;
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>Этот тест... ну вы поняли.</p>
+  </mat-expansion-panel>
+  <div class="labbuttoncontainer">
+    <button mat-raised-button (click)="applyChoice()" color="primary">Поехали (200 ⌛&#xFE0E;)</button>
+  </div>
+</div>
