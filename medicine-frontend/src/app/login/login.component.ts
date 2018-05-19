@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from 'src/services/auth.service';
+import { DataService } from 'src/services/data.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ export class LoginComponent {
 
   constructor(
     private _matSnackBar: MatSnackBar,
-    private _authService: AuthService) { }
+    private _authService: AuthService,
+    private _dataService: DataService) { }
 
   username: string;
   password: string;
@@ -21,6 +23,7 @@ export class LoginComponent {
     try {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       console.log(JSON.stringify(v));
+      this._dataService.setViewModel({availableTests: [], patientHistory: []});
     }
     catch (err) {
       console.warn(JSON.stringify(err));
