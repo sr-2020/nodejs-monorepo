@@ -27,7 +27,16 @@ export class LoginComponent {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       console.log(JSON.stringify(v));
       // TODO: Set received viewmodel
-      this._dataService.setViewModel({availableTests: [], patientHistory: [
+      this._dataService.setViewModel({availableTests: [
+        {
+          name: "sum",
+          displayableName: "Сумма всех систем",
+        },
+        {
+          name: "max",
+          displayableName: "Максимум из всех систем",
+        }
+      ], patientHistory: [
         {
           timestamp: currentTimestamp(),
           patientId: "9005",

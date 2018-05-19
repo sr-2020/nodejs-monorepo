@@ -1,3 +1,7 @@
-<p>
-  choose-lab-tests works!
-</p>
+<mat-selection-list #tests>
+  <mat-list-option *ngFor="let test of availableTests">
+    {{test.displayableName}}
+  </mat-list-option>
+</mat-selection-list>
+
+<button mat-raised-button (click)="applyChoice()" color="primary">Поехали</button>

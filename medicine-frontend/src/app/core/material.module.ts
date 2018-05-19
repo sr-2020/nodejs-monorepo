@@ -9,6 +9,7 @@ import {
   MatToolbarModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatListModule,
 } from '@angular/material';
 
 @NgModule({
@@ -22,6 +23,7 @@ import {
     MatTableModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatListModule,
   ],
   exports: [
     CommonModule,
@@ -33,6 +35,7 @@ import {
     MatTableModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatListModule,
   ],
 })
 export class CustomMaterialModule { }
