@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -6,6 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
+  constructor(
+    private _router: Router,
+  ) { }
 
-  constructor() { }
+  public newLabTest() {
+    // TODO: Implement
+  }
+
+  public labTestHistory() {
+    this._router.navigate(['history']);
+  }
 }
+
