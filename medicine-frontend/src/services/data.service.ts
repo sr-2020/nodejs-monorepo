@@ -4,7 +4,26 @@ import { currentTimestamp } from "src/app/util";
 
 @Injectable()
 export class DataService {
-  private _viewModel: ViewModel;
+  // TODO: Remove when backend is enabled
+  private _viewModel: ViewModel = {
+    availableTests: [
+      {
+        name: "sum",
+        displayableName: "Сумма всех систем",
+      },
+      {
+        name: "max",
+        displayableName: "Максимум из всех систем",
+      }
+    ], patientHistory: [
+      {
+        timestamp: currentTimestamp(),
+        patientId: "9005",
+        patientFullName: "Петя Васечкин",
+        text: "Lorem ipsum",
+      }
+    ]
+  };
 
   public setViewModel(viewModel: ViewModel) { this._viewModel = viewModel; }
   public getViewModel() { return this._viewModel; }
