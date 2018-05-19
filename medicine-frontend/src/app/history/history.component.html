@@ -1,3 +1,4 @@
-<p>
-  history works!
-</p>
+<mat-card *ngFor="let entry of patientHistory">
+  <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
+  <mat-card-content>{{entry.text}}</mat-card-content>
+</mat-card>

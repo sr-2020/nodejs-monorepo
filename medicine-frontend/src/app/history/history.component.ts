@@ -8,11 +8,11 @@ import { HistoryEntry } from 'src/datatypes/viewmodel';
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-  private _patientHistory: HistoryEntry[];
+  public patientHistory: HistoryEntry[] = [];
 
   constructor(private _dataService: DataService) {}
 
   public ngOnInit() {
-    this._patientHistory = this._dataService.getViewModel().patientHistory;
+    this.patientHistory = this._dataService.getViewModel().patientHistory;
   }
 }

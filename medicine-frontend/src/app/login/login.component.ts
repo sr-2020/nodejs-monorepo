@@ -31,7 +31,7 @@ export class LoginComponent {
         {
           timestamp: currentTimestamp(),
           patientId: "9005",
-          patientFullName: "Петя Васечки",
+          patientFullName: "Петя Васечкин",
           text: "Lorem ipsum",
         }
       ]});
