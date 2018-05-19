@@ -1,6 +1,4 @@
 import { ModelApiInterface, Modifier } from "deus-engine-manager-api";
-import { MindData } from "../src/medicViewModel";
-
 
 /**
  * Хелперы для разных моделей
@@ -10,6 +8,9 @@ import type = require('type-detect');
 import Chance = require('chance');
 let chance = new Chance();
 
+interface MindData {
+    [index: string]: number[];
+}
 
 function loadImplant(api: ModelApiInterface, id: string) {
     let implant = api.getCatalogObject("implants", id.toLowerCase());
