@@ -49,8 +49,6 @@ if (config.objects) {
         dbNames.push(config.objects[dbName]);
 }
 
-console.log("HEEEEEELLLLOOOOOOOO");
-
 console.log("Following DBs should be present:");
 console.log(dbNames);
 
@@ -80,8 +78,7 @@ const catalogsStorage = new CatalogsStorage(config, connector);
 const catalogs = catalogsStorage.loadFromFiles(catalogsPath);
 const dataSamplePath = path.join(process.cwd(), config.pool.workerArgs[0], '..', '..', 'data_samples');
 
-async function createSampleData() {
-    console.log("Creating sample data");
+async function createHumanSampleData() {
     const modelTemplate = require(path.join(dataSamplePath, 'model.json'));
     const viewModelTemplate = require(path.join(dataSamplePath, 'view-model.json'));
     console.log(`Using following templates: model=${JSON.stringify(modelTemplate)}, viewmodel=${JSON.stringify(viewModelTemplate)}`);
@@ -89,11 +86,29 @@ async function createSampleData() {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), modelTemplate, index),
-            // TODO: Support case of many viewmodel
             createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index),
             createBalanceRecord(connection.use(config.db.economy), index),
         ]);
     }
+};
+
+async function createMedicSampleData() {
+    const medicModelTemplate = require(path.join(dataSamplePath, 'medic-model.json'));
+    const medicViewModelTemplate = require(path.join(dataSamplePath, 'medic-view-model.json'));
+    console.log(`Using following templates: medic-model=${JSON.stringify(medicModelTemplate)}, medic-viewmodel=${JSON.stringify(medicViewModelTemplate)}`);
+    for (let index = 1000; index < 1010; ++index) {
+        await Promise.all([
+            createAccount(connection.use(config.db.accounts), index),
+            createModel(connection.use(config.db.models), medicModelTemplate, index),
+            createViewModel(connection.use(config.viewModels['medic']), medicViewModelTemplate, index),
+        ]);
+    }
+}
+
+async function createSampleData() {
+    console.log("Creating sample data");
+    await createHumanSampleData();
+    await createMedicSampleData();
 }
 
 Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
