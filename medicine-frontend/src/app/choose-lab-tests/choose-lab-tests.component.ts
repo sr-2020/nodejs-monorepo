@@ -35,7 +35,7 @@ export class ChooseLabTestsComponent implements OnInit {
     }
   }
 
-  private _isExpansionIndicator(target: EventTarget): boolean {
+  private _isExpansionIndicator(target: any): boolean {
     // TODO: Make clickable area bigger
     // TODO: Toggle checkbox otherwise
     const expansionIndicatorClass = 'mat-expansion-indicator';
