@@ -1,0 +1,21 @@
+<div *ngIf="availableDevices">
+  <select (change)="onDeviceSelectChange($event.target.value)">
+    <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="device.deviceId == selectedDevice.deviceId">{{ device.label }}</option>
+  </select>
+</div>
+
+<div [hidden]="!hasCameras">
+  <zxing-scanner #scanner class="test-class" start="true" [device]="selectedDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+</div>
+
+<div *ngIf="!hasCameras">
+  <h1>Не вышло найти камеру.</h1>
+</div>
+
+<div *ngIf="hasCameras && hasPermission == undefined">
+  <h1>Пожалуйста, разрешите сайту доступ к камере.</h1>
+</div>
+
+<div *ngIf="hasPermission == false">
+  <h1>Доступ к камере был запрещен, считывание QR-кода работать не будет.</h1>
+</div>
