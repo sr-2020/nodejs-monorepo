@@ -3,6 +3,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
@@ -15,7 +16,7 @@ import { MainComponent } from 'src/app/main/main.component';
 import { DataService } from 'src/services/data.service';
 import { HistoryComponent } from 'src/app/history/history.component';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
-import { ChooseLabTestsComponent } from './choose-lab-tests/choose-lab-tests.component';
+import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tests.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { ChooseLabTestsComponent } from './choose-lab-tests/choose-lab-tests.com
     FormsModule,
     AppRoutingModule,
     HttpModule,
+    HttpClientModule,
     ZXingScannerModule,
   ],
   providers: [

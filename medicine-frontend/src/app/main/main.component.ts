@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main',
@@ -8,8 +10,14 @@ import { Router } from '@angular/router';
 })
 export class MainComponent {
   constructor(
-    private _router: Router,
-  ) { }
+    private _router: Router, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon(
+      'history',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/history.svg'));
+    iconRegistry.addSvgIcon(
+      'analyze',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/analyze.svg'));
+  }
 
   public newLabTest() {
     this._router.navigate(['choose-lab-tests']);
