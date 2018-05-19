@@ -11,6 +11,7 @@ import { CustomMaterialModule } from 'src/app/core/material.module';
 import { AuthService } from 'src/services/auth.service';
 import { MainComponent } from 'src/app/main/main.component';
 import { DataService } from 'src/services/data.service';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { DataService } from 'src/services/data.service';
     AppComponent,
     LoginComponent,
     MainComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,
