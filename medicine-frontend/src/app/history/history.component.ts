@@ -9,10 +9,17 @@ import { HistoryEntry } from 'src/datatypes/viewmodel';
 })
 export class HistoryComponent implements OnInit {
   public patientHistory: HistoryEntry[] = [];
+  public patientId: string;
+  public comment: string;
 
   constructor(private _dataService: DataService) {}
 
   public ngOnInit() {
+    this.patientHistory = this._dataService.getViewModel().patientHistory;
+  }
+
+  public addComment() {
+    this._dataService.addComment(this.patientId, this.comment);
     this.patientHistory = this._dataService.getViewModel().patientHistory;
   }
 }

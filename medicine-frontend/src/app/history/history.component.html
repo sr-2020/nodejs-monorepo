@@ -1,3 +1,14 @@
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Patient ID" [(ngModel)]="patientId" name="username" required>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <textarea matInput placeholder="Leave a comment" [(ngModel)]="comment" name="comment" matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows = "5" required></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button (click)="addComment()" color="primary">Добавить</button>
+</form>
+
 <mat-card *ngFor="let entry of patientHistory">
   <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
   <mat-card-content>{{entry.text}}</mat-card-content>
