@@ -4,10 +4,10 @@ import { currentTimestamp } from "src/app/util";
 
 @Injectable()
 export class DataService {
-  private viewModel_: ViewModel;
+  private _viewModel: ViewModel;
 
-  public setViewModel(viewModel: ViewModel) { this.viewModel_ = viewModel; }
-  public getViewModel() { return this.viewModel_; }
+  public setViewModel(viewModel: ViewModel) { this._viewModel = viewModel; }
+  public getViewModel() { return this._viewModel; }
 
   public addComment(patientId: string, comment: string) {
     // TODO: Send request to server
@@ -17,7 +17,7 @@ export class DataService {
       patientFullName: "Вася Пупкин",
       text: comment,
     };
-    this.viewModel_.patientHistory.push(entry);
+    this._viewModel.patientHistory.push(entry);
   }
 
   public runTests(patientId: string, tests: LabTest[]) {
