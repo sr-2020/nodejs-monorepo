@@ -10,7 +10,7 @@ export class DataService {
   public getViewModel() { return this.viewModel_; }
 
   public addComment(patientId: string, comment: string) {
-    // TODO: Send event to server
+    // TODO: Send request to server
     const entry: HistoryEntry = {
       timestamp: currentTimestamp(),
       patientId: patientId,
@@ -20,5 +20,7 @@ export class DataService {
     this.viewModel_.patientHistory.push(entry);
   }
 
-  public runTests(patientId: string, tests: LabTest[]) {};
+  public runTests(patientId: string, tests: LabTest[]) {
+    // TODO: Send request to server
+  };
 }
