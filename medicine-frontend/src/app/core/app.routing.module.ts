@@ -9,6 +9,7 @@ import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tes
 
 
 // TODO: Set route guards to check if user logged in
+// https://medium.com/@ryanchenkie_40935/angular-authentication-using-route-guards-bf7a4ca13ae3
 const routes: Routes = [
   {path : '', component : LoginComponent},
   {path : 'login', component : LoginComponent},
