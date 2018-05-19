@@ -1,0 +1,21 @@
+{
+  "availableTests": [
+    {
+      "name": "sum",
+      "displayableName": "Сумма всех систем"
+    },
+    {
+      "name": "max",
+      "displayableName": "Максимум из всех систем"
+    }
+  ],
+  "patientHistory": [
+    {
+      "type": "Комментарий",
+      "timestamp": 1523666164298,
+      "patientId": "9005",
+      "patientFullName": "Петя Васечкин",
+      "text": "Пациент здоров!"
+    }
+  ]
+}
