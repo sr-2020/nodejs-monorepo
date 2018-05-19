@@ -147,7 +147,9 @@ export async function createModel(db: NanoDocument, modelTemplate: any, index: n
 export async function createViewModel(db: NanoDocument, viewModelTemplate: any, index: number) {
     const viewModel = cloneDeep(viewModelTemplate);
     viewModel._id = getId(index);
-    viewModel.passportScreen.id = getId(index);
+    // TODO: Separate function for different viewmodels?
+    if (viewModel.passportScreen != undefined)
+        viewModel.passportScreen.id = getId(index);
     delete viewModel._rev;
     await updateIfDifferent(db, viewModel);
 }
