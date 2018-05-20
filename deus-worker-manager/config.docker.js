@@ -63,7 +63,6 @@ module.exports = {
     // блок настроек баз для вью-моделей
     viewModels: {
         default: "view-models", // пары <alias>: <имя базы или алиас из списка db>
-        medic: "medic-view-models"
     },
 
     // блок настроек баз для общих объектов

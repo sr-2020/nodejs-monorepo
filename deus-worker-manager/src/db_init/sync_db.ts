@@ -100,7 +100,7 @@ async function createMedicSampleData() {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), medicModelTemplate, index),
-            createViewModel(connection.use(config.viewModels['medic']), medicViewModelTemplate, index),
+            createViewModel(connection.use(config.viewModels['default']), medicViewModelTemplate, index),
         ]);
     }
 }
