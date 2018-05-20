@@ -2,7 +2,7 @@
   <mat-expansion-panel #matExpansionPanel *ngFor="let test of availableTests">
     <mat-expansion-panel-header (click)="expandPanel(matExpansionPanel, $event)">
       <mat-panel-title>
-        <mat-checkbox>{{test.displayableName}}</mat-checkbox>
+        <mat-checkbox [(ngModel)]="checked[test.name]">{{test.displayableName}}</mat-checkbox>
       </mat-panel-title>
       <mat-panel-description class="labcost">
         100 ⌛&#xFE0E;

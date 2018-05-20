@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSelectionList, MatListOption, MatExpansionPanel } from '@angular/material';
 
 import { DataService } from 'src/services/data.service';
@@ -14,17 +15,24 @@ export class ChooseLabTestsComponent implements OnInit {
   tests: MatSelectionList;
 
   availableTests: LabTest[];
-  constructor(private _dataService: DataService) {}
+  checked: { [key: string]: boolean } = {};
+
+  constructor(
+    private _router: Router,
+    private _dataService: DataService) {}
 
   public ngOnInit() {
     this.availableTests = this._dataService.getViewModel().availableTests
+    for (const test of this.availableTests)
+      this.checked[test.name] = false;
   }
 
-  public applyChoice() {
-    const checkedTests = this.tests.options
-      .filter((item: MatListOption) => this.tests.selectedOptions.isSelected(item))
-      .map((item: MatListOption, index: number) => this.availableTests[index].name);
+  public async applyChoice() {
+    const checkedTests = this.availableTests.filter(test => this.checked[test.name]);
     console.log(JSON.stringify(checkedTests));
+    // TODO: get patient by scanning QR
+    await this._dataService.runTests('9010', checkedTests);
+    this._router.navigate(['history']);
   }
 
   expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {

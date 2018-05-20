@@ -36,7 +36,17 @@ export class DataService {
     this.setViewModel(response.json().viewModel);
   }
 
-  public runTests(patientId: string, tests: LabTest[]) {
-    // TODO: Send request to server
+  public async runTests(patientId: string, tests: LabTest[]) {
+    const fullUrl = GlobalConfig.runTestsBaseUrl + this._authService.getUserId();
+    const response = await this._http.post(fullUrl,
+      { patientId, tests: tests.map(t => t.name) },
+      this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
+      if (response.json().viewModel == undefined) {
+        console.error("Didn't get updated viewmodel");
+        console.log(JSON.stringify(response.json()));
+        console.log(response.status);
+        return;
+      }
+      this.setViewModel(response.json().viewModel);
   };
 }
