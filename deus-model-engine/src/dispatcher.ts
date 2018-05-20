@@ -34,6 +34,9 @@ export class Dispatcher implements DispatcherInterface {
     }
 
     dispatch(event: Event, context: Context): Context {
+        // TODO: Should it be filtered out earlier?
+        if (event.eventType.startsWith('_')) return context;
+
         if (!this.store[event.eventType]) {
             Logger.error('model',
                 `Unknown event type ${event.eventType}. ` +
