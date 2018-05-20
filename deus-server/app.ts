@@ -24,6 +24,7 @@ import { PushController } from "./controllers/push.controller";
 import { EventsController } from "./controllers/events.controller";
 import { EconomyController } from './controllers/economy.controller';
 import { LocationEventsController } from "./controllers/location-events.controller";
+import { MedicController } from "./controllers/medic.controller";
 
 class App {
   private app: express.Express = express();
@@ -63,7 +64,7 @@ class App {
       },
       controllers: [
         TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
-        LocationEventsController
+        LocationEventsController, MedicController
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,

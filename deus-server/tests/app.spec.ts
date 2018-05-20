@@ -770,6 +770,84 @@ describe('API Server', () => {
     });
   });
 
+  describe('POST /medic', () => {
+    describe('POST /medic/run_lab_tests/', () => {
+      it('Puts event into db', async () => {
+        const response = await rp.post(address + '/medic/run_lab_tests/some_user',
+          {
+            resolveWithFullResponse: true, json: { patientId: '00001', tests: ['foo', 'bar'] },
+            auth: { username: 'admin', password: 'admin' },
+          }).promise();
+
+        expect(response.statusCode).to.eq(202);
+        const docs = await dbContainer.allEventsSortedByTimestamp();
+        expect(docs.length).to.equal(3);
+        {
+          const doc = docs[0].doc;
+          expect(doc).to.deep.include({
+            eventType: 'medic-run-lab-test',
+          });
+          expect(doc.data).to.deep.include({
+            test: 'foo'
+          });
+          expect(doc.data.model).to.deep.include({
+            location: 'ship_BSG'
+          });
+        }
+        {
+          const doc = docs[1].doc;
+          expect(doc).to.deep.include({
+            eventType: 'medic-run-lab-test',
+          });
+          expect(doc.data).to.deep.include({
+            test: 'bar'
+          });
+          expect(doc.data.model).to.deep.include({
+            location: 'ship_BSG'
+          });
+        }
+        {
+          const doc = docs[2].doc;
+          expect(doc).to.deep.include({
+            eventType: '_RefreshModel',
+          });
+        }
+      });
+    });
+
+    describe('POST /medic/add_comment/', () => {
+      it('Puts event into db', async () => {
+        const response = await rp.post(address + '/medic/add_comment/some_user',
+          {
+            resolveWithFullResponse: true, json: { patientId: '00001', text: 'Lorem ipsum' },
+            auth: { username: 'admin', password: 'admin' },
+          }).promise();
+
+        expect(response.statusCode).to.eq(202);
+        const docs = await dbContainer.allEventsSortedByTimestamp();
+        expect(docs.length).to.equal(2);
+        {
+          const doc = docs[0].doc;
+          expect(doc).to.deep.include({
+            eventType: 'medic-add-comment',
+          });
+          expect(doc.data).to.deep.include({
+            text: 'Lorem ipsum',
+          });
+          expect(doc.data.model).to.deep.include({
+            location: 'ship_BSG'
+          });
+        }
+        {
+          const doc = docs[1].doc;
+          expect(doc).to.deep.include({
+            eventType: '_RefreshModel',
+          });
+        }
+      });
+    });
+  });
+
   describe('GET /characters', () => {
     it('Returns requested ACL', async () => {
       const response = await rp.get(address + '/characters/some_user',
@@ -1200,8 +1278,8 @@ describe('API Server', () => {
       const docsNew = await dbContainer.viewModelDb('mobile').find({
         selector: {
           $and: [
-            { timestamp: {$gt: 1000} },
-            { timestamp: {$lt: 9999999} }
+            { timestamp: { $gt: 1000 } },
+            { timestamp: { $lt: 9999999 } }
           ]
         }
       });
