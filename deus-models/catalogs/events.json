@@ -1,10 +1,6 @@
 {
     "events": [
         {
-            "eventType": "_RefreshModel",
-            "effects": []
-        },
-        {
             "eventType": "usePill",
             "effects": [
                 "usePill"
