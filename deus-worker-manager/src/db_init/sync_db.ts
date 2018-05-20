@@ -86,6 +86,7 @@ async function createHumanSampleData() {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), modelTemplate, index),
+            createModel(connection.use(config.db.workingModels), modelTemplate, index),
             createViewModel(connection.use(config.viewModels['default']), viewModelTemplate, index),
             createBalanceRecord(connection.use(config.db.economy), index),
         ]);
@@ -100,6 +101,7 @@ async function createMedicSampleData() {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), medicModelTemplate, index),
+            createModel(connection.use(config.db.workingModels), medicModelTemplate, index),
             createViewModel(connection.use(config.viewModels['default']), medicViewModelTemplate, index),
         ]);
     }
