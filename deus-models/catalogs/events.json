@@ -1,42 +1,13 @@
 {
     "events": [
         {
-            "eventType": "add",
-            "effects": [
-                "add"
-            ]
-        },
-
-        {
-            "eventType": "mul",
-            "effects": [
-                "mul"
-            ]
-        },
-
-        {
-            "eventType": "concat",
-            "effects": [
-                "concat"
-            ]
-        },
-
-        {
-            "eventType": "delayedConcat",
-            "effects": [
-                "delayedConcat"
-            ]
+            "eventType": "_RefreshModel",
+            "effects": []
         },
         {
             "eventType": "usePill",
             "effects": [
                 "usePill"
-            ]
-        },
-        {
-            "eventType": "illnessTimerHandler",
-            "effects": [
-                "illnessTimerHandler"
             ]
         },
         {
