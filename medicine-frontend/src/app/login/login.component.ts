@@ -26,7 +26,7 @@ export class LoginComponent {
     try {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       console.log(JSON.stringify(v));
-      // TODO: Set received viewmodel
+      this._dataService.setViewModel(v);
       this._router.navigate(['main']);
     }
     catch (err) {

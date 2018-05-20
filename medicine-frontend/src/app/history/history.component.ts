@@ -18,8 +18,8 @@ export class HistoryComponent implements OnInit {
     this.patientHistory = this._dataService.getViewModel().patientHistory;
   }
 
-  public addComment() {
-    this._dataService.addComment(this.patientId, this.comment);
+  public async addComment() {
+    await this._dataService.addComment(this.patientId, this.comment);
     this.patientHistory = this._dataService.getViewModel().patientHistory;
   }
 }

@@ -1,42 +1,39 @@
 import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
+
 import { ViewModel, HistoryEntry, LabTest } from "src/datatypes/viewmodel";
 import { currentTimestamp } from "src/app/util";
+import { GlobalConfig } from "src/config";
+import { AuthService } from "src/services/auth.service";
 
 @Injectable()
 export class DataService {
   // TODO: Remove when backend is enabled
   private _viewModel: ViewModel = {
-    availableTests: [
-      {
-        name: "sum",
-        displayableName: "Сумма всех систем",
-      },
-      {
-        name: "max",
-        displayableName: "Максимум из всех систем",
-      }
-    ], patientHistory: [
-      {
-        timestamp: currentTimestamp(),
-        patientId: "9005",
-        patientFullName: "Петя Васечкин",
-        text: "Lorem ipsum",
-      }
-    ]
+    availableTests: [],
+    patientHistory: [],
   };
+
+  constructor(
+    private _http: Http,
+    private _authService: AuthService) {};
 
   public setViewModel(viewModel: ViewModel) { this._viewModel = viewModel; }
   public getViewModel() { return this._viewModel; }
 
-  public addComment(patientId: string, comment: string) {
-    // TODO: Send request to server
-    const entry: HistoryEntry = {
-      timestamp: currentTimestamp(),
-      patientId: patientId,
-      patientFullName: "Вася Пупкин",
-      text: comment,
-    };
-    this._viewModel.patientHistory.push(entry);
+  public async addComment(patientId: string, text: string) {
+    const fullUrl = GlobalConfig.addCommentBaseUrl + this._authService.getUserId();
+    const response = await this._http.post(fullUrl,
+      { patientId, text },
+      this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
+
+    if (response.json().viewModel == undefined) {
+      console.error("Didn't get updated viewmodel");
+      console.log(JSON.stringify(response.json()));
+      console.log(response.status);
+      return;
+    }
+    this.setViewModel(response.json().viewModel);
   }
 
   public runTests(patientId: string, tests: LabTest[]) {
