@@ -9,7 +9,7 @@ import { DatabasesContainerToken, Account } from "../services/db-container";
 import { returnCharacterNotFoundOrRethrow, checkAccess, currentTimestamp, AccessPropagation } from "../utils";
 import { EventsRequest } from "./events.controller";
 import * as rp from 'request-promise';
-import { ApplicationSettingsToken } from "../services/settings";
+import { EventsProcessor } from "../events.processor";
 
 @JsonController()
 export class LocationEventsController {
@@ -27,13 +27,9 @@ export class LocationEventsController {
 
       const modelDb = Container.get(DatabasesContainerToken).modelsDb();
       const charactersInLocation = await modelDb.find({ selector: {location: locationId}});
-      const eventsEndpoint = `http://localhost:${Container.get(ApplicationSettingsToken).port}/events/`;
-
+      const processor = new EventsProcessor();
       for (const character of charactersInLocation.docs)
-        await rp.post(eventsEndpoint + character._id, {
-          json: { events: body.events },
-          auth: { username: user._id, password: user.password },
-        }).promise();
+        await processor.process(character._id, body.events);
 
       return { receivers: charactersInLocation.docs.map(r => r._id) };
     }
