@@ -157,7 +157,11 @@ export class Worker {
     }
 
     private resolveCallback(callback: config.Callback): model.Callback | null {
-        return this.model.callbacks[callback];
+        const result = this.model.callbacks[callback];
+        if (result == null) {
+            Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
+        }
+        return result;
     }
 
     private runEvent(context: Context, event: Event): number {
@@ -188,7 +192,6 @@ export class Worker {
                 for (let effect of effects) {
                     let f = this.resolveCallback(effect.handler);
                     if (!f) {
-                        Logger.error('model', `Unable to find handler ${effect.handler}`, {});
                         continue;
                     }
                     Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {

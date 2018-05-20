@@ -1,6 +1,7 @@
 import * as model from './model'
 import { Context } from './context'
 import { ModelApiFactory } from './model_api'
+import Logger from './logger';
 
 import { Event } from 'deus-engine-manager-api';
 
@@ -33,7 +34,12 @@ export class Dispatcher implements DispatcherInterface {
     }
 
     dispatch(event: Event, context: Context): Context {
-        if (!this.store[event.eventType]) return context;
+        if (!this.store[event.eventType]) {
+            Logger.error('model',
+                `Unknown event type ${event.eventType}. ` +
+                `Make sure there is corresponding eventType --> effects mapping in events DB/file`);
+            return context;
+        }
 
         const api = ModelApiFactory(context, event);
         const handlers = this.store[event.eventType];
