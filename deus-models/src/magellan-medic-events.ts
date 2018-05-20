@@ -57,3 +57,10 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
   api.model.patientHistory.push(historyEntry);
 }
 
+module.exports = () => {
+  return {
+    medicRunLabTest,
+    medicAddComment,
+  };
+};
+
