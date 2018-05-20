@@ -8,7 +8,6 @@ export type CallbacksList = model.Callback | null | (model.Callback | null)[]
 
 export interface DispatcherInterface {
     on(name: string, callbacks: CallbacksList): void
-    off(name: string, callback: model.Callback): void
     dispatch(event: Event, context: Context): Context
 }
 
@@ -31,11 +30,6 @@ export class Dispatcher implements DispatcherInterface {
         } else if (callbacks) {
             this.store[name].push(callbacks);
         }
-    }
-
-    off(handle: string, callback: model.Callback) {
-        if (!this.store[handle]) return;
-        this.store[handle] = this.store[handle].filter((f) => f != callback);
     }
 
     dispatch(event: Event, context: Context): Context {
