@@ -8,8 +8,14 @@ interface RunLabTestData {
 }
 
 const tests = {
-  sum: (model) => {},
-  max: (model) => {},
+  sum: (model) => {
+    const r = (model.systems as number[]).reduce((acc, val) => acc + val);
+    return `Сумма значений состояний систем равна ${r}`;
+  },
+  max: (model) => {
+    const r = (model.systems as number[]).reduce((acc, val) => Math.max(acc, val));
+    return `Максимум значений состояний систем равна ${r}`;
+  },
 }
 
 
