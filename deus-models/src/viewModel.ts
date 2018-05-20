@@ -1,6 +1,6 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
 import consts = require('../helpers/constants');
-import { hasMobileViewModel } from "../helpers/view-model-helper";
+import { hasMobileViewModel, hasMedicViewModel } from "../helpers/view-model-helper";
 
 interface PageViewModel {
   menuTitle: string;
@@ -389,15 +389,19 @@ function getViewModel(model) {
 module.exports = () => {
     return {
         _view(api: ViewModelApiInterface, model) {
-            if (!hasMobileViewModel(model)) return undefined;
-            try {
-                return getViewModel(model);
-            }
-            catch (err) {
-                // The app would display error message when ViewModel is incorrect
-                console.error(err);
-                return {};
-            }
+            if (hasMobileViewModel(model)) {
+                try {
+                    return getViewModel(model);
+                }
+                catch (err) {
+                    // The app would display error message when ViewModel is incorrect
+                    console.error(err);
+                    return {};
+                }
+            } else if (hasMedicViewModel(model)) {
+                return model
+            } else
+                return undefined;
         }
     };
 };
