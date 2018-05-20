@@ -268,6 +268,14 @@
         {
             "eventType": "leave-ship",
             "effects": ["leaveShip"]
+        },
+        {
+            "eventType": "medic-add-comment",
+            "effects": ["medicAddComment"]
+        },
+        {
+            "eventType": "medic-run-lab-test",
+            "effects": ["medicRunLabTest"]
         }
-]
+    ]
 }
