@@ -21,6 +21,8 @@ export class HistoryComponent implements OnInit {
   public async addComment() {
     await this._dataService.addComment(this.patientId, this.comment);
     this.update();
+    this.patientId = '';
+    this.comment = '';
   }
 
   private update() {
