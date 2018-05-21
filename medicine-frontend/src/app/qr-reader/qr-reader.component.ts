@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatSelectChange } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 import { decode, QrData } from 'deus-qr-lib/lib/qr';
@@ -38,6 +38,7 @@ export class QrReaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      if (devices.length == 0) return;
       this.hasCameras = true;
       console.log('Devices: ', devices);
       this.availableDevices = devices;
@@ -54,9 +55,9 @@ export class QrReaderComponent implements OnInit {
 
   }
 
-  public onDeviceSelectChange(selectedValue: string) {
+  public onDeviceSelectChange(selectedValue: MatSelectChange) {
     console.log('Selection changed: ', selectedValue);
-    this.selectedDevice = this.scanner.getDeviceById(selectedValue);
+    this.selectedDevice = this.scanner.getDeviceById(selectedValue.value);
   }
 
   public async handleQrCodeResult(qr: string) {
