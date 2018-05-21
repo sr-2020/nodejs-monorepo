@@ -38,8 +38,10 @@ export class ChooseLabTestsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      await this._dataService.runTests(result, checkedTests);
-      this._router.navigate(['history']);
+      if (result) {
+        await this._dataService.runTests(result, checkedTests);
+        this._router.navigate(['history']);
+      }
     });
   }
 
