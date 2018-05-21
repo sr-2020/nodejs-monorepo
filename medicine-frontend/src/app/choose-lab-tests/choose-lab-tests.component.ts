@@ -29,10 +29,7 @@ export class ChooseLabTestsComponent implements OnInit {
 
   public async applyChoice() {
     const checkedTests = this.availableTests.filter(test => this.checked[test.name]);
-    console.log(JSON.stringify(checkedTests));
-    // TODO: get patient by scanning QR
-    await this._dataService.runTests('9010', checkedTests);
-    this._router.navigate(['history']);
+    this._router.navigate(['qr-reader'], { queryParams: checkedTests.map(a => a.name) });
   }
 
   expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {

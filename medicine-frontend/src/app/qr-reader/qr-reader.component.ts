@@ -1,5 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
+
+import { decode, QrData } from 'deus-qr-lib/lib/qr';
+import { QrType } from 'deus-qr-lib/lib/qr.type';
+import { currentTimestamp } from 'src/app/util';
+import { DataService } from 'src/services/data.service';
+
+class QrExpiredError extends Error {
+}
+
+class NonPassportQrError extends Error {
+}
+
 
 @Component({
   selector: 'app-qr-reader',
@@ -7,6 +20,9 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
   styleUrls: ['./qr-reader.component.css']
 })
 export class QrReaderComponent implements OnInit {
+  private _labTests: string[];
+  private _finishedScanning = false;
+
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
 
@@ -16,7 +32,18 @@ export class QrReaderComponent implements OnInit {
   availableDevices: MediaDeviceInfo[];
   selectedDevice: MediaDeviceInfo;
 
+
+  constructor(
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _dataService: DataService){};
+
   ngOnInit(): void {
+    this._route.queryParams.subscribe(params => {
+      this._labTests = [];
+      for (const key in params) this._labTests.push(params[key]);
+    });
+
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
       this.hasCameras = true;
       console.log('Devices: ', devices);
@@ -39,8 +66,31 @@ export class QrReaderComponent implements OnInit {
     this.selectedDevice = this.scanner.getDeviceById(selectedValue);
   }
 
-  public handleQrCodeResult(resultString: string) {
-    // TODO: Validate QR, navigate to next page
-    console.log('Result: ', resultString);
+  public async handleQrCodeResult(qr: string) {
+    // QR Reader component continues to call this
+    if (this._finishedScanning) return;
+
+    try {
+      const data: QrData = decode(qr);
+      console.info('Decoded QR code: ' + JSON.stringify(data));
+      if (data.validUntil < currentTimestamp() / 1000)
+        throw new QrExpiredError();
+
+      if (data.type != QrType.Passport)
+        throw new NonPassportQrError();
+
+      console.log('QR Code is valid');
+      //this._finishedScanning = true;
+
+      await this._dataService.runTests(data.payload, this._labTests);
+      this._router.navigate(['history']);
+
+    } catch (e) {
+      console.error('Unsupported QR code scanned, error: ' + e);
+      if (e instanceof QrExpiredError)
+        console.log('Expired');
+      else
+        console.log('Invalid Format');
+    }
   }
 }
