@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSelectionList, MatListOption, MatExpansionPanel } from '@angular/material';
+import { MatSelectionList, MatListOption, MatExpansionPanel, MatDialog } from '@angular/material';
 
 import { DataService } from 'src/services/data.service';
 import { LabTest } from 'src/datatypes/viewmodel';
+import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 
 @Component({
   selector: 'app-choose-lab-tests',
@@ -19,6 +20,7 @@ export class ChooseLabTestsComponent implements OnInit {
 
   constructor(
     private _router: Router,
+    public dialog: MatDialog,
     private _dataService: DataService) {}
 
   public ngOnInit() {
@@ -29,7 +31,16 @@ export class ChooseLabTestsComponent implements OnInit {
 
   public async applyChoice() {
     const checkedTests = this.availableTests.filter(test => this.checked[test.name]);
-    this._router.navigate(['qr-reader'], { queryParams: checkedTests.map(a => a.name) });
+
+    let dialogRef = this.dialog.open(QrReaderComponent, {
+      width: '500px',
+      data: { checkedTests }
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      await this._dataService.runTests(result, checkedTests);
+      this._router.navigate(['history']);
+    });
   }
 
   expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {

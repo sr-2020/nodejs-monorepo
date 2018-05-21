@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialogRef } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 import { decode, QrData } from 'deus-qr-lib/lib/qr';
 import { QrType } from 'deus-qr-lib/lib/qr.type';
 import { currentTimestamp } from 'src/app/util';
 import { DataService } from 'src/services/data.service';
+
 
 class QrExpiredError extends Error {
 }
@@ -20,9 +22,6 @@ class NonPassportQrError extends Error {
   styleUrls: ['./qr-reader.component.css']
 })
 export class QrReaderComponent implements OnInit {
-  private _labTests: string[];
-  private _finishedScanning = false;
-
   @ViewChild('scanner')
   scanner: ZXingScannerComponent;
 
@@ -34,16 +33,10 @@ export class QrReaderComponent implements OnInit {
 
 
   constructor(
-    private _router: Router,
-    private _route: ActivatedRoute,
+    private _dialogRef: MatDialogRef<QrReaderComponent>,
     private _dataService: DataService){};
 
   ngOnInit(): void {
-    this._route.queryParams.subscribe(params => {
-      this._labTests = [];
-      for (const key in params) this._labTests.push(params[key]);
-    });
-
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
       this.hasCameras = true;
       console.log('Devices: ', devices);
@@ -67,9 +60,6 @@ export class QrReaderComponent implements OnInit {
   }
 
   public async handleQrCodeResult(qr: string) {
-    // QR Reader component continues to call this
-    if (this._finishedScanning) return;
-
     try {
       const data: QrData = decode(qr);
       console.info('Decoded QR code: ' + JSON.stringify(data));
@@ -80,11 +70,7 @@ export class QrReaderComponent implements OnInit {
         throw new NonPassportQrError();
 
       console.log('QR Code is valid');
-      //this._finishedScanning = true;
-
-      await this._dataService.runTests(data.payload, this._labTests);
-      this._router.navigate(['history']);
-
+      this._dialogRef.close(data.payload);
     } catch (e) {
       console.error('Unsupported QR code scanned, error: ' + e);
       if (e instanceof QrExpiredError)
