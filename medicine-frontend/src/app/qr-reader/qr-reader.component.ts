@@ -9,10 +9,10 @@ import { currentTimestamp } from 'src/app/util';
 import { DataService } from 'src/services/data.service';
 
 
-class QrExpiredError extends Error {
+class QrExpiredError {
 }
 
-class NonPassportQrError extends Error {
+class NonPassportQrError {
 }
 
 
