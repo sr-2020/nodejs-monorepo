@@ -44,6 +44,7 @@ import { AuthGuardService } from 'src/services/auth.guard.service';
     AuthGuardService,
     DataService
   ],
+  entryComponents: [QrReaderComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
