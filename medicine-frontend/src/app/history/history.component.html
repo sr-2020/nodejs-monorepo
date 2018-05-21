@@ -1,15 +1,30 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Patient ID" [(ngModel)]="patientId" name="username" required>
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <textarea matInput placeholder="Leave a comment" [(ngModel)]="comment" name="comment" matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows = "5" required></textarea>
-  </mat-form-field>
+<mat-card class="history-card">
+  <mat-card-content>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="ID пациента" [(ngModel)]="patientId" name="username" required>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <textarea matInput placeholder="Комментарий" [(ngModel)]="comment" name="comment" matTextareaAutosize matAutosizeMinRows="3"
+          matAutosizeMaxRows="5" required></textarea>
+      </mat-form-field>
 
-  <button mat-raised-button (click)="addComment()" color="primary">Добавить</button>
-</form>
+      <button mat-raised-button (click)="addComment()" color="primary">Добавить</button>
+    </form>
+  </mat-card-content>
+</mat-card>
 
-<mat-card *ngFor="let entry of patientHistory">
-  <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
-  <mat-card-content>{{entry.text}}</mat-card-content>
+<mat-card *ngFor="let entry of patientHistory" class="history-card">
+  <mat-card-header>
+    <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
+    <mat-card-subtitle>Результат анализа</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div style='white-space: pre-wrap;'>
+      {{entry.text}}
+    </div>
+  </mat-card-content>
+
 </mat-card>

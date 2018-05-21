@@ -15,11 +15,15 @@ export class HistoryComponent implements OnInit {
   constructor(private _dataService: DataService) {}
 
   public ngOnInit() {
-    this.patientHistory = this._dataService.getViewModel().patientHistory;
+    this.update();
   }
 
   public async addComment() {
     await this._dataService.addComment(this.patientId, this.comment);
-    this.patientHistory = this._dataService.getViewModel().patientHistory;
+    this.update();
+  }
+
+  private update() {
+    this.patientHistory = this._dataService.getViewModel().patientHistory.reverse();
   }
 }
