@@ -16,38 +16,25 @@ import {
   MatSelectModule,
 } from '@angular/material';
 
+const materialDesignModules = [
+  CommonModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatCardModule,
+  MatInputModule,
+  MatDialogModule,
+  MatTableModule,
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
+  MatListModule,
+  MatIconModule,
+  MatExpansionModule,
+  MatCheckboxModule,
+  MatSelectModule,
+]
+
 @NgModule({
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatCardModule,
-    MatInputModule,
-    MatDialogModule,
-    MatTableModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatListModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatCheckboxModule,
-    MatSelectModule,
-  ],
-  exports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatCardModule,
-    MatInputModule,
-    MatDialogModule,
-    MatTableModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatListModule,
-    MatIconModule,
-    MatExpansionModule,
-    MatCheckboxModule,
-    MatSelectModule,
-  ],
+  imports: materialDesignModules,
+  exports: materialDesignModules,
 })
 export class CustomMaterialModule { }
