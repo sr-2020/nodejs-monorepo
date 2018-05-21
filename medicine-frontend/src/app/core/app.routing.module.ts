@@ -16,7 +16,6 @@ const routes: Routes = [
   {path : 'main', component : MainComponent},
   {path : 'history', component : HistoryComponent},
   {path : 'choose-lab-tests', component : ChooseLabTestsComponent},
-  {path : 'qr-reader', component : QrReaderComponent},
 ];
 
 @NgModule({
