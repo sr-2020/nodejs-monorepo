@@ -17,6 +17,7 @@ import { DataService } from 'src/services/data.service';
 import { HistoryComponent } from 'src/app/history/history.component';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tests.component';
+import { AuthGuardService } from 'src/services/auth.guard.service';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tes
   ],
   providers: [
     AuthService,
+    AuthGuardService,
     DataService
   ],
   bootstrap: [AppComponent]

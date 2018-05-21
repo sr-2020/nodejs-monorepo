@@ -6,16 +6,15 @@ import { MainComponent } from 'src/app/main/main.component';
 import { HistoryComponent } from 'src/app/history/history.component';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tests.component';
+import { AuthGuardService } from 'src/services/auth.guard.service';
 
 
-// TODO: Set route guards to check if user logged in
-// https://medium.com/@ryanchenkie_40935/angular-authentication-using-route-guards-bf7a4ca13ae3
 const routes: Routes = [
   {path : '', component : LoginComponent},
   {path : 'login', component : LoginComponent},
-  {path : 'main', component : MainComponent},
-  {path : 'history', component : HistoryComponent},
-  {path : 'choose-lab-tests', component : ChooseLabTestsComponent},
+  {path : 'main', component : MainComponent, canActivate: [AuthGuardService]},
+  {path : 'history', component : HistoryComponent, canActivate: [AuthGuardService]},
+  {path : 'choose-lab-tests', component : ChooseLabTestsComponent, canActivate: [AuthGuardService]},
 ];
 
 @NgModule({
