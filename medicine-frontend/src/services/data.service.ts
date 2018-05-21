@@ -10,8 +10,102 @@ import { AuthService } from "src/services/auth.service";
 export class DataService {
   // TODO: Remove when backend is enabled
   private _viewModel: ViewModel = {
-    availableTests: [],
-    patientHistory: [],
+    "availableTests": [
+      {
+        "name": "sum",
+        "displayableName": "Сумма всех систем"
+      },
+      {
+        "name": "max",
+        "displayableName": "Максимум из всех систем"
+      }
+    ],
+    "patientHistory": [
+      {
+        "timestamp": 1523666164298,
+        "patientId": "9005",
+        "patientFullName": "Петя Васечкин",
+        "text": "Пациент здоров!"
+      },
+      {
+        "timestamp": 1526854063611,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Сумма значений состояний систем равна 49"
+      },
+      {
+        "timestamp": 1526854063612,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Максимум значений состояний систем равна 21"
+      },
+      {
+        "timestamp": 1526854078251,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Ололо"
+      },
+      {
+        "timestamp": 1526854082813,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Сумма значений состояний систем равна 49"
+      },
+      {
+        "timestamp": 1526854082814,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Максимум значений состояний систем равна 21"
+      },
+      {
+        "timestamp": 1526854099810,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Сумма значений состояний систем равна 49"
+      },
+      {
+        "timestamp": 1526854099811,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Максимум значений состояний систем равна 21"
+      },
+      {
+        "timestamp": 1526854107658,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Сумма значений состояний систем равна 49"
+      },
+      {
+        "timestamp": 1526854107659,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Максимум значений состояний систем равна 21"
+      },
+      {
+        "timestamp": 1526854133881,
+        "patientId": "9005",
+        "patientFullName": "Геннадий Лавров",
+        "text": "123"
+      },
+      {
+        "timestamp": 1526854623957,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Сумма значений состояний систем равна 49"
+      },
+      {
+        "timestamp": 1526854623958,
+        "patientId": "9010",
+        "patientFullName": "Геннадий Лавров",
+        "text": "Максимум значений состояний систем равна 21"
+      },
+      {
+        "timestamp": 1526854660637,
+        "patientId": "9999",
+        "patientFullName": "Геннадий Лавров",
+        "text": "54321"
+      }
+    ],
   };
 
   constructor(

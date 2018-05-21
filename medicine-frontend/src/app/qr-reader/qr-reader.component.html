@@ -1,21 +1,28 @@
-<mat-form-field *ngIf="availableDevices">
-  <mat-select [ngModel]="selectedDevice.deviceId" (selectionChange)="onDeviceSelectChange($event)">
-    <mat-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</mat-option>
-  </mat-select>
-</mat-form-field>
+<h2 mat-dialog-title>Сканирование QR-кода пациента</h2>
+<mat-dialog-content>
+  <mat-form-field *ngIf="availableDevices">
+    <mat-select placeholder="Камера" [ngModel]="selectedDevice.deviceId" (selectionChange)="onDeviceSelectChange($event)">
+      <mat-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<div [hidden]="!hasCameras">
-  <zxing-scanner #scanner class="test-class" start="true" [device]="selectedDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
-</div>
+  <div [hidden]="!hasCameras">
+    <zxing-scanner #scanner class="test-class" start="true" [device]="selectedDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+  </div>
 
-<div *ngIf="!hasCameras">
-  <h1>Идет поиск камеры...</h1>
-</div>
+  <div *ngIf="!hasCameras">
+    <h3>Идет поиск камеры...</h3>
+  </div>
 
-<div *ngIf="hasCameras && hasPermission == undefined">
-  <h1>Пожалуйста, разрешите сайту доступ к камере.</h1>
-</div>
+  <div *ngIf="hasCameras && hasPermission == undefined">
+    <h3>Пожалуйста, разрешите сайту доступ к камере.</h3>
+  </div>
 
-<div *ngIf="hasPermission == false">
-  <h1>Доступ к камере был запрещен, считывание QR-кода работать не будет.</h1>
-</div>
+  <div *ngIf="hasPermission == false">
+    <h3>Доступ к камере был запрещен, считывание QR-кода работать не будет.</h3>
+  </div>
+
+  <div style="color:red" >
+    {{errorMessage}}
+  </div>
+</mat-dialog-content>

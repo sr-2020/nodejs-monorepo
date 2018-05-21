@@ -28,6 +28,8 @@ export class QrReaderComponent implements OnInit {
   hasCameras = false;
   hasPermission: boolean;
 
+  errorMessage = ' ';
+
   availableDevices: MediaDeviceInfo[];
   selectedDevice: MediaDeviceInfo;
 
@@ -63,21 +65,21 @@ export class QrReaderComponent implements OnInit {
   public async handleQrCodeResult(qr: string) {
     try {
       const data: QrData = decode(qr);
-      console.info('Decoded QR code: ' + JSON.stringify(data));
       if (data.validUntil < currentTimestamp() / 1000)
         throw new QrExpiredError();
 
       if (data.type != QrType.Passport)
         throw new NonPassportQrError();
 
-      console.log('QR Code is valid');
       this._dialogRef.close(data.payload);
     } catch (e) {
       console.error('Unsupported QR code scanned, error: ' + e);
       if (e instanceof QrExpiredError)
-        console.log('Expired');
+        this.errorMessage = 'Отсканирован код с истекшим сроком действия, пересоздайте код.';
+      else if (e instanceof NonPassportQrError)
+        this.errorMessage = 'Отсканируйте код со страницы-паспорта.';
       else
-        console.log('Invalid Format');
+        this.errorMessage = 'Неподдерживаемый формат кода.';
     }
   }
 }
