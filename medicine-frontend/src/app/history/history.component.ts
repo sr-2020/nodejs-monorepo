@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { FormGroup, FormBuilder, Validators, FormGroupDirective } from '@angular/forms';
+
+import { DataService } from 'src/services/data.service';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
 
 @Component({
@@ -9,20 +11,28 @@ import { HistoryEntry } from 'src/datatypes/viewmodel';
 })
 export class HistoryComponent implements OnInit {
   public patientHistory: HistoryEntry[] = [];
-  public patientId: string;
-  public comment: string;
+  public addCommentForm: FormGroup;
 
-  constructor(private _dataService: DataService) {}
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _dataService: DataService
+  ) {
+    this.addCommentForm = this._formBuilder.group({
+      patientId: ['', Validators.required],
+      comment: ['', Validators.required],
+    });
+  }
 
   public ngOnInit() {
     this.update();
   }
 
-  public async addComment() {
-    await this._dataService.addComment(this.patientId, this.comment);
+  public async addComment(formDirective: FormGroupDirective) {
+    await this._dataService.addComment(this.addCommentForm.value.patientId, this.addCommentForm.value.comment);
     this.update();
-    this.patientId = '';
-    this.comment = '';
+    this.addCommentForm.value.patientId = '';
+    this.addCommentForm.value.comment = '';
+    formDirective.resetForm();
   }
 
   private update() {

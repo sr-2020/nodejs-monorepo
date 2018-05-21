@@ -1,16 +1,15 @@
 <mat-card class="history-card">
   <mat-card-content>
-    <form class="example-form">
+    <form class="example-form" [formGroup]="addCommentForm" (ngSubmit)="addComment(formDirective)" #formDirective="ngForm">
       <mat-form-field class="example-full-width">
-        <input matInput placeholder="ID пациента" [(ngModel)]="patientId" name="username" required>
+        <input matInput placeholder="ID пациента" formControlName="patientId" name="username" type="number">
       </mat-form-field>
-      <br>
       <mat-form-field class="example-full-width">
-        <textarea matInput placeholder="Комментарий" [(ngModel)]="comment" name="comment" matTextareaAutosize matAutosizeMinRows="3"
-          matAutosizeMaxRows="5" required></textarea>
+        <textarea matInput placeholder="Комментарий" formControlName="comment" name="comment" matTextareaAutosize matAutosizeMinRows="3"
+          matAutosizeMaxRows="5"></textarea>
       </mat-form-field>
 
-      <button mat-raised-button (click)="addComment()" color="primary">Добавить</button>
+      <button mat-raised-button type="submit" color="primary" [disabled]="!addCommentForm.valid">Добавить</button>
     </form>
   </mat-card-content>
 </mat-card>
