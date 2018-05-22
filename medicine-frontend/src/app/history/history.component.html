@@ -5,13 +5,13 @@
   <span class="example-fill-remaining-space"></span>
 
   <mat-form-field class="header-filter">
-      <input type="text" placeholder="Фильтр" matInput [formControl]="filterControl" [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let option of filteredPatientFilterOptions | async" [value]="option">
-          {{option.description()}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    <input type="text" placeholder="Фильтр" matInput [formControl]="filterControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let option of filteredPatientFilterOptions | async" [value]="option">
+        {{option.description()}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 </mat-toolbar>
 
 <mat-card class="history-card">
