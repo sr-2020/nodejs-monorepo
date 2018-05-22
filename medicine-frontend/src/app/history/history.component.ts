@@ -1,8 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormGroupDirective, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 import { DataService } from 'src/services/data.service';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
+
+
+class PatientFilterOption {
+  public patientId?: string;
+  public patientFullName: string;
+
+  public from(entry: HistoryEntry) {
+    this.patientId = entry.patientId;
+    this.patientFullName = entry.patientFullName;
+    return this;
+  }
+
+  public all() {
+    this.patientFullName = 'Все пациенты'
+    return this;
+  }
+
+  public description() {
+    if (this.patientId)
+      return `${this.patientFullName} (${this.patientId})`;
+    else
+      return this.patientFullName;
+  }
+}
 
 @Component({
   selector: 'app-history',
@@ -10,7 +36,14 @@ import { HistoryEntry } from 'src/datatypes/viewmodel';
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-  public patientHistory: HistoryEntry[] = [];
+  public fullPatientHistory: HistoryEntry[] = [];
+  public filteredPatientHistory: HistoryEntry[] = [];
+
+  public filterControl = new FormControl();
+  public patientFilterOptions: PatientFilterOption[] = []
+  public filteredPatientFilterOptions: Observable<PatientFilterOption[]>;
+  public currentPatientFilterOption: PatientFilterOption;
+
   public addCommentForm: FormGroup;
 
   constructor(
@@ -25,17 +58,57 @@ export class HistoryComponent implements OnInit {
 
   public ngOnInit() {
     this.update();
+    this.currentPatientFilterOption = this.patientFilterOptions[0];
+    this.filterHistoryEntries();
+
+    this.filteredPatientFilterOptions = this.filterControl.valueChanges
+      .pipe(
+        startWith<string | PatientFilterOption>(''),
+        map(value => typeof value == 'string' ? value : value.patientId),
+        map(name => name ? this.filterFilterOptions(name) : this.patientFilterOptions.slice())
+      );
+
+    this.filterControl.valueChanges.subscribe((v) => {
+      if (typeof v == 'string') return;
+      this.currentPatientFilterOption = v;
+      this.filterHistoryEntries();
+    });
   }
 
   public async addComment(formDirective: FormGroupDirective) {
     await this._dataService.addComment(this.addCommentForm.value.patientId, this.addCommentForm.value.comment);
     this.update();
+    this.filterHistoryEntries();
     this.addCommentForm.value.patientId = '';
     this.addCommentForm.value.comment = '';
     formDirective.resetForm();
   }
 
   private update() {
-    this.patientHistory = this._dataService.getViewModel().patientHistory.reverse();
+    this.fullPatientHistory = this._dataService.getViewModel().patientHistory.reverse();
+    const seenPatientIds = {};
+    this.patientFilterOptions = [new PatientFilterOption().all()];
+    for (const entry of this.fullPatientHistory) {
+      if (!seenPatientIds.hasOwnProperty(entry.patientId)) {
+        this.patientFilterOptions.push(new PatientFilterOption().from(entry));
+        seenPatientIds[entry.patientId] = true;
+      }
+    }
+  }
+
+  private filterHistoryEntries() {
+    if (!this.currentPatientFilterOption.patientId)
+      this.filteredPatientHistory = this.fullPatientHistory;
+    else
+      this.filteredPatientHistory = this.fullPatientHistory.filter(e => e.patientId == this.currentPatientFilterOption.patientId);
+  }
+
+  private filterFilterOptions(name: string): PatientFilterOption[] {
+    return this.patientFilterOptions.filter(option =>
+      option.description().toLowerCase().indexOf(name.toLowerCase()) >= 0);
+  }
+
+  private displayFn(user?: PatientFilterOption): string | undefined {
+    return user ? user.description() : undefined;
   }
 }

@@ -1,3 +1,19 @@
+<mat-toolbar color="primary" class="history-header">
+  <span>История</span>
+
+  <!-- This fills the remaining space of the current row -->
+  <span class="example-fill-remaining-space"></span>
+
+  <mat-form-field class="header-filter">
+      <input type="text" placeholder="Фильтр" matInput [formControl]="filterControl" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of filteredPatientFilterOptions | async" [value]="option">
+          {{option.description()}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+</mat-toolbar>
+
 <mat-card class="history-card">
   <mat-card-content>
     <form class="example-form" [formGroup]="addCommentForm" (ngSubmit)="addComment(formDirective)" #formDirective="ngForm">
@@ -14,7 +30,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngFor="let entry of patientHistory" class="history-card">
+<mat-card *ngFor="let entry of filteredPatientHistory" class="history-card">
   <mat-card-header>
     <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
     <mat-card-subtitle>Результат анализа</mat-card-subtitle>

@@ -1,8 +1,22 @@
+.history-header {
+  min-height: 4.7em
+}
+
+.header-filter {
+  width: 30%
+}
+
 .history-card {
   width: 90%;
   margin: auto;
-  margin-top: 10px;
+  margin-top: 0.4em;
 }
 .example-full-width {
   width: 100%;
+}
+
+.example-fill-remaining-space {
+  /* This fills the remaining space, by using flexbox.
+     Every toolbar row uses a flexbox row layout. */
+  flex: 1 1 auto;
 }

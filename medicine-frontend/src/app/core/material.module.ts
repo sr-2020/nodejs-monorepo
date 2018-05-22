@@ -14,6 +14,7 @@ import {
   MatExpansionModule,
   MatCheckboxModule,
   MatSelectModule,
+  MatAutocompleteModule,
 } from '@angular/material';
 
 const materialDesignModules = [
@@ -31,6 +32,7 @@ const materialDesignModules = [
   MatExpansionModule,
   MatCheckboxModule,
   MatSelectModule,
+  MatAutocompleteModule,
 ]
 
 @NgModule({
