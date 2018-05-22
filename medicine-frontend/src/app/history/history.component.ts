@@ -76,11 +76,12 @@ export class HistoryComponent implements OnInit {
   }
 
   public async addComment(formDirective: FormGroupDirective) {
-    await this._dataService.addComment(this.addCommentForm.value.patientId, this.addCommentForm.value.comment);
+    // Need to use getRawValue() as that form field is potentially disabled,
+    // and accessing value.patientId returns 'undefined'.
+    await this._dataService.addComment(this.addCommentForm.getRawValue().patientId,
+      this.addCommentForm.value.comment);
     this.update();
     this.filterHistoryEntries();
-    this.addCommentForm.value.patientId = '';
-    this.addCommentForm.value.comment = '';
     formDirective.resetForm();
   }
 
@@ -97,10 +98,17 @@ export class HistoryComponent implements OnInit {
   }
 
   private filterHistoryEntries() {
-    if (!this.currentPatientFilterOption.patientId)
+    if (!this.currentPatientFilterOption.patientId) {
+      this.addCommentForm.get('patientId').enable();
       this.filteredPatientHistory = this.fullPatientHistory;
-    else
+    }
+    else {
+      this.addCommentForm.patchValue({
+        patientId: Number(this.currentPatientFilterOption.patientId)
+      });
+      this.addCommentForm.get('patientId').disable();
       this.filteredPatientHistory = this.fullPatientHistory.filter(e => e.patientId == this.currentPatientFilterOption.patientId);
+    }
   }
 
   private filterFilterOptions(name: string): PatientFilterOption[] {
