@@ -92,8 +92,8 @@ export class HistoryComponent implements OnInit {
     await this._dataService.addComment(this.addCommentForm.getRawValue().patientId,
       this.addCommentForm.value.comment);
     this.update();
-    this.filterHistoryEntries();
     formDirective.resetForm();
+    this.filterHistoryEntries();
   }
 
   private update() {
