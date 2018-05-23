@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective, FormControl } from '@angular/forms';
+import { MatIconRegistry } from '@angular/material';
+
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { DataService } from 'src/services/data.service';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
+
 
 
 class PatientFilterOption {
@@ -48,8 +53,14 @@ export class HistoryComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _dataService: DataService
-  ) {
+    private _router: Router,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
+    private _dataService: DataService) {
+    iconRegistry.addSvgIcon(
+      'analyze',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/analyze.svg'));
+
     this.addCommentForm = this._formBuilder.group({
       patientId: ['', Validators.required],
       comment: ['', Validators.required],
@@ -118,5 +129,9 @@ export class HistoryComponent implements OnInit {
 
   private displayFn(user?: PatientFilterOption): string | undefined {
     return user ? user.description() : undefined;
+  }
+
+  public newLabTest() {
+    this._router.navigate(['choose-lab-tests']);
   }
 }

@@ -20,3 +20,14 @@
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
 }
+
+.new-lab-test {
+  z-index: 2;
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+}
+
+.mat-tooltip {
+  font-size: 14px;
+}

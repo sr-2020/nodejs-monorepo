@@ -26,7 +26,7 @@ export class LoginComponent {
     try {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       this._dataService.setViewModel(v);
-      this._router.navigate(['main']);
+      this._router.navigate(['history']);
     }
     catch (err) {
       console.warn(JSON.stringify(err));
