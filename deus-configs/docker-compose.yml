@@ -43,6 +43,14 @@ services:
       - type: volume
         source: models_src
         target: /app
+  medicine-frontend:
+    image: "alexeyeremin/medicine-frontend"
+    networks:
+      - overlay
+    ports:
+      - "8000:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
   deus-qr-lib:
     image: "alexeyeremin/deus-qr-lib"
     networks:
