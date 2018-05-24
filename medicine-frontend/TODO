@@ -1,4 +1,3 @@
 * Meaningful error message when adding comment for non-existing patient ID.
 * Add lab test type to lab test card.
 * Add time visualization to lab test card.
-* Dockerize, run in cloud.
