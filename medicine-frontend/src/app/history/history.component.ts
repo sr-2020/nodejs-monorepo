@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective, FormControl } from '@angular/forms';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry, MatSnackBar } from '@angular/material';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -54,6 +54,7 @@ export class HistoryComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _router: Router,
+    private _matSnackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
     private _dataService: DataService) {
@@ -89,11 +90,20 @@ export class HistoryComponent implements OnInit {
   public async addComment(formDirective: FormGroupDirective) {
     // Need to use getRawValue() as that form field is potentially disabled,
     // and accessing value.patientId returns 'undefined'.
-    await this._dataService.addComment(this.addCommentForm.getRawValue().patientId,
-      this.addCommentForm.value.comment);
-    this.update();
-    formDirective.resetForm();
-    this.filterHistoryEntries();
+    try {
+      await this._dataService.addComment(this.addCommentForm.getRawValue().patientId,
+        this.addCommentForm.value.comment);
+      this.update();
+      formDirective.resetForm();
+      this.filterHistoryEntries();
+    } catch (e) {
+      console.error(JSON.stringify(e));
+      if (e.status && e.status == 404) {
+        this._matSnackBar.open("Пациент с данным ID не найден.", '', { duration: 2000 });
+      } else {
+        this._matSnackBar.open("Неизвестная ошибка сервера :(", '', { duration: 2000 });
+      }
+    }
   }
 
   public newLabTest() {
