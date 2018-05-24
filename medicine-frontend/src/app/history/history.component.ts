@@ -96,6 +96,14 @@ export class HistoryComponent implements OnInit {
     this.filterHistoryEntries();
   }
 
+  public newLabTest() {
+    this._router.navigate(['choose-lab-tests']);
+  }
+
+  public displayFn(user?: PatientFilterOption): string | undefined {
+    return user ? user.description() : undefined;
+  }
+
   private update() {
     this.fullPatientHistory = this._dataService.getViewModel().patientHistory.reverse();
     const seenPatientIds = {};
@@ -125,13 +133,5 @@ export class HistoryComponent implements OnInit {
   private filterFilterOptions(name: string): PatientFilterOption[] {
     return this.patientFilterOptions.filter(option =>
       option.description().toLowerCase().indexOf(name.toLowerCase()) >= 0);
-  }
-
-  private displayFn(user?: PatientFilterOption): string | undefined {
-    return user ? user.description() : undefined;
-  }
-
-  public newLabTest() {
-    this._router.navigate(['choose-lab-tests']);
   }
 }
