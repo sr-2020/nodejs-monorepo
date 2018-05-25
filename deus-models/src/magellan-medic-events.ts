@@ -15,7 +15,7 @@ interface TestResult {
 const tests = {
   sum: (model): TestResult => {
     const r = (model.systems as number[]).reduce((acc, val) => acc + val);
-    return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}}`};
+    return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}`};
   },
   max: (model): TestResult=> {
     const r = (model.systems as number[]).reduce((acc, val) => Math.max(acc, val));
