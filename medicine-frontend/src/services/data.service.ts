@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 
-import { ViewModel, HistoryEntry, LabTest } from "src/datatypes/viewmodel";
-import { currentTimestamp } from "src/app/util";
-import { GlobalConfig } from "src/config";
-import { AuthService } from "src/services/auth.service";
+import { ViewModel, HistoryEntry, LabTest } from 'src/datatypes/viewmodel';
+import { currentTimestamp } from 'src/app/util';
+import { GlobalConfig } from 'src/config';
+import { AuthService } from 'src/services/auth.service';
 
 @Injectable()
 export class DataService {
@@ -25,6 +25,7 @@ export class DataService {
       this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
 
     if (response.json().viewModel == undefined) {
+      // tslint:disable-next-line:quotemark
       console.error("Didn't get updated viewmodel");
       console.log(JSON.stringify(response.json()));
       console.log(response.status);
@@ -45,5 +46,5 @@ export class DataService {
         return;
       }
       this.setViewModel(response.json().viewModel);
-  };
+  }
 }

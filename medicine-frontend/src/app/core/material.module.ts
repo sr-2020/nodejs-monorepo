@@ -35,7 +35,7 @@ const materialDesignModules = [
   MatSelectModule,
   MatAutocompleteModule,
   MatTooltipModule,
-]
+];
 
 @NgModule({
   imports: materialDesignModules,

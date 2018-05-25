@@ -27,15 +27,15 @@ export class LoginComponent {
       const v = await this._authService.tryLoginAndGetViewmodel(this.username, this.password);
       this._dataService.setViewModel(v);
       this._router.navigate(['history']);
-    }
-    catch (err) {
+    } catch (err) {
       console.warn(JSON.stringify(err));
-      if (err.status == 404)
+      if (err.status == 404) {
         this.showLoginFailedAlert('Персонаж с данным ID не найден');
-      else if (err.status == 401)
+      } else if (err.status == 401) {
         this.showLoginFailedAlert('Неправильный пароль');
-      else
+      } else {
         this.showLoginFailedAlert('Ошибка подключения к серверу, повторите попытку позже');
+      }
     }
   }
 

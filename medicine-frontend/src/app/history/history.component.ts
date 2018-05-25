@@ -23,15 +23,16 @@ class PatientFilterOption {
   }
 
   public all() {
-    this.patientFullName = 'Все пациенты'
+    this.patientFullName = 'Все пациенты';
     return this;
   }
 
   public description() {
-    if (this.patientId)
+    if (this.patientId) {
       return `${this.patientFullName} (${this.patientId})`;
-    else
+    } else {
       return this.patientFullName;
+    }
   }
 }
 
@@ -45,7 +46,7 @@ export class HistoryComponent implements OnInit {
   public filteredPatientHistory: HistoryEntry[] = [];
 
   public filterControl = new FormControl();
-  public patientFilterOptions: PatientFilterOption[] = []
+  public patientFilterOptions: PatientFilterOption[] = [];
   public filteredPatientFilterOptions: Observable<PatientFilterOption[]>;
   public currentPatientFilterOption: PatientFilterOption;
 
@@ -81,7 +82,7 @@ export class HistoryComponent implements OnInit {
       );
 
     this.filterControl.valueChanges.subscribe((v) => {
-      if (typeof v == 'string') return;
+      if (typeof v == 'string') { return; }
       this.currentPatientFilterOption = v;
       this.filterHistoryEntries();
     });
@@ -99,9 +100,9 @@ export class HistoryComponent implements OnInit {
     } catch (e) {
       console.error(JSON.stringify(e));
       if (e.status && e.status == 404) {
-        this._matSnackBar.open("Пациент с данным ID не найден.", '', { duration: 2000 });
+        this._matSnackBar.open('Пациент с данным ID не найден.', '', { duration: 2000 });
       } else {
-        this._matSnackBar.open("Неизвестная ошибка сервера :(", '', { duration: 2000 });
+        this._matSnackBar.open('Неизвестная ошибка сервера :(', '', { duration: 2000 });
       }
     }
   }
@@ -130,8 +131,7 @@ export class HistoryComponent implements OnInit {
     if (!this.currentPatientFilterOption.patientId) {
       this.addCommentForm.get('patientId').enable();
       this.filteredPatientHistory = this.fullPatientHistory;
-    }
-    else {
+    } else {
       this.addCommentForm.patchValue({
         patientId: Number(this.currentPatientFilterOption.patientId)
       });

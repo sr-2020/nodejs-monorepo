@@ -24,15 +24,16 @@ export class ChooseLabTestsComponent implements OnInit {
     private _dataService: DataService) {}
 
   public ngOnInit() {
-    this.availableTests = this._dataService.getViewModel().availableTests
-    for (const test of this.availableTests)
+    this.availableTests = this._dataService.getViewModel().availableTests;
+    for (const test of this.availableTests) {
       this.checked[test.name] = false;
+    }
   }
 
   public async applyChoice() {
     const checkedTests = this.availableTests.filter(test => this.checked[test.name]);
 
-    let dialogRef = this.dialog.open(QrReaderComponent, {
+    const dialogRef = this.dialog.open(QrReaderComponent, {
       width: '500px',
       data: { checkedTests }
     });

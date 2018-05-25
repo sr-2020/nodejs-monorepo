@@ -14,8 +14,9 @@ export function formatInteger(value: number, padding: number): string {
 
 // Prints "H:MM" or "M:SS" with a given separator.
 export function formatTime2(value: number, separator: string): string {
-  if (value >= infinity)
+  if (value >= infinity) {
     return '∞';
+  }
   const sign = signCharacter(value);
   value = Math.abs(value);
   value = Math.floor(value);
@@ -26,8 +27,9 @@ export function formatTime2(value: number, separator: string): string {
 
 // Prints "H:MM:SS" with a given separator.
 export function formatTime3(value: number, separator: string): string {
-  if (value >= infinity)
+  if (value >= infinity) {
     return '∞';
+  }
   const sign = signCharacter(value);
   value = Math.abs(value);
   value = Math.floor(value);
@@ -35,9 +37,9 @@ export function formatTime3(value: number, separator: string): string {
   const min = Math.floor(value / 60) % 60;
   const sec = value % 60;
   return sign +
-         formatInteger(hour, 1) + separator +
-         formatInteger(min, 2) + separator +
-         formatInteger(sec, 2);
+    formatInteger(hour, 1) + separator +
+    formatInteger(min, 2) + separator +
+    formatInteger(sec, 2);
 }
 
 // TODO: test
@@ -46,8 +48,8 @@ export function renderTimestamp(unixSeconds: number): string {
   const now = new Date();
 
   if (timestamp.getFullYear() == now.getFullYear() &&
-      timestamp.getMonth() == now.getMonth() &&
-      timestamp.getDate() == now.getDate()) {
+    timestamp.getMonth() == now.getMonth() &&
+    timestamp.getDate() == now.getDate()) {
     const minutesSinceMidnight = timestamp.getHours() * 60 + timestamp.getMinutes();
     return formatTime2(minutesSinceMidnight, ':');
   }
@@ -59,14 +61,16 @@ export function renderTimestamp(unixSeconds: number): string {
   const nowDaysSinceEpoch = Math.floor((now.getTime() - localOffset) / microsPerDay);
   const dayDiff = Math.abs(nowDaysSinceEpoch - timestampDaysSinceEpoch);
   if (timestampDaysSinceEpoch < nowDaysSinceEpoch) {
-    if (dayDiff == 1)
+    if (dayDiff == 1) {
       return 'вчера';
-    else
+    } else {
       return dayDiff + /*U+00A0*/ ' д. назад';
+    }
   } else {
-    if (dayDiff == 1)
+    if (dayDiff == 1) {
       return 'завтра';
-    else
+    } else {
       return 'через ' + dayDiff + /*U+00A0*/ ' д.';
+    }
   }
 }

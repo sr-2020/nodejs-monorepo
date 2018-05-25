@@ -36,11 +36,11 @@ export class QrReaderComponent implements OnInit {
 
   constructor(
     private _dialogRef: MatDialogRef<QrReaderComponent>,
-    private _dataService: DataService){};
+    private _dataService: DataService) { }
 
   ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-      if (devices.length == 0) return;
+      if (devices.length == 0) { return; }
       this.hasCameras = true;
       console.log('Devices: ', devices);
       this.availableDevices = devices;
@@ -65,21 +65,24 @@ export class QrReaderComponent implements OnInit {
   public async handleQrCodeResult(qr: string) {
     try {
       const data: QrData = decode(qr);
-      if (data.validUntil < currentTimestamp() / 1000)
+      if (data.validUntil < currentTimestamp() / 1000) {
         throw new QrExpiredError();
+      }
 
-      if (data.type != QrType.Passport)
+      if (data.type != QrType.Passport) {
         throw new NonPassportQrError();
+      }
 
       this._dialogRef.close(data.payload);
     } catch (e) {
       console.error('Unsupported QR code scanned, error: ' + e);
-      if (e instanceof QrExpiredError)
+      if (e instanceof QrExpiredError) {
         this.errorMessage = 'Отсканирован код с истекшим сроком действия, пересоздайте код.';
-      else if (e instanceof NonPassportQrError)
+      } else if (e instanceof NonPassportQrError) {
         this.errorMessage = 'Отсканируйте код со страницы-паспорта.';
-      else
+      } else {
         this.errorMessage = 'Неподдерживаемый формат кода.';
+      }
     }
   }
 }

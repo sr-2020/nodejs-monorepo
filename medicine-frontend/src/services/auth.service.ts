@@ -42,7 +42,7 @@ export class AuthService {
       headers: new Headers({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': "Basic "+btoa(userId + ':' + password)
+        'Authorization': 'Basic ' + btoa(userId + ':' + password)
       }),
     };
   }
