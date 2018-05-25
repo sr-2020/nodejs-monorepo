@@ -4,6 +4,7 @@ export interface HistoryEntry {
   patientId: string;
   patientFullName: string;
 
+  type: string;
   text: string;
 }
 

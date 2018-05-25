@@ -33,7 +33,7 @@
 <mat-card *ngFor="let entry of filteredPatientHistory" class="history-card">
   <mat-card-header>
     <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
-    <mat-card-subtitle>Результат анализа</mat-card-subtitle>
+    <mat-card-subtitle>{{entry.type}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
