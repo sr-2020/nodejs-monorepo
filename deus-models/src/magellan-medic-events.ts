@@ -7,14 +7,19 @@ interface RunLabTestData {
   model: any;
 }
 
+interface TestResult {
+  type: string;
+  message: string;
+}
+
 const tests = {
-  sum: (model) => {
+  sum: (model): TestResult => {
     const r = (model.systems as number[]).reduce((acc, val) => acc + val);
-    return `Сумма значений состояний систем равна ${r}`;
+    return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}}`};
   },
-  max: (model) => {
+  max: (model): TestResult=> {
     const r = (model.systems as number[]).reduce((acc, val) => Math.max(acc, val));
-    return `Максимум значений состояний систем равна ${r}`;
+    return {type:'Максимум', message: `Максимум значений состояний систем равна ${r}`};
   },
 }
 
@@ -31,11 +36,14 @@ function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Ev
     return;
   }
 
+  const testResult: TestResult = testFunction(data.model);
+
   const historyEntry = {
     timestamp: event.timestamp,
     patientId: data.model._id,
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
-    text: testFunction(data.model),
+    type: testResult.type,
+    text: testResult.message,
   }
 
   api.model.patientHistory.push(historyEntry);
@@ -58,6 +66,7 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
     patientId: data.model._id,
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     text: data.text,
+    type: 'Комментарий',
   }
 
   api.model.patientHistory.push(historyEntry);
