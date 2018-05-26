@@ -9,6 +9,7 @@ import { map, startWith } from 'rxjs/operators';
 
 import { DataService } from 'src/services/data.service';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
+import { renderTimestamp } from 'src/time-utils';
 
 
 
@@ -113,6 +114,10 @@ export class HistoryComponent implements OnInit {
 
   public displayFn(user?: PatientFilterOption): string | undefined {
     return user ? user.description() : undefined;
+  }
+
+  public displayTimestamp(entry: HistoryEntry): string {
+    return renderTimestamp(entry.timestamp);
   }
 
   private update() {

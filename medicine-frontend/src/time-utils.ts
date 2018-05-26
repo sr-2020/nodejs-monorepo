@@ -42,19 +42,7 @@ export function formatTime3(value: number, separator: string): string {
     formatInteger(sec, 2);
 }
 
-// TODO: test
-export function renderTimestamp(unixSeconds: number): string {
-  const timestamp = new Date(unixSeconds * 1000);
-  const now = new Date();
-
-  if (timestamp.getFullYear() == now.getFullYear() &&
-    timestamp.getMonth() == now.getMonth() &&
-    timestamp.getDate() == now.getDate()) {
-    const minutesSinceMidnight = timestamp.getHours() * 60 + timestamp.getMinutes();
-    return formatTime2(minutesSinceMidnight, ':');
-  }
-
-  // TODO: fix leap seconds
+function renderDay(now: Date, timestamp: Date) {
   const microsPerDay = 24 * 3600 * 1000;
   const localOffset = now.getTimezoneOffset() * 60 * 1000;
   const timestampDaysSinceEpoch = Math.floor((timestamp.getTime() - localOffset) / microsPerDay);
@@ -63,14 +51,37 @@ export function renderTimestamp(unixSeconds: number): string {
   if (timestampDaysSinceEpoch < nowDaysSinceEpoch) {
     if (dayDiff == 1) {
       return 'вчера';
+    } else if (dayDiff == 2) {
+      return 'позавчера';
     } else {
       return dayDiff + /*U+00A0*/ ' д. назад';
     }
   } else {
     if (dayDiff == 1) {
       return 'завтра';
+    } else if (dayDiff == 2) {
+      return 'послезавтра';
     } else {
       return 'через ' + dayDiff + /*U+00A0*/ ' д.';
     }
   }
+}
+
+// TODO: test
+export function renderTimestamp(unixMilliseconds: number): string {
+  const timestamp = new Date(unixMilliseconds);
+  const now = new Date();
+
+  const minutesSinceMidnight = timestamp.getHours() * 60 + timestamp.getMinutes();
+
+  const time = formatTime2(minutesSinceMidnight, ':');
+
+  if (timestamp.getFullYear() == now.getFullYear() &&
+    timestamp.getMonth() == now.getMonth() &&
+    timestamp.getDate() == now.getDate()) {
+    return time;
+  }
+
+  return time + ', ' + renderDay(now, timestamp);
+  // TODO: fix leap seconds
 }

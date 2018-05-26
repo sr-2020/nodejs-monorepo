@@ -32,18 +32,19 @@
 
 <mat-card *ngFor="let entry of filteredPatientHistory" class="history-card">
   <mat-card-header>
-    <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
-    <mat-card-subtitle>{{entry.type}}</mat-card-subtitle>
+    <mat-card-title-group>
+      <mat-card-title>{{entry.patientFullName}} ({{entry.patientId}})</mat-card-title>
+      <mat-card-subtitle>{{displayTimestamp(entry)}}</mat-card-subtitle>
+    </mat-card-title-group>
   </mat-card-header>
 
   <mat-card-content>
     <div style='white-space: pre-wrap;'>
-      {{entry.text}}
+      <b>{{entry.type}}:</b> {{entry.text}}
     </div>
   </mat-card-content>
-
 </mat-card>
 
 <button mat-fab color="primary" class="new-lab-test" matTooltip="Новый анализ" [matTooltipClass]="'tooltip'" (click)="newLabTest()">
-    <mat-icon svgIcon="analyze"></mat-icon>
+  <mat-icon svgIcon="analyze"></mat-icon>
 </button>
