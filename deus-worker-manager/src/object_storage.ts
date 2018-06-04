@@ -33,7 +33,7 @@ export class ObjectStorage implements ObjectStorageInterface {
         let locked = get(this.storage, [alias, id]);
         if (locked) {
             if (locked.lockId == lockId) {
-                return locked;
+                return locked; // TODO(aeremin): should it be locked.obj?
             } else {
                 return;
             }
