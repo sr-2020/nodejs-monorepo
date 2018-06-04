@@ -191,8 +191,6 @@ describe('Green way', function() {
             timestamp: timestamp + 20
         });
 
-        await delay(400);
-
         await pushEvent(di, {
             characterId: model._id,
             eventType: 'externalCounter',
@@ -205,13 +203,12 @@ describe('Green way', function() {
             timestamp: timestamp + 50
         });
 
-        await delay(400);
-
+        // Not interested in actual model, just wait for processing.
+        await getModelAtTimestamp(di, model._id, timestamp + 50);
+        
         let abc = await getObject(di, 'counters', 'abc');
 
         expect(abc).to.exist;
-        if (!abc) throw new Error('Imposible!');
-
         expect(abc.value).to.equals(2);
     });
 
