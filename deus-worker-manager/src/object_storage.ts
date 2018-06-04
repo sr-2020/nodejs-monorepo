@@ -29,7 +29,7 @@ export class ObjectStorage implements ObjectStorageInterface {
 
     newId() { return this.nextId++; }
 
-    async aquireOne(lockId: number, alias: string, id: string): Promise<Document | null | undefined> {
+    private async aquireOne(lockId: number, alias: string, id: string): Promise<Document | null | undefined> {
         let locked = get(this.storage, [alias, id]);
         if (locked) {
             if (locked.lockId == lockId) {
@@ -69,7 +69,7 @@ export class ObjectStorage implements ObjectStorageInterface {
         return result;
     }
 
-    storeOne(lockId: number, alias: string, id: string, obj: any): Promise<void> {
+    private storeOne(lockId: number, alias: string, id: string, obj: any): Promise<void> {
         let locked = get(this.storage, [alias, id]);
         if (!locked || !(locked.lockId == lockId)) {
             return Promise.reject(null);
