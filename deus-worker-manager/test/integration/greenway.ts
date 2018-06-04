@@ -181,7 +181,7 @@ describe('Green way', function() {
 
         await pushEvent(di, {
             characterId: model._id,
-            eventType: 'externalCounter',
+            eventType: 'increaseExternalCounterAbc',
             timestamp: timestamp + 10
         });
 
@@ -193,7 +193,7 @@ describe('Green way', function() {
 
         await pushEvent(di, {
             characterId: model._id,
-            eventType: 'externalCounter',
+            eventType: 'increaseExternalCounterAbc',
             timestamp: timestamp + 30
         });
 

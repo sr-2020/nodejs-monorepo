@@ -19,7 +19,7 @@ module.exports = () => {
             process.exit(1);
         },
 
-        externalCounter(api) {
+        increaseExternalCounterAbc(api) {
             let abc = api.aquired('counters', 'abc');
             if (abc) {
                 abc.value++;
@@ -28,7 +28,7 @@ module.exports = () => {
 
         _preprocess(api, events) {
             for (let e of events) {
-                if (e.eventType == 'externalCounter') {
+                if (e.eventType == 'increaseExternalCounterAbc') {
                     api.aquire('counters', 'abc');
                 }
             }
