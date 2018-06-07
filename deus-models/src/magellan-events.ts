@@ -3,6 +3,16 @@ import consts = require('../helpers/constants');
 import uuid = require('uuid/v1');
 import helpers = require('../helpers/model-helper');
 
+enum BiologicalSystems {
+  Nervous,
+  Cardiovascular,
+  Reproductive,
+  Digestive,
+  Respiratory,
+  Musculoskeletal,
+  Integumentary
+}
+
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
   for (let i = 0; i < consts.medicSystems.length; ++i)
