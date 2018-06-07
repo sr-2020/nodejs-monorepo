@@ -13,10 +13,19 @@ enum BiologicalSystems {
   Integumentary
 }
 
+interface OrganismModel {
+  systems: number[];
+  location?: string;
+}
+
+function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
+  return api.model;
+}
+
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
   for (let i = 0; i < consts.medicSystems.length; ++i)
-    api.model.systems[i] += data[i];
+    getTypedOrganismModel(api).systems[i] += data[i];
 }
 
 function useMagellanPill(api: ModelApiInterface, data: number[], event: Event) {
@@ -53,7 +62,7 @@ function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
     text: `Вы находитесь на корабле номер ${modifier.shipId}`
   };
   api.addCondition(c);
-  api.model.location = `ship_${modifier.shipId}`;
+  getTypedOrganismModel(api).location = `ship_${modifier.shipId}`;
 }
 
 module.exports = () => {
