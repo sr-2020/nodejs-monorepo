@@ -12,6 +12,8 @@ enum QrType {
     EnterShip = 5,     // payload should contain ship id (number)
     LeaveShip = 6,
 
+    SpaceSuitRefill = 7, // payload is time in minutes
+
     Passport = 100,
     Bill = 101
 }
