@@ -11,6 +11,9 @@
     "corporation": "",
     "email": "gennady.lavrov@alice.digital"
   },
+  "toolbar": {
+    "airSecondsLeft": 60
+  },
   "pages": [
     {
       "__type": "ListPageViewModel",

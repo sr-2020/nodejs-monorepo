@@ -57,5 +57,8 @@
     1,
     21,
     0
-  ]
+  ],
+  "spaceSuit": {
+    "oxygenLeftMs": 60000
+  }
 }

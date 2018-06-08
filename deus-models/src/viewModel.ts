@@ -214,12 +214,20 @@ function getPassportScreen(model: OrganismModel) {
     };
 }
 
+
+function getToolbar(model: OrganismModel) {
+    return {
+        airSecondsLeft: model.spaceSuit.oxygenLeftMs / 1000
+    };
+}
+
 function getViewModel(model: OrganismModel) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
         menu: getMenu(model),
         passportScreen: getPassportScreen(model),
+        toolbar: getToolbar(model),
         pages: getPages(model),
     };
 }
