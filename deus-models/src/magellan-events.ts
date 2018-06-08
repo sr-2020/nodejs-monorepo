@@ -21,7 +21,7 @@ function systemsIndices(): number[] {
   return result;
 }
 
-interface OrganismModel {
+export interface OrganismModel {
   systems: number[];
   location?: string;
 }

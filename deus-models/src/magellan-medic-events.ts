@@ -1,5 +1,6 @@
 import { ModelApiInterface, Event } from "deus-engine-manager-api";
 import { hasMedicViewModel } from "../helpers/view-model-helper";
+import { OrganismModel } from "./magellan-events";
 
 
 interface RunLabTestData {
@@ -13,11 +14,11 @@ interface TestResult {
 }
 
 const tests = {
-  sum: (model): TestResult => {
+  sum: (model: OrganismModel): TestResult => {
     const r = (model.systems as number[]).reduce((acc, val) => acc + val);
     return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}`};
   },
-  max: (model): TestResult=> {
+  max: (model: OrganismModel): TestResult=> {
     const r = (model.systems as number[]).reduce((acc, val) => Math.max(acc, val));
     return {type:'Максимум', message: `Максимум значений состояний систем равна ${r}`};
   },
