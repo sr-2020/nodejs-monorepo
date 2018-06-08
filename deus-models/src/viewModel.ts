@@ -1,6 +1,6 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
 import { hasMobileViewModel, hasMedicViewModel } from "../helpers/view-model-helper";
-import { systemsIndices, BiologicalSystems, biologicalSystemsNames } from "../helpers/magellan";
+import { systemsIndices, BiologicalSystems, biologicalSystemsNames, OrganismModel, Change } from "../helpers/magellan";
 
 interface PageViewModel {
   menuTitle: string;
@@ -16,11 +16,11 @@ interface Row {
     valueColor?: string
 };
 
-function getCharacterName(model) {
+function getCharacterName(model: OrganismModel) {
     return model.firstName + " " + model.lastName;
 }
 
-function getStartPage(model) {
+function getStartPage(model: OrganismModel) {
     const items: Row[] = [
         {
             text: "Имя",
@@ -104,7 +104,7 @@ function getConditionsPageItem(cond) {
     };
 }
 
-function getConditionsPage(model) {
+function getConditionsPage(model: OrganismModel) {
     return {
         __type: "ListPageViewModel",
         viewId: "page:conditions",
@@ -133,7 +133,7 @@ function getEconomyPage() {
     };
 }
 
-function getBodyPage(model) {
+function getBodyPage(model: OrganismModel) {
     const items: any[] = [];
     let result = {
         __type: "ListPageViewModel",
@@ -155,7 +155,7 @@ function getBodyPage(model) {
     return result;
 }
 
-function getChangesPageItem(change) {
+function getChangesPageItem(change: Change) {
     return {
         viewId: "mid:" + change.mID,
         text: change.text,
@@ -167,7 +167,7 @@ function getChangesPageItem(change) {
     };
 }
 
-function getChangesPage(model) {
+function getChangesPage(model: OrganismModel) {
     return {
         __type: "ListPageViewModel",
         viewId: "page:changes",
@@ -179,7 +179,7 @@ function getChangesPage(model) {
     };
 }
 
-function getPages(model) {
+function getPages(model: OrganismModel) {
     let pages: PageViewModel[] = [];
 
 
@@ -199,13 +199,13 @@ function getPages(model) {
     return pages;
 }
 
-function getMenu(model) {
+function getMenu(model: OrganismModel) {
     return {
         characterName: getCharacterName(model),
     };
 }
 
-function getPassportScreen(model) {
+function getPassportScreen(model: OrganismModel) {
     return {
         id: model._id,
         fullName: model.firstName + " " + model.lastName,
@@ -214,7 +214,7 @@ function getPassportScreen(model) {
     };
 }
 
-function getViewModel(model) {
+function getViewModel(model: OrganismModel) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
