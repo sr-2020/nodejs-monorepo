@@ -4,6 +4,14 @@
   "isAlive": true,
   "inGame": true,
   "timestamp": 0,
+  "conditions": [
+    {
+      "class": "physiology",
+      "id": "on-the-ship",
+      "mID": "059c5900-6b23-11e8-8481-074472161ad3",
+      "text": "Вы находитесь на корабле номер 12"
+    }
+  ],
   "modifiers": [
     {
       "mID": "OnTheShip",
@@ -48,6 +56,7 @@
   "profileType": "human",
   "firstName": "Геннадий",
   "lastName": "Лавров",
+  "location": "ship_12",
   "systems": [
     4,
     7,

@@ -1,5 +1,12 @@
+
+
+
 function randomId() {
     return Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+}
+
+export function getExampleMagellanModel() {
+    return require( "../../../data_samples/model.json" );
 }
 
 export const getExampleModel = (id?: string) => ({
@@ -128,39 +135,3 @@ export const getExampleModel = (id?: string) => ({
     ],
     "timers": []
 });
-
-
-
-export const getExampleMagellanModel = (id?: string) => ({
-    _id: id || randomId(),
-    hp: 4,
-    maxHp: 4,
-
-    randomSeed: 12345678,
-
-    login: "john.smith",
-    password: "P@ssw0rd",
-    mail: "john.smith@alice.digital",
-    profileType: "human",
-    firstName: "Джон",
-    nicName: "",
-    lastName: "Смит",
-    sweethome: "Жилые комплексы PanAm",
-    sex: "male",
-    corporation: "Корпорация Pan American Sunrise Technology Corp.",
-    isAlive: true,
-
-    genome: [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 2, 0, 0],
-    systems: [0, 0, 0, 0, 0, 0],
-
-    timestamp: 0,
-
-    modifiers: [
-    ],
-    changes: [
-    ],
-    messages: [
-    ],
-    timers: {}
-});
-

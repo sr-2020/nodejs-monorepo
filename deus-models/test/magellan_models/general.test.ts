@@ -5,12 +5,20 @@ import { process, printModel } from '../test_helpers';
 import { getExampleMagellanModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import consts = require('../../helpers/constants');
+import { systemsIndices } from '../../helpers/magellan';
 
-describe('General Magellan events: ', () => {
+describe('Helpers', () => {
+    it('systemIndices', () => {
+        const indices = systemsIndices();
+        expect(indices).to.deep.equal([0, 1, 2, 3, 4, 5, 6]);
+    })
+});
+
+describe.only('General Magellan events: ', () => {
 
     it("No-op refresh model", async function() {
 
-        let model = getExampleMagellanModel();
+        const model = getExampleMagellanModel();
         const events = [getRefreshEvent(model._id, model.timestamp + 610*1000 )];
         let {baseModel, workingModel } = await process(model, events);
 
@@ -20,7 +28,6 @@ describe('General Magellan events: ', () => {
         model.timestamp = 610*1000;
 
         expect(baseModel).to.deep.equal(model);
-        expect(workingModel).to.deep.equal(model);
     });
 
     it("Modify systems instant", async function() {

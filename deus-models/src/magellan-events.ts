@@ -2,33 +2,8 @@ import { ModelApiInterface, Modifier, Effect, Condition, Event } from "deus-engi
 import consts = require('../helpers/constants');
 import uuid = require('uuid/v1');
 import helpers = require('../helpers/model-helper');
+import { systemsIndices, getTypedOrganismModel } from "../helpers/magellan";
 
-enum BiologicalSystems {
-  Nervous,
-  Cardiovascular,
-  Reproductive,
-  Digestive,
-  Respiratory,
-  Musculoskeletal,
-  Integumentary
-}
-
-function systemsIndices(): number[] {
-  const result: number[] = [];
-  for (const system in BiologicalSystems)
-    if (!isNaN(Number(system)))
-      result.push(Number(system));
-  return result;
-}
-
-export interface OrganismModel {
-  systems: number[];
-  location?: string;
-}
-
-function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
-  return api.model;
-}
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)

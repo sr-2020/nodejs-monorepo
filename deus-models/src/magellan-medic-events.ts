@@ -1,6 +1,6 @@
 import { ModelApiInterface, Event } from "deus-engine-manager-api";
 import { hasMedicViewModel } from "../helpers/view-model-helper";
-import { OrganismModel } from "./magellan-events";
+import { OrganismModel } from "../helpers/magellan";
 
 
 interface RunLabTestData {

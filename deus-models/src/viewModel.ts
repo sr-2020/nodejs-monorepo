@@ -1,6 +1,6 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
-import consts = require('../helpers/constants');
 import { hasMobileViewModel, hasMedicViewModel } from "../helpers/view-model-helper";
+import { systemsIndices, BiologicalSystems, biologicalSystemsNames } from "../helpers/magellan";
 
 interface PageViewModel {
   menuTitle: string;
@@ -20,30 +20,7 @@ function getCharacterName(model) {
     return model.firstName + " " + model.lastName;
 }
 
-function getRussianSex(sex) {
-    switch (sex) {
-        case "male": return "мужской";
-        case "female": return "женский";
-        case "agender": return "агендер";
-        default: return "---";
-    }
-}
-
-function getHandicaps(model) {
-    if (model.hp == 0) {
-        return "только лежать";
-    } else {
-        return "";
-    }
-}
-
 function getStartPage(model) {
-    let isHuman = model.profileType == "human";
-    let isProgram = model.profileType == "program";
-    let isExHumanProgram = model.profileType == "exhuman-program";
-    let isRobot = model.profileType == "robot";
-    let isExHumanRobot = model.profileType == "ex-human-robot";
-
     const items: Row[] = [
         {
             text: "Имя",
@@ -70,73 +47,10 @@ function getStartPage(model) {
         },
     };
 
-    if (!isProgram && !isExHumanProgram) {
-        pageInfo.body.items.push({ text: "Пол", value: getRussianSex(model.sex) });
-    }
-
     if (!model.isAlive) {
         pageInfo.body.items.unshift({
             text: "Состояние персонажа", value: "Вы мертвы!", valueColor: "#ff565c"
         });
-    }
-
-    if (isRobot) {
-        pageInfo.body.items.unshift({ text: "Тип системы:", value: `Андроид ${model.model}` });
-    }
-
-    if (isExHumanRobot) {
-        pageInfo.body.items.unshift({ text: "Тип системы:", value: model.model });
-    }
-
-    if (isProgram || isExHumanProgram) {
-        pageInfo.body.items.unshift({ text: "Тип системы:", value: "Программа" });
-    }
-
-    if (model.profileType == "robot" || isProgram) {
-        pageInfo.body.items.push({ text: "Создатель", value: model.creator })
-        pageInfo.body.items.push({ text: "Владелец", value: model.owner })
-    }
-
-    if (isHuman) {
-        pageInfo.body.items.push({ text: "Поколение", value: model.generation })
-    }
-
-    if (!isProgram && !isExHumanProgram) {
-        pageInfo.body.items.push({ text: "Проживание", value: model.sweethome })
-    }
-
-    let workRow = {
-        text: "Работа",
-        value: model.corporation,
-    };
-
-    let insuranceRow = {
-        text: "Страховка",
-        value: model.insuranceDiplayName
-    };
-
-    if (isHuman || isExHumanProgram || isExHumanRobot) {
-        pageInfo.body.items.push(workRow);
-        pageInfo.body.items.push(insuranceRow);
-    }
-
-    if (!isProgram && !isExHumanProgram) {
-
-        let hpRow: Row = {
-            text: "Hit Points",
-            value: model.hp + " / " + model.maxHp,
-            percent: 0,
-        };
-
-        if (model.maxHp) {
-            hpRow.percent = 100 * model.hp / model.maxHp
-        }
-
-        if (model.hp == 0) {
-            hpRow.valueColor = "#ff565c";
-        }
-
-        pageInfo.body.items.push(hpRow);
     }
 
     let illnesses = model.modifiers.filter(e => e.class == "illness" && e.currentStage > 2);
@@ -149,21 +63,12 @@ function getStartPage(model) {
             percent: 100
         });
     }
-    else if (isHuman) {
+    else /*if (isHuman)*/ {
         pageInfo.body.items.push({
             text: "Инфо:",
             value: "Проверяй ALICE часто",
         });
 
-    }
-
-    let handicaps = getHandicaps(model);
-    if (handicaps) {
-        pageInfo.body.items.push({
-            text: "Ограничения движения",
-            value: getHandicaps(model),
-            valueColor: "#ff565c"
-        })
     }
 
     return pageInfo;
@@ -242,38 +147,6 @@ function getEnableActionText(enabled) {
     return enabled ? "Выключить" : "Включить";
 }
 
-function getMemoryPageItem(mem) {
-    let header = mem.title;
-
-    if (mem.text == mem.title || mem.text == (mem.title + ".")) {
-        header = "Воспоминание";
-    }
-
-    let details = "";
-    if (mem.text) details += `<p>${mem.text.replace(/\s/g, ' ')}</p>`;
-    if (mem.url) details += `<p><a href="${mem.url}">${mem.url}</a></p>`
-
-    return {
-        text: mem.title,
-        details: {
-            header: header,
-            text: details
-        },
-    };
-}
-
-function getMemoryPage(model) {
-    return {
-        __type: "ListPageViewModel",
-        viewId: "page:memory",
-        menuTitle: "Воспоминания",
-        body: {
-            title: "Воспоминания",
-            items: model.memory.map(getMemoryPageItem),
-        },
-    };
-}
-
 function getBodyPage(model) {
     const items: any[] = [];
     let result = {
@@ -285,10 +158,11 @@ function getBodyPage(model) {
             items
         },
     };
-    for (let i = 0; i < consts.medicSystems.length; ++i) {
+    for (const i of systemsIndices()) {
+        const system: BiologicalSystems = i;
         result.body.items.push({
-            viewId: "mid:" + consts.medicSystems[i].name,
-            text: consts.medicSystems[i].label,
+            viewId: "mid:" + BiologicalSystems[system],
+            text: biologicalSystemsNames[system],
             value: model.systems[i].toString()
         });
     }
@@ -324,7 +198,6 @@ function getPages(model) {
 
 
     pages.push(getStartPage(model));
-    pages.push(getMemoryPage(model));
 
     pages.push(getConditionsPage(model));
     pages.push(getBodyPage(model));
@@ -340,29 +213,10 @@ function getPages(model) {
     return pages;
 }
 
-// General characteristics not tied to any page or UI element.
-function getGeneral(model) {
-    return {
-    };
-}
-
 function getMenu(model) {
     return {
         characterName: getCharacterName(model),
     };
-}
-
-function getToolbar(model) {
-    let ret = {
-        hitPoints: model.hp,
-        maxHitPoints: model.maxHp,
-    };
-
-    if (model.maxHp == 0) {
-        ret.maxHitPoints = 1;
-    }
-
-    return ret;
 }
 
 function getPassportScreen(model) {
@@ -378,9 +232,7 @@ function getViewModel(model) {
     return {
         _id: model._id,
         timestamp: model.timestamp,
-        general: getGeneral(model),
         menu: getMenu(model),
-        toolbar: getToolbar(model),
         passportScreen: getPassportScreen(model),
         pages: getPages(model),
     };
