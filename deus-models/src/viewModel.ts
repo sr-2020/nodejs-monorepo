@@ -133,20 +133,6 @@ function getEconomyPage() {
     };
 }
 
-
-function getEnabledText(enabled) {
-    return enabled ? "ON" : "OFF";
-}
-
-function getEnabledColor(enabled) {
-    // TODO: Use magic color provided by the app
-    return enabled ? "" : "#FF373F";
-}
-
-function getEnableActionText(enabled) {
-    return enabled ? "Выключить" : "Включить";
-}
-
 function getBodyPage(model) {
     const items: any[] = [];
     let result = {
