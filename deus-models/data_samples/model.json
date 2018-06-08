@@ -4,6 +4,7 @@
   "isAlive": true,
   "inGame": true,
   "timestamp": 0,
+  "conditions": [],
   "modifiers": [
     {
       "mID": "OnTheShip",

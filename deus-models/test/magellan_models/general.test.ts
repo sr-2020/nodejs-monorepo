@@ -14,7 +14,7 @@ describe('Helpers', () => {
     })
 });
 
-describe.only('General Magellan events: ', () => {
+describe('General Magellan events: ', () => {
 
     it("No-op refresh model", async function() {
 
@@ -122,7 +122,7 @@ describe.only('General Magellan events: ', () => {
         events = getEvents(baseModel._id, [ {eventType: 'leave-ship', data: {} } ]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
 
-        expect(workingModel.conditions).not.exist;
+        expect(workingModel.conditions).to.be.empty;
         expect(workingModel.location).not.exist;
     });
 
@@ -144,7 +144,7 @@ describe.only('General Magellan events: ', () => {
             [ {eventType: 'scanQr', data: {type: 6, kind: 0, validUntil: 0, payload: '' } }]);
         ({baseModel, workingModel} = (await process(baseModel, events)));
 
-        expect(workingModel.conditions).not.exist;
+        expect(workingModel.conditions).to.be.empty;
         expect(workingModel.location).not.exist;
     });
 

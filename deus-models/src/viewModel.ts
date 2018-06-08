@@ -162,7 +162,7 @@ function getBodyPage(model) {
         const system: BiologicalSystems = i;
         result.body.items.push({
             viewId: "mid:" + BiologicalSystems[system],
-            text: biologicalSystemsNames[system],
+            text: biologicalSystemsNames.get(system),
             value: model.systems[i].toString()
         });
     }
