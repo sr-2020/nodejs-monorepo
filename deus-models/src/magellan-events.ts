@@ -13,6 +13,14 @@ enum BiologicalSystems {
   Integumentary
 }
 
+function systemsIndices(): number[] {
+  const result: number[] = [];
+  for (const system in BiologicalSystems)
+    if (!isNaN(Number(system)))
+      result.push(Number(system));
+  return result;
+}
+
 interface OrganismModel {
   systems: number[];
   location?: string;
@@ -24,7 +32,8 @@ function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
-  for (let i = 0; i < consts.medicSystems.length; ++i)
+  
+  for (const i of systemsIndices())
     getTypedOrganismModel(api).systems[i] += data[i];
 }
 

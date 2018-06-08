@@ -26,68 +26,68 @@ describe('General Magellan events: ', () => {
     it("Modify systems instant", async function() {
 
         let model = getExampleMagellanModel();
-        model.systems = [0, -1, 2, -3, 18, -2]
+        model.systems = [0, -1, 2, -3, 18, -2, 0]
         const events = getEvents(model._id,
-            [ {eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6] } ], 100);
+            [ {eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6, 0] } ], 100);
 
         let {baseModel, workingModel } = await process(model, events);
 
-        expect(baseModel.systems).to.deep.equal([1, 1, 5, 1, 23, 4]);
-        expect(baseModel.systems).to.deep.equal([1, 1, 5, 1, 23, 4]);
+        expect(baseModel.systems).to.deep.equal([1, 1, 5, 1, 23, 4, 0]);
+        expect(baseModel.systems).to.deep.equal([1, 1, 5, 1, 23, 4, 0]);
     });
 
 
     it("Use pill", async function() {
         let model = getExampleMagellanModel();
-        model.systems = [0, 0, 0, 0, 0, 0]
+        model.systems = [0, 0, 0, 0, 0, 0, 0]
 
         let events = getEvents(model._id,
-            [ {eventType: 'use-magellan-pill', data: [1, 2, -2, -3, 0, 0] } ], 100);
+            [ {eventType: 'use-magellan-pill', data: [1, 2, -2, -3, 0, 0, 0] } ], 100);
 
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 1, -1, -1, 0, 0]);
-
-        events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
-        model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -2, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 1, -1, -1, 0, 0, 0]);
 
         events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 2, -2, -2, 0, 0, 0]);
 
         events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0, 0]);
+
+        events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0, 0]);
     });
 
     it("Use pill via QR", async function() {
         let model = getExampleMagellanModel();
-        model.systems = [0, 0, 0, 0, 0, 0]
+        model.systems = [0, 0, 0, 0, 0, 0, 0]
 
         const data = {
             type: 4,
             kind: 0,
             validUntil: 0,
-            payload: '1,2,-2,-3,0,0'
+            payload: '1,2,-2,-3,0,0,0'
         }
 
         let events = getEvents(model._id,
             [ {eventType: 'scanQr', data} ], 100);
 
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 1, -1, -1, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 1, -1, -1, 0, 0, 0]);
 
         events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -2, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 2, -2, -2, 0, 0, 0]);
 
         events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0, 0]);
 
         events = [getRefreshEvent(model._id, model.timestamp + consts.MAGELLAN_TICK_MILLISECONDS)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0]);
+        expect(model.systems).to.deep.equal([1, 2, -2, -3, 0, 0, 0]);
     });
 
 
