@@ -76,7 +76,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
-      start_period: 120s
+      start_period: 300s
 # Components we don't own, but depend on
 # CouchDB
   couchdb:
