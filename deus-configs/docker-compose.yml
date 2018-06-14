@@ -51,6 +51,9 @@ services:
       - "8000:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+    depends_on:
+      deus-server:
+        condition: service_healthy
   deus-qr-lib:
     image: "alexeyeremin/deus-qr-lib"
     networks:
