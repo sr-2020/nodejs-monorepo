@@ -73,37 +73,47 @@
         "title": "Доктор Хаус",
         "items": [
           {
-            "viewId": "mid:musculoskeletal",
-            "text": "опорно-двигательная",
+            "viewId": "mid:Nervous",
+            "text": "Нервная",
             "value": "4"
           },
           {
-            "viewId": "mid:cardiovascular",
-            "text": "сердечно-сосудистая",
+            "viewId": "mid:Cardiovascular",
+            "text": "Сердечно-сосудистая",
             "value": "7"
           },
           {
-            "viewId": "mid:respiratory",
-            "text": "дыхательная",
+            "viewId": "mid:Reproductive",
+            "text": "Репродуктивная",
             "value": "5"
           },
           {
-            "viewId": "mid:endocrine",
-            "text": "эндокринная",
+            "viewId": "mid:Digestive",
+            "text": "Пищеварительная",
             "value": "11"
           },
           {
-            "viewId": "mid:lymphatic",
-            "text": "лимфатическая",
+            "viewId": "mid:Respiratory",
+            "text": "Дыхательная",
             "value": "1"
           },
           {
-            "viewId": "mid:nervous",
-            "text": "нервная",
+            "viewId": "mid:Musculoskeletal",
+            "text": "Опорно-двигательная",
             "value": "21"
+          },
+          {
+            "viewId": "mid:Integumentary",
+            "text": "Покровная",
+            "value": "0"
           }
         ]
       }
+    },
+    {
+      "__type": "EconomyPageViewModel",
+      "viewId": "page:economy",
+      "menuTitle": "Экономика"
     },
     {
       "__type": "ListPageViewModel",
