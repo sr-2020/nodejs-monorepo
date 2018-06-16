@@ -7,6 +7,8 @@ COPY . .
 RUN npm run build -- --prod
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.13
+FROM nginx:1.15
+# Needed for the healthcheck
+RUN apt-get update && apt-get install curl
 COPY --from=node /app/dist/medicine-frontend /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
