@@ -50,7 +50,7 @@ services:
     ports:
       - "8000:80"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
       start_period: 30s
     depends_on:
       deus-server:
