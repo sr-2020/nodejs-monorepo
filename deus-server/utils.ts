@@ -4,9 +4,9 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBFind);
 
-import { DatabasesContainerToken, Account } from "./services/db-container";
-import { NotFoundError, UnauthorizedError } from "routing-controllers";
-import { Container } from "typedi";
+import { NotFoundError, UnauthorizedError } from 'routing-controllers';
+import { Container } from 'typedi';
+import { Account, DatabasesContainerToken } from './services/db-container';
 
 class LoginNotFoundError extends Error { }
 
@@ -19,7 +19,7 @@ export async function canonicalId(idOrLogin: string): Promise<string> {
     return idOrLogin;
 
   const docs = await Container.get(DatabasesContainerToken).accountsDb().find({
-    selector: { login: idOrLogin }
+    selector: { login: idOrLogin },
   });
 
   if (docs.docs.length == 0)
@@ -64,7 +64,7 @@ export function createLogData(req: express.Request, status: number): any {
     ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
     characterId: req.params.id,
     query: req.query,
-    source: 'api'
+    source: 'api',
   };
 }
 
@@ -74,7 +74,8 @@ export enum AccessPropagation {
   NoPropagation,
 }
 
-export async function checkAccess(from: Account, to: string, accessPropagation: AccessPropagation = AccessPropagation.Default) {
+export async function checkAccess(from: Account, to: string,
+                                  accessPropagation: AccessPropagation = AccessPropagation.Default) {
   if (from.roles && from.roles.includes('admin'))
     return;
 
@@ -89,12 +90,12 @@ export async function checkAccess(from: Account, to: string, accessPropagation: 
 
   try {
     const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;
-    if (allowedAccess && allowedAccess.some((access) => access.id == from._id && access.timestamp >= currentTimestamp()))
+    if (allowedAccess && allowedAccess.some(
+      (access) => access.id == from._id && access.timestamp >= currentTimestamp()))
       return;
     else
       throw new UnauthorizedError('Trying to access user without proper access rights');
-  }
-  catch (e) {
+  } catch (e) {
     returnCharacterNotFoundOrRethrow(e);
   }
 }

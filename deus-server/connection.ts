@@ -36,7 +36,7 @@ export class Connection {
 
     return race([
       this.refreshModelUpdatedResponse(id, latestSavedEventTimestamp),
-      this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp)
+      this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp),
     ]);
   }
 

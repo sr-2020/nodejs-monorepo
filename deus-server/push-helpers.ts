@@ -1,12 +1,12 @@
-import * as uuid from 'uuid/v4';
 import * as rp from 'request-promise';
-import { StatusAndBody } from "./connection";
-import { Container } from "typedi";
-import { DatabasesContainerToken } from "./services/db-container";
-import { ApplicationSettingsToken } from "./services/settings";
-import { IsNotFoundError } from "./utils";
-import { LoggerToken } from "./services/logger";
-import { HttpError } from "routing-controllers";
+import { HttpError } from 'routing-controllers';
+import { Container } from 'typedi';
+import * as uuid from 'uuid/v4';
+import { StatusAndBody } from './connection';
+import { DatabasesContainerToken } from './services/db-container';
+import { LoggerToken } from './services/logger';
+import { ApplicationSettingsToken } from './services/settings';
+import { IsNotFoundError } from './utils';
 
 export function makeVisibleNotificationPayload(title: string, body?: string): any {
   return {
@@ -18,7 +18,7 @@ export function makeVisibleNotificationPayload(title: string, body?: string): an
     aps: {
       sound: 'default',
     },
-    priority: "high"
+    priority: 'high',
   };
 }
 
@@ -33,7 +33,7 @@ export function makeSilentRefreshNotificationPayload(): any {
       'refresh': true,
       'content-available': 1,
     },
-    priority: "high"
+    priority: 'high',
   };
 }
 
@@ -54,7 +54,8 @@ export async function sendGenericPushNotification(id: string, payload: any): Pro
   } catch (e) {
     if (IsNotFoundError(e))
       return { status: 404, body: 'Character with such id or login is not found' };
-    Container.get(LoggerToken).error(`Error while sending push notification via FCM: ${e}`, {characterId: id, source: 'api'});
+    Container.get(LoggerToken).error(
+      `Error while sending push notification via FCM: ${e}`, {characterId: id, source: 'api'});
     throw e;
   }
 }

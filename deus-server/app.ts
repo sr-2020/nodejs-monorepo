@@ -7,24 +7,25 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBFind);
 
+import 'reflect-metadata'; // this shim is required
+import { Action, UnauthorizedError, useExpressServer } from 'routing-controllers';
+import { Container } from 'typedi';
 import { StatusAndBody } from './connection';
-import { makeVisibleNotificationPayload, makeSilentRefreshNotificationPayload, sendGenericPushNotification } from './push-helpers';
-import "reflect-metadata"; // this shim is required
-import { useExpressServer, Action, UnauthorizedError } from "routing-controllers";
-import { TimeController } from './controllers/time.controller';
-import { DatabasesContainerToken, Account } from './services/db-container';
-import { currentTimestamp, canonicalId, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
-import { ViewModelController } from './controllers/viewmodel.controller';
-import { LoggingErrorHandler } from './middleware/error-handler'
-import { Container } from "typedi";
-import { LoggerToken } from "./services/logger";
-import { CharactersController } from "./controllers/characters.controller";
-import { ApplicationSettingsToken } from "./services/settings";
-import { PushController } from "./controllers/push.controller";
-import { EventsController } from "./controllers/events.controller";
+import { CharactersController } from './controllers/characters.controller';
 import { EconomyController } from './controllers/economy.controller';
-import { LocationEventsController } from "./controllers/location-events.controller";
-import { MedicController } from "./controllers/medic.controller";
+import { EventsController } from './controllers/events.controller';
+import { LocationEventsController } from './controllers/location-events.controller';
+import { MedicController } from './controllers/medic.controller';
+import { PushController } from './controllers/push.controller';
+import { TimeController } from './controllers/time.controller';
+import { ViewModelController } from './controllers/viewmodel.controller';
+import { LoggingErrorHandler } from './middleware/error-handler';
+import { makeSilentRefreshNotificationPayload, makeVisibleNotificationPayload,
+  sendGenericPushNotification } from './push-helpers';
+import { Account, DatabasesContainerToken } from './services/db-container';
+import { LoggerToken } from './services/logger';
+import { ApplicationSettingsToken } from './services/settings';
+import { canonicalId, currentTimestamp, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 
 class App {
   private app: express.Express = express();
@@ -50,7 +51,7 @@ class App {
       currentUserChecker: async (action: Action): Promise<Account | undefined> => {
         const credentials = basic_auth(action.request);
         if (!credentials)
-          throw new UnauthorizedError('No authorization provided');;
+          throw new UnauthorizedError('No authorization provided');
 
         try {
           credentials.name = await canonicalId(credentials.name);
@@ -64,14 +65,15 @@ class App {
       },
       controllers: [
         TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
-        LocationEventsController, MedicController
+        LocationEventsController, MedicController,
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
     });
 
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
-      result.then((r) => this.logger.info(`Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
+      result.then((r) => this.logger.info(
+        `Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
         .catch((err) => this.logger.warn(`Failed to send notification: ${err}`, { characterId: id, source: 'api' }));
     };
 
@@ -132,7 +134,7 @@ class App {
 
   private async getCharactersInactiveForMoreThan(ms: number): Promise<string[]> {
     const docs = await this.dbContainer.viewModelDb('mobile').find({
-      selector: { timestamp: { $lt: currentTimestamp() - ms } }
+      selector: { timestamp: { $lt: currentTimestamp() - ms } },
     });
 
     return docs.docs.map((doc) => doc._id);
