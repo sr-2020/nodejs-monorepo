@@ -1,9 +1,9 @@
-import { TSMap } from "typescript-map";
 import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
+import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
-import { Token } from "typedi";
-import { Connection } from "../connection";
+import { Token } from 'typedi';
+import { Connection } from '../connection';
 
 export interface AccessEntry {
   id: string;
@@ -12,10 +12,10 @@ export interface AccessEntry {
 
 export interface Account {
   _id: string;
-  login?: string,
-  password: string,
-  access?: AccessEntry[],
-  pushToken?: string,
+  login?: string;
+  password: string;
+  access?: AccessEntry[];
+  pushToken?: string;
   roles?: string[];
 }
 
@@ -41,21 +41,22 @@ export interface BalancesDocument {
 
 export interface DatabasesContainerInterface {
   // TODO: Make private, provide accessors
-  connections: TSMap<string, Connection>,
+  connections: TSMap<string, Connection>;
 
   createIndices(): Promise<void>;
 
-  accountsDb(): PouchDB.Database<Account>,
-  modelsDb(): PouchDB.Database<{}>,
-  viewModelDb(type: string): PouchDB.Database<ViewModel>,
-  eventsDb(): PouchDB.Database<{ timestamp: number }>,
+  accountsDb(): PouchDB.Database<Account>;
+  modelsDb(): PouchDB.Database<{}>;
+  viewModelDb(type: string): PouchDB.Database<ViewModel>;
+  eventsDb(): PouchDB.Database<{ timestamp: number }>;
 
-  economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument>,
+  economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument>;
 }
 
+// tslint:disable-next-line:variable-name
 export const DatabasesContainerToken = new Token<DatabasesContainerInterface>();
 
-export class DatabasesContainer implements DatabasesContainerInterface{
+export class DatabasesContainer implements DatabasesContainerInterface {
   public connections = new TSMap<string, Connection>();
 
   constructor(
@@ -63,7 +64,7 @@ export class DatabasesContainer implements DatabasesContainerInterface{
     protected _modelsDb: PouchDB.Database<{}>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
-    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>){
+    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument>) {
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
         .on('change', (change) => {
@@ -77,25 +78,25 @@ export class DatabasesContainer implements DatabasesContainerInterface{
 
   public async createIndices(): Promise<void> {
     await this.accountsDb().createIndex({
-      index: {fields: ['login']}
+      index: {fields: ['login']},
     });
 
     await this.accountsDb().createIndex({
-      index: {fields: ['pushToken']}
+      index: {fields: ['pushToken']},
     });
 
     await this.economyDb().createIndex({
-      index: {fields: ['sender']}
+      index: {fields: ['sender']},
     });
     await this.economyDb().createIndex({
-      index: {fields: ['receiver']}
+      index: {fields: ['receiver']},
     });
     await this.viewModelDb('mobile').createIndex({
-      index: {fields: ['timestamp']}
+      index: {fields: ['timestamp']},
     });
 
     await this.modelsDb().createIndex({
-      index: {fields: ['location']}
+      index: {fields: ['location']},
     });
   }
 

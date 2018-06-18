@@ -2,19 +2,17 @@ import * as PouchDB from 'pouchdb';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
 import * as nock from 'nock';
-import * as winston from 'winston';
 
 import { expect } from 'chai';
 import 'mocha';
 
-import { TSMap } from 'typescript-map';
-import { Container } from "typedi";
+import { Container } from 'typedi';
 
 import App from '../app';
-import { ApplicationSettings, PushSettings, CheckForInactivitySettings,
-  ApplicationSettingsToken } from '../services/settings';
-import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
-import { LoggerToken, WinstonLogger } from "../services/logger";
+import { DatabasesContainerToken } from '../services/db-container';
+import { LoggerToken, WinstonLogger } from '../services/logger';
+import { ApplicationSettings, ApplicationSettingsToken, CheckForInactivitySettings,
+  PushSettings } from '../services/settings';
 import { TestDatabasesContainer } from './test-db-container';
 
 function delay(ms: number) {
@@ -57,16 +55,16 @@ describe('Mass push notifications', () => {
     await dbContainer.accountsDb().put({
       _id: '00001',
       pushToken: '00001spushtoken',
-      password: ''
+      password: '',
     });
     await dbContainer.accountsDb().put({
       _id: '00002',
       pushToken: '00002spushtoken',
-      password: ''
+      password: '',
     });
     await dbContainer.accountsDb().put({
       _id: '00003',
-      password: ''
+      password: '',
     });
     await dbContainer.createViews();
     Container.set(DatabasesContainerToken, dbContainer);

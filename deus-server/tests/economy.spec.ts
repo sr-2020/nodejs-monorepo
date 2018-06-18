@@ -2,31 +2,26 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import * as winston from 'winston';
 import * as rp from 'request-promise';
 
 import { expect } from 'chai';
 import 'mocha';
 
-import { Container } from "typedi";
+import { Container } from 'typedi';
 
 import App from '../app';
-import {
-  ApplicationSettings, PushSettings, CheckForInactivitySettings,
-  ApplicationSettingsToken
-} from '../services/settings';
 import { DatabasesContainerToken } from '../services/db-container';
-import { LoggerToken, WinstonLogger } from "../services/logger";
-import { TestDatabasesContainer } from './test-db-container';
+import { LoggerToken, WinstonLogger } from '../services/logger';
+import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../services/settings';
 import { currentTimestamp } from '../utils';
+import { TestDatabasesContainer } from './test-db-container';
 
-const address = `http://localhost:3000`
+const address = `http://localhost:3000`;
 
 describe('Economy', () => {
 
   let app: App;
   let dbContainer: TestDatabasesContainer;
-  const testStartTime: number = currentTimestamp()
 
   const pushSettings: PushSettings = {
     autoRefresh: {
@@ -79,13 +74,15 @@ describe('Economy', () => {
 
   it('Can transfer', async () => {
     let response = await rp.post(address + '/economy/transfer', {
-      resolveWithFullResponse: true, json: { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' },
+      resolveWithFullResponse: true, json:
+      { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' },
       auth: { username: 'first', password: '1' },
     }).promise();
     expect(response.statusCode).to.eq(200);
 
     response = await rp.post(address + '/economy/transfer', {
-      resolveWithFullResponse: true, json: { sender: 'second', receiver: 'first', amount: 5, description: 'For dark side' },
+      resolveWithFullResponse: true, json:
+      { sender: 'second', receiver: 'first', amount: 5, description: 'For dark side' },
       auth: { username: 'second', password: '2' },
     }).promise();
     expect(response.statusCode).to.eq(200);
@@ -107,7 +104,7 @@ describe('Economy', () => {
     expect(response.body.balance).to.equal(1010);
 
     const history = response.body.history;
-    expect(history).to.exist
+    expect(history).to.exist;
     expect(history.length).to.equal(2);
     expect(history[0].timestamp).to.be.greaterThan(history[1].timestamp);
     expect(history[0].timestamp).to.be.approximately(currentTimestamp(), 1000);
@@ -121,16 +118,17 @@ describe('Economy', () => {
   });
 
   it('Can process simultaneous transfers', async () => {
-    const promises: any[] = []
+    const promises: any[] = [];
     for (let i = 0; i < 20; ++i) {
       promises.push(rp.post(address + '/economy/transfer', {
-        resolveWithFullResponse: true, json: { sender: 'first', receiver: 'second', amount: 10, description: 'For cookies' },
+        resolveWithFullResponse: true, json:
+        { sender: 'first', receiver: 'second', amount: 10, description: 'For cookies' },
         auth: { username: 'first', password: '1' },
       }).promise());
     }
     const responses = await Promise.all(promises);
-    for (const response of responses)
-      expect(response.statusCode).to.eq(200);
+    for (const r of responses)
+      expect(r.statusCode).to.eq(200);
 
     const response = await rp.get(address + '/economy/00001',
       {
@@ -141,21 +139,21 @@ describe('Economy', () => {
     expect(response.body.balance).to.equal(800);
 
     const history = response.body.history;
-    expect(history).to.exist
+    expect(history).to.exist;
     expect(history.length).to.equal(20);
   });
 
   it('Get 401 if no auth', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
-      json: { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' }
+      json: { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' },
     }).promise();
     expect(response.statusCode).to.eq(401);
     expect(response.headers['WWW-Authenticate']).not.to.be.null;
   });
 
   it('Get 401 if incorrect password', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
       json: { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' },
       auth: { username: 'first', password: '3' },
@@ -165,7 +163,7 @@ describe('Economy', () => {
   });
 
   it('Get 401 if user do not have access', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
       json: { sender: 'first', receiver: 'second', amount: 15, description: 'For cookies' },
       auth: { username: 'second', password: '2' },
@@ -175,7 +173,7 @@ describe('Economy', () => {
   });
 
   it('Get 400 if spending more money than present', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
       json: { sender: 'first', receiver: 'second', amount: 1500, description: 'For cookies' },
       auth: { username: 'first', password: '1' },
@@ -184,7 +182,7 @@ describe('Economy', () => {
   });
 
   it('Get 400 if spending negative amount', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
       json: { sender: 'first', receiver: 'second', amount: -15, description: 'For cookies' },
       auth: { username: 'first', password: '1' },
@@ -194,7 +192,7 @@ describe('Economy', () => {
 
   // TODO(https://deus2017.atlassian.net/browse/DEM-314)
   it.skip('Get 400 if amount is not a number', async () => {
-    let response = await rp.post(address + '/economy/transfer', {
+    const response = await rp.post(address + '/economy/transfer', {
       resolveWithFullResponse: true, simple: false,
       json: { sender: 'first', receiver: 'second', amount: '15', description: 'For cookies' },
       auth: { username: 'first', password: '1' },

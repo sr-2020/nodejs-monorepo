@@ -1,31 +1,28 @@
 import * as express from 'express';
 import * as PouchDB from 'pouchdb';
-import * as PouchDBUpsert from 'pouchdb-upsert';
 import * as PouchDBFind from 'pouchdb-find';
+import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
-import { JsonController, Get, CurrentUser, Param, Post, Body, HttpError, Res, BadRequestError, Req } from "routing-controllers";
-import { canonicalId, returnCharacterNotFoundOrRethrow, currentTimestamp, checkAccess, createLogData } from "../utils";
-import { characterIdTimestampOnlyRefreshesView } from "../consts";
-import { Container } from "typedi";
-import { DatabasesContainerToken, Account } from "../services/db-container";
-import { LoggerToken } from "../services/logger";
-import { ApplicationSettingsToken } from "../services/settings";
-import { Connection, StatusAndBody } from "../connection";
-import { sendGenericPushNotification, makeVisibleNotificationPayload } from "../push-helpers";
-import { Event, EventsProcessor } from "../events.processor";
+import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Req, Res } from 'routing-controllers';
+import { Container } from 'typedi';
+import { Event, EventsProcessor } from '../events.processor';
+import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
+import { Account } from '../services/db-container';
+import { LoggerToken } from '../services/logger';
+import { canonicalId, checkAccess, createLogData, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
 export interface EventsRequest {
-  events: Event[]
+  events: Event[];
 }
 
 function CleanEventsForLogging(events: Event[]): Event[] {
   return events.map((event) => {
     return {
       eventType: event.eventType,
-      timestamp: event.timestamp
-    }
+      timestamp: event.timestamp,
+    };
   });
 }
 
@@ -33,8 +30,8 @@ function CleanEventsForLogging(events: Event[]): Event[] {
 export class EventsController {
   private logger = Container.get(LoggerToken);
 
-  @Get("/events/:id")
-  async get( @CurrentUser() user: Account, @Param("id") id: string) {
+  @Get('/events/:id')
+  public async get( @CurrentUser() user: Account, @Param('id') id: string) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -49,14 +46,14 @@ export class EventsController {
     }
   }
 
-  @Post("/events/:id")
-  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() body: EventsRequest,
-    @Req() req: express.Request, @Res() res: express.Response) {
+  @Post('/events/:id')
+  public async post( @CurrentUser() user: Account, @Param('id') id: string, @Body() body: EventsRequest,
+                     @Req() req: express.Request, @Res() res: express.Response) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
 
-      let events = body.events;
+      const events = body.events;
       if (!(events instanceof Array))
         throw new BadRequestError('No events array in request');
 
@@ -67,8 +64,7 @@ export class EventsController {
       if (s.status == 200) {
         await this.sendPushNotifications(viewModelTimestampBefore, s.body.viewModel);
         this.logSuccessfulResponse(req, CleanEventsForLogging(events), s.status);
-      }
-      else {
+      } else {
         this.logHalfSuccessfulResponse(req, CleanEventsForLogging(events), s.status);
       }
       res.status(s.status);
@@ -82,11 +78,11 @@ export class EventsController {
   private async sendPushNotifications(timestampBefore: number, updatedViewModel: any): Promise<void> {
     // TODO: Rework this horror
     if (!updatedViewModel.pages) return;
-    const changesPage = (updatedViewModel.pages as any[]).find(page => page.viewId == "page:changes");
+    const changesPage = (updatedViewModel.pages as any[]).find((page) => page.viewId == 'page:changes');
     if (!changesPage) return;
     await Promise.all(
       (changesPage.body.items as any[])
-        .filter(item => item.unixSecondsValue * 1000 > timestampBefore).map(item => {
+        .filter((item) => item.unixSecondsValue * 1000 > timestampBefore).map((item) => {
           return sendGenericPushNotification(updatedViewModel.passportScreen.id,
             makeVisibleNotificationPayload(item.details.header, item.details.text));
         }));

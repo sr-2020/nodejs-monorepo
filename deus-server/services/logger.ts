@@ -1,5 +1,5 @@
+import { Token } from 'typedi';
 import * as winston from 'winston';
-import { Token } from "typedi";
 
 export interface LoggerInterface {
   debug(msg: string, data?: any);
@@ -8,6 +8,7 @@ export interface LoggerInterface {
   error(msg: string, data?: any);
 }
 
+// tslint:disable-next-line:variable-name
 export const LoggerToken = new Token<LoggerInterface>();
 
 export class WinstonLogger implements LoggerInterface {
@@ -15,18 +16,18 @@ export class WinstonLogger implements LoggerInterface {
 
   constructor(opts: winston.LoggerOptions) {
     this._logger = new winston.Logger(opts);
-  };
+  }
 
-  debug(msg: string, data?: any) {
+  public debug(msg: string, data?: any) {
     this._logger.debug(msg, data);
   }
-  info(msg: string, data?: any) {
+  public info(msg: string, data?: any) {
     this._logger.info(msg, data);
   }
-  warn(msg: string, data?: any) {
+  public warn(msg: string, data?: any) {
     this._logger.warn(msg, data);
   }
-  error(msg: string, data?: any) {
+  public error(msg: string, data?: any) {
     this._logger.error(msg, data);
   }
 }

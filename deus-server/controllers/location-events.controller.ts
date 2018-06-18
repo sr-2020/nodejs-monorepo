@@ -2,23 +2,23 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBFind);
 
-import { JsonController, Post, CurrentUser, Body, BadRequestError, Param } from "routing-controllers";
-import { Container } from "typedi";
+import { Body, CurrentUser, JsonController, Param, Post } from 'routing-controllers';
+import { Container } from 'typedi';
 
-import { DatabasesContainerToken, Account } from "../services/db-container";
-import { returnCharacterNotFoundOrRethrow, checkAccess, currentTimestamp, AccessPropagation } from "../utils";
-import { EventsRequest } from "./events.controller";
-import * as rp from 'request-promise';
-import { EventsProcessor } from "../events.processor";
+import { EventsProcessor } from '../events.processor';
+import { Account, DatabasesContainerToken } from '../services/db-container';
+import { AccessPropagation, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
+import { EventsRequest } from './events.controller';
 
 @JsonController()
 export class LocationEventsController {
-  @Post("/location_events/:locationId")
-  async post( @CurrentUser() user: Account, @Param("locationId") locationId: string, @Body() body: EventsRequest) {
+  @Post('/location_events/:locationId')
+  public async post( @CurrentUser() user: Account, @Param('locationId') locationId: string,
+                     @Body() body: EventsRequest) {
     try {
       await checkAccess(user, '', AccessPropagation.AdminOnly);
 
-      {
+      {0;
         // Any way to make it better but still be sure that everything will be processed?
         let timestamp = currentTimestamp() + 2000;
         for (const event of body.events)
@@ -31,9 +31,8 @@ export class LocationEventsController {
       for (const character of charactersInLocation.docs)
         await processor.process(character._id, body.events);
 
-      return { receivers: charactersInLocation.docs.map(r => r._id) };
-    }
-    catch (e) {
+      return { receivers: charactersInLocation.docs.map((r) => r._id) };
+    } catch (e) {
       returnCharacterNotFoundOrRethrow(e);
     }
   }

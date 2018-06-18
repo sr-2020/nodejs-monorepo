@@ -1,4 +1,4 @@
-import { Token } from "typedi";
+import { Token } from 'typedi';
 
 export class CheckForInactivitySettings {
   // Once per that time we will query all "inactive" users and notify them
@@ -59,6 +59,7 @@ export class ApplicationSettings {
   public pushSettings: PushSettings;
 }
 
+// tslint:disable-next-line:variable-name
 export const ApplicationSettingsToken = new Token<ApplicationSettings>();
 
 export class ViewModelDbSettings {
@@ -83,7 +84,7 @@ export class DatabasesSettings {
   public events: string;
 
   // How often to run compactions in events database
-  public compactEventsViewEveryMs?: number
+  public compactEventsViewEveryMs?: number;
 
   // URL to access models DB
   public models: string;

@@ -3,19 +3,16 @@ import * as rp from 'request-promise';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
 
-import * as winston from 'winston';
-
 import { expect } from 'chai';
 import 'mocha';
 
-import { TSMap } from 'typescript-map';
-import { Container } from "typedi";
+import { Container } from 'typedi';
 
 import App from '../app';
-import { PushSettings, ApplicationSettings } from '../services/settings';
-import { DatabasesContainer, DatabasesContainerToken } from '../services/db-container';
-import { LoggerToken, WinstonLogger } from "../services/logger";
-import { ApplicationSettingsToken } from "../services/settings";
+import { DatabasesContainerToken } from '../services/db-container';
+import { LoggerToken, WinstonLogger } from '../services/logger';
+import { ApplicationSettings, PushSettings } from '../services/settings';
+import { ApplicationSettingsToken } from '../services/settings';
 import { TestDatabasesContainer } from './test-db-container';
 
 const address = 'http://localhost:3000';
@@ -108,7 +105,7 @@ describe('API Server - medium timeout', () => {
           timestamp: 4370,
         }]},
         auth: { username: 'some_user', password: 'qwerty' },
-      }).promise()
+      }).promise(),
     ]);
 
     if (responses[0].statusCode == 429) {

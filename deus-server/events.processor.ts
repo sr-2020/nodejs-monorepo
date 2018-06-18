@@ -1,11 +1,11 @@
-import { StatusAndBody, Connection } from "./connection";
-import { Container } from "typedi";
-import { DatabasesContainerToken } from "./services/db-container";
-import { HttpError } from "routing-controllers";
-import { ApplicationSettingsToken } from "./services/settings";
-import { currentTimestamp } from "./utils";
-import { LoggerToken } from "./services/logger";
-import { characterIdTimestampOnlyRefreshesView } from "./consts";
+import { HttpError } from 'routing-controllers';
+import { Container } from 'typedi';
+import { Connection, StatusAndBody } from './connection';
+import { characterIdTimestampOnlyRefreshesView } from './consts';
+import { DatabasesContainerToken } from './services/db-container';
+import { LoggerToken } from './services/logger';
+import { ApplicationSettingsToken } from './services/settings';
+import { currentTimestamp } from './utils';
 
 export interface Event {
   eventType: string;
@@ -24,7 +24,8 @@ export class EventsProcessor {
     }
     const cutTimestamp = await this.cutTimestamp(id);
     if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp))
-      throw new HttpError(409, "Can't accept event with timestamp earlier than cut timestamp: they won't get processed!");
+      throw new HttpError(409,
+        "Can't accept event with timestamp earlier than cut timestamp: they won't get processed!");
     events = events.filter((value: any) => value.timestamp > cutTimestamp);
     if (isMobileClient) {
       if (this.dbContainer().connections.has(id))
@@ -33,7 +34,6 @@ export class EventsProcessor {
       this.dbContainer().connections.set(id, new Connection(this.dbContainer().eventsDb(),
         Container.get(ApplicationSettingsToken).viewmodelUpdateTimeout));
 
-      const viewModelTimestampBefore = await this.latestExistingMobileEventTimestamp(id);
       const s = await this.dbContainer().connections.get(id).processEvents(id, events);
       this.dbContainer().connections.delete(id);
       return s;
@@ -44,12 +44,12 @@ export class EventsProcessor {
       const connection = new Connection(this.dbContainer().eventsDb(), 0);
       return await connection.processEvents(id, events);
     }
-  };
+  }
 
   public async cutTimestamp(id: string): Promise<number> {
     const [currentViewmodelTimestamp, lastEventTimeStamp] = await Promise.all([
       this.latestViewmodelTimestamp(id),
-      this.latestExistingMobileEventTimestamp(id)
+      this.latestExistingMobileEventTimestamp(id),
     ]);
     return Math.max(currentViewmodelTimestamp, lastEventTimeStamp);
   }
@@ -74,13 +74,14 @@ export class EventsProcessor {
         await this.dbContainer().accountsDb().find({ selector: { pushToken: token } });
       for (const existingCharacter of existingCharacterWithThatToken.docs) {
         await this.dbContainer().accountsDb().upsert(existingCharacter._id, (accountInfo) => {
-          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) from character ${existingCharacter._id} to give it to ${id}`)
+          this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) ` +
+            `from character ${existingCharacter._id} to give it to ${id}`);
           delete accountInfo.pushToken;
           return accountInfo;
         });
       }
       await this.dbContainer().accountsDb().upsert(id, (accountInfo) => {
-        this.logger.info(`Saving push token`, { characterId: id, source: 'api' })
+        this.logger.info(`Saving push token`, { characterId: id, source: 'api' });
         accountInfo.pushToken = token;
         return accountInfo;
       });
@@ -92,7 +93,8 @@ export class EventsProcessor {
   // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
   // Then removes all _RefreshModel events except latest one.
   private filterRefreshModelEventsByTimestamp(id, events: Event[]): Event[] {
-    const tooFarInFuturetimestamp = currentTimestamp() + Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
+    const tooFarInFuturetimestamp = currentTimestamp() +
+      Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
     events = events.filter((value: any) =>
       value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
     if (events.length == 0) {

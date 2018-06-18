@@ -4,11 +4,11 @@ import * as winston from 'winston';
 import App from './app';
 import { ApplicationSettingsToken } from './services/settings';
 import Elasticsearch = require('winston-elasticsearch');
-import { config } from './config';
-import { LoggerInterface, LoggerToken, WinstonLogger } from './services/logger'
 import * as rp from 'request-promise';
+import { Container } from 'typedi';
+import { config } from './config';
 import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
-import { Container, Token } from "typedi";
+import { LoggerToken, WinstonLogger } from './services/logger';
 
 const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
@@ -16,25 +16,25 @@ const authOptions = { auth: { username: databasesConfig.username, password: data
 const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
   databasesConfig.viewModels.map((v) => [v.type, new PouchDB(v.url, authOptions)]));
 
-
 Container.set(DatabasesContainerToken, new DatabasesContainer(
   new PouchDB(databasesConfig.accounts, authOptions),
   new PouchDB(databasesConfig.models, authOptions),
   viewmodelDbs,
   new PouchDB(databasesConfig.events, authOptions),
-  new PouchDB(databasesConfig.economy, authOptions)
+  new PouchDB(databasesConfig.economy, authOptions),
 ));
 Container.set(LoggerToken, new WinstonLogger({
   level: 'info',
   transports: [
     new (winston.transports.Console)(),
-    new (Elasticsearch)({ level: "debug", clientOpts: { host: 'elasticsearch:9200' } }),
+    new (Elasticsearch)({ level: 'debug', clientOpts: { host: 'elasticsearch:9200' } }),
   ],
 }));
 Container.set(ApplicationSettingsToken, config.settings);
 
 process.on('unhandledRejection', (reason, p) => {
-  Container.get(LoggerToken).error(`Unhandled Rejection at: Promise ${p.toString()} reason: ${reason.toString()}`, reason.stack);
+  Container.get(LoggerToken).error(
+    `Unhandled Rejection at: Promise ${p.toString()} reason: ${reason.toString()}`, reason.stack);
 });
 
 if (databasesConfig.compactEventsViewEveryMs) {

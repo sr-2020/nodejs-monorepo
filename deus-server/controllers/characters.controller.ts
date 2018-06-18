@@ -1,22 +1,22 @@
-import { JsonController, Get, CurrentUser, Param, Post, Body, UnauthorizedError } from "routing-controllers";
-import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, canonicalIds, AccessPropagation, checkAccess } from "../utils";
-import { DatabasesContainerToken, Account } from "../services/db-container";
-import { Container } from "typedi";
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
-import { ApplicationSettingsToken } from "../services/settings";
+import { Body, CurrentUser, Get, JsonController, Param, Post } from 'routing-controllers';
+import { Container } from 'typedi';
+import { Account, DatabasesContainerToken } from '../services/db-container';
+import { ApplicationSettingsToken } from '../services/settings';
+import { AccessPropagation, canonicalId, canonicalIds, checkAccess,
+  currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 PouchDB.plugin(PouchDBUpsert);
 
-
 interface ChangeAccessRightRequest {
-  grantAccess?: string[],
-  removeAccess?: string[],
+  grantAccess?: string[];
+  removeAccess?: string[];
 }
 
 @JsonController()
 export class CharactersController {
-  @Get("/characters/:id")
-  async get( @CurrentUser() user: Account, @Param("id") id: string) {
+  @Get('/characters/:id')
+  public async get( @CurrentUser() user: Account, @Param('id') id: string) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);
@@ -29,8 +29,8 @@ export class CharactersController {
     }
   }
 
-  @Post("/characters/:id")
-  async post( @CurrentUser() user: Account, @Param("id") id: string, @Body() req: ChangeAccessRightRequest) {
+  @Post('/characters/:id')
+  public async post( @CurrentUser() user: Account, @Param('id') id: string, @Body() req: ChangeAccessRightRequest) {
     const dbContainer = Container.get(DatabasesContainerToken);
     try {
       id = await canonicalId(id);

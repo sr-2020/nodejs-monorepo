@@ -1,9 +1,9 @@
 import * as express from 'express';
-import { JsonController, CurrentUser, Param, Post, Body, Res } from "routing-controllers";
-import { canonicalId, currentTimestamp, returnCharacterNotFoundOrRethrow, checkAccess } from "../utils";
-import { DatabasesContainerToken, Account } from "../services/db-container";
-import { Container } from "typedi";
-import { Event, EventsProcessor } from "../events.processor";
+import { Body, CurrentUser, JsonController, Param, Post, Res } from 'routing-controllers';
+import { Container } from 'typedi';
+import { Event, EventsProcessor } from '../events.processor';
+import { Account, DatabasesContainerToken } from '../services/db-container';
+import { canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
 interface RunLabTestsRequest {
   patientId: string;
@@ -17,9 +17,9 @@ interface AddCommentRequest {
 
 @JsonController()
 export class MedicController {
-  @Post("/medic/run_lab_tests/:id")
-  async runLabTests( @CurrentUser() user: Account, @Param("id") id: string, @Body() req: RunLabTestsRequest,
-    @Res() res: express.Response) {
+  @Post('/medic/run_lab_tests/:id')
+  public async runLabTests( @CurrentUser() user: Account, @Param('id') id: string, @Body() req: RunLabTestsRequest,
+                            @Res() res: express.Response) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -28,7 +28,7 @@ export class MedicController {
 
       let timestamp = currentTimestamp();
 
-      let events: Event[] = req.tests.map((test: string) => {
+      const events: Event[] = req.tests.map((test: string) => {
         return {
           eventType: 'medic-run-lab-test',
           timestamp: timestamp++,
@@ -36,12 +36,12 @@ export class MedicController {
             test,
             model,
           },
-        }
-      })
+        };
+      });
       events.push({
         eventType: '_RefreshModel',
         timestamp: timestamp++,
-      });;
+      });
 
       const s = await new EventsProcessor().process(id, events);
       res.status(s.status);
@@ -51,9 +51,9 @@ export class MedicController {
     }
   }
 
-  @Post("/medic/add_comment/:id")
-  async addComment( @CurrentUser() user: Account, @Param("id") id: string, @Body() req: AddCommentRequest,
-    @Res() res: express.Response) {
+  @Post('/medic/add_comment/:id')
+  public async addComment( @CurrentUser() user: Account, @Param('id') id: string, @Body() req: AddCommentRequest,
+                           @Res() res: express.Response) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -62,7 +62,7 @@ export class MedicController {
       const model = await dbContainer.modelsDb().get(req.patientId);
 
       let timestamp = currentTimestamp();
-      let events: Event[] = [{
+      const events: Event[] = [{
         eventType: 'medic-add-comment',
         timestamp: timestamp++,
         data: {

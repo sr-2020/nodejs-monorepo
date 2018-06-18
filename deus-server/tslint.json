@@ -18,7 +18,8 @@
         "object-literal-shorthand": false,
 
         "no-unused-expression": false,
-        "no-unused": true
+        "no-unused": true,
+        "interface-name": false
     },
     "rulesDirectory": []
 }
