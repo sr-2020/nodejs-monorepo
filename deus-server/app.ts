@@ -1,4 +1,5 @@
 import * as basic_auth from 'basic-auth';
+import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as addRequestId from 'express-request-id';
 import * as time from 'express-timestamp';
@@ -39,6 +40,7 @@ class App {
   constructor() {
     this.app.use(addRequestId());
     this.app.use(time.init);
+    this.app.use(bodyparser.json());
 
     this.app.use((req, res, next) => {
       this.logger.debug('Request body', { requestId: RequestId(req), body: req.body, source: 'api' });
