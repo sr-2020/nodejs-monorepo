@@ -3,20 +3,18 @@ import * as rp from 'request-promise';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
 import * as nock from 'nock';
-import * as winston from 'winston';
 
 import { expect } from 'chai';
 import 'mocha';
 
-import { TSMap } from 'typescript-map';
-import { Container } from "typedi";
+import { Container } from 'typedi';
 
 import App from '../app';
 import { characterIdTimestampOnlyRefreshesView } from '../consts';
-import { DatabasesContainer, DatabasesContainerToken, DatabasesContainerInterface } from '../services/db-container';
+import { DatabasesContainerToken } from '../services/db-container';
+import { LoggerToken, WinstonLogger } from '../services/logger';
+import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../services/settings';
 import { currentTimestamp } from '../utils';
-import { LoggerToken, WinstonLogger } from "../services/logger";
-import { ApplicationSettingsToken, PushSettings, ApplicationSettings } from "../services/settings";
 import { TestDatabasesContainer } from './test-db-container';
 
 const address = 'http://localhost:3000';
@@ -24,7 +22,7 @@ const address = 'http://localhost:3000';
 // Express spams console on errors if it's not set.
 // See https://github.com/expressjs/express/blob/c0136d8b48dd3526c58b2ad8666fb4b12b55116c/lib/application.js#L630
 // and https://github.com/mochajs/mocha/issues/185
-process.env.NODE_ENV = 'test'
+process.env.NODE_ENV = 'test';
 
 /*
 
@@ -332,7 +330,7 @@ describe('API Server', () => {
       {
         eventType: '_RefreshModel',
         timestamp: 4367,
-      }]
+      }];
       const response = await rp.post(address + '/events/some_user',
         {
           resolveWithFullResponse: true, json: { events },
@@ -560,7 +558,7 @@ describe('API Server', () => {
           {
             resolveWithFullResponse: true, simple: false, json: { events: [mobileEvent] },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise()
+          }).promise(),
       ];
 
       const event = {
@@ -620,7 +618,6 @@ describe('API Server', () => {
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
 
-      const res = await dbContainer.eventsDb().allDocs({ include_docs: true });
       // Filter design-docs
       const events = await dbContainer.allEventsSortedByTimestamp();
       expect(events.length).to.eq(1);
@@ -788,10 +785,10 @@ describe('API Server', () => {
             eventType: 'medic-run-lab-test',
           });
           expect(doc.data).to.deep.include({
-            test: 'foo'
+            test: 'foo',
           });
           expect(doc.data.model).to.deep.include({
-            location: 'ship_BSG'
+            location: 'ship_BSG',
           });
         }
         {
@@ -800,10 +797,10 @@ describe('API Server', () => {
             eventType: 'medic-run-lab-test',
           });
           expect(doc.data).to.deep.include({
-            test: 'bar'
+            test: 'bar',
           });
           expect(doc.data.model).to.deep.include({
-            location: 'ship_BSG'
+            location: 'ship_BSG',
           });
         }
         {
@@ -835,7 +832,7 @@ describe('API Server', () => {
             text: 'Lorem ipsum',
           });
           expect(doc.data.model).to.deep.include({
-            location: 'ship_BSG'
+            location: 'ship_BSG',
           });
         }
         {
@@ -1249,7 +1246,7 @@ describe('API Server', () => {
     });
 
     it('Propagates FCM error', async () => {
-      const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
+      nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
         .post('/fcm/send', {
           to: '00001spushtoken',
           foo: 'bar',
@@ -1270,7 +1267,7 @@ describe('API Server', () => {
   describe('Periodic notification sending', () => {
     it('Can sort characters by timestamp', async () => {
       const docsOld = await dbContainer.viewModelDb('mobile').find({
-        selector: { timestamp: { $lt: 1000 } }
+        selector: { timestamp: { $lt: 1000 } },
       });
       expect(docsOld.docs.length).to.equal(1);
       expect(docsOld.docs[0]._id).to.equal('00001');
@@ -1279,9 +1276,9 @@ describe('API Server', () => {
         selector: {
           $and: [
             { timestamp: { $gt: 1000 } },
-            { timestamp: { $lt: 9999999 } }
-          ]
-        }
+            { timestamp: { $lt: 9999999 } },
+          ],
+        },
       });
 
       expect(docsNew.docs.length).to.equal(1);
@@ -1289,4 +1286,3 @@ describe('API Server', () => {
     });
   });
 });
-
