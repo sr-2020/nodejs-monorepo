@@ -4,7 +4,7 @@ import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
-import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post } from 'routing-controllers';
+import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, NotFoundError } from 'routing-controllers';
 import { Container } from 'typedi';
 
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
@@ -28,6 +28,9 @@ export class EconomyController {
       await db.upsert('balances', (doc) => {
         if (doc[body.sender] < body.amount)
           throw new BadRequestError('Недостаточно денег.');
+        if (doc[body.receiver] == undefined)
+          throw new NotFoundError('Получатель не найден');
+
         doc[body.sender] -= body.amount;
         doc[body.receiver] += body.amount;
         return doc;
