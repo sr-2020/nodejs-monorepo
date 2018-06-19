@@ -26,10 +26,13 @@ export class EconomyController {
 
       const db = Container.get(DatabasesContainerToken).economyDb();
       await db.upsert('balances', (doc) => {
-        if (doc[body.sender] < body.amount)
-          throw new BadRequestError('Недостаточно денег.');
         if (doc[body.receiver] == undefined)
           throw new NotFoundError('Получатель не найден');
+        if (doc[body.sender] == undefined)
+          throw new NotFoundError('Отправитель не найден');
+
+        if (doc[body.sender] < body.amount)
+          throw new BadRequestError('Недостаточно денег.');
 
         doc[body.sender] -= body.amount;
         doc[body.receiver] += body.amount;
