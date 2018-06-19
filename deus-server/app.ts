@@ -43,7 +43,8 @@ class App {
     this.app.use(bodyparser.json());
 
     this.app.use((req, res, next) => {
-      this.logger.debug('Request body', { requestId: RequestId(req), body: req.body, source: 'api' });
+      this.logger.debug('Request body',
+        { requestId: RequestId(req), body: req.body, originalUrl: req.originalUrl, ip: req.ip, source: 'api' });
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
