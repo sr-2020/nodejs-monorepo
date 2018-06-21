@@ -60,6 +60,7 @@ export interface OrganismModel {
     corporation: string;
 
     systems: number[];
+    nucleotide: number[];
     location?: string;
 
     spaceSuit: SpaceSuit;
@@ -67,4 +68,9 @@ export interface OrganismModel {
 
 export function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
     return api.model;
+}
+
+// TODO(aeremin): Remove
+export function isReadyForGame(model: OrganismModel) {
+    return Number(model._id) < 9100;
 }

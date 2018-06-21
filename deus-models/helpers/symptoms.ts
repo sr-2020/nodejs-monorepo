@@ -1,4 +1,4 @@
-import { BiologicalSystems, systemsIndices } from "./magellan";
+import { BiologicalSystems, systemsIndices, OrganismModel } from "./magellan";
 
 export enum Symptoms {
   SevereHeadache,
@@ -112,7 +112,7 @@ export function getSymptomValue(currentValue: number, nucleotideValue: number) {
   return 0;
 }
 
-export function getSymptoms(currentValues: number[], nucleotideValue: number[]): Set<Symptoms> {
+export function getSymptomsInternal(currentValues: number[], nucleotideValue: number[]): Set<Symptoms> {
   const result = new Set<Symptoms>();
   for (const indice of systemsIndices()) {
     const v = getSymptomValue(currentValues[indice], nucleotideValue[indice]);
@@ -124,4 +124,8 @@ export function getSymptoms(currentValues: number[], nucleotideValue: number[]):
   }
 
   return result;
+}
+
+export function getSymptoms(model: OrganismModel): Set<Symptoms> {
+  return getSymptomsInternal(model.systems, model.nucleotide);
 }

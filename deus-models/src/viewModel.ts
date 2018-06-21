@@ -1,6 +1,7 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
 import { hasMobileViewModel, hasMedicViewModel } from "../helpers/view-model-helper";
-import { systemsIndices, BiologicalSystems, biologicalSystemsNames, OrganismModel, Change } from "../helpers/magellan";
+import { systemsIndices, BiologicalSystems, biologicalSystemsNames, OrganismModel, Change, isReadyForGame } from "../helpers/magellan";
+import { getSymptoms } from "../helpers/symptoms";
 
 interface PageViewModel {
   menuTitle: string;
@@ -155,6 +156,29 @@ function getBodyPage(model: OrganismModel) {
     return result;
 }
 
+function getSymptomsPage(model: OrganismModel): PageViewModel {
+    const items: any[] = [];
+    let result = {
+        __type: "ListPageViewModel",
+        menuTitle: "Симптомы",
+        viewId: "page:symptoms",
+        body: {
+            title: "Симптомы",
+            items
+        },
+    };
+
+    const symptoms = getSymptoms(model);
+    for (const s of symptoms) {
+        result.body.items.push({
+            viewId: "mid:" + s.toString(),
+            // TODO(aeremin): Make human-readable
+            text: s.toString(),
+        });
+    }
+    return result;
+}
+
 function getChangesPageItem(change: Change) {
     return {
         viewId: "mid:" + change.mID,
@@ -186,7 +210,11 @@ function getPages(model: OrganismModel) {
     pages.push(getStartPage(model));
 
     pages.push(getConditionsPage(model));
+
     pages.push(getBodyPage(model));
+    if (isReadyForGame(model)) {
+        pages.push(getSymptomsPage(model));
+    }
 
     pages.push(getEconomyPage());
 
