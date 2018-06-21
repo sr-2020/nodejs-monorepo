@@ -1,7 +1,7 @@
 import { ViewModelApiInterface } from "deus-engine-manager-api";
 import { hasMobileViewModel, hasMedicViewModel } from "../helpers/view-model-helper";
 import { systemsIndices, BiologicalSystems, biologicalSystemsNames, OrganismModel, Change, isReadyForGame } from "../helpers/magellan";
-import { getSymptoms } from "../helpers/symptoms";
+import { getSymptoms, Symptoms } from "../helpers/symptoms";
 
 interface PageViewModel {
   menuTitle: string;
@@ -173,7 +173,7 @@ function getSymptomsPage(model: OrganismModel): PageViewModel {
         result.body.items.push({
             viewId: "mid:" + s.toString(),
             // TODO(aeremin): Make human-readable
-            text: s.toString(),
+            text: Symptoms[s]
         });
     }
     return result;
