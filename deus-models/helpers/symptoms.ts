@@ -97,3 +97,15 @@ export const systemToSymptoms = new Map<BiologicalSystems, Array<Symptoms>>([
     [Symptoms.SoftTissuesSwelling, Symptoms.Blisters, Symptoms.InflammationsAbscesses, Symptoms.Hives, Symptoms.Pruritus, Symptoms.SkinPeeling, Symptoms.SkinRedness,
       Symptoms.FingertipsTingling, Symptoms.SkinDarkening, Symptoms.NailsDarkening, Symptoms.FingertipsTingling, Symptoms.TactileSensitivityLoss, Symptoms.HairLoss, Symptoms.Blindness]],
 ]);
+
+export function getSymptomValue(currentValue: number, nucleotideValue: number) {
+  const l = Math.min(0, nucleotideValue);
+  const r = Math.max(0, nucleotideValue);
+  if (currentValue < l)
+    return currentValue - l;
+
+  if (currentValue > r)
+    return currentValue - r;
+
+  return 0;
+}
