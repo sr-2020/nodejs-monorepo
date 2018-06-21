@@ -1,4 +1,4 @@
-import { BiologicalSystems } from "./magellan";
+import { BiologicalSystems, systemsIndices } from "./magellan";
 
 export enum Symptoms {
   SevereHeadache,
@@ -72,6 +72,8 @@ export enum Symptoms {
   NailsDarkening,
   TactileSensitivityLoss,
   HairLoss,
+
+  Death
 }
 
 export const systemToSymptoms = new Map<BiologicalSystems, Array<Symptoms>>([
@@ -108,4 +110,18 @@ export function getSymptomValue(currentValue: number, nucleotideValue: number) {
     return currentValue - r;
 
   return 0;
+}
+
+export function getSymptoms(currentValues: number[], nucleotideValue: number[]): Set<Symptoms> {
+  const result = new Set<Symptoms>();
+  for (const indice of systemsIndices()) {
+    const v = getSymptomValue(currentValues[indice], nucleotideValue[indice]);
+    if (Math.abs(v) > 7) return new Set<Symptoms>([Symptoms.Death]);
+    if (v > 0)
+      result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v])
+    if (v < 0)
+      result.add((systemToSymptoms.get(indice) as Symptoms[])[7 + v])
+  }
+
+  return result;
 }
