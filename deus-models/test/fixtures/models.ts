@@ -28,7 +28,7 @@ export const getExampleModel = (id?: string) => ({
     skills: [],
     hp: 4,
     maxHp: 4,
-    
+
     randomSeed: 12345678,
 
     login: "john.smith",
@@ -69,9 +69,14 @@ export const getExampleModel = (id?: string) => ({
         "F": [47, 58, 41, 56]
     },
 
+    spaceSuit:  {
+        oxygenLeftMs: 0
+    },
+
     genome: [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 2, 0, 0],
 
-    systems: [1, 1, 1, 1, 1, 1],
+    systems: [1, 1, 1, 1, 1, 1, 1],
+    nucleotide: [1, 1, 1, 1, 1, 1, 1],
 
     timestamp: 0,
     conditions: [

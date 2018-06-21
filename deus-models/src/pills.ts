@@ -1,5 +1,4 @@
 import _ = require('lodash');
-import medichelpers = require('../helpers/medic-helper');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import { Modifier, ModelApiInterface, PreprocessApiInterface } from "deus-engine-manager-api";
@@ -26,11 +25,7 @@ function useStamm(api: ModelApiInterface, pill) {
 
 function useAid(api: ModelApiInterface, pill, event) {
     if (api.model.profileType != 'human') return;
-
-    medichelpers.restoreDamage(api, 1, event.timestamp);
-    if (api.model.genome && _.get(api.model, ['usedPills', pill.id])) {
-        _.set(api.model, ['genome', pill.affectedGenomePos - 1], pill.affectedGenomeVal);
-    }
+    api.model.hp += 1;
 }
 
 function useLastChance(api: ModelApiInterface, pill) {
@@ -48,33 +43,6 @@ function useLastChance(api: ModelApiInterface, pill) {
 function useNarco(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
     api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
-}
-
-function useImmortal (api: ModelApiInterface, pill, event) {
-    if (api.model.profileType != 'human') return;
-    api.model.profileType = "exhuman-program";
-
-    helpers.modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
-
-    helpers.getAllImplants(api).forEach(implant => helpers.removeImplant(api, implant, event.timestamp));
-    delete api.model.genome;
-    delete api.model.systems;
-    delete api.model.generation;
-    helpers.getAllIlnesses(api).forEach( ill => medichelpers.removeIllness(api, ill.mID) );
-
-    let modifier: Modifier | undefined = helpers.createEffectModifier(
-        api,
-        "show-always-condition",
-        "ImmortalProgram",
-        "Эффект бессмертия",
-        "immortal"
-    );
-
-    if (!modifier) {return};
-
-    modifier.conditions = ["pa_cyberg0-1", "lab_becomehacker-3", "pa-immortal-condition"];
-    modifier = api.addModifier(modifier);
-    api.info("IMMORTAL PANAM");
 }
 
 function useGeneric(api: ModelApiInterface, pill) {
@@ -130,9 +98,6 @@ function usePill(api: ModelApiInterface, data, event) {
             break;
         case 'narco':
             useNarco(api, pill);
-            break;
-        case "immortal-panam":
-            useImmortal(api, pill, event);
             break;
         case "generic":
             useGeneric(api, pill);

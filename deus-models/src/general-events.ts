@@ -86,29 +86,6 @@ function sendMessageEvent ( api: ModelApiInterface, data, event ){
 }
 
 /**
- * Обработчик события "change-mind-cube"
- * Событие позволяет поменять кубик (или несколько кубиков) сознания на новое значение
- * В operations передается строка операций по изменению кубиков в следующем формате:
- *        A1+20,B2=33,B4-10
- *
- * Т.е. набор опраций по изменнию (+-=) через запятую (формат как в списке имплантов)
- *
- * В явном виде игроку информация об изменении не сообщается
- *
- * {
- *   operations: string
- * }
- */
-function changeMindCubeEvent( api: ModelApiInterface, data, event ){
-    api.error("=============================");
-
-    if(data.operations){
-        let norm = data.operations.toUpperCase().replace(/\s/ig,'');
-        helpers.modifyMindCubes(api, api.model.mind, norm);
-    }
-}
-
-/**
  * Обработчик события "add-change-record"
  * Событие позволяет добавить состояние в список состояний
  *
@@ -159,122 +136,12 @@ function changeModelVariableEvent ( api: ModelApiInterface, data, event ){
     }
 }
 
-/**
- * Обработчик события "change-android-owner"
- * Позволяет изменить владельца андроида
- *
- * Игрок видит в списке изменний информацию об данном изменении
- *
- * {
- *   owner: string
- * }
- */
-function changeAndroidOwnerEvent ( api: ModelApiInterface, data, event ){
-    if(data.owner && api.model.profileType=="robot"){
-        api.info(`changeAndroidOwner:  ${api.model.owner} ===> ${data.owner}` );
-
-        api.model.owner = data.owner;
-        helpers.addChangeRecord(api, `Изменен владелец андроида. Новый владелец: ${api.model.owner}`, event.timestamp)
-    }
-}
-
-/**
- * Обработчик события "change-memory"
- * Событие позволяет добавить или удалить элементы памяти персонажа
- *
- * Игрок увидет информацию о новых воспоминаниях в списке изменений
- * Передаваемые данные:
- * {
- *      remove: [mID, mID, mID]
- *      add: [
- *          {
- *              title: string,
- *              text?: string,
- *              url?: string
- *          },
- *          {
- *              title: string,
- *              text?: string,
- *              url?: string
- *          }
- *      ]
- * }
- */
-function changeMemoryEvent( api: ModelApiInterface, data, event ){
-    if(data.remove){
-        data.remove.forEach( mID => {
-                api.info(`changeMemory: remove element with ${mID}` );
-                api.model.memory = api.model.memory.filter( mem => mem.mID ? ( mem.mID != mID ) : true );
-        });
-    }
-
-    if(data.update){
-        data.update.forEach( mem => {
-            if(mem.title && mem.mID){
-                let elem = api.model.memory.find( e => e.mID == mem.mID );
-                if(elem){
-                    elem.title = mem.title;
-                    if(mem.text) { elem.text = mem.text }
-                    if(mem.url)  { elem.url = mem.url }
-                }
-            }
-        });
-    }
-
-    if(data.add){
-        data.add.forEach( mem => {
-            if(mem.title){
-                mem.mID = helpers.uuidv4();
-                api.model.memory.push(mem);
-            }
-        });
-
-        if(data.add.length){
-            helpers.addChangeRecord(api, `Вы вспомнили о важных эпизодах в вашей жизни!`, event.timestamp)
-        }
-    }
-}
-
-/**
- * Обработчик события "change-insurance"
- * Позволяет изменить страховку
- *
- * Игрок видит в списке изменний информацию об данном событии
- *
- * {
- *   "Insurance": "JJ",
- *   "Level": 2
- * }
- */
-function changeInsuranceEvent ( api: ModelApiInterface, data, event ){
-    if(data.Insurance && data.Level){
-        api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}` );
-
-        api.model.insurance = data.Insurance;
-
-        if(api.model.insurance.toLowerCase() != "none"){
-            api.model.insuranceLevel = data.Level;
-            api.model.insuranceDiplayName = `${consts.InsuranceDisplay[api.model.insurance]}, L: ${api.model.insuranceLevel}`;
-        }else{
-            api.model.insuranceLevel = 0;
-            api.model.insuranceDiplayName = "Нет";
-        }
-
-        helpers.addChangeRecord(api, `Заменена страховка. Новая страховка: ${api.model.insuranceDiplayName}`, event.timestamp);
-    }
-}
-
-
 module.exports = () => {
     return {
         putConditionEvent,
         removeConditionEvent,
         sendMessageEvent,
         changeModelVariableEvent,
-        changeAndroidOwnerEvent,
-        changeMemoryEvent,
-        changeMindCubeEvent,
-        changeInsuranceEvent,
         addChangeRecord
     };
 };

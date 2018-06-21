@@ -7,48 +7,6 @@
             ]
         },
         {
-            "eventType": "add-implant",
-            "effects": [
-                "addImplantEvent"
-            ]
-        },
-        {
-            "eventType": "remove-implant",
-            "effects": [
-                "removeImplantEvent"
-            ]
-        },
-        {
-            "eventType": "disable-implant",
-            "effects": [
-                "disableImplantEvent"
-            ]
-        },
-        {
-            "eventType": "enable-implant",
-            "effects": [
-                "enableImplantEvent"
-            ]
-        },
-        {
-            "eventType": "subtractHp",
-            "effects": [
-                "getDamageEvent"
-            ]
-        },
-        {
-            "eventType": "addHp",
-            "effects": [
-                "restoreDamageEvent"
-            ]
-        },
-        {
-            "eventType": "kill-random-system",
-            "effects": [
-                "killRandomSystemEvent"
-            ]
-        },
-        {
             "eventType": "put-condition",
             "effects": [
                 "putConditionEvent"
@@ -73,72 +31,6 @@
             ]
         },
         {
-            "eventType": "change-mind-cube",
-            "effects": [
-                "changeMindCubeEvent"
-            ]
-        },
-        {
-            "eventType": "change-android-owner",
-            "effects": [
-                "changeAndroidOwnerEvent"
-            ]
-        },
-        {
-            "eventType": "change-memory",
-            "effects": [
-                "changeMemoryEvent"
-            ]
-        },
-        {
-            "eventType": "leak-hp",
-            "effects": [
-                "leakHpEvent"
-            ]
-        },
-        {
-            "eventType": "character-death",
-            "effects": [
-                "characterDeathEvent"
-            ]
-        },
-        {
-            "eventType": "character-resurect",
-            "effects": [
-                "characterResurectEvent"
-            ]
-        },
-        {
-            "eventType": "take-narco",
-            "effects": [
-                "applyNarcoEffect"
-            ]
-        },
-        {
-            "eventType": "stop-narco-modifier",
-            "effects": [
-                "removeNarcoEffect"
-            ]
-        },
-        {
-            "eventType": "change-insurance",
-            "effects": [
-                "changeInsuranceEvent"
-            ]
-        },
-        {
-            "eventType": "recover-hp",
-            "effects": [
-                "recoverHpEvent"
-            ]
-        },
-        {
-            "eventType": "regen-hp",
-            "effects": [
-                "regenHpEvent"
-            ]
-        },
-        {
             "eventType": "enterVr",
             "effects": [
                 "enterVREvent"
@@ -151,73 +43,10 @@
             ]
         },
         {
-            "eventType": "recover-systems",
-            "effects": [
-                "recoverSystemsEvent"
-            ]
-        },
-        {
-            "eventType": "start-illness",
-            "effects": [
-                "startIllnessEvent"
-            ]
-        },
-        {
-            "eventType": "illness-next-stage",
-            "effects": [
-                "illnessNextStageEvent"
-            ]
-        },
-        {
-            "eventType": "delay-illness",
-            "effects": [
-                "delayIllnessEvent"
-            ]
-        },
-        {
             "eventType": "scanQr",
             "effects": [
                 "scanQR"
             ]
-        },
-        {
-            "eventType" : "roll-illness",
-            "effects": ["rollForInfection"]
-        },
-        {
-            "id" : "serenity_immortality_ready",
-            "eventType" : "serenity_immortality_ready",
-            "effects": ["serenityImmortalityReadyEvent"]
-        },
-        {
-            "id" : "serenity_immortality_go",
-            "eventType" : "serenity_immortality_go",
-            "effects": ["serenityImmortalityGoEvent"]
-        },
-        {
-            "id" : "add-change-record",
-            "eventType" : "add-change-record",
-            "effects": ["addChangeRecord"]
-        },
-        {
-            "id": "jj-immortal-one-start",
-            "eventType": "jj-immortal-one-start",
-            "effects": ["jjImmortalOneStartEvent"]
-        },
-        {
-            "id": "jj-immortal-one-next-stage",
-            "eventType": "jj-immortal-one-next-stage",
-            "effects": ["jjImmortalOneNextStageEvent"]
-        },
-        {
-            "id": "jj-immortal-two-start",
-            "eventType": "jj-immortal-two-start",
-            "effects": ["jjImmortalTwoStartEvent"]
-        },
-        {
-            "id": "jj-immortal-two-awake",
-            "eventType": "jj-immortal-two-awake",
-            "effects": ["jjImmortalTwoAwakeEvent"]
         },
         {
             "eventType": "modify-systems-instant",
