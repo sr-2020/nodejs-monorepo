@@ -7,10 +7,12 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 import consts = require('../../helpers/constants');
 import { systemsIndices, System } from '../../helpers/magellan';
 
-function makeSystems(values: number[], lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0]): System[] {
+function makeSystems(values: number[],
+    lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
+    nucleotides?: number[]): System[] {
     return systemsIndices().map((i) => {
         return {
-            value: values[i], nucleotide: 0, lastModified: lastModifieds[i]
+            value: values[i], nucleotide: nucleotides ? nucleotides[i] : 0, lastModified: lastModifieds[i]
         }
     });
 }
@@ -102,6 +104,28 @@ describe('General Magellan events: ', () => {
         expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
     });
 
+
+    it("Use mutation pill", async function () {
+        let model = getExampleMagellanModel();
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+
+        let events = getEvents(model._id,
+            [{ eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
+
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal(makeSystems([0, 1, -1, 0, 1, 0, 0], [0, 100, 100, 0, 100, 0, 0]));
+
+        const p = consts.MAGELLAN_TICK_MILLISECONDS;
+
+        events = [getRefreshEvent(model._id, model.timestamp + p)];
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0]));
+
+        events = [getRefreshEvent(model._id, model.timestamp + p)];
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0],
+            [0, 2, -2, 0, 1, 0, 0]));
+    });
 
     it("Enter and leave ship", async function () {
         let baseModel = getExampleMagellanModel();

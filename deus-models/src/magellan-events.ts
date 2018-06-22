@@ -2,7 +2,8 @@ import { ModelApiInterface, Modifier, Effect, Condition, Event } from "deus-engi
 import consts = require('../helpers/constants');
 import uuid = require('uuid/v1');
 import helpers = require('../helpers/model-helper');
-import { systemsIndices, getTypedOrganismModel } from "../helpers/magellan";
+import { systemsIndices, getTypedOrganismModel, SystemColor, colorOfChange, systemCorrespondsToColor } from "../helpers/magellan";
+import { getSymptomValue } from "../helpers/symptoms";
 
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
@@ -18,14 +19,52 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
   }
 }
 
-function useMagellanPill(api: ModelApiInterface, data: number[], event: Event) {
-  const totalTicks = Math.max(...data.map(v => Math.abs(v)));
+interface DiseaseTickData {
+  systemsModification: number[];
+  // Only set for the last tick and only if initial change is single-colored
+  mutationColor?: SystemColor;
+}
+
+function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event) {
+  modifySystemsInstant(api, data.systemsModification, event);
+  const color = data.mutationColor;
+  if (color) {
+    const model = getTypedOrganismModel(api);
+    const mutationData: MutationData = {
+      newNucleotideValues: systemsIndices().map((i) => {
+        if (!systemCorrespondsToColor(color, i)) return undefined;
+        return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
+      })
+    };
+    api.setTimer(uuid(), consts.MAGELLAN_TICK_MILLISECONDS, "mutation", mutationData);
+  }
+}
+
+interface MutationData {
+  newNucleotideValues: (number | undefined)[];
+}
+
+function mutation(api: ModelApiInterface, data: MutationData, event: Event) {
+  for (const i of systemsIndices()) {
+    const newValueOrUndefined = data.newNucleotideValues[i];
+    if (newValueOrUndefined) {
+      getTypedOrganismModel(api).systems[i].nucleotide = newValueOrUndefined;
+    }
+  }
+}
+
+function useMagellanPill(api: ModelApiInterface, totalChange: number[], event: Event) {
+  const totalTicks = Math.max(...totalChange.map(v => Math.abs(v)));
   for (let i = 0; i < totalTicks; ++i) {
-    const adjustment = data.map(v => {
+    const adjustment = totalChange.map(v => {
       if (Math.abs(v) <= i) return 0;
       return Math.sign(v);
     });
-    api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, "modify-systems-instant", adjustment);
+    const tickData: DiseaseTickData = { systemsModification: adjustment };
+    if (i == totalTicks - 1)
+      tickData.mutationColor = colorOfChange(totalChange);
+
+    api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, "disease-tick", tickData);
   }
 }
 
@@ -58,6 +97,8 @@ function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
 module.exports = () => {
   return {
     modifySystemsInstant,
+    diseaseTick,
+    mutation,
     useMagellanPill,
     onTheShip,
     enterShip,

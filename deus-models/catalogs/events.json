@@ -53,6 +53,14 @@
             "effects": ["modifySystemsInstant"]
         },
         {
+            "eventType": "disease-tick",
+            "effects": ["diseaseTick"]
+        },
+        {
+            "eventType": "mutation",
+            "effects": ["mutation"]
+        },
+        {
             "eventType": "use-magellan-pill",
             "effects": ["useMagellanPill"]
         },
