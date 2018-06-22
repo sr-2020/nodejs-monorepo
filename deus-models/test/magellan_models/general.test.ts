@@ -7,13 +7,6 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 import consts = require('../../helpers/constants');
 import { systemsIndices, System } from '../../helpers/magellan';
 
-describe('Helpers', () => {
-    it('systemIndices', () => {
-        const indices = systemsIndices();
-        expect(indices).to.deep.equal([0, 1, 2, 3, 4, 5, 6]);
-    })
-});
-
 function makeSystems(values: number[], lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0]): System[] {
     return systemsIndices().map((i) => {
         return {

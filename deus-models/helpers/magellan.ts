@@ -27,6 +27,51 @@ export const biologicalSystemsNames = new Map<BiologicalSystems, string>([
   [BiologicalSystems.Integumentary, 'Покровная'],
 ]);
 
+export enum SystemColor {
+  Orange,
+  Green,
+  Blue,
+}
+
+export const biologicalSystemsColors = new Map<BiologicalSystems, SystemColor[]>([
+  [BiologicalSystems.Nervous, [SystemColor.Orange]],
+  [BiologicalSystems.Cardiovascular, [SystemColor.Green, SystemColor.Blue]],
+  [BiologicalSystems.Reproductive, [SystemColor.Blue]],
+  [BiologicalSystems.Digestive, [SystemColor.Green]],
+  [BiologicalSystems.Respiratory, [SystemColor.Orange, SystemColor.Blue]],
+  [BiologicalSystems.Musculoskeletal, [SystemColor.Orange]],
+  [BiologicalSystems.Integumentary, [SystemColor.Green]],
+]);
+
+export function systemCorrespondsToColor(color: SystemColor, system: BiologicalSystems): boolean {
+  return (biologicalSystemsColors.get(system) as SystemColor[]).includes(color);
+}
+
+export function colorOfChange(change: number[]): SystemColor | undefined {
+  const systemsAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>();
+  const systemsNotAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>(systemsIndices());
+  change.forEach((v, i) => {
+    if (v != 0) {
+      systemsAffected.add(i);
+      systemsNotAffected.delete(i);
+    }
+  });
+
+  const colorsSeen: Set<SystemColor> = new Set<SystemColor>();
+
+  systemsAffected.forEach((s) => {
+    (biologicalSystemsColors.get(s) as SystemColor[]).map(color => colorsSeen.add(color));
+  });
+
+  for (const color of colorsSeen) {
+    if (Array.from(systemsAffected).every((system) => systemCorrespondsToColor(color, system)) &&
+        !Array.from(systemsNotAffected).some((system) => systemCorrespondsToColor(color, system)))
+        return color;
+  }
+
+  return undefined;
+}
+
 export function systemsIndices(): number[] {
   const result: number[] = [];
   for (const system in BiologicalSystems)
