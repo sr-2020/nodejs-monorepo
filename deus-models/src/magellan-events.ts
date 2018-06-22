@@ -8,8 +8,14 @@ import { systemsIndices, getTypedOrganismModel } from "../helpers/magellan";
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
 
-  for (const i of systemsIndices())
-    getTypedOrganismModel(api).systems[i].value += data[i];
+  const model = getTypedOrganismModel(api);
+
+  for (const i of systemsIndices()) {
+    if (data[i] != 0) {
+      model.systems[i].value += data[i];
+      model.systems[i].lastModified = event.timestamp;
+    }
+  }
 }
 
 function useMagellanPill(api: ModelApiInterface, data: number[], event: Event) {
