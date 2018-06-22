@@ -1,4 +1,4 @@
-import { BiologicalSystems, systemsIndices, OrganismModel } from "./magellan";
+import { BiologicalSystems, systemsIndices, OrganismModel, System } from "./magellan";
 
 export enum Symptoms {
   SevereHeadache,
@@ -100,22 +100,22 @@ export const systemToSymptoms = new Map<BiologicalSystems, Array<Symptoms>>([
   Symptoms.FingertipsTingling, Symptoms.SkinDarkening, Symptoms.NailsDarkening, Symptoms.FingertipsTingling, Symptoms.TactileSensitivityLoss, Symptoms.HairLoss, Symptoms.Blindness]],
 ]);
 
-export function getSymptomValue(currentValue: number, nucleotideValue: number) {
-  const l = Math.min(0, nucleotideValue);
-  const r = Math.max(0, nucleotideValue);
-  if (currentValue < l)
-    return currentValue - l;
+export function getSymptomValue(system: System) {
+  const l = Math.min(0, system.nucleotide);
+  const r = Math.max(0, system.nucleotide);
+  if (system.value < l)
+    return system.value - l;
 
-  if (currentValue > r)
-    return currentValue - r;
+  if (system.value > r)
+    return system.value - r;
 
   return 0;
 }
 
-export function getSymptomsInternal(currentValues: number[], nucleotideValue: number[]): Set<Symptoms> {
+export function getSymptomsInternal(systems: System[]): Set<Symptoms> {
   const result = new Set<Symptoms>();
   for (const indice of systemsIndices()) {
-    const v = getSymptomValue(currentValues[indice], nucleotideValue[indice]);
+    const v = getSymptomValue(systems[indice]);
     if (Math.abs(v) > 7) return new Set<Symptoms>([Symptoms.Death]);
     if (v > 0)
       result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v])
@@ -127,5 +127,5 @@ export function getSymptomsInternal(currentValues: number[], nucleotideValue: nu
 }
 
 export function getSymptoms(model: OrganismModel): Set<Symptoms> {
-  return getSymptomsInternal(model.systems, model.nucleotide);
+  return getSymptomsInternal(model.systems);
 }

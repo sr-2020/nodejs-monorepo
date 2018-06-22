@@ -50,22 +50,41 @@
   "firstName": "Геннадий",
   "lastName": "Лавров",
   "systems": [
-    1,
-    1,
-    -1,
-    1,
-    0,
-    1,
-    1
-  ],
-  "nucleotide": [
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0
+    {
+      "value": 1,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": 1,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": -1,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": 1,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": 0,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": 1,
+      "nucleotide": 0,
+      "lastModified": 0
+    },
+    {
+      "value": 1,
+      "nucleotide": 0,
+      "lastModified": 0
+    }
   ],
   "spaceSuit": {
     "oxygenLeftMs": 60000

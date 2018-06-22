@@ -7,9 +7,9 @@ import { systemsIndices, getTypedOrganismModel } from "../helpers/magellan";
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
-  
+
   for (const i of systemsIndices())
-    getTypedOrganismModel(api).systems[i] += data[i];
+    getTypedOrganismModel(api).systems[i].value += data[i];
 }
 
 function useMagellanPill(api: ModelApiInterface, data: number[], event: Event) {

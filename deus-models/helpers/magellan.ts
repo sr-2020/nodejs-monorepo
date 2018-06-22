@@ -40,6 +40,12 @@ export interface SpaceSuit {
   oxygenLeftMs: number;
 }
 
+export interface System {
+  value: number;
+  nucleotide: number;
+  lastModified: number;
+}
+
 export interface OrganismModel {
   _id: string;
   timestamp: number;
@@ -59,9 +65,8 @@ export interface OrganismModel {
   mail: string;
   corporation: string;
 
-  systems: number[];
-  nucleotide: number[];
   location?: string;
+  systems: System[];
 
   spaceSuit: SpaceSuit;
 }

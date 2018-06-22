@@ -1,6 +1,8 @@
-import { systemsIndices } from "../../helpers/magellan";
+import { systemsIndices, System } from "../../helpers/magellan";
 import { systemToSymptoms, getSymptomValue, getSymptomsInternal, Symptoms } from "../../helpers/symptoms";
 import { expect } from "chai";
+
+function makeSystem(value: number, nucleotide: number, lastModified: number = 0): System { return { value, nucleotide, lastModified } };
 
 describe('Symptoms helper', () => {
   it('Symtoms table have correct number of elements', () => {
@@ -12,33 +14,65 @@ describe('Symptoms helper', () => {
   })
 
   it('getSymptomValue', () => {
-    expect(getSymptomValue(0, 0)).to.equal(0);
-    expect(getSymptomValue(1, 2)).to.equal(0);
-    expect(getSymptomValue(5, 2)).to.equal(3);
-    expect(getSymptomValue(-1, 2)).to.equal(-1);
-    expect(getSymptomValue(0, -4)).to.equal(0);
-    expect(getSymptomValue(-2, -4)).to.equal(0);
-    expect(getSymptomValue(-5, -4)).to.equal(-1);
-    expect(getSymptomValue(3, -4)).to.equal(3);
+    expect(getSymptomValue(makeSystem(0, 0))).to.equal(0);
+    expect(getSymptomValue(makeSystem(1, 2))).to.equal(0);
+    expect(getSymptomValue(makeSystem(5, 2))).to.equal(3);
+    expect(getSymptomValue(makeSystem(-1, 2))).to.equal(-1);
+    expect(getSymptomValue(makeSystem(0, -4))).to.equal(0);
+    expect(getSymptomValue(makeSystem(-2, -4))).to.equal(0);
+    expect(getSymptomValue(makeSystem(-5, -4))).to.equal(-1);
+    expect(getSymptomValue(makeSystem(3, -4))).to.equal(3);
   })
 
   it('getSymptoms - all symptoms different', () => {
-    expect(getSymptomsInternal([1, 5, -1, 0, -2, -5, 3], [2, 2, 2, -4, -4, -4, -4])).to.deep.equal(
+    expect(getSymptomsInternal([
+      makeSystem(1, 2),
+      makeSystem(5, 2),
+      makeSystem(-1, 2),
+      makeSystem(0, -4),
+      makeSystem(-2, -4),
+      makeSystem(-5, -4),
+      makeSystem(3, -4)
+    ])).to.deep.equal(
       new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling, Symptoms.NailsDarkening]));
   });
 
   it('getSymptoms - some symptoms same', () => {
-    expect(getSymptomsInternal([-6, 5, -1, 0, -2, -5, 1], [2, 2, 2, -4, -4, -4, -4])).to.deep.equal(
+    expect(getSymptomsInternal([
+      makeSystem(-6, 2),
+      makeSystem(5, 2),
+      makeSystem(-1, 2),
+      makeSystem(0, -4),
+      makeSystem(-2, -4),
+      makeSystem(-5, -4),
+      makeSystem(1, -4)
+    ])).to.deep.equal(
       new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling]))
   })
 
   it('getSymptoms - death+', () => {
-    expect(getSymptomsInternal([2, 9, -1, 0, -2, -5, 1], [2, 1, 2, -4, -4, -4, -4])).to.deep.equal(
+    expect(getSymptomsInternal([
+      makeSystem(2, 2),
+      makeSystem(9, 1),
+      makeSystem(-1, 2),
+      makeSystem(0, -4),
+      makeSystem(-2, -4),
+      makeSystem(-5, -4),
+      makeSystem(1, -4)
+    ])).to.deep.equal(
       new Set<Symptoms>([Symptoms.Death]))
   })
 
   it('getSymptoms - death-', () => {
-    expect(getSymptomsInternal([-8, 5, -1, 0, -2, -5, 1], [2, 2, 2, -4, -4, -4, -4])).to.deep.equal(
+    expect(getSymptomsInternal([
+      makeSystem(-8, 2),
+      makeSystem(5, 1),
+      makeSystem(-1, 2),
+      makeSystem(0, -4),
+      makeSystem(-2, -4),
+      makeSystem(-5, -4),
+      makeSystem(1, -4)
+    ])).to.deep.equal(
       new Set<Symptoms>([Symptoms.Death]))
   })
 });

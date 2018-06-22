@@ -15,11 +15,11 @@ interface TestResult {
 
 const tests = {
   sum: (model: OrganismModel): TestResult => {
-    const r = (model.systems as number[]).reduce((acc, val) => acc + val);
+    const r = model.systems.map((s) => s.value).reduce((acc, val) => acc + val);
     return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}`};
   },
   max: (model: OrganismModel): TestResult=> {
-    const r = (model.systems as number[]).reduce((acc, val) => Math.max(acc, val));
+    const r = model.systems.map((s) => s.value).reduce((acc, val) => Math.max(acc, val));
     return {type:'Максимум', message: `Максимум значений состояний систем равна ${r}`};
   },
 }

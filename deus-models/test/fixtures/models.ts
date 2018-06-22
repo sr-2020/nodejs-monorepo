@@ -6,7 +6,7 @@ function randomId() {
 }
 
 export function getExampleMagellanModel() {
-    return require( "../../../data_samples/model.json" );
+    return require("../../../data_samples/model.json");
 }
 
 export const getExampleModel = (id?: string) => ({
@@ -32,12 +32,47 @@ export const getExampleModel = (id?: string) => ({
     lastVREnterDuration: 0,
     totalSpentInVR: 0,
 
-    spaceSuit:  {
+    spaceSuit: {
         oxygenLeftMs: 0
     },
 
-    systems: [1, 1, 1, 1, 1, 1, 1],
-    nucleotide: [1, 1, 1, 1, 1, 1, 1],
+    systems: [
+        {
+            value: 1,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: 1,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: -1,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: 1,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: 0,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: 1,
+            nucleotide: 0,
+            lastModified: 0
+        },
+        {
+            value: 1,
+            nucleotide: 0,
+            lastModified: 0
+        }
+    ],
 
     timestamp: 0,
     conditions: [
