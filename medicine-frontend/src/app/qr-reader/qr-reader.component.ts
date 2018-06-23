@@ -70,12 +70,13 @@ export class QrReaderComponent implements OnInit {
       }
 
       if (data.type != QrType.Passport) {
+        console.error('Scanned QR data type: ', data.type);
         throw new NonPassportQrError();
       }
 
       this._dialogRef.close(data.payload);
     } catch (e) {
-      console.error('Unsupported QR code scanned, error: ' + e);
+      console.error('Unsupported QR code scanned, error: ' + JSON.stringify(e));
       if (e instanceof QrExpiredError) {
         this.errorMessage = 'Отсканирован код с истекшим сроком действия, пересоздайте код.';
       } else if (e instanceof NonPassportQrError) {
