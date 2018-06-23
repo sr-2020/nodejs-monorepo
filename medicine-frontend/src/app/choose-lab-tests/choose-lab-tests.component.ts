@@ -1,22 +1,22 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatExpansionPanel, MatSelectionList } from '@angular/material';
 import { Router } from '@angular/router';
-import { MatSelectionList, MatListOption, MatExpansionPanel, MatDialog } from '@angular/material';
 
-import { DataService } from 'src/services/data.service';
-import { LabTest } from 'src/datatypes/viewmodel';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
+import { LabTest } from 'src/datatypes/viewmodel';
+import { DataService } from 'src/services/data.service';
 
 @Component({
   selector: 'app-choose-lab-tests',
   templateUrl: './choose-lab-tests.component.html',
-  styleUrls: ['./choose-lab-tests.component.css']
+  styleUrls: ['./choose-lab-tests.component.css'],
 })
 export class ChooseLabTestsComponent implements OnInit {
   @ViewChild('tests')
-  tests: MatSelectionList;
+  public tests: MatSelectionList;
 
-  availableTests: LabTest[];
-  checked: { [key: string]: boolean } = {};
+  public availableTests: LabTest[];
+  public checked: { [key: string]: boolean } = {};
 
   constructor(
     private _router: Router,
@@ -31,11 +31,11 @@ export class ChooseLabTestsComponent implements OnInit {
   }
 
   public async applyChoice() {
-    const checkedTests = this.availableTests.filter(test => this.checked[test.name]);
+    const checkedTests = this.availableTests.filter((test) => this.checked[test.name]);
 
     const dialogRef = this.dialog.open(QrReaderComponent, {
       width: '500px',
-      data: { checkedTests }
+      data: { checkedTests },
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -46,7 +46,7 @@ export class ChooseLabTestsComponent implements OnInit {
     });
   }
 
-  expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {
+  public expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {
     event.stopPropagation(); // Preventing event bubbling
 
     if (!this._isExpansionIndicator(event.target)) {

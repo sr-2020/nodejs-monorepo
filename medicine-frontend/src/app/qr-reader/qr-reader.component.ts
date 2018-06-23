@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogRef, MatSelectChange } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
@@ -8,37 +7,34 @@ import { QrType } from 'deus-qr-lib/lib/qr.type';
 import { currentTimestamp } from 'src/app/util';
 import { DataService } from 'src/services/data.service';
 
-
 class QrExpiredError {
 }
 
 class NonPassportQrError {
 }
 
-
 @Component({
   selector: 'app-qr-reader',
   templateUrl: './qr-reader.component.html',
-  styleUrls: ['./qr-reader.component.css']
+  styleUrls: ['./qr-reader.component.css'],
 })
 export class QrReaderComponent implements OnInit {
   @ViewChild('scanner')
-  scanner: ZXingScannerComponent;
+  public scanner: ZXingScannerComponent;
 
-  hasCameras = false;
-  hasPermission: boolean;
+  public hasCameras = false;
+  public hasPermission: boolean;
 
-  errorMessage = ' ';
+  public errorMessage = ' ';
 
-  availableDevices: MediaDeviceInfo[];
-  selectedDevice: MediaDeviceInfo;
-
+  public availableDevices: MediaDeviceInfo[];
+  public selectedDevice: MediaDeviceInfo;
 
   constructor(
     private _dialogRef: MatDialogRef<QrReaderComponent>,
     private _dataService: DataService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
       if (devices.length == 0) { return; }
       this.hasCameras = true;
@@ -47,7 +43,7 @@ export class QrReaderComponent implements OnInit {
       this.selectedDevice = this.availableDevices[0];
     });
 
-    this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+    this.scanner.camerasNotFound.subscribe((_devices: MediaDeviceInfo[]) => {
       console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.');
     });
 

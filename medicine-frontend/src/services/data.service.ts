@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { ViewModel, HistoryEntry, LabTest } from 'src/datatypes/viewmodel';
-import { currentTimestamp } from 'src/app/util';
 import { GlobalConfig } from 'src/config';
+import { LabTest, ViewModel } from 'src/datatypes/viewmodel';
 import { AuthService } from 'src/services/auth.service';
 
 @Injectable()
@@ -37,7 +36,7 @@ export class DataService {
   public async runTests(patientId: string, tests: LabTest[]) {
     const fullUrl = GlobalConfig.runTestsBaseUrl + this._authService.getUserId();
     const response = await this._http.post(fullUrl,
-      { patientId, tests: tests.map(t => t.name) },
+      { patientId, tests: tests.map((t) => t.name) },
       this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
       if (response.json().viewModel == undefined) {
         console.error("Didn't get updated viewmodel");

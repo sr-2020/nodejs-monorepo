@@ -1,26 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { AuthService } from 'src/services/auth.service';
 import { DataService } from 'src/services/data.service';
-import { currentTimestamp } from 'src/app/util';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+  public username: string;
+  public password: string;
 
   constructor(
     private _router: Router,
     private _matSnackBar: MatSnackBar,
     private _authService: AuthService,
     private _dataService: DataService) { }
-
-  username: string;
-  password: string;
 
   public async login(): Promise<void> {
     try {

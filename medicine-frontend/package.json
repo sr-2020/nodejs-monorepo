@@ -28,6 +28,7 @@
     "deus-qr-lib": "git+https://github.com/sth-larp/deus-qr-lib.git",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.1.0",
+    "tslint-consistent-codestyle": "^1.13.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

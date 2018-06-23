@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { FormGroup, FormBuilder, Validators, FormGroupDirective, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatIconRegistry, MatSnackBar } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-import { DataService } from 'src/services/data.service';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
+import { DataService } from 'src/services/data.service';
 import { renderTimestamp } from 'src/time-utils';
-
-
 
 class PatientFilterOption {
   public patientId?: string;
@@ -40,7 +38,7 @@ class PatientFilterOption {
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
-  styleUrls: ['./history.component.css']
+  styleUrls: ['./history.component.css'],
 })
 export class HistoryComponent implements OnInit {
   public fullPatientHistory: HistoryEntry[] = [];
@@ -78,8 +76,8 @@ export class HistoryComponent implements OnInit {
     this.filteredPatientFilterOptions = this.filterControl.valueChanges
       .pipe(
         startWith<string | PatientFilterOption>(''),
-        map(value => typeof value == 'string' ? value : value.patientId),
-        map(name => name ? this.filterFilterOptions(name) : this.patientFilterOptions.slice())
+        map((value) => typeof value == 'string' ? value : value.patientId),
+        map((name) => name ? this.filterFilterOptions(name) : this.patientFilterOptions.slice()),
       );
 
     this.filterControl.valueChanges.subscribe((v) => {
@@ -138,15 +136,16 @@ export class HistoryComponent implements OnInit {
       this.filteredPatientHistory = this.fullPatientHistory;
     } else {
       this.addCommentForm.patchValue({
-        patientId: Number(this.currentPatientFilterOption.patientId)
+        patientId: Number(this.currentPatientFilterOption.patientId),
       });
       this.addCommentForm.get('patientId').disable();
-      this.filteredPatientHistory = this.fullPatientHistory.filter(e => e.patientId == this.currentPatientFilterOption.patientId);
+      this.filteredPatientHistory = this.fullPatientHistory.filter(
+        (e) => e.patientId == this.currentPatientFilterOption.patientId);
     }
   }
 
   private filterFilterOptions(name: string): PatientFilterOption[] {
-    return this.patientFilterOptions.filter(option =>
+    return this.patientFilterOptions.filter((option) =>
       option.description().toLowerCase().indexOf(name.toLowerCase()) >= 0);
   }
 }

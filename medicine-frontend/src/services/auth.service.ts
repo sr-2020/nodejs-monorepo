@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs } from '@angular/http';
 
-import { ViewModel } from 'src/datatypes/viewmodel';
 import { GlobalConfig } from 'src/config';
+import { ViewModel } from 'src/datatypes/viewmodel';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +42,7 @@ export class AuthService {
       headers: new Headers({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Basic ' + btoa(userId + ':' + password)
+        'Authorization': 'Basic ' + btoa(userId + ':' + password),
       }),
     };
   }
