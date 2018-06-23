@@ -150,7 +150,7 @@ function getBodyPage(model: OrganismModel) {
     result.body.items.push({
       viewId: "mid:" + BiologicalSystems[system],
       text: biologicalSystemsNames.get(system),
-      value: model.systems[i].toString()
+      value: model.systems[i].value.toString()
     });
   }
   return result;
