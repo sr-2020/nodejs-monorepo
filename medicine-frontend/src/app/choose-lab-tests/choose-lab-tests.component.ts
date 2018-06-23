@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatExpansionPanel, MatSelectionList } from '@angular/material';
+import { MatDialog, MatSelectionList } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
@@ -44,20 +44,5 @@ export class ChooseLabTestsComponent implements OnInit {
         this._router.navigate(['history']);
       }
     });
-  }
-
-  public expandPanel(matExpansionPanel: MatExpansionPanel, event: Event): void {
-    event.stopPropagation(); // Preventing event bubbling
-
-    if (!this._isExpansionIndicator(event.target)) {
-      matExpansionPanel.toggle(); // Here's the magic
-    }
-  }
-
-  private _isExpansionIndicator(target: any): boolean {
-    // TODO: Make clickable area bigger
-    // TODO: Toggle checkbox otherwise
-    const expansionIndicatorClass = 'mat-expansion-indicator';
-    return (target.classList && target.classList.contains(expansionIndicatorClass) );
   }
 }
