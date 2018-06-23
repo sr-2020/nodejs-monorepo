@@ -6,6 +6,7 @@ import { getExampleMagellanModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import consts = require('../../helpers/constants');
 import { systemsIndices, System } from '../../helpers/magellan';
+import { Event } from 'deus-engine-manager-api';
 
 function makeSystems(values: number[],
     lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
@@ -105,7 +106,7 @@ describe('General Magellan events: ', () => {
     });
 
 
-    it("Use mutation pill", async function () {
+    it("Use blue mutation pill", async function () {
         let model = getExampleMagellanModel();
         model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
 
@@ -125,6 +126,39 @@ describe('General Magellan events: ', () => {
         model = (await process(model, events)).baseModel;
         expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0],
             [0, 2, -2, 0, 1, 0, 0]));
+    });
+
+    it("Use blue mutation pill and introduce compatible change", async function () {
+        let model = getExampleMagellanModel();
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+
+        const p = consts.MAGELLAN_TICK_MILLISECONDS;
+        let events: Event[] = [
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] , timestamp: 100 },
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 1, 0, 0, 0, 0, 0] , timestamp: 200 },
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [0, -1, 0, 0, 0, 0, 0] , timestamp: 300 },
+            getRefreshEvent(model._id, 100 + 2 * p)
+        ];
+
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0],
+            [0, 2, -2, 0, 1, 0, 0]));
+    });
+
+    it("Use blue mutation pill and introduce incompatible change", async function () {
+        let model = getExampleMagellanModel();
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+
+        const p = consts.MAGELLAN_TICK_MILLISECONDS;
+        let events: Event[] = [
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] , timestamp: 100 },
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [1, 0, 0, 0, 0, 0, 0] , timestamp: 200 },
+            { characterId: model._id, eventType: 'use-magellan-pill', data: [-1, 0, 0, 0, 0, 0, 0] , timestamp: 300 },
+            getRefreshEvent(model._id, 100 + 2 * p)
+        ];
+
+        model = (await process(model, events)).baseModel;
+        expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [300, 100 + p, 100 + p, 0, 100, 0, 0]));
     });
 
     it("Enter and leave ship", async function () {

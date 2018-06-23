@@ -19,20 +19,27 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
   }
 }
 
+interface PreMutationData {
+  mutationColor: SystemColor;
+  diseaseStartTimestamp: number
+}
+
 interface DiseaseTickData {
   systemsModification: number[];
   // Only set for the last tick and only if initial change is single-colored
-  mutationColor?: SystemColor;
+  preMutationData?: PreMutationData;
 }
 
 function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event) {
   modifySystemsInstant(api, data.systemsModification, event);
-  const color = data.mutationColor;
-  if (color) {
+  const preMutationData = data.preMutationData;
+  if (preMutationData) {
     const model = getTypedOrganismModel(api);
     const mutationData: MutationData = {
+      color: preMutationData.mutationColor,
+      diseaseStartTimestamp: preMutationData.diseaseStartTimestamp,
       newNucleotideValues: systemsIndices().map((i) => {
-        if (!systemCorrespondsToColor(color, i)) return undefined;
+        if (!systemCorrespondsToColor(preMutationData.mutationColor, i)) return undefined;
         return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
       })
     };
@@ -41,10 +48,18 @@ function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event
 }
 
 interface MutationData {
+  color: SystemColor;
+  diseaseStartTimestamp: number;
   newNucleotideValues: (number | undefined)[];
 }
 
 function mutation(api: ModelApiInterface, data: MutationData, event: Event) {
+  for (const i of systemsIndices()) {
+    if (!systemCorrespondsToColor(data.color, i) &&
+      getTypedOrganismModel(api).systems[i].lastModified >= data.diseaseStartTimestamp)
+      return; // Cancel mutation due to the change in the system of incompatible color
+  }
+
   for (const i of systemsIndices()) {
     const newValueOrUndefined = data.newNucleotideValues[i];
     if (newValueOrUndefined) {
@@ -61,8 +76,15 @@ function useMagellanPill(api: ModelApiInterface, totalChange: number[], event: E
       return Math.sign(v);
     });
     const tickData: DiseaseTickData = { systemsModification: adjustment };
-    if (i == totalTicks - 1)
-      tickData.mutationColor = colorOfChange(totalChange);
+    if (i == totalTicks - 1) {
+      const color = colorOfChange(totalChange);
+      if (color) {
+        tickData.preMutationData = {
+          mutationColor: color,
+          diseaseStartTimestamp: event.timestamp,
+        }
+      }
+    }
 
     api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, "disease-tick", tickData);
   }
