@@ -3,12 +3,28 @@
   "profileType": "medic",
   "availableTests": [
     {
-      "name": "sum",
-      "displayableName": "Сумма всех систем"
+      "name": "nucleotide",
+      "displayableName": "Анализ нуклеотида"
     },
     {
-      "name": "max",
-      "displayableName": "Максимум из всех систем"
+      "name": "test1",
+      "displayableName": "Тест 1"
+    },
+    {
+      "name": "test2",
+      "displayableName": "Тест 2"
+    },
+    {
+      "name": "test3",
+      "displayableName": "Тест 3"
+    },
+    {
+      "name": "test4",
+      "displayableName": "Тест 4"
+    },
+    {
+      "name": "test5",
+      "displayableName": "Тест 5"
     }
   ],
   "patientHistory": [

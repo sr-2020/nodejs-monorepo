@@ -1,7 +1,7 @@
 import { ModelApiInterface, Event } from "deus-engine-manager-api";
 import { hasMedicViewModel } from "../helpers/view-model-helper";
-import { OrganismModel } from "../helpers/magellan";
-
+import { OrganismModel, BiologicalSystems, systemsIndices } from "../helpers/magellan";
+import * as shuffle from 'shuffle-array'
 
 interface RunLabTestData {
   test: string;
@@ -13,17 +13,53 @@ interface TestResult {
   message: string;
 }
 
-const tests = {
-  sum: (model: OrganismModel): TestResult => {
-    const r = model.systems.map((s) => s.value).reduce((acc, val) => acc + val);
-    return {type:'Cумма', message: `Сумма значений состояний систем равна ${r}`};
-  },
-  max: (model: OrganismModel): TestResult=> {
-    const r = model.systems.map((s) => s.value).reduce((acc, val) => Math.max(acc, val));
-    return {type:'Максимум', message: `Максимум значений состояний систем равна ${r}`};
-  },
+function nucleotideTest(model: OrganismModel): string {
+  return 'Результат: ' + shuffle(systemsIndices().map((s) => model.systems[s].nucleotide)).join(', ');
 }
 
+function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string {
+  return 'Результат: ' + shuffle(systems.map((s) => model.systems[s].value), { copy: true }).join(', ');
+}
+
+const tests = {
+  nucleotide: (model: OrganismModel): TestResult => {
+    return {
+      type: 'Анализ нуклеотида',
+      message: nucleotideTest(model),
+    }
+  },
+  test1: (model: OrganismModel): TestResult => {
+    return {
+      type: "Тест 1",
+      message: genericTest(model, [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary])
+    }
+  },
+  test2: (model: OrganismModel): TestResult => {
+    return {
+      type: "Тест 2",
+      message: genericTest(model, [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous])
+    }
+  },
+  test3: (model: OrganismModel): TestResult => {
+    return {
+      type: "Тест 3",
+      message: genericTest(model, [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive])
+    }
+  },
+  test4: (model: OrganismModel): TestResult => {
+    return {
+      type: "Тест 4",
+      message: genericTest(model, [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive])
+    }
+  },
+  test5: (model: OrganismModel): TestResult => {
+    return {
+      type: "Тест 5",
+      message: genericTest(model, [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous])
+    }
+  },
+
+}
 
 function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Event) {
   if (!hasMedicViewModel(api.model)) {
