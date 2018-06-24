@@ -48,7 +48,7 @@ export class EconomyController {
       await sendGenericPushNotification(body.receiver,
         makeVisibleNotificationPayload(`Получен платеж: ${body.amount}`,
           `Отправитель платежа: ${body.sender}`
-            + body.description != undefined ? `, описание: "${body.description}"` : ''));
+            + (body.description != undefined ? `, описание: "${body.description}"` : '')));
       return {};
     } catch (e) {
       returnCharacterNotFoundOrRethrow(e);
