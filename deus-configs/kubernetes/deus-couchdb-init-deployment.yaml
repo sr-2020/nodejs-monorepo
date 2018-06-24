@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose convert
+    kompose.version: 1.14.0 (fa706f2)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: deus-couchdb-init
+  name: deus-couchdb-init
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: deus-couchdb-init
+    spec:
+      containers:
+      - image: alexeyeremin/deus-couchdb-init
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - -f
+            - http://localhost/
+        name: deus-couchdb-init
+        resources: {}
+        volumeMounts:
+        - mountPath: /deus-models
+          name: models-src
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: models-src
+        persistentVolumeClaim:
+          claimName: models-src
+          readOnly: true
+status: {}
