@@ -19,6 +19,8 @@ spec:
           value: single-node
         - name: ES_JAVA_OPTS
           value: -Xmx1024m -Xms1024m
+        - name: TAKE_FILE_OWNERSHIP
+          value: true
         ports:
         - containerPort: 9200
           name: http
