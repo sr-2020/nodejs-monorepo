@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta2
+kind: Deployment
+metadata:
+  name: couchdb
+spec:
+  template:
+    spec:
+      containers:
+      - image: apache/couchdb
+        name: couchdb
+        ports:
+        - containerPort: 5984
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/couchdb/data
+          name: couchdb-data
+      volumes:
+      - name: couchdb-data
+        persistentVolumeClaim:
+          claimName: couchdb-data
+status: {}
