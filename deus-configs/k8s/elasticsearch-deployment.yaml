@@ -23,3 +23,17 @@ spec:
         - containerPort: 9200
           name: http
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9200
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9200
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
