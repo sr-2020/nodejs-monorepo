@@ -3,7 +3,13 @@ kind: Deployment
 metadata:
   name: couchdb
 spec:
+  selector:
+    matchLabels:
+      component: couchdb
   template:
+    metadata:
+      labels:
+        component: couchdb
     spec:
       containers:
       - image: apache/couchdb
