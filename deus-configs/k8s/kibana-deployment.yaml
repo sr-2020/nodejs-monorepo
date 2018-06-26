@@ -18,3 +18,17 @@ spec:
         - containerPort: 5601
           name: http
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 5601
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 5601
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
