@@ -37,3 +37,10 @@ spec:
             httpHeaders:
           initialDelaySeconds: 3
           periodSeconds: 20
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: elasticsearch-data
+      volumes:
+      - name: elasticsearch-data
+        persistentVolumeClaim:
+          claimName: elasticsearch-data
