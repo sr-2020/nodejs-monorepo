@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: couchdb
 spec:
+  type: LoadBalancer
+  selector:
+    component: couchdb
   ports:
   - name: "5988"
     port: 5988
