@@ -13,14 +13,12 @@ spec:
     spec:
       containers:
       - name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+        image: launcher.gcr.io/google/elasticsearch6:6.2
         env:
         - name: discovery.type
           value: single-node
         - name: ES_JAVA_OPTS
           value: -Xmx1024m -Xms1024m
-        - name: TAKE_FILE_OWNERSHIP
-          value: true
         ports:
         - containerPort: 9200
           name: http
