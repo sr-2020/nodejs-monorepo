@@ -17,6 +17,8 @@ spec:
         env:
         - name: discovery.type
           value: single-node
+        - name: ES_JAVA_OPTS
+          value: -Xmx1024m -Xms1024m
         ports:
         - containerPort: 9200
           name: http
