@@ -14,6 +14,17 @@ spec:
       containers:
       - image: apache/couchdb
         name: couchdb
+        env:
+        - name: COUCHDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: username
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: password
         ports:
         - containerPort: 5984
         readinessProbe:
