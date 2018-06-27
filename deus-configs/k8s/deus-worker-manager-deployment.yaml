@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: deus-worker-manager
+spec:
+  selector:
+    matchLabels:
+      component: deus-worker-manager
+  template:
+    metadata:
+      labels:
+        component: deus-worker-manager
+    spec:
+      initContainers:
+      - name: deus-models
+        image: alexeyeremin/deus-models
+        command:
+          - cp
+          - -r
+          - /app/.
+          - /app_destination
+        volumeMounts:
+        - name: models-src
+          mountPath: /app_destination
+      containers:
+      - image: alexeyeremin/deus-worker-manager
+        name: deus-worker-manager
+        env:
+        - name: COUCHDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: username
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: password
+        volumeMounts:
+        - name: models-src
+          mountPath: /deus-models
+          readOnly: true
+      volumes:
+      - name: models-src
+        emptyDir: {}
