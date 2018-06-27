@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deus-server
+spec:
+  selector:
+    matchLabels:
+      component: deus-server
+  template:
+    metadata:
+      labels:
+        component: deus-server
+    spec:
+      containers:
+      - image: alexeyeremin/deus-server
+        name: deus-server
+        ports:
+        - containerPort: 8157
+        readinessProbe:
+          httpGet:
+            path: /time
+            port: 8157
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /time
+            port: 8157
+          initialDelaySeconds: 3
+          periodSeconds: 20
