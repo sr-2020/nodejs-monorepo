@@ -14,6 +14,22 @@ spec:
       containers:
       - image: alexeyeremin/deus-server
         name: deus-server
+        env:
+        - name: COUCHDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: username
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: password
+        - name: PUSH_SERVERKEY
+          valueFrom:
+            secretKeyRef:
+              name: common-secret
+              key: push_serverkey
         ports:
         - containerPort: 8157
         readinessProbe:
