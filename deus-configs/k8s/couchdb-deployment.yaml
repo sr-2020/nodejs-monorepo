@@ -16,7 +16,20 @@ spec:
         name: couchdb
         ports:
         - containerPort: 5984
-        resources: {}
+        readinessProbe:
+          httpGet:
+            path: /_up
+            port: 5984
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /_up
+            port: 5984
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 20
         volumeMounts:
         - mountPath: /opt/couchdb/data
           name: couchdb-data
@@ -24,4 +37,3 @@ spec:
       - name: couchdb-data
         persistentVolumeClaim:
           claimName: couchdb-data
-status: {}
