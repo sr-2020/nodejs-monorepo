@@ -7,7 +7,7 @@ spec:
   selector:
     component: couchdb
   ports:
-  - name: "5988"
-    port: 5988
+  - name: "5984"
+    port: 5984
     targetPort: 5984
 
