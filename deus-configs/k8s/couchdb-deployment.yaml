@@ -31,14 +31,12 @@ spec:
           httpGet:
             path: /_up
             port: 5984
-            httpHeaders:
           initialDelaySeconds: 3
           periodSeconds: 20
         livenessProbe:
           httpGet:
             path: /_up
             port: 5984
-            httpHeaders:
           initialDelaySeconds: 3
           periodSeconds: 20
         volumeMounts:

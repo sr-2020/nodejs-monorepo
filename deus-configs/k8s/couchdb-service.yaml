@@ -10,4 +10,4 @@ spec:
   - name: "5988"
     port: 5988
     targetPort: 5984
-status:
+
