@@ -17,7 +17,7 @@ spec:
         command:
           - cp
           - -r
-          - /app/*
+          - /app/.
           - /app_destination
         volumeMounts:
         - name: models-src
