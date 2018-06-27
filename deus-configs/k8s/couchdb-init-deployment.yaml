@@ -39,6 +39,7 @@ spec:
         volumeMounts:
         - name: models-src
           mountPath: /deus-models
+          readOnly: true
       volumes:
       - name: models-src
         emptyDir: {}
