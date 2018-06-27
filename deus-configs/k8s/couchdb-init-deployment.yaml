@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: couchdb-init
+spec:
+  selector:
+    matchLabels:
+      component: couchdb-init
+  template:
+    metadata:
+      labels:
+        component: couchdb-init
+    spec:
+      initContainers:
+      - name: deus-models
+        image: alexeyeremin/deus-models
+        volumeMounts:
+        - name: models_src
+          mountPath: /app
+      containers:
+      - name: deus-couchdb-init
+        image: alexeyeremin/deus-couchdb-init
+        volumeMounts:
+        - name: models_src
+          mountPath: /deus-models
+          env:
+          - name: COUCHDB_USER
+            valueFrom:
+              secretKeyRef:
+                name: couchdb-secret
+                key: username
+          - name: COUCHDB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: couchdb-secret
+                key: password
+      volumes:
+      - name: models_src
+        emptyDir: {}
