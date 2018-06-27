@@ -15,7 +15,7 @@ spec:
       - name: deus-models
         image: alexeyeremin/deus-models
         volumeMounts:
-        - name: models_src
+        - name: models-src
           mountPath: /app
       containers:
       - name: deus-couchdb-init
@@ -32,8 +32,8 @@ spec:
               name: couchdb-secret
               key: password
         volumeMounts:
-        - name: models_src
+        - name: models-src
           mountPath: /deus-models
       volumes:
-      - name: models_src
+      - name: models-src
         emptyDir: {}
