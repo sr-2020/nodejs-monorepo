@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deus-qr-lib
+spec:
+  selector:
+    matchLabels:
+      component: deus-qr-lib
+  template:
+    metadata:
+      labels:
+        component: deus-qr-lib
+    spec:
+      containers:
+      - image: alexeyeremin/deus-qr-lib
+        name: deus-qr-lib
+        ports:
+        - containerPort: 8159
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8159
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8159
+          initialDelaySeconds: 3
+          periodSeconds: 20
