@@ -14,9 +14,14 @@ spec:
       initContainers:
       - name: deus-models
         image: alexeyeremin/deus-models
+        command:
+          - cp
+          - -r
+          - /app
+          - /app_destination
         volumeMounts:
         - name: models-src
-          mountPath: /app
+          mountPath: /app_destination
       containers:
       - name: deus-couchdb-init
         image: alexeyeremin/deus-couchdb-init
