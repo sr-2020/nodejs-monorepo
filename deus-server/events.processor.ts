@@ -57,7 +57,17 @@ export class EventsProcessor {
   public async latestExistingMobileEventTimestamp(id: string): Promise<number> {
     const docs = await this.dbContainer().eventsDb().query<any>(characterIdTimestampOnlyRefreshesView,
       { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
-    return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
+    // TODO(aeremin) Remove after investigation
+    try {
+      return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
+    } catch (e) {
+      this.logger.error('Unexpected error in latestExistingMobileEventTimestamp',
+        {
+          query: { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 },
+          response: docs.rows,
+        });
+      return 0;
+    }
   }
 
   private dbContainer() {
