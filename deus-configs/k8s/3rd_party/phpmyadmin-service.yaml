@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin
+  labels:
+    component: phpmyadmin
+spec:
+  type: LoadBalancer
+  selector:
+    component: phpmyadmin
+  ports:
+  - name: http
+    port: 8024
+    targetPort: 80
+    protocol: TCP
