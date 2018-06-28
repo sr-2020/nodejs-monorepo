@@ -12,8 +12,9 @@ spec:
         component: couchdb-init
     spec:
       initContainers:
-      - name: deus-models
-        image: alexeyeremin/deus-models
+      - image: alexeyeremin/deus-models
+        imagePullPolicy: Always
+        name: deus-models
         command:
           - cp
           - -r
@@ -23,8 +24,9 @@ spec:
         - name: models-src
           mountPath: /app_destination
       containers:
-      - name: deus-couchdb-init
-        image: alexeyeremin/deus-couchdb-init
+      - image: alexeyeremin/deus-couchdb-init
+        imagePullPolicy: Always
+        name: deus-couchdb-init
         env:
         - name: COUCHDB_USER
           valueFrom:
