@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: phpmyadmin
   labels:
-    component: phpmyadmin
+    run: phpmyadmin
 spec:
   type: LoadBalancer
   selector:
-    component: phpmyadmin
+    run: phpmyadmin
   ports:
   - name: http
     port: 8024
