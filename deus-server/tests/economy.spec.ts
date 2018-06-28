@@ -18,7 +18,7 @@ import { TestDatabasesContainer } from './test-db-container';
 
 const address = `http://localhost:3000`;
 
-describe.only('Economy', () => {
+describe('Economy', () => {
 
   let app: App;
   let dbContainer: TestDatabasesContainer;
