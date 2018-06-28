@@ -13,6 +13,7 @@ spec:
     spec:
       containers:
       - image: alexeyeremin/deus-server
+        imagePullPolicy: Always
         name: deus-server
         env:
         - name: COUCHDB_USER

@@ -12,8 +12,9 @@ spec:
         component: deus-worker-manager
     spec:
       initContainers:
-      - name: deus-models
-        image: alexeyeremin/deus-models
+      - image: alexeyeremin/deus-models
+        imagePullPolicy: Always
+        name: deus-models
         command:
           - cp
           - -r
@@ -24,6 +25,7 @@ spec:
           mountPath: /app_destination
       containers:
       - image: alexeyeremin/deus-worker-manager
+        imagePullPolicy: Always
         name: deus-worker-manager
         env:
         - name: COUCHDB_USER
