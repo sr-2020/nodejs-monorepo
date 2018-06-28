@@ -25,6 +25,8 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: mysql-data
+          # See https://github.com/docker-library/mysql/issues/186#issuecomment-320342277 for reasons
+          subPath: db
       volumes:
       - name: mysql-data
         persistentVolumeClaim:
