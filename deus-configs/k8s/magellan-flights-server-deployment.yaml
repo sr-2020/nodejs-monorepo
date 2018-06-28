@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: magellan-flights-server
+spec:
+  selector:
+    matchLabels:
+      component: magellan-flights-server
+  template:
+    metadata:
+      labels:
+        component: magellan-flights-server
+    spec:
+      containers:
+      - image: alexeyeremin/magellan-flights-server
+        imagePullPolicy: Always
+        name: magellan-flights-server
+        ports:
+        - containerPort: 8010
+        readinessProbe:
+          httpGet:
+            path: /test
+            port: 8010
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /test
+            port: 8010
+          initialDelaySeconds: 3
+          periodSeconds: 20
