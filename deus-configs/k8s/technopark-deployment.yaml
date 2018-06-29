@@ -20,12 +20,12 @@ spec:
         readinessProbe:
           httpGet:
             path: /ping
-            port: 80
+            port: 8888
           initialDelaySeconds: 3
-          periodSeconds: 8888
+          periodSeconds: 20
         livenessProbe:
           httpGet:
             path: /ping
-            port: 80
+            port: 8888
           initialDelaySeconds: 3
           periodSeconds: 20
