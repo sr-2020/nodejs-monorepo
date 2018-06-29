@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: technopark
+spec:
+  selector:
+    matchLabels:
+      component: technopark
+  template:
+    metadata:
+      labels:
+        component: technopark
+    spec:
+      containers:
+      - image: alexeyeremin/technopark
+        imagePullPolicy: Always
+        name: technopark
+        ports:
+        - containerPort: 8888
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 8888
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 20

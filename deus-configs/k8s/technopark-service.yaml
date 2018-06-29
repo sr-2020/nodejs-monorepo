@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: technopark
+spec:
+  type: LoadBalancer
+  selector:
+    component: technopark
+  ports:
+  - name: http
+    port: 8888
+    targetPort: 8888
