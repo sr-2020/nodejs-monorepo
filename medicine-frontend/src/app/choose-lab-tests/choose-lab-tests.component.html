@@ -3,7 +3,7 @@
 
   <mat-card-content>
     <mat-selection-list #tests>
-      <mat-list-option *ngFor="let test of availableTests">
+      <mat-list-option *ngFor="let test of availableTests" [value]="test.name">
         {{test.displayableName}}
       </mat-list-option>
     </mat-selection-list>

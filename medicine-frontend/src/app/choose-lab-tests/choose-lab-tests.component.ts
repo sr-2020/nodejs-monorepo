@@ -16,7 +16,6 @@ export class ChooseLabTestsComponent implements OnInit {
   public tests: MatSelectionList;
 
   public availableTests: LabTest[];
-  public checked: { [key: string]: boolean } = {};
 
   constructor(
     private _router: Router,
@@ -25,13 +24,10 @@ export class ChooseLabTestsComponent implements OnInit {
 
   public ngOnInit() {
     this.availableTests = this._dataService.getViewModel().availableTests;
-    for (const test of this.availableTests) {
-      this.checked[test.name] = false;
-    }
   }
 
   public async applyChoice() {
-    const checkedTests = this.availableTests.filter((test) => this.checked[test.name]);
+    const checkedTests = this.tests.selectedOptions.selected.map((v) => v.value);
 
     const dialogRef = this.dialog.open(QrReaderComponent, {
       width: '500px',
