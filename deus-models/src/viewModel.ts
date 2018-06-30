@@ -12,9 +12,10 @@ interface PageViewModel {
 
 interface Row {
   text: string,
-  value: string,
+  value?: string,
   percent?: number,
-  valueColor?: string
+  valueColor?: string,
+  viewId?: string,
 };
 
 function getCharacterName(model: OrganismModel) {
@@ -135,7 +136,7 @@ function getEconomyPage() {
 }
 
 function getBodyPage(model: OrganismModel) {
-  const items: any[] = [];
+  const items: Row[] = [];
   let result = {
     __type: "ListPageViewModel",
     menuTitle: "Доктор Хаус",
@@ -149,7 +150,7 @@ function getBodyPage(model: OrganismModel) {
     const system: BiologicalSystems = i;
     result.body.items.push({
       viewId: "mid:" + BiologicalSystems[system],
-      text: biologicalSystemsNames.get(system),
+      text: biologicalSystemsNames.get(system) as string,
       value: model.systems[i].value.toString()
     });
   }
@@ -157,7 +158,7 @@ function getBodyPage(model: OrganismModel) {
 }
 
 function getSymptomsPage(model: OrganismModel): PageViewModel {
-  const items: any[] = [];
+  const items: Row[] = [];
   let result = {
     __type: "ListPageViewModel",
     menuTitle: "Симптомы",
