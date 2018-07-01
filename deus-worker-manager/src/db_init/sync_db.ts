@@ -117,11 +117,6 @@ Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
     .then(() => createDesignDocs())
     .then(() => importCatalogs(connection, catalogsStorage, catalogs))
     .then(() => createSampleData())
-    .then(() => {
-        const app = express();
-        app.get('/', (req, res) => res.status(200).send('Done!'));
-        app.listen(80);
-    })
-    .then(() => console.log('Done!'))
+    .then(() => console.log('Done!'));
 
 
