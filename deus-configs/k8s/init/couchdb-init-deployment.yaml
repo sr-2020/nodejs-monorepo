@@ -5,6 +5,7 @@ metadata:
 spec:
   template:
     spec:
+      restartPolicy: OnFailure
       initContainers:
       - image: alexeyeremin/deus-models
         imagePullPolicy: Always
@@ -20,7 +21,6 @@ spec:
       containers:
       - image: alexeyeremin/deus-couchdb-init
         imagePullPolicy: Always
-        restartPolicy: OnFailure
         name: deus-couchdb-init
         env:
         - name: COUCHDB_USER
