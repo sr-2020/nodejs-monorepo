@@ -1,15 +1,9 @@
-apiVersion: apps/v1beta2
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: couchdb-init
 spec:
-  selector:
-    matchLabels:
-      component: couchdb-init
   template:
-    metadata:
-      labels:
-        component: couchdb-init
     spec:
       initContainers:
       - image: alexeyeremin/deus-models
