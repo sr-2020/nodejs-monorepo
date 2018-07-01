@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: technopark
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: technopark
   ports:
