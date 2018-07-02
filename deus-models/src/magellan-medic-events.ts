@@ -67,6 +67,20 @@ function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Ev
     return;
   }
 
+  if (api.model.numTests <= 0) {
+    const historyEntry = {
+      timestamp: event.timestamp,
+      patientId: data.model._id,
+      patientFullName: data.model.firstName + ' ' + data.model.lastName,
+      type: "Ошибка",
+      text: "Недостачно реактивов для проведения анализа",
+    };
+    api.model.patientHistory.push(historyEntry);
+    return;
+  } else {
+    api.model.numTests--;
+  }
+
   const testFunction = tests[data.test];
   if (testFunction == undefined) {
     api.error(`medic-run-lab-test: unknown test "${data.test}"`);

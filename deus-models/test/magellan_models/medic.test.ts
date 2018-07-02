@@ -47,7 +47,7 @@ describe('Medic Magellan events: ', () => {
         model.numTests = 10;
         const patientHistoryLengthBefore = model.patientHistory.length;
         model = (await process(model, events)).baseModel;
-        // expect(model.numTests).to.equal(10 - 1);
+        expect(model.numTests).to.equal(10 - 1);
         expect(model.patientHistory).to.be.of.length(patientHistoryLengthBefore + 1);
     });
 });
