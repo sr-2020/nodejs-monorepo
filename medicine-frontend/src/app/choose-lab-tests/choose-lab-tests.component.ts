@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatSelectionList } from '@angular/material';
+import { MatDialog, MatSelectionList, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
+import { QrData } from 'deus-qr-lib/lib/qr';
+import { QrType } from 'deus-qr-lib/lib/qr.type';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 import { LabTest } from 'src/datatypes/viewmodel';
 import { DataService } from 'src/services/data.service';
@@ -20,7 +22,8 @@ export class ChooseLabTestsComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    public dialog: MatDialog,
+    private _dialog: MatDialog,
+    private _matSnackBar: MatSnackBar,
     private _dataService: DataService) {}
 
   public ngOnInit() {
@@ -36,14 +39,18 @@ export class ChooseLabTestsComponent implements OnInit {
   public async applyChoice() {
     const checkedTests: string[] = this.tests.selectedOptions.selected.map((v) => v.value);
 
-    const dialogRef = this.dialog.open(QrReaderComponent, {
+    const dialogRef = this._dialog.open(QrReaderComponent, {
       width: '500px',
-      data: { checkedTests },
+      data: {
+        title: 'Сканирование QR-кода пациента',
+        qrType: QrType.Passport,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.afterClosed().subscribe(async (result: QrData) => {
       if (result) {
-        await this._dataService.runTests(result, checkedTests);
+        await this._dataService.runTests(result.payload, checkedTests);
+        this._matSnackBar.open('Aнализ завершен', '', { duration: 2000 });
         this._router.navigate(['history']);
       }
     });

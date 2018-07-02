@@ -45,6 +45,10 @@
   </mat-card-content>
 </mat-card>
 
+<button mat-fab color="primary" class="scan-qr" matTooltip="Добавить реактивы" [matTooltipClass]="'tooltip'" (click)="scanQr()">
+  <mat-icon svgIcon="analyze"></mat-icon>
+</button>
+
 <button mat-fab color="primary" class="new-lab-test" matTooltip="Новый анализ" [matTooltipClass]="'tooltip'" (click)="newLabTest()">
   <mat-icon svgIcon="analyze"></mat-icon>
 </button>

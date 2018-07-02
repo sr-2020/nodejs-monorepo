@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
-import { MatIconRegistry, MatSnackBar } from '@angular/material';
+import { MatDialog, MatIconRegistry, MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
+import { QrData } from 'deus-qr-lib/lib/qr';
+import { QrType } from 'deus-qr-lib/lib/qr.type';
+import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
 import { DataService } from 'src/services/data.service';
 import { renderTimestamp } from 'src/time-utils';
@@ -55,6 +58,7 @@ export class HistoryComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _matSnackBar: MatSnackBar,
+    private _dialog: MatDialog,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
     private _dataService: DataService) {
@@ -108,6 +112,25 @@ export class HistoryComponent implements OnInit {
 
   public newLabTest() {
     this._router.navigate(['choose-lab-tests']);
+  }
+
+  public scanQr() {
+    const dialogRef = this._dialog.open(QrReaderComponent, {
+      width: '500px',
+      data: {
+        title: 'Сканирование QR-кода реактивов',
+        qrType: QrType.LabTerminalRefill,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async (result: QrData) => {
+      if (result) {
+        const hadTests = this._dataService.getViewModel().numTests;
+        await this._dataService.scanQr(result);
+        const haveTests = this._dataService.getViewModel().numTests;
+        this._matSnackBar.open(`Добавлено реактивов на ${haveTests - hadTests} анализов`, '', { duration: 2000 } );
+      }
+    });
   }
 
   public displayFn(user?: PatientFilterOption): string | undefined {

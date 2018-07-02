@@ -1,16 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MatSelectChange } from '@angular/material';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 import { decode, QrData } from 'deus-qr-lib/lib/qr';
 import { QrType } from 'deus-qr-lib/lib/qr.type';
 import { currentTimestamp } from 'src/app/util';
-import { DataService } from 'src/services/data.service';
 
 class QrExpiredError {
 }
 
 class NonPassportQrError {
+}
+
+class NonLabTerminalRefillQrError {
+}
+
+interface QrDialogData {
+  title: string;
+  qrType: QrType;
 }
 
 @Component({
@@ -31,8 +38,8 @@ export class QrReaderComponent implements OnInit {
   public selectedDevice: MediaDeviceInfo;
 
   constructor(
-    private _dialogRef: MatDialogRef<QrReaderComponent>,
-    private _dataService: DataService) { }
+    @Inject(MAT_DIALOG_DATA) private data: QrDialogData,
+    private _dialogRef: MatDialogRef<QrReaderComponent>) { }
 
   public ngOnInit(): void {
     this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
@@ -65,18 +72,29 @@ export class QrReaderComponent implements OnInit {
         throw new QrExpiredError();
       }
 
-      if (data.type != QrType.Passport) {
-        console.error('Scanned QR data type: ', data.type);
-        throw new NonPassportQrError();
+      if (this.data.qrType != data.type) {
+        console.error(`Scanned QR data type: ${data.type} while expecting ${this.data.qrType}`);
+        switch (this.data.qrType) {
+          case QrType.Passport:
+            throw new NonPassportQrError();
+
+          case QrType.LabTerminalRefill:
+            throw new NonLabTerminalRefillQrError();
+
+          default:
+            throw Error('Unsupported QrType passed to QrReaderComponent');
+        }
       }
 
-      this._dialogRef.close(data.payload);
+      this._dialogRef.close(data);
     } catch (e) {
       console.error('Unsupported QR code scanned, error: ' + JSON.stringify(e));
       if (e instanceof QrExpiredError) {
         this.errorMessage = 'Отсканирован код с истекшим сроком действия, пересоздайте код.';
       } else if (e instanceof NonPassportQrError) {
         this.errorMessage = 'Отсканируйте код со страницы-паспорта.';
+      } else if (e instanceof NonLabTerminalRefillQrError) {
+        this.errorMessage = 'Отсканируйте код контейнера с реактивами.';
       } else {
         this.errorMessage = 'Неподдерживаемый формат кода.';
       }

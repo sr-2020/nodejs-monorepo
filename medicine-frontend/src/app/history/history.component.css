@@ -28,6 +28,13 @@
   right: 2em;
 }
 
+.scan-qr {
+  z-index: 2;
+  position: fixed;
+  bottom: 7em;
+  right: 2em;
+}
+
 .mat-tooltip {
   font-size: 14px;
 }

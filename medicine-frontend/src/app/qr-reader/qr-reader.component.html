@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Сканирование QR-кода пациента</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
   <mat-form-field *ngIf="availableDevices">
     <mat-select placeholder="Камера" [ngModel]="selectedDevice.deviceId" (selectionChange)="onDeviceSelectChange($event)">
