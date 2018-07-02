@@ -50,10 +50,7 @@ module.exports = {
             events: 'dict-events',
             // К этим базам обращается модельный код непосредственно
             // (через ReadModelApi.getCatalogObject).
-            conditions: 'dict-conditions', // это и далее - пары <имя каталога>: <имя или алиас базы>
-            effects: 'dict-effects',
-            illnesses: 'dict-illnesses',
-            implants: 'dict-implants'
+            effects: 'dict-effects', // это и далее - пары <имя каталога>: <имя или алиас базы>
         }
 
         // если загрузка из файлов, используется ключ path
