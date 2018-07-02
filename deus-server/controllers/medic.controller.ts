@@ -15,6 +15,10 @@ interface AddCommentRequest {
   text: string;
 }
 
+interface ScanQrRequest {
+  data: any;
+}
+
 @JsonController()
 export class MedicController {
   @Post('/medic/run_lab_tests/:id')
@@ -69,6 +73,31 @@ export class MedicController {
           text: req.text,
           model,
         },
+      }, {
+        eventType: '_RefreshModel',
+        timestamp: timestamp++,
+      }];
+
+      const s = await new EventsProcessor().process(id, events);
+      res.status(s.status);
+      return s.body;
+    } catch (e) {
+      returnCharacterNotFoundOrRethrow(e);
+    }
+  }
+
+  @Post('/medic/scan_qr/:id')
+  public async scanQr( @CurrentUser() user: Account, @Param('id') id: string, @Body() req: ScanQrRequest,
+                       @Res() res: express.Response) {
+    try {
+      id = await canonicalId(id);
+      await checkAccess(user, id);
+
+      let timestamp = currentTimestamp();
+      const events: Event[] = [{
+        eventType: 'scanQr',
+        timestamp: timestamp++,
+        data: req.data,
       }, {
         eventType: '_RefreshModel',
         timestamp: timestamp++,
