@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { process } from '../test_helpers';
-import { getExampleMedicModel } from '../fixtures/models';
+import { getExampleMedicModel, getExampleMagellanModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Medic Magellan events: ', () => {
@@ -32,6 +32,22 @@ describe('Medic Magellan events: ', () => {
         
         model.numTests = 10;
         model = (await process(model, events)).baseModel;
-        expect(model.numTests).to.deep.equal(10 + 12);
+        expect(model.numTests).to.equal(10 + 12);
+    });
+
+    it("Run test", async function () {
+        let model = getExampleMedicModel();
+        const data = {
+            test: "nucleotide",
+            model: getExampleMagellanModel(),
+        };
+        let events = getEvents(model._id,
+            [{ eventType: 'medic-run-lab-test', data }], 100);
+        
+        model.numTests = 10;
+        const patientHistoryLengthBefore = model.patientHistory.length;
+        model = (await process(model, events)).baseModel;
+        // expect(model.numTests).to.equal(10 - 1);
+        expect(model.patientHistory).to.be.of.length(patientHistoryLengthBefore + 1);
     });
 });
