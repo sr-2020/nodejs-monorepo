@@ -124,3 +124,9 @@ export function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
 export function isReadyForGame(model: OrganismModel) {
   return Number(model._id) < 9100;
 }
+
+export interface LabTerminalRefillData {
+  uniqueId: string;
+  numTests: number;
+}
+

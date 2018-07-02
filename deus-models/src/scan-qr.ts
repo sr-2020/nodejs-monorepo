@@ -1,4 +1,5 @@
 import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
+import { LabTerminalRefillData } from '../helpers/magellan';
 
 // TODO: Merge with deus-qr-lib
 enum QrType {
@@ -28,6 +29,11 @@ interface ScanQRData {
   payload: string,
 }
 
+function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
+  let [uniqueId, numTests] = payload.split(',');
+  return { uniqueId, numTests: Number(numTests) }
+}
+
 function scanQR(api: ModelApiInterface, data: ScanQRData) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`)
   switch (data.type) {
@@ -51,8 +57,7 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
     case QrType.LabTerminalRefill:
       {
         let [uniqueId, numTests] = data.payload.split(',');
-        api.sendEvent(null, 'lab-terminal-refill',
-          { uniqueId, numTests: Number(numTests) });
+        api.sendEvent(null, 'lab-terminal-refill', parseLabTerminalRefillData(data.payload));
       }
       break;
 
@@ -78,11 +83,9 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
 }
 
 function aquirePills(api: PreprocessApiInterface, events: Event[]) {
-  if (!api.model.isAlive) return;
-
   events
-    .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.Pill)
-    .forEach((event) => api.aquire('pills', event.data.payload));
+    .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.LabTerminalRefill)
+    .forEach((event) => api.aquire('obj-counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
 }
 
 module.exports = {

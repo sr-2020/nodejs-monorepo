@@ -2,6 +2,20 @@ import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleMedicModel, getExampleMagellanModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
+import { merge } from 'lodash';
+
+interface Global {
+    TEST_EXTERNAL_OBJECTS: any
+}
+
+declare var global: Global;
+
+global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
+    "obj-counters": {
+        '111-111': { _id: '111-111', foo: "bar" },
+        '111-112': { _id: '111-112', bar: "foo" },
+    },
+});
 
 describe('Medic Magellan events: ', () => {
     it("No-op refresh model", async function () {
@@ -19,18 +33,41 @@ describe('Medic Magellan events: ', () => {
 
     it("Add tests via QR", async function () {
         let model = getExampleMedicModel();
-        
+
         const data = {
             type: 20,
             kind: 0,
             validUntil: 0,
-            payload: 'abc3t5,12'
+            payload: '111-111,12'
         }
 
         let events = getEvents(model._id,
             [{ eventType: 'scanQr', data }], 100);
-        
+
         model.numTests = 10;
+        model = (await process(model, events)).baseModel;
+        expect(model.numTests).to.equal(10 + 12);
+    });
+
+    it("Can't add tests with same QR twice", async function () {
+        let model = getExampleMedicModel();
+
+        const data = {
+            type: 20,
+            kind: 0,
+            validUntil: 0,
+            payload: '111-112,12',
+        };
+
+        let events = getEvents(model._id, [{ eventType: 'scanQr', data }], 100);
+
+        model.numTests = 10;
+        model = (await process(model, events)).baseModel;
+        expect(model.numTests).to.equal(10 + 12);
+
+        expect(global.TEST_EXTERNAL_OBJECTS['obj-counters']['111-112']).to.has.property('usedBy', model._id);
+
+        events = getEvents(model._id, [{ eventType: 'scanQr', data }], 200);
         model = (await process(model, events)).baseModel;
         expect(model.numTests).to.equal(10 + 12);
     });
@@ -43,7 +80,7 @@ describe('Medic Magellan events: ', () => {
         };
         let events = getEvents(model._id,
             [{ eventType: 'medic-run-lab-test', data }], 100);
-        
+
         model.numTests = 10;
         const patientHistoryLengthBefore = model.patientHistory.length;
         model = (await process(model, events)).baseModel;
@@ -65,6 +102,6 @@ describe('Medic Magellan events: ', () => {
         model = (await process(model, events)).baseModel;
         expect(model.numTests).to.equal(0);
         expect(model.patientHistory).to.be.of.length(patientHistoryLengthBefore + 1);
-        expect(model.patientHistory[model.patientHistory.length - 1]).to.include({type: "Ошибка" });
+        expect(model.patientHistory[model.patientHistory.length - 1]).to.include({ type: "Ошибка" });
     });
 });

@@ -1,6 +1,6 @@
 import { ModelApiInterface, Event } from "deus-engine-manager-api";
 import { hasMedicViewModel } from "../helpers/view-model-helper";
-import { OrganismModel, BiologicalSystems, systemsIndices } from "../helpers/magellan";
+import { OrganismModel, BiologicalSystems, systemsIndices, LabTerminalRefillData } from "../helpers/magellan";
 import * as shuffle from 'shuffle-array'
 
 interface RunLabTestData {
@@ -124,15 +124,23 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
 }
 
 
-interface LabTerminalRefillData {
-  uniquId: string;
-  numTests: number;
-}
+function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, _: Event) {
+  const counter = api.aquired('obj-counters', data.uniqueId);
+  api.error(JSON.stringify(counter));
+  if (!counter) {
+    api.error("labTerminalRefill: can't aquire lab terminal refill code", { uniqueId: data.uniqueId });
+    return;
+  }
 
-function labTerminalRefill(api: ModelApiInterface,
-  data: LabTerminalRefillData, _: Event) {
-    // TODO(aeremin): Check if uniqueId is aquiredFt
-    api.model.numTests += data.numTests;
+  if (counter.usedBy) {
+    api.warn('labTerminalRefill: already used lab terminal refill code. Cheaters gonna cheat?',
+      { terminalId: api.model._id, uniqueId: data.uniqueId });
+    return;
+  }
+
+  counter.usedBy = api.model._id;
+
+  api.model.numTests += data.numTests;
 }
 
 
