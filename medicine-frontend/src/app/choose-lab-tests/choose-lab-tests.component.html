@@ -1,5 +1,6 @@
 <mat-card class="labcard">
-    <mat-card-title>Выберите анализы</mat-card-title>
+  <mat-card-title>Выберите анализы</mat-card-title>
+  <mat-card-subtitle>Доступно реактивов: {{numTests}}</mat-card-subtitle>
 
   <mat-card-content>
     <mat-selection-list #tests>
@@ -10,6 +11,6 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button (click)="applyChoice()" color="primary">Далее</button>
+    <button mat-raised-button (click)="applyChoice()" color="primary" [disabled]="!canApplyChoice()">Далее</button>
   </mat-card-actions>
 </mat-card>

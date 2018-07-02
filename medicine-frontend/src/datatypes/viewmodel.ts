@@ -16,5 +16,6 @@ export interface LabTest {
 export interface ViewModel {
   patientHistory: HistoryEntry[];
 
+  numTests: number;
   availableTests: LabTest[];
 }

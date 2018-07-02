@@ -16,6 +16,7 @@ export class ChooseLabTestsComponent implements OnInit {
   public tests: MatSelectionList;
 
   public availableTests: LabTest[];
+  public numTests: number;
 
   constructor(
     private _router: Router,
@@ -24,6 +25,12 @@ export class ChooseLabTestsComponent implements OnInit {
 
   public ngOnInit() {
     this.availableTests = this._dataService.getViewModel().availableTests;
+    this.numTests = this._dataService.getViewModel().numTests;
+  }
+
+  public canApplyChoice(): boolean {
+    return this.numTests >= this.tests.selectedOptions.selected.length &&
+                       0 <  this.tests.selectedOptions.selected.length;
   }
 
   public async applyChoice() {
