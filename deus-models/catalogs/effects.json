@@ -1,65 +1,22 @@
 {
     "effects" : [
-        {        
-            "id"    : "demoEffect",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "demoImplantEffect"
-        },
-        {        
-            "id"    : "show-condition",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
+        {
+            "id"    : "show-condition",
+            "class"   : "physiology",
+            "type"    : "normal",
             "handler" : "showCondition"
         },
-        {        
-            "id"    : "show-always-condition",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
+        {
+            "id"    : "show-always-condition",
+            "class"   : "physiology",
+            "type"    : "normal",
             "handler" : "showAlwaysCondition"
         },
-        {        
-            "id"    : "damage-effect",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "damageEffect"
-        },
-        {        
-            "id"    : "change-properties",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "changeProperties"
-        },
-        {        
-            "id"      : "change-mind-cube-effect",       
-            "class"   : "mind",    
-            "type"    : "normal",        
-            "handler" : "changeMindCubesEffect"
-        },
         {
-            "id"    : "timed-recover-hp",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "timedRecoveryEffect"
-        },
-        {        
-            "id"    : "timed-recover-systems",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "timedRecoverSystemsEffect"
-        },
-        {        
-            "id"    : "illness-effect",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "illnessEffect"
-        },
-        {        
-            "id"    : "serenity_immortality_s01",       
-            "class"   : "physiology",    
-            "type"    : "normal",        
-            "handler" : "serenityImmortalityS01Effect"
+            "id"    : "change-properties",
+            "class"   : "physiology",
+            "type"    : "normal",
+            "handler" : "changeProperties"
         }
-
     ]
 }
