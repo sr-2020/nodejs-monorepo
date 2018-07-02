@@ -50,4 +50,21 @@ describe('Medic Magellan events: ', () => {
         expect(model.numTests).to.equal(10 - 1);
         expect(model.patientHistory).to.be.of.length(patientHistoryLengthBefore + 1);
     });
+
+    it("Run test with numTests = 0", async function () {
+        let model = getExampleMedicModel();
+        const data = {
+            test: "nucleotide",
+            model: getExampleMagellanModel(),
+        };
+        let events = getEvents(model._id,
+            [{ eventType: 'medic-run-lab-test', data }], 100);
+
+        model.numTests = 0;
+        const patientHistoryLengthBefore = model.patientHistory.length;
+        model = (await process(model, events)).baseModel;
+        expect(model.numTests).to.equal(0);
+        expect(model.patientHistory).to.be.of.length(patientHistoryLengthBefore + 1);
+        expect(model.patientHistory[model.patientHistory.length - 1]).to.include({type: "Ошибка" });
+    });
 });
