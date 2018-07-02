@@ -48,4 +48,8 @@ export class ChooseLabTestsComponent implements OnInit {
       }
     });
   }
+
+  public cancel() {
+    this._router.navigate(['history']);
+  }
 }
