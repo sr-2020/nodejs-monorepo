@@ -1,4 +1,4 @@
-import { BiologicalSystems, systemsIndices, OrganismModel, System } from "./magellan";
+import { BiologicalSystems, OrganismModel, System, systemsIndices } from './magellan';
 
 export enum Symptoms {
   SevereHeadache,
@@ -73,10 +73,11 @@ export enum Symptoms {
   TactileSensitivityLoss,
   HairLoss,
 
-  Death
+  Death,
 }
 
-export const systemToSymptoms = new Map<BiologicalSystems, Array<Symptoms>>([
+// tslint:disable:max-line-length
+export const systemToSymptoms = new Map<BiologicalSystems, Symptoms[]>([
   [BiologicalSystems.Nervous,
   [Symptoms.SevereHeadache, Symptoms.Faint, Symptoms.Tic, Symptoms.Headache, Symptoms.Dizziness, Symptoms.Dyspnea, Symptoms.Melancholy,
   Symptoms.Jitters, Symptoms.FingertipsTingling, Symptoms.Convulsions, Symptoms.LimbNumbness, Symptoms.Tremor, Symptoms.InvoluntaryMovements, Symptoms.Hallucinations]],
@@ -99,6 +100,7 @@ export const systemToSymptoms = new Map<BiologicalSystems, Array<Symptoms>>([
   [Symptoms.SoftTissuesSwelling, Symptoms.Blisters, Symptoms.InflammationsAbscesses, Symptoms.Hives, Symptoms.Pruritus, Symptoms.SkinPeeling, Symptoms.SkinRedness,
   Symptoms.FingertipsTingling, Symptoms.SkinDarkening, Symptoms.NailsDarkening, Symptoms.FingertipsTingling, Symptoms.TactileSensitivityLoss, Symptoms.HairLoss, Symptoms.Blindness]],
 ]);
+// tslint:enable:max-line-length
 
 export function getSymptomValue(system: System) {
   const l = Math.min(0, system.nucleotide);
@@ -118,9 +120,9 @@ export function getSymptomsInternal(systems: System[]): Set<Symptoms> {
     const v = getSymptomValue(systems[indice]);
     if (Math.abs(v) > 7) return new Set<Symptoms>([Symptoms.Death]);
     if (v > 0)
-      result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v])
+      result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v]);
     if (v < 0)
-      result.add((systemToSymptoms.get(indice) as Symptoms[])[7 + v])
+      result.add((systemToSymptoms.get(indice) as Symptoms[])[7 + v]);
   }
 
   return result;

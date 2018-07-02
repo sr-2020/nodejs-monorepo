@@ -1,12 +1,12 @@
-import { systemsIndices, biologicalSystemsNames, biologicalSystemsColors, SystemColor, systemCorrespondsToColor, BiologicalSystems, colorOfChange } from "../../helpers/magellan";
-import { expect } from "chai";
-import { systemToSymptoms } from "../../helpers/symptoms";
+import { expect } from 'chai';
+import { BiologicalSystems, biologicalSystemsColors, biologicalSystemsNames,
+  colorOfChange, SystemColor, systemCorrespondsToColor, systemsIndices } from '../../helpers/magellan';
 
 describe('Magellan helpers', () => {
   it('systemIndices', () => {
     const indices = systemsIndices();
     expect(indices).to.deep.equal([0, 1, 2, 3, 4, 5, 6]);
-  })
+  });
 
   it('Has name for all systems', () => {
     for (const i of systemsIndices()) {
@@ -69,6 +69,6 @@ describe('Magellan helpers', () => {
       expect(colorOfChange([0, 1, -1, 1, 1, 0, 0])).to.not.exist;
       expect(colorOfChange([1, 0, 0, 0, -10, 4, 1])).to.not.exist;
     });
-  })
+  });
 
 });

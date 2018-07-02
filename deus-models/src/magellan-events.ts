@@ -1,13 +1,13 @@
-import { ModelApiInterface, Modifier, Effect, Condition, Event } from "deus-engine-manager-api";
-import consts = require('../helpers/constants');
+import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 import uuid = require('uuid/v1');
+import consts = require('../helpers/constants');
+import { colorOfChange, getTypedOrganismModel, SystemColor,
+  systemCorrespondsToColor, systemsIndices } from '../helpers/magellan';
 import helpers = require('../helpers/model-helper');
-import { systemsIndices, getTypedOrganismModel, SystemColor, colorOfChange, systemCorrespondsToColor } from "../helpers/magellan";
-import { getSymptomValue } from "../helpers/symptoms";
-
+import { getSymptomValue } from '../helpers/symptoms';
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
-  helpers.addChangeRecord(api, "Состояние систем организма изменилось!", event.timestamp)
+  helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
 
   const model = getTypedOrganismModel(api);
 
@@ -21,7 +21,7 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
 
 interface PreMutationData {
   mutationColor: SystemColor;
-  diseaseStartTimestamp: number
+  diseaseStartTimestamp: number;
 }
 
 interface DiseaseTickData {
@@ -41,19 +41,19 @@ function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event
       newNucleotideValues: systemsIndices().map((i) => {
         if (!systemCorrespondsToColor(preMutationData.mutationColor, i)) return undefined;
         return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
-      })
+      }),
     };
-    api.setTimer(uuid(), consts.MAGELLAN_TICK_MILLISECONDS, "mutation", mutationData);
+    api.setTimer(uuid(), consts.MAGELLAN_TICK_MILLISECONDS, 'mutation', mutationData);
   }
 }
 
 interface MutationData {
   color: SystemColor;
   diseaseStartTimestamp: number;
-  newNucleotideValues: (number | undefined)[];
+  newNucleotideValues: Array<number | undefined>;
 }
 
-function mutation(api: ModelApiInterface, data: MutationData, event: Event) {
+function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
   for (const i of systemsIndices()) {
     if (!systemCorrespondsToColor(data.color, i) &&
       getTypedOrganismModel(api).systems[i].lastModified >= data.diseaseStartTimestamp)
@@ -82,14 +82,13 @@ function useMagellanPill(api: ModelApiInterface, totalChange: number[], event: E
         tickData.preMutationData = {
           mutationColor: color,
           diseaseStartTimestamp: event.timestamp,
-        }
+        };
       }
     }
 
-    api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, "disease-tick", tickData);
+    api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, 'disease-tick', tickData);
   }
 }
-
 
 interface OnTheShipModifier extends Modifier {
   shipId: number;
@@ -99,18 +98,18 @@ function enterShip(api: ModelApiInterface, data: number, event: Event) {
   leaveShip(api, {}, event);
   // TODO: move to config
   const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'physiology', type: 'normal', handler: 'onTheShip' };
-  const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data }
+  const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
 }
 
-function leaveShip(api: ModelApiInterface, unused_data: any, event: Event) {
-  api.removeModifier('OnTheShip')
+function leaveShip(api: ModelApiInterface, _data: any, _event: Event) {
+  api.removeModifier('OnTheShip');
 }
 
 function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
   const c: Condition = {
-    mID: uuid(), id: "on-the-ship", class: 'physiology',
-    text: `Вы находитесь на корабле номер ${modifier.shipId}`
+    mID: uuid(), id: 'on-the-ship', class: 'physiology',
+    text: `Вы находитесь на корабле номер ${modifier.shipId}`,
   };
   api.addCondition(c);
   getTypedOrganismModel(api).location = `ship_${modifier.shipId}`;
@@ -124,6 +123,6 @@ module.exports = () => {
     useMagellanPill,
     onTheShip,
     enterShip,
-    leaveShip
+    leaveShip,
   };
 };

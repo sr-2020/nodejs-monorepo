@@ -1,10 +1,9 @@
+import { ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
 import _ = require('lodash');
-import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { Modifier, ModelApiInterface, PreprocessApiInterface } from "deus-engine-manager-api";
+import helpers = require('../helpers/model-helper');
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
-
 
 function useCure(api: ModelApiInterface, pill) {
     if (api.model.profileType != 'human') return;
@@ -23,15 +22,15 @@ function useStamm(api: ModelApiInterface, pill) {
     }
 }
 
-function useAid(api: ModelApiInterface, pill, event) {
+function useAid(api: ModelApiInterface, _pill, _event) {
     if (api.model.profileType != 'human') return;
     api.model.hp += 1;
 }
 
-function useLastChance(api: ModelApiInterface, pill) {
+function useLastChance(api: ModelApiInterface, _pill) {
     if (api.model.profileType != 'human') return;
 
-    let deathTimer = api.getTimer(consts.DEATH_TIMER);
+    const deathTimer = api.getTimer(consts.DEATH_TIMER);
     if (deathTimer) {
         deathTimer.miliseconds += 20 * 60 * 1000;
         api.info(`new death timer: ${deathTimer.miliseconds}`);
@@ -55,7 +54,7 @@ function usePill(api: ModelApiInterface, data, event) {
         return;
     }
 
-    let code = api.aquired('pills', data.id);
+    const code = api.aquired('pills', data.id);
     if (!code) {
         api.error(`usePill: can't aquire code ${data.id}`);
         return;
@@ -66,7 +65,7 @@ function usePill(api: ModelApiInterface, data, event) {
         return;
     }
 
-    let pill = api.getCatalogObject('pills', code.pillId);
+    const pill = api.getCatalogObject('pills', code.pillId);
     if (!pill) {
         api.error(`usePill: can't load pill ${code.pillId}`);
         return;
@@ -76,9 +75,9 @@ function usePill(api: ModelApiInterface, data, event) {
 
     const previousUsage = _.get(api.model, ['usedPills', pill.id]);
 
-    if(code._id.startsWith("9c5d9d84-dbf2")){
+    if (code._id.startsWith('9c5d9d84-dbf2')) {
 
-        let pillText = code._id.substring(code._id.length - 6);
+        const pillText = code._id.substring(code._id.length - 6);
         helpers.addChangeRecord(api, `Вы использовали препарат ${pillText}`, event.timestamp);
     }
 
@@ -99,14 +98,13 @@ function usePill(api: ModelApiInterface, data, event) {
         case 'narco':
             useNarco(api, pill);
             break;
-        case "generic":
+        case 'generic':
             useGeneric(api, pill);
             break;
         default:
             return;
         }
-    }
-    else {
+    } else {
         api.info(`Pill of type ${pill.id} already used lately, cooldown not expired.`);
     }
 
@@ -125,5 +123,5 @@ function aquirePills(api: PreprocessApiInterface, events) {
 
 module.exports = {
     _preprocess: aquirePills,
-    usePill
+    usePill,
 };

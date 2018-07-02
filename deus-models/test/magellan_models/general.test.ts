@@ -1,30 +1,27 @@
-//Тесты для событий общего назначения (для хакеров и т.д.)
-
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
-import { getExampleMagellanModel } from '../fixtures/models';
-import { getEvents, getRefreshEvent } from '../fixtures/events';
-import consts = require('../../helpers/constants');
-import { systemsIndices, System } from '../../helpers/magellan';
 import { Event } from 'deus-engine-manager-api';
+import consts = require('../../helpers/constants');
+import { System, systemsIndices } from '../../helpers/magellan';
+import { getEvents, getRefreshEvent } from '../fixtures/events';
+import { getExampleMagellanModel } from '../fixtures/models';
+import { process } from '../test_helpers';
 
 function makeSystems(values: number[],
-    lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
-    nucleotides?: number[]): System[] {
+                     lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
+                     nucleotides?: number[]): System[] {
     return systemsIndices().map((i) => {
         return {
-            value: values[i], nucleotide: nucleotides ? nucleotides[i] : 0, lastModified: lastModifieds[i]
-        }
+            value: values[i], nucleotide: nucleotides ? nucleotides[i] : 0, lastModified: lastModifieds[i],
+        };
     });
 }
 
 describe('General Magellan events: ', () => {
 
-    it("No-op refresh model", async function () {
-
+    it('No-op refresh model', async () => {
         const model = getExampleMagellanModel();
         const events = [getRefreshEvent(model._id, model.timestamp + 610 * 1000)];
-        let { baseModel, workingModel } = await process(model, events);
+        const { baseModel, workingModel } = await process(model, events);
 
         expect(baseModel.timestamp).to.equal(610 * 1000);
         expect(workingModel.timestamp).to.equal(610 * 1000);
@@ -34,23 +31,23 @@ describe('General Magellan events: ', () => {
         expect(baseModel).to.deep.equal(model);
     });
 
-    it("Modify systems instant", async function () {
-
-        let model = getExampleMagellanModel();
+    it('Modify systems instant', async () => {
+        const model = getExampleMagellanModel();
         model.systems = makeSystems([0, -1, 2, -3, 18, -2, 0]);
         const events = getEvents(model._id,
             [{ eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
 
-        let { baseModel, workingModel } = await process(model, events);
+        const { baseModel, workingModel } = await process(model, events);
 
-        expect(baseModel.systems).to.deep.equal(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
-        expect(workingModel.systems).to.deep.equal(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
+        expect(baseModel.systems).to.deep.equal(
+            makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
+        expect(workingModel.systems).to.deep.equal(
+            makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
     });
 
-
-    it("Use pill", async function () {
+    it('Use pill', async () => {
         let model = getExampleMagellanModel();
-        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
         let events = getEvents(model._id,
             [{ eventType: 'use-magellan-pill', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
@@ -62,27 +59,30 @@ describe('General Magellan events: ', () => {
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
     });
 
-    it("Use pill via QR", async function () {
+    it('Use pill via QR', async () => {
         let model = getExampleMagellanModel();
-        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
         const data = {
             type: 4,
             kind: 0,
             validUntil: 0,
-            payload: '1,2,-2,-3,0,0,0'
-        }
+            payload: '1,2,-2,-3,0,0,0',
+        };
 
         let events = getEvents(model._id,
             [{ eventType: 'scanQr', data }], 100);
@@ -94,21 +94,23 @@ describe('General Magellan events: ', () => {
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
         events = [getRefreshEvent(model._id, model.timestamp + p)];
         model = (await process(model, events)).baseModel;
-        expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+        expect(model.systems).to.deep.equal(
+            makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
     });
 
-
-    it("Use blue mutation pill", async function () {
+    it('Use blue mutation pill', async () => {
         let model = getExampleMagellanModel();
-        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
         let events = getEvents(model._id,
             [{ eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
@@ -128,16 +130,16 @@ describe('General Magellan events: ', () => {
             [0, 2, -2, 0, 1, 0, 0]));
     });
 
-    it("Use blue mutation pill and introduce compatible change", async function () {
+    it('Use blue mutation pill and introduce compatible change', async () => {
         let model = getExampleMagellanModel();
-        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
         const p = consts.MAGELLAN_TICK_MILLISECONDS;
-        let events: Event[] = [
+        const events: Event[] = [
             { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] , timestamp: 100 },
             { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 1, 0, 0, 0, 0, 0] , timestamp: 200 },
             { characterId: model._id, eventType: 'use-magellan-pill', data: [0, -1, 0, 0, 0, 0, 0] , timestamp: 300 },
-            getRefreshEvent(model._id, 100 + 2 * p)
+            getRefreshEvent(model._id, 100 + 2 * p),
         ];
 
         model = (await process(model, events)).baseModel;
@@ -145,30 +147,30 @@ describe('General Magellan events: ', () => {
             [0, 2, -2, 0, 1, 0, 0]));
     });
 
-    it("Use blue mutation pill and introduce incompatible change", async function () {
+    it('Use blue mutation pill and introduce incompatible change', async () => {
         let model = getExampleMagellanModel();
-        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0])
+        model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
         const p = consts.MAGELLAN_TICK_MILLISECONDS;
-        let events: Event[] = [
+        const events: Event[] = [
             { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] , timestamp: 100 },
             { characterId: model._id, eventType: 'use-magellan-pill', data: [1, 0, 0, 0, 0, 0, 0] , timestamp: 200 },
             { characterId: model._id, eventType: 'use-magellan-pill', data: [-1, 0, 0, 0, 0, 0, 0] , timestamp: 300 },
-            getRefreshEvent(model._id, 100 + 2 * p)
+            getRefreshEvent(model._id, 100 + 2 * p),
         ];
 
         model = (await process(model, events)).baseModel;
         expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [300, 100 + p, 100 + p, 0, 100, 0, 0]));
     });
 
-    it("Enter and leave ship", async function () {
+    it('Enter and leave ship', async () => {
         let baseModel = getExampleMagellanModel();
         let workingModel: any;
 
         let events = getEvents(baseModel._id, [{ eventType: 'enter-ship', data: 17 }]);
         ({ baseModel, workingModel } = (await process(baseModel, events)));
 
-        let cond = workingModel.conditions.find((c: any) => c.id == "on-the-ship");
+        let cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
         expect(cond).is.exist;
         expect(cond.text).to.contain('17');
         expect(workingModel.location).to.equal('ship_17');
@@ -176,7 +178,7 @@ describe('General Magellan events: ', () => {
         events = getEvents(baseModel._id, [{ eventType: 'enter-ship', data: 22 }]);
         ({ baseModel, workingModel } = (await process(baseModel, events)));
 
-        cond = workingModel.conditions.find((c: any) => c.id == "on-the-ship");
+        cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
         expect(cond).is.exist;
         expect(cond.text).to.contain('22');
         expect(cond.text).not.to.contain('17');
@@ -189,16 +191,15 @@ describe('General Magellan events: ', () => {
         expect(workingModel.location).not.exist;
     });
 
-    it("Enter and leave ship QR", async function () {
+    it('Enter and leave ship QR', async () => {
         let baseModel = getExampleMagellanModel();
         let workingModel: any;
-        let viewModels: any;
 
         let events = getEvents(baseModel._id,
             [{ eventType: 'scanQr', data: { type: 5, kind: 0, validUntil: 0, payload: '17' } }]);
-        ({ baseModel, workingModel, viewModels } = (await process(baseModel, events)));
+        ({ baseModel, workingModel } = (await process(baseModel, events)));
 
-        let cond = workingModel.conditions.find((c: any) => c.id == "on-the-ship");
+        const cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
         expect(cond).is.exist;
         expect(cond.text).to.contain('17');
         expect(workingModel.location).to.equal('ship_17');
@@ -210,6 +211,5 @@ describe('General Magellan events: ', () => {
         expect(workingModel.conditions).to.be.empty;
         expect(workingModel.location).not.exist;
     });
-
 
 });

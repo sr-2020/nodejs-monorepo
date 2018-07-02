@@ -2,9 +2,8 @@
  * Эффекты работы имплантов
  */
 
-import helpers = require('../helpers/model-helper');
 import { ModelApiInterface } from 'deus-engine-manager-api';
-
+import helpers = require('../helpers/model-helper');
 
 /**
  * Эффект показывающий состояние пока работает импланта.
@@ -17,13 +16,13 @@ import { ModelApiInterface } from 'deus-engine-manager-api';
  * }
  */
 
-function showCondition(api: ModelApiInterface, modifier){
-    //Получить СПИСОК предикатов для показа (может быть несколько состояний)
-    let params = helpers.checkPredicate(api, modifier.mID, "show-condition", true);
-    api.info("showCondition: start, predicate: " + JSON.stringify(params));
+function showCondition(api: ModelApiInterface, modifier) {
+    // Получить СПИСОК предикатов для показа (может быть несколько состояний)
+    const params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
+    api.info('showCondition: start, predicate: ' + JSON.stringify(params));
 
-    if(params){
-        //Пройти по всем совпадаениям в предикатах и показать все состояния
+    if (params) {
+        // Пройти по всем совпадаениям в предикатах и показать все состояния
         params.forEach( data => {
             helpers.addCharacterCondition(api, data.condition);
         });
@@ -35,16 +34,15 @@ function showCondition(api: ModelApiInterface, modifier){
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api: ModelApiInterface, modifier){
-    api.debug("Show always condition " + JSON.stringify(modifier.conditions));
-    if(modifier.conditions){
-        //Пройти по всем совпадаениям в предикатах и показать все состояния
+function showAlwaysCondition(api: ModelApiInterface, modifier) {
+    api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
+    if (modifier.conditions) {
+        // Пройти по всем совпадаениям в предикатах и показать все состояния
         modifier.conditions.forEach(condition => {
             helpers.addCharacterCondition(api, condition);
         });
     }
 }
-
 
 /**
  * Универсальный эффект "изменение свойства модели" (change-properties)
@@ -58,20 +56,19 @@ function showAlwaysCondition(api: ModelApiInterface, modifier){
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
  *
  */
-function changeProperties(api: ModelApiInterface, modifier){
-    let params = helpers.checkPredicate(api, modifier.mID, "change-properties");
-    api.info("changeProperties: start, predicate: " + JSON.stringify(params));
+function changeProperties(api: ModelApiInterface, modifier) {
+    const params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
+    api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 
-    if(params){
+    if (params) {
         helpers.modifyModelProperties(api, params.operations);
     }
 }
-
 
 module.exports = () => {
     return {
         showCondition,
         changeProperties,
-        showAlwaysCondition
+        showAlwaysCondition,
     };
 };

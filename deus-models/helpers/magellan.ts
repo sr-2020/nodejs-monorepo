@@ -1,4 +1,4 @@
-import { ModelApiInterface, Condition, Modifier } from "deus-engine-manager-api";
+import { Condition, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 
 // TODO(aeremin) Move to deus-engine-manager-api?
 export interface Change {
@@ -14,7 +14,7 @@ export enum BiologicalSystems {
   Digestive,
   Respiratory,
   Musculoskeletal,
-  Integumentary
+  Integumentary,
 }
 
 export const biologicalSystemsNames = new Map<BiologicalSystems, string>([
@@ -129,4 +129,3 @@ export interface LabTerminalRefillData {
   uniqueId: string;
   numTests: number;
 }
-

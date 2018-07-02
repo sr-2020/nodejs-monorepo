@@ -19,7 +19,8 @@
 
         "no-unused-expression": false,
         "no-unused": true,
-        "interface-name": false
+        "interface-name": false,
+        "arrow-parens": false
     },
     "rulesDirectory": []
 }

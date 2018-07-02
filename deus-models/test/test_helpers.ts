@@ -1,9 +1,9 @@
-import * as Path from 'path';
-import { Worker } from 'deus-model-engine/lib/worker';
 import { Config } from 'deus-model-engine/lib/config';
 import { requireDir } from 'deus-model-engine/lib/utils';
+import { Worker } from 'deus-model-engine/lib/worker';
+import * as Path from 'path';
 
-import { EngineContext, Event, EngineResult, EngineResultOk } from 'deus-engine-manager-api';
+import { EngineContext, EngineResult, EngineResultOk, Event } from 'deus-engine-manager-api';
 
 let WORKER_INSTANCE: Worker | null = null;
 
@@ -22,7 +22,7 @@ export function process_(model: EngineContext, events: Event[]): Promise<EngineR
 }
 
 export async function process(model: EngineContext, events: Event[]): Promise<EngineResultOk> {
-    let result = await process_(model, events);
+    const result = await process_(model, events);
     if (result.status == 'error') throw result.error;
     return result;
 }

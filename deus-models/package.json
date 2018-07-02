@@ -44,6 +44,8 @@
     "lodash": "^4.17.4",
     "shuffle-array": "^1.0.1",
     "source-map-support": "^0.4.15",
+    "tslint": "^5.10.0",
+    "tslint-consistent-codestyle": "^1.13.1",
     "type-detect": "^4.0.3",
     "uuid": "^3.2.1",
     "yn": "^2.0.0"

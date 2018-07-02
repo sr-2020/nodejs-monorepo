@@ -19,23 +19,23 @@ enum QrType {
   LabTerminalRefill = 20, // payload is <unique id>,<how many tests to add>
 
   Passport = 100,
-  Bill = 101
+  Bill = 101,
 }
 
 interface ScanQRData {
-  type: QrType,
-  kind: number,
-  validUntil: number,
-  payload: string,
+  type: QrType;
+  kind: number;
+  validUntil: number;
+  payload: string;
 }
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
-  let [uniqueId, numTests] = payload.split(',');
-  return { uniqueId, numTests: Number(numTests) }
+  const [uniqueId, numTests] = payload.split(',');
+  return { uniqueId, numTests: Number(numTests) };
 }
 
 function scanQR(api: ModelApiInterface, data: ScanQRData) {
-  api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`)
+  api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case QrType.Pill:
       if (!api.model.isAlive) return;
@@ -55,15 +55,12 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
       break;
 
     case QrType.LabTerminalRefill:
-      {
-        let [uniqueId, numTests] = data.payload.split(',');
-        api.sendEvent(null, 'lab-terminal-refill', parseLabTerminalRefillData(data.payload));
-      }
+      api.sendEvent(null, 'lab-terminal-refill', parseLabTerminalRefillData(data.payload));
       break;
 
     case QrType.SpaceSuitRefill:
       {
-        let [uniqueId, time] = data.payload.split(',');
+        const [uniqueId, time] = data.payload.split(',');
         api.sendEvent(null, 'space-suit-refill',
           { uniqueId, time: Number(time) });
       }
@@ -71,14 +68,14 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
 
     case QrType.SpaceSuitTakeOff:
       {
-        let [uniqueId, disinfectionPower] = data.payload.split(',');
+        const [uniqueId, disinfectionPower] = data.payload.split(',');
         api.sendEvent(null, 'space-suit-take-off',
           { uniqueId, disinfectionPower: Number(disinfectionPower) });
       }
       break;
 
     default:
-      api.error("Unsupported QR code received", { data });
+      api.error('Unsupported QR code received', { data });
   }
 }
 
@@ -90,5 +87,5 @@ function aquirePills(api: PreprocessApiInterface, events: Event[]) {
 
 module.exports = {
   _preprocess: aquirePills,
-  scanQR
+  scanQR,
 };

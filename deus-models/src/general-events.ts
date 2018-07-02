@@ -2,12 +2,11 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import type = require('type-detect');
-import helpers = require('../helpers/model-helper');
-import consts = require('../helpers/constants');
 import Chance = require('chance');
 import { ModelApiInterface } from 'deus-engine-manager-api';
-let chance = new Chance();
+import type = require('type-detect');
+import helpers = require('../helpers/model-helper');
+const chance = new Chance();
 
 /**
  * Обработчик события "put-condition"
@@ -22,23 +21,23 @@ let chance = new Chance();
  * параметр duration задается в секундах, и он опционален.
  * Если не задано, то состояния добавляются на 2 часа
  */
-function putConditionEvent ( api: ModelApiInterface, data, event ){
-    if(data.text){
-        let cond = api.addCondition(
+function putConditionEvent( api: ModelApiInterface, data, _ ) {
+    if (data.text) {
+        const cond = api.addCondition(
                         {
-                            mID: "",
+                            mID: '',
                             id : `putCondition-${chance.natural({min: 0, max: 999999})}`,
                             text: data.text,
                             details: data.details ? data.details : data.text,
-                            class: data.class ? data.class : "physiology"
+                            class: data.class ? data.class : 'physiology',
                         });
 
-        if(cond){
-            api.info(`putConditionEvent: add condition "${cond.text.substring(0,20)}..."` );
+        if (cond) {
+            api.info(`putConditionEvent: add condition "${cond.text.substring(0, 20)}..."` );
 
-            const duration_ms = data.duration ? Number(data.duration)*1000 : 7200000;
+            const durationMs = data.duration ? Number(data.duration) * 1000 : 7200000;
 
-            helpers.addDelayedEvent(api, duration_ms, "remove-condition", { mID: cond.mID }, `remCond-${cond.mID}` );
+            helpers.addDelayedEvent(api, durationMs, 'remove-condition', { mID: cond.mID }, `remCond-${cond.mID}` );
         }
     }
 }
@@ -50,15 +49,15 @@ function putConditionEvent ( api: ModelApiInterface, data, event ){
  * Удаляет состояние персонажа
  */
 
-function removeConditionEvent ( api: ModelApiInterface, data, event ){
-    if(data.mID){
-        let i = api.model.conditions.findIndex( c => c.mID == data.mID );
+function removeConditionEvent( api: ModelApiInterface, data, _ ) {
+    if (data.mID) {
+        const i = api.model.conditions.findIndex( c => c.mID == data.mID );
 
-        if(i != -1){
-            let text = api.model.conditions[i].text;
+        if (i != -1) {
+            const text = api.model.conditions[i].text;
             api.model.conditions.splice(i, 1);
 
-            api.info(`removeConditionEvent: removed condition "${text.substring(0,20)}..."` );
+            api.info(`removeConditionEvent: removed condition "${text.substring(0, 20)}..."` );
         }
     }
 }
@@ -72,16 +71,16 @@ function removeConditionEvent ( api: ModelApiInterface, data, event ){
  *   text: string,
  * }
  */
-function sendMessageEvent ( api: ModelApiInterface, data, event ){
-    if(data.title && api.model.messages){
-        let message = {
+function sendMessageEvent( api: ModelApiInterface, data, _ ) {
+    if (data.title && api.model.messages) {
+        const message = {
                         mID : helpers.uuidv4(),
                         title: data.title,
                         text: data.text ? data.text : data.title,
                     };
 
         api.model.messages.push(message);
-        api.info(`sendMessageEvent: send message "${message.text.substring(0,20)}..."` );
+        api.info(`sendMessageEvent: send message "${message.text.substring(0, 20)}..."` );
     }
 }
 
@@ -94,9 +93,9 @@ function sendMessageEvent ( api: ModelApiInterface, data, event ){
  *   timestamp: number
  * }
  */
-function addChangeRecord( api: ModelApiInterface, data, event ){
-    if(data.text && data.timestamp){
-        helpers.addChangeRecord(api, data.text, data.timestamp)
+function addChangeRecord( api: ModelApiInterface, data, _ ) {
+    if (data.text && data.timestamp) {
+        helpers.addChangeRecord(api, data.text, data.timestamp);
     }
 }
 
@@ -114,19 +113,19 @@ function addChangeRecord( api: ModelApiInterface, data, event ){
  *   value: string,
  * }
  */
-function changeModelVariableEvent ( api: ModelApiInterface, data, event ){
-    if(data.name && data.value){
-        let restricted = ["_id", "id", "hp", "maxHp", "login", "mail", "profileType", "timestamp",
-                          "mind", "genome", "systems", "conditions", "modifiers", "changes", "messages", "timers" ];
-        if(restricted.find( e => e == data.name)){
+function changeModelVariableEvent( api: ModelApiInterface, data, _ ) {
+    if (data.name && data.value) {
+        const restricted = ['_id', 'id', 'hp', 'maxHp', 'login', 'mail', 'profileType', 'timestamp',
+                          'mind', 'genome', 'systems', 'conditions', 'modifiers', 'changes', 'messages', 'timers' ];
+        if (restricted.find( e => e == data.name)) {
             return;
         }
 
-        if(api.model[data.name]){
-            let t = type(api.model[data.name]);
+        if (api.model[data.name]) {
+            const t = type(api.model[data.name]);
 
-            if(t=="number" || t=="string" || t=="null" || t=="undefined"){
-                let oldValue = api.model[data.name];
+            if (t == 'number' || t == 'string' || t == 'null' || t == 'undefined') {
+                const oldValue = api.model[data.name];
 
                 api.model[data.name] = data.value;
 
@@ -142,6 +141,6 @@ module.exports = () => {
         removeConditionEvent,
         sendMessageEvent,
         changeModelVariableEvent,
-        addChangeRecord
+        addChangeRecord,
     };
 };

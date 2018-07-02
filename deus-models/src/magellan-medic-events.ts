@@ -1,7 +1,7 @@
-import { ModelApiInterface, Event } from "deus-engine-manager-api";
-import { hasMedicViewModel } from "../helpers/view-model-helper";
-import { OrganismModel, BiologicalSystems, systemsIndices, LabTerminalRefillData } from "../helpers/magellan";
-import * as shuffle from 'shuffle-array'
+import { Event, ModelApiInterface } from 'deus-engine-manager-api';
+import * as shuffle from 'shuffle-array';
+import { BiologicalSystems, LabTerminalRefillData, OrganismModel, systemsIndices } from '../helpers/magellan';
+import { hasMedicViewModel } from '../helpers/view-model-helper';
 
 interface RunLabTestData {
   test: string;
@@ -26,54 +26,60 @@ const tests = {
     return {
       type: 'Анализ нуклеотида',
       message: nucleotideTest(model),
-    }
+    };
   },
   test1: (model: OrganismModel): TestResult => {
     return {
-      type: "Тест 1",
-      message: genericTest(model, [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary])
-    }
+      type: 'Тест 1',
+      message: genericTest(model,
+        [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary]),
+    };
   },
   test2: (model: OrganismModel): TestResult => {
     return {
-      type: "Тест 2",
-      message: genericTest(model, [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous])
-    }
+      type: 'Тест 2',
+      message: genericTest(model,
+        [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous]),
+    };
   },
   test3: (model: OrganismModel): TestResult => {
     return {
-      type: "Тест 3",
-      message: genericTest(model, [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive])
-    }
+      type: 'Тест 3',
+      message: genericTest(model,
+        [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive]),
+    };
   },
   test4: (model: OrganismModel): TestResult => {
     return {
-      type: "Тест 4",
-      message: genericTest(model, [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive])
-    }
+      type: 'Тест 4',
+      message: genericTest(model,
+        [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive]),
+    };
   },
   test5: (model: OrganismModel): TestResult => {
     return {
-      type: "Тест 5",
-      message: genericTest(model, [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous])
-    }
+      type: 'Тест 5',
+      message: genericTest(model,
+        [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous]),
+    };
   },
 
-}
+};
 
 function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Event) {
   if (!hasMedicViewModel(api.model)) {
-    api.error("medic-run-lab-test event sent to non-medic account");
+    api.error('medic-run-lab-test event sent to non-medic account');
     return;
   }
 
   if (api.model.numTests <= 0) {
+    // tslint:disable-next-line:no-shadowed-variable
     const historyEntry = {
       timestamp: event.timestamp,
       patientId: data.model._id,
       patientFullName: data.model.firstName + ' ' + data.model.lastName,
-      type: "Ошибка",
-      text: "Недостачно реактивов для проведения анализа",
+      type: 'Ошибка',
+      text: 'Недостачно реактивов для проведения анализа',
     };
     api.model.patientHistory.push(historyEntry);
     return;
@@ -95,11 +101,10 @@ function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Ev
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     type: testResult.type,
     text: testResult.message,
-  }
+  };
 
   api.model.patientHistory.push(historyEntry);
 }
-
 
 interface AddCommentData {
   text: string;
@@ -108,7 +113,7 @@ interface AddCommentData {
 
 function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Event) {
   if (!hasMedicViewModel(api.model)) {
-    api.error("medic-add-comment event sent to non-medic account");
+    api.error('medic-add-comment event sent to non-medic account');
     return;
   }
 
@@ -118,11 +123,10 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     text: data.text,
     type: 'Комментарий',
-  }
+  };
 
   api.model.patientHistory.push(historyEntry);
 }
-
 
 function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, _: Event) {
   const counter = api.aquired('obj-counters', data.uniqueId);
@@ -143,7 +147,6 @@ function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, 
   api.model.numTests += data.numTests;
 }
 
-
 module.exports = () => {
   return {
     medicRunLabTest,
@@ -151,4 +154,3 @@ module.exports = () => {
     labTerminalRefill,
   };
 };
-
