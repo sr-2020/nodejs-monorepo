@@ -27,7 +27,7 @@ export class ChooseLabTestsComponent implements OnInit {
   }
 
   public async applyChoice() {
-    const checkedTests = this.tests.selectedOptions.selected.map((v) => v.value);
+    const checkedTests: string[] = this.tests.selectedOptions.selected.map((v) => v.value);
 
     const dialogRef = this.dialog.open(QrReaderComponent, {
       width: '500px',

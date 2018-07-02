@@ -33,10 +33,10 @@ export class DataService {
     this.setViewModel(response.json().viewModel);
   }
 
-  public async runTests(patientId: string, tests: LabTest[]) {
+  public async runTests(patientId: string, tests: string[]) {
     const fullUrl = GlobalConfig.runTestsBaseUrl + this._authService.getUserId();
     const response = await this._http.post(fullUrl,
-      { patientId, tests: tests.map((t) => t.name) },
+      { patientId, tests },
       this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
       if (response.json().viewModel == undefined) {
         console.error("Didn't get updated viewmodel");
