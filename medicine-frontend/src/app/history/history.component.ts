@@ -119,7 +119,7 @@ export class HistoryComponent implements OnInit {
   }
 
   private update() {
-    this.fullPatientHistory = this._dataService.getViewModel().patientHistory.reverse();
+    this.fullPatientHistory = this._dataService.getViewModel().patientHistory.slice().reverse();
     const seenPatientIds = {};
     this.patientFilterOptions = [new PatientFilterOption().all()];
     for (const entry of this.fullPatientHistory) {
