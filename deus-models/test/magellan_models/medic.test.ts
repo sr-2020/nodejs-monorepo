@@ -11,7 +11,7 @@ interface Global {
 declare var global: Global;
 
 global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
-    'obj-counters': {
+    counters: {
         '111-111': { _id: '111-111', foo: 'bar' },
         '111-112': { _id: '111-112', bar: 'foo' },
     },
@@ -65,7 +65,7 @@ describe('Medic Magellan events: ', () => {
         model = (await process(model, events)).baseModel;
         expect(model.numTests).to.equal(10 + 12);
 
-        expect(global.TEST_EXTERNAL_OBJECTS['obj-counters']['111-112']).to.has.property('usedBy', model._id);
+        expect(global.TEST_EXTERNAL_OBJECTS.counters['111-112']).to.has.property('usedBy', model._id);
 
         events = getEvents(model._id, [{ eventType: 'scanQr', data }], 200);
         model = (await process(model, events)).baseModel;

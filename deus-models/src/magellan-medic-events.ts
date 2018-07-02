@@ -129,7 +129,7 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
 }
 
 function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, _: Event) {
-  const counter = api.aquired('obj-counters', data.uniqueId);
+  const counter = api.aquired('counters', data.uniqueId);
   api.error(JSON.stringify(counter));
   if (!counter) {
     api.error("labTerminalRefill: can't aquire lab terminal refill code", { uniqueId: data.uniqueId });

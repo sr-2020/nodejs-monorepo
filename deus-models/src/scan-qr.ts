@@ -82,7 +82,7 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
 function aquirePills(api: PreprocessApiInterface, events: Event[]) {
   events
     .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.LabTerminalRefill)
-    .forEach((event) => api.aquire('obj-counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
+    .forEach((event) => api.aquire('counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
 }
 
 module.exports = {
