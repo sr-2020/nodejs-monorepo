@@ -5,7 +5,7 @@ import * as shuffle from 'shuffle-array'
 
 interface RunLabTestData {
   test: string;
-  model: any;
+  model: OrganismModel;
 }
 
 interface TestResult {
