@@ -1,6 +1,7 @@
 {
-  "timestamp": 1526828679010,
+  "timestamp": 0,
   "profileType": "medic",
+  "numTests": 10,
   "availableTests": [
     {
       "name": "nucleotide",

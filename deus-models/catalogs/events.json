@@ -80,6 +80,18 @@
         {
             "eventType": "medic-run-lab-test",
             "effects": ["medicRunLabTest"]
+        },
+        {
+            "eventType": "lab-terminal-refill",
+            "effects": ["labTerminalRefill"]
+        },
+        {
+            "eventType": "space-suit-refill",
+            "effects": ["spaceSuitRefill"]
+        },
+        {
+            "eventType": "space-suit-take-off",
+            "effects": ["spaceSuitTakeOff"]
         }
     ]
 }

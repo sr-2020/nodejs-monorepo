@@ -9,6 +9,10 @@ export function getExampleMagellanModel() {
     return require("../../../data_samples/model.json");
 }
 
+export function getExampleMedicModel() {
+    return require("../../../data_samples/medic-model.json");
+}
+
 export const getExampleModel = (id?: string) => ({
     _id: id || randomId(),
     hp: 4,

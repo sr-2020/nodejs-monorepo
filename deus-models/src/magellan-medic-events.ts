@@ -109,10 +109,24 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
   api.model.patientHistory.push(historyEntry);
 }
 
+
+interface LabTerminalRefillData {
+  uniquId: string;
+  numTests: number;
+}
+
+function labTerminalRefill(api: ModelApiInterface,
+  data: LabTerminalRefillData, _: Event) {
+    // TODO(aeremin): Check if uniqueId is aquiredFt
+    api.model.numTests += data.numTests;
+}
+
+
 module.exports = () => {
   return {
     medicRunLabTest,
     medicAddComment,
+    labTerminalRefill,
   };
 };
 

@@ -12,7 +12,10 @@ enum QrType {
   EnterShip = 5,     // payload should contain ship id (number)
   LeaveShip = 6,
 
-  SpaceSuitRefill = 7, // payload is time in minutes
+  SpaceSuitRefill = 7, // payload is <unique id>,<time in minutes>
+  SpaceSuitTakeOff = 8, // payload is life support system disinfection power
+
+  LabTerminalRefill = 20, // payload is <unique id>,<how many tests to add>
 
   Passport = 100,
   Bill = 101
@@ -44,6 +47,33 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
     case QrType.LeaveShip:
       api.sendEvent(null, 'leave-ship', {});
       break;
+
+    case QrType.LabTerminalRefill:
+      {
+        let [uniqueId, numTests] = data.payload.split(',');
+        api.sendEvent(null, 'lab-terminal-refill',
+          { uniqueId, numTests: Number(numTests) });
+      }
+      break;
+
+    case QrType.SpaceSuitRefill:
+      {
+        let [uniqueId, time] = data.payload.split(',');
+        api.sendEvent(null, 'space-suit-refill',
+          { uniqueId, time: Number(time) });
+      }
+      break;
+
+    case QrType.SpaceSuitTakeOff:
+      {
+        let [uniqueId, disinfectionPower] = data.payload.split(',');
+        api.sendEvent(null, 'space-suit-take-off',
+          { uniqueId, disinfectionPower: Number(disinfectionPower) });
+      }
+      break;
+
+    default:
+      api.error("Unsupported QR code received", { data });
   }
 }
 
