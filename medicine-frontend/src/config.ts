@@ -1,4 +1,4 @@
-const baseAliceUrl = 'http://magellan2018.aerem.in:8157/';
+const baseAliceUrl = 'https://api.magellan2018.aerem.in/';
 
 // tslint:disable-next-line:variable-name
 export const GlobalConfig = {
