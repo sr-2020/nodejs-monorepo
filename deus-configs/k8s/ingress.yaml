@@ -8,6 +8,11 @@ spec:
     - technopark.magellan2018.aerem.in
     - lab.magellan2018.aerem.in
     - api.magellan2018.aerem.in
+    - qr.magellan2018.aerem.in
+    - flights.magellan2018.aerem.in
+    - couchdb.magellan2018.aerem.in
+    - kibana.magellan2018.aerem.in
+    - phpmyadmin.magellan2018.aerem.in
     secretName: tls-secret
   rules:
   - host: technopark.magellan2018.aerem.in
@@ -28,3 +33,33 @@ spec:
       - backend:
           serviceName: deus-server
           servicePort: 8157
+  - host: qr.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: deus-qr-lib
+          servicePort: 8159
+  - host: flights.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: magellan-flights-server
+          servicePort: 8010
+  - host: couchdb.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: couchdb
+          servicePort: 5984
+  - host: kibana.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: kibana
+          servicePort: 5601
+  - host: phpmyadmin.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: phpmyadmin
+          servicePort: 8024

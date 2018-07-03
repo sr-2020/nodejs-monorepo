@@ -5,7 +5,7 @@ metadata:
   labels:
     run: phpmyadmin
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     run: phpmyadmin
   ports:

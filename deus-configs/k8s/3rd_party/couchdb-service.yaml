@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: couchdb
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: couchdb
   ports:

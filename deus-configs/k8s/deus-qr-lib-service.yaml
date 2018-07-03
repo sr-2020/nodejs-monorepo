@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: deus-qr-lib
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: deus-qr-lib
   ports:

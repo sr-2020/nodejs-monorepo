@@ -5,7 +5,7 @@ metadata:
   labels:
     run: kibana
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     run: kibana
   ports:

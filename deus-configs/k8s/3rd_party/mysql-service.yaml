@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mysql
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: mysql
   ports:
