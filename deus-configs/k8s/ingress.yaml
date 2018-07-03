@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  tls:
+  - hosts:
+    - technopark.magellan2018.aerem.in
+    - lab.magellan2018.aerem.in
+    secretName: tls-secret
+  rules:
+  - host: technopark.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: technopark
+          servicePort: 8888
+  - host: lab.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: medicine-frontend
+          servicePort: 8000

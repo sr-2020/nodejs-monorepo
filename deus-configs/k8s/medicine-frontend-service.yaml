@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: medicine-frontend
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: medicine-frontend
   ports:
