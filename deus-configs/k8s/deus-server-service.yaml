@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: deus-server
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     component: deus-server
   ports:

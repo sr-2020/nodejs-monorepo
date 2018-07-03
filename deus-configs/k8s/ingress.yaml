@@ -7,6 +7,7 @@ spec:
   - hosts:
     - technopark.magellan2018.aerem.in
     - lab.magellan2018.aerem.in
+    - api.magellan2018.aerem.in
     secretName: tls-secret
   rules:
   - host: technopark.magellan2018.aerem.in
@@ -21,3 +22,9 @@ spec:
       - backend:
           serviceName: medicine-frontend
           servicePort: 8000
+  - host: api.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: deus-server
+          servicePort: 8157
