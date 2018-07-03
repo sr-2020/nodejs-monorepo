@@ -65,7 +65,9 @@ export class HistoryComponent implements OnInit {
     iconRegistry.addSvgIcon(
       'analyze',
       sanitizer.bypassSecurityTrustResourceUrl('assets/analyze.svg'));
-
+    iconRegistry.addSvgIcon(
+        'scan-qr-code',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/scan-qr-code.svg'));
     this.addCommentForm = this._formBuilder.group({
       patientId: ['', Validators.required],
       comment: ['', Validators.required],
