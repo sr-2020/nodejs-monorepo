@@ -19,13 +19,13 @@ spec:
         - containerPort: 8888
         readinessProbe:
           httpGet:
-            path: /ping
+            path: /get-params
             port: 8888
           initialDelaySeconds: 3
           periodSeconds: 20
         livenessProbe:
           httpGet:
-            path: /ping
+            path: /get-params
             port: 8888
           initialDelaySeconds: 3
           periodSeconds: 20
