@@ -19,13 +19,13 @@ spec:
         - containerPort: 8010
         readinessProbe:
           httpGet:
-            path: /test
+            path: /test/
             port: 8010
           initialDelaySeconds: 3
           periodSeconds: 20
         livenessProbe:
           httpGet:
-            path: /test
+            path: /test/
             port: 8010
           initialDelaySeconds: 3
           periodSeconds: 20
