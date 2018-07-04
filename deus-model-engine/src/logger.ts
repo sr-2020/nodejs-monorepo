@@ -51,7 +51,7 @@ export default {
     debug: defLevel('debug'),
     info: defLevel('info'),
     notice: defLevel('notice'),
-    warn: defLevel('warning'),
+    warn: defLevel('warn'),
     error: defLevel('error'),
     crit: defLevel('crit')
 }
