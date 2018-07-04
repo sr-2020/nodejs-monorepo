@@ -1,4 +1,4 @@
-export type LogLevel = 'debug' | 'info' | 'notice' | 'warning' | 'error' | 'crit' | 'alert' | 'emerg';
+export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
 export type Event = {
