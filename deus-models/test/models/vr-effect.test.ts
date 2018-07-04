@@ -1,14 +1,14 @@
 // Тесты для событий VR
 
 import { expect } from 'chai';
-import { getEvents } from '../fixtures/events';
-import { getExampleModel } from '../fixtures/models';
-import { process } from '../test_helpers';
+import { getEvents } from '../helpers/events';
+import { getExampleDeusModel } from '../helpers/example-models';
+import { process } from '../helpers/util';
 
 describe('VR events: ', () => {
 
     it('Enter VR', async () => {
-        const model = getExampleModel();
+        const model = getExampleDeusModel();
         const enterTimestamp = model.timestamp + 100;
         const events = getEvents(model._id, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
         const { baseModel } = await process(model, events);
@@ -18,7 +18,7 @@ describe('VR events: ', () => {
     });
 
     it('Enter & Exit VR', async () => {
-        const model = getExampleModel();
+        const model = getExampleDeusModel();
         const enterTimestamp = model.timestamp + 100;
         let events = getEvents(model._id, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
         let { baseModel } = await process(model, events);

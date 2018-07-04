@@ -1,5 +1,5 @@
 /**
- * Эффекты работы имплантов
+ * Разные универсальный эффекты
  */
 
 import { ModelApiInterface } from 'deus-engine-manager-api';
@@ -17,16 +17,16 @@ import helpers = require('../helpers/model-helper');
  */
 
 function showCondition(api: ModelApiInterface, modifier) {
-    // Получить СПИСОК предикатов для показа (может быть несколько состояний)
-    const params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
-    api.info('showCondition: start, predicate: ' + JSON.stringify(params));
+  // Получить СПИСОК предикатов для показа (может быть несколько состояний)
+  const params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
+  api.info('showCondition: start, predicate: ' + JSON.stringify(params));
 
-    if (params) {
-        // Пройти по всем совпадаениям в предикатах и показать все состояния
-        params.forEach( data => {
-            helpers.addCharacterCondition(api, data.condition);
-        });
-    }
+  if (params) {
+    // Пройти по всем совпадаениям в предикатах и показать все состояния
+    params.forEach(data => {
+      helpers.addCharacterCondition(api, data.condition);
+    });
+  }
 }
 
 /**
@@ -35,13 +35,13 @@ function showCondition(api: ModelApiInterface, modifier) {
  */
 
 function showAlwaysCondition(api: ModelApiInterface, modifier) {
-    api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
-    if (modifier.conditions) {
-        // Пройти по всем совпадаениям в предикатах и показать все состояния
-        modifier.conditions.forEach(condition => {
-            helpers.addCharacterCondition(api, condition);
-        });
-    }
+  api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
+  if (modifier.conditions) {
+    // Пройти по всем совпадаениям в предикатах и показать все состояния
+    modifier.conditions.forEach(condition => {
+      helpers.addCharacterCondition(api, condition);
+    });
+  }
 }
 
 /**
@@ -57,18 +57,18 @@ function showAlwaysCondition(api: ModelApiInterface, modifier) {
  *
  */
 function changeProperties(api: ModelApiInterface, modifier) {
-    const params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
-    api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
+  const params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
+  api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 
-    if (params) {
-        helpers.modifyModelProperties(api, params.operations);
-    }
+  if (params) {
+    helpers.modifyModelProperties(api, params.operations);
+  }
 }
 
 module.exports = () => {
-    return {
-        showCondition,
-        changeProperties,
-        showAlwaysCondition,
-    };
+  return {
+    showCondition,
+    changeProperties,
+    showAlwaysCondition,
+  };
 };

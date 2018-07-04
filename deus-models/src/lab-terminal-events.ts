@@ -1,6 +1,6 @@
 import { Event, ModelApiInterface } from 'deus-engine-manager-api';
 import * as shuffle from 'shuffle-array';
-import { BiologicalSystems, LabTerminalRefillData, OrganismModel, systemsIndices } from '../helpers/magellan';
+import { BiologicalSystems, LabTerminalRefillData, OrganismModel, systemsIndices } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';
 
 interface RunLabTestData {

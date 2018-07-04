@@ -1,4 +1,4 @@
-import { BiologicalSystems, OrganismModel, System, systemsIndices } from './magellan';
+import { BiologicalSystems, OrganismModel, System, systemsIndices } from './basic-types';
 
 export enum Symptoms {
   SevereHeadache,

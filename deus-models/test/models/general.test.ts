@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { getEvents, getRefreshEvent } from '../fixtures/events';
-import { getExampleModel } from '../fixtures/models';
-import { process } from '../test_helpers';
+import { getEvents, getRefreshEvent } from '../helpers/events';
+import { getExampleDeusModel } from '../helpers/example-models';
+import { process } from '../helpers/util';
 
 describe('General events: ', () => {
 
@@ -19,7 +19,7 @@ describe('General events: ', () => {
             duration: 600,
         };
 
-        const model = getExampleModel();
+        const model = getExampleDeusModel();
         let events = getEvents(model._id, [{ eventType: 'put-condition', data: eventData },
         { eventType: 'put-condition', data: eventData2 }], model.timestamp + 100);
         let { baseModel } = await process(model, events);
@@ -57,7 +57,7 @@ describe('General events: ', () => {
             text: 'Test Message details',
         };
 
-        const model = getExampleModel();
+        const model = getExampleDeusModel();
         const events = getEvents(model._id, [{ eventType: 'send-message', data: msgData }], model.timestamp + 100);
         const { baseModel } = await process(model, events);
 
@@ -69,7 +69,7 @@ describe('General events: ', () => {
     });
 
     it('Change variable', async () => {
-        const model = getExampleModel();
+        const model = getExampleDeusModel();
         const events = getEvents(model._id,
             [{ eventType: 'change-model-variable', data: { name: 'sweethome', value: 'new_location' } },
         { eventType: 'change-model-variable', data: { name: 'login', value: 'test-login' } }], model.timestamp + 100);

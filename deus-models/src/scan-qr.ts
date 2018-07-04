@@ -1,5 +1,5 @@
 import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
-import { LabTerminalRefillData } from '../helpers/magellan';
+import { LabTerminalRefillData } from '../helpers/basic-types';
 
 // TODO: Merge with deus-qr-lib
 enum QrType {

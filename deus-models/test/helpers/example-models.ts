@@ -3,15 +3,15 @@ function randomId() {
     return Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 }
 
-export function getExampleMagellanModel() {
+export function getExampleBiologicalOrganismModel() {
     return require('../../../data_samples/model.json');
 }
 
-export function getExampleMedicModel() {
+export function getExampleLabTerminalModel() {
     return require('../../../data_samples/medic-model.json');
 }
 
-export const getExampleModel = (id?: string) => ({
+export const getExampleDeusModel = (id?: string) => ({
     _id: id || randomId(),
     hp: 4,
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { BiologicalSystems, biologicalSystemsColors, biologicalSystemsNames,
-  colorOfChange, SystemColor, systemCorrespondsToColor, systemsIndices } from '../../helpers/magellan';
+  colorOfChange, SystemColor, systemCorrespondsToColor, systemsIndices } from '../../helpers/basic-types';
 
 describe('Magellan helpers', () => {
   it('systemIndices', () => {

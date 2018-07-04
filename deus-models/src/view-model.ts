@@ -1,6 +1,6 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
 import { BiologicalSystems, biologicalSystemsNames, Change,
-  isReadyForGame, OrganismModel, systemsIndices } from '../helpers/magellan';
+  isReadyForGame, OrganismModel, systemsIndices } from '../helpers/basic-types';
 import { getSymptoms, Symptoms } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 

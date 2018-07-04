@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { System, systemsIndices } from '../../helpers/magellan';
+import { System, systemsIndices } from '../../helpers/basic-types';
 import { getSymptomsInternal, getSymptomValue, Symptoms, systemToSymptoms } from '../../helpers/symptoms';
 
 function makeSystem(value: number, nucleotide: number, lastModified: number = 0): System {

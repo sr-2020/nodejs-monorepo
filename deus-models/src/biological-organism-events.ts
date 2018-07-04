@@ -1,8 +1,8 @@
 import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 import uuid = require('uuid/v1');
-import consts = require('../helpers/constants');
 import { colorOfChange, getTypedOrganismModel, SystemColor,
-  systemCorrespondsToColor, systemsIndices } from '../helpers/magellan';
+  systemCorrespondsToColor, systemsIndices } from '../helpers/basic-types';
+import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import { getSymptomValue } from '../helpers/symptoms';
 
