@@ -13,23 +13,13 @@ export function getExampleLabTerminalModel() {
 
 export const getExampleDeusModel = (id?: string) => ({
     _id: id || randomId(),
-    hp: 4,
-
-    randomSeed: 12345678,
-
     login: 'john.smith',
-    mail: 'john.smith@alice.digital',
+
     profileType: 'human',
-    firstName: 'Джон',
-    nicName: '',
-    lastName: 'Смит',
-    model: '',  // For droids
-    sex: 'male',
     sweethome: 'Жилые комплексы PanAm',
-    corporation: 'Корпорация Pan American Sunrise Technology Corp.',
-    maxSecondsInVr: 1200,
     isAlive: true,
 
+    maxSecondsInVr: 1200,
     lastVREnterTimestamp: 0,
     lastVREnterDuration: 0,
     totalSpentInVR: 0,
