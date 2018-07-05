@@ -7,66 +7,66 @@ metadata:
 spec:
   tls:
   - hosts:
-    - technopark.magellan2018.aerem.in
-    - lab.magellan2018.aerem.in
-    - api.magellan2018.aerem.in
-    - qr.magellan2018.aerem.in
-    - flights.magellan2018.aerem.in
-    - couchdb.magellan2018.aerem.in
-    - kibana.magellan2018.aerem.in
-    - phpmyadmin.magellan2018.aerem.in
-    - elasticsearch.magellan2018.aerem.in
+    - technopark.alice.magellan2018.ru
+    - lab.alice.magellan2018.ru
+    - api.alice.magellan2018.ru
+    - qr.alice.magellan2018.ru
+    - flights.alice.magellan2018.ru
+    - couchdb.alice.magellan2018.ru
+    - kibana.alice.magellan2018.ru
+    - phpmyadmin.alice.magellan2018.ru
+    - elasticsearch.alice.magellan2018.ru
     secretName: tls-secret
   rules:
-  - host: technopark.magellan2018.aerem.in
+  - host: technopark.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: technopark
           servicePort: 8888
-  - host: lab.magellan2018.aerem.in
+  - host: lab.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: medicine-frontend
           servicePort: 8000
-  - host: api.magellan2018.aerem.in
+  - host: api.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: deus-server
           servicePort: 8157
-  - host: qr.magellan2018.aerem.in
+  - host: qr.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: deus-qr-lib
           servicePort: 8159
-  - host: flights.magellan2018.aerem.in
+  - host: flights.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: magellan-flights-server
           servicePort: 8010
-  - host: couchdb.magellan2018.aerem.in
+  - host: couchdb.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: couchdb
           servicePort: 5984
-  - host: kibana.magellan2018.aerem.in
+  - host: kibana.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: kibana
           servicePort: 5601
-  - host: phpmyadmin.magellan2018.aerem.in
+  - host: phpmyadmin.alice.magellan2018.ru
     http:
       paths:
       - backend:
           serviceName: phpmyadmin
           servicePort: 8024
-  - host: elasticsearch.magellan2018.aerem.in
+  - host: elasticsearch.alice.magellan2018.ru
     http:
       paths:
       - backend:
