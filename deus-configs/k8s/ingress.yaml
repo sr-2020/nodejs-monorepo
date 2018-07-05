@@ -2,6 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
 spec:
   tls:
   - hosts:
@@ -13,6 +15,7 @@ spec:
     - couchdb.magellan2018.aerem.in
     - kibana.magellan2018.aerem.in
     - phpmyadmin.magellan2018.aerem.in
+    - elasticsearch.magellan2018.aerem.in
     secretName: tls-secret
   rules:
   - host: technopark.magellan2018.aerem.in
@@ -63,3 +66,9 @@ spec:
       - backend:
           serviceName: phpmyadmin
           servicePort: 8024
+  - host: elasticsearch.magellan2018.aerem.in
+    http:
+      paths:
+      - backend:
+          serviceName: elasticsearch
+          servicePort: 9200
