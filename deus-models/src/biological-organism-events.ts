@@ -68,7 +68,7 @@ function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
   }
 }
 
-function useMagellanPill(api: ModelApiInterface, totalChange: number[], event: Event) {
+function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[], event: Event) {
   const totalTicks = Math.max(...totalChange.map(v => Math.abs(v)));
   for (let i = 0; i < totalTicks; ++i) {
     const adjustment = totalChange.map(v => {
@@ -95,14 +95,14 @@ interface OnTheShipModifier extends Modifier {
 }
 
 function enterShip(api: ModelApiInterface, data: number, event: Event) {
-  leaveShip(api, {}, event);
+  leaveShip(api, null, event);
   // TODO: move to config
   const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'physiology', type: 'normal', handler: 'onTheShip' };
   const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
 }
 
-function leaveShip(api: ModelApiInterface, _data: any, _event: Event) {
+function leaveShip(api: ModelApiInterface, _data: null, _event: Event) {
   api.removeModifier('OnTheShip');
 }
 
@@ -120,7 +120,7 @@ module.exports = () => {
     modifySystemsInstant,
     diseaseTick,
     mutation,
-    useMagellanPill,
+    biologicalSystemsInfluence,
     onTheShip,
     enterShip,
     leaveShip,

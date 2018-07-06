@@ -43,7 +43,7 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
       break;
 
     case QrType.MagellanPill:
-      api.sendEvent(null, 'use-magellan-pill', data.payload.split(',').map(Number));
+      api.sendEvent(null, 'biological-systems-influence', data.payload.split(',').map(Number));
       break;
 
     case QrType.EnterShip:

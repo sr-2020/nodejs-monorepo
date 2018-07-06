@@ -61,8 +61,8 @@
             "effects": ["mutation"]
         },
         {
-            "eventType": "use-magellan-pill",
-            "effects": ["useMagellanPill"]
+            "eventType": "biological-systems-influence",
+            "effects": ["biologicalSystemsInfluence"]
         },
 
         {

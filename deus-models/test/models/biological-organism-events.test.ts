@@ -50,7 +50,7 @@ describe('General Magellan events: ', () => {
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
     let events = getEvents(model._id,
-      [{ eventType: 'use-magellan-pill', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
+      [{ eventType: 'biological-systems-influence', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
@@ -113,7 +113,7 @@ describe('General Magellan events: ', () => {
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
     let events = getEvents(model._id,
-      [{ eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
+      [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 1, -1, 0, 1, 0, 0], [0, 100, 100, 0, 100, 0, 0]));
@@ -136,9 +136,9 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0], timestamp: 100 },
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 1, 0, 0, 0, 0, 0], timestamp: 200 },
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [0, -1, 0, 0, 0, 0, 0], timestamp: 300 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0], timestamp: 100 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [0, 1, 0, 0, 0, 0, 0], timestamp: 200 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [0, -1, 0, 0, 0, 0, 0], timestamp: 300 },
       getRefreshEvent(model._id, 100 + 2 * p),
     ];
 
@@ -153,9 +153,9 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [0, 2, -2, 0, 1, 0, 0], timestamp: 100 },
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [1, 0, 0, 0, 0, 0, 0], timestamp: 200 },
-      { characterId: model._id, eventType: 'use-magellan-pill', data: [-1, 0, 0, 0, 0, 0, 0], timestamp: 300 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0], timestamp: 100 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [1, 0, 0, 0, 0, 0, 0], timestamp: 200 },
+      { characterId: model._id, eventType: 'biological-systems-influence', data: [-1, 0, 0, 0, 0, 0, 0], timestamp: 300 },
       getRefreshEvent(model._id, 100 + 2 * p),
     ];
 
