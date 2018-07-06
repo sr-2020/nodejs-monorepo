@@ -33,6 +33,20 @@ describe('General Magellan events: ', () => {
 
   it('Modify systems instant', async () => {
     const model = getExampleBiologicalOrganismModel();
+    model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [1, 0, -1, 0, 2, 0, 0]);
+    const events = getEvents(model._id,
+      [{ eventType: 'modify-nucleotide-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
+
+    const { baseModel, workingModel } = await process(model, events);
+
+    expect(baseModel.systems).to.deep.equal(
+      makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
+    expect(workingModel.systems).to.deep.equal(
+      makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
+  });
+
+  it('Modify nucleotide instant', async () => {
+    const model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, -1, 2, -3, 18, -2, 0]);
     const events = getEvents(model._id,
       [{ eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);

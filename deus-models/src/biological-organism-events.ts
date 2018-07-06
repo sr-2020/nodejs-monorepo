@@ -19,6 +19,16 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
   }
 }
 
+function modifyNucleotideInstant(api: ModelApiInterface, data: number[], _event: Event) {
+  const model = getTypedOrganismModel(api);
+
+  for (const i of systemsIndices()) {
+    if (data[i] != 0) {
+      model.systems[i].nucleotide += data[i];
+    }
+  }
+}
+
 interface PreMutationData {
   mutationColor: SystemColor;
   diseaseStartTimestamp: number;
@@ -118,6 +128,7 @@ function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
 module.exports = () => {
   return {
     modifySystemsInstant,
+    modifyNucleotideInstant,
     diseaseTick,
     mutation,
     biologicalSystemsInfluence,
