@@ -242,7 +242,9 @@ function getPassportScreen(model: OrganismModel) {
 
 function getToolbar(model: OrganismModel) {
   return {
-    airSecondsLeft: model.spaceSuit.oxygenLeftMs / 1000,
+    spaceSuitOn: model.spaceSuit.on,
+    oxygenCapacity: model.spaceSuit.oxygenCapacity,
+    timestampWhenPutOn: model.spaceSuit.timestampWhenPutOn,
   };
 }
 

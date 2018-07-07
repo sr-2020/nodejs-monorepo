@@ -68,7 +68,10 @@
             "eventType": "biological-systems-influence",
             "effects": ["biologicalSystemsInfluence"]
         },
-
+        {
+            "eventType": "xeno-disease",
+            "effects": ["xenoDisease"]
+        },
         {
             "eventType": "enter-ship",
             "effects": ["enterShip"]

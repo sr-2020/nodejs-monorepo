@@ -1,5 +1,5 @@
 import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
-import { LabTerminalRefillData } from '../helpers/basic-types';
+import { LabTerminalRefillData, XenoDisease } from '../helpers/basic-types';
 
 // TODO: Merge with deus-qr-lib
 enum QrType {
@@ -15,6 +15,10 @@ enum QrType {
 
   SpaceSuitRefill = 7, // payload is <unique id>,<time in minutes>
   SpaceSuitTakeOff = 8, // payload is life support system disinfection power
+
+  // Payload is 1,2,3,0,1,2,0,26 where first 7 numbers are systems influce,
+  // and the last one is disease power
+  XenoDisease = 9,
 
   LabTerminalRefill = 20, // payload is <unique id>,<how many tests to add>
 
@@ -67,10 +71,18 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
       break;
 
     case QrType.SpaceSuitTakeOff:
+      api.sendEvent(null, 'space-suit-take-off', Number(data.payload));
+      break;
+
+    case QrType.XenoDisease:
       {
-        const [uniqueId, disinfectionPower] = data.payload.split(',');
-        api.sendEvent(null, 'space-suit-take-off',
-          { uniqueId, disinfectionPower: Number(disinfectionPower) });
+        const values = data.payload.split(',').map(Number);
+        const power = values.pop() as number;
+        const diseaseData: XenoDisease = {
+          influence: values,
+          power,
+        };
+        api.sendEvent(null, 'xeno-disease', diseaseData);
       }
       break;
 
@@ -81,7 +93,8 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
 
 function aquirePills(api: PreprocessApiInterface, events: Event[]) {
   events
-    .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.LabTerminalRefill)
+    .filter((event) => event.eventType == 'scanQr' &&
+      (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill))
     .forEach((event) => api.aquire('counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
 }
 

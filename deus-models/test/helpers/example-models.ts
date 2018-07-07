@@ -1,9 +1,10 @@
+import { OrganismModel } from '../../helpers/basic-types';
 
 function randomId() {
     return Math.floor(Math.random() * 10000).toString().padStart(4, '0');
 }
 
-export function getExampleBiologicalOrganismModel() {
+export function getExampleBiologicalOrganismModel(): OrganismModel {
     return require('../../../data_samples/model.json');
 }
 

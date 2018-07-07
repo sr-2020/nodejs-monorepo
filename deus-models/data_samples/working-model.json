@@ -95,6 +95,9 @@
     }
   ],
   "spaceSuit": {
-    "oxygenLeftMs": 60000
+    "on": false,
+    "oxygenCapacity": 0,
+    "timestampWhenPutOn": 0,
+    "diseases": []
   }
 }

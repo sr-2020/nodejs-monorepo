@@ -1,10 +1,22 @@
 import { expect } from 'chai';
 import { Event } from 'deus-engine-manager-api';
-import { System, systemsIndices } from '../../helpers/basic-types';
+import { merge } from 'lodash';
+import { System, systemsIndices, OrganismModel } from '../../helpers/basic-types';
 import consts = require('../../helpers/constants');
 import { getEvents, getRefreshEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 import { process } from '../helpers/util';
+
+interface Global {
+  TEST_EXTERNAL_OBJECTS: any;
+}
+
+declare var global: Global;
+global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
+  counters: {
+    'ss-111': { _id: 'ss-111' },
+  },
+});
 
 function makeSystems(values: number[],
                      lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
@@ -244,4 +256,49 @@ describe('General Magellan events: ', () => {
     expect(workingModel.location).not.exist;
   });
 
+  describe('Space suit actions', () => {
+    it('Autoexpiration', async () => {
+      let baseModel = getExampleBiologicalOrganismModel();
+      baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+      let workingModel: OrganismModel;
+
+      let events = getEvents(baseModel._id,
+        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-111,10' } }],
+        100);
+      ({ baseModel, workingModel } = (await process(baseModel, events)));
+      expect(baseModel.spaceSuit).to.deep.include({on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100});
+      expect(workingModel.spaceSuit).to.deep.include({on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100});
+
+      events = getEvents(baseModel._id,
+        [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,100' } }],
+        200);
+      ({ baseModel, workingModel } = (await process(baseModel, events)));
+      expect(baseModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
+
+      ({ baseModel, workingModel } = (await process(baseModel, getEvents(baseModel._id, [], 600000 + 100))));
+      expect(baseModel.spaceSuit).to.deep.include({on: false});
+      expect(workingModel.spaceSuit).to.deep.include({on: false});
+
+      expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
+    });
+
+    it('Weak xenodisease without suit', async () => {
+      let baseModel = getExampleBiologicalOrganismModel();
+      baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+      let workingModel: OrganismModel;
+
+      const events = getEvents(baseModel._id,
+        [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,1' } }],
+        200);
+      ({ baseModel, workingModel } = (await process(baseModel, events)));
+      expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
+    });
+  });
+
+  // TODO(aeremin): Add tests:
+  // 1) Cheating protection
+  // 2) Disease contraction probability
 });

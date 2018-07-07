@@ -81,8 +81,16 @@ export function systemsIndices(): number[] {
   return result;
 }
 
+export interface XenoDisease {
+  influence: number[];
+  power: number;
+}
+
 export interface SpaceSuit {
-  oxygenLeftMs: number;
+  on: boolean;
+  oxygenCapacity: number;
+  timestampWhenPutOn: number;
+  diseases: XenoDisease[];
 }
 
 export interface System {
