@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Event } from 'deus-engine-manager-api';
 import { merge } from 'lodash';
-import { System, systemsIndices, OrganismModel } from '../../helpers/basic-types';
+import { OrganismModel, ScanQRData, System, systemsIndices } from '../../helpers/basic-types';
 import consts = require('../../helpers/constants');
 import { getEvents, getRefreshEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
@@ -15,6 +15,7 @@ declare var global: Global;
 global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
   counters: {
     'ss-111': { _id: 'ss-111' },
+    'ss-112': { _id: 'ss-112' },
   },
 });
 
@@ -282,6 +283,38 @@ describe('General Magellan events: ', () => {
 
       expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
       expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
+    });
+
+    it('Manual takeoff', async () => {
+      let baseModel = getExampleBiologicalOrganismModel();
+      baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+      let workingModel: OrganismModel;
+
+      const qrs: ScanQRData[] = [{ type: 7, kind: 0, validUntil: 0, payload: 'ss-112,10' }];
+      // Add "weak" xenodisease
+      qrs.push({type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,30' });
+      // Add "strong" xenodisease
+      qrs.push({type: 9, kind: 0, validUntil: 0, payload: '0,1,0,0,0,0,0,130' });
+      // Add "medium" xenodiseases
+      // We expect 65% (95 - 30) of them to stay
+      for (let i = 0; i < 100; ++i)
+        qrs.push({type: 9, kind: 0, validUntil: 0, payload: '0,0,1,0,0,0,0,95' });
+      // Add manual space suit take off action
+        qrs.push({type: 8, kind: 0, validUntil: 0, payload: '30' });
+
+      const events = getEvents(baseModel._id, qrs.map((data) => ({eventType: 'scanQr', data })), 100);
+      ({ baseModel, workingModel } = (await process(baseModel, events)));
+
+      expect(baseModel.spaceSuit.on).to.be.false;
+      expect(workingModel.spaceSuit.on).to.be.false;
+
+      expect(baseModel.systems[0].value).to.eq(0);
+      expect(baseModel.systems[1].value).to.eq(1);
+      expect(baseModel.systems[2].value).to.approximately(65, 10);
+
+      expect(workingModel.systems[0].value).to.eq(0);
+      expect(workingModel.systems[1].value).to.eq(1);
+      expect(workingModel.systems[2].value).to.approximately(65, 10);
     });
 
     it('Weak xenodisease without suit', async () => {

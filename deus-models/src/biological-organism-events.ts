@@ -171,19 +171,11 @@ function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, eve
   getTypedOrganismModel(api).spaceSuit.on = false;
   api.removeTimer('spacesuit');
 
-  // TODO(aeremin): Activate diseases
-  const accumulatedInfluence: number[] = systemsIndices().map((_) => 0);
   for (const disease of getTypedOrganismModel(api).spaceSuit.diseases) {
     const diff = disease.power - disinfectionLevel;
     if (diff > Math.random() * 100) {
-      for (const i of systemsIndices()) {
-        accumulatedInfluence[i] += disease.influence[i];
-      }
+      biologicalSystemsInfluence(api, disease.influence, event);
     }
-  }
-
-  if (accumulatedInfluence.some((v) => v != 0)) {
-    biologicalSystemsInfluence(api, accumulatedInfluence, event);
   }
 }
 

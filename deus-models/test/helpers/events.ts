@@ -15,7 +15,7 @@ export const getRefreshEvent = (characterId: string, timestamp = Date.now()): Ev
     timestamp,
 });
 
-interface PartialEvent {
+export interface PartialEvent {
     eventType: string;
     data?: any;
 }
