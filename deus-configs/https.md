@@ -10,7 +10,7 @@ If there are some errors about old versions of package, upgrade them via pip:
     pip install <package name>
 
 Then run command to get certificate:
-    certbot certonly -d *.magellan2018.aerem.in --manual --logs-dir certbot --config-dir certbot --work-dir certbot --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory
+    certbot certonly -d *.alice.magellan2018.ru --manual --logs-dir certbot --config-dir certbot --work-dir certbot --agree-tos --no-bootstrap --manual-public-ip-logging-ok --preferred-challenges dns-01 --server https://acme-v02.api.letsencrypt.org/directory
 
 Update DNS TXT record as requested.
 If there are no errors and key files are generated, run
