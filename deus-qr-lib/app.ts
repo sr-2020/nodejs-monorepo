@@ -109,7 +109,7 @@ class App {
 
 <body>
 
-  <form target="_blank" action="http://magellan2018.aerem.in:8159/encode_bill">
+  <form target="_blank" action="https://qr.alice.magellan2018.ru/encode_bill">
     Продавец (получатель платежа)<br>
     <input type="text" name="receiver" value="">
     <br> Цена:
