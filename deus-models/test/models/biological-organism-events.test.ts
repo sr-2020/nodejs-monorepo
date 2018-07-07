@@ -268,8 +268,8 @@ describe('General Magellan events: ', () => {
         [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-111,10' } }],
         100);
       ({ baseModel, workingModel } = (await process(baseModel, events)));
-      expect(baseModel.spaceSuit).to.deep.include({on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100});
-      expect(workingModel.spaceSuit).to.deep.include({on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100});
+      expect(baseModel.spaceSuit).to.deep.include({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
+      expect(workingModel.spaceSuit).to.deep.include({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
 
       events = getEvents(baseModel._id,
         [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,100' } }],
@@ -279,8 +279,8 @@ describe('General Magellan events: ', () => {
       expect(workingModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
 
       ({ baseModel, workingModel } = (await process(baseModel, getEvents(baseModel._id, [], 600000 + 100))));
-      expect(baseModel.spaceSuit).to.deep.include({on: false});
-      expect(workingModel.spaceSuit).to.deep.include({on: false});
+      expect(baseModel.spaceSuit).to.deep.include({ on: false });
+      expect(workingModel.spaceSuit).to.deep.include({ on: false });
 
       expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
       expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
@@ -293,17 +293,17 @@ describe('General Magellan events: ', () => {
 
       const qrs: ScanQRData[] = [{ type: 7, kind: 0, validUntil: 0, payload: 'ss-112,10' }];
       // Add "weak" xenodisease
-      qrs.push({type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,30' });
+      qrs.push({ type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,30' });
       // Add "strong" xenodisease
-      qrs.push({type: 9, kind: 0, validUntil: 0, payload: '0,1,0,0,0,0,0,130' });
+      qrs.push({ type: 9, kind: 0, validUntil: 0, payload: '0,1,0,0,0,0,0,130' });
       // Add "medium" xenodiseases
       // We expect 65% (95 - 30) of them to stay
       for (let i = 0; i < 100; ++i)
-        qrs.push({type: 9, kind: 0, validUntil: 0, payload: '0,0,1,0,0,0,0,95' });
+        qrs.push({ type: 9, kind: 0, validUntil: 0, payload: '0,0,1,0,0,0,0,95' });
       // Add manual space suit take off action
-        qrs.push({type: 8, kind: 0, validUntil: 0, payload: '30' });
+      qrs.push({ type: 8, kind: 0, validUntil: 0, payload: '30' });
 
-      const events = getEvents(baseModel._id, qrs.map((data) => ({eventType: 'scanQr', data })), 100);
+      const events = getEvents(baseModel._id, qrs.map((data) => ({ eventType: 'scanQr', data })), 100);
       ({ baseModel, workingModel } = (await process(baseModel, events)));
 
       expect(baseModel.spaceSuit.on).to.be.false;
