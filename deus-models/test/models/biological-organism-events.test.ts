@@ -16,6 +16,7 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
   counters: {
     'ss-111': { _id: 'ss-111' },
     'ss-112': { _id: 'ss-112' },
+    'ss-113': { _id: 'ss-113' },
   },
 });
 
@@ -329,9 +330,22 @@ describe('General Magellan events: ', () => {
       expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
       expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
     });
-  });
 
-  // TODO(aeremin): Add tests:
-  // 1) Cheating protection
-  // 2) Disease contraction probability
+    it('Can not use same space suit second time', async () => {
+      let baseModel = getExampleBiologicalOrganismModel();
+      let workingModel: OrganismModel;
+
+      let events = getEvents(baseModel._id,
+        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }], 100);
+      ({ baseModel, workingModel } = (await process(baseModel, events)));
+      expect(baseModel.spaceSuit.on).to.be.true;
+      expect(workingModel.spaceSuit.on).to.be.true;
+
+      events = getEvents(baseModel._id,
+        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }], 60000 + 100);
+        ({ baseModel, workingModel } = (await process(baseModel, events)));
+      expect(baseModel.spaceSuit.on).to.be.false;
+      expect(workingModel.spaceSuit.on).to.be.false;
+    });
+  });
 });
