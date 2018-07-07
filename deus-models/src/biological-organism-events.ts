@@ -141,7 +141,6 @@ export interface SpaceSuitRefillData {
 
 function spaceSuitRefill(api: ModelApiInterface, data: SpaceSuitRefillData, event: Event) {
   const counter = api.aquired('counters', data.uniqueId);
-  api.error(JSON.stringify(counter));
   if (!counter) {
     api.error("spaceSuitRefill: can't aquire space suit refill code", { uniqueId: data.uniqueId });
     return;
