@@ -1,7 +1,7 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
 import { BiologicalSystems, biologicalSystemsNames, Change,
   isReadyForGame, OrganismModel, systemsIndices } from '../helpers/basic-types';
-import { getSymptoms, Symptoms } from '../helpers/symptoms';
+import { getSymptoms, Symptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 
 interface PageViewModel {
@@ -171,8 +171,7 @@ function getSymptomsPage(model: OrganismModel): PageViewModel {
   for (const s of symptoms) {
     result.body.items.push({
       viewId: 'mid:' + s.toString(),
-      // TODO(aeremin): Make human-readable
-      text: Symptoms[s],
+      text: symptomToRussian[s],
     });
   }
   return result;
