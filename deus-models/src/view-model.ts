@@ -1,7 +1,7 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
 import { BiologicalSystems, biologicalSystemsNames, Change,
   isReadyForGame, OrganismModel, systemsIndices } from '../helpers/basic-types';
-import { getSymptoms, Symptoms, symptomToRussian } from '../helpers/symptoms';
+import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 
 interface PageViewModel {
