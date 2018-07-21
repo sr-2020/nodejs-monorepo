@@ -260,13 +260,14 @@ function getViewModel(model: OrganismModel) {
 
 module.exports = () => {
   return {
-    _view(_api: ViewModelApiInterface, model) {
+    _view(api: ViewModelApiInterface, model) {
       if (hasMobileViewModel(model)) {
         try {
           return getViewModel(model);
         } catch (err) {
           // The app would display error message when ViewModel is incorrect
           console.error(err);
+          api.error('Error while generating viewmodel: ', err);
           return {};
         }
       } else if (hasMedicViewModel(model)) {
