@@ -153,6 +153,15 @@ export class HistoryComponent implements OnInit {
         seenPatientIds[entry.patientId] = true;
       }
     }
+
+    // HACK: We need to control this.filterControl.setValue so this.patientFilterOptions
+    // will propagate into this.filteredPatientFilterOptions. We only do it if current
+    // filter is empty, if it's not - user will need to change value in filter control
+    // anyway, which will trigger propagation. Proper fix would be to make this.patientFilterOptions
+    // into Observable/another subscribable object.
+    if (!(this.currentPatientFilterOption && this.currentPatientFilterOption.patientId)) {
+      this.filterControl.setValue('');
+    }
   }
 
   private filterHistoryEntries() {
