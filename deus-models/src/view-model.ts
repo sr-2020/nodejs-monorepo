@@ -171,7 +171,7 @@ function getSymptomsPage(model: OrganismModel): PageViewModel {
   for (const s of symptoms) {
     result.body.items.push({
       viewId: 'mid:' + s.toString(),
-      text: symptomToRussian[s],
+      text: symptomToRussian.get(s) as string,
     });
   }
   return result;
