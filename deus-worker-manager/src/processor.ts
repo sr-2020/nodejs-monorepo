@@ -150,7 +150,7 @@ export class Processor {
             event = cloneDeep(event);
 
             // XXX есть шанс что эта модель сейчас обрабатывается и тогда все пропало
-            event.timestamp = Math.max(event.timestamp, model.timestamp + 1);
+            event.timestamp = Math.max(event.timestamp, (model as any).timestamp  + 1);
 
             return this.eventStorage.store(event);
         });
