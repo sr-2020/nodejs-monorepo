@@ -32,11 +32,6 @@ function getStartPage(model: OrganismModel) {
       text: 'ID',
       value: model._id,
     },
-    {
-      text: 'e-mail',
-      value: model.mail,
-    },
-
   ];
 
   const pageInfo = {
@@ -235,7 +230,6 @@ function getPassportScreen(model: OrganismModel) {
     id: model._id,
     fullName: model.firstName + ' ' + model.lastName,
     corporation: model.corporation ? model.corporation : '',
-    email: model.mail ? model.mail : '',
   };
 }
 

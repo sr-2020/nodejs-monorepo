@@ -103,7 +103,7 @@ function addChangeRecord( api: ModelApiInterface, data, _ ) {
  * Обработчик события "change-model-variable"
  * Универсальное событие для изменения любой простой (т.е. не внутри каких-то вложенных структур)
  * переменной в модели. Переменные, тип которых Object/Array менять запрещается.
- * Переменные: login,_id, timestamp, mail, profileType менять запрещается
+ * Переменные: login,_id, timestamp, profileType менять запрещается
  *
  * Изменение проходит "тихо" для игрока - ни в каких списках изменений оно не отображается
  * (поэтому так лучше не менять что-то игровое и важное о чем надо знать)
@@ -115,7 +115,7 @@ function addChangeRecord( api: ModelApiInterface, data, _ ) {
  */
 function changeModelVariableEvent( api: ModelApiInterface, data, _ ) {
     if (data.name && data.value) {
-        const restricted = ['_id', 'id', 'hp', 'maxHp', 'login', 'mail', 'profileType', 'timestamp',
+        const restricted = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'timestamp',
                           'mind', 'genome', 'systems', 'conditions', 'modifiers', 'changes', 'messages', 'timers' ];
         if (restricted.find( e => e == data.name)) {
             return;

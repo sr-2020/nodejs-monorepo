@@ -325,7 +325,7 @@ function removeElementByMID(list: Modifier[], mID: string): Modifier | null {
     return null;
 }
 
-const restrictedVars = ['_id', 'id', 'hp', 'maxHp', 'login', 'mail', 'profileType', 'timestamp',
+const restrictedVars = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'timestamp',
     'mind', 'genome', 'systems', 'conditions', 'modifiers', 'changes', 'messages', 'timers'];
 
 /**

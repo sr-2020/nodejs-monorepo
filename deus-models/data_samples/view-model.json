@@ -8,8 +8,7 @@
   "passportScreen": {
     "id": "6006",
     "fullName": "Геннадий Лавров",
-    "corporation": "",
-    "email": "gennady.lavrov@alice.digital"
+    "corporation": ""
   },
   "toolbar": {
     "airSecondsLeft": 60
@@ -29,10 +28,6 @@
           {
             "text": "ID",
             "value": "6006"
-          },
-          {
-            "text": "e-mail",
-            "value": "gennady.lavrov@alice.digital"
           },
           {
             "text": "Инфо:",
