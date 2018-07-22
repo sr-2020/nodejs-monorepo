@@ -1,3 +1,4 @@
+import { clone } from 'lodash';
 import { OrganismModel } from '../../helpers/basic-types';
 
 function randomId() {
@@ -5,7 +6,7 @@ function randomId() {
 }
 
 export function getExampleBiologicalOrganismModel(): OrganismModel {
-    return require('../../../data_samples/model.json');
+    return clone(require('../../../data_samples/model.json'));
 }
 
 export function getExampleLabTerminalModel() {

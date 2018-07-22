@@ -1,15 +1,22 @@
 import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 import uuid = require('uuid/v1');
-import { colorOfChange, getTypedOrganismModel, SystemColor,
-  systemCorrespondsToColor, systemsIndices, XenoDisease } from '../helpers/basic-types';
+import { colorOfChange, getTypedOrganismModel, OrganismModel,
+  SystemColor, systemCorrespondsToColor, systemsIndices, XenoDisease } from '../helpers/basic-types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
-import { getSymptomValue } from '../helpers/symptoms';
+import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
+
+function updateIsAlive(model: OrganismModel) {
+  if (getSymptoms(model).has(Symptoms.Death))
+    model.isAlive = false;
+}
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
-  helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
-
   const model = getTypedOrganismModel(api);
+  if (!model.isAlive)
+    return;
+
+  helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
 
   for (const i of systemsIndices()) {
     if (data[i] != 0) {
@@ -17,16 +24,22 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
       model.systems[i].lastModified = event.timestamp;
     }
   }
+
+  updateIsAlive(model);
 }
 
 function modifyNucleotideInstant(api: ModelApiInterface, data: number[], _event: Event) {
   const model = getTypedOrganismModel(api);
+  if (!model.isAlive)
+    return;
 
   for (const i of systemsIndices()) {
     if (data[i] != 0) {
       model.systems[i].nucleotide += data[i];
     }
   }
+
+  updateIsAlive(model);
 }
 
 interface PreMutationData {
@@ -64,18 +77,25 @@ interface MutationData {
 }
 
 function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
+  const model = getTypedOrganismModel(api);
+
+  if (!model.isAlive)
+    return;
+
   for (const i of systemsIndices()) {
     if (!systemCorrespondsToColor(data.color, i) &&
-      getTypedOrganismModel(api).systems[i].lastModified >= data.diseaseStartTimestamp)
+      model.systems[i].lastModified >= data.diseaseStartTimestamp)
       return; // Cancel mutation due to the change in the system of incompatible color
   }
 
   for (const i of systemsIndices()) {
     const newValueOrUndefined = data.newNucleotideValues[i];
     if (newValueOrUndefined) {
-      getTypedOrganismModel(api).systems[i].nucleotide = newValueOrUndefined;
+      model.systems[i].nucleotide = newValueOrUndefined;
     }
   }
+
+  updateIsAlive(model);
 }
 
 function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[], event: Event) {

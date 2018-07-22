@@ -73,6 +73,31 @@ describe('General Magellan events: ', () => {
       makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
   });
 
+  it('Can kill by modify-systems-instant', async () => {
+    const model = getExampleBiologicalOrganismModel();
+    model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+    const events = getEvents(model._id,
+      [{ eventType: 'modify-systems-instant', data: [8, 0, 0, 0, 0, 0, 0] }], 100);
+
+    const { baseModel, workingModel } = await process(model, events);
+
+    expect(baseModel.isAlive).to.be.false;
+    expect(workingModel.isAlive).to.be.false;
+  });
+
+  it('No modification if is not alive', async () => {
+    const model = getExampleBiologicalOrganismModel();
+    model.isAlive = false;
+    model.systems = makeSystems([3, -1, 0, 0, 2, 0, 0]);
+    const events = getEvents(model._id,
+      [{ eventType: 'modify-systems-instant', data: [1, 2, -1, 0, 3, 0, 0] }], 100);
+
+    const { baseModel, workingModel } = await process(model, events);
+
+    expect(baseModel.systems).to.deep.equal(makeSystems([3, -1, 0, 0, 2, 0, 0]));
+    expect(workingModel.systems).to.deep.equal(makeSystems([3, -1, 0, 0, 2, 0, 0]));
+  });
+
   it('Use pill', async () => {
     let model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
@@ -288,7 +313,7 @@ describe('General Magellan events: ', () => {
 
     it('Manual takeoff', async () => {
       let baseModel = getExampleBiologicalOrganismModel();
-      baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+      baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 100, 0, 0, 0, 0]);
       let workingModel: OrganismModel;
 
       const qrs: ScanQRData[] = [{ type: 7, kind: 0, validUntil: 0, payload: 'ss-112,10' }];
