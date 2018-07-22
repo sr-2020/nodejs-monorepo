@@ -14,6 +14,8 @@ export interface LabTest {
 }
 
 export interface ViewModel {
+  profileType: string;
+
   patientHistory: HistoryEntry[];
 
   numTests: number;

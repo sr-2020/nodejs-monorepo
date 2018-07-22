@@ -6,6 +6,8 @@ import { GlobalConfig } from 'src/config';
 import { ViewModel } from 'src/datatypes/viewmodel';
 import { AuthService } from 'src/services/auth.service';
 
+export class ForeignViewModelError {}
+
 @Injectable()
 export class DataService {
   // TODO: Remove when backend is enabled
@@ -15,8 +17,15 @@ export class DataService {
     private _http: Http,
     private _authService: AuthService) {}
 
-  public setViewModel(viewModel: ViewModel) { this._viewModel = viewModel; }
-  public getViewModel() { return this._viewModel; }
+  public setViewModel(viewModel: ViewModel) {
+    if (viewModel.profileType != 'medic')
+      throw new ForeignViewModelError();
+    this._viewModel = viewModel;
+  }
+
+  public getViewModel() {
+    return this._viewModel;
+  }
 
   public async addComment(patientId: string, text: string) {
     const fullUrl = GlobalConfig.addCommentBaseUrl + this._authService.getUserId();
