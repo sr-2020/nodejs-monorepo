@@ -56,6 +56,12 @@ const designDocs = getAllDesignDocs();
 console.log("Found following design docs:");
 console.log(designDocs.map((doc) => doc._id));
 
+async function dropEventsDb(): Promise<void> {
+    await new Promise((resolve, reject) => {
+        connection.db.destroy(config.db.events, (err, res) => resolve(err));
+    });
+}
+
 async function createDesignDoc(doc: any): Promise<void> {
     let dbNames = doc.dbs;
     delete (doc.dbs);
@@ -113,10 +119,12 @@ async function createSampleData() {
     await createMedicSampleData();
 }
 
-Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)))
-    .then(() => createDesignDocs())
-    .then(() => importCatalogs(connection, catalogsStorage, catalogs))
-    .then(() => createSampleData())
-    .then(() => console.log('Done!'));
+async function run(): Promise<void> {
+    await dropEventsDb();
+    await Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)));
+    await createDesignDocs();
+    await importCatalogs(connection, catalogsStorage, catalogs);
+    await createSampleData();
+}
 
-
+run().then(() => console.log('Done!'));
