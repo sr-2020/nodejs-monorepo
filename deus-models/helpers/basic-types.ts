@@ -127,11 +127,6 @@ export function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
   return api.model;
 }
 
-// TODO(aeremin): Remove
-export function isReadyForGame(model: OrganismModel) {
-  return Number(model._id) < 9100;
-}
-
 export interface LabTerminalRefillData {
   uniqueId: string;
   numTests: number;

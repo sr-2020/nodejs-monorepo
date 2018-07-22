@@ -1,6 +1,6 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
 import { BiologicalSystems, biologicalSystemsNames, Change,
-  isReadyForGame, OrganismModel, systemsIndices } from '../helpers/basic-types';
+  OrganismModel, systemsIndices } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 
@@ -201,14 +201,12 @@ function getPages(model: OrganismModel) {
 
   pages.push(getStartPage(model));
 
-  pages.push(getConditionsPage(model));
-
-  pages.push(getBodyPage(model));
-  if (isReadyForGame(model)) {
+  if (model.isAlive) {
+    pages.push(getConditionsPage(model));
+    pages.push(getBodyPage(model));
     pages.push(getSymptomsPage(model));
+    pages.push(getEconomyPage());
   }
-
-  pages.push(getEconomyPage());
 
   pages.push(getChangesPage(model));
 
