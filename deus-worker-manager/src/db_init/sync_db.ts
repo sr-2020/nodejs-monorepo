@@ -88,7 +88,7 @@ async function createHumanSampleData() {
     const modelTemplate = require(path.join(dataSamplePath, 'model.json'));
     const viewModelTemplate = require(path.join(dataSamplePath, 'view-model.json'));
     console.log(`Using following templates: model=${JSON.stringify(modelTemplate)}, viewmodel=${JSON.stringify(viewModelTemplate)}`);
-    for (let index = 0; index < 1000; ++index) {
+    for (let index = 0; index < 150; ++index) {
         await Promise.all([
             createAccount(connection.use(config.db.accounts), index),
             createModel(connection.use(config.db.models), modelTemplate, index),
