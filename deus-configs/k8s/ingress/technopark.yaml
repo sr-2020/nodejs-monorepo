@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: technopark
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - hosts:
+    - technopark.alice.magellan2018.ru
+    secretName: tls-secret
+  rules:
+  - host: technopark.alice.magellan2018.ru
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: technopark
+          servicePort: 8888

@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: couchdb
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - hosts:
+    - couchdb.alice.magellan2018.ru
+    secretName: tls-secret
+  rules:
+  - host: couchdb.alice.magellan2018.ru
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: couchdb
+          servicePort: 5984

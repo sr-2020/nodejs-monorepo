@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: magellan-flights-server
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - hosts:
+    - flights.alice.magellan2018.ru
+    secretName: tls-secret
+  rules:
+  - host: flights.alice.magellan2018.ru
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: magellan-flights-server
+          servicePort: 8010

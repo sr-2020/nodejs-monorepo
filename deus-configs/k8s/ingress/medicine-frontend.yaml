@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: medicine-frontend
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - hosts:
+    - lab.alice.magellan2018.ru
+    secretName: tls-secret
+  rules:
+  - host: lab.alice.magellan2018.ru
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: medicine-frontend
+          servicePort: 8000
