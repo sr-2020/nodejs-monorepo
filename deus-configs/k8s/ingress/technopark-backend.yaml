@@ -7,10 +7,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.technopark.alice.magellan2018.ru
+    - technopark-backend.alice.magellan2018.ru
     secretName: tls-secret
   rules:
-  - host: api.technopark.alice.magellan2018.ru
+  - host: technopark-backend.alice.magellan2018.ru
     http:
       paths:
       - path: /
