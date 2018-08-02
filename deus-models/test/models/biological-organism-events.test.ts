@@ -186,6 +186,39 @@ describe('General Magellan events: ', () => {
       [0, 2, -2, 0, 1, 0, 0]));
   });
 
+  it('Use blue/orange mutation pill on plant', async () => {
+    let model = getExampleBiologicalOrganismModel();
+    model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
+
+    const disableSystems = (systems: System[]): System[] => {
+      for (const i of [0, 1, 2, 5])
+        systems[i].present = false;
+      return systems;
+    };
+
+    model.systems = disableSystems(model.systems);
+
+    let events = getEvents(model._id,
+      [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 2, 1, 0] }], 100);
+
+    model = (await process(model, events)).baseModel;
+    expect(model.systems).to.deep.equal(disableSystems(
+      makeSystems([0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 100, 0, 0])));
+
+    const p = consts.MAGELLAN_TICK_MILLISECONDS;
+
+    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    model = (await process(model, events)).baseModel;
+    expect(model.systems).to.deep.equal(disableSystems(
+      makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0])));
+
+    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    model = (await process(model, events)).baseModel;
+    expect(model.systems).to.deep.equal(disableSystems(
+      makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0],
+      [0, 0, 0, 0, 2, 0, 0])));
+  });
+
   it('Use blue mutation pill and introduce compatible change', async () => {
     let model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);

@@ -1,7 +1,8 @@
 import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 import uuid = require('uuid/v1');
-import { colorOfChange, getTypedOrganismModel, OrganismModel,
-  organismSystemsIndices, SystemColor, systemCorrespondsToColor, XenoDisease } from '../helpers/basic-types';
+import { allSystemsIndices, colorOfChange, getTypedOrganismModel,
+  OrganismModel, organismSystemsIndices, SystemColor,
+  systemCorrespondsToColor, XenoDisease } from '../helpers/basic-types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
@@ -61,7 +62,8 @@ function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event
     const mutationData: MutationData = {
       color: preMutationData.mutationColor,
       diseaseStartTimestamp: preMutationData.diseaseStartTimestamp,
-      newNucleotideValues: organismSystemsIndices(model).map((i) => {
+      newNucleotideValues: allSystemsIndices().map((i) => {
+        if (!model.systems[i].present) return undefined;
         if (!systemCorrespondsToColor(preMutationData.mutationColor, i)) return undefined;
         return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
       }),
@@ -90,7 +92,7 @@ function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
 
   for (const i of organismSystemsIndices(model)) {
     const newValueOrUndefined = data.newNucleotideValues[i];
-    if (newValueOrUndefined) {
+    if (newValueOrUndefined != undefined) {
       model.systems[i].nucleotide = newValueOrUndefined;
     }
   }
@@ -108,7 +110,7 @@ function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[
     const tickData: DiseaseTickData = { systemsModification: adjustment };
     if (i == totalTicks - 1) {
       const color = colorOfChange(getTypedOrganismModel(api), totalChange);
-      if (color) {
+      if (color != undefined) {
         tickData.preMutationData = {
           mutationColor: color,
           diseaseStartTimestamp: event.timestamp,

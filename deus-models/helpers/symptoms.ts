@@ -1,4 +1,4 @@
-import { BiologicalSystems, OrganismModel, System, organismSystemsIndices } from './basic-types';
+import { BiologicalSystems, OrganismModel, organismSystemsIndices, System } from './basic-types';
 
 export enum Symptoms {
   SevereHeadache,
