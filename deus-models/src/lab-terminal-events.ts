@@ -1,6 +1,7 @@
 import { Event, ModelApiInterface } from 'deus-engine-manager-api';
 import * as shuffle from 'shuffle-array';
-import { BiologicalSystems, LabTerminalRefillData, OrganismModel, systemsIndices } from '../helpers/basic-types';
+import { BiologicalSystems, LabTerminalRefillData,
+  OrganismModel, organismSystemsIndices } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';
 
 interface RunLabTestData {
@@ -14,7 +15,7 @@ interface TestResult {
 }
 
 function nucleotideTest(model: OrganismModel): string {
-  return 'Результат: ' + shuffle(systemsIndices().map((s) => model.systems[s].nucleotide)).join(', ');
+  return 'Результат: ' + shuffle(organismSystemsIndices(model).map((s) => model.systems[s].nucleotide)).join(', ');
 }
 
 function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string {

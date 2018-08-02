@@ -1,4 +1,4 @@
-import { BiologicalSystems, OrganismModel, System, systemsIndices } from './basic-types';
+import { BiologicalSystems, OrganismModel, System, organismSystemsIndices } from './basic-types';
 
 export enum Symptoms {
   SevereHeadache,
@@ -188,10 +188,10 @@ export function getSymptomValue(system: System) {
   return 0;
 }
 
-export function getSymptomsInternal(systems: System[]): Set<Symptoms> {
+export function getSymptoms(model: OrganismModel): Set<Symptoms> {
   const result = new Set<Symptoms>();
-  for (const indice of systemsIndices()) {
-    const v = getSymptomValue(systems[indice]);
+  for (const indice of organismSystemsIndices(model)) {
+    const v = getSymptomValue(model.systems[indice]);
     if (Math.abs(v) > 7) return new Set<Symptoms>([Symptoms.Death]);
     if (v > 0)
       result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v]);
@@ -200,8 +200,4 @@ export function getSymptomsInternal(systems: System[]): Set<Symptoms> {
   }
 
   return result;
-}
-
-export function getSymptoms(model: OrganismModel): Set<Symptoms> {
-  return getSymptomsInternal(model.systems);
 }

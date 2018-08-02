@@ -1,7 +1,7 @@
 import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
 import uuid = require('uuid/v1');
 import { colorOfChange, getTypedOrganismModel, OrganismModel,
-  SystemColor, systemCorrespondsToColor, systemsIndices, XenoDisease } from '../helpers/basic-types';
+  organismSystemsIndices, SystemColor, systemCorrespondsToColor, XenoDisease } from '../helpers/basic-types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
@@ -18,7 +18,7 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
 
   helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
 
-  for (const i of systemsIndices()) {
+  for (const i of organismSystemsIndices(model)) {
     if (data[i] != 0) {
       model.systems[i].value += data[i];
       model.systems[i].lastModified = event.timestamp;
@@ -33,7 +33,7 @@ function modifyNucleotideInstant(api: ModelApiInterface, data: number[], _event:
   if (!model.isAlive)
     return;
 
-  for (const i of systemsIndices()) {
+  for (const i of organismSystemsIndices(model)) {
     if (data[i] != 0) {
       model.systems[i].nucleotide += data[i];
     }
@@ -61,7 +61,7 @@ function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event
     const mutationData: MutationData = {
       color: preMutationData.mutationColor,
       diseaseStartTimestamp: preMutationData.diseaseStartTimestamp,
-      newNucleotideValues: systemsIndices().map((i) => {
+      newNucleotideValues: organismSystemsIndices(model).map((i) => {
         if (!systemCorrespondsToColor(preMutationData.mutationColor, i)) return undefined;
         return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
       }),
@@ -82,13 +82,13 @@ function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
   if (!model.isAlive)
     return;
 
-  for (const i of systemsIndices()) {
+  for (const i of organismSystemsIndices(model)) {
     if (!systemCorrespondsToColor(data.color, i) &&
       model.systems[i].lastModified >= data.diseaseStartTimestamp)
       return; // Cancel mutation due to the change in the system of incompatible color
   }
 
-  for (const i of systemsIndices()) {
+  for (const i of organismSystemsIndices(model)) {
     const newValueOrUndefined = data.newNucleotideValues[i];
     if (newValueOrUndefined) {
       model.systems[i].nucleotide = newValueOrUndefined;
@@ -107,7 +107,7 @@ function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[
     });
     const tickData: DiseaseTickData = { systemsModification: adjustment };
     if (i == totalTicks - 1) {
-      const color = colorOfChange(totalChange);
+      const color = colorOfChange(getTypedOrganismModel(api), totalChange);
       if (color) {
         tickData.preMutationData = {
           mutationColor: color,

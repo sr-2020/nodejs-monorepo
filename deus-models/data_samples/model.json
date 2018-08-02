@@ -50,36 +50,43 @@
   "lastName": "Лавров",
   "systems": [
     {
+      "present": true,
       "value": 1,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": 1,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": -1,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": 1,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": 0,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": 1,
       "nucleotide": 0,
       "lastModified": 0
     },
     {
+      "present": true,
       "value": 1,
       "nucleotide": 0,
       "lastModified": 0

@@ -1,6 +1,7 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
 import { BiologicalSystems, biologicalSystemsNames, Change,
-  OrganismModel, systemsIndices } from '../helpers/basic-types';
+  OrganismModel, 
+  organismSystemsIndices} from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 
@@ -139,7 +140,7 @@ function getBodyPage(model: OrganismModel) {
       items,
     },
   };
-  for (const i of systemsIndices()) {
+  for (const i of organismSystemsIndices(model)) {
     const system: BiologicalSystems = i;
     result.body.items.push({
       viewId: 'mid:' + BiologicalSystems[system],

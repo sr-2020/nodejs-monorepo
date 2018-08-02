@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Event } from 'deus-engine-manager-api';
 import { merge } from 'lodash';
-import { OrganismModel, ScanQRData, System, systemsIndices } from '../../helpers/basic-types';
+import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
 import consts = require('../../helpers/constants');
 import { getEvents, getRefreshEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
@@ -23,9 +23,12 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
 function makeSystems(values: number[],
                      lastModifieds: number[] = [0, 0, 0, 0, 0, 0, 0],
                      nucleotides?: number[]): System[] {
-  return systemsIndices().map((i) => {
+  return allSystemsIndices().map((i) => {
     return {
-      value: values[i], nucleotide: nucleotides ? nucleotides[i] : 0, lastModified: lastModifieds[i],
+      present: true,
+      value: values[i],
+      nucleotide: nucleotides ? nucleotides[i] : 0,
+      lastModified: lastModifieds[i],
     };
   });
 }

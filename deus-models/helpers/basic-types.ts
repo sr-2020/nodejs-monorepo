@@ -47,11 +47,12 @@ export function systemCorrespondsToColor(color: SystemColor, system: BiologicalS
   return (biologicalSystemsColors.get(system) as SystemColor[]).includes(color);
 }
 
-export function colorOfChange(change: number[]): SystemColor | undefined {
+export function colorOfChange(model: OrganismModel, change: number[]): SystemColor | undefined {
   const systemsAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>();
-  const systemsNotAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>(systemsIndices());
-  change.forEach((v, i) => {
-    if (v != 0) {
+  const systemsNotAffected: Set<BiologicalSystems> =
+    new Set<BiologicalSystems>(organismSystemsIndices(model));
+  organismSystemsIndices(model).forEach((i) => {
+    if (change[i] != 0) {
       systemsAffected.add(i);
       systemsNotAffected.delete(i);
     }
@@ -72,13 +73,17 @@ export function colorOfChange(change: number[]): SystemColor | undefined {
   return undefined;
 }
 
-export function systemsIndices(): number[] {
+export function allSystemsIndices(): number[] {
   const result: number[] = [];
   for (const system in BiologicalSystems)
     if (!isNaN(Number(system)))
       result.push(Number(system));
 
   return result;
+}
+
+export function organismSystemsIndices(model: OrganismModel): number[] {
+  return allSystemsIndices().filter((i) => model.systems[i].present);
 }
 
 export interface XenoDisease {
@@ -94,6 +99,7 @@ export interface SpaceSuit {
 }
 
 export interface System {
+  present: boolean;
   value: number;
   nucleotide: number;
   lastModified: number;
