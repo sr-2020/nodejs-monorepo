@@ -11,7 +11,7 @@ import { config } from '../config';
 import { DeusModifier } from '../interfaces/modifier';
 import { DeusCondition } from '../interfaces/condition';
 import { Predicate } from '../interfaces/predicate';
-import { saveObject, MindCubesModifier } from '../helpers'
+import { saveObject } from '../helpers'
 import { effectNames, conditionTypes, implantClasses, implantCorp, systems, implantSystems } from './constants'
 import { GenEffectData, MindEffectData, ImplantData } from './ImplantData';
 import { IllnessData } from './illnessData'

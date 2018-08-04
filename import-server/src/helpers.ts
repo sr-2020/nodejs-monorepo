@@ -3,9 +3,6 @@ import * as PouchDB from 'pouchdb';
 import * as winston from 'winston';
 import * as clones from 'clones';
 
-import { DeusModifier } from "./interfaces/modifier"
-
-
 /**
  * Сохранить в БД (connection) переданный объект (doc) 
  * Перед сохранением проверяется есть ли там уже такой думент, 
@@ -23,7 +20,7 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
 
     return Observable.fromPromise(connection.get( doc._id ))
         .flatMap( (oldDoc:any) => { 
-            console.log(`try to save: ${doc._id}`);
+            winston.debug(`try to save: ${doc._id}`);
             if(update){
                 doc._rev = oldDoc._rev;
                 return connection.put(doc);
@@ -32,10 +29,11 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
             }
         })
         .catch( (err) => {
-            console.log(`catch object: `, err);
-
             if(err.status && err.status == 404){
                 return connection.put(doc)
+            }
+            else{
+                winston.warn(`catch object: `, err, doc);    
             }
         });
 
@@ -52,39 +50,3 @@ export function saveObject( connection: any, doc: any, update:boolean = true ): 
     //         })
     //         .catch( () => connection.put(doc) );
 }
-
-
-export class DamageModifier  {
-        id = "_damage";
-        displayName = "internal damage modificator";
-        class = "_internal";
-        effects = [
-            {
-                id: "damage-effect",
-                class: "physiology",
-                type: "normal",
-                handler: "damageEffect",
-                enabled: true
-            }
-        ];
-        damage = 0;
-        enabled = true;
-        mID = "_internal_damage";
-};
-
-export class MindCubesModifier implements DeusModifier  {
-        id = "mindcubes_showdata";
-        displayName = "internal mind cube conditions modifier";
-        class = "_internal";
-        effects = [
-            {        
-                "id"    : "show-condition",       
-                "class"   : "physiology",    
-                "type"    : "normal",        
-                "handler" : "showCondition",
-                enabled : true
-            },
-        ];
-        enabled = true;
-        mID = "_internal_mindcubes";
-};

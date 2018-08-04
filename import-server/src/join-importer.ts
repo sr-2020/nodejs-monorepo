@@ -37,14 +37,15 @@ export interface JoinCharacterDetail{
     _id?: string,
     _rev?: string
     model?: DeusModel,
-    finalInGame?: boolean
+    finalInGame?: boolean,
 }
 
 export interface JoinFieldValue{
     ProjectFieldVariantId: number,
     Label: string,
     IsActive: boolean,
-    Description: string
+    Description: string,
+    ProgrammaticValue: string,
 }
 
 export interface JoinFieldMetadata{

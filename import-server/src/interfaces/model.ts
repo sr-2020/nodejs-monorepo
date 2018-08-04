@@ -20,13 +20,6 @@ import { DeusCondition } from './condition';
 //         timers: Array<any>
 // };
 
-export interface MemoryElement {
-    title: string,
-    text?: string,
-    url?: string,
-    mID?: string,
-}
-
 export interface MindData {
     [index: string]: number[];
 }
@@ -43,53 +36,44 @@ export interface Message {
     text: string
 }
 
+export interface ISystem {
+    value: number, 
+    nucleotide: number,
+    lastModified: number,
+}
+
+export interface Professions {
+    isPilot: boolean;
+    isNavigator: boolean;
+    isCommunications: boolean;
+    isSupercargo: boolean;
+    isEngineer: boolean;
+    isBiologist: boolean;
+    isPlanetolog: boolean;
+    isJournalist: boolean;
+    isIdelogist: boolean;
+    isTopManager: boolean;
+    isSecurity: boolean;
+}
+
 export class DeusModel{
     _id: string;        //id в БД == JoinRPG ID
     _rev: string;       //rev в БД техническое  
     mail: string;       //loging@alice.digital
     login: string;      //login
-    profileType: string;    //Тип профиля (human/robot/program)
     firstName: string;      //имя
     nicName?: string;       //ник-нейм
     lastName?:  string;     //фамилия
-    sweethome?: string;  //Родная локация
-    hp: number;         //количество хитов
-    maxHp: number;      //макстмальное количество хитов персонажа
-    maxSecondsInVr: number;  //Максимальное время в VR
+    planet?: string;  //Родная локация
     isAlive: boolean = true;  //Если false = персонаж мертв
     inGame: boolean = false; //Если true - персонаж в игре, и обновлять при импорте эту модель нельзя
 
-    lastVREnterTimestamp: number;
-    lastVREnterDuration: number;
-    totalSpentInVR: number;
+    profileType: string = "human";
 
-//Только для типа профиля "human"
     sex?: string;            //пол
-    generation?: string;     //Поколение (A / W / Z / X/Y)
-    corporation?: string;    //Место работы
-    corporationId?: string;    //Место работы (ID компании для экономики)
-    salaryLevel?: number;    //Уровень зарплаты
-    corporationAdmin?: boolean; //Является администратором места работы (для экономики)
-    insurance: string;      //кто выдал страховку (формат для внешних систем)
-    insuranceDiplayName?: string; //Название того кто выдал страховку для отображения
-    insuranceLevel?: number;      //Уровень страховки (1-4)
-    genome?: number[];       //Геном массив из 13 значений
-    memory: Array<MemoryElement> = [];  //Воспоминания
-    hackingLogin?: string;           //логин хакеров
-    hackingProtection?: number;      //Уровень защиты от хакеров
-    mind?: MindData;                  //кубики сознания
-    systems?: number[];         //физиологические системы организма
+    systems: Array<ISystem>;
 
-//Only android or programm
-    owner?: string;          //Владелец андроида/программы
-    creator?: string;       //Создатель андроида/программы
-    model?: string;      //Модель андроида или программа
-    firmware?: string;   //Прошивка андроида. Временное. 
-
-//Хакеры
-    lockReduction?: number;
-    proxyRegen?: number;
-    maxProxy?: number;
+    professions: Professions;
 
 //Техническое
     validateErrors?: string[];      //Ошибки валидации (если не пустое, в БД модель не пишутся)

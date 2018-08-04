@@ -5,7 +5,7 @@ import * as winston from 'winston';
 
 import { config } from './config';
 import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue, JoinGroupInfo, JoinMetadata } from './join-importer'
-import { DeusModel, MemoryElement, MindData } from './interfaces/model';
+import { DeusModel, MindData } from './interfaces/model';
 import { AliceExporter } from './alice-exporter';
 
 interface MailboxData {
@@ -23,15 +23,21 @@ export class MailProvision {
     constructor() {
     }
 
+    //TODO accept here Accounts (already parsed) instead of JoinCharacterDetail
     //Послать запрос на создание e-mail'ов
     createEmails(chars: JoinCharacterDetail[]): Promise<any>{
 
+        if (!config.mailServerAPIUrl) {
+            winston.info("Mail server is not configured, so skipping email provisoining");
+            return Promise.resolve();
+        }
+
         let usersList: MailboxData[] = chars.map( c => { 
-                let nameParts = AliceExporter.parseFullName(AliceExporter.joinStrFieldValue(c, 496)); 
+                let nameParts = null; //AliceExporter.parseFullName(AliceExporter.joinStrFieldValue(c, 496)); 
                 return {
                     id : c._id,
-                    login: AliceExporter.joinStrFieldValue(c, 1905).split("@")[0],
-                    password: AliceExporter.joinStrFieldValue(c, 2039),
+                    login: null, //AliceExporter.joinStrFieldValue(c, 1905).split("@")[0],
+                    password: null, //AliceExporter.joinStrFieldValue(c, 2039),
                     fullName: nameParts.fullName,
                     firstName: nameParts.firstName,
                     lastName: nameParts.lastName
@@ -47,6 +53,5 @@ export class MailProvision {
         }
 
         return request(reqOpts);
-        //return Promise.resolve('{ "type": "moke" }');
     }
 }

@@ -26,6 +26,12 @@ export class CatalogsLoader {
         };
 
         for(let alias in config.catalogs){
+            const dbName = config.catalogs[alias];
+            if (dbName == '')
+            {
+                winston.info(`Catalog ${alias} will be skipped as it not configured with database name`);
+                continue;
+            }
             let db = new PouchDB(`${config.url}${config.catalogs[alias]}`, ajaxOpts);
             let docs = await db.allDocs( {include_docs: true} );
 
