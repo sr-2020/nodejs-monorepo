@@ -46,6 +46,7 @@
     "google-auth-library": "^0.10.0",
     "googleapis": "^20.1.0",
     "ignore-case": "^0.1.0",
+    "leveldown": "^4.0.1",
     "moment": "^2.18.1",
     "pouchdb": "^6.3.2",
     "pouchdb-authentication": "^0.5.5",
