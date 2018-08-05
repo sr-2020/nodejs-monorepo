@@ -50,9 +50,9 @@ export class AliceExporter {
 
     public account: IAliceAccount = { _id: "", password: "", login: "" };
 
-    private characterParsed: CharacterParser;
+    private character: CharacterParser;
 
-    constructor(private character: JoinCharacterDetail,
+    constructor(character: JoinCharacterDetail,
         metadata: JoinMetadata,
         private catalogs: CatalogsLoader,
         public isUpdate: boolean = true,
@@ -71,7 +71,7 @@ export class AliceExporter {
         this.accCon = new PouchDB(`${config.url}${config.accountDBName}`, ajaxOpts);
         this.eventsCon = new PouchDB(`${config.url}${config.eventsDBName}`, ajaxOpts);
 
-        this.characterParsed = new CharacterParser(this.character, metadata);
+        this.character = new CharacterParser(character, metadata);
 
         this.createModel();
     }
@@ -79,7 +79,7 @@ export class AliceExporter {
     export(): Promise<any> {
         
         if (!this.model._id) {
-            winston.warn(`AliceExporter.export(): ${this.character._id} Incorrect model ID or problem in conversion!`);
+            winston.warn(`AliceExporter.export(): ${this.character.characterId} Incorrect model ID or problem in conversion!`);
             return Promise.resolve();
         }
 
@@ -131,14 +131,14 @@ export class AliceExporter {
 
             .map(([thisModel, oldModel]) => thisModel)
 
-//            .flatMap(() => this.clearEvents())
-//            .do(result => results.clearEvents = result.length)
+            .flatMap(() => this.clearEvents())
+            .do(result => results.clearEvents = result.length)
 
             .flatMap(() => saveObject(this.con, this.model, this.isUpdate))
             .do(result => results.model = result.ok ? "ok" : "error")
 
-//            .flatMap(() => this.eventsToSend.length ? this.eventsCon.bulkDocs(this.eventsToSend) : Observable.from([[]]))
-//            .do((result: any) => results.saveEvents = result.length)
+            .flatMap(() => this.eventsToSend.length ? this.eventsCon.bulkDocs(this.eventsToSend) : Observable.from([[]]))
+            .do((result: any) => results.saveEvents = result.length)
 
             .flatMap(() => {
                 if (this.account.login && this.account.password) {
@@ -162,8 +162,7 @@ export class AliceExporter {
     clearEvents(): Observable<any> {
         let selector = {
             selector: { characterId: this.model._id },
-            sort: [{ characterId: "desc" },
-            { timestamp: "desc" }],
+            //sort: [{ characterId: "desc" }, { timestamp: "desc" }],
             limit: 10000
         };
 
@@ -181,81 +180,65 @@ export class AliceExporter {
 
     private createModel() {
         try {
-            winston.info(`Try to convert model id=${this.character.CharacterId}`);
+            winston.info(`Try to convert model id=${this.character.characterId}`);
 
             this.model.timestamp = Date.now();
 
             //ID Alice. CharacterId
-            this.model._id = this.character.CharacterId.toString();
-            this.account._id = this.model._id;
+            this.model._id = this.character.characterId.toString();
 
             //Персонаж жив
             this.model.isAlive = true;
 
             //Состояние "в игре"
-            this.model.inGame = this.character.InGame;
+            this.model.inGame = this.character.inGame;
 
             //Login (e-mail). 
             //Защита от цифрового логина
-            this.model.login =  this.characterParsed.joinStrFieldValue(3631);
-
-            if (this.model.login == "")
-            {
-                this.model.login = "user" + this.model._id;
-            }
+            this.model.login =  this.character.joinStrFieldValue(3631) || ("user" + this.model._id);
 
             if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,30}$/i) || this.model.login.match(/^\d+$/i)) {
-                winston.warn(`ERROR: can't convert id=${this.character.CharacterId} incorrect login=\"${this.model.login}\"`);
+                winston.warn(`ERROR: can't convert id=${this.character.characterId} incorrect login=\"${this.model.login}\"`);
                 //this.model._id = "";
                 //return;
                 this.model.login = "";
             }
 
-            this.account.login = this.model.login;
-
-            if (this.model.login) {
-                this.model.mail = this.model.login + "@alice.digital";
-            } else {
-                this.model.mail = "";
-            }
-
-            //Password. 
-            this.account.password = this.characterParsed.joinStrFieldValue(3630);
-
-            if (this.account.password == "")
-            {
-                this.account.password = "0000";
-            }
+            this.model.mail = this.model.login + "@alice.digital";
 
             //Установить имя песрнажа. 
             this.setFullName(2786);
             
-            if (!this.characterParsed.joinStrFieldValue(2787)) 
+            if (!this.character.joinStrFieldValue(2787)) 
             {
                 //Prevent to import
-                winston.info(`Character(${this.character.CharacterId}) hasn't been filled fully and skipped.`)
+                winston.info(`Character(${this.character.characterId}) hasn't been filled fully and skipped.`)
                 this.model._id = "";
                 return;
             }
 
             //Локация  
-            this.model.planet = this.characterParsed.joinStrFieldValue(2787);
+            this.model.planet = this.character.joinStrFieldValue(2787);
 
             this.setGenome(2787);
 
             this.model.professions = this.getProfessions();
 
-            winston.info(`Character(${this.character.CharacterId}) was converted`, this.model, this.account);
+            this.account = {
+                _id: this.model._id,
+                login: this.model.login,
+                password: this.character.joinStrFieldValue(3630) || "0000",
+            };
 
         } catch (e) {
-            winston.info(`Error in converting model id=${this.character.CharacterId}: ` + e);
+            winston.info(`Error in converting model id=${this.character.characterId}: ` + e);
             this.model._id = "";
         }
     } 
 
     //Создает значение поля Геном для модели. 
     setGenome(fieldID: number) {
-        const nucleotides = this.characterParsed.joinFieldProgrammaticValue(fieldID).split(" ", 7).map(sp => Number.parseInt(sp));
+        const nucleotides = this.character.joinFieldProgrammaticValue(fieldID).split(" ", 7).map(sp => Number.parseInt(sp));
 
         this.model.systems = [];
         nucleotides.forEach((element, index) => {
@@ -264,7 +247,7 @@ export class AliceExporter {
     }
 
     getProfessions() : Professions {
-        const groupOrField = (group, field) => this.characterParsed.hasFieldValue(3438, field) || this.characterParsed.partOfGroup(group);
+        const groupOrField = (group, field) => this.character.hasFieldValue(3438, field) || this.character.partOfGroup(group);
 
         return {
             isBiologist: groupOrField(8489, 3448),
@@ -282,7 +265,7 @@ export class AliceExporter {
     }
 
     setFullName(fullNameFieldNumber: number) {
-        const name = this.characterParsed.joinStrFieldValue(fullNameFieldNumber);
+        const name = this.character.joinStrFieldValue(fullNameFieldNumber);
         let nameParts: INameParts = AliceExporter.parseFullName(name);
 
         this.model.firstName = nameParts.firstName;

@@ -1,11 +1,15 @@
 import { JoinCharacterDetail, JoinMetadata } from "./join-importer";
 
 export class CharacterParser {
+    public characterId: number;
+    public inGame: boolean;
+
     constructor(
         public character: JoinCharacterDetail,
         public metadata: JoinMetadata
     ) {
-
+        this.characterId = character.CharacterId;
+        this.inGame = character.InGame;
     }
 
     hasFieldValue(fieldId: number, variantID: number): boolean {

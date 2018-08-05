@@ -232,10 +232,7 @@ function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacter
 
             // Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
             .mergeMap( (cl: JoinCharacter[]) => {
-                winston.info( `##=====================================\n` +
-                             `## Process buffer ${bufferCounter}, ` +
-                             `size=${config.importBurstSize}: ${cl.map((d) => d.CharacterId).join(",")}
-                             \n##=====================================`);
+                winston.info( `## Process buffer ${bufferCounter}, size=${config.importBurstSize}: ${cl.map((d) => d.CharacterId).join(",")}##`);
                 bufferCounter++;
 
                 const promiseArr: Array<Promise<JoinCharacterDetail>> = [];

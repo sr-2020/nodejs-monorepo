@@ -84,8 +84,8 @@ export class JoinImporter {
             method : "POST",
             form: {
                 grant_type: "password",
-                username: config.joinLogin,
-                password: config.joinPassword
+                username: config.joinrpg.login,
+                password: config.joinrpg.password,
             },
             timeout: config.requestTimeout,
             json : true
