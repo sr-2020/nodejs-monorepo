@@ -2,7 +2,6 @@ import * as moment from "moment";
 import * as request from "request-promise-native";
 import * as winston from "winston";
 
-import { ImportStats } from "./stats";
 import { config } from "./config";
 import { DeusModel } from "./interfaces/model";
 
@@ -32,6 +31,7 @@ export interface JoinCharacterDetail {
     InGame: boolean;
     BusyStatus: string;
     Groups: JoinGroupInfo[];
+    AllGroups: JoinGroupInfo[];
     Fields: JoinFieldInfo[];
     PlayerUserId: string;
     _id?: string;

@@ -18,8 +18,7 @@ export class CharacterParser {
     }
 
     public partOfGroup(characterGroupId: number): boolean {
-          // TODO only direct groups here
-          return this.character.Groups.some((group) => group.CharacterGroupId === characterGroupId);
+          return this.character.AllGroups.some((group) => group.CharacterGroupId === characterGroupId);
     }
 
     public joinStrFieldValue(fieldID: number): string {
