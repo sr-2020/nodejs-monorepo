@@ -1,85 +1,92 @@
 import * as moment from "moment";
-import * as request from 'request-promise-native';
-import * as winston from 'winston';
+import * as request from "request-promise-native";
+import * as winston from "winston";
 
-import { ImportStats } from './stats';
-import { config } from './config';
-import { DeusModel } from './interfaces/model';
+import { ImportStats } from "./stats";
+import { config } from "./config";
+import { DeusModel } from "./interfaces/model";
 
-export interface JoinCharacter{
-    CharacterId : number,
-    UpdatedAt?: string,
-    IsActive?: boolean,
-    CharacterLink: string
+export interface JoinCharacter {
+    CharacterId: number;
+    UpdatedAt?: string;
+    IsActive?: boolean;
+    CharacterLink: string;
 }
 
 export interface JoinGroupInfo {
-    CharacterGroupId: number,
-    CharacterGroupName: string
+    CharacterGroupId: number;
+    CharacterGroupName: string;
 }
 
-export interface JoinFieldInfo{
-    ProjectFieldId: number,
-    FieldName?: string,
-    Value: string,
-    DisplayString: string
+export interface JoinFieldInfo {
+    ProjectFieldId: number;
+    FieldName?: string;
+    Value: string;
+    DisplayString: string;
 }
 
-export interface JoinCharacterDetail{
-    CharacterId : number,
-    UpdatedAt: string,
-    IsActive: boolean,
-    InGame: boolean,
-    BusyStatus: string,
-    Groups: JoinGroupInfo[],
-    Fields : JoinFieldInfo[],
-    PlayerUserId: string,
-    _id?: string,
-    _rev?: string
-    model?: DeusModel,
-    finalInGame?: boolean,
+export interface JoinCharacterDetail {
+    CharacterId: number;
+    UpdatedAt: string;
+    IsActive: boolean;
+    InGame: boolean;
+    BusyStatus: string;
+    Groups: JoinGroupInfo[];
+    Fields: JoinFieldInfo[];
+    PlayerUserId: string;
+    _id?: string;
+    _rev?: string;
+    model?: DeusModel;
+    finalInGame?: boolean;
 }
 
-export interface JoinFieldValue{
-    ProjectFieldVariantId: number,
-    Label: string,
-    IsActive: boolean,
-    Description: string,
-    ProgrammaticValue: string,
+export interface JoinFieldValue {
+    ProjectFieldVariantId: number;
+    Label: string;
+    IsActive: boolean;
+    Description: string;
+    ProgrammaticValue: string;
 }
 
-export interface JoinFieldMetadata{
-    FieldName: string,
-    ProjectFieldId: number,
-    IsActive: boolean,
-    FieldType: string,
-    ValueList: JoinFieldValue[]
+export interface JoinFieldMetadata {
+    FieldName: string;
+    ProjectFieldId: number;
+    IsActive: boolean;
+    FieldType: string;
+    ValueList: JoinFieldValue[];
 }
 
-export interface JoinMetadata{
-    ProjectId: number,
-	ProjectName: string,
-    Fields : JoinFieldMetadata[],
-    _id?: string,
-    _rev?: string
+export interface JoinMetadata {
+    ProjectId: number;
+    ProjectName: string;
+    Fields: JoinFieldMetadata[];
+    _id?: string;
+    _rev?: string;
 }
 
 export interface JoinData {
-    characters: JoinCharacterDetail[],
-    metadata: JoinMetadata
+    characters: JoinCharacterDetail[];
+    metadata: JoinMetadata;
 }
 
 export class JoinImporter {
 
-    public access_token = "";
+    public static createJoinCharacter(id: number): JoinCharacter {
+        return {
+            CharacterId: id,
+            CharacterLink: `${config.joinCharactersBasePath}/${id}/`,
+        };
+    }
+
+    public accessToken = "";
 
     public metadata: JoinMetadata;
 
     constructor() {}
 
-    init():Promise<boolean> {
-         //Get token
-        let reqOpts:any = {
+    public init(): Promise<boolean> {
+         // Get token
+        const reqOpts: any = {
             url: config.joinTokenUrl,
             method : "POST",
             form: {
@@ -88,74 +95,63 @@ export class JoinImporter {
                 password: config.joinrpg.password,
             },
             timeout: config.requestTimeout,
-            json : true
-        }
+            json : true,
+        };
 
-        return request(reqOpts).then( (result:any) => {
+        return request(reqOpts).then( (result: any) => {
             winston.info(`Received access token!`);
-            this.access_token = result.access_token;
+            this.accessToken = result.access_token;
             return true;
         });
     }
 
-    static createJoinCharacter(id: number):JoinCharacter {
-        return {
-            CharacterId: id,
-            CharacterLink: `${config.joinCharactersBasePath}/${id}/`
-        };
-    }
-
-    //modifiedSince=2017-07-01
-    getCharacterList(modifiedSince: moment.Moment ):Promise<JoinCharacter[]> {
-        let reqOpts = {
+    public getCharacterList(modifiedSince: moment.Moment ): Promise<JoinCharacter[]> {
+        const reqOpts = {
             url: config.joinListUrl,
             qs : {
-                modifiedSince: modifiedSince.format("YYYY-MM-DD") + "T" +  modifiedSince.format("HH:mm:00.000")
+                modifiedSince: modifiedSince.format("YYYY-MM-DD") + "T" +  modifiedSince.format("HH:mm:00.000"),
             },
             method : "GET",
             auth : {
-                bearer : this.access_token
+                bearer : this.accessToken,
             },
             timeout: config.requestTimeout,
-            json : true
+            json : true,
         };
         return request(reqOpts);
     }
 
-    getCharacter(CharacterLink:string):Promise<JoinCharacterDetail> {
-        let reqOpts = {
+    public getCharacter(CharacterLink: string): Promise<JoinCharacterDetail> {
+        const reqOpts = {
             url: config.joinBaseUrl + CharacterLink,
             method : "GET",
             auth : {
-                bearer : this.access_token
+                bearer : this.accessToken,
             },
             timeout: config.requestTimeout,
-            json : true
+            json : true,
         };
 
         return request(reqOpts);
     }
 
-    getCharacterByID(id:string):Promise<JoinCharacterDetail> {
-        let url = `${config.joinCharactersBasePath}/${id}/`;
+    public getCharacterByID(id: string): Promise<JoinCharacterDetail> {
+        const url = `${config.joinCharactersBasePath}/${id}/`;
         return this.getCharacter(url);
     }
 
-    getMetadata():Promise<JoinMetadata> {
-         let reqOpts = {
+    public getMetadata(): Promise<JoinMetadata> {
+         const reqOpts = {
             url: config.joinMetaUrl,
             method : "GET",
             auth : {
-                bearer : this.access_token
+                bearer : this.accessToken,
             },
             timeout: config.requestTimeout,
-            json : true
+            json : true,
         };
 
-        return request(reqOpts).then( (m:JoinMetadata) => {
-            this.metadata = m;
-            return m;
-        });
+         return request(reqOpts).then( (m: JoinMetadata) => {this.metadata = m; return m; });
     }
 
 }

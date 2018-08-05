@@ -5,7 +5,7 @@ import * as winston from "winston";
 import * as PouchDB from "pouchdb";
 import * as pouchDBFind from "pouchdb-find";
 
-import { ImportStats, ImportRunStats } from "./stats";
+import { ImportStats} from "./stats";
 import { config } from "./config";
 import { JoinData, JoinImporter, JoinCharacter, JoinCharacterDetail, JoinMetadata } from "./join-importer";
 import { TempDbWriter} from "./tempdb-writer";
@@ -14,6 +14,7 @@ import { CatalogsLoader } from "./catalogs-loader";
 import { ModelRefresher } from "./model-refresher";
 import { MailProvision } from "./mail-provision";
 import { processCliParams } from "./cli-params";
+import { ImportRunStats } from "./import-run-stats";
 
 PouchDB.plugin(pouchDBFind);
 
@@ -162,17 +163,16 @@ function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData):
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
 function exportCharacterModel(
-    char: JoinCharacterDetail, 
-    data: ModelImportData, 
+    char: JoinCharacterDetail,
+    data: ModelImportData,
     exportModel: boolean = true): Observable<JoinCharacterDetail>  {
 
-    if (!exportModel)
-    {
+    if (!exportModel) {
         return Observable.from([char]);
     }
 
     winston.info(`About to export Character(${char._id})`);
-    
+
     const model = new AliceExporter(
         char, data.importer.metadata, data.catalogsLoader, true, params.ignoreInGame);
     char.model = model.model;
@@ -232,7 +232,8 @@ function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacter
 
             // Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
             .mergeMap( (cl: JoinCharacter[]) => {
-                winston.info( `## Process buffer ${bufferCounter}, size=${config.importBurstSize}: ${cl.map((d) => d.CharacterId).join(",")}##`);
+                const characterIds = cl.map((d) => d.CharacterId);
+                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(",")} #`);
                 bufferCounter++;
 
                 const promiseArr: Array<Promise<JoinCharacterDetail>> = [];
@@ -259,10 +260,8 @@ function loadCharactersFromCache(data: ModelImportData): Observable<JoinCharacte
             .bufferCount(config.importBurstSize)        // Порезать на группы по 20
              // Полученные данные группы разбить на отдельные элементы для обработки
             .mergeMap( (cl: JoinCharacter[]) => {
-                winston.info( `##=====================================\n` +
-                             `## Process buffer ${bufferCounter}, ` +
-                             `size=${config.importBurstSize}: ${cl.map((d) => d.CharacterId).join(",")}` +
-                             `\n##=====================================`);
+                const characterIds = cl.map((d) => d.CharacterId);
+                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(",")} #`);
                 bufferCounter++;
 
                 const promiseArr: Array<Promise<JoinCharacterDetail>> = [];
@@ -400,9 +399,9 @@ function configureLogger() {
                 json: false,
                 level: "debug",
             });
-    //const Elasticsearch = require('winston-elasticsearch');            
+    // const Elasticsearch = require('winston-elasticsearch');
 
-    //winston.add( new (Elasticsearch)({ level: 'debug', clientOpts: { host: config.log } }));
+    // winston.add( new (Elasticsearch)({ level: 'debug', clientOpts: { host: config.log } }));
 
     winston.handleExceptions(new winston.transports.File({
                  filename: "path/to/exceptions.log",
