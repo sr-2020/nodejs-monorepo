@@ -18,7 +18,6 @@ import { DeusCondition } from "./interfaces/condition";
 import { DeusEffect } from "./interfaces/effect";
 import { DeusEvent } from "./interfaces/events";
 import { mindModelData } from "./mind-model-stub";
-import { CatalogsLoader } from "./catalogs-loader";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
 
@@ -53,7 +52,6 @@ export class AliceExporter {
 
     constructor(character: JoinCharacterDetail,
                 metadata: JoinMetadata,
-                private catalogs: CatalogsLoader,
                 public isUpdate: boolean = true,
                 public ignoreInGame: boolean = false) {
 

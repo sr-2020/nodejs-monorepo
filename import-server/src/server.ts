@@ -10,7 +10,6 @@ import { config } from "./config";
 import { JoinData, JoinImporter, JoinCharacter, JoinCharacterDetail, JoinMetadata } from "./join-importer";
 import { TempDbWriter} from "./tempdb-writer";
 import { AliceExporter } from "./alice-exporter";
-import { CatalogsLoader } from "./catalogs-loader";
 import { ModelRefresher } from "./model-refresher";
 import { MailProvision } from "./mail-provision";
 import { processCliParams } from "./cli-params";
@@ -21,7 +20,6 @@ PouchDB.plugin(pouchDBFind);
 class ModelImportData {
     public importer: JoinImporter = new JoinImporter();
     public cacheWriter: TempDbWriter = new TempDbWriter();
-    public catalogsLoader: CatalogsLoader = new CatalogsLoader();
     public modelRefresher: ModelRefresher = new ModelRefresher();
     public mailProvision: MailProvision = new MailProvision();
 
@@ -113,13 +111,6 @@ function prepareForImport(data: ModelImportData): Observable<ModelImportData> {
             .do( () => winston.info(`Received metadata!`) )
             .flatMap( () => data.cacheWriter.saveMetadata(data.importer.metadata) )
             .do( () => winston.info(`Save metadata to cache!`) )
-            .flatMap( () => data.catalogsLoader.load() )
-            .do( () => {
-                Object.keys(data.catalogsLoader.catalogs).forEach( (name) => {
-                    winston.info(`Loaded catalog: ${name}, `
-                    + `elements: ${data.catalogsLoader.catalogs[name].length}`);
-                });
-            })
             .flatMap( () => Observable.from([data]) );
 }
 
@@ -174,7 +165,7 @@ function exportCharacterModel(
     winston.info(`About to export Character(${char._id})`);
 
     const model = new AliceExporter(
-        char, data.importer.metadata, data.catalogsLoader, true, params.ignoreInGame);
+        char, data.importer.metadata, true, params.ignoreInGame);
     char.model = model.model;
 
     return Observable.fromPromise(model.export())

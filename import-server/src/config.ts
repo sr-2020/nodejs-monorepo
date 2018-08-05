@@ -1,7 +1,6 @@
-import dotenv = require('dotenv');
+import dotenv = require("dotenv");
 
 if (process.env.NODE_ENV !== "production") {
-    console.log("Exporting .dotenv");
     dotenv.load();
 }
 
@@ -31,7 +30,6 @@ export const config = {
     joinMetaUrl: "https://joinrpg.ru/x-game-api/329/metadata/fields",
     joinCharactersBasePath: "/x-game-api/329/characters",
 
-
     importInterval: 300000,
     importBurstSize: 10,
     requestTimeout: 120000,
@@ -44,19 +42,4 @@ export const config = {
     },
 
     mailServerAPIUrl: "",
-
-    economicsApiUrl: "",
-    economicsLogin: "alice",
-    economicsPassword: "xxxx",
-    economicsStartCash: 100,
-
-    catalogs: {
-        effects: "",
-        illnesses: "",
-        implants: "",
-        condition: "",
-        pills: "",
-        events: ""
-    }
 };
-
