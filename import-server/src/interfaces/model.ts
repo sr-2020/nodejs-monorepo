@@ -35,6 +35,7 @@ export interface Professions {
     isIdelogist: boolean;
     isTopManager: boolean;
     isSecurity: boolean;
+    isManager: boolean;
 }
 
 export class DeusModel {

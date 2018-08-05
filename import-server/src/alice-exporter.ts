@@ -243,21 +243,23 @@ export class AliceExporter {
     }
 
     private getProfessions(): Professions {
-        const groupOrField =
-            (group, field) => this.character.hasFieldValue(3438, field) || this.character.partOfGroup(group);
+        const field = (f) => this.character.hasFieldValue(3438, f);
+
+        const group = (g) => this.character.partOfGroup(g);
 
         return {
-            isBiologist: groupOrField(8489, 3448),
-            isCommunications: groupOrField(8486, 3445),
-            isEngineer: groupOrField(8488, 3447),
-            isIdelogist: groupOrField(8556, -1),
-            isJournalist: groupOrField(-1, 3450),
-            isNavigator: groupOrField(8446, 3444),
-            isPilot: groupOrField(8445, 3443),
-            isPlanetolog: groupOrField(8490, 3449),
-            isSecurity: groupOrField(9907, -1),
-            isSupercargo: groupOrField(8487, 3446),
-            isTopManager: groupOrField(9906, -1),
+            isBiologist: group(8489) || field(3448),
+            isCommunications: group(8486) || field(3445),
+            isEngineer: group(8488) || field(3447),
+            isIdelogist: group(8556),
+            isJournalist: field(3450),
+            isNavigator: group(8446) || field(3444),
+            isPilot: group(8445) || field(3443),
+            isPlanetolog: group(3449) || field(3449),
+            isSecurity: group(9907),
+            isSupercargo: group(8487) || field(3446),
+            isTopManager: group(9906),
+            isManager: group(8491),
         };
     }
 
