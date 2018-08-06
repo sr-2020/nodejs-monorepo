@@ -238,7 +238,7 @@ export class AliceExporter {
 
         this.model.systems = [];
         nucleotides.forEach((element, index) => {
-            this.model.systems[index] = { value: 0, nucleotide: element, lastModified: 0};
+            this.model.systems[index] = { value: 0, nucleotide: element, lastModified: 0, present: true};
         });
     }
 

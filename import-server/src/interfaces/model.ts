@@ -21,6 +21,7 @@ export interface ISystem {
     value: number;
     nucleotide: number;
     lastModified: number;
+    present: boolean;
 }
 
 export interface Professions {
