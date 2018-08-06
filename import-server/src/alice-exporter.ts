@@ -193,7 +193,7 @@ export class AliceExporter {
             // Защита от цифрового логина
             this.model.login =  this.character.joinStrFieldValue(3631) || ("user" + this.model._id);
 
-            if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{4,30}$/i) || this.model.login.match(/^\d+$/i)) {
+            if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || this.model.login.match(/^\d+$/i)) {
                 winston.warn(`can't convert id=${this.character.characterId} incorrect login=\"${this.model.login}\"`);
                 this.model.login = "";
             }
