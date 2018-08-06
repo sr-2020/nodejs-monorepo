@@ -2,6 +2,7 @@ import * as express from "express";
 import { Observable, BehaviorSubject  } from "rxjs/Rx";
 import * as moment from "moment";
 import * as winston from "winston";
+import Elasticsearch = require("winston-elasticsearch");
 import * as PouchDB from "pouchdb";
 import * as pouchDBFind from "pouchdb-find";
 
@@ -390,9 +391,8 @@ function configureLogger() {
                 json: false,
                 level: "debug",
             });
-    // const Elasticsearch = require('winston-elasticsearch');
-
-    // winston.add( new (Elasticsearch)({ level: 'debug', clientOpts: { host: config.log } }));
+    winston.add(Elasticsearch,
+        { level: "debug",  indexPrefix: "importserver-logs", clientOpts: { host: config.log.elasticHost } });
 
     winston.handleExceptions(new winston.transports.File({
                  filename: "path/to/exceptions.log",
