@@ -394,6 +394,14 @@ function configureLogger() {
     winston.add(Elasticsearch,
         { level: "debug",  indexPrefix: "importserver-logs", clientOpts: { host: config.log.elasticHost } });
 
+
+    winston.add(winston.transports.File, {
+        name: "warn-files",
+        filename: config.log.warnFileName,
+        json: false,
+        level: "warn",
+    });
+
     winston.handleExceptions(new winston.transports.File({
                  filename: "path/to/exceptions.log",
                 handleExceptions: true,

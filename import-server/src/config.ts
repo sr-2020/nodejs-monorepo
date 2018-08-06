@@ -37,6 +37,7 @@ export const config = {
 
     log: {
         logFileName: "import-server.log",
+        warnFileName: "import-server.warn.log",
         supportLogFileName: "import-support-server.log",
         elasticHost: "https://elasticsearch.alice.magellan2018.ru/",
     },
