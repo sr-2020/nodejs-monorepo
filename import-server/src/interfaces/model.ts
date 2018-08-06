@@ -39,6 +39,13 @@ export interface Professions {
     isManager: boolean;
 }
 
+export interface SpaceSuit {
+    on: boolean;
+    oxygenCapacity: number;
+    timestampWhenPutOn: number;
+    diseases: any[];
+}
+
 export class DeusModel {
     // tslint:disable-next-line:variable-name
     public _id: string;        // id в БД == JoinRPG ID
@@ -59,6 +66,8 @@ export class DeusModel {
     public systems: ISystem[];
 
     public professions: Professions;
+
+    public spacesuit: SpaceSuit;
 
 // Техническое
     public validateErrors?: string[];      // Ошибки валидации (если не пустое, в БД модель не пишутся)
