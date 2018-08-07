@@ -230,27 +230,24 @@ export class AliceExporter {
             this.setGenome(2787);
         }
 
-            this.model.professions = this.getProfessions();
-
-            this.account = {
-                _id: this.model._id,
-                login: this.model.login,
-                password: this.character.joinStrFieldValue(3630) || "0000",
-            };
         this.model.professions = this.getProfessions();
 
-            // Заглушка для скафандра, должна быть в каждой модели
-            this.model.spaceSuit = {
-                on: false,
-                oxygenCapacity: 0,
-                timestampWhenPutOn: 0,
-                diseases: [],
-            };
+        // Заглушка для скафандра, должна быть в каждой модели
+        this.model.spaceSuit = this.getSpaceSuit();
 
         this.account = {
             _id: this.model._id,
             login: this.model.login,
             password: this.character.joinStrFieldValue(3630) || "0000",
+        };
+    }
+
+    private getSpaceSuit() {
+        return {
+            on: false,
+            oxygenCapacity: 0,
+            timestampWhenPutOn: 0,
+            diseases: [],
         };
     }
 
