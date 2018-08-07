@@ -1,27 +1,17 @@
 import { Observable } from "rxjs/Rx";
-import * as moment from "moment";
 import * as PouchDB from "pouchdb";
-import * as request from "request-promise-native";
-import * as chance from "chance";
 import * as winston from "winston";
-import * as uuid from "uuid/v4";
 import * as clones from "clones";
 
-import { ImportStats } from "./stats";
 import { config } from "./config";
-import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata } from "./join-importer";
-import { JoinFieldValue, JoinGroupInfo, JoinMetadata } from "./join-importer";
+import { JoinCharacterDetail } from "./join-importer";
+import { JoinMetadata } from "./join-importer";
 
-import { DeusModel, MindData, Professions } from "./interfaces/model";
-import { DeusModifier } from "./interfaces/modifier";
-import { DeusCondition } from "./interfaces/condition";
-import { DeusEffect } from "./interfaces/effect";
+import { DeusModel, Professions } from "./interfaces/model";
 import { DeusEvent } from "./interfaces/events";
-import { mindModelData } from "./mind-model-stub";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
 
-const PHYS_SYSTEMS_NUMBER = 6;
 
 interface IAliceAccount {
     _id: string;
@@ -120,7 +110,7 @@ export class AliceExporter {
 
         return Observable.zip(thisModel, oldModel, (a, b) => [a, b])
             // ===== Проверка InGame для для случая обновления ==============================
-            .filter(([t, o]: [DeusModel, DeusModel | null]) => {
+            .filter(([, o]: [DeusModel, DeusModel | null]) => {
                 if (o && o.inGame) {
                     winston.info(`Character model ${this.model._id} already in game!`);
                     return false;
@@ -128,7 +118,7 @@ export class AliceExporter {
                 return true;
             })
 
-            .map(([thisM, old]) => thisM)
+            .map(([thisM,]) => thisM)
 
             .flatMap(() => this.clearEvents())
             .do((result) => results.clearEvents = result.length)
@@ -150,7 +140,7 @@ export class AliceExporter {
             })
             .do((result) => results.account = result.ok ? "ok" : "error")
 
-            .map((result) => results)
+            .map(() => results)
             .toPromise();
 
     }
