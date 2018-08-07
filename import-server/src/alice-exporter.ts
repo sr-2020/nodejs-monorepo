@@ -7,7 +7,7 @@ import { config } from "./config";
 import { JoinCharacterDetail } from "./join-importer";
 import { JoinMetadata } from "./join-importer";
 
-import { DeusModel, Professions } from "./interfaces/model";
+import { DeusModel, Professions, ICompanyAccess, ICompany } from "./interfaces/model";
 import { DeusEvent } from "./interfaces/events";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
@@ -187,49 +187,91 @@ export class AliceExporter {
         }
         winston.info(`Try to convert model id=${this.character.characterId}`);
 
-        this.model.timestamp = Date.now();
-
-        // ID Alice. CharacterId
-        this.model._id = this.character.characterId.toString();
-
-        // Персонаж жив
-        this.model.isAlive = true;
-
-        // Состояние "в игре"
-        this.model.inGame = this.character.inGame;
-
-        // Login (e-mail).
-        // Защита от цифрового логина
-        this.model.login =  this.character.joinStrFieldValue(3631) || ("user" + this.model._id);
-
-        if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || this.model.login.match(/^\d+$/i)) {
-            this.conversionProblems.push(`Incorrect login ${this.model.login}`);
-        }
-
-        this.model.mail = this.model.login + "@alice.digital";
-
-        // Установить имя песрнажа.
-        this.setFullName(2786);
-
-        // Локация
-        if (!this.character.joinStrFieldValue(2787)) {
-            this.conversionProblems.push("Missing required field homeworld (2787)");
-        }
-        else {
-            this.model.planet = this.character.joinStrFieldValue(2787);
-            this.setGenome(2787);
-        }
-
-        this.model.professions = this.getProfessions();
-
-        // Заглушка для скафандра, должна быть в каждой модели
-        this.model.spaceSuit = this.getSpaceSuit();
+        this.model = {
+            timestamp: Date.now(),
+            _id: this.character.characterId.toString(),
+            _rev: undefined,
+            isAlive: true,
+            inGame: this.character.inGame,
+            login: this.getLogin(),
+            ...this.getFullName(2786),
+            professions: this.getProfessions(),
+            spaceSuit: this.getSpaceSuit(),
+            ...this.getPlanetAndGenome(2787),
+            profileType: "human",
+            companyAccess: this.getCompanyAccess(),
+            ...this.getEmptyModel(),  
+        };
 
         this.account = {
             _id: this.model._id,
             login: this.model.login,
             password: this.character.joinStrFieldValue(3630) || "0000",
         };
+    }
+
+    private getEmptyModel() {
+        return {
+            conditions: [],
+            changes: [],
+            messages: [],
+            modifiers: [],
+            systems: [],
+            timers: [],
+        };
+    }
+
+    private getCompanyAccess() {
+        const companyAccess = [];
+        
+        const group = (g) => this.character.partOfGroup(g);
+        
+        const checkAccess  = (g, companyName) => {
+            if (group(g))
+            {
+                companyAccess.push({companyName: companyName, isTopManager: group(9906)});
+            }    
+        }
+
+        checkAccess(8492, "gd");
+        checkAccess(8495, "pre");
+        checkAccess(8497, "kkg");
+        checkAccess(8498, "mat");
+        checkAccess(8499, "mst");
+
+        return companyAccess;
+    }
+
+    private getPlanetAndGenome(planetFieldId: number) {
+        // Локация
+        if (!this.character.joinStrFieldValue(planetFieldId)) {
+            this.conversionProblems.push(`Missing required field homeworld (${planetFieldId})`);
+        }
+        else {
+            const planet = this.character.joinStrFieldValue(planetFieldId);
+            const nucleotides = 
+            this.character.joinFieldProgrammaticValue(planetFieldId)
+            .split(" ", 7)
+            .map((sp) => Number.parseInt(sp, 10));
+
+            const systems = [];
+            nucleotides.forEach((element, index) => {
+                systems[index] = { value: 0, nucleotide: element, lastModified: 0, present: true};
+            });
+
+        return {planet, systems};
+        }
+    }
+
+    private getLogin() {
+        // Защита от цифрового логина
+        const login =  this.character.joinStrFieldValue(3631) || ("user" + this.character.characterId);
+
+        if (!login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || login.match(/^\d+$/i)) {
+            this.conversionProblems.push(`Incorrect login ${login}`);
+        }
+
+        return login;
     }
 
     private getSpaceSuit() {
@@ -239,19 +281,6 @@ export class AliceExporter {
             timestampWhenPutOn: 0,
             diseases: [],
         };
-    }
-
-    // Создает значение поля Геном для модели.
-    private setGenome(fieldID: number) {
-        const nucleotides =
-            this.character.joinFieldProgrammaticValue(fieldID)
-            .split(" ", 7)
-            .map((sp) => Number.parseInt(sp, 10));
-
-        this.model.systems = [];
-        nucleotides.forEach((element, index) => {
-            this.model.systems[index] = { value: 0, nucleotide: element, lastModified: 0, present: true};
-        });
     }
 
     private getProfessions(): Professions {
@@ -275,13 +304,14 @@ export class AliceExporter {
         };
     }
 
-    private setFullName(fullNameFieldNumber: number) {
+    private getFullName(fullNameFieldNumber: number) {
         const name = this.character.joinStrFieldValue(fullNameFieldNumber);
-        const nameParts: INameParts = this.parseFullName(name);
-
-        this.model.firstName = nameParts.firstName;
-        this.model.nicName = nameParts.nicName;
-        this.model.lastName = nameParts.lastName;
+        const parts = this.parseFullName(name);
+        return { 
+            firstName: parts.firstName, 
+            nicName: parts.nicName, 
+            lastName: parts.lastName 
+        };
     }
 
     // Установить имя песрнажа.

@@ -46,12 +46,18 @@ export interface SpaceSuit {
     diseases: any[];
 }
 
+export interface ICompanyAccess {
+    isTopManager: boolean;
+    companyName: ICompany;
+}
+
+export type ICompany = "gd" | "pre" | "kkg" | "mat" | "mst";
+
 export class DeusModel {
     // tslint:disable-next-line:variable-name
     public _id: string;        // id в БД == JoinRPG ID
     // tslint:disable-next-line:variable-name
     public _rev: string;       // rev в БД техническое
-    public mail: string;       // loging@alice.digital
     public login: string;      // login
     public firstName: string;      // имя
     public nicName?: string;       // ник-нейм
@@ -62,15 +68,15 @@ export class DeusModel {
 
     public profileType: string = "human";
 
-    public sex?: string;            // пол
     public systems: ISystem[];
 
     public professions: Professions;
 
     public spaceSuit: SpaceSuit;
 
+    public companyAccess: ICompanyAccess[];
+
 // Техническое
-    public validateErrors?: string[];      // Ошибки валидации (если не пустое, в БД модель не пишутся)
     public timestamp: number = 0;          // дата обновление модели
     public conditions: DeusCondition[] = [];     // состояния
     public modifiers: DeusModifier[] = [];       // модификаторы (импланты\болезни)
