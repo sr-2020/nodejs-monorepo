@@ -42,6 +42,8 @@ export class AliceExporter {
     public model: DeusModel = new DeusModel();
     public account: IAliceAccount = { _id: "", password: "", login: "" };
 
+    public conversionProblems: string[] = [];
+
     private con: any = null;
     private accCon: any = null;
     private eventsCon: any = null;
@@ -76,7 +78,7 @@ export class AliceExporter {
     public export(): Promise<any> {
 
         if (!this.model._id) {
-            winston.warn(`AliceExporter.export(): ${this.character.characterId} problem in conversion!`);
+            winston.warn(`Character(${this.character.characterId}) not converted. Reasons: ${this.conversionProblems.join("; ")}`);
             return Promise.resolve();
         }
 
@@ -176,46 +178,66 @@ export class AliceExporter {
 
     private createModel() {
         try {
-            winston.info(`Try to convert model id=${this.character.characterId}`);
+            this.convertModelImpl();
+        } catch (e) {
+            this.conversionProblems.push("Error in converting model" + e);
+        }
 
-            this.model.timestamp = Date.now();
+        if (this.conversionProblems.length > 0)
+        {
+            this.model._id = "";
+        }
+    }
 
-            // ID Alice. CharacterId
-            this.model._id = this.character.characterId.toString();
+    private convertModelImpl() {
+        if (!this.character.isActive)
+        {
+            this.conversionProblems.push("Not active character");
+            return;
+        }
+        winston.info(`Try to convert model id=${this.character.characterId}`);
 
-            // Персонаж жив
-            this.model.isAlive = true;
+        this.model.timestamp = Date.now();
 
-            // Состояние "в игре"
-            this.model.inGame = this.character.inGame;
+        // ID Alice. CharacterId
+        this.model._id = this.character.characterId.toString();
 
-            // Login (e-mail).
-            // Защита от цифрового логина
-            this.model.login =  this.character.joinStrFieldValue(3631) || ("user" + this.model._id);
+        // Персонаж жив
+        this.model.isAlive = true;
 
-            if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || this.model.login.match(/^\d+$/i)) {
-                winston.warn(`can't convert id=${this.character.characterId} incorrect login=\"${this.model.login}\"`);
-                this.model.login = "";
-            }
+        // Состояние "в игре"
+        this.model.inGame = this.character.inGame;
 
-            this.model.mail = this.model.login + "@alice.digital";
+        // Login (e-mail).
+        // Защита от цифрового логина
+        this.model.login =  this.character.joinStrFieldValue(3631) || ("user" + this.model._id);
 
-            // Установить имя песрнажа.
-            this.setFullName(2786);
+        if (!this.model.login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || this.model.login.match(/^\d+$/i)) {
+            this.conversionProblems.push(`Incorrect login ${this.model.login}`);
+        }
 
-            if (!this.character.joinStrFieldValue(2787)) {
-                // Prevent to import
-                winston.info(`Character(${this.character.characterId}) hasn't been filled fully and skipped.`);
-                this.model._id = "";
-                return;
-            }
+        this.model.mail = this.model.login + "@alice.digital";
 
-            // Локация
+        // Установить имя песрнажа.
+        this.setFullName(2786);
+
+        // Локация
+        if (!this.character.joinStrFieldValue(2787)) {
+            this.conversionProblems.push("Missing required field homeworld (2787)");
+        }
+        else {
             this.model.planet = this.character.joinStrFieldValue(2787);
-
             this.setGenome(2787);
+        }
 
             this.model.professions = this.getProfessions();
+
+            this.account = {
+                _id: this.model._id,
+                login: this.model.login,
+                password: this.character.joinStrFieldValue(3630) || "0000",
+            };
+        this.model.professions = this.getProfessions();
 
             // Заглушка для скафандра, должна быть в каждой модели
             this.model.spaceSuit = {
@@ -225,16 +247,11 @@ export class AliceExporter {
                 diseases: [],
             };
 
-            this.account = {
-                _id: this.model._id,
-                login: this.model.login,
-                password: this.character.joinStrFieldValue(3630) || "0000",
-            };
-
-        } catch (e) {
-            winston.info(`Error in converting model id=${this.character.characterId}: ` + e);
-            this.model._id = "";
-        }
+        this.account = {
+            _id: this.model._id,
+            login: this.model.login,
+            password: this.character.joinStrFieldValue(3630) || "0000",
+        };
     }
 
     // Создает значение поля Геном для модели.

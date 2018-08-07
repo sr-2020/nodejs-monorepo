@@ -391,6 +391,7 @@ function configureLogger() {
                 json: false,
                 level: "debug",
             });
+            
     winston.add(Elasticsearch,
         { level: "debug",  indexPrefix: "importserver-logs", clientOpts: { host: config.log.elasticHost } });
 
