@@ -67,7 +67,7 @@ export class DeusModel {
 
     public professions: Professions;
 
-    public spacesuit: SpaceSuit;
+    public spaceSuit: SpaceSuit;
 
 // Техническое
     public validateErrors?: string[];      // Ошибки валидации (если не пустое, в БД модель не пишутся)

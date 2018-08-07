@@ -218,7 +218,7 @@ export class AliceExporter {
             this.model.professions = this.getProfessions();
 
             // Заглушка для скафандра, должна быть в каждой модели
-            this.model.spacesuit = {
+            this.model.spaceSuit = {
                 on: false,
                 oxygenCapacity: 0,
                 timestampWhenPutOn: 0,
