@@ -32,7 +32,7 @@ const medicSystems = [
     { name: 'nervous', label: 'нервная', slots: 2},
 ];
 
-const MAGELLAN_TICK_MILLISECONDS = 60 * 1000;
+const MAGELLAN_TICK_MILLISECONDS = 20 * 60 * 1000;
 
 export = {
         DAMAGE_MODIFIER_MID,
