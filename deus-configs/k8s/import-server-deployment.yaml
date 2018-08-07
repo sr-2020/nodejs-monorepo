@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: import-server
+spec:
+  selector:
+    matchLabels:
+      component: import-server
+  template:
+    metadata:
+      labels:
+        component: import-server
+    spec:
+      containers:
+      - image: alexeyeremin/import-server
+        imagePullPolicy: Always
+        name: import-server
+        env:
+        - name: COUCHDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: username
+        - name: COUCHDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: couchdb-secret
+              key: password
+        - name: JOINRPG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: joinrpg-secret
+              key: password
+        - name: JOINRPG_USER
+          valueFrom:
+            secretKeyRef:
+              name: joinrpg-secret
+              key: user
+        ports:
+        - containerPort: 8100
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8100
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8100
+          initialDelaySeconds: 3
+          periodSeconds: 20
