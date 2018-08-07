@@ -1,7 +1,5 @@
 import { ViewModelApiInterface } from 'deus-engine-manager-api';
-import { BiologicalSystems, biologicalSystemsNames, Change,
-  OrganismModel, 
-  organismSystemsIndices} from '../helpers/basic-types';
+import { Change, OrganismModel } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
 
@@ -129,28 +127,6 @@ function getEconomyPage() {
   };
 }
 
-function getBodyPage(model: OrganismModel) {
-  const items: Row[] = [];
-  const result = {
-    __type: 'ListPageViewModel',
-    menuTitle: 'Доктор Хаус',
-    viewId: 'page:body',
-    body: {
-      title: 'Доктор Хаус',
-      items,
-    },
-  };
-  for (const i of organismSystemsIndices(model)) {
-    const system: BiologicalSystems = i;
-    result.body.items.push({
-      viewId: 'mid:' + BiologicalSystems[system],
-      text: biologicalSystemsNames.get(system) as string,
-      value: model.systems[i].value.toString(),
-    });
-  }
-  return result;
-}
-
 function getSymptomsPage(model: OrganismModel): PageViewModel {
   const items: Row[] = [];
   const result = {
@@ -204,7 +180,6 @@ function getPages(model: OrganismModel) {
 
   if (model.isAlive) {
     pages.push(getConditionsPage(model));
-    pages.push(getBodyPage(model));
     pages.push(getSymptomsPage(model));
     pages.push(getEconomyPage());
   }
