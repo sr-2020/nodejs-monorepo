@@ -7,20 +7,11 @@ import { config } from "./config";
 import { JoinCharacterDetail } from "./join-importer";
 import { JoinMetadata } from "./join-importer";
 
-import { DeusModel, Professions, ICompanyAccess, ICompany } from "./interfaces/model";
+import { DeusModel, Professions } from "./interfaces/model";
 import { DeusEvent } from "./interfaces/events";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
-
-
-interface IAliceAccount {
-    _id: string;
-    _rev?: string;
-    password: string;
-    login: string;
-    professions: Professions;
-    companyAccess: ICompanyAccess[];
-}
+import { IAliceAccount } from "./interfaces/alice-account";
 
 export interface INameParts {
     firstName: string;

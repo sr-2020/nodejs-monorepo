@@ -1,10 +1,6 @@
 import { DeusModifier } from "./modifier";
 import { DeusCondition } from "./condition";
 
-export interface MindData {
-    [index: string]: number[];
-}
-
 export interface ChangesElement {
     mID: string;
     text: string;
@@ -24,7 +20,7 @@ export interface ISystem {
     present: boolean;
 }
 
-export interface Professions {
+export interface TradeUnions {
     isPilot: boolean;
     isNavigator: boolean;
     isCommunications: boolean;
@@ -32,12 +28,20 @@ export interface Professions {
     isEngineer: boolean;
     isBiologist: boolean;
     isPlanetolog: boolean;
-    isJournalist: boolean;
-    isIdelogist: boolean;
+}
+
+export interface CompanyPosition {
     isTopManager: boolean;
     isSecurity: boolean;
     isManager: boolean;
 }
+
+export interface SpecialPositions {
+    isJournalist: boolean;
+    isIdelogist: boolean;
+}
+
+export type Professions = CompanyPosition & SpecialPositions & TradeUnions;
 
 export interface SpaceSuit {
     on: boolean;
