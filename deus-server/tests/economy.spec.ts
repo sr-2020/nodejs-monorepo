@@ -15,6 +15,7 @@ import { TestDatabasesContainer } from './test-db-container';
 
 import { getBalanceTest } from './economy/balance';
 import { getCreateAccountTest } from './economy/create-account';
+import { getSalaryTest } from './economy/salary';
 import { getTransferTest } from './economy/transfer';
 
 const address = `http://localhost:3000`;
@@ -77,5 +78,6 @@ describe('Economy', () => {
   getBalanceTest(address);
   getTransferTest(address);
   getCreateAccountTest(address);
+  getSalaryTest(address);
 
 });

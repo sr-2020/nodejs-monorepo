@@ -91,6 +91,31 @@ export class EconomyController {
     }
   }
 
+  @Post('/economy/pay_salary')
+  public async paySalary( @CurrentUser() user: Account) {
+    try {
+      await checkAccess(user, user._id, AccessPropagation.AdminOnly);
+
+      const accounts = await Container.get(DatabasesContainerToken).accountsDb().allDocs({ include_docs: true });
+
+      const db = Container.get(DatabasesContainerToken).economyDb();
+      await db.upsert('balances', (doc) => {
+        accounts.rows.forEach((account) => {
+          if (account.doc && doc[account.doc._id]) {
+            // TODO add salary formula
+            doc[account.doc._id] += 1;
+          }
+        });
+        return doc;
+      });
+
+      // TODO: add salary transaction
+      return {};
+    } catch (e) {
+      returnCharacterNotFoundOrRethrow(e);
+    }
+  }
+
   @Get('/economy/:id')
   public async get( @CurrentUser() user: Account, @Param('id') id: string) {
     id = await canonicalId(id);
