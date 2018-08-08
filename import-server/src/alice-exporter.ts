@@ -219,9 +219,6 @@ export class AliceExporter {
             ...this.getEmptyModel(),
         };
 
-        // TODO: Пофиксить this.getPlanetAndGenome (который по каким-то причинам делает systems=[]) и убрать.
-        this.setGenome(2787);
-
         this.account = {
             _id: this.model._id,
             login: this.model.login,
@@ -237,7 +234,6 @@ export class AliceExporter {
             changes: [],
             messages: [],
             modifiers: [],
-            systems: [],
             timers: [],
         };
     }
@@ -302,19 +298,6 @@ export class AliceExporter {
             timestampWhenPutOn: 0,
             diseases: [],
         };
-    }
-
-    // Создает значение поля Геном для модели.
-    private setGenome(fieldID: number) {
-        const nucleotides =
-            this.character.joinFieldProgrammaticValue(fieldID)
-            .split(" ", 7)
-            .map((sp) => Number.parseInt(sp, 10));
-
-        this.model.systems = [];
-        nucleotides.forEach((element, index) => {
-            this.model.systems[index] = { value: 0, nucleotide: element, lastModified: 0, present: true};
-        });
     }
 
     private getProfessions(): Professions {
