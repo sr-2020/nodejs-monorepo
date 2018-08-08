@@ -12,6 +12,7 @@ export interface AccessEntry {
 
 export interface Account {
   _id: string;
+  _rev?: string;
   login?: string;
   password: string;
   access?: AccessEntry[];

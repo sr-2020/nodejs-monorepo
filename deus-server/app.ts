@@ -12,6 +12,7 @@ import 'reflect-metadata'; // this shim is required
 import { Action, UnauthorizedError, useExpressServer } from 'routing-controllers';
 import { Container } from 'typedi';
 import { StatusAndBody } from './connection';
+import { AccountController } from './controllers/account.controller';
 import { CharactersController } from './controllers/characters.controller';
 import { EconomyController } from './controllers/economy.controller';
 import { EventsController } from './controllers/events.controller';
@@ -68,7 +69,7 @@ class App {
       },
       controllers: [
         TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
-        LocationEventsController, MedicController,
+        LocationEventsController, MedicController, AccountController,
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,

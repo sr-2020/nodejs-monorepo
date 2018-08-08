@@ -92,7 +92,7 @@ describe('API Server', () => {
         { id: '10001', timestamp: testStartTime + 60000 },
       ],
     });
-    await dbContainer.accountsDb().put({ _id: '00002', login: 'some_other_user', password: 'asdfg' });
+    await dbContainer.accountsDb().put({ _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
     await dbContainer.accountsDb().put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
 
     await dbContainer.createViews();
@@ -1285,4 +1285,37 @@ describe('API Server', () => {
       expect(docsNew.docs[0]._id).to.equal('00002');
     });
   });
+
+  describe.only('GET /account', () => {
+
+    it('Returns account', async () => {
+      const response = await rp.get(address + '/account',
+        {
+          resolveWithFullResponse: true, json: {},
+          auth: { username: 'some_other_user', password: 'asdfg' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+      expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+      expect(response.body.account).to.deep.equal(
+        { _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
+    });
+
+    it('Return 401 if wrong password', async () => {
+      const response = await rp.get(address + '/account',
+        {
+          resolveWithFullResponse: true, json: {}, simple: false,
+          auth: { username: 'some_other_user', password: '1111' },
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+    });
+
+    it('Return 401 if no auth', async () => {
+      const response = await rp.get(address + '/account',
+        {
+          resolveWithFullResponse: true, json: {}, simple: false,
+        }).promise();
+      expect(response.statusCode).to.eq(401);
+    });
+  });
+
 });
