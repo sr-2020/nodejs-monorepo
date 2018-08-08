@@ -29,6 +29,37 @@ describe('Create account', () => {
         expect(responseBalance.body.balance).to.deep.equal(1000);
     });
 
+    it('Can create account twice', async () => {
+        const provisionBody: ProvisionRequest = {
+            initialBalance: 1000,
+            userId: '00003',
+        };
+
+        const response = await rp.post(address + '/economy/provision',
+        {
+          resolveWithFullResponse: true,
+          json: provisionBody,
+          auth: { username: 'admin', password: 'admin' },
+        }).promise();
+      expect(response.statusCode).to.eq(200);
+
+      const response2 = await rp.post(address + '/economy/provision',
+      {
+        resolveWithFullResponse: true,
+        json: provisionBody,
+        auth: { username: 'admin', password: 'admin' },
+      }).promise();
+        expect(response2.statusCode).to.eq(200);
+
+      const responseBalance = await rp.get(address + '/economy/00003',
+      {
+        resolveWithFullResponse: true, json: {},
+        auth: { username: 'withoutbalance', password: '3' },
+      }).promise();
+        expect(responseBalance.statusCode).to.eq(200);
+        expect(responseBalance.body.balance).to.deep.equal(1000);
+    });
+
     it('Only admins could provide account', async () => {
         const provisionBody: ProvisionRequest = {
             initialBalance: 1000,
