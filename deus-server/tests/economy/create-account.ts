@@ -77,10 +77,16 @@ describe('Create account', () => {
     });
 
     it('Get 404 if user does not exist', async () => {
+        const provisionBody: ProvisionRequest = {
+            initialBalance: 1000,
+            userId: '101010',
+        };
+
       const response = await rp.post(address + '/economy/provision',
         {
-          resolveWithFullResponse: true, simple: false, json: {},
-          auth: { username: '101010', password: '3' },
+          resolveWithFullResponse: true, simple: false,
+          json: provisionBody,
+          auth: { username: 'admin', password: 'admin' },
         }).promise();
       expect(response.statusCode).to.eq(404);
     });

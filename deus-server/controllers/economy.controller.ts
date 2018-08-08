@@ -66,14 +66,21 @@ export class EconomyController {
   @Post('/economy/provision')
   public async provision( @CurrentUser() user: Account, @Body() body: ProvisionRequest) {
     try {
-      await checkAccess(user, body.userId, AccessPropagation.AdminOnly);
+      const { userId } = body;
+
+      await checkAccess(user, userId, AccessPropagation.AdminOnly);
 
       if (body.initialBalance < 0)
         throw new BadRequestError('Начальный баланс не может быть отрицательным');
 
+      const target = await Container.get(DatabasesContainerToken).accountsDb().get(userId);
+
+      if (!target)
+        throw new NotFoundError('Не удалось найти пользователя');
+
       const db = Container.get(DatabasesContainerToken).economyDb();
       await db.upsert('balances', (doc) => {
-        doc[body.userId] = body.initialBalance;
+        doc[userId] = body.initialBalance;
         return doc;
       });
 
