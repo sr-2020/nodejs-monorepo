@@ -1286,7 +1286,7 @@ describe('API Server', () => {
     });
   });
 
-  describe.only('GET /account', () => {
+  describe('GET /account', () => {
 
     it('Returns account', async () => {
       const response = await rp.get(address + '/account',
