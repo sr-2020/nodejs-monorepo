@@ -13,8 +13,8 @@ import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../
 
 import { TestDatabasesContainer } from './test-db-container';
 
-import { getBalanceTest } from './economy.balance';
-import { getTransferTest } from './economy.transfer';
+import { getBalanceTest } from './economy/balance';
+import { getTransferTest } from './economy/transfer';
 
 const address = `http://localhost:3000`;
 

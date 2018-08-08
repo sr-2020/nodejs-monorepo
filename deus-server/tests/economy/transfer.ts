@@ -1,6 +1,7 @@
 import { expect } from 'chai';
+import 'mocha';
 import * as rp from 'request-promise';
-import { currentTimestamp } from '../utils';
+import { currentTimestamp } from '../../utils';
 
 export function getTransferTest(address: string) {
 
