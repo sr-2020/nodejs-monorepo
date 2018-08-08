@@ -14,6 +14,7 @@ import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../
 import { TestDatabasesContainer } from './test-db-container';
 
 import { getBalanceTest } from './economy/balance';
+import { getCreateAccountTest } from './economy/create-account';
 import { getTransferTest } from './economy/transfer';
 
 const address = `http://localhost:3000`;
@@ -37,8 +38,11 @@ describe('Economy', () => {
   Container.set(ApplicationSettingsToken, settings);
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
 
-  async function addAccount(id: string, login: string, password: string, balance: number) {
+  async function addAccount(id: string, login: string, password: string) {
     await dbContainer.accountsDb().post({ _id: id, login, password });
+  }
+
+  async function setBalance(id: string, balance: number) {
     await dbContainer.economyDb().upsert('balances', (doc) => {
       doc[id] = balance;
       return doc;
@@ -48,8 +52,16 @@ describe('Economy', () => {
   beforeEach(async () => {
     dbContainer = new TestDatabasesContainer();
 
-    await addAccount('00001', 'first', '1', 1000);
-    await addAccount('00002', 'second', '2', 1000);
+    await addAccount('00001', 'first', '1');
+    await setBalance('00001', 1000);
+
+    await addAccount('00002', 'second', '2');
+    await setBalance('00002', 1000);
+
+    await addAccount('00003', 'withoutbalance', '3');
+
+    await dbContainer.accountsDb().post({ _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
+
     await dbContainer.createViews();
     Container.set(DatabasesContainerToken, dbContainer);
 
@@ -64,5 +76,6 @@ describe('Economy', () => {
 
   getBalanceTest(address);
   getTransferTest(address);
+  getCreateAccountTest(address);
 
 });

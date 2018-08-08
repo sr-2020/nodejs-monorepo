@@ -32,6 +32,11 @@ export interface TransactionRequest {
   description?: string;
 }
 
+export interface ProvisionRequest {
+  userId: string;
+  initialBalance: number;
+}
+
 export interface TransactionDocument extends TransactionRequest {
   timestamp: number;
 }

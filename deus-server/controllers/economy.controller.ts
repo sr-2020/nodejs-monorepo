@@ -4,12 +4,19 @@ import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
-import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, NotFoundError } from 'routing-controllers';
+import {
+  BadRequestError, Body, CurrentUser, Get, JsonController, NotFoundError, Param, Post,
+} from 'routing-controllers';
+
 import { Container } from 'typedi';
 
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
-import { Account, BalancesDocument, DatabasesContainerToken, TransactionRequest } from '../services/db-container';
-import { canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
+import {
+  Account, BalancesDocument, DatabasesContainerToken, ProvisionRequest, TransactionRequest,
+} from '../services/db-container';
+import {
+   AccessPropagation, canonicalId, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow,
+} from '../utils';
 
 @JsonController()
 export class EconomyController {
@@ -50,6 +57,27 @@ export class EconomyController {
           `Отправитель платежа: ${body.sender}`
             + ((body.description != undefined && body.description.length > 0)
               ? `, описание: "${body.description}"` : '')));
+      return {};
+    } catch (e) {
+      returnCharacterNotFoundOrRethrow(e);
+    }
+  }
+
+  @Post('/economy/provision')
+  public async provision( @CurrentUser() user: Account, @Body() body: ProvisionRequest) {
+    try {
+      await checkAccess(user, body.userId, AccessPropagation.AdminOnly);
+
+      if (body.initialBalance < 0)
+        throw new BadRequestError('Начальный баланс не может быть отрицательным');
+
+      const db = Container.get(DatabasesContainerToken).economyDb();
+      await db.upsert('balances', (doc) => {
+        doc[body.userId] = body.initialBalance;
+        return doc;
+      });
+
+      // TODO: consider deleting all transactions for this user
       return {};
     } catch (e) {
       returnCharacterNotFoundOrRethrow(e);
