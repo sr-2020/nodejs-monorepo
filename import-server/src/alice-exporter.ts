@@ -188,7 +188,7 @@ export class AliceExporter {
         try {
             this.convertModelImpl();
         } catch (e) {
-            this.conversionProblems.push("Error in converting model" + e);
+            this.conversionProblems.push("Error in converting model " + e);
         }
 
         if (this.conversionProblems.length > 0)

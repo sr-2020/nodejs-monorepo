@@ -56,6 +56,11 @@ export class CharacterParser {
         const fieldValue = this.joinNumFieldValue(fieldID);
         const fieldMetadata = this.metadata.Fields.find((f) => f.ProjectFieldId === fieldID);
 
+        if (!fieldMetadata)
+        {
+            throw new Error(`Can't find expected metadata for field ${fieldID}`);
+        }
+
         const variant = fieldMetadata.ValueList.find((f) => f.ProjectFieldVariantId === fieldValue);
 
         if (variant) {
