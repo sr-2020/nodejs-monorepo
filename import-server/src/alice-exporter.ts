@@ -18,6 +18,8 @@ interface IAliceAccount {
     _rev?: string;
     password: string;
     login: string;
+    professions: Professions;
+    companyAccess: ICompanyAccess[];
 }
 
 export interface INameParts {
@@ -30,7 +32,23 @@ export interface INameParts {
 export class AliceExporter {
 
     public model: DeusModel = new DeusModel();
-    public account: IAliceAccount = { _id: "", password: "", login: "" };
+    public account: IAliceAccount = {
+        _id: "", password: "", login: "",
+        professions: {
+            isBiologist: false,
+            isCommunications: false,
+            isIdelogist: false,
+            isEngineer: false,
+            isManager: false,
+            isJournalist: false,
+            isNavigator: false,
+            isPilot: false,
+            isPlanetolog: false,
+            isSecurity: false,
+            isSupercargo: false,
+            isTopManager: false
+        }, companyAccess: []
+    };
 
     public conversionProblems: string[] = [];
 
@@ -195,12 +213,10 @@ export class AliceExporter {
             inGame: this.character.inGame,
             login: this.getLogin(),
             ...this.getFullName(2786),
-            professions: this.getProfessions(),
             spaceSuit: this.getSpaceSuit(),
             ...this.getPlanetAndGenome(2787),
             profileType: "human",
-            companyAccess: this.getCompanyAccess(),
-            ...this.getEmptyModel(),  
+            ...this.getEmptyModel(),
         };
 
         // TODO: Пофиксить this.getPlanetAndGenome (который по каким-то причинам делает systems=[]) и убрать.
@@ -210,6 +226,8 @@ export class AliceExporter {
             _id: this.model._id,
             login: this.model.login,
             password: this.character.joinStrFieldValue(3630) || "0000",
+            professions: this.getProfessions(),
+            companyAccess: this.getCompanyAccess(),
         };
     }
 

@@ -70,11 +70,7 @@ export class DeusModel {
 
     public systems: ISystem[];
 
-    public professions: Professions;
-
     public spaceSuit: SpaceSuit;
-
-    public companyAccess: ICompanyAccess[];
 
 // Техническое
     public timestamp: number = 0;          // дата обновление модели
