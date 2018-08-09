@@ -1,15 +1,17 @@
 import { expect } from 'chai';
-import { AliceExporter } from '../src/alice-exporter';
 
 import { testCharData01 } from './test-char1';
 import { metadata } from './test-metadata';
+import { convertAliceModel } from '../src/alice-model-converter';
+import { CharacterParser } from '../src/character-parser';
 
 describe("Model Creation", () => {
 
-    const {model, account, conversionProblems} = new AliceExporter(testCharData01, metadata);
+    const character = new CharacterParser(testCharData01, metadata);
+    const {model, account, problems} = convertAliceModel(character);
 
     it("no conversion error", () => {
-        expect(conversionProblems, `Has conversion problems: ${conversionProblems.join(", ")}`).to.be.empty;
+        expect(problems, `Has conversion problems: ${problems.join(", ")}`).to.be.empty;
     })
 
     it("model._id", () => {

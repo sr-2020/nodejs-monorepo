@@ -3,7 +3,7 @@ import * as request from "request-promise-native";
 import * as winston from "winston";
 
 import { config } from "./config";
-import { DeusModel } from "./interfaces/model";
+import { DeusModel } from "./interfaces/deus-model";
 
 export interface JoinCharacter {
     CharacterId: number;

@@ -7,12 +7,12 @@ import { config } from "./config";
 import { JoinCharacterDetail } from "./join-importer";
 import { JoinMetadata } from "./join-importer";
 
-import { Professions } from "./interfaces/model";
 import { DeusEvent } from "./interfaces/events";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
 import { IAliceAccount } from "./interfaces/alice-account";
 import { DeusModel } from "./interfaces/deus-model";
+import { convertAliceModel } from "./alice-model-converter";
 
 export interface INameParts {
     firstName: string;
@@ -24,23 +24,7 @@ export interface INameParts {
 export class AliceExporter {
 
     public model: DeusModel = new DeusModel();
-    public account: IAliceAccount = {
-        _id: "", password: "", login: "",
-        professions: {
-            isBiologist: false,
-            isCommunications: false,
-            isIdelogist: false,
-            isEngineer: false,
-            isManager: false,
-            isJournalist: false,
-            isNavigator: false,
-            isPilot: false,
-            isPlanetolog: false,
-            isSecurity: false,
-            isSupercargo: false,
-            isTopManager: false
-        }, companyAccess: []
-    };
+    private account?: IAliceAccount;
 
     public conversionProblems: string[] = [];
 
@@ -77,7 +61,7 @@ export class AliceExporter {
 
     public export(): Promise<any> {
 
-        if (!this.model._id) {
+        if (!this.model) {
             winston.warn(`Character(${this.character.characterId}) not converted. Reasons: ${this.conversionProblems.join("; ")}`);
             return Promise.resolve();
         }
@@ -141,10 +125,10 @@ export class AliceExporter {
             .do((result: any) => results.saveEvents = result.length)
 
             .flatMap(() => {
-                if (this.account.login && this.account.password) {
+                if (this.account) {
                     return saveObject(this.accCon, this.account, this.isUpdate);
                 } else {
-                    winston.warn(`Cannot provide account for Character(${this.model._id})`, this.account);
+                    winston.warn(`Cannot provide account for Character(${this.model._id})`);
                     return Promise.resolve(false);
                 }
             })
@@ -177,196 +161,9 @@ export class AliceExporter {
     }
 
     private createModel() {
-        try {
-            this.convertModelImpl();
-        } catch (e) {
-            this.conversionProblems.push("Error in converting model " + e);
-        }
-
-        if (this.conversionProblems.length > 0)
-        {
-            this.model._id = "";
-        }
-    }
-
-    private convertModelImpl() {
-        if (!this.character.isActive)
-        {
-            this.conversionProblems.push("Not active character");
-            return;
-        }
-        winston.info(`Try to convert model id=${this.character.characterId}`);
-
-        this.model = {
-            timestamp: Date.now(),
-            _id: this.character.characterId.toString(),
-            _rev: undefined,
-            isAlive: true,
-            inGame: this.character.inGame,
-            login: this.getLogin(),
-            ...this.getFullName(2786),
-            spaceSuit: this.getSpaceSuit(),
-            ...this.getPlanetAndGenome(2787),
-            profileType: "human",
-            ...this.getEmptyModel(),
-        };
-
-        this.account = {
-            _id: this.model._id,
-            login: this.model.login,
-            password: this.character.joinStrFieldValue(3630) || "0000",
-            professions: this.getProfessions(),
-            companyAccess: this.getCompanyAccess(),
-        };
-    }
-
-    private getEmptyModel() {
-        return {
-            conditions: [],
-            changes: [],
-            messages: [],
-            modifiers: [],
-            timers: [],
-        };
-    }
-
-    private getCompanyAccess() {
-        const companyAccess = [];
-        
-        const group = (g) => this.character.partOfGroup(g);
-        
-        const checkAccess  = (g, companyName) => {
-            if (group(g))
-            {
-                companyAccess.push({companyName: companyName, isTopManager: group(9906)});
-            }    
-        }
-
-        checkAccess(8492, "gd");
-        checkAccess(8495, "pre");
-        checkAccess(8497, "kkg");
-        checkAccess(8498, "mat");
-        checkAccess(8499, "mst");
-
-        return companyAccess;
-    }
-
-    private getPlanetAndGenome(planetFieldId: number) {
-        // Локация
-        if (!this.character.joinStrFieldValue(planetFieldId)) {
-            this.conversionProblems.push(`Missing required field homeworld (${planetFieldId})`);
-        }
-        else {
-            const planet = this.character.joinStrFieldValue(planetFieldId);
-            const nucleotides = 
-            this.character.joinFieldProgrammaticValue(planetFieldId)
-            .split(" ", 7)
-            .map((sp) => Number.parseInt(sp, 10));
-
-            const systems = [];
-            nucleotides.forEach((element, index) => {
-                systems[index] = { value: 0, nucleotide: element, lastModified: 0, present: true};
-            });
-
-        return {planet, systems};
-        }
-    }
-
-    private getLogin() {
-        // Защита от цифрового логина
-        const login =  this.character.joinStrFieldValue(3631) || ("user" + this.character.characterId);
-
-        if (!login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || login.match(/^\d+$/i)) {
-            this.conversionProblems.push(`Incorrect login ${login}`);
-        }
-
-        return login;
-    }
-
-    private getSpaceSuit() {
-        return {
-            on: false,
-            oxygenCapacity: 0,
-            timestampWhenPutOn: 0,
-            diseases: [],
-        };
-    }
-
-    private getProfessions(): Professions {
-        const field = (f) => this.character.hasFieldValue(3438, f);
-
-        const group = (g) => this.character.partOfGroup(g);
-
-        return {
-            isBiologist: group(8489) || field(3448),
-            isCommunications: group(8486) || field(3445),
-            isEngineer: group(8488) || field(3447),
-            isIdelogist: group(8556),
-            isJournalist: field(3450),
-            isNavigator: group(8446) || field(3444),
-            isPilot: group(8445) || field(3443),
-            isPlanetolog: group(3449) || field(3449),
-            isSecurity: group(9907),
-            isSupercargo: group(8487) || field(3446),
-            isTopManager: group(9906),
-            isManager: group(8491),
-        };
-    }
-
-    private getFullName(fullNameFieldNumber: number) {
-        const name = this.character.joinStrFieldValue(fullNameFieldNumber);
-        const parts = this.parseFullName(name);
-        return { 
-            firstName: parts.firstName, 
-            nicName: parts.nicName, 
-            lastName: parts.lastName 
-        };
-    }
-
-    // Установить имя песрнажа.
-    private parseFullName(name: string): INameParts {
-        const ret: INameParts = {
-            firstName: "",
-            nicName: "",
-            lastName: "",
-            fullName: name,
-        };
-
-        let parts = name.match(/^(.*?)\s\"(.*?)\"\s(.*)$/i);
-
-        // Формат имени Имя "Ник" Фамилия
-        if (parts) {
-            ret.firstName = parts[1];
-            ret.nicName = parts[2];
-            ret.lastName = parts[3];
-            return ret;
-        }
-
-        // Формат имени Имя "Ник"
-        parts = name.match(/^(.*?)\s\"(.*?)\"\s*$/i);
-
-        if (parts) {
-            ret.firstName = parts[1];
-            ret.nicName = parts[2];
-            ret.lastName = "";
-            return ret;
-        }
-
-        // Формат имени Имя Фамилия
-        parts = name.match(/^(.*?)\s(.*)$/i);
-
-        if (parts) {
-            ret.firstName = parts[1];
-            ret.lastName = parts[2];
-            ret.nicName = "";
-            return ret;
-        }
-
-        // Формат имени - только имя
-        ret.firstName = name;
-        ret.nicName = "";
-        ret.lastName = "";
-
-        return ret;
+        const result = convertAliceModel(this.character);
+        this.model = result.model;
+        this.account = result.account;
+        this.conversionProblems = result.problems;
     }
 }

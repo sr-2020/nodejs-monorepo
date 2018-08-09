@@ -366,7 +366,7 @@ function importAndCreate(   id: number = 0,
    // ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
         .subscribe( () => {},
             (error) => {
-                winston.info( "Error in pipe: " + JSON.stringify(error) );
+                winston.error( "Error in pipe: ", error );
                 isImportRunning = false;
             },
             () => {
