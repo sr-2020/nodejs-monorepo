@@ -12,4 +12,13 @@ export interface IAliceAccount {
         tradeUnion: TradeUnions;
         companyBonus: ICompany[];
     }
+
+    access?: AccessEntry[];
+    pushToken?: string;
+    roles?: string[];
 }
+
+export interface AccessEntry {
+    id: string;
+    timestamp: number;
+  }
