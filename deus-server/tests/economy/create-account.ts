@@ -43,6 +43,8 @@ describe('Create account', () => {
         }).promise();
       expect(response.statusCode).to.eq(200);
 
+      provisionBody.initialBalance = 500;
+
       const response2 = await rp.post(address + '/economy/provision',
       {
         resolveWithFullResponse: true,
@@ -57,7 +59,7 @@ describe('Create account', () => {
         auth: { username: 'withoutbalance', password: '3' },
       }).promise();
         expect(responseBalance.statusCode).to.eq(200);
-        expect(responseBalance.body.balance).to.deep.equal(1000);
+        expect(responseBalance.body.balance).to.deep.equal(500);
     });
 
     it('Only admins could provide account', async () => {
