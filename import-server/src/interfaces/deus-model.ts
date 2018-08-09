@@ -1,6 +1,25 @@
-import { ISystem, SpaceSuit, Message, ChangesElement } from "./model";
+import { ISystem } from "./model";
 import { DeusCondition } from "./condition";
 import { DeusModifier } from "./modifier";
+
+export interface ChangesElement {
+    mID: string;
+    text: string;
+    timestamp: string;
+}
+
+export interface Message {
+    mID: string;
+    title: string;
+    text: string;
+}
+
+export interface SpaceSuit {
+    on: boolean;
+    oxygenCapacity: number;
+    timestampWhenPutOn: number;
+    diseases: any[];
+}
 
 export class DeusModel {
     // tslint:disable-next-line:variable-name

@@ -1,15 +1,3 @@
-export interface ChangesElement {
-    mID: string;
-    text: string;
-    timestamp: string;
-}
-
-export interface Message {
-    mID: string;
-    title: string;
-    text: string;
-}
-
 export interface ISystem {
     value: number;
     nucleotide: number;
@@ -39,13 +27,6 @@ export interface SpecialPositions {
 }
 
 export type Professions = CompanyPosition & SpecialPositions & TradeUnions;
-
-export interface SpaceSuit {
-    on: boolean;
-    oxygenCapacity: number;
-    timestampWhenPutOn: number;
-    diseases: any[];
-}
 
 export interface ICompanyAccess {
     isTopManager: boolean;
