@@ -13,7 +13,8 @@ import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, PushSettings } from '../services/settings';
 import { ApplicationSettingsToken } from '../services/settings';
-import { TestDatabasesContainer } from './test-db-container';
+
+import { createEmptyAccount, TestDatabasesContainer } from './test-db-container';
 
 const address = 'http://localhost:3000';
 
@@ -34,7 +35,11 @@ describe('API Server - long timeout', () => {
     app = new App();
     await app.listen();
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
-    await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
+    const account = {
+      ...createEmptyAccount(),
+      _id: '00001', login: 'some_user', password: 'qwerty',
+    };
+    await dbContainer.accountsDb().put(account);
     await dbContainer.createViews();
   });
 
@@ -79,7 +84,9 @@ describe('API Server - medium timeout', () => {
     app = new App();
     await app.listen();
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
-    await dbContainer.accountsDb().put({ _id: '00001', login: 'some_user', password: 'qwerty' });
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(),  _id: '00001', login: 'some_user', password: 'qwerty' },
+    );
     await dbContainer.createViews();
   });
 

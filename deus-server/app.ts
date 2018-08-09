@@ -24,10 +24,12 @@ import { ViewModelController } from './controllers/viewmodel.controller';
 import { LoggingErrorHandler } from './middleware/error-handler';
 import { makeSilentRefreshNotificationPayload, makeVisibleNotificationPayload,
   sendGenericPushNotification } from './push-helpers';
-import { Account, DatabasesContainerToken } from './services/db-container';
+import { DatabasesContainerToken } from './services/db-container';
 import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
 import { canonicalId, currentTimestamp, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
+
+import { AliceAccount } from './models/alice-account';
 
 class App {
   private app: express.Express = express();
@@ -52,14 +54,14 @@ class App {
     });
 
     useExpressServer(this.app, {
-      currentUserChecker: async (action: Action): Promise<Account | undefined> => {
+      currentUserChecker: async (action: Action): Promise<AliceAccount | undefined> => {
         const credentials = basic_auth(action.request);
         if (!credentials)
           throw new UnauthorizedError('No authorization provided');
 
         try {
           credentials.name = await canonicalId(credentials.name);
-          const account: Account = await this.dbContainer.accountsDb().get(credentials.name);
+          const account = await this.dbContainer.accountsDb().get(credentials.name);
           if (account.password != credentials.pass)
             throw new UnauthorizedError('Wrong password');
           return account;

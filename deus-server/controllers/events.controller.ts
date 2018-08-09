@@ -8,8 +8,8 @@ PouchDB.plugin(PouchDBFind);
 import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Req, Res } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Event, EventsProcessor } from '../events.processor';
+import { AliceAccount } from '../models/alice-account';
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
-import { Account } from '../services/db-container';
 import { LoggerToken } from '../services/logger';
 import { canonicalId, checkAccess, createLogData, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
@@ -31,7 +31,7 @@ export class EventsController {
   private logger = Container.get(LoggerToken);
 
   @Get('/events/:id')
-  public async get( @CurrentUser() user: Account, @Param('id') id: string) {
+  public async get( @CurrentUser() user: AliceAccount, @Param('id') id: string) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -47,7 +47,7 @@ export class EventsController {
   }
 
   @Post('/events/:id')
-  public async post( @CurrentUser() user: Account, @Param('id') id: string, @Body() body: EventsRequest,
+  public async post( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() body: EventsRequest,
                      @Req() req: express.Request, @Res() res: express.Response) {
     try {
       id = await canonicalId(id);

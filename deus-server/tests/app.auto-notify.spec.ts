@@ -9,11 +9,12 @@ import 'mocha';
 import { Container } from 'typedi';
 
 import App from '../app';
+import { AliceAccount } from '../models/alice-account';
 import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, ApplicationSettingsToken, CheckForInactivitySettings,
   PushSettings } from '../services/settings';
-import { TestDatabasesContainer } from './test-db-container';
+import { createEmptyAccount, TestDatabasesContainer } from './test-db-container';
 
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -52,20 +53,10 @@ describe('Mass push notifications', () => {
       _id: '00003', timestamp: testStartTime - 20000, mobile: true,
     });
 
-    await dbContainer.accountsDb().put({
-      _id: '00001',
-      pushToken: '00001spushtoken',
-      password: '',
-    });
-    await dbContainer.accountsDb().put({
-      _id: '00002',
-      pushToken: '00002spushtoken',
-      password: '',
-    });
-    await dbContainer.accountsDb().put({
-      _id: '00003',
-      password: '',
-    });
+    await dbContainer.accountsDb().put(createAccount('00001', '00001pushtoken'));
+    await dbContainer.accountsDb().put(createAccount('00002', '00002spushtoken'));
+    await dbContainer.accountsDb().put(createAccount('00003', '00001pushtoken'));
+
     await dbContainer.createViews();
     Container.set(DatabasesContainerToken, dbContainer);
   });
@@ -103,3 +94,12 @@ describe('Mass push notifications', () => {
   });
 
 });
+
+function createAccount(id: string, pushToken: string): AliceAccount {
+  return {
+    ...createEmptyAccount(),
+    _id: id,
+    login: id,
+    pushToken: pushToken,
+  };
+}

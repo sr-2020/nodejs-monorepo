@@ -15,7 +15,7 @@ import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../services/settings';
 import { currentTimestamp } from '../utils';
-import { TestDatabasesContainer } from './test-db-container';
+import { createEmptyAccount, TestDatabasesContainer } from './test-db-container';
 
 const address = 'http://localhost:3000';
 
@@ -76,13 +76,22 @@ describe('API Server', () => {
       location: 'ship_MilleniumFalcon',
     });
 
-    await dbContainer.accountsDb().put({ _id: '10001', login: 'some_lab_technician', password: 'research' });
-    await dbContainer.accountsDb().put({ _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
-    await dbContainer.accountsDb().put({ _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
-    await dbContainer.accountsDb().put({ _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '10001', login: 'some_lab_technician', password: 'research' },
+    );
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '10002', login: 'some_fired_lab_technician', password: 'beer' },
+    );
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' },
+    );
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
+    );
 
     testStartTime = currentTimestamp();
     await dbContainer.accountsDb().put({
+      ...createEmptyAccount(),
       _id: '00001',
       login: 'some_user',
       password: 'qwerty',
@@ -92,8 +101,12 @@ describe('API Server', () => {
         { id: '10001', timestamp: testStartTime + 60000 },
       ],
     });
-    await dbContainer.accountsDb().put({ _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
-    await dbContainer.accountsDb().put({ _id: '55555', login: 'user_without_model', password: 'hunter2' });
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' },
+    );
+    await dbContainer.accountsDb().put(
+      {...createEmptyAccount(), _id: '55555', login: 'user_without_model', password: 'hunter2' },
+    );
 
     await dbContainer.createViews();
   });
@@ -1297,7 +1310,7 @@ describe('API Server', () => {
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.account).to.deep.equal(
-        { _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
+        {...createEmptyAccount(), _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
     });
 
     it('Return 401 if wrong password', async () => {

@@ -6,7 +6,8 @@ PouchDB.plugin(PouchDBFind);
 
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Container } from 'typedi';
-import { Account, DatabasesContainerToken } from './services/db-container';
+import { AliceAccount } from './models/alice-account';
+import {  DatabasesContainerToken } from './services/db-container';
 
 class LoginNotFoundError extends Error { }
 
@@ -74,7 +75,7 @@ export enum AccessPropagation {
   NoPropagation,
 }
 
-export async function checkAccess(from: Account, to: string,
+export async function checkAccess(from: AliceAccount, to: string,
                                   accessPropagation: AccessPropagation = AccessPropagation.Default) {
   if (from.roles && from.roles.includes('admin'))
     return;

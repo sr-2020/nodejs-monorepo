@@ -11,7 +11,7 @@ import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../services/settings';
 
-import { TestDatabasesContainer } from './test-db-container';
+import { createEmptyAccount, TestDatabasesContainer } from './test-db-container';
 
 import { getBalanceTest } from './economy/balance';
 import { getCreateAccountTest } from './economy/create-account';
@@ -40,7 +40,9 @@ describe('Economy', () => {
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
 
   async function addAccount(id: string, login: string, password: string) {
-    await dbContainer.accountsDb().post({ _id: id, login, password });
+    await dbContainer.accountsDb().post(
+      {...createEmptyAccount(),  _id: id, login, password },
+    );
   }
 
   async function setBalance(id: string, balance: number) {
@@ -61,7 +63,9 @@ describe('Economy', () => {
 
     await addAccount('00003', 'withoutbalance', '3');
 
-    await dbContainer.accountsDb().post({ _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
+    await dbContainer.accountsDb().post(
+      {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
+    );
 
     await dbContainer.createViews();
     Container.set(DatabasesContainerToken, dbContainer);

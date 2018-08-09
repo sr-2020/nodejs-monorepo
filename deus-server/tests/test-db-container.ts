@@ -6,6 +6,41 @@ PouchDB.plugin(PouchDBUpsert);
 
 import { DatabasesContainer } from '../services/db-container';
 
+import { AliceAccount, Professions } from '../models/alice-account';
+
+export function createEmptyAccount(): AliceAccount {
+  const trade = {
+    isPilot: false,
+    isNavigator: false,
+    isCommunications: false,
+    isSupercargo: false,
+    isEngineer: false,
+    isBiologist: false,
+    isPlanetolog: false,
+  };
+
+  const professions: Professions = {
+    ...trade,
+    isTopManager: false,
+    isSecurity: false,
+    isManager: false,
+    isIdelogist: false,
+    isJournalist: false,
+  };
+
+  return {
+    _id: '-',
+    login: '-',
+    companyAccess: [],
+    professions: professions,
+    jobs: {
+      companyBonus: [],
+      tradeUnion: trade,
+    },
+    password: '',
+  };
+}
+
 export class TestDatabasesContainer extends DatabasesContainer {
 
   constructor() {
