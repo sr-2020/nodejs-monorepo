@@ -66,7 +66,9 @@ export class EconomyController {
   @Post('/economy/provision')
   public async provision( @CurrentUser() user: Account, @Body() body: ProvisionRequest) {
     try {
-      const { userId } = body;
+      let { userId } = body;
+
+      userId = await canonicalId(userId);
 
       await checkAccess(user, userId, AccessPropagation.AdminOnly);
 
@@ -98,6 +100,7 @@ export class EconomyController {
 
       const accounts = await Container.get(DatabasesContainerToken).accountsDb().allDocs({ include_docs: true });
 
+      // TODO non-human or dead accounts
       const db = Container.get(DatabasesContainerToken).economyDb();
       await db.upsert('balances', (doc) => {
         accounts.rows.forEach((account) => {
