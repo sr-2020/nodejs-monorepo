@@ -4,7 +4,7 @@ import { IAliceAccount } from "./interfaces/alice-account";
 
 import * as winston from "winston";
 import { INameParts } from "./alice-exporter";
-import { Professions } from "./interfaces/model";
+import { Professions, TradeUnions, ICompany } from "./interfaces/model";
 
 export interface ConversionResults {
     problems: string[];
@@ -63,12 +63,16 @@ class AliceModelConverter {
             profileType: "human",
         };
 
-        const account = {
+        const account : IAliceAccount = {
             _id: model._id,
             login: model.login,
             password: this.character.joinStrFieldValue(3630) || "0000",
             professions: this.getProfessions(),
             companyAccess: this.getCompanyAccess(),
+            jobs: {
+                tradeUnion: this.getTradeUnionMembership(),
+                companyBonus: this.getCompanies(),
+            }
         };
 
         return {model, account};
@@ -85,15 +89,13 @@ class AliceModelConverter {
         };
     }
 
-    private getCompanyAccess() {
-        const companyAccess = [];
-        
-        const group = (g) => this.character.partOfGroup(g);
-        
+    private getCompanies() {
+        const companies : ICompany[] = [];
+
         const checkAccess  = (g, companyName) => {
-            if (group(g))
+            if (this.character.partOfGroup(g))
             {
-                companyAccess.push({companyName: companyName, isTopManager: group(9906)});
+                companies.push(companyName);
             }    
         }
 
@@ -103,7 +105,16 @@ class AliceModelConverter {
         checkAccess(8498, "mat");
         checkAccess(8499, "mst");
 
-        return companyAccess;
+        return companies;
+
+    }
+
+    private getCompanyAccess() {
+        return this.getCompanies().map(
+            company => {
+                return {companyName: company, isTopManager: this.character.partOfGroup(9906)};
+            }
+        )
     }
 
     private getPlanetAndGenome(planetFieldId: number) {
@@ -147,7 +158,7 @@ class AliceModelConverter {
         };
     }
 
-    private getProfessions(): Professions {
+    private getTradeUnionMembership(): TradeUnions {
         const field = (f) => this.character.hasFieldValue(3438, f);
 
         const group = (g) => this.character.partOfGroup(g);
@@ -156,13 +167,23 @@ class AliceModelConverter {
             isBiologist: group(8489) || field(3448),
             isCommunications: group(8486) || field(3445),
             isEngineer: group(8488) || field(3447),
-            isIdelogist: group(8556),
-            isJournalist: field(3450),
             isNavigator: group(8446) || field(3444),
             isPilot: group(8445) || field(3443),
             isPlanetolog: group(3449) || field(3449),
-            isSecurity: group(9907),
             isSupercargo: group(8487) || field(3446),
+        };
+    }
+
+    private getProfessions(): Professions {
+        const field = (f) => this.character.hasFieldValue(3438, f);
+
+        const group = (g) => this.character.partOfGroup(g);
+
+        return {
+            ...this.getTradeUnionMembership(),
+            isIdelogist: group(8556),
+            isJournalist: field(3450),
+            isSecurity: group(9907),
             isTopManager: group(9906),
             isManager: group(8491),
         };
