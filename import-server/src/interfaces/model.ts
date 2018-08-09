@@ -1,4 +1,4 @@
-export interface ISystem {
+export interface System {
     value: number;
     nucleotide: number;
     lastModified: number;
@@ -28,11 +28,11 @@ export interface SpecialPositions {
 
 export type Professions = CompanyPosition & SpecialPositions & TradeUnions;
 
-export interface ICompanyAccess {
+export interface CompanyAccess {
     isTopManager: boolean;
-    companyName: ICompany;
+    companyName: Company;
 }
 
-export type ICompany = "gd" | "pre" | "kkg" | "mat" | "mst";
+export type Company = "gd" | "pre" | "kkg" | "mat" | "mst";
 
 

@@ -1,15 +1,15 @@
 import { CharacterParser } from "./character-parser";
 import { DeusModel } from "./interfaces/deus-model";
-import { IAliceAccount } from "./interfaces/alice-account";
+import { AliceAccount } from "./interfaces/alice-account";
 
 import * as winston from "winston";
 import { INameParts } from "./alice-exporter";
-import { Professions, TradeUnions, ICompany } from "./interfaces/model";
+import { Professions, TradeUnions, Company } from "./interfaces/model";
 
 export interface ConversionResults {
     problems: string[];
     model: DeusModel;
-    account: IAliceAccount;
+    account: AliceAccount;
 }
 
 export function convertAliceModel (character: CharacterParser): ConversionResults {
@@ -63,7 +63,7 @@ class AliceModelConverter {
             profileType: "human",
         };
 
-        const account : IAliceAccount = {
+        const account : AliceAccount = {
             _id: model._id,
             login: model.login,
             password: this.character.joinStrFieldValue(3630) || "0000",
@@ -90,7 +90,7 @@ class AliceModelConverter {
     }
 
     private getCompanies() {
-        const companies : ICompany[] = [];
+        const companies : Company[] = [];
 
         const checkAccess  = (g, companyName) => {
             if (this.character.partOfGroup(g))

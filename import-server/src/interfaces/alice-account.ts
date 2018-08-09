@@ -1,16 +1,16 @@
-import { Professions, ICompanyAccess, TradeUnions, ICompany } from "./model";
+import { Professions, CompanyAccess, TradeUnions, Company } from "./model";
 
-export interface IAliceAccount {
+export interface AliceAccount {
     _id: string;
     _rev?: string;
     password: string;
     login: string;
     professions: Professions;
-    companyAccess: ICompanyAccess[];
+    companyAccess: CompanyAccess[];
 
     jobs: {
         tradeUnion: TradeUnions;
-        companyBonus: ICompany[];
+        companyBonus: Company[];
     }
 
     access?: AccessEntry[];

@@ -1,4 +1,4 @@
-import { ISystem } from "./model";
+import { System } from "./model";
 import { DeusCondition } from "./condition";
 import { DeusModifier } from "./modifier";
 
@@ -36,7 +36,7 @@ export class DeusModel {
 
     public profileType: string = "human";
 
-    public systems: ISystem[];
+    public systems: System[];
 
     public spaceSuit: SpaceSuit;
 

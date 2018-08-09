@@ -10,7 +10,7 @@ import { JoinMetadata } from "./join-importer";
 import { DeusEvent } from "./interfaces/events";
 import { saveObject } from "./helpers";
 import { CharacterParser } from "./character-parser";
-import { IAliceAccount } from "./interfaces/alice-account";
+import { AliceAccount } from "./interfaces/alice-account";
 import { DeusModel } from "./interfaces/deus-model";
 import { convertAliceModel } from "./alice-model-converter";
 
@@ -24,7 +24,7 @@ export interface INameParts {
 export class AliceExporter {
 
     public model: DeusModel = new DeusModel();
-    private account?: IAliceAccount;
+    private account?: AliceAccount;
 
     public conversionProblems: string[] = [];
 
