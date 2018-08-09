@@ -74,7 +74,7 @@ export class JoinImporter {
     public static createJoinCharacter(id: number): JoinCharacter {
         return {
             CharacterId: id,
-            CharacterLink: `${config.joinCharactersBasePath}/${id}/`,
+            CharacterLink: `${config.joinrpg.charactersPath}/${id}/`,
         };
     }
 
@@ -87,7 +87,7 @@ export class JoinImporter {
     public init(): Promise<boolean> {
          // Get token
         const reqOpts: any = {
-            url: config.joinTokenUrl,
+            url: config.joinrpg.baseUrl + config.joinrpg.tokenPath,
             method : "POST",
             form: {
                 grant_type: "password",
@@ -107,7 +107,7 @@ export class JoinImporter {
 
     public getCharacterList(modifiedSince: moment.Moment ): Promise<JoinCharacter[]> {
         const reqOpts = {
-            url: config.joinListUrl,
+            url: config.joinrpg.baseUrl + config.joinrpg.listPath,
             qs : {
                 modifiedSince: modifiedSince.format("YYYY-MM-DD") + "T" +  modifiedSince.format("HH:mm:00.000"),
             },
@@ -123,7 +123,7 @@ export class JoinImporter {
 
     public getCharacter(CharacterLink: string): Promise<JoinCharacterDetail> {
         const reqOpts = {
-            url: config.joinBaseUrl + CharacterLink,
+            url: config.joinrpg.baseUrl + CharacterLink,
             method : "GET",
             auth : {
                 bearer : this.accessToken,
@@ -136,13 +136,13 @@ export class JoinImporter {
     }
 
     public getCharacterByID(id: string): Promise<JoinCharacterDetail> {
-        const url = `${config.joinCharactersBasePath}/${id}/`;
+        const url = `${config.joinrpg.charactersPath}/${id}/`;
         return this.getCharacter(url);
     }
 
     public getMetadata(): Promise<JoinMetadata> {
          const reqOpts = {
-            url: config.joinMetaUrl,
+            url: config.joinrpg.baseUrl + config.joinrpg.metaPath,
             method : "GET",
             auth : {
                 bearer : this.accessToken,

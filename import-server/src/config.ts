@@ -21,14 +21,12 @@ export const config = {
     joinrpg: {
         login: process.env.JOINRPG_USER,
         password: process.env.JOINRPG_PASSWORD,
+        baseUrl: "https://joinrpg.ru",
+        tokenPath: "/x-api/token",
+        listPath: "/x-game-api/329/characters",
+        metaPath: "/x-game-api/329/metadata/fields",
+        charactersPath: "/x-game-api/329/characters",
     },
-
-    joinGameId: "329",
-    joinBaseUrl: "https://joinrpg.ru",
-    joinTokenUrl: "https://joinrpg.ru/x-api/token",
-    joinListUrl: "https://joinrpg.ru/x-game-api/329/characters",
-    joinMetaUrl: "https://joinrpg.ru/x-game-api/329/metadata/fields",
-    joinCharactersBasePath: "/x-game-api/329/characters",
 
     importInterval: 300000,
     importBurstSize: 10,
