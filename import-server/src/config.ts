@@ -28,6 +28,12 @@ export const config = {
         charactersPath: "/x-game-api/329/characters",
     },
 
+    econ: {
+        baseUrl: "http://api.alice.magellan2018.ru",
+        username: process.env.ADMIN_USER,
+        password: process.env.ADMIN_PASSWORD,
+    },
+
     importInterval: 300000,
     importBurstSize: 10,
     requestTimeout: 120000,

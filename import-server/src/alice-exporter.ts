@@ -24,7 +24,7 @@ export interface INameParts {
 export class AliceExporter {
 
     public model: DeusModel = new DeusModel();
-    private account?: AliceAccount;
+    public account?: AliceAccount;
 
     public conversionProblems: string[] = [];
 
@@ -126,6 +126,7 @@ export class AliceExporter {
 
             .flatMap(() => {
                 if (this.account) {
+                    winston.debug(`Providing account for character ${this.account._id}`)
                     return saveObject(this.accCon, this.account, this.isUpdate);
                 } else {
                     winston.warn(`Cannot provide account for Character(${this.model._id})`);

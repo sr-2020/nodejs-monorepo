@@ -4,6 +4,7 @@ import * as winston from "winston";
 
 import { config } from "./config";
 import { DeusModel } from "./interfaces/deus-model";
+import { AliceAccount } from "./interfaces/alice-account";
 
 export interface JoinCharacter {
     CharacterId: number;
@@ -37,6 +38,7 @@ export interface JoinCharacterDetail {
     _id?: string;
     _rev?: string;
     model?: DeusModel;
+    account?: AliceAccount;
     finalInGame?: boolean;
 }
 

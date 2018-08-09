@@ -15,6 +15,8 @@ import { ModelRefresher } from "./model-refresher";
 import { MailProvision } from "./mail-provision";
 import { processCliParams } from "./cli-params";
 import { ImportRunStats } from "./import-run-stats";
+import { EconProvider } from "./providers/econ-provider";
+import { Provider } from "./providers/interface";
 
 PouchDB.plugin(pouchDBFind);
 
@@ -23,6 +25,8 @@ class ModelImportData {
     public cacheWriter: TempDbWriter = new TempDbWriter();
     public modelRefresher: ModelRefresher = new ModelRefresher();
     public mailProvision: MailProvision = new MailProvision();
+
+    public afterConversionProviders: Provider[] = [ new EconProvider()];
 
     public currentStats = new ImportRunStats();
 
@@ -151,6 +155,46 @@ function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData):
             .map( () => char);
 }
 
+function assertNever(x: never): never {
+    throw new Error("Unexpected object: " + x);
+}
+
+function perfromProvide (
+    provider: Provider,
+    char: JoinCharacterDetail,
+    data: ModelImportData,
+    exportModel: boolean = true
+): Observable<JoinCharacterDetail> {
+    if (!exportModel) {
+        return Observable.from([char]);
+    }
+
+    if (params.ignoreInGame || !char.finalInGame) {
+    
+        return Observable.from([char])
+        .do(() => winston.info(`About to provide ${provider.name} for character(${char._id})`))
+        .delay(1000)
+        .flatMap(c => provider.provide(c))
+        .map((result) => {
+            switch(result.result) {
+                case "success": {
+                     winston.info(`Provide ${provider.name} for character(${char._id}) success`);
+                     return char;
+                }
+                case "nothing":  {
+                    winston.info(`Provide ${provider.name} for character(${char._id}) nothing to do`);
+                    return char;
+                }
+                case "problems": {
+                    winston.warn(`Provide ${provider.name} for character(${char._id}) failed with ${result.problems.join(", ")}`);
+                    return char;
+                }
+                default: assertNever(result);
+            }
+        });
+    }
+}
+
 /**
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
@@ -165,13 +209,15 @@ function exportCharacterModel(
 
     winston.info(`About to export Character(${char._id})`);
 
-    const model = new AliceExporter(
+    const exporter = new AliceExporter(
         char, data.importer.metadata, true, params.ignoreInGame);
-    char.model = model.model;
 
-    return Observable.fromPromise(model.export())
+    return Observable.fromPromise(exporter.export())
             .map( (c: any) => {
                     if (c) {
+                        char.model = exporter.model;
+                        char.account = exporter.account;
+
                         winston.info(
                                 `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
                     } else {
@@ -299,7 +345,7 @@ function importAndCreate(   id: number = 0,
 
     const returnSubject = new BehaviorSubject("start");
 
-    prepareForImport(workData)
+    let chain = prepareForImport(workData)
     // Установить дату с которой загружать персонажей (если задано)
         .map( (data) => {
             if (updatedSince) { data.lastRefreshTime = updatedSince; }
@@ -344,11 +390,19 @@ function importAndCreate(   id: number = 0,
          })
 
     // Экспортировать модель в БД (если надо)
+        .flatMap( (c) => Observable.from([c]).delay(1000), 1 )
         .flatMap( (c)  =>  exportCharacterModel(c, workData, exportModel) )
 
     // Если персонаж "В игре" остановить дальнейшую обработку
-        .filter( (c) => (!c.finalInGame) )
+        .filter( (c) => (!c.finalInGame) );
 
+    // Выполнить все задачи после экспорта
+        workData.afterConversionProviders.forEach(provider => {
+            chain = chain.flatMap((c) => perfromProvide(provider, c, workData, exportModel))
+            
+        });
+
+        chain
     // Сохранить данные по персонажу в общий список
         .do( (c) => workData.charDetails.push(c) )
 
@@ -386,6 +440,17 @@ function importAndCreate(   id: number = 0,
 }
 
 function configureLogger() {
+
+    winston.remove("console");
+    if (process.env.NODE_ENV !== "production") {
+
+        winston.add(winston.transports.Console, {
+            level: "debug",
+            colorize: true,
+            prettyPrint: true
+        });
+    }
+
     winston.add(winston.transports.File, {
                 filename: config.log.logFileName,
                 json: false,
