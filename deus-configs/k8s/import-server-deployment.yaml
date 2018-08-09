@@ -36,6 +36,16 @@ spec:
             secretKeyRef:
               name: joinrpg-secret
               key: user
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: alice-secret
+              key: user
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: alice-secret
+              key: password
         ports:
         - containerPort: 8100
         readinessProbe:
