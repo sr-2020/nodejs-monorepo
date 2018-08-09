@@ -50,7 +50,7 @@ class AliceModelConverter {
         }
         winston.info(`Try to convert model id=${this.character.characterId}`);
 
-        const model = {
+        const model: DeusModel = {
             ...this.getEmptyModel(),
             timestamp: Date.now(),
             _id: this.character.characterId.toString(),
@@ -61,6 +61,7 @@ class AliceModelConverter {
             spaceSuit: this.getSpaceSuit(),
             ...this.getPlanetAndGenome(2787),
             profileType: "human",
+            isTopManager: this.getCompanyAccess().some((company) => company.isTopManager),
         };
 
         const account : AliceAccount = {

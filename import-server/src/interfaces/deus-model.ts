@@ -40,6 +40,8 @@ export class DeusModel {
 
     public spaceSuit: SpaceSuit;
 
+    public isTopManager: boolean;
+
 // Техническое
     public timestamp: number = 0;          // дата обновление модели
     public conditions: DeusCondition[] = [];     // состояния
