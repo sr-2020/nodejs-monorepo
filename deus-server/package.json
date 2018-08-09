@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "npm run build && forever start ./main.js",
     "stop": "forever stop ./main.js",
-    "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
+    "test:dev": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts",
+    "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts --forbid-only "
   },
   "repository": {
     "type": "git",
@@ -67,7 +68,7 @@
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",
     "chai": "^4.1.2",
-    "mocha": "^3.4.2",
+    "mocha": "^3.5.3",
     "pouchdb-adapter-memory": "^6.2.0"
   }
 }
