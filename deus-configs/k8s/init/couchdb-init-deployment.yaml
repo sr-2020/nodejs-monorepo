@@ -7,7 +7,7 @@ spec:
     spec:
       restartPolicy: OnFailure
       initContainers:
-      - image: alexeyeremin/deus-models
+      - image: docker-registry.alice.magellan2018.ru/deus-models
         imagePullPolicy: Always
         name: deus-models
         command:
@@ -19,7 +19,7 @@ spec:
         - name: models-src
           mountPath: /app_destination
       containers:
-      - image: alexeyeremin/deus-couchdb-init
+      - image: docker-registry.alice.magellan2018.ru/deus-couchdb-init
         imagePullPolicy: Always
         name: deus-couchdb-init
         env:

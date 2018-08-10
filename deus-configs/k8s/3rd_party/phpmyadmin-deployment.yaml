@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: phpmyadmin
-        image: phpmyadmin/phpmyadmin
+        image: docker-registry.alice.magellan2018.ru/phpmyadmin
         ports:
         - containerPort: 80
           name: http

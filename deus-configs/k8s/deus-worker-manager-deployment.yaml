@@ -12,7 +12,7 @@ spec:
         component: deus-worker-manager
     spec:
       initContainers:
-      - image: alexeyeremin/deus-models
+      - image: docker-registry.alice.magellan2018.ru/deus-models
         imagePullPolicy: Always
         name: deus-models
         command:
@@ -24,7 +24,7 @@ spec:
         - name: models-src
           mountPath: /app_destination
       containers:
-      - image: alexeyeremin/deus-worker-manager
+      - image: docker-registry.alice.magellan2018.ru/deus-worker-manager
         imagePullPolicy: Always
         name: deus-worker-manager
         env:

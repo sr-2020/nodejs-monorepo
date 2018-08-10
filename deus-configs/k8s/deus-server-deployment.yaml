@@ -12,7 +12,7 @@ spec:
         component: deus-server
     spec:
       containers:
-      - image: alexeyeremin/deus-server
+      - image: docker-registry.alice.magellan2018.ru/deus-server
         imagePullPolicy: Always
         name: deus-server
         env:

@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana-oss:6.2.0
+        image: docker-registry.alice.magellan2018.ru/kibana
         ports:
         - containerPort: 5601
           name: http
