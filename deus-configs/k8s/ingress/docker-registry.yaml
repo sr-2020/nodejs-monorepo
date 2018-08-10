@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: docker-registry
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - hosts:
+    - docker-registry.alice.magellan2018.ru
+    secretName: tls-secret
+  rules:
+  - host: docker-registry.alice.magellan2018.ru
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: docker-registry
+          servicePort: 5000
