@@ -63,6 +63,19 @@ describe('Economy', () => {
 
     await addAccount('00003', 'withoutbalance', '3');
 
+    await dbContainer.economyDb().upsert('constants', (doc) => {
+      doc = {
+        ...doc,
+          topManagerBase: 9000,
+          managerPremium: 3000,
+          managerBase: 1000,
+          specialistPremium: 500,
+          specialistBase: 500,
+          everyone: 100,
+      };
+      return doc;
+    });
+
     await dbContainer.accountsDb().post(
       {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
     );

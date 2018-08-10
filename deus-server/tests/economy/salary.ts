@@ -20,7 +20,7 @@ describe('Salary', () => {
         auth: { username: 'first', password: '1' },
       }).promise();
         expect(responseBalance.statusCode).to.eq(200);
-        expect(responseBalance.body.balance).to.deep.equal(1001);
+        expect(responseBalance.body.balance).to.deep.equal(1100);
     });
 
     it('Only admins can pay salary', async () => {
