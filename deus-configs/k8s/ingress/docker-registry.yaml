@@ -4,6 +4,7 @@ metadata:
   name: docker-registry
   annotations:
     kubernetes.io/ingress.allow-http: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: 5000m
 spec:
   tls:
   - hosts:

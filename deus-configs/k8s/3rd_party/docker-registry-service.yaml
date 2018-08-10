@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: docker-registry
   labels:
-    run: docker-registry
+    component: docker-registry
 spec:
   type: NodePort
   selector:
-    run: docker-registry
+    component: docker-registry
   ports:
   - name: http
     port: 5000
