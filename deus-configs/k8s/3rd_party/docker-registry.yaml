@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: docker-registry
+spec:
+  selector:
+    matchLabels:
+      component: docker-registry
+  template:
+    metadata:
+      labels:
+        component: docker-registry
+    spec:
+      containers:
+      - image: registry:2.6.2
+        name: docker-registry
+        volumeMounts:
+        - mountPath: /var/lib/registry
+          name: docker-registry-data
+      volumes:
+      - name: docker-registry-data
+        persistentVolumeClaim:
+          claimName: docker-registry-data
