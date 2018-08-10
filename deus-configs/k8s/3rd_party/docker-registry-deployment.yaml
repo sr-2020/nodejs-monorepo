@@ -21,3 +21,17 @@ spec:
       - name: docker-registry-data
         persistentVolumeClaim:
           claimName: docker-registry-data
+      ports:
+      - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 20
