@@ -14,15 +14,8 @@ spec:
       containers:
       - image: registry:2.6.2
         name: docker-registry
-        volumeMounts:
-        - mountPath: /var/lib/registry
-          name: docker-registry-data
-      volumes:
-      - name: docker-registry-data
-        persistentVolumeClaim:
-          claimName: docker-registry-data
-      ports:
-      - containerPort: 5000
+        ports:
+        - containerPort: 5000
         readinessProbe:
           httpGet:
             path: /
@@ -35,3 +28,10 @@ spec:
             port: 5000
           initialDelaySeconds: 3
           periodSeconds: 20
+        volumeMounts:
+        - mountPath: /var/lib/registry
+          name: docker-registry-data
+      volumes:
+      - name: docker-registry-data
+        persistentVolumeClaim:
+          claimName: docker-registry-data
