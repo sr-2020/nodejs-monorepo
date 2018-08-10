@@ -119,11 +119,12 @@ function getTechnicalInfoPage() {
   };
 }
 
-function getEconomyPage() {
+function getEconomyPage(model: OrganismModel) {
   return {
     __type: 'EconomyPageViewModel',
     viewId: 'page:economy',
     menuTitle: 'Экономика',
+    isTopManager: model.isTopManager,
   };
 }
 
@@ -181,7 +182,7 @@ function getPages(model: OrganismModel) {
   if (model.isAlive) {
     pages.push(getConditionsPage(model));
     pages.push(getSymptomsPage(model));
-    pages.push(getEconomyPage());
+    pages.push(getEconomyPage(model));
   }
 
   pages.push(getChangesPage(model));

@@ -117,6 +117,8 @@ export interface OrganismModel {
 
   isAlive: boolean;
 
+  isTopManager?: boolean;
+
   firstName: string;
   lastName: string;
 
