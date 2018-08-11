@@ -66,10 +66,10 @@ export class TablesImporter {
             }
         };
 
-        this.implantDB = new PouchDB(`${config.url}${config.catalogs.implants}`, ajaxOpts);
-        this.conditionDB = new PouchDB(`${config.url}${config.catalogs.condition}`, ajaxOpts);
-        this.pillsDB = new PouchDB(`${config.url}${config.catalogs.pills}`, ajaxOpts);
-        this.illnessesDB = new PouchDB(`${config.url}${config.catalogs.illnesses}`, ajaxOpts);
+        //this.implantDB = new PouchDB(`${config.url}${config.catalogs.implants}`, ajaxOpts);
+        //this.conditionDB = new PouchDB(`${config.url}${config.catalogs.condition}`, ajaxOpts);
+        //this.pillsDB = new PouchDB(`${config.url}${config.catalogs.pills}`, ajaxOpts);
+        //this.illnessesDB = new PouchDB(`${config.url}${config.catalogs.illnesses}`, ajaxOpts);
     }
 
 
@@ -91,7 +91,7 @@ export class TablesImporter {
     private async importImplants(authClient: any) {
         const implants = await loaders.implantsDataLoad(authClient);
 
-        // console.log(JSON.stringify(Object.keys(implants),null,4));
+        console.log(JSON.stringify(implants));
 
 
         // Превратить в список объектов ImplantData
@@ -164,76 +164,10 @@ export class TablesImporter {
                 // this.importPills(authClient),
                 this.importFirmware(authClient)
             ]);
-
-            this.createImplants();
-            this.createMindConditions();
-            this.implants.push(this.mindCubeModifier);
-            this.createIllnesses();
-            this.createFirmware();
-
-            await this.saveImplants();
-            await this.saveConditions();
-            // await this.savePills();
-            await this.saveIlnesses();
-
             return this;
         }
 
         return Observable.fromPromise(promise());
-    }
-
-    /**
-     *  Сохранить импланты в БД, с обновлением существующих
-     */
-    private saveImplants(): Promise<any[]> {
-        return Observable.from(this.implants)
-            .flatMap(implant => saveObject(this.implantDB, implant))
-            .toArray()
-            .do((results) => {
-                winston.info(`Saved ${results.length} implants`);
-            })
-            .toPromise();
-    }
-
-    /**
-     *  Сохранить созданные Conditions в БД, с обновлением существующих
-     */
-    private saveConditions(): Promise<any[]> {
-
-        let sortedConditions = this.conditions.sort( (a, b) => {
-                if(a._id == b._id) return 0;
-                return a._id < b._id ? -1 : 1;
-          });
-
-        return Observable.from(sortedConditions)
-            //.do( c => winston.info(c._id))
-            .flatMap(condition => saveObject(this.conditionDB, condition))
-            .toArray()
-            .do((results) => {
-                winston.info(`Saved ${results.length} conditions`);
-            })
-            .toPromise();
-    }
-
-    /**
-     *  Сохранить болезни в БД, с обновлением существующих
-     */
-    private saveIlnesses(): Promise<any[]> {
-        return Observable.from(this.illnesses)
-            .flatMap(ill => saveObject(this.illnessesDB, ill))
-            .toArray()
-            .do((results) => {
-                winston.info(`Saved ${results.length} illnesses`);
-            })
-            .toPromise();
-    }
-
-    private savePills(): Promise<any[]> {
-        return Observable.from(this.tablesData.pillsData)
-            .flatMap((pill) => saveObject(this.pillsDB, pill))
-            .toArray()
-            .do((results) => winston.info(`Saved ${results.length} pills`))
-            .toPromise();
     }
 
     /**
