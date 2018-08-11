@@ -124,7 +124,7 @@ async function run(): Promise<void> {
     await Promise.all(dbNames.map(name => createDbIfNotExists(connection, name)));
     await createDesignDocs();
     await importCatalogs(connection, catalogsStorage, catalogs);
-    await createSampleData();
+    await createMedicSampleData();
 }
 
 run().then(() => console.log('Done!'));
