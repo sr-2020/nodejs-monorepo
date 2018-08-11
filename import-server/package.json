@@ -43,6 +43,7 @@
     "clones": "^1.1.0",
     "command-line-args": "^4.0.6",
     "command-line-usage": "^4.0.0",
+    "csv-writer": "^1.0.1",
     "dotenv": "^6.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.15.3",
