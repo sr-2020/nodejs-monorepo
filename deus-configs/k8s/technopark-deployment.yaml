@@ -18,7 +18,6 @@ spec:
         env:
         - name: MAGELLAN_MYSQL_HOST
           value: mysql
-        env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
