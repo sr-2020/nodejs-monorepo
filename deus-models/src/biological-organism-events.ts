@@ -136,6 +136,14 @@ interface OnTheShipModifier extends Modifier {
 }
 
 function enterShip(api: ModelApiInterface, data: number, event: Event) {
+  const counter = api.aquired('counters', `ship_${data}`);
+  if (counter && counter.shield) {
+    const shieldValue = Number(counter.shield);
+    spaceSuitTakeOff(api, shieldValue, event);
+  } else {
+    api.error("enterShip: can't find ship shields data", { shipId: data });
+  }
+
   leaveShip(api, null, event);
   // TODO: move to config
   const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'physiology', type: 'normal', handler: 'onTheShip' };

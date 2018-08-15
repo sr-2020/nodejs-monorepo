@@ -59,14 +59,18 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
   }
 }
 
-function aquirePills(api: PreprocessApiInterface, events: Event[]) {
+function aquireDocuments(api: PreprocessApiInterface, events: Event[]) {
   events
     .filter((event) => event.eventType == 'scanQr' &&
       (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill))
     .forEach((event) => api.aquire('counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
-}
+
+    events
+    .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.EnterShip)
+    .forEach((event) => api.aquire('counters', `ship_${Number(event.data.payload)}`));
+  }
 
 module.exports = {
-  _preprocess: aquirePills,
+  _preprocess: aquireDocuments,
   scanQR,
 };

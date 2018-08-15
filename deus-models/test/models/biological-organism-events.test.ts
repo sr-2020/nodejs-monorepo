@@ -17,6 +17,11 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
     'ss-111': { _id: 'ss-111' },
     'ss-112': { _id: 'ss-112' },
     'ss-113': { _id: 'ss-113' },
+    'ship_7':
+    {
+      _id: 'ship_7',
+      shield: '30',
+    },
   },
 });
 
@@ -347,7 +352,7 @@ describe('General Magellan events: ', () => {
       expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
     });
 
-    it('Manual takeoff', async () => {
+    it('Manual takeoff by entering ship', async () => {
       let baseModel = getExampleBiologicalOrganismModel();
       baseModel.systems = makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 100, 0, 0, 0, 0]);
       let workingModel: OrganismModel;
@@ -362,7 +367,7 @@ describe('General Magellan events: ', () => {
       for (let i = 0; i < 100; ++i)
         qrs.push({ type: 9, kind: 0, validUntil: 0, payload: '0,0,1,0,0,0,0,95' });
       // Add manual space suit take off action
-      qrs.push({ type: 8, kind: 0, validUntil: 0, payload: '30' });
+      qrs.push({ type: 5, kind: 0, validUntil: 0, payload: '7' });
 
       const events = getEvents(baseModel._id, qrs.map((data) => ({ eventType: 'scanQr', data })), 100);
       ({ baseModel, workingModel } = (await process(baseModel, events)));
