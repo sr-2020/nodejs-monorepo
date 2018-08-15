@@ -23,6 +23,16 @@ spec:
             secretKeyRef:
               name: mysql-secret
               key: password
+        - name: ADMIN_USER
+          valueFrom:
+            secretKeyRef:
+              name: alice-secret
+              key: user
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: alice-secret
+              key: password              
         ports:
         - containerPort: 8888
         readinessProbe:
