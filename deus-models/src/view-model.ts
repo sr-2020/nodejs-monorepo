@@ -182,7 +182,9 @@ function getPages(model: OrganismModel) {
   if (model.isAlive) {
     pages.push(getConditionsPage(model));
     pages.push(getSymptomsPage(model));
-    pages.push(getEconomyPage(model));
+    if (model.profileType == 'human') {
+      pages.push(getEconomyPage(model));
+    }
   }
 
   pages.push(getChangesPage(model));
@@ -209,6 +211,14 @@ function getPassportScreen(model: OrganismModel) {
 }
 
 function getToolbar(model: OrganismModel) {
+  if (model.profileType != 'human') {
+    return {
+      spaceSuitOn: false,
+      oxygenCapacity: 0,
+      timestampWhenPutOn: 0,
+    };
+  }
+
   return {
     spaceSuitOn: model.spaceSuit.on,
     oxygenCapacity: model.spaceSuit.oxygenCapacity,
@@ -242,6 +252,7 @@ module.exports = () => {
       } else if (hasMedicViewModel(model)) {
         return model;
       } else
+        console.log('Not calculating viewmodel for model');
         return undefined;
     },
   };

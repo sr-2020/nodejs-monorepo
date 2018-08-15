@@ -129,6 +129,8 @@ export interface OrganismModel {
   systems: System[];
 
   spaceSuit: SpaceSuit;
+
+  profileType: string;
 }
 
 export function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
