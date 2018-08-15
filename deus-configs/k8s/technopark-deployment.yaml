@@ -15,6 +15,15 @@ spec:
       - image: docker-registry.alice.magellan2018.ru/technopark
         imagePullPolicy: Always
         name: technopark
+        env:
+        - name: MAGELLAN_MYSQL_HOST
+          value: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
         ports:
         - containerPort: 8888
         readinessProbe:
