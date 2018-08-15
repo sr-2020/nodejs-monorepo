@@ -31,35 +31,35 @@ const tests = {
   },
   test1: (model: OrganismModel): TestResult => {
     return {
-      type: 'Тест 1',
+      type: 'Тест 1 (Нервная, опорно-двигательная, покровная системы)',
       message: genericTest(model,
         [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary]),
     };
   },
   test2: (model: OrganismModel): TestResult => {
     return {
-      type: 'Тест 2',
+      type: 'Тест 2 (Дыхательная, кровеносная, нервная системы)',
       message: genericTest(model,
         [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous]),
     };
   },
   test3: (model: OrganismModel): TestResult => {
     return {
-      type: 'Тест 3',
+      type: 'Тест 3 (Кровеносная, опорно-двигательная, репродуктивная системы)',
       message: genericTest(model,
         [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive]),
     };
   },
   test4: (model: OrganismModel): TestResult => {
     return {
-      type: 'Тест 4',
+      type: 'Тест 4 (Покровная, дыхательная, системы ЖКТ)',
       message: genericTest(model,
         [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive]),
     };
   },
   test5: (model: OrganismModel): TestResult => {
     return {
-      type: 'Тест 5',
+      type: 'Тест 5 (ЖКТ, репродуктивная, нервная системы)',
       message: genericTest(model,
         [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous]),
     };

@@ -10,32 +10,24 @@
     },
     {
       "name": "test1",
-      "displayableName": "Тест 1"
+      "displayableName": "Тест 1 (Нервная, опорно-двигательная, покровная системы)"
     },
     {
       "name": "test2",
-      "displayableName": "Тест 2"
+      "displayableName": "Тест 2 (Дыхательная, кровеносная, нервная системы)"
     },
     {
       "name": "test3",
-      "displayableName": "Тест 3"
+      "displayableName": "Тест 3 (Кровеносная, опорно-двигательная, репродуктивная системы)"
     },
     {
       "name": "test4",
-      "displayableName": "Тест 4"
+      "displayableName": "Тест 4 (Покровная, дыхательная, системы ЖКТ)"
     },
     {
       "name": "test5",
-      "displayableName": "Тест 5"
+      "displayableName": "Тест 5 (ЖКТ, репродуктивная, нервная системы)"
     }
   ],
-  "patientHistory": [
-    {
-      "type": "Комментарий",
-      "timestamp": 1523666164298,
-      "patientId": "9005",
-      "patientFullName": "Петя Васечкин",
-      "text": "Пациент здоров!"
-    }
-  ]
+  "patientHistory": []
 }
