@@ -46,17 +46,3 @@ spec:
             secretKeyRef:
               name: alice-secret
               key: password
-        ports:
-        - containerPort: 8100
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8100
-          initialDelaySeconds: 3
-          periodSeconds: 20
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8100
-          initialDelaySeconds: 3
-          periodSeconds: 20
