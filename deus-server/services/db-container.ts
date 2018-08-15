@@ -4,7 +4,7 @@ import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
 import { Token } from 'typedi';
 import { Connection } from '../connection';
-import { AliceAccount } from '../models/alice-account';
+import { AliceAccount, ShieldValues } from '../models/alice-account';
 import { EconomyConstants } from '../models/economy-constants';
 
 export interface ViewModel {
@@ -49,6 +49,7 @@ export interface DatabasesContainerInterface {
   eventsDb(): PouchDB.Database<{ timestamp: number }>;
 
   economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>;
+  objCounterDb(): PouchDB.Database<ShieldValues>;
 }
 
 // tslint:disable-next-line:variable-name
@@ -62,7 +63,9 @@ export class DatabasesContainer implements DatabasesContainerInterface {
     protected _modelsDb: PouchDB.Database<{}>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
-    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>) {
+    protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>,
+    protected _objCounterDb: PouchDB.Database<ShieldValues>,
+  ) {
       const options = { since: 'now', live: true, include_docs: true, return_docs: false };
       this.viewModelDb('mobile').changes(options)
         .on('change', (change) => {
@@ -103,4 +106,5 @@ export class DatabasesContainer implements DatabasesContainerInterface {
   public eventsDb() { return this._eventsDb; }
   public viewModelDb(type: string) { return this._viewmodelDbs.get(type); }
   public economyDb() { return this._economyDb; }
+  public objCounterDb() { return this._objCounterDb; }
 }

@@ -50,3 +50,7 @@ export interface AccessEntry {
     id: string;
     timestamp: number;
   }
+
+export interface ShieldValues {
+    shield: number;
+}

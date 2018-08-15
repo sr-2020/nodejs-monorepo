@@ -50,7 +50,8 @@ export class TestDatabasesContainer extends DatabasesContainer {
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', mobileViewModelDb]]);
     const accountsDb = new PouchDB('accounts', { adapter: 'memory' });
     const economyDb = new PouchDB('economy', { adapter: 'memory' });
-    super(accountsDb, modelDb, viewmodelDbs, eventsDb, economyDb);
+    const objCountersDb = new PouchDB('obj-counters', { adapter: 'memory' });
+    super(accountsDb, modelDb, viewmodelDbs, eventsDb, economyDb, objCountersDb);
   }
 
   public async allEventsSortedByTimestamp(): Promise<any[]> {

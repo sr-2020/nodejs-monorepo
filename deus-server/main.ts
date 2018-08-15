@@ -22,6 +22,7 @@ Container.set(DatabasesContainerToken, new DatabasesContainer(
   viewmodelDbs,
   new PouchDB(databasesConfig.events, authOptions),
   new PouchDB(databasesConfig.economy, authOptions),
+  new PouchDB(databasesConfig.objCounters, authOptions),
 ));
 Container.set(LoggerToken, new WinstonLogger({
   level: 'info',

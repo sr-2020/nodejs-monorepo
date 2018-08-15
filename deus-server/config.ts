@@ -9,6 +9,7 @@ export const config: Configuration = {
         events: 'http://couchdb:5984/events',
         compactEventsViewEveryMs: 5 * 60 * 1000,
         economy: 'http://couchdb:5984/economy',
+        objCounters: 'http://couchdb:5984/obj-counters',
         viewModels: [
           {type: 'mobile', url: 'http://couchdb:5984/view-models'},
         ],

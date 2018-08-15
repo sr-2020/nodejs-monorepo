@@ -94,6 +94,8 @@ export class DatabasesSettings {
 
   // URL to access economy DB
   public economy: string;
+
+  public objCounters: string;
 }
 
 export class Configuration {

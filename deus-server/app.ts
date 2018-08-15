@@ -30,6 +30,7 @@ import { ApplicationSettingsToken } from './services/settings';
 import { canonicalId, currentTimestamp, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 
 import { AliceAccount } from './models/alice-account';
+import { ShipsController } from './controllers/ships.controller';
 
 class App {
   private app: express.Express = express();
@@ -71,7 +72,7 @@ class App {
       },
       controllers: [
         TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
-        LocationEventsController, MedicController, AccountController,
+        LocationEventsController, MedicController, AccountController, ShipsController,
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,

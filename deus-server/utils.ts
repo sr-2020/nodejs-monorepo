@@ -75,6 +75,10 @@ export enum AccessPropagation {
   NoPropagation,
 }
 
+export async function checkAdmin(from:AliceAccount) {
+  await checkAccess(from, from._id, AccessPropagation.AdminOnly);
+}
+
 export async function checkAccess(from: AliceAccount, to: string,
                                   accessPropagation: AccessPropagation = AccessPropagation.Default) {
   if (from.roles && from.roles.includes('admin'))
