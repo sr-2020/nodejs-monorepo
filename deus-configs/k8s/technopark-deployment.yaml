@@ -12,7 +12,7 @@ spec:
         component: technopark
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/technopark
+      - image: alexeyeremin/technopark
         imagePullPolicy: Always
         name: technopark
         env:

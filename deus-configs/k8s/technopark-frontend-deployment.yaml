@@ -12,7 +12,7 @@ spec:
         component: technopark-frontend
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/technopark-frontend
+      - image: alexeyeremin/technopark-frontend
         imagePullPolicy: Always
         name: technopark-frontend
         ports:

@@ -12,7 +12,7 @@ spec:
         component: couchdb
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/couchdb
+      - image: apache/couchdb
         name: couchdb
         env:
         - name: COUCHDB_USER

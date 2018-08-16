@@ -12,7 +12,7 @@ spec:
         component: mysql
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/mysql
+      - image: mysql:5.7
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD

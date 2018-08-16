@@ -12,7 +12,7 @@ spec:
         component: medicine-frontend
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/medicine-frontend
+      - image: alexeyeremin/medicine-frontend
         imagePullPolicy: Always
         name: medicine-frontend
         ports:

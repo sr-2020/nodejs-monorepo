@@ -12,7 +12,7 @@ spec:
         component: deus-qr-lib
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/deus-qr-lib
+      - image: alexeyeremin/deus-qr-lib
         imagePullPolicy: Always
         name: deus-qr-lib
         ports:
