@@ -1,14 +1,13 @@
 import * as PouchDB from 'pouchdb';
+import * as rp from 'request-promise';
+import { Container } from 'typedi';
 import { TSMap } from 'typescript-map';
 import * as winston from 'winston';
 import App from './app';
-import { ApplicationSettingsToken } from './services/settings';
-import Elasticsearch = require('winston-elasticsearch');
-import * as rp from 'request-promise';
-import { Container } from 'typedi';
 import { config } from './config';
 import { DatabasesContainer, DatabasesContainerToken } from './services/db-container';
 import { LoggerToken, WinstonLogger } from './services/logger';
+import { ApplicationSettingsToken } from './services/settings';
 
 const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
@@ -27,8 +26,7 @@ Container.set(DatabasesContainerToken, new DatabasesContainer(
 Container.set(LoggerToken, new WinstonLogger({
   level: 'info',
   transports: [
-    new (winston.transports.Console)(),
-    new (Elasticsearch)({ level: 'debug', clientOpts: { host: 'elasticsearch:9200' } }),
+    new (winston.transports.Console)({colorize: true}),
   ],
 }));
 Container.set(ApplicationSettingsToken, config.settings);
