@@ -99,6 +99,10 @@
         {
             "eventType": "space-suit-take-off",
             "effects": ["spaceSuitTakeOff"]
-        }
+        },
+        {
+            "eventType": "full-rollback",
+            "effects": ["fullRollback"]
+        }        
     ]
 }

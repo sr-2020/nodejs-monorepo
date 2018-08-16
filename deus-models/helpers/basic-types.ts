@@ -163,6 +163,8 @@ export enum QrType {
 
   LabTerminalRefill = 20, // payload is <unique id>,<how many tests to add>
 
+  Rollback = 66,
+
   Passport = 100,
   Bill = 101,
 }

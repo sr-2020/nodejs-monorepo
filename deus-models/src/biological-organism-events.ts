@@ -209,6 +209,14 @@ function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, eve
   }
 }
 
+function fullRollback(api: ModelApiInterface, _: any, event: Event) {
+  const m = getTypedOrganismModel(api);
+  for (const i of allSystemsIndices())
+    m.systems[i].value = 0;
+  api.model.timers = {};
+  helpers.addChangeRecord(api, 'Извините за баги :(', event.timestamp);
+}
+
 module.exports = () => {
   return {
     modifySystemsInstant,
@@ -222,5 +230,6 @@ module.exports = () => {
     spaceSuitTakeOff,
     spaceSuitRefill,
     xenoDisease,
+    fullRollback,
   };
 };

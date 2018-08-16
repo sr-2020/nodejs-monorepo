@@ -42,6 +42,10 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
       api.sendEvent(null, 'space-suit-take-off', Number(data.payload));
       break;
 
+    case QrType.Rollback:
+      api.sendEvent(null, 'full-rollback', {});
+      break;
+
     case QrType.XenoDisease:
       {
         const values = data.payload.split(',').map(Number);
