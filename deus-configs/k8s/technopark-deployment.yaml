@@ -41,9 +41,13 @@ spec:
             port: 8888
           initialDelaySeconds: 3
           periodSeconds: 20
+          timeoutSeconds: 10
+          periodSeconds: 60
         livenessProbe:
           httpGet:
             path: /mcc/dashboard
             port: 8888
           initialDelaySeconds: 3
           periodSeconds: 20
+          timeoutSeconds: 10
+          periodSeconds: 60
