@@ -83,7 +83,10 @@ export function allSystemsIndices(): number[] {
 }
 
 export function organismSystemsIndices(model: OrganismModel): number[] {
-  return allSystemsIndices().filter((i) => model.systems[i].present);
+  return allSystemsIndices().filter(
+    (i) => model.systems[i].present
+    &&  model.systems[i].nucleotide != null
+    && model.systems[i].nucleotide != undefined);
 }
 
 export interface XenoDisease {
