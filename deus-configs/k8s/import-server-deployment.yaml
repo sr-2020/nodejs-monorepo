@@ -12,7 +12,7 @@ spec:
         component: import-server
     spec:
       containers:
-      - image: docker-registry.alice.magellan2018.ru/import-server
+      - image: alexeyeremin/import-server
         imagePullPolicy: Always
         name: import-server
         env:
