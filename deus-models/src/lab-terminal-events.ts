@@ -15,7 +15,7 @@ interface TestResult {
 }
 
 function nucleotideTest(model: OrganismModel): string {
-  return 'Результат: ' + shuffle(organismSystemsIndices(model).map((s) => model.systems[s].nucleotide)).join(', ');
+  return 'Результат: ' + organismSystemsIndices(model).map((s) => model.systems[s].nucleotide).join(', ');
 }
 
 function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string {
