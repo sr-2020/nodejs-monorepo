@@ -31,13 +31,13 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "ts-node": "^3.0.6",
-    "typescript": "^2.3.4",
     "typescript-map": "0.0.3"
   },
   "devDependencies": {
     "@types/chai": "^4.0.0",
     "@types/mocha": "^2.2.41",
     "chai": "^4.0.2",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "typescript": "2.9.2"
   }
 }
