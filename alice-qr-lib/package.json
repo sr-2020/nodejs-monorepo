@@ -1,5 +1,5 @@
 {
-  "name": "deus-qr-lib",
+  "name": "alice-qr-lib",
   "version": "1.0.0",
   "description": "Utilities for QR code content generation and parsing",
   "main": "lib/",
@@ -13,16 +13,8 @@
     "stop": "forever stop ./lib/main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sth-larp/deus-qr-lib.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sth-larp/deus-qr-lib/issues"
-  },
-  "homepage": "https://github.com/sth-larp/deus-qr-lib#readme",
   "dependencies": {
     "@types/basic-auth": "^1.1.1",
     "@types/body-parser": "^1.16.3",
