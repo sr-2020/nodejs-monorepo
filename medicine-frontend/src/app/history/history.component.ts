@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-import { QrData } from 'deus-qr-lib/lib/qr';
-import { QrType } from 'deus-qr-lib/lib/qr.type';
+import { QrData } from 'alice-qr-lib/qr';
+import { QrType } from 'alice-qr-lib/qr.type';
 import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
 import { HistoryEntry } from 'src/datatypes/viewmodel';
 import { DataService } from 'src/services/data.service';

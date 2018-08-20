@@ -2,7 +2,7 @@ import * as basic_auth from 'basic-auth';
 import * as express from 'express'
 import * as http from 'http'
 
-import bodyparser = require('body-parser')
+import * as bodyparser from 'body-parser'
 import { TSMap } from "typescript-map"
 import { QrData, encode, decode } from "./qr";
 import { QrType } from "./qr.type";

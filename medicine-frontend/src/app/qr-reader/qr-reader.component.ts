@@ -2,8 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
-import { decode, QrData } from 'deus-qr-lib/lib/qr';
-import { QrType } from 'deus-qr-lib/lib/qr.type';
+import { decode, QrData } from 'alice-qr-lib/qr';
+import { QrType } from 'alice-qr-lib/qr.type';
 import { currentTimestamp } from 'src/app/util';
 
 class QrExpiredError {

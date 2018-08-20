@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { QrData } from 'deus-qr-lib/lib/qr';
+import { QrData } from 'alice-qr-lib/qr';
 import { GlobalConfig } from 'src/config';
 import { ViewModel } from 'src/datatypes/viewmodel';
 import { AuthService } from 'src/services/auth.service';
