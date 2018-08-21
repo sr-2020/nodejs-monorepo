@@ -38,7 +38,7 @@ export class QrReaderComponent implements OnInit {
   public selectedDevice: MediaDeviceInfo;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: QrDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: QrDialogData,
     private _dialogRef: MatDialogRef<QrReaderComponent>) { }
 
   public ngOnInit(): void {
