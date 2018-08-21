@@ -1,5 +1,5 @@
 {
-  "name": "deus-server",
+  "name": "alice-api-server",
   "version": "1.0.0",
   "description": "DeusEx LARP Server Backend",
   "main": "index.js",
@@ -11,16 +11,8 @@
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts --forbid-only",
     "test:watch": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts --forbid-only --watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sth-larp/deus-server.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sth-larp/deus-server/issues"
-  },
-  "homepage": "https://github.com/sth-larp/deus-server#readme",
   "dependencies": {
     "@types/basic-auth": "^1.1.1",
     "@types/body-parser": "^1.16.8",
