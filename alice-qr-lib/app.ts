@@ -1,18 +1,15 @@
 import * as basic_auth from 'basic-auth';
-import * as express from 'express'
-import * as http from 'http'
+import * as express from 'express';
+import * as http from 'http';
 
-import * as bodyparser from 'body-parser'
-import { TSMap } from "typescript-map"
-import { QrData, encode, decode } from "./qr";
-import { QrType } from "./qr.type";
-
+import * as bodyparser from 'body-parser';
+import { decode, encode, QrData } from './qr';
+import { QrType } from './qr.type';
 
 function QrDataFromQuery(query: any): QrData {
   if (/^[0-9]*$/.test(query.type)) {
     query.type = Number(query.type);
-  }
-  else {
+  } else {
     query.type = QrType[query.type];
   }
   return query;
@@ -20,26 +17,25 @@ function QrDataFromQuery(query: any): QrData {
 
 class App {
   private app: express.Express = express();
-  private server: http.Server;
+  private server: http.Server | undefined = undefined;
 
   constructor(private _user: string, private _password: string) {
     this.app.use(bodyparser.json());
-    this.app.use((req, res, next) => {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    this.app.use((_, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
     });
 
     this.app.get('/decode', (req, res) => {
       try {
-        const decoded: any = decode(req.query.content)
+        const decoded: any = decode(req.query.content);
         res.send(decoded);
-      }
-      catch (e) {
+      } catch (e) {
         console.warn('exception in /decode: ', e);
         res.status(400).send('Wrong data format');
       }
-    })
+    });
 
     this.app.get('/encode_bill', (req, res) => {
       try {
@@ -49,10 +45,10 @@ class App {
         const content = encode({type: QrType.Bill, kind: 0, validUntil: 1700000000,
           payload: [receiver, amount, comment].join(',')});
         res.redirect(
-          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=10&margin=1&size=300x300&ecc=L`
+          // tslint:disable-next-line:max-line-length
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=10&margin=1&size=300x300&ecc=L`,
         );
-      }
-      catch (e) {
+      } catch (e) {
         console.warn('exception in /encode_bill: ', e);
         res.status(400).send('Wrong data format');
       }
@@ -67,18 +63,17 @@ class App {
       }
       res.header('WWW-Authentificate', 'Basic');
       res.status(401).send('Access denied');
-    }
+    };
 
     this.app.get('/encode', auth, (req, res) => {
       try {
         const data = QrDataFromQuery(req.query);
         res.send({ content: encode(data) });
-      }
-      catch (e) {
+      } catch (e) {
         console.warn('exception in /encode: ', e);
         res.status(400).send('Wrong data format');
       }
-    })
+    });
 
     this.app.get('/encode_to_image', auth, (req, res) => {
       try {
@@ -87,16 +82,16 @@ class App {
         if (!data.validUntil)
           data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
         res.redirect(
-          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=0&size=300x300&ecc=L&format=svg`
+          // tslint:disable-next-line:max-line-length
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=0&size=300x300&ecc=L&format=svg`,
         );
-      }
-      catch (e) {
+      } catch (e) {
         console.warn('exception in /encode: ', e);
         res.status(400).send('Wrong data format');
       }
-    })
+    });
 
-    this.app.get('/', (req, res) => {
+    this.app.get('/', (_, res) => {
       res.send(`
 <!DOCTYPE html>
 <html>
@@ -129,12 +124,13 @@ class App {
     });
   }
 
-  listen(port: number) {
+  public listen(port: number) {
     this.server = this.app.listen(port);
   }
 
-  stop() {
-    this.server.close();
+  public stop() {
+    if (this.server)
+      this.server.close();
   }
 }
 

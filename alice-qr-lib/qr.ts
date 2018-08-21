@@ -1,27 +1,25 @@
-import * as md5 from 'md5'
-import { QrType } from "./qr.type";
+import * as md5 from 'md5';
+import { QrType } from './qr.type';
 
-
-
-export class QrData {
-  public type: QrType;
-  public kind: number;
-  public validUntil: number;
-  public payload: string;
+export interface QrData {
+  type: QrType;
+  kind: number;
+  validUntil: number;
+  payload: string;
 }
 
 export class FormatError implements Error {
   public name: string = 'FormatError';
-  constructor(public message: string) { };
+  constructor(public message: string) { }
 }
 
 export class ValidationError implements Error {
   public name: string = 'ValidationError';
-  constructor(public message: string) { };
+  constructor(public message: string) { }
 }
 
 function uint16LESignature(data: string): number {
-  //TODO: get salt from config
+  // TODO: get salt from config
   const salt = 'do you like ponies?';
   const md5buffer = Buffer.from(md5(data + salt), 'hex');
   return md5buffer.readUInt16LE(0);
@@ -42,9 +40,8 @@ export function decode(content: string): QrData {
     if (signature != expectedSignature)
       throw new ValidationError('Validation Error: Invalid signature');
     return { type: type, kind: kind, validUntil: validUntil, payload: content.slice(12) };
-  }
-  catch (e) {
-    if(e instanceof RangeError){
+  } catch (e) {
+    if (e instanceof RangeError) {
       throw new FormatError('Format Error: Cannot process content: index out of range');
     }
     throw e;
@@ -52,12 +49,11 @@ export function decode(content: string): QrData {
 }
 
 export function encode(data: QrData): string {
-  let contentBuffer = Buffer.alloc(6);
+  const contentBuffer = Buffer.alloc(6);
   contentBuffer.writeUInt8(data.type, 0);
   contentBuffer.writeUInt8(data.kind, 1);
   contentBuffer.writeUInt32LE(data.validUntil, 2);
-  let signatureBuffer = Buffer.alloc(2);
+  const signatureBuffer = Buffer.alloc(2);
   signatureBuffer.writeUInt16LE(uint16LESignature(contentBuffer + data.payload), 0);
   return signatureBuffer.toString('hex') + contentBuffer.toString('base64') + data.payload;
 }
-

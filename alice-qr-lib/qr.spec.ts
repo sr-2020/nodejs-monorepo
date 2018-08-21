@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { QrType } from "./qr.type";
-import { decode, encode, FormatError, QrData } from "./qr";
+import { decode, encode, QrData } from './qr';
+import { QrType } from './qr.type';
 
 describe('QR content encoding/decode', () => {
   it('Throws format error if too short', () => {
@@ -11,7 +11,7 @@ describe('QR content encoding/decode', () => {
   it('Changing any symbol fails signature check', () => {
     const properContent: string = '92c2EQ1ybkhZHello';
     for (let i = 0; i < properContent.length; ++i) {
-      let changedContent = properContent.slice(0, i) + 'A' + properContent.slice(i + 1);
+      const changedContent = properContent.slice(0, i) + 'A' + properContent.slice(i + 1);
       expect(() => decode(changedContent)).to.throw('Validation Error');
     }
   });
@@ -25,7 +25,7 @@ describe('QR content encoding/decode', () => {
     const properContent: string = '92c2EQ1ybkhZHello';
     for (let i = 4; i < 4 + 8; ++i) {
       // ! is not base64 symbol
-      let changedContent = properContent.slice(0, i) + '?' + properContent.slice(i + 1);
+      const changedContent = properContent.slice(0, i) + '?' + properContent.slice(i + 1);
       expect(() => decode(changedContent)).to.throw();
     }
   });
