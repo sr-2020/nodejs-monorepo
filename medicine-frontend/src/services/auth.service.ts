@@ -6,8 +6,8 @@ import { ViewModel } from 'src/datatypes/viewmodel';
 
 @Injectable()
 export class AuthService {
-  private _userId: string = null;
-  private _password: string = null;
+  private _userId: string | null = null;
+  private _password: string | null = null;
 
   constructor(private _http: Http) { }
 
@@ -24,11 +24,13 @@ export class AuthService {
     this._password = null;
   }
 
-  public getUserId(): string {
+  public getUserId(): string | null {
     return this._userId;
   }
 
   public getRequestOptionsWithSavedCredentials(): RequestOptionsArgs {
+    if (!(this._userId && this._password))
+      throw Error('Not logged in');
     return this.getRequestOptionsWithCredentials(this._userId, this._password);
   }
 

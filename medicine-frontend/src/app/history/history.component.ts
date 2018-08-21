@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog, MatIconRegistry, MatSnackBar } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { renderTimestamp } from 'src/time-utils';
 
 class PatientFilterOption {
   public patientId?: string;
-  public patientFullName: string;
+  public patientFullName: string = '';
 
   public from(entry: HistoryEntry) {
     this.patientId = entry.patientId;
@@ -49,8 +49,8 @@ export class HistoryComponent implements OnInit {
 
   public filterControl = new FormControl();
   public patientFilterOptions: PatientFilterOption[] = [];
-  public filteredPatientFilterOptions: Observable<PatientFilterOption[]>;
-  public currentPatientFilterOption: PatientFilterOption;
+  public filteredPatientFilterOptions!: Observable<PatientFilterOption[]>;
+  public currentPatientFilterOption!: PatientFilterOption;
 
   public addCommentForm: FormGroup;
 
@@ -145,7 +145,7 @@ export class HistoryComponent implements OnInit {
 
   private update() {
     this.fullPatientHistory = this._dataService.getViewModel().patientHistory.slice().reverse();
-    const seenPatientIds = {};
+    const seenPatientIds: any = {};
     this.patientFilterOptions = [new PatientFilterOption().all()];
     for (const entry of this.fullPatientHistory) {
       if (!seenPatientIds.hasOwnProperty(entry.patientId)) {
@@ -165,14 +165,15 @@ export class HistoryComponent implements OnInit {
   }
 
   private filterHistoryEntries() {
+    const patientIdControl = this.addCommentForm.get('patientId') as AbstractControl;
     if (!this.currentPatientFilterOption.patientId) {
-      this.addCommentForm.get('patientId').enable();
+      patientIdControl.enable();
       this.filteredPatientHistory = this.fullPatientHistory;
     } else {
       this.addCommentForm.patchValue({
         patientId: Number(this.currentPatientFilterOption.patientId),
       });
-      this.addCommentForm.get('patientId').disable();
+      patientIdControl.disable();
       this.filteredPatientHistory = this.fullPatientHistory.filter(
         (e) => e.patientId == this.currentPatientFilterOption.patientId);
     }

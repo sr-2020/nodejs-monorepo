@@ -27,15 +27,15 @@ interface QrDialogData {
 })
 export class QrReaderComponent implements OnInit {
   @ViewChild('scanner')
-  public scanner: ZXingScannerComponent;
+  public scanner!: ZXingScannerComponent;
 
   public hasCameras = false;
-  public hasPermission: boolean;
+  public hasPermission: boolean = false;
 
   public errorMessage = ' ';
 
-  public availableDevices: MediaDeviceInfo[];
-  public selectedDevice: MediaDeviceInfo;
+  public availableDevices: MediaDeviceInfo[] = [];
+  public selectedDevice!: MediaDeviceInfo;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: QrDialogData,

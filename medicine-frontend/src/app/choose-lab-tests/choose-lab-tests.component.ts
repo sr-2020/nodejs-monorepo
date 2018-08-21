@@ -15,10 +15,10 @@ import { DataService } from 'src/services/data.service';
 })
 export class ChooseLabTestsComponent implements OnInit {
   @ViewChild('tests')
-  public tests: MatSelectionList;
+  public tests!: MatSelectionList;
 
-  public availableTests: LabTest[];
-  public numTests: number;
+  public availableTests: LabTest[] = [];
+  public numTests: number = 0;
 
   constructor(
     private _router: Router,

@@ -10,7 +10,7 @@ export class ForeignViewModelError {}
 
 @Injectable()
 export class DataService {
-  private _viewModel: ViewModel;
+  private _viewModel: ViewModel | undefined;
 
   constructor(
     private _http: Http,
@@ -22,7 +22,9 @@ export class DataService {
     this._viewModel = viewModel;
   }
 
-  public getViewModel() {
+  public getViewModel(): ViewModel {
+    if (!this._viewModel)
+      throw Error('ViewModel was never set');
     return this._viewModel;
   }
 

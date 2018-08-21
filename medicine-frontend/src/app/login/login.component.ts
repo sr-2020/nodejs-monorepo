@@ -11,8 +11,8 @@ import { DataService, ForeignViewModelError } from 'src/services/data.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  public username: string;
-  public password: string;
+  public username: string = '';
+  public password: string = '';
 
   constructor(
     private _router: Router,
