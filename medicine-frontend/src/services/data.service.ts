@@ -10,7 +10,6 @@ export class ForeignViewModelError {}
 
 @Injectable()
 export class DataService {
-  // TODO: Remove when backend is enabled
   private _viewModel: ViewModel;
 
   constructor(
