@@ -1,20 +1,17 @@
-FROM node:carbon
-
-# Create app directory
+# Stage 0, based on Node.js, to build and compile Angular
+FROM node:carbon as node
 WORKDIR /app
+COPY lerna.json .
+COPY package.json .
+COPY yarn.lock .
+COPY packages/alice-qr-lib/package.json ./packages/alice-qr-lib/
+COPY packages/alice-qr-lib/yarn.lock ./packages/alice-qr-lib/
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+RUN yarn global add lerna
+RUN lerna bootstrap
 
-RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
+COPY packages/alice-qr-lib/.  ./packages/alice-qr-lib
 
-# Bundle app source
-COPY . .
-RUN [ "npm", "run", "build" ]
+RUN cd packages/alice-qr-lib && npm run build
 
-EXPOSE 8159
-CMD [ "node", "./lib/main.js" ]
+CMD [ "node", "./packages/alice-qr-lib/dist/out-tsc/main.js" ]
