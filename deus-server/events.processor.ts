@@ -1,3 +1,6 @@
+import * as PouchDB from 'pouchdb';
+import * as PouchDBUpsert from 'pouchdb-upsert';
+PouchDB.plugin(PouchDBUpsert);
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, StatusAndBody } from './connection';
@@ -83,14 +86,14 @@ export class EventsProcessor {
       const existingCharacterWithThatToken =
         await this.dbContainer().accountsDb().find({ selector: { pushToken: token } });
       for (const existingCharacter of existingCharacterWithThatToken.docs) {
-        await this.dbContainer().accountsDb().upsert(existingCharacter._id, (accountInfo) => {
+        await this.dbContainer().accountsDb().upsert(existingCharacter._id, (accountInfo: any) => {
           this.logger.info(`Removing token (${token} == ${accountInfo.pushToken}) ` +
             `from character ${existingCharacter._id} to give it to ${id}`);
           delete accountInfo.pushToken;
           return accountInfo;
         });
       }
-      await this.dbContainer().accountsDb().upsert(id, (accountInfo) => {
+      await this.dbContainer().accountsDb().upsert(id, (accountInfo: any) => {
         this.logger.info(`Saving push token`, { characterId: id, source: 'api' });
         accountInfo.pushToken = token;
         return accountInfo;

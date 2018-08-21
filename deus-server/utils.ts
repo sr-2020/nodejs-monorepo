@@ -53,7 +53,9 @@ export function RequestId(req: express.Request): string {
 
 export function createLogData(req: express.Request, status: number): any {
   const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
-  const responseStartMoment = (req as any).timestamp;
+  // TODO: Use real timestamp
+  // const responseStartMoment = (req as any).timestamp;
+  const responseStartMoment = moment();
   return {
     requestId: RequestId(req),
     status,
@@ -75,7 +77,7 @@ export enum AccessPropagation {
   NoPropagation,
 }
 
-export async function checkAdmin(from:AliceAccount) {
+export async function checkAdmin(from: AliceAccount) {
   await checkAccess(from, from._id, AccessPropagation.AdminOnly);
 }
 

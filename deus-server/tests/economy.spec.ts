@@ -46,7 +46,7 @@ describe('Economy', () => {
   }
 
   async function setBalance(id: string, balance: number) {
-    await dbContainer.economyDb().upsert('balances', (doc) => {
+    await dbContainer.economyDb().upsert('balances', (doc: any) => {
       doc[id] = balance;
       return doc;
     });
@@ -63,7 +63,7 @@ describe('Economy', () => {
 
     await addAccount('00003', 'withoutbalance', '3');
 
-    await dbContainer.economyDb().upsert('constants', (doc) => {
+    await dbContainer.economyDb().upsert('constants', (doc: any) => {
       doc = {
         ...doc,
           topManagerBase: 9000,

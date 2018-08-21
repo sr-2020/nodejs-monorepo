@@ -45,7 +45,7 @@ export class CharactersController {
       const removeAccess = await canonicalIds(req.removeAccess);
 
       const resultAccess: any[] = [];
-      await dbContainer.accountsDb().upsert(id, (doc) => {
+      await dbContainer.accountsDb().upsert(id, (doc: any) => {
         const accessGrantTime = Container.get(ApplicationSettingsToken).accessGrantTime;
         doc.access = doc.access ? doc.access : [];
         for (const access of doc.access) {

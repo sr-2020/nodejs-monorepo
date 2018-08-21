@@ -2,7 +2,6 @@ import * as basic_auth from 'basic-auth';
 import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as addRequestId from 'express-request-id';
-import * as time from 'express-timestamp';
 import * as http from 'http';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
@@ -29,8 +28,8 @@ import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
 import { canonicalId, currentTimestamp, RequestId, returnCharacterNotFoundOrRethrow } from './utils';
 
-import { AliceAccount } from './models/alice-account';
 import { ShipsController } from './controllers/ships.controller';
+import { AliceAccount } from './models/alice-account';
 
 class App {
   private app: express.Express = express();
@@ -43,7 +42,8 @@ class App {
 
   constructor() {
     this.app.use(addRequestId());
-    this.app.use(time.init);
+    // TODO: Add timestamps back
+    // this.app.use(time.init);
     this.app.use(bodyparser.json());
 
     this.app.use((req, res, next) => {

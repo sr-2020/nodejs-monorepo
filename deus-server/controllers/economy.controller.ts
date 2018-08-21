@@ -38,7 +38,7 @@ export class EconomyController {
         throw new BadRequestError('Нельзя переводить деньги самому себе.');
 
       const db = Container.get(DatabasesContainerToken).economyDb();
-      await db.upsert('balances', (doc) => {
+      await db.upsert('balances', (doc: any) => {
         if (doc[body.receiver] == undefined)
           throw new NotFoundError('Получатель не найден');
         if (doc[body.sender] == undefined)
@@ -84,7 +84,7 @@ export class EconomyController {
 
       const db = Container.get(DatabasesContainerToken).accountsDb();
 
-      await db.upsert(body.userId, (doc) => {
+      await db.upsert(body.userId, (doc: any) => {
         if (body.bonusSet) {
           bonuses.forEach( (bonus) => doc.jobs.companyBonus.push(bonus));
         } else {
@@ -120,7 +120,7 @@ export class EconomyController {
         throw new NotFoundError('Не удалось найти пользователя');
 
       const db = Container.get(DatabasesContainerToken).economyDb();
-      await db.upsert('balances', (doc) => {
+      await db.upsert('balances', (doc: any) => {
         doc[userId] = body.initialBalance;
         return doc;
       });
@@ -145,7 +145,7 @@ export class EconomyController {
 
       // TODO non-human or dead accounts
 
-      await db.upsert('balances', (doc) => {
+      await db.upsert('balances', (doc: any) => {
         accounts.rows.forEach((account) => {
           if (account.doc && doc[account.doc._id]) {
 

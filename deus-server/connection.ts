@@ -1,8 +1,10 @@
+import * as PouchDB from 'pouchdb';
+
 import { EventEmitter } from 'events';
 
-export class StatusAndBody {
-  public status: number;
-  public body: any;
+export interface StatusAndBody {
+  status: number;
+  body: any;
 }
 
 function race<T>(promises: Array<Promise<T>>): Promise<T> {

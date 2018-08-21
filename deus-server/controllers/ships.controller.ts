@@ -8,8 +8,8 @@ import { CurrentUser, Get, JsonController, Param } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Event } from '../events.processor';
 import { AliceAccount } from '../models/alice-account';
-import { currentTimestamp, returnCharacterNotFoundOrRethrow, checkAdmin } from '../utils';
 import { DatabasesContainerToken } from '../services/db-container';
+import { checkAdmin, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
 export interface EventsRequest {
   events: Event[];
@@ -21,13 +21,13 @@ export class ShipsController {
   public async setShields(
     @CurrentUser() user: AliceAccount,
     @Param('dock') dock: number,
-    @Param('shield_value') shieldValue:number
+    @Param('shield_value') shieldValue: number,
   ) {
     try {
       await checkAdmin(user);
 
       const db = Container.get(DatabasesContainerToken).objCounterDb();
-      await db.upsert('ship_' + dock, (doc) => {
+      await db.upsert('ship_' + dock, (doc: any) => {
         doc.shield = shieldValue;
         return doc;
       });
