@@ -13,7 +13,7 @@ const databasesConfig = config.databases;
 const authOptions = { auth: { username: databasesConfig.username, password: databasesConfig.password } };
 
 const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
-  databasesConfig.viewModels.map((v) => [v.type, new PouchDB(v.url, authOptions)]));
+  databasesConfig.viewModels.map((v) => [v.type, new PouchDB<{timestamp: number}>(v.url, authOptions)]));
 
 Container.set(DatabasesContainerToken, new DatabasesContainer(
   new PouchDB(databasesConfig.accounts, authOptions),

@@ -2,8 +2,8 @@ import { Configuration } from './services/settings';
 
 export const config: Configuration = {
     databases: {
-        username: process.env.COUCHDB_USER,
-        password: process.env.COUCHDB_PASSWORD,
+        username: process.env.COUCHDB_USER as string,
+        password: process.env.COUCHDB_PASSWORD as string,
         accounts: 'http://couchdb:5984/accounts',
         models: 'http://couchdb:5984/work-models',
         events: 'http://couchdb:5984/events',
@@ -16,12 +16,12 @@ export const config: Configuration = {
     },
 
     settings: {
-        port: 8157,
+        port: 80,
         viewmodelUpdateTimeout: 15000,
         accessGrantTime: 60000,
         tooFarInFutureFilterTime: 1800000,
         pushSettings: {
-            serverKey: process.env.PUSH_SERVERKEY,
+            serverKey: process.env.PUSH_SERVERKEY as string,
         },
     },
 };
