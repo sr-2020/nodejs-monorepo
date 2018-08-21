@@ -68,7 +68,7 @@ describe('Mass push notifications', () => {
 
   it('Sends refresh notification to inactive users with push tokens', async () => {
     const fcm = nock('https://fcm.googleapis.com', { reqheaders: { authorization: 'key=fakeserverkey' } })
-      .post('/fcm/send', (body) => body.to == '00002spushtoken')
+      .post('/fcm/send', (body: any) => body.to == '00002spushtoken')
       .reply(200);
 
     app = new App();

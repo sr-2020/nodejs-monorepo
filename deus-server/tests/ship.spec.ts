@@ -64,7 +64,7 @@ describe('Ships', () => {
 
       const ship1 = await dbContainer.objCounterDb().get('ship_1');
 
-      expect(ship1.shield).to.equal('100');
+      expect(ship1.shield).to.equal(100);
 
       expect(response.statusCode).to.eq(200);
     });

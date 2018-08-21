@@ -9,7 +9,9 @@ import { Container } from 'typedi';
 import { AliceAccount } from './models/alice-account';
 import {  DatabasesContainerToken } from './services/db-container';
 
-class LoginNotFoundError extends Error { }
+class LoginNotFoundError {
+  constructor(public message: string) {}
+}
 
 export function currentTimestamp(): number {
   return new Date().valueOf();
