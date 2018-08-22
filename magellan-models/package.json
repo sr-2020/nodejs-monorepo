@@ -1,7 +1,7 @@
 {
-  "name": "deus-models",
+  "name": "magellan-models",
   "version": "0.0.1",
-  "description": "Deus Ex Model Server — handlers that process events.",
+  "description": "Models for Magellan 2018 LARP.",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
