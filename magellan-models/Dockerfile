@@ -1,20 +1,23 @@
-FROM node:carbon
+FROM node:carbon as node
+WORKDIR /app
+COPY lerna.json .
+COPY package.json .
+COPY yarn.lock .
+COPY packages/magellan-models/package.json ./packages/magellan-models/
+COPY packages/magellan-models/yarn.lock ./packages/magellan-models/
 
-# Create app directory
+RUN yarn global add lerna
+RUN lerna bootstrap
+
+COPY packages/magellan-models/.  ./packages/magellan-models
+
+RUN cd packages/magellan-models && npm run build
+
+
+# We use alpine instead of scratch so we have debugging tools (e.g. 'sh') inside container.
+# It only adds 4.4 mb of size.
+FROM alpine:latest
+COPY --from=node /app/packages/magellan-models/dist/ /app/build/
 WORKDIR /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-
-RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
-
-COPY . .
-
-RUN ["npm", "run", "build"]
-
-# We don't need to stay alive, just copy data into volume
 CMD [ "true" ]
