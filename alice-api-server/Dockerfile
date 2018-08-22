@@ -14,4 +14,4 @@ COPY packages/alice-api-server/.  ./packages/alice-api-server
 
 RUN cd packages/alice-api-server && npm run build
 
-CMD [ "node", "./packages/alice-api-server/dist/out-tsc/main.js" ]
+CMD [ "node", "./packages/alice-api-server/dist/main.js" ]

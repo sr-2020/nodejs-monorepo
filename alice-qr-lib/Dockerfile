@@ -14,4 +14,4 @@ COPY packages/alice-qr-lib/.  ./packages/alice-qr-lib
 
 RUN cd packages/alice-qr-lib && npm run build
 
-CMD [ "node", "./packages/alice-qr-lib/dist/out-tsc/main.js" ]
+CMD [ "node", "./packages/alice-qr-lib/dist/main.js" ]
