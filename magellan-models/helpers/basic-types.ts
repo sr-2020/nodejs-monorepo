@@ -144,7 +144,7 @@ export interface LabTerminalRefillData {
   numTests: number;
 }
 
-// TODO: Merge with deus-qr-lib
+// TODO: Merge with alice-qr-lib
 export enum QrType {
   Unknown = 0,
 
