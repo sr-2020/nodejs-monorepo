@@ -61,7 +61,7 @@ export function colorOfChange(model: OrganismModel, change: number[]): SystemCol
   const colorsSeen: Set<SystemColor> = new Set<SystemColor>();
 
   systemsAffected.forEach((s) => {
-    (biologicalSystemsColors.get(s) as SystemColor[]).map(color => colorsSeen.add(color));
+    (biologicalSystemsColors.get(s) as SystemColor[]).map((color) => colorsSeen.add(color));
   });
 
   for (const color of colorsSeen) {
