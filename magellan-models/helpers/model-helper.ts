@@ -8,10 +8,6 @@ import type = require('type-detect');
 import consts = require('./constants');
 const chance = new Chance();
 
-interface MindData {
-    [index: string]: number[];
-}
-
 function loadImplant(api: ModelApiInterface, id: string) {
     const implant = api.getCatalogObject('implants', id.toLowerCase());
 
@@ -77,108 +73,13 @@ function addChangeRecord(api: ModelApiInterface, text: string, timestamp: number
     }
 }
 
-// Проверка предиката и возвращение данных для работы эффекта
-// Вовращается объект Params (если он есть)
-function checkPredicate(api: ModelApiInterface, mID: string, effectName: string,
-                        multi = false) {
-    const implant = api.getModifierById(mID);
-
-    // api.info("checkPredicate: " + JSON.stringify(implant));
-
-    if (implant) {
-        let predicates = implant.predicates;
-
-        // Если предикатов нет внутри импланта, попробовать загрузить имплант из БД
-        if (!predicates) {
-            // api.info("checkPredicate: try to load predicates from catalog");
-
-            const catalogImplant = api.getCatalogObject('implants', implant.id);
-            if (catalogImplant) {
-                predicates = catalogImplant.predicates;
-            }
-        }
-
-        if (predicates) {
-            const p = predicates.filter(p => p.effect == effectName)
-                .filter(p => isGenomeMatch(api, p.variable, p.value) ||
-                    isMindCubeMatch(api, p.variable, p.value));
-
-            if (p && p.length) {
-                if (!multi) {
-                    return p[0].params;
-                } else {
-                    return p.map(element => element.params);
-                }
-            }
-        }
-    }
-
-    return null;
-}
-
-function isMindCubeMatch(api: ModelApiInterface, variable: string, condition: string) {
-    const parts = variable.match(/^([A-G])(\d)/i);
-    // console.log(`isMindCubeMatch: ${variable}`);
-    if (parts) {
-        const cube = parts[1];
-        const index = Number(parts[2]);
-
-        // console.log(`isMindCubeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
-
-        if (api.model.mind && api.model.mind[cube]) {
-            if (checkValue(api.model.mind[cube][index], condition)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-// Condition это условие для проверки value.
-// имеет форматы: <X, >Y, A-B, X
-function checkValue(value: string, condition: string) {
-    let l = -1;
-    let h = -1;
-    const v = Number.parseInt(value);
-
-    l = Number.parseInt(condition);
-    if (!Number.isNaN(l)) {
-        h = l;
-    }
-
-    let parts: RegExpMatchArray | null = null;
-    if ((parts = condition.match(/^(\d+)\-(\d+)$/i))) {
-        l = Number.parseInt(parts[1]);
-        h = Number.parseInt(parts[2]);
-    }
-
-    if ((parts = condition.match(/^([<>])(\d+)$/i))) {
-        if (parts[1] == '>') {
-            l = Number.parseInt(parts[2]) + 1;
-            h = Number.MAX_VALUE;
-        } else {
-            h = Number.parseInt(parts[2]) - 1;
-            l = 0;
-        }
-    }
-
-    // console.log(`checkValue: ${l} ..  ${v} .. ${h}`)
-
-    if (v >= l && v <= h) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function isGenomeMatch(api: ModelApiInterface, variable: string, value: string) {
     const parts = variable.match(/^Z(\d\d?)/i);
 
     if (parts) {
-        const index = Number.parseInt(parts[1]) - 1;
+        const index = Number.parseInt(parts[1], 10) - 1;
         if (api.model.genome && (index < api.model.genome.length)) {
-            if (api.model.genome[index] == Number.parseInt(value)) {
+            if (api.model.genome[index] == Number.parseInt(value, 10)) {
                 return true;
             }
         }
@@ -186,60 +87,12 @@ function isGenomeMatch(api: ModelApiInterface, variable: string, value: string) 
     return false;
 }
 
-/**
- * Модифицирует кубики сознания в переданном объекте Mind,
- * в соответствии с "инструкцией"
- * Формат инструкции из таблицы имплантов:
- * A1+X,B2-Y,C2=Z
- *
- * Предполагается что текст инструкции уже нормализован
- * (верхний регистр, без пробелов, через запятую)
- *
- * scaleFactor = 100 (default) to apply normal change
- */
-function modifyMindCubes(api: ModelApiInterface, mind: MindData,
-                         changeText: string, scaleFactor: number = 100) {
-    api.error('=======================================================');
-    changeText.split(',').forEach(exp => {
-
-        api.error(`MMC:  Part: ${exp}`);
-
-        const exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
-        if (exParts) {
-            const cube = exParts[1];
-            const index = Number(exParts[2]);
-            const op = exParts[3];
-            const mod = Math.trunc(Number(exParts[4]) * scaleFactor / 100);
-
-            // console.log(`MMC parsed: ${cube}${index} ${op} ${mod}`);
-            const beforeOp = mind[cube][index];
-
-            if (mind[cube] && index < mind[cube].length) {
-                switch (op) {
-                    case '+': mind[cube][index] += mod;
-                        break;
-                    case '-': mind[cube][index] -= mod;
-                        break;
-                    default: mind[cube][index] = mod;
-                }
-            }
-
-            if (mind[cube][index] < 0) {
-                mind[cube][index] = 0;
-            }
-
-            if (mind[cube][index] > 100) {
-                mind[cube][index] = 100;
-            }
-
-            api.info(`modifyMindCubes: ${cube}${index} ${beforeOp} => ${mind[cube][index]}`);
-        }
-    });
-}
-
 function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        // tslint:disable:no-bitwise
+        const r = Math.random() * 16 | 0;
+        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+        // tslint:enable:no-bitwise
         return v.toString(16);
     });
 }
@@ -312,7 +165,7 @@ function addDelayedEvent(api: ModelApiInterface,
  */
 function removeElementByMID(list: Modifier[], mID: string): Modifier | null {
     if (list) {
-        const i = list.findIndex(e => e.mID ? (e.mID == mID) : false);
+        const i = list.findIndex((e) => e.mID ? (e.mID == mID) : false);
         if (i != -1) {
             const e = list[i];
 
@@ -337,7 +190,7 @@ const restrictedVars = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'tim
  */
 function modifyModelProperties(api: ModelApiInterface, operations: string) {
     if (operations) {
-        operations.replace(/\s/ig, '').split(',').forEach(op => {
+        operations.replace(/\s/ig, '').split(',').forEach((op) => {
             const parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
             if (parts) {
@@ -361,7 +214,7 @@ function modifyModelProperties(api: ModelApiInterface, operations: string) {
 }
 
 function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
-    if (restrictedVars.find(v => varName == v)) {
+    if (restrictedVars.find((v) => varName == v)) {
         return false;
     }
 
@@ -381,7 +234,7 @@ function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
 }
 
 function modifyModelDigitProperty(api: ModelApiInterface, varName: string, op: string, value: string) {
-    if (restrictedVars.find(v => varName == v)) {
+    if (restrictedVars.find((v) => varName == v)) {
         return false;
     }
 
@@ -428,7 +281,7 @@ const implantClasses = [
  * Проверяет класс модификатора и возращается true если это имплант
  */
 function isImplant(modifier) {
-    if (modifier.class && implantClasses.find(c => c == modifier.class)) {
+    if (modifier.class && implantClasses.find((c) => c == modifier.class)) {
         return true;
     }
 
@@ -447,15 +300,15 @@ function isIllness(modifier) {
 }
 
 function getImplantsBySystem(api: ModelApiInterface, systemName) {
-    return api.getModifiersBySystem(systemName).filter(m => isImplant(m));
+    return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
 function getAllImplants(api) {
-    return api.model.modifiers.filter(m => isImplant(m));
+    return api.model.modifiers.filter((m) => isImplant(m));
 }
 
 function getAllIlnesses(api) {
-    return api.model.modifiers.filter(m => isIllness(m));
+    return api.model.modifiers.filter((m) => isIllness(m));
 }
 
 function getChanceFromModel(model) {
@@ -495,11 +348,7 @@ export = {
     loadImplant,
     addChangeRecord,
     uuidv4,
-    checkValue,
-    isMindCubeMatch,
     isGenomeMatch,
-    checkPredicate,
-    modifyMindCubes,
     addCharacterCondition,
     addDelayedEvent,
     removeElementByMID,

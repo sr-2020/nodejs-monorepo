@@ -49,7 +49,7 @@ function getStartPage(model: OrganismModel) {
     });
   }
 
-  const illnesses = model.modifiers.filter(e => e.class == 'illness' && e.currentStage > 2);
+  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
 
   if (illnesses && illnesses.length) {
     pageInfo.body.items.push({

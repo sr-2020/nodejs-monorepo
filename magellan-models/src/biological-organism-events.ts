@@ -101,9 +101,9 @@ function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
 }
 
 function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[], event: Event) {
-  const totalTicks = Math.max(...totalChange.map(v => Math.abs(v)));
+  const totalTicks = Math.max(...totalChange.map((v) => Math.abs(v)));
   for (let i = 0; i < totalTicks; ++i) {
-    const adjustment = totalChange.map(v => {
+    const adjustment = totalChange.map((v) => {
       if (Math.abs(v) <= i) return 0;
       return Math.sign(v);
     });

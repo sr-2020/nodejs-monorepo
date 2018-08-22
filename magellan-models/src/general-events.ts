@@ -51,7 +51,7 @@ function putConditionEvent( api: ModelApiInterface, data, _ ) {
 
 function removeConditionEvent( api: ModelApiInterface, data, _ ) {
     if (data.mID) {
-        const i = api.model.conditions.findIndex( c => c.mID == data.mID );
+        const i = api.model.conditions.findIndex((c) => c.mID == data.mID );
 
         if (i != -1) {
             const text = api.model.conditions[i].text;
@@ -117,7 +117,7 @@ function changeModelVariableEvent( api: ModelApiInterface, data, _ ) {
     if (data.name && data.value) {
         const restricted = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'timestamp',
                           'mind', 'genome', 'systems', 'conditions', 'modifiers', 'changes', 'messages', 'timers' ];
-        if (restricted.find( e => e == data.name)) {
+        if (restricted.find((e) => e == data.name)) {
             return;
         }
 

@@ -50,7 +50,7 @@ describe('Magellan helpers', () => {
 
   describe('colorOfChange', () => {
     const allSystemsModel = getExampleBiologicalOrganismModel();
-    
+
     it('No change', () => {
       expect(colorOfChange(allSystemsModel, [0, 0, 0, 0, 0, 0, 0])).to.not.exist;
     });
