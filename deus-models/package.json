@@ -5,18 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && mocha build/test/**/*.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sth-larp/deus-models.git"
+    "test": "npm run build && mocha dist/test/**/*.js"
   },
   "author": "",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/sth-larp/deus-models/issues"
-  },
-  "homepage": "https://github.com/sth-larp/deus-models#readme",
   "devDependencies": {
     "@types/chai": "^4.0.1",
     "@types/mocha": "^2.2.41",
