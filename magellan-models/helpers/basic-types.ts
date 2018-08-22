@@ -125,7 +125,6 @@ export interface OrganismModel {
   firstName: string;
   lastName: string;
 
-  // TODO(aeremin): Do we need corporation?
   corporation: string;
 
   location?: string;

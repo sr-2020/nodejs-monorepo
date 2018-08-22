@@ -60,7 +60,6 @@ function loadIllness(api: ModelApiInterface, id: string) {
     return illness;
 }
 
-// TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord(api: ModelApiInterface, text: string, timestamp: number) {
     if (text) {
         if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();

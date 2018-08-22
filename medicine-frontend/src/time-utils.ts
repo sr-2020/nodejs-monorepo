@@ -83,5 +83,4 @@ export function renderTimestamp(unixMilliseconds: number): string {
   }
 
   return time + ', ' + renderDay(now, timestamp);
-  // TODO: fix leap seconds
 }
