@@ -1,4 +1,4 @@
-const baseAliceUrl = 'https://api.alice.magellan2018.ru/';
+const baseAliceUrl = 'https://api.alice.aerem.in/';
 
 // tslint:disable-next-line:variable-name
 export const GlobalConfig = {
