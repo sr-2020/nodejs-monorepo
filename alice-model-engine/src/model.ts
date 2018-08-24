@@ -7,7 +7,7 @@ export type ViewModelCallback = (api: ViewModelApiInterface, model: any) => any;
 export type PreprocessCallback = (api: PreprocessApiInterface, events: Event[]) => any
 
 export type Model = {
-    callbacks: { [key: string]: Callback },
-    preprocessCallbacks: PreprocessCallback[]
-    viewModelCallbacks: { [base: string]: ViewModelCallback }
+  callbacks: { [key: string]: Callback },
+  preprocessCallbacks: PreprocessCallback[]
+  viewModelCallbacks: { [base: string]: ViewModelCallback }
 }

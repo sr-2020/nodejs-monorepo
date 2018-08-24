@@ -8,47 +8,47 @@ import { Event } from 'alice-model-engine-api';
 export type CallbacksList = model.Callback | null | (model.Callback | null)[]
 
 export interface DispatcherInterface {
-    on(name: string, callbacks: CallbacksList): void
-    dispatch(event: Event, context: Context): Context
+  on(name: string, callbacks: CallbacksList): void
+  dispatch(event: Event, context: Context): Context
 }
 
 export class Dispatcher implements DispatcherInterface {
-    private store: {
-        [key: string]: model.Callback[]
+  private store: {
+    [key: string]: model.Callback[]
+  }
+
+  constructor() {
+    this.store = {};
+  }
+
+  on(name: string, callbacks: CallbacksList) {
+    if (!this.store[name]) this.store[name] = [];
+
+    if (Array.isArray(callbacks)) {
+      callbacks.forEach((f) => {
+        if (f) this.store[name].push(f)
+      });
+    } else if (callbacks) {
+      this.store[name].push(callbacks);
+    }
+  }
+
+  dispatch(event: Event, context: Context): Context {
+    // TODO: Should it be filtered out earlier?
+    if (event.eventType.startsWith('_')) return context;
+
+    if (!this.store[event.eventType]) {
+      Logger.error('model',
+        `Unknown event type ${event.eventType}. ` +
+        `Make sure there is corresponding eventType --> effects mapping in events DB/file`);
+      return context;
     }
 
-    constructor() {
-        this.store = {};
-    }
+    const api = ModelApiFactory(context, event);
+    const handlers = this.store[event.eventType];
 
-    on(name: string, callbacks: CallbacksList) {
-        if (!this.store[name]) this.store[name] = [];
+    handlers.forEach((f) => f(api, event.data, event));
 
-        if (Array.isArray(callbacks)) {
-            callbacks.forEach((f) => {
-                if (f) this.store[name].push(f)
-            });
-        } else if (callbacks) {
-            this.store[name].push(callbacks);
-        }
-    }
-
-    dispatch(event: Event, context: Context): Context {
-        // TODO: Should it be filtered out earlier?
-        if (event.eventType.startsWith('_')) return context;
-
-        if (!this.store[event.eventType]) {
-            Logger.error('model',
-                `Unknown event type ${event.eventType}. ` +
-                `Make sure there is corresponding eventType --> effects mapping in events DB/file`);
-            return context;
-        }
-
-        const api = ModelApiFactory(context, event);
-        const handlers = this.store[event.eventType];
-
-        handlers.forEach((f) => f(api, event.data, event));
-
-        return context;
-    }
+    return context;
+  }
 }

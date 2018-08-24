@@ -4,195 +4,195 @@ import { Worker } from '../../src/worker';
 import { Config, EventHandler } from '../../src/config';
 
 describe('Worker', () => {
-    let worker: Worker;
+  let worker: Worker;
 
-    beforeEach(() => {
-        let eventHandlers: EventHandler[] = [
-            {
-                eventType: "noop",
-                effects: [
-                    "noop"
-                ]
-            },
+  beforeEach(() => {
+    let eventHandlers: EventHandler[] = [
+      {
+        eventType: "noop",
+        effects: [
+          "noop"
+        ]
+      },
 
-            {
-                eventType: "add",
-                effects: [
-                    "add"
-                ]
-            },
+      {
+        eventType: "add",
+        effects: [
+          "add"
+        ]
+      },
 
-            {
-                eventType: "mul",
-                effects: [
-                    "mul"
-                ]
-            },
+      {
+        eventType: "mul",
+        effects: [
+          "mul"
+        ]
+      },
 
-            {
-                eventType: "concat",
-                effects: [
-                    "concat"
-                ]
-            },
+      {
+        eventType: "concat",
+        effects: [
+          "concat"
+        ]
+      },
 
-            {
-                eventType: "delayedConcat",
-                effects: [
-                    "delayedConcat"
-                ]
-            },
+      {
+        eventType: "delayedConcat",
+        effects: [
+          "delayedConcat"
+        ]
+      },
 
-            {
-                eventType: "sendMessage",
-                effects: [
-                    "sendMessage"
-                ]
-            }
-        ];
+      {
+        eventType: "sendMessage",
+        effects: [
+          "sendMessage"
+        ]
+      }
+    ];
 
-        const config = Config.parse({
-            events: eventHandlers
-        });
-
-        worker = Worker.load(`${__dirname}/../test-models/trivial`).configure(config);
+    const config = Config.parse({
+      events: eventHandlers
     });
 
-    it("Should process some models", async () => {
-        const context = { timestamp: 0, "value": 0 };
+    worker = Worker.load(`${__dirname}/../test-models/trivial`).configure(config);
+  });
 
-        const timestamp = Date.now();
+  it("Should process some models", async () => {
+    const context = { timestamp: 0, "value": 0 };
 
-        const events = [
-            { characterId: '0000', eventType: "add", data: { operand: "value", value: "2" }, timestamp: timestamp - 2000 },
-            { characterId: '0000', eventType: "add", data: { operand: "value", value: "3" }, timestamp: timestamp - 1000 },
-            { characterId: '0000', eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
-        ];
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events)
+    const events = [
+      { characterId: '0000', eventType: "add", data: { operand: "value", value: "2" }, timestamp: timestamp - 2000 },
+      { characterId: '0000', eventType: "add", data: { operand: "value", value: "3" }, timestamp: timestamp - 1000 },
+      { characterId: '0000', eventType: "mul", data: { operand: "value", value: "2" }, timestamp }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events)
 
-        expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
-        expect(result.workingModel.timestamp).to.equal(timestamp);
-    });
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-    it("Should process some timers", async () => {
-        const context = { timestamp: 0, "value": '' }
-        const timestamp = Date.now();
+    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
+    expect(result.workingModel.timestamp).to.equal(timestamp);
+  });
 
-        const events = [
-            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 10000 },
-            { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 10000 },
-            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 9000 },
-            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
-        ];
+  it("Should process some timers", async () => {
+    const context = { timestamp: 0, "value": '' }
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events);
+    const events = [
+      { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 10000 },
+      { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 10000 },
+      { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp - 9000 },
+      { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events);
 
-        expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: {} });
-        expect(result.workingModel.timestamp).to.equal(timestamp);
-    })
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-    it("Should leave unprocessed timers intact", async () => {
-        const context = { timestamp: 0, "value": '' }
-        const timestamp = Date.now();
+    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "AABA", timers: {} });
+    expect(result.workingModel.timestamp).to.equal(timestamp);
+  })
 
-        const events = [
-            { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 1000 },
-            { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
-        ];
+  it("Should leave unprocessed timers intact", async () => {
+    const context = { timestamp: 0, "value": '' }
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events);
+    const events = [
+      { characterId: '0000', eventType: "delayedConcat", data: { operand: "value", value: "B", delay: 3000 }, timestamp: timestamp - 1000 },
+      { characterId: '0000', eventType: "concat", data: { operand: "value", value: "A" }, timestamp: timestamp }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events);
 
-        let expectedTimer = {
-            name: 'delayedConcat',
-            miliseconds: 2000,
-            eventType: 'concat',
-            data: { operand: 'value', value: 'B' }
-        }
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-        expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "A", timers: { delayedConcat: expectedTimer } });
-        expect(result.workingModel.timestamp).to.equal(timestamp);
-    })
+    let expectedTimer = {
+      name: 'delayedConcat',
+      miliseconds: 2000,
+      eventType: 'concat',
+      data: { operand: 'value', value: 'B' }
+    }
 
-    it("Should produce view model", async () => {
-        const context = { timestamp: 0, "value": 0 };
-        const timestamp = Date.now();
+    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: "A", timers: { delayedConcat: expectedTimer } });
+    expect(result.workingModel.timestamp).to.equal(timestamp);
+  })
 
-        const events = [
-            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
-        ];
+  it("Should produce view model", async () => {
+    const context = { timestamp: 0, "value": 0 };
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events)
+    const events = [
+      { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events)
 
-        let { viewModels } = result;
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-        expect(viewModels).to.exist;
-        expect(viewModels).to.has.property('default');
-        expect(viewModels.default).to.deep.equal({ value: 0 });
-    })
+    let { viewModels } = result;
 
-    it("Should return outbound events", async () => {
-        const context = { timestamp: 0, "value": 0 };
-        const timestamp = Date.now();
+    expect(viewModels).to.exist;
+    expect(viewModels).to.has.property('default');
+    expect(viewModels.default).to.deep.equal({ value: 0 });
+  })
 
-        const events = [
-            { characterId: '0000', eventType: "sendMessage", timestamp, data: { receiver: '0001', message: 'test message' } },
-            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
-        ];
+  it("Should return outbound events", async () => {
+    const context = { timestamp: 0, "value": 0 };
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events)
+    const events = [
+      { characterId: '0000', eventType: "sendMessage", timestamp, data: { receiver: '0001', message: 'test message' } },
+      { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events)
 
-        expect(result).to.has.property('events');
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-        let event = (result as any).events[0];
-        expect(event.characterId).to.equals('0001');
-        expect(event.eventType).to.equals('message');
-        expect(event.data.message).to.equals('test message');
-    })
+    expect(result).to.has.property('events');
 
-    it('Should run modifiers', async () => {
-        const context = {
-            timestamp: 0,
-            value: '',
-            modifiers: [{
-                id: 'test modifier',
-                enabled: true,
-                operand: 'value', value: 'A',
-                effects: [
-                    { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
-                    { id: 'add A', type: 'normal', enabled: true, handler: 'concat' }
-                ]
-            }]
-        };
+    let event = (result as any).events[0];
+    expect(event.characterId).to.equals('0001');
+    expect(event.eventType).to.equals('message');
+    expect(event.data.message).to.equals('test message');
+  })
 
-        const timestamp = Date.now();
+  it('Should run modifiers', async () => {
+    const context = {
+      timestamp: 0,
+      value: '',
+      modifiers: [{
+        id: 'test modifier',
+        enabled: true,
+        operand: 'value', value: 'A',
+        effects: [
+          { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
+          { id: 'add A', type: 'normal', enabled: true, handler: 'concat' }
+        ]
+      }]
+    };
 
-        const events = [
-            { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
-        ];
+    const timestamp = Date.now();
 
-        let result = await worker.process(context, events)
+    const events = [
+      { characterId: '0000', eventType: "_RefreshModel", timestamp, data: undefined }
+    ];
 
-        expect(result.status).to.equals('ok');
-        result = result as EngineResultOk;
+    let result = await worker.process(context, events)
 
-        let { workingModel } = result;
+    expect(result.status).to.equals('ok');
+    result = result as EngineResultOk;
 
-        expect(workingModel.value).to.equals('AA');
-    })
+    let { workingModel } = result;
+
+    expect(workingModel.value).to.equals('AA');
+  })
 });

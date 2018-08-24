@@ -1,186 +1,188 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
-import { Event, ReadModelApiInterface, LogApiInterface,
-    ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface, Condition  } from 'alice-model-engine-api';
+import {
+  Event, ReadModelApiInterface, LogApiInterface,
+  ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface, Condition
+} from 'alice-model-engine-api';
 
 import { FieldName, FieldValue, Context } from './context'
 import Logger from './logger';
 
 class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
-    constructor(protected contextGetter: () => Context) { }
+  constructor(protected contextGetter: () => Context) { }
 
-    get model() { return this.contextGetter().ctx; }
+  get model() { return this.contextGetter().ctx; }
 
-    private getModifiersBy(predicate: (m: any) => boolean) {
-        return this.contextGetter().modifiers.filter(predicate);
+  private getModifiersBy(predicate: (m: any) => boolean) {
+    return this.contextGetter().modifiers.filter(predicate);
+  }
+
+  private getEffectsBy(predicate: (m: any) => boolean) {
+    let effects = this.contextGetter().effects.filter(predicate);
+    return effects;
+  }
+
+  private getConditionsBy(predicate: (m: any) => boolean) {
+    return this.contextGetter().conditions.filter(predicate);
+  }
+
+  getCatalogObject(catalogName: string, id: string) {
+    let catalog = this.contextGetter().getDictionary(catalogName);
+    if (catalog) {
+      return cloneDeep(catalog.find((c) => c.id == id));
     }
+  }
 
-    private getEffectsBy(predicate: (m: any) => boolean) {
-        let effects = this.contextGetter().effects.filter(predicate);
-        return effects;
-    }
+  getModifierById(id: string) {
+    return this.contextGetter().modifiers.find((m) => m.mID == id);
+  }
 
-    private getConditionsBy(predicate: (m: any) => boolean) {
-        return this.contextGetter().conditions.filter(predicate);
-    }
+  getModifiersByName(name: string) {
+    return this.getModifiersBy((m) => m.name == name);
+  }
 
-    getCatalogObject(catalogName: string, id: string) {
-        let catalog = this.contextGetter().getDictionary(catalogName);
-        if (catalog) {
-            return cloneDeep(catalog.find((c) => c.id == id));
-        }
-    }
+  getModifiersByClass(className: string) {
+    return this.getModifiersBy((m) => m.class == className);
+  }
 
-    getModifierById(id: string) {
-        return this.contextGetter().modifiers.find((m) => m.mID == id);
-    }
+  getModifiersBySystem(systemName: string) {
+    return this.getModifiersBy((m) => m.system == systemName);
+  }
 
-    getModifiersByName(name: string) {
-        return this.getModifiersBy((m) => m.name == name);
-    }
+  getEffectsByName(name: string) {
+    return this.getEffectsBy((e) => e.name == name);
+  }
 
-    getModifiersByClass(className: string) {
-        return this.getModifiersBy((m) => m.class == className);
-    }
+  getEffectsByClass(className: string) {
+    return this.getEffectsBy((e) => e.class == className);
+  }
 
-    getModifiersBySystem(systemName: string) {
-        return this.getModifiersBy((m) => m.system == systemName);
-    }
+  getConditionById(id: string) {
+    return this.contextGetter().conditions.find((c) => c.id == id);
+  }
 
-    getEffectsByName(name: string) {
-        return this.getEffectsBy((e) => e.name == name);
-    }
+  getConditionsByClass(className: string) {
+    return this.getConditionsBy((c) => c.class == className);
+  }
 
-    getEffectsByClass(className: string) {
-        return this.getEffectsBy((e) => e.class == className);
-    }
+  getConditionsByGroup(group: string) {
+    return this.getConditionsBy((c) => c.group == group);
+  }
 
-    getConditionById(id: string) {
-        return this.contextGetter().conditions.find((c) => c.id == id);
-    }
+  getTimer(name: string) {
+    return this.contextGetter().timers[name];
+  }
 
-    getConditionsByClass(className: string) {
-        return this.getConditionsBy((c) => c.class == className);
-    }
+  debug(msg: string, additionalData?: any) {
+    Logger.debug('model', msg, additionalData);
+  }
 
-    getConditionsByGroup(group: string) {
-        return this.getConditionsBy((c) => c.group == group);
-    }
+  info(msg: string, additionalData?: any) {
+    Logger.info('model', msg, additionalData);
+  }
 
-    getTimer(name: string) {
-        return this.contextGetter().timers[name];
-    }
+  notice(msg: string, additionalData?: any) {
+    Logger.notice('model', msg, additionalData);
+  }
 
-    debug(msg: string, additionalData?: any) {
-        Logger.debug('model', msg, additionalData);
-    }
+  warn(msg: string, additionalData?: any) {
+    Logger.warn('model', msg, additionalData);
+  }
 
-    info(msg: string, additionalData?: any) {
-        Logger.info('model', msg, additionalData);
-    }
-
-    notice(msg: string, additionalData?: any) {
-        Logger.notice('model', msg, additionalData);
-    }
-
-    warn(msg: string, additionalData?: any) {
-        Logger.warn('model', msg, additionalData);
-    }
-
-    error(msg: string, additionalData?: any) {
-        Logger.error('model', msg, additionalData);
-    }
+  error(msg: string, additionalData?: any) {
+    Logger.error('model', msg, additionalData);
+  }
 }
 
 class ModelApi extends ReadModelApi implements ModelApiInterface {
-    constructor(contextGetter: () => Context, private currentEvent?: Event) {
-        super(contextGetter);
+  constructor(contextGetter: () => Context, private currentEvent?: Event) {
+    super(contextGetter);
+  }
+
+  addModifier(modifier: any) {
+    let m = cloneDeep(modifier);
+
+    if (!m.mID) {
+      m.mID = cuid();
     }
 
-    addModifier(modifier: any) {
-        let m = cloneDeep(modifier);
+    this.contextGetter().modifiers.push(m);
+    return m;
+  }
 
-        if (!m.mID) {
-            m.mID = cuid();
-        }
+  aquired(db: string, id: string): any {
+    return _.get(this.contextGetter(), ['aquired', db, id]);
+  }
 
-        this.contextGetter().modifiers.push(m);
-        return m;
+  removeModifier(mID: string) {
+    _.remove(this.contextGetter().modifiers, (m) => m.mID == mID);
+    return this;
+  }
+
+  addCondition(condition: Condition): Condition {
+    let c = _.find(this.contextGetter().conditions, (c) => c.id == condition.id);
+
+    if (c) return c;
+
+    c = cloneDeep(condition);
+
+    if (c) {
+      if (!c.mID) {
+        c.mID = cuid();
+      }
+
+      this.contextGetter().conditions.push(c);
     }
 
-    aquired(db: string, id: string): any {
-        return _.get(this.contextGetter(), ['aquired', db, id]);
-    }
+    return c;
+  }
 
-    removeModifier(mID: string) {
-        _.remove(this.contextGetter().modifiers, (m) => m.mID == mID);
-        return this;
-    }
+  removeCondition(id: string) {
+    _.remove(this.contextGetter().conditions, (c) => c.id == id);
+    return this;
+  }
 
-    addCondition(condition: Condition): Condition {
-        let c = _.find(this.contextGetter().conditions, (c) => c.id == condition.id);
+  setTimer(name: string, miliseconds: number, eventType: string, data: any) {
+    this.contextGetter().setTimer(name, miliseconds, eventType, data)
+    return this;
+  }
 
-        if (c) return c;
+  removeTimer(name: string) {
+    delete this.contextGetter().timers[name];
+    return this;
+  }
 
-        c = cloneDeep(condition);
-
-        if (c) {
-            if (!c.mID) {
-                c.mID = cuid();
-            }
-
-            this.contextGetter().conditions.push(c);
-        }
-
-        return c;
-    }
-
-    removeCondition(id: string) {
-        _.remove(this.contextGetter().conditions, (c) => c.id == id);
-        return this;
-    }
-
-    setTimer(name: string, miliseconds: number, eventType: string, data: any) {
-        this.contextGetter().setTimer(name, miliseconds, eventType, data)
-        return this;
-    }
-
-    removeTimer(name: string) {
-        delete this.contextGetter().timers[name];
-        return this;
-    }
-
-    sendEvent(characterId: string | null, event: string, data: any) {
-        let timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
-        this.contextGetter().sendEvent(characterId, event, timestamp, data);
-        return this;
-    }
+  sendEvent(characterId: string | null, event: string, data: any) {
+    let timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+    this.contextGetter().sendEvent(characterId, event, timestamp, data);
+    return this;
+  }
 }
 
 class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
-    constructor(contextGetter: () => Context, protected baseContextGetter: () => Context) {
-        super(contextGetter);
-    }
+  constructor(contextGetter: () => Context, protected baseContextGetter: () => Context) {
+    super(contextGetter);
+  }
 
-    get baseModel() { return this.baseContextGetter().ctx }
+  get baseModel() { return this.baseContextGetter().ctx }
 }
 
 class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {
-    aquire(db: string, id: string) {
-        this.contextGetter().pendingAquire.push([db, id]);
-        return this;
-    }
+  aquire(db: string, id: string) {
+    this.contextGetter().pendingAquire.push([db, id]);
+    return this;
+  }
 }
 
 export function ModelApiFactory(context: Context, event?: Event): ModelApiInterface {
-    return new ModelApi(() => context, event);
+  return new ModelApi(() => context, event);
 }
 
 export function ViewModelApiFactory(context: Context, baseContext: Context): ViewModelApiInterface {
-    return new ViewModelApi(() => context, () => baseContext);
+  return new ViewModelApi(() => context, () => baseContext);
 }
 
 export function PreprocessApiFactory(context: Context): PreprocessApiInterface {
-    return new PreprocessApi(() => context);
+  return new PreprocessApi(() => context);
 }
