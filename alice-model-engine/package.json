@@ -1,7 +1,7 @@
 {
-  "name": "deus-model-engine",
+  "name": "alice-model-engine",
   "version": "0.0.1",
-  "description": "DeusEx model scripts runner",
+  "description": "ALICE model scripts runner",
   "main": "dist/worker.js",
   "scripts": {
     "build": "tsc",
