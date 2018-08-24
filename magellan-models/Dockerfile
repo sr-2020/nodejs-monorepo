@@ -6,8 +6,6 @@ COPY yarn.lock .
 COPY packages/magellan-models/package.json ./packages/magellan-models/
 COPY packages/magellan-models/yarn.lock ./packages/magellan-models/
 COPY packages/alice-model-engine-api/package.json ./packages/alice-model-engine-api/
-COPY packages/alice-model-engine-api/yarn.lock ./packages/alice-model-engine-api/
-
 
 RUN yarn global add lerna
 RUN lerna bootstrap
