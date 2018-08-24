@@ -1,36 +1,33 @@
-import Logger from './logger';
-import { requireDir } from './utils';
-
 export type Callback = string;
 
-export type EventHandler = {
-    eventType: string,
-    effects: Callback[]
+export interface EventHandler {
+    eventType: string;
+    effects: Callback[];
 }
 
-export type SerializedConfig = {
-    events: EventHandler[],
-    [name: string]: any
+export interface SerializedConfig {
+    events: EventHandler[];
+    [name: string]: any;
 }
 
 export interface ConfigInterface {
-    events: EventHandler[]
+    events: EventHandler[];
     dictionaries: {
-        [name: string]: any
-    }
+        [name: string]: any;
+    };
 }
 
 export class Config implements ConfigInterface {
-    events: EventHandler[] = []
-    dictionaries: { [name: string]: any } = {}
 
-    static parse(src: SerializedConfig): Config {
-        let config = new Config();
+    public static parse(src: SerializedConfig): Config {
+        const config = new Config();
 
-        let { events, ...dictionaries } = src;
+        const { events, ...dictionaries } = src;
         config.events = events;
         config.dictionaries = dictionaries;
 
         return config;
     }
+    public events: EventHandler[] = [];
+    public dictionaries: { [name: string]: any } = {};
 }
