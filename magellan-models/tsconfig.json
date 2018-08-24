@@ -10,7 +10,7 @@
         "experimentalDecorators": true,
         "sourceMap": false,
         "allowJs": true,
-        "outDir": "./dist"
+        "outDir": "./build"
     },
     "typeRoots": [
         "./node_modules/@types"

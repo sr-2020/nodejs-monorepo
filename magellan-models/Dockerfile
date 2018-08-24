@@ -17,7 +17,7 @@ RUN cd packages/magellan-models && npm run build
 # We use alpine instead of scratch so we have debugging tools (e.g. 'sh') inside container.
 # It only adds 4.4 mb of size.
 FROM alpine:latest
-COPY --from=node /app/packages/magellan-models/dist/ /app/build/
+COPY --from=node /app/packages/magellan-models/ /app/
 WORKDIR /app
 
 CMD [ "true" ]
