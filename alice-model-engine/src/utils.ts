@@ -1,5 +1,5 @@
 import glob = require('glob');
-import { merge as _merge } from 'lodash'
+import { merge as _merge } from 'lodash';
 import * as Path from 'path';
 import Logger from './logger';
 

@@ -1,7 +1,7 @@
-const ChildProcess = require('child_process');
+import * as childProcess from 'child_process';
 const args = ['-c../config.json', '../models'];
 
-const child = ChildProcess.fork(require.resolve('./worker_runner'), args);
+const child = childProcess.fork(require.resolve('./worker_runner'), args);
 
 process.on('SIGINT', () => {
   console.log('>>> SIGINT');

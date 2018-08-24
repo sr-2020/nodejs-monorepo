@@ -1,49 +1,48 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
-import * as dispatcher from './dispatcher';
 
-import { Event, Timer, Effect, Modifier, Condition } from 'alice-model-engine-api';
+import { Condition, Effect, Event, Modifier, Timer } from 'alice-model-engine-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
 export type Timestamp = number;
 
-export type Timers = {
-  [name: string]: Timer
+export interface Timers {
+  [name: string]: Timer;
 }
 
-export type Character = {
-  characterId: string,
-  timestamp: number,
+export interface Character {
+  characterId: string;
+  timestamp: number;
 
-  modifiers: Modifier[],
-  conditions: Condition[],
+  modifiers: Modifier[];
+  conditions: Condition[];
 
-  timers: Timers,
+  timers: Timers;
 
-  [key: string]: any
+  [key: string]: any;
 }
 
-export type Dictionaries = {
-  [catalog: string]: any[]
+export interface Dictionaries {
+  [catalog: string]: any[];
 }
 
 export class OutboundEvents {
   private events: Event[] = [];
 
-  push(e: Event) {
+  public push(e: Event) {
     this.events.push(e);
   }
 
-  valueOf() {
+  public valueOf() {
     return cloneDeep(this.events);
   }
 }
 
-export type AquiredObjects = {
+export interface AquiredObjects {
   [db: string]: {
-    [id: string]: any
-  }
+    [id: string]: any,
+  };
 }
 
 export class Context {
@@ -51,7 +50,7 @@ export class Context {
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
-  private _pendingAquire: [string, string][];
+  private _pendingAquire: Array<[string, string]>;
   private _aquired: AquiredObjects;
 
   constructor(
@@ -59,8 +58,8 @@ export class Context {
     events: Event[],
     dictionaries?: any,
     outboundEvents?: OutboundEvents,
-    pendingAquire?: [string, string][],
-    aquired?: AquiredObjects
+    pendingAquire?: Array<[string, string]>,
+    aquired?: AquiredObjects,
   ) {
     this._ctx = cloneDeep(contextSrc);
 
@@ -109,7 +108,7 @@ export class Context {
   }
 
   get effects() {
-    let enabledModifiers = this.modifiers.filter((m) => m.enabled)
+    const enabledModifiers = this.modifiers.filter((m) => m.enabled);
     return _.flatMap(enabledModifiers, (c) => c.effects);
   }
 
@@ -130,48 +129,49 @@ export class Context {
     this._aquired = value;
   }
 
-  get pendingAquire(): [string, string][] {
+  get pendingAquire(): Array<[string, string]> {
     return this._pendingAquire;
   }
 
-  clone(): Context {
-    const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
+  public clone(): Context {
+    const clone = new Context(this._ctx, this._events, this._dictionaries,
+      this._outboundEvents, this._pendingAquire, this._aquired);
     clone.timers = this.timers;
     return clone;
   }
 
-  getDictionary(name: FieldName): any[] | undefined {
+  public getDictionary(name: FieldName): any[] | undefined {
     return _.get(this._dictionaries, name, undefined);
   }
 
-  setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
-    let timer = {
-      name, miliseconds, eventType, data
+  public setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
+    const timer = {
+      name, miliseconds, eventType, data,
     };
     if (!this._ctx.timers) this._ctx.timers = {};
     this._ctx.timers[timer.name] = timer;
     return this;
   }
 
-  sendEvent(characterId: string | null, eventType: string, timestamp: number, data: any) {
+  public sendEvent(characterId: string | null, eventType: string, timestamp: number, data: any) {
     if (!characterId || characterId == this._ctx.characterId) {
       this._events.unshift({
         characterId: this._ctx.characterId,
         eventType,
         timestamp: timestamp,
-        data
+        data,
       });
     } else {
       this._outboundEvents.push({
         characterId,
         eventType,
         timestamp: timestamp,
-        data
-      })
+        data,
+      });
     }
   }
 
-  nextTimer(): Timer | null {
+  public nextTimer(): Timer | null {
     return _.reduce(this.timers, (current: Timer | null, t) => {
       if (!current) return t;
       if (current.miliseconds > t.miliseconds) return t;
@@ -179,11 +179,11 @@ export class Context {
     }, null);
   }
 
-  nextEvent(): Event | undefined {
+  public nextEvent(): Event | undefined {
     if (!this._events.length) return;
 
-    let firstTimer = this.nextTimer();
-    let firstEvent = this._events[0];
+    const firstTimer = this.nextTimer();
+    const firstEvent = this._events[0];
 
     if (firstTimer && (this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp)) {
       delete this._ctx.timers[firstTimer.name];
@@ -194,7 +194,7 @@ export class Context {
     }
   }
 
-  *iterateEvents(): Iterable<Event> {
+  public *iterateEvents(): Iterable<Event> {
     let event = this.nextEvent();
     while (event) {
       yield event;
@@ -202,31 +202,31 @@ export class Context {
     }
   }
 
-  enabledEffectsByType(t: string): Effect[] {
+  public enabledEffectsByType(t: string): Effect[] {
     return this.effects.filter((e) => e.enabled && e.type == t);
   }
 
-  enabledFunctionalEffects() {
+  public enabledFunctionalEffects() {
     return this.enabledEffectsByType('functional');
   }
 
-  enabledNormalEffects() {
+  public enabledNormalEffects() {
     return this.enabledEffectsByType('normal');
   }
 
-  *iterateEnabledFunctionalEffects(): Iterable<Effect> {
-    for (let effect of this.enabledFunctionalEffects()) {
+  public *iterateEnabledFunctionalEffects(): Iterable<Effect> {
+    for (const effect of this.enabledFunctionalEffects()) {
       yield effect;
     }
   }
 
-  *iterateEnabledNormalEffects() {
-    for (let effect of this.enabledNormalEffects()) {
+  public *iterateEnabledNormalEffects() {
+    for (const effect of this.enabledNormalEffects()) {
       yield effect;
     }
   }
 
-  decreaseTimers(diff: number): void {
+  public decreaseTimers(diff: number): void {
     if (!this._ctx.timers) return;
 
     this._ctx.timers = _.mapValues(this._ctx.timers, (t) => {
@@ -234,12 +234,12 @@ export class Context {
         name: t.name,
         miliseconds: t.miliseconds - diff,
         eventType: t.eventType,
-        data: t.data
+        data: t.data,
       };
     });
   }
 
-  valueOf() {
+  public valueOf() {
     return cloneDeep(this._ctx);
   }
 
@@ -254,7 +254,7 @@ export class Context {
       characterId: this._ctx.characterId,
       eventType: timer.eventType,
       timestamp: this.timestamp + timer.miliseconds,
-      data: timer.data
+      data: timer.data,
     };
   }
 }

@@ -1,39 +1,39 @@
-import * as model from './model'
-import { Context } from './context'
-import { ModelApiFactory } from './model_api'
+import { Context } from './context';
 import Logger from './logger';
+import * as model from './model';
+import { ModelApiFactory } from './model_api';
 
 import { Event } from 'alice-model-engine-api';
 
-export type CallbacksList = model.Callback | null | (model.Callback | null)[]
+export type CallbacksList = model.Callback | null | Array<model.Callback | null>;
 
 export interface DispatcherInterface {
-  on(name: string, callbacks: CallbacksList): void
-  dispatch(event: Event, context: Context): Context
+  on(name: string, callbacks: CallbacksList): void;
+  dispatch(event: Event, context: Context): Context;
 }
 
 export class Dispatcher implements DispatcherInterface {
   private store: {
-    [key: string]: model.Callback[]
-  }
+    [key: string]: model.Callback[];
+  };
 
   constructor() {
     this.store = {};
   }
 
-  on(name: string, callbacks: CallbacksList) {
+  public on(name: string, callbacks: CallbacksList) {
     if (!this.store[name]) this.store[name] = [];
 
     if (Array.isArray(callbacks)) {
       callbacks.forEach((f) => {
-        if (f) this.store[name].push(f)
+        if (f) this.store[name].push(f);
       });
     } else if (callbacks) {
       this.store[name].push(callbacks);
     }
   }
 
-  dispatch(event: Event, context: Context): Context {
+  public dispatch(event: Event, context: Context): Context {
     // TODO: Should it be filtered out earlier?
     if (event.eventType.startsWith('_')) return context;
 

@@ -1,46 +1,47 @@
-import { clone, assign, reduce } from 'lodash'
+import { assign, clone, reduce } from 'lodash';
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult, Modifier } from 'alice-model-engine-api';
+import { EngineContext, EngineMessage,
+  EngineMessageConfigure, EngineMessageEvents, EngineResult, Event, Modifier } from 'alice-model-engine-api';
 
-import Logger from './logger';
-import { requireDir } from './utils';
 import * as config from './config';
-import * as model from './model';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
-import { ModelApiFactory, ViewModelApiFactory, PreprocessApiFactory } from './model_api';
+import Logger from './logger';
+import * as model from './model';
+import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
+import { requireDir } from './utils';
 
 declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {
-  private config: config.ConfigInterface
-  private dispatcher: dispatcher.DispatcherInterface
 
-  constructor(private model: model.Model) { }
-
-  static load(dir: string): Worker {
-    let model = loadModels(dir);
-    Logger.debug('engine', 'Loaded model', { model: inspect(model, false, null) });
-    return new Worker(model);
+  public static load(dir: string): Worker {
+    const m = loadModels(dir);
+    Logger.debug('engine', 'Loaded model', { model: inspect(m, false, null) });
+    return new Worker(m);
   }
+  private _config: config.ConfigInterface;
+  private dispatcher: dispatcher.DispatcherInterface;
 
-  configure(config: config.ConfigInterface): Worker {
-    Logger.debug('engine', 'Loaded config', { config: inspect(config, false, null) });
-    this.config = config;
-    this.dispatcher = new dispatcher.Dispatcher()
+  constructor(private _model: model.Model) { }
 
-    config.events.forEach((e) => {
-      let callbacks = e.effects.map((c) => this.resolveCallback(c))
+  public configure(newConfig: config.ConfigInterface): Worker {
+    Logger.debug('engine', 'Loaded config', { config: inspect(newConfig, false, null) });
+    this._config = newConfig;
+    this.dispatcher = new dispatcher.Dispatcher();
+
+    newConfig.events.forEach((e) => {
+      const callbacks = e.effects.map((c) => this.resolveCallback(c));
       this.dispatcher.on(e.eventType, callbacks);
     });
 
     return this;
   }
 
-  async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
-    let baseCtx = new Context(context, events, this.config.dictionaries);
+  public async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
+    const baseCtx = new Context(context, events, this._config.dictionaries);
     const characterId = baseCtx.ctx.characterId;
 
     Logger.info('engine', 'Processing model', { characterId, events });
@@ -73,7 +74,7 @@ export class Worker {
     //
     // main loop
     //
-    for (let event of baseCtx.iterateEvents()) {
+    for (const event of baseCtx.iterateEvents()) {
       baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
 
       try {
@@ -85,7 +86,8 @@ export class Worker {
       }
 
       try {
-        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })(() => this.runModifiers(baseCtx));
+        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })
+          (() => this.runModifiers(baseCtx));
       } catch (e) {
         Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { characterId });
         return { status: 'error', error: e };
@@ -95,12 +97,13 @@ export class Worker {
       baseCtx.events = workingCtx.events;
     }
 
-    let baseCtxValue = baseCtx.valueOf()
-    let workingCtxValue = workingCtx.valueOf()
+    const baseCtxValue = baseCtx.valueOf();
+    const workingCtxValue = workingCtx.valueOf();
     let viewModels;
 
     try {
-      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })(() => this.runViewModels(workingCtx, baseCtx));
+      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })
+        (() => this.runViewModels(workingCtx, baseCtx));
     } catch (e) {
       Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { characterId });
       return { status: 'error', error: e };
@@ -112,11 +115,11 @@ export class Worker {
       workingModel: workingCtxValue,
       viewModels,
       aquired: baseCtx.aquired,
-      events: baseCtx.outboundEvents
+      events: baseCtx.outboundEvents,
     };
   }
 
-  listen() {
+  public listen() {
     if (process.send) {
       process.on('disconnect', () => {
         console.log('Disconnected');
@@ -142,9 +145,9 @@ export class Worker {
   }
 
   private async onEvents(message: EngineMessageEvents) {
-    let { context, events } = message;
+    const { context, events } = message;
 
-    let result = await this.process(context, events);
+    const result = await this.process(context, events);
 
     if (process && process.send) {
       process.send({ type: 'result', ...result });
@@ -152,12 +155,12 @@ export class Worker {
   }
 
   private onConfigure(message: EngineMessageConfigure) {
-    let cfg = config.Config.parse(message.data);
+    const cfg = config.Config.parse(message.data);
     this.configure(cfg);
   }
 
   private resolveCallback(callback: config.Callback): model.Callback | null {
-    const result = this.model.callbacks[callback];
+    const result = this._model.callbacks[callback];
     if (result == null) {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
     }
@@ -180,17 +183,16 @@ export class Worker {
   }
 
   private runModifiers(baseCtx: Context): Context {
-    let timestamp = baseCtx.timestamp;
-    let workingCtx = baseCtx.clone();
+    const workingCtx = baseCtx.clone();
     const characterId = workingCtx.ctx.characterId;
-    let api = ModelApiFactory(workingCtx);
+    const api = ModelApiFactory(workingCtx);
 
     // First process all functional events, then all normal ones.
     for (const effectType of ['functional', 'normal']) {
-      for (let modifier of this.getEnabledModifiers(workingCtx)) {
-        let effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
-        for (let effect of effects) {
-          let f = this.resolveCallback(effect.handler);
+      for (const modifier of this.getEnabledModifiers(workingCtx)) {
+        const effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
+        for (const effect of effects) {
+          const f = this.resolveCallback(effect.handler);
           if (!f) {
             continue;
           }
@@ -206,22 +208,22 @@ export class Worker {
   }
 
   private runViewModels(workingCtx: Context, baseCtx: Context) {
-    let data = workingCtx.valueOf();
-    let api = ViewModelApiFactory(workingCtx, baseCtx);
+    const data = workingCtx.valueOf();
+    const api = ViewModelApiFactory(workingCtx, baseCtx);
 
-    return reduce(this.model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
+    return reduce(this._model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
       vm[base] = f(api, data);
       return vm;
     }, {});
   }
 
   private runPreprocess(baseCtx: Context, events: Event[]) {
-    if (!this.model.preprocessCallbacks.length) return;
+    if (!this._model.preprocessCallbacks.length) return;
 
     const ctx = baseCtx.clone();
     const api = PreprocessApiFactory(ctx);
 
-    for (let f of this.model.preprocessCallbacks) {
+    for (const f of this._model.preprocessCallbacks) {
       f(api, events);
     }
 
@@ -241,15 +243,15 @@ export class Worker {
           } else {
             reject();
           }
-        })
+        });
 
         process.send({
           type: 'aquire',
-          keys: baseCtx.pendingAquire
-        })
+          keys: baseCtx.pendingAquire,
+        });
       } else if (TEST_EXTERNAL_OBJECTS) {
-        let result = baseCtx.pendingAquire.reduce<any>((aquired, [db, id]) => {
-          let obj = _.get(TEST_EXTERNAL_OBJECTS, [db, id]);
+        const result = baseCtx.pendingAquire.reduce<any>((aquired, [db, id]) => {
+          const obj = _.get(TEST_EXTERNAL_OBJECTS, [db, id]);
           if (obj) _.set(aquired, [db, id], obj);
           return aquired;
         }, {});
@@ -283,7 +285,7 @@ function loadModels(dir: string): model.Model {
       delete src._preprocess;
     }
 
-    for (let fname in src) {
+    for (const fname in src) {
       if (fname.startsWith('view_')) {
         m.viewModelCallbacks[fname.substr('view_'.length)] = src[fname];
         delete src[fname];

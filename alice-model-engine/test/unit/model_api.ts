@@ -4,8 +4,8 @@ import { ModelApiFactory } from '../../src/model_api';
 
 describe('ModelApi', () => {
   it('getCatalogObject', () => {
-    let context = new Context({}, [], { foo: [{ id: 'bar' }] });
-    let api = ModelApiFactory(context);
+    const context = new Context({}, [], { foo: [{ id: 'bar' }] });
+    const api = ModelApiFactory(context);
 
     expect(api.getCatalogObject('foo', 'bar')).to.deep.equal({ id: 'bar' });
   });
