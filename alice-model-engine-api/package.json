@@ -1,0 +1,9 @@
+{
+  "name": "alice-model-engine-api",
+  "version": "0.0.1",
+  "description": "Model engine API typings",
+  "main": "",
+  "scripts": {},
+  "author": "",
+  "license": "Apache-2.0"
+}
