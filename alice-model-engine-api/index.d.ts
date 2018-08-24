@@ -1,11 +1,14 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
-export type Event = {
-    characterId: string,
+export interface CharacterlessEvent {
     eventType: string,
     timestamp: number,
     data?: any
+}
+
+export interface Event extends CharacterlessEvent {
+    characterId: string,
 }
 
 export type SyncEvent = Event & { eventType: '_RefreshModel' }

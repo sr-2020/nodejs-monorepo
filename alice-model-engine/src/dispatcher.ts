@@ -3,7 +3,7 @@ import { Context } from './context'
 import { ModelApiFactory } from './model_api'
 import Logger from './logger';
 
-import { Event } from 'deus-engine-manager-api';
+import { Event } from 'alice-model-engine-api';
 
 export type CallbacksList = model.Callback | null | (model.Callback | null)[]
 

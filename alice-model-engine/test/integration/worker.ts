@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { EngineResultOk } from 'deus-engine-manager-api';
+import { EngineResultOk } from 'alice-model-engine-api';
 import { Worker } from '../../src/worker';
 import { Config, EventHandler } from '../../src/config';
 

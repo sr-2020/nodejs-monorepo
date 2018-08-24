@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 import { Event, ReadModelApiInterface, LogApiInterface,
-    ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface, Condition  } from 'deus-engine-manager-api';
+    ViewModelApiInterface, ModelApiInterface, PreprocessApiInterface, Condition  } from 'alice-model-engine-api';
 
 import { FieldName, FieldValue, Context } from './context'
 import Logger from './logger';

@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 import * as dispatcher from './dispatcher';
 
-import { Event, Timer, Effect, Modifier, Condition } from 'deus-engine-manager-api';
+import { Event, Timer, Effect, Modifier, Condition } from 'alice-model-engine-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;

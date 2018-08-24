@@ -4,15 +4,15 @@ import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
+import { CharacterlessEvent } from 'alice-model-engine-api';
 import { CurrentUser, Get, JsonController, Param } from 'routing-controllers';
 import { Container } from 'typedi';
-import { Event } from '../events.processor';
 import { AliceAccount } from '../models/alice-account';
 import { DatabasesContainerToken } from '../services/db-container';
 import { checkAdmin, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
 export interface EventsRequest {
-  events: Event[];
+  events: CharacterlessEvent[];
 }
 
 @JsonController()

@@ -1,7 +1,7 @@
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
-import { Event } from 'alice-model-engine-api';
+import { CharacterlessEvent } from 'alice-model-engine-api';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, StatusAndBody } from './connection';
@@ -14,7 +14,7 @@ import { currentTimestamp } from './utils';
 export class EventsProcessor {
   private logger = Container.get(LoggerToken);
 
-  public async process(id: string, events: Event[]): Promise<StatusAndBody> {
+  public async process(id: string, events: CharacterlessEvent[]): Promise<StatusAndBody> {
     events = await this.processTokenUpdateEvents(id, events);
     const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
     if (isMobileClient) {
@@ -72,7 +72,7 @@ export class EventsProcessor {
     return Container.get(DatabasesContainerToken);
   }
 
-  private async processTokenUpdateEvents(id: string, events: Event[]) {
+  private async processTokenUpdateEvents(id: string, events: CharacterlessEvent[]) {
     const tokenUpdatedEvents = events.filter(
       (event) => event.eventType == 'tokenUpdated' && event.data &&
         event.data.token && event.data.token.registrationId);
@@ -100,7 +100,7 @@ export class EventsProcessor {
   // Removes _RefreshModel events which are too far in future
   // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
   // Then removes all _RefreshModel events except latest one.
-  private filterRefreshModelEventsByTimestamp(id, events: Event[]): Event[] {
+  private filterRefreshModelEventsByTimestamp(id, events: CharacterlessEvent[]): CharacterlessEvent[] {
     const tooFarInFuturetimestamp = currentTimestamp() +
       Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
     events = events.filter((value: any) =>

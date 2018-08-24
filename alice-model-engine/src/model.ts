@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from 'alice-model-engine-api';
 
 export type Callback = (api: ModelApiInterface, data: any, event?: Event) => void
 

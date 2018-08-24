@@ -2,7 +2,7 @@ import { clone, assign, reduce } from 'lodash'
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult, Modifier } from 'deus-engine-manager-api';
+import { Event, EngineContext, EngineMessage, EngineMessageEvents, EngineMessageConfigure, EngineResult, Modifier } from 'alice-model-engine-api';
 
 import Logger from './logger';
 import { requireDir } from './utils';

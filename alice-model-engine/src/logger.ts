@@ -1,7 +1,7 @@
 import * as Winston from 'winston';
 (Winston as any).level = 'debug';
 
-import { LogLevel, LogSource } from 'deus-engine-manager-api';
+import { LogLevel, LogSource } from 'alice-model-engine-api';
 
 function log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
     additionalData = additionalData ? additionalData : {};

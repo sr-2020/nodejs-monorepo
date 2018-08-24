@@ -5,19 +5,20 @@ import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
+import { CharacterlessEvent } from 'alice-model-engine-api';
 import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Req, Res } from 'routing-controllers';
 import { Container } from 'typedi';
-import { Event, EventsProcessor } from '../events.processor';
+import { EventsProcessor } from '../events.processor';
 import { AliceAccount } from '../models/alice-account';
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
 import { LoggerToken } from '../services/logger';
 import { canonicalId, checkAccess, createLogData, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
 export interface EventsRequest {
-  events: Event[];
+  events: CharacterlessEvent[];
 }
 
-function CleanEventsForLogging(events: Event[]): Event[] {
+function CleanEventsForLogging(events: CharacterlessEvent[]): CharacterlessEvent[] {
   return events.map((event) => {
     return {
       eventType: event.eventType,
@@ -88,13 +89,13 @@ export class EventsController {
         }));
   }
 
-  private logHalfSuccessfulResponse(req: express.Request, eventTypes: Event[], status: number) {
+  private logHalfSuccessfulResponse(req: express.Request, eventTypes: CharacterlessEvent[], status: number) {
     const logData = createLogData(req, status);
     logData.eventTypes = eventTypes;
     this.logger.error('Successfully put events into DB, but they were not processed in time', logData);
   }
 
-  private logSuccessfulResponse(req: express.Request, eventTypes: Event[], status: number) {
+  private logSuccessfulResponse(req: express.Request, eventTypes: CharacterlessEvent[], status: number) {
     const logData = createLogData(req, status);
     logData.eventTypes = eventTypes;
     this.logger.info('Successfully processed all events and answered back to client', logData);

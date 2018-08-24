@@ -7,8 +7,7 @@
     "build": "tsc",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",
-    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts",
-    "postinstall": "npm run build"
+    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
   },
   "author": "",
   "license": "Apache2",
@@ -29,7 +28,7 @@
     "@types/systemjs": "^0.20.6",
     "@types/winston": "^2.3.8",
     "cuid": "^2.1.0",
-    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
+    "alice-model-engine-api": "*",
     "glob": "^7.1.1",
     "lodash": "^4.17.5",
     "meow": "^4.0.0",
