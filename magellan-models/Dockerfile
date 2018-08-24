@@ -5,14 +5,17 @@ COPY package.json .
 COPY yarn.lock .
 COPY packages/magellan-models/package.json ./packages/magellan-models/
 COPY packages/magellan-models/yarn.lock ./packages/magellan-models/
+COPY packages/alice-model-engine-api/package.json ./packages/alice-model-engine-api/
+COPY packages/alice-model-engine-api/yarn.lock ./packages/alice-model-engine-api/
+
 
 RUN yarn global add lerna
 RUN lerna bootstrap
 
 COPY packages/magellan-models/.  ./packages/magellan-models
+COPY packages/alice-model-engine-api/.  ./packages/alice-model-engine-api
 
 RUN cd packages/magellan-models && npm run build
-
 
 # We use alpine instead of scratch so we have debugging tools (e.g. 'sh') inside container.
 # It only adds 4.4 mb of size.
