@@ -481,10 +481,6 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
-"deus-engine-manager-api@github:sth-larp/deus-engine-manager-api":
-  version "0.0.1"
-  resolved "https://codeload.github.com/sth-larp/deus-engine-manager-api/tar.gz/add896b90c6555c6ae7d61eccdf70dab7988d763"
-
 "deus-model-engine@github:sth-larp/deus-model-engine":
   version "0.0.1"
   resolved "https://codeload.github.com/sth-larp/deus-model-engine/tar.gz/c814da22966fd377147262d48950b8259de6ce3f"
@@ -497,7 +493,6 @@ detect-libc@^1.0.2:
     "@types/systemjs" "^0.20.6"
     "@types/winston" "^2.3.8"
     cuid "^2.1.0"
-    deus-engine-manager-api "github:sth-larp/deus-engine-manager-api"
     glob "^7.1.1"
     lodash "^4.17.5"
     meow "^4.0.0"

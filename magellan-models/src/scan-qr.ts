@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface, PreprocessApiInterface } from 'alice-model-engine-api';
 import { LabTerminalRefillData, QrType, ScanQRData, XenoDisease } from '../helpers/basic-types';
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {

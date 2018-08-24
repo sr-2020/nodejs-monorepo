@@ -1,4 +1,4 @@
-import { ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface, PreprocessApiInterface } from 'alice-model-engine-api';
 import _ = require('lodash');
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');

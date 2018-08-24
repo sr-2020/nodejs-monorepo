@@ -2,7 +2,7 @@
  * Универсальные события связанные с VR
  */
 
-import { ModelApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface } from 'alice-model-engine-api';
 import helpers = require('../helpers/model-helper');
 
 /**

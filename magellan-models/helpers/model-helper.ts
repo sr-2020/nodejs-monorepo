@@ -1,4 +1,4 @@
-import { ModelApiInterface, Modifier } from 'deus-engine-manager-api';
+import { ModelApiInterface, Modifier } from 'alice-model-engine-api';
 
 /**
  * Хелперы для разных моделей

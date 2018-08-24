@@ -3,7 +3,7 @@ import { requireDir } from 'deus-model-engine/lib/utils';
 import { Worker } from 'deus-model-engine/lib/worker';
 import * as Path from 'path';
 
-import { EngineContext, EngineResult, EngineResultOk, Event } from 'deus-engine-manager-api';
+import { EngineContext, EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
 
 let WORKER_INSTANCE: Worker | null = null;
 

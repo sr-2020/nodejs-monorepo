@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface } from 'alice-model-engine-api';
 import * as shuffle from 'shuffle-array';
 import { BiologicalSystems, LabTerminalRefillData,
   OrganismModel, organismSystemsIndices } from '../helpers/basic-types';

@@ -1,5 +1,5 @@
+import { Event } from 'alice-model-engine-api';
 import { expect } from 'chai';
-import { Event } from 'deus-engine-manager-api';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
 import consts = require('../../helpers/constants');

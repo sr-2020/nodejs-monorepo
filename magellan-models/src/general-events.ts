@@ -2,8 +2,8 @@
  * Универсальные события для хакерства и т.д.
  */
 
+import { ModelApiInterface } from 'alice-model-engine-api';
 import Chance = require('chance');
-import { ModelApiInterface } from 'deus-engine-manager-api';
 import type = require('type-detect');
 import helpers = require('../helpers/model-helper');
 const chance = new Chance();

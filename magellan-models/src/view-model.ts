@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from 'deus-engine-manager-api';
+import { ViewModelApiInterface } from 'alice-model-engine-api';
 import { Change, OrganismModel } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';

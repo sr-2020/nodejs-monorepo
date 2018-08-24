@@ -1,4 +1,4 @@
-import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
+import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'alice-model-engine-api';
 import uuid = require('uuid/v1');
 import { allSystemsIndices, colorOfChange, getTypedOrganismModel,
   OrganismModel, organismSystemsIndices, SystemColor,

@@ -1,6 +1,6 @@
-import { Condition, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
+import { Condition, ModelApiInterface, Modifier } from 'alice-model-engine-api';
 
-// TODO(aeremin) Move to deus-engine-manager-api?
+// TODO(aeremin) Move to alice-model-engine-api?
 export interface Change {
   mID: string;
   text: string;
