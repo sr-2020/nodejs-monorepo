@@ -1,6 +1,7 @@
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
+import { Event } from 'alice-model-engine-api';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, StatusAndBody } from './connection';
@@ -9,12 +10,6 @@ import { DatabasesContainerToken } from './services/db-container';
 import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
 import { currentTimestamp } from './utils';
-
-export interface Event {
-  eventType: string;
-  timestamp: number;
-  data?: any;
-}
 
 export class EventsProcessor {
   private logger = Container.get(LoggerToken);

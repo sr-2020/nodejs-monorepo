@@ -6,11 +6,13 @@ COPY package.json .
 COPY yarn.lock .
 COPY packages/alice-api-server/package.json ./packages/alice-api-server/
 COPY packages/alice-api-server/yarn.lock ./packages/alice-api-server/
+COPY packages/alice-model-engine-api/package.json ./packages/alice-model-engine-api/
 
 RUN yarn global add lerna
 RUN lerna bootstrap
 
 COPY packages/alice-api-server/.  ./packages/alice-api-server
+COPY packages/alice-model-engine-api/.  ./packages/alice-model-engine-api
 
 RUN cd packages/alice-api-server && npm run build
 
