@@ -35,7 +35,7 @@ export class QrReaderComponent implements OnInit {
   public errorMessage = ' ';
 
   public availableDevices: MediaDeviceInfo[] = [];
-  public selectedDevice!: MediaDeviceInfo;
+  public selectedDevice: MediaDeviceInfo | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: QrDialogData,

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
-  <mat-form-field *ngIf="availableDevices">
+  <mat-form-field *ngIf="availableDevices && selectedDevice">
     <mat-select placeholder="Камера" [ngModel]="selectedDevice.deviceId" (selectionChange)="onDeviceSelectChange($event)">
       <mat-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{ device.label }}</mat-option>
     </mat-select>
