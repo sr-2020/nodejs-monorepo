@@ -68,6 +68,9 @@
   dependencies:
     winston "*"
 
+"alice-model-engine-api@file:../alice-model-engine-api":
+  version "0.0.1"
+
 ansi-styles@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
