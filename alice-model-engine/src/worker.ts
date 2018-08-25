@@ -51,7 +51,7 @@ export class Worker {
         (() => this.runPreprocess(baseCtx, events));
     } catch (e) {
       Logger.error('engine', `Exception ${e.toString()} caught when running preproces`,
-        { event, characterId });
+        { events, characterId });
       return { status: 'error', error: e };
     }
 
