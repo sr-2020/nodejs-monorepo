@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 
 import { QrData } from 'alice-qr-lib/qr';
 import { QrType } from 'alice-qr-lib/qr.type';
-import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
-import { LabTest } from 'src/datatypes/viewmodel';
-import { DataService } from 'src/services/data.service';
+import { QrReaderComponent } from 'medicine-frontend/src/app/qr-reader/qr-reader.component';
+import { LabTest } from 'medicine-frontend/src/datatypes/viewmodel';
+import { DataService } from 'medicine-frontend/src/services/data.service';
 
 @Component({
   selector: 'app-choose-lab-tests',

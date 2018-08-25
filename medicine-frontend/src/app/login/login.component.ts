@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { AuthService } from 'src/services/auth.service';
-import { DataService, ForeignViewModelError } from 'src/services/data.service';
+import { AuthService } from 'medicine-frontend/src/services/auth.service';
+import { DataService, ForeignViewModelError } from 'medicine-frontend/src/services/data.service';
 
 @Component({
   selector: 'app-login',

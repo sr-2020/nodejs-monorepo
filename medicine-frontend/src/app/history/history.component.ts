@@ -9,10 +9,10 @@ import { map, startWith } from 'rxjs/operators';
 
 import { QrData } from 'alice-qr-lib/qr';
 import { QrType } from 'alice-qr-lib/qr.type';
-import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
-import { HistoryEntry } from 'src/datatypes/viewmodel';
-import { DataService } from 'src/services/data.service';
-import { renderTimestamp } from 'src/time-utils';
+import { QrReaderComponent } from 'medicine-frontend/src/app/qr-reader/qr-reader.component';
+import { HistoryEntry } from 'medicine-frontend/src/datatypes/viewmodel';
+import { DataService } from 'medicine-frontend/src/services/data.service';
+import { renderTimestamp } from 'medicine-frontend/src/time-utils';
 
 class PatientFilterOption {
   public patientId?: string;

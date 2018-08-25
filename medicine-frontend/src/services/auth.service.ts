@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs } from '@angular/http';
 
-import { GlobalConfig } from 'src/config';
-import { ViewModel } from 'src/datatypes/viewmodel';
+import { GlobalConfig } from 'medicine-frontend/src/config';
+import { ViewModel } from 'medicine-frontend/src/datatypes/viewmodel';
 
 @Injectable()
 export class AuthService {

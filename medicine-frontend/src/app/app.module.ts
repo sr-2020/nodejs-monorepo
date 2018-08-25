@@ -7,16 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
-import { AppComponent } from 'src/app/app.component';
-import { ChooseLabTestsComponent } from 'src/app/choose-lab-tests/choose-lab-tests.component';
-import { AppRoutingModule } from 'src/app/core/app.routing.module';
-import { CustomMaterialModule } from 'src/app/core/material.module';
-import { HistoryComponent } from 'src/app/history/history.component';
-import { LoginComponent } from 'src/app/login/login.component';
-import { QrReaderComponent } from 'src/app/qr-reader/qr-reader.component';
-import { AuthGuardService } from 'src/services/auth.guard.service';
-import { AuthService } from 'src/services/auth.service';
-import { DataService } from 'src/services/data.service';
+import { AppComponent } from 'medicine-frontend/src/app/app.component';
+import { ChooseLabTestsComponent } from 'medicine-frontend/src/app/choose-lab-tests/choose-lab-tests.component';
+import { AppRoutingModule } from 'medicine-frontend/src/app/core/app.routing.module';
+import { CustomMaterialModule } from 'medicine-frontend/src/app/core/material.module';
+import { HistoryComponent } from 'medicine-frontend/src/app/history/history.component';
+import { LoginComponent } from 'medicine-frontend/src/app/login/login.component';
+import { QrReaderComponent } from 'medicine-frontend/src/app/qr-reader/qr-reader.component';
+import { AuthGuardService } from 'medicine-frontend/src/services/auth.guard.service';
+import { AuthService } from 'medicine-frontend/src/services/auth.service';
+import { DataService } from 'medicine-frontend/src/services/data.service';
 
 @NgModule({
   declarations: [

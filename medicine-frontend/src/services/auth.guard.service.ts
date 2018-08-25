@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from 'src/services/auth.service';
+import { AuthService } from 'medicine-frontend/src/services/auth.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {

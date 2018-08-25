@@ -4,7 +4,7 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 import { decode, QrData } from 'alice-qr-lib/qr';
 import { QrType } from 'alice-qr-lib/qr.type';
-import { currentTimestamp } from 'src/app/util';
+import { currentTimestamp } from 'medicine-frontend/src/app/util';
 
 class QrExpiredError {
 }

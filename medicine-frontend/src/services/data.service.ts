@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { QrData } from 'alice-qr-lib/qr';
-import { GlobalConfig } from 'src/config';
-import { ViewModel } from 'src/datatypes/viewmodel';
-import { AuthService } from 'src/services/auth.service';
+import { GlobalConfig } from 'medicine-frontend/src/config';
+import { ViewModel } from 'medicine-frontend/src/datatypes/viewmodel';
+import { AuthService } from 'medicine-frontend/src/services/auth.service';
 
 export class ForeignViewModelError {}
 
