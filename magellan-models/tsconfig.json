@@ -10,10 +10,14 @@
         "experimentalDecorators": true,
         "sourceMap": false,
         "allowJs": true,
-        "outDir": "./build"
+        "outDir": "./build",
+        "baseUrl": ".."
     },
     "typeRoots": [
         "./node_modules/@types"
       ],
-    "include": ["**/*.ts"]
+    "include": [
+        "**/*.ts",
+        "../alice-model-engine/src/worker.ts"
+    ]
 }

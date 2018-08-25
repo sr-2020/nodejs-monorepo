@@ -1,6 +1,6 @@
+import { Worker } from '../../../alice-model-engine/src/worker';
 import { Config } from 'deus-model-engine/lib/config';
 import { requireDir } from 'deus-model-engine/lib/utils';
-import { Worker } from 'deus-model-engine/lib/worker';
 import * as Path from 'path';
 
 import { EngineContext, EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
@@ -10,7 +10,7 @@ let WORKER_INSTANCE: Worker | null = null;
 function getWorker() {
     if (WORKER_INSTANCE) return WORKER_INSTANCE;
 
-    const catalogsPath = Path.resolve(__dirname, '../../../catalogs');
+    const catalogsPath = Path.resolve(__dirname, '../../../../catalogs');
     const modelsPath = Path.resolve(__dirname, '../../src');
 
     const config = Config.parse(requireDir(catalogsPath));

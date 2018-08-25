@@ -6,11 +6,11 @@ function randomId() {
 }
 
 export function getExampleBiologicalOrganismModel(): OrganismModel {
-    return clone(require('../../../data_samples/model.json'));
+    return clone(require('../../../../data_samples/model.json'));
 }
 
 export function getExampleLabTerminalModel() {
-    return require('../../../data_samples/medic-model.json');
+    return require('../../../../data_samples/medic-model.json');
 }
 
 export const getExampleDeusModel = (id?: string) => ({

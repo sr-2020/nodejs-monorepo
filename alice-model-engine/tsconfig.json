@@ -10,7 +10,8 @@
         "experimentalDecorators": true,
         "sourceMap": false,
         "declaration": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "baseUrl": ".."
     },
     "include": ["./src/**/*.ts"]
 }

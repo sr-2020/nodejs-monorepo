@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && mocha build/test/**/*.js"
+    "test": "npm run build && mocha build/magellan-models/test/**/*.js"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -28,6 +28,7 @@
     "@types/lodash": "^4.14.106",
     "@types/shuffle-array": "0.0.28",
     "@types/uuid": "^3.4.3",
+    "alice-model-engine": "*",
     "async-file": "^2.0.2",
     "chance": "^1.0.10",
     "clone": "^1.0.4",
