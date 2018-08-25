@@ -1,7 +1,8 @@
-import { Worker } from '../../../alice-model-engine/src/worker';
-import { Config } from 'deus-model-engine/lib/config';
-import { requireDir } from 'deus-model-engine/lib/utils';
 import * as Path from 'path';
+// TODO: Figure out how to use proper absolutish paths
+import { Config } from '../../../alice-model-engine/src/config';
+import { requireDir } from '../../../alice-model-engine/src/utils';
+import { Worker } from '../../../alice-model-engine/src/worker';
 
 import { EngineContext, EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
 
