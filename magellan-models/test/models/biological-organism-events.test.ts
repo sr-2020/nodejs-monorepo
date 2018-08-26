@@ -377,11 +377,11 @@ describe('General Magellan events: ', () => {
 
       expect(baseModel.systems[0].value).to.eq(0);
       expect(baseModel.systems[1].value).to.eq(1);
-      expect(baseModel.systems[2].value).to.approximately(65, 10);
+      expect(baseModel.systems[2].value).to.approximately(65, 15);
 
       expect(workingModel.systems[0].value).to.eq(0);
       expect(workingModel.systems[1].value).to.eq(1);
-      expect(workingModel.systems[2].value).to.approximately(65, 10);
+      expect(workingModel.systems[2].value).to.approximately(65, 15);
     });
 
     it('Weak xenodisease without suit', async () => {
