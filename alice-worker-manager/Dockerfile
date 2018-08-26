@@ -24,5 +24,6 @@ COPY packages/alice-model-engine-api/.  ./packages/alice-model-engine-api
 COPY packages/alice-model-engine/.  ./packages/alice-model-engine
 
 RUN yarn --cwd packages/alice-worker-manager run build
+RUN yarn --cwd packages/alice-model-engine run build
 
-CMD [ "node", "./packages/alice-worker-manager/build/src/worker_manager_runner.js", "-c", "./packages/alice-worker-manager/config.docker.js" ]
+CMD [ "node", "./packages/alice-worker-manager/build/src/worker_manager_runner.js", "-c", "/app/packages/alice-worker-manager/config.docker.js" ]

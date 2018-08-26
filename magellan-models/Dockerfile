@@ -23,6 +23,7 @@ FROM alpine:latest
 COPY --from=node /app/packages/magellan-models/build/magellan-models /app/build
 COPY --from=node /app/packages/magellan-models/catalogs /app/catalogs
 COPY --from=node /app/packages/magellan-models/data_samples /app/data_samples
+COPY --from=node /app/packages/magellan-models/node_modules /app/node_modules
 WORKDIR /app
 
 CMD [ "true" ]
