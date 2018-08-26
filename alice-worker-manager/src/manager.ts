@@ -2,7 +2,7 @@ import { Inject } from './di';
 import { isNil, keyBy } from 'lodash';
 import { Subscription, Subject, Observable } from 'rxjs/Rx';
 
-import { Event, SyncEvent, RetryEvent } from 'deus-engine-manager-api';
+import { Event, SyncEvent, RetryEvent } from 'alice-model-engine-api';
 
 import { DBConnectorInterface } from './db/interface';
 

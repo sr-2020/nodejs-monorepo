@@ -3,7 +3,7 @@ import { DBInterface } from './db/interface';
 import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
 
-import { Event, SyncEvent, RetryEvent } from 'deus-engine-manager-api';
+import { Event, SyncEvent, RetryEvent } from 'alice-model-engine-api';
 import { Document } from './db/interface';
 
 const SYNC_EVENT_TYPE = '_RefreshModel';

@@ -1,7 +1,7 @@
 import { Inject } from './di';
 import { isNil, keyBy, cloneDeep } from 'lodash';
 
-import { Event, SyncEvent, EngineResult } from 'deus-engine-manager-api';
+import { Event, SyncEvent, EngineResult } from 'alice-model-engine-api';
 
 import { ModelStorage } from './model_storage';
 import { ViewModelStorage } from './view_model_storage';

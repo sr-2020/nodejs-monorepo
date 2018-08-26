@@ -13,13 +13,13 @@
     "test:integration:realdb": "__USE_REAL_DB=1 mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts"
   },
   "author": "",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "dependencies": {
     "@types/deep-equal": "^1.0.1",
     "@types/express": "^4.11.1",
+    "alice-model-engine": "file:../alice-model-engine",
+    "alice-model-engine-api": "file:../alice-model-engine-api",
     "deep-equal": "^1.0.1",
-    "deus-engine-manager-api": "github:sth-larp/deus-engine-manager-api",
-    "deus-model-engine": "github:sth-larp/deus-model-engine",
     "express": "^4.16.3",
     "forever": "^0.15.3",
     "generic-pool": "^3.4.2",

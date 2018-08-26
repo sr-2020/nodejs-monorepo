@@ -4,7 +4,7 @@
         "../models/src",
         "src",
         "config.json",
-        "node_modules/deus-model-engine"
+        "node_modules/alice-model-engine"
     ],
 
     "ext": "ts,js,json",

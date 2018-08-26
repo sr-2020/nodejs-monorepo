@@ -1,5 +1,5 @@
 import { pick, merge } from 'lodash';
-import { Event, SyncEvent } from 'deus-engine-manager-api';
+import { Event, SyncEvent } from 'alice-model-engine-api'
 
 import { DBInterface, Document } from './db/interface';
 

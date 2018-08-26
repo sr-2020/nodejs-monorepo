@@ -3,7 +3,7 @@ import * as ChildProcess from 'child_process';
 import * as Rx from 'rxjs/Rx';
 import { fromStream } from './utils';
 
-import { Event, EngineMessage, EngineReply, EngineReplyAquire, EngineResult, EngineResultOk, EngineResultError } from 'deus-engine-manager-api';
+import { Event, EngineMessage, EngineReply, EngineReplyAquire, EngineResult, EngineResultOk, EngineResultError } from 'alice-model-engine-api';
 
 import { LoggerInterface } from './logger';
 import { Catalogs } from './catalogs_storage';

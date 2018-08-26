@@ -1,7 +1,7 @@
 import { Inject } from './di';
 import * as genericPool from 'generic-pool';
 
-import { Event } from 'deus-engine-manager-api';
+import { Event } from 'alice-model-engine-api';
 
 import { LoggerInterface } from './logger';
 import { Config, PoolConfig } from './config';

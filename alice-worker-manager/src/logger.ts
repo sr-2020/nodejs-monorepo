@@ -4,7 +4,7 @@ import * as winston from 'winston';
 import * as Elasticsearch from 'winston-elasticsearch';
 
 import { Config, LoggerConfig } from './config';
-import { LogLevel, LogSource } from 'deus-engine-manager-api';
+import { LogLevel, LogSource } from 'alice-model-engine-api';
 
 // Set default winston config
 (winston.transports as any).Elasticsearch = Elasticsearch;

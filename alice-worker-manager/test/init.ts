@@ -34,10 +34,11 @@ export const defaultConfig: Config = {
         models: 'models-test',
         workingModels: 'working-models-test',
         accounts: '',
+        economy: '',
     },
 
     pool: {
-        workerModule: 'deus-model-engine/lib/worker_runner',
+        workerModule: 'alice-model-engine/dist/worker_runner',
         workerArgs: [__dirname + '/test-models/trivial/models'],
         options: {
             max: 2,
