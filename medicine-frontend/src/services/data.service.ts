@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { QrData } from 'alice-qr-lib/qr';
+import { QrData } from 'alice-qr-lib/qr.types';
 import { GlobalConfig } from 'medicine-frontend/src/config';
 import { ViewModel } from 'medicine-frontend/src/datatypes/viewmodel';
 import { AuthService } from 'medicine-frontend/src/services/auth.service';

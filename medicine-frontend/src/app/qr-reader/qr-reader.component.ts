@@ -2,8 +2,8 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
-import { decode, QrData } from 'alice-qr-lib/qr';
-import { QrType } from 'alice-qr-lib/qr.type';
+import { decode } from 'alice-qr-lib/qr';
+import { QrData, QrType } from 'alice-qr-lib/qr.types';
 import { currentTimestamp } from 'medicine-frontend/src/app/util';
 
 class QrExpiredError {

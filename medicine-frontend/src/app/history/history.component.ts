@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-import { QrData } from 'alice-qr-lib/qr';
-import { QrType } from 'alice-qr-lib/qr.type';
+import { QrData, QrType } from 'alice-qr-lib/qr.types';
 import { QrReaderComponent } from 'medicine-frontend/src/app/qr-reader/qr-reader.component';
 import { HistoryEntry } from 'medicine-frontend/src/datatypes/viewmodel';
 import { DataService } from 'medicine-frontend/src/services/data.service';

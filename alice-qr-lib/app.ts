@@ -3,8 +3,8 @@ import * as express from 'express';
 import * as http from 'http';
 
 import * as bodyparser from 'body-parser';
-import { decode, encode, QrData } from './qr';
-import { QrType } from './qr.type';
+import { decode, encode } from './qr';
+import { QrType, QrData } from './qr.types';
 
 function QrDataFromQuery(query: any): QrData {
   if (/^[0-9]*$/.test(query.type)) {

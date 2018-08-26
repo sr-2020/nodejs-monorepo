@@ -1,12 +1,5 @@
 import * as md5 from 'md5';
-import { QrType } from './qr.type';
-
-export interface QrData {
-  type: QrType;
-  kind: number;
-  validUntil: number;
-  payload: string;
-}
+import { QrData } from './qr.types';
 
 export class FormatError implements Error {
   public name: string = 'FormatError';

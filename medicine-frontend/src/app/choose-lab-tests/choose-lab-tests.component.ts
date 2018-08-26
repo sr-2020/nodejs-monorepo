@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatSelectionList, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { QrData } from 'alice-qr-lib/qr';
-import { QrType } from 'alice-qr-lib/qr.type';
+import { QrData, QrType } from 'alice-qr-lib/qr.types';
 import { QrReaderComponent } from 'medicine-frontend/src/app/qr-reader/qr-reader.component';
 import { LabTest } from 'medicine-frontend/src/datatypes/viewmodel';
 import { DataService } from 'medicine-frontend/src/services/data.service';

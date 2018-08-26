@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { decode, encode, QrData } from './qr';
-import { QrType } from './qr.type';
+import { decode, encode } from './qr';
+import { QrType, QrData } from './qr.types';
 
 describe('QR content encoding/decode', () => {
   it('Throws format error if too short', () => {
