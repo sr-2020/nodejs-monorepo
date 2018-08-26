@@ -5,11 +5,14 @@ import { requireDir } from '../../../alice-model-engine/src/utils';
 import { Worker } from '../../../alice-model-engine/src/worker';
 
 import { EngineContext, EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
+import * as Winston from 'winston';
 
 let WORKER_INSTANCE: Worker | null = null;
 
 function getWorker() {
     if (WORKER_INSTANCE) return WORKER_INSTANCE;
+
+    (Winston as any).level = 'warn';
 
     const catalogsPath = Path.resolve(__dirname, '../../../../catalogs');
     const modelsPath = Path.resolve(__dirname, '../../src');
