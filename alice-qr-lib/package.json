@@ -8,6 +8,7 @@
     "lib/"
   ],
   "scripts": {
+    "deps": "yarn install",
     "build": "tsc",
     "start": "npm run build && forever start ./lib/main.js",
     "stop": "forever stop ./lib/main.js",

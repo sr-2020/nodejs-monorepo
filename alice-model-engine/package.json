@@ -4,6 +4,7 @@
   "description": "ALICE model scripts runner",
   "main": "dist/worker.js",
   "scripts": {
+    "deps": "yarn install",
     "build": "tsc",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",

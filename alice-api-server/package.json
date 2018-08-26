@@ -4,6 +4,7 @@
   "description": "DeusEx LARP Server Backend",
   "main": "index.js",
   "scripts": {
+    "deps": "yarn install",
     "build": "tsc",
     "start": "npm run build && forever start ./main.js",
     "stop": "forever stop ./main.js",

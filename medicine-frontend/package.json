@@ -2,6 +2,7 @@
   "name": "medicine-frontend",
   "version": "0.0.0",
   "scripts": {
+    "deps": "yarn install",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
