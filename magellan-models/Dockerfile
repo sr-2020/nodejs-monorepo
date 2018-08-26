@@ -20,7 +20,9 @@ RUN yarn --cwd packages/magellan-models run build
 # We use alpine instead of scratch so we have debugging tools (e.g. 'sh') inside container.
 # It only adds 4.4 mb of size.
 FROM alpine:latest
-COPY --from=node /app/packages/magellan-models/ /app/
+COPY --from=node /app/packages/magellan-models/build/magellan-models /app/build
+COPY --from=node /app/packages/magellan-models/catalogs /app/catalogs
+COPY --from=node /app/packages/magellan-models/data_samples /app/data_samples
 WORKDIR /app
 
 CMD [ "true" ]
