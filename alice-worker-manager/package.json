@@ -1,13 +1,12 @@
 {
-  "name": "deus-worker-manager",
+  "name": "alice-worker-manager",
   "version": "0.0.1",
-  "description": "DeusEx model workers manager",
+  "description": "ALICE model workers manager",
   "main": "index.js",
   "scripts": {
+    "deps": "yarn install",
     "build": "tsc",
     "lint": "tslint -p tsconfig.json --exclude node_modules",
-    "start": "bin/start.sh",
-    "stop": "bin/stop.sh",
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
     "test:integration": "mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts",
