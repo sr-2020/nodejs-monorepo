@@ -9,6 +9,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "@angular/animations": "^6.0.2",
     "@angular/cdk": "^6.0.2",

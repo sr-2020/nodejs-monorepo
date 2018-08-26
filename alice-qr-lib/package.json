@@ -14,7 +14,7 @@
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "@types/basic-auth": "^1.1.1",
     "@types/body-parser": "^1.16.3",

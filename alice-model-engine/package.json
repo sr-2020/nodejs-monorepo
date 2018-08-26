@@ -10,7 +10,7 @@
     "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
   },
   "author": "",
-  "license": "Apache2",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/mocha": "^5.0.0",
