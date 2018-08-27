@@ -55,9 +55,7 @@ export function RequestId(req: express.Request): string {
 
 export function createLogData(req: express.Request, status: number): any {
   const dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
-  // TODO: Use real timestamp
-  // const responseStartMoment = (req as any).timestamp;
-  const responseStartMoment = moment();
+  const responseStartMoment = (req as any).timestamp;
   return {
     requestId: RequestId(req),
     status,

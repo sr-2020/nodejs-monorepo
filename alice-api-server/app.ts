@@ -3,6 +3,7 @@ import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as addRequestId from 'express-request-id';
 import * as http from 'http';
+import * as moment from 'moment';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 PouchDB.plugin(PouchDBFind);
@@ -42,8 +43,10 @@ class App {
 
   constructor() {
     this.app.use(addRequestId());
-    // TODO: Add timestamps back
-    // this.app.use(time.init);
+    this.app.use((req, _res, next) => {
+      (req as any).timestamp = moment();
+      next();
+    });
     this.app.use(bodyparser.json());
 
     this.app.use((req, res, next) => {
