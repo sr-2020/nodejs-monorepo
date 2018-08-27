@@ -1,15 +1,14 @@
 // tslint:disable:no-unused-expression
 
-import { cloneDeep } from 'lodash';
 import { expect } from 'chai';
+import { cloneDeep } from 'lodash';
 
 import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
-import { Document } from '../../src/db/interface';
 
-import { initDi, defaultConfig } from '../init';
-import { createModel, createModelObj, saveModel, pushEvent, getModel, getModelAtTimestamp } from '../model_helpers';
 import { delay } from '../../src/utils';
+import { defaultConfig, initDi } from '../init';
+import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, saveModel } from '../model_helpers';
 
 describe('Crash scenarios', function() {
     this.timeout(15000);
@@ -18,7 +17,7 @@ describe('Crash scenarios', function() {
     let di;
 
     before(async () => {
-        let config = cloneDeep(defaultConfig);
+        const config = cloneDeep(defaultConfig);
         config.logger.default = { console: { silent: true } };
         di = initDi(config);
         manager = di.get(ManagerToken);
@@ -42,25 +41,25 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 2
+            timestamp: timestamp + 2,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 3
+            timestamp: timestamp + 3,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 4
+            timestamp: timestamp + 4,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 4
+            timestamp: timestamp + 4,
         });
 
         // now let's try normal operation
@@ -72,22 +71,22 @@ describe('Crash scenarios', function() {
             characterId: anotherModel._id,
             eventType: 'concat',
             timestamp,
-            data: { value: 'A' }
+            data: { value: 'A' },
         });
 
         await pushEvent(di, {
             characterId: anotherModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 50
+            timestamp: timestamp + 50,
         });
 
-        let baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
+        const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
 
         expect(baseModel).to.has.property('value', 'A');
     });
 
     it('Shoud not crash if model has no timestamp', async () => {
-        let model = createModelObj();
+        const model = createModelObj();
         const timestamp = model.timestamp + 1;
         delete model.timestamp;
         await saveModel(di, model);
@@ -98,7 +97,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp
+            timestamp,
         });
 
         baseModel = await getModelAtTimestamp(di, model._id, timestamp);
@@ -113,31 +112,31 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: 'kill',
-            timestamp
+            timestamp,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 2
+            timestamp: timestamp + 2,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 3
+            timestamp: timestamp + 3,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 4
+            timestamp: timestamp + 4,
         });
 
         await pushEvent(di, {
             characterId: crashModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 4
+            timestamp: timestamp + 4,
         });
 
         // now let's try normal operation
@@ -149,42 +148,34 @@ describe('Crash scenarios', function() {
             characterId: anotherModel._id,
             eventType: 'concat',
             timestamp,
-            data: { value: 'A' }
+            data: { value: 'A' },
         });
 
         await pushEvent(di, {
             characterId: anotherModel._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 50
+            timestamp: timestamp + 50,
         });
 
-        let baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
+        const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
 
         expect(baseModel).to.has.property('value', 'A');
     });
 
     it('should handle _RetryRefresh event', async () => {
-        let model = await createModel(di);
-        let timestamp = model.timestamp + 1;
+        const model = await createModel(di);
+        const timestamp = model.timestamp + 1;
 
-        let crash = await pushEvent(di, {
+        const crash = await pushEvent(di, {
             characterId: model._id,
             eventType: 'crash',
-            timestamp: timestamp + 1
+            timestamp: timestamp + 1,
         });
 
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 2
-        });
-
-        await delay(500);
-
-        await pushEvent(di, {
-            characterId: model._id,
-            eventType: '_RefreshModel',
-            timestamp: timestamp + 3
+            timestamp: timestamp + 2,
         });
 
         await delay(500);
@@ -192,7 +183,15 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RefreshModel',
-            timestamp: timestamp + 4
+            timestamp: timestamp + 3,
+        });
+
+        await delay(500);
+
+        await pushEvent(di, {
+            characterId: model._id,
+            eventType: '_RefreshModel',
+            timestamp: timestamp + 4,
         });
 
         await delay(1000);
@@ -205,7 +204,7 @@ describe('Crash scenarios', function() {
         await pushEvent(di, {
             characterId: model._id,
             eventType: '_RetryRefresh',
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
 
         await delay(400);

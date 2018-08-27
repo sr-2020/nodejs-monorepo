@@ -1,25 +1,18 @@
+import { keyBy } from 'lodash';
+import { Observable, Subject } from 'rxjs/Rx';
 import { Inject } from './di';
-import { isNil, keyBy } from 'lodash';
-import { Subscription, Subject, Observable } from 'rxjs/Rx';
 
-import { Event, SyncEvent, RetryEvent } from 'alice-model-engine-api';
+import { Event, SyncEvent } from 'alice-model-engine-api';
 
-import { DBConnectorInterface } from './db/interface';
-
-import { Config } from './config';
-import { EventsSource /* , Event, SyncEvent */ } from './events_source';
-import { ModelStorage } from './model_storage';
-import { ViewModelStorage } from './view_model_storage';
-import { EventStorage } from './event_storage';
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { WorkersPoolInterface } from './workers_pool';
+import { Config } from './config';
+import { EventStorage } from './event_storage';
+import { EventsSource /* , Event, SyncEvent */ } from './events_source';
 import { LoggerInterface } from './logger';
+import { ModelStorage } from './model_storage';
+import { WorkersPoolInterface } from './workers_pool';
 
 import { Processor, ProcessorFactory } from './processor';
-
-interface SyncedModels {
-    [characterId: string]: Event;
-}
 
 const MAX_ERRORS = 3;
 
@@ -30,12 +23,12 @@ export class Manager {
     private processors: {
         [characterId: string]: {
             current: Processor,
-            pending?: Processor
-        }
+            pending?: Processor,
+        },
     } = {};
 
     private errors: {
-        [characterId: string]: number
+        [characterId: string]: number,
     } = {};
 
     constructor(
@@ -46,10 +39,10 @@ export class Manager {
         private eventStorage: EventStorage,
         private pool: WorkersPoolInterface,
         private processorFactory: ProcessorFactory,
-        private logger: LoggerInterface
+        private logger: LoggerInterface,
     ) { }
 
-    async init() {
+    public async init() {
         let catalogs;
         catalogs = await this.catalogsStorage.load();
 
@@ -57,18 +50,18 @@ export class Manager {
         this.subscribeEvents();
     }
 
-    async retryAll() {
-        let models = keyBy(await this.modelStorage.findAll(), '_id');
-        let refresh = await this.eventStorage.listLastRefresh();
+    public async retryAll() {
+        const models = keyBy(await this.modelStorage.findAll(), '_id');
+        const refresh = await this.eventStorage.listLastRefresh();
 
-        for (let event of refresh) {
+        for (const event of refresh) {
             if (models[event.characterId] && models[event.characterId].timestamp < event.timestamp) {
                 this.onSyncEvent(event);
             }
         }
     }
 
-    subscribeEvents() {
+    public subscribeEvents() {
         this.eventsSource.syncEvents
             .takeUntil(this.stopped)
             .do(this.logEvent)
@@ -84,33 +77,38 @@ export class Manager {
         this.eventsSource.follow();
     }
 
-    logEvent = (event: Event) => {
+    public logEvent = (event: Event) => {
         switch (event.eventType) {
             case '_RefreshModel':
-                this.logger.info('manager', `Found refresh event for ${event.characterId}`, {characterId: event.characterId, event});
+                this.logger.info(
+                    'manager', `Found refresh event for ${event.characterId}`, {characterId: event.characterId, event});
                 break;
             case '_RetryRefresh':
-                this.logger.info('manager', `Found retry event for ${event.characterId}`, {characterId: event.characterId, event});
+                this.logger.info(
+                    'manager', `Found retry event for ${event.characterId}`, {characterId: event.characterId, event});
                 break;
             default:
-                this.logger.warn('manager', `Unexpected event for ${event.characterId}`, {characterId: event.characterId, event});
+                this.logger.warn(
+                    'manager', `Unexpected event for ${event.characterId}`, {characterId: event.characterId, event});
         }
     }
 
-    filterErroredModels = (event: Event) => {
+    public filterErroredModels = (event: Event) => {
         const characterId = event.characterId;
 
         if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
-            this.logger.warn('manager', 'Character exceed MAX_ERRORS value', {characterId, totalErrors: this.errors[characterId], MAX_ERRORS });
+            this.logger.warn('manager',
+                'Character exceed MAX_ERRORS value', {characterId, totalErrors: this.errors[characterId], MAX_ERRORS });
             return false;
         }
 
         return true;
     }
 
-    queryLastRefresh = (event: Event) => Observable.fromPromise(this.eventStorage.lastRefresh(event.characterId));
+    public queryLastRefresh =
+        (event: Event) => Observable.fromPromise(this.eventStorage.lastRefresh(event.characterId))
 
-    onSyncEvent = (event: SyncEvent) => {
+    public onSyncEvent = (event: SyncEvent) => {
         const characterId = event.characterId;
 
         if (this.processors[characterId]) {
@@ -130,19 +128,19 @@ export class Manager {
         }
     }
 
-    processorFulfilled = (event: SyncEvent) => {
+    public processorFulfilled = (event: SyncEvent) => {
         const characterId = event.characterId;
 
         delete this.errors[characterId];
         this.rotateProcessors(characterId);
     }
 
-    processorRejected = (event: SyncEvent) => {
+    public processorRejected = (event: SyncEvent) => {
         this.errors[event.characterId] = (this.errors[event.characterId] || 0) + 1;
         this.rotateProcessors(event.characterId);
     }
 
-    rotateProcessors(characterId: string) {
+    public rotateProcessors(characterId: string) {
         if (!this.processors[characterId]) return;
 
         const processors = this.processors[characterId];
@@ -155,7 +153,7 @@ export class Manager {
         }
     }
 
-    stop() {
+    public stop() {
         this.stopped.next({});
         return this.pool.drain();
     }

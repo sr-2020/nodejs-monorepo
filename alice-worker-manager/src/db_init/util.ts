@@ -1,20 +1,20 @@
-import { Nano, NanoDocument } from "nano";
-import { stdCallback } from "../utils";
-import deepEqual = require('deep-equal')
-import { CatalogsStorage, Catalogs } from "../catalogs_storage";
-import { NanoDb, NanoConnector } from "../db/nano";
-import { cloneDeep } from "lodash";
-import { Config } from "../config";
+import deepEqual = require('deep-equal');
+import { cloneDeep } from 'lodash';
+import { Nano, NanoDocument } from 'nano';
+import { Catalogs, CatalogsStorage } from '../catalogs_storage';
+import { Config } from '../config';
+import { stdCallback } from '../utils';
 
 export function dbName(config: Config, alias: string): string {
-    if (alias == 'defaultViewModels') return config.viewModels['default'];
+    if (alias == 'defaultViewModels') return config.viewModels.default;
     return config.db[alias] || config.objects[alias];
 }
 
 export function deepToString(doc: any) {
-    let result: any = {};
+    const result: any = {};
 
-    for (let k in doc) {
+    // tslint:disable-next-line:forin
+    for (const k in doc) {
         switch (typeof (doc[k])) {
             case 'function':
                 result[k] = doc[k].toString();
@@ -31,8 +31,8 @@ export function deepToString(doc: any) {
 }
 
 export async function createDbIfNotExists(connection: Nano, name: string): Promise<void> {
-    const dbExists = await new Promise((resolve, reject) => {
-        connection.db.get(name, (err, res) => resolve(!err))
+    const dbExists = await new Promise((resolve, _) => {
+        connection.db.get(name, (err) => resolve(!err));
     });
 
     if (!dbExists) {
@@ -46,7 +46,7 @@ export async function createDbIfNotExists(connection: Nano, name: string): Promi
 }
 
 async function getOrNull(db: NanoDocument, id: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
         db.get(id, {}, (err: any, data: any) => {
             if (err) {
                 resolve();
@@ -84,20 +84,22 @@ export async function updateIfDifferent(db: NanoDocument, doc: any) {
 }
 
 function catalogDb(connection: Nano, catalogsStorage: CatalogsStorage, catalog: string): NanoDocument | undefined {
-    let dbName = catalogsStorage.catalogDbName(catalog);
-    if (!dbName) return;
+    const databaseName = catalogsStorage.catalogDbName(catalog);
+    if (!databaseName) return;
 
-    return connection.use(dbName);
+    return connection.use(databaseName);
 }
 
 export async function importCatalogs(connection: Nano, catalogsStorage: CatalogsStorage, catalogs: Catalogs) {
-    console.log("Importing catalogs");
-    for (let catalogName in catalogs.data) {
+    console.log('Importing catalogs');
+    // tslint:disable-next-line:forin
+    for (const catalogName in catalogs.data) {
         console.log(`Importing catalog ${catalogName}`);
-        let db = catalogDb(connection, catalogsStorage, catalogName);
+        const db = catalogDb(connection, catalogsStorage, catalogName);
 
         if (!db) {
-            console.warn(`  Input file for catalog ${catalogName} is present, but such catalog DB is not configured, skipping.`);
+            console.warn(
+                `  Input file for catalog ${catalogName} is present, but such catalog DB is not configured, skipping.`);
             continue;
         }
 
@@ -157,9 +159,8 @@ export async function createViewModel(db: NanoDocument, viewModelTemplate: any, 
 export async function createBalanceRecord(db: NanoDocument, index: number) {
     let doc = await getOrNull(db, 'balances');
     if (!doc) {
-        doc = { _id: 'balances' }
+        doc = { _id: 'balances' };
     }
     doc[getId(index)] = 9000;
     await put(db, doc);
 }
-

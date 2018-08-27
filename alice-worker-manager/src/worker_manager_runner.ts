@@ -1,28 +1,26 @@
-// tslint:disable:no-shadowed-variable
-
-import * as path from 'path';
 import * as meow from 'meow';
+import * as path from 'path';
 
 import { Injector } from './di';
 import {
-    ConfigToken, DBConnectorToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken,
-    EventStorageToken, EventsSourceToken, CatalogsStorageToken, ObjectStorageToken, LoggerToken, WorkersPoolToken,
-    ProcessorFactoryToken, ManagerToken
+    CatalogsStorageToken, ConfigToken, DBConnectorToken, EventsSourceToken, EventStorageToken,
+    LoggerToken, ManagerToken, ModelStorageToken, ObjectStorageToken, ProcessorFactoryToken, ViewModelStorageToken,
+    WorkersPoolToken, WorkingModelStorageToken,
 } from './di_tokens';
 
+import { CatalogsStorage } from './catalogs_storage';
 import { Config } from './config';
 import { DBConnectorInterface } from './db/interface';
 import { NanoConnector } from './db/nano';
-import { ModelStorage } from './model_storage';
-import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
-import { CatalogsStorage } from './catalogs_storage';
-import { ObjectStorage } from './object_storage';
 import { Logger } from './logger';
-import { WorkersPool } from './workers_pool';
-import { processorFactory } from './processor';
 import { Manager } from './manager';
+import { ModelStorage } from './model_storage';
+import { ObjectStorage } from './object_storage';
+import { processorFactory } from './processor';
+import { ViewModelStorage } from './view_model_storage';
+import { WorkersPool } from './workers_pool';
 
 const cli = meow(`
 Usage
@@ -37,20 +35,20 @@ const CONFIG_PATH = cli.flags.c;
 
 const config = require(CONFIG_PATH) as Config; // tslint:disable-line
 
-function modelStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
-    return new ModelStorage(dbConnector.use(config.db.models));
+function modelStorageFactory(c: Config, dbConnector: DBConnectorInterface) {
+    return new ModelStorage(dbConnector.use(c.db.models));
 }
 
-function workingModelStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
-    return new ModelStorage(dbConnector.use(config.db.workingModels));
+function workingModelStorageFactory(c: Config, dbConnector: DBConnectorInterface) {
+    return new ModelStorage(dbConnector.use(c.db.workingModels));
 }
 
-function eventStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
-    return new EventStorage(dbConnector.use(config.db.events));
+function eventStorageFactory(c: Config, dbConnector: DBConnectorInterface) {
+    return new EventStorage(dbConnector.use(c.db.events));
 }
 
-function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) {
-    return new EventsSource(dbConnector.use(config.db.events));
+function eventsSourceFactory(c: Config, dbConnector: DBConnectorInterface) {
+    return new EventsSource(dbConnector.use(c.db.events));
 }
 
 const di = Injector
@@ -66,16 +64,22 @@ const di = Injector
     .bind(CatalogsStorageToken).singleton().toClass(CatalogsStorage, ConfigToken, DBConnectorToken)
     .bind(ObjectStorageToken).singleton().toClass(ObjectStorage, ConfigToken, DBConnectorToken)
     .bind(WorkersPoolToken).singleton().toClass(WorkersPool, ConfigToken, LoggerToken)
-    .bind(ProcessorFactoryToken).singleton().toFactory(processorFactory, ConfigToken, WorkersPoolToken, EventStorageToken, ModelStorageToken, WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
-    .bind(ManagerToken).singleton().toClass(Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, ModelStorageToken, EventStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
+    .bind(ProcessorFactoryToken).singleton().toFactory(
+        processorFactory, ConfigToken, WorkersPoolToken, EventStorageToken, ModelStorageToken,
+        WorkingModelStorageToken, ViewModelStorageToken, ObjectStorageToken, LoggerToken)
+    .bind(ManagerToken).singleton().toClass(
+        Manager, ConfigToken, EventsSourceToken, CatalogsStorageToken, ModelStorageToken,
+        EventStorageToken, WorkersPoolToken, ProcessorFactoryToken, LoggerToken);
 
 const requiredDbNames = [config.db.events, config.db.models, config.db.workingModels];
 if (config.catalogs && ('db' in config.catalogs)) {
-    for (let catalog in config.catalogs['db']) {
-        requiredDbNames.push(config.catalogs['db'][catalog]);
+    // tslint:disable-next-line:forin
+    for (const catalog in config.catalogs.db) {
+        requiredDbNames.push(config.catalogs.db[catalog]);
     }
 }
-for (let viewModel in config.viewModels) {
+// tslint:disable-next-line:forin
+for (const viewModel in config.viewModels) {
     requiredDbNames.push(config.viewModels[viewModel]);
 }
 

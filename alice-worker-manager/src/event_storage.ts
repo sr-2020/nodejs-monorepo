@@ -1,12 +1,11 @@
-import { pick, merge } from 'lodash';
-import { Event, SyncEvent } from 'alice-model-engine-api'
+import { SyncEvent } from 'alice-model-engine-api';
 
 import { DBInterface, Document } from './db/interface';
 
 export class EventStorage {
     constructor(private db: DBInterface) { }
 
-    async range(characterId: string, since: number, till: number): Promise<Document[]> {
+    public async range(characterId: string, since: number, till: number): Promise<Document[]> {
         if (since >= till) return [];
 
         const startkey = [characterId, Number(since)];
@@ -16,15 +15,15 @@ export class EventStorage {
             endkey,
             reduce: false,
             include_docs: true,
-            inclusive_end: true
+            inclusive_end: true,
         };
 
-        let result = await this.db.view('character', 'by-character-id', params);
+        const result = await this.db.view('character', 'by-character-id', params);
 
         return result.rows.map((r: any) => r.doc);
     }
 
-    async removeOlderThan(characterId: string, till: number): Promise<void> {
+    public async removeOlderThan(characterId: string, till: number): Promise<void> {
         const docs = await this.range(characterId, 0, till);
         await Promise.all(docs.map((doc) => {
             if (doc._rev)
@@ -32,8 +31,8 @@ export class EventStorage {
         }));
     }
 
-    async lastRefresh(characterId: string): Promise<SyncEvent | null> {
-        let result = await this.db.view('character', 'last-refresh-event', { key: characterId, reduce: true });
+    public async lastRefresh(characterId: string): Promise<SyncEvent | null> {
+        const result = await this.db.view('character', 'last-refresh-event', { key: characterId, reduce: true });
 
         if (result.rows.length) {
             return result.rows[0].value;
@@ -42,12 +41,12 @@ export class EventStorage {
         }
     }
 
-    async listLastRefresh(): Promise<SyncEvent[]> {
-        let result = await this.db.view('character', 'last-refresh-event', { reduce: true, group: true });
+    public async listLastRefresh(): Promise<SyncEvent[]> {
+        const result = await this.db.view('character', 'last-refresh-event', { reduce: true, group: true });
         return result.rows.map((r) => r.value);
     }
 
-    store(event: any) {
+    public store(event: any) {
         event.timestamp = Number(event.timestamp);
         return this.db.put(event);
     }

@@ -1,16 +1,15 @@
-import { Inject } from './di';
-import { isNil, keyBy, cloneDeep } from 'lodash';
+import { cloneDeep, isNil, keyBy } from 'lodash';
 
-import { Event, SyncEvent, EngineResult } from 'alice-model-engine-api';
+import { EngineResult, Event, SyncEvent } from 'alice-model-engine-api';
 
-import { ModelStorage } from './model_storage';
-import { ViewModelStorage } from './view_model_storage';
-import { EventStorage } from './event_storage';
-import { ObjectStorageInterface, BoundObjectStorage } from './object_storage';
-import { WorkersPoolInterface } from './workers_pool';
-import { Worker } from './worker';
-import { LoggerInterface } from './logger';
 import { Config } from './config';
+import { EventStorage } from './event_storage';
+import { LoggerInterface } from './logger';
+import { ModelStorage } from './model_storage';
+import { BoundObjectStorage, ObjectStorageInterface } from './object_storage';
+import { ViewModelStorage } from './view_model_storage';
+import { Worker } from './worker';
+import { WorkersPoolInterface } from './workers_pool';
 
 type State = 'New' | 'Waiting for worker' | 'Processing' | 'Done';
 
@@ -24,10 +23,11 @@ export function processorFactory(
     workingModelStorage: ModelStorage,
     viewModelStorage: ViewModelStorage,
     objectStorage: ObjectStorageInterface,
-    logger: LoggerInterface
+    logger: LoggerInterface,
 ) {
     return () => {
-        return new Processor(config, pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, objectStorage, logger);
+        return new Processor(config, pool, eventStorage, modelStorage,
+            workingModelStorage, viewModelStorage, objectStorage, logger);
     };
 }
 
@@ -43,14 +43,14 @@ export class Processor {
         private workingModelStorage: ModelStorage,
         private viewModelStorage: ViewModelStorage,
         private objectStorage: ObjectStorageInterface,
-        private logger: LoggerInterface
+        private logger: LoggerInterface,
     ) { }
 
-    acceptingEvents() {
+    public acceptingEvents() {
         return this.state == 'New' || this.state == 'Waiting for worker';
     }
 
-    pushEvent(event: SyncEvent) {
+    public pushEvent(event: SyncEvent) {
         if (!this.event || event.timestamp > this.event.timestamp) {
             this.event = event;
         }
@@ -58,7 +58,7 @@ export class Processor {
         return this;
     }
 
-    async run() {
+    public async run() {
         this.logger.info('manager', 'Started processing model',
             { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
         this.state = 'Waiting for worker';
@@ -67,7 +67,8 @@ export class Processor {
             await this.pool.withWorker(async (worker: Worker) => {
                 this.state = 'Processing';
 
-                this.logger.info('manager', 'Worker aquired', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.info('manager',
+                    'Worker aquired', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
                 const characterId = this.event.characterId;
                 const model = await this.modelStorage.find(characterId);
 
@@ -84,11 +85,15 @@ export class Processor {
                 const objectStorage = new BoundObjectStorage(this.objectStorage);
                 const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
-                this.logger.info('manager', 'Finished processing model', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
-                this.logger.debug('manager', 'Result of model processing', { result, characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.info('manager',
+                    'Finished processing model',
+                    { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                this.logger.debug('manager',
+                    'Result of model processing',
+                    { result, characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
 
                 if (result.status == 'ok') {
-                    let { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
+                    const { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
 
                     delete workingModel._rev;
                     workingModel.timestamp = baseModel.timestamp;
@@ -99,12 +104,14 @@ export class Processor {
                             this.workingModelStorage.store(workingModel),
                             this.storeViewModels(characterId, baseModel.timestamp, viewModels),
                             this.storeOutboundEvents(outboundEvents),
-                            this.storeAquiredObjects(objectStorage, aquired)
+                            this.storeAquiredObjects(objectStorage, aquired),
                         ]);
 
-                        await this.eventStorage.removeOlderThan(characterId, baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
+                        await this.eventStorage.removeOlderThan(characterId,
+                            baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
 
-                        this.logger.info('manager', 'All data stored', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+                        this.logger.info('manager', 'All data stored',
+                            { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
                     } finally {
                         objectStorage.release();
                     }
@@ -123,9 +130,10 @@ export class Processor {
     }
 
     private async storeViewModels(characteId: string, timestamp: number, viewModels: { [alias: string]: any }) {
-        let pending: Array<Promise<any>> = [];
-        for (let alias in viewModels) {
-            let viewModel = viewModels[alias];
+        const pending: Array<Promise<any>> = [];
+        // tslint:disable-next-line:forin
+        for (const alias in viewModels) {
+            const viewModel = viewModels[alias];
             viewModel.timestamp = timestamp;
             delete viewModel._rev;
             if (isNil(viewModel._id)) {
@@ -141,11 +149,11 @@ export class Processor {
     private async storeOutboundEvents(outboundEvents: Event[] | undefined) {
         if (!outboundEvents || !outboundEvents.length) return;
 
-        let characterIds = outboundEvents.map((e) => e.characterId);
-        let models = keyBy(await this.modelStorage.findAll(characterIds), (m) => m.characterId);
+        const characterIds = outboundEvents.map((e) => e.characterId);
+        const models = keyBy(await this.modelStorage.findAll(characterIds), (m) => m.characterId);
 
-        let pending = outboundEvents.map((event) => {
-            let model = models[event.characterId];
+        const pending = outboundEvents.map((event) => {
+            const model = models[event.characterId];
             if (!model) return;
             event = cloneDeep(event);
 

@@ -1,7 +1,7 @@
-import * as Path from 'path';
 import * as glob from 'glob';
-import * as Rx from 'rxjs/Rx';
 import { merge as _merge } from 'lodash';
+import * as Path from 'path';
+import * as Rx from 'rxjs/Rx';
 
 type AnyFunc = (...args: any[]) => void;
 
@@ -67,7 +67,7 @@ export function requireDir(dir: string, merge = _merge): any {
 }
 
 export function delay(t: number) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
         setTimeout(() => resolve(), t);
     });
 }

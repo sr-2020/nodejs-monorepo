@@ -1,11 +1,9 @@
-import { Inject } from '../di';
-import * as Path from 'path';
-import { isNil, get } from 'lodash';
-import * as Pouch from 'pouchdb';
-import * as glob from 'glob';
 import { EventEmitter } from 'events';
-import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
+import { get, isNil } from 'lodash';
+import * as Pouch from 'pouchdb';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
+import { Inject } from '../di';
+import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from './interface';
 
 @Inject
 export class PouchConnector implements DBConnectorInterface {
@@ -16,19 +14,19 @@ export class PouchConnector implements DBConnectorInterface {
         this.initViews();
     }
 
+    public use(name: string): DBInterface {
+        if (this.cache[name]) return this.cache[name];
+        return this.cache[name] = new PouchDb(name, this.adapter, this.views);
+    }
+
     private initViews() {
         const designDocs = getAllDesignDocs();
 
         this.views = designDocs.reduce((vs: any, doc) => {
-            let { views } = doc;
+            const { views } = doc;
             vs[(doc._id as string).slice('_design/'.length)] = views;
             return vs;
         }, {});
-    }
-
-    use(name: string): DBInterface {
-        if (this.cache[name]) return this.cache[name];
-        return this.cache[name] = new PouchDb(name, this.adapter, this.views);
     }
 }
 
@@ -39,11 +37,11 @@ export class PouchDb implements DBInterface {
         this.db = new Pouch(this.dbName, { adapter });
     }
 
-    get(id: ID, params: any = {}) {
+    public get(id: ID, params: any = {}) {
         return this.db.get(id, params);
     }
 
-    async getOrNull(id: ID, params: any): Promise<Document | null> {
+    public async getOrNull(id: ID, params: any): Promise<Document | null> {
         try {
             return await this.get(id, params);
         } catch (e) {
@@ -55,11 +53,11 @@ export class PouchDb implements DBInterface {
         }
     }
 
-    list(params?: any): Promise<any> {
+    public list(params?: any): Promise<any> {
         return this.db.allDocs(params);
     }
 
-    put(doc: Document) {
+    public put(doc: Document) {
         if (!isNil(doc._id)) {
             return this.db.put(doc);
         } else {
@@ -67,7 +65,7 @@ export class PouchDb implements DBInterface {
         }
     }
 
-    remove(id: ID, rev: string) {
+    public remove(id: ID, rev: string) {
         if (isNil(id) || isNil(rev)) {
             return Promise.reject(new Error('Document id or revision not defined in remove'));
         }
@@ -75,8 +73,8 @@ export class PouchDb implements DBInterface {
         return this.db.remove({ _id: id, _rev: rev });
     }
 
-    view(design: string, view: string, params: any = {}): Promise<any> {
-        let v = get(this.views, [design, view]);
+    public view(design: string, view: string, params: any = {}): Promise<any> {
+        const v = get(this.views, [design, view]);
 
         if (v) {
             // XXX
@@ -86,8 +84,8 @@ export class PouchDb implements DBInterface {
         return Promise.reject(new Error(`No such view: ${design}/${view}`));
     }
 
-    follow(params: FilterParams): EventEmitter {
-        let { onChange, ...otherParams } = params;
+    public follow(params: FilterParams): EventEmitter {
+        const { onChange, ...otherParams } = params;
         otherParams.live = true;
         let feed = this.db.changes(otherParams);
 

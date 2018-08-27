@@ -4,10 +4,11 @@ import 'reflect-metadata';
 
 type _ = {};
 
-type ClassN<N, T> = { new (...a: N[]): T };
+type ClassN<N, T> = { new(...a: N[]): T };
 type FN8<A, B, C, D, E, F, G, H, R> = (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H) => R;
-type CLS8<A, B, C, D, E, F, G, H, R> = { new (a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H): R };
+type CLS8<A, B, C, D, E, F, G, H, R> = { new(a?: A, b?: B, c?: C, d?: D, e?: E, f?: F, g?: G, h?: H): R };
 
+// tslint:disable-next-line:no-unused
 class Token<T> {
     private _tokenBrand;
     constructor(public name: string) { }
@@ -22,8 +23,8 @@ function getSignature<T>(cls: ClassN<T, _>): Array<Bindable<T>> {
 
 const enum BindType { CLASS, VALUE, FACTORY }
 class Binder<T, Base> {
-    dependencies: Bindable<Base>[] = [];
-    cacheable: boolean = false;
+    public dependencies: Array<Bindable<Base>> = [];
+    public cacheable: boolean = false;
     private _type: BindType;
     private _cls: ClassN<any, T>;
     private _val: T;
@@ -31,14 +32,24 @@ class Binder<T, Base> {
 
     constructor(private _injector: Injector<Base>) { }
 
-    private _releaseInjector() {
-        let injector = this._injector;
-        this._injector = null as any;
-        return injector;
-    }
-
-    toClass<A extends Base, B extends Base, C extends Base, D extends Base, E extends Base, F extends Base, G extends Base, H extends Base>(fn: CLS8<A, B, C, D, E, F, G, H, T>, a?: Bindable<A>, b?: Bindable<B>, c?: Bindable<C>, d?: Bindable<D>, e?: Bindable<E>, f?: Bindable<F>, g?: Bindable<G>, h?: Bindable<H>): Injector<Base | T>;
-    toClass(cls: ClassN<Base, T>, ...deps: Bindable<Base>[]): Injector<Base | T> {
+    public toClass<
+        A extends Base,
+        B extends Base,
+        C extends Base,
+        D extends Base,
+        E extends Base,
+        F extends Base,
+        G extends Base,
+        H extends Base>(fn: CLS8<A, B, C, D, E, F, G, H, T>,
+                        a?: Bindable<A>,
+                        b?: Bindable<B>,
+                        c?: Bindable<C>,
+                        d?: Bindable<D>,
+                        e?: Bindable<E>,
+                        f?: Bindable<F>,
+                        g?: Bindable<G>,
+                        h?: Bindable<H>): Injector<Base | T>;
+    public toClass(cls: ClassN<Base, T>, ...deps: Array<Bindable<Base>>): Injector<Base | T> {
         this._type = BindType.CLASS;
         this._cls = cls;
         this.dependencies = getSignature(cls);
@@ -48,30 +59,46 @@ class Binder<T, Base> {
         return this._releaseInjector();
     }
 
-    toValue(val: T): Injector<Base | T> {
+    public toValue(val: T): Injector<Base | T> {
         this._type = BindType.VALUE;
         this._val = val;
         this.cacheable = true;
         return this._releaseInjector();
     }
 
-    toFactory<A extends Base, B extends Base, C extends Base, D extends Base, E extends Base, F extends Base, G extends Base, H extends Base>(fn: FN8<A, B, C, D, E, F, G, H, T>, a?: Bindable<A>, b?: Bindable<B>, c?: Bindable<C>, d?: Bindable<D>, e?: Bindable<E>, f?: Bindable<F>, g?: Bindable<G>, h?: Bindable<H>): Injector<Base | T>;
-    toFactory(fn: (...a: Base[]) => T, ...deps: Bindable<Base>[]): Injector<Base | T> {
+    public toFactory<
+    A extends Base,
+    B extends Base,
+    C extends Base,
+    D extends Base,
+    E extends Base,
+    F extends Base,
+    G extends Base,
+    H extends Base>(fn: FN8<A, B, C, D, E, F, G, H, T>,
+                    a?: Bindable<A>,
+                    b?: Bindable<B>,
+                    c?: Bindable<C>,
+                    d?: Bindable<D>,
+                    e?: Bindable<E>,
+                    f?: Bindable<F>,
+                    g?: Bindable<G>,
+                    h?: Bindable<H>): Injector<Base | T>;
+    public toFactory(fn: (...a: Base[]) => T, ...deps: Array<Bindable<Base>>): Injector<Base | T> {
         this._type = BindType.FACTORY;
         this._fn = fn;
         this.dependencies = deps;
         return this._releaseInjector();
     }
 
-    singleton() {
+    public singleton() {
         this.cacheable = true;
         return this;
     }
 
-    resolve(deps: any[]): T {
+    public resolve(deps: any[]): T {
         switch (this._type) {
             case BindType.CLASS:
-                let cls = this._cls;
+                const cls = this._cls;
                 return new cls(...deps);
             case BindType.VALUE:
                 return this._val;
@@ -79,18 +106,38 @@ class Binder<T, Base> {
                 return this._fn(...deps);
         }
     }
+
+    private _releaseInjector() {
+        const injector = this._injector;
+        this._injector = null as any;
+        return injector;
+    }
 }
 
 export class Injector<Base> {
+
+    public static create(): Injector<Injector<_>> {
+        const inj = new Injector<Injector<_>>();
+        inj.bind(Injector).toValue(inj);
+        return inj;
+    }
+
+    public static inherit<A>(p: Injector<A>): Injector<A> {
+        const inj = new Injector<A>();
+        p._typeBinderMap.forEach((val, key) => {
+            inj._typeBinderMap.set(key, val);
+        });
+        return inj;
+    }
     private _resolving = new Set<Bindable<_>>();
     private _typeBinderMap = new Map<Bindable<_>, Binder<_, Base>>();
     private _cache = new Map<Bindable<_>, any>();
 
-    get<T extends Base>(cls: Bindable<T>): T {
-        let binder = this._typeBinderMap.get(cls);
+    public get<T extends Base>(cls: Bindable<T>): T {
+        const binder = this._typeBinderMap.get(cls);
         if (!binder) throw new NoBinding(cls.name);
 
-        let cache = binder.cacheable ? this._cache.get(cls) : null;
+        const cache = binder.cacheable ? this._cache.get(cls) : null;
         if (cache) {
             return cache;
         }
@@ -98,46 +145,32 @@ export class Injector<Base> {
         if (this._resolving.has(cls)) throw new CyclicDependency(cls.name);
 
         this._resolving.add(cls);
-        let deps = binder.dependencies.map((dep) => this.get(dep));
+        const deps = binder.dependencies.map((dep) => this.get(dep));
         this._resolving.delete(cls);
 
-        let res = binder.resolve(deps);
+        const res = binder.resolve(deps);
         if (binder.cacheable) this._cache.set(cls, res);
         return res as T;
     }
 
-    bind<T>(cls: Bindable<T>): Binder<T, Base> {
-        let binder = new Binder<T, Base>(this);
+    public bind<T>(cls: Bindable<T>): Binder<T, Base> {
+        const binder = new Binder<T, Base>(this);
         this._typeBinderMap.set(cls, binder);
         return binder;
     }
 
-    bindWithCache<T>(cls: Bindable<T>): Binder<T, Base> {
-        let binder = this.bind<T>(cls);
+    public bindWithCache<T>(cls: Bindable<T>): Binder<T, Base> {
+        const binder = this.bind<T>(cls);
         binder.cacheable = true;
         return binder;
     }
 
-    use<A>(a: ClassN<Base, A>): Injector<A | Base> {
+    public use<A>(a: ClassN<Base, A>): Injector<A | Base> {
         return this.bind(a).toClass(a);
     }
 
-    useWithCache<A>(a: ClassN<Base, A>): Injector<A | Base> {
+    public useWithCache<A>(a: ClassN<Base, A>): Injector<A | Base> {
         return this.bindWithCache(a).toClass(a);
-    }
-
-    static create(): Injector<Injector<_>> {
-        let inj = new Injector<Injector<_>>();
-        inj.bind(Injector).toValue(inj);
-        return inj;
-    }
-
-    static inherit<A>(p: Injector<A>): Injector<A> {
-        let inj = new Injector<A>();
-        p._typeBinderMap.forEach((val, key) => {
-            inj._typeBinderMap.set(key, val);
-        });
-        return inj;
     }
 }
 
@@ -157,4 +190,4 @@ export function token<T>(name: string): Token<T> {
     return new Token(name);
 }
 
-export function Inject(a: any): void { /* magic! */ }
+export function Inject(_a: any): void { /* magic! */ }

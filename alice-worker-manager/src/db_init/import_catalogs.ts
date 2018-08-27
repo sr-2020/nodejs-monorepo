@@ -1,12 +1,8 @@
-/* tslint:disable no-var-requires no-console */
-
-import * as path from 'path';
+import { cloneDeep, isEmpty } from 'lodash';
 import * as meow from 'meow';
-import * as glob from 'glob';
-import * as Path from 'path';
-import { isEmpty, cloneDeep } from 'lodash';
-import { Config, CatalogsConfigDb } from '../config';
+import * as path from 'path';
 import { CatalogsStorage } from '../catalogs_storage';
+import { CatalogsConfigDb, Config } from '../config';
 import { NanoConnector, NanoDb } from '../db/nano';
 
 const cli = meow(`
@@ -21,6 +17,7 @@ if (!cli.input.length || !cli.flags.c) {
 const CONFIG_PATH = cli.flags.c;
 const CATALOGS_PATH = cli.input[0];
 
+// tslint:disable-next-line:no-var-requires
 const config = require(CONFIG_PATH) as Config;
 
 if (!('db' in config.catalogs)) {
@@ -38,9 +35,9 @@ if (isEmpty(catalogs.data)) {
 }
 
 async function clearDb(db: NanoDb) {
-    let docs = await db.list();
+    const docs = await db.list();
 
-    for (let doc of docs.rows) {
+    for (const doc of docs.rows) {
         if (doc.id.startsWith('_design')) continue;
 
         await db.remove(doc.id, doc.value.rev);
@@ -48,25 +45,27 @@ async function clearDb(db: NanoDb) {
 }
 
 function catalogDb(catalog: string) {
-    let dbName = catalogsStorage.catalogDbName(catalog);
+    const dbName = catalogsStorage.catalogDbName(catalog);
     if (!dbName) return;
 
     return connection.use(dbName);
 }
 
 async function clearCatalogs() {
-    let catalogsConfig = config.catalogs as CatalogsConfigDb;
-    for (let catalog in catalogsConfig.db) {
-        let db = catalogDb(catalog);
+    const catalogsConfig = config.catalogs as CatalogsConfigDb;
+    // tslint:disable-next-line:forin
+    for (const catalog in catalogsConfig.db) {
+        const db = catalogDb(catalog);
         if (!db) continue;
         await clearDb(db);
     }
 }
 
 async function importCatalogs() {
-    for (let catalog in catalogs.data) {
+    // tslint:disable-next-line:forin
+    for (const catalog in catalogs.data) {
         console.log(`Importing ${catalog}`);
-        let db = catalogDb(catalog);
+        const db = catalogDb(catalog);
 
         if (!db) {
             console.log('  - not configured');

@@ -1,11 +1,11 @@
-import { Inject } from '../di';
 import { isNil } from 'lodash';
-import { Nano, NanoDatabase, NanoDocument } from 'nano';
+import { Nano, NanoDocument } from 'nano';
 import nano = require('nano');
-import { stdCallback } from '../utils';
 import { Config } from '../config';
+import { Inject } from '../di';
+import { stdCallback } from '../utils';
 
-import { DBConnectorInterface, DBInterface, ID, Document, FilterParams } from './interface';
+import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from './interface';
 
 @Inject
 export class NanoConnector implements DBConnectorInterface {
@@ -17,7 +17,7 @@ export class NanoConnector implements DBConnectorInterface {
         this.url = config.db.url;
     }
 
-    use(name: string) {
+    public use(name: string) {
         if (!this.connection) {
             this.connection = nano(this.url);
         }
@@ -35,13 +35,13 @@ export class NanoDb implements DBInterface {
         this.db = this.connection.use(dbName);
     }
 
-    get(id: ID, params: any): Promise<Document> {
+    public get(id: ID, params: any): Promise<Document> {
         return new Promise((resolve, reject) => {
             this.db.get(id, params, stdCallback(resolve, reject));
         }) as Promise<Document>;
     }
 
-    async getOrNull(id: ID, params: any): Promise<Document | null> {
+    public async getOrNull(id: ID, params: any): Promise<Document | null> {
         try {
             return await this.get(id, params);
         } catch (e) {
@@ -53,19 +53,19 @@ export class NanoDb implements DBInterface {
         }
     }
 
-    list(params?: any): Promise<any> {
+    public list(params?: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.list(params, stdCallback(resolve, reject));
         });
     }
 
-    put(doc: Document) {
+    public put(doc: Document) {
         return new Promise((resolve, reject) => {
             this.db.insert(doc, {}, stdCallback(resolve, reject));
         });
     }
 
-    remove(id: ID, rev: string): Promise<any> {
+    public remove(id: ID, rev: string): Promise<any> {
         return new Promise((resolve, reject) => {
             if (isNil(id) || isNil(rev)) {
                 return reject(new Error('Document id or revision not defined in remove'));
@@ -75,20 +75,20 @@ export class NanoDb implements DBInterface {
         });
     }
 
-    view(design: string, view: string, params: any): Promise<any> {
+    public view(design: string, view: string, params: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.view(design, view, params, stdCallback(resolve, reject));
         });
     }
 
-    follow(params: FilterParams) {
-        let { filter, onChange, ...otherParams } = params;
+    public follow(params: FilterParams) {
+        const { filter, onChange, ...otherParams } = params;
 
         if (typeof filter == 'string') {
             otherParams.filter = filter;
         }
 
-        let feed = this.connection.db.follow(this.dbName, otherParams);
+        const feed = this.connection.db.follow(this.dbName, otherParams);
 
         if (typeof filter == 'function') {
             feed.filter = filter;

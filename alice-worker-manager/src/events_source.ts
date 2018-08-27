@@ -1,23 +1,22 @@
 import { EventEmitter } from 'events';
-import { DBInterface } from './db/interface';
 import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
+import { DBInterface } from './db/interface';
 
-import { Event, SyncEvent, RetryEvent } from 'alice-model-engine-api';
+import { Event, RetryEvent, SyncEvent } from 'alice-model-engine-api';
 import { Document } from './db/interface';
 
 const SYNC_EVENT_TYPE = '_RefreshModel';
 const RETRY_EVENT_TYPE = '_RetryRefresh';
 
 type EventDocument = Document & Event;
-type SyncEventDocument = Document & SyncEvent;
 
 function docToEvent(e: EventDocument): Event {
     return {
         characterId: e.characterId,
         eventType: e.eventType,
         timestamp: e.timestamp,
-        data: e.data
+        data: e.data,
     };
 }
 
@@ -27,12 +26,12 @@ export class EventsSource {
 
     constructor(private db: DBInterface) { }
 
-    follow() {
+    public follow() {
         const params = {
             since: 'now',
             include_docs: true,
 
-            filter: (doc: any, req: any) => {
+            filter: (doc: any, _req: any) => {
                 if (doc._deleted) {
                     return false;
                 }
@@ -42,7 +41,7 @@ export class EventsSource {
 
             onChange: (change: Change<Event>) => {
                 this.subject.next(change);
-            }
+            },
         };
 
         this.feed = this.db.follow(params);

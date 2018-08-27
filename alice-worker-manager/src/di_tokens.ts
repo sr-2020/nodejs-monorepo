@@ -1,18 +1,19 @@
 import { token } from './di';
 
+import { CatalogsStorageInterface } from './catalogs_storage';
 import { Config } from './config';
 import { DBConnectorInterface } from './db/interface';
-import { ModelStorage } from './model_storage';
-import { ViewModelStorage } from './view_model_storage';
 import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
-import { CatalogsStorageInterface } from './catalogs_storage';
-import { ObjectStorageInterface } from './object_storage';
 import { LoggerInterface } from './logger';
-import { WorkersPoolInterface } from './workers_pool';
-import { ProcessorFactory } from './processor';
 import { Manager } from './manager';
+import { ModelStorage } from './model_storage';
+import { ObjectStorageInterface } from './object_storage';
+import { ProcessorFactory } from './processor';
+import { ViewModelStorage } from './view_model_storage';
+import { WorkersPoolInterface } from './workers_pool';
 
+// tslint:disable:variable-name
 export const ConfigToken = token<Config>('config');
 export const DBConnectorToken = token<DBConnectorInterface>('dbConnector');
 export const ModelStorageToken = token<ModelStorage>('modelStorage');
@@ -26,3 +27,4 @@ export const LoggerToken = token<LoggerInterface>('logger');
 export const WorkersPoolToken = token<WorkersPoolInterface>('workersPool');
 export const ProcessorFactoryToken = token<ProcessorFactory>('processorFactory');
 export const ManagerToken = token<Manager>('manager');
+// tslint:enable:variable-name
