@@ -1,5 +1,3 @@
-// tslint:disable-next-line:no-var-requires
-require('ts-node/register');
 import { EventEmitter } from 'events';
 import * as ChildProcess from 'child_process';
 import * as Rx from 'rxjs/Rx';
