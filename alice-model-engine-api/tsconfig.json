@@ -3,7 +3,6 @@
     "compilerOptions": {
         "target": "ES6",
         "lib": ["es2017", "dom"],
-        "preserveConstEnums": true
     },
     "files": ["index.d.ts"]
 }

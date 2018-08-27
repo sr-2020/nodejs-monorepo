@@ -3,9 +3,6 @@
     "compilerOptions": {
         "target": "ES6",
         "lib": ["es2017"],
-        "preserveConstEnums": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "sourceMap": false,
         "outDir": "./build",
         // TODO: Figure out what prevents enable it and remove
