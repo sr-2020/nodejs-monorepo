@@ -1,7 +1,6 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "target": "ES6",
         "sourceMap": false,
         "outDir": "./build",
         // TODO: Figure out what prevents enable it and remove

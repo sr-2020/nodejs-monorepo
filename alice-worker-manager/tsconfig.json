@@ -5,7 +5,6 @@
         "noImplicitAny": false,
         "strictPropertyInitialization": false,
         "strictFunctionTypes": false,
-        "target": "ES6",
         "sourceMap": false,
         "outDir": "./build",
         "typeRoots": [

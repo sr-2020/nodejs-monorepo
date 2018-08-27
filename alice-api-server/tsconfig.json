@@ -7,7 +7,6 @@
     "declaration": false,
     // TODO: Figure out what prevents enable it and remove
     "noImplicitAny": false,
-    "target": "es5",
     "typeRoots": [
       "node_modules/@types"
     ],
