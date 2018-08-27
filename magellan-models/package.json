@@ -20,7 +20,6 @@
     "chokidar-cli": "^1.2.0",
     "mocha": "^3.4.2",
     "node-tsconfig-paths": "^0.4.2",
-    "ts-node": "^3.0.6",
     "typescript": "^2.6.2"
   },
   "dependencies": {
