@@ -1,3 +1,5 @@
+// tslint:disable-next-line:no-var-requires
+require('ts-node/register');
 import { EventEmitter } from 'events';
 import * as ChildProcess from 'child_process';
 import * as Rx from 'rxjs/Rx';
@@ -36,8 +38,9 @@ export class Worker extends EventEmitter {
         this.startedAt = Date.now();
 
         this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
-            let workerModule = require.resolve(this.workerModule);
-            let child = ChildProcess.fork(workerModule, this.args, { silent: true });
+            let workerModule = this.workerModule; //require.resolve(this.workerModule);
+            let child = ChildProcess.fork(workerModule, this.args,
+                { execPath: 'node', execArgv: ['-r', 'ts-node/register'], silent: true });
             child.setMaxListeners(20);
 
             let error = Rx.Observable.fromEvent(child, 'error');
