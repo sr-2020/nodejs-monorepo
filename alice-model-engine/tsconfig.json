@@ -5,6 +5,8 @@
         "sourceMap": false,
         "declaration": true,
         "outDir": "./dist",
+        // TODO: Fix and re-enable
+        "strictPropertyInitialization": false,
     },
     "include": ["./src/**/*.ts"]
 }

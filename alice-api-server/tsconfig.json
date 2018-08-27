@@ -3,7 +3,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist",
-    "strict": true,
     "sourceMap": true,
     "declaration": false,
     // TODO: Figure out what prevents enable it and remove

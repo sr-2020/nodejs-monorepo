@@ -6,6 +6,8 @@
         "outDir": "./build",
         // TODO: Figure out what prevents enable it and remove
         "noImplicitAny": false,
+        // TODO: Fix and re-enable
+        "strictPropertyInitialization": false,
     },
     "typeRoots": [
         "./node_modules/@types"

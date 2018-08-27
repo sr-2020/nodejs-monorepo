@@ -10,14 +10,6 @@ import { Config, LoggerConfig } from './config';
 (winston.transports as any).Elasticsearch = Elasticsearch;
 winston.setLevels(winston.config.syslog.levels);
 
-function defLevel(level: LogLevel) {
-    return function(source: LogSource, msg: string, additionalData?: any) {
-        additionalData = additionalData ? additionalData : {};
-        additionalData.source = source;
-        this.log(source, level, msg, additionalData);
-    };
-}
-
 export interface LoggerInterface {
     log(source: LogSource, level: LogLevel, msg: string, additionalData?: any): void;
     debug(source: LogSource, msg: string, additionalData?: any): void;
@@ -30,11 +22,11 @@ export interface LoggerInterface {
 @Inject
 export class Logger implements LoggerInterface {
 
-    public debug = defLevel('debug');
-    public info = defLevel('info');
-    public notice = defLevel('notice');
-    public warn = defLevel('warn');
-    public error = defLevel('error');
+    public debug = this.defLevel('debug');
+    public info = this.defLevel('info');
+    public notice = this.defLevel('notice');
+    public warn = this.defLevel('warn');
+    public error = this.defLevel('error');
     private config: LoggerConfig;
     private container: ContainerInstance;
 
@@ -51,5 +43,13 @@ export class Logger implements LoggerInterface {
 
     public log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
         this.container.get(source).log(level, msg, additionalData);
+    }
+
+    private defLevel(level: LogLevel) {
+        return (source: LogSource, msg: string, additionalData?: any) => {
+            additionalData = additionalData ? additionalData : {};
+            additionalData.source = source;
+            this.log(source, level, msg, additionalData);
+        };
     }
 }
