@@ -3,7 +3,6 @@
     "compilerOptions": {
         "target": "ES6",
         "lib": ["es2017"],
-        "strictNullChecks": true,
         "preserveConstEnums": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
