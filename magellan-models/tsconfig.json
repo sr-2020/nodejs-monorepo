@@ -3,7 +3,6 @@
     "compilerOptions": {
         "target": "ES6",
         "lib": ["es2017"],
-        "noImplicitAny": false,
         "strictNullChecks": true,
         "preserveConstEnums": true,
         "emitDecoratorMetadata": true,
@@ -11,6 +10,8 @@
         "sourceMap": false,
         "allowJs": true,
         "outDir": "./build",
+        // TODO: Figure out what prevents enable it and remove
+        "noImplicitAny": false,
     },
     "typeRoots": [
         "./node_modules/@types"

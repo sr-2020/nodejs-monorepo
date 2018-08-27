@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    // TODO: Figure out what prevents enable it and remove
     "noImplicitAny": false,
     "target": "es5",
     "typeRoots": [
