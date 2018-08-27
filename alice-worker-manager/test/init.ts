@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
-import { CatalogsStorage, CatalogsStorageInterface } from '../src/catalogs_storage';
+import { CatalogsStorage } from '../src/catalogs_storage';
 import { Config } from '../src/config';
 import { DBConnectorInterface } from '../src/db/interface';
 import { NanoConnector } from '../src/db/nano';
