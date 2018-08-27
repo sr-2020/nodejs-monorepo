@@ -36,9 +36,8 @@ export class Worker extends EventEmitter {
         this.startedAt = Date.now();
 
         this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
-            let workerModule = this.workerModule; //require.resolve(this.workerModule);
-            let child = ChildProcess.fork(workerModule, this.args,
-                { execPath: 'node', execArgv: ['-r', 'ts-node/register'], silent: true });
+            let child = ChildProcess.fork(this.workerModule, this.args,
+                { execArgv: ['-r', 'ts-node/register'], silent: true });
             child.setMaxListeners(20);
 
             let error = Rx.Observable.fromEvent(child, 'error');

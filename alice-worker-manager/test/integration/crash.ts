@@ -12,7 +12,7 @@ import { createModel, createModelObj, saveModel, pushEvent, getModel, getModelAt
 import { delay } from '../../src/utils';
 
 describe('Crash scenarios', function() {
-    this.timeout(5000);
+    this.timeout(15000);
 
     let manager: Manager;
     let di;
@@ -195,7 +195,7 @@ describe('Crash scenarios', function() {
             timestamp: timestamp + 4
         });
 
-        await delay(500);
+        await delay(1000);
 
         expect((manager as any).errors[model._id]).to.exist;
         expect((manager as any).errors[model._id]).to.equals(3);
