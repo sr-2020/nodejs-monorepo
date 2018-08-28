@@ -1,3 +1,10 @@
+export type ID = string;
+export interface Document {
+  _id: ID;
+  _rev?: string;
+  [key: string]: any;
+}
+
 export interface FilterParams {
   filter?: string | ((doc: any, req: any) => boolean);
   onChange?: (value: PouchDB.Core.ChangesResponseChange<{}>) => any;
@@ -7,8 +14,6 @@ export interface FilterParams {
 export interface DBConnectorInterface {
   use(name: string): DBInterface;
 }
-
-export type ID = string;
 
 export interface DBInterface {
   get(id: ID, params?: any): Promise<Document>;
