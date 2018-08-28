@@ -73,7 +73,7 @@
         </form>
       </div>
 
-      <div padding ng-if="isTop">
+      <div padding *ngIf="isTop">
         <div class="sectionHeader">Установить премию</div>
         <form [formGroup]="setBonusForm" (ngSubmit)="setBonus()">
           <ion-item no-padding>
