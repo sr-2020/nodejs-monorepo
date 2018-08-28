@@ -1,17 +1,12 @@
-import { EventEmitter } from 'events';
-import { Change } from 'nano';
 import * as Rx from 'rxjs/Rx';
 import { DBInterface } from './db/interface';
 
 import { Event, RetryEvent, SyncEvent } from 'alice-model-engine-api';
-import { Document } from './db/interface';
 
 const SYNC_EVENT_TYPE = '_RefreshModel';
 const RETRY_EVENT_TYPE = '_RetryRefresh';
 
-type EventDocument = Document & Event;
-
-function docToEvent(e: EventDocument): Event {
+function docToEvent(e: PouchDB.Core.ExistingDocument<Event>): Event {
     return {
         characterId: e.characterId,
         eventType: e.eventType,
@@ -21,8 +16,7 @@ function docToEvent(e: EventDocument): Event {
 }
 
 export class EventsSource {
-    private subject: Rx.Subject<Change<Event>> = new Rx.Subject();
-    private feed: EventEmitter;
+    private subject: Rx.Subject<PouchDB.Core.ChangesResponseChange<Event>> = new Rx.Subject();
 
     constructor(private db: DBInterface) { }
 
@@ -39,12 +33,12 @@ export class EventsSource {
                 return true;
             },
 
-            onChange: (change: Change<Event>) => {
+            onChange: (change: PouchDB.Core.ChangesResponseChange<Event>) => {
                 this.subject.next(change);
             },
         };
 
-        this.feed = this.db.follow(params);
+        this.db.follow(params);
     }
 
     get observable() { return this.subject; }

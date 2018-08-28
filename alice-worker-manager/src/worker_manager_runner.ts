@@ -11,7 +11,7 @@ import {
 import { CatalogsStorage } from './catalogs_storage';
 import { Config } from './config';
 import { DBConnectorInterface } from './db/interface';
-import { NanoConnector } from './db/nano';
+import { PouchConnector } from './db/pouch';
 import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
 import { Logger } from './logger';
@@ -55,7 +55,7 @@ const di = Injector
     .create()
     .bind(ConfigToken).toValue(config)
     .bind(LoggerToken).singleton().toClass(Logger, ConfigToken)
-    .bind(DBConnectorToken).singleton().toClass(NanoConnector, ConfigToken)
+    .bind(DBConnectorToken).singleton().toClass(PouchConnector, ConfigToken)
     .bind(ModelStorageToken).singleton().toFactory(modelStorageFactory, ConfigToken, DBConnectorToken)
     .bind(WorkingModelStorageToken).singleton().toFactory(workingModelStorageFactory, ConfigToken, DBConnectorToken)
     .bind(ViewModelStorageToken).singleton().toClass(ViewModelStorage, ConfigToken, DBConnectorToken)

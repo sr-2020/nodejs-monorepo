@@ -3,7 +3,8 @@ import * as meow from 'meow';
 import * as path from 'path';
 import { CatalogsStorage } from '../catalogs_storage';
 import { CatalogsConfigDb, Config } from '../config';
-import { NanoConnector, NanoDb } from '../db/nano';
+import { DBInterface } from '../db/interface';
+import { PouchConnector } from '../db/pouch';
 
 const cli = meow(`
 Usage
@@ -25,7 +26,7 @@ if (!('db' in config.catalogs)) {
     process.exit(1);
 }
 
-const connection = new NanoConnector(config);
+const connection = new PouchConnector(config);
 const catalogsStorage = new CatalogsStorage(config, connection);
 const catalogs = catalogsStorage.loadFromFiles(CATALOGS_PATH);
 
@@ -34,7 +35,7 @@ if (isEmpty(catalogs.data)) {
     process.exit(1);
 }
 
-async function clearDb(db: NanoDb) {
+async function clearDb(db: DBInterface) {
     const docs = await db.list();
 
     for (const doc of docs.rows) {

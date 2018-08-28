@@ -1,5 +1,7 @@
 export interface DbConfig {
     url: string;
+    adapter?: string;
+    initViews: boolean;
     events: string;
     models: string;
     workingModels: string;

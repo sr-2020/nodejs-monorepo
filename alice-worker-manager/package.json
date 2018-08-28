@@ -9,8 +9,7 @@
     "lint": "tslint -p tsconfig.json --exclude node_modules",
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
-    "test:integration": "mocha -r ts-node/register -r reflect-metadata test/integration/**/*.ts",
-    "test:integration:realdb": "__USE_REAL_DB=1 mocha --compilers ts:ts-node/register -r reflect-metadata test/integration/**/*.ts"
+    "test:integration": "mocha -r ts-node/register -r reflect-metadata test/integration/**/*.ts"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -25,7 +24,6 @@
     "generic-pool": "^3.4.2",
     "glob": "^7.1.2",
     "meow": "^4.0.0",
-    "nano": "^6.4.3",
     "npm": "^5.8.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.8",

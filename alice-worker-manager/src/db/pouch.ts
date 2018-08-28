@@ -1,40 +1,45 @@
-import { EventEmitter } from 'events';
-import { get, isNil } from 'lodash';
+import { isNil } from 'lodash';
 import * as Pouch from 'pouchdb';
+import { Config } from '../config';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
+import { dbName, deepToString } from '../db_init/util';
 import { Inject } from '../di';
 import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from './interface';
 
 @Inject
 export class PouchConnector implements DBConnectorInterface {
   private cache: { [name: string]: PouchDb } = {};
-  private views: any;
 
-  constructor(private adapter: string) {
-    this.initViews();
+  constructor(private _config: Config) {
+    if (this._config.db.initViews) {
+      this.initViews();
+    }
   }
 
   public use(name: string): DBInterface {
     if (this.cache[name]) return this.cache[name];
-    return this.cache[name] = new PouchDb(name, this.adapter, this.views);
+    return this.cache[name] = new PouchDb(this._config.db.url + name, this._config.db.adapter);
   }
 
-  private initViews() {
+  private async initViews() {
     const designDocs = getAllDesignDocs();
-
-    this.views = designDocs.reduce((vs: any, doc) => {
-      const { views } = doc;
-      vs[(doc._id as string).slice('_design/'.length)] = views;
-      return vs;
-    }, {});
+    for (const ddoc of designDocs) {
+      const dbNames = ddoc.dbs;
+      delete (ddoc.dbs);
+      const designDocFunctionsStringified = deepToString(ddoc);
+      for (const alias of dbNames) {
+        await this.use(dbName(this._config, alias)).put(designDocFunctionsStringified);
+      }
+    }
   }
 }
 
 export class PouchDb implements DBInterface {
-  private db: PouchDB.Database;
+  // TODO(aeremin): Rework import code and make private
+  public db: PouchDB.Database;
 
-  constructor(private dbName: string, adapter: string, private views: any) {
-    this.db = new Pouch(this.dbName, { adapter });
+  constructor(databaseUrl: string, adapter?: string) {
+    this.db = new Pouch(databaseUrl, { adapter });
   }
 
   public get(id: ID, params: any = {}) {
@@ -74,25 +79,17 @@ export class PouchDb implements DBInterface {
   }
 
   public view(design: string, view: string, params: any = {}): Promise<any> {
-    const v = get(this.views, [design, view]);
-
-    if (v) {
-      // XXX
-      return (this.db as any).query(v, params);
-    }
-
-    return Promise.reject(new Error(`No such view: ${design}/${view}`));
+    const p = params as PouchDB.Query.Options<{}, {}>;
+    return this.db.query(`${design}/${view}`, p);
   }
 
-  public follow(params: FilterParams): EventEmitter {
+  public follow(params: FilterParams): void {
     const { onChange, ...otherParams } = params;
-    otherParams.live = true;
-    let feed = this.db.changes(otherParams);
+    let feed = this.db.changes({...otherParams, live: true, return_docs: false});
 
     if (onChange) {
       feed = feed.on('change', onChange);
     }
-
-    return feed as any;
+    // TODO(aeremin): Handle 'error', e.g. database connection loss
   }
 }

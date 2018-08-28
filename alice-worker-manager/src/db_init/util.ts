@@ -1,9 +1,9 @@
 import deepEqual = require('deep-equal');
 import { cloneDeep } from 'lodash';
-import { Nano, NanoDocument } from 'nano';
 import { Catalogs, CatalogsStorage } from '../catalogs_storage';
 import { Config } from '../config';
-import { stdCallback } from '../utils';
+import { DBInterface } from '../db/interface';
+import { PouchConnector, PouchDb } from '../db/pouch';
 
 export function dbName(config: Config, alias: string): string {
     if (alias == 'defaultViewModels') return config.viewModels.default;
@@ -30,22 +30,11 @@ export function deepToString(doc: any) {
     return result;
 }
 
-export async function createDbIfNotExists(connection: Nano, name: string): Promise<void> {
-    const dbExists = await new Promise((resolve, _) => {
-        connection.db.get(name, (err) => resolve(!err));
-    });
-
-    if (!dbExists) {
-        console.log(`Database ${name} is not present, creating`);
-        await new Promise((resolve, reject) => {
-            connection.db.create(name, stdCallback(resolve, reject));
-        });
-    } else {
-        console.log(`Database ${name} already exists, skipping creation`);
-    }
+export async function createDbIfNotExists(config: Config, name: string): Promise<void> {
+    new PouchConnector(config).use(name);
 }
 
-async function getOrNull(db: NanoDocument, id: string): Promise<any> {
+async function getOrNull(db: PouchDB.Database, id: string): Promise<any> {
     return new Promise((resolve, _) => {
         db.get(id, {}, (err: any, data: any) => {
             if (err) {
@@ -57,9 +46,9 @@ async function getOrNull(db: NanoDocument, id: string): Promise<any> {
     });
 }
 
-async function put(db: NanoDocument, doc: any) {
+async function put(db: PouchDB.Database, doc: any) {
     return new Promise((resolve, reject) => {
-        db.insert(doc, {}, (err: any, data: any) => {
+        db.put(doc, {}, (err: any, data: any) => {
             if (err) {
                 console.error('Error while putting document into db: ', err);
                 reject(err);
@@ -70,7 +59,7 @@ async function put(db: NanoDocument, doc: any) {
     });
 }
 
-export async function updateIfDifferent(db: NanoDocument, doc: any) {
+export async function updateIfDifferent(db: PouchDB.Database, doc: any) {
     const existing = await getOrNull(db, doc._id);
     if (existing) {
         doc._rev = existing._rev;
@@ -83,19 +72,19 @@ export async function updateIfDifferent(db: NanoDocument, doc: any) {
     await put(db, doc);
 }
 
-function catalogDb(connection: Nano, catalogsStorage: CatalogsStorage, catalog: string): NanoDocument | undefined {
+function catalogDb(config: Config, catalogsStorage: CatalogsStorage, catalog: string): DBInterface | undefined {
     const databaseName = catalogsStorage.catalogDbName(catalog);
     if (!databaseName) return;
 
-    return connection.use(databaseName);
+    return new PouchConnector(config).use(databaseName);
 }
 
-export async function importCatalogs(connection: Nano, catalogsStorage: CatalogsStorage, catalogs: Catalogs) {
+export async function importCatalogs(config: Config, catalogsStorage: CatalogsStorage, catalogs: Catalogs) {
     console.log('Importing catalogs');
     // tslint:disable-next-line:forin
     for (const catalogName in catalogs.data) {
         console.log(`Importing catalog ${catalogName}`);
-        const db = catalogDb(connection, catalogsStorage, catalogName);
+        const db = catalogDb(config, catalogsStorage, catalogName);
 
         if (!db) {
             console.warn(
@@ -107,7 +96,7 @@ export async function importCatalogs(connection: Nano, catalogsStorage: Catalogs
             doc = cloneDeep(doc);
             doc._id = doc.id || doc.eventType;
             delete doc.id;
-            await updateIfDifferent(db, doc);
+            await updateIfDifferent((db as PouchDb).db, doc);
         }
     }
 }
@@ -118,7 +107,7 @@ function getId(index: number): string {
     return (baseTestAccountIndex + index).toString();
 }
 
-export async function createAccount(db: NanoDocument, index: number) {
+export async function createAccount(db: PouchDB.Database, index: number) {
     let login = 't' + getId(index);
     let password = '1';
     const roles: string[] = [];
@@ -139,14 +128,14 @@ export async function createAccount(db: NanoDocument, index: number) {
     });
 }
 
-export async function createModel(db: NanoDocument, modelTemplate: any, index: number) {
+export async function createModel(db: PouchDB.Database, modelTemplate: any, index: number) {
     const model = cloneDeep(modelTemplate);
     model._id = getId(index);
     delete model._rev;
     await updateIfDifferent(db, model);
 }
 
-export async function createViewModel(db: NanoDocument, viewModelTemplate: any, index: number) {
+export async function createViewModel(db: PouchDB.Database, viewModelTemplate: any, index: number) {
     const viewModel = cloneDeep(viewModelTemplate);
     viewModel._id = getId(index);
     // TODO: Separate function for different viewmodels?
@@ -156,7 +145,7 @@ export async function createViewModel(db: NanoDocument, viewModelTemplate: any, 
     await updateIfDifferent(db, viewModel);
 }
 
-export async function createBalanceRecord(db: NanoDocument, index: number) {
+export async function createBalanceRecord(db: PouchDB.Database, index: number) {
     let doc = await getOrNull(db, 'balances');
     if (!doc) {
         doc = { _id: 'balances' };

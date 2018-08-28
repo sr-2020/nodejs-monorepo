@@ -1,21 +1,14 @@
-import { EventEmitter } from 'events';
-
-export type ID = string;
-export interface Document {
-  _id: ID;
-  _rev?: string;
-  [key: string]: any;
-}
-
 export interface FilterParams {
   filter?: string | ((doc: any, req: any) => boolean);
-  onChange?: (...params: any[]) => void;
+  onChange?: (value: PouchDB.Core.ChangesResponseChange<{}>) => any;
   [key: string]: any;
 }
 
 export interface DBConnectorInterface {
   use(name: string): DBInterface;
 }
+
+export type ID = string;
 
 export interface DBInterface {
   get(id: ID, params?: any): Promise<Document>;
@@ -24,5 +17,5 @@ export interface DBInterface {
   put(doc: Document): Promise<any>;
   remove(id: ID, rev: string): Promise<any>;
   view(design: string, view: string, params: any): Promise<any>;
-  follow(params: FilterParams): EventEmitter;
+  follow(params: FilterParams): void;
 }

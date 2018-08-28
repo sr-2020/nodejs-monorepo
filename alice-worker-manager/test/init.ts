@@ -13,7 +13,6 @@ import * as MemoryAdapter from 'pouchdb-adapter-memory';
 import { CatalogsStorage } from '../src/catalogs_storage';
 import { Config } from '../src/config';
 import { DBConnectorInterface } from '../src/db/interface';
-import { NanoConnector } from '../src/db/nano';
 import { PouchConnector } from '../src/db/pouch';
 import { EventStorage } from '../src/event_storage';
 import { EventsSource } from '../src/events_source';
@@ -29,7 +28,9 @@ Pouch.plugin(MemoryAdapter);
 
 export const defaultConfig: Config = {
     db: {
-        url: 'http://admin:admin@localhost:5984/',
+        url: '',
+        adapter: 'memory',
+        initViews: true,
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
@@ -73,12 +74,7 @@ export const defaultConfig: Config = {
 Object.freeze(defaultConfig);
 
 export function initDb(config: Config): DBConnectorInterface {
-    // tslint:disable-next-line:no-string-literal
-    if (process.env['__USE_REAL_DB']) {
-        return new NanoConnector(config);
-    } else {
-        return new PouchConnector('memory');
-    }
+    return new PouchConnector(config);
 }
 
 const counter = 0;
@@ -102,12 +98,8 @@ function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) 
 export function initDi(config: Config = defaultConfig) {
     config = cloneDeep(config);
 
-    // tslint:disable-next-line:no-string-literal
-    if (!process.env['__USE_REAL_DB']) {
-        // tslint:disable-next-line:forin
-        for (const alias in config.db) {
-            config.db[alias] += '-' + counter;
-        }
+    for (const alias of ['events', 'models', 'workingModels']) {
+        config.db[alias] += '-' + counter;
     }
 
     return Injector

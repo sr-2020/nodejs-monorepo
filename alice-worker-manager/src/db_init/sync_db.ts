@@ -1,10 +1,9 @@
 /* tslint:disable no-console */
 import * as meow from 'meow';
-import * as nano from 'nano';
 import * as path from 'path';
 import { CatalogsStorage } from '../catalogs_storage';
 import { CatalogsConfigDb, Config } from '../config';
-import { NanoConnector } from '../db/nano';
+import { PouchConnector } from '../db/pouch';
 import { delay } from '../utils';
 import { getAllDesignDocs } from './design_docs_helper';
 import { createAccount, createBalanceRecord, createDbIfNotExists, createModel,
@@ -24,8 +23,7 @@ const CONFIG_PATH = cli.flags.c;
 // tslint:disable-next-line:no-var-requires
 const config = require(CONFIG_PATH) as Config;
 
-const connection = nano(config.db.url);
-const connector = new NanoConnector(config);
+const connector = new PouchConnector(config);
 
 const databasesNames: string[] = [
     '_global_changes', '_metadata', '_replicator', '_users',
@@ -56,18 +54,20 @@ const designDocs = getAllDesignDocs();
 console.log('Found following design docs:');
 console.log(designDocs.map((doc) => doc._id));
 
-async function dropEventsDb(): Promise<void> {
-    await new Promise((resolve) => {
-        connection.db.destroy(config.db.events, (err) => resolve(err));
-    });
+function getDatabase(name: string) {
+    return new PouchDB(config.db.url + '/' + name);
 }
 
-async function createDesignDoc(doc: any): Promise<void> {
+async function dropEventsDb(): Promise<void> {
+    await getDatabase(config.db.events).destroy();
+}
+
+export async function createDesignDoc(doc: any): Promise<void> {
     const dbNames = doc.dbs;
     delete (doc.dbs);
     const designDocFunctionsStringified = deepToString(doc);
     await Promise.all(dbNames.map(
-        (alias) => updateIfDifferent(connection.use(dbName(config, alias)), designDocFunctionsStringified)));
+        (alias) => updateIfDifferent(getDatabase(dbName(config, alias)), designDocFunctionsStringified)));
 }
 
 async function createDesignDocs(): Promise<void> {
@@ -92,11 +92,11 @@ async function createHumanSampleData() {
         `viewmodel=${JSON.stringify(viewModelTemplate)}`);
     for (let index = 0; index < 150; ++index) {
         await Promise.all([
-            createAccount(connection.use(config.db.accounts), index),
-            createModel(connection.use(config.db.models), modelTemplate, index),
-            createModel(connection.use(config.db.workingModels), modelTemplate, index),
-            createViewModel(connection.use(config.viewModels.default), viewModelTemplate, index),
-            createBalanceRecord(connection.use(config.db.economy), index),
+            createAccount(getDatabase(config.db.accounts), index),
+            createModel(getDatabase(config.db.models), modelTemplate, index),
+            createModel(getDatabase(config.db.workingModels), modelTemplate, index),
+            createViewModel(getDatabase(config.viewModels.default), viewModelTemplate, index),
+            createBalanceRecord(getDatabase(config.db.economy), index),
         ]);
     }
 }
@@ -109,10 +109,10 @@ async function createMedicSampleData() {
         `medic-viewmodel=${JSON.stringify(medicViewModelTemplate)}`);
     for (let index = 1000; index < 1010; ++index) {
         await Promise.all([
-            createAccount(connection.use(config.db.accounts), index),
-            createModel(connection.use(config.db.models), medicModelTemplate, index),
-            createModel(connection.use(config.db.workingModels), medicModelTemplate, index),
-            createViewModel(connection.use(config.viewModels.default), medicViewModelTemplate, index),
+            createAccount(getDatabase(config.db.accounts), index),
+            createModel(getDatabase(config.db.models), medicModelTemplate, index),
+            createModel(getDatabase(config.db.workingModels), medicModelTemplate, index),
+            createViewModel(getDatabase(config.viewModels.default), medicViewModelTemplate, index),
         ]);
     }
 }
@@ -125,9 +125,9 @@ async function createSampleData() {
 
 async function run(): Promise<void> {
     await dropEventsDb();
-    await Promise.all(databasesNames.map((name) => createDbIfNotExists(connection, name)));
+    await Promise.all(databasesNames.map((name) => createDbIfNotExists(config, name)));
     await createDesignDocs();
-    await importCatalogs(connection, catalogsStorage, catalogs);
+    await importCatalogs(config, catalogsStorage, catalogs);
     await createSampleData();
 }
 
