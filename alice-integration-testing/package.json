@@ -1,0 +1,19 @@
+{
+  "name": "alice-integration-testing",
+  "version": "1.0.0",
+  "description": "integration testing tools",
+  "scripts": {
+    "deps": "yarn install",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/command-line-args": "^4.0.0",
+    "@types/request": "0.0.45",
+    "@types/request-promise": "^4.1.35",
+    "command-line-args": "^4.0.6",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
