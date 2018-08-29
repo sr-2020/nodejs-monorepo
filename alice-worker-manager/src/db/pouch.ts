@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil, clone } from 'lodash';
 import * as Pouch from 'pouchdb';
 import { Config } from '../config';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
@@ -24,10 +24,10 @@ export class PouchConnector implements DBConnectorInterface {
   private async initViews() {
     const designDocs = getAllDesignDocs();
     for (const ddoc of designDocs) {
-      const dbNames = ddoc.dbs;
-      delete (ddoc.dbs);
-      const designDocFunctionsStringified = deepToString(ddoc);
-      for (const alias of dbNames) {
+      const ddocNoDbs = clone(ddoc);
+      delete (ddocNoDbs.dbs);
+      const designDocFunctionsStringified = deepToString(ddocNoDbs);
+      for (const alias of ddoc.dbs) {
         await this.use(dbName(this._config, alias)).put(designDocFunctionsStringified);
       }
     }
