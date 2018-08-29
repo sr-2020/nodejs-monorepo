@@ -1,7 +1,7 @@
 {
-    "name": "deus-mobile",
+    "name": "alice-mobile",
     "author": "sth-larp",
-    "homepage": "http://deus.rpg.ru",
+    "homepage": "https://github.com/alice-larp/alice-larp-sdk",
     "private": true,
     "scripts": {
         "ionic:build": "ionic-app-scripts build",
@@ -99,7 +99,7 @@
         "cordova-plugin-splashscreen"
     ],
     "cordovaPlatforms": [],
-    "description": "deus-mobile: An Ionic project",
+    "description": "alice-mobile: An Ionic project",
     "cordova": {
         "plugins": {
             "cordova-plugin-console": {},
