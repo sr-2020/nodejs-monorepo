@@ -35,7 +35,10 @@ describe('ViewModel subtypes parsing from JSON', () => {
       },
       "toolbar": {
         "hitPoints": 46,
-        "maxHitPoints": 55
+        "maxHitPoints": 55,
+        "oxygenCapacity": 0,
+        "spaceSuitOn": false,
+        "timestampWhenPutOn": 0
       },
       "passportScreen": {
         "id": "vasya",
