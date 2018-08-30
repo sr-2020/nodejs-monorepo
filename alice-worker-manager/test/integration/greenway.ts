@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { expect } from 'chai';
 
 import { ManagerToken } from '../../src/di_tokens';
