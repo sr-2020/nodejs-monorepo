@@ -1,5 +1,4 @@
 import Container from 'typedi';
-import { Logger } from '../node_modules/winston';
 import { CatalogsStorage } from './catalogs_storage';
 import { Config } from './config';
 import { PouchConnector } from './db/pouch';
@@ -9,6 +8,7 @@ import { CatalogsStorageToken, ConfigToken, DBConnectorToken,
   ViewModelStorageToken, WorkersPoolToken, WorkingModelStorageToken } from './di_tokens';
 import { eventStorageFactory } from './event_storage';
 import { eventsSourceFactory } from './events_source';
+import { Logger } from './logger';
 import { Manager } from './manager';
 import { ModelStorage, WorkingModelStorage } from './model_storage';
 import { ObjectStorage } from './object_storage';
