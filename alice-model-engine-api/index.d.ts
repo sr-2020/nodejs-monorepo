@@ -12,7 +12,6 @@ export interface Event extends CharacterlessEvent {
 }
 
 export type SyncEvent = Event & { eventType: '_RefreshModel' }
-export type RetryEvent = Event & { eventType: '_RetryRefresh' }
 
 export type Timer = {
     name: string,

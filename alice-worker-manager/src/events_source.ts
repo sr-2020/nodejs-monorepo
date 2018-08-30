@@ -1,10 +1,9 @@
-import { Event, RetryEvent, SyncEvent } from 'alice-model-engine-api';
+import { Event, SyncEvent } from 'alice-model-engine-api';
 import * as Rx from 'rxjs/Rx';
 import { Config } from './config';
 import { DBConnectorInterface, DBInterface } from './db/interface';
 
 const SYNC_EVENT_TYPE = '_RefreshModel';
-const RETRY_EVENT_TYPE = '_RetryRefresh';
 
 function docToEvent(e: PouchDB.Core.ExistingDocument<Event>): Event {
     return {
@@ -53,9 +52,5 @@ export class EventsSource {
 
     get syncEvents(): Rx.Observable<SyncEvent> {
         return this.events.filter((e) => Boolean(e.eventType === SYNC_EVENT_TYPE)) as any;
-    }
-
-    get retryEvents(): Rx.Observable<RetryEvent> {
-        return this.events.filter((e) => Boolean(e.eventType === RETRY_EVENT_TYPE)) as any;
     }
 }

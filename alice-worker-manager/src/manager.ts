@@ -64,12 +64,6 @@ export class Manager {
             .filter(this.filterErroredModels)
             .subscribe(this.onSyncEvent);
 
-        this.eventsSource.retryEvents
-            .takeUntil(this.stopped)
-            .do(this.logEvent)
-            .flatMap(this.queryLastRefresh)
-            .subscribe(this.onSyncEvent);
-
         this.eventsSource.follow();
     }
 
@@ -78,10 +72,6 @@ export class Manager {
             case '_RefreshModel':
                 this.logger.info(
                     'manager', `Found refresh event for ${event.characterId}`, {characterId: event.characterId, event});
-                break;
-            case '_RetryRefresh':
-                this.logger.info(
-                    'manager', `Found retry event for ${event.characterId}`, {characterId: event.characterId, event});
                 break;
             default:
                 this.logger.warn(
