@@ -23,12 +23,9 @@ export function processorFactory(
     workingModelStorage: ModelStorageBase,
     viewModelStorage: ViewModelStorage,
     objectStorage: ObjectStorageInterface,
-    logger: LoggerInterface,
-) {
-    return () => {
-        return new Processor(config, pool, eventStorage, modelStorage,
-            workingModelStorage, viewModelStorage, objectStorage, logger);
-    };
+    logger: LoggerInterface): ProcessorFactory {
+    return () => new Processor(config, pool, eventStorage, modelStorage,
+        workingModelStorage, viewModelStorage, objectStorage, logger);
 }
 
 export class Processor {
@@ -46,19 +43,18 @@ export class Processor {
         private logger: LoggerInterface,
     ) { }
 
-    public acceptingEvents() {
+    public acceptingEvents(): boolean {
         return this.state == 'New' || this.state == 'Waiting for worker';
     }
 
-    public pushEvent(event: SyncEvent) {
+    public pushEvent(event: SyncEvent): this {
         if (!this.event || event.timestamp > this.event.timestamp) {
             this.event = event;
         }
-
         return this;
     }
 
-    public async run() {
+    public async run(): Promise<SyncEvent> {
         this.logger.info('manager', 'Started processing model',
             { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
         this.state = 'Waiting for worker';
@@ -158,7 +154,7 @@ export class Processor {
             event = cloneDeep(event);
 
             // XXX есть шанс что эта модель сейчас обрабатывается и тогда все пропало
-            event.timestamp = Math.max(event.timestamp, (model as any).timestamp  + 1);
+            event.timestamp = Math.max(event.timestamp, (model as any).timestamp + 1);
 
             return this.eventStorage.store(event);
         });
