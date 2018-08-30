@@ -1,4 +1,4 @@
-import Container from '../node_modules/typedi';
+import Container from 'typedi';
 import { Logger } from '../node_modules/winston';
 import { CatalogsStorage } from './catalogs_storage';
 import { Config } from './config';
