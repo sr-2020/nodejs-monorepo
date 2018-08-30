@@ -202,30 +202,6 @@ export class Context {
     }
   }
 
-  public enabledEffectsByType(t: string): Effect[] {
-    return this.effects.filter((e) => e.enabled && e.type == t);
-  }
-
-  public enabledFunctionalEffects() {
-    return this.enabledEffectsByType('functional');
-  }
-
-  public enabledNormalEffects() {
-    return this.enabledEffectsByType('normal');
-  }
-
-  public *iterateEnabledFunctionalEffects(): Iterable<Effect> {
-    for (const effect of this.enabledFunctionalEffects()) {
-      yield effect;
-    }
-  }
-
-  public *iterateEnabledNormalEffects() {
-    for (const effect of this.enabledNormalEffects()) {
-      yield effect;
-    }
-  }
-
   public decreaseTimers(diff: number): void {
     if (!this._ctx.timers) return;
 
