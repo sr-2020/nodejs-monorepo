@@ -1,9 +1,7 @@
 import * as genericPool from 'generic-pool';
 import { Catalogs } from './catalogs_storage';
 import { Config, PoolConfig } from './config';
-import { Inject } from './di';
 import { LoggerInterface } from './logger';
-
 import { Worker } from './worker';
 
 export interface WorkersPoolInterface {
@@ -15,7 +13,6 @@ export interface WorkersPoolInterface {
     drain(): Promise<void>;
 }
 
-@Inject
 export class WorkersPool implements WorkersPoolInterface {
     private logger: LoggerInterface;
 

@@ -1,7 +1,6 @@
 import { Container, ContainerInstance } from 'winston';
 import * as winston from 'winston';
 import * as Elasticsearch from 'winston-elasticsearch';
-import { Inject } from './di';
 
 import { LogLevel, LogSource } from 'alice-model-engine-api';
 import { Config, LoggerConfig } from './config';
@@ -19,7 +18,6 @@ export interface LoggerInterface {
     error(source: LogSource, msg: string, additionalData?: any): void;
 }
 
-@Inject
 export class Logger implements LoggerInterface {
 
     public debug = this.defLevel('debug');

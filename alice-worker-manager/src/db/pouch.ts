@@ -1,12 +1,10 @@
-import { isNil, clone } from 'lodash';
+import { clone, isNil } from 'lodash';
 import * as Pouch from 'pouchdb';
 import { Config } from '../config';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
 import { dbName, deepToString } from '../db_init/util';
-import { Inject } from '../di';
 import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from './interface';
 
-@Inject
 export class PouchConnector implements DBConnectorInterface {
   private cache: { [name: string]: PouchDb } = {};
 

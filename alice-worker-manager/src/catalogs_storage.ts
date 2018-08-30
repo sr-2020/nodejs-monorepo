@@ -1,7 +1,6 @@
 import { cloneDeep, get } from 'lodash';
 import { CatalogsConfigDb, CatalogsConfigFiles, Config } from './config';
 import { DBConnectorInterface } from './db/interface';
-import { Inject } from './di';
 import { requireDir } from './utils';
 
 interface CatalogObject {
@@ -22,9 +21,9 @@ export interface CatalogsStorageInterface {
     loadFromDb(): Promise<Catalogs>;
 }
 
-@Inject
 export class CatalogsStorage implements CatalogsStorageInterface {
-    constructor(private config: Config, private dbConnector: DBConnectorInterface) { }
+    constructor(private config: Config,
+                private dbConnector: DBConnectorInterface) { }
 
     public catalogDbName(catalog: string): string | undefined {
         let dbName: string = get(this.config, ['catalogs', 'db', catalog]);

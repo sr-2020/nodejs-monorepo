@@ -1,6 +1,11 @@
 import { SyncEvent } from 'alice-model-engine-api';
 
-import { DBInterface, Document } from './db/interface';
+import { Config } from './config';
+import { DBConnectorInterface, DBInterface, Document } from './db/interface';
+
+export function eventStorageFactory(config: Config, dbConnector: DBConnectorInterface) {
+    return new EventStorage(dbConnector.use(config.db.events));
+}
 
 export class EventStorage {
     constructor(private db: DBInterface) { }

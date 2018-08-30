@@ -1,22 +1,19 @@
 import { keyBy } from 'lodash';
 import { Observable, Subject } from 'rxjs/Rx';
-import { Inject } from './di';
 
 import { Event, SyncEvent } from 'alice-model-engine-api';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { Config } from './config';
 import { EventStorage } from './event_storage';
-import { EventsSource /* , Event, SyncEvent */ } from './events_source';
+import { EventsSource } from './events_source';
 import { LoggerInterface } from './logger';
-import { ModelStorage } from './model_storage';
+import { ModelStorageBase } from './model_storage';
 import { WorkersPoolInterface } from './workers_pool';
 
 import { Processor, ProcessorFactory } from './processor';
 
 const MAX_ERRORS = 3;
 
-@Inject
 export class Manager {
     private stopped: Subject<{}> = new Subject();
 
@@ -32,10 +29,9 @@ export class Manager {
     } = {};
 
     constructor(
-        private config: Config,
         private eventsSource: EventsSource,
         private catalogsStorage: CatalogsStorageInterface,
-        private modelStorage: ModelStorage,
+        private modelStorage: ModelStorageBase,
         private eventStorage: EventStorage,
         private pool: WorkersPoolInterface,
         private processorFactory: ProcessorFactory,

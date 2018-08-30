@@ -1,4 +1,4 @@
-import { token } from './di';
+import { Token } from 'typedi';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
 import { Config } from './config';
@@ -7,24 +7,24 @@ import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
 import { LoggerInterface } from './logger';
 import { Manager } from './manager';
-import { ModelStorage } from './model_storage';
+import { ModelStorageBase } from './model_storage';
 import { ObjectStorageInterface } from './object_storage';
 import { ProcessorFactory } from './processor';
 import { ViewModelStorage } from './view_model_storage';
 import { WorkersPoolInterface } from './workers_pool';
 
 // tslint:disable:variable-name
-export const ConfigToken = token<Config>('config');
-export const DBConnectorToken = token<DBConnectorInterface>('dbConnector');
-export const ModelStorageToken = token<ModelStorage>('modelStorage');
-export const WorkingModelStorageToken = token<ModelStorage>('workingModelStorage');
-export const ViewModelStorageToken = token<ViewModelStorage>('viewModelStorage');
-export const EventStorageToken = token<EventStorage>('eventStorage');
-export const EventsSourceToken = token<EventsSource>('eventsSource');
-export const CatalogsStorageToken = token<CatalogsStorageInterface>('catalogsStorage');
-export const ObjectStorageToken = token<ObjectStorageInterface>('objectStorage');
-export const LoggerToken = token<LoggerInterface>('logger');
-export const WorkersPoolToken = token<WorkersPoolInterface>('workersPool');
-export const ProcessorFactoryToken = token<ProcessorFactory>('processorFactory');
-export const ManagerToken = token<Manager>('manager');
+export const ConfigToken = new Token<Config>();
+export const DBConnectorToken = new Token<DBConnectorInterface>();
+export const ModelStorageToken = new Token<ModelStorageBase>('modelStorage');
+export const WorkingModelStorageToken = new Token<ModelStorageBase>('workingModelStorage');
+export const ViewModelStorageToken = new Token<ViewModelStorage>('viewModelStorage');
+export const EventStorageToken = new Token<EventStorage>();
+export const EventsSourceToken = new Token<EventsSource>();
+export const CatalogsStorageToken = new Token<CatalogsStorageInterface>();
+export const ObjectStorageToken = new Token<ObjectStorageInterface>();
+export const LoggerToken = new Token<LoggerInterface>();
+export const WorkersPoolToken = new Token<WorkersPoolInterface>();
+export const ProcessorFactoryToken = new Token<ProcessorFactory>();
+export const ManagerToken = new Token<Manager>();
 // tslint:enable:variable-name

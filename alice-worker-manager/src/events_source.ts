@@ -1,7 +1,7 @@
-import * as Rx from 'rxjs/Rx';
-import { DBInterface } from './db/interface';
-
 import { Event, RetryEvent, SyncEvent } from 'alice-model-engine-api';
+import * as Rx from 'rxjs/Rx';
+import { Config } from './config';
+import { DBConnectorInterface, DBInterface } from './db/interface';
 
 const SYNC_EVENT_TYPE = '_RefreshModel';
 const RETRY_EVENT_TYPE = '_RetryRefresh';
@@ -13,6 +13,10 @@ function docToEvent(e: PouchDB.Core.ExistingDocument<Event>): Event {
         timestamp: e.timestamp,
         data: e.data,
     };
+}
+
+export function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) {
+    return new EventsSource(dbConnector.use(config.db.events));
 }
 
 export class EventsSource {

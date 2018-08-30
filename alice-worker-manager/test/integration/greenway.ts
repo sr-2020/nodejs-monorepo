@@ -5,6 +5,7 @@ import { expect } from 'chai';
 import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
+import Container from 'typedi';
 import { delay } from '../../src/utils';
 import { initDi } from '../init';
 import { createModel, getModelAtTimestamp, getModelVariants,
@@ -14,10 +15,10 @@ describe('Green way', function() {
     this.timeout(5000);
 
     let manager: Manager;
-    let di;
+    const di = Container;
 
     before(async () => {
-        di = initDi();
+        initDi();
         manager = di.get(ManagerToken);
         await manager.init();
     });

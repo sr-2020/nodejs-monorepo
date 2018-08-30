@@ -1,7 +1,6 @@
 import { flatten, get, set } from 'lodash';
 import { Config } from './config';
 import { DBConnectorInterface, Document } from './db/interface';
-import { Inject } from './di';
 
 export interface ObjectStorageInterface {
     newId(): number;
@@ -10,7 +9,6 @@ export interface ObjectStorageInterface {
     release(lockId: number): void;
 }
 
-@Inject
 export class ObjectStorage implements ObjectStorageInterface {
     private storage: {
         [db: string]: {
@@ -23,7 +21,8 @@ export class ObjectStorage implements ObjectStorageInterface {
 
     private nextId: number = 0;
 
-    constructor(private config: Config, private dbConnector: DBConnectorInterface) { }
+    constructor(private config: Config,
+                private dbConnector: DBConnectorInterface) { }
 
     public newId() { return this.nextId++; }
 

@@ -27,6 +27,7 @@
     "npm": "^5.8.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.8",
+    "typedi": "^0.8.0",
     "wait-on": "^2.0.1",
     "winston": "^2.4.1",
     "winston-elasticsearch": "^0.5.8"

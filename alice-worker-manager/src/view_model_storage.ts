@@ -1,13 +1,10 @@
-import { Inject } from './di';
-
 import { Config } from './config';
 import { DBConnectorInterface } from './db/interface';
-import { ModelStorage } from './model_storage';
+import { ModelStorageBase } from './model_storage';
 
-@Inject
 export class ViewModelStorage {
     private aliases: {
-        [alias: string]: ModelStorage;
+        [alias: string]: ModelStorageBase;
     };
 
     constructor(config: Config, dbConnector: DBConnectorInterface) {
@@ -19,7 +16,7 @@ export class ViewModelStorage {
             if (config.db[dbName]) dbName = config.db[dbName];
 
             const db = dbConnector.use(dbName);
-            this.aliases[alias] = new ModelStorage(db);
+            this.aliases[alias] = new ModelStorageBase(db);
         }
     }
 

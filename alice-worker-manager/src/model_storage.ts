@@ -1,6 +1,7 @@
-import { DBInterface, Document, ID } from './db/interface';
+import { Config } from './config';
+import { DBConnectorInterface, DBInterface, Document, ID } from './db/interface';
 
-export class ModelStorage {
+export class ModelStorageBase {
     constructor(private db: DBInterface) { }
 
     public find(id: ID): Promise<Document> {
@@ -25,5 +26,18 @@ export class ModelStorage {
         }
 
         return this.db.put(doc);
+    }
+}
+
+export class ModelStorage extends ModelStorageBase {
+    constructor(c: Config, dbConnector: DBConnectorInterface) {
+        super(dbConnector.use(c.db.models));
+    }
+}
+
+// tslint:disable-next-line:no-unused
+export class WorkingModelStorage extends ModelStorageBase {
+    constructor(c: Config, dbConnector: DBConnectorInterface) {
+        super(dbConnector.use(c.db.workingModels));
     }
 }

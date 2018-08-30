@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
+import { Container } from 'typedi';
 import { delay } from '../../src/utils';
 import { defaultConfig, initDi } from '../init';
 import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, saveModel } from '../model_helpers';
@@ -14,13 +15,14 @@ describe('Crash scenarios', function() {
     this.timeout(15000);
 
     let manager: Manager;
-    let di;
+    const di = Container;
 
     before(async () => {
         const config = cloneDeep(defaultConfig);
         config.logger.default = { console: { silent: true } };
-        di = initDi(config);
-        manager = di.get(ManagerToken);
+        initDi(config);
+
+        manager = Container.get(ManagerToken);
         await manager.init();
     });
 

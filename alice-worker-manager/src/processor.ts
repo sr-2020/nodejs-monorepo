@@ -5,7 +5,7 @@ import { EngineResult, Event, SyncEvent } from 'alice-model-engine-api';
 import { Config } from './config';
 import { EventStorage } from './event_storage';
 import { LoggerInterface } from './logger';
-import { ModelStorage } from './model_storage';
+import { ModelStorageBase } from './model_storage';
 import { BoundObjectStorage, ObjectStorageInterface } from './object_storage';
 import { ViewModelStorage } from './view_model_storage';
 import { Worker } from './worker';
@@ -19,8 +19,8 @@ export function processorFactory(
     config: Config,
     pool: WorkersPoolInterface,
     eventStorage: EventStorage,
-    modelStorage: ModelStorage,
-    workingModelStorage: ModelStorage,
+    modelStorage: ModelStorageBase,
+    workingModelStorage: ModelStorageBase,
     viewModelStorage: ViewModelStorage,
     objectStorage: ObjectStorageInterface,
     logger: LoggerInterface,
@@ -39,8 +39,8 @@ export class Processor {
         private config: Config,
         private pool: WorkersPoolInterface,
         private eventStorage: EventStorage,
-        private modelStorage: ModelStorage,
-        private workingModelStorage: ModelStorage,
+        private modelStorage: ModelStorageBase,
+        private workingModelStorage: ModelStorageBase,
         private viewModelStorage: ViewModelStorage,
         private objectStorage: ObjectStorageInterface,
         private logger: LoggerInterface,
