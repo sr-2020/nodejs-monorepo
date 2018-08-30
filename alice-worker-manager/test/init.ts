@@ -1,12 +1,8 @@
-
-
 import { cloneDeep } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
 import { Config } from '../src/config';
-import { DBConnectorInterface } from '../src/db/interface';
-import { PouchConnector } from '../src/db/pouch';
 import { initializeDI } from '../src/di';
 
 Pouch.plugin(MemoryAdapter);
@@ -57,10 +53,6 @@ export const defaultConfig: Config = {
 };
 
 Object.freeze(defaultConfig);
-
-export function initDb(config: Config): DBConnectorInterface {
-    return new PouchConnector(config);
-}
 
 const counter = 0;
 
