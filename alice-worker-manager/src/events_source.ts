@@ -4,10 +4,10 @@ import { Config } from './config';
 import { DBConnectorInterface, DBInterface } from './db/interface';
 
 export function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) {
-  return new EventsSource(dbConnector.use(config.db.events));
+  return new SyncEventsSource(dbConnector.use(config.db.events));
 }
 
-export class EventsSource {
+export class SyncEventsSource {
   private subject: Rx.Subject<SyncEvent> = new Rx.Subject();
 
   constructor(private db: DBInterface) { }

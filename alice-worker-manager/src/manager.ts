@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Rx';
 import { Event, SyncEvent } from 'alice-model-engine-api';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { EventsSource } from './events_source';
+import { SyncEventsSource } from './events_source';
 import { LoggerInterface } from './logger';
 import { WorkersPoolInterface } from './workers_pool';
 
@@ -26,7 +26,7 @@ export class Manager {
   } = {};
 
   constructor(
-    private eventsSource: EventsSource,
+    private eventsSource: SyncEventsSource,
     private catalogsStorage: CatalogsStorageInterface,
     private pool: WorkersPoolInterface,
     private processorFactory: ProcessorFactory,
