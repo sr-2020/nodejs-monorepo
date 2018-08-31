@@ -15,7 +15,7 @@ $ ${path.basename(__filename)} -c <path-to-config>
 `);
 
 if (!cli.flags.c) {
-    cli.showHelp(1);
+  cli.showHelp(1);
 }
 
 const CONFIG_PATH = cli.flags.c;
@@ -25,14 +25,14 @@ initializeDI(config);
 
 const requiredDbNames = [config.db.events, config.db.models, config.db.workingModels];
 if (config.catalogs && ('db' in config.catalogs)) {
-    // tslint:disable-next-line:forin
-    for (const catalog in config.catalogs.db) {
-        requiredDbNames.push(config.catalogs.db[catalog]);
-    }
+  // tslint:disable-next-line:forin
+  for (const catalog in config.catalogs.db) {
+    requiredDbNames.push(config.catalogs.db[catalog]);
+  }
 }
 // tslint:disable-next-line:forin
 for (const viewModel in config.viewModels) {
-    requiredDbNames.push(config.viewModels[viewModel]);
+  requiredDbNames.push(config.viewModels[viewModel]);
 }
 
 const manager = Container.get(ManagerToken);

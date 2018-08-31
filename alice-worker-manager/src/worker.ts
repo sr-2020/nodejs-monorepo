@@ -11,149 +11,149 @@ import { BoundObjectStorage } from './object_storage';
 
 export class Worker extends EventEmitter {
 
-    public lastOutput: string[] = [];
-    public startedAt: number;
-    private child: ChildProcess.ChildProcess | null;
+  public lastOutput: string[] = [];
+  public startedAt: number;
+  private child: ChildProcess.ChildProcess | null;
 
-    private rx: {
-        message: Rx.Observable<EngineReply>,
-        error: Rx.Observable<any>,
-        exit: Rx.Observable<any>,
-        stop: Rx.Observable<any>,
-        data: Rx.Observable<string>,
-    };
+  private rx: {
+    message: Rx.Observable<EngineReply>,
+    error: Rx.Observable<any>,
+    exit: Rx.Observable<any>,
+    stop: Rx.Observable<any>,
+    data: Rx.Observable<string>,
+  };
 
-    constructor(
-        private logger: LoggerInterface,
-        private workerModule: string,
-        private args?: string[],
-    ) {
-        super();
+  constructor(
+    private logger: LoggerInterface,
+    private workerModule: string,
+    private args?: string[],
+  ) {
+    super();
+  }
+
+  public async up(): Promise<this> {
+    this.logger.info('manager', 'Worker::up', { worker: this.workerModule });
+    this.startedAt = Date.now();
+
+    this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
+      const child = ChildProcess.fork(this.workerModule, this.args,
+        { execArgv: ['-r', 'ts-node/register'], silent: true });
+      child.setMaxListeners(20);
+
+      const error = Rx.Observable.fromEvent(child, 'error');
+      const exit = Rx.Observable.fromEvent(child, 'exit');
+      const stop = error.merge(exit);
+      const message = Rx.Observable.fromEvent<EngineReply>(child, 'message').takeUntil(stop);
+      const out = fromStream<string>(child.stdout);
+      const err = fromStream<string>(child.stderr);
+      const data = out.merge(err).takeUntil(stop);
+
+      this.rx = {
+        message, exit, error, stop, data,
+      };
+
+      const ready = this.rx.message.filter((msg) => msg.type == 'ready').take(1);
+
+      // subscribe for logs early
+      this.rx.message.filter((msg) => msg.type == 'log').takeUntil(ready).subscribe(this.handleLogMessage());
+      this.rx.data.subscribe(this.handleOutput);
+
+      this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
+      this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
+
+      ready.subscribe((_) => resolve(child));
+    });
+
+    if (!this.rx) throw new Error('Imposible! Observable is not populated.');
+
+    this.rx.message.subscribe(this.emitMessage);
+    this.rx.error.subscribe(this.emitError);
+    this.rx.exit.subscribe(this.emitExit);
+
+    return this;
+  }
+
+  public down(): this {
+    if (this.child) {
+      this.child.removeAllListeners();
+      this.child.kill();
+      this.child = null;
+      this.rx = null as any;
     }
+    return this;
+  }
 
-    public async up(): Promise<this> {
-        this.logger.info('manager', 'Worker::up', {worker: this.workerModule});
-        this.startedAt = Date.now();
+  public configure(catalogs: Catalogs): this {
+    return this.send({ type: 'configure', data: catalogs.data });
+  }
 
-        this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
-            const child = ChildProcess.fork(this.workerModule, this.args,
-                { execArgv: ['-r', 'ts-node/register'], silent: true });
-            child.setMaxListeners(20);
+  public send(message: EngineMessage): this {
+    if (this.child) {
+      this.child.send(message);
+    }
+    return this;
+  }
 
-            const error = Rx.Observable.fromEvent(child, 'error');
-            const exit = Rx.Observable.fromEvent(child, 'exit');
-            const stop = error.merge(exit);
-            const message = Rx.Observable.fromEvent<EngineReply>(child, 'message').takeUntil(stop);
-            const out = fromStream<string>(child.stdout);
-            const err = fromStream<string>(child.stderr);
-            const data = out.merge(err).takeUntil(stop);
+  public onMessage(callback: (message: any) => void): this {
+    this.on('message', callback);
+    return this;
+  }
 
-            this.rx = {
-                message, exit, error, stop, data,
-            };
+  public onError(callback: (err: Error) => void): this {
+    this.on('error', callback);
+    return this;
+  }
 
-            const ready = this.rx.message.filter((msg) => msg.type == 'ready').take(1);
+  public onExit(callback: () => void): this {
+    this.on('exit', callback);
+    return this;
+  }
 
-            // subscribe for logs early
-            this.rx.message.filter((msg) => msg.type == 'log').takeUntil(ready).subscribe(this.handleLogMessage());
-            this.rx.data.subscribe(this.handleOutput);
-
-            this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
-            this.rx.error.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
-
-            ready.subscribe((_) => resolve(child));
+  public handleLogMessage = (syncEvent?: Event) => (message: any) => {
+    if (message.type == 'log') {
+      if (syncEvent) {
+        message.params = message.params || [];
+        message.params.push({
+          characterId: syncEvent.characterId,
+          eventTimestamp: syncEvent.timestamp,
         });
-
-        if (!this.rx) throw new Error('Imposible! Observable is not populated.');
-
-        this.rx.message.subscribe(this.emitMessage);
-        this.rx.error.subscribe(this.emitError);
-        this.rx.exit.subscribe(this.emitExit);
-
-        return this;
+      }
+      this.logger.log(message.source, message.level, message.msg, message.additionalData);
     }
+  }
 
-    public down(): this {
-        if (this.child) {
-            this.child.removeAllListeners();
-            this.child.kill();
-            this.child = null;
-            this.rx = null as any;
-        }
-        return this;
-    }
+  public handleOutput = (chunk: string) => {
+    this.lastOutput.push(chunk);
+  }
 
-    public configure(catalogs: Catalogs): this {
-        return this.send({ type: 'configure', data: catalogs.data });
-    }
+  public emitMessage = (message: any) => this.emit('message', message);
+  public emitError = (err: Error) => this.emit('error', err);
+  public emitExit = () => this.emit('exit');
 
-    public send(message: EngineMessage): this {
-        if (this.child) {
-            this.child.send(message);
-        }
-        return this;
-    }
+  public async process(objectStorage: BoundObjectStorage, syncEvent: Event,
+                       model: any, events: Event[]): Promise<EngineResult> {
+    this.lastOutput = [];
 
-    public onMessage(callback: (message: any) => void): this {
-        this.on('message', callback);
-        return this;
-    }
+    return new Promise<EngineResult>((resolve, reject) => {
+      if (!this.child) return reject(new Error('No child process'));
 
-    public onError(callback: (err: Error) => void): this {
-        this.on('error', callback);
-        return this;
-    }
+      const result = this.rx.message.filter((m) => m.type == 'result') as Rx.Observable<EngineResult>;
+      result.take(1).subscribe(resolve);
 
-    public onExit(callback: () => void): this {
-        this.on('exit', callback);
-        return this;
-    }
+      const aquire = this.rx.message.filter((m) => m.type == 'aquire') as Rx.Observable<EngineReplyAquire>;
+      aquire.takeUntil(Rx.Observable.merge(result, this.rx.stop)).subscribe(async (msg: EngineReplyAquire) => {
+        const data = await objectStorage.aquire(msg.keys);
+        this.send({ type: 'aquired', data });
+      });
 
-    public handleLogMessage = (syncEvent?: Event) => (message: any) => {
-        if (message.type == 'log') {
-            if (syncEvent) {
-                message.params = message.params || [];
-                message.params.push({
-                    characterId: syncEvent.characterId,
-                    eventTimestamp: syncEvent.timestamp,
-                });
-            }
-            this.logger.log(message.source, message.level, message.msg, message.additionalData);
-        }
-    }
+      this.rx.message.filter((msg) => msg.type == 'log')
+        .takeUntil(result).subscribe(this.handleLogMessage(syncEvent));
 
-    public handleOutput = (chunk: string) => {
-        this.lastOutput.push(chunk);
-    }
+      this.rx.stop.takeUntil(result).take(1).subscribe(() => reject('Worker error'));
 
-    public emitMessage = (message: any) => this.emit('message', message);
-    public emitError = (err: Error) => this.emit('error', err);
-    public emitExit = () => this.emit('exit');
+      this.send({ type: 'events', context: model, events });
 
-    public async process(objectStorage: BoundObjectStorage, syncEvent: Event,
-                         model: any, events: Event[]): Promise<EngineResult> {
-        this.lastOutput = [];
-
-        return new Promise<EngineResult>((resolve, reject) => {
-            if (!this.child) return reject(new Error('No child process'));
-
-            const result = this.rx.message.filter((m) => m.type == 'result') as Rx.Observable<EngineResult>;
-            result.take(1).subscribe(resolve);
-
-            const aquire = this.rx.message.filter((m) => m.type == 'aquire') as Rx.Observable<EngineReplyAquire>;
-            aquire.takeUntil(Rx.Observable.merge(result, this.rx.stop)).subscribe(async (msg: EngineReplyAquire) => {
-                const data = await objectStorage.aquire(msg.keys);
-                this.send({ type: 'aquired', data });
-            });
-
-            this.rx.message.filter((msg) => msg.type == 'log')
-                .takeUntil(result).subscribe(this.handleLogMessage(syncEvent));
-
-            this.rx.stop.takeUntil(result).take(1).subscribe(() => reject('Worker error'));
-
-            this.send({ type: 'events', context: model, events });
-
-            // TODO: handle timeout
-        });
-    }
+      // TODO: handle timeout
+    });
+  }
 }
