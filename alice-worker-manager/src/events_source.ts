@@ -15,12 +15,13 @@ export class EventsSource {
   public follow() {
     const params = {
       include_docs: true,
+      filter: '_view',
+      view: 'character/refresh-events',
 
       onChange: (change: PouchDB.Core.ChangesResponseChange<Event>) => {
         if (!change.doc) return;
         const doc = change.doc;
         if (doc._deleted) return;
-        if (doc.eventType != '_RefreshModel') return;
         this.subject.next({
           characterId: doc.characterId,
           eventType: '_RefreshModel',
