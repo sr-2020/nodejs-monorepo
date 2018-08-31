@@ -16,7 +16,7 @@ async function createAndStartManager(): Promise<Manager> {
   return manager;
 }
 
-describe.only('Prepopulated events', function() {
+describe('Prepopulated events', function() {
   this.timeout(2000);
 
   let manager: Manager;
