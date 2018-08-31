@@ -8,7 +8,7 @@ import { delay } from '../../src/utils';
 import { destroyDatabases, initDiAndDatabases } from '../init';
 import {
   createModel, getModelAtTimestamp, getModelVariants,
-  getModelVariantsAtTimestamp, getObject, pushEvent, saveObject,
+  getModelVariantsAtTimestamp, getObject, pushEvent, pushRefreshEvent, saveObject,
 } from '../model_helpers';
 
 describe('Green way', function() {
@@ -42,11 +42,7 @@ describe('Green way', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 10,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 10);
 
     const [baseModel, workingModel, viewModel] =
       await getModelVariantsAtTimestamp(di, model._id, timestamp + 10,
@@ -92,11 +88,7 @@ describe('Green way', function() {
       data: { value: 'C' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 150,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 150);
 
     const [baseModel, workingModel, viewModel] =
       await getModelVariantsAtTimestamp(di, model._id, timestamp + 150,
@@ -119,11 +111,7 @@ describe('Green way', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 20,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 20);
 
     await delay(400);
 
@@ -136,11 +124,7 @@ describe('Green way', function() {
       data: { value: 'B' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 20,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 20);
 
     const baseModel = await getModelAtTimestamp(di, model._id, timestamp + 20);
     expect(baseModel).to.has.property('value', 'AB');
@@ -150,23 +134,9 @@ describe('Green way', function() {
     const model = await createModel(di);
     const timestamp = model.timestamp + 1;
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp,
-    });
-
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 1,
-    });
-
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 2,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 0);
+    await pushRefreshEvent(di, model._id, timestamp + 1);
+    await pushRefreshEvent(di, model._id, timestamp + 2);
 
     const [baseModel, workingModel, viewModel] =
       await getModelVariantsAtTimestamp(di, model._id, timestamp + 2,
@@ -192,11 +162,7 @@ describe('Green way', function() {
       timestamp: timestamp + 10,
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 20,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 20);
 
     await pushEvent(di, {
       characterId: model._id,
@@ -204,11 +170,7 @@ describe('Green way', function() {
       timestamp: timestamp + 30,
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 50,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 50);
 
     // Not interested in actual model, just wait for processing.
     await getModelAtTimestamp(di, model._id, timestamp + 50);
@@ -223,11 +185,7 @@ describe('Green way', function() {
     const model = await createModel(di, undefined, { skipFromViewmodel: true });
     const timestamp = model.timestamp;
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 1,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 1);
 
     const [baseModel, workingModel] =
       await getModelVariantsAtTimestamp(di, model._id, timestamp + 1, ['models', 'workingModels']);

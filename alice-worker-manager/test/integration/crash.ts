@@ -6,7 +6,8 @@ import { Manager } from '../../src/manager';
 
 import { Container } from 'typedi';
 import { defaultConfig, destroyDatabases, initDiAndDatabases } from '../init';
-import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, saveModel } from '../model_helpers';
+import { createModel, createModelObj, getModel, getModelAtTimestamp,
+  pushEvent, pushRefreshEvent, saveModel } from '../model_helpers';
 
 describe('Crash scenarios', function() {
   this.timeout(15000);
@@ -40,29 +41,13 @@ describe('Crash scenarios', function() {
       timestamp,
     });
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 2,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 2);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 3,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 3);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 4,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 4,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
 
     // now let's try normal operation
 
@@ -76,11 +61,7 @@ describe('Crash scenarios', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: anotherModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 50,
-    });
+    await pushRefreshEvent(di, anotherModel._id, timestamp + 50);
 
     const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
 
@@ -96,11 +77,7 @@ describe('Crash scenarios', function() {
     let baseModel = await getModel(di, model._id);
     expect(baseModel).not.to.has.property('timestamp');
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp,
-    });
+    await pushRefreshEvent(di, model._id, timestamp);
 
     baseModel = await getModelAtTimestamp(di, model._id, timestamp);
 
@@ -117,29 +94,13 @@ describe('Crash scenarios', function() {
       timestamp,
     });
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 2,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 2);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 3,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 3);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 4,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
 
-    await pushEvent(di, {
-      characterId: crashModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 4,
-    });
+    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
 
     // now let's try normal operation
 
@@ -153,11 +114,7 @@ describe('Crash scenarios', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: anotherModel._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 50,
-    });
+    await pushRefreshEvent(di, anotherModel._id, timestamp + 50);
 
     const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
 

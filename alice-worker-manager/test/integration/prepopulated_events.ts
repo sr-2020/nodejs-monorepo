@@ -6,7 +6,7 @@ import { Manager } from '../../src/manager';
 import Container from 'typedi';
 import { destroyDatabases, initDiAndDatabases } from '../init';
 import {
-  createModel, getModelVariantsAtTimestamp, pushEvent,
+  createModel, getModelVariantsAtTimestamp, pushEvent, pushRefreshEvent,
 } from '../model_helpers';
 
 async function createAndStartManager(): Promise<Manager> {
@@ -41,11 +41,7 @@ describe('Prepopulated events', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 10,
-    });
+    await pushRefreshEvent(di, model._id, timestamp + 10);
 
     manager = await createAndStartManager();
 
@@ -77,17 +73,8 @@ describe('Prepopulated events', function() {
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp - 3,
-    });
-
-    await pushEvent(di, {
-      characterId: model._id,
-      eventType: '_RefreshModel',
-      timestamp: timestamp + 10,
-    });
+    await pushRefreshEvent(di, model._id, timestamp - 3);
+    await pushRefreshEvent(di, model._id, timestamp + 10);
 
     manager = await createAndStartManager();
 

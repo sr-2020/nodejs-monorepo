@@ -1,3 +1,4 @@
+import { Event } from 'alice-model-engine-api';
 import { merge } from 'lodash';
 import { Document } from '../src/db/interface';
 import { dbName } from '../src/db_init/util';
@@ -63,9 +64,19 @@ export function getModelVariantsAtTimestamp(di: any, id: string, timestamp: numb
     return Promise.all(pending);
 }
 
-export function pushEvent(di: any, event: any) {
+export function pushEvent(di: any, event: Event) {
+    if (event.eventType == '_RefreshModel') throw Error('Please use dedicated pushRefreshEvent!');
     const eventsDb = di.get(DBConnectorToken).use(testDbName(di, 'events'));
     return eventsDb.put(event);
+}
+
+export function pushRefreshEvent(di: any, characterId: string, timestamp: number) {
+    const eventsDb = di.get(DBConnectorToken).use(testDbName(di, 'events'));
+    return eventsDb.put({
+        characterId,
+        timestamp,
+        eventType: '_RefreshModel',
+    });
 }
 
 export function saveObject(di: any, dbAlias: string, doc: any) {
