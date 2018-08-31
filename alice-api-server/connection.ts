@@ -1,5 +1,6 @@
 import * as PouchDB from 'pouchdb';
 
+import { CharacterlessEvent, Event } from 'alice-model-engine-api';
 import { EventEmitter } from 'events';
 
 export interface StatusAndBody {
@@ -20,12 +21,11 @@ export class Connection {
     private eventsDb: PouchDB.Database<{}>,
     private timeout: number) { }
 
-  public async processEvents(id: string, events: any[]): Promise<StatusAndBody> {
+  public async processEvents(id: string, events: CharacterlessEvent[]): Promise<StatusAndBody> {
     let latestSavedEventTimestamp = 0;
     try {
       for (const event of events) {
-        const eventsWithCharId = event;
-        eventsWithCharId.characterId = id;
+        const eventsWithCharId: Event = { characterId: id, ...event };
         await this.eventsDb.post(eventsWithCharId);
         latestSavedEventTimestamp = event.timestamp;
       }
