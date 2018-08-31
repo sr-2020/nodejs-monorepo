@@ -36,11 +36,6 @@ export class EventStorage {
     }));
   }
 
-  public async listLastRefresh(): Promise<SyncEvent[]> {
-    const result = await this.db.view('character', 'last-refresh-event', { reduce: true, group: true });
-    return result.rows.map((r) => r.value);
-  }
-
   public store(event: any) {
     event.timestamp = Number(event.timestamp);
     return this.db.put(event);

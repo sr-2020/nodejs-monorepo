@@ -18,27 +18,5 @@ module.exports = {
         }
       }
     },
-
-    'last-refresh-event': {
-      map: function (doc) {
-        if (doc.eventType == '_RefreshModel' && doc.timestamp && doc.characterId) {
-          emit(doc.characterId, doc);
-        }
-      },
-
-      reduce: function (key, values, rereduce) {
-        var last = null;
-        var current;
-
-        for (var i = 0; i < values.length; i++) {
-          current = values[i];
-          if (!last || current.timestamp > last.timestamp) {
-            last = current;
-          }
-        }
-
-        return last;
-      }
-    }
   }
 };
