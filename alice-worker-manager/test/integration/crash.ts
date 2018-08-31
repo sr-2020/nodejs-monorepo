@@ -5,7 +5,6 @@ import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
 import { Container } from 'typedi';
-import { delay } from '../../src/utils';
 import { defaultConfig, initDi } from '../init';
 import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, saveModel } from '../model_helpers';
 
