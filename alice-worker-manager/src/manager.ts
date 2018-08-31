@@ -1,13 +1,10 @@
-import { keyBy } from 'lodash';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs/Rx';
 
 import { Event, SyncEvent } from 'alice-model-engine-api';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { EventStorage } from './event_storage';
 import { EventsSource } from './events_source';
 import { LoggerInterface } from './logger';
-import { ModelStorageBase } from './model_storage';
 import { WorkersPoolInterface } from './workers_pool';
 
 import { Processor, ProcessorFactory } from './processor';
@@ -31,8 +28,6 @@ export class Manager {
   constructor(
     private eventsSource: EventsSource,
     private catalogsStorage: CatalogsStorageInterface,
-    private modelStorage: ModelStorageBase,
-    private eventStorage: EventStorage,
     private pool: WorkersPoolInterface,
     private processorFactory: ProcessorFactory,
     private logger: LoggerInterface,
@@ -44,17 +39,6 @@ export class Manager {
 
     this.pool.init().setCatalogs(catalogs);
     this.subscribeEvents();
-  }
-
-  public async retryAll() {
-    const models = keyBy(await this.modelStorage.findAll(), '_id');
-    const refresh = await this.eventStorage.listLastRefresh();
-
-    for (const event of refresh) {
-      if (models[event.characterId] && models[event.characterId].timestamp < event.timestamp) {
-        this.onSyncEvent(event);
-      }
-    }
   }
 
   public subscribeEvents() {

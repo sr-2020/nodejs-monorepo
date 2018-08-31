@@ -12,7 +12,6 @@ import {
 async function createAndStartManager(): Promise<Manager> {
   const manager = Container.get(ManagerToken);
   await manager.init();
-  await manager.retryAll();
   return manager;
 }
 

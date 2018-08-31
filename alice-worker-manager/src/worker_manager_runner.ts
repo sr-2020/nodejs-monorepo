@@ -36,4 +36,4 @@ for (const viewModel in config.viewModels) {
 }
 
 const manager = Container.get(ManagerToken);
-manager.init().then(() => manager.retryAll());
+manager.init().then(() => {});

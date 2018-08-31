@@ -14,7 +14,6 @@ export class EventsSource {
 
   public follow() {
     const params = {
-      since: 'now',
       include_docs: true,
 
       onChange: (change: PouchDB.Core.ChangesResponseChange<Event>) => {

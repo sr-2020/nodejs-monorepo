@@ -43,8 +43,6 @@ export function initializeDI(config: Config) {
   Container.set(ManagerToken, new Manager(
     Container.get(EventsSourceToken),
     Container.get(CatalogsStorageToken),
-    Container.get(ModelStorageToken),
-    Container.get(EventStorageToken),
     Container.get(WorkersPoolToken),
     Container.get(ProcessorFactoryToken),
     Container.get(LoggerToken)));
