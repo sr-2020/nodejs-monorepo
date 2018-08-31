@@ -4,7 +4,7 @@ import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
 import Container from 'typedi';
-import { destroyDatabases, initDiAndDatabases } from '../init';
+import { destroyDatabases, initDi } from '../init';
 import {
   createModel, getModelVariantsAtTimestamp, pushEvent, pushRefreshEvent,
 } from '../model_helpers';
@@ -21,7 +21,7 @@ describe('Prepopulated events', function() {
   let manager: Manager;
 
   beforeEach(async () => {
-    await initDiAndDatabases();
+    await initDi();
   });
 
   afterEach(async () => {

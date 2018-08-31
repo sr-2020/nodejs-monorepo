@@ -55,9 +55,8 @@ export const defaultConfig: Config = {
 
 Object.freeze(defaultConfig);
 
-export async function initDiAndDatabases(config: Config = defaultConfig) {
+export async function initDi(config: Config = defaultConfig) {
     initializeDI(config);
-    await Container.get(DBConnectorToken).initViews();
 }
 
 export async function destroyDatabases() {

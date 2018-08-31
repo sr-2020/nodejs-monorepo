@@ -17,7 +17,6 @@ export interface FilterParams {
 }
 
 export interface DBConnectorInterface {
-  initViews(): Promise<void>;
   use(name: string): DBInterface;
 }
 
@@ -27,7 +26,6 @@ export interface DBInterface {
   list(params?: any): Promise<any>;
   put(doc: PutableDocument): Promise<any>;
   remove(id: ID, rev: string): Promise<any>;
-  view(design: string, view: string, params: any): Promise<any>;
   follow(params: FilterParams): void;
 
   createIndex(options: PouchDB.Find.CreateIndexOptions);

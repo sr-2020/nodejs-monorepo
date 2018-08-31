@@ -5,7 +5,7 @@ import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
 import { Container } from 'typedi';
-import { defaultConfig, destroyDatabases, initDiAndDatabases } from '../init';
+import { defaultConfig, destroyDatabases, initDi } from '../init';
 import { createModel, createModelObj, getModel, getModelAtTimestamp,
   pushEvent, pushRefreshEvent, saveModel } from '../model_helpers';
 
@@ -18,7 +18,7 @@ describe('Crash scenarios', function() {
   beforeEach(async () => {
     const config = cloneDeep(defaultConfig);
     config.logger.default = { console: { silent: true } };
-    await initDiAndDatabases(config);
+    await initDi(config);
     manager = di.get(ManagerToken);
     await manager.init();
   });

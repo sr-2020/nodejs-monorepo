@@ -40,7 +40,7 @@ describe('API Server - long timeout', () => {
       _id: '00001', login: 'some_user', password: 'qwerty',
     };
     await dbContainer.accountsDb().put(account);
-    await dbContainer.createViews();
+    await dbContainer.createIndices();
   });
 
   afterEach(async () => {
@@ -87,7 +87,7 @@ describe('API Server - medium timeout', () => {
     await dbContainer.accountsDb().put(
       {...createEmptyAccount(),  _id: '00001', login: 'some_user', password: 'qwerty' },
     );
-    await dbContainer.createViews();
+    await dbContainer.createIndices();
   });
 
   afterEach(async () => {

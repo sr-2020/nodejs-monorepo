@@ -57,7 +57,7 @@ describe('Mass push notifications', () => {
     await dbContainer.accountsDb().put(createAccount('00002', '00002spushtoken'));
     await dbContainer.accountsDb().put(createAccount('00003', '00001pushtoken'));
 
-    await dbContainer.createViews();
+    await dbContainer.createIndices();
     Container.set(DatabasesContainerToken, dbContainer);
   });
 

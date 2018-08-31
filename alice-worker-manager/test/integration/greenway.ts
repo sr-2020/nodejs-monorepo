@@ -5,7 +5,7 @@ import { Manager } from '../../src/manager';
 
 import Container from 'typedi';
 import { delay } from '../../src/utils';
-import { destroyDatabases, initDiAndDatabases } from '../init';
+import { destroyDatabases, initDi } from '../init';
 import {
   createModel, getModelAtTimestamp, getModelVariants,
   getModelVariantsAtTimestamp, getObject, pushEvent, pushRefreshEvent, saveObject,
@@ -18,7 +18,7 @@ describe('Green way', function() {
   const di = Container;
 
   beforeEach(async () => {
-    await initDiAndDatabases();
+    await initDi();
     manager = di.get(ManagerToken);
     await manager.init();
   });

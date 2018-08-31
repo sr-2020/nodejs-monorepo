@@ -80,7 +80,7 @@ describe('Economy', () => {
       {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
     );
 
-    await dbContainer.createViews();
+    await dbContainer.createIndices();
     Container.set(DatabasesContainerToken, dbContainer);
 
     app = new App();

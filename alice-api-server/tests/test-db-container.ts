@@ -72,18 +72,4 @@ export class TestDatabasesContainer extends DatabasesContainer {
     for (const db of this._viewmodelDbs.values())
       await db.destroy();
   }
-
-  public async createViews() {
-    await this.createIndices();
-
-    await (this.eventsDb() as PouchDB.Database<any>).put({
-      _id: '_design/character',
-      views: {
-        'refresh-events': {
-          // tslint:disable-next-line:max-line-length
-          map: "function (doc) { if (doc.timestamp && doc.characterId && doc.eventType == '_RefreshModel') emit([doc.characterId, doc.timestamp]);  }",
-        },
-      },
-    });
-  }
 }

@@ -106,7 +106,7 @@ describe('API Server', () => {
       {...createEmptyAccount(), _id: '55555', login: 'user_without_model', password: 'hunter2' },
     );
 
-    await dbContainer.createViews();
+    await dbContainer.createIndices();
   });
 
   afterEach(async () => {

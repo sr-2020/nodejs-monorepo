@@ -73,18 +73,10 @@ export function pushEvent(event: Event) {
 
 export async function pushRefreshEvent(characterId: string, timestamp: number) {
     const metadataDb = Container.get(ConfigToken).db.metadata;
-    if (metadataDb) {
-        const metadata: any = await Container.get(DBConnectorToken).use(metadataDb).getOrNull(characterId)
-            || { _id: characterId };
-        metadata.scheduledUpdateTimestamp = timestamp;
-        await Container.get(DBConnectorToken).use(metadataDb).put(metadata);
-    } else {
-        await pushEvent({
-            characterId,
-            timestamp,
-            eventType: '_RefreshModel',
-        });
-    }
+    const metadata: any = await Container.get(DBConnectorToken).use(metadataDb).getOrNull(characterId)
+        || { _id: characterId };
+    metadata.scheduledUpdateTimestamp = timestamp;
+    await Container.get(DBConnectorToken).use(metadataDb).put(metadata);
 }
 
 export function saveObject(dbAlias: string, doc: any) {
