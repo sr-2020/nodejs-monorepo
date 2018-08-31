@@ -32,20 +32,20 @@ describe('Green way', function() {
   });
 
   it('Should process events', async () => {
-    const model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
+    const model = await createModel(undefined, { value: '', otherValue: 'some useless info' });
     const timestamp = model.timestamp;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 5,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 10);
+    await pushRefreshEvent(model._id, timestamp + 10);
 
     const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 10,
+      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
         ['models', 'workingModels', 'defaultViewModels']);
 
     expect(baseModel).to.exist;
@@ -64,34 +64,34 @@ describe('Green way', function() {
   });
 
   it('Should sort events by timestamp', async () => {
-    const model = await createModel(di);
+    const model = await createModel();
     const timestamp = model.timestamp;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 100,
       data: { value: 'A' },
     });
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 50,
       data: { value: 'B' },
     });
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 200,
       data: { value: 'C' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 150);
+    await pushRefreshEvent(model._id, timestamp + 150);
 
     const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 150,
+      await getModelVariantsAtTimestamp(model._id, timestamp + 150,
         ['models', 'workingModels', 'defaultViewModels']);
 
     if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
@@ -101,45 +101,45 @@ describe('Green way', function() {
   });
 
   it('Should continue to process events for the same character', async () => {
-    const model = await createModel(di);
+    const model = await createModel();
     let timestamp = model.timestamp;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 10,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 20);
+    await pushRefreshEvent(model._id, timestamp + 20);
 
     await delay(400);
 
     timestamp = Date.now();
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 10,
       data: { value: 'B' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 20);
+    await pushRefreshEvent(model._id, timestamp + 20);
 
-    const baseModel = await getModelAtTimestamp(di, model._id, timestamp + 20);
+    const baseModel = await getModelAtTimestamp(model._id, timestamp + 20);
     expect(baseModel).to.has.property('value', 'AB');
   });
 
   it('Should process events queued with short intervals', async () => {
-    const model = await createModel(di);
+    const model = await createModel();
     const timestamp = model.timestamp + 1;
 
-    await pushRefreshEvent(di, model._id, timestamp + 0);
-    await pushRefreshEvent(di, model._id, timestamp + 1);
-    await pushRefreshEvent(di, model._id, timestamp + 2);
+    await pushRefreshEvent(model._id, timestamp + 0);
+    await pushRefreshEvent(model._id, timestamp + 1);
+    await pushRefreshEvent(model._id, timestamp + 2);
 
     const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 2,
+      await getModelVariantsAtTimestamp(model._id, timestamp + 2,
         ['models', 'workingModels', 'defaultViewModels']);
 
     if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
@@ -148,52 +148,52 @@ describe('Green way', function() {
   });
 
   it('Should be able to aquire external objects', async () => {
-    const model = await createModel(di);
+    const model = await createModel();
     const timestamp = model.timestamp;
 
-    await saveObject(di, 'counters', {
+    await saveObject('counters', {
       _id: 'abc',
       value: 0,
     });
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'increaseExternalCounterAbc',
       timestamp: timestamp + 10,
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 20);
+    await pushRefreshEvent(model._id, timestamp + 20);
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'increaseExternalCounterAbc',
       timestamp: timestamp + 30,
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 50);
+    await pushRefreshEvent(model._id, timestamp + 50);
 
     // Not interested in actual model, just wait for processing.
-    await getModelAtTimestamp(di, model._id, timestamp + 50);
+    await getModelAtTimestamp(model._id, timestamp + 50);
 
-    const abc = await getObject(di, 'counters', 'abc');
+    const abc = await getObject('counters', 'abc');
 
     expect(abc).to.exist;
-    expect(abc.value).to.equals(2);
+    expect(abc).to.deep.include({value: 2});
   });
 
   it('Do not save undefined viewmodels', async () => {
-    const model = await createModel(di, undefined, { skipFromViewmodel: true });
+    const model = await createModel(undefined, { skipFromViewmodel: true });
     const timestamp = model.timestamp;
 
-    await pushRefreshEvent(di, model._id, timestamp + 1);
+    await pushRefreshEvent(model._id, timestamp + 1);
 
     const [baseModel, workingModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 1, ['models', 'workingModels']);
+      await getModelVariantsAtTimestamp(model._id, timestamp + 1, ['models', 'workingModels']);
 
     expect(baseModel).to.exist;
     expect(workingModel).to.exist;
 
-    const [viewModel] = await getModelVariants(di, model._id, ['defaultViewModels']);
+    const [viewModel] = await getModelVariants(model._id, ['defaultViewModels']);
     expect(viewModel).not.to.exist;
   });
 });

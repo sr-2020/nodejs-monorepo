@@ -19,7 +19,6 @@ describe('Prepopulated events', function() {
   this.timeout(5000);
 
   let manager: Manager;
-  const di = Container;
 
   beforeEach(async () => {
     await initDiAndDatabases();
@@ -31,22 +30,22 @@ describe('Prepopulated events', function() {
   });
 
   it('Processes events existed before start', async () => {
-    const model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
+    const model = await createModel(undefined, { value: '', otherValue: 'some useless info' });
     const timestamp = model.timestamp;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 5,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp + 10);
+    await pushRefreshEvent(model._id, timestamp + 10);
 
     manager = await createAndStartManager();
 
     const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 10,
+      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
         ['models', 'workingModels', 'defaultViewModels']);
 
     expect(baseModel).to.exist;
@@ -62,24 +61,24 @@ describe('Prepopulated events', function() {
   });
 
   it('Will ignore events earlier than model timestamp', async () => {
-    const model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
+    const model = await createModel(undefined, { value: '', otherValue: 'some useless info' });
     const timestamp = model.timestamp;
 
     // Following 2 events are in model "past"
-    await pushEvent(di, {
+    await pushEvent({
       characterId: model._id,
       eventType: 'concat',
       timestamp: timestamp - 5,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, model._id, timestamp - 3);
-    await pushRefreshEvent(di, model._id, timestamp + 10);
+    await pushRefreshEvent(model._id, timestamp - 3);
+    await pushRefreshEvent(model._id, timestamp + 10);
 
     manager = await createAndStartManager();
 
     const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(di, model._id, timestamp + 10,
+      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
         ['models', 'workingModels', 'defaultViewModels']);
 
     expect(baseModel).to.exist;

@@ -32,38 +32,38 @@ describe('Crash scenarios', function() {
   });
 
   it('Should not crash if model crashes', async () => {
-    const crashModel = await createModel(di);
+    const crashModel = await createModel();
     let timestamp = crashModel.timestamp + 1;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: crashModel._id,
       eventType: 'crash',
       timestamp,
     });
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 2);
+    await pushRefreshEvent(crashModel._id, timestamp + 2);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 3);
+    await pushRefreshEvent(crashModel._id, timestamp + 3);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
+    await pushRefreshEvent(crashModel._id, timestamp + 4);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
+    await pushRefreshEvent(crashModel._id, timestamp + 4);
 
     // now let's try normal operation
 
-    const anotherModel = await createModel(di);
+    const anotherModel = await createModel();
     timestamp = anotherModel.timestamp + 1;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: anotherModel._id,
       eventType: 'concat',
       timestamp,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, anotherModel._id, timestamp + 50);
+    await pushRefreshEvent(anotherModel._id, timestamp + 50);
 
-    const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
+    const baseModel = await getModelAtTimestamp(anotherModel._id, timestamp + 50);
 
     expect(baseModel).to.has.property('value', 'A');
   });
@@ -72,51 +72,51 @@ describe('Crash scenarios', function() {
     const model = createModelObj();
     const timestamp = model.timestamp + 1;
     delete model.timestamp;
-    await saveModel(di, model);
+    await saveModel(model);
 
-    let baseModel = await getModel(di, model._id);
+    let baseModel = await getModel(model._id);
     expect(baseModel).not.to.has.property('timestamp');
 
-    await pushRefreshEvent(di, model._id, timestamp);
+    await pushRefreshEvent(model._id, timestamp);
 
-    baseModel = await getModelAtTimestamp(di, model._id, timestamp);
+    baseModel = await getModelAtTimestamp(model._id, timestamp);
 
     expect(baseModel).to.has.property('timestamp');
   });
 
   it('Should not crash if worker was somehow killed', async () => {
-    const crashModel = await createModel(di);
+    const crashModel = await createModel();
     let timestamp = crashModel.timestamp + 1;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: crashModel._id,
       eventType: 'kill',
       timestamp,
     });
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 2);
+    await pushRefreshEvent(crashModel._id, timestamp + 2);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 3);
+    await pushRefreshEvent(crashModel._id, timestamp + 3);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
+    await pushRefreshEvent(crashModel._id, timestamp + 4);
 
-    await pushRefreshEvent(di, crashModel._id, timestamp + 4);
+    await pushRefreshEvent(crashModel._id, timestamp + 4);
 
     // now let's try normal operation
 
-    const anotherModel = await createModel(di);
+    const anotherModel = await createModel();
     timestamp = anotherModel.timestamp + 1;
 
-    await pushEvent(di, {
+    await pushEvent({
       characterId: anotherModel._id,
       eventType: 'concat',
       timestamp,
       data: { value: 'A' },
     });
 
-    await pushRefreshEvent(di, anotherModel._id, timestamp + 50);
+    await pushRefreshEvent(anotherModel._id, timestamp + 50);
 
-    const baseModel = await getModelAtTimestamp(di, anotherModel._id, timestamp + 50);
+    const baseModel = await getModelAtTimestamp(anotherModel._id, timestamp + 50);
 
     expect(baseModel).to.has.property('value', 'A');
   });
