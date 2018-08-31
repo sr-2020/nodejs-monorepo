@@ -1,8 +1,13 @@
 export type ID = string;
-export interface Document {
-  _id: ID;
+
+export interface PutableDocument {
+  _id?: ID;
   _rev?: string;
   [key: string]: any;
+}
+
+export interface Document extends PutableDocument {
+  _id: ID;
 }
 
 export interface FilterParams {
@@ -20,7 +25,7 @@ export interface DBInterface {
   get(id: ID, params?: any): Promise<Document>;
   getOrNull(id: ID, params?: any): Promise<Document | null>;
   list(params?: any): Promise<any>;
-  put(doc: Document): Promise<any>;
+  put(doc: PutableDocument): Promise<any>;
   remove(id: ID, rev: string): Promise<any>;
   view(design: string, view: string, params: any): Promise<any>;
   follow(params: FilterParams): void;

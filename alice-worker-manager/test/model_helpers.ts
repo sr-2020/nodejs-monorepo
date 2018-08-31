@@ -1,11 +1,12 @@
 import { Event } from 'alice-model-engine-api';
 import { merge } from 'lodash';
+import { ContainerInstance } from '../node_modules/typedi';
 import { Document } from '../src/db/interface';
 import { dbName } from '../src/db_init/util';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 import { delay } from '../src/utils';
 
-function testDbName(di: any, alias: string): string {
+function testDbName(di: ContainerInstance, alias: string): string {
     return dbName(di.get(ConfigToken), alias);
 }
 
@@ -26,24 +27,25 @@ export function createModelObj(id?: string, fields?: any) {
     return model;
 }
 
-export function saveModel(di: any, model: any) {
+export function saveModel(di: ContainerInstance, model: any) {
     const modelsDb = di.get(DBConnectorToken).use(testDbName(di, 'models'));
     return modelsDb.put(model);
 }
 
-export async function createModel(di: any, id?: string, fields?: any): Promise<Document> {
+export async function createModel(di: ContainerInstance, id?: string, fields?: any): Promise<Document> {
     const model = createModelObj(id, fields);
     await saveModel(di, model);
     return model;
 }
 
-export function getModel(di: any, id: string, dbAlias: string = 'models') {
+export function getModel(di: ContainerInstance, id: string, dbAlias: string = 'models') {
     const modelsDb = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return modelsDb.getOrNull(id);
 }
 
 // Waits until model with given timestamp will be generated
-export async function getModelAtTimestamp(di: any, id: string, timestamp: number, dbAlias: string = 'models') {
+export async function getModelAtTimestamp(di: ContainerInstance, id: string,
+                                          timestamp: number, dbAlias: string = 'models') {
     while (true) {
         const model = await getModel(di, id, dbAlias);
         if (model && 'timestamp' in model && model.timestamp == timestamp)
@@ -52,13 +54,13 @@ export async function getModelAtTimestamp(di: any, id: string, timestamp: number
     }
 }
 
-export function getModelVariants(di: any, id: string,
+export function getModelVariants(di: ContainerInstance, id: string,
                                  aliases: string[] = ['models', 'workingModels', 'defaultViewModels']) {
     const pending = aliases.map((alias) => getModel(di, id, alias));
     return Promise.all(pending);
 }
 
-export function getModelVariantsAtTimestamp(di: any, id: string, timestamp: number,
+export function getModelVariantsAtTimestamp(di: ContainerInstance, id: string, timestamp: number,
                                             aliases: string[] = ['models', 'workingModels', 'defaultViewModels']) {
     const pending = aliases.map((alias) => getModelAtTimestamp(di, id, timestamp, alias));
     return Promise.all(pending);
@@ -79,7 +81,7 @@ export function pushRefreshEvent(di: any, characterId: string, timestamp: number
     });
 }
 
-export function saveObject(di: any, dbAlias: string, doc: any) {
+export function saveObject(di: ContainerInstance, dbAlias: string, doc: any) {
     const db = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return db.put(doc);
 }

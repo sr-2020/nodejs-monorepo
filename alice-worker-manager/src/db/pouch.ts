@@ -5,7 +5,7 @@ Pouch.plugin(PouchDBFind);
 import { Config } from '../config';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
 import { dbName, deepToString } from '../db_init/util';
-import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from './interface';
+import { DBConnectorInterface, DBInterface, Document, FilterParams, ID, PutableDocument } from './interface';
 
 export class PouchConnector implements DBConnectorInterface {
   private cache: { [name: string]: PouchDb } = {};
@@ -58,7 +58,7 @@ export class PouchDb implements DBInterface {
     return this.db.allDocs(params);
   }
 
-  public put(doc: Document) {
+  public put(doc: PutableDocument) {
     if (!isNil(doc._id)) {
       return this.db.put(doc);
     } else {
