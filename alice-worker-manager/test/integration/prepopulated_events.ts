@@ -16,7 +16,7 @@ async function createAndStartManager(): Promise<Manager> {
 }
 
 describe('Prepopulated events', function() {
-  this.timeout(2000);
+  this.timeout(5000);
 
   let manager: Manager;
   const di = Container;
