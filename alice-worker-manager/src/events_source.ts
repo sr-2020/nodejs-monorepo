@@ -1,4 +1,4 @@
-import { Event, SyncEvent, ModelMetadata } from 'alice-model-engine-api';
+import { Event, ModelMetadata, SyncEvent } from 'alice-model-engine-api';
 import * as Rx from 'rxjs/Rx';
 import { Config } from './config';
 import { DBConnectorInterface, DBInterface } from './db/interface';
