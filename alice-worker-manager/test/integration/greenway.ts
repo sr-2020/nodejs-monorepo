@@ -5,7 +5,7 @@ import { Manager } from '../../src/manager';
 
 import Container from 'typedi';
 import { delay } from '../../src/utils';
-import { initDi } from '../init';
+import { destroyDatabases, initDiAndDatabases } from '../init';
 import {
   createModel, getModelAtTimestamp, getModelVariants,
   getModelVariantsAtTimestamp, getObject, pushEvent, saveObject,
@@ -14,17 +14,21 @@ import {
 describe('Green way', function() {
   this.timeout(5000);
 
-  let manager: Manager;
+  let manager: Manager | null;
   const di = Container;
 
-  before(async () => {
-    initDi();
+  beforeEach(async () => {
+    await initDiAndDatabases();
     manager = di.get(ManagerToken);
     await manager.init();
   });
 
-  after(() => {
-    return manager.stop();
+  afterEach(async () => {
+    if (manager) {
+      await manager.stop();
+      manager = null;
+    }
+    await destroyDatabases();
   });
 
   it('Should process events', async () => {

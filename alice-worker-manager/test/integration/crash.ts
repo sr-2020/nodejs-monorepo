@@ -5,26 +5,29 @@ import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
 
 import { Container } from 'typedi';
-import { defaultConfig, initDi } from '../init';
+import { defaultConfig, destroyDatabases, initDiAndDatabases } from '../init';
 import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, saveModel } from '../model_helpers';
 
 describe('Crash scenarios', function() {
   this.timeout(15000);
 
-  let manager: Manager;
+  let manager: Manager | null;
   const di = Container;
 
-  before(async () => {
+  beforeEach(async () => {
     const config = cloneDeep(defaultConfig);
     config.logger.default = { console: { silent: true } };
-    initDi(config);
-
-    manager = Container.get(ManagerToken);
+    await initDiAndDatabases(config);
+    manager = di.get(ManagerToken);
     await manager.init();
   });
 
-  after(() => {
-    return manager.stop();
+  afterEach(async () => {
+    if (manager) {
+      await manager.stop();
+      manager = null;
+    }
+    await destroyDatabases();
   });
 
   it('Should not crash if model crashes', async () => {

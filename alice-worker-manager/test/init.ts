@@ -1,9 +1,10 @@
-import { cloneDeep } from 'lodash';
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
+import { Container } from '../node_modules/typedi';
 import { Config } from '../src/config';
 import { initializeDI } from '../src/di';
+import { DBConnectorToken, ConfigToken } from '../src/di_tokens';
 
 Pouch.plugin(MemoryAdapter);
 
@@ -11,7 +12,6 @@ export const defaultConfig: Config = {
     db: {
         url: '',
         adapter: 'memory',
-        initViews: true,
         events: 'events-test',
         models: 'models-test',
         workingModels: 'working-models-test',
@@ -54,14 +54,14 @@ export const defaultConfig: Config = {
 
 Object.freeze(defaultConfig);
 
-const counter = 0;
-
-export function initDi(config: Config = defaultConfig) {
-    config = cloneDeep(config);
-
-    for (const alias of ['events', 'models', 'workingModels']) {
-        config.db[alias] += '-' + counter;
-    }
-
+export async function initDiAndDatabases(config: Config = defaultConfig) {
     initializeDI(config);
+    await Container.get(DBConnectorToken).initViews();
+}
+
+export async function destroyDatabases() {
+    const config = Container.get(ConfigToken);
+    for (const alias of ['events', 'models', 'workingModels']) {
+        await Container.get(DBConnectorToken).use(config.db[alias]).destroy();
+    }
 }

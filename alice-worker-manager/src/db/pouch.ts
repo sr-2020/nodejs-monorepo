@@ -8,18 +8,14 @@ import { DBConnectorInterface, DBInterface, Document, FilterParams, ID } from '.
 export class PouchConnector implements DBConnectorInterface {
   private cache: { [name: string]: PouchDb } = {};
 
-  constructor(private _config: Config) {
-    if (this._config.db.initViews) {
-      this.initViews();
-    }
-  }
+  constructor(private _config: Config) {}
 
   public use(name: string): DBInterface {
     if (this.cache[name]) return this.cache[name];
     return this.cache[name] = new PouchDb(this._config.db.url + name, this._config.db.adapter);
   }
 
-  private async initViews() {
+  public async initViews() {
     const designDocs = getAllDesignDocs();
     for (const ddoc of designDocs) {
       const ddocNoDbs = clone(ddoc);
@@ -89,5 +85,9 @@ export class PouchDb implements DBInterface {
       feed = feed.on('change', onChange);
     }
     // TODO(aeremin): Handle 'error', e.g. database connection loss
+  }
+
+  public async destroy(): Promise<void> {
+    await this.db.destroy();
   }
 }

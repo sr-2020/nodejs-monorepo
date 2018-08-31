@@ -12,6 +12,7 @@ export interface FilterParams {
 }
 
 export interface DBConnectorInterface {
+  initViews(): Promise<void>;
   use(name: string): DBInterface;
 }
 
@@ -23,4 +24,7 @@ export interface DBInterface {
   remove(id: ID, rev: string): Promise<any>;
   view(design: string, view: string, params: any): Promise<any>;
   follow(params: FilterParams): void;
+
+  // Destroys the whole database! Make sure you know what are you doing.
+  destroy(): Promise<void>;
 }
