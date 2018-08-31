@@ -36,16 +36,6 @@ export class EventStorage {
     }));
   }
 
-  public async lastRefresh(characterId: string): Promise<SyncEvent | null> {
-    const result = await this.db.view('character', 'last-refresh-event', { key: characterId, reduce: true });
-
-    if (result.rows.length) {
-      return result.rows[0].value;
-    } else {
-      return null;
-    }
-  }
-
   public async listLastRefresh(): Promise<SyncEvent[]> {
     const result = await this.db.view('character', 'last-refresh-event', { reduce: true, group: true });
     return result.rows.map((r) => r.value);

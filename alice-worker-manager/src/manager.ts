@@ -91,9 +91,6 @@ export class Manager {
     return true;
   }
 
-  public queryLastRefresh =
-    (event: Event) => Observable.fromPromise(this.eventStorage.lastRefresh(event.characterId))
-
   public onSyncEvent = (event: SyncEvent) => {
     const characterId = event.characterId;
 
