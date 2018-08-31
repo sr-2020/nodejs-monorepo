@@ -2,6 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
+import { Event } from 'alice-model-engine-api';
 import { Token } from 'typedi';
 import { Connection } from '../connection';
 import { AliceAccount, ShieldValues } from '../models/alice-account';
@@ -46,7 +47,7 @@ export interface DatabasesContainerInterface {
   accountsDb(): PouchDB.Database<AliceAccount>;
   modelsDb(): PouchDB.Database<{}>;
   viewModelDb(type: string): PouchDB.Database<ViewModel>;
-  eventsDb(): PouchDB.Database<{ timestamp: number }>;
+  eventsDb(): PouchDB.Database<Event>;
 
   economyDb(): PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>;
   objCounterDb(): PouchDB.Database<ShieldValues>;
@@ -62,7 +63,7 @@ export class DatabasesContainer implements DatabasesContainerInterface {
     protected _accountsDb: PouchDB.Database<AliceAccount>,
     protected _modelsDb: PouchDB.Database<{}>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
-    protected _eventsDb: PouchDB.Database<{ timestamp: number }>,
+    protected _eventsDb: PouchDB.Database<Event>,
     protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>,
     protected _objCounterDb: PouchDB.Database<ShieldValues>,
   ) {

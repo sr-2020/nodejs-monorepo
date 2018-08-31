@@ -4,10 +4,10 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import { BalancesDocument, DatabasesContainer, TransactionDocument } from '../services/db-container';
-
+import { Event } from 'alice-model-engine-api';
 import { AliceAccount, Professions, ShieldValues } from '../models/alice-account';
 import { EconomyConstants } from '../models/economy-constants';
+import { BalancesDocument, DatabasesContainer, TransactionDocument } from '../services/db-container';
 
 export function createEmptyAccount(): AliceAccount {
   const trade = {
@@ -45,7 +45,7 @@ export function createEmptyAccount(): AliceAccount {
 export class TestDatabasesContainer extends DatabasesContainer {
 
   constructor() {
-    const eventsDb = new PouchDB<{timestamp: number}>('events', { adapter: 'memory' });
+    const eventsDb = new PouchDB<Event>('events', { adapter: 'memory' });
     const mobileViewModelDb = new PouchDB<{ timestamp: number }>('viewmodels_mobile', { adapter: 'memory' });
     const modelDb = new PouchDB('models', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', mobileViewModelDb]]);
