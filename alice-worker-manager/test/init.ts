@@ -4,7 +4,7 @@ import * as MemoryAdapter from 'pouchdb-adapter-memory';
 import { Container } from '../node_modules/typedi';
 import { Config } from '../src/config';
 import { initializeDI } from '../src/di';
-import { DBConnectorToken, ConfigToken } from '../src/di_tokens';
+import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
 
 Pouch.plugin(MemoryAdapter);
 
@@ -14,6 +14,7 @@ export const defaultConfig: Config = {
         adapter: 'memory',
         events: 'events-test',
         models: 'models-test',
+        metadata: 'metadata-test',
         workingModels: 'working-models-test',
         accounts: '',
         economy: '',
@@ -61,7 +62,7 @@ export async function initDiAndDatabases(config: Config = defaultConfig) {
 
 export async function destroyDatabases() {
     const config = Container.get(ConfigToken);
-    for (const alias of ['events', 'models', 'workingModels']) {
+    for (const alias of ['events', 'models', 'workingModels', 'metadata']) {
         await Container.get(DBConnectorToken).use(config.db[alias]).destroy();
     }
 }

@@ -1,6 +1,7 @@
-import { Event } from 'alice-model-engine-api';
+import { Event, ModelMetadata } from 'alice-model-engine-api';
 import { merge } from 'lodash';
 import { ContainerInstance } from '../node_modules/typedi';
+import { Config } from '../src/config';
 import { Document } from '../src/db/interface';
 import { dbName } from '../src/db_init/util';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';
@@ -66,19 +67,25 @@ export function getModelVariantsAtTimestamp(di: ContainerInstance, id: string, t
     return Promise.all(pending);
 }
 
-export function pushEvent(di: any, event: Event) {
-    if (event.eventType == '_RefreshModel') throw Error('Please use dedicated pushRefreshEvent!');
+export function pushEvent(di: ContainerInstance, event: Event) {
     const eventsDb = di.get(DBConnectorToken).use(testDbName(di, 'events'));
     return eventsDb.put(event);
 }
 
-export function pushRefreshEvent(di: any, characterId: string, timestamp: number) {
-    const eventsDb = di.get(DBConnectorToken).use(testDbName(di, 'events'));
-    return eventsDb.put({
-        characterId,
-        timestamp,
-        eventType: '_RefreshModel',
-    });
+export async function pushRefreshEvent(di: ContainerInstance, characterId: string, timestamp: number) {
+    const metadataDb = di.get(ConfigToken).db.metadata;
+    if (metadataDb) {
+        const metadata: any = await di.get(DBConnectorToken).use(metadataDb).getOrNull(characterId)
+            || { _id: characterId };
+        metadata.scheduledUpdateTimestamp = timestamp;
+        await di.get(DBConnectorToken).use(metadataDb).put(metadata);
+    } else {
+        await pushEvent(di, {
+            characterId,
+            timestamp,
+            eventType: '_RefreshModel',
+        });
+    }
 }
 
 export function saveObject(di: ContainerInstance, dbAlias: string, doc: any) {
@@ -86,7 +93,7 @@ export function saveObject(di: ContainerInstance, dbAlias: string, doc: any) {
     return db.put(doc);
 }
 
-export function getObject(di: any, dbAlias: string, id: string) {
+export function getObject(di: ContainerInstance, dbAlias: string, id: string) {
     const db = di.get(DBConnectorToken).use(testDbName(di, dbAlias));
     return db.getOrNull(id);
 }

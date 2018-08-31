@@ -2,6 +2,7 @@ export interface DbConfig {
   url: string;
   adapter?: string;
   events: string;
+  metadata?: string;
   models: string;
   workingModels: string;
   accounts: string;
