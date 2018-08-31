@@ -65,4 +65,46 @@ describe.only('Prepopulated events', function() {
     expect(viewModel).to.has.property('timestamp', baseModel.timestamp);
     expect(viewModel).not.to.has.property('otherValue');
   });
+
+  it('Will ignore events earlier than model timestamp', async () => {
+    const model = await createModel(di, undefined, { value: '', otherValue: 'some useless info' });
+    const timestamp = model.timestamp;
+
+    // Following 2 events are in model "past"
+    await pushEvent(di, {
+      characterId: model._id,
+      eventType: 'concat',
+      timestamp: timestamp - 5,
+      data: { value: 'A' },
+    });
+
+    await pushEvent(di, {
+      characterId: model._id,
+      eventType: '_RefreshModel',
+      timestamp: timestamp - 3,
+    });
+
+    await pushEvent(di, {
+      characterId: model._id,
+      eventType: '_RefreshModel',
+      timestamp: timestamp + 10,
+    });
+
+    manager = await createAndStartManager();
+
+    const [baseModel, workingModel, viewModel] =
+      await getModelVariantsAtTimestamp(di, model._id, timestamp + 10,
+        ['models', 'workingModels', 'defaultViewModels']);
+
+    expect(baseModel).to.exist;
+    expect(workingModel).to.exist;
+    expect(viewModel).to.exist;
+    expect(baseModel).to.has.property('value', '');
+    expect(baseModel).to.has.property('otherValue', 'some useless info');
+    expect(workingModel).to.has.property('value', '');
+    expect(workingModel).to.has.property('timestamp', baseModel.timestamp);
+    expect(viewModel).to.has.property('value', '');
+    expect(viewModel).to.has.property('timestamp', baseModel.timestamp);
+    expect(viewModel).not.to.has.property('otherValue');
+  });
 });
