@@ -5,7 +5,6 @@ import { CharacterlessEvent } from 'alice-model-engine-api';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, StatusAndBody } from './connection';
-import { characterIdTimestampOnlyRefreshesView } from './consts';
 import { DatabasesContainerToken } from './services/db-container';
 import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
@@ -29,7 +28,8 @@ export class EventsProcessor {
       if (this.dbContainer().connections.has(id))
         throw new HttpError(429, 'Multiple connections from one client are not allowed');
 
-      this.dbContainer().connections.set(id, new Connection(this.dbContainer().eventsDb(),
+      this.dbContainer().connections.set(id, new Connection(
+        this.dbContainer().eventsDb(),  this.dbContainer().metadataDb(),
         Container.get(ApplicationSettingsToken).viewmodelUpdateTimeout));
 
       const s = await this.dbContainer().connections.get(id).processEvents(id, events);
@@ -39,7 +39,7 @@ export class EventsProcessor {
       // In this case we don't need to subscribe for viewmodel updates or
       // block other clients from connecting.
       // So we don't add Connection to this.connections.
-      const connection = new Connection(this.dbContainer().eventsDb(), 0);
+      const connection = new Connection(this.dbContainer().eventsDb(), this.dbContainer().metadataDb(), 0);
       return await connection.processEvents(id, events);
     }
   }
@@ -53,18 +53,14 @@ export class EventsProcessor {
   }
 
   public async latestExistingMobileEventTimestamp(id: string): Promise<number> {
-    const docs = await this.dbContainer().eventsDb().query<any>(characterIdTimestampOnlyRefreshesView,
-      { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 });
-    // TODO(aeremin) Remove after investigation
     try {
-      return docs.rows.length ? docs.rows[0].doc.timestamp : 0;
+      return (await this.dbContainer().metadataDb().get(id)).scheduledUpdateTimestamp;
     } catch (e) {
-      this.logger.error('Unexpected error in latestExistingMobileEventTimestamp',
-        {
-          query: { include_docs: true, descending: true, endkey: [id], startkey: [id, {}], limit: 1 },
-          response: docs.rows,
-        });
-      return 0;
+      if (e.status == 404) {
+        return 0;
+      } else {
+        throw e;
+      }
     }
   }
 

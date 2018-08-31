@@ -1,6 +1,6 @@
 import * as PouchDB from 'pouchdb';
 
-import { CharacterlessEvent, Event } from 'alice-model-engine-api';
+import { CharacterlessEvent, Event, ModelMetadata } from 'alice-model-engine-api';
 import { EventEmitter } from 'events';
 
 export interface StatusAndBody {
@@ -18,16 +18,28 @@ export class Connection {
   private viewModelUpdated = new EventEmitter();
 
   constructor(
-    private eventsDb: PouchDB.Database<{}>,
+    private eventsDb: PouchDB.Database<Event>,
+    private metadataDb: PouchDB.Database<ModelMetadata>,
     private timeout: number) { }
 
   public async processEvents(id: string, events: CharacterlessEvent[]): Promise<StatusAndBody> {
     let latestSavedEventTimestamp = 0;
+    let latestRefreshModelTimestamp: number | null = null;
     try {
       for (const event of events) {
         const eventsWithCharId: Event = { characterId: id, ...event };
-        await this.eventsDb.post(eventsWithCharId);
+        if (event.eventType == '_RefreshModel') {
+          latestRefreshModelTimestamp = event.timestamp;
+        } else {
+          await this.eventsDb.post(eventsWithCharId);
+        }
         latestSavedEventTimestamp = event.timestamp;
+      }
+      if (latestRefreshModelTimestamp != null) {
+        const scheduledUpdateTimestamp = latestRefreshModelTimestamp;
+        await this.metadataDb.upsert(id, (doc) => {
+          return {...doc, _id: id, scheduledUpdateTimestamp};
+        });
       }
     } catch (e) {
       console.warn(e);

@@ -2,7 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
-import { Event } from 'alice-model-engine-api';
+import { Event, ModelMetadata } from 'alice-model-engine-api';
 import { Token } from 'typedi';
 import { Connection } from '../connection';
 import { AliceAccount, ShieldValues } from '../models/alice-account';
@@ -46,6 +46,7 @@ export interface DatabasesContainerInterface {
 
   accountsDb(): PouchDB.Database<AliceAccount>;
   modelsDb(): PouchDB.Database<{}>;
+  metadataDb(): PouchDB.Database<ModelMetadata>;
   viewModelDb(type: string): PouchDB.Database<ViewModel>;
   eventsDb(): PouchDB.Database<Event>;
 
@@ -62,6 +63,7 @@ export class DatabasesContainer implements DatabasesContainerInterface {
   constructor(
     protected _accountsDb: PouchDB.Database<AliceAccount>,
     protected _modelsDb: PouchDB.Database<{}>,
+    protected _modelsMetadataDb: PouchDB.Database<ModelMetadata>,
     protected _viewmodelDbs: TSMap<string, PouchDB.Database<ViewModel>>,
     protected _eventsDb: PouchDB.Database<Event>,
     protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>,
@@ -104,6 +106,7 @@ export class DatabasesContainer implements DatabasesContainerInterface {
 
   public accountsDb() { return this._accountsDb; }
   public modelsDb() { return this._modelsDb; }
+  public metadataDb() { return this._modelsMetadataDb; }
   public eventsDb() { return this._eventsDb; }
   public viewModelDb(type: string) { return this._viewmodelDbs.get(type); }
   public economyDb() { return this._economyDb; }

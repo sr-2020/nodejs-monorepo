@@ -89,6 +89,9 @@ export interface DatabasesSettings {
   // URL to access models DB
   models: string;
 
+  // URL to access metadata DB
+  metadata: string;
+
   // Settings for ViewModel databases
   viewModels: ViewModelDbSettings[];
 

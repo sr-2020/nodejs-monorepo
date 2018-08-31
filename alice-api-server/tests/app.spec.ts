@@ -2,15 +2,13 @@ import * as PouchDB from 'pouchdb';
 import * as rp from 'request-promise';
 // tslint:disable-next-line:no-var-requires
 PouchDB.plugin(require('pouchdb-adapter-memory'));
-import * as nock from 'nock';
-
 import { expect } from 'chai';
 import 'mocha';
-
+import { now } from 'moment';
+import * as nock from 'nock';
 import { Container } from 'typedi';
 
 import App from '../app';
-import { characterIdTimestampOnlyRefreshesView } from '../consts';
 import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
 import { ApplicationSettings, ApplicationSettingsToken, PushSettings } from '../services/settings';
@@ -311,11 +309,10 @@ describe('API Server', () => {
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
     });
 
-    it('Puts event into db', async () => {
+    it('Updates metadata', async () => {
       const event = {
         eventType: '_RefreshModel',
         timestamp: 4365,
-        data: { foo: 'ambar' },
       };
       const response = await rp.post(address + '/events/some_user',
         {
@@ -324,14 +321,11 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await dbContainer.eventsDb().query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
-      expect(docs.rows.length).to.equal(1);
-      const doc: any = docs.rows[0].doc;
-      expect(doc).to.deep.include(event);
-      expect(doc).to.deep.include({ characterId: '00001' });
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4365);
     });
 
-    it('Puts only last _RefreshModel event to db', async () => {
+    it('Sets scheduledUpdateTimestamp according to the last _RefreshModel event', async () => {
       const events = [{
         eventType: '_RefreshModel',
         timestamp: 4365,
@@ -352,9 +346,11 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
-      expect(docs.length).to.equal(2);
+      expect(docs.length).to.equal(1);
       expect(docs[0].doc).to.deep.include(events[1]);
-      expect(docs[1].doc).to.deep.include(events[2]);
+
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4367);
     });
 
     it('Puts only last _RefreshModel event to db - 2', async () => {
@@ -383,10 +379,12 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
-      expect(docs.length).to.equal(3);
+      expect(docs.length).to.equal(2);
       expect(docs[0].doc).to.deep.include(events[0]);
       expect(docs[1].doc).to.deep.include(events[2]);
-      expect(docs[2].doc).to.deep.include(events[3]);
+
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4368);
     });
 
     it('Puts only last _RefreshModel event to db - 3', async () => {
@@ -415,8 +413,10 @@ describe('API Server', () => {
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
-      expect(docs.length).to.equal(1);
-      expect(docs[0].doc).to.deep.include(events[3]);
+      expect(docs.length).to.equal(0);
+
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4368);
     });
 
     it('Filters out tokenUpdated events', async () => {
@@ -427,7 +427,7 @@ describe('API Server', () => {
         data: { token: 'cFA60K00jtY:APA91bGtjF4t8R4hEiu7Z1oowRU1ZH8YQaL2HwjhuY4mIO9yD1gKcxEX8l6c2vEtRn4fGxgQnqzTwmMq8wQ15Vpve6QbQAOMm-ds1qwXKED1HABlhxinnQFVKWKty7dlhEQsnpA0w9ye' },
       },
       {
-        eventType: '_RefreshModel',
+        eventType: 'somethingSomething',
         timestamp: 4565,
         data: { foo: 'ambar' },
       }];
@@ -439,9 +439,10 @@ describe('API Server', () => {
         }).promise();
 
       expect(response.statusCode).to.eq(202);
-      const docs = await dbContainer.eventsDb().query(characterIdTimestampOnlyRefreshesView, { include_docs: true });
-      expect(docs.rows.length).to.equal(1);
-      const doc: any = docs.rows[0].doc;
+
+      const docs = await dbContainer.allEventsSortedByTimestamp();
+      expect(docs.length).to.equal(1);
+      const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[1]);
       expect(doc).to.deep.include({ characterId: '00001' });
     });
@@ -475,7 +476,7 @@ describe('API Server', () => {
         eventType: '_RefreshModel',
         timestamp: 4365,
       };
-      dbContainer.eventsDb().changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
+      dbContainer.metadataDb().changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
         if (change.doc) {
           const changeDoc = change.doc;
           const viewModelDb = dbContainer.viewModelDb('mobile') as PouchDB.Database<any>;
@@ -483,7 +484,7 @@ describe('API Server', () => {
             viewModelDb.put({
               _id: '00001',
               _rev: doc._rev,
-              timestamp: changeDoc.timestamp,
+              timestamp: changeDoc.scheduledUpdateTimestamp,
               updatesCount: doc.updatesCount + 1,
             });
           });
@@ -589,7 +590,10 @@ describe('API Server', () => {
       const expectedStatuses = Array(21).fill(202);
       expect(resultStatuses).to.deep.equal(expectedStatuses);
       const events = await dbContainer.allEventsSortedByTimestamp();
-      expect(events.length).to.eq(21);
+      expect(events.length).to.eq(20);
+
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4364);
     });
 
     it('Handles multiple sequential connections from same client', async () => {
@@ -631,9 +635,8 @@ describe('API Server', () => {
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
 
-      // Filter design-docs
-      const events = await dbContainer.allEventsSortedByTimestamp();
-      expect(events.length).to.eq(1);
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(4365);
     });
 
     it('Returns 409 if trying to submit non-mobile event into past', async () => {
@@ -783,15 +786,17 @@ describe('API Server', () => {
   describe('POST /medic', () => {
     describe('POST /medic/run_lab_tests/', () => {
       it('Puts event into db', async () => {
+        const beforeRequest = now();
         const response = await rp.post(address + '/medic/run_lab_tests/some_user',
           {
             resolveWithFullResponse: true, json: { patientId: '00001', tests: ['foo', 'bar'] },
             auth: { username: 'admin', password: 'admin' },
           }).promise();
+        const afterRequest = now();
 
         expect(response.statusCode).to.eq(202);
         const docs = await dbContainer.allEventsSortedByTimestamp();
-        expect(docs.length).to.equal(3);
+        expect(docs.length).to.equal(2);
         {
           const doc = docs[0].doc;
           expect(doc).to.deep.include({
@@ -816,26 +821,25 @@ describe('API Server', () => {
             location: 'ship_BSG',
           });
         }
-        {
-          const doc = docs[2].doc;
-          expect(doc).to.deep.include({
-            eventType: '_RefreshModel',
-          });
-        }
+        const metadata = await dbContainer.metadataDb().get('00001');
+        expect(metadata.scheduledUpdateTimestamp).to.be.gte(beforeRequest);
+        expect(metadata.scheduledUpdateTimestamp).to.be.lte(afterRequest);
       });
     });
 
     describe('POST /medic/add_comment/', () => {
       it('Puts event into db', async () => {
+        const beforeRequest = now();
         const response = await rp.post(address + '/medic/add_comment/some_user',
           {
             resolveWithFullResponse: true, json: { patientId: '00001', text: 'Lorem ipsum' },
             auth: { username: 'admin', password: 'admin' },
           }).promise();
+        const afterRequest = now();
 
         expect(response.statusCode).to.eq(202);
         const docs = await dbContainer.allEventsSortedByTimestamp();
-        expect(docs.length).to.equal(2);
+        expect(docs.length).to.equal(1);
         {
           const doc = docs[0].doc;
           expect(doc).to.deep.include({
@@ -848,12 +852,9 @@ describe('API Server', () => {
             location: 'ship_BSG',
           });
         }
-        {
-          const doc = docs[1].doc;
-          expect(doc).to.deep.include({
-            eventType: '_RefreshModel',
-          });
-        }
+        const metadata = await dbContainer.metadataDb().get('00001');
+        expect(metadata.scheduledUpdateTimestamp).to.be.gte(beforeRequest);
+        expect(metadata.scheduledUpdateTimestamp).to.be.lte(afterRequest);
       });
     });
   });

@@ -6,6 +6,7 @@ export const config: Configuration = {
         password: process.env.COUCHDB_PASSWORD as string,
         accounts: 'http://couchdb:5984/accounts',
         models: 'http://couchdb:5984/work-models',
+        metadata: 'http://couchdb:5984/metadata',
         events: 'http://couchdb:5984/events',
         compactEventsViewEveryMs: 5 * 60 * 1000,
         economy: 'http://couchdb:5984/economy',

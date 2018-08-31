@@ -4,7 +4,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import { Event } from 'alice-model-engine-api';
+import { Event, ModelMetadata } from 'alice-model-engine-api';
 import { AliceAccount, Professions, ShieldValues } from '../models/alice-account';
 import { EconomyConstants } from '../models/economy-constants';
 import { BalancesDocument, DatabasesContainer, TransactionDocument } from '../services/db-container';
@@ -48,12 +48,13 @@ export class TestDatabasesContainer extends DatabasesContainer {
     const eventsDb = new PouchDB<Event>('events', { adapter: 'memory' });
     const mobileViewModelDb = new PouchDB<{ timestamp: number }>('viewmodels_mobile', { adapter: 'memory' });
     const modelDb = new PouchDB('models', { adapter: 'memory' });
+    const metadataDb = new PouchDB<ModelMetadata>('metadata', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', mobileViewModelDb]]);
     const accountsDb = new PouchDB<AliceAccount>('accounts', { adapter: 'memory' });
     const economyDb = new PouchDB<TransactionDocument | BalancesDocument | EconomyConstants>
       ('economy', { adapter: 'memory' });
     const objCountersDb = new PouchDB<ShieldValues>('obj-counters', { adapter: 'memory' });
-    super(accountsDb, modelDb, viewmodelDbs, eventsDb, economyDb, objCountersDb);
+    super(accountsDb, modelDb, metadataDb, viewmodelDbs, eventsDb, economyDb, objCountersDb);
   }
 
   public async allEventsSortedByTimestamp(): Promise<any[]> {
@@ -67,6 +68,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
     await this._economyDb.destroy();
     await this._eventsDb.destroy();
     await this._modelsDb.destroy();
+    await this._modelsMetadataDb.destroy();
     for (const db of this._viewmodelDbs.values())
       await db.destroy();
   }

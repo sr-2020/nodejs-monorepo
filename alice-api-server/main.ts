@@ -18,6 +18,7 @@ const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>(
 Container.set(DatabasesContainerToken, new DatabasesContainer(
   new PouchDB(databasesConfig.accounts, authOptions),
   new PouchDB(databasesConfig.models, authOptions),
+  new PouchDB(databasesConfig.metadata, authOptions),
   viewmodelDbs,
   new PouchDB(databasesConfig.events, authOptions),
   new PouchDB(databasesConfig.economy, authOptions),
