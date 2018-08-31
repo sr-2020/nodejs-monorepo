@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import 'mocha';
 import { Context } from '../../src/context';
 import { ModelApiFactory } from '../../src/model_api';
 
