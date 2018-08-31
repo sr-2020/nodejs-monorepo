@@ -1,5 +1,7 @@
 import { clone, isNil } from 'lodash';
 import * as Pouch from 'pouchdb';
+import * as PouchDBFind from 'pouchdb-find';
+Pouch.plugin(PouchDBFind);
 import { Config } from '../config';
 import { getAllDesignDocs } from '../db_init/design_docs_helper';
 import { dbName, deepToString } from '../db_init/util';
@@ -89,5 +91,13 @@ export class PouchDb implements DBInterface {
 
   public async destroy(): Promise<void> {
     await this.db.destroy();
+  }
+
+  public async createIndex(options: PouchDB.Find.CreateIndexOptions) {
+    await this.db.createIndex(options);
+  }
+
+  public async query<T>(options: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>> {
+    return (this.db as PouchDB.Database<T>).find(options);
   }
 }

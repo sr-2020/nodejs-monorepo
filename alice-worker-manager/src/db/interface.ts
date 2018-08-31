@@ -25,6 +25,8 @@ export interface DBInterface {
   view(design: string, view: string, params: any): Promise<any>;
   follow(params: FilterParams): void;
 
+  createIndex(options: PouchDB.Find.CreateIndexOptions);
+  query<T>(options: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>>;
   // Destroys the whole database! Make sure you know what are you doing.
   destroy(): Promise<void>;
 }
