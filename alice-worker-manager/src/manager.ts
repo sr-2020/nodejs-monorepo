@@ -58,7 +58,7 @@ export class Manager {
   }
 
   public subscribeEvents() {
-    this.eventsSource.syncEvents
+    this.eventsSource.syncEvents()
       .takeUntil(this.stopped)
       .do(this.logEvent)
       .filter(this.filterErroredModels)
