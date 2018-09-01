@@ -3,8 +3,8 @@ import { Subject } from 'rxjs';
 import { SyncRequest } from 'alice-model-engine-api';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { SyncRequestsSource } from './sync_requests_source';
 import { LoggerInterface } from './logger';
+import { SyncRequestsSource } from './sync_requests_source';
 import { WorkersPoolInterface } from './workers_pool';
 
 import { Processor, ProcessorFactory } from './processor';
