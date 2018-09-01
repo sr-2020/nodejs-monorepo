@@ -1,20 +1,20 @@
-import dotenv = require("dotenv");
+import dotenv = require('dotenv');
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
     dotenv.load();
 }
 
 export const config = {
     port: process.env.PORT || 8100,
 
-    url: "https://couchdb.alice.magellan2018.ru/",
+    url: 'https://couchdb.alice.aerem.in/',
     username: process.env.COUCHDB_USER,
     password: process.env.COUCHDB_PASSWORD,
-    tempDbName: "join-import",
-    modelDBName: "models",
-    workModelDBName: "work-models",
-    accountDBName: "accounts",
-    eventsDBName: "events",
+    tempDbName: 'join-import',
+    modelDBName: 'models',
+    workModelDBName: 'work-models',
+    accountDBName: 'accounts',
+    eventsDBName: 'events',
 
     importDelay: 200,
     importOnlyInGame: false,
@@ -22,15 +22,15 @@ export const config = {
     joinrpg: {
         login: process.env.JOINRPG_USER,
         password: process.env.JOINRPG_PASSWORD,
-        baseUrl: "https://joinrpg.ru",
-        tokenPath: "/x-api/token",
-        listPath: "/x-game-api/329/characters",
-        metaPath: "/x-game-api/329/metadata/fields",
-        charactersPath: "/x-game-api/329/characters",
+        baseUrl: 'https://joinrpg.ru',
+        tokenPath: '/x-api/token',
+        listPath: '/x-game-api/329/characters',
+        metaPath: '/x-game-api/329/metadata/fields',
+        charactersPath: '/x-game-api/329/characters',
     },
 
     econ: {
-        baseUrl: "http://api.alice.magellan2018.ru",
+        baseUrl: 'http://api.alice.magellan2018.ru',
         username: process.env.ADMIN_USER,
         password: process.env.ADMIN_PASSWORD,
     },
@@ -41,11 +41,11 @@ export const config = {
     importBurstDelay: 1000,
 
     log: {
-        logFileName: "import-server.log",
-        warnFileName: "import-server.warn.log",
-        supportLogFileName: "import-support-server.log",
-        elasticHost: "https://elasticsearch.alice.magellan2018.ru/",
+        logFileName: 'import-server.log',
+        warnFileName: 'import-server.warn.log',
+        supportLogFileName: 'import-support-server.log',
+        elasticHost: 'https://elasticsearch.alice.magellan2018.ru/',
     },
 
-    mailServerAPIUrl: "",
+    mailServerAPIUrl: '',
 };

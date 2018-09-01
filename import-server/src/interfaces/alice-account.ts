@@ -1,4 +1,4 @@
-import { Professions, CompanyAccess, TradeUnions, Company } from "./model";
+import { Company, CompanyAccess, Professions, TradeUnions } from './model';
 
 export interface AliceAccount {
     _id: string;
@@ -11,7 +11,7 @@ export interface AliceAccount {
     jobs: {
         tradeUnion: TradeUnions;
         companyBonus: Company[];
-    }
+    };
 
     access?: AccessEntry[];
     pushToken?: string;
@@ -21,4 +21,4 @@ export interface AliceAccount {
 export interface AccessEntry {
     id: string;
     timestamp: number;
-  }
+}

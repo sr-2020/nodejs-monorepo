@@ -62,7 +62,8 @@ export class AliceExporter {
     public export(): Promise<any> {
 
         if (!this.model) {
-            winston.warn(`Character(${this.character.characterId}) not converted. Reasons: ${this.conversionProblems.join('; ')}`);
+            winston.warn(`Character(${this.character.characterId}) not converted. ` +
+                `Reasons: ${this.conversionProblems.join('; ')}`);
             return Promise.resolve();
         }
 
