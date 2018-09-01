@@ -30,7 +30,7 @@ export const config = {
     },
 
     econ: {
-        baseUrl: 'http://api.alice.magellan2018.ru',
+        baseUrl: 'https://api.alice.aerem.in',
         username: process.env.ADMIN_USER,
         password: process.env.ADMIN_PASSWORD,
     },
@@ -44,7 +44,7 @@ export const config = {
         logFileName: 'import-server.log',
         warnFileName: 'import-server.warn.log',
         supportLogFileName: 'import-support-server.log',
-        elasticHost: 'https://elasticsearch.alice.magellan2018.ru/',
+        elasticHost: 'https://elasticsearch.alice.aerem.in/',
     },
 
     mailServerAPIUrl: '',
