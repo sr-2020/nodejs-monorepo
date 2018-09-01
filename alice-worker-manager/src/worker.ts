@@ -1,6 +1,6 @@
 import * as ChildProcess from 'child_process';
 import { EventEmitter } from 'events';
-import * as Rx from 'rxjs/Rx';
+import * as Rx from 'rxjs';
 import { fromStream } from './utils';
 
 import { EngineMessage, EngineReply, EngineReplyAquire, EngineResult, Event } from 'alice-model-engine-api';

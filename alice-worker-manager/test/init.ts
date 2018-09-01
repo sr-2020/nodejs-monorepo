@@ -1,7 +1,7 @@
 import * as Pouch from 'pouchdb';
 import * as MemoryAdapter from 'pouchdb-adapter-memory';
 
-import { Container } from '../node_modules/typedi';
+import { Container } from 'typedi';
 import { Config } from '../src/config';
 import { initializeDI } from '../src/di';
 import { ConfigToken, DBConnectorToken } from '../src/di_tokens';

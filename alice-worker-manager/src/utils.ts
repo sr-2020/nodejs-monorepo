@@ -1,7 +1,7 @@
 import * as glob from 'glob';
 import { merge as _merge } from 'lodash';
 import * as Path from 'path';
-import * as Rx from 'rxjs/Rx';
+import * as Rx from 'rxjs';
 
 type AnyFunc = (...args: any[]) => void;
 
