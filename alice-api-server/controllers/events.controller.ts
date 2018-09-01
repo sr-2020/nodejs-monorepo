@@ -8,15 +8,12 @@ PouchDB.plugin(PouchDBFind);
 import { CharacterlessEvent } from 'alice-model-engine-api';
 import { BadRequestError, Body, CurrentUser, Get, JsonController, Param, Post, Req, Res } from 'routing-controllers';
 import { Container } from 'typedi';
+import { ProcessRequest } from '../connection';
 import { EventsProcessor } from '../events.processor';
 import { AliceAccount } from '../models/alice-account';
 import { makeVisibleNotificationPayload, sendGenericPushNotification } from '../push-helpers';
 import { LoggerToken } from '../services/logger';
 import { canonicalId, checkAccess, createLogData, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
-
-export interface EventsRequest {
-  events: CharacterlessEvent[];
-}
 
 function CleanEventsForLogging(events: CharacterlessEvent[]): CharacterlessEvent[] {
   return events.map((event) => {
@@ -48,7 +45,7 @@ export class EventsController {
   }
 
   @Post('/events/:id')
-  public async post( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() body: EventsRequest,
+  public async post( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() body: ProcessRequest,
                      @Req() req: express.Request, @Res() res: express.Response) {
     try {
       id = await canonicalId(id);
@@ -60,7 +57,7 @@ export class EventsController {
 
       const processor = new EventsProcessor();
       const viewModelTimestampBefore = await processor.latestExistingMobileEventTimestamp(id);
-      const s = await processor.process(id, events);
+      const s = await processor.process(id, body);
 
       if (s.status == 200) {
         await this.sendPushNotifications(viewModelTimestampBefore, s.body.viewModel);

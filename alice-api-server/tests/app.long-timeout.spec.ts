@@ -26,8 +26,7 @@ describe('API Server - long timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      port: 3000, viewmodelUpdateTimeout: 9000, accessGrantTime: 1000,
-      tooFarInFutureFilterTime: 30000, pushSettings,
+      port: 3000, viewmodelUpdateTimeout: 9000, accessGrantTime: 1000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
@@ -75,8 +74,7 @@ describe('API Server - medium timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      port: 3000, viewmodelUpdateTimeout: 500, accessGrantTime: 1000,
-      tooFarInFutureFilterTime: 30000, pushSettings,
+      port: 3000, viewmodelUpdateTimeout: 500, accessGrantTime: 1000, pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
@@ -99,18 +97,12 @@ describe('API Server - medium timeout', () => {
     const responses: any[] = await Promise.all([
       rp.post(address + '/events/some_user',
       {
-        resolveWithFullResponse: true, simple: false, json: { events: [{
-          eventType: '_RefreshModel',
-          timestamp: 4365,
-        }]},
+        resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
         auth: { username: 'some_user', password: 'qwerty' },
       }).promise(),
       rp.post(address + '/events/some_user',
       {
-        resolveWithFullResponse: true, simple: false, json: { events: [{
-          eventType: '_RefreshModel',
-          timestamp: 4370,
-        }]},
+        resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4370 },
         auth: { username: 'some_user', password: 'qwerty' },
       }).promise(),
     ]);

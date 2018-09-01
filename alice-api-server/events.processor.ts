@@ -4,7 +4,7 @@ PouchDB.plugin(PouchDBUpsert);
 import { CharacterlessEvent } from 'alice-model-engine-api';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
-import { Connection, StatusAndBody } from './connection';
+import { Connection, ProcessRequest, StatusAndBody } from './connection';
 import { DatabasesContainerToken } from './services/db-container';
 import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
@@ -13,34 +13,36 @@ import { currentTimestamp } from './utils';
 export class EventsProcessor {
   private logger = Container.get(LoggerToken);
 
-  public async process(id: string, events: CharacterlessEvent[]): Promise<StatusAndBody> {
-    events = await this.processTokenUpdateEvents(id, events);
-    const isMobileClient = events.some((event) => event.eventType == '_RefreshModel');
-    if (isMobileClient) {
-      events = this.filterRefreshModelEventsByTimestamp(id, events);
-    }
+  public async process(id: string, request: ProcessRequest): Promise<StatusAndBody> {
+    request.events = await this.processTokenUpdateEvents(id, request.events);
+    this._cancelUpdateIfTooFarInFuture(id, request);
     const cutTimestamp = await this.cutTimestamp(id);
-    if (!isMobileClient && events.some((event) => event.timestamp <= cutTimestamp))
+
+    // If request.scheduledUpdateTimestamp is present, it means that events have come
+    // from mobile client. It's possible that some of them were already processed if
+    // previous connection attempt was not successful.
+    if (!request.scheduledUpdateTimestamp &&
+        request.events.some((event) => event.timestamp <= cutTimestamp))
       throw new HttpError(409,
         "Can't accept event with timestamp earlier than cut timestamp: they won't get processed!");
-    events = events.filter((value: any) => value.timestamp > cutTimestamp);
-    if (isMobileClient) {
+
+    request.events = request.events.filter((value: any) => value.timestamp > cutTimestamp);
+
+    const connection = new Connection(this.dbContainer().eventsDb(),  this.dbContainer().metadataDb(),
+      Container.get(ApplicationSettingsToken).viewmodelUpdateTimeout);
+    if (request.scheduledUpdateTimestamp) {
       if (this.dbContainer().connections.has(id))
         throw new HttpError(429, 'Multiple connections from one client are not allowed');
 
-      this.dbContainer().connections.set(id, new Connection(
-        this.dbContainer().eventsDb(),  this.dbContainer().metadataDb(),
-        Container.get(ApplicationSettingsToken).viewmodelUpdateTimeout));
-
-      const s = await this.dbContainer().connections.get(id).processEvents(id, events);
+      this.dbContainer().connections.set(id, connection);
+      const s = await this.dbContainer().connections.get(id).processEvents(id, request);
       this.dbContainer().connections.delete(id);
       return s;
     } else {
       // In this case we don't need to subscribe for viewmodel updates or
       // block other clients from connecting.
       // So we don't add Connection to this.connections.
-      const connection = new Connection(this.dbContainer().eventsDb(), this.dbContainer().metadataDb(), 0);
-      return await connection.processEvents(id, events);
+      return await connection.processEvents(id, request);
     }
   }
 
@@ -93,23 +95,15 @@ export class EventsProcessor {
     return events.filter((event) => event.eventType != 'tokenUpdated');
   }
 
-  // Removes _RefreshModel events which are too far in future
-  // (timestamp > current timestamp + settings.tooFarInFutureFilterTime).
-  // Then removes all _RefreshModel events except latest one.
-  private filterRefreshModelEventsByTimestamp(id, events: CharacterlessEvent[]): CharacterlessEvent[] {
-    const tooFarInFuturetimestamp = currentTimestamp() +
-      Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
-    events = events.filter((value: any) =>
-      value.eventType != '_RefreshModel' || value.timestamp < tooFarInFuturetimestamp);
-    if (events.length == 0) {
-      this.logger.warn(`All received events are from the future!`, { characterId: id, source: 'api' });
+  private _cancelUpdateIfTooFarInFuture(id: string, request: ProcessRequest) {
+    const tooFarInFutureFilterTime = Container.get(ApplicationSettingsToken).tooFarInFutureFilterTime;
+    if (request.scheduledUpdateTimestamp && tooFarInFutureFilterTime &&
+      request.scheduledUpdateTimestamp > currentTimestamp() + tooFarInFutureFilterTime) {
+        this.logger.error(
+          `Received request with scheduledUpdateTimestamp too far in future. Somebody messing with time?`,
+          { source: 'api', characterId: id });
+        request.scheduledUpdateTimestamp = undefined;
     }
-    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
-
-    const lastRefreshModelEventTimestamp =
-      Math.max(...refreshModelEvents.map((event) => event.timestamp));
-    return events.filter((value: any) =>
-      value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
   }
 
   private async latestViewmodelTimestamp(id: string): Promise<number> {

@@ -33,8 +33,7 @@ describe('Economy', () => {
   };
 
   const settings: ApplicationSettings = {
-    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200,
-    tooFarInFutureFilterTime: 30000, pushSettings,
+    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200, pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));

@@ -49,12 +49,7 @@ export class MedicController {
           },
         };
       });
-      events.push({
-        eventType: '_RefreshModel',
-        timestamp: timestamp++,
-      });
-
-      const s = await new EventsProcessor().process(id, events);
+      const s = await new EventsProcessor().process(id, { events, scheduledUpdateTimestamp: timestamp++ });
       res.status(s.status);
       return s.body;
     } catch (e) {
@@ -80,12 +75,9 @@ export class MedicController {
           text: req.text,
           model,
         },
-      }, {
-        eventType: '_RefreshModel',
-        timestamp: timestamp++,
       }];
 
-      const s = await new EventsProcessor().process(id, events);
+      const s = await new EventsProcessor().process(id, { events, scheduledUpdateTimestamp: timestamp++ });
       res.status(s.status);
       return s.body;
     } catch (e) {
@@ -105,12 +97,9 @@ export class MedicController {
         eventType: 'scanQr',
         timestamp: timestamp++,
         data: req.data,
-      }, {
-        eventType: '_RefreshModel',
-        timestamp: timestamp++,
       }];
 
-      const s = await new EventsProcessor().process(id, events);
+      const s = await new EventsProcessor().process(id, { events, scheduledUpdateTimestamp: timestamp++ });
       res.status(s.status);
       return s.body;
     } catch (e) {

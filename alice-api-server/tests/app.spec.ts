@@ -310,13 +310,9 @@ describe('API Server', () => {
     });
 
     it('Updates metadata', async () => {
-      const event = {
-        eventType: '_RefreshModel',
-        timestamp: 4365,
-      };
       const response = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, json: { events: [event] },
+          resolveWithFullResponse: true, json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
@@ -325,98 +321,24 @@ describe('API Server', () => {
       expect(metadata.scheduledUpdateTimestamp).to.eq(4365);
     });
 
-    it('Sets scheduledUpdateTimestamp according to the last _RefreshModel event', async () => {
+    it('Sets scheduledUpdateTimestamp to provided value', async () => {
       const events = [{
-        eventType: '_RefreshModel',
-        timestamp: 4365,
-      },
-      {
         eventType: 'TestEvent',
         timestamp: 4366,
-      },
-      {
-        eventType: '_RefreshModel',
-        timestamp: 4367,
       }];
       const response = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, json: { events },
+          resolveWithFullResponse: true, json: { events, scheduledUpdateTimestamp: 4367 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
       expect(docs.length).to.equal(1);
-      expect(docs[0].doc).to.deep.include(events[1]);
+      expect(docs[0].doc).to.deep.include(events[0]);
 
       const metadata = await dbContainer.metadataDb().get('00001');
       expect(metadata.scheduledUpdateTimestamp).to.eq(4367);
-    });
-
-    it('Puts only last _RefreshModel event to db - 2', async () => {
-      const events = [
-        {
-          eventType: 'TestEvent',
-          timestamp: 4365,
-        },
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4366,
-        },
-        {
-          eventType: 'TestEvent',
-          timestamp: 4367,
-        },
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4368,
-        }];
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events },
-          auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-
-      expect(response.statusCode).to.eq(202);
-      const docs = await dbContainer.allEventsSortedByTimestamp();
-      expect(docs.length).to.equal(2);
-      expect(docs[0].doc).to.deep.include(events[0]);
-      expect(docs[1].doc).to.deep.include(events[2]);
-
-      const metadata = await dbContainer.metadataDb().get('00001');
-      expect(metadata.scheduledUpdateTimestamp).to.eq(4368);
-    });
-
-    it('Puts only last _RefreshModel event to db - 3', async () => {
-      const events = [
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4365,
-        },
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4366,
-        },
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4367,
-        },
-        {
-          eventType: '_RefreshModel',
-          timestamp: 4368,
-        }];
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events },
-          auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-
-      expect(response.statusCode).to.eq(202);
-      const docs = await dbContainer.allEventsSortedByTimestamp();
-      expect(docs.length).to.equal(0);
-
-      const metadata = await dbContainer.metadataDb().get('00001');
-      expect(metadata.scheduledUpdateTimestamp).to.eq(4368);
     });
 
     it('Filters out tokenUpdated events', async () => {
@@ -447,19 +369,17 @@ describe('API Server', () => {
       expect(doc).to.deep.include({ characterId: '00001' });
     });
 
-    it('Filters _RefreshModels too far in future', async () => {
+    it('Filters scheduledUpdateTimestamp too far in future', async () => {
+      await dbContainer.metadataDb().put({_id: '00001', scheduledUpdateTimestamp: 0});
+
       const timestamp = currentTimestamp() + 60000;
       const events = [{
         eventType: 'TestEvent',
         timestamp: timestamp,
-      },
-      {
-        eventType: '_RefreshModel',
-        timestamp: timestamp + 1,
       }];
       const response = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, json: { events },
+          resolveWithFullResponse: true, json: { events, scheduledUpdateTimestamp: timestamp + 1 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
 
@@ -469,13 +389,12 @@ describe('API Server', () => {
       const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[0]);
       expect(doc).to.deep.include({ characterId: '00001' });
+
+      const metadata = await dbContainer.metadataDb().get('00001');
+      expect(metadata.scheduledUpdateTimestamp).to.eq(0);
     });
 
     it('Returns viewmodel in case if processed in time', async () => {
-      const event = {
-        eventType: '_RefreshModel',
-        timestamp: 4365,
-      };
       dbContainer.metadataDb().changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
         if (change.doc) {
           const changeDoc = change.doc;
@@ -493,7 +412,7 @@ describe('API Server', () => {
 
       const response = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, json: { events: [event] },
+          resolveWithFullResponse: true, json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response.statusCode).to.eq(200);
@@ -563,14 +482,11 @@ describe('API Server', () => {
     });
 
     it('Handles mobile + non-mobile connection simultaneously', async () => {
-      const mobileEvent = {
-        eventType: '_RefreshModel',
-        timestamp: 4364,
-      };
       const promises: any[] = [
         rp.post(address + '/events/some_user',
           {
-            resolveWithFullResponse: true, simple: false, json: { events: [mobileEvent] },
+            resolveWithFullResponse: true, simple: false,
+            json: { events: [], scheduledUpdateTimestamp: 4364 },
             auth: { username: 'some_user', password: 'qwerty' },
           }).promise(),
       ];
@@ -617,19 +533,14 @@ describe('API Server', () => {
     });
 
     it('Deduplicates events with same timestamp', async () => {
-      const event = {
-        eventType: '_RefreshModel',
-        timestamp: 4365,
-      };
-
       const response1 = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       const response2 = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+          resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(response1.statusCode).to.eq(202);
@@ -720,14 +631,11 @@ describe('API Server', () => {
       const events = [{
         eventType: 'TestEvent',
         timestamp: 4365,
-      }, {
-        eventType: '_RefreshModel',
-        timestamp: 6666,
       }];
 
       const responsePut = await rp.post(address + '/events/some_user',
         {
-          resolveWithFullResponse: true, json: { events: events },
+          resolveWithFullResponse: true, json: { events: events, scheduledUpdateTimestamp: 6666 },
           auth: { username: 'some_user', password: 'qwerty' },
         }).promise();
       expect(responsePut.statusCode).to.eq(202);

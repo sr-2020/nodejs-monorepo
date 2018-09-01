@@ -51,9 +51,9 @@ export interface ApplicationSettings {
   // Time for which access is granted by /characters method
   accessGrantTime: number;
 
-  // _RefreshModel events with timestamp > currentTimestamp + tooFarInFutureFilterTime
+  // Requests to process events with scheduledUpdateTimestamp > currentTimestamp + tooFarInFutureFilterTime
   // will be ignored
-  tooFarInFutureFilterTime: number;
+  tooFarInFutureFilterTime?: number;
 
   // Settings for push notifications
   pushSettings: PushSettings;
