@@ -69,7 +69,7 @@ async function sendEvent() {
   }
 }
 
-async function sendEventToShip() {
+export async function sendEventToShip() {
   const tsBefore = new Date().valueOf();
   totalShipRequests += 1;
   const ship = totalShipRequests % 5;
@@ -96,5 +96,4 @@ async function sendEventToShip() {
 
 prepare().then(() => {
   setInterval(sendEvent, 500);
-  setInterval(sendEventToShip, 12000);
 });
