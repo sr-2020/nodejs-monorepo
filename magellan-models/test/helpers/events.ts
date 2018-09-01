@@ -1,7 +1,5 @@
 import { Event } from 'alice-model-engine-api';
 
-const REFRESH_EVENT_TYPE = '_RefreshModel';
-
 export const getEvent = (characterId: string, eventType: string, data: any, timestamp = Date.now()): Event => ({
     characterId,
     eventType,
@@ -9,9 +7,9 @@ export const getEvent = (characterId: string, eventType: string, data: any, time
     data,
 });
 
-export const getRefreshEvent = (characterId: string, timestamp = Date.now()): Event => ({
+export const getNoOpEvent = (characterId: string, timestamp = Date.now()): Event => ({
     characterId,
-    eventType: REFRESH_EVENT_TYPE,
+    eventType: '_',
     timestamp,
 });
 
@@ -21,16 +19,13 @@ export interface PartialEvent {
 }
 
 export const getEvents = (characterId: string, events: PartialEvent[],
-                          timestamp = Date.now(), withRefresh = true): Event[] => {
+                          timestamp = Date.now()): Event[] => {
     const result: Event[] = events.map((e, i) => ({
         characterId,
         timestamp: timestamp + i,
         ...e,
     }));
 
-    if (withRefresh) {
-        result.push(getRefreshEvent(characterId, timestamp + events.length));
-    }
-
+    result.push(getNoOpEvent(characterId, timestamp + events.length));
     return result;
 };

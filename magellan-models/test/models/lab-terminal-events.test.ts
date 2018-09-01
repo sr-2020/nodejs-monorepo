@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { merge } from 'lodash';
-import { getEvents, getRefreshEvent } from '../helpers/events';
+import { getEvents, getNoOpEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel, getExampleLabTerminalModel } from '../helpers/example-models';
 import { process } from '../helpers/util';
 
@@ -20,7 +20,7 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
 describe('Medic Magellan events: ', () => {
   it('No-op refresh model', async () => {
     const model = getExampleLabTerminalModel();
-    const events = [getRefreshEvent(model._id, model.timestamp + 610 * 1000)];
+    const events = [getNoOpEvent(model._id, model.timestamp + 610 * 1000)];
     const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.timestamp).to.equal(610 * 1000);

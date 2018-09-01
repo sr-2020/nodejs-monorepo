@@ -24,7 +24,7 @@ export interface PushSettings {
   serverKey: string;
 
   // Settings for sending hidden (background) push notification
-  // forcing _RefreshModel event sending
+  // forcing client data sending
   autoRefresh?: CheckForInactivitySettings;
 
   // Settings for sending visible (and audible if possible) push notification

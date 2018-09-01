@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
 import consts = require('../../helpers/constants');
-import { getEvents, getRefreshEvent } from '../helpers/events';
+import { getEvents, getNoOpEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 import { process } from '../helpers/util';
 
@@ -42,7 +42,7 @@ describe('General Magellan events: ', () => {
 
   it('No-op refresh model', async () => {
     const model = getExampleBiologicalOrganismModel();
-    const events = [getRefreshEvent(model._id, model.timestamp + 610 * 1000)];
+    const events = [getNoOpEvent(model._id, model.timestamp + 610 * 1000)];
     const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.timestamp).to.equal(610 * 1000);
@@ -118,17 +118,17 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
@@ -153,17 +153,17 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
@@ -181,11 +181,11 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0]));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0],
       [0, 2, -2, 0, 1, 0, 0]));
@@ -212,12 +212,12 @@ describe('General Magellan events: ', () => {
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(disableSystems(
       makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0])));
 
-    events = [getRefreshEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model._id, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(disableSystems(
       makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0],
@@ -242,7 +242,7 @@ describe('General Magellan events: ', () => {
         characterId: model._id, eventType: 'biological-systems-influence',
         data: [0, -1, 0, 0, 0, 0, 0], timestamp: 300,
       },
-      getRefreshEvent(model._id, 100 + 2 * p),
+      getNoOpEvent(model._id, 100 + 2 * p),
     ];
 
     model = (await process(model, events)).baseModel;
@@ -268,7 +268,7 @@ describe('General Magellan events: ', () => {
         characterId: model._id, eventType: 'biological-systems-influence',
         data: [-1, 0, 0, 0, 0, 0, 0], timestamp: 300,
       },
-      getRefreshEvent(model._id, 100 + 2 * p),
+      getNoOpEvent(model._id, 100 + 2 * p),
     ];
 
     model = (await process(model, events)).baseModel;

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { getEvents, getRefreshEvent } from '../helpers/events';
+import { getEvents, getNoOpEvent } from '../helpers/events';
 import { getExampleDeusModel } from '../helpers/example-models';
 import { process } from '../helpers/util';
 
@@ -31,7 +31,7 @@ describe('General events: ', () => {
         expect(cond2).to.exist;
 
         // Проверить через 600 секунд
-        events = [getRefreshEvent(model._id, baseModel.timestamp + 610 * 1000)];
+        events = [getNoOpEvent(model._id, baseModel.timestamp + 610 * 1000)];
         ({ baseModel } = await process(baseModel, events));
 
         cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
@@ -41,7 +41,7 @@ describe('General events: ', () => {
         expect(cond2).to.not.exist;
 
         // Проверить через 2 часа секунд
-        events = [getRefreshEvent(model._id, baseModel.timestamp + 7200 * 1000)];
+        events = [getNoOpEvent(model._id, baseModel.timestamp + 7200 * 1000)];
         ({ baseModel } = await process(baseModel, events));
 
         cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
