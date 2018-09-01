@@ -4,6 +4,7 @@
   "description": "Import server part",
   "main": "./dist/server.js",
   "scripts": {
+    "deps": "yarn install",
     "test": "mocha -r ts-node/register ./test/*.ts",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
     "start": "tsc && forever start ./dist/server.js --server",
@@ -19,16 +20,7 @@
     "import:db": "ts-node src/db-docs-creator.ts",
     "processor": "ts-node src/processors/index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sth-larp/import-server.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sth-larp/import-server/issues"
-  },
-  "homepage": "https://github.com/sth-larp/import-server#readme",
+  "license": "Apache-2.0",
   "dependencies": {
     "@types/chance": "^0.7.33",
     "@types/command-line-args": "^4.0.0",
