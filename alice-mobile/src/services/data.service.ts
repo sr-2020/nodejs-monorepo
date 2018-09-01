@@ -110,16 +110,16 @@ export class DataService implements ILoginListener {
   }
 
   public async trySendEvents() {
-    // if (this._sendingEvents) throw new TooManyRequests();
+    if (this._sendingEvents) throw new TooManyRequests();
     this._sendingEvents = true;
     try {
       await this.trySendEventsInternal();
-      this._sendingEvents = false;
       this._sendEventsLastStatusEmitter.emit('status', true);
     } catch (e) {
-      this._sendingEvents = false;
       this._sendEventsLastStatusEmitter.emit('status', false);
       throw e;
+    } finally {
+      this._sendingEvents = false;
     }
   }
 
