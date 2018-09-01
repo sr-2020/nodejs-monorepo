@@ -77,6 +77,6 @@ module.exports = {
     },
 
     processor: {
-        deleteEventsOlderThanMs: 30 * 60 * 1000 // 30 минут
+        deleteEventsOlderThanMs: 10 * 60 * 60 * 1000 // 10 часов, должно быть достаточно для разруливания вопросов
     }
 };
