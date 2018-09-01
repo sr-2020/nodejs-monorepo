@@ -83,9 +83,6 @@ export interface DatabasesSettings {
   // URL to access events DB
   events: string;
 
-  // How often to run compactions in events database
-  compactEventsViewEveryMs?: number;
-
   // URL to access models DB
   models: string;
 

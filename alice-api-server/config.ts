@@ -8,7 +8,6 @@ export const config: Configuration = {
         models: 'http://couchdb:5984/work-models',
         metadata: 'http://couchdb:5984/metadata',
         events: 'http://couchdb:5984/events',
-        compactEventsViewEveryMs: 5 * 60 * 1000,
         economy: 'http://couchdb:5984/economy',
         objCounters: 'http://couchdb:5984/obj-counters',
         viewModels: [
