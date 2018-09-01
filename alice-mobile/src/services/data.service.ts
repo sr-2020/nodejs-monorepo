@@ -22,7 +22,7 @@ export enum UpdateStatus {
   Red,
 }
 
-export class TooManyRequests extends Error {};
+export class TooManyRequests extends Error {}
 
 @Injectable()
 export class DataService implements ILoginListener {
@@ -160,9 +160,9 @@ export class DataService implements ILoginListener {
 
   private async _trySendEventsInternal() {
     console.debug('Trying to send events to server');
-    await this._pushRefreshModelEvent();
+    const scheduledUpdateTimestamp = this._time.getUnixTimeMs();
     const alldocsResponse = await this._eventsDb.allDocs({ include_docs: true });
-    let events = alldocsResponse.rows.map((row) => {
+    const events = alldocsResponse.rows.map((row) => {
       return {
         timestamp: Number(row.doc._id),
         characterId: this._authService.getUserId(),
@@ -171,17 +171,11 @@ export class DataService implements ILoginListener {
       };
     });
 
-    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
-    const scheduledUpdateTimestamp =
-      Math.max(...refreshModelEvents.map((event) => event.timestamp));
-    events = events.filter((value: any) => value.eventType != '_RefreshModel');
-
-    console.info(`Sending ${events.length} events to server`);
+    console.info(`Sending ${events.length} events to server, scheduledUpdateTimestamp=${scheduledUpdateTimestamp}`);
     console.debug(JSON.stringify(events));
-    const requestBody = JSON.stringify({ events, scheduledUpdateTimestamp });
     const fullUrl = GlobalConfig.sendEventsBaseUrl + '/' + this._authService.getUserId();
     try {
-      const response = await this._http.post(fullUrl, requestBody,
+      const response = await this._http.post(fullUrl, { events, scheduledUpdateTimestamp },
         this._authService.getRequestOptionsWithSavedCredentials()).toPromise();
       if (response.status == 200) {
         console.debug('Get updated viewmodel! :)');
@@ -200,19 +194,6 @@ export class DataService implements ILoginListener {
       else
         throw e;
     }
-  }
-
-  private _pushRefreshModelEvent(): Promise<PouchDB.Core.Response> {
-    return this._eventsDb.put(this._makeRefreshModelEvent());
-  }
-
-  private _makeRefreshModelEvent() {
-    return {
-      _id: this._time.getUnixTimeMs().toString(),
-      characterId: this._authService.getUserId(),
-      eventType: '_RefreshModel',
-      data: {},
-    };
   }
 
   private async _deleteEventsBefore(timestamp: number) {
