@@ -62,7 +62,7 @@ export class DataService implements ILoginListener {
       return () => { changesStream.cancel(); };
     });
 
-    this._updateStatus = this.getUpdateStatusInternal().publish().refCount();
+    this._updateStatus = this._getUpdateStatusInternal().publish().refCount();
   }
 
   public onLogout() {
@@ -113,7 +113,7 @@ export class DataService implements ILoginListener {
     if (this._sendingEvents) throw new TooManyRequests();
     this._sendingEvents = true;
     try {
-      await this.trySendEventsInternal();
+      await this._trySendEventsInternal();
       this._sendEventsLastStatusEmitter.emit('status', true);
     } catch (e) {
       this._sendEventsLastStatusEmitter.emit('status', false);
@@ -132,13 +132,13 @@ export class DataService implements ILoginListener {
     } catch (e) {
       this._logging.error(`Can't parse or save ApplicationViewModel: ${e}`);
       this._logging.debug(`ViewModel received from server: ${JSON.stringify(viewModel)}`);
-      const errorViewModel = this.makeErrorApplicationViewModel();
+      const errorViewModel = this._makeErrorApplicationViewModel();
       upsert(this._viewModelDb, errorViewModel);
       this._inMemoryViewmodel = errorViewModel;
     }
   }
 
-  private getUpdateStatusInternal(): Observable<UpdateStatus> {
+  private _getUpdateStatusInternal(): Observable<UpdateStatus> {
     const currentViewModelTmestamp = this.getData().map((appViewModel) => appViewModel.timestamp);
     const currentTimestamp =
       Observable.timer(0, GlobalConfig.recalculateUpdateStatusEveryMs).map(() => this._time.getUnixTimeMs());
@@ -158,9 +158,9 @@ export class DataService implements ILoginListener {
       });
   }
 
-  private async trySendEventsInternal() {
+  private async _trySendEventsInternal() {
     console.debug('Trying to send events to server');
-    await this.pushRefreshModelEvent();
+    await this._pushRefreshModelEvent();
     const alldocsResponse = await this._eventsDb.allDocs({ include_docs: true });
     let events = alldocsResponse.rows.map((row) => {
       return {
@@ -186,11 +186,11 @@ export class DataService implements ILoginListener {
       if (response.status == 200) {
         console.debug('Get updated viewmodel! :)');
         const updatedViewModel = response.json().viewModel;
-        await this.deleteEventsBefore(updatedViewModel.timestamp);
+        await this._deleteEventsBefore(updatedViewModel.timestamp);
         await this.setViewModel(updatedViewModel);
       } else if (response.status == 202) {
         console.warn('Managed to submit events, but no viewmodel :(');
-        await this.deleteEventsBefore(response.json().timestamp);
+        await this._deleteEventsBefore(response.json().timestamp);
         throw Error('Managed to submit events, but no viewmodel');
       } else
         throw response.toString();
@@ -202,11 +202,11 @@ export class DataService implements ILoginListener {
     }
   }
 
-  private pushRefreshModelEvent(): Promise<PouchDB.Core.Response> {
-    return this._eventsDb.put(this.makeRefreshModelEvent());
+  private _pushRefreshModelEvent(): Promise<PouchDB.Core.Response> {
+    return this._eventsDb.put(this._makeRefreshModelEvent());
   }
 
-  private makeRefreshModelEvent() {
+  private _makeRefreshModelEvent() {
     return {
       _id: this._time.getUnixTimeMs().toString(),
       characterId: this._authService.getUserId(),
@@ -215,7 +215,7 @@ export class DataService implements ILoginListener {
     };
   }
 
-  private async deleteEventsBefore(timestamp: number) {
+  private async _deleteEventsBefore(timestamp: number) {
     console.info(`deleting events before ${timestamp}`);
     const alldocsBeforeResponse = await this._eventsDb.allDocs({
       include_docs: true,
@@ -226,7 +226,7 @@ export class DataService implements ILoginListener {
     await Promise.all(alldocsBeforeResponse.rows.map((row) => this._eventsDb.remove(row.doc._id, row.value.rev)));
   }
 
-  private makeErrorApplicationViewModel(): ApplicationViewModel {
+  private _makeErrorApplicationViewModel(): ApplicationViewModel {
     const errorPage: ListPageViewModel = {
       __type: 'ListPageViewModel',
       menuTitle: 'Общая информация',
