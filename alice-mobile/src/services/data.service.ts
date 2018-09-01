@@ -170,16 +170,15 @@ export class DataService implements ILoginListener {
         data: row.doc.data,
       };
     });
-    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
 
-    const lastRefreshModelEventTimestamp =
+    const refreshModelEvents = events.filter((event) => event.eventType == '_RefreshModel');
+    const scheduledUpdateTimestamp =
       Math.max(...refreshModelEvents.map((event) => event.timestamp));
-    events = events.filter((value: any) =>
-      value.eventType != '_RefreshModel' || value.timestamp == lastRefreshModelEventTimestamp);
+    events = events.filter((value: any) => value.eventType != '_RefreshModel');
 
     console.info(`Sending ${events.length} events to server`);
     console.debug(JSON.stringify(events));
-    const requestBody = JSON.stringify({ events });
+    const requestBody = JSON.stringify({ events, scheduledUpdateTimestamp });
     const fullUrl = GlobalConfig.sendEventsBaseUrl + '/' + this._authService.getUserId();
     try {
       const response = await this._http.post(fullUrl, requestBody,
