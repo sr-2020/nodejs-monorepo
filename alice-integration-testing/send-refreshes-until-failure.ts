@@ -51,7 +51,7 @@ async function sendEvent() {
   const response = await rp.post(address + '/events/' + username,
     {
       resolveWithFullResponse: true, simple: false,
-      json: { events: [{ eventType: '_RefreshModel', timestamp: new Date().valueOf() }] },
+      json: { events: [], scheduledUpdateTimestamp: new Date().valueOf() },
       auth: { username, password },
     }).promise();
   const tsAfter = new Date().valueOf();
