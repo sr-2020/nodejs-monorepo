@@ -127,7 +127,7 @@ class App {
     }
   }
 
-  public async listen() {
+  public listen() {
     this.server = this.app.listen(this.settings.port);
   }
 
