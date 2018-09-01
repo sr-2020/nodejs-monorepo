@@ -1,19 +1,19 @@
-import { ModelMetadata, SyncEvent } from 'alice-model-engine-api';
-import * as Rx from 'rxjs/Rx';
+import { ModelMetadata, SyncRequest } from 'alice-model-engine-api';
+import * as Rx from 'rxjs';
 import { Config } from './config';
 import { DBConnectorInterface, DBInterface } from './db/interface';
 
 export function eventsSourceFactory(config: Config, dbConnector: DBConnectorInterface) {
-  return new MetadataSyncEventsSource(dbConnector.use(config.db.metadata));
+  return new MetadataSyncRequestsSource(dbConnector.use(config.db.metadata));
 }
 
-export interface SyncEventsSource {
+export interface SyncRequestsSource {
   follow(): void;
-  syncEvents(): Rx.Observable<SyncEvent>;
+  syncRequests(): Rx.Observable<SyncRequest>;
 }
 
-export class MetadataSyncEventsSource implements SyncEventsSource {
-  private subject: Rx.Subject<SyncEvent> = new Rx.Subject();
+export class MetadataSyncRequestsSource implements SyncRequestsSource {
+  private subject = new Rx.Subject<SyncRequest>();
 
   constructor(private db: DBInterface) { }
 
@@ -27,8 +27,7 @@ export class MetadataSyncEventsSource implements SyncEventsSource {
         if (doc._deleted) return;
         this.subject.next({
           characterId: doc._id,
-          eventType: '_RefreshModel',
-          timestamp: doc.scheduledUpdateTimestamp,
+          scheduledUpdateTimestamp: doc.scheduledUpdateTimestamp,
         });
       },
     };
@@ -36,7 +35,7 @@ export class MetadataSyncEventsSource implements SyncEventsSource {
     this.db.follow(params);
   }
 
-  public syncEvents(): Rx.Observable<SyncEvent> {
+  public syncRequests(): Rx.Observable<SyncRequest> {
     return this.subject;
   }
 }

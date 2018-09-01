@@ -3,16 +3,16 @@ import { CatalogsStorage } from './catalogs_storage';
 import { Config } from './config';
 import { PouchConnector } from './db/pouch';
 import { CatalogsStorageToken, ConfigToken, DBConnectorToken,
-  EventsSourceToken, EventStorageToken, LoggerToken, ManagerToken,
-  ModelStorageToken, ObjectStorageToken, ProcessorFactoryToken,
+  EventStorageToken, LoggerToken, ManagerToken, ModelStorageToken,
+  ObjectStorageToken, ProcessorFactoryToken, SyncRequestsSourceToken,
   ViewModelStorageToken, WorkersPoolToken, WorkingModelStorageToken } from './di_tokens';
 import { eventStorageFactory } from './event_storage';
-import { eventsSourceFactory } from './events_source';
 import { Logger } from './logger';
 import { Manager } from './manager';
 import { ModelStorage, WorkingModelStorage } from './model_storage';
 import { ObjectStorage } from './object_storage';
 import { processorFactory } from './processor';
+import { eventsSourceFactory } from './sync_requests_source';
 import { ViewModelStorage } from './view_model_storage';
 import { WorkersPool } from './workers_pool';
 
@@ -27,7 +27,8 @@ export function initializeDI(config: Config) {
   Container.set(ViewModelStorageToken,
     new ViewModelStorage(Container.get(ConfigToken), Container.get(DBConnectorToken)));
   Container.set(EventStorageToken, eventStorageFactory(Container.get(ConfigToken), Container.get(DBConnectorToken)));
-  Container.set(EventsSourceToken, eventsSourceFactory(Container.get(ConfigToken), Container.get(DBConnectorToken)));
+  Container.set(SyncRequestsSourceToken,
+    eventsSourceFactory(Container.get(ConfigToken), Container.get(DBConnectorToken)));
   Container.set(CatalogsStorageToken, new CatalogsStorage(Container.get(ConfigToken), Container.get(DBConnectorToken)));
   Container.set(ObjectStorageToken, new ObjectStorage(Container.get(ConfigToken), Container.get(DBConnectorToken)));
   Container.set(WorkersPoolToken, new WorkersPool(Container.get(ConfigToken), Container.get(LoggerToken)));
@@ -41,7 +42,7 @@ export function initializeDI(config: Config) {
     Container.get(ObjectStorageToken),
     Container.get(LoggerToken)));
   Container.set(ManagerToken, new Manager(
-    Container.get(EventsSourceToken),
+    Container.get(SyncRequestsSourceToken),
     Container.get(CatalogsStorageToken),
     Container.get(WorkersPoolToken),
     Container.get(ProcessorFactoryToken),

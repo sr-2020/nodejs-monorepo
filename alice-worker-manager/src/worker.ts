@@ -3,7 +3,8 @@ import { EventEmitter } from 'events';
 import * as Rx from 'rxjs';
 import { fromStream } from './utils';
 
-import { EngineMessage, EngineReply, EngineReplyAquire, EngineResult, Event } from 'alice-model-engine-api';
+import { EngineMessage, EngineReply, EngineReplyAquire,
+  EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
 
 import { Catalogs } from './catalogs_storage';
 import { LoggerInterface } from './logger';
@@ -109,13 +110,13 @@ export class Worker extends EventEmitter {
     return this;
   }
 
-  public handleLogMessage = (syncEvent?: Event) => (message: any) => {
+  public handleLogMessage = (syncEvent?: SyncRequest) => (message: any) => {
     if (message.type == 'log') {
       if (syncEvent) {
         message.params = message.params || [];
         message.params.push({
           characterId: syncEvent.characterId,
-          eventTimestamp: syncEvent.timestamp,
+          eventTimestamp: syncEvent.scheduledUpdateTimestamp,
         });
       }
       this.logger.log(message.source, message.level, message.msg, message.additionalData);
@@ -130,7 +131,7 @@ export class Worker extends EventEmitter {
   public emitError = (err: Error) => this.emit('error', err);
   public emitExit = () => this.emit('exit');
 
-  public async process(objectStorage: BoundObjectStorage, syncEvent: Event,
+  public async process(objectStorage: BoundObjectStorage, syncEvent: SyncRequest,
                        model: any, events: Event[]): Promise<EngineResult> {
     this.lastOutput = [];
 

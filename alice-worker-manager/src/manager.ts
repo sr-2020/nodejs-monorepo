@@ -1,9 +1,9 @@
 import { Subject } from 'rxjs';
 
-import { Event, SyncEvent } from 'alice-model-engine-api';
+import { SyncRequest } from 'alice-model-engine-api';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
-import { SyncEventsSource } from './events_source';
+import { SyncRequestsSource } from './sync_requests_source';
 import { LoggerInterface } from './logger';
 import { WorkersPoolInterface } from './workers_pool';
 
@@ -26,7 +26,7 @@ export class Manager {
   } = {};
 
   constructor(
-    private eventsSource: SyncEventsSource,
+    private eventsSource: SyncRequestsSource,
     private catalogsStorage: CatalogsStorageInterface,
     private pool: WorkersPoolInterface,
     private processorFactory: ProcessorFactory,
@@ -42,7 +42,7 @@ export class Manager {
   }
 
   public subscribeEvents() {
-    this.eventsSource.syncEvents()
+    this.eventsSource.syncRequests()
       .takeUntil(this.stopped)
       .do(this.logEvent)
       .filter(this.filterErroredModels)
@@ -51,19 +51,12 @@ export class Manager {
     this.eventsSource.follow();
   }
 
-  public logEvent = (event: Event) => {
-    switch (event.eventType) {
-      case '_RefreshModel':
-        this.logger.info(
-          'manager', `Found refresh event for ${event.characterId}`, { characterId: event.characterId, event });
-        break;
-      default:
-        this.logger.warn(
-          'manager', `Unexpected event for ${event.characterId}`, { characterId: event.characterId, event });
-    }
+  public logEvent = (event: SyncRequest) => {
+    this.logger.info(
+          'manager', `Get sync request for ${event.characterId}`, { characterId: event.characterId, event });
   }
 
-  public filterErroredModels = (event: Event) => {
+  public filterErroredModels = (event: SyncRequest) => {
     const characterId = event.characterId;
 
     if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
@@ -75,7 +68,7 @@ export class Manager {
     return true;
   }
 
-  public onSyncEvent = (event: SyncEvent) => {
+  public onSyncEvent = (event: SyncRequest) => {
     const characterId = event.characterId;
 
     if (this.processors[characterId]) {
@@ -95,14 +88,14 @@ export class Manager {
     }
   }
 
-  public processorFulfilled = (event: SyncEvent) => {
+  public processorFulfilled = (event: SyncRequest) => {
     const characterId = event.characterId;
 
     delete this.errors[characterId];
     this.rotateProcessors(characterId);
   }
 
-  public processorRejected = (event: SyncEvent) => {
+  public processorRejected = (event: SyncRequest) => {
     this.errors[event.characterId] = (this.errors[event.characterId] || 0) + 1;
     this.rotateProcessors(event.characterId);
   }

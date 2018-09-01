@@ -11,12 +11,14 @@ export interface Event extends CharacterlessEvent {
   characterId: string,
 }
 
-export type SyncEvent = Event & { eventType: '_RefreshModel' }
+export interface SyncRequest {
+  characterId: string;
+  scheduledUpdateTimestamp: number;
+}
 
 export interface ModelMetadata {
   scheduledUpdateTimestamp: number;
 }
-
 
 export type Timer = {
   name: string,

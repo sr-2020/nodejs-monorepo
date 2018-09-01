@@ -1,6 +1,6 @@
 import { cloneDeep, isNil, keyBy } from 'lodash';
 
-import { EngineResult, Event, SyncEvent } from 'alice-model-engine-api';
+import { EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
 
 import { Config } from './config';
 import { EventStorage } from './event_storage';
@@ -30,7 +30,7 @@ export function processorFactory(
 
 export class Processor {
   private state: State = 'New';
-  private event: SyncEvent;
+  private event: SyncRequest;
 
   constructor(
     private config: Config,
@@ -47,46 +47,48 @@ export class Processor {
     return this.state == 'New' || this.state == 'Waiting for worker';
   }
 
-  public pushEvent(event: SyncEvent): this {
-    if (!this.event || event.timestamp > this.event.timestamp) {
+  public pushEvent(event: SyncRequest): this {
+    if (!this.event || event.scheduledUpdateTimestamp > this.event.scheduledUpdateTimestamp) {
       this.event = event;
     }
     return this;
   }
 
-  public async run(): Promise<SyncEvent> {
+  public async run(): Promise<SyncRequest> {
     this.logger.info('manager', 'Started processing model',
-      { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+      { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
     this.state = 'Waiting for worker';
 
     try {
       await this.pool.withWorker(async (worker: Worker) => {
         this.state = 'Processing';
 
-        this.logger.info('manager',
-          'Worker aquired', { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+        this.logger.info('manager', 'Worker aquired',
+          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
         const characterId = this.event.characterId;
         const model = await this.modelStorage.find(characterId);
 
-        if (model.timestamp > this.event.timestamp) return;
+        if (model.timestamp > this.event.scheduledUpdateTimestamp) return;
 
-        const events = (await this.eventStorage.range(characterId, model.timestamp + 1, this.event.timestamp))
-          .filter((event) => event.eventType[0] != '_') as any;
+        const events = (await this.eventStorage.range(characterId,
+          model.timestamp + 1, this.event.scheduledUpdateTimestamp))
+          .filter((event) => event.eventType[0] != '_');
 
-        events.push(this.event);
+        events.push(
+          { characterId: this.event.characterId, eventType: '_NoOp', timestamp: this.event.scheduledUpdateTimestamp });
 
         this.logger.debug('manager', 'Processing following events',
-          { characterId: this.event.characterId, eventTimestamp: this.event.timestamp, events });
+          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp, events });
 
         const objectStorage = new BoundObjectStorage(this.objectStorage);
         const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
         this.logger.info('manager',
           'Finished processing model',
-          { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
         this.logger.debug('manager',
           'Result of model processing',
-          { result, characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+          { result, characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
 
         if (result.status == 'ok') {
           const { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
@@ -107,7 +109,7 @@ export class Processor {
               baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
 
             this.logger.info('manager', 'All data stored',
-              { characterId: this.event.characterId, eventTimestamp: this.event.timestamp });
+              { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
           } finally {
             objectStorage.release();
           }
