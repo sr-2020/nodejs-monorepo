@@ -134,7 +134,7 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: '_RefreshModel', timestamp, data: undefined },
+      { characterId: '0000', eventType: '_', timestamp, data: undefined },
     ];
 
     let result = await worker.process(context, events);
@@ -155,7 +155,7 @@ describe('Worker', () => {
 
     const events = [
       { characterId: '0000', eventType: 'sendMessage', timestamp, data: { receiver: '0001', message: 'test message' } },
-      { characterId: '0000', eventType: '_RefreshModel', timestamp, data: undefined },
+      { characterId: '0000', eventType: '_', timestamp, data: undefined },
     ];
 
     let result = await worker.process(context, events);
@@ -189,7 +189,7 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: '_RefreshModel', timestamp, data: undefined },
+      { characterId: '0000', eventType: '_', timestamp, data: undefined },
     ];
 
     let result = await worker.process(context, events);
