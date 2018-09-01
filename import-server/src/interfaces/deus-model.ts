@@ -1,6 +1,6 @@
-import { System } from "./model";
-import { DeusCondition } from "./condition";
-import { DeusModifier } from "./modifier";
+import { DeusCondition } from './condition';
+import { System } from './model';
+import { DeusModifier } from './modifier';
 
 export interface ChangesElement {
     mID: string;
@@ -22,10 +22,10 @@ export interface SpaceSuit {
 }
 
 export class DeusModel {
-    // tslint:disable-next-line:variable-name
+    // disable-next-line:variable-name
     public _id: string;        // id в БД == JoinRPG ID
     // tslint:disable-next-line:variable-name
-    public _rev: string;       // rev в БД техническое
+    public _rev?: string;       // rev в БД техническое
     public login: string;      // login
     public firstName: string;      // имя
     public nicName?: string;       // ник-нейм
@@ -34,7 +34,7 @@ export class DeusModel {
     public isAlive: boolean = true;  // Если false = персонаж мертв
     public inGame: boolean = false; // Если true - персонаж в игре, и обновлять при импорте эту модель нельзя
 
-    public profileType: string = "human";
+    public profileType: string = 'human';
 
     public systems: System[];
 

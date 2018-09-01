@@ -1,6 +1,6 @@
 import * as Pouch from 'pouchdb';
-import { MapperInterface } from './mapper';
 import { config } from '../config';
+import { MapperInterface } from './mapper';
 
 export default class DeleteAccounts implements MapperInterface {
     private accountsDb: PouchDB.Database;
@@ -9,21 +9,21 @@ export default class DeleteAccounts implements MapperInterface {
         const ajaxOpts = {
             auth: {
                 username: config.username,
-                password: config.password
-            }
+                password: config.password,
+            },
         };
 
         this.accountsDb = new Pouch(`${config.url}${config.accountDBName}`, ajaxOpts);
     }
 
-    filter(doc) {
+    public filter(doc: any) {
         return !doc.inGame;
     }
 
-    async map(doc) {
+    public async map(doc: any) {
         console.log(doc._id);
         try {
-            await this.accountsDb.remove(doc._id)
+            await this.accountsDb.remove(doc._id);
         } catch (e) { }
     }
 }

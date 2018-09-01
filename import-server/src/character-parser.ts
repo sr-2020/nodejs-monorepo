@@ -1,4 +1,4 @@
-import { JoinCharacterDetail, JoinMetadata } from "./join-importer";
+import { JoinCharacterDetail, JoinMetadata } from './join-importer';
 
 export class CharacterParser {
     public characterId: number;
@@ -27,7 +27,7 @@ export class CharacterParser {
 
         const field = this.character.Fields.find((fi) => fi.ProjectFieldId === fieldID);
 
-        if (!field) { return ""; }
+        if (!field) { return ''; }
 
         return field.DisplayString.trim();
     }
@@ -35,7 +35,7 @@ export class CharacterParser {
     public joinBoolFieldValue(fieldID: number): boolean {
 
             const text = this.joinStrFieldValue(fieldID);
-            return (text === "on");
+            return (text === 'on');
     }
 
     public joinNumFieldValue(fieldID: number): number {
@@ -52,12 +52,11 @@ export class CharacterParser {
         return Number.NaN;
     }
 
-    public  joinFieldProgrammaticValue(fieldID: number): string {
+    public  joinFieldProgrammaticValue(fieldID: number): string | null {
         const fieldValue = this.joinNumFieldValue(fieldID);
         const fieldMetadata = this.metadata.Fields.find((f) => f.ProjectFieldId === fieldID);
 
-        if (!fieldMetadata)
-        {
+        if (!fieldMetadata) {
             throw new Error(`Can't find expected metadata for field ${fieldID}`);
         }
 
@@ -71,14 +70,14 @@ export class CharacterParser {
 
     // Конвертирует числовое ID значения поля мультивыбора в Description для этого значения
     // при конвертации убирает HTML-теги
-    public convertToDescription(fieldID: number, variantID: number): string {
+    public convertToDescription(fieldID: number, variantID: number): string | null {
         const field = this.metadata.Fields.find((f) => f.ProjectFieldId === fieldID);
 
         if (field && field.ValueList) {
 
             const value = field.ValueList.find((fv) => fv.ProjectFieldVariantId === variantID);
             if (value && value.Description) {
-                return value.Description.replace(/\<(.*?)\>/ig, "");
+                return value.Description.replace(/\<(.*?)\>/ig, '');
             }
         }
 
@@ -91,7 +90,7 @@ export class CharacterParser {
         const field = this.character.Fields.find((fi) => fi.ProjectFieldId === fieldID);
 
         if (field) {
-            return field.Value.split(",").map((el) => Number.parseInt(el, 10));
+            return field.Value.split(',').map((el) => Number.parseInt(el, 10));
         }
 
         return [];

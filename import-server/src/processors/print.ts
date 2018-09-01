@@ -1,8 +1,8 @@
 import { MapperInterface } from './mapper';
 
 export default class Print implements MapperInterface {
-    filter() { return true; }
-    map(doc) {
+    public filter() { return true; }
+    public  map(doc: any) {
         console.log(doc._id);
         return Promise.resolve();
     }

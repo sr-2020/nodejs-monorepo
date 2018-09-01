@@ -1,22 +1,21 @@
-import * as express from "express";
-import { Observable, BehaviorSubject  } from "rxjs/Rx";
-import * as moment from "moment";
-import * as winston from "winston";
-import Elasticsearch = require("winston-elasticsearch");
-import * as PouchDB from "pouchdb";
-import * as pouchDBFind from "pouchdb-find";
+import * as express from 'express';
+import * as moment from 'moment';
+import * as PouchDB from 'pouchdb';
+import * as pouchDBFind from 'pouchdb-find';
+import { BehaviorSubject, Observable  } from 'rxjs/Rx';
+import * as winston from 'winston';
+const Elasticsearch = require('winston-elasticsearch');
 
-import { ImportStats} from "./stats";
-import { config } from "./config";
-import { JoinData, JoinImporter, JoinCharacter, JoinCharacterDetail, JoinMetadata } from "./join-importer";
-import { TempDbWriter} from "./tempdb-writer";
-import { AliceExporter } from "./alice-exporter";
-import { ModelRefresher } from "./model-refresher";
-import { MailProvision } from "./mail-provision";
-import { processCliParams } from "./cli-params";
-import { ImportRunStats } from "./import-run-stats";
-import { EconProvider } from "./providers/econ-provider";
-import { Provider } from "./providers/interface";
+import { AliceExporter } from './alice-exporter';
+import { processCliParams } from './cli-params';
+import { config } from './config';
+import { ImportRunStats } from './import-run-stats';
+import { JoinCharacter, JoinCharacterDetail, JoinImporter } from './join-importer';
+import { ModelRefresher } from './model-refresher';
+import { EconProvider } from './providers/econ-provider';
+import { Provider } from './providers/interface';
+import { ImportStats} from './stats';
+import { TempDbWriter} from './tempdb-writer';
 
 PouchDB.plugin(pouchDBFind);
 
@@ -24,7 +23,6 @@ class ModelImportData {
     public importer: JoinImporter = new JoinImporter();
     public cacheWriter: TempDbWriter = new TempDbWriter();
     public modelRefresher: ModelRefresher = new ModelRefresher();
-    public mailProvision: MailProvision = new MailProvision();
 
     public afterConversionProviders: Provider[] = [ new EconProvider()];
 
@@ -47,7 +45,7 @@ if (!params) {
 // start logging
 configureLogger();
 
-winston.info("Run CLI parameters: ", params);
+winston.info('Run CLI parameters: ', params);
 
 // Reenter flag
 let isImportRunning = false;
@@ -66,17 +64,17 @@ if (
     || params.econ) {
     // tslint:disable-next-line:variable-name
     const _id = params.id ? params.id : 0;
-    const since = params.since ? moment.utc(params.since, "YYYY-MM-DDTHH:mm") : null;
+    const since = params.since ? moment.utc(params.since, 'YYYY-MM-DDTHH:mm') : null;
 
     importAndCreate(_id, (params.import === true), (params.export === true), (params.list === true),
                             false, (params.refresh === true), (params.mail === true), since)
     // tslint:disable-next-line:no-empty
-    .subscribe( (data: string) => { },
-                (error: any) => {
-                    process.exit(1);
-                },
+    .subscribe( () => { },
                 () => {
-                    winston.info("Finished!");
+            process.exit(1);
+        },
+                () => {
+                    winston.info('Finished!');
                     process.exit(0);
                 },
     );
@@ -86,16 +84,16 @@ if (
     const app = express();
     app.listen(config.port);
 
-    app.get("/", (req, res) => res.send(stats.toString()));
+    app.get('/', (_req, res) => res.send(stats.toString()));
 
     Observable.timer(0, config.importInterval).
         flatMap( () => importAndCreate() )
-        .subscribe( (data: string) => {},
-            (error: any) => {
+        .subscribe( () => { },
+            () => {
                 process.exit(1);
             },
             () => {
-                winston.info("Finished!");
+                winston.info('Finished!');
                 process.exit(0);
             },
         );
@@ -124,7 +122,7 @@ function prepareForImport(data: ModelImportData): Observable<ModelImportData> {
  */
 function loadCharacterListFomJoin(data: ModelImportData): Observable<ModelImportData> {
     return Observable.fromPromise(
-                data.importer.getCharacterList(data.lastRefreshTime.subtract(5, "minutes"))
+                data.importer.getCharacterList(data.lastRefreshTime.subtract(5, 'minutes'))
                 .then( ( c: JoinCharacter[] ) => {
                             data.charList = c;
                             return data;
@@ -139,7 +137,7 @@ function loadCharacterListFromCache(data: ModelImportData): Observable<ModelImpo
     return Observable.fromPromise(
                 data.cacheWriter.getCacheCharactersList()
                 .then( ( c: JoinCharacter[] ) => {
-                            winston.info("Debug: " + JSON.stringify(c));
+                            winston.info('Debug: ' + JSON.stringify(c));
                             data.charList = c;
                             return data;
                  }),
@@ -156,43 +154,45 @@ function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData):
 }
 
 function assertNever(x: never): never {
-    throw new Error("Unexpected object: " + x);
+    throw new Error('Unexpected object: ' + x);
 }
 
-function perfromProvide (
+function perfromProvide(
     provider: Provider,
     char: JoinCharacterDetail,
-    data: ModelImportData,
-    exportModel: boolean = true
+    exportModel: boolean = true,
 ): Observable<JoinCharacterDetail> {
     if (!exportModel) {
         return Observable.from([char]);
     }
 
     if (params.ignoreInGame || !char.finalInGame) {
-    
+
         return Observable.from([char])
         .do(() => winston.info(`About to provide ${provider.name} for character(${char._id})`))
         .delay(1000)
-        .flatMap(c => provider.provide(c))
+        .flatMap((c) => provider.provide(c))
         .map((result) => {
-            switch(result.result) {
-                case "success": {
+            switch (result.result) {
+                case 'success': {
                      winston.info(`Provide ${provider.name} for character(${char._id}) success`);
                      return char;
                 }
-                case "nothing":  {
+                case 'nothing':  {
                     winston.info(`Provide ${provider.name} for character(${char._id}) nothing to do`);
                     return char;
                 }
-                case "problems": {
-                    winston.warn(`Provide ${provider.name} for character(${char._id}) failed with ${result.problems.join(", ")}`);
+                case 'problems': {
+                    winston.warn(`Provide ${provider.name} for character(${char._id})` +
+                        `failed with ${result.problems.join(', ')}`);
                     return char;
                 }
                 default: assertNever(result);
             }
+            return char;
         });
     }
+    return Observable.from([char]);
 }
 
 /**
@@ -260,7 +260,7 @@ function provisionMailAddreses(data: ModelImportData): Promise<any> {
  */
 function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacterDetail> {
     let bufferCounter = 0;
-    winston.info("Load characters from JoinRPG");
+    winston.info('Load characters from JoinRPG');
 
     return Observable.from(data.charList)
             .bufferCount(config.importBurstSize)        // Порезать на группы по 20
@@ -271,7 +271,7 @@ function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacter
             // Каждую группу преобразовать в один общий Promise, ждущий все запросы в группе
             .mergeMap( (cl: JoinCharacter[]) => {
                 const characterIds = cl.map((d) => d.CharacterId);
-                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(",")} #`);
+                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(',')} #`);
                 bufferCounter++;
 
                 const promiseArr: Array<Promise<JoinCharacterDetail>> = [];
@@ -292,14 +292,14 @@ function loadCharactersFromJoin(data: ModelImportData): Observable<JoinCharacter
  */
 function loadCharactersFromCache(data: ModelImportData): Observable<JoinCharacterDetail> {
     let bufferCounter = 0;
-    winston.info("Load characters from CouchDB cache");
+    winston.info('Load characters from CouchDB cache');
 
     return Observable.from(data.charList)
             .bufferCount(config.importBurstSize)        // Порезать на группы по 20
              // Полученные данные группы разбить на отдельные элементы для обработки
             .mergeMap( (cl: JoinCharacter[]) => {
                 const characterIds = cl.map((d) => d.CharacterId);
-                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(",")} #`);
+                winston.info(`# Process ${bufferCounter}, size=${config.importBurstSize}: ${characterIds.join(',')} #`);
                 bufferCounter++;
 
                 const promiseArr: Array<Promise<JoinCharacterDetail>> = [];
@@ -324,10 +324,10 @@ function importAndCreate(   id: number = 0,
                             updateStats: boolean = true,
                             refreshModel: boolean = false,
                             mailProvision: boolean = true,
-                            updatedSince?: moment.Moment,
+                            updatedSince: moment.Moment | null = null,
                         ): Observable<string> {
 
-    const sinceText = updatedSince ? updatedSince.format("DD-MM-YYYY HH:mm:SS") : "";
+    const sinceText = updatedSince ? updatedSince.format('DD-MM-YYYY HH:mm:SS') : '';
 
     winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
                   `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, ` +
@@ -337,19 +337,19 @@ function importAndCreate(   id: number = 0,
     const workData = new ModelImportData();
 
     if (isImportRunning) {
-        winston.info("Import session in progress.. return and wait to next try");
+        winston.info('Import session in progress.. return and wait to next try');
         return Observable.from([]);
     }
 
     isImportRunning = true;
 
-    const returnSubject = new BehaviorSubject("start");
+    const returnSubject = new BehaviorSubject('start');
 
     let chain = prepareForImport(workData)
     // Установить дату с которой загружать персонажей (если задано)
         .map( (data) => {
             if (updatedSince) { data.lastRefreshTime = updatedSince; }
-            winston.info("Using update since time: " +  data.lastRefreshTime.format("DD-MM-YYYY HH:mm:SS"));
+            winston.info('Using update since time: ' +  data.lastRefreshTime.format('DD-MM-YYYY HH:mm:SS'));
             return data;
         })
 
@@ -369,7 +369,7 @@ function importAndCreate(   id: number = 0,
         .do( (data) => winston.info(`Received character list: ${data.charList.length} characters`) )
 
     // Если это только запрос списка - закончить
-        .filter( (data) => !onlyList )
+        .filter( () => !onlyList )
 
     // Загрузить данные из Join или из кеша
         .flatMap( (data: ModelImportData) => importJoin ? loadCharactersFromJoin(data) : loadCharactersFromCache(data) )
@@ -397,9 +397,9 @@ function importAndCreate(   id: number = 0,
         .filter( (c) => (!c.finalInGame) );
 
     // Выполнить все задачи после экспорта
-        workData.afterConversionProviders.forEach(provider => {
-            chain = chain.flatMap((c) => perfromProvide(provider, c, workData, exportModel))
-            
+        workData.afterConversionProviders.forEach((provider) => {
+            chain = chain.flatMap((c) => perfromProvide(provider, c, exportModel));
+
         });
 
         chain
@@ -420,7 +420,7 @@ function importAndCreate(   id: number = 0,
    // ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
         .subscribe( () => {},
             (error) => {
-                winston.error( "Error in pipe: ", error );
+                winston.error( 'Error in pipe: ', error );
                 isImportRunning = false;
             },
             () => {
@@ -441,38 +441,37 @@ function importAndCreate(   id: number = 0,
 
 function configureLogger() {
 
-    winston.remove("console");
-    if (process.env.NODE_ENV !== "production") {
+    winston.remove('console');
+    if (process.env.NODE_ENV !== 'production') {
 
         winston.add(winston.transports.Console, {
-            level: "debug",
+            level: 'debug',
             colorize: true,
-            prettyPrint: true
+            prettyPrint: true,
         });
     }
 
     winston.add(winston.transports.File, {
                 filename: config.log.logFileName,
                 json: false,
-                level: "debug",
+                level: 'debug',
             });
-            
-    winston.add(Elasticsearch,
-        { level: "debug",  indexPrefix: "importserver-logs", clientOpts: { host: config.log.elasticHost } });
 
+    winston.add(Elasticsearch,
+        { level: 'debug',  indexPrefix: 'importserver-logs', clientOpts: { host: config.log.elasticHost } });
 
     winston.add(winston.transports.File, {
-        name: "warn-files",
+        name: 'warn-files',
         filename: config.log.warnFileName,
         json: false,
-        level: "warn",
+        level: 'warn',
     });
 
     winston.handleExceptions(new winston.transports.File({
-                 filename: "path/to/exceptions.log",
+                 filename: 'path/to/exceptions.log',
                 handleExceptions: true,
                 humanReadableUnhandledException: true,
                 json: false,
-                level: "debug",
+                level: 'debug',
             }));
 }

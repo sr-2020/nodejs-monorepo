@@ -1,6 +1,6 @@
 import * as Pouch from 'pouchdb';
-import { MapperInterface } from './mapper';
 import { config } from '../config';
+import { MapperInterface } from './mapper';
 
 export class Processor {
     private db: PouchDB.Database;
@@ -9,21 +9,21 @@ export class Processor {
         const ajaxOpts = {
             auth: {
                 username: config.username,
-                password: config.password
-            }
+                password: config.password,
+            },
         };
 
         this.db = new Pouch(`${config.url}${config.modelDBName}`, ajaxOpts);
     }
 
-    async run() {
+    public async run() {
         let lastId;
         let total = 0;
 
         while (true) {
-            let params: any = {
+            const params: any = {
                 include_docs: true,
-                limit: 100
+                limit: 100,
             };
 
             if (lastId) {
@@ -40,7 +40,7 @@ export class Processor {
                 throw e;
             }
 
-            let pending = docs.rows
+            const pending = docs.rows
                 .map((row) => row.doc)
                 .filter((doc) => this.mapper.filter(doc))
                 .map((doc) => this.mapper.map(doc));
@@ -54,11 +54,12 @@ export class Processor {
                 throw e;
             }
 
-            if (docs.rows.length < 100) {
+            const lastDoc = docs.rows[docs.rows.length - 1].doc;
+            if (docs.rows.length < 100 || !lastDoc) {
                 break;
             }
 
-            lastId = docs.rows[docs.rows.length - 1].doc._id;
+            lastId = lastDoc._id;
         }
 
         return total;

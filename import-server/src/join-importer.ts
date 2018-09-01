@@ -1,10 +1,10 @@
-import * as moment from "moment";
-import * as request from "request-promise-native";
-import * as winston from "winston";
+import * as moment from 'moment';
+import * as request from 'request-promise-native';
+import * as winston from 'winston';
 
-import { config } from "./config";
-import { DeusModel } from "./interfaces/deus-model";
-import { AliceAccount } from "./interfaces/alice-account";
+import { config } from './config';
+import { AliceAccount } from './interfaces/alice-account';
+import { DeusModel } from './interfaces/deus-model';
 
 export interface JoinCharacter {
     CharacterId: number;
@@ -38,7 +38,7 @@ export interface JoinCharacterDetail {
     _id?: string;
     _rev?: string;
     model?: DeusModel;
-    account?: AliceAccount;
+    account: AliceAccount;
     finalInGame?: boolean;
 }
 
@@ -80,7 +80,7 @@ export class JoinImporter {
         };
     }
 
-    public accessToken = "";
+    public accessToken = '';
 
     public metadata: JoinMetadata;
 
@@ -90,9 +90,9 @@ export class JoinImporter {
          // Get token
         const reqOpts: any = {
             url: config.joinrpg.baseUrl + config.joinrpg.tokenPath,
-            method : "POST",
+            method : 'POST',
             form: {
-                grant_type: "password",
+                grant_type: 'password',
                 username: config.joinrpg.login,
                 password: config.joinrpg.password,
             },
@@ -107,13 +107,13 @@ export class JoinImporter {
         });
     }
 
-    public getCharacterList(modifiedSince: moment.Moment ): Promise<JoinCharacter[]> {
+    public async getCharacterList(modifiedSince: moment.Moment ): Promise<JoinCharacter[]> {
         const reqOpts = {
             url: config.joinrpg.baseUrl + config.joinrpg.listPath,
             qs : {
-                modifiedSince: modifiedSince.format("YYYY-MM-DD") + "T" +  modifiedSince.format("HH:mm:00.000"),
+                modifiedSince: modifiedSince.format('YYYY-MM-DD') + 'T' +  modifiedSince.format('HH:mm:00.000'),
             },
-            method : "GET",
+            method : 'GET',
             auth : {
                 bearer : this.accessToken,
             },
@@ -123,10 +123,10 @@ export class JoinImporter {
         return request(reqOpts);
     }
 
-    public getCharacter(CharacterLink: string): Promise<JoinCharacterDetail> {
+    public async getCharacter(characterLink: string): Promise<JoinCharacterDetail> {
         const reqOpts = {
-            url: config.joinrpg.baseUrl + CharacterLink,
-            method : "GET",
+            url: config.joinrpg.baseUrl + characterLink,
+            method : 'GET',
             auth : {
                 bearer : this.accessToken,
             },
@@ -145,7 +145,7 @@ export class JoinImporter {
     public getMetadata(): Promise<JoinMetadata> {
          const reqOpts = {
             url: config.joinrpg.baseUrl + config.joinrpg.metaPath,
-            method : "GET",
+            method : 'GET',
             auth : {
                 bearer : this.accessToken,
             },

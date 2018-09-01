@@ -1,18 +1,18 @@
-import { Observable } from "rxjs/Rx";
-import * as PouchDB from "pouchdb";
-import * as winston from "winston";
-import * as clones from "clones";
+import * as clones from 'clones';
+import * as PouchDB from 'pouchdb';
+import { Observable } from 'rxjs/Rx';
+import * as winston from 'winston';
 
-import { config } from "./config";
-import { JoinCharacterDetail } from "./join-importer";
-import { JoinMetadata } from "./join-importer";
+import { config } from './config';
+import { JoinCharacterDetail } from './join-importer';
+import { JoinMetadata } from './join-importer';
 
-import { DeusEvent } from "./interfaces/events";
-import { saveObject } from "./helpers";
-import { CharacterParser } from "./character-parser";
-import { AliceAccount } from "./interfaces/alice-account";
-import { DeusModel } from "./interfaces/deus-model";
-import { convertAliceModel } from "./alice-model-converter";
+import { convertAliceModel } from './alice-model-converter';
+import { CharacterParser } from './character-parser';
+import { saveObject } from './helpers';
+import { AliceAccount } from './interfaces/alice-account';
+import { DeusModel } from './interfaces/deus-model';
+import { DeusEvent } from './interfaces/events';
 
 export interface INameParts {
     firstName: string;
@@ -24,7 +24,7 @@ export interface INameParts {
 export class AliceExporter {
 
     public model: DeusModel = new DeusModel();
-    public account?: AliceAccount;
+    public account: AliceAccount;
 
     public conversionProblems: string[] = [];
 
@@ -62,7 +62,7 @@ export class AliceExporter {
     public export(): Promise<any> {
 
         if (!this.model) {
-            winston.warn(`Character(${this.character.characterId}) not converted. Reasons: ${this.conversionProblems.join("; ")}`);
+            winston.warn(`Character(${this.character.characterId}) not converted. Reasons: ${this.conversionProblems.join('; ')}`);
             return Promise.resolve();
         }
 
@@ -77,7 +77,7 @@ export class AliceExporter {
 
         const refreshEvent = {
             characterId: this.model._id,
-            eventType: "_RefreshModel",
+            eventType: '_RefreshModel',
             timestamp: this.model.timestamp + 100,
             data: {},
         };
@@ -112,13 +112,13 @@ export class AliceExporter {
                 return true;
             })
 
-            .map(([thisM,]) => thisM)
+            .map(([thisM]: any) => thisM)
 
             .flatMap(() => this.clearEvents())
-            .do((result) => results.clearEvents = result.length)
+            .do((result: any) => results.clearEvents = result.length)
 
             .flatMap(() => saveObject(this.con, this.model, this.isUpdate))
-            .do((result) => results.model = result.ok ? "ok" : "error")
+            .do((result: any) => results.model = result.ok ? 'ok' : 'error')
 
             .flatMap(() =>
                 this.eventsToSend.length ? this.eventsCon.bulkDocs(this.eventsToSend) : Observable.from([[]]))
@@ -126,14 +126,14 @@ export class AliceExporter {
 
             .flatMap(() => {
                 if (this.account) {
-                    winston.debug(`Providing account for character ${this.account._id}`)
+                    winston.debug(`Providing account for character ${this.account._id}`);
                     return saveObject(this.accCon, this.account, this.isUpdate);
                 } else {
                     winston.warn(`Cannot provide account for Character(${this.model._id})`);
                     return Promise.resolve(false);
                 }
             })
-            .do((result) => results.account = result.ok ? "ok" : "error")
+            .do((result: any) => results.account = result.ok ? 'ok' : 'error')
 
             .map(() => results)
             .toPromise();

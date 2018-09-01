@@ -1,67 +1,64 @@
-import { Observable } from "rxjs/Rx";
-import * as moment from "moment";
-import * as PouchDB from "pouchdb";
-import * as request from "request-promise-native";
-import * as winston from "winston";
+import * as moment from 'moment';
+import * as PouchDB from 'pouchdb';
+import * as winston from 'winston';
 
-
-import { ImportStats } from "./stats";
-import { config } from "./config";
-import { JoinCharacterDetail, JoinData, JoinFieldInfo, JoinFieldMetadata, JoinFieldValue,
-         JoinGroupInfo, JoinMetadata, JoinImporter, JoinCharacter } from "./join-importer"
-import { ImportRunStats } from "./import-run-stats";
+import { config } from './config';
+import { ImportRunStats } from './import-run-stats';
+import { JoinCharacter, JoinCharacterDetail, JoinImporter, JoinMetadata } from './join-importer';
 
 export class TempDbWriter {
 
-    private con: any = null;
+    public lastStatsDocID = 'lastImportStats';
 
-    private exceptionIds = ["JoinMetadata", "lastImportStats"];
+    public metadataDocID = 'JoinMetadata';
+
+    private con: PouchDB.Database<JoinCharacterDetail | JoinMetadata>;
+
+    private exceptionIds = ['JoinMetadata', 'lastImportStats'];
 
     constructor() {
         const ajaxOpts = {
                 auth: {
                     username: config.username,
                     password: config.password,
-                }
+                },
         };
 
         this.con = new PouchDB(`${config.url}${config.tempDbName}`, ajaxOpts);
     }
-    
-    setFieldsNames(c: JoinCharacterDetail, metadata: JoinMetadata): JoinCharacterDetail{
+
+    public setFieldsNames(c: JoinCharacterDetail, metadata: JoinMetadata): JoinCharacterDetail {
         c.Fields.forEach( (f) => {
-            let fmeta = metadata.Fields.find( v => v.ProjectFieldId == f.ProjectFieldId );
-            f.FieldName = fmeta ? fmeta.FieldName : "";
+            const fmeta = metadata.Fields.find( (v) => v.ProjectFieldId == f.ProjectFieldId );
+            f.FieldName = fmeta ? fmeta.FieldName : '';
         } );
 
         return c;
     }
 
-    saveCharacter( c: JoinCharacterDetail ): Promise<any>{
+    public saveCharacter( c: JoinCharacterDetail ): Promise<any> {
         c._id = c.CharacterId.toString();
-        
-        return this.con.get(c._id)
-                        .then( (oldc: JoinCharacterDetail) =>{ 
+
+        return this.con.get<JoinCharacterDetail>(c._id)
+                        .then( (oldc: JoinCharacterDetail) => {
                             c._rev = oldc._rev;
                             return this.con.put(c);
                         })
                         .catch( () => this.con.put(c) );
     }
 
-    public lastStatsDocID = "lastImportStats";
+    public saveLastStats(s: ImportRunStats): Promise<any> {
 
-    saveLastStats(s: ImportRunStats): Promise<any>{
-
-        let stats: any = {
+        const stats: any = {
             _id: this.lastStatsDocID,
-            importTime: s.importTime.format("YYYY-MM-DDTHH:mm"),
+            importTime: s.importTime.format('YYYY-MM-DDTHH:mm'),
             imported: s.imported,
             created: s.created,
-            updated: s.updated
+            updated: s.updated,
         };
 
-        return this.con.get(this.lastStatsDocID)
-                        .then( (oldc: JoinCharacterDetail) =>{ 
+        return this.con.get<JoinCharacterDetail>(this.lastStatsDocID)
+                        .then( (oldc: JoinCharacterDetail) => {
                             stats._rev = oldc._rev;
                             return this.con.put(stats);
                         })
@@ -69,49 +66,47 @@ export class TempDbWriter {
 
     }
 
-    getLastStats(): Promise<ImportRunStats>{
+    public getLastStats(): Promise<ImportRunStats> {
         return this.con.get(this.lastStatsDocID).then((s: any) => {
-            let ret = new ImportRunStats( moment(s.importTime, "YYYY-MM-DDTHH:mm") );
+            const ret = new ImportRunStats( moment(s.importTime, 'YYYY-MM-DDTHH:mm') );
             ret.created = s.created;
             ret.imported = s.imported;
             ret.updated = s.updated;
             return ret;
          })
-        .catch( ()=>{
-             return (new ImportRunStats( moment([1900,0,1]) ));
-         })
+        .catch( () => {
+             return (new ImportRunStats( moment([1900, 0, 1]) ));
+         });
     }
 
-    public metadataDocID = "JoinMetadata";
-
-    saveMetadata(s: JoinMetadata): Promise<any>{
+    public saveMetadata(s: JoinMetadata): Promise<any> {
         s._id = this.metadataDocID;
 
-        return this.con.get(this.metadataDocID)
-                        .then( (oldc: JoinMetadata) =>{ 
+        return this.con.get<JoinMetadata>(this.metadataDocID)
+                        .then( (oldc: JoinMetadata) => {
                             s._rev = oldc._rev;
-                            winston.info("Metadata saved!");
+                            winston.info('Metadata saved!');
                             return this.con.put(s);
                         })
                         .catch( () => this.con.put(s) );
 
     }
 
-    getMetadata(): Promise<JoinMetadata | null>{
-        return this.con.get(this.metadataDocID)
+    public getMetadata(): Promise<JoinMetadata | null> {
+        return this.con.get<JoinMetadata>(this.metadataDocID)
                         .catch( () => Promise.resolve(null) );
 
     }
 
-    getCacheCharactersList(): Promise<JoinCharacter[]>{
+    public getCacheCharactersList(): Promise<JoinCharacter[]> {
         return this.con.allDocs().then( (docs) => {
             return docs.rows
-            .filter( (doc: any) => !this.exceptionIds.find(e => e == doc.id ) )
-            .map( (doc) => JoinImporter.createJoinCharacter(doc.id) );
-        })
+            .filter( (doc: any) => !this.exceptionIds.find((e) => e == doc.id ) )
+            .map( (doc) => JoinImporter.createJoinCharacter(Number(doc.id)) );
+        });
     }
 
-    getCacheCharacter(id: string): Promise<JoinCharacterDetail>{
+    public getCacheCharacter(id: string): Promise<JoinCharacterDetail> {
         return this.con.get(id);
     }
 }
