@@ -3,18 +3,6 @@ import { merge as _merge } from 'lodash';
 import * as Path from 'path';
 import * as Rx from 'rxjs';
 
-type AnyFunc = (...args: any[]) => void;
-
-export function stdCallback(resolve: AnyFunc, reject: AnyFunc) {
-  return (err: any, data: any) => {
-    if (err) {
-      reject(err);
-    } else {
-      resolve(data);
-    }
-  };
-}
-
 export function fromStream<T>(stream, finishEventName = 'end', dataEventName = 'data') {
   stream.pause();
 
