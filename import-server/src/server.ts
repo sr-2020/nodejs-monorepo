@@ -218,12 +218,10 @@ async function exportCharacterModel(
 /**
  * Посылка события Refresh-модели
  */
-function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
-  return Observable.fromPromise(data.modelRefresher.sentRefreshEvent(char))
-    .map((c: any) => {
-      winston.info(`Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c));
-      return char;
-    });
+async function sendModelRefresh(char: JoinCharacterDetail, data: ModelImportData): Promise<JoinCharacterDetail> {
+  const c = await data.modelRefresher.sentRefreshEvent(char);
+  winston.info(`Refresh event sent to model for character id = ${char._id}: ` + JSON.stringify(c));
+  return char;
 }
 
 /*
