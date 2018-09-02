@@ -132,10 +132,10 @@ async function loadCharacterListFromCache(data: ModelImportData): Promise<ModelI
 /**
  * Сохранение данных о персонаже из Join в кеш на CouchDB
  */
-function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData): Observable<JoinCharacterDetail> {
-  return Observable.fromPromise(data.cacheWriter.saveCharacter(char))
-    .do((c: any) => winston.info(`Character id: ${c.id} saved to cache`))
-    .map(() => char);
+async function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImportData): Promise<JoinCharacterDetail> {
+  await data.cacheWriter.saveCharacter(char);
+  winston.info(`Character id: ${char.CharacterId} saved to cache`);
+  return char;
 }
 
 function assertNever(x: never): never {
