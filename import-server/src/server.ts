@@ -102,19 +102,15 @@ if (
 /**
  * Предвартельные операции для импорта (токен, заливка метаданных, каталоги и т.д)
  */
-function prepareForImport(data: ModelImportData): Observable<ModelImportData> {
-
-  return Observable.fromPromise(data.cacheWriter.getLastStats())
-    .map((loadedStats) => {
-      data.lastRefreshTime = loadedStats.importTime;
-      return data;
-    })
-    .flatMap(() => data.importer.init())
-    .flatMap(() => data.importer.getMetadata())
-    .do(() => winston.info(`Received metadata!`))
-    .flatMap((metadata) => data.cacheWriter.saveMetadata(metadata))
-    .do(() => winston.info(`Save metadata to cache!`))
-    .flatMap(() => Observable.from([data]));
+async function prepareForImport(data: ModelImportData): Promise<ModelImportData> {
+  const loadedStats = await data.cacheWriter.getLastStats();
+  data.lastRefreshTime = loadedStats.importTime;
+  await data.importer.init();
+  const metadata = await data.importer.getMetadata();
+  winston.info(`Received metadata!`);
+  await data.cacheWriter.saveMetadata(metadata);
+  winston.info(`Save metadata to cache!`);
+  return data;
 }
 
 /**
@@ -344,7 +340,7 @@ function importAndCreate(id: number = 0,
 
   const returnSubject = new BehaviorSubject('start');
 
-  let chain = prepareForImport(workData)
+  let chain = Observable.fromPromise(prepareForImport(workData))
     // Установить дату с которой загружать персонажей (если задано)
     .map((data) => {
       if (updatedSince) { data.lastRefreshTime = updatedSince; }

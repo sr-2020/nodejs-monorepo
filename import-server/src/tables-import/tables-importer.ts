@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs/Rx';
-
 // tslint:disable-next-line:no-var-requires
 const google = require('googleapis');
 import * as PouchDB from 'pouchdb';
@@ -144,10 +142,9 @@ export class TablesImporter {
 
 const importer = new TablesImporter();
 
-importer.import().subscribe((result) => {
+importer.import().then((result) => {
   winston.info(`Import finished. Result: ${result}`);
-},
-  (err) => {
+  }).catch((err) => {
     winston.info('Error in import process: ', err);
   },
 );
