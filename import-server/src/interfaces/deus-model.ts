@@ -1,6 +1,5 @@
-import { DeusCondition } from './condition';
+import { Condition, Modifier } from 'alice-model-engine-api';
 import { System } from './model';
-import { DeusModifier } from './modifier';
 
 export interface ChangesElement {
   mID: string;
@@ -44,8 +43,8 @@ export interface DeusModel {
 
   // Техническое
   timestamp: number;           // дата обновление модели
-  conditions: DeusCondition[]; // состояния
-  modifiers: DeusModifier[];   // модификаторы (импланты\болезни)
+  conditions: Condition[]; // состояния
+  modifiers: Modifier[];   // модификаторы (импланты\болезни)
   timers: any[];               // таймеры в модели
   changes: ChangesElement[];   // Изменения в модели
   messages: Message[];         // Сообщения игроку

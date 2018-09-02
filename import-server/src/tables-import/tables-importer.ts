@@ -5,26 +5,11 @@ import * as winston from 'winston';
 
 import { config } from '../config';
 import { saveObject } from '../helpers';
-import { DeusCondition } from '../interfaces/condition';
-import { DeusModifier } from '../interfaces/modifier';
 
 import { System } from '../interfaces/model';
 import * as loaders from './loaders';
 
 export class TablesImporter {
-
-  // Созданные в результате импорта объекты имплантов, состояний и "модификатор" для показа состояний кубиков сознания
-  public implants: DeusModifier[] = [];
-  public conditions: DeusCondition[] = [];
-  public mindCubeModifier: DeusModifier = {
-    _id: 'mindcubes_showdata',
-    displayName: 'internal mind cube conditions modifier',
-    class: '_internal',
-    effects: ['show-condition'],
-    predicates: [],
-  };
-  public illnesses: DeusCondition[] = [];
-
   private readonly numberOfSystems = 7;
 
   private readonly systemsPresence = [
