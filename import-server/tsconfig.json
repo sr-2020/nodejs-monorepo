@@ -2,9 +2,6 @@
     "extends": "../../tsconfig.base.json",
     "compileOnSave": false,
     "compilerOptions": {
-        // TODO: Fix and re-enable
-        "strictPropertyInitialization": false,
-        "strict": true,
         "outDir": "./dist",
         "typeRoots": [
             "node_modules/@types"

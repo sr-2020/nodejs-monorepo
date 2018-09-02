@@ -112,7 +112,7 @@ function prepareForImport(data: ModelImportData): Observable<ModelImportData> {
     .flatMap(() => data.importer.init())
     .flatMap(() => data.importer.getMetadata())
     .do(() => winston.info(`Received metadata!`))
-    .flatMap(() => data.cacheWriter.saveMetadata(data.importer.metadata))
+    .flatMap((metadata) => data.cacheWriter.saveMetadata(metadata))
     .do(() => winston.info(`Save metadata to cache!`))
     .flatMap(() => Observable.from([data]));
 }
@@ -198,39 +198,38 @@ function perfromProvide(
 /**
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
-function exportCharacterModel(
+async function exportCharacterModel(
   char: JoinCharacterDetail,
   data: ModelImportData,
-  exportModel: boolean = true): Observable<JoinCharacterDetail> {
+  exportModel: boolean = true): Promise<JoinCharacterDetail> {
 
   if (!exportModel) {
-    return Observable.from([char]);
+    return Observable.from([char]).toPromise();
   }
 
   winston.info(`About to export Character(${char._id})`);
 
   const exporter = new AliceExporter(
-    char, data.importer.metadata, true, params.ignoreInGame);
+    char, await data.importer.getMetadata(), true, params.ignoreInGame);
 
-  return Observable.fromPromise(exporter.export())
-    .map((c) => {
-      if (c) {
-        char.model = exporter.model;
-        char.account = exporter.account;
+  const exportResult = await exporter.export();
+  if (exportResult) {
+    char.model = exporter.model;
+    char.account = exporter.account;
 
-        winston.info(
-          `Exported model and account for character ${char._id}, results: ${JSON.stringify(c)}`);
-      } else {
-        if (char.InGame) {
-          winston.info(
-            `Model and account for character ${char._id} not exported: model alredy IN THE GAME`);
-          char.finalInGame = true;    // Отметить что эту модель дальше не надо обрабатывать
-        }
-      }
+    winston.info(
+      `Exported model and account for character ${char._id}, results: ${JSON.stringify(exportResult)}`);
+  } else {
+    if (char.InGame) {
+      winston.info(
+        `Model and account for character ${char._id} not exported: model alredy IN THE GAME`);
+      char.finalInGame = true;    // Отметить что эту модель дальше не надо обрабатывать
+    }
+  }
 
-      return char;
-    });
+  return char;
 }
+
 /**
  * Посылка события Refresh-модели
  */

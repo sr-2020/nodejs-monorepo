@@ -82,9 +82,7 @@ export class JoinImporter {
 
   public accessToken = '';
 
-  public metadata: JoinMetadata;
-
-  constructor() { }
+  public metadata: JoinMetadata | undefined;
 
   public init(): Promise<boolean> {
     // Get token
@@ -142,7 +140,8 @@ export class JoinImporter {
     return this.getCharacter(url);
   }
 
-  public getMetadata(): Promise<JoinMetadata> {
+  public async getMetadata(): Promise<JoinMetadata> {
+    if (this.metadata) return this.metadata;
     const reqOpts = {
       url: config.joinrpg.baseUrl + config.joinrpg.metaPath,
       method: 'GET',
@@ -153,7 +152,7 @@ export class JoinImporter {
       json: true,
     };
 
-    return request(reqOpts).then((m: JoinMetadata) => { this.metadata = m; return m; });
+    return request(reqOpts).then((metadata) => this.metadata = metadata);
   }
 
 }
