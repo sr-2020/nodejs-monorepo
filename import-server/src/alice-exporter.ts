@@ -121,7 +121,7 @@ export class AliceExporter {
   /**
    * Очистка очереди события для данного персонажа (если они были)
    */
-  public clearEvents(characterId: string) {
+  private clearEvents(characterId: string) {
     const selector = {
       selector: { characterId },
       limit: 10000,
