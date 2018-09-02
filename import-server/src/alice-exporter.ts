@@ -1,18 +1,17 @@
-import * as clones from 'clones';
+import { cloneDeep } from 'lodash';
 import * as PouchDB from 'pouchdb';
 import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
 
-import { config } from './config';
-import { JoinCharacterDetail } from './join-importer';
-import { JoinMetadata } from './join-importer';
-
 import { convertAliceModel } from './alice-model-converter';
 import { CharacterParser } from './character-parser';
+import { config } from './config';
 import { saveObject } from './helpers';
 import { AliceAccount } from './interfaces/alice-account';
 import { DeusModel } from './interfaces/deus-model';
 import { DeusEvent } from './interfaces/events';
+import { JoinCharacterDetail } from './join-importer';
+import { JoinMetadata } from './join-importer';
 
 export interface INameParts {
     firstName: string;
@@ -154,7 +153,7 @@ export class AliceExporter {
             .flatMap((result: any) => {
                 return this.eventsCon.bulkDocs(
                     result.docs.map((x) => {
-                        const x2 = clones(x);
+                        const x2 = cloneDeep(x);
                         x2._deleted = true;
                         return x2;
                     }),
