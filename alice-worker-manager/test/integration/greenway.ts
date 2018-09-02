@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import 'mocha';
 
 import { ManagerToken } from '../../src/di_tokens';
 import { Manager } from '../../src/manager';
