@@ -8,7 +8,6 @@ import { config } from './config';
 import { saveObject } from './helpers';
 import { AliceAccount } from './interfaces/alice-account';
 import { DeusModel } from './interfaces/deus-model';
-import { DeusEvent } from './interfaces/events';
 import { JoinCharacterDetail } from './join-importer';
 import { JoinMetadata } from './join-importer';
 
@@ -19,6 +18,11 @@ export interface INameParts {
   fullName: string;
 }
 
+export interface ExportResult {
+  account: 'ok' | 'error';
+  model: 'ok' | 'error';
+}
+
 export class AliceExporter {
 
   public model: DeusModel = new DeusModel();
@@ -26,11 +30,9 @@ export class AliceExporter {
 
   public conversionProblems: string[] = [];
 
-  private con: PouchDB.Database;
+  private con: PouchDB.Database<DeusModel>;
   private accCon: PouchDB.Database;
   private eventsCon: PouchDB.Database;
-
-  private eventsToSend: DeusEvent[] = [];
 
   private character: CharacterParser;
 
@@ -57,7 +59,7 @@ export class AliceExporter {
     this.createModel();
   }
 
-  public export(): Promise<any> {
+  public export(): Promise<ExportResult | void> {
 
     if (!this.model) {
       winston.warn(`Character(${this.character.characterId}) not converted. ` +
@@ -67,25 +69,10 @@ export class AliceExporter {
 
     winston.info(`Will export converted Character(${this.model._id})`);
 
-    const results: any = {
-      clearEvents: null,
-      account: null,
-      model: null,
-      saveEvents: null,
+    const results: ExportResult = {
+      account: 'error',
+      model: 'error',
     };
-
-    const refreshEvent = {
-      characterId: this.model._id,
-      eventType: '_RefreshModel',
-      timestamp: this.model.timestamp + 100,
-      data: {},
-    };
-
-    if (this.eventsToSend.length) {
-      refreshEvent.timestamp = this.eventsToSend[this.eventsToSend.length - 1].timestamp + 100;
-    }
-
-    this.eventsToSend.push(refreshEvent);
 
     let oldModel = Observable
       .fromPromise(this.con.get(this.model._id))
@@ -101,27 +88,21 @@ export class AliceExporter {
 
     const thisModel = Observable.of(this.model);
 
-    return Observable.zip(thisModel, oldModel, (a, b) => [a, b])
+    return Observable.zip(thisModel, oldModel, (model, old) => ({model, old}))
       // ===== Проверка InGame для для случая обновления ==============================
-      .filter(([, o]: [DeusModel, DeusModel | null]) => {
-        if (o && o.inGame) {
+      .filter((p) => {
+        if (p.old && p.old.inGame) {
           winston.info(`Character model ${this.model._id} already in game!`);
           return false;
         }
         return true;
       })
 
-      .map(([thisM]: any) => thisM)
+      .map((p) => p.model)
 
-      .flatMap(() => this.clearEvents())
-      .do((result: any) => results.clearEvents = result.length)
-
+      .do(() => this.clearEvents())
       .flatMap(() => saveObject(this.con, this.model, this.isUpdate))
-      .do((result: any) => results.model = result.ok ? 'ok' : 'error')
-
-      .flatMap(() =>
-        this.eventsToSend.length ? this.eventsCon.bulkDocs(this.eventsToSend) : Observable.from([[]]))
-      .do((result: any) => results.saveEvents = result.length)
+      .do((result) => results.model = result.ok ? 'ok' : 'error')
 
       .flatMap(() => {
         if (this.account) {
@@ -142,7 +123,7 @@ export class AliceExporter {
   /**
    * Очистка очереди события для данного персонажа (если они были)
    */
-  public clearEvents(): Observable<any> {
+  public clearEvents() {
     const selector = {
       selector: { characterId: this.model._id },
       limit: 10000,

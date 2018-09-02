@@ -213,7 +213,7 @@ function exportCharacterModel(
     char, data.importer.metadata, true, params.ignoreInGame);
 
   return Observable.fromPromise(exporter.export())
-    .map((c: any) => {
+    .map((c) => {
       if (c) {
         char.model = exporter.model;
         char.account = exporter.account;
