@@ -1,5 +1,4 @@
 import * as PouchDB from 'pouchdb';
-import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
 
 import { convertAliceModel } from './alice-model-converter';
@@ -59,7 +58,7 @@ export class AliceExporter {
     this.createModel();
   }
 
-  public export(): Promise<ExportResult | void> {
+  public async export(): Promise<ExportResult | void> {
 
     if (!this.model) {
       winston.warn(`Character(${this.character.characterId}) not converted. ` +
@@ -69,70 +68,57 @@ export class AliceExporter {
 
     winston.info(`Will export converted Character(${this.model._id})`);
 
-    const results: ExportResult = {
-      account: 'error',
-      model: 'error',
-    };
-
-    let oldModel = Observable
-      .fromPromise(this.con.get(this.model._id))
-      .catch((err) => {
-        winston.info(`Model doesnt exist`, err);
-        return Observable.of(null);
-      });
-
-    if (this.ignoreInGame) {
-      winston.info(`Ovveride inGame flag for id=${this.model._id}`);
-      oldModel = Observable.of(null);
+    const existingModel = await this.getExistingModel();
+    if (existingModel && existingModel.inGame) {
+      winston.info(`Character model ${existingModel._id} already in game!`);
+      return { account: 'ok', model: 'ok' };
     }
 
-    const model = this.model;
+    await this.clearEvents(this.model._id);
+    const savedModel = await saveObject(this.con, this.model, this.isUpdate);
+    let savedAccount: any;
+    if (this.account) {
+      winston.debug(`Providing account for character ${this.model._id}`);
+      savedAccount = await saveObject(this.accCon, this.account, this.isUpdate);
+    } else {
+      winston.warn(`Cannot provide account for Character(${this.model._id})`);
+      savedAccount = false;
+    }
 
-    return oldModel
-      // ===== Проверка InGame для для случая обновления ==============================
-      .filter((o) => {
-        if (o && o.inGame) {
-          winston.info(`Character model ${o._id} already in game!`);
-          return false;
-        }
-        return true;
-      })
+    return {
+      account: savedAccount ? 'ok' : 'error',
+      model: savedModel ? 'ok' : 'error',
+    };
+  }
 
-      .do(() => this.clearEvents(model._id))
-      .flatMap(() => saveObject(this.con, this.model, this.isUpdate))
-      .do((result) => results.model = result.ok ? 'ok' : 'error')
+  private async getExistingModel(): Promise<DeusModel | null> {
+    if (!this.model) return null;
+    if (this.ignoreInGame) {
+      winston.info(`Overriding inGame flag for id=${this.model._id}`);
+      return null;
+    }
 
-      .flatMap(() => {
-        if (this.account) {
-          winston.debug(`Providing account for character ${model._id}`);
-          return saveObject(this.accCon, this.account, this.isUpdate);
-        } else {
-          winston.warn(`Cannot provide account for Character(${model._id})`);
-          return Promise.resolve(false);
-        }
-      })
-      .do((result) => results.account = result.ok ? 'ok' : 'error')
-
-      .map(() => results)
-      .toPromise();
-
+    try {
+      return this.con.get(this.model._id);
+    } catch (err) {
+      winston.info(`Model doesnt exist`, err);
+      return null;
+    }
   }
 
   /**
    * Очистка очереди события для данного персонажа (если они были)
    */
-  private clearEvents(characterId: string) {
+  private async clearEvents(characterId: string) {
     const selector = {
       selector: { characterId },
       limit: 10000,
     };
 
-    return Observable.from(this.eventsCon.find(selector))
-      .flatMap((result) => {
-        return this.eventsCon.bulkDocs(
-          result.docs.map((x) => ({ ...x, _deleted: true })),
-        );
-      });
+    const events = await this.eventsCon.find(selector);
+    this.eventsCon.bulkDocs(
+      events.docs.map((x) => ({ ...x, _deleted: true })),
+    );
   }
 
   private createModel() {

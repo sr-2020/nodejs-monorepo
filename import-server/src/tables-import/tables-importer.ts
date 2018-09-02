@@ -137,7 +137,7 @@ export class TablesImporter {
           };
 
           try {
-            await saveObject(con, model, true).toPromise();
+            await saveObject(con, model, true);
           } catch (e) {
             winston.error(e);
           }
