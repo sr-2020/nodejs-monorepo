@@ -2,18 +2,19 @@ import * as commandLineArgs from 'command-line-args';
 import { MapperInterface } from './mapper';
 import { Processor } from './processor';
 
-let p = commandLineArgs([{ name: 'mapper', type: String }])
+const p = commandLineArgs([{ name: 'mapper', type: String }]);
 
 console.log('=== Process with', p.mapper);
 
-let Mapper: any = require('./' + p.mapper);
-if (Mapper.default) Mapper = Mapper.default;
+// tslint:disable-next-line:no-var-requires
+let importedMapper: any = require('./' + p.mapper);
+if (importedMapper.default) importedMapper = importedMapper.default;
 
-let mapper: MapperInterface = new Mapper();
+const mapper: MapperInterface = new importedMapper();
 
-let processor = new Processor(mapper);
+const processor = new Processor(mapper);
 
 processor.run().then((total: number) => {
-    console.log('=== processed ' + total + ' models')
-    console.log('=== Done');
+  console.log('=== processed ' + total + ' models');
+  console.log('=== Done');
 });

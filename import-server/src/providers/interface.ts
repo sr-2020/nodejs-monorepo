@@ -1,20 +1,20 @@
-import { JoinCharacterDetail } from "../join-importer";
+import { JoinCharacterDetail } from '../join-importer';
 
 export interface ProvideSuccess {
-    result: "success";
+  result: 'success';
 }
 
 export interface ProvideNothing {
-    result: "nothing";
+  result: 'nothing';
 }
 export interface ProvideProblems {
-    result: "problems";
-    problems: string[];
+  result: 'problems';
+  problems: string[];
 }
 
 export type ProvideResult = ProvideSuccess | ProvideNothing | ProvideProblems;
 
 export interface Provider {
-    name: string;
-    provide(character: JoinCharacterDetail) : Promise<ProvideResult>;
+  name: string;
+  provide(character: JoinCharacterDetail): Promise<ProvideResult>;
 }

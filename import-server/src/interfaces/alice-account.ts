@@ -1,24 +1,24 @@
 import { Company, CompanyAccess, Professions, TradeUnions } from './model';
 
 export interface AliceAccount {
-    _id: string;
-    _rev?: string;
-    password: string;
-    login: string;
-    professions: Professions;
-    companyAccess: CompanyAccess[];
+  _id: string;
+  _rev?: string;
+  password: string;
+  login: string;
+  professions: Professions;
+  companyAccess: CompanyAccess[];
 
-    jobs: {
-        tradeUnion: TradeUnions;
-        companyBonus: Company[];
-    };
+  jobs: {
+    tradeUnion: TradeUnions;
+    companyBonus: Company[];
+  };
 
-    access?: AccessEntry[];
-    pushToken?: string;
-    roles?: string[];
+  access?: AccessEntry[];
+  pushToken?: string;
+  roles?: string[];
 }
 
 export interface AccessEntry {
-    id: string;
-    timestamp: number;
+  id: string;
+  timestamp: number;
 }

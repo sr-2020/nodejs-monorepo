@@ -3,27 +3,27 @@ import { config } from '../config';
 import { MapperInterface } from './mapper';
 
 export default class DeleteAccounts implements MapperInterface {
-    private accountsDb: PouchDB.Database;
+  private accountsDb: PouchDB.Database;
 
-    constructor() {
-        const ajaxOpts = {
-            auth: {
-                username: config.username,
-                password: config.password,
-            },
-        };
+  constructor() {
+    const ajaxOpts = {
+      auth: {
+        username: config.username,
+        password: config.password,
+      },
+    };
 
-        this.accountsDb = new Pouch(`${config.url}${config.accountDBName}`, ajaxOpts);
-    }
+    this.accountsDb = new Pouch(`${config.url}${config.accountDBName}`, ajaxOpts);
+  }
 
-    public filter(doc: any) {
-        return !doc.inGame;
-    }
+  public filter(doc: any) {
+    return !doc.inGame;
+  }
 
-    public async map(doc: any) {
-        console.log(doc._id);
-        try {
-            await this.accountsDb.remove(doc._id);
-        } catch (e) { }
-    }
+  public async map(doc: any) {
+    console.log(doc._id);
+    try {
+      await this.accountsDb.remove(doc._id);
+    } catch (e) { }
+  }
 }
