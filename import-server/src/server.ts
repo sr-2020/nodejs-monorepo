@@ -116,14 +116,9 @@ async function prepareForImport(data: ModelImportData): Promise<ModelImportData>
 /**
  * Получение списка обновленных персонажей (выполняется с уже подготовленной ModelImportData)
  */
-function loadCharacterListFomJoin(data: ModelImportData): Observable<ModelImportData> {
-  return Observable.fromPromise(
-    data.importer.getCharacterList(data.lastRefreshTime.subtract(5, 'minutes'))
-      .then((c: JoinCharacter[]) => {
-        data.charList = c;
-        return data;
-      }),
-  );
+async function loadCharacterListFomJoin(data: ModelImportData): Promise<ModelImportData> {
+   data.charList = await data.importer.getCharacterList(data.lastRefreshTime.subtract(5, 'minutes'));
+   return data;
 }
 
 /**
