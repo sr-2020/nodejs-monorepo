@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import * as PouchDB from 'pouchdb';
 import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
@@ -27,9 +26,9 @@ export class AliceExporter {
 
     public conversionProblems: string[] = [];
 
-    private con: any = null;
-    private accCon: any = null;
-    private eventsCon: any = null;
+    private con: PouchDB.Database;
+    private accCon: PouchDB.Database;
+    private eventsCon: PouchDB.Database;
 
     private eventsToSend: DeusEvent[] = [];
 
@@ -150,13 +149,9 @@ export class AliceExporter {
         };
 
         return Observable.from(this.eventsCon.find(selector))
-            .flatMap((result: any) => {
+            .flatMap((result) => {
                 return this.eventsCon.bulkDocs(
-                    result.docs.map((x) => {
-                        const x2 = cloneDeep(x);
-                        x2._deleted = true;
-                        return x2;
-                    }),
+                    result.docs.map((x) => ({...x, _deleted: true})),
                 );
             });
     }
