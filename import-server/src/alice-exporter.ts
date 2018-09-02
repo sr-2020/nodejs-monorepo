@@ -25,8 +25,8 @@ export interface ExportResult {
 
 export class AliceExporter {
 
-  public model: DeusModel = new DeusModel();
-  public account: AliceAccount;
+  public model: DeusModel | undefined;
+  public account: AliceAccount | undefined;
 
   public conversionProblems: string[] = [];
 
@@ -86,34 +86,32 @@ export class AliceExporter {
       oldModel = Observable.of(null);
     }
 
-    const thisModel = Observable.of(this.model);
+    const model = this.model;
 
-    return Observable.zip(thisModel, oldModel, (model, old) => ({model, old}))
+    return oldModel
       // ===== Проверка InGame для для случая обновления ==============================
-      .filter((p) => {
-        if (p.old && p.old.inGame) {
-          winston.info(`Character model ${this.model._id} already in game!`);
+      .filter((o) => {
+        if (o && o.inGame) {
+          winston.info(`Character model ${o._id} already in game!`);
           return false;
         }
         return true;
       })
 
-      .map((p) => p.model)
-
-      .do(() => this.clearEvents())
+      .do(() => this.clearEvents(model._id))
       .flatMap(() => saveObject(this.con, this.model, this.isUpdate))
       .do((result) => results.model = result.ok ? 'ok' : 'error')
 
       .flatMap(() => {
         if (this.account) {
-          winston.debug(`Providing account for character ${this.account._id}`);
+          winston.debug(`Providing account for character ${model._id}`);
           return saveObject(this.accCon, this.account, this.isUpdate);
         } else {
-          winston.warn(`Cannot provide account for Character(${this.model._id})`);
+          winston.warn(`Cannot provide account for Character(${model._id})`);
           return Promise.resolve(false);
         }
       })
-      .do((result: any) => results.account = result.ok ? 'ok' : 'error')
+      .do((result) => results.account = result.ok ? 'ok' : 'error')
 
       .map(() => results)
       .toPromise();
@@ -123,9 +121,9 @@ export class AliceExporter {
   /**
    * Очистка очереди события для данного персонажа (если они были)
    */
-  public clearEvents() {
+  public clearEvents(characterId: string) {
     const selector = {
-      selector: { characterId: this.model._id },
+      selector: { characterId },
       limit: 10000,
     };
 

@@ -8,6 +8,10 @@ export class EconProvider {
   public name: string = 'economic account';
 
   public async provide(character: JoinCharacterDetail): Promise<ProvideResult> {
+    if (!character.account) {
+      return {result: 'problems', problems: ['No character.accound defined'] };
+    }
+
     const body = {
       userId: character.account.login,
       initialBalance: 777,

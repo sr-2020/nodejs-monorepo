@@ -38,7 +38,7 @@ export interface JoinCharacterDetail {
   _id?: string;
   _rev?: string;
   model?: DeusModel;
-  account: AliceAccount;
+  account?: AliceAccount;
   finalInGame?: boolean;
 }
 
