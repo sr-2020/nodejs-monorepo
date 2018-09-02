@@ -124,15 +124,9 @@ async function loadCharacterListFomJoin(data: ModelImportData): Promise<ModelImp
 /**
  * Получение списка персонажей в кеше (выполняется с уже подготовленной ModelImportData)
  */
-function loadCharacterListFromCache(data: ModelImportData): Observable<ModelImportData> {
-  return Observable.fromPromise(
-    data.cacheWriter.getCacheCharactersList()
-      .then((c: JoinCharacter[]) => {
-        winston.info('Debug: ' + JSON.stringify(c));
-        data.charList = c;
-        return data;
-      }),
-  );
+async function loadCharacterListFromCache(data: ModelImportData): Promise<ModelImportData> {
+  data.charList = await data.cacheWriter.getCacheCharactersList();
+  return data;
 }
 
 /**
