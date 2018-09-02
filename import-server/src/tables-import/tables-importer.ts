@@ -57,18 +57,11 @@ export class TablesImporter {
     });
   }
 
-  public import(): Observable<TablesImporter> {
-    const promise = async () => {
+  public async import(): Promise<TablesImporter> {
       const authClient = await this.authorize();
       winston.info('Authorization success!');
-
-      await Promise.all([
-        this.importXenos(authClient),
-      ]);
+      await this.importXenos(authClient);
       return this;
-    };
-
-    return Observable.fromPromise(promise());
   }
 
   private splitCell(value: string): number[] {
