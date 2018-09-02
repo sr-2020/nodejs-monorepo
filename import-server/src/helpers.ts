@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash';
-import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
 
 /**
