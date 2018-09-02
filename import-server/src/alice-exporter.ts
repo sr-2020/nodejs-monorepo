@@ -38,8 +38,8 @@ export class AliceExporter {
 
   constructor(character: JoinCharacterDetail,
               metadata: JoinMetadata,
-              public isUpdate: boolean = true,
-              public ignoreInGame: boolean = false) {
+              private isUpdate: boolean = true,
+              private ignoreInGame: boolean = false) {
 
     const ajaxOpts = {
       auth: {
