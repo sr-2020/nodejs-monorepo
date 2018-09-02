@@ -28,7 +28,6 @@
     "@types/pouchdb-find": "^6.3.0",
     "@types/request-promise-native": "^1.0.6",
     "@types/winston": "^2.3.3",
-    "body-parser": "^1.17.2",
     "command-line-args": "^4.0.6",
     "command-line-usage": "^4.0.0",
     "dotenv": "^6.0.0",
@@ -46,10 +45,8 @@
     "winston-elasticsearch": "^0.5.8"
   },
   "devDependencies": {
-    "@types/body-parser": "^1.16.4",
     "@types/chai": "^4.0.1",
     "@types/command-line-usage": "^5.0.1",
-    "@types/errorhandler": "0.0.30",
     "@types/lodash": "^4.14.116",
     "chai": "^4.1.0",
     "nodemon": "^1.11.0"
