@@ -8,8 +8,8 @@ import { Company, Professions, System, TradeUnions } from './interfaces/model';
 
 export interface ConversionResults {
   problems: string[];
-  model: DeusModel | undefined;
-  account: AliceAccount | undefined;
+  model: DeusModel;
+  account: AliceAccount;
 }
 
 export function convertAliceModel(character: CharacterParser): ConversionResults {
@@ -26,16 +26,10 @@ class AliceModelConverter {
   }
 
   public convert(): ConversionResults {
-    try {
-      const result = this.convertModelImpl();
       return {
         problems: this.conversionProblems,
-        ...result,
+        ...this.convertModelImpl(),
       };
-    } catch (e) {
-      this.conversionProblems.push('Error in converting model ' + e);
-      return { model: undefined, account: undefined, problems: this.conversionProblems };
-    }
   }
 
   private convertModelImpl() {
