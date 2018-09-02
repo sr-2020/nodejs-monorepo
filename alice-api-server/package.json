@@ -59,9 +59,7 @@
   },
   "devDependencies": {
     "@types/chai": "^3.5.2",
-    "@types/mocha": "^2.2.41",
     "chai": "^4.1.2",
-    "mocha": "^3.5.3",
     "pouchdb-adapter-memory": "^7.0.0"
   }
 }
