@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const google = require('googleapis');
+import { google } from 'googleapis';
 import * as PouchDB from 'pouchdb';
 import * as winston from 'winston';
 
@@ -61,20 +60,22 @@ export class TablesImporter {
     }
   }
 
-  private async importXenos(authClient: any) {
-
+  private async importXenos(authClient: any): Promise<void> {
     const con = new PouchDB(`${config.url}${config.workModelDBName}`, {});
 
     const data = await loaders.xenomorphsDataLoad(authClient);
+    if (!data.values) {
+      winston.error('Failed to load values from Google Spreadsheet!');
+      return;
+    }
+
     data.values.forEach(async (line: string[], rowIndex: number) => {
-      if (rowIndex > 10) return;
       const planet = line[0];
       if (planet.length == 0)
         return;
 
-      // winston.info(`Processing planet ${planet}`);
       for (let i = 0; i < this.systemsPresence.length; ++i) {
-        const nucleotideString = line[1 + 8 * i];
+        const nucleotideString = line[1 + 9 * i];
         if (nucleotideString == '-')
           continue;
 
@@ -83,7 +84,7 @@ export class TablesImporter {
         this.assertMatch(nucleotide, systemsMask);
 
         for (let j = 0; j < 5; ++j) {
-          const columnIndex = 1 + 8 * i + j;
+          const columnIndex = 3 + 9 * i + j;
           const systemValuesString = line[columnIndex];
 
           const systemsValues = this.splitCell(systemValuesString);
@@ -120,8 +121,6 @@ export class TablesImporter {
         }
       }
     });
-    // await loaders.testDataSave(authClient);
-    // console.log(JSON.stringify(implants));
   }
 }
 
