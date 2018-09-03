@@ -60,10 +60,12 @@ export class TablesImporter {
       return;
     }
 
-    data.values.forEach(async (line: string[], rowIndex: number) => {
+    for (const [rowIndex, line] of data.values.entries()) {
       const planet = line[0];
       if (planet.length == 0)
-        return;
+        continue;
+
+      winston.info(`Importing planet ${planet}`);
 
       for (let i = 0; i < this.systemsPresence.length; ++i) {
         const nucleotideString = line[1 + 9 * i];
@@ -111,7 +113,7 @@ export class TablesImporter {
           }
         }
       }
-    });
+    }
   }
 }
 
