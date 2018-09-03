@@ -24,18 +24,9 @@ export class TablesImporter {
     [1, 1, 1, 1, 1, 1, 1], // Млекопитающие
   ];
 
-  public authorize(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      google.auth.getApplicationDefault((err: any, authClient: any) => {
-        if (err) return reject(err);
-
-        if (authClient.createScopedRequired && authClient.createScopedRequired()) {
-          const scopes = ['https://www.googleapis.com/auth/spreadsheets'];
-          authClient = authClient.createScoped(scopes);
-        }
-
-        resolve(authClient);
-      });
+  public async authorize() {
+    return google.auth.getClient({
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
   }
 
