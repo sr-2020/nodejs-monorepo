@@ -26,7 +26,7 @@ export class TablesImporter {
 
   public async authorize() {
     return google.auth.getClient({
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
   }
 
