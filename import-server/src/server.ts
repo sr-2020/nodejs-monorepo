@@ -4,7 +4,7 @@ import * as PouchDB from 'pouchdb';
 import * as pouchDBFind from 'pouchdb-find';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
-const Elasticsearch = require('winston-elasticsearch');
+const Elasticsearch = require('winston-elasticsearch'); // tslint:disable-line
 
 import { AliceExporter } from './alice-exporter';
 import { processCliParams } from './cli-params';
