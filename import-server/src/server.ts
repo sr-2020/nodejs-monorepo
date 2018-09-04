@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as moment from 'moment';
 import * as PouchDB from 'pouchdb';
 import * as pouchDBFind from 'pouchdb-find';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
 const Elasticsearch = require('winston-elasticsearch'); // tslint:disable-line
 
@@ -65,16 +65,11 @@ if (
 
   importAndCreate(_id, (params.import === true), (params.export === true), (params.list === true),
     false, (params.refresh === true), (params.mail === true), since)
-    // tslint:disable-next-line:no-empty
-    .subscribe(() => { },
-      () => {
-        process.exit(1);
-      },
-      () => {
-        winston.info('Finished!');
-        process.exit(0);
-      },
-  );
+    .catch(() => process.exit(1))
+    .then(() => {
+      winston.info('Finished!');
+      process.exit(0);
+    });
 } else if (params.server) {
   winston.info(`Start HTTP-server on port: ${config.port} and run import loop`);
 
@@ -114,8 +109,8 @@ async function prepareForImport(data: ModelImportData): Promise<ModelImportData>
  * Получение списка обновленных персонажей (выполняется с уже подготовленной ModelImportData)
  */
 async function loadCharacterListFomJoin(data: ModelImportData): Promise<ModelImportData> {
-   data.charList = await data.importer.getCharacterList(data.lastRefreshTime.subtract(5, 'minutes'));
-   return data;
+  data.charList = await data.importer.getCharacterList(data.lastRefreshTime.subtract(5, 'minutes'));
+  return data;
 }
 
 /**
@@ -135,46 +130,43 @@ async function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImport
   return char;
 }
 
-function assertNever(x: never): never {
-  throw new Error('Unexpected object: ' + x);
-}
-
-function perfromProvide(
+async function perfromProvide(
   provider: Provider,
   char: JoinCharacterDetail,
   exportModel: boolean = true,
-): Observable<JoinCharacterDetail> {
+): Promise<void> {
   if (!exportModel) {
-    return Observable.from([char]);
+    return;
   }
 
   if (params.ignoreInGame || !char.finalInGame) {
 
-    return Observable.from([char])
-      .do(() => winston.info(`About to provide ${provider.name} for character(${char._id})`))
-      .delay(1000)
-      .flatMap((c) => provider.provide(c))
-      .map((result) => {
-        switch (result.result) {
-          case 'success': {
-            winston.info(`Provide ${provider.name} for character(${char._id}) success`);
-            return char;
+    return new Promise<void>((resolve, reject) => {
+      Observable.from([char])
+        .do(() => winston.info(`About to provide ${provider.name} for character(${char._id})`))
+        .delay(1000)
+        .flatMap((c) => provider.provide(c))
+        .map((result: any) => {
+          switch (result.result) {
+            case 'success': {
+              winston.info(`Provide ${provider.name} for character(${char._id}) success`);
+              resolve();
+            }
+            case 'nothing': {
+              winston.info(`Provide ${provider.name} for character(${char._id}) nothing to do`);
+              resolve();
+            }
+            case 'problems': {
+              winston.warn(`Provide ${provider.name} for character(${char._id})` +
+                `failed with ${result.problems.join(', ')}`);
+                resolve();
+            }
+            default: reject('Unexpected result.result');
           }
-          case 'nothing': {
-            winston.info(`Provide ${provider.name} for character(${char._id}) nothing to do`);
-            return char;
-          }
-          case 'problems': {
-            winston.warn(`Provide ${provider.name} for character(${char._id})` +
-              `failed with ${result.problems.join(', ')}`);
-            return char;
-          }
-          default: assertNever(result);
-        }
-        return char;
+          resolve();
+        });
       });
   }
-  return Observable.from([char]);
 }
 
 /**
@@ -184,7 +176,6 @@ async function exportCharacterModel(
   char: JoinCharacterDetail,
   data: ModelImportData,
   exportModel: boolean = true): Promise<JoinCharacterDetail> {
-
   if (!exportModel) {
     return Observable.from([char]).toPromise();
   }
@@ -296,15 +287,15 @@ function loadCharactersFromCache(data: ModelImportData): Observable<JoinCharacte
  *  Функция для импорта данных из Join, записи в кеш CouchDB, создания и экспорта моделей
  *  (т.е. вся цепочка)
  */
-function importAndCreate(id: number = 0,
-                         importJoin: boolean = true,
-                         exportModel: boolean = true,
-                         onlyList: boolean = false,
-                         updateStats: boolean = true,
-                         refreshModel: boolean = false,
-                         mailProvision: boolean = true,
-                         updatedSince: moment.Moment | null = null,
-): Observable<string> {
+async function importAndCreate(id: number = 0,
+                               importJoin: boolean = true,
+                               exportModel: boolean = true,
+                               onlyList: boolean = false,
+                               updateStats: boolean = true,
+                               refreshModel: boolean = false,
+                               mailProvision: boolean = true,
+                               updatedSince: moment.Moment | null = null,
+): Promise<void> {
 
   const sinceText = updatedSince ? updatedSince.format('DD-MM-YYYY HH:mm:SS') : '';
 
@@ -315,97 +306,88 @@ function importAndCreate(id: number = 0,
   // Объект с рабочими данными при импорте - экспорте
   const workData = new ModelImportData();
 
-  const returnSubject = new BehaviorSubject('start');
+  let importData = await prepareForImport(workData);
+  if (updatedSince)
+    importData.lastRefreshTime = updatedSince;
+  winston.info('Using update since time: ' + importData.lastRefreshTime.format('DD-MM-YYYY HH:mm:SS'));
+  if (id) {
+    importData.charList.push(JoinImporter.createJoinCharacter(id));
+  } else if (importJoin) {
+    importData = await loadCharacterListFomJoin(importData);
+  } else {
+    importData = await loadCharacterListFromCache(importData);
+  }
 
-  let chain = Observable.fromPromise(prepareForImport(workData))
-    // Установить дату с которой загружать персонажей (если задано)
-    .map((data) => {
-      if (updatedSince) { data.lastRefreshTime = updatedSince; }
-      winston.info('Using update since time: ' + data.lastRefreshTime.format('DD-MM-YYYY HH:mm:SS'));
-      return data;
-    })
+  winston.info(`Received character list: ${importData.charList.length} characters`);
 
-    // Загрузить список персонажей (Join или кэш), если не задан ID
-    .flatMap((data: ModelImportData) => {
-      if (id) {
-        data.charList.push(JoinImporter.createJoinCharacter(id));
-        return Observable.from([data]);
-      } else if (importJoin) {
-        return loadCharacterListFomJoin(data);
-      } else {
-        return loadCharacterListFromCache(data);
-      }
-    })
+  // Если это только запрос списка - закончить
+  if (onlyList)
+    return;
 
-    // Запись в лог
-    .do((data) => winston.info(`Received character list: ${data.charList.length} characters`))
+  // Загрузить данные из Join или из кеша
+  const charactersDetails = importJoin ? loadCharactersFromJoin(importData) : loadCharactersFromCache(importData);
+  return new Promise<void>((resolve, reject) => {
+    charactersDetails
+      // Добавить задержку между обработкой записей
+      .flatMap((c) => Observable.from([c]).delay(config.importDelay), 1)
 
-    // Если это только запрос списка - закончить
-    .filter(() => !onlyList)
+      // Сохранить данные в кеш (если надо)
+      .flatMap((c) => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]))
 
-    // Загрузить данные из Join или из кеша
-    .flatMap((data: ModelImportData) => importJoin ? loadCharactersFromJoin(data) : loadCharactersFromCache(data))
-
-    // Добавить задержку между обработкой записей
-    .flatMap((c) => Observable.from([c]).delay(config.importDelay), 1)
-
-    // Сохранить данные в кеш (если надо)
-    .flatMap((c) => importJoin ? saveCharacterToCache(c, workData) : Observable.from([c]))
-
-    // Остановить обработку, если в модели нет флага InGame (игра началась и дальше импортировать что-то левое не нужно)
-    .filter((c) => {
-      if (config.importOnlyInGame && !c.InGame) {
-        winston.info(`Character id=${c._id} have no flag "InGame", and not imported`);
-        return false;
-      }
-      return true;
-    })
-
-    // Экспортировать модель в БД (если надо)
-    .flatMap((c) => Observable.from([c]).delay(1000), 1)
-    .flatMap((c) => exportCharacterModel(c, workData, exportModel))
-
-    // Если персонаж "В игре" остановить дальнейшую обработку
-    .filter((c) => (!c.finalInGame));
-
-  // Выполнить все задачи после экспорта
-  workData.afterConversionProviders.forEach((provider) => {
-    chain = chain.flatMap((c) => perfromProvide(provider, c, exportModel));
-
-  });
-
-  chain
-    // Сохранить данные по персонажу в общий список
-    .do((c) => workData.charDetails.push(c))
-
-    // Послать модели Refresh соообщение для создания Work и View-моделей
-    .flatMap((c) => refreshModel ? sendModelRefresh(c, workData) : Observable.from([c]))
-
-    // Посчитать статистику
-    .do(() => workData.importCouter++)
-
-    // Собрать из всех обработанных данных всех персонажей общий массив и передать дальше как один элемент
-    .toArray()
-    // Отправить запрос на создание почтовых ящиков для всхе персонажей
-    .filter(() => workData.charDetails.length > 0)
-    //     .flatMap( c => mailProvision
-    // ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
-    .subscribe(() => { },
-      (error) => {
-        winston.error('Error in pipe: ', error);
-      },
-      () => {
-        if (updateStats) {
-          workData.cacheWriter.saveLastStats(new ImportRunStats(moment.utc()));
+      // Остановить обработку, если в модели нет флага InGame
+      // (игра началась и дальше импортировать что-то левое не нужно)
+      .filter((c) => {
+        if (config.importOnlyInGame && !c.InGame) {
+          winston.info(`Character id=${c._id} have no flag "InGame", and not imported`);
+          return false;
         }
+        return true;
+      })
 
-        winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
+      // Экспортировать модель в БД (если надо)
+      .flatMap((c) => Observable.from([c]).delay(1000), 1)
+      .flatMap((c) => exportCharacterModel(c, workData, exportModel))
 
-        returnSubject.complete();
-      },
-  );
+      // Если персонаж "В игре" остановить дальнейшую обработку
+      .filter((c) => (!c.finalInGame))
+      .flatMap((c) => {
+        return (async () => {
+          await Promise.all(
+            workData.afterConversionProviders.map((provider) =>  perfromProvide(provider, c, exportModel),
+          ));
+          return c;
+        })();
+      })
 
-  return returnSubject;
+      // Сохранить данные по персонажу в общий список
+      .do((c) => workData.charDetails.push(c))
+
+      // Послать модели Refresh соообщение для создания Work и View-моделей
+      .flatMap((c) => refreshModel ? sendModelRefresh(c, workData) : Observable.from([c]))
+
+      // Посчитать статистику
+      .do(() => workData.importCouter++)
+
+      // Собрать из всех обработанных данных всех персонажей общий массив и передать дальше как один элемент
+      .toArray()
+      // Отправить запрос на создание почтовых ящиков для всхе персонажей
+      .filter(() => workData.charDetails.length > 0)
+      //     .flatMap( c => mailProvision
+      // ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
+      .subscribe(() => { },
+        (error) => {
+          winston.error('Error in pipe: ', error);
+          reject(error);
+        },
+        () => {
+          if (updateStats) {
+            workData.cacheWriter.saveLastStats(new ImportRunStats(moment.utc()));
+          }
+          winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
+          resolve();
+        },
+    );
+  });
 }
 
 function configureLogger() {
