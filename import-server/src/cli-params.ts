@@ -8,7 +8,6 @@ const cliParamsDef = [
   { name: 'import', type: Boolean, description: 'Import data from JoinRPG' },
   { name: 'list', type: Boolean, description: 'Only list characters for import (dry run)' },
   { name: 'refresh', type: Boolean, description: 'Send _Refresh event after import' },
-  { name: 'mail', type: Boolean, description: 'Create e-mail after import' },
   { name: 'econ', type: Boolean, description: 'Register economy account' },
   {
     name: 'id',

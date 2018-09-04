@@ -57,14 +57,13 @@ if (
   || params.test
   || params.list
   || params.refresh
-  || params.mail
   || params.econ) {
   // tslint:disable-next-line:variable-name
   const _id = params.id ? params.id : 0;
   const since = params.since ? moment.utc(params.since, 'YYYY-MM-DDTHH:mm') : null;
 
   importAndCreate(_id, (params.import === true), (params.export === true), (params.list === true),
-    false, (params.refresh === true), (params.mail === true), since)
+    false, (params.refresh === true), since)
     .catch(() => process.exit(1))
     .then(() => {
       winston.info('Finished!');
@@ -293,7 +292,6 @@ async function importAndCreate(id: number = 0,
                                onlyList: boolean = false,
                                updateStats: boolean = true,
                                refreshModel: boolean = false,
-                               mailProvision: boolean = true,
                                updatedSince: moment.Moment | null = null,
 ): Promise<void> {
 
@@ -301,7 +299,7 @@ async function importAndCreate(id: number = 0,
 
   winston.info(`Run import sequence with: id=${id}, import=${importJoin}, export=${exportModel}, ` +
     `onlyList=${onlyList}, updateStats=${updateStats}, refresh=${refreshModel}, ` +
-    `mailProvision=${mailProvision}, updateSince=${sinceText}`);
+    `updateSince=${sinceText}`);
 
   // Объект с рабочими данными при импорте - экспорте
   const workData = new ModelImportData();
@@ -372,8 +370,7 @@ async function importAndCreate(id: number = 0,
       .toArray()
       // Отправить запрос на создание почтовых ящиков для всхе персонажей
       .filter(() => workData.charDetails.length > 0)
-      //     .flatMap( c => mailProvision
-      // ? Observable.fromPromise(provisionMailAddreses(workData)) : Observable.from([c]) )
+
       .subscribe(() => { },
         (error) => {
           winston.error('Error in pipe: ', error);
