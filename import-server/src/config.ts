@@ -12,6 +12,7 @@ export const config = {
   password: process.env.COUCHDB_PASSWORD,
   tempDbName: 'join-import',
   modelDBName: 'models',
+  metadataDbName: 'metadata',
   workModelDBName: 'work-models',
   accountDBName: 'accounts',
   eventsDBName: 'events',

@@ -7,7 +7,7 @@ const cliParamsDef = [
   { name: 'export', type: Boolean, description: 'Create and export model to ALICE DB' },
   { name: 'import', type: Boolean, description: 'Import data from JoinRPG' },
   { name: 'list', type: Boolean, description: 'Only list characters for import (dry run)' },
-  { name: 'refresh', type: Boolean, description: 'Send _Refresh event after import' },
+  { name: 'refresh', type: Boolean, description: 'Trigger model update after import' },
   { name: 'econ', type: Boolean, description: 'Register economy account' },
   {
     name: 'id',

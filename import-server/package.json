@@ -38,6 +38,7 @@
     "moment": "^2.18.1",
     "pouchdb": "^6.3.2",
     "pouchdb-find": "^6.3.4",
+    "pouchdb-upsert": "^2.2.0",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "rxjs": "^5.4.2",
@@ -49,6 +50,7 @@
     "@types/command-line-usage": "^5.0.1",
     "@types/express": "^4.16.0",
     "@types/lodash": "^4.14.116",
+    "@types/pouchdb-upsert": "^2.2.4",
     "chai": "^4.1.0",
     "nodemon": "^1.11.0"
   }

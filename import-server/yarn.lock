@@ -182,6 +182,12 @@
     "@types/pouchdb-core" "*"
     "@types/pouchdb-find" "*"
 
+"@types/pouchdb-upsert@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@types/pouchdb-upsert/-/pouchdb-upsert-2.2.4.tgz#99458b4a9b2531e21ebc9d5de0eae6bdc076356f"
+  dependencies:
+    "@types/pouchdb-core" "*"
+
 "@types/pouchdb@^6.1.1":
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/@types/pouchdb/-/pouchdb-6.3.2.tgz#fa6f70b98c55c7685867887350e44421d5446592"
@@ -2544,7 +2550,7 @@ pouchdb-md5@6.4.3:
     pouchdb-binary-utils "6.4.3"
     spark-md5 "3.0.0"
 
-pouchdb-promise@6.4.3:
+pouchdb-promise@6.4.3, pouchdb-promise@^6.1.2:
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/pouchdb-promise/-/pouchdb-promise-6.4.3.tgz#74516f4acf74957b54debd0fb2c0e5b5a68ca7b3"
   dependencies:
@@ -2556,6 +2562,12 @@ pouchdb-selector-core@6.4.3:
   dependencies:
     pouchdb-collate "6.4.3"
     pouchdb-utils "6.4.3"
+
+pouchdb-upsert@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/pouchdb-upsert/-/pouchdb-upsert-2.2.0.tgz#42b15e420848f3b294c35060589fdb51cf7f7f5f"
+  dependencies:
+    pouchdb-promise "^6.1.2"
 
 pouchdb-utils@6.4.3:
   version "6.4.3"
