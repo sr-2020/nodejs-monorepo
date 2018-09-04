@@ -291,7 +291,7 @@ async function importAndCreate(id: number = 0,
                                exportModel: boolean = true,
                                onlyList: boolean = false,
                                updateStats: boolean = true,
-                               refreshModel: boolean = false,
+                               refreshModel: boolean = true,
                                updatedSince: moment.Moment | null = null,
 ): Promise<void> {
 
