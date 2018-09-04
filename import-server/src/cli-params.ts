@@ -28,7 +28,7 @@ const usageSections = [
     header: 'DeusEx LARP import application',
     content: [
       'Can be run as server for continues import or manualy',
-      'If set only [italic]{id} that means - import->export->refresh->create mail for this character',
+      'If set only [italic]{id} that means - import->export->refresh for this character',
     ],
   },
   {
@@ -41,7 +41,7 @@ export function processCliParams(): any {
   try {
     const p = commandLineArgs(cliParamsDef);
 
-    const setSteps = p.export || p.import || p.list || p.refresh || p.mail || p.since || p.econ;
+    const setSteps = p.export || p.import || p.list || p.refresh || p.since || p.econ;
 
     if (!setSteps && !p.server && !p.id) {
       throw new Error('error combinations');
@@ -55,7 +55,6 @@ export function processCliParams(): any {
     if (!setSteps && !p.server && p.id) {
       p.export = true;
       p.import = true;
-      p.mail = true;
       p.econ = true;
     }
 
