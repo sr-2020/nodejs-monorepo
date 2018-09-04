@@ -9,7 +9,7 @@ export class EconProvider {
 
   public async provide(character: JoinCharacterDetail): Promise<ProvideResult> {
     if (!character.account) {
-      return {result: 'problems', problems: ['No character.accound defined'] };
+      return {result: 'problems', problems: ['No character.account defined'] };
     }
 
     const body = {
