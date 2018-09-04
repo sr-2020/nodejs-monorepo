@@ -47,9 +47,6 @@ configureLogger();
 
 winston.info('Run CLI parameters: ', params);
 
-// Reenter flag
-let isImportRunning = false;
-
 // Statisticts
 const stats = new ImportStats();
 
@@ -318,13 +315,6 @@ function importAndCreate(id: number = 0,
   // Объект с рабочими данными при импорте - экспорте
   const workData = new ModelImportData();
 
-  if (isImportRunning) {
-    winston.info('Import session in progress.. return and wait to next try');
-    return Observable.from([]);
-  }
-
-  isImportRunning = true;
-
   const returnSubject = new BehaviorSubject('start');
 
   let chain = Observable.fromPromise(prepareForImport(workData))
@@ -403,11 +393,8 @@ function importAndCreate(id: number = 0,
     .subscribe(() => { },
       (error) => {
         winston.error('Error in pipe: ', error);
-        isImportRunning = false;
       },
       () => {
-        isImportRunning = false;
-
         if (updateStats) {
           workData.cacheWriter.saveLastStats(new ImportRunStats(moment.utc()));
         }
