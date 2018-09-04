@@ -1,6 +1,6 @@
 import * as commandLineArgs from 'command-line-args';
 import * as commandLineUsage from 'command-line-usage';
-import winston from 'winston';
+import * as winston from 'winston';
 
 // Сheck CLI arguments
 const cliParamsDef = [
