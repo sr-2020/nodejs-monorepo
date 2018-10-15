@@ -6,7 +6,9 @@
     "scripts": {
         "ionic:build": "ionic-app-scripts build",
         "start": "ionic-app-scripts serve --iscordovaserve --wwwDir platforms/browser/www/ --buildDir platforms/browser/www/build",
-        "test": "ng test"
+        "test": "ng test",
+        "add_android": "ionic cordova platform add android --noresources --no-interactive --verbose",
+        "build_android": "ionic cordova build android --device --no-interactive --verbose --prod"
     },
     "dependencies": {
         "@angular/animations": "4.0.0",
