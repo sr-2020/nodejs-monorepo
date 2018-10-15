@@ -79,7 +79,7 @@ if (
 
   Observable.timer(0, config.importInterval).
     flatMap(() => importAndCreate())
-    .subscribe(() => { },
+    .subscribe(() => winston.info('Finished one import cycle, waiting for next'),
       () => {
         process.exit(1);
       },
