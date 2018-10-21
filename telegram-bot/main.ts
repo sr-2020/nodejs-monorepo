@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 import * as TelegramBot from 'node-telegram-bot-api';
 import * as QRCode from 'qrcode';
 import * as uuid from 'uuid';
@@ -46,6 +47,7 @@ bot.onText(/^\/qr (.+)/, async (msg, match) => {
   const filename = `qr-${uuid.v4()}.png`;
   await QRCode.toFile(filename, data);
   await bot.sendPhoto(chatId, filename, { reply_to_message_id: msg.message_id });
+  fs.unlinkSync(filename);
 });
 
 // Listen for any kind of message. There are different kinds of
