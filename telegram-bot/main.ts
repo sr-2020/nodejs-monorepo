@@ -24,7 +24,7 @@ const m: TelegramBot.InlineKeyboardMarkup = {
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN as string, { polling: true });
 
 // Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, async (msg, _match) => {
+bot.onText(/^\/echo (.+)/, async (msg, _match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
   // of the message
@@ -35,7 +35,7 @@ bot.onText(/\/echo (.+)/, async (msg, _match) => {
 });
 
 // Matches "/echo [whatever]"
-bot.onText(/\/qr (.+)/, async (msg, match) => {
+bot.onText(/^\/qr (.+)/, async (msg, match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
   // of the message
