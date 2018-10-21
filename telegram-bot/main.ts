@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as TelegramBot from 'node-telegram-bot-api';
+import * as QRCode from 'qrcode';
+import * as uuid from 'uuid';
 
 dotenv.load();
 
@@ -30,6 +32,20 @@ bot.onText(/\/echo (.+)/, async (msg, _match) => {
   // send back the matched "whatever" to the chat
   const res = await bot.sendMessage(chatId, `Текущее значение: ${currentValue}`, { reply_markup: m });
   console.log(JSON.stringify(res));
+});
+
+// Matches "/echo [whatever]"
+bot.onText(/\/qr (.+)/, async (msg, match) => {
+  // 'msg' is the received Message from Telegram
+  // 'match' is the result of executing the regexp above on the text content
+  // of the message
+  if (!match) return;
+  const chatId = msg.chat.id;
+
+  const data = match[1];
+  const filename = `qr-${uuid.v4()}.png`;
+  await QRCode.toFile(filename, data);
+  await bot.sendPhoto(chatId, filename, { reply_to_message_id: msg.message_id });
 });
 
 // Listen for any kind of message. There are different kinds of
