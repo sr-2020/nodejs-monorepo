@@ -14,7 +14,12 @@
   },
   "author": "",
   "license": "Apache-2.0",
-  "dependencies": {},
+  "dependencies": {
+    "@types/dotenv": "^4.0.3",
+    "@types/telebot": "^1.2.1",
+    "dotenv": "^6.1.0",
+    "telebot": "^1.2.6"
+  },
   "devDependencies": {
     "typescript": "2.9.2"
   }
