@@ -88,7 +88,7 @@ export type EngineResultOk = {
   workingModel: any,
   viewModels: { [base: string]: any },
   aquired?: { [key: string]: any },
-  outboundEvents?: Event[]
+  outboundEvents: Event[]
 }
 
 export type EngineResultError = {

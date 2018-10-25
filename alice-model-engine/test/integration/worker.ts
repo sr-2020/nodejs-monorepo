@@ -163,12 +163,14 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result).to.has.property('events');
-
-    const event = (result as any).events[0];
-    expect(event.characterId).to.equals('0001');
-    expect(event.eventType).to.equals('message');
-    expect(event.data.message).to.equals('test message');
+    expect(result.outboundEvents).length(1);
+    expect(result.outboundEvents[0]).to.deep.include({
+      characterId: '0001',
+      eventType: 'message',
+      data: {
+        message: 'test message',
+      },
+    });
   });
 
   it('Should run modifiers', async () => {
