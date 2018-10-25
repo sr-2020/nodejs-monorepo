@@ -115,7 +115,7 @@ export class Worker {
       workingModel: workingCtxValue,
       viewModels,
       aquired: baseCtx.aquired,
-      events: baseCtx.outboundEvents,
+      outboundEvents: baseCtx.outboundEvents,
     };
   }
 

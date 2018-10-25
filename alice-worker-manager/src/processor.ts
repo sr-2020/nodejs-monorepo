@@ -91,7 +91,7 @@ export class Processor {
           { result, characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
 
         if (result.status == 'ok') {
-          const { baseModel, workingModel, viewModels, events: outboundEvents, aquired } = result;
+          const { baseModel, workingModel, viewModels, outboundEvents, aquired } = result;
 
           delete workingModel._rev;
           workingModel.timestamp = baseModel.timestamp;
