@@ -6,6 +6,10 @@
         "outDir": "./dist",
         // TODO: Fix and re-enable
         "strictPropertyInitialization": false,
+        "composite": true
     },
-    "include": ["./src/**/*.ts"]
+    "include": ["**/*.ts"],
+    "references": [
+      { "path": "../alice-model-engine-api" }
+    ]
 }

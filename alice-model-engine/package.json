@@ -5,7 +5,7 @@
   "main": "dist/worker.js",
   "scripts": {
     "deps": "yarn install",
-    "build": "tsc",
+    "build": "tsc -b",
     "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",
     "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
@@ -25,7 +25,6 @@
     "@types/node": "^9.6.1",
     "@types/systemjs": "^0.20.6",
     "@types/winston": "^2.3.8",
-    "alice-model-engine-api": "file:../alice-model-engine-api",
     "cuid": "^2.1.0",
     "glob": "^7.1.1",
     "lodash": "^4.17.5",

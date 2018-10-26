@@ -13,5 +13,8 @@
   },
   "include": [
     "**/*.ts"
+  ],
+  "references": [
+    { "path": "../alice-model-engine-api" }
   ]
 }

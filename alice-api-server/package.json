@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "deps": "yarn install",
-    "build": "tsc",
+    "build": "tsc -b",
     "start": "npm run build && forever start ./main.js",
     "stop": "forever stop ./main.js",
     "test:dev": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts",
@@ -29,7 +29,6 @@
     "@types/request-promise": "^4.1.33",
     "@types/uuid": "^3.4.0",
     "@types/winston": "^2.3.3",
-    "alice-model-engine-api": "file:../alice-model-engine-api",
     "basic-auth": "^1.1.0",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",

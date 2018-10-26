@@ -11,6 +11,8 @@
   },
   "include": [
     "**/*.ts",
-    "../alice-qr-lib/**/*.ts"
+  ],
+  "references": [
+    { "path": "../alice-qr-lib" }
   ]
 }

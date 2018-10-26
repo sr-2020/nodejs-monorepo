@@ -33,7 +33,7 @@ module.exports = {
 
     // блок настроек пула воркеров
     pool: {
-        workerModule: '/app/packages/alice-model-engine/dist/worker_runner',   // модуль воркера, для которого вызывается ChildProcess.fork
+        workerModule: '/app/packages/alice-model-engine/dist/src/worker_runner',   // модуль воркера, для которого вызывается ChildProcess.fork
         workerArgs: ['../deus-models/build/src'],              // аргументы, передаваемые дочернему процессу при запуске
         options: {                                             // опции для https://www.npmjs.com/package/generic-pool
             max: 2,                                            // максимальное число воркеров

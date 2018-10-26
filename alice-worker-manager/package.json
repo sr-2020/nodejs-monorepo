@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "deps": "yarn install",
-    "build": "tsc",
+    "build": "tsc -b",
     "lint": "tslint -p tsconfig.json --exclude node_modules",
     "test": "npm run test:integration",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json",
@@ -16,8 +16,6 @@
   "dependencies": {
     "@types/deep-equal": "^1.0.1",
     "@types/express": "^4.11.1",
-    "alice-model-engine": "file:../alice-model-engine",
-    "alice-model-engine-api": "file:../alice-model-engine-api",
     "deep-equal": "^1.0.1",
     "express": "^4.16.3",
     "forever": "^0.15.3",
