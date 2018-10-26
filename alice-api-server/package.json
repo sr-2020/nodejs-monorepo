@@ -50,7 +50,6 @@
     "tslint-consistent-codestyle": "^1.5.1",
     "typed-event-emitter": "^1.0.3",
     "typedi": "^0.7.2",
-    "typescript": "^2.2.2",
     "typescript-map": "0.0.3",
     "uuid": "^3.1.0",
     "wait-on": "^2.1.0",
@@ -60,6 +59,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "chai": "^4.1.2",
-    "pouchdb-adapter-memory": "^7.0.0"
+    "pouchdb-adapter-memory": "^7.0.0",
+    "typescript": "3.1.3"
   }
 }

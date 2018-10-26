@@ -48,6 +48,6 @@
     "pouchdb": "^7.0.0",
     "pouchdb-adapter-memory": "^7.0.0",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "typescript": "3.1.3"
   }
 }
