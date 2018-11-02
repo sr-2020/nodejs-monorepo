@@ -1,7 +1,9 @@
 # Based on https://github.com/marcoturi/ionic-docker
 
 FROM debian:jessie
-
+#################################
+# 3-rd party dependencies begin #
+#################################
 ENV DEBIAN_FRONTEND=noninteractive \
     ANDROID_HOME=/opt/android-sdk-linux \
     GRADLE_VERSION=4.4.1
@@ -52,32 +54,36 @@ ENV NPM_VERSION=6.0.1 \
 
 RUN npm install -g npm@"$NPM_VERSION" cordova@"$CORDOVA_VERSION" ionic@"$IONIC_VERSION"
 
+#################################
+# 3-rd party dependencies end   #
+#################################
+
 WORKDIR /sources
 
-COPY package*.json ./
+#################################
+# 1-st party dependencies begin #
+#################################
+COPY packages/alice-mobile/package*.json ./packages/alice-mobile/
+RUN cd packages/alice-mobile && npm install
 
-RUN ["npm", "install"]
+COPY packages/alice-mobile/config.xml ./packages/alice-mobile
+COPY packages/alice-mobile/ionic.config.json ./packages/alice-mobile
+COPY packages/alice-mobile/google-services.json ./packages/alice-mobile
+RUN cd packages/alice-mobile && ionic cordova platform add android --noresources --no-interactive --verbose
+#################################
+# 1-st party dependencies end   #
+#################################
 
-COPY . .
-
-# COPY .git .git
-
-# RUN ls .git
-
-# RUN bash scripts/update-app-version.sh
+# Dark magic here: we need .git folder to calculate version number...
+# So we copy top-level .git folder into packages/alice-mobile/ subfolder.
+# It's totally wrong location for it, but it's ok as we only do read-only git operations
+# (namely, count commits and search for labels) in update-app-version.sh.
+COPY .git packages/alice-mobile/.git
+COPY ./packages/alice-mobile/ ./packages/alice-mobile/
+WORKDIR /sources/packages/alice-mobile/
+RUN bash ./scripts/update-app-version.sh
 
 RUN ionic cordova platform add android --noresources --no-interactive --verbose
 RUN ionic cordova build android --device --no-interactive --verbose --prod
 
-RUN ionic cordova build browser
-
-RUN curl \
-  -F "ipa=@platforms/android/app/build/outputs/apk/debug/app-debug.apk" \
-  -F "notes=$changes" \
-  -F "notes_type=0" \
-  -F "status=2" \
-  -F "release_type=2" \
-  -H "X-HockeyAppToken: 01398666c9714a43bb032743eafb9a4e" \
-  https://rink.hockeyapp.net/api/2/apps/upload
-
-CMD ["ionic", "serve"]
+RUN bash ./scripts/upload-to-hockeyapp.sh
