@@ -12,7 +12,7 @@ import { createModel, createModelObj, getModel, getModelAtTimestamp,
   pushEvent, pushRefreshEvent, saveModel } from '../model_helpers';
 
 describe('Crash scenarios', function() {
-  this.timeout(15000);
+  this.timeout(25000);
 
   let manager: Manager | null;
   const di = Container;
