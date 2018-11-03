@@ -86,4 +86,6 @@ WORKDIR /sources/packages/alice-mobile/
 RUN ionic cordova platform add android --noresources --no-interactive --verbose
 RUN ionic cordova build android --device --no-interactive --verbose --prod
 
+ARG HOCKEY_TOKEN
+ENV HOCKEY_APP_TOKEN=$HOCKEY_TOKEN
 RUN bash ./scripts/upload-to-hockeyapp.sh
