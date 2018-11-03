@@ -78,10 +78,10 @@ RUN cd packages/alice-mobile && ionic cordova platform add android --noresources
 # So we copy top-level .git folder into packages/alice-mobile/ subfolder.
 # It's totally wrong location for it, but it's ok as we only do read-only git operations
 # (namely, count commits and search for labels) in update-app-version.sh.
-COPY .git packages/alice-mobile/.git
+# COPY .git packages/alice-mobile/.git
 COPY ./packages/alice-mobile/ ./packages/alice-mobile/
 WORKDIR /sources/packages/alice-mobile/
-RUN bash ./scripts/update-app-version.sh
+# RUN bash ./scripts/update-app-version.sh
 
 RUN ionic cordova platform add android --noresources --no-interactive --verbose
 RUN ionic cordova build android --device --no-interactive --verbose --prod
