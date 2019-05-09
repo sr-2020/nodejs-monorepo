@@ -4,6 +4,7 @@ import {ApplicationConfig} from '@loopback/core';
 export {BillingApplication};
 
 export async function main(options: ApplicationConfig = {}) {
+  require('dotenv').config();
   const app = new BillingApplication(options);
   await app.boot();
   await app.start();
