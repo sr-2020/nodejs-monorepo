@@ -22,7 +22,7 @@ import {TransactionRepository} from '../repositories';
 export class TransactionController {
   constructor(
     @repository(TransactionRepository)
-    public transactionRepository : TransactionRepository,
+    public transactionRepository: TransactionRepository,
   ) {}
 
   @post('/transactions', {
@@ -64,7 +64,8 @@ export class TransactionController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Transaction)) filter?: Filter,
+    @param.query.object('filter', getFilterSchemaFor(Transaction))
+    filter?: Filter,
   ): Promise<Transaction[]> {
     return await this.transactionRepository.find(filter);
   }

@@ -7,9 +7,7 @@ export class TransactionRepository extends DefaultCrudRepository<
   Transaction,
   typeof Transaction.prototype.id
 > {
-  constructor(
-    @inject('datasources.MySQL') dataSource: MySqlDataSource,
-  ) {
+  constructor(@inject('datasources.MySQL') dataSource: MySqlDataSource) {
     super(Transaction, dataSource);
   }
 }
