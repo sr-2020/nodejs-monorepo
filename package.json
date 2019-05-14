@@ -56,7 +56,8 @@
     "@loopback/rest-explorer": "^1.1.19",
     "@loopback/service-proxy": "^1.1.7",
     "dotenv": "^8.0.0",
-    "loopback-connector-mysql": "^5.4.0"
+    "loopback-connector-mysql": "^5.4.0",
+    "loopback-connector-sqlite3": "^3.0.0"
   },
   "devDependencies": {
     "@loopback/build": "^1.5.1",
