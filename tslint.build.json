@@ -1,4 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/tslint",
-  "extends": ["@loopback/tslint-config/tslint.build.json"]
+  "extends": ["@loopback/tslint-config/tslint.build.json"],
+  "rules": {
+    "triple-equals": false
+  }
 }
