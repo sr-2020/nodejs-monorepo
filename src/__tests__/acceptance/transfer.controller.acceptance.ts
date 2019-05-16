@@ -20,6 +20,13 @@ describe('TransferController', () => {
 
   describe('POST /transfer', () => {
     it('Returns 200 on success', async () => {
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 0,
+        sin_to: 123,
+        amount: 200,
+      });
+
       await client
         .post('/transfer')
         .send({
@@ -29,13 +36,41 @@ describe('TransferController', () => {
         })
         .expect(200);
 
-      const allEntries = await repo.find();
+      const allEntries = await repo.find({where: {sin_from: 123}});
       expect(allEntries.length).to.equal(1);
       expect(allEntries[0]).to.containEql({
         sin_from: 123,
         sin_to: 321,
         amount: 100,
       });
+    });
+
+    it('Returns 400 if not enough money', async () => {
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 0,
+        sin_to: 123,
+        amount: 120,
+      });
+
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 123,
+        sin_to: 125,
+        amount: 21,
+      });
+
+      await client
+        .post('/transfer')
+        .send({
+          sin_from: 123,
+          sin_to: 321,
+          amount: 100,
+        })
+        .expect(400);
+
+      const allEntries = await repo.find({where: {sin_to: 321}});
+      expect(allEntries.length).to.equal(0);
     });
 
     it('Returns 400 if transfering negative amount', async () => {

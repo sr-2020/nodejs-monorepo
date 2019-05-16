@@ -2,6 +2,7 @@ import {repository} from '@loopback/repository';
 import {TransactionRepository} from '../repositories';
 import {post, requestBody, HttpErrors} from '@loopback/rest';
 import {Transfer, Empty} from '../models';
+import {balance} from '../lib/balance';
 
 export class TransferController {
   constructor(
@@ -33,6 +34,12 @@ export class TransferController {
 
     if (transferRequest.sin_from == transferRequest.sin_to)
       throw new HttpErrors.BadRequest('Нельзя переводить деньги самому себе.');
+
+    if (
+      (await balance(this.transactionRepository, transferRequest.sin_from)) <
+      transferRequest.amount
+    )
+      throw new HttpErrors.BadRequest('Недостаточно денег.');
 
     // TODO(aeremin): Check that has enough money
     await this.transactionRepository.create({
