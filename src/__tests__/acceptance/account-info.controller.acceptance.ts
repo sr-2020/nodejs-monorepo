@@ -1,0 +1,73 @@
+import {Client, expect} from '@loopback/testlab';
+import {BillingApplication} from '../..';
+import {setupApplication} from './test-helper';
+import {TransactionRepository} from '../../repositories';
+
+describe('AccountInfoController', () => {
+  let app: BillingApplication;
+  let client: Client;
+  let repo: TransactionRepository;
+
+  beforeEach('setupApplication', async () => {
+    ({app, client} = await setupApplication());
+    repo = await app.getRepository(TransactionRepository);
+    await repo.deleteAll();
+  });
+
+  afterEach(async () => {
+    await app.stop();
+  });
+
+  describe('GET /account_info', () => {
+    it('User with no transactions', async () => {
+      await client
+        .get('/account_info/123')
+        .expect(200)
+        .expect({
+          balance: 0,
+          history: [],
+        });
+    });
+
+    it('User with some transactions', async () => {
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 0,
+        sin_to: 123,
+        amount: 1000,
+      });
+
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 123,
+        sin_to: 1,
+        amount: 200,
+      });
+
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 2,
+        sin_to: 123,
+        amount: 100,
+      });
+
+      await repo.create({
+        created_at: new Date().toUTCString(),
+        sin_from: 123,
+        sin_to: 3,
+        amount: 27,
+      });
+
+      const response = await client.get('/account_info/123').expect(200);
+      expect(response.body).containDeep({
+        balance: 873,
+        history: [
+          {sin_from: 123, sin_to: 3, amount: 27},
+          {sin_from: 2, sin_to: 123, amount: 100},
+          {sin_from: 123, sin_to: 1, amount: 200},
+          {sin_from: 0, sin_to: 123, amount: 1000},
+        ],
+      });
+    });
+  });
+});
