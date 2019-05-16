@@ -31,7 +31,7 @@ export async function setupApplication(): Promise<AppWithClient> {
   await sqlite.execute(`
     CREATE TABLE transactions (
       id int(11),
-      created_at date NOT NULL,
+      created_at datetime NOT NULL,
       sin_from int(11) NOT NULL,
       sin_to int(11) NOT NULL,
       amount int(11) NOT NULL,
