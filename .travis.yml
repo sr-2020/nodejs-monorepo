@@ -1,3 +1,28 @@
 language: node_js
 node_js:
   - '8'
+
+jobs:
+  include:
+    - stage: build and push docker image
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - npm test
+        - make build
+        - make push
+
+    - stage: deploy production
+      script:
+        - make deploy server=84.201.132.246 password=$USER_PASSWORD
+
+    - stage: test production
+      script:
+        - make test env=production
+
+addons:
+  ssh_known_hosts:
+    - 84.201.132.246
+  apt:
+    packages:
+      - sshpass
+      - sox
