@@ -30,6 +30,7 @@ export class AccountInfoController {
       order: ['created_at DESC'],
     });
     return new AccountInfo({
+      sin,
       balance: await balance(this.transactionRepository, sin),
       history: await history,
     });

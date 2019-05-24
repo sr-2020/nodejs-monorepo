@@ -24,6 +24,7 @@ describe('AccountInfoController', () => {
         .get('/account_info/123')
         .expect(200)
         .expect({
+          sin: 123,
           balance: 0,
           history: [],
         });
@@ -60,6 +61,7 @@ describe('AccountInfoController', () => {
 
       const response = await client.get('/account_info/123').expect(200);
       expect(response.body).containDeep({
+        sin: 123,
         balance: 873,
         history: [
           {sin_from: 123, sin_to: 3, amount: 27},

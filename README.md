@@ -35,6 +35,7 @@ docker run -p 3000:3000 -e MYSQL_HOST=<...> -e MYSQL_PASSWORD=<...> billing:late
 
 ```
 {
+  "sin": 123,
   "balance": 0,
   "history": [
     {

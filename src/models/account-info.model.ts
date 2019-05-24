@@ -4,6 +4,9 @@ import {Transaction} from './transaction.model';
 @model()
 export class AccountInfo extends Model {
   @property({type: 'number', required: true})
+  sin: number;
+
+  @property({type: 'number', required: true})
   balance: number;
 
   @property.array(Transaction, {required: true})
