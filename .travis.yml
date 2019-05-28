@@ -13,11 +13,11 @@ jobs:
 
     - stage: deploy production
       script:
-        - make deploy server=84.201.132.246 password=$USER_PASSWORD
+        - make deploy server=35.234.112.65 password=$USER_PASSWORD
 
 addons:
   ssh_known_hosts:
-    - 84.201.132.246
+    - 35.234.112.65
   apt:
     packages:
       - sshpass
