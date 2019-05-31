@@ -35,9 +35,19 @@ describe('QR content encoding/decode', () => {
     expect(decoded).to.deep.equal({type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello'});
   });
 
+  it('Can decode example content 2', () => {
+    const decoded = decode('ca7fBwAA8VNl123,1267,abc');
+    expect(decoded).to.deep.equal({type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc'});
+  });
+
   it('Can encode example content', () => {
     const encoded = encode({type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello'});
     expect(encoded).to.equal('d810Aw1ybkhZHello');
+  });
+
+  it('Can encode example content 2', () => {
+    const data: QrData = {type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc'};
+    expect(encode(data)).to.deep.equal('ca7fBwAA8VNl123,1267,abc');
   });
 
   it('Can encode and decode example content with cyrillic characters', () => {

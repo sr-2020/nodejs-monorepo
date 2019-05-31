@@ -9,7 +9,7 @@ export enum QrType {
   EnterShip = 5,     // payload should contain ship id (number)
   LeaveShip = 6,
 
-  SpaceSuitRefill = 7, // payload is <unique id>,<time in minutes>
+  Bill = 7,          // payload is <recipient>,<amount>[,<comment>]
   SpaceSuitTakeOff = 8, // payload is life support system disinfection power
 
   // Payload is 1,2,3,0,1,2,0,26 where first 7 numbers are systems influce,
@@ -21,7 +21,6 @@ export enum QrType {
   Rollback = 66,
 
   Passport = 100,
-  Bill = 101,
 }
 
 export interface QrData {
