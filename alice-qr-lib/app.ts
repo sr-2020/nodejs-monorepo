@@ -104,7 +104,7 @@ class App {
 
 <body>
 
-  <form target="_blank" action="https://qr.alice.aerem.in/encode_bill">
+  <form target="_blank" action="/encode_bill">
     Продавец (получатель платежа)<br>
     <input type="text" name="receiver" value="">
     <br> Цена:
