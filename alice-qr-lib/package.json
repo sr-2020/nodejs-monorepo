@@ -10,8 +10,8 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc",
-    "start": "npm run build && forever start ./lib/main.js",
-    "stop": "forever stop ./lib/main.js",
+    "start": "npm run build && forever start ./dist/main.js",
+    "stop": "forever stop ./dist/main.js",
     "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
   },
   "author": "",
