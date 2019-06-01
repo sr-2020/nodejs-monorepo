@@ -1,3 +1,4 @@
 import App from './app';
 
-new App('', '').listen(80);
+const port = Number(process.env.PORT || 80);
+new App('', '').listen(port);
