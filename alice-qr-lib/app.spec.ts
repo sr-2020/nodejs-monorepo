@@ -44,7 +44,7 @@ describe('API Server', () => {
     expect(match).not.to.be.null;
     const data = decodeURI((match as RegExpExecArray)[1]);
     const decodeResponse = await rp.get(address + encodeURI(`/decode?content=${data}`), { json: {} }).promise();
-    expect(decodeResponse).to.deep.equal({ type: 101, kind: 0, validUntil: 1700000000, payload: 'vasya,100,Рыба' });
+    expect(decodeResponse).to.deep.equal({ type: 7, kind: 0, validUntil: 1700000000, payload: 'vasya,100,Рыба' });
   });
 
   it('Encode fails without credentials', async () => {
