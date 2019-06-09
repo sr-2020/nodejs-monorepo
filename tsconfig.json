@@ -1,9 +1,10 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "@loopback/build/config/tsconfig.common.json",
+  "extends": "./tsconfig.build.json",
+
   "compilerOptions": {
-    "composite": true,
-    "rootDir": "src"
-  },
-  "include": ["src/**/*", "src/**/*.json"]
+    "baseUrl": ".",
+    "paths": {
+      "@sr2020/*": ["packages/*/src"]
+    }
+  }
 }

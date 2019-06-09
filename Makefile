@@ -9,7 +9,7 @@ cest := $(or ${cest},${cest},)
 current_dir = $(shell pwd)
 
 build:
-	docker build -t ${NAMESPACE}/${IMAGE}${TAG} .
+	docker build -t ${NAMESPACE}/${IMAGE}${TAG} ./packages/billing
 
 push:
 	docker push ${NAMESPACE}/${IMAGE}

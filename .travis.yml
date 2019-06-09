@@ -5,9 +5,11 @@ node_js:
 jobs:
   include:
     - stage: build and push docker image
+      before_script:
+        - yarn --cwd=packages/billing install
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - npm test
+        - yarn --cwd=packages/billing test
         - make build
         - make push
 
