@@ -46,7 +46,8 @@ export class TransactionController {
     },
   })
   async count(
-    @param.query.object('where', getWhereSchemaFor(Transaction)) where?: Where,
+    @param.query.object('where', getWhereSchemaFor(Transaction))
+    where?: Where<Transaction>,
   ): Promise<Count> {
     return await this.transactionRepository.count(where);
   }
@@ -65,7 +66,7 @@ export class TransactionController {
   })
   async find(
     @param.query.object('filter', getFilterSchemaFor(Transaction))
-    filter?: Filter,
+    filter?: Filter<Transaction>,
   ): Promise<Transaction[]> {
     return await this.transactionRepository.find(filter);
   }
@@ -80,7 +81,8 @@ export class TransactionController {
   })
   async updateAll(
     @requestBody() transaction: Transaction,
-    @param.query.object('where', getWhereSchemaFor(Transaction)) where?: Where,
+    @param.query.object('where', getWhereSchemaFor(Transaction))
+    where?: Where<Transaction>,
   ): Promise<Count> {
     return await this.transactionRepository.updateAll(transaction, where);
   }
