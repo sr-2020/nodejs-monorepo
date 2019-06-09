@@ -14,7 +14,7 @@
     "build:apidocs": "lb-apidocs",
     "build": "lb-tsc es2017 --outDir dist",
     "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist || rm tsconfig.build.tsbuildinfo",
+    "clean": "lb-clean dist && rm -f *.tsbuildinfo",
     "lint": "npm run prettier:check && npm run tslint",
     "lint:fix": "npm run tslint:fix && npm run prettier:fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
