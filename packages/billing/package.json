@@ -6,7 +6,7 @@
     "loopback-application",
     "loopback"
   ],
-  "main": "index.js",
+  "main": "dist/index.js",
   "engines": {
     "node": ">=8.9"
   },
@@ -30,7 +30,7 @@
     "docker:run": "docker run -p 3000:3000 -d billing",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
-    "start": "node .",
+    "start": "node ./dist",
     "prepublishOnly": "npm run test"
   },
   "repository": {

@@ -1,4 +1,4 @@
-import {BillingApplication} from '../..';
+import {BillingApplication} from '../../application';
 import {
   createRestAppClient,
   givenHttpServerConfig,

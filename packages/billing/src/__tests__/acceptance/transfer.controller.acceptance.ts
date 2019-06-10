@@ -1,5 +1,5 @@
 import {Client, expect} from '@loopback/testlab';
-import {BillingApplication} from '../..';
+import {BillingApplication} from '../../application';
 import {setupApplication} from './test-helper';
 import {TransactionRepository} from '../../repositories';
 
