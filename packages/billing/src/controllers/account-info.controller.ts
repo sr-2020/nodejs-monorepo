@@ -1,9 +1,9 @@
 import {repository} from '@loopback/repository';
 
 import {TransactionRepository} from '../repositories';
-import {AccountInfo} from '../models';
 import {param, get} from '@loopback/rest';
 import {balance} from '../lib/balance';
+import {AccountInfo} from '../../../interface/src/models';
 
 // Uncomment these imports to begin using these cool features!
 

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build:apidocs": "lb-apidocs",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -b",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist && rm -f *.tsbuildinfo",
     "lint": "npm run prettier:check && npm run tslint",

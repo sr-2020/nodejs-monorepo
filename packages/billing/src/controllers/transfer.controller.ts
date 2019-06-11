@@ -1,7 +1,7 @@
 import {repository} from '@loopback/repository';
 import {TransactionRepository} from '../repositories';
 import {post, requestBody, HttpErrors} from '@loopback/rest';
-import {Transfer, Empty} from '../models';
+import {Transfer, Empty} from '../../../interface/src/models';
 import {balance} from '../lib/balance';
 
 export class TransferController {
