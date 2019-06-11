@@ -11,7 +11,9 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/CVS": true,
-    "dist": true,
+    "**/*.js": true,
+    "**/*.js.map": true,
+    "**/*.d.ts": true
   },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
