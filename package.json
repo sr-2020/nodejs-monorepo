@@ -1,6 +1,6 @@
 {
   "name": "sr2020-nodejs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Monorepo for SR2020 parts written in NodeJS",
   "keywords": [
     "loopback-application",
