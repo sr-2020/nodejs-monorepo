@@ -1,0 +1,39 @@
+{
+  "name": "sr2020-nodejs",
+  "version": "1.0.1",
+  "description": "Monorepo for SR2020 parts written in NodeJS",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "scripts": {},
+  "repository": {
+    "type": "git"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@loopback/boot": "^1.2.4",
+    "@loopback/context": "^1.12.1",
+    "@loopback/core": "^1.6.1",
+    "@loopback/openapi-v3": "^1.3.8",
+    "@loopback/repository": "^1.5.2",
+    "@loopback/rest": "^1.10.5",
+    "@loopback/rest-explorer": "^1.1.19",
+    "@loopback/service-proxy": "^1.1.7",
+    "dotenv": "^8.0.0",
+    "loopback-connector-mysql": "^5.4.0",
+    "loopback-connector-sqlite3": "^3.0.0"
+  },
+  "devDependencies": {
+    "@loopback/build": "^1.5.1",
+    "@loopback/testlab": "^1.2.6",
+    "@loopback/tslint-config": "^2.0.4",
+    "@types/node": "^10.11.2",
+    "tslint": "^5.15.0",
+    "typescript": "^3.5.1"
+  }
+}

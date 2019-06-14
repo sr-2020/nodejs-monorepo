@@ -9,21 +9,22 @@ RUN mkdir -p /home/node/app
 
 WORKDIR /home/node/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY --chown=node package*.json ./
+COPY --chown=node *.json ./
+COPY --chown=node yarn.lock ./
 
-RUN npm install
+COPY --chown=node packages/billing/*.json ./packages/billing/
+COPY --chown=node packages/interface/*.json ./packages/interface/
 
-# Bundle app source code
-COPY --chown=node . .
+RUN yarn
 
-RUN npm run build
+COPY --chown=node packages/billing/. ./packages/billing
+COPY --chown=node packages/interface/. ./packages/interface
+
+RUN yarn --cwd packages/billing run build
 
 # Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0 PORT=3000
 
 EXPOSE ${PORT}
-CMD [ "node", "./src" ]
+CMD [ "yarn", "--cwd", "packages/billing/", "start" ]
 
