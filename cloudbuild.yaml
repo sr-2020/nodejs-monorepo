@@ -37,6 +37,21 @@ steps:
         'gcr.io/$PROJECT_ID/push',
         '.',
       ]
+  - id: deploy_push
+    name: 'gcr.io/cloud-builders/gcloud'
+    waitFor: ['build_push']
+    args:
+      [
+        'beta',
+        'run',
+        'deploy',
+        'push',
+        '--image',
+        'gcr.io/$PROJECT_ID/push',
+        '--region',
+        'us-central1',
+      ]
+
 # Push container images
 images:
   - 'gcr.io/$PROJECT_ID/billing'
