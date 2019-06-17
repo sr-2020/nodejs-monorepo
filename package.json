@@ -24,6 +24,7 @@
     "@loopback/rest": "^1.10.5",
     "@loopback/rest-explorer": "^1.1.19",
     "@loopback/service-proxy": "^1.1.7",
+    "@types/dotenv": "^6.1.1",
     "dotenv": "^8.0.0",
     "loopback-connector-mysql": "^5.4.0",
     "loopback-connector-sqlite3": "^3.0.0"

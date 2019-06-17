@@ -1,8 +1,10 @@
 import {PushApplication} from './application';
 import {ApplicationConfig} from '@loopback/core';
+import * as dotenv from 'dotenv';
 
 export async function main(options: ApplicationConfig = {}) {
-  require('dotenv').config();
+  dotenv.config({path: '../../.env'});
+
   const app = new PushApplication(options);
   await app.boot();
   await app.start();
