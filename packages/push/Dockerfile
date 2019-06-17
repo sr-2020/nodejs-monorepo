@@ -25,6 +25,5 @@ RUN yarn --cwd packages/push run build
 # Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0
 
-EXPOSE ${PORT}
 CMD [ "yarn", "--cwd", "packages/push/", "start" ]
 
