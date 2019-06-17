@@ -1,0 +1,43 @@
+timeout: 3600s
+# Google Cloud Build script
+steps:
+  # - id: pull_billing
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   args: ['pull', 'gcr.io/$PROJECT_ID/billing']
+  #   waitFor: ['-']
+  - id: build_billing
+    name: 'gcr.io/cloud-builders/docker'
+  #  waitFor: ['pull_billing']
+    args:
+      [
+        'build',
+        '-f',
+        'packages/billing/Dockerfile',
+        '-t',
+        'gcr.io/$PROJECT_ID/billing',
+  #      '--cache-from',
+  #      'gcr.io/$PROJECT_ID/billing',
+        '.',
+      ]
+  # - id: pull_push
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   args: ['pull', 'gcr.io/$PROJECT_ID/push']
+  #   waitFor: ['-']
+  - id: build_push
+    name: 'gcr.io/cloud-builders/docker'
+  #  waitFor: ['pull_push']
+    args:
+      [
+        'build',
+        '-f',
+        'packages/push/Dockerfile',
+        '-t',
+        'gcr.io/$PROJECT_ID/push',
+  #      '--cache-from',
+  #      'gcr.io/$PROJECT_ID/push',
+        '.',
+      ]
+# Push container images
+images:
+  - 'gcr.io/$PROJECT_ID/billing'
+  - 'gcr.io/$PROJECT_ID/push'
