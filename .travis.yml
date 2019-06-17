@@ -5,6 +5,10 @@ node_js:
 jobs:
   include:
     - stage: run tests
+      before_install:
+        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
+        - export PATH=$HOME/.yarn/bin:$PATH
+        - yarn -v
       install:
         - yarn
       script:
