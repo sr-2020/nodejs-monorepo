@@ -1,16 +1,20 @@
 language: node_js
 node_js:
-  - "8"
+  - '8'
 
 jobs:
   include:
-    - stage: build and push docker image
+    - stage: run tests
       before_script:
+        - npm i -g yarn@1.13.0
         - yarn
-        - yarn global add typescript@3.5.1
+      script:
+        - yarn --cwd=packages/billing test
+        - yarn --cwd=packages/push test
+
+    - stage: build and push docker image
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        # - yarn --cwd=packages/billing test
         - make build
         - make push
 
