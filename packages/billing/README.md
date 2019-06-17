@@ -18,11 +18,6 @@ docker build -t billing:latest
 docker run -p 3000:3000 -e MYSQL_HOST=<...> -e MYSQL_PASSWORD=<...> billing:latest
 ```
 
-Дополнительные параметры которые можно передать через `-e`:
-
-- MYSQL_USER (по умолчанию root)
-- MYSQL_DATABASE (по умолчанию billing)
-
 ## Доступные методы
 
 После запуска команды выше, на http://localhost:3000/explorer/ будет доступна Swagger-документация.
