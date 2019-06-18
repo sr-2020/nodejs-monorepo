@@ -29,21 +29,13 @@
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",
     "migrate": "node ./src/migrate",
-    "start": "node ./src",
-    "prepublishOnly": "npm run test"
+    "start": "node ./src"
   },
   "repository": {
     "type": "git"
   },
   "author": "",
-  "license": "",
-  "files": [
-    "README.md",
-    "index.js",
-    "index.d.ts",
-    "src",
-    "!*/__tests__"
-  ],
+  "license": "Apache-2.0",
   "dependencies": {},
   "devDependencies": {}
 }
