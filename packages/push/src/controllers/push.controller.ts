@@ -10,7 +10,7 @@ import {
 import {FirebaseMessagingService} from '../services';
 import {inject} from '@loopback/core';
 
-export class TokensController {
+export class PushController {
   constructor(
     @repository(FirebaseTokenRepository)
     public firebaseTokenRepository: FirebaseTokenRepository,
