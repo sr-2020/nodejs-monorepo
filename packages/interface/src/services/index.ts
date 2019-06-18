@@ -1,1 +1,1 @@
-export * from './firebase-messaging.service';
+export * from './push.service';
