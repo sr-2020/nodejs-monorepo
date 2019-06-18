@@ -27,6 +27,7 @@
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs src/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t sr2020/billing -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/billing",
     "migrate": "node ./src/migrate",
     "prestart": "npm run build",
     "start": "node ./src",
