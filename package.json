@@ -27,6 +27,7 @@
     "@types/dotenv": "^6.1.1",
     "dotenv": "^8.0.0",
     "loopback-connector-mysql": "^5.4.0",
+    "loopback-connector-rest": "^3.4.1",
     "loopback-connector-sqlite3": "^3.0.0"
   },
   "devDependencies": {
