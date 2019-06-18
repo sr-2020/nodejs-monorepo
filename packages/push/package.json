@@ -29,7 +29,6 @@
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",
     "migrate": "node ./src/migrate",
-    "prestart": "npm run build",
     "start": "node ./src",
     "prepublishOnly": "npm run test"
   },
