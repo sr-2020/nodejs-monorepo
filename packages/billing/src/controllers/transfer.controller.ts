@@ -41,7 +41,6 @@ export class TransferController {
     )
       throw new HttpErrors.BadRequest('Недостаточно денег.');
 
-    // TODO(aeremin): Check that has enough money
     await this.transactionRepository.create({
       ...transferRequest,
       created_at: new Date().toUTCString(),
