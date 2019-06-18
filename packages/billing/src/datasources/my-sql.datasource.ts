@@ -7,13 +7,10 @@ export class MySqlDataSource extends juggler.DataSource {
 
   constructor(
     @inject('datasources.config.MySQL', {optional: true})
-    dsConfig: object = config,
+    dsConfig = config,
   ) {
-    const fullConfig = {
-      ...dsConfig,
-      host: process.env.MYSQL_HOST,
-      password: process.env.MYSQL_PASSWORD,
-    };
-    super(fullConfig);
+    dsConfig.host = process.env.MYSQL_HOST!!;
+    dsConfig.password = process.env.MYSQL_PASSWORD!!;
+    super(dsConfig);
   }
 }
