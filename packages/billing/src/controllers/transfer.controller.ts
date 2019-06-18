@@ -1,13 +1,17 @@
 import {repository} from '@loopback/repository';
 import {TransactionRepository} from '../repositories';
 import {post, requestBody, HttpErrors} from '@loopback/rest';
-import {Transfer, Empty} from '../../../interface/src/models';
+import {Transfer, Empty, PushNotification} from '../../../interface/src/models';
+import {PushService} from '../../../interface/src/services';
 import {balance} from '../lib/balance';
+import {inject} from '@loopback/core';
 
 export class TransferController {
   constructor(
     @repository(TransactionRepository)
     public transactionRepository: TransactionRepository,
+    @inject('services.PushService')
+    protected pushService: PushService,
   ) {}
 
   @post('/transfer', {
@@ -45,6 +49,17 @@ export class TransferController {
       ...transferRequest,
       created_at: new Date().toUTCString(),
     });
+
+    await this.pushService.send(
+      transferRequest.sin_to,
+      new PushNotification({
+        title: 'Получен перевод',
+        body: `Отправитель: ${transferRequest.sin_from}, сумма ${
+          transferRequest.amount
+        }, комментарий: ${transferRequest.comment}`,
+      }),
+    );
+
     return new Empty();
   }
 }

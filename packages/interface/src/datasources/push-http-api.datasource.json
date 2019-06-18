@@ -1,0 +1,23 @@
+{
+  "name": "PushHttpApi",
+  "connector": "rest",
+  "baseURL": "https://push-o5ricu5t6q-uc.a.run.app",
+  "options": {
+    "headers": {
+      "accept": "application/json",
+      "content-type": "application/json"
+    }
+  },
+  "crud": false,
+  "operations": [
+    {
+      "template": {
+        "method": "POST",
+        "url": "https://push-o5ricu5t6q-uc.a.run.app/send_notification/{recipient}"
+      },
+      "functions": {
+        "send": ["recipient", "body"]
+      }
+    }
+  ]
+}
