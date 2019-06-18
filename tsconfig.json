@@ -3,5 +3,10 @@
   "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
     "composite": true
-  }
+  },
+  "references": [
+    {"path": "packages/interface/"},
+    {"path": "packages/billing"},
+    {"path": "packages/push"}
+  ]
 }

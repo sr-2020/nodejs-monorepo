@@ -6,7 +6,10 @@
     "loopback-application",
     "loopback"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "tsc -b",
+    "build:watch": "tsc -b --watch"
+  },
   "repository": {
     "type": "git"
   },
