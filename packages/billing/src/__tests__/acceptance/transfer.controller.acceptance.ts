@@ -2,6 +2,7 @@ import {Client, expect} from '@loopback/testlab';
 import {BillingApplication} from '../../application';
 import {setupApplication} from './test-helper';
 import {TransactionRepository} from '../../repositories';
+import * as nock from 'nock';
 
 describe('TransferController', () => {
   let app: BillingApplication;
@@ -27,6 +28,10 @@ describe('TransferController', () => {
         amount: 200,
       });
 
+      const scope = nock('https://push-o5ricu5t6q-uc.a.run.app')
+        .post('/send_notification/321', {title: /.*/, body: /.*/})
+        .reply(200);
+
       await client
         .post('/transfer')
         .send({
@@ -35,6 +40,8 @@ describe('TransferController', () => {
           amount: 100,
         })
         .expect(200);
+
+      expect(scope.isDone()).to.be.true();
 
       const allEntries = await repo.find({where: {sin_from: 123}});
       expect(allEntries.length).to.equal(1);

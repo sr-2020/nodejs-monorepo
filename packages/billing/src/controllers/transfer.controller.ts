@@ -54,9 +54,7 @@ export class TransferController {
       transferRequest.sin_to,
       new PushNotification({
         title: 'Получен перевод',
-        body: `Отправитель: ${transferRequest.sin_from}, сумма ${
-          transferRequest.amount
-        }, комментарий: ${transferRequest.comment}`,
+        body: `Отправитель: ${transferRequest.sin_from}, сумма ${transferRequest.amount}, комментарий: ${transferRequest.comment}`,
       }),
     );
 

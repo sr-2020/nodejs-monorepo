@@ -13,10 +13,11 @@
     {
       "template": {
         "method": "POST",
-        "url": "https://push-o5ricu5t6q-uc.a.run.app/send_notification/{recipient}"
+        "url": "https://push-o5ricu5t6q-uc.a.run.app/send_notification/{recipient}",
+        "body": "{notification}"
       },
       "functions": {
-        "send": ["recipient", "body"]
+        "send": ["recipient", "notification"]
       }
     }
   ]

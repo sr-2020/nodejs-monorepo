@@ -4,7 +4,7 @@ import {PushHttpApiDataSource} from '../datasources';
 import {PushResult, PushNotification} from '../../../interface/src/models';
 
 export interface PushService {
-  send(recipient: number, body: PushNotification): PushResult;
+  send(recipient: number, notification: PushNotification): PushResult;
 }
 
 export class PushServiceProvider implements Provider<PushService> {

@@ -28,14 +28,21 @@ export class BillingApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
-    this.projectRoot = __dirname;
+    this.projectRoot = __dirname + '/../../';
+    const dirs = ['billing', 'interface'];
     // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {
       controllers: {
-        // Customize ControllerBooter Conventions here
-        dirs: ['controllers'],
-        extensions: ['.controller.js'],
-        nested: true,
+        dirs,
+      },
+      datasources: {
+        dirs,
+      },
+      repositories: {
+        dirs,
+      },
+      services: {
+        dirs,
       },
     };
   }
