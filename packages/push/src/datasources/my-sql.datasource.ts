@@ -10,6 +10,7 @@ export class MySqlDataSource extends juggler.DataSource {
     dsConfig = config,
   ) {
     dsConfig.host = process.env.MYSQL_HOST!!;
+    dsConfig.user = process.env.MYSQL_USER || dsConfig.user;
     dsConfig.password = process.env.MYSQL_PASSWORD!!;
     super(dsConfig);
   }
