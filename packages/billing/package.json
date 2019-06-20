@@ -28,8 +28,8 @@
     "test:dev": "lb-mocha --allow-console-logs src/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t sr2020/billing -f Dockerfile ../..",
     "docker:push": "docker push sr2020/billing",
-    "migrate": "node ./src/migrate",
-    "start": "node ./src"
+    "migrate": "node -r tsconfig-paths/register ./src/migrate",
+    "start": "node -r tsconfig-paths/register ./src"
   },
   "repository": {
     "type": "git"

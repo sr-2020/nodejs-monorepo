@@ -1,8 +1,5 @@
 import {DefaultCrudRepository} from '@loopback/repository';
-import {
-  FirebaseToken,
-  FirebaseTokenRelations,
-} from '../../../interface/src/models';
+import {FirebaseToken, FirebaseTokenRelations} from '@sr2020/interface/models';
 import {MySqlDataSource} from '../datasources';
 import {inject} from '@loopback/core';
 

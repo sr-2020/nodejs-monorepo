@@ -6,7 +6,7 @@ import {
   FirebaseToken,
   PushResult,
   PushNotification,
-} from '../../../interface/src/models';
+} from '@sr2020/interface/models';
 import {FirebaseMessagingService} from '../services';
 import {inject} from '@loopback/core';
 

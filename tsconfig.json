@@ -3,7 +3,11 @@
   "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
     "composite": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "baseUrl": "./packages",
+    "paths": {
+      "@sr2020/interface/*": ["interface/src/*"]
+    }
   },
   "references": [
     {"path": "packages/interface/"},

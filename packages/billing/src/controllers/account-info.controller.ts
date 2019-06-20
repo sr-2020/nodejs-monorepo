@@ -3,7 +3,7 @@ import {repository} from '@loopback/repository';
 import {TransactionRepository} from '../repositories';
 import {param, get} from '@loopback/rest';
 import {balance} from '../lib/balance';
-import {AccountInfo} from '../../../interface/src/models';
+import {AccountInfo} from '@sr2020/interface/models';
 
 // Uncomment these imports to begin using these cool features!
 

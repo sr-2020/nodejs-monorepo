@@ -1,8 +1,8 @@
 import {repository} from '@loopback/repository';
 import {TransactionRepository} from '../repositories';
 import {post, requestBody, HttpErrors} from '@loopback/rest';
-import {Transfer, Empty, PushNotification} from '../../../interface/src/models';
-import {PushService} from '../../../interface/src/services';
+import {Transfer, Empty, PushNotification} from '@sr2020/interface/models';
+import {PushService} from '@sr2020/interface/services';
 import {balance} from '../lib/balance';
 import {inject} from '@loopback/core';
 

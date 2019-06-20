@@ -1,7 +1,7 @@
 import {getService} from '@loopback/service-proxy';
 import {inject, Provider} from '@loopback/core';
 import {FirebaseHttpApiDataSource} from '../datasources';
-import {PushResult} from '../../../interface/src/models';
+import {PushResult} from '@sr2020/interface/models';
 
 export interface FirebaseMessagingService {
   send(recipient: string, title: string, body: string): PushResult;

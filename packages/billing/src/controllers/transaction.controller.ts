@@ -16,7 +16,7 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {Transaction} from '../../../interface/src/models';
+import {Transaction} from '@sr2020/interface/models';
 import {TransactionRepository} from '../repositories';
 
 export class TransactionController {

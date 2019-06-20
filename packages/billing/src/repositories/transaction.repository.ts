@@ -1,5 +1,5 @@
 import {DefaultCrudRepository} from '@loopback/repository';
-import {Transaction} from '../../../interface/src/models';
+import {Transaction} from '@sr2020/interface/models';
 import {MySqlDataSource} from '../datasources';
 import {inject} from '@loopback/core';
 
