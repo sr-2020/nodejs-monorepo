@@ -12,7 +12,7 @@
     "**/.svn": true,
     "**/CVS": true,
     "**/*.js": true,
-    "**/*.js.map": true,
+    "**/*.map": true,
     "**/*.d.ts": true
   },
   "files.insertFinalNewline": true,

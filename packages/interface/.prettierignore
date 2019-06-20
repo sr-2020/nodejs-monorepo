@@ -1,4 +1,4 @@
 *.js
-*.js.map
+*.map
 *.d.ts
 *.json

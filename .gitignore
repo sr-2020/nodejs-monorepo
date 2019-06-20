@@ -62,7 +62,7 @@ api-docs/
 
 # Transpiled JavaScript files from Typescript
 *.js
-*.js.map
+*.map
 *.d.ts
 
 # Idea
