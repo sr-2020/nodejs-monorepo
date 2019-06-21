@@ -28,7 +28,7 @@ describe('TransferController', () => {
         amount: 200,
       });
 
-      const scope = nock('https://push-o5ricu5t6q-uc.a.run.app')
+      const scope = nock('http://gateway.evarun.ru/api/v1/push')
         .post('/send_notification/321', {title: /.*/, body: /.*/})
         .reply(200);
 
