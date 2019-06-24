@@ -1,20 +1,13 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
-    "declaration": false,
     // TODO: Figure out what prevents enable it and remove
     "noImplicitAny": false,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "references": [
-    { "path": "../alice-model-engine-api" }
-  ]
+  "include": ["**/*.ts"],
+  "references": [{"path": "../alice-model-engine-api"}]
 }

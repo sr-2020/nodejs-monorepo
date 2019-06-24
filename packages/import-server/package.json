@@ -36,7 +36,7 @@
     "googleapis": "^33.0.0",
     "lodash": "^4.17.10",
     "moment": "^2.18.1",
-    "pouchdb": "^6.3.2",
+    "pouchdb": "^7.1.1",
     "pouchdb-find": "^6.3.4",
     "pouchdb-upsert": "^2.2.0",
     "request": "^2.81.0",

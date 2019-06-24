@@ -27,8 +27,7 @@
     "deus-model-engine": "github:sth-larp/deus-model-engine",
     "mocha": "^3.4.2",
     "node-tsconfig-paths": "^0.4.2",
-    "ts-node": "^3.0.6",
-    "typescript": "^2.6.2"
+    "ts-node": "^3.0.6"
   },
   "dependencies": {
     "@types/chance": "^1.0.0",

@@ -1,22 +1,17 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        // TODO: Figure out what prevents enable it and remove
-        "noImplicitAny": false,
-        "strictPropertyInitialization": false,
-        "strictFunctionTypes": false,
-        "sourceMap": false,
-        "outDir": "./build",
-        "typeRoots": [
-            "./vendor",
-            "./node_modules/@types"
-        ]
-    },
-    "include": [
-        "**/*.ts"
-    ],
-    "references": [
-      { "path": "../alice-model-engine-api" },
-      { "path": "../alice-model-engine" },
-    ]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // TODO: Figure out what prevents enable it and remove
+    "noImplicitAny": false,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
+    "sourceMap": false,
+    "outDir": "./build",
+    "typeRoots": ["./vendor", "./node_modules/@types"]
+  },
+  "include": ["**/*.ts"],
+  "references": [
+    {"path": "../alice-model-engine-api"},
+    {"path": "../alice-model-engine"}
+  ]
 }

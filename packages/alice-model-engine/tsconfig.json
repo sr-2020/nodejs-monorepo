@@ -1,15 +1,13 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "sourceMap": false,
-        "declaration": true,
-        "outDir": "./dist",
-        // TODO: Fix and re-enable
-        "strictPropertyInitialization": false,
-        "composite": true
-    },
-    "include": ["**/*.ts"],
-    "references": [
-      { "path": "../alice-model-engine-api" }
-    ]
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "declaration": true,
+    "outDir": "./dist",
+    // TODO: Fix and re-enable
+    "strictPropertyInitialization": false,
+    "composite": true
+  },
+  "include": ["**/*.ts"],
+  "references": [{"path": "../alice-model-engine-api"}]
 }
