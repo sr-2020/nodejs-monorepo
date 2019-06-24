@@ -8,7 +8,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
-import { Event, ModelApiInterface } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Формат специального модификатора в каждой модели для отображения и хранения ущерба

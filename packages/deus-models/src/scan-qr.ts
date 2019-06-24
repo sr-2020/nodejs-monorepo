@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface, PreprocessApiInterface } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 function scanQR(api: ModelApiInterface, data: any) {
     api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`)

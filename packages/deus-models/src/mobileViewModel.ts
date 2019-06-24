@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from "deus-engine-manager-api";
+import { ViewModelApiInterface } from "@sr2020/alice-model-engine-api/index";
 
 interface PageViewModel {
   menuTitle: string;

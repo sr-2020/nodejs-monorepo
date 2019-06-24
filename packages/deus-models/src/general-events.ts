@@ -6,7 +6,7 @@ import type = require('type-detect');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import Chance = require('chance');
-import { ModelApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 let chance = new Chance();
 
 /**

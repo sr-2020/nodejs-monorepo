@@ -1,4 +1,4 @@
-import { Event } from 'deus-engine-manager-api';
+import { Event } from '@sr2020/alice-model-engine-api/index';
 
 const REFRESH_EVENT_TYPE = "_RefreshModel";
 

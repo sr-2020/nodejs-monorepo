@@ -2,7 +2,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import clone = require("clone");
-import { ModelApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Обработчик события "serenity_immortality_ready"

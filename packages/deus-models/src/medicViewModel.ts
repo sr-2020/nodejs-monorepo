@@ -1,4 +1,4 @@
-import { ModelApiInterface, ViewModelApiInterface } from "deus-engine-manager-api";
+import { ModelApiInterface, ViewModelApiInterface } from "@sr2020/alice-model-engine-api/index";
 
 /**
  *  В ViewModel для медиков и психологов должны входить:

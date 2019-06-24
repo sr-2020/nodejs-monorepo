@@ -11,7 +11,7 @@ import medhelpers = require('../helpers/medic-helper');
 import Chance = require('chance');
 const chance = new Chance();
 import clone = require("clone");
-import { ModelApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 
 /**

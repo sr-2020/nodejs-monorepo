@@ -1,7 +1,7 @@
 import _ = require('lodash');
 import helpers = require('../helpers/model-helper');
 import medichelpers = require('../helpers/medic-helper');
-import { ModelApiInterface, Modifier } from "deus-engine-manager-api";
+import { ModelApiInterface, Modifier } from "@sr2020/alice-model-engine-api/index";
 
 /*
   modifier jj-immortal-one: {

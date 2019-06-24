@@ -3,7 +3,7 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import { ModelApiInterface } from 'deus-engine-manager-api';
+import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 
 /**

@@ -2,7 +2,7 @@ import _ = require('lodash');
 import medichelpers = require('../helpers/medic-helper');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { Modifier, ModelApiInterface, PreprocessApiInterface } from "deus-engine-manager-api";
+import { Modifier, ModelApiInterface, PreprocessApiInterface } from "@sr2020/alice-model-engine-api/index";
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 

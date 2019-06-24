@@ -1,4 +1,4 @@
-import { ModelApiInterface, Modifier } from "deus-engine-manager-api";
+import { ModelApiInterface, Modifier } from "@sr2020/alice-model-engine-api/index";
 import { MindData } from "../src/medicViewModel";
 
 

@@ -7,7 +7,7 @@ import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import clone = require("clone");
 import infection = require('../helpers/infection-illness');
-import { Event, ModelApiInterface, Modifier } from 'deus-engine-manager-api';
+import { Event, ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
 
 
 /**

@@ -6,7 +6,7 @@ import helpers = require('../helpers/model-helper');
 import Chance = require('chance');
 let chance = new Chance();
 import consts = require('../helpers/constants');
-import { Modifier, ModelApiInterface } from "deus-engine-manager-api";
+import { Modifier, ModelApiInterface } from "@sr2020/alice-model-engine-api/index";
 
 function loadNarco(api: ModelApiInterface, id)
 {
