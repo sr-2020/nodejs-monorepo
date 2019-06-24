@@ -12,7 +12,8 @@
     "build": "tsc",
     "start": "npm run build && forever start ./dist/main.js",
     "stop": "forever stop ./dist/main.js",
-    "test": "mocha -r ts-node/register **/*.spec.ts --watch-extensions ts"
+    "pretest": "yarn run build",
+    "test": "mocha **/*.spec.js"
   },
   "author": "",
   "license": "Apache-2.0",

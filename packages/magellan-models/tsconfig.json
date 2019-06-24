@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./build",
     // TODO: Fix and remove
     "noImplicitAny": false,
     // TODO: Fix and re-enable

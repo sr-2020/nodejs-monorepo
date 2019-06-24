@@ -64,7 +64,7 @@ function jjImmortalOneStartEvent(api: ModelApiInterface, data, event) {
 
     const timerName = 'jj-immortal-one-' + modifier.mID;
 
-    api.info('jjImmortalOneStartEvent: set timer %s', timerName);
+    api.info(`jjImmortalOneStartEvent: set timer ${timerName}`);
     api.setTimer(timerName, modifier.stages[0].duration * 1000, 'jj-immortal-one-next-stage', {mID: modifier.mID});
 }
 
@@ -99,7 +99,7 @@ function jjImmortalOneNextStageEvent(api: ModelApiInterface, data, event) {
         api.info('jjImmortalOneStartEvent: last stage reached, remove modifier');
         api.removeModifier(modifier.mID);
     } else {
-        api.info('jjImmortalOneStartEvent: start timer %s', timerName);
+        api.info(`jjImmortalOneStartEvent: start timer ${timerName}`);
         api.setTimer(timerName, duration * 1000, 'jj-immortal-one-next-stage', {mID: modifier.mID});
     }
 }

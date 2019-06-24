@@ -14,7 +14,7 @@ function getWorker() {
 
     (Winston as any).level = 'warn';
 
-    const catalogsPath = Path.resolve(__dirname, '../../../../catalogs');
+    const catalogsPath = Path.resolve(__dirname, '../../catalogs');
     const modelsPath = Path.resolve(__dirname, '../../src');
 
     const config = Config.parse(requireDir(catalogsPath));

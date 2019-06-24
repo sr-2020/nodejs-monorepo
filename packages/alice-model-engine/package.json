@@ -6,9 +6,10 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
+    "pretest": "yarn run build",
     "test": "npm run test:unit && npm run test:integration",
-    "test:integration": "mocha -r ts-node/register test/integration/**/*.ts",
-    "test:unit": "mocha -r ts-node/register test/unit/**/*.ts"
+    "test:integration": "mocha test/integration/**/*.js",
+    "test:unit": "mocha test/unit/**/*.js"
   },
   "author": "",
   "license": "Apache-2.0",

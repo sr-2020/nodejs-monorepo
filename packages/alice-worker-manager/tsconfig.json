@@ -6,7 +6,6 @@
     "strictPropertyInitialization": false,
     "strictFunctionTypes": false,
     "sourceMap": false,
-    "outDir": "./build",
     "typeRoots": ["./vendor", "./node_modules/@types"]
   },
   "include": ["**/*.ts"],

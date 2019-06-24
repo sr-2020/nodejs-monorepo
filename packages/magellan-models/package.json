@@ -6,7 +6,7 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "test": "npm run build && mocha build/magellan-models/test/**/*.js"
+    "test": "npm run build && mocha test/**/*.js"
   },
   "author": "",
   "license": "Apache-2.0",

@@ -2,9 +2,8 @@
   "extends": "../../tsconfig.json",
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist",
     "sourceMap": true,
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["**/*.ts", "../alice-qr-lib/**/*.ts"]
+  "include": ["**/*.ts"]
 }
