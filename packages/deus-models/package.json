@@ -4,7 +4,7 @@
   "description": "Deus Ex Model Server — handlers that process events.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "test": "npm run build && mocha build/test/**/*.js"
   },
   "repository": {

@@ -1,7 +1,7 @@
 import * as Path from 'path';
-import { Worker } from 'deus-model-engine/lib/worker';
-import { Config } from 'deus-model-engine/lib/config';
-import { requireDir } from 'deus-model-engine/lib/utils';
+import { Worker } from '@sr2020/alice-model-engine/worker';
+import { Config } from '@sr2020/alice-model-engine/config';
+import { requireDir } from '@sr2020/alice-model-engine/utils';
 
 import { EngineContext, Event, EngineResult, EngineResultOk } from 'deus-engine-manager-api';
 

@@ -6,7 +6,9 @@
     "declarationMap": true,
     "baseUrl": "./packages",
     "paths": {
-      "@sr2020/interface/*": ["interface/src/*"]
+      "@sr2020/interface/*": ["interface/src/*"],
+      "@sr2020/alice-model-engine-api/*": ["alice-model-engine-api/*"],
+      "@sr2020/alice-model-engine/*": ["alice-model-engine/src/*"]
     }
   },
   "references": [
