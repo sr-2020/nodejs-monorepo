@@ -130,7 +130,7 @@ describe('Implants: ', () => {
     });
 
     it("Add implant and stop illness 2", async function() {
-        
+
         let model = getExampleModel();
         let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: "acromegaly" } }], model.timestamp + 100);
         let { baseModel, workingModel } = await process(model, events);
@@ -343,8 +343,6 @@ describe('Implants: ', () => {
         expect(workingModel.sex).is.equal("female");
 
         let condition = workingModel.conditions.find((c: any) => c.id == "jj_i_am_girl-2");
-
-        printModel(workingModel);
 
         expect(condition).is.exist;
 

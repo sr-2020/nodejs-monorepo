@@ -257,7 +257,7 @@ function addCharacterCondition(api: ModelApiInterface, condId: string) {
             return api.addCondition(condition);
         }
         else {
-            api.error("Couldn't find condition " + condId);
+            api.info("Couldn't find condition " + condId);
         }
     }
 

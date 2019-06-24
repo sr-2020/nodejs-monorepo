@@ -327,8 +327,6 @@ describe('Medicine: ', () => {
 
         let { baseModel, workingModel } = await process(model, events);
 
-        printModel(baseModel);
-
     //Нанесли повреждения и добавили болезнь
         events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } },
                                        { eventType: 'start-illness', data: { id: "acromegaly" } }], baseModel.timestamp+100, true);
@@ -373,8 +371,6 @@ describe('Medicine: ', () => {
         illness = baseModel.modifiers.find( (m:any) => m.id == "acromegaly" );
 
         expect(illness).is.not.exist;
-
-        printModel(baseModel);
     });
 
 });

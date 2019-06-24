@@ -2,6 +2,7 @@ import * as Path from 'path';
 import { Worker } from '@sr2020/alice-model-engine/worker';
 import { Config } from '@sr2020/alice-model-engine/config';
 import { requireDir } from '@sr2020/alice-model-engine/utils';
+import * as Winston from 'winston';
 
 import { EngineContext, Event, EngineResult, EngineResultOk } from '@sr2020/alice-model-engine-api/index';
 
@@ -9,6 +10,8 @@ let WORKER_INSTANCE: Worker | null = null;
 
 export function getWorker() {
     if (WORKER_INSTANCE) return WORKER_INSTANCE;
+
+    (Winston as any).level = 'error';
 
     const catalogsPath = Path.resolve(__dirname, '../catalogs');
     const modelsPath = Path.resolve(__dirname, '../src');

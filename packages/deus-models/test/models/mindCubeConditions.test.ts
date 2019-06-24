@@ -19,17 +19,15 @@ describe('Mind Cubes conditions tests: ', () => {
 
         let cond1 = workingModel.conditions.find((c: any) => c.id == "mcube-condition-A0-2");
         let cond2 = workingModel.conditions.find((c: any) => c.id == "mcube-condition-F0-3");
-        
+
         expect(cond1).to.exist;
         expect(cond1).to.exist;
 
         cond1 = baseModel.conditions.find((c: any) => c.id == "mcube-condition-A0-2");
         cond2 = baseModel.conditions.find((c: any) => c.id == "mcube-condition-F0-3");
-        
-        expect(cond1).to.not.exist;
-        expect(cond1).to.not.exist;
 
-        printModel(workingModel);
+        expect(cond1).to.not.exist;
+        expect(cond1).to.not.exist;
     });
 
 
