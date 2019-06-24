@@ -6,7 +6,6 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "lint": "tslint -p tsconfig.json --exclude node_modules",
     "pretest": "yarn run build",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json"
   },
