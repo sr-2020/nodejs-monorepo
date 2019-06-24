@@ -4,5 +4,8 @@
   "compilerOptions": {
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "references": [
+    {"path": "../alice-model-engine-api"},
+  ]
 }
