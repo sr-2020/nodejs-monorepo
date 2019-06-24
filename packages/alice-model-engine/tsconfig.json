@@ -4,12 +4,9 @@
     // TODO: Fix and re-enable
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
-    "composite": true
   },
   "include": ["**/*.ts"],
   "references": [
-    {
-      "path": "../alice-model-engine-api"
-    }
+    { "path": "../alice-model-engine-api" }
   ]
 }

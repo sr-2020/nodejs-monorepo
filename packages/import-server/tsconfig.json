@@ -1,9 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "compileOnSave": false,
-  "compilerOptions": {
-    "typeRoots": ["node_modules/@types"]
-  },
   "include": ["**/*.ts"],
   "references": [
     {"path": "../alice-model-engine-api"},

@@ -1,11 +1,8 @@
 {
   "extends": "../../tsconfig.json",
-  "compileOnSave": false,
   "compilerOptions": {
-    "sourceMap": true,
     // TODO: Figure out what prevents enable it and remove
     "noImplicitAny": false,
-    "typeRoots": ["node_modules/@types"]
   },
   "include": ["**/*.ts"],
   "references": [{"path": "../alice-model-engine-api"}]

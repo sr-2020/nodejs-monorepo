@@ -3,7 +3,4 @@
   "include": [
     "**/*.ts"
   ],
-  "compilerOptions": {
-    "composite": true
-  }
 }

@@ -1,9 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "compileOnSave": false,
-  "compilerOptions": {
-    "sourceMap": true,
-    "typeRoots": ["node_modules/@types"]
-  },
   "include": ["**/*.ts"]
 }

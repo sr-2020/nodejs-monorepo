@@ -5,8 +5,6 @@
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "strictFunctionTypes": false,
-    "sourceMap": false,
-    "typeRoots": ["./vendor", "./node_modules/@types"]
   },
   "include": ["**/*.ts"],
   "references": [
