@@ -20,7 +20,7 @@
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
     "prettier:check": "npm run prettier:cli -- -l",
     "prettier:fix": "npm run prettier:cli -- --write",
-    "tslint": "lb-tslint",
+    "tslint": "lb-tslint -c ../../tslint.json",
     "tslint:fix": "npm run tslint -- --fix",
     "pretest": "yarn run build",
     "test": "lb-mocha --allow-console-logs \"src/__tests__\"",
