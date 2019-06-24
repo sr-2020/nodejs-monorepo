@@ -238,10 +238,6 @@ function getEnabledColor(enabled) {
   return enabled ? '' : '#FF373F';
 }
 
-function getEnableActionText(enabled) {
-  return enabled ? 'Выключить' : 'Включить';
-}
-
 const implantsClasses = ['cyber-implant', 'bio-implant', 'illegal-cyber-implant', 'illegal-bio-implant', 'virtual', 'firmware'];
 
 function isImplant(modifier) {
@@ -341,36 +337,6 @@ function getMemoryPage(model) {
     body: {
       title: 'Воспоминания',
       items: model.memory.map(getMemoryPageItem),
-    },
-  };
-}
-
-// TODO: Can new systems be added dynamically?
-function getBodyPage(model) {
-  let systems = model.systems;
-  return {
-    __type: 'ListPageViewModel',
-    menuTitle: 'Тело',
-    body: {
-      title: 'Физиологические системы',
-      items: [
-        {
-          text: 'Нервная система',
-          value: systems.NervousSystem,
-        },
-        {
-          text: 'Сердечно-сосудистая система',
-          value: systems.CardioSystem,
-        },
-        {
-          text: 'Руки',
-          value: systems.Hands,
-        },
-        {
-          text: 'Ноги',
-          value: systems.Legs,
-        },
-      ],
     },
   };
 }
@@ -547,15 +513,6 @@ function getViewModel(model) {
     passportScreen: getPassportScreen(model),
     pages: getPages(model),
   };
-}
-
-function setModifierEnabled(modifiers, id, enabled) {
-  const index = modifiers.findIndex((m) => m.mID == id);
-  if (index < 0) {
-    return modifiers;
-  }
-  modifiers[index].enabled = enabled;
-  return modifiers;
 }
 
 module.exports = () => {

@@ -1,23 +1,12 @@
-/**
- * Эффекты и события для управления имплантами
- */
-
-//import * as helpers from '../helpers/model-helper';
-
-import immortal = require('./s-immortal');
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
-import Chance = require('chance');
-const chance = new Chance();
-import clone = require('clone');
 import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Обработчик события
  * Добавляет имплант в модель
  * { id: implant-id }
- * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
 function addImplantEvent(api: ModelApiInterface, data, event) {
   if (data.id) {
@@ -127,7 +116,6 @@ function addImplantEvent(api: ModelApiInterface, data, event) {
  * Обработчик события
  * Удвляет имплант из модели
  * { mID: implant-model-id }
- * TODO: доабавить проверку легитимности - т.е. кто именно может выполнять эту операцию
  */
 function removeImplantEvent(api: ModelApiInterface, data, event) {
   if (data.mID) {

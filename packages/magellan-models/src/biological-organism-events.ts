@@ -146,7 +146,6 @@ function enterShip(api: ModelApiInterface, data: number, event: Event) {
   }
 
   leaveShip(api, null, event);
-  // TODO: move to config
   const eff: Effect = { enabled: true, id: 'on-the-ship', class: 'physiology', type: 'normal', handler: 'onTheShip' };
   const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
