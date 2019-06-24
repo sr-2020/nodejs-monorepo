@@ -7,7 +7,7 @@
     "deps": "yarn install",
     "build": "tsc -b",
     "pretest": "yarn run build",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "yarn run test:unit && yarn run test:integration",
     "test:integration": "mocha test/integration/**/*.js",
     "test:unit": "mocha test/unit/**/*.js"
   },

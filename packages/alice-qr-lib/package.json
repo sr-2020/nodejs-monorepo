@@ -10,7 +10,7 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc",
-    "start": "npm run build && forever start ./dist/main.js",
+    "start": "yarn run build && forever start ./dist/main.js",
     "stop": "forever stop ./dist/main.js",
     "pretest": "yarn run build",
     "test": "mocha **/*.spec.js"

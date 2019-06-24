@@ -6,7 +6,7 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "start": "npm run build && forever start ./main.js",
+    "start": "yarn run build && forever start ./main.js",
     "stop": "forever stop ./main.js",
     "test:dev": "mocha **/*.spec.js --watch-extensions ts",
     "pretest": "yarn run build",
