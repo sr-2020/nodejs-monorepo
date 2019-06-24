@@ -1,9 +1,9 @@
-import {BillingApplication} from './application';
-import {ApplicationConfig} from '@loopback/core';
+import { BillingApplication } from './application';
+import { ApplicationConfig } from '@loopback/core';
 import * as dotenv from 'dotenv';
 
 export async function main(options: ApplicationConfig = {}) {
-  dotenv.config({path: '../../.env'});
+  dotenv.config({ path: '../../.env' });
 
   const app = new BillingApplication(options);
   await app.boot();
@@ -26,7 +26,7 @@ const config = {
     },
   },
 };
-main(config).catch(err => {
+main(config).catch((err) => {
   console.error('Cannot start the application.', err);
   process.exit(1);
 });

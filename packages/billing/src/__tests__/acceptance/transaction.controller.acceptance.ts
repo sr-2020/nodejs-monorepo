@@ -1,7 +1,7 @@
-import {Client, expect} from '@loopback/testlab';
-import {BillingApplication} from '../../application';
-import {setupApplication} from './test-helper';
-import {TransactionRepository} from '../../repositories';
+import { Client, expect } from '@loopback/testlab';
+import { BillingApplication } from '../../application';
+import { setupApplication } from './test-helper';
+import { TransactionRepository } from '../../repositories';
 
 describe('TransactionController', () => {
   let app: BillingApplication;
@@ -9,7 +9,7 @@ describe('TransactionController', () => {
   let repo: TransactionRepository;
 
   beforeEach('setupApplication', async () => {
-    ({app, client} = await setupApplication());
+    ({ app, client } = await setupApplication());
     repo = await app.getRepository(TransactionRepository);
   });
 
@@ -39,7 +39,7 @@ describe('TransactionController', () => {
 
   it('invokes GET /transactions/count', async () => {
     const res = await client.get('/transactions/count').expect(200);
-    expect(res.body).to.containEql({count: 0});
+    expect(res.body).to.containEql({ count: 0 });
 
     await repo.create({
       created_at: '2019-05-09T20:20:59.686Z',
@@ -49,6 +49,6 @@ describe('TransactionController', () => {
     });
 
     const res2 = await client.get('/transactions/count').expect(200);
-    expect(res2.body).to.containEql({count: 1});
+    expect(res2.body).to.containEql({ count: 1 });
   });
 });

@@ -76,7 +76,6 @@ function usePill(api: ModelApiInterface, data, event) {
   const previousUsage = _.get(api.model, ['usedPills', pill.id]);
 
   if (code._id.startsWith('9c5d9d84-dbf2')) {
-
     const pillText = code._id.substring(code._id.length - 6);
     helpers.addChangeRecord(api, `Вы использовали препарат ${pillText}`, event.timestamp);
   }
@@ -116,9 +115,7 @@ function usePill(api: ModelApiInterface, data, event) {
 function aquirePills(api: PreprocessApiInterface, events) {
   if (!api.model.isAlive) return;
 
-  events
-    .filter((event) => event.eventType == 'usePill')
-    .forEach((event) => api.aquire('pills', event.data.id));
+  events.filter((event) => event.eventType == 'usePill').forEach((event) => api.aquire('pills', event.data.id));
 }
 
 module.exports = {

@@ -19,7 +19,6 @@ export interface LoggerInterface {
 }
 
 export class Logger implements LoggerInterface {
-
   public debug = this.defLevel('debug');
   public info = this.defLevel('info');
   public notice = this.defLevel('notice');

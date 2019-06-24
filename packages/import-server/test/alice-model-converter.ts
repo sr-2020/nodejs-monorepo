@@ -8,7 +8,6 @@ import { testCharData02 } from './test-char2';
 import { metadata } from './test-metadata';
 
 describe('Model Creation testchar01', () => {
-
   const character = new CharacterParser(testCharData01, metadata);
   const { model, account, problems } = convertAliceModel(character);
 
@@ -43,7 +42,6 @@ describe('Model Creation testchar01', () => {
 });
 
 describe('Model Creation testchar02', () => {
-
   const character = new CharacterParser(testCharData02, metadata);
   const { model, account, problems } = convertAliceModel(character);
 

@@ -1,28 +1,28 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
 @model({
   name: 'transactions',
 })
 export class Transaction extends Entity {
-  @property({type: 'number', id: true})
+  @property({ type: 'number', id: true })
   id?: number;
 
-  @property({type: 'date', required: true})
+  @property({ type: 'date', required: true })
   created_at: string;
 
-  @property({type: 'number', required: true})
+  @property({ type: 'number', required: true })
   sin_from: number;
 
-  @property({type: 'number', required: true})
+  @property({ type: 'number', required: true })
   sin_to: number;
 
-  @property({type: 'number', required: true})
+  @property({ type: 'number', required: true })
   amount: number;
 
-  @property({type: 'string'})
+  @property({ type: 'string' })
   comment?: string;
 
-  @property({type: 'number'})
+  @property({ type: 'number' })
   recurrent_payment_id?: number;
 
   constructor(data?: Partial<Transaction>) {

@@ -18,7 +18,6 @@ export interface ConfigInterface {
 }
 
 export class Config implements ConfigInterface {
-
   public static parse(src: SerializedConfig): Config {
     const config = new Config();
 

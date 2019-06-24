@@ -75,11 +75,10 @@ export class WorkersPool implements WorkersPoolInterface {
 
   private createWorker = async () => {
     this.logger.info('manager', 'WorkersPool::createWorker');
-    const worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs)
-      .onExit(() => {
-        this.logger.error('manager', `Worker exit. Last output:\n ${worker.lastOutput.join()}`);
-        this.pool.destroy(worker);
-      });
+    const worker: Worker = new Worker(this.logger, this.config.workerModule, this.config.workerArgs).onExit(() => {
+      this.logger.error('manager', `Worker exit. Last output:\n ${worker.lastOutput.join()}`);
+      this.pool.destroy(worker);
+    });
 
     try {
       await worker.up();
@@ -95,9 +94,9 @@ export class WorkersPool implements WorkersPoolInterface {
     }
 
     return worker;
-  }
+  };
 
   private destroyWorker = (worker: Worker) => {
     worker.down();
-  }
+  };
 }

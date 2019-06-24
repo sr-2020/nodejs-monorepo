@@ -2,13 +2,12 @@ import * as moment from 'moment';
 import { ImportRunStats } from './import-run-stats';
 
 export class ImportStats {
-
   public imports: ImportRunStats[] = [];
 
   public lastRefreshTime = moment([1900, 0, 1]);
   // public lastRefreshTime = moment().subtract(3,"hours");
 
-  constructor() { }
+  constructor() {}
 
   public toString(): string {
     return JSON.stringify(Array.from(this.imports).reverse(), null, 4);
@@ -31,5 +30,4 @@ export class ImportStats {
 
     this.imports.push(s);
   }
-
 }

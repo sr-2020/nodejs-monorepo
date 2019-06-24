@@ -12,12 +12,14 @@ const cliParamsDef = [
   {
     name: 'id',
     type: String,
-    typeLabel: '[underline]{characterId}', description: 'ID of single character for import',
+    typeLabel: '[underline]{characterId}',
+    description: 'ID of single character for import',
   },
   {
     name: 'since',
     type: String,
-    typeLabel: '[underline]{YYYY-MM-DDTHH:mm}', description: 'import characters modified after that time',
+    typeLabel: '[underline]{YYYY-MM-DDTHH:mm}',
+    description: 'import characters modified after that time',
   },
   { name: 'server', type: Boolean, description: 'Run as a server' },
   { name: 'ignoreInGame', type: Boolean, description: 'Ignore inGame flag for re-export' },

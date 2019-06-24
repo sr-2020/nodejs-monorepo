@@ -16,13 +16,13 @@ export class Manager {
 
   private processors: {
     [characterId: string]: {
-      current: Processor,
-      pending?: Processor,
-    },
+      current: Processor;
+      pending?: Processor;
+    };
   } = {};
 
   private errors: {
-    [characterId: string]: number,
+    [characterId: string]: number;
   } = {};
 
   constructor(
@@ -31,7 +31,7 @@ export class Manager {
     private pool: WorkersPoolInterface,
     private processorFactory: ProcessorFactory,
     private logger: LoggerInterface,
-  ) { }
+  ) {}
 
   public async init() {
     let catalogs;
@@ -42,7 +42,8 @@ export class Manager {
   }
 
   public subscribeEvents() {
-    this.eventsSource.syncRequests()
+    this.eventsSource
+      .syncRequests()
       .takeUntil(this.stopped)
       .do(this.logEvent)
       .filter(this.filterErroredModels)
@@ -52,21 +53,19 @@ export class Manager {
   }
 
   public logEvent = (event: SyncRequest) => {
-    this.logger.info(
-          'manager', `Get sync request for ${event.characterId}`, { characterId: event.characterId, event });
-  }
+    this.logger.info('manager', `Get sync request for ${event.characterId}`, { characterId: event.characterId, event });
+  };
 
   public filterErroredModels = (event: SyncRequest) => {
     const characterId = event.characterId;
 
     if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
-      this.logger.warn('manager',
-        'Character exceed MAX_ERRORS value', { characterId, totalErrors: this.errors[characterId], MAX_ERRORS });
+      this.logger.warn('manager', 'Character exceed MAX_ERRORS value', { characterId, totalErrors: this.errors[characterId], MAX_ERRORS });
       return false;
     }
 
     return true;
-  }
+  };
 
   public onSyncEvent = (event: SyncRequest) => {
     const characterId = event.characterId;
@@ -84,21 +83,24 @@ export class Manager {
     } else {
       const processor = this.processorFactory();
       this.processors[characterId] = { current: processor };
-      processor.pushEvent(event).run().then(this.processorFulfilled, this.processorRejected);
+      processor
+        .pushEvent(event)
+        .run()
+        .then(this.processorFulfilled, this.processorRejected);
     }
-  }
+  };
 
   public processorFulfilled = (event: SyncRequest) => {
     const characterId = event.characterId;
 
     delete this.errors[characterId];
     this.rotateProcessors(characterId);
-  }
+  };
 
   public processorRejected = (event: SyncRequest) => {
     this.errors[event.characterId] = (this.errors[event.characterId] || 0) + 1;
     this.rotateProcessors(event.characterId);
-  }
+  };
 
   public rotateProcessors(characterId: string) {
     if (!this.processors[characterId]) return;

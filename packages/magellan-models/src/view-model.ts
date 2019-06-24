@@ -45,7 +45,9 @@ function getStartPage(model: OrganismModel) {
 
   if (!model.isAlive) {
     pageInfo.body.items.unshift({
-      text: 'Состояние персонажа', value: 'Вы мертвы!', valueColor: '#ff565c',
+      text: 'Состояние персонажа',
+      value: 'Вы мертвы!',
+      valueColor: '#ff565c',
     });
   }
 
@@ -58,12 +60,11 @@ function getStartPage(model: OrganismModel) {
       valueColor: '#ff565c',
       percent: 100,
     });
-  } else /*if (isHuman)*/ {
+  } /*if (isHuman)*/ else {
     pageInfo.body.items.push({
       text: 'Инфо:',
       value: 'Проверяй ALICE часто',
     });
-
   }
 
   return pageInfo;
@@ -71,9 +72,12 @@ function getStartPage(model: OrganismModel) {
 
 function getRussianConditionTag(tag) {
   switch (tag) {
-    case 'physiology': return 'Физиология';
-    case 'mind': return 'Психология';
-    default: return 'Физиология';
+    case 'physiology':
+      return 'Физиология';
+    case 'mind':
+      return 'Психология';
+    default:
+      return 'Физиология';
   }
 }
 
@@ -82,7 +86,7 @@ function getConditionsPageItem(cond) {
   const details = cond.details ? cond.details : header;
   const condClass = cond.class ? cond.class : 'physiology';
 
-  if (details == header || details == (header + '.')) {
+  if (details == header || details == header + '.') {
     header = 'Состояние';
   }
 
@@ -251,9 +255,8 @@ module.exports = () => {
         }
       } else if (hasMedicViewModel(model)) {
         return model;
-      } else
-        console.log('Not calculating viewmodel for model');
-        return undefined;
+      } else console.log('Not calculating viewmodel for model');
+      return undefined;
     },
   };
 };

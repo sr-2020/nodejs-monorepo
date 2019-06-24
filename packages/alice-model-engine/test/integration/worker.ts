@@ -11,44 +11,32 @@ describe('Worker', () => {
     const eventHandlers: EventHandler[] = [
       {
         eventType: 'noop',
-        effects: [
-          'noop',
-        ],
+        effects: ['noop'],
       },
 
       {
         eventType: 'add',
-        effects: [
-          'add',
-        ],
+        effects: ['add'],
       },
 
       {
         eventType: 'mul',
-        effects: [
-          'mul',
-        ],
+        effects: ['mul'],
       },
 
       {
         eventType: 'concat',
-        effects: [
-          'concat',
-        ],
+        effects: ['concat'],
       },
 
       {
         eventType: 'delayedConcat',
-        effects: [
-          'delayedConcat',
-        ],
+        effects: ['delayedConcat'],
       },
 
       {
         eventType: 'sendMessage',
-        effects: [
-          'sendMessage',
-        ],
+        effects: ['sendMessage'],
       },
     ];
 
@@ -84,10 +72,13 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'concat',
-        data: { operand: 'value', value: 'A' }, timestamp: timestamp - 10000 },
-      { characterId: '0000', eventType: 'delayedConcat',
-        data: { operand: 'value', value: 'B', delay: 3000 }, timestamp: timestamp - 10000 },
+      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 10000 },
+      {
+        characterId: '0000',
+        eventType: 'delayedConcat',
+        data: { operand: 'value', value: 'B', delay: 3000 },
+        timestamp: timestamp - 10000,
+      },
       { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 9000 },
       { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
     ];
@@ -106,10 +97,8 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'delayedConcat',
-        data: { operand: 'value', value: 'B', delay: 3000 }, timestamp: timestamp - 1000 },
-      { characterId: '0000', eventType: 'concat',
-        data: { operand: 'value', value: 'A' }, timestamp: timestamp },
+      { characterId: '0000', eventType: 'delayedConcat', data: { operand: 'value', value: 'B', delay: 3000 }, timestamp: timestamp - 1000 },
+      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
     ];
 
     let result = await worker.process(context, events);
@@ -124,8 +113,7 @@ describe('Worker', () => {
       data: { operand: 'value', value: 'B' },
     };
 
-    expect(result.baseModel).to.deep.equal(
-      { timestamp: timestamp, value: 'A', timers: { delayedConcat: expectedTimer } });
+    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: 'A', timers: { delayedConcat: expectedTimer } });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
@@ -133,9 +121,7 @@ describe('Worker', () => {
     const context = { timestamp: 0, value: 0 };
     const timestamp = Date.now();
 
-    const events = [
-      { characterId: '0000', eventType: '_', timestamp, data: undefined },
-    ];
+    const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
 
     let result = await worker.process(context, events);
 
@@ -177,22 +163,23 @@ describe('Worker', () => {
     const context = {
       timestamp: 0,
       value: '',
-      modifiers: [{
-        id: 'test modifier',
-        enabled: true,
-        operand: 'value', value: 'A',
-        effects: [
-          { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
-          { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
-        ],
-      }],
+      modifiers: [
+        {
+          id: 'test modifier',
+          enabled: true,
+          operand: 'value',
+          value: 'A',
+          effects: [
+            { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
+            { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
+          ],
+        },
+      ],
     };
 
     const timestamp = Date.now();
 
-    const events = [
-      { characterId: '0000', eventType: '_', timestamp, data: undefined },
-    ];
+    const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
 
     let result = await worker.process(context, events);
 

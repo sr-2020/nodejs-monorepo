@@ -9,16 +9,18 @@ dotenv.load();
 let currentValue = 100;
 
 const m: TelegramBot.InlineKeyboardMarkup = {
-  inline_keyboard: [[
-    {
-      text: 'Decrease',
-      callback_data: '-1',
-    },
-    {
-      text: 'Increase',
-      callback_data: '+1',
-    },
-  ]],
+  inline_keyboard: [
+    [
+      {
+        text: 'Decrease',
+        callback_data: '-1',
+      },
+      {
+        text: 'Increase',
+        callback_data: '+1',
+      },
+    ],
+  ],
 };
 
 // Create a bot that uses 'polling' to fetch new updates
@@ -59,7 +61,10 @@ bot.on('message', (msg) => {
 bot.on('callback_query', async (query) => {
   console.log(`Received message: ${JSON.stringify(query)}`);
   currentValue = currentValue + Number(query.data);
-  await bot.editMessageText(`Текущее значение: ${currentValue}`,
-    { reply_markup: m, chat_id: query.message!!.chat.id, message_id: query.message!!.message_id });
+  await bot.editMessageText(`Текущее значение: ${currentValue}`, {
+    reply_markup: m,
+    chat_id: query.message!!.chat.id,
+    message_id: query.message!!.message_id,
+  });
   await bot.answerCallbackQuery(query.id);
 });

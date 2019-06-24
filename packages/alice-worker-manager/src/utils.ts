@@ -30,7 +30,9 @@ export function fromStream<T>(stream, finishEventName = 'end', dataEventName = '
       stream.removeListener('error', errorHandler);
       stream.removeListener(finishEventName, endHandler);
     };
-  }).publish().refCount();
+  })
+    .publish()
+    .refCount();
 }
 
 export function requireDir(dir: string, merge = _merge): any {

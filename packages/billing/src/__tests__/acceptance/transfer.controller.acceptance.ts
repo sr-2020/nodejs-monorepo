@@ -1,7 +1,7 @@
-import {Client, expect} from '@loopback/testlab';
-import {BillingApplication} from '../../application';
-import {setupApplication} from './test-helper';
-import {TransactionRepository} from '../../repositories';
+import { Client, expect } from '@loopback/testlab';
+import { BillingApplication } from '../../application';
+import { setupApplication } from './test-helper';
+import { TransactionRepository } from '../../repositories';
 import * as nock from 'nock';
 
 describe('TransferController', () => {
@@ -10,7 +10,7 @@ describe('TransferController', () => {
   let repo: TransactionRepository;
 
   beforeEach('setupApplication', async () => {
-    ({app, client} = await setupApplication());
+    ({ app, client } = await setupApplication());
     repo = await app.getRepository(TransactionRepository);
     await repo.deleteAll();
   });
@@ -29,7 +29,7 @@ describe('TransferController', () => {
       });
 
       const scope = nock('http://gateway.evarun.ru/api/v1/push')
-        .post('/send_notification/321', {title: /.*/, body: /.*/})
+        .post('/send_notification/321', { title: /.*/, body: /.*/ })
         .reply(200);
 
       await client
@@ -43,7 +43,7 @@ describe('TransferController', () => {
 
       expect(scope.isDone()).to.be.true();
 
-      const allEntries = await repo.find({where: {sin_from: 123}});
+      const allEntries = await repo.find({ where: { sin_from: 123 } });
       expect(allEntries.length).to.equal(1);
       expect(allEntries[0]).to.containEql({
         sin_from: 123,
@@ -76,7 +76,7 @@ describe('TransferController', () => {
         })
         .expect(400);
 
-      const allEntries = await repo.find({where: {sin_to: 321}});
+      const allEntries = await repo.find({ where: { sin_to: 321 } });
       expect(allEntries.length).to.equal(0);
     });
 

@@ -22,10 +22,7 @@ function race<T>(promises: Array<Promise<T>>): Promise<T> {
 export class Connection {
   private viewModelUpdated = new EventEmitter();
 
-  constructor(
-    private eventsDb: PouchDB.Database<Event>,
-    private metadataDb: PouchDB.Database<ModelMetadata>,
-    private timeout: number) { }
+  constructor(private eventsDb: PouchDB.Database<Event>, private metadataDb: PouchDB.Database<ModelMetadata>, private timeout: number) {}
 
   public async processEvents(id: string, request: ProcessRequest): Promise<StatusAndBody> {
     let latestSavedEventTimestamp = 0;
@@ -39,14 +36,13 @@ export class Connection {
       if (scheduledUpdateTimestamp) {
         latestSavedEventTimestamp = scheduledUpdateTimestamp;
         await this.metadataDb.upsert(id, (doc) => {
-          return {...doc, _id: id, scheduledUpdateTimestamp};
+          return { ...doc, _id: id, scheduledUpdateTimestamp };
         });
       }
     } catch (e) {
       console.warn(e);
       // TODO: Should we actually return error if only part of events were saved to DB?
-      return { status: 202, body: { id: id, serverTime: this.currentTimestamp(),
-        timestamp: latestSavedEventTimestamp } };
+      return { status: 202, body: { id: id, serverTime: this.currentTimestamp(), timestamp: latestSavedEventTimestamp } };
     }
 
     // If scheduledUpdateTimestamp is not set, no model update will happens, so there is
@@ -57,8 +53,7 @@ export class Connection {
         this.refreshModelTimeoutResponse(id, latestSavedEventTimestamp),
       ]);
     } else {
-      return { status: 202, body: { id, timestamp: latestSavedEventTimestamp,
-        serverTime: this.currentTimestamp() } };
+      return { status: 202, body: { id, timestamp: latestSavedEventTimestamp, serverTime: this.currentTimestamp() } };
     }
   }
 
@@ -84,8 +79,7 @@ export class Connection {
   private refreshModelTimeoutResponse(id: string, latestSavedEventTimestamp: number): Promise<StatusAndBody> {
     return new Promise((resolve, _reject) => {
       setTimeout(() => {
-        resolve({ status: 202, body: { id: id, timestamp: latestSavedEventTimestamp,
-          serverTime: this.currentTimestamp() } });
+        resolve({ status: 202, body: { id: id, timestamp: latestSavedEventTimestamp, serverTime: this.currentTimestamp() } });
       }, this.timeout);
     });
   }

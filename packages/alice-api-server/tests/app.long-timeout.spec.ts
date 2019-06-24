@@ -26,7 +26,10 @@ describe('API Server - long timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      port: 3000, viewmodelUpdateTimeout: 9000, accessGrantTime: 1000, pushSettings,
+      port: 3000,
+      viewmodelUpdateTimeout: 9000,
+      accessGrantTime: 1000,
+      pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
@@ -36,7 +39,9 @@ describe('API Server - long timeout', () => {
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
     const account = {
       ...createEmptyAccount(),
-      _id: '00001', login: 'some_user', password: 'qwerty',
+      _id: '00001',
+      login: 'some_user',
+      password: 'qwerty',
     };
     await dbContainer.accountsDb().put(account);
     await dbContainer.createIndices();
@@ -52,11 +57,13 @@ describe('API Server - long timeout', () => {
       eventType: 'NonMobile',
       timestamp: 4365,
     };
-    const response = await rp.post(address + '/events/some_user',
-      {
-        resolveWithFullResponse: true, json: { events: [event] },
+    const response = await rp
+      .post(address + '/events/some_user', {
+        resolveWithFullResponse: true,
+        json: { events: [event] },
         auth: { username: 'some_user', password: 'qwerty' },
-      }).promise();
+      })
+      .promise();
 
     expect(response.statusCode).to.eq(202);
     const events = await dbContainer.allEventsSortedByTimestamp();
@@ -74,7 +81,10 @@ describe('API Server - medium timeout', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      port: 3000, viewmodelUpdateTimeout: 500, accessGrantTime: 1000, pushSettings,
+      port: 3000,
+      viewmodelUpdateTimeout: 500,
+      accessGrantTime: 1000,
+      pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
@@ -82,9 +92,7 @@ describe('API Server - medium timeout', () => {
     app = new App();
     await app.listen();
     await dbContainer.viewModelDb('mobile').put({ _id: '00001', timestamp: 420, updatesCount: 0 });
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(),  _id: '00001', login: 'some_user', password: 'qwerty' },
-    );
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '00001', login: 'some_user', password: 'qwerty' });
     await dbContainer.createIndices();
   });
 
@@ -95,16 +103,22 @@ describe('API Server - medium timeout', () => {
 
   it('Forbids two simultaneous mobile connections', async () => {
     const responses: any[] = await Promise.all([
-      rp.post(address + '/events/some_user',
-      {
-        resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
-        auth: { username: 'some_user', password: 'qwerty' },
-      }).promise(),
-      rp.post(address + '/events/some_user',
-      {
-        resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4370 },
-        auth: { username: 'some_user', password: 'qwerty' },
-      }).promise(),
+      rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [], scheduledUpdateTimestamp: 4365 },
+          auth: { username: 'some_user', password: 'qwerty' },
+        })
+        .promise(),
+      rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [], scheduledUpdateTimestamp: 4370 },
+          auth: { username: 'some_user', password: 'qwerty' },
+        })
+        .promise(),
     ]);
 
     if (responses[0].statusCode == 429) {

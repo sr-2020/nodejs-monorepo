@@ -38,9 +38,10 @@ export class Dispatcher implements DispatcherInterface {
     if (event.eventType.startsWith('_')) return context;
 
     if (!this.store[event.eventType]) {
-      Logger.error('model',
-        `Unknown event type ${event.eventType}. ` +
-        `Make sure there is corresponding eventType --> effects mapping in events DB/file`);
+      Logger.error(
+        'model',
+        `Unknown event type ${event.eventType}. ` + `Make sure there is corresponding eventType --> effects mapping in events DB/file`,
+      );
       return context;
     }
 

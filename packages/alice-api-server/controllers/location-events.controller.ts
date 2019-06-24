@@ -24,21 +24,19 @@ interface LocationEventsRequest {
 @JsonController()
 export class LocationEventsController {
   @Post('/location_events/:locationId')
-  public async post( @CurrentUser() user: AliceAccount, @Param('locationId') locationId: string,
-                     @Body() body: LocationEventsRequest) {
+  public async post(@CurrentUser() user: AliceAccount, @Param('locationId') locationId: string, @Body() body: LocationEventsRequest) {
     try {
       await checkAccess(user, '', AccessPropagation.AdminOnly);
 
       // Any way to make it better but still be sure that everything will be processed?
       let timestamp = currentTimestamp() + 2000;
 
-      const events: CharacterlessEvent[] = body.events.map((event) => ({...event, timestamp: timestamp++}));
+      const events: CharacterlessEvent[] = body.events.map((event) => ({ ...event, timestamp: timestamp++ }));
 
       const modelDb = Container.get(DatabasesContainerToken).modelsDb();
-      const charactersInLocation = await modelDb.find({ selector: {location: locationId}});
+      const charactersInLocation = await modelDb.find({ selector: { location: locationId } });
       const processor = new EventsProcessor();
-      for (const character of charactersInLocation.docs)
-        await processor.process(character._id, { events });
+      for (const character of charactersInLocation.docs) await processor.process(character._id, { events });
 
       return { receivers: charactersInLocation.docs.map((r) => r._id) };
     } catch (e) {

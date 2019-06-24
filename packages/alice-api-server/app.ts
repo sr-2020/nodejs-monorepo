@@ -22,8 +22,7 @@ import { PushController } from './controllers/push.controller';
 import { TimeController } from './controllers/time.controller';
 import { ViewModelController } from './controllers/viewmodel.controller';
 import { LoggingErrorHandler } from './middleware/error-handler';
-import { makeSilentRefreshNotificationPayload, makeVisibleNotificationPayload,
-  sendGenericPushNotification } from './push-helpers';
+import { makeSilentRefreshNotificationPayload, makeVisibleNotificationPayload, sendGenericPushNotification } from './push-helpers';
 import { DatabasesContainerToken } from './services/db-container';
 import { LoggerToken } from './services/logger';
 import { ApplicationSettingsToken } from './services/settings';
@@ -50,8 +49,13 @@ class App {
     this.app.use(bodyparser.json());
 
     this.app.use((req, res, next) => {
-      this.logger.debug('Request body',
-        { requestId: RequestId(req), body: req.body, originalUrl: req.originalUrl, ip: req.ip, source: 'api' });
+      this.logger.debug('Request body', {
+        requestId: RequestId(req),
+        body: req.body,
+        originalUrl: req.originalUrl,
+        ip: req.ip,
+        source: 'api',
+      });
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       next();
@@ -60,30 +64,36 @@ class App {
     useExpressServer(this.app, {
       currentUserChecker: async (action: Action): Promise<AliceAccount | undefined> => {
         const credentials = basic_auth(action.request);
-        if (!credentials)
-          throw new UnauthorizedError('No authorization provided');
+        if (!credentials) throw new UnauthorizedError('No authorization provided');
 
         try {
           credentials.name = await canonicalId(credentials.name);
           const account = await this.dbContainer.accountsDb().get(credentials.name);
-          if (account.password != credentials.pass)
-            throw new UnauthorizedError('Wrong password');
+          if (account.password != credentials.pass) throw new UnauthorizedError('Wrong password');
           return account;
         } catch (e) {
           returnCharacterNotFoundOrRethrow(e);
         }
       },
       controllers: [
-        TimeController, ViewModelController, CharactersController, PushController, EventsController, EconomyController,
-        LocationEventsController, MedicController, AccountController, ShipsController,
+        TimeController,
+        ViewModelController,
+        CharactersController,
+        PushController,
+        EventsController,
+        EconomyController,
+        LocationEventsController,
+        MedicController,
+        AccountController,
+        ShipsController,
       ],
       middlewares: [LoggingErrorHandler],
       cors: true,
     });
 
     const deleteMeLogFn = (id: string, result: Promise<StatusAndBody>) => {
-      result.then((r) => this.logger.info(
-        `Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
+      result
+        .then((r) => this.logger.info(`Sending push notification to force refresh`, { r, characterId: id, source: 'api' }))
         .catch((err) => this.logger.warn(`Failed to send notification: ${err}`, { characterId: id, source: 'api' }));
     };
 
@@ -92,15 +102,16 @@ class App {
       const autoNotifyTitle = this.settings.pushSettings.autoNotifyTitle;
       this.cancelAutoNotify = setInterval(async () => {
         const currentHour = new Date().getHours();
-        if (autoNotifySettings.allowFromHour && autoNotifySettings.allowFromHour > currentHour)
-          return;
-        if (autoNotifySettings.allowToHour && autoNotifySettings.allowToHour < currentHour)
-          return;
+        if (autoNotifySettings.allowFromHour && autoNotifySettings.allowFromHour > currentHour) return;
+        if (autoNotifySettings.allowToHour && autoNotifySettings.allowToHour < currentHour) return;
         try {
-          const inactiveIDs =
-            await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
-          inactiveIDs.map((id) => deleteMeLogFn(id, sendGenericPushNotification(id,
-            makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody))));
+          const inactiveIDs = await this.getCharactersInactiveForMoreThan(autoNotifySettings.notifyIfInactiveForMoreThanMs);
+          inactiveIDs.map((id) =>
+            deleteMeLogFn(
+              id,
+              sendGenericPushNotification(id, makeVisibleNotificationPayload(autoNotifyTitle, this.settings.pushSettings.autoNotifyBody)),
+            ),
+          );
         } catch (e) {
           this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
         }
@@ -111,15 +122,11 @@ class App {
       const autoRefreshSettings = this.settings.pushSettings.autoRefresh;
       this.cancelAutoRefresh = setInterval(async () => {
         const currentHour = new Date().getHours();
-        if (autoRefreshSettings.allowFromHour && autoRefreshSettings.allowFromHour > currentHour)
-          return;
-        if (autoRefreshSettings.allowToHour && autoRefreshSettings.allowToHour < currentHour)
-          return;
+        if (autoRefreshSettings.allowFromHour && autoRefreshSettings.allowFromHour > currentHour) return;
+        if (autoRefreshSettings.allowToHour && autoRefreshSettings.allowToHour < currentHour) return;
         try {
-          const inactiveIDs =
-            await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
-          inactiveIDs.map((id) => deleteMeLogFn(id, sendGenericPushNotification(id,
-            makeSilentRefreshNotificationPayload())));
+          const inactiveIDs = await this.getCharactersInactiveForMoreThan(autoRefreshSettings.notifyIfInactiveForMoreThanMs);
+          inactiveIDs.map((id) => deleteMeLogFn(id, sendGenericPushNotification(id, makeSilentRefreshNotificationPayload())));
         } catch (e) {
           this.logger.error(`Error when getting inactive users: ${e}`, { source: 'api' });
         }

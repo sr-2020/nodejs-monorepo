@@ -41,8 +41,7 @@ describe('Medic Magellan events: ', () => {
       payload: '111-111,12',
     };
 
-    const events = getEvents(model._id,
-      [{ eventType: 'scanQr', data }], 100);
+    const events = getEvents(model._id, [{ eventType: 'scanQr', data }], 100);
 
     model.numTests = 10;
     model = (await process(model, events)).baseModel;
@@ -78,8 +77,7 @@ describe('Medic Magellan events: ', () => {
       test: 'nucleotide',
       model: getExampleBiologicalOrganismModel(),
     };
-    const events = getEvents(model._id,
-      [{ eventType: 'medic-run-lab-test', data }], 100);
+    const events = getEvents(model._id, [{ eventType: 'medic-run-lab-test', data }], 100);
 
     model.numTests = 10;
     const patientHistoryLengthBefore = model.patientHistory.length;
@@ -94,8 +92,7 @@ describe('Medic Magellan events: ', () => {
       test: 'nucleotide',
       model: getExampleBiologicalOrganismModel(),
     };
-    const events = getEvents(model._id,
-      [{ eventType: 'medic-run-lab-test', data }], 100);
+    const events = getEvents(model._id, [{ eventType: 'medic-run-lab-test', data }], 100);
 
     model.numTests = 0;
     const patientHistoryLengthBefore = model.patientHistory.length;

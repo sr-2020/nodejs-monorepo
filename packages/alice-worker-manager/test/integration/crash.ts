@@ -8,8 +8,7 @@ import { Manager } from '../../src/manager';
 
 import { Container } from 'typedi';
 import { defaultConfig, destroyDatabases, initDi } from '../init';
-import { createModel, createModelObj, getModel, getModelAtTimestamp,
-  pushEvent, pushRefreshEvent, saveModel } from '../model_helpers';
+import { createModel, createModelObj, getModel, getModelAtTimestamp, pushEvent, pushRefreshEvent, saveModel } from '../model_helpers';
 
 describe('Crash scenarios', function() {
   this.timeout(25000);

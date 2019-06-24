@@ -8,8 +8,14 @@ import Container from 'typedi';
 import { delay } from '../../src/utils';
 import { destroyDatabases, initDi } from '../init';
 import {
-  createModel, getModelAtTimestamp, getModelVariants,
-  getModelVariantsAtTimestamp, getObject, pushEvent, pushRefreshEvent, saveObject,
+  createModel,
+  getModelAtTimestamp,
+  getModelVariants,
+  getModelVariantsAtTimestamp,
+  getObject,
+  pushEvent,
+  pushRefreshEvent,
+  saveObject,
 } from '../model_helpers';
 
 describe('Green way', function() {
@@ -45,9 +51,11 @@ describe('Green way', function() {
 
     await pushRefreshEvent(model._id, timestamp + 10);
 
-    const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
-        ['models', 'workingModels', 'defaultViewModels']);
+    const [baseModel, workingModel, viewModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 10, [
+      'models',
+      'workingModels',
+      'defaultViewModels',
+    ]);
 
     expect(baseModel).to.exist;
     expect(workingModel).to.exist;
@@ -91,9 +99,11 @@ describe('Green way', function() {
 
     await pushRefreshEvent(model._id, timestamp + 150);
 
-    const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 150,
-        ['models', 'workingModels', 'defaultViewModels']);
+    const [baseModel, workingModel, viewModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 150, [
+      'models',
+      'workingModels',
+      'defaultViewModels',
+    ]);
 
     if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
@@ -139,9 +149,11 @@ describe('Green way', function() {
     await pushRefreshEvent(model._id, timestamp + 1);
     await pushRefreshEvent(model._id, timestamp + 2);
 
-    const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 2,
-        ['models', 'workingModels', 'defaultViewModels']);
+    const [baseModel, workingModel, viewModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 2, [
+      'models',
+      'workingModels',
+      'defaultViewModels',
+    ]);
 
     if (!baseModel || !workingModel || !viewModel) throw new Error('imposible!');
 
@@ -179,7 +191,7 @@ describe('Green way', function() {
     const abc = await getObject('counters', 'abc');
 
     expect(abc).to.exist;
-    expect(abc).to.deep.include({value: 2});
+    expect(abc).to.deep.include({ value: 2 });
   });
 
   it('Do not save undefined viewmodels', async () => {
@@ -188,8 +200,7 @@ describe('Green way', function() {
 
     await pushRefreshEvent(model._id, timestamp + 1);
 
-    const [baseModel, workingModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 1, ['models', 'workingModels']);
+    const [baseModel, workingModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 1, ['models', 'workingModels']);
 
     expect(baseModel).to.exist;
     expect(workingModel).to.exist;

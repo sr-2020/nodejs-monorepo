@@ -23,7 +23,6 @@ export interface ExportResult {
 }
 
 export class AliceExporter {
-
   public model: DeusModel | undefined;
   public account: AliceAccount | undefined;
 
@@ -35,11 +34,12 @@ export class AliceExporter {
 
   private character: CharacterParser;
 
-  constructor(character: JoinCharacterDetail,
-              metadata: JoinMetadata,
-              private isUpdate: boolean = true,
-              private ignoreInGame: boolean = false) {
-
+  constructor(
+    character: JoinCharacterDetail,
+    metadata: JoinMetadata,
+    private isUpdate: boolean = true,
+    private ignoreInGame: boolean = false,
+  ) {
     const ajaxOpts = {
       auth: {
         username: config.username,
@@ -59,10 +59,8 @@ export class AliceExporter {
   }
 
   public async export(): Promise<ExportResult | void> {
-
     if (!this.model) {
-      winston.warn(`Character(${this.character.characterId}) not converted. ` +
-        `Reasons: ${this.conversionProblems.join('; ')}`);
+      winston.warn(`Character(${this.character.characterId}) not converted. ` + `Reasons: ${this.conversionProblems.join('; ')}`);
       return Promise.resolve();
     }
 
@@ -116,9 +114,7 @@ export class AliceExporter {
     };
 
     const events = await this.eventsCon.find(selector);
-    this.eventsCon.bulkDocs(
-      events.docs.map((x) => ({ ...x, _deleted: true })),
-    );
+    this.eventsCon.bulkDocs(events.docs.map((x) => ({ ...x, _deleted: true })));
   }
 
   private createModel() {

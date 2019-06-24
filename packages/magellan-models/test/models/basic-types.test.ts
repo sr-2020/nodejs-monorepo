@@ -1,6 +1,13 @@
 import { expect } from 'chai';
-import { allSystemsIndices, BiologicalSystems, biologicalSystemsColors,
-  biologicalSystemsNames, colorOfChange, SystemColor, systemCorrespondsToColor } from '../../helpers/basic-types';
+import {
+  allSystemsIndices,
+  BiologicalSystems,
+  biologicalSystemsColors,
+  biologicalSystemsNames,
+  colorOfChange,
+  SystemColor,
+  systemCorrespondsToColor,
+} from '../../helpers/basic-types';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 
 describe('Magellan helpers', () => {
@@ -23,23 +30,15 @@ describe('Magellan helpers', () => {
   });
 
   it('There are 3 systems of each color', () => {
-    const c = new Map<SystemColor, number>([
-      [SystemColor.Blue, 0],
-      [SystemColor.Orange, 0],
-      [SystemColor.Green, 0],
-    ]);
+    const c = new Map<SystemColor, number>([[SystemColor.Blue, 0], [SystemColor.Orange, 0], [SystemColor.Green, 0]]);
 
     for (const i of allSystemsIndices()) {
       for (const color of biologicalSystemsColors.get(i) as SystemColor[]) {
-        c.set(color, c.get(color) as number + 1);
+        c.set(color, (c.get(color) as number) + 1);
       }
     }
 
-    expect(c).to.deep.equal(new Map<SystemColor, number>([
-      [SystemColor.Blue, 3],
-      [SystemColor.Orange, 3],
-      [SystemColor.Green, 3],
-    ]));
+    expect(c).to.deep.equal(new Map<SystemColor, number>([[SystemColor.Blue, 3], [SystemColor.Orange, 3], [SystemColor.Green, 3]]));
   });
 
   it('systemCorrespondsToColor', () => {
@@ -73,5 +72,4 @@ describe('Magellan helpers', () => {
       expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 4, 1])).to.not.exist;
     });
   });
-
 });

@@ -1,4 +1,4 @@
-import * as   request from 'request-promise-native';
+import * as request from 'request-promise-native';
 import * as winston from 'winston';
 import { config } from '../config';
 import { JoinCharacterDetail } from '../join-importer';
@@ -9,7 +9,7 @@ export class EconProvider {
 
   public async provide(character: JoinCharacterDetail): Promise<ProvideResult> {
     if (!character.account) {
-      return {result: 'problems', problems: ['No character.account defined'] };
+      return { result: 'problems', problems: ['No character.account defined'] };
     }
 
     const body = {

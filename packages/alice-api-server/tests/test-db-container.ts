@@ -43,7 +43,6 @@ export function createEmptyAccount(): AliceAccount {
 }
 
 export class TestDatabasesContainer extends DatabasesContainer {
-
   constructor() {
     const eventsDb = new PouchDB<Event>('events', { adapter: 'memory' });
     const mobileViewModelDb = new PouchDB<{ timestamp: number }>('viewmodels_mobile', { adapter: 'memory' });
@@ -51,8 +50,7 @@ export class TestDatabasesContainer extends DatabasesContainer {
     const metadataDb = new PouchDB<ModelMetadata>('metadata', { adapter: 'memory' });
     const viewmodelDbs = new TSMap<string, PouchDB.Database<{ timestamp: number }>>([['mobile', mobileViewModelDb]]);
     const accountsDb = new PouchDB<AliceAccount>('accounts', { adapter: 'memory' });
-    const economyDb = new PouchDB<TransactionDocument | BalancesDocument | EconomyConstants>
-      ('economy', { adapter: 'memory' });
+    const economyDb = new PouchDB<TransactionDocument | BalancesDocument | EconomyConstants>('economy', { adapter: 'memory' });
     const objCountersDb = new PouchDB<ShieldValues>('obj-counters', { adapter: 'memory' });
     super(accountsDb, modelDb, metadataDb, viewmodelDbs, eventsDb, economyDb, objCountersDb);
   }
@@ -69,7 +67,6 @@ export class TestDatabasesContainer extends DatabasesContainer {
     await this._eventsDb.destroy();
     await this._modelsDb.destroy();
     await this._modelsMetadataDb.destroy();
-    for (const db of this._viewmodelDbs.values())
-      await db.destroy();
+    for (const db of this._viewmodelDbs.values()) await db.destroy();
   }
 }

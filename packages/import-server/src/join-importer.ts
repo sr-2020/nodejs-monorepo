@@ -72,7 +72,6 @@ export interface JoinData {
 }
 
 export class JoinImporter {
-
   public static createJoinCharacter(id: number): JoinCharacter {
     return {
       CharacterId: id,
@@ -152,7 +151,6 @@ export class JoinImporter {
       json: true,
     };
 
-    return request(reqOpts).then((metadata) => this.metadata = metadata);
+    return request(reqOpts).then((metadata) => (this.metadata = metadata));
   }
-
 }

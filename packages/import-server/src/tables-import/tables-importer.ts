@@ -31,23 +31,21 @@ export class TablesImporter {
   }
 
   public async import(): Promise<TablesImporter> {
-      const authClient = await this.authorize();
-      winston.info('Authorization success!');
-      await this.importXenos(authClient);
-      return this;
+    const authClient = await this.authorize();
+    winston.info('Authorization success!');
+    await this.importXenos(authClient);
+    return this;
   }
 
   private splitCell(value: string): number[] {
     const result = value.split(' ').map(Number);
-    if (result.length != this.numberOfSystems)
-      winston.error('Incorrect cell value, not 7 numbers: ' + value);
+    if (result.length != this.numberOfSystems) winston.error('Incorrect cell value, not 7 numbers: ' + value);
     return result;
   }
 
   private assertMatch(values: number[], mask: number[]) {
     for (let i = 0; i < this.numberOfSystems; ++i) {
-      if (values[i] != 0 && mask[i] == 0)
-        winston.error(`Value is present for missing system. values=${values}, mask=${mask}`);
+      if (values[i] != 0 && mask[i] == 0) winston.error(`Value is present for missing system. values=${values}, mask=${mask}`);
     }
   }
 
@@ -62,15 +60,13 @@ export class TablesImporter {
 
     for (const [rowIndex, line] of data.values.entries()) {
       const planet = line[0];
-      if (planet.length == 0)
-        continue;
+      if (planet.length == 0) continue;
 
       winston.info(`Importing planet ${planet}`);
 
       for (let i = 0; i < this.systemsPresence.length; ++i) {
         const nucleotideString = line[1 + 9 * i];
-        if (nucleotideString == '-')
-          continue;
+        if (nucleotideString == '-') continue;
 
         const systemsMask = this.systemsPresence[i];
         const nucleotide = this.splitCell(nucleotideString);
@@ -88,8 +84,10 @@ export class TablesImporter {
           const systems: System[] = [];
           for (let s = 0; s < this.numberOfSystems; ++s)
             systems.push({
-              lastModified: 0, present: systemsMask[s] == 1,
-              value: systemsValues[s], nucleotide: nucleotide[s],
+              lastModified: 0,
+              present: systemsMask[s] == 1,
+              value: systemsValues[s],
+              nucleotide: nucleotide[s],
             });
 
           const model = {
@@ -119,9 +117,11 @@ export class TablesImporter {
 
 const importer = new TablesImporter();
 
-importer.import().then((result) => {
-  winston.info(`Import finished. Result: ${result}`);
-  }).catch((err) => {
+importer
+  .import()
+  .then((result) => {
+    winston.info(`Import finished. Result: ${result}`);
+  })
+  .catch((err) => {
     winston.info('Error in import process: ', err);
-  },
-);
+  });

@@ -12,16 +12,14 @@ import App from '../app';
 import { AliceAccount } from '../models/alice-account';
 import { DatabasesContainerToken } from '../services/db-container';
 import { LoggerToken, WinstonLogger } from '../services/logger';
-import { ApplicationSettings, ApplicationSettingsToken, CheckForInactivitySettings,
-  PushSettings } from '../services/settings';
+import { ApplicationSettings, ApplicationSettingsToken, CheckForInactivitySettings, PushSettings } from '../services/settings';
 import { createEmptyAccount, TestDatabasesContainer } from './test-db-container';
 
 function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 describe('Mass push notifications', () => {
-
   let app: App;
   let dbContainer: TestDatabasesContainer;
   const testStartTime: number = new Date().valueOf();
@@ -29,12 +27,16 @@ describe('Mass push notifications', () => {
   const pushSettings: PushSettings = {
     serverKey: 'fakeserverkey',
     autoRefresh: {
-      notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 160,
+      notifyIfInactiveForMoreThanMs: 10000,
+      performOncePerMs: 160,
     },
   };
 
   const settings: ApplicationSettings = {
-    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200, pushSettings,
+    port: 3000,
+    viewmodelUpdateTimeout: 20,
+    accessGrantTime: 200,
+    pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
@@ -43,13 +45,19 @@ describe('Mass push notifications', () => {
     dbContainer = new TestDatabasesContainer();
 
     await dbContainer.viewModelDb('mobile').put({
-      _id: '00001', timestamp: testStartTime, mobile: true,
+      _id: '00001',
+      timestamp: testStartTime,
+      mobile: true,
     });
     await dbContainer.viewModelDb('mobile').put({
-      _id: '00002', timestamp: testStartTime - 20000, mobile: true,
+      _id: '00002',
+      timestamp: testStartTime - 20000,
+      mobile: true,
     });
     await dbContainer.viewModelDb('mobile').put({
-      _id: '00003', timestamp: testStartTime - 20000, mobile: true,
+      _id: '00003',
+      timestamp: testStartTime - 20000,
+      mobile: true,
     });
 
     await dbContainer.accountsDb().put(createAccount('00001', '00001pushtoken'));
@@ -91,7 +99,6 @@ describe('Mass push notifications', () => {
     await app.listen();
     await delay(300);
   });
-
 });
 
 function createAccount(id: string, pushToken: string): AliceAccount {

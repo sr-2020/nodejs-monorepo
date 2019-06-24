@@ -3,32 +3,26 @@ import { EventEmitter } from 'events';
 import * as Rx from 'rxjs';
 import { fromStream } from './utils';
 
-import { EngineMessage, EngineReply, EngineReplyAquire,
-  EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
+import { EngineMessage, EngineReply, EngineReplyAquire, EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
 
 import { Catalogs } from './catalogs_storage';
 import { LoggerInterface } from './logger';
 import { BoundObjectStorage } from './object_storage';
 
 export class Worker extends EventEmitter {
-
   public lastOutput: string[] = [];
   public startedAt: number;
   private child: ChildProcess.ChildProcess | null;
 
   private rx: {
-    message: Rx.Observable<EngineReply>,
-    error: Rx.Observable<any>,
-    exit: Rx.Observable<any>,
-    stop: Rx.Observable<any>,
-    data: Rx.Observable<string>,
+    message: Rx.Observable<EngineReply>;
+    error: Rx.Observable<any>;
+    exit: Rx.Observable<any>;
+    stop: Rx.Observable<any>;
+    data: Rx.Observable<string>;
   };
 
-  constructor(
-    private logger: LoggerInterface,
-    private workerModule: string,
-    private args?: string[],
-  ) {
+  constructor(private logger: LoggerInterface, private workerModule: string, private args?: string[]) {
     super();
   }
 
@@ -37,8 +31,7 @@ export class Worker extends EventEmitter {
     this.startedAt = Date.now();
 
     this.child = await new Promise<ChildProcess.ChildProcess>((resolve, reject) => {
-      const child = ChildProcess.fork(this.workerModule, this.args,
-        { execArgv: ['-r', 'ts-node/register'], silent: true });
+      const child = ChildProcess.fork(this.workerModule, this.args, { execArgv: ['-r', 'ts-node/register'], silent: true });
       child.setMaxListeners(20);
 
       const error = Rx.Observable.fromEvent(child, 'error');
@@ -50,13 +43,20 @@ export class Worker extends EventEmitter {
       const data = out.merge(err).takeUntil(stop);
 
       this.rx = {
-        message, exit, error, stop, data,
+        message,
+        exit,
+        error,
+        stop,
+        data,
       };
 
       const ready = this.rx.message.filter((msg) => msg.type == 'ready').take(1);
 
       // subscribe for logs early
-      this.rx.message.filter((msg) => msg.type == 'log').takeUntil(ready).subscribe(this.handleLogMessage());
+      this.rx.message
+        .filter((msg) => msg.type == 'log')
+        .takeUntil(ready)
+        .subscribe(this.handleLogMessage());
       this.rx.data.subscribe(this.handleOutput);
 
       this.rx.exit.takeUntil(ready).subscribe(() => reject(new Error("Couldn't start child process")));
@@ -121,18 +121,17 @@ export class Worker extends EventEmitter {
       }
       this.logger.log(message.source, message.level, message.msg, message.additionalData);
     }
-  }
+  };
 
   public handleOutput = (chunk: string) => {
     this.lastOutput.push(chunk);
-  }
+  };
 
   public emitMessage = (message: any) => this.emit('message', message);
   public emitError = (err: Error) => this.emit('error', err);
   public emitExit = () => this.emit('exit');
 
-  public async process(objectStorage: BoundObjectStorage, syncEvent: SyncRequest,
-                       model: any, events: Event[]): Promise<EngineResult> {
+  public async process(objectStorage: BoundObjectStorage, syncEvent: SyncRequest, model: any, events: Event[]): Promise<EngineResult> {
     this.lastOutput = [];
 
     return new Promise<EngineResult>((resolve, reject) => {
@@ -147,10 +146,15 @@ export class Worker extends EventEmitter {
         this.send({ type: 'aquired', data });
       });
 
-      this.rx.message.filter((msg) => msg.type == 'log')
-        .takeUntil(result).subscribe(this.handleLogMessage(syncEvent));
+      this.rx.message
+        .filter((msg) => msg.type == 'log')
+        .takeUntil(result)
+        .subscribe(this.handleLogMessage(syncEvent));
 
-      this.rx.stop.takeUntil(result).take(1).subscribe(() => reject('Worker error'));
+      this.rx.stop
+        .takeUntil(result)
+        .take(1)
+        .subscribe(() => reject('Worker error'));
 
       this.send({ type: 'events', context: model, events });
 

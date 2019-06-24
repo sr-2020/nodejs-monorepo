@@ -1,7 +1,6 @@
 import { Event, ModelApiInterface } from 'alice-model-engine-api';
 import * as shuffle from 'shuffle-array';
-import { BiologicalSystems, LabTerminalRefillData,
-  OrganismModel, organismSystemsIndices } from '../helpers/basic-types';
+import { BiologicalSystems, LabTerminalRefillData, OrganismModel, organismSystemsIndices } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';
 
 interface RunLabTestData {
@@ -15,7 +14,12 @@ interface TestResult {
 }
 
 function nucleotideTest(model: OrganismModel): string {
-  return 'Результат: ' + organismSystemsIndices(model).map((s) => model.systems[s].nucleotide).join(', ');
+  return (
+    'Результат: ' +
+    organismSystemsIndices(model)
+      .map((s) => model.systems[s].nucleotide)
+      .join(', ')
+  );
 }
 
 function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string {
@@ -32,39 +36,33 @@ const tests = {
   test1: (model: OrganismModel): TestResult => {
     return {
       type: 'Тест 1 (Нервная, опорно-двигательная, покровная системы)',
-      message: genericTest(model,
-        [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary]),
+      message: genericTest(model, [BiologicalSystems.Nervous, BiologicalSystems.Musculoskeletal, BiologicalSystems.Integumentary]),
     };
   },
   test2: (model: OrganismModel): TestResult => {
     return {
       type: 'Тест 2 (Дыхательная, кровеносная, нервная системы)',
-      message: genericTest(model,
-        [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous]),
+      message: genericTest(model, [BiologicalSystems.Respiratory, BiologicalSystems.Cardiovascular, BiologicalSystems.Nervous]),
     };
   },
   test3: (model: OrganismModel): TestResult => {
     return {
       type: 'Тест 3 (Кровеносная, опорно-двигательная, репродуктивная системы)',
-      message: genericTest(model,
-        [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive]),
+      message: genericTest(model, [BiologicalSystems.Cardiovascular, BiologicalSystems.Musculoskeletal, BiologicalSystems.Reproductive]),
     };
   },
   test4: (model: OrganismModel): TestResult => {
     return {
       type: 'Тест 4 (Покровная, дыхательная, системы ЖКТ)',
-      message: genericTest(model,
-        [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive]),
+      message: genericTest(model, [BiologicalSystems.Integumentary, BiologicalSystems.Respiratory, BiologicalSystems.Digestive]),
     };
   },
   test5: (model: OrganismModel): TestResult => {
     return {
       type: 'Тест 5 (ЖКТ, репродуктивная, нервная системы)',
-      message: genericTest(model,
-        [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous]),
+      message: genericTest(model, [BiologicalSystems.Digestive, BiologicalSystems.Reproductive, BiologicalSystems.Nervous]),
     };
   },
-
 };
 
 function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Event) {
@@ -137,8 +135,10 @@ function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, 
   }
 
   if (counter.usedBy) {
-    api.warn('labTerminalRefill: already used lab terminal refill code. Cheaters gonna cheat?',
-      { terminalId: api.model._id, uniqueId: data.uniqueId });
+    api.warn('labTerminalRefill: already used lab terminal refill code. Cheaters gonna cheat?', {
+      terminalId: api.model._id,
+      uniqueId: data.uniqueId,
+    });
     return;
   }
 

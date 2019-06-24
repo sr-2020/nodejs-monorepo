@@ -7,7 +7,7 @@ PouchDB.plugin(PouchDBFind);
 import { NotFoundError, UnauthorizedError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { AliceAccount } from './models/alice-account';
-import {  DatabasesContainerToken } from './services/db-container';
+import { DatabasesContainerToken } from './services/db-container';
 
 class LoginNotFoundError {
   constructor(public message: string) {}
@@ -18,17 +18,16 @@ export function currentTimestamp(): number {
 }
 
 export async function canonicalId(idOrLogin: string): Promise<string> {
-  if (/^[0-9]*$/.test(idOrLogin))
-    return idOrLogin;
+  if (/^[0-9]*$/.test(idOrLogin)) return idOrLogin;
 
-  const docs = await Container.get(DatabasesContainerToken).accountsDb().find({
-    selector: { login: idOrLogin },
-  });
+  const docs = await Container.get(DatabasesContainerToken)
+    .accountsDb()
+    .find({
+      selector: { login: idOrLogin },
+    });
 
-  if (docs.docs.length == 0)
-    throw new LoginNotFoundError('No user with such login found');
-  if (docs.docs.length > 1)
-    throw new LoginNotFoundError('Multiple users with such login found');
+  if (docs.docs.length == 0) throw new LoginNotFoundError('No user with such login found');
+  if (docs.docs.length > 1) throw new LoginNotFoundError('Multiple users with such login found');
 
   return docs.docs[0]._id;
 }
@@ -38,15 +37,12 @@ export async function canonicalIds(ids?: string[]): Promise<string[]> {
 }
 
 export function IsNotFoundError(e): boolean {
-  return (e.status && e.status == 404 && e.reason && e.reason == 'missing') ||
-    (e instanceof LoginNotFoundError);
+  return (e.status && e.status == 404 && e.reason && e.reason == 'missing') || e instanceof LoginNotFoundError;
 }
 
 export function returnCharacterNotFoundOrRethrow(e: any) {
-  if (IsNotFoundError(e))
-    throw new NotFoundError('Character with such id or login is not found');
-  else
-    throw e;
+  if (IsNotFoundError(e)) throw new NotFoundError('Character with such id or login is not found');
+  else throw e;
 }
 
 export function RequestId(req: express.Request): string {
@@ -81,27 +77,22 @@ export async function checkAdmin(from: AliceAccount) {
   await checkAccess(from, from._id, AccessPropagation.AdminOnly);
 }
 
-export async function checkAccess(from: AliceAccount, to: string,
-                                  accessPropagation: AccessPropagation = AccessPropagation.Default) {
-  if (from.roles && from.roles.includes('admin'))
-    return;
+export async function checkAccess(from: AliceAccount, to: string, accessPropagation: AccessPropagation = AccessPropagation.Default) {
+  if (from.roles && from.roles.includes('admin')) return;
 
-  if (accessPropagation == AccessPropagation.AdminOnly)
-    throw new UnauthorizedError('Only admins can access this method');
+  if (accessPropagation == AccessPropagation.AdminOnly) throw new UnauthorizedError('Only admins can access this method');
 
-  if (from._id == to)
-    return;
+  if (from._id == to) return;
 
   if (accessPropagation == AccessPropagation.NoPropagation)
     throw new UnauthorizedError('Trying to access method of another user, but access propagation is not allowed');
 
   try {
-    const allowedAccess = (await Container.get(DatabasesContainerToken).accountsDb().get(to)).access;
-    if (allowedAccess && allowedAccess.some(
-      (access) => access.id == from._id && access.timestamp >= currentTimestamp()))
-      return;
-    else
-      throw new UnauthorizedError('Trying to access user without proper access rights');
+    const allowedAccess = (await Container.get(DatabasesContainerToken)
+      .accountsDb()
+      .get(to)).access;
+    if (allowedAccess && allowedAccess.some((access) => access.id == from._id && access.timestamp >= currentTimestamp())) return;
+    else throw new UnauthorizedError('Trying to access user without proper access rights');
   } catch (e) {
     returnCharacterNotFoundOrRethrow(e);
   }

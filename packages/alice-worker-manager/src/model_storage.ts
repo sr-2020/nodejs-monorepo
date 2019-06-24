@@ -2,7 +2,7 @@ import { Config } from './config';
 import { DBConnectorInterface, DBInterface, Document, ID } from './db/interface';
 
 export class ModelStorageBase {
-  constructor(private db: DBInterface) { }
+  constructor(private db: DBInterface) {}
 
   public find(id: ID): Promise<Document> {
     return this.db.get(id);

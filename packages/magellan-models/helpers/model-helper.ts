@@ -9,109 +9,109 @@ import consts = require('./constants');
 const chance = new Chance();
 
 function loadImplant(api: ModelApiInterface, id: string) {
-    const implant = api.getCatalogObject('implants', id.toLowerCase());
+  const implant = api.getCatalogObject('implants', id.toLowerCase());
 
-    if (!implant) {
-        api.error(`loadImplant: implant id=${id} not found!`);
-        return null;
+  if (!implant) {
+    api.error(`loadImplant: implant id=${id} not found!`);
+    return null;
+  }
+
+  const effects: any[] = [];
+
+  implant.effects.forEach((eID: string) => {
+    const effect = api.getCatalogObject('effects', eID.toLowerCase());
+    if (effect) {
+      effect.enabled = true;
+      effects.push(effect);
+    } else {
+      api.error(`loadImplant: effect id=${eID} not found!`);
     }
+  });
 
-    const effects: any[] = [];
+  implant.effects = effects;
+  implant.enabled = true;
 
-    implant.effects.forEach((eID: string) => {
-        const effect = api.getCatalogObject('effects', eID.toLowerCase());
-        if (effect) {
-            effect.enabled = true;
-            effects.push(effect);
-        } else {
-            api.error(`loadImplant: effect id=${eID} not found!`);
-        }
-    });
-
-    implant.effects = effects;
-    implant.enabled = true;
-
-    return implant;
+  return implant;
 }
 
 /**
  * Загружает болезнь и ее эффект из каталога
  */
 function loadIllness(api: ModelApiInterface, id: string) {
-    const illness = api.getCatalogObject('illnesses', id.toLowerCase());
+  const illness = api.getCatalogObject('illnesses', id.toLowerCase());
 
-    if (!illness) {
-        api.error(`loadIllness: illness id=${id} not found!`);
-        return null;
-    }
+  if (!illness) {
+    api.error(`loadIllness: illness id=${id} not found!`);
+    return null;
+  }
 
-    const effectName = consts.ILLNESS_EFFECT_NAME;
-    const effect = api.getCatalogObject('effects', effectName);
+  const effectName = consts.ILLNESS_EFFECT_NAME;
+  const effect = api.getCatalogObject('effects', effectName);
 
-    if (!effect) {
-        api.error(`loadIllness: effect id = ${effectName} not found`);
-        return null;
-    }
-    effect.enabled = true;
+  if (!effect) {
+    api.error(`loadIllness: effect id = ${effectName} not found`);
+    return null;
+  }
+  effect.enabled = true;
 
-    illness.effects = [effect];
-    illness.enabled = true;
+  illness.effects = [effect];
+  illness.enabled = true;
 
-    return illness;
+  return illness;
 }
 
 function addChangeRecord(api: ModelApiInterface, text: string, timestamp: number) {
-    if (text) {
-        if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
+  if (text) {
+    if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
 
-        api.model.changes.push({
-            mID: uuidv4(),
-            text: text,
-            timestamp,
-        });
-    }
+    api.model.changes.push({
+      mID: uuidv4(),
+      text: text,
+      timestamp,
+    });
+  }
 }
 
 function isGenomeMatch(api: ModelApiInterface, variable: string, value: string) {
-    const parts = variable.match(/^Z(\d\d?)/i);
+  const parts = variable.match(/^Z(\d\d?)/i);
 
-    if (parts) {
-        const index = Number.parseInt(parts[1], 10) - 1;
-        if (api.model.genome && (index < api.model.genome.length)) {
-            if (api.model.genome[index] == Number.parseInt(value, 10)) {
-                return true;
-            }
-        }
+  if (parts) {
+    const index = Number.parseInt(parts[1], 10) - 1;
+    if (api.model.genome && index < api.model.genome.length) {
+      if (api.model.genome[index] == Number.parseInt(value, 10)) {
+        return true;
+      }
     }
-    return false;
+  }
+  return false;
 }
 
 function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        // tslint:disable:no-bitwise
-        const r = Math.random() * 16 | 0;
-        const v = c == 'x' ? r : (r & 0x3 | 0x8);
-        // tslint:enable:no-bitwise
-        return v.toString(16);
-    });
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    // tslint:disable:no-bitwise
+    const r = (Math.random() * 16) | 0;
+    const v = c == 'x' ? r : (r & 0x3) | 0x8;
+    // tslint:enable:no-bitwise
+    return v.toString(16);
+  });
 }
 
 /**
  *  Устанавливает значение состояния системы в модели по ее имени (англоязычному)
  */
 function addCharacterCondition(api: ModelApiInterface, condId: string) {
-    if (condId) {
-        const condition = api.getCatalogObject('conditions', condId);
+  if (condId) {
+    const condition = api.getCatalogObject('conditions', condId);
 
-        if (condition) {
-            api.debug(JSON.stringify(condition));
-            return api.addCondition(condition);
-        } else {
-            api.error("Couldn't find condition " + condId);
-        }
+    if (condition) {
+      api.debug(JSON.stringify(condition));
+      return api.addCondition(condition);
+    } else {
+      api.error("Couldn't find condition " + condId);
     }
+  }
 
-    return null;
+  return null;
 }
 
 /**
@@ -141,17 +141,16 @@ function addCharacterCondition(api: ModelApiInterface, condId: string) {
  *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
  *  Задержка (duration) задается в миллисекундах
  */
-function addDelayedEvent(api: ModelApiInterface,
-                         duration: number, eventType: string, data: any, prefix = 'delayed') {
-    if (api && duration && eventType && data) {
-        const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
+function addDelayedEvent(api: ModelApiInterface, duration: number, eventType: string, data: any, prefix = 'delayed') {
+  if (api && duration && eventType && data) {
+    const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
-        api.setTimer(timerName, Number(duration), eventType, data);
+    api.setTimer(timerName, Number(duration), eventType, data);
 
-        api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms`);
-    } else {
-        api.error('Not enough params');
-    }
+    api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms`);
+  } else {
+    api.error('Not enough params');
+  }
 }
 
 /**
@@ -163,22 +162,37 @@ function addDelayedEvent(api: ModelApiInterface,
  * Функция возращает удаленный элемент или null
  */
 function removeElementByMID(list: Modifier[], mID: string): Modifier | null {
-    if (list) {
-        const i = list.findIndex((e) => e.mID ? (e.mID == mID) : false);
-        if (i != -1) {
-            const e = list[i];
+  if (list) {
+    const i = list.findIndex((e) => (e.mID ? e.mID == mID : false));
+    if (i != -1) {
+      const e = list[i];
 
-            list.slice(i, 1);
+      list.slice(i, 1);
 
-            return e;
-        }
+      return e;
     }
+  }
 
-    return null;
+  return null;
 }
 
-const restrictedVars = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'timestamp',
-    'mind', 'genome', 'systems', 'conditions', 'modifiers', 'changes', 'messages', 'timers'];
+const restrictedVars = [
+  '_id',
+  'id',
+  'hp',
+  'maxHp',
+  'login',
+  'profileType',
+  'timestamp',
+  'mind',
+  'genome',
+  'systems',
+  'conditions',
+  'modifiers',
+  'changes',
+  'messages',
+  'timers',
+];
 
 /**
  * Изменить простые свойства модели по инструкциям в переданной строке вида
@@ -188,178 +202,174 @@ const restrictedVars = ['_id', 'id', 'hp', 'maxHp', 'login', 'profileType', 'tim
  * Нельзя менять ключевые поля, меняемые через специальные события и методы
  */
 function modifyModelProperties(api: ModelApiInterface, operations: string) {
-    if (operations) {
-        operations.replace(/\s/ig, '').split(',').forEach((op) => {
-            const parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
+  if (operations) {
+    operations
+      .replace(/\s/gi, '')
+      .split(',')
+      .forEach((op) => {
+        const parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
-            if (parts) {
-                let result = false;
+        if (parts) {
+          let result = false;
 
-                if (parts[1]) {
-                    result = modifyModelDigitProperty(api, parts[1], parts[2], parts[3]);
-                } else {
-                    result = modifyModelStringProperty(api, parts[4], parts[5]);
-                }
+          if (parts[1]) {
+            result = modifyModelDigitProperty(api, parts[1], parts[2], parts[3]);
+          } else {
+            result = modifyModelStringProperty(api, parts[4], parts[5]);
+          }
 
-                if (result) {
-                    const varName = parts[1] || parts[4];
-                    api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
-                } else {
-                    api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
-                }
-            }
-        });
-    }
+          if (result) {
+            const varName = parts[1] || parts[4];
+            api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
+          } else {
+            api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
+          }
+        }
+      });
+  }
 }
 
 function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
-    if (restrictedVars.find((v) => varName == v)) {
-        return false;
-    }
+  if (restrictedVars.find((v) => varName == v)) {
+    return false;
+  }
 
-    if (!api.model.hasOwnProperty(varName)) {
-        return false;
-    }
+  if (!api.model.hasOwnProperty(varName)) {
+    return false;
+  }
 
-    const t = type(api.model[varName]);
+  const t = type(api.model[varName]);
 
-    if (t != 'string' && t != 'null' && t != 'undefined') {
-        return false;
-    }
+  if (t != 'string' && t != 'null' && t != 'undefined') {
+    return false;
+  }
 
-    api.model[varName] = value;
+  api.model[varName] = value;
 
-    return true;
+  return true;
 }
 
 function modifyModelDigitProperty(api: ModelApiInterface, varName: string, op: string, value: string) {
-    if (restrictedVars.find((v) => varName == v)) {
-        return false;
-    }
+  if (restrictedVars.find((v) => varName == v)) {
+    return false;
+  }
 
-    if (!api.model.hasOwnProperty(varName)) {
-        return false;
-    }
+  if (!api.model.hasOwnProperty(varName)) {
+    return false;
+  }
 
-    const t = type(api.model[varName]);
+  const t = type(api.model[varName]);
 
-    if (t != 'number') {
-        return false;
-    }
+  if (t != 'number') {
+    return false;
+  }
 
-    switch (op) {
-        case '+': api.model[varName] += Number(value);
-            break;
-        case '-': api.model[varName] -= Number(value);
-            break;
-        case '=': api.model[varName] = Number(value);
-            break;
-        default: return false;
-    }
+  switch (op) {
+    case '+':
+      api.model[varName] += Number(value);
+      break;
+    case '-':
+      api.model[varName] -= Number(value);
+      break;
+    case '=':
+      api.model[varName] = Number(value);
+      break;
+    default:
+      return false;
+  }
 
-    return true;
+  return true;
 }
 
 function setTimerToKillModifier(api: ModelApiInterface, modifier, timestamp) {
-    api.setTimer(
-        consts.NARCO_TIME_PREFIX + modifier.mID,
-        timestamp - 1,
-        'stop-narco-modifier',
-        { mID: modifier.mID });
+  api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, timestamp - 1, 'stop-narco-modifier', { mID: modifier.mID });
 }
 
-const implantClasses = [
-    'cyber-implant',
-    'bio-implant',
-    'illegal-cyber-implant',
-    'illegal-bio-implant',
-    'virtual',
-];
+const implantClasses = ['cyber-implant', 'bio-implant', 'illegal-cyber-implant', 'illegal-bio-implant', 'virtual'];
 
 /**
  * Проверяет класс модификатора и возращается true если это имплант
  */
 function isImplant(modifier) {
-    if (modifier.class && implantClasses.find((c) => c == modifier.class)) {
-        return true;
-    }
+  if (modifier.class && implantClasses.find((c) => c == modifier.class)) {
+    return true;
+  }
 
-    return false;
+  return false;
 }
 
 /**
  * Проверяет класс модификатора и возращается true если это болезнь
  */
 function isIllness(modifier) {
-    if (modifier.class && modifier.class == 'illness') {
-        return true;
-    }
+  if (modifier.class && modifier.class == 'illness') {
+    return true;
+  }
 
-    return false;
+  return false;
 }
 
 function getImplantsBySystem(api: ModelApiInterface, systemName) {
-    return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
+  return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
 function getAllImplants(api) {
-    return api.model.modifiers.filter((m) => isImplant(m));
+  return api.model.modifiers.filter((m) => isImplant(m));
 }
 
 function getAllIlnesses(api) {
-    return api.model.modifiers.filter((m) => isIllness(m));
+  return api.model.modifiers.filter((m) => isIllness(m));
 }
 
 function getChanceFromModel(model) {
-    return (model.randomSeed) ? new Chance(model.randomSeed) : new Chance();
+  return model.randomSeed ? new Chance(model.randomSeed) : new Chance();
 }
 
 function removeImplant(api: ModelApiInterface, implantForRemove, timestamp) {
-    api.removeModifier(implantForRemove.mID);
-    addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
+  api.removeModifier(implantForRemove.mID);
+  addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
 }
 
-function createEffectModifier(api: ModelApiInterface, effectName, modifierId,
-                              displayName, modifierClass): Modifier | undefined {
-    const effect = api.getCatalogObject('effects', effectName);
+function createEffectModifier(api: ModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
+  const effect = api.getCatalogObject('effects', effectName);
 
-    if (!effect) {
-        api.error("Can't load effect " + effectName);
-        return;
-    }
+  if (!effect) {
+    api.error("Can't load effect " + effectName);
+    return;
+  }
 
-    effect.enabled = true;
+  effect.enabled = true;
 
-    const modifier = {
-        mID: '',
-        id: modifierId,
-        name: modifierId,
-        displayName: displayName,
-        class: modifierClass,
-        effects: [effect],
-        enabled: true,
-    };
+  const modifier = {
+    mID: '',
+    id: modifierId,
+    name: modifierId,
+    displayName: displayName,
+    class: modifierClass,
+    effects: [effect],
+    enabled: true,
+  };
 
-    return modifier;
+  return modifier;
 }
 
 export = {
-    loadImplant,
-    addChangeRecord,
-    uuidv4,
-    isGenomeMatch,
-    addCharacterCondition,
-    addDelayedEvent,
-    removeElementByMID,
-    modifyModelProperties,
-    setTimerToKillModifier,
-    loadIllness,
-    getImplantsBySystem,
-    getChanceFromModel,
-    removeImplant,
-    isImplant,
-    getAllImplants,
-    getAllIlnesses,
-    createEffectModifier,
-    isIllness,
+  loadImplant,
+  addChangeRecord,
+  uuidv4,
+  isGenomeMatch,
+  addCharacterCondition,
+  addDelayedEvent,
+  removeElementByMID,
+  modifyModelProperties,
+  setTimerToKillModifier,
+  loadIllness,
+  getImplantsBySystem,
+  getChanceFromModel,
+  removeImplant,
+  isImplant,
+  getAllImplants,
+  getAllIlnesses,
+  createEffectModifier,
+  isIllness,
 };

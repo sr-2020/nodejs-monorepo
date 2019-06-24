@@ -12,7 +12,7 @@ export class PouchConnector implements DBConnectorInterface {
 
   public use(name: string): DBInterface {
     if (this.cache[name]) return this.cache[name];
-    return this.cache[name] = new PouchDb(this._config.db.url + name, this._config.db.adapter);
+    return (this.cache[name] = new PouchDb(this._config.db.url + name, this._config.db.adapter));
   }
 }
 
@@ -62,7 +62,7 @@ export class PouchDb implements DBInterface {
 
   public follow(params: FilterParams): void {
     const { onChange, ...otherParams } = params;
-    let feed = this.db.changes({...otherParams, live: true, return_docs: false});
+    let feed = this.db.changes({ ...otherParams, live: true, return_docs: false });
 
     if (onChange) {
       feed = feed.on('change', onChange);

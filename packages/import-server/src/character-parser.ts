@@ -5,10 +5,7 @@ export class CharacterParser {
   public inGame: boolean;
   public isActive: boolean;
 
-  constructor(
-    public character: JoinCharacterDetail,
-    public metadata: JoinMetadata,
-  ) {
+  constructor(public character: JoinCharacterDetail, public metadata: JoinMetadata) {
     this.characterId = character.CharacterId;
     this.inGame = character.InGame;
     this.isActive = character.IsActive;
@@ -24,22 +21,21 @@ export class CharacterParser {
   }
 
   public joinStrFieldValue(fieldID: number): string {
-
     const field = this.character.Fields.find((fi) => fi.ProjectFieldId === fieldID);
 
-    if (!field) { return ''; }
+    if (!field) {
+      return '';
+    }
 
     return field.DisplayString.trim();
   }
 
   public joinBoolFieldValue(fieldID: number): boolean {
-
     const text = this.joinStrFieldValue(fieldID);
-    return (text === 'on');
+    return text === 'on';
   }
 
   public joinNumFieldValue(fieldID: number): number {
-
     const field = this.character.Fields.find((fi) => fi.ProjectFieldId === fieldID);
 
     if (field) {
@@ -74,10 +70,9 @@ export class CharacterParser {
     const field = this.metadata.Fields.find((f) => f.ProjectFieldId === fieldID);
 
     if (field && field.ValueList) {
-
       const value = field.ValueList.find((fv) => fv.ProjectFieldVariantId === variantID);
       if (value && value.Description) {
-        return value.Description.replace(/\<(.*?)\>/ig, '');
+        return value.Description.replace(/\<(.*?)\>/gi, '');
       }
     }
 
@@ -95,5 +90,4 @@ export class CharacterParser {
 
     return [];
   }
-
 }

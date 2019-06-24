@@ -18,11 +18,7 @@ export interface EventsRequest {
 @JsonController()
 export class ShipsController {
   @Get('/ships/set_shields/:dock/:shield_value')
-  public async setShields(
-    @CurrentUser() user: AliceAccount,
-    @Param('dock') dock: number,
-    @Param('shield_value') shieldValue: number,
-  ) {
+  public async setShields(@CurrentUser() user: AliceAccount, @Param('dock') dock: number, @Param('shield_value') shieldValue: number) {
     try {
       await checkAdmin(user);
 

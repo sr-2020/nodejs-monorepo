@@ -1,6 +1,11 @@
 import {
-  Condition, Event,
-  LogApiInterface, ModelApiInterface, PreprocessApiInterface, ReadModelApiInterface, ViewModelApiInterface,
+  Condition,
+  Event,
+  LogApiInterface,
+  ModelApiInterface,
+  PreprocessApiInterface,
+  ReadModelApiInterface,
+  ViewModelApiInterface,
 } from 'alice-model-engine-api';
 import cuid = require('cuid');
 import * as _ from 'lodash';
@@ -10,9 +15,11 @@ import { Context } from './context';
 import Logger from './logger';
 
 class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
-  constructor(protected contextGetter: () => Context) { }
+  constructor(protected contextGetter: () => Context) {}
 
-  get model() { return this.contextGetter().ctx; }
+  get model() {
+    return this.contextGetter().ctx;
+  }
 
   public getCatalogObject(catalogName: string, id: string) {
     const catalog = this.contextGetter().getDictionary(catalogName);
@@ -165,7 +172,9 @@ class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
     super(contextGetter);
   }
 
-  get baseModel() { return this.baseContextGetter().ctx; }
+  get baseModel() {
+    return this.baseContextGetter().ctx;
+  }
 }
 
 class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {

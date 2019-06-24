@@ -17,10 +17,11 @@ export class EventStorage {
 
   public async removeOlderThan(characterId: string, till: number): Promise<void> {
     const docs = await this._range(characterId, 0, till);
-    await Promise.all(docs.map((doc) => {
-      if (doc._rev)
-        this.db.remove(doc._id, doc._rev);
-    }));
+    await Promise.all(
+      docs.map((doc) => {
+        if (doc._rev) this.db.remove(doc._id, doc._rev);
+      }),
+    );
   }
 
   public store(event: any) {
@@ -28,8 +29,7 @@ export class EventStorage {
     return this.db.put(event);
   }
 
-  private async _range(characterId: string,
-                       since: number, till: number): Promise<Array<PouchDB.Core.ExistingDocument<Event>>> {
+  private async _range(characterId: string, since: number, till: number): Promise<Array<PouchDB.Core.ExistingDocument<Event>>> {
     if (since >= till) return [];
 
     const result = await this.db.query<Event>({

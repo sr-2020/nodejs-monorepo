@@ -29,7 +29,7 @@ export class EventsController {
   private logger = Container.get(LoggerToken);
 
   @Get('/events/:id')
-  public async get( @CurrentUser() user: AliceAccount, @Param('id') id: string) {
+  public async get(@CurrentUser() user: AliceAccount, @Param('id') id: string) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -45,15 +45,19 @@ export class EventsController {
   }
 
   @Post('/events/:id')
-  public async post( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() body: ProcessRequest,
-                     @Req() req: express.Request, @Res() res: express.Response) {
+  public async post(
+    @CurrentUser() user: AliceAccount,
+    @Param('id') id: string,
+    @Body() body: ProcessRequest,
+    @Req() req: express.Request,
+    @Res() res: express.Response,
+  ) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
 
       const events = body.events;
-      if (!(events instanceof Array))
-        throw new BadRequestError('No events array in request');
+      if (!(events instanceof Array)) throw new BadRequestError('No events array in request');
 
       const processor = new EventsProcessor();
       const viewModelTimestampBefore = await processor.latestExistingMobileEventTimestamp(id);
@@ -70,7 +74,6 @@ export class EventsController {
     } catch (e) {
       returnCharacterNotFoundOrRethrow(e);
     }
-
   }
 
   private async sendPushNotifications(timestampBefore: number, updatedViewModel: any): Promise<void> {
@@ -80,10 +83,14 @@ export class EventsController {
     if (!changesPage) return;
     await Promise.all(
       (changesPage.body.items as any[])
-        .filter((item) => item.unixSecondsValue * 1000 > timestampBefore).map((item) => {
-          return sendGenericPushNotification(updatedViewModel.passportScreen.id,
-            makeVisibleNotificationPayload(item.details.header, item.details.text));
-        }));
+        .filter((item) => item.unixSecondsValue * 1000 > timestampBefore)
+        .map((item) => {
+          return sendGenericPushNotification(
+            updatedViewModel.passportScreen.id,
+            makeVisibleNotificationPayload(item.details.header, item.details.text),
+          );
+        }),
+    );
   }
 
   private logHalfSuccessfulResponse(req: express.Request, eventTypes: CharacterlessEvent[], status: number) {

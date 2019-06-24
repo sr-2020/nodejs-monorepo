@@ -8,7 +8,6 @@ import * as winston from 'winston';
  *
  */
 export async function saveObject(connection: PouchDB.Database, doc: any, update: boolean = true): Promise<any> {
-
   doc = cloneDeep(doc);
 
   // Если в объекте не установлен _id => то его можно просто сохранять, проставится автоматически

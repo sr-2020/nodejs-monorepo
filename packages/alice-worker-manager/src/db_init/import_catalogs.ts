@@ -87,4 +87,6 @@ async function importCatalogs() {
   }
 }
 
-clearCatalogs().then(importCatalogs).then(() => console.log('done.'));
+clearCatalogs()
+  .then(importCatalogs)
+  .then(() => console.log('done.'));

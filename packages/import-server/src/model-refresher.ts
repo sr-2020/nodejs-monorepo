@@ -7,7 +7,6 @@ import { ModelMetadata } from 'alice-model-engine-api';
 import { config } from './config';
 import { JoinCharacterDetail } from './join-importer';
 
-
 export class ModelRefresher {
   private metadataCon: PouchDB.Database<ModelMetadata>;
 
@@ -24,8 +23,7 @@ export class ModelRefresher {
 
   // Вызывает пересчет экспортрованной модели, что бы сформировалась Work/ViewModel
   public async sentRefreshEvent(char: JoinCharacterDetail): Promise<any> {
-    if (!char._id)
-      return;
+    if (!char._id) return;
 
     let scheduledUpdateTimestamp = now();
 

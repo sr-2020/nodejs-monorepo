@@ -6,9 +6,7 @@ import { Manager } from '../../src/manager';
 
 import Container from 'typedi';
 import { destroyDatabases, initDi } from '../init';
-import {
-  createModel, getModelVariantsAtTimestamp, pushEvent, pushRefreshEvent,
-} from '../model_helpers';
+import { createModel, getModelVariantsAtTimestamp, pushEvent, pushRefreshEvent } from '../model_helpers';
 
 async function createAndStartManager(): Promise<Manager> {
   const manager = Container.get(ManagerToken);
@@ -45,9 +43,11 @@ describe('Prepopulated events', function() {
 
     manager = await createAndStartManager();
 
-    const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
-        ['models', 'workingModels', 'defaultViewModels']);
+    const [baseModel, workingModel, viewModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 10, [
+      'models',
+      'workingModels',
+      'defaultViewModels',
+    ]);
 
     expect(baseModel).to.exist;
     expect(workingModel).to.exist;
@@ -78,9 +78,11 @@ describe('Prepopulated events', function() {
 
     manager = await createAndStartManager();
 
-    const [baseModel, workingModel, viewModel] =
-      await getModelVariantsAtTimestamp(model._id, timestamp + 10,
-        ['models', 'workingModels', 'defaultViewModels']);
+    const [baseModel, workingModel, viewModel] = await getModelVariantsAtTimestamp(model._id, timestamp + 10, [
+      'models',
+      'workingModels',
+      'defaultViewModels',
+    ]);
 
     expect(baseModel).to.exist;
     expect(workingModel).to.exist;

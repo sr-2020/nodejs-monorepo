@@ -69,46 +69,59 @@ export class DatabasesContainer implements DatabasesContainerInterface {
     protected _economyDb: PouchDB.Database<TransactionDocument | BalancesDocument | EconomyConstants>,
     protected _objCounterDb: PouchDB.Database<ShieldValues>,
   ) {
-      const options = { since: 'now', live: true, include_docs: true, return_docs: false };
-      this.viewModelDb('mobile').changes(options)
-        .on('change', (change) => {
-          if (!change.doc)
-            return;
+    const options = { since: 'now', live: true, include_docs: true, return_docs: false };
+    this.viewModelDb('mobile')
+      .changes(options)
+      .on('change', (change) => {
+        if (!change.doc) return;
 
-          if (this.connections.has(change.doc._id))
-            this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
-        });
-    }
+        if (this.connections.has(change.doc._id)) this.connections.get(change.doc._id).onViewModelUpdate(change.doc);
+      });
+  }
 
   public async createIndices(): Promise<void> {
     await this.accountsDb().createIndex({
-      index: {fields: ['login']},
+      index: { fields: ['login'] },
     });
 
     await this.accountsDb().createIndex({
-      index: {fields: ['pushToken']},
+      index: { fields: ['pushToken'] },
     });
 
     await this.economyDb().createIndex({
-      index: {fields: ['sender']},
+      index: { fields: ['sender'] },
     });
     await this.economyDb().createIndex({
-      index: {fields: ['receiver']},
+      index: { fields: ['receiver'] },
     });
     await this.viewModelDb('mobile').createIndex({
-      index: {fields: ['timestamp']},
+      index: { fields: ['timestamp'] },
     });
 
     await this.modelsDb().createIndex({
-      index: {fields: ['location']},
+      index: { fields: ['location'] },
     });
   }
 
-  public accountsDb() { return this._accountsDb; }
-  public modelsDb() { return this._modelsDb; }
-  public metadataDb() { return this._modelsMetadataDb; }
-  public eventsDb() { return this._eventsDb; }
-  public viewModelDb(type: string) { return this._viewmodelDbs.get(type); }
-  public economyDb() { return this._economyDb; }
-  public objCounterDb() { return this._objCounterDb; }
+  public accountsDb() {
+    return this._accountsDb;
+  }
+  public modelsDb() {
+    return this._modelsDb;
+  }
+  public metadataDb() {
+    return this._modelsMetadataDb;
+  }
+  public eventsDb() {
+    return this._eventsDb;
+  }
+  public viewModelDb(type: string) {
+    return this._viewmodelDbs.get(type);
+  }
+  public economyDb() {
+    return this._economyDb;
+  }
+  public objCounterDb() {
+    return this._objCounterDb;
+  }
 }

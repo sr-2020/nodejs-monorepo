@@ -2,8 +2,15 @@ import { assign, clone, reduce } from 'lodash';
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { EngineContext, EngineMessage,
-  EngineMessageConfigure, EngineMessageEvents, EngineResult, Event, Modifier } from 'alice-model-engine-api';
+import {
+  EngineContext,
+  EngineMessage,
+  EngineMessageConfigure,
+  EngineMessageEvents,
+  EngineResult,
+  Event,
+  Modifier,
+} from 'alice-model-engine-api';
 
 import * as config from './config';
 import { Context } from './context';
@@ -16,7 +23,6 @@ import { requireDir } from './utils';
 declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {
-
   public static load(dir: string): Worker {
     const m = loadModels(dir);
     Logger.debug('engine', 'Loaded model', { model: inspect(m, false, null) });
@@ -25,7 +31,7 @@ export class Worker {
   private _config: config.ConfigInterface;
   private dispatcher: dispatcher.DispatcherInterface;
 
-  constructor(private _model: model.Model) { }
+  constructor(private _model: model.Model) {}
 
   public configure(newConfig: config.ConfigInterface): Worker {
     Logger.debug('engine', 'Loaded config', { config: inspect(newConfig, false, null) });
@@ -47,24 +53,20 @@ export class Worker {
     Logger.info('engine', 'Processing model', { characterId, events });
 
     try {
-      Logger.logStep('engine', 'info', 'Preprocess', { characterId })
-        (() => this.runPreprocess(baseCtx, events));
+      Logger.logStep('engine', 'info', 'Preprocess', { characterId })(() => this.runPreprocess(baseCtx, events));
     } catch (e) {
-      Logger.error('engine', `Exception ${e.toString()} caught when running preproces`,
-        { events, characterId });
+      Logger.error('engine', `Exception ${e.toString()} caught when running preproces`, { events, characterId });
       return { status: 'error', error: e };
     }
 
     if (baseCtx.pendingAquire.length) {
       try {
-        await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects',
-          { pendingAquire: baseCtx.pendingAquire, characterId })
-          (() => this.waitAquire(baseCtx));
-        Logger.debug('engine', 'Aquired objects',
-          { aquired: baseCtx.aquired, characterId });
+        await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', { pendingAquire: baseCtx.pendingAquire, characterId })(
+          () => this.waitAquire(baseCtx),
+        );
+        Logger.debug('engine', 'Aquired objects', { aquired: baseCtx.aquired, characterId });
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`,
-          { characterId });
+        Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { characterId });
         return { status: 'error', error: e };
       }
     }
@@ -78,16 +80,14 @@ export class Worker {
       baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
 
       try {
-        Logger.logStep('engine', 'info', 'Running event', { event, characterId })
-          (() => this.runEvent(baseCtx, event));
+        Logger.logStep('engine', 'info', 'Running event', { event, characterId })(() => this.runEvent(baseCtx, event));
       } catch (e) {
         Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, characterId });
         return { status: 'error', error: e };
       }
 
       try {
-        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })
-          (() => this.runModifiers(baseCtx));
+        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })(() => this.runModifiers(baseCtx));
       } catch (e) {
         Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { characterId });
         return { status: 'error', error: e };
@@ -102,8 +102,7 @@ export class Worker {
     let viewModels;
 
     try {
-      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })
-        (() => this.runViewModels(workingCtx, baseCtx));
+      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })(() => this.runViewModels(workingCtx, baseCtx));
     } catch (e) {
       Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { characterId });
       return { status: 'error', error: e };
@@ -169,7 +168,7 @@ export class Worker {
 
   private runEvent(context: Context, event: Event): number {
     this.dispatcher.dispatch(event, context);
-    return context.timestamp = event.timestamp;
+    return (context.timestamp = event.timestamp);
   }
 
   private getEnabledModifiers(workingCtx: Context): Modifier[] {
@@ -211,10 +210,14 @@ export class Worker {
     const data = workingCtx.valueOf();
     const api = ViewModelApiFactory(workingCtx, baseCtx);
 
-    return reduce(this._model.viewModelCallbacks, (vm: any, f: model.ViewModelCallback, base: string) => {
-      vm[base] = f(api, data);
-      return vm;
-    }, {});
+    return reduce(
+      this._model.viewModelCallbacks,
+      (vm: any, f: model.ViewModelCallback, base: string) => {
+        vm[base] = f(api, data);
+        return vm;
+      },
+      {},
+    );
   }
 
   private runPreprocess(baseCtx: Context, events: Event[]) {
@@ -231,8 +234,7 @@ export class Worker {
   }
 
   private async waitAquire(baseCtx: Context) {
-    Logger.debug('engine', 'Waitin to aquire',
-      { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
+    Logger.debug('engine', 'Waitin to aquire', { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
 
     return new Promise((resolve, reject) => {
       if (process && process.send) {
@@ -263,7 +265,6 @@ export class Worker {
         reject(new Error('Called in wrong context'));
       }
     });
-
   }
 }
 

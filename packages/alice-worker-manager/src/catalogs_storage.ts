@@ -11,7 +11,7 @@ interface CatalogObject {
 export interface Catalogs {
   timestamp: number;
   data: {
-    [catalog: string]: CatalogObject[],
+    [catalog: string]: CatalogObject[];
   };
 }
 
@@ -22,8 +22,7 @@ export interface CatalogsStorageInterface {
 }
 
 export class CatalogsStorage implements CatalogsStorageInterface {
-  constructor(private config: Config,
-              private dbConnector: DBConnectorInterface) { }
+  constructor(private config: Config, private dbConnector: DBConnectorInterface) {}
 
   public catalogDbName(catalog: string): string | undefined {
     let dbName: string = get(this.config, ['catalogs', 'db', catalog]);

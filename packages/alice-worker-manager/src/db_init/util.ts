@@ -15,7 +15,7 @@ export function deepToString(doc: any) {
 
   // tslint:disable-next-line:forin
   for (const k in doc) {
-    switch (typeof (doc[k])) {
+    switch (typeof doc[k]) {
       case 'function':
         result[k] = doc[k].toString();
         break;
@@ -87,8 +87,7 @@ export async function importCatalogs(config: Config, catalogsStorage: CatalogsSt
     const db = catalogDb(config, catalogsStorage, catalogName);
 
     if (!db) {
-      console.warn(
-        `  Input file for catalog ${catalogName} is present, but such catalog DB is not configured, skipping.`);
+      console.warn(`  Input file for catalog ${catalogName} is present, but such catalog DB is not configured, skipping.`);
       continue;
     }
 
@@ -119,13 +118,12 @@ export async function createAccount(db: PouchDB.Database, index: number) {
   }
   // First accounts get logins a, b, c, ..., z
   if (index > 0 && index <= 26) login = String.fromCharCode(96 + index);
-  await updateIfDifferent(db,
-    {
-      _id: getId(index),
-      login,
-      password,
-      roles,
-    });
+  await updateIfDifferent(db, {
+    _id: getId(index),
+    login,
+    password,
+    roles,
+  });
 }
 
 export async function createModel(db: PouchDB.Database, modelTemplate: any, index: number) {
@@ -139,8 +137,7 @@ export async function createViewModel(db: PouchDB.Database, viewModelTemplate: a
   const viewModel = cloneDeep(viewModelTemplate);
   viewModel._id = getId(index);
   // TODO: Separate function for different viewmodels?
-  if (viewModel.passportScreen != undefined)
-    viewModel.passportScreen.id = getId(index);
+  if (viewModel.passportScreen != undefined) viewModel.passportScreen.id = getId(index);
   delete viewModel._rev;
   await updateIfDifferent(db, viewModel);
 }

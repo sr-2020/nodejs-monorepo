@@ -15,7 +15,7 @@ export interface SyncRequestsSource {
 export class MetadataSyncRequestsSource implements SyncRequestsSource {
   private subject = new Rx.Subject<SyncRequest>();
 
-  constructor(private db: DBInterface) { }
+  constructor(private db: DBInterface) {}
 
   public follow() {
     const params = {

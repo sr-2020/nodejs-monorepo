@@ -21,27 +21,28 @@ import { getTransferTest } from './economy/transfer';
 const address = `http://localhost:3000`;
 
 describe('Economy', () => {
-
   let app: App;
   let dbContainer: TestDatabasesContainer;
 
   const pushSettings: PushSettings = {
     autoRefresh: {
-      notifyIfInactiveForMoreThanMs: 10000, performOncePerMs: 160,
+      notifyIfInactiveForMoreThanMs: 10000,
+      performOncePerMs: 160,
     },
     serverKey: 'fakeserverkey',
   };
 
   const settings: ApplicationSettings = {
-    port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 200, pushSettings,
+    port: 3000,
+    viewmodelUpdateTimeout: 20,
+    accessGrantTime: 200,
+    pushSettings,
   };
   Container.set(ApplicationSettingsToken, settings);
   Container.set(LoggerToken, new WinstonLogger({ level: 'warning' }));
 
   async function addAccount(id: string, login: string, password: string) {
-    await dbContainer.accountsDb().post(
-      {...createEmptyAccount(),  _id: id, login, password },
-    );
+    await dbContainer.accountsDb().post({ ...createEmptyAccount(), _id: id, login, password });
   }
 
   async function setBalance(id: string, balance: number) {
@@ -65,19 +66,17 @@ describe('Economy', () => {
     await dbContainer.economyDb().upsert('constants', (doc: any) => {
       doc = {
         ...doc,
-          topManagerBase: 9000,
-          managerPremium: 3000,
-          managerBase: 1000,
-          specialistPremium: 500,
-          specialistBase: 500,
-          everyone: 100,
+        topManagerBase: 9000,
+        managerPremium: 3000,
+        managerBase: 1000,
+        specialistPremium: 500,
+        specialistBase: 500,
+        everyone: 100,
       };
       return doc;
     });
 
-    await dbContainer.accountsDb().post(
-      {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
-    );
+    await dbContainer.accountsDb().post({ ...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
 
     await dbContainer.createIndices();
     Container.set(DatabasesContainerToken, dbContainer);
@@ -95,5 +94,4 @@ describe('Economy', () => {
   getTransferTest(address);
   getCreateAccountTest(address);
   getSalaryTest(address);
-
 });

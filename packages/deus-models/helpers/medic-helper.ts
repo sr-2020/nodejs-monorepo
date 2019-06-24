@@ -1,5 +1,4 @@
-import { ModelApiInterface } from "@sr2020/alice-model-engine-api/index";
-
+import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Хелперы для медицинских моделей
@@ -8,22 +7,17 @@ import { ModelApiInterface } from "@sr2020/alice-model-engine-api/index";
 let helpers = require('./model-helper');
 let consts = require('./constants');
 
+function addDamage(api: ModelApiInterface, hpLost, timestamp) {
+  if (hpLost && api.model.hp && api.model.profileType != 'program' && api.model.profileType != 'exhuman-program') {
+    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
-function addDamage(api: ModelApiInterface, hpLost, timestamp){
-    if(hpLost
-        && api.model.hp
-        && api.model.profileType != "program"
-        && api.model.profileType != "exhuman-program"
-    ){
-        let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    if (m) {
+      m.damage += hpLost;
+      api.info(`HP Lost: ${hpLost}, summary damage: ${m.damage}`);
 
-        if(m){
-            m.damage += hpLost;
-            api.info(`HP Lost: ${hpLost}, summary damage: ${m.damage}` );
-
-            helpers.addChangeRecord(api, `Вы потеряли ${hpLost} HP`, timestamp);
-        }
-     }
+      helpers.addChangeRecord(api, `Вы потеряли ${hpLost} HP`, timestamp);
+    }
+  }
 }
 
 /**
@@ -31,50 +25,54 @@ function addDamage(api: ModelApiInterface, hpLost, timestamp){
  * Т.е. если на данный момент maxHP < damage, то надо скорректировать damage так,
  * что бы лечение начиналось с 0 хитов
  */
-function restoreDamage(api: ModelApiInterface, hpHeal, timestamp){
+function restoreDamage(api: ModelApiInterface, hpHeal, timestamp) {
+  api.info(`removeDamage: ${hpHeal}`);
 
-    api.info(`removeDamage: ${hpHeal}`);
+  if (hpHeal && api.model.hp) {
+    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
-    if(hpHeal && api.model.hp){
-        let m =  api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    if (m) {
+      let maxHP = calcMaxHP(api);
 
-        if(m){
-            let maxHP = calcMaxHP(api);
+      if (m.damage > maxHP) {
+        m.damage = maxHP;
+      }
 
-            if(m.damage > maxHP){  m.damage = maxHP; }
+      let dmgBefore = m.damage;
 
-            let dmgBefore = m.damage;
+      m.damage -= hpHeal;
+      if (m.damage < 0) {
+        m.damage = 0;
+      }
 
-            m.damage -= hpHeal;
-            if(m.damage < 0)  { m.damage = 0; }
-
-            api.info(`HP heal: ${hpHeal}, summary damage: ${m.damage}` );
-            helpers.addChangeRecord(api, `Вы восстановили ${dmgBefore - m.damage} HP`, timestamp);
-        }
-     }
+      api.info(`HP heal: ${hpHeal}, summary damage: ${m.damage}`);
+      helpers.addChangeRecord(api, `Вы восстановили ${dmgBefore - m.damage} HP`, timestamp);
+    }
+  }
 }
 
 /**
  *  Посчитать текущее MaxHP для всех имплантов вида "+2 хита" и базовых хитов персонажа
  */
-function calcMaxHP(api){
-    let maxHP = api.model.modifiers.filter( m => m.enabled )
-                        .map( m => helpers.checkPredicate(api, m.mID, "change-max-hp") )
-                        .map( p => p ? p.maxHp : 0)
-                        .reduce( (acc, val) => acc + val, api.model.maxHp );
+function calcMaxHP(api) {
+  let maxHP = api.model.modifiers
+    .filter((m) => m.enabled)
+    .map((m) => helpers.checkPredicate(api, m.mID, 'change-max-hp'))
+    .map((p) => (p ? p.maxHp : 0))
+    .reduce((acc, val) => acc + val, api.model.maxHp);
 
-    return (maxHP <= 6 ? maxHP : 6);
+  return maxHP <= 6 ? maxHP : 6;
 }
 
 /**
  * Поставить состояние системы по названию
  */
-function setMedSystem(api: ModelApiInterface, system, value){
-    let i = consts.medicSystems.findIndex( m => m.name == system );
+function setMedSystem(api: ModelApiInterface, system, value) {
+  let i = consts.medicSystems.findIndex((m) => m.name == system);
 
-    if((i != -1) && api.model.systems){
-        api.model.systems[i] = value;
-    }
+  if (i != -1 && api.model.systems) {
+    api.model.systems[i] = value;
+  }
 }
 
 /**
@@ -83,81 +81,81 @@ function setMedSystem(api: ModelApiInterface, system, value){
  * Возвращает массив с номерами таких систем (пустой, если таких систем нет)
  * Если у персонажа нет систем - возвращает пустой массив
  */
-function getDeadSystems(api){
-    let ret: any = [];
+function getDeadSystems(api) {
+  let ret: any = [];
 
-    if(api.model.systems){
-        api.model.systems.forEach( (sys,i) => {
-            let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter( m => m.enabled );
+  if (api.model.systems) {
+    api.model.systems.forEach((sys, i) => {
+      let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
 
-            if(!sys && !implants.length){
-                ret.push(i);
-            }
-        });
-    }
+      if (!sys && !implants.length) {
+        ret.push(i);
+      }
+    });
+  }
 
-    return ret;
+  return ret;
 }
 
 /**
  * Вернуть строку описывающую состояние систем
  */
-function getSystemsStateString(api){
-    if(api.model.systems){
-        let systemsStr = api.model.systems.map( (s, i) => {
-            let imps = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter( m => m.enabled );
-            let impDat = imps.length ? ` (+${imps.length})` : '';
+function getSystemsStateString(api) {
+  if (api.model.systems) {
+    let systemsStr = api.model.systems
+      .map((s, i) => {
+        let imps = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
+        let impDat = imps.length ? ` (+${imps.length})` : '';
 
-            return `${consts.medicSystems[i].name.substring(0,3)}: ${s}${impDat}`
-        }).join(',')
+        return `${consts.medicSystems[i].name.substring(0, 3)}: ${s}${impDat}`;
+      })
+      .join(',');
 
-        return  "[ " + systemsStr + " ]";
-    }
+    return '[ ' + systemsStr + ' ]';
+  }
 
-    return "";
+  return '';
 }
 
-function getSystemID(name){
-    return consts.medicSystems.findIndex( s => s.name == name );
+function getSystemID(name) {
+  return consts.medicSystems.findIndex((s) => s.name == name);
 }
 
-function isSystemAlive(api: ModelApiInterface, name){
-    let i = consts.medicSystems.findIndex( s => s.name == name );
-    if(i != -1 && api.model.systems){
-        return (api.model.systems[i] == 1);
-    }
+function isSystemAlive(api: ModelApiInterface, name) {
+  let i = consts.medicSystems.findIndex((s) => s.name == name);
+  if (i != -1 && api.model.systems) {
+    return api.model.systems[i] == 1;
+  }
 }
 
 /**
  * Удалить болезь
  */
-function removeIllness(api: ModelApiInterface, mID){
-    if(mID){
-        let index = api.model.modifiers.findIndex( m => m.mID == mID );
+function removeIllness(api: ModelApiInterface, mID) {
+  if (mID) {
+    let index = api.model.modifiers.findIndex((m) => m.mID == mID);
 
-        if(index != -1){
-            let ill = api.model.modifiers[index];
+    if (index != -1) {
+      let ill = api.model.modifiers[index];
 
-            api.info(`removeIllness: remove ${ill.id} and timer ${ill.id}-${ill.mID}`);
+      api.info(`removeIllness: remove ${ill.id} and timer ${ill.id}-${ill.mID}`);
 
-            api.removeTimer(`${ill.id}-${ill.mID}`);
-            api.model.modifiers.splice(index,1);
-        }else{
-            api.error(`removeIllness: illness ${mID} not found!`);
-        }
+      api.removeTimer(`${ill.id}-${ill.mID}`);
+      api.model.modifiers.splice(index, 1);
+    } else {
+      api.error(`removeIllness: illness ${mID} not found!`);
     }
+  }
 }
 
-
 export = {
-        addDamage,
-        restoreDamage,
-        calcMaxHP,
-        setMedSystem,
-        getDeadSystems,
-        getSystemsStateString,
-        getSystemID,
-        isSystemAlive,
-        removeIllness
+  addDamage,
+  restoreDamage,
+  calcMaxHP,
+  setMedSystem,
+  getDeadSystems,
+  getSystemsStateString,
+  getSystemID,
+  isSystemAlive,
+  removeIllness,
 };
-

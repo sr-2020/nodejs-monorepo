@@ -47,8 +47,11 @@ describe('API Server', () => {
     Container.set(LoggerToken, new WinstonLogger({ level: 'warn' }));
     const pushSettings: PushSettings = { serverKey: 'fakeserverkey' };
     const settings: ApplicationSettings = {
-      port: 3000, viewmodelUpdateTimeout: 20, accessGrantTime: 1000,
-      tooFarInFutureFilterTime: 30000, pushSettings,
+      port: 3000,
+      viewmodelUpdateTimeout: 20,
+      accessGrantTime: 1000,
+      tooFarInFutureFilterTime: 30000,
+      pushSettings,
     };
     Container.set(ApplicationSettingsToken, settings);
     dbContainer = new TestDatabasesContainer();
@@ -57,35 +60,35 @@ describe('API Server', () => {
     await app.listen();
 
     await dbContainer.viewModelDb('mobile').put({
-      _id: '00001', timestamp: 420,
-      updatesCount: 0, mobile: true,
+      _id: '00001',
+      timestamp: 420,
+      updatesCount: 0,
+      mobile: true,
     });
     await dbContainer.modelsDb().put({
-      _id: '00001', timestamp: 420,
+      _id: '00001',
+      timestamp: 420,
       location: 'ship_BSG',
     });
 
     await dbContainer.viewModelDb('mobile').put({
-      _id: '00002', timestamp: 10000,
-      updatesCount: 0, mobile: true,
+      _id: '00002',
+      timestamp: 10000,
+      updatesCount: 0,
+      mobile: true,
     });
     await dbContainer.modelsDb().put({
-      _id: '00002', timestamp: 10000,
+      _id: '00002',
+      timestamp: 10000,
       location: 'ship_MilleniumFalcon',
     });
 
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '10001', login: 'some_lab_technician', password: 'research' },
-    );
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '10002', login: 'some_fired_lab_technician', password: 'beer' },
-    );
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' },
-    );
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] },
-    );
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '10001', login: 'some_lab_technician', password: 'research' });
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '10002', login: 'some_fired_lab_technician', password: 'beer' });
+    await dbContainer
+      .accountsDb()
+      .put({ ...createEmptyAccount(), _id: '10003', login: 'some_hired_lab_technician', password: 'wowsocool' });
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '99999', login: 'admin', password: 'admin', roles: ['admin'] });
 
     testStartTime = currentTimestamp();
     await dbContainer.accountsDb().put({
@@ -94,17 +97,10 @@ describe('API Server', () => {
       login: 'some_user',
       password: 'qwerty',
       pushToken: '00001spushtoken',
-      access: [
-        { id: '10002', timestamp: testStartTime - 1 },
-        { id: '10001', timestamp: testStartTime + 60000 },
-      ],
+      access: [{ id: '10002', timestamp: testStartTime - 1 }, { id: '10001', timestamp: testStartTime + 60000 }],
     });
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' },
-    );
-    await dbContainer.accountsDb().put(
-      {...createEmptyAccount(), _id: '55555', login: 'user_without_model', password: 'hunter2' },
-    );
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
+    await dbContainer.accountsDb().put({ ...createEmptyAccount(), _id: '55555', login: 'user_without_model', password: 'hunter2' });
 
     await dbContainer.createIndices();
   });
@@ -116,8 +112,7 @@ describe('API Server', () => {
 
   describe('/time', () => {
     it('Returns approximately current time', async () => {
-      const response = await rp.get(address + '/time',
-        { resolveWithFullResponse: true, json: { events: [] } }).promise();
+      const response = await rp.get(address + '/time', { resolveWithFullResponse: true, json: { events: [] } }).promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -125,13 +120,14 @@ describe('API Server', () => {
   });
 
   describe('GET /viewmodel', () => {
-
     it('Returns mobile viewmodel of existing character if mobile type is provided', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          json: {},
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -140,89 +136,115 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for non-existent viewmodel type', async () => {
-      const response = await rp.get(address + '/viewmodel/foo/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/foo/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Viewmodel type is not found');
     });
 
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/4444',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/4444', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: '4444', password: '4444' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/user_without_model',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/user_without_model', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-        }).promise();
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'wrong one' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying user not providing access ', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if access to user expired ', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_fired_lab_technician', password: 'beer' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Admin can access anybody', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
     });
 
     it('Returns viewmodel of existing character if accessed by technician', async () => {
-      const response = await rp.get(address + '/viewmodel/mobile/some_user',
-        {
-          resolveWithFullResponse: true, json: {},
+      const response = await rp
+        .get(address + '/viewmodel/mobile/some_user', {
+          resolveWithFullResponse: true,
+          json: {},
           auth: { username: 'some_lab_technician', password: 'research' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -233,88 +255,113 @@ describe('API Server', () => {
 
   describe('POST /events', () => {
     it('Returns 400 if no events field present', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { foo: 'bar' },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { foo: 'bar' },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(400);
     });
 
     it('Returns 400 if events field is not an array', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: { foo: 'bar' } },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: { foo: 'bar' } },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(400);
     });
 
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
-      const response = await rp.post(address + '/events/4444',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [] },
+      const response = await rp
+        .post(address + '/events/4444', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [] },
           auth: { username: '4444', password: '4444' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.post(address + '/events/user_without_model',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [] },
+      const response = await rp
+        .post(address + '/events/user_without_model', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [] },
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-        }).promise();
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'wrong one' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying user not providing access', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Sets proper header', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events: [] },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: [] },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(202);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
     });
 
     it('Updates metadata', async () => {
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events: [], scheduledUpdateTimestamp: 4365 },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
       const metadata = await dbContainer.metadataDb().get('00001');
@@ -322,15 +369,19 @@ describe('API Server', () => {
     });
 
     it('Sets scheduledUpdateTimestamp to provided value', async () => {
-      const events = [{
-        eventType: 'TestEvent',
-        timestamp: 4366,
-      }];
-      const response = await rp.post(address + '/events/some_user',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events, scheduledUpdateTimestamp: 4367 },
+          eventType: 'TestEvent',
+          timestamp: 4366,
+        },
+      ];
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events, scheduledUpdateTimestamp: 4367 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
@@ -342,23 +393,30 @@ describe('API Server', () => {
     });
 
     it('Filters out tokenUpdated events', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        // tslint:disable-next-line:max-line-length
-        data: { token: 'cFA60K00jtY:APA91bGtjF4t8R4hEiu7Z1oowRU1ZH8YQaL2HwjhuY4mIO9yD1gKcxEX8l6c2vEtRn4fGxgQnqzTwmMq8wQ15Vpve6QbQAOMm-ds1qwXKED1HABlhxinnQFVKWKty7dlhEQsnpA0w9ye' },
-      },
-      {
-        eventType: 'somethingSomething',
-        timestamp: 4565,
-        data: { foo: 'ambar' },
-      }];
-
-      const response = await rp.post(address + '/events/some_user',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          // tslint:disable-next-line:max-line-length
+          data: {
+            token:
+              'cFA60K00jtY:APA91bGtjF4t8R4hEiu7Z1oowRU1ZH8YQaL2HwjhuY4mIO9yD1gKcxEX8l6c2vEtRn4fGxgQnqzTwmMq8wQ15Vpve6QbQAOMm-ds1qwXKED1HABlhxinnQFVKWKty7dlhEQsnpA0w9ye',
+          },
+        },
+        {
+          eventType: 'somethingSomething',
+          timestamp: 4565,
+          data: { foo: 'ambar' },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -370,18 +428,22 @@ describe('API Server', () => {
     });
 
     it('Filters scheduledUpdateTimestamp too far in future', async () => {
-      await dbContainer.metadataDb().put({_id: '00001', scheduledUpdateTimestamp: 0});
+      await dbContainer.metadataDb().put({ _id: '00001', scheduledUpdateTimestamp: 0 });
 
       const timestamp = currentTimestamp() + 60000;
-      const events = [{
-        eventType: 'TestEvent',
-        timestamp: timestamp,
-      }];
-      const response = await rp.post(address + '/events/some_user',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events, scheduledUpdateTimestamp: timestamp + 1 },
+          eventType: 'TestEvent',
+          timestamp: timestamp,
+        },
+      ];
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events, scheduledUpdateTimestamp: timestamp + 1 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
       const docs = await dbContainer.allEventsSortedByTimestamp();
@@ -395,26 +457,31 @@ describe('API Server', () => {
     });
 
     it('Returns viewmodel in case if processed in time', async () => {
-      dbContainer.metadataDb().changes({ since: 'now', live: true, include_docs: true }).on('change', (change) => {
-        if (change.doc) {
-          const changeDoc = change.doc;
-          const viewModelDb = dbContainer.viewModelDb('mobile') as PouchDB.Database<any>;
-          viewModelDb.get('00001').then((doc) => {
-            viewModelDb.put({
-              _id: '00001',
-              _rev: doc._rev,
-              timestamp: changeDoc.scheduledUpdateTimestamp,
-              updatesCount: doc.updatesCount + 1,
+      dbContainer
+        .metadataDb()
+        .changes({ since: 'now', live: true, include_docs: true })
+        .on('change', (change) => {
+          if (change.doc) {
+            const changeDoc = change.doc;
+            const viewModelDb = dbContainer.viewModelDb('mobile') as PouchDB.Database<any>;
+            viewModelDb.get('00001').then((doc) => {
+              viewModelDb.put({
+                _id: '00001',
+                _rev: doc._rev,
+                timestamp: changeDoc.scheduledUpdateTimestamp,
+                updatesCount: doc.updatesCount + 1,
+              });
             });
-          });
-        }
-      });
+          }
+        });
 
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events: [], scheduledUpdateTimestamp: 4365 },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
       expect(response.body.id).to.equal('00001');
@@ -427,11 +494,13 @@ describe('API Server', () => {
         timestamp: 4365,
       };
 
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, json: { events: [event] },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: [event] },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -440,19 +509,24 @@ describe('API Server', () => {
     });
 
     it('Returns timestamp of latest event successfully saved', async () => {
-      const events = [{
-        eventType: 'TestEvent',
-        timestamp: 4365,
-      }, {
-        eventType: 'TestEvent',
-        timestamp: 6666,
-      }];
-
-      const response = await rp.post(address + '/events/some_user',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events: events },
+          eventType: 'TestEvent',
+          timestamp: 4365,
+        },
+        {
+          eventType: 'TestEvent',
+          timestamp: 6666,
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: events },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -468,11 +542,16 @@ describe('API Server', () => {
 
       const promises: any[] = [];
       for (let i = 0; i < 20; ++i)
-        promises.push(rp.post(address + '/events/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { events: [event] },
-            auth: { username: 'some_user', password: 'qwerty' },
-          }).promise());
+        promises.push(
+          rp
+            .post(address + '/events/some_user', {
+              resolveWithFullResponse: true,
+              simple: false,
+              json: { events: [event] },
+              auth: { username: 'some_user', password: 'qwerty' },
+            })
+            .promise(),
+        );
 
       const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
       const expectedStatuses = Array(20).fill(202);
@@ -483,12 +562,14 @@ describe('API Server', () => {
 
     it('Handles mobile + non-mobile connection simultaneously', async () => {
       const promises: any[] = [
-        rp.post(address + '/events/some_user',
-          {
-            resolveWithFullResponse: true, simple: false,
+        rp
+          .post(address + '/events/some_user', {
+            resolveWithFullResponse: true,
+            simple: false,
             json: { events: [], scheduledUpdateTimestamp: 4364 },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise(),
+          })
+          .promise(),
       ];
 
       const event = {
@@ -496,11 +577,16 @@ describe('API Server', () => {
         timestamp: 4365,
       };
       for (let i = 0; i < 20; ++i)
-        promises.push(rp.post(address + '/events/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { events: [event] },
-            auth: { username: 'some_user', password: 'qwerty' },
-          }).promise());
+        promises.push(
+          rp
+            .post(address + '/events/some_user', {
+              resolveWithFullResponse: true,
+              simple: false,
+              json: { events: [event] },
+              auth: { username: 'some_user', password: 'qwerty' },
+            })
+            .promise(),
+        );
 
       const resultStatuses = (await Promise.all(promises)).map((result) => result.statusCode);
       const expectedStatuses = Array(21).fill(202);
@@ -518,31 +604,43 @@ describe('API Server', () => {
         timestamp: 4365,
       };
 
-      const response1 = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+      const response1 = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [event] },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-      const response2 = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+        })
+        .promise();
+      const response2 = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [event] },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
     });
 
     it('Deduplicates events with same timestamp', async () => {
-      const response1 = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
+      const response1 = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
-      const response2 = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [], scheduledUpdateTimestamp: 4365 },
+        })
+        .promise();
+      const response2 = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [], scheduledUpdateTimestamp: 4365 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response1.statusCode).to.eq(202);
       expect(response2.statusCode).to.eq(202);
 
@@ -556,71 +654,92 @@ describe('API Server', () => {
         timestamp: 100, // < 420
       };
 
-      const response = await rp.post(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: { events: [event] },
+      const response = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { events: [event] },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(409);
     });
   });
 
   describe('GET /events', () => {
     it('Returns 404 for сharacter not existing in accounts DB', async () => {
-      const response = await rp.get(address + '/events/4444',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/4444', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: '4444', password: '4444' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 for сharacter existing accounts DB, but not viewmodel DB', async () => {
-      const response = await rp.get(address + '/events/user_without_model',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/user_without_model', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 and WWW-Authenticate if no credentials ', async () => {
-      const response = await rp.get(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-        }).promise();
+      const response = await rp
+        .get(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if wrong credentials ', async () => {
-      const response = await rp.get(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'wrong one' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns 401 and WWW-Authenticate if querying user not providing access', async () => {
-      const response = await rp.get(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'user_without_model', password: 'hunter2' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
       expect(response.headers['WWW-Authenticate']).not.to.be.null;
     });
 
     it('Returns timestamp of viewmodel if no events present', async () => {
-      const response = await rp.get(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(420);
@@ -628,23 +747,30 @@ describe('API Server', () => {
     });
 
     it('Returns timestamp of latest mobile event', async () => {
-      const events = [{
-        eventType: 'TestEvent',
-        timestamp: 4365,
-      }];
-
-      const responsePut = await rp.post(address + '/events/some_user',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events: events, scheduledUpdateTimestamp: 6666 },
+          eventType: 'TestEvent',
+          timestamp: 4365,
+        },
+      ];
+
+      const responsePut = await rp
+        .post(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          json: { events: events, scheduledUpdateTimestamp: 6666 },
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(responsePut.statusCode).to.eq(202);
 
-      const response = await rp.get(address + '/events/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/events/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.body.id).to.equal('00001');
       expect(response.body.timestamp).to.equal(6666);
       expect(response.body.serverTime).to.be.approximately(new Date().valueOf(), 1000);
@@ -657,11 +783,13 @@ describe('API Server', () => {
         eventType: 'whatever',
         data: { foo: 'ambar' },
       };
-      const response = await rp.post(address + '/location_events/ship_BSG',
-        {
-          resolveWithFullResponse: true, json: { events: [event] },
+      const response = await rp
+        .post(address + '/location_events/ship_BSG', {
+          resolveWithFullResponse: true,
+          json: { events: [event] },
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({ receivers: ['00001'] });
@@ -678,11 +806,13 @@ describe('API Server', () => {
         eventType: 'whatever',
         data: { foo: 'ambar' },
       };
-      const response = await rp.post(address + '/location_events/ship_DeathStar',
-        {
-          resolveWithFullResponse: true, json: { events: [event] },
+      const response = await rp
+        .post(address + '/location_events/ship_DeathStar', {
+          resolveWithFullResponse: true,
+          json: { events: [event] },
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({ receivers: [] });
@@ -695,11 +825,13 @@ describe('API Server', () => {
     describe('POST /medic/run_lab_tests/', () => {
       it('Puts event into db', async () => {
         const beforeRequest = now();
-        const response = await rp.post(address + '/medic/run_lab_tests/some_user',
-          {
-            resolveWithFullResponse: true, json: { patientId: '00001', tests: ['foo', 'bar'] },
+        const response = await rp
+          .post(address + '/medic/run_lab_tests/some_user', {
+            resolveWithFullResponse: true,
+            json: { patientId: '00001', tests: ['foo', 'bar'] },
             auth: { username: 'admin', password: 'admin' },
-          }).promise();
+          })
+          .promise();
         const afterRequest = now();
 
         expect(response.statusCode).to.eq(202);
@@ -738,11 +870,13 @@ describe('API Server', () => {
     describe('POST /medic/add_comment/', () => {
       it('Puts event into db', async () => {
         const beforeRequest = now();
-        const response = await rp.post(address + '/medic/add_comment/some_user',
-          {
-            resolveWithFullResponse: true, json: { patientId: '00001', text: 'Lorem ipsum' },
+        const response = await rp
+          .post(address + '/medic/add_comment/some_user', {
+            resolveWithFullResponse: true,
+            json: { patientId: '00001', text: 'Lorem ipsum' },
             auth: { username: 'admin', password: 'admin' },
-          }).promise();
+          })
+          .promise();
         const afterRequest = now();
 
         expect(response.statusCode).to.eq(202);
@@ -769,55 +903,67 @@ describe('API Server', () => {
 
   describe('GET /characters', () => {
     it('Returns requested ACL', async () => {
-      const response = await rp.get(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/characters/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_user', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({
-        access: [
-          { id: '10002', timestamp: testStartTime - 1 },
-          { id: '10001', timestamp: testStartTime + 60000 },
-        ],
+        access: [{ id: '10002', timestamp: testStartTime - 1 }, { id: '10001', timestamp: testStartTime + 60000 }],
       });
     });
 
     it('Returns requested ACL if no explicit access field', async () => {
-      const response = await rp.get(address + '/characters/some_lab_technician',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/characters/some_lab_technician', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_lab_technician', password: 'research' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({ access: [] });
     });
 
     it('Returns 404 for non-existing user', async () => {
-      const response = await rp.get(address + '/characters/nobody',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/characters/nobody', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'nobody', password: 'nobody' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {
-      const response = await rp.get(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/characters/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_lab_technician', password: 'research' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
     });
 
     it('Admin can access anybody', async () => {
-      const response = await rp.get(address + '/characters/some_lab_technician',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .get(address + '/characters/some_lab_technician', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.body).to.deep.equal({ access: [] });
     });
@@ -826,11 +972,14 @@ describe('API Server', () => {
   describe('POST /characters', () => {
     describe('With logins in request', () => {
       it('Can grant access to a new user', async () => {
-        const response = await rp.post(address + '/characters/some_lab_technician',
-          {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['some_hired_lab_technician'] },
+        const response = await rp
+          .post(address + '/characters/some_lab_technician', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { grantAccess: ['some_hired_lab_technician'] },
             auth: { username: 'some_lab_technician', password: 'research' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10003');
@@ -843,28 +992,32 @@ describe('API Server', () => {
       });
 
       it('Can re-grant access to expired user', async () => {
-        const response = await rp.post(address + '/characters/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['some_fired_lab_technician'] },
+        const response = await rp
+          .post(address + '/characters/some_user', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { grantAccess: ['some_fired_lab_technician'] },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(2);
-        for (const access of response.body.access)
-          expect(access.timestamp).to.be.gt(testStartTime);
+        for (const access of response.body.access) expect(access.timestamp).to.be.gt(testStartTime);
 
         const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(2);
-        for (const access of (accessInfo.access))
-          expect(access.timestamp).to.be.gt(testStartTime);
+        for (const access of accessInfo.access) expect(access.timestamp).to.be.gt(testStartTime);
       });
 
       it('Can remove access', async () => {
-        const response = await rp.post(address + '/characters/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { removeAccess: ['some_lab_technician'] },
+        const response = await rp
+          .post(address + '/characters/some_user', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { removeAccess: ['some_lab_technician'] },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10002');
@@ -879,11 +1032,14 @@ describe('API Server', () => {
 
     describe('With id in request', () => {
       it('Can grant access to a new user', async () => {
-        const response = await rp.post(address + '/characters/some_lab_technician',
-          {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['10003'] },
+        const response = await rp
+          .post(address + '/characters/some_lab_technician', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { grantAccess: ['10003'] },
             auth: { username: 'some_lab_technician', password: 'research' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10003');
@@ -896,28 +1052,32 @@ describe('API Server', () => {
       });
 
       it('Can re-grant access to expired user', async () => {
-        const response = await rp.post(address + '/characters/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { grantAccess: ['10002'] },
+        const response = await rp
+          .post(address + '/characters/some_user', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { grantAccess: ['10002'] },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(2);
-        for (const access of response.body.access)
-          expect(access.timestamp).to.be.gt(testStartTime);
+        for (const access of response.body.access) expect(access.timestamp).to.be.gt(testStartTime);
 
         const accessInfo: any = await dbContainer.accountsDb().get('00001');
         expect(accessInfo.access.length).to.equal(2);
-        for (const access of (accessInfo.access))
-          expect(access.timestamp).to.be.gt(testStartTime);
+        for (const access of accessInfo.access) expect(access.timestamp).to.be.gt(testStartTime);
       });
 
       it('Can remove access', async () => {
-        const response = await rp.post(address + '/characters/some_user',
-          {
-            resolveWithFullResponse: true, simple: false, json: { removeAccess: ['10001'] },
+        const response = await rp
+          .post(address + '/characters/some_user', {
+            resolveWithFullResponse: true,
+            simple: false,
+            json: { removeAccess: ['10001'] },
             auth: { username: 'some_user', password: 'qwerty' },
-          }).promise();
+          })
+          .promise();
         expect(response.statusCode).to.eq(200);
         expect(response.body.access.length).to.equal(1);
         expect(response.body.access[0].id).to.equal('10002');
@@ -931,30 +1091,39 @@ describe('API Server', () => {
     });
 
     it('Returns 404 for non-existing user', async () => {
-      const response = await rp.post(address + '/characters/nobody',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/characters/nobody', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'nobody', password: 'nobody' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 401 if querying another user (even one allowing access)', async () => {
-      const response = await rp.post(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/characters/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'some_lab_technician', password: 'research' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
     });
 
     it('Admin can access anybody', async () => {
-      const response = await rp.post(address + '/characters/some_user',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/characters/some_user', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
     });
   });
@@ -967,17 +1136,21 @@ describe('API Server', () => {
     });
 
     it('Token from tokenUpdated event is saved into db', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        data: { token: { registrationId: '00002snewtoken' } },
-      }];
-
-      const response = await rp.post(address + '/events/00002',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          data: { token: { registrationId: '00002snewtoken' } },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/00002', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: '00002', password: 'asdfg' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -987,22 +1160,26 @@ describe('API Server', () => {
     });
 
     it('Token from LAST tokenUpdated event is saved into db', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        data: { token: { registrationId: '00002snewtoken' } },
-      },
-      {
-        eventType: 'tokenUpdated',
-        timestamp: 9953,
-        data: { token: { registrationId: '00002snewesttoken' } },
-      }];
-
-      const response = await rp.post(address + '/events/00002',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          data: { token: { registrationId: '00002snewtoken' } },
+        },
+        {
+          eventType: 'tokenUpdated',
+          timestamp: 9953,
+          data: { token: { registrationId: '00002snewesttoken' } },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/00002', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: '00002', password: 'asdfg' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -1015,17 +1192,21 @@ describe('API Server', () => {
     });
 
     it('Token from tokenUpdated event overwrites existing one', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        data: { token: { registrationId: '00001snewtoken' } },
-      }];
-
-      const response = await rp.post(address + '/events/00001',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          data: { token: { registrationId: '00001snewtoken' } },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/00001', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: '00001', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -1039,17 +1220,21 @@ describe('API Server', () => {
     });
 
     it('If token from tokenUpdated event associated with other character, this association is removed', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        data: { token: { registrationId: '00001spushtoken' } },
-      }];
-
-      const response = await rp.post(address + '/events/00002',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          data: { token: { registrationId: '00001spushtoken' } },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/00002', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: '00002', password: 'asdfg' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -1059,17 +1244,21 @@ describe('API Server', () => {
     });
 
     it('If token from tokenUpdated event associated with same character, nothing changes', async () => {
-      const events = [{
-        eventType: 'tokenUpdated',
-        timestamp: 4365,
-        data: { token: { registrationId: '00001spushtoken' } },
-      }];
-
-      const response = await rp.post(address + '/events/00001',
+      const events = [
         {
-          resolveWithFullResponse: true, json: { events },
+          eventType: 'tokenUpdated',
+          timestamp: 4365,
+          data: { token: { registrationId: '00001spushtoken' } },
+        },
+      ];
+
+      const response = await rp
+        .post(address + '/events/00001', {
+          resolveWithFullResponse: true,
+          json: { events },
           auth: { username: '00001', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
 
       expect(response.statusCode).to.eq(202);
 
@@ -1080,7 +1269,6 @@ describe('API Server', () => {
   });
 
   describe('Generic push notification send', () => {
-
     afterEach(() => {
       nock.cleanAll();
     });
@@ -1093,11 +1281,13 @@ describe('API Server', () => {
         })
         .reply(200, 'Ok!');
 
-      const response = await rp.post(address + '/push/00001',
-        {
-          resolveWithFullResponse: true, json: { foo: 'bar' },
+      const response = await rp
+        .post(address + '/push/00001', {
+          resolveWithFullResponse: true,
+          json: { foo: 'bar' },
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(200);
 
       expect(fcm.isDone()).to.be.true;
@@ -1111,58 +1301,75 @@ describe('API Server', () => {
         })
         .reply(200, 'Ok!');
 
-      const response = await rp.post(address + '/push/some_user',
-        {
-          resolveWithFullResponse: true, json: { foo: 'bar' },
+      const response = await rp
+        .post(address + '/push/some_user', {
+          resolveWithFullResponse: true,
+          json: { foo: 'bar' },
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(200);
 
       expect(fcm.isDone()).to.be.true;
     });
 
     it('Returns 401 if sending push without auth', async () => {
-      const response = await rp.post(address + '/push/00001',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
-        }).promise();
+      const response = await rp
+        .post(address + '/push/00001', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
+        })
+        .promise();
       expect(response.statusCode).to.equal(401);
     });
 
     it('Returns 401 if sending push with non-admin user', async () => {
-      const response = await rp.post(address + '/push/00001',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/push/00001', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: '00001', password: 'qwerty' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(401);
     });
 
     it('Returns 401 if sending push with wrong admin password', async () => {
-      const response = await rp.post(address + '/push/00001',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/push/00001', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'asdsa' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(401);
     });
 
     it('Returns 404 if sending push to non-existing user', async () => {
-      const response = await rp.post(address + '/push/54674',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/push/54674', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(404);
       expect(response.body.message).to.eq('Character with such id or login is not found');
     });
 
     it('Returns 404 if sending push to user without a token', async () => {
-      const response = await rp.post(address + '/push/00002',
-        {
-          resolveWithFullResponse: true, simple: false, json: {},
+      const response = await rp
+        .post(address + '/push/00002', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: {},
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(404);
       expect(response.body.message).to.eq('No push token for this character');
     });
@@ -1175,15 +1382,17 @@ describe('API Server', () => {
         })
         .reply(400, 'Nope!');
 
-      const response = await rp.post(address + '/push/00001',
-        {
-          resolveWithFullResponse: true, simple: false, json: { foo: 'bar' },
+      const response = await rp
+        .post(address + '/push/00001', {
+          resolveWithFullResponse: true,
+          simple: false,
+          json: { foo: 'bar' },
           auth: { username: 'admin', password: 'admin' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.equal(400);
       expect(response.body.message).to.eq('Nope!');
     });
-
   });
 
   describe('Periodic notification sending', () => {
@@ -1196,10 +1405,7 @@ describe('API Server', () => {
 
       const docsNew = await dbContainer.viewModelDb('mobile').find({
         selector: {
-          $and: [
-            { timestamp: { $gt: 1000 } },
-            { timestamp: { $lt: 9999999 } },
-          ],
+          $and: [{ timestamp: { $gt: 1000 } }, { timestamp: { $lt: 9999999 } }],
         },
       });
 
@@ -1209,35 +1415,46 @@ describe('API Server', () => {
   });
 
   describe('GET /account', () => {
-
     it('Returns account', async () => {
-      const response = await rp.get(address + '/account',
-        {
-          resolveWithFullResponse: true, json: {},
+      const response = await rp
+        .get(address + '/account', {
+          resolveWithFullResponse: true,
+          json: {},
           auth: { username: 'some_other_user', password: 'asdfg' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(200);
       expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
-      expect(response.body.account).to.deep.equal(
-        {...createEmptyAccount(), _id: '00002', login: 'some_other_user', password: 'asdfg', foo: 'bar' });
+      expect(response.body.account).to.deep.equal({
+        ...createEmptyAccount(),
+        _id: '00002',
+        login: 'some_other_user',
+        password: 'asdfg',
+        foo: 'bar',
+      });
     });
 
     it('Return 401 if wrong password', async () => {
-      const response = await rp.get(address + '/account',
-        {
-          resolveWithFullResponse: true, json: {}, simple: false,
+      const response = await rp
+        .get(address + '/account', {
+          resolveWithFullResponse: true,
+          json: {},
+          simple: false,
           auth: { username: 'some_other_user', password: '1111' },
-        }).promise();
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
     });
 
     it('Return 401 if no auth', async () => {
-      const response = await rp.get(address + '/account',
-        {
-          resolveWithFullResponse: true, json: {}, simple: false,
-        }).promise();
+      const response = await rp
+        .get(address + '/account', {
+          resolveWithFullResponse: true,
+          json: {},
+          simple: false,
+        })
+        .promise();
       expect(response.statusCode).to.eq(401);
     });
   });
-
 });

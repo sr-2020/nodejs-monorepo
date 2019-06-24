@@ -30,7 +30,7 @@ export function makeSilentRefreshNotificationPayload(): any {
     content_available: true,
     notId: uuid(),
     data: {
-      'refresh': true,
+      refresh: true,
       'content-available': 1,
     },
     priority: 'high',
@@ -39,30 +39,29 @@ export function makeSilentRefreshNotificationPayload(): any {
 
 export async function sendGenericPushNotification(id: string, payload: any): Promise<StatusAndBody> {
   try {
-    const pushToken = (await Container.get(DatabasesContainerToken).accountsDb().get(id)).pushToken;
-    if (!pushToken)
-      return { status: 404, body: 'No push token for this character' };
+    const pushToken = (await Container.get(DatabasesContainerToken)
+      .accountsDb()
+      .get(id)).pushToken;
+    if (!pushToken) return { status: 404, body: 'No push token for this character' };
 
     payload.to = pushToken;
 
     const fcmResponse = await rp.post('https://fcm.googleapis.com/fcm/send', {
-      resolveWithFullResponse: true, simple: false,
-      headers: { Authorization: 'key=' +  Container.get(ApplicationSettingsToken).pushSettings.serverKey },
+      resolveWithFullResponse: true,
+      simple: false,
+      headers: { Authorization: 'key=' + Container.get(ApplicationSettingsToken).pushSettings.serverKey },
       json: payload,
     });
     return { status: fcmResponse.statusCode, body: fcmResponse.body };
   } catch (e) {
-    if (IsNotFoundError(e))
-      return { status: 404, body: 'Character with such id or login is not found' };
-    Container.get(LoggerToken).error(
-      `Error while sending push notification via FCM: ${e}`, {characterId: id, source: 'api'});
+    if (IsNotFoundError(e)) return { status: 404, body: 'Character with such id or login is not found' };
+    Container.get(LoggerToken).error(`Error while sending push notification via FCM: ${e}`, { characterId: id, source: 'api' });
     throw e;
   }
 }
 
 export async function sendGenericPushNotificationThrowOnError(id: string, payload: any): Promise<string> {
   const statusAndBody = await sendGenericPushNotification(id, payload);
-  if (statusAndBody.status != 200)
-    throw new HttpError(statusAndBody.status, statusAndBody.body);
+  if (statusAndBody.status != 200) throw new HttpError(statusAndBody.status, statusAndBody.body);
   return statusAndBody.body;
 }

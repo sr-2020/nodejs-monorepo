@@ -19,17 +19,13 @@ export function convertAliceModel(character: CharacterParser): ConversionResults
 
 class AliceModelConverter {
   public conversionProblems: string[] = [];
-  constructor(
-    private character: CharacterParser,
-  ) {
-
-  }
+  constructor(private character: CharacterParser) {}
 
   public convert(): ConversionResults {
-      return {
-        problems: this.conversionProblems,
-        ...this.convertModelImpl(),
-      };
+    return {
+      problems: this.conversionProblems,
+      ...this.convertModelImpl(),
+    };
   }
 
   private convertModelImpl() {
@@ -95,15 +91,12 @@ class AliceModelConverter {
     checkAccess(8499, 'mst');
 
     return companies;
-
   }
 
   private getCompanyAccess() {
-    return this.getCompanies().map(
-      (company) => {
-        return { companyName: company, isTopManager: this.character.partOfGroup(9906) };
-      },
-    );
+    return this.getCompanies().map((company) => {
+      return { companyName: company, isTopManager: this.character.partOfGroup(9906) };
+    });
   }
 
   private getPlanetAndGenome(planetFieldId: number) {
@@ -114,10 +107,7 @@ class AliceModelConverter {
       this.conversionProblems.push(`Missing required field homeworld (${planetFieldId})`);
       return { planet: '', systems: [] };
     } else {
-      const nucleotides =
-        planetProgrammaticValue
-          .split(' ', 7)
-          .map((sp) => Number.parseInt(sp, 10));
+      const nucleotides = planetProgrammaticValue.split(' ', 7).map((sp) => Number.parseInt(sp, 10));
 
       const systems: System[] = [];
       nucleotides.forEach((element, index) => {
@@ -130,7 +120,7 @@ class AliceModelConverter {
 
   private getLogin() {
     // Защита от цифрового логина
-    const login = this.character.joinStrFieldValue(3631) || ('user' + this.character.characterId);
+    const login = this.character.joinStrFieldValue(3631) || 'user' + this.character.characterId;
 
     if (!login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || login.match(/^\d+$/i)) {
       this.conversionProblems.push(`Incorrect login ${login}`);

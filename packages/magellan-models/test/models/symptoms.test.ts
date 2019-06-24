@@ -29,7 +29,7 @@ describe('Symptoms helper', () => {
 
   it('getSymptoms - all symptoms different', () => {
     const model = getExampleBiologicalOrganismModel();
-    model.systems =  [
+    model.systems = [
       makeSystem(1, 2),
       makeSystem(5, 2),
       makeSystem(-1, 2),
@@ -39,13 +39,13 @@ describe('Symptoms helper', () => {
       makeSystem(3, -4),
     ];
     expect(getSymptoms(model)).to.deep.equal(
-      new Set<Symptoms>(
-        [Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling, Symptoms.NailsDarkening]));
+      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling, Symptoms.NailsDarkening]),
+    );
   });
 
   it('getSymptoms - some symptoms same', () => {
     const model = getExampleBiologicalOrganismModel();
-    model.systems =  [
+    model.systems = [
       makeSystem(-6, 2),
       makeSystem(5, 2),
       makeSystem(-1, 2),
@@ -55,12 +55,13 @@ describe('Symptoms helper', () => {
       makeSystem(1, -4),
     ];
     expect(getSymptoms(model)).to.deep.equal(
-      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling]));
+      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling]),
+    );
   });
 
   it('getSymptoms - death+', () => {
     const model = getExampleBiologicalOrganismModel();
-    model.systems =  [
+    model.systems = [
       makeSystem(2, 2),
       makeSystem(9, 1),
       makeSystem(-1, 2),
@@ -69,13 +70,12 @@ describe('Symptoms helper', () => {
       makeSystem(-5, -4),
       makeSystem(1, -4),
     ];
-    expect(getSymptoms(model)).to.deep.equal(
-      new Set<Symptoms>([Symptoms.Death]));
+    expect(getSymptoms(model)).to.deep.equal(new Set<Symptoms>([Symptoms.Death]));
   });
 
   it('getSymptoms - death-', () => {
     const model = getExampleBiologicalOrganismModel();
-    model.systems =  [
+    model.systems = [
       makeSystem(-8, 2),
       makeSystem(5, 1),
       makeSystem(-1, 2),
@@ -84,7 +84,6 @@ describe('Symptoms helper', () => {
       makeSystem(-5, -4),
       makeSystem(1, -4),
     ];
-    expect(getSymptoms(model)).to.deep.equal(
-      new Set<Symptoms>([Symptoms.Death]));
+    expect(getSymptoms(model)).to.deep.equal(new Set<Symptoms>([Symptoms.Death]));
   });
 });

@@ -3,12 +3,12 @@ import { QrData } from './qr.types';
 
 export class FormatError implements Error {
   public name: string = 'FormatError';
-  constructor(public message: string) { }
+  constructor(public message: string) {}
 }
 
 export class ValidationError implements Error {
   public name: string = 'ValidationError';
-  constructor(public message: string) { }
+  constructor(public message: string) {}
 }
 
 function uint16LESignature(data: string): number {
@@ -19,8 +19,7 @@ function uint16LESignature(data: string): number {
 }
 
 export function decode(content: string): QrData {
-  if (content.length < 12)
-    throw new FormatError('Format Error: QR code content should contain 12 character header');
+  if (content.length < 12) throw new FormatError('Format Error: QR code content should contain 12 character header');
 
   try {
     const signatureBuffer = Buffer.from(content.slice(0, 4), 'hex');
@@ -30,8 +29,7 @@ export function decode(content: string): QrData {
     const validUntil = contentBuffer.readUInt32LE(2);
     const signature = signatureBuffer.readUInt16LE(0);
     const expectedSignature = uint16LESignature(contentBuffer + content.slice(12));
-    if (signature != expectedSignature)
-      throw new ValidationError('Validation Error: Invalid signature');
+    if (signature != expectedSignature) throw new ValidationError('Validation Error: Invalid signature');
     return { type: type, kind: kind, validUntil: validUntil, payload: content.slice(12) };
   } catch (e) {
     if (e instanceof RangeError) {

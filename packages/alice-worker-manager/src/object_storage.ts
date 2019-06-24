@@ -13,18 +13,19 @@ export class ObjectStorage implements ObjectStorageInterface {
   private storage: {
     [db: string]: {
       [id: string]: {
-        lockId: number,
-        obj: Document | null | undefined,
-      },
-    },
+        lockId: number;
+        obj: Document | null | undefined;
+      };
+    };
   } = {};
 
   private nextId: number = 0;
 
-  constructor(private config: Config,
-              private dbConnector: DBConnectorInterface) { }
+  constructor(private config: Config, private dbConnector: DBConnectorInterface) {}
 
-  public newId() { return this.nextId++; }
+  public newId() {
+    return this.nextId++;
+  }
 
   public async aquire(lockId: number, keys: Array<[string, string]>) {
     const result: { [db: string]: { [id: string]: Document } } = {};
@@ -49,7 +50,9 @@ export class ObjectStorage implements ObjectStorageInterface {
       });
     });
 
-    return Promise.all(flatten(pending)).then(() => { /* pass */ });
+    return Promise.all(flatten(pending)).then(() => {
+      /* pass */
+    });
   }
 
   public release(lockId: number) {

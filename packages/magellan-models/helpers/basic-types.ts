@@ -49,8 +49,7 @@ export function systemCorrespondsToColor(color: SystemColor, system: BiologicalS
 
 export function colorOfChange(model: OrganismModel, change: number[]): SystemColor | undefined {
   const systemsAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>();
-  const systemsNotAffected: Set<BiologicalSystems> =
-    new Set<BiologicalSystems>(organismSystemsIndices(model));
+  const systemsNotAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>(organismSystemsIndices(model));
   organismSystemsIndices(model).forEach((i) => {
     if (change[i] != 0) {
       systemsAffected.add(i);
@@ -65,9 +64,11 @@ export function colorOfChange(model: OrganismModel, change: number[]): SystemCol
   });
 
   for (const color of colorsSeen) {
-    if (Array.from(systemsAffected).every((system) => systemCorrespondsToColor(color, system)) &&
-        !Array.from(systemsNotAffected).some((system) => systemCorrespondsToColor(color, system)))
-        return color;
+    if (
+      Array.from(systemsAffected).every((system) => systemCorrespondsToColor(color, system)) &&
+      !Array.from(systemsNotAffected).some((system) => systemCorrespondsToColor(color, system))
+    )
+      return color;
   }
 
   return undefined;
@@ -75,18 +76,15 @@ export function colorOfChange(model: OrganismModel, change: number[]): SystemCol
 
 export function allSystemsIndices(): number[] {
   const result: number[] = [];
-  for (const system in BiologicalSystems)
-    if (!isNaN(Number(system)))
-      result.push(Number(system));
+  for (const system in BiologicalSystems) if (!isNaN(Number(system))) result.push(Number(system));
 
   return result;
 }
 
 export function organismSystemsIndices(model: OrganismModel): number[] {
   return allSystemsIndices().filter(
-    (i) => model.systems[i].present
-    &&  model.systems[i].nucleotide != null
-    && model.systems[i].nucleotide != undefined);
+    (i) => model.systems[i].present && model.systems[i].nucleotide != null && model.systems[i].nucleotide != undefined,
+  );
 }
 
 export interface XenoDisease {
@@ -152,8 +150,8 @@ export enum QrType {
   Implant = 2,
   InstantEffect = 3,
 
-  MagellanPill = 4,  // payload should be of [1,2,3,4,5,6] kind
-  EnterShip = 5,     // payload should contain ship id (number)
+  MagellanPill = 4, // payload should be of [1,2,3,4,5,6] kind
+  EnterShip = 5, // payload should contain ship id (number)
   LeaveShip = 6,
 
   SpaceSuitRefill = 7, // payload is <unique id>,<time in minutes>

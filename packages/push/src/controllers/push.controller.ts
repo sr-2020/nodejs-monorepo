@@ -1,14 +1,9 @@
-import {repository} from '@loopback/repository';
-import {put, requestBody, param, post} from '@loopback/rest';
-import {FirebaseTokenRepository} from '../repositories';
-import {
-  Empty,
-  FirebaseToken,
-  PushResult,
-  PushNotification,
-} from '@sr2020/interface/models';
-import {FirebaseMessagingService} from '../services';
-import {inject} from '@loopback/core';
+import { repository } from '@loopback/repository';
+import { put, requestBody, param, post } from '@loopback/rest';
+import { FirebaseTokenRepository } from '../repositories';
+import { Empty, FirebaseToken, PushResult, PushNotification } from '@sr2020/interface/models';
+import { FirebaseMessagingService } from '../services';
+import { inject } from '@loopback/core';
 
 export class PushController {
   constructor(
@@ -22,16 +17,13 @@ export class PushController {
     responses: {
       '200': {
         description: 'Token was successfully saved',
-        content: {'application/json': {schema: {'x-ts-type': Empty}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
       },
     },
   })
   async saveToken(@requestBody() firebaseToken: FirebaseToken): Promise<Empty> {
     try {
-      await this.firebaseTokenRepository.replaceById(
-        firebaseToken.id,
-        firebaseToken,
-      );
+      await this.firebaseTokenRepository.replaceById(firebaseToken.id, firebaseToken);
     } catch {
       await this.firebaseTokenRepository.create(firebaseToken);
     }
@@ -42,24 +34,16 @@ export class PushController {
     responses: {
       '200': {
         description: 'Successfully send notification',
-        content: {'application/json': {schema: {'x-ts-type': PushResult}}},
+        content: { 'application/json': { schema: { 'x-ts-type': PushResult } } },
       },
     },
   })
-  async test(
-    @param.path.number('id') id: number,
-    @requestBody() notification: PushNotification,
-  ): Promise<PushResult> {
+  async test(@param.path.number('id') id: number, @requestBody() notification: PushNotification): Promise<PushResult> {
     if (!(await this.firebaseTokenRepository.exists(id))) {
-      return new PushResult({success: 0, failure: 1});
+      return new PushResult({ success: 0, failure: 1 });
     }
-    const receiverToken = (await this.firebaseTokenRepository.findById(id))
-      .token!!;
-    const sendResult = await this.firebaseService.send(
-      receiverToken,
-      notification.title,
-      notification.body,
-    );
-    return new PushResult({...sendResult, token_used: receiverToken});
+    const receiverToken = (await this.firebaseTokenRepository.findById(id)).token!!;
+    const sendResult = await this.firebaseService.send(receiverToken, notification.title, notification.body);
+    return new PushResult({ ...sendResult, token_used: receiverToken });
   }
 }

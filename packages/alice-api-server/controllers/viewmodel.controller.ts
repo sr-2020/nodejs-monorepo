@@ -7,7 +7,6 @@ import { AliceAccount } from '../models/alice-account';
 
 @JsonController()
 export class ViewModelController {
-
   @Get('/viewmodel/:type/:id')
   public async get(@CurrentUser() user: AliceAccount, @Param('type') type: string, @Param('id') id: string) {
     try {
@@ -18,7 +17,7 @@ export class ViewModelController {
       if (!db) {
         throw new NotFoundError('Viewmodel type is not found');
       } else {
-        const doc = (await db.get(id));
+        const doc = await db.get(id);
         delete doc._id;
         delete doc._rev;
         return {

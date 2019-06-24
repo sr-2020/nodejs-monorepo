@@ -7,8 +7,15 @@ import { PouchConnector } from '../db/pouch';
 import { delay } from '../utils';
 import { getAllDesignDocs } from './design_docs_helper';
 import {
-  createAccount, createBalanceRecord, createDbIfNotExists, createModel,
-  createViewModel, dbName, deepToString, importCatalogs, updateIfDifferent,
+  createAccount,
+  createBalanceRecord,
+  createDbIfNotExists,
+  createModel,
+  createViewModel,
+  dbName,
+  deepToString,
+  importCatalogs,
+  updateIfDifferent,
 } from './util';
 
 const cli = meow(`
@@ -28,25 +35,29 @@ const config = require(CONFIG_PATH) as Config;
 const connector = new PouchConnector(config);
 
 const databasesNames: string[] = [
-  '_global_changes', '_metadata', '_replicator', '_users',
-  config.db.events, config.db.models, config.db.workingModels, config.db.accounts, config.db.economy,
+  '_global_changes',
+  '_metadata',
+  '_replicator',
+  '_users',
+  config.db.events,
+  config.db.models,
+  config.db.workingModels,
+  config.db.accounts,
+  config.db.economy,
 ];
 
-if (config.catalogs && ('db' in config.catalogs)) {
+if (config.catalogs && 'db' in config.catalogs) {
   const dbMappingConfig = (config.catalogs as CatalogsConfigDb).db;
   // tslint:disable-next-line:no-shadowed-variable
-  for (const databaseName in dbMappingConfig)
-    databasesNames.push(dbMappingConfig[databaseName]);
+  for (const databaseName in dbMappingConfig) databasesNames.push(dbMappingConfig[databaseName]);
 }
 
 if (config.viewModels) {
-  for (const databaseName in config.viewModels)
-    databasesNames.push(config.viewModels[databaseName]);
+  for (const databaseName in config.viewModels) databasesNames.push(config.viewModels[databaseName]);
 }
 
 if (config.objects) {
-  for (const databaseName in config.objects)
-    databasesNames.push(config.objects[databaseName]);
+  for (const databaseName in config.objects) databasesNames.push(config.objects[databaseName]);
 }
 
 console.log('Following DBs should be present:');
@@ -66,10 +77,9 @@ async function dropEventsDb(): Promise<void> {
 
 export async function createDesignDoc(doc: any): Promise<void> {
   const dbNames = doc.dbs;
-  delete (doc.dbs);
+  delete doc.dbs;
   const designDocFunctionsStringified = deepToString(doc);
-  await Promise.all(dbNames.map(
-    (alias) => updateIfDifferent(getDatabase(dbName(config, alias)), designDocFunctionsStringified)));
+  await Promise.all(dbNames.map((alias) => updateIfDifferent(getDatabase(dbName(config, alias)), designDocFunctionsStringified)));
 }
 
 async function createDesignDocs(): Promise<void> {
@@ -89,9 +99,9 @@ const dataSamplePath = path.join(process.cwd(), config.pool.workerArgs[0], '..',
 async function createHumanSampleData() {
   const modelTemplate = require(path.join(dataSamplePath, 'model.json'));
   const viewModelTemplate = require(path.join(dataSamplePath, 'view-model.json'));
-  console.log(`Using following templates:\n` +
-    `model=${JSON.stringify(modelTemplate)}\n` +
-    `viewmodel=${JSON.stringify(viewModelTemplate)}`);
+  console.log(
+    `Using following templates:\n` + `model=${JSON.stringify(modelTemplate)}\n` + `viewmodel=${JSON.stringify(viewModelTemplate)}`,
+  );
   for (let index = 0; index < 150; ++index) {
     await Promise.all([
       createAccount(getDatabase(config.db.accounts), index),
@@ -106,9 +116,11 @@ async function createHumanSampleData() {
 async function createMedicSampleData() {
   const medicModelTemplate = require(path.join(dataSamplePath, 'medic-model.json'));
   const medicViewModelTemplate = require(path.join(dataSamplePath, 'medic-view-model.json'));
-  console.log(`Using following templates:\n` +
-    `medic-model=${JSON.stringify(medicModelTemplate)}\n` +
-    `medic-viewmodel=${JSON.stringify(medicViewModelTemplate)}`);
+  console.log(
+    `Using following templates:\n` +
+      `medic-model=${JSON.stringify(medicModelTemplate)}\n` +
+      `medic-viewmodel=${JSON.stringify(medicViewModelTemplate)}`,
+  );
   for (let index = 1000; index < 1010; ++index) {
     await Promise.all([
       createAccount(getDatabase(config.db.accounts), index),

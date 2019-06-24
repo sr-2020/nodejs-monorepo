@@ -1,23 +1,7 @@
-import {
-  Count,
-  CountSchema,
-  Filter,
-  repository,
-  Where,
-} from '@loopback/repository';
-import {
-  post,
-  param,
-  get,
-  getFilterSchemaFor,
-  getWhereSchemaFor,
-  patch,
-  put,
-  del,
-  requestBody,
-} from '@loopback/rest';
-import {Transaction} from '@sr2020/interface/models';
-import {TransactionRepository} from '../repositories';
+import { Count, CountSchema, Filter, repository, Where } from '@loopback/repository';
+import { post, param, get, getFilterSchemaFor, getWhereSchemaFor, patch, put, del, requestBody } from '@loopback/rest';
+import { Transaction } from '@sr2020/interface/models';
+import { TransactionRepository } from '../repositories';
 
 export class TransactionController {
   constructor(
@@ -29,7 +13,7 @@ export class TransactionController {
     responses: {
       '200': {
         description: 'Transaction model instance',
-        content: {'application/json': {schema: {'x-ts-type': Transaction}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Transaction } } },
       },
     },
   })
@@ -41,7 +25,7 @@ export class TransactionController {
     responses: {
       '200': {
         description: 'Transaction model count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -58,7 +42,7 @@ export class TransactionController {
         description: 'Array of Transaction model instances',
         content: {
           'application/json': {
-            schema: {type: 'array', items: {'x-ts-type': Transaction}},
+            schema: { type: 'array', items: { 'x-ts-type': Transaction } },
           },
         },
       },
@@ -75,7 +59,7 @@ export class TransactionController {
     responses: {
       '200': {
         description: 'Transaction PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
+        content: { 'application/json': { schema: CountSchema } },
       },
     },
   })
@@ -91,7 +75,7 @@ export class TransactionController {
     responses: {
       '200': {
         description: 'Transaction model instance',
-        content: {'application/json': {schema: {'x-ts-type': Transaction}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Transaction } } },
       },
     },
   })
@@ -106,10 +90,7 @@ export class TransactionController {
       },
     },
   })
-  async updateById(
-    @param.path.number('id') id: number,
-    @requestBody() transaction: Transaction,
-  ): Promise<void> {
+  async updateById(@param.path.number('id') id: number, @requestBody() transaction: Transaction): Promise<void> {
     await this.transactionRepository.updateById(id, transaction);
   }
 
@@ -120,10 +101,7 @@ export class TransactionController {
       },
     },
   })
-  async replaceById(
-    @param.path.number('id') id: number,
-    @requestBody() transaction: Transaction,
-  ): Promise<void> {
+  async replaceById(@param.path.number('id') id: number, @requestBody() transaction: Transaction): Promise<void> {
     await this.transactionRepository.replaceById(id, transaction);
   }
 

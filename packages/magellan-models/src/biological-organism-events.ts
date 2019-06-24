@@ -1,21 +1,26 @@
 import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'alice-model-engine-api';
 import uuid = require('uuid/v1');
-import { allSystemsIndices, colorOfChange, getTypedOrganismModel,
-  OrganismModel, organismSystemsIndices, SystemColor,
-  systemCorrespondsToColor, XenoDisease } from '../helpers/basic-types';
+import {
+  allSystemsIndices,
+  colorOfChange,
+  getTypedOrganismModel,
+  OrganismModel,
+  organismSystemsIndices,
+  SystemColor,
+  systemCorrespondsToColor,
+  XenoDisease,
+} from '../helpers/basic-types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
 
 function updateIsAlive(model: OrganismModel) {
-  if (getSymptoms(model).has(Symptoms.Death))
-    model.isAlive = false;
+  if (getSymptoms(model).has(Symptoms.Death)) model.isAlive = false;
 }
 
 function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
   const model = getTypedOrganismModel(api);
-  if (!model.isAlive)
-    return;
+  if (!model.isAlive) return;
 
   helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
 
@@ -31,8 +36,7 @@ function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Eve
 
 function modifyNucleotideInstant(api: ModelApiInterface, data: number[], _event: Event) {
   const model = getTypedOrganismModel(api);
-  if (!model.isAlive)
-    return;
+  if (!model.isAlive) return;
 
   for (const i of organismSystemsIndices(model)) {
     if (data[i] != 0) {
@@ -81,13 +85,10 @@ interface MutationData {
 function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
   const model = getTypedOrganismModel(api);
 
-  if (!model.isAlive)
-    return;
+  if (!model.isAlive) return;
 
   for (const i of organismSystemsIndices(model)) {
-    if (!systemCorrespondsToColor(data.color, i) &&
-      model.systems[i].lastModified >= data.diseaseStartTimestamp)
-      return; // Cancel mutation due to the change in the system of incompatible color
+    if (!systemCorrespondsToColor(data.color, i) && model.systems[i].lastModified >= data.diseaseStartTimestamp) return; // Cancel mutation due to the change in the system of incompatible color
   }
 
   for (const i of organismSystemsIndices(model)) {
@@ -157,7 +158,9 @@ function leaveShip(api: ModelApiInterface, _data: null, _event: Event) {
 
 function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
   const c: Condition = {
-    mID: uuid(), id: 'on-the-ship', class: 'physiology',
+    mID: uuid(),
+    id: 'on-the-ship',
+    class: 'physiology',
     text: `Вы находитесь на корабле номер ${modifier.shipId}`,
   };
   api.addCondition(c);
@@ -177,8 +180,10 @@ function spaceSuitRefill(api: ModelApiInterface, data: SpaceSuitRefillData, even
   }
 
   if (counter.usedBy) {
-    api.warn('spaceSuitRefill: already used space suit refill code. Cheaters gonna cheat?',
-      { terminalId: api.model._id, uniqueId: data.uniqueId });
+    api.warn('spaceSuitRefill: already used space suit refill code. Cheaters gonna cheat?', {
+      terminalId: api.model._id,
+      uniqueId: data.uniqueId,
+    });
     return;
   }
 
@@ -195,8 +200,7 @@ function spaceSuitRefill(api: ModelApiInterface, data: SpaceSuitRefillData, even
 }
 
 function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, event: Event) {
-  if (!getTypedOrganismModel(api).spaceSuit.on)
-    return;
+  if (!getTypedOrganismModel(api).spaceSuit.on) return;
 
   getTypedOrganismModel(api).spaceSuit.on = false;
   api.removeTimer('spacesuit');
@@ -211,8 +215,7 @@ function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, eve
 
 function fullRollback(api: ModelApiInterface, _: any, event: Event) {
   const m = getTypedOrganismModel(api);
-  for (const i of allSystemsIndices())
-    m.systems[i].value = 0;
+  for (const i of allSystemsIndices()) m.systems[i].value = 0;
   api.model.timers = {};
   helpers.addChangeRecord(api, 'Извините за баги :(', event.timestamp);
 }

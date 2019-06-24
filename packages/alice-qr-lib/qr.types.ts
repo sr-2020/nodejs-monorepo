@@ -5,11 +5,11 @@ export enum QrType {
   Implant = 2,
   InstantEffect = 3,
 
-  MagellanPill = 4,  // payload should be of [1,2,3,4,5,6] kind
-  EnterShip = 5,     // payload should contain ship id (number)
+  MagellanPill = 4, // payload should be of [1,2,3,4,5,6] kind
+  EnterShip = 5, // payload should contain ship id (number)
   LeaveShip = 6,
 
-  Bill = 7,          // payload is <recipient>,<amount>[,<comment>]
+  Bill = 7, // payload is <recipient>,<amount>[,<comment>]
   SpaceSuitTakeOff = 8, // payload is life support system disinfection power
 
   // Payload is 1,2,3,0,1,2,0,26 where first 7 numbers are systems influce,

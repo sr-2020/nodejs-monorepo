@@ -33,8 +33,7 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
     case QrType.SpaceSuitRefill:
       {
         const [uniqueId, time] = data.payload.split(',');
-        api.sendEvent(null, 'space-suit-refill',
-          { uniqueId, time: Number(time) });
+        api.sendEvent(null, 'space-suit-refill', { uniqueId, time: Number(time) });
       }
       break;
 
@@ -65,14 +64,15 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
 
 function aquireDocuments(api: PreprocessApiInterface, events: Event[]) {
   events
-    .filter((event) => event.eventType == 'scanQr' &&
-      (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill))
+    .filter(
+      (event) => event.eventType == 'scanQr' && (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill),
+    )
     .forEach((event) => api.aquire('counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
 
-    events
+  events
     .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.EnterShip)
     .forEach((event) => api.aquire('counters', `ship_${Number(event.data.payload)}`));
-  }
+}
 
 module.exports = {
   _preprocess: aquireDocuments,

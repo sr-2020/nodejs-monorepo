@@ -42,8 +42,7 @@ class App {
         const receiver: string = req.query.receiver;
         const amount: string = req.query.amount;
         const comment: string = req.query.comment;
-        const content = encode({type: QrType.Bill, kind: 0, validUntil: 1700000000,
-          payload: [receiver, amount, comment].join(',')});
+        const content = encode({ type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: [receiver, amount, comment].join(',') });
         res.redirect(
           // tslint:disable-next-line:max-line-length
           `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=10&margin=1&size=300x300&ecc=L`,
@@ -55,8 +54,7 @@ class App {
     });
 
     const auth = (req: express.Request, res: express.Response, next: any) => {
-      if (!this._user)
-        return next();
+      if (!this._user) return next();
       const credentials = basic_auth(req);
       if (credentials && credentials.name == this._user && credentials.pass == this._password) {
         return next();
@@ -79,11 +77,12 @@ class App {
       try {
         const data = QrDataFromQuery(req.query);
         console.log(JSON.stringify(data));
-        if (!data.validUntil)
-          data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
+        if (!data.validUntil) data.validUntil = new Date().valueOf() / 1000 + 300 /* valid for 5 minutes from now */;
         res.redirect(
           // tslint:disable-next-line:max-line-length
-          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(data)}&qzone=10&margin=0&size=300x300&ecc=L&format=svg`,
+          `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${encode(
+            data,
+          )}&qzone=10&margin=0&size=300x300&ecc=L&format=svg`,
         );
       } catch (e) {
         console.warn('exception in /encode: ', e);
@@ -129,8 +128,7 @@ class App {
   }
 
   public stop() {
-    if (this.server)
-      this.server.close();
+    if (this.server) this.server.close();
   }
 }
 

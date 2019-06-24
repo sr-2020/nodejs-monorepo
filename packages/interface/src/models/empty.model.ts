@@ -1,4 +1,4 @@
-import {Model, model} from '@loopback/repository';
+import { Model, model } from '@loopback/repository';
 
 @model()
 export class Empty extends Model {

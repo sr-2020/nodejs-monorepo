@@ -1,7 +1,7 @@
-import {Client, expect} from '@loopback/testlab';
-import {PushApplication} from '../../application';
-import {setupApplication} from './test-helper';
-import {FirebaseTokenRepository} from '../../repositories';
+import { Client, expect } from '@loopback/testlab';
+import { PushApplication } from '../../application';
+import { setupApplication } from './test-helper';
+import { FirebaseTokenRepository } from '../../repositories';
 
 describe('TokenController', () => {
   let app: PushApplication;
@@ -9,7 +9,7 @@ describe('TokenController', () => {
   let repo: FirebaseTokenRepository;
 
   beforeEach('setupApplication', async () => {
-    ({app, client} = await setupApplication());
+    ({ app, client } = await setupApplication());
     repo = await app.getRepository(FirebaseTokenRepository);
   });
 
@@ -35,7 +35,7 @@ describe('TokenController', () => {
   });
 
   it('Save token for existing ID', async () => {
-    await repo.create({id: 10, token: 'foo'});
+    await repo.create({ id: 10, token: 'foo' });
 
     await client
       .put('/save_token')

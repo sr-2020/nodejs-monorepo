@@ -41,7 +41,7 @@ export class OutboundEvents {
 
 export interface AquiredObjects {
   [db: string]: {
-    [id: string]: any,
+    [id: string]: any;
   };
 }
 
@@ -84,7 +84,9 @@ export class Context {
     this.sortEvents();
   }
 
-  get ctx() { return this._ctx; }
+  get ctx() {
+    return this._ctx;
+  }
 
   get timers(): Timers {
     return _.get(this._ctx, 'timers', {});
@@ -134,8 +136,7 @@ export class Context {
   }
 
   public clone(): Context {
-    const clone = new Context(this._ctx, this._events, this._dictionaries,
-      this._outboundEvents, this._pendingAquire, this._aquired);
+    const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
     clone.timers = this.timers;
     return clone;
   }
@@ -146,7 +147,10 @@ export class Context {
 
   public setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
     const timer = {
-      name, miliseconds, eventType, data,
+      name,
+      miliseconds,
+      eventType,
+      data,
     };
     if (!this._ctx.timers) this._ctx.timers = {};
     this._ctx.timers[timer.name] = timer;
@@ -172,11 +176,15 @@ export class Context {
   }
 
   public nextTimer(): Timer | null {
-    return _.reduce(this.timers, (current: Timer | null, t) => {
-      if (!current) return t;
-      if (current.miliseconds > t.miliseconds) return t;
-      return current;
-    }, null);
+    return _.reduce(
+      this.timers,
+      (current: Timer | null, t) => {
+        if (!current) return t;
+        if (current.miliseconds > t.miliseconds) return t;
+        return current;
+      },
+      null,
+    );
   }
 
   public nextEvent(): Event | undefined {
@@ -185,7 +193,7 @@ export class Context {
     const firstTimer = this.nextTimer();
     const firstEvent = this._events[0];
 
-    if (firstTimer && (this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp)) {
+    if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
       delete this._ctx.timers[firstTimer.name];
       return this.timerEvent(firstTimer);
     } else {

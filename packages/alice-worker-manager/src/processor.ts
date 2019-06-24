@@ -23,9 +23,9 @@ export function processorFactory(
   workingModelStorage: ModelStorageBase,
   viewModelStorage: ViewModelStorage,
   objectStorage: ObjectStorageInterface,
-  logger: LoggerInterface): ProcessorFactory {
-  return () => new Processor(config, pool, eventStorage, modelStorage,
-    workingModelStorage, viewModelStorage, objectStorage, logger);
+  logger: LoggerInterface,
+): ProcessorFactory {
+  return () => new Processor(config, pool, eventStorage, modelStorage, workingModelStorage, viewModelStorage, objectStorage, logger);
 }
 
 export class Processor {
@@ -41,7 +41,7 @@ export class Processor {
     private viewModelStorage: ViewModelStorage,
     private objectStorage: ObjectStorageInterface,
     private logger: LoggerInterface,
-  ) { }
+  ) {}
 
   public acceptingEvents(): boolean {
     return this.state == 'New' || this.state == 'Waiting for worker';
@@ -55,40 +55,49 @@ export class Processor {
   }
 
   public async run(): Promise<SyncRequest> {
-    this.logger.info('manager', 'Started processing model',
-      { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
+    this.logger.info('manager', 'Started processing model', {
+      characterId: this.event.characterId,
+      eventTimestamp: this.event.scheduledUpdateTimestamp,
+    });
     this.state = 'Waiting for worker';
 
     try {
       await this.pool.withWorker(async (worker: Worker) => {
         this.state = 'Processing';
 
-        this.logger.info('manager', 'Worker aquired',
-          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
+        this.logger.info('manager', 'Worker aquired', {
+          characterId: this.event.characterId,
+          eventTimestamp: this.event.scheduledUpdateTimestamp,
+        });
         const characterId = this.event.characterId;
         const model = await this.modelStorage.find(characterId);
 
         if (model.timestamp > this.event.scheduledUpdateTimestamp) return;
 
-        const events = (await this.eventStorage.range(characterId,
-          model.timestamp + 1, this.event.scheduledUpdateTimestamp))
-          .filter((event) => event.eventType[0] != '_');
+        const events = (await this.eventStorage.range(characterId, model.timestamp + 1, this.event.scheduledUpdateTimestamp)).filter(
+          (event) => event.eventType[0] != '_',
+        );
 
-        events.push(
-          { characterId: this.event.characterId, eventType: '_NoOp', timestamp: this.event.scheduledUpdateTimestamp });
+        events.push({ characterId: this.event.characterId, eventType: '_NoOp', timestamp: this.event.scheduledUpdateTimestamp });
 
-        this.logger.debug('manager', 'Processing following events',
-          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp, events });
+        this.logger.debug('manager', 'Processing following events', {
+          characterId: this.event.characterId,
+          eventTimestamp: this.event.scheduledUpdateTimestamp,
+          events,
+        });
 
         const objectStorage = new BoundObjectStorage(this.objectStorage);
         const result: EngineResult = await worker.process(objectStorage, this.event, model, events);
 
-        this.logger.info('manager',
-          'Finished processing model',
-          { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
-        this.logger.debug('manager',
-          'Result of model processing',
-          { result, characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
+        this.logger.info('manager', 'Finished processing model', {
+          characterId: this.event.characterId,
+          eventTimestamp: this.event.scheduledUpdateTimestamp,
+        });
+        this.logger.debug('manager', 'Result of model processing', {
+          result,
+          characterId: this.event.characterId,
+          eventTimestamp: this.event.scheduledUpdateTimestamp,
+        });
 
         if (result.status == 'ok') {
           const { baseModel, workingModel, viewModels, outboundEvents, aquired } = result;
@@ -105,11 +114,12 @@ export class Processor {
               this.storeAquiredObjects(objectStorage, aquired),
             ]);
 
-            await this.eventStorage.removeOlderThan(characterId,
-              baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
+            await this.eventStorage.removeOlderThan(characterId, baseModel.timestamp - this.config.processor.deleteEventsOlderThanMs);
 
-            this.logger.info('manager', 'All data stored',
-              { characterId: this.event.characterId, eventTimestamp: this.event.scheduledUpdateTimestamp });
+            this.logger.info('manager', 'All data stored', {
+              characterId: this.event.characterId,
+              eventTimestamp: this.event.scheduledUpdateTimestamp,
+            });
           } finally {
             objectStorage.release();
           }

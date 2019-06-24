@@ -26,11 +26,11 @@ interface ScanQrRequest {
 export class MedicController {
   @Post('/medic/run_lab_tests/:id')
   public async runLabTests(
-     @CurrentUser() user: AliceAccount,
-     @Param('id') id: string,
-     @Body() req: RunLabTestsRequest,
-     @Res() res: express.Response,
-    ) {
+    @CurrentUser() user: AliceAccount,
+    @Param('id') id: string,
+    @Body() req: RunLabTestsRequest,
+    @Res() res: express.Response,
+  ) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -58,8 +58,12 @@ export class MedicController {
   }
 
   @Post('/medic/add_comment/:id')
-  public async addComment( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() req: AddCommentRequest,
-                           @Res() res: express.Response) {
+  public async addComment(
+    @CurrentUser() user: AliceAccount,
+    @Param('id') id: string,
+    @Body() req: AddCommentRequest,
+    @Res() res: express.Response,
+  ) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
@@ -68,14 +72,16 @@ export class MedicController {
       const model = await dbContainer.modelsDb().get(req.patientId);
 
       let timestamp = currentTimestamp();
-      const events: CharacterlessEvent[] = [{
-        eventType: 'medic-add-comment',
-        timestamp: timestamp++,
-        data: {
-          text: req.text,
-          model,
+      const events: CharacterlessEvent[] = [
+        {
+          eventType: 'medic-add-comment',
+          timestamp: timestamp++,
+          data: {
+            text: req.text,
+            model,
+          },
         },
-      }];
+      ];
 
       const s = await new EventsProcessor().process(id, { events, scheduledUpdateTimestamp: timestamp++ });
       res.status(s.status);
@@ -86,18 +92,24 @@ export class MedicController {
   }
 
   @Post('/medic/scan_qr/:id')
-  public async scanQr( @CurrentUser() user: AliceAccount, @Param('id') id: string, @Body() req: ScanQrRequest,
-                       @Res() res: express.Response) {
+  public async scanQr(
+    @CurrentUser() user: AliceAccount,
+    @Param('id') id: string,
+    @Body() req: ScanQrRequest,
+    @Res() res: express.Response,
+  ) {
     try {
       id = await canonicalId(id);
       await checkAccess(user, id);
 
       let timestamp = currentTimestamp();
-      const events: CharacterlessEvent[] = [{
-        eventType: 'scanQr',
-        timestamp: timestamp++,
-        data: req.data,
-      }];
+      const events: CharacterlessEvent[] = [
+        {
+          eventType: 'scanQr',
+          timestamp: timestamp++,
+          data: req.data,
+        },
+      ];
 
       const s = await new EventsProcessor().process(id, { events, scheduledUpdateTimestamp: timestamp++ });
       res.status(s.status);

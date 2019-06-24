@@ -1,7 +1,7 @@
-import {Client, expect} from '@loopback/testlab';
-import {BillingApplication} from '../../application';
-import {setupApplication} from './test-helper';
-import {TransactionRepository} from '../../repositories';
+import { Client, expect } from '@loopback/testlab';
+import { BillingApplication } from '../../application';
+import { setupApplication } from './test-helper';
+import { TransactionRepository } from '../../repositories';
 
 describe('AccountInfoController', () => {
   let app: BillingApplication;
@@ -9,7 +9,7 @@ describe('AccountInfoController', () => {
   let repo: TransactionRepository;
 
   beforeEach('setupApplication', async () => {
-    ({app, client} = await setupApplication());
+    ({ app, client } = await setupApplication());
     repo = await app.getRepository(TransactionRepository);
     await repo.deleteAll();
   });
@@ -64,10 +64,10 @@ describe('AccountInfoController', () => {
         sin: 123,
         balance: 873,
         history: [
-          {sin_from: 123, sin_to: 3, amount: 27},
-          {sin_from: 2, sin_to: 123, amount: 100},
-          {sin_from: 123, sin_to: 1, amount: 200},
-          {sin_from: 0, sin_to: 123, amount: 1000},
+          { sin_from: 123, sin_to: 3, amount: 27 },
+          { sin_from: 2, sin_to: 123, amount: 100 },
+          { sin_from: 123, sin_to: 1, amount: 200 },
+          { sin_from: 0, sin_to: 123, amount: 1000 },
         ],
       });
     });

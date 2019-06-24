@@ -152,38 +152,148 @@ export const symptomToRussian = new Map<Symptoms, string>([
 
 // tslint:disable:max-line-length
 export const systemToSymptoms = new Map<BiologicalSystems, Symptoms[]>([
-  [BiologicalSystems.Nervous,
-  [Symptoms.SevereHeadache, Symptoms.Faint, Symptoms.Tic, Symptoms.Headache, Symptoms.Dizziness, Symptoms.Dyspnea, Symptoms.Melancholy,
-  Symptoms.Jitters, Symptoms.FingertipsTingling, Symptoms.Convulsions, Symptoms.LimbNumbness, Symptoms.Tremor, Symptoms.InvoluntaryMovements, Symptoms.Hallucinations]],
-  [BiologicalSystems.Cardiovascular,
-  [Symptoms.LowBodyTemperature, Symptoms.HardToMove, Symptoms.Chills, Symptoms.Convulsions, Symptoms.HeartPain, Symptoms.Sleepiness, Symptoms.DimVision,
-  Symptoms.Thirst, Symptoms.Jitters, Symptoms.Faint, Symptoms.Nosebleeding, Symptoms.Tachycardia, Symptoms.HardToBreath, Symptoms.HighFever]],
-  [BiologicalSystems.Reproductive,
-  [Symptoms.ContinuousPainLowAbdomen, Symptoms.Chills, Symptoms.Pruritus, Symptoms.PainLowBack, Symptoms.Bloating, Symptoms.DimVision, Symptoms.PainPushRightAbdomen,
-  Symptoms.Weakness, Symptoms.Nausea, Symptoms.Thirst, Symptoms.Fever, Symptoms.Faint, Symptoms.PainLowBack, Symptoms.PainWhenMoving]],
-  [BiologicalSystems.Digestive,
-  [Symptoms.SharpAbdomenPain, Symptoms.Indigestion, Symptoms.Bloating, Symptoms.PainRightAbdomen, Symptoms.PainLeftAbdomen, Symptoms.Thirst, Symptoms.AbdomenDiscomfort,
-  Symptoms.AppetiteLoss, Symptoms.AbdomenTingling, Symptoms.PainRightAbdomen, Symptoms.Nausea, Symptoms.PainLowBack, Symptoms.Vomiting, Symptoms.ContinuousPainUpperAbdomen]],
-  [BiologicalSystems.Respiratory,
-  [Symptoms.Hemoptysis, Symptoms.Wheeze, Symptoms.Aphonia, Symptoms.HardToBreath, Symptoms.Cough, Symptoms.ThroatPain, Symptoms.SoreThroat,
-  Symptoms.Hiccough, Symptoms.RapidBreathing, Symptoms.RunnyNose, Symptoms.LightDeafness, Symptoms.Blindness, Symptoms.Deafness, Symptoms.Headache]],
-  [BiologicalSystems.Musculoskeletal,
-  [Symptoms.CantMove, Symptoms.Convulsions, Symptoms.Tic, Symptoms.Tremor, Symptoms.Chills, Symptoms.ColdLimbs, Symptoms.FingertipsTingling,
-  Symptoms.BoneAche, Symptoms.JointsCreak, Symptoms.LimbNumbness, Symptoms.JointsPain, Symptoms.InvoluntaryMovements, Symptoms.PainWhenMoving, Symptoms.UnsteadyGait]],
-  [BiologicalSystems.Integumentary,
-  [Symptoms.SoftTissuesSwelling, Symptoms.Blisters, Symptoms.InflammationsAbscesses, Symptoms.Hives, Symptoms.Pruritus, Symptoms.SkinPeeling, Symptoms.SkinRedness,
-  Symptoms.FingertipsTingling, Symptoms.SkinDarkening, Symptoms.NailsDarkening, Symptoms.FingertipsTingling, Symptoms.TactileSensitivityLoss, Symptoms.HairLoss, Symptoms.Blindness]],
+  [
+    BiologicalSystems.Nervous,
+    [
+      Symptoms.SevereHeadache,
+      Symptoms.Faint,
+      Symptoms.Tic,
+      Symptoms.Headache,
+      Symptoms.Dizziness,
+      Symptoms.Dyspnea,
+      Symptoms.Melancholy,
+      Symptoms.Jitters,
+      Symptoms.FingertipsTingling,
+      Symptoms.Convulsions,
+      Symptoms.LimbNumbness,
+      Symptoms.Tremor,
+      Symptoms.InvoluntaryMovements,
+      Symptoms.Hallucinations,
+    ],
+  ],
+  [
+    BiologicalSystems.Cardiovascular,
+    [
+      Symptoms.LowBodyTemperature,
+      Symptoms.HardToMove,
+      Symptoms.Chills,
+      Symptoms.Convulsions,
+      Symptoms.HeartPain,
+      Symptoms.Sleepiness,
+      Symptoms.DimVision,
+      Symptoms.Thirst,
+      Symptoms.Jitters,
+      Symptoms.Faint,
+      Symptoms.Nosebleeding,
+      Symptoms.Tachycardia,
+      Symptoms.HardToBreath,
+      Symptoms.HighFever,
+    ],
+  ],
+  [
+    BiologicalSystems.Reproductive,
+    [
+      Symptoms.ContinuousPainLowAbdomen,
+      Symptoms.Chills,
+      Symptoms.Pruritus,
+      Symptoms.PainLowBack,
+      Symptoms.Bloating,
+      Symptoms.DimVision,
+      Symptoms.PainPushRightAbdomen,
+      Symptoms.Weakness,
+      Symptoms.Nausea,
+      Symptoms.Thirst,
+      Symptoms.Fever,
+      Symptoms.Faint,
+      Symptoms.PainLowBack,
+      Symptoms.PainWhenMoving,
+    ],
+  ],
+  [
+    BiologicalSystems.Digestive,
+    [
+      Symptoms.SharpAbdomenPain,
+      Symptoms.Indigestion,
+      Symptoms.Bloating,
+      Symptoms.PainRightAbdomen,
+      Symptoms.PainLeftAbdomen,
+      Symptoms.Thirst,
+      Symptoms.AbdomenDiscomfort,
+      Symptoms.AppetiteLoss,
+      Symptoms.AbdomenTingling,
+      Symptoms.PainRightAbdomen,
+      Symptoms.Nausea,
+      Symptoms.PainLowBack,
+      Symptoms.Vomiting,
+      Symptoms.ContinuousPainUpperAbdomen,
+    ],
+  ],
+  [
+    BiologicalSystems.Respiratory,
+    [
+      Symptoms.Hemoptysis,
+      Symptoms.Wheeze,
+      Symptoms.Aphonia,
+      Symptoms.HardToBreath,
+      Symptoms.Cough,
+      Symptoms.ThroatPain,
+      Symptoms.SoreThroat,
+      Symptoms.Hiccough,
+      Symptoms.RapidBreathing,
+      Symptoms.RunnyNose,
+      Symptoms.LightDeafness,
+      Symptoms.Blindness,
+      Symptoms.Deafness,
+      Symptoms.Headache,
+    ],
+  ],
+  [
+    BiologicalSystems.Musculoskeletal,
+    [
+      Symptoms.CantMove,
+      Symptoms.Convulsions,
+      Symptoms.Tic,
+      Symptoms.Tremor,
+      Symptoms.Chills,
+      Symptoms.ColdLimbs,
+      Symptoms.FingertipsTingling,
+      Symptoms.BoneAche,
+      Symptoms.JointsCreak,
+      Symptoms.LimbNumbness,
+      Symptoms.JointsPain,
+      Symptoms.InvoluntaryMovements,
+      Symptoms.PainWhenMoving,
+      Symptoms.UnsteadyGait,
+    ],
+  ],
+  [
+    BiologicalSystems.Integumentary,
+    [
+      Symptoms.SoftTissuesSwelling,
+      Symptoms.Blisters,
+      Symptoms.InflammationsAbscesses,
+      Symptoms.Hives,
+      Symptoms.Pruritus,
+      Symptoms.SkinPeeling,
+      Symptoms.SkinRedness,
+      Symptoms.FingertipsTingling,
+      Symptoms.SkinDarkening,
+      Symptoms.NailsDarkening,
+      Symptoms.FingertipsTingling,
+      Symptoms.TactileSensitivityLoss,
+      Symptoms.HairLoss,
+      Symptoms.Blindness,
+    ],
+  ],
 ]);
 // tslint:enable:max-line-length
 
 export function getSymptomValue(system: System) {
   const l = Math.min(0, system.nucleotide);
   const r = Math.max(0, system.nucleotide);
-  if (system.value < l)
-    return system.value - l;
+  if (system.value < l) return system.value - l;
 
-  if (system.value > r)
-    return system.value - r;
+  if (system.value > r) return system.value - r;
 
   return 0;
 }
@@ -193,10 +303,8 @@ export function getSymptoms(model: OrganismModel): Set<Symptoms> {
   for (const indice of organismSystemsIndices(model)) {
     const v = getSymptomValue(model.systems[indice]);
     if (Math.abs(v) > 7) return new Set<Symptoms>([Symptoms.Death]);
-    if (v > 0)
-      result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v]);
-    if (v < 0)
-      result.add((systemToSymptoms.get(indice) as Symptoms[])[7 + v]);
+    if (v > 0) result.add((systemToSymptoms.get(indice) as Symptoms[])[6 + v]);
+    if (v < 0) result.add((systemToSymptoms.get(indice) as Symptoms[])[7 + v]);
   }
 
   return result;

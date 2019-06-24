@@ -24,6 +24,6 @@ export default class DeleteAccounts implements MapperInterface {
     console.log(doc._id);
     try {
       await this.accountsDb.remove(doc._id);
-    } catch (e) { }
+    } catch (e) {}
   }
 }
