@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { Condition, Effect, Event, Modifier, Timer } from 'alice-model-engine-api';
+import { Condition, Event, Modifier, Timer } from 'alice-model-engine-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;

@@ -10,7 +10,14 @@
     "stop": "forever stop ./main.js",
     "test:dev": "mocha **/*.spec.js --watch-extensions ts",
     "pretest": "yarn run build",
-    "test": "mocha **/*.spec.js --watch-extensions ts --forbid-only"
+    "test": "mocha **/*.spec.js --watch-extensions ts --forbid-only",
+    "lint": "yarn run prettier:check && yarn run tslint",
+    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "tslint": "lb-tslint -c ../../tslint.json",
+    "tslint:fix": "yarn run tslint --fix"
   },
   "author": "",
   "license": "Apache-2.0",

@@ -18,7 +18,14 @@
     "import:tables": "ts-node src/tables-import/tables-importer.ts",
     "import:test": "tsc && node ./dist/server.js -- --test",
     "import:db": "ts-node src/db-docs-creator.ts",
-    "processor": "ts-node src/processors/index.ts"
+    "processor": "ts-node src/processors/index.ts",
+    "lint": "yarn run prettier:check && yarn run tslint",
+    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "tslint": "lb-tslint -c ../../tslint.json",
+    "tslint:fix": "yarn run tslint --fix"
   },
   "license": "Apache-2.0",
   "dependencies": {

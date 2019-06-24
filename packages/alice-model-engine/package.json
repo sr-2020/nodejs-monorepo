@@ -9,7 +9,14 @@
     "pretest": "yarn run build",
     "test": "yarn run test:unit && yarn run test:integration",
     "test:integration": "mocha test/integration/**/*.js",
-    "test:unit": "mocha test/unit/**/*.js"
+    "test:unit": "mocha test/unit/**/*.js",
+    "lint": "yarn run prettier:check && yarn run tslint",
+    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "tslint": "lb-tslint -c ../../tslint.json",
+    "tslint:fix": "yarn run tslint --fix"
   },
   "author": "",
   "license": "Apache-2.0",

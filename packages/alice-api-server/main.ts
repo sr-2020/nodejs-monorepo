@@ -1,5 +1,4 @@
 import * as PouchDB from 'pouchdb';
-import * as rp from 'request-promise';
 import { Container } from 'typedi';
 import { TSMap } from 'typescript-map';
 import * as winston from 'winston';

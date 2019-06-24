@@ -3,6 +3,11 @@
   "extends": ["@loopback/tslint-config/tslint.common.json"],
   "rules": {
     "triple-equals": false,
-    "no-any": false
-  }
+    "no-any": false,
+    "no-unused-expression": false,
+    "no-unused-expression-chai": true
+  },
+  "rulesDirectory": [
+    "tslint-no-unused-expression-chai"
+  ]
 }
