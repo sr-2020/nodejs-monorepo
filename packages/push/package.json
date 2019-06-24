@@ -24,7 +24,6 @@
     "tslint:fix": "yarn run tslint --fix",
     "pretest": "yarn run build",
     "test": "lb-mocha --allow-console-logs \"src/__tests__\"",
-    "posttest": "yarn run lint",
     "test:dev": "lb-mocha --allow-console-logs src/__tests__/**/*.js && yarn run posttest",
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",

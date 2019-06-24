@@ -10,6 +10,7 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
       script:
         - lerna run test
+        - lerna run lint
 
     - stage: build and push docker image
       script:
