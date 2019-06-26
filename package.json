@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "tsc -b",
+    "clean": "find . -type f ( -name *.js -or -name *.map -or -name *.d.ts -or -name *.tsbuildinfo ) -not -path '*node_modules*' -delete",
     "build:watch": "tsc -b --watch"
   },
   "repository": {
