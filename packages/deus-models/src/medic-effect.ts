@@ -8,7 +8,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
-import { Event, ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { Event, ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Формат специального модификатора в каждой модели для отображения и хранения ущерба
@@ -233,7 +233,7 @@ function killRandomSystemEvent(api: ModelApiInterface, data, event) {
  *
  * Предполагается что никакие другие импланты не вносят корректировки в HP
  */
-function damageEffect(api: ModelApiInterface, modifier) {
+function damageEffect(api: ModelApiInterface, modifier: Modifier) {
   //Если персонаж мертв ничего больше не делаем
   if (!api.model.isAlive) {
     api.model.maxHp = 0;
@@ -428,7 +428,7 @@ function characterResurectEvent(api: ModelApiInterface, data, event) {
  * Если это был не последний хит, то таймер само обновится.
  * Название таймера хранится внутри импланта
  */
-function timedRecoveryEffect(api: ModelApiInterface, modifier) {
+function timedRecoveryEffect(api: ModelApiInterface, modifier: Modifier) {
   if (!api.model.isAlive) {
     api.info('timedRecoveryEffect: character already dead. Stop processing');
     return;
@@ -480,7 +480,7 @@ function recoverHpEvent(api: ModelApiInterface, data, event) {
  * 1. вылечит все отключенные системы, на которых нет имплантов
  * 2. выставить повреждения в зависимости от параметров
  */
-function timedRecoverSystemsEffect(api: ModelApiInterface, modifier) {
+function timedRecoverSystemsEffect(api: ModelApiInterface, modifier: Modifier) {
   if (!api.model.isAlive) {
     api.info('timedRecoverSystemsEffect: character already dead. Stop processing');
     return;
@@ -499,7 +499,9 @@ function timedRecoverSystemsEffect(api: ModelApiInterface, modifier) {
 
     if (!api.getTimer(timerName)) {
       api.info(
-        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
+        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${
+          params.recoveryTime
+        } sec!`,
       );
       api.setTimer(timerName, params.recoveryTime * 1000, 'recover-systems', { mID: modifier.mID, hpRemain });
     } else {

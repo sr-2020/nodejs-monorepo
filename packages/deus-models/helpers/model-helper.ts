@@ -439,7 +439,7 @@ const implantClasses = ['cyber-implant', 'bio-implant', 'illegal-cyber-implant',
 /**
  * Проверяет класс модификатора и возращается true если это имплант
  */
-function isImplant(modifier) {
+function isImplant(modifier: Modifier) {
   if (modifier.class && implantClasses.find((c) => c == modifier.class)) {
     return true;
   }
@@ -450,7 +450,7 @@ function isImplant(modifier) {
 /**
  * Проверяет класс модификатора и возращается true если это болезнь
  */
-function isIllness(modifier) {
+function isIllness(modifier: Modifier) {
   if (modifier.class && modifier.class == 'illness') {
     return true;
   }

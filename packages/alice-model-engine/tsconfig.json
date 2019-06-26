@@ -1,9 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    // TODO: Fix and re-enable
-    "noImplicitAny": false,
-  },
   "include": ["**/*.ts"],
   "references": [
     { "path": "../alice-model-engine-api" }

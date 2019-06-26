@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { ViewModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
 
 interface PageViewModel {
   menuTitle: string;
@@ -240,7 +240,7 @@ function getEnabledColor(enabled) {
 
 const implantsClasses = ['cyber-implant', 'bio-implant', 'illegal-cyber-implant', 'illegal-bio-implant', 'virtual', 'firmware'];
 
-function isImplant(modifier) {
+function isImplant(modifier: Modifier) {
   return implantsClasses.find((c) => modifier.class == c);
 }
 
@@ -253,7 +253,7 @@ const systemNames = {
   nervous: 'нервная',
 };
 
-function getImplantDetails(modifier) {
+function getImplantDetails(modifier: Modifier) {
   let details = modifier.details || 'подробного описания нет';
 
   if (modifier.system) {
@@ -263,7 +263,7 @@ function getImplantDetails(modifier) {
   }
 }
 
-function getImplantsPageItem(modifier) {
+function getImplantsPageItem(modifier: Modifier) {
   return {
     text: modifier.displayName,
     value: getEnabledText(modifier.enabled),

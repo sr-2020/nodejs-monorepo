@@ -26,7 +26,7 @@ function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string
   return 'Результат: ' + shuffle(systems.map((s) => model.systems[s].value), { copy: true }).join(', ');
 }
 
-const tests = {
+const tests: { [testName: string]: (model: OrganismModel) => TestResult } = {
   nucleotide: (model: OrganismModel): TestResult => {
     return {
       type: 'Анализ нуклеотида',

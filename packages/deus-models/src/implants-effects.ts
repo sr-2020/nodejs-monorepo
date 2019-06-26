@@ -3,7 +3,7 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
 
 /**
  * Эффект показывающий состояние пока работает импланта.
@@ -16,7 +16,7 @@ import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
  * }
  */
 
-function showCondition(api: ModelApiInterface, modifier) {
+function showCondition(api: ModelApiInterface, modifier: Modifier) {
   //Получить СПИСОК предикатов для показа (может быть несколько состояний)
   let params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
   api.info('showCondition: start, predicate: ' + JSON.stringify(params));
@@ -34,7 +34,7 @@ function showCondition(api: ModelApiInterface, modifier) {
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api: ModelApiInterface, modifier) {
+function showAlwaysCondition(api: ModelApiInterface, modifier: Modifier) {
   api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
   if (modifier.conditions) {
     //Пройти по всем совпадаениям в предикатах и показать все состояния
@@ -56,7 +56,7 @@ function showAlwaysCondition(api: ModelApiInterface, modifier) {
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
  *
  */
-function changeProperties(api: ModelApiInterface, modifier) {
+function changeProperties(api: ModelApiInterface, modifier: Modifier) {
   let params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
   api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 

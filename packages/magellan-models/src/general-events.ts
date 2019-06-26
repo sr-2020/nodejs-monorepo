@@ -2,7 +2,7 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import { ModelApiInterface } from 'alice-model-engine-api';
+import { ModelApiInterface, Event, Condition } from 'alice-model-engine-api';
 import Chance = require('chance');
 import type = require('type-detect');
 import helpers = require('../helpers/model-helper');
@@ -21,7 +21,15 @@ const chance = new Chance();
  * параметр duration задается в секундах, и он опционален.
  * Если не задано, то состояния добавляются на 2 часа
  */
-function putConditionEvent(api: ModelApiInterface, data, _) {
+
+interface PutConditionData {
+  text?: string;
+  details?: string;
+  class?: string;
+  duration?: number;
+}
+
+function putConditionEvent(api: ModelApiInterface, data: PutConditionData, event: Event) {
   if (data.text) {
     const cond = api.addCondition({
       mID: '',
@@ -47,10 +55,13 @@ function putConditionEvent(api: ModelApiInterface, data, _) {
  *
  * Удаляет состояние персонажа
  */
+interface RemoveConditionData {
+  mID?: string;
+}
 
-function removeConditionEvent(api: ModelApiInterface, data, _) {
+function removeConditionEvent(api: ModelApiInterface, data: RemoveConditionData, _: Event) {
   if (data.mID) {
-    const i = api.model.conditions.findIndex((c) => c.mID == data.mID);
+    const i = api.model.conditions.findIndex((c: Condition) => c.mID == data.mID);
 
     if (i != -1) {
       const text = api.model.conditions[i].text;
@@ -70,7 +81,12 @@ function removeConditionEvent(api: ModelApiInterface, data, _) {
  *   text: string,
  * }
  */
-function sendMessageEvent(api: ModelApiInterface, data, _) {
+interface SendMessageData {
+  title?: string;
+  text?: string;
+}
+
+function sendMessageEvent(api: ModelApiInterface, data: SendMessageData, _: Event) {
   if (data.title && api.model.messages) {
     const message = {
       mID: helpers.uuidv4(),
@@ -92,7 +108,12 @@ function sendMessageEvent(api: ModelApiInterface, data, _) {
  *   timestamp: number
  * }
  */
-function addChangeRecord(api: ModelApiInterface, data, _) {
+interface AddChangeRecordData {
+  text?: string;
+  timestamp?: number;
+}
+
+function addChangeRecord(api: ModelApiInterface, data: AddChangeRecordData, _: Event) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }
@@ -112,7 +133,12 @@ function addChangeRecord(api: ModelApiInterface, data, _) {
  *   value: string,
  * }
  */
-function changeModelVariableEvent(api: ModelApiInterface, data, _) {
+interface ChangeModelVariableData {
+  name?: string;
+  value?: any;
+}
+
+function changeModelVariableEvent(api: ModelApiInterface, data: ChangeModelVariableData, _: Event) {
   if (data.name && data.value) {
     const restricted = [
       '_id',

@@ -2,7 +2,7 @@
  * Универсальные события связанные с VR
  */
 
-import { ModelApiInterface } from 'alice-model-engine-api';
+import { ModelApiInterface, Event } from 'alice-model-engine-api';
 import helpers = require('../helpers/model-helper');
 
 /**
@@ -12,7 +12,7 @@ import helpers = require('../helpers/model-helper');
  * (время события - время входа)
  *
  */
-function enterVREvent(api: ModelApiInterface, _data, event) {
+function enterVREvent(api: ModelApiInterface, _: void, event: Event) {
   if (!api.model.isAlive) {
     api.error("Dead can't enter VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
@@ -29,7 +29,7 @@ function enterVREvent(api: ModelApiInterface, _data, event) {
  * И увеличивает счетчик суммарного нахождения в VR для персонажа
  * (время события - время выхода)
  */
-function exitVREvent(api: ModelApiInterface, _data, event) {
+function exitVREvent(api: ModelApiInterface, _: void, event: Event) {
   if (!api.model.isAlive) {
     api.error("Dead can't exit VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);

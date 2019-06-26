@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from 'alice-model-engine-api';
+import { ViewModelApiInterface, Condition } from 'alice-model-engine-api';
 import { Change, OrganismModel } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
@@ -70,7 +70,7 @@ function getStartPage(model: OrganismModel) {
   return pageInfo;
 }
 
-function getRussianConditionTag(tag) {
+function getRussianConditionTag(tag: string) {
   switch (tag) {
     case 'physiology':
       return 'Физиология';
@@ -81,7 +81,7 @@ function getRussianConditionTag(tag) {
   }
 }
 
-function getConditionsPageItem(cond) {
+function getConditionsPageItem(cond: Condition) {
   let header = cond.text;
   const details = cond.details ? cond.details : header;
   const condClass = cond.class ? cond.class : 'physiology';
@@ -243,7 +243,7 @@ function getViewModel(model: OrganismModel) {
 
 module.exports = () => {
   return {
-    _view(api: ViewModelApiInterface, model) {
+    _view(api: ViewModelApiInterface, model: any) {
       if (hasMobileViewModel(model)) {
         try {
           return getViewModel(model);

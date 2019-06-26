@@ -229,7 +229,7 @@ function modifyModelProperties(api: ModelApiInterface, operations: string) {
   }
 }
 
-function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
+function modifyModelStringProperty(api: ModelApiInterface, varName: string, value: any) {
   if (restrictedVars.find((v) => varName == v)) {
     return false;
   }
@@ -281,7 +281,7 @@ function modifyModelDigitProperty(api: ModelApiInterface, varName: string, op: s
   return true;
 }
 
-function setTimerToKillModifier(api: ModelApiInterface, modifier, timestamp) {
+function setTimerToKillModifier(api: ModelApiInterface, modifier: Modifier, timestamp: number) {
   api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, timestamp - 1, 'stop-narco-modifier', { mID: modifier.mID });
 }
 
@@ -290,7 +290,7 @@ const implantClasses = ['cyber-implant', 'bio-implant', 'illegal-cyber-implant',
 /**
  * Проверяет класс модификатора и возращается true если это имплант
  */
-function isImplant(modifier) {
+function isImplant(modifier: Modifier) {
   if (modifier.class && implantClasses.find((c) => c == modifier.class)) {
     return true;
   }
@@ -301,7 +301,7 @@ function isImplant(modifier) {
 /**
  * Проверяет класс модификатора и возращается true если это болезнь
  */
-function isIllness(modifier) {
+function isIllness(modifier: Modifier) {
   if (modifier.class && modifier.class == 'illness') {
     return true;
   }
@@ -309,28 +309,34 @@ function isIllness(modifier) {
   return false;
 }
 
-function getImplantsBySystem(api: ModelApiInterface, systemName) {
+function getImplantsBySystem(api: ModelApiInterface, systemName: string) {
   return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
-function getAllImplants(api) {
-  return api.model.modifiers.filter((m) => isImplant(m));
+function getAllImplants(api: ModelApiInterface) {
+  return api.model.modifiers.filter((m: Modifier) => isImplant(m));
 }
 
-function getAllIlnesses(api) {
-  return api.model.modifiers.filter((m) => isIllness(m));
+function getAllIlnesses(api: ModelApiInterface) {
+  return api.model.modifiers.filter((m: Modifier) => isIllness(m));
 }
 
-function getChanceFromModel(model) {
+function getChanceFromModel(model: any) {
   return model.randomSeed ? new Chance(model.randomSeed) : new Chance();
 }
 
-function removeImplant(api: ModelApiInterface, implantForRemove, timestamp) {
+function removeImplant(api: ModelApiInterface, implantForRemove: Modifier, timestamp: number) {
   api.removeModifier(implantForRemove.mID);
   addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
 }
 
-function createEffectModifier(api: ModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
+function createEffectModifier(
+  api: ModelApiInterface,
+  effectName: string,
+  modifierId: string,
+  displayName: string,
+  modifierClass: string,
+): Modifier | undefined {
   const effect = api.getCatalogObject('effects', effectName);
 
   if (!effect) {
