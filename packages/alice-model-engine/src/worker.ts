@@ -1,4 +1,3 @@
-import { assign, clone } from 'lodash';
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
@@ -8,7 +7,7 @@ import * as config from './config';
 import { Context } from './context';
 import Logger from './logger';
 import * as model from './model';
-import { requireDir } from './utils';
+import { loadModels } from './utils';
 import { Engine } from './engine';
 
 declare var TEST_EXTERNAL_OBJECTS: any;
@@ -129,35 +128,4 @@ export class Worker {
       }
     });
   }
-}
-
-function loadModels(dir: string): model.Model {
-  return requireDir(dir, (m: model.Model, src: any) => {
-    m = clone(m);
-    src = clone(src);
-
-    if (!m.viewModelCallbacks) m.viewModelCallbacks = {};
-    if (!m.preprocessCallbacks) m.preprocessCallbacks = [];
-
-    if (src._view) {
-      m.viewModelCallbacks.default = src._view;
-      delete src._view;
-    }
-
-    if (src._preprocess) {
-      m.preprocessCallbacks.push(src._preprocess);
-      delete src._preprocess;
-    }
-
-    for (const fname in src) {
-      if (fname.startsWith('view_')) {
-        m.viewModelCallbacks[fname.substr('view_'.length)] = src[fname];
-        delete src[fname];
-      }
-    }
-
-    m.callbacks = assign({}, m.callbacks, src);
-
-    return m;
-  });
 }
