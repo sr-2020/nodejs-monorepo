@@ -96,14 +96,6 @@ export class Worker {
     this.configure(cfg);
   }
 
-  private resolveCallback(callback: config.Callback): model.Callback | null {
-    const result = this._model.callbacks[callback];
-    if (result == null) {
-      Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
-    }
-    return result;
-  }
-
   private async waitAquire(baseCtx: Context) {
     Logger.debug('engine', 'Waitin to aquire', { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
 
