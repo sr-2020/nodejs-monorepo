@@ -1,121 +1,59 @@
-import { assign, clone, reduce } from 'lodash';
+import { assign, clone } from 'lodash';
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import {
-  EngineContext,
-  EngineMessage,
-  EngineMessageConfigure,
-  EngineMessageEvents,
-  EngineResult,
-  Event,
-  Modifier,
-} from 'alice-model-engine-api';
+import { EngineContext, EngineMessage, EngineMessageConfigure, EngineMessageEvents, EngineResult, Event } from 'alice-model-engine-api';
 
 import * as config from './config';
 import { Context } from './context';
-import * as dispatcher from './dispatcher';
 import Logger from './logger';
 import * as model from './model';
-import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
 import { requireDir } from './utils';
+import { Engine } from './engine';
 
 declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {
+  private _engine: Engine;
+
   public static load(dir: string): Worker {
     const m = loadModels(dir);
     Logger.debug('engine', 'Loaded model', { model: inspect(m, false, null) });
     return new Worker(m);
   }
-  private _config: config.ConfigInterface;
-  private dispatcher: dispatcher.DispatcherInterface;
 
   constructor(private _model: model.Model) {}
 
   public configure(newConfig: config.ConfigInterface): Worker {
     Logger.debug('engine', 'Loaded config', { config: inspect(newConfig, false, null) });
-    this._config = newConfig;
-    this.dispatcher = new dispatcher.Dispatcher();
-
-    newConfig.events.forEach((e) => {
-      const callbacks = e.effects.map((c) => this.resolveCallback(c));
-      this.dispatcher.on(e.eventType, callbacks);
-    });
-
+    this._engine = new Engine(this._model, newConfig);
     return this;
   }
 
   public async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
-    const baseCtx = new Context(context, events, this._config.dictionaries);
-    const characterId = baseCtx.ctx.characterId;
-
-    Logger.info('engine', 'Processing model', { characterId, events });
-
+    const characterId = context.characterId;
+    let contextForAquire: Context;
     try {
-      Logger.logStep('engine', 'info', 'Preprocess', { characterId })(() => this.runPreprocess(baseCtx, events));
+      contextForAquire = this._engine.preProcess(context, events);
     } catch (e) {
       Logger.error('engine', `Exception ${e.toString()} caught when running preproces`, { events, characterId });
       return { status: 'error', error: e };
     }
 
-    if (baseCtx.pendingAquire.length) {
+    if (contextForAquire.pendingAquire.length) {
       try {
-        await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', { pendingAquire: baseCtx.pendingAquire, characterId })(
-          () => this.waitAquire(baseCtx),
-        );
-        Logger.debug('engine', 'Aquired objects', { aquired: baseCtx.aquired, characterId });
+        await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', {
+          pendingAquire: contextForAquire.pendingAquire,
+          characterId,
+        })(() => this.waitAquire(contextForAquire));
+        Logger.debug('engine', 'Aquired objects', { aquired: contextForAquire.aquired, characterId });
       } catch (e) {
         Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { characterId });
         return { status: 'error', error: e };
       }
     }
 
-    let workingCtx = baseCtx.clone();
-
-    //
-    // main loop
-    //
-    for (const event of baseCtx.iterateEvents()) {
-      baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
-
-      try {
-        Logger.logStep('engine', 'info', 'Running event', { event, characterId })(() => this.runEvent(baseCtx, event));
-      } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, characterId });
-        return { status: 'error', error: e };
-      }
-
-      try {
-        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })(() => this.runModifiers(baseCtx));
-      } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { characterId });
-        return { status: 'error', error: e };
-      }
-
-      baseCtx.timers = workingCtx.timers;
-      baseCtx.events = workingCtx.events;
-    }
-
-    const baseCtxValue = baseCtx.valueOf();
-    const workingCtxValue = workingCtx.valueOf();
-    let viewModels;
-
-    try {
-      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })(() => this.runViewModels(workingCtx, baseCtx));
-    } catch (e) {
-      Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { characterId });
-      return { status: 'error', error: e };
-    }
-
-    return {
-      status: 'ok',
-      baseModel: baseCtxValue,
-      workingModel: workingCtxValue,
-      viewModels,
-      aquired: baseCtx.aquired,
-      outboundEvents: baseCtx.outboundEvents,
-    };
+    return this._engine.process(contextForAquire);
   }
 
   public listen() {
@@ -164,73 +102,6 @@ export class Worker {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
     }
     return result;
-  }
-
-  private runEvent(context: Context, event: Event): number {
-    this.dispatcher.dispatch(event, context);
-    return (context.timestamp = event.timestamp);
-  }
-
-  private getEnabledModifiers(workingCtx: Context): Modifier[] {
-    return workingCtx.modifiers
-      .filter((m) => m.enabled)
-      .sort((a, b) => {
-        if (a.class != '_internal' && b.class == '_internal') return -1;
-        if (a.class == '_internal' && b.class != '_internal') return 1;
-        return 0;
-      });
-  }
-
-  private runModifiers(baseCtx: Context): Context {
-    const workingCtx = baseCtx.clone();
-    const characterId = workingCtx.ctx.characterId;
-    const api = ModelApiFactory(workingCtx);
-
-    // First process all functional events, then all normal ones.
-    for (const effectType of ['functional', 'normal']) {
-      for (const modifier of this.getEnabledModifiers(workingCtx)) {
-        const effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
-        for (const effect of effects) {
-          const f = this.resolveCallback(effect.handler);
-          if (!f) {
-            continue;
-          }
-          Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {
-            Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, characterId });
-            (f as any)(api, modifier);
-          });
-        }
-      }
-    }
-
-    return workingCtx;
-  }
-
-  private runViewModels(workingCtx: Context, baseCtx: Context) {
-    const data = workingCtx.valueOf();
-    const api = ViewModelApiFactory(workingCtx, baseCtx);
-
-    return reduce(
-      this._model.viewModelCallbacks,
-      (vm: any, f: model.ViewModelCallback, base: string) => {
-        vm[base] = f(api, data);
-        return vm;
-      },
-      {},
-    );
-  }
-
-  private runPreprocess(baseCtx: Context, events: Event[]) {
-    if (!this._model.preprocessCallbacks.length) return;
-
-    const ctx = baseCtx.clone();
-    const api = PreprocessApiFactory(ctx);
-
-    for (const f of this._model.preprocessCallbacks) {
-      f(api, events);
-    }
-
-    baseCtx.events = ctx.events;
   }
 
   private async waitAquire(baseCtx: Context) {
