@@ -19,7 +19,7 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
   constructor(protected contextGetter: () => Context<T>) {}
 
   get model() {
-    return this.contextGetter().ctx;
+    return this.contextGetter().model;
   }
 
   public getCatalogObject(catalogName: string, id: string) {
@@ -174,7 +174,7 @@ class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements View
   }
 
   get baseModel() {
-    return this.baseContextGetter().ctx;
+    return this.baseContextGetter().model;
   }
 }
 

@@ -32,7 +32,7 @@ export interface AquiredObjects {
 }
 
 export class Context<T extends EmptyModel> {
-  private _ctx: T;
+  private _model: T;
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
@@ -40,14 +40,14 @@ export class Context<T extends EmptyModel> {
   private _aquired: AquiredObjects;
 
   constructor(
-    contextSrc: T,
+    model: T,
     events: Event[],
     dictionaries?: any,
     outboundEvents?: OutboundEvents,
     pendingAquire?: PendingAquire,
     aquired?: AquiredObjects,
   ) {
-    this._ctx = cloneDeep(contextSrc);
+    this._model = cloneDeep(model);
 
     this._events = cloneDeep(events);
     this.sortEvents();
@@ -70,28 +70,28 @@ export class Context<T extends EmptyModel> {
     this.sortEvents();
   }
 
-  get ctx() {
-    return this._ctx;
+  get model() {
+    return this._model;
   }
 
   get timers(): Timers {
-    return _.get(this._ctx, 'timers', {});
+    return _.get(this._model, 'timers', {});
   }
 
   set timers(value: Timers) {
-    this._ctx.timers = cloneDeep(value);
+    this._model.timers = cloneDeep(value);
   }
 
   get timestamp() {
-    return this._ctx.timestamp;
+    return this._model.timestamp;
   }
 
   set timestamp(value: number) {
-    this._ctx.timestamp = value;
+    this._model.timestamp = value;
   }
 
   get modifiers(): Modifier[] {
-    return this._ctx.modifiers;
+    return this._model.modifiers;
   }
 
   get effects() {
@@ -100,27 +100,27 @@ export class Context<T extends EmptyModel> {
   }
 
   get conditions(): Condition[] {
-    return this._ctx.conditions;
+    return this._model.conditions;
   }
 
   get outboundEvents(): Event[] {
     return this._outboundEvents.valueOf();
   }
 
-  get aquired(): any {
+  get aquired(): AquiredObjects {
     return this._aquired;
   }
 
-  set aquired(value: any) {
+  set aquired(value: AquiredObjects) {
     this._aquired = value;
   }
 
-  get pendingAquire(): Array<[string, string]> {
+  get pendingAquire(): PendingAquire {
     return this._pendingAquire;
   }
 
   public clone(): Context<T> {
-    const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
+    const clone = new Context(this._model, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
     clone.timers = this.timers;
     return clone;
   }
@@ -136,15 +136,15 @@ export class Context<T extends EmptyModel> {
       eventType,
       data,
     };
-    if (!this._ctx.timers) this._ctx.timers = {};
-    this._ctx.timers[timer.name] = timer;
+    if (!this._model.timers) this._model.timers = {};
+    this._model.timers[timer.name] = timer;
     return this;
   }
 
   public sendEvent(characterId: string | null, eventType: string, timestamp: number, data: any) {
-    if (!characterId || characterId == this._ctx.characterId) {
+    if (!characterId || characterId == this._model.characterId) {
       this._events.unshift({
-        characterId: this._ctx.characterId,
+        characterId: this._model.characterId,
         eventType,
         timestamp: timestamp,
         data,
@@ -179,7 +179,7 @@ export class Context<T extends EmptyModel> {
 
     if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
       // !! is safe as firstTimer != null means that there are timers indeed.
-      delete this._ctx.timers!![firstTimer.name];
+      delete this._model.timers!![firstTimer.name];
       return this.timerEvent(firstTimer);
     } else {
       this._events.shift();
@@ -196,9 +196,9 @@ export class Context<T extends EmptyModel> {
   }
 
   public decreaseTimers(diff: number): void {
-    if (!this._ctx.timers) return;
+    if (!this._model.timers) return;
 
-    this._ctx.timers = _.mapValues(this._ctx.timers, (t) => {
+    this._model.timers = _.mapValues(this._model.timers, (t) => {
       return {
         name: t.name,
         miliseconds: t.miliseconds - diff,
@@ -209,7 +209,7 @@ export class Context<T extends EmptyModel> {
   }
 
   public valueOf() {
-    return cloneDeep(this._ctx);
+    return cloneDeep(this._model);
   }
 
   private sortEvents() {
@@ -220,7 +220,7 @@ export class Context<T extends EmptyModel> {
 
   private timerEvent(timer: Timer): Event {
     return {
-      characterId: this._ctx.characterId,
+      characterId: this._model.characterId,
       eventType: timer.eventType,
       timestamp: this.timestamp + timer.miliseconds,
       data: timer.data,

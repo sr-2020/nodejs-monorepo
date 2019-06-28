@@ -21,18 +21,18 @@ export class Engine<T extends EmptyModel> {
     });
   }
 
-  public preProcess(context: T, events: Event[]): PendingAquire {
-    const baseCtx = new Context(context, events, this._config.dictionaries);
-    const characterId = baseCtx.ctx.characterId;
+  public preProcess(model: T, events: Event[]): PendingAquire {
+    const baseCtx = new Context(model, events, this._config.dictionaries);
+    const characterId = baseCtx.model.characterId;
     Logger.info('engine', 'Preprocessing model', { characterId, events });
     Logger.logStep('engine', 'info', 'Preprocess', { characterId })(() => this.runPreprocess(baseCtx, events));
     return baseCtx.pendingAquire;
   }
 
-  public process(context: T, aquired: AquiredObjects, events: Event[]): EngineResult {
-    const baseCtx = new Context(context, events, this._config.dictionaries);
+  public process(model: T, aquired: AquiredObjects, events: Event[]): EngineResult {
+    const baseCtx = new Context(model, events, this._config.dictionaries);
     baseCtx.aquired = aquired;
-    const characterId = baseCtx.ctx.characterId;
+    const characterId = baseCtx.model.characterId;
 
     let workingCtx = baseCtx.clone();
 
@@ -106,7 +106,7 @@ export class Engine<T extends EmptyModel> {
 
   private runModifiers(baseCtx: Context<T>): Context<T> {
     const workingCtx = baseCtx.clone();
-    const characterId = workingCtx.ctx.characterId;
+    const characterId = workingCtx.model.characterId;
     const api = ModelApiFactory(workingCtx);
 
     // First process all functional events, then all normal ones.
