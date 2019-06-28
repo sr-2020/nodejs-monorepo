@@ -23,6 +23,8 @@ export class OutboundEvents {
   }
 }
 
+export type PendingAquire = Array<[string, string]>;
+
 export interface AquiredObjects {
   [db: string]: {
     [id: string]: any;
@@ -34,7 +36,7 @@ export class Context<T extends EmptyModel> {
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
-  private _pendingAquire: Array<[string, string]>;
+  private _pendingAquire: PendingAquire;
   private _aquired: AquiredObjects;
 
   constructor(
@@ -42,7 +44,7 @@ export class Context<T extends EmptyModel> {
     events: Event[],
     dictionaries?: any,
     outboundEvents?: OutboundEvents,
-    pendingAquire?: Array<[string, string]>,
+    pendingAquire?: PendingAquire,
     aquired?: AquiredObjects,
   ) {
     this._ctx = cloneDeep(contextSrc);

@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import { EmptyModel, EngineResult, Event, Modifier } from 'alice-model-engine-api';
 
 import * as config from './config';
-import { Context } from './context';
+import { Context, PendingAquire, AquiredObjects } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
 import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
@@ -21,15 +21,17 @@ export class Engine<T extends EmptyModel> {
     });
   }
 
-  public preProcess(context: T, events: Event[]): Context<T> {
+  public preProcess(context: T, events: Event[]): PendingAquire {
     const baseCtx = new Context(context, events, this._config.dictionaries);
     const characterId = baseCtx.ctx.characterId;
     Logger.info('engine', 'Preprocessing model', { characterId, events });
     Logger.logStep('engine', 'info', 'Preprocess', { characterId })(() => this.runPreprocess(baseCtx, events));
-    return baseCtx;
+    return baseCtx.pendingAquire;
   }
 
-  public process(baseCtx: Context<T>): EngineResult {
+  public process(context: T, aquired: AquiredObjects, events: Event[]): EngineResult {
+    const baseCtx = new Context(context, events, this._config.dictionaries);
+    baseCtx.aquired = aquired;
     const characterId = baseCtx.ctx.characterId;
 
     let workingCtx = baseCtx.clone();

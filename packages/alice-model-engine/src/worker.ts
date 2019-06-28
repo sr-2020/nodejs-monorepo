@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import { EngineMessage, EngineMessageConfigure, EngineMessageEvents, EngineResult, Event, EmptyModel } from 'alice-model-engine-api';
 
 import * as config from './config';
-import { Context } from './context';
+import { PendingAquire, AquiredObjects } from './context';
 import Logger from './logger';
 import { loadModels } from './utils';
 import { Engine } from './engine';
@@ -31,28 +31,27 @@ export class Worker {
 
   public async process(context: EmptyModel, events: Event[]): Promise<EngineResult> {
     const characterId = context.characterId;
-    let contextForAquire: Context<EmptyModel>;
+    let pendingAquire: PendingAquire;
     try {
-      contextForAquire = this._engine.preProcess(context, events);
+      pendingAquire = this._engine.preProcess(context, events);
     } catch (e) {
       Logger.error('engine', `Exception ${e.toString()} caught when running preproces`, { events, characterId });
       return { status: 'error', error: e };
     }
 
-    if (contextForAquire.pendingAquire.length) {
-      try {
-        await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', {
-          pendingAquire: contextForAquire.pendingAquire,
-          characterId,
-        })(() => this.waitAquire(contextForAquire));
-        Logger.debug('engine', 'Aquired objects', { aquired: contextForAquire.aquired, characterId });
-      } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { characterId });
-        return { status: 'error', error: e };
-      }
+    try {
+      const aquired = pendingAquire.length
+        ? await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', {
+            pendingAquire,
+            characterId,
+          })(() => this.waitAquire(pendingAquire))
+        : undefined;
+      Logger.debug('engine', 'Aquired objects', { aquired, characterId });
+      return this._engine.process(context, aquired, events);
+    } catch (e) {
+      Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { characterId });
+      return { status: 'error', error: e };
     }
-
-    return this._engine.process(contextForAquire);
   }
 
   public listen() {
@@ -95,15 +94,14 @@ export class Worker {
     this.configure(cfg);
   }
 
-  private async waitAquire(baseCtx: Context<EmptyModel>) {
-    Logger.debug('engine', 'Waitin to aquire', { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
+  private async waitAquire(pendingAquire: PendingAquire): Promise<AquiredObjects> {
+    Logger.debug('engine', 'Waitin to aquire', { pendingAquire });
 
     return new Promise((resolve, reject) => {
       if (process && process.send) {
         process.once('message', (msg: EngineMessage) => {
           if (msg.type == 'aquired') {
-            baseCtx.aquired = msg.data;
-            resolve();
+            resolve(msg.data);
           } else {
             reject();
           }
@@ -111,18 +109,16 @@ export class Worker {
 
         process.send({
           type: 'aquire',
-          keys: baseCtx.pendingAquire,
+          keys: pendingAquire,
         });
       } else if (TEST_EXTERNAL_OBJECTS) {
-        const result = baseCtx.pendingAquire.reduce<any>((aquired, [db, id]) => {
+        const result = pendingAquire.reduce<any>((aquired, [db, id]) => {
           const obj = _.get(TEST_EXTERNAL_OBJECTS, [db, id]);
           if (obj) _.set(aquired, [db, id], obj);
           return aquired;
         }, {});
 
-        baseCtx.aquired = result;
-
-        resolve();
+        resolve(result);
       } else {
         reject(new Error('Called in wrong context'));
       }
