@@ -43,6 +43,7 @@
     "@loopback/tslint-config": "^2.0.4",
     "@types/node": "^10.11.2",
     "lerna": "^3.1.4",
+    "mocha": "^6.1.4",
     "tslint": "^5.15.0",
     "tslint-no-unused-expression-chai": "^0.1.4",
     "typescript": "^3.5.1"
