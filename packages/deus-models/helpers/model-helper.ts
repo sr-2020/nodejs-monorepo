@@ -96,17 +96,17 @@ function checkPredicate(api: DeusExModelApiInterface, mID: string, effectName: s
     }
 
     if (predicates) {
-      let p = predicates
+      predicates = predicates
         .filter((p) => p.effect == effectName)
         .filter((p) => isGenomeMatch(api, p.variable, p.value) || isMindCubeMatch(api, p.variable, p.value));
 
       // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
 
-      if (p && p.length) {
+      if (predicates && predicates.length) {
         if (!multi) {
-          return p[0].params;
+          return predicates[0].params;
         } else {
-          return p.map((element) => element.params);
+          return predicates.map((element) => element.params);
         }
       }
     }
@@ -239,7 +239,7 @@ function modifyMindCubes(api: DeusExModelApiInterface, mind: MindData, changeTex
 
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = (Math.random() * 16) | 0,
+    let r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
@@ -481,7 +481,7 @@ function removeImplant(api: DeusExModelApiInterface, implantForRemove, timestamp
 }
 
 function createEffectModifier(api: DeusExModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
-  var effect = api.getCatalogObject('effects', effectName);
+  let effect = api.getCatalogObject('effects', effectName);
 
   if (!effect) {
     api.error("Can't load effect " + effectName);
@@ -490,7 +490,7 @@ function createEffectModifier(api: DeusExModelApiInterface, effectName, modifier
 
   effect.enabled = true;
 
-  var modifier = {
+  let modifier = {
     mID: '',
     id: modifierId,
     name: modifierId,

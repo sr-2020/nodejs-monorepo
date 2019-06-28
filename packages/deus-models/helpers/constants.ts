@@ -18,7 +18,6 @@ const MAX_CHANGES_LINES = 30;
 
 //Болезни
 const ILLNESS_EFFECT_NAME = 'illness-effect';
-const ILLNESS_EVENT_NAME = 'illness-next-stage';
 
 //Бессмертие
 const S_IMMORTAL_NAME_01 = 's_immortal01';

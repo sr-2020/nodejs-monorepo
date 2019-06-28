@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "yarn run build && mocha -r tsconfig-paths/register test/**/*.js"
+    "test": "yarn run build && mocha -r tsconfig-paths/register test/**/*.js",
+    "lint": "yarn run prettier:check && yarn run tslint",
+    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "tslint": "lb-tslint -c ../../tslint.json",
+    "tslint:fix": "yarn run tslint --fix"
   },
   "repository": {
     "type": "git",

@@ -2,9 +2,8 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import { ModelApiInterface, Event, Condition } from 'alice-model-engine-api';
+import { ModelApiInterface, Event } from 'alice-model-engine-api';
 import Chance = require('chance');
-import type = require('type-detect');
 import helpers = require('../helpers/model-helper');
 import { OrganismModel, MagellanModelApiInterface } from 'magellan-models/helpers/basic-types';
 const chance = new Chance();

@@ -1,5 +1,4 @@
 import consts = require('../helpers/constants');
-import Chance = require('chance');
 import _ = require('lodash');
 import helpers = require('../helpers/model-helper');
 

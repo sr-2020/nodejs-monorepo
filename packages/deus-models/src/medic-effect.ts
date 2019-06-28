@@ -75,7 +75,7 @@ function hasAnyEffect(api: DeusExModelApiInterface, effectName) {
  * Этот обаботчик должен в случае, если damage >0 списывать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function leakHpEvent(api: DeusExModelApiInterface, data, event) {
+function leakHpEvent(api: DeusExModelApiInterface, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -102,7 +102,7 @@ function leakHpEvent(api: DeusExModelApiInterface, data, event) {
  * Этот обаботчик должен в случае, если damage >0 восстанавливать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function regenHpEvent(api: DeusExModelApiInterface, data, event) {
+function regenHpEvent(api: DeusExModelApiInterface, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -130,7 +130,7 @@ function regenHpEvent(api: DeusExModelApiInterface, data, event) {
  * и если нет - ничего не делает (значит уже вылечили)
  * если все еще есть - умирает
  */
-function characterDeathEvent(api: DeusExModelApiInterface, data, event) {
+function characterDeathEvent(api: DeusExModelApiInterface, event) {
   //проверить системы и импланты на них (все только для Human'ов пока)
   if (api.model.systems) {
     let deadSystem: any = null;
@@ -243,7 +243,6 @@ function damageEffect(api: DeusExModelApiInterface, modifier: Modifier) {
   }
 
   let isHuman = api.model.profileType == 'human';
-  let isRobot = api.model.profileType == 'robot' || api.model.profileType == 'ex-human-robot';
 
   let curMaxHP = medhelpers.calcMaxHP(api);
 
@@ -371,25 +370,24 @@ function stopLeakTimerIfRequired(api) {
  * 3. Сбрасывает damage в 0 (на всякий случай)
  * 4. Ставит флаг isAlive в true
  */
-function characterResurectEvent(api: DeusExModelApiInterface, data, event) {
+function characterResurectEvent(api: DeusExModelApiInterface, event) {
   //проверить системы и импланты на них (все только для Human'ов пока)
   if (api.model.systems && !api.model.isAlive) {
     api.info(`characterResurectEvent: systems ${medhelpers.getSystemsStateString(api)}`);
 
     //Пройти по всем системам
-    api.model.systems = api.model.systems.map((sys, systemID) => {
+    api.model.systems = api.model.systems.map((_, systemID) => {
       //Найти все модификаторы для системы
       let systemName = consts.medicSystems[systemID].name;
-      let modifiers = api.getModifiersBySystem(systemName);
       let systemState = 1;
 
       //Убить все болезни
       helpers.getAllIlnesses(api).forEach((ill) => medhelpers.removeIllness(api, ill.mID));
 
       //Включить все импланты
-      modifiers = helpers.getAllImplants(api).forEach((m) => {
-        m.enabled = true;
-        api.info(`characterResurectEvent: enable ${m.id} implant`);
+      helpers.getAllImplants(api).forEach((mod) => {
+        mod.enabled = true;
+        api.info(`characterResurectEvent: enable ${mod.id} implant`);
         systemState = 0;
       });
 
@@ -456,7 +454,7 @@ function timedRecoveryEffect(api: DeusExModelApiInterface, modifier: Modifier) {
  * Обработчик уменьшает damage на 1 и перевзводит таймер. Если это был последний хит, то следюущий вызов
  * просто отключит таймер (повреждения в минус уйти не могут)
  */
-function recoverHpEvent(api: DeusExModelApiInterface, data, event) {
+function recoverHpEvent(api: DeusExModelApiInterface, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   if (m && m.damage && api.model.isAlive) {
@@ -500,9 +498,7 @@ function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modif
 
     if (!api.getTimer(timerName)) {
       api.info(
-        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${
-          params.recoveryTime
-        } sec!`,
+        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
       );
       api.setTimer(timerName, params.recoveryTime * 1000, 'recover-systems', { mID: modifier.mID, hpRemain });
     } else {

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
-import { getEvents, getRefreshEvent } from '../fixtures/events';
+import { getRefreshEvent } from '../fixtures/events';
 
 describe('Meidc and Mind ViewModel Generation', () => {
   let result: any = null;

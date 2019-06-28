@@ -19,7 +19,7 @@ function changeMindCubesEffect(api: DeusExModelApiInterface, modifier) {
   if (timerValue) {
     api.debug('Timer: ' + JSON.stringify(timerValue));
 
-    var scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
+    let scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
 
     if (changeCommand) {
       helpers.modifyMindCubes(api, api.model.mind, changeCommand, scale);

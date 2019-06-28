@@ -2,7 +2,7 @@ import { getTotalChance, getPotentialSystemsIds, whatSystemShouldBeInfected } fr
 import { expect } from 'chai';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 
 describe('Infecton: ', () => {
   it('Calculate potentially bad systems', async () => {
@@ -45,11 +45,11 @@ describe('Infecton: ', () => {
 
     let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     events = [getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
 
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     expect(baseModel.isAlive).is.false;
   });
@@ -63,11 +63,11 @@ describe('Infecton: ', () => {
 
     let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     events = [getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
 
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     expect(baseModel.isAlive).is.true;
   });

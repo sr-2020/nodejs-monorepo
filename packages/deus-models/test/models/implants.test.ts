@@ -1,13 +1,11 @@
 //Тесты для моделей управления имплантами
 
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Implants: ', () => {
-  let result: any = null;
-
   it('Add implant', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
@@ -62,7 +60,7 @@ describe('Implants: ', () => {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 
@@ -73,7 +71,7 @@ describe('Implants: ', () => {
     expect(changeRecord).to.exist;
 
     events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], baseModel.timestamp + 100, true);
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     let implants = baseModel.modifiers.filter((e: any) => e.id == 's_stability');
 
@@ -88,7 +86,7 @@ describe('Implants: ', () => {
       model.timestamp + 100,
     );
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
     let implant2 = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
@@ -218,7 +216,7 @@ describe('Implants: ', () => {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let cubeVal = baseModel.mind.C[7];
     expect(cubeVal).is.equal(61);
@@ -227,7 +225,7 @@ describe('Implants: ', () => {
     model = getExampleModel();
     model.mind.C[7] = 63;
     events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
-    ({ baseModel, workingModel } = await process(model, events));
+    ({ baseModel } = await process(model, events));
 
     expect(baseModel.mind.A[1]).is.equal(57);
     expect(baseModel.mind.B[2]).is.equal(30);
@@ -270,7 +268,7 @@ describe('Implants: ', () => {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_stability' } }], model.timestamp + 100, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 
@@ -285,7 +283,7 @@ describe('Implants: ', () => {
       true,
     );
 
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 
@@ -294,7 +292,7 @@ describe('Implants: ', () => {
 
     //Проверяем состояние импланта до истечения времени
     events = [getRefreshEvent(baseModel._id, baseModel.timestamp + Math.round((duration * 1000) / 2))];
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 
@@ -304,7 +302,7 @@ describe('Implants: ', () => {
     //Проверяем состояние импланта после истечения времени
     events = [getRefreshEvent(baseModel._id, baseModel.timestamp + duration * 1000 + 100)];
 
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 

@@ -100,9 +100,7 @@ function illnessNextStageEvent(api: DeusExModelApiInterface, data: any, event: E
         //Если это последний этап, то убить систему
         let totalTime = Math.round((event.timestamp - illness.startTime) / 1000);
         api.info(
-          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${
-            illness.system
-          }!`,
+          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
         );
         api.model.systems[medhelpers.getSystemID(illness.system)] = 0;
       }

@@ -1,6 +1,6 @@
 import { merge } from 'lodash';
 import { expect } from 'chai';
-import { process, printModel, findModifier, findChangeRecord } from '../test_helpers';
+import { process, findModifier, findChangeRecord } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -106,7 +106,7 @@ describe('JJ Immortality', () => {
     model.changes = [];
     let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;

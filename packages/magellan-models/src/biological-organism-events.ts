@@ -1,4 +1,4 @@
-import { Condition, Effect, Event, Modifier, ModelApiInterface } from 'alice-model-engine-api';
+import { Condition, Effect, Event, Modifier } from 'alice-model-engine-api';
 import uuid = require('uuid/v1');
 import {
   allSystemsIndices,

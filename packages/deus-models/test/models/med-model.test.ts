@@ -1,11 +1,9 @@
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Medicine: ', () => {
-  let result: any = null;
-
   it('Compute HP', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
@@ -46,7 +44,7 @@ describe('Medicine: ', () => {
     model.profileType = 'program';
 
     let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
   });
@@ -57,7 +55,7 @@ describe('Medicine: ', () => {
     model.profileType = 'exhuman-program';
 
     let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
   });

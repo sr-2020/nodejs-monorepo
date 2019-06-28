@@ -2,7 +2,7 @@ import { merge } from 'lodash';
 import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
-import { getEvents, getRefreshEvent } from '../fixtures/events';
+import { getEvents } from '../fixtures/events';
 import { find } from 'lodash';
 
 interface Global {
@@ -51,7 +51,7 @@ describe('Pills', () => {
     let model = getExampleModel();
 
     let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
     expect(effect).to.exist;
@@ -61,7 +61,7 @@ describe('Pills', () => {
     let model = getExampleModel();
 
     let events = getEvents(model._id, [{ eventType: 'scanQr', data: { type: 1, payload: '111-113' } }], Date.now(), true);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
     expect(effect).to.exist;

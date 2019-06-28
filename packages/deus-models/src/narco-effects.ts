@@ -29,7 +29,7 @@ function startTemporaryCubeChange(api: DeusExModelApiInterface, narco) {
   api.debug('Narco will add modifier');
   //Изменение должно быть временным. Накладываем эффект
 
-  var modifier = createNarcoEffectModifier(api, 'change-mind-cube-effect', 'narcoEffects');
+  let modifier = createNarcoEffectModifier(api, 'change-mind-cube-effect', 'narcoEffects');
   if (!modifier) {
     return;
   }

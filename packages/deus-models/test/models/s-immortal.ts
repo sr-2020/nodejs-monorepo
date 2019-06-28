@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -63,7 +63,6 @@ describe('Serenity immortality: ', () => {
     ill = baseModel.modifiers.find((m: any) => m.class == 'illness');
     expect(ill).is.not.exist;
 
-    let imp = baseModel.modifiers.find((m: any) => m.class == 'bio-implant' || m.class == 'cyber-implant');
     expect(ill).is.not.exist;
 
     expect(baseModel.systems).is.not.exist;
@@ -84,7 +83,7 @@ describe('Serenity immortality: ', () => {
       ],
       model.timestamp + 100,
     );
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let imp = baseModel.modifiers.find((m: any) => m.id == 's_immortal01');
     let imp2 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle');

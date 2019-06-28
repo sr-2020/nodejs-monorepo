@@ -1,4 +1,3 @@
-import _ = require('lodash');
 import helpers = require('../helpers/model-helper');
 import medichelpers = require('../helpers/medic-helper');
 import { Modifier } from '@sr2020/alice-model-engine-api/index';

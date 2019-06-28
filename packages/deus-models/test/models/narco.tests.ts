@@ -1,7 +1,7 @@
 //Тесты наркотиков
 
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import * as fs from 'async-file';
@@ -11,7 +11,7 @@ function expectNarcoIgnoredForProfileType(profileType: string) {
     let model = getExampleModel();
     model.profileType = profileType;
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     let modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
     expect(modifiers.length).is.equal(0);
@@ -71,7 +71,7 @@ describe('Narco effects: ', () => {
   it('Narco with condition', async function() {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(1);
   });
@@ -80,7 +80,7 @@ describe('Narco effects: ', () => {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     events.push(getRefreshEvent(model._id, model.timestamp + 18000 * 1001));
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(0);
   });
@@ -88,7 +88,7 @@ describe('Narco effects: ', () => {
   it('Narco with history record', async function() {
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(
       workingModel.changes.filter((e: any) => e.text == 'Таблетка начала действовать. Надень браслет и следуй указаниям дилера.').length,
@@ -140,7 +140,7 @@ describe('Narco effects: ', () => {
 
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(0);
   });
@@ -178,13 +178,12 @@ describe('Narco effects: ', () => {
 
     let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let refresh = [getRefreshEvent(model._id, 60 * 60 * 24 * 1000)];
     let result = await process(baseModel, refresh);
 
     baseModel = result.baseModel;
-    workingModel = result.workingModel;
 
     expect(baseModel.isAlive).is.false;
   });

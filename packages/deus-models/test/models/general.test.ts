@@ -1,7 +1,7 @@
 //Тесты для событий общего назначения (для хакеров и т.д.)
 
 import { expect } from 'chai';
-import { process, printModel } from '../test_helpers';
+import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -26,7 +26,7 @@ describe('General events: ', () => {
       [{ eventType: 'put-condition', data: eventData }, { eventType: 'put-condition', data: eventData2 }],
       model.timestamp + 100,
     );
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     let cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
@@ -36,7 +36,7 @@ describe('General events: ', () => {
 
     //Проверить через 600 секунд
     events = [getRefreshEvent(model._id, baseModel.timestamp + 610 * 1000)];
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
@@ -46,7 +46,7 @@ describe('General events: ', () => {
 
     //Проверить через 2 часа секунд
     events = [getRefreshEvent(model._id, baseModel.timestamp + 7200 * 1000)];
-    ({ baseModel, workingModel } = await process(baseModel, events));
+    ({ baseModel } = await process(baseModel, events));
 
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
@@ -63,7 +63,7 @@ describe('General events: ', () => {
 
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'send-message', data: msgData }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     let msg = baseModel.messages.find((c: any) => c.title == 'Test Message');
 
@@ -82,7 +82,7 @@ describe('General events: ', () => {
       ],
       model.timestamp + 100,
     );
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     expect(baseModel.sweethome).is.equal('new_location');
     expect(baseModel.login).is.equal('john.smith');
@@ -94,7 +94,7 @@ describe('General events: ', () => {
     };
     let model = getExampleModel();
     let events = getEvents(model._id, [{ eventType: 'change-mind-cube', data: eventData }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     expect(baseModel.mind.A[2]).is.equal(76);
     expect(baseModel.mind.B[4]).is.equal(50);
@@ -108,7 +108,7 @@ describe('General events: ', () => {
     model.owner = 'ivan.ivanovich';
 
     let events = getEvents(model._id, [{ eventType: 'change-android-owner', data: { owner: 'vasya.pupkin' } }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     expect(baseModel.owner).is.equal('vasya.pupkin');
 
@@ -141,7 +141,7 @@ describe('General events: ', () => {
     };
 
     let events = getEvents(model._id, [{ eventType: 'change-memory', data: modelData }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     //printModel(baseModel);
 
@@ -161,7 +161,7 @@ describe('General events: ', () => {
     let model = getExampleModel();
 
     let events = getEvents(model._id, [{ eventType: 'change-insurance', data: { Insurance: 'JJ', Level: 2 } }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    let { baseModel } = await process(model, events);
 
     expect(baseModel.insurance).is.equal('JJ');
     expect(baseModel.insuranceLevel).is.equal(2);
