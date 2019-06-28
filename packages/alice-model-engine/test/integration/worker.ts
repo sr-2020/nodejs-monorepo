@@ -1,4 +1,4 @@
-import { EngineResultOk, Effect } from 'alice-model-engine-api';
+import { EngineResultOk, Effect, EmptyModel } from 'alice-model-engine-api';
 import { expect } from 'chai';
 import 'mocha';
 import { Config, EventHandler } from '../../src/config';
@@ -6,6 +6,7 @@ import { Worker } from '../../src/worker';
 
 describe('Worker', () => {
   let worker: Worker;
+  const defaultModel: EmptyModel = { characterId: '0', timestamp: 0, modifiers: [], conditions: [], timers: {} };
 
   beforeEach(() => {
     const eventHandlers: EventHandler[] = [
@@ -48,7 +49,7 @@ describe('Worker', () => {
   });
 
   it('Should process some models', async () => {
-    const context = { characterId: '0', timestamp: 0, value: 0 };
+    const context = { ...defaultModel, value: 0 };
 
     const timestamp = Date.now();
 
@@ -63,12 +64,12 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ characterId: '0', timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
+    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
   it('Should process some timers', async () => {
-    const context = { characterId: '0', timestamp: 0, value: '' };
+    const context = { ...defaultModel, value: '' };
     const timestamp = Date.now();
 
     const events = [
@@ -88,12 +89,12 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ characterId: '0', timestamp: timestamp, value: 'AABA', timers: {} });
+    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: 'AABA', timers: {} });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
   it('Should leave unprocessed timers intact', async () => {
-    const context = { characterId: '0', timestamp: 0, value: '' };
+    const context = { ...defaultModel, value: '' };
     const timestamp = Date.now();
 
     const events = [
@@ -114,7 +115,7 @@ describe('Worker', () => {
     };
 
     expect(result.baseModel).to.deep.equal({
-      characterId: '0',
+      ...defaultModel,
       timestamp: timestamp,
       value: 'A',
       timers: { delayedConcat: expectedTimer },
@@ -123,7 +124,7 @@ describe('Worker', () => {
   });
 
   it('Should produce view model', async () => {
-    const context = { characterId: '0', timestamp: 0, value: 0 };
+    const context = { ...defaultModel, value: 0 };
     const timestamp = Date.now();
 
     const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
@@ -141,7 +142,7 @@ describe('Worker', () => {
   });
 
   it('Should return outbound events', async () => {
-    const context = { characterId: '0', timestamp: 0, value: 0 };
+    const context = { ...defaultModel, value: 0 };
     const timestamp = Date.now();
 
     const events = [
@@ -171,8 +172,7 @@ describe('Worker', () => {
     ];
 
     const context = {
-      characterId: '0',
-      timestamp: 0,
+      ...defaultModel,
       value: '',
       modifiers: [
         {

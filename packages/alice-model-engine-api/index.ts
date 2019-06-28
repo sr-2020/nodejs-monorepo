@@ -122,8 +122,8 @@ export interface EmptyModel {
   characterId: string;
   timestamp: number;
 
-  modifiers?: Modifier[];
-  conditions?: Condition[];
+  modifiers: Modifier[];
+  conditions: Condition[];
 
   timers?: Timers;
 }

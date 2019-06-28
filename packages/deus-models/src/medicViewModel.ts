@@ -74,20 +74,18 @@ function getViewModel(api: ViewModelApiInterface<any>, data) {
     }
   }
 
-  if (api.model.modifiers) {
-    ret.implants = [];
+  ret.implants = [];
 
-    api.model.modifiers
-      .filter((m) => m.system)
-      .forEach((m) =>
-        ret.implants.push({
-          id: m.id,
-          displayName: m.displayName,
-          system: m.system,
-          enabled: m.enabled,
-        }),
-      );
-  }
+  api.model.modifiers
+    .filter((m) => m.system)
+    .forEach((m) =>
+      ret.implants.push({
+        id: m.id,
+        displayName: m.displayName,
+        system: m.system,
+        enabled: m.enabled,
+      }),
+    );
 
   return ret;
 }

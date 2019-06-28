@@ -105,8 +105,8 @@ export interface Timers {
 export interface EmptyModel {
     characterId: string;
     timestamp: number;
-    modifiers?: Modifier[];
-    conditions?: Condition[];
+    modifiers: Modifier[];
+    conditions: Condition[];
     timers?: Timers;
 }
 export interface ReadModelApiInterface<T extends EmptyModel> {

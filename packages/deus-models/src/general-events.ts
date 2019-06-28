@@ -50,7 +50,7 @@ function putConditionEvent(api: DeusExModelApiInterface, data, event) {
  */
 
 function removeConditionEvent(api: DeusExModelApiInterface, data, event) {
-  if (data.mID && api.model.conditions) {
+  if (data.mID) {
     let i = api.model.conditions.findIndex((c) => c.mID == data.mID);
 
     if (i != -1) {

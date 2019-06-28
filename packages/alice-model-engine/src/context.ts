@@ -89,7 +89,6 @@ export class Context<T extends EmptyModel> {
   }
 
   get modifiers(): Modifier[] {
-    if (!this._ctx.modifiers) this._ctx.modifiers = [];
     return this._ctx.modifiers;
   }
 
@@ -99,7 +98,6 @@ export class Context<T extends EmptyModel> {
   }
 
   get conditions(): Condition[] {
-    if (!this._ctx.conditions) this._ctx.conditions = [];
     return this._ctx.conditions;
   }
 
