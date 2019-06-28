@@ -7,22 +7,23 @@ import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import Chance = require('chance');
 import { DeusExModelApiInterface } from '../helpers/model';
+import { Event } from '@sr2020/alice-model-engine-api/index';
 let chance = new Chance();
 
 /**
  * Обработчик события "put-condition"
  * Добавляет текстовое состояние в модель
- *
- * {
- *   text: string,
- *   details: string,
- *   class: string,     //physiology | mind
- *   duration: xxxx
- * }
  * параметр duration задается в секундах, и он опционален.
  * Если не задано, то состояния добавляются на 2 часа
  */
-function putConditionEvent(api: DeusExModelApiInterface, data, event) {
+interface PutConditionData {
+  text: string;
+  details: string;
+  class: 'physiology' | 'mind';
+  duration?: number;
+}
+
+function putConditionEvent(api: DeusExModelApiInterface, data: PutConditionData, _: Event) {
   if (data.text) {
     let cond = api.addCondition({
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
@@ -43,12 +44,14 @@ function putConditionEvent(api: DeusExModelApiInterface, data, event) {
 
 /**
  * Обработчик события "remove-condition"
- * { id: string }
  *
  * Удаляет состояние персонажа
  */
+interface RemoveConditionData {
+  id?: string;
+}
 
-function removeConditionEvent(api: DeusExModelApiInterface, data, event) {
+function removeConditionEvent(api: DeusExModelApiInterface, data: RemoveConditionData, _: Event) {
   if (data.id) {
     let i = api.model.conditions.findIndex((c) => c.id == data.id);
 
@@ -64,13 +67,13 @@ function removeConditionEvent(api: DeusExModelApiInterface, data, event) {
 /**
  * Обработчик события "send-message"
  * Отправляет текстовое сообщение в модель (в список messages)
- *
- * {
- *   title: string,
- *   text: string,
- * }
  */
-function sendMessageEvent(api: DeusExModelApiInterface, data, event) {
+interface SendMessageData {
+  title?: string;
+  text?: string;
+}
+
+function sendMessageEvent(api: DeusExModelApiInterface, data: SendMessageData, _: Event) {
   if (data.title && api.model.messages) {
     let message = {
       mID: helpers.uuidv4(),
@@ -92,12 +95,12 @@ function sendMessageEvent(api: DeusExModelApiInterface, data, event) {
  * Т.е. набор опраций по изменнию (+-=) через запятую (формат как в списке имплантов)
  *
  * В явном виде игроку информация об изменении не сообщается
- *
- * {
- *   operations: string
- * }
  */
-function changeMindCubeEvent(api: DeusExModelApiInterface, data, event) {
+interface ChangeMindCubeData {
+  operations: string;
+}
+
+function changeMindCubeEvent(api: DeusExModelApiInterface, data: ChangeMindCubeData, _: Event) {
   api.error('=============================');
 
   if (data.operations) {
@@ -109,13 +112,13 @@ function changeMindCubeEvent(api: DeusExModelApiInterface, data, event) {
 /**
  * Обработчик события "add-change-record"
  * Событие позволяет добавить состояние в список состояний
- *
- * {
- *   text: string,
- *   timestamp: number
- * }
  */
-function addChangeRecord(api: DeusExModelApiInterface, data, event) {
+interface AddChangeRecordData {
+  text?: string;
+  timestamp?: number;
+}
+
+function addChangeRecord(api: DeusExModelApiInterface, data: AddChangeRecordData, _: Event) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }
@@ -129,13 +132,13 @@ function addChangeRecord(api: DeusExModelApiInterface, data, event) {
  *
  * Изменение проходит "тихо" для игрока - ни в каких списках изменений оно не отображается
  * (поэтому так лучше не менять что-то игровое и важное о чем надо знать)
- *
- * {
- *   name: string,
- *   value: string,
- * }
  */
-function changeModelVariableEvent(api: DeusExModelApiInterface, data, event) {
+interface ChangeModelVariableData {
+  name?: string;
+  value?: any;
+}
+
+function changeModelVariableEvent(api: DeusExModelApiInterface, data: ChangeModelVariableData, _: Event) {
   if (data.name && data.value) {
     let restricted = [
       '_id',
@@ -178,12 +181,12 @@ function changeModelVariableEvent(api: DeusExModelApiInterface, data, event) {
  * Позволяет изменить владельца андроида
  *
  * Игрок видит в списке изменний информацию об данном изменении
- *
- * {
- *   owner: string
- * }
  */
-function changeAndroidOwnerEvent(api: DeusExModelApiInterface, data, event) {
+interface ChangeAndroidOwnerData {
+  owner?: string;
+}
+
+function changeAndroidOwnerEvent(api: DeusExModelApiInterface, data: ChangeAndroidOwnerData, event: Event) {
   if (data.owner && api.model.profileType == 'robot') {
     api.info(`changeAndroidOwner:  ${api.model.owner} ===> ${data.owner}`);
 
@@ -214,7 +217,7 @@ function changeAndroidOwnerEvent(api: DeusExModelApiInterface, data, event) {
  *      ]
  * }
  */
-function changeMemoryEvent(api: DeusExModelApiInterface, data, event) {
+function changeMemoryEvent(api: DeusExModelApiInterface, data, event: Event) {
   if (data.remove) {
     data.remove.forEach((mID) => {
       api.info(`changeMemory: remove element with ${mID}`);
@@ -258,13 +261,13 @@ function changeMemoryEvent(api: DeusExModelApiInterface, data, event) {
  * Позволяет изменить страховку
  *
  * Игрок видит в списке изменний информацию об данном событии
- *
- * {
- *   "Insurance": "JJ",
- *   "Level": 2
- * }
  */
-function changeInsuranceEvent(api: DeusExModelApiInterface, data, event) {
+interface ChangeInsuranceData {
+  Insurance: string;
+  Level: number;
+}
+
+function changeInsuranceEvent(api: DeusExModelApiInterface, data: ChangeInsuranceData, event: Event) {
   if (data.Insurance && data.Level) {
     api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}`);
 

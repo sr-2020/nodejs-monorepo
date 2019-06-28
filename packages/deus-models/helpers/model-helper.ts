@@ -1,6 +1,6 @@
 import { Modifier } from '@sr2020/alice-model-engine-api/index';
 import { MindData } from '../src/medicViewModel';
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface, DeusExModel } from '../helpers/model';
 
 /**
  * Хелперы для разных моделей
@@ -431,7 +431,7 @@ function modifyModelDigitProperty(api: DeusExModelApiInterface, varName: string,
   return true;
 }
 
-function setTimerToKillModifier(api: DeusExModelApiInterface, modifier, timestamp) {
+function setTimerToKillModifier(api: DeusExModelApiInterface, modifier: Modifier, timestamp: number) {
   api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, timestamp - 1, 'stop-narco-modifier', { mID: modifier.mID });
 }
 
@@ -459,28 +459,34 @@ function isIllness(modifier: Modifier) {
   return false;
 }
 
-function getImplantsBySystem(api: DeusExModelApiInterface, systemName) {
+function getImplantsBySystem(api: DeusExModelApiInterface, systemName: string) {
   return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
-function getAllImplants(api) {
+function getAllImplants(api: DeusExModelApiInterface) {
   return api.model.modifiers.filter((m) => isImplant(m));
 }
 
-function getAllIlnesses(api) {
+function getAllIlnesses(api: DeusExModelApiInterface) {
   return api.model.modifiers.filter((m) => isIllness(m));
 }
 
-function getChanceFromModel(model) {
+function getChanceFromModel(model: DeusExModel) {
   return model.randomSeed ? new Chance(model.randomSeed) : new Chance();
 }
 
-function removeImplant(api: DeusExModelApiInterface, implantForRemove, timestamp) {
+function removeImplant(api: DeusExModelApiInterface, implantForRemove: Modifier, timestamp: number) {
   api.removeModifier(implantForRemove.mID);
   addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
 }
 
-function createEffectModifier(api: DeusExModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
+function createEffectModifier(
+  api: DeusExModelApiInterface,
+  effectName: string,
+  modifierId: string,
+  displayName: string,
+  modifierClass: string,
+): Modifier | undefined {
   let effect = api.getCatalogObject('effects', effectName);
 
   if (!effect) {

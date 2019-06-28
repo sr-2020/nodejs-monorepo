@@ -39,7 +39,7 @@ function showAlwaysCondition(api: DeusExModelApiInterface, modifier: Modifier) {
   api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
   if (modifier.conditions) {
     //Пройти по всем совпадаениям в предикатах и показать все состояния
-    modifier.conditions.forEach((condition) => {
+    modifier.conditions.forEach((condition: string) => {
       helpers.addCharacterCondition(api, condition);
     });
   }
