@@ -14,7 +14,7 @@ import cuid = require('cuid');
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { Context } from './context';
+import { Context, AquiredObjects } from './context';
 import Logger from './logger';
 
 class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {
@@ -106,7 +106,7 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     super(contextGetter);
   }
 
-  public addModifier(modifier: any) {
+  public addModifier(modifier: Modifier) {
     const m = cloneDeep(modifier);
 
     if (!m.mID) {
@@ -117,7 +117,7 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return m;
   }
 
-  public aquired(db: string, id: string): any {
+  public aquired(db: string, id: string): AquiredObjects {
     return _.get(this.contextGetter(), ['aquired', db, id]);
   }
 
