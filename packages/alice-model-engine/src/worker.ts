@@ -6,9 +6,9 @@ import { EngineContext, EngineMessage, EngineMessageConfigure, EngineMessageEven
 import * as config from './config';
 import { Context } from './context';
 import Logger from './logger';
-import * as model from './model';
 import { loadModels } from './utils';
 import { Engine } from './engine';
+import { ModelCallbacks } from './callbacks';
 
 declare var TEST_EXTERNAL_OBJECTS: any;
 
@@ -21,11 +21,11 @@ export class Worker {
     return new Worker(m);
   }
 
-  constructor(private _model: model.Model) {}
+  constructor(private _modelCallbacks: ModelCallbacks) {}
 
   public configure(newConfig: config.ConfigInterface): Worker {
     Logger.debug('engine', 'Loaded config', { config: inspect(newConfig, false, null) });
-    this._engine = new Engine(this._model, newConfig);
+    this._engine = new Engine(this._modelCallbacks, newConfig);
     return this;
   }
 

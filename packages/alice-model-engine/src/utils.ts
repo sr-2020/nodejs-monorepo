@@ -2,10 +2,10 @@ import glob = require('glob');
 import { merge as _merge, clone, assign } from 'lodash';
 import * as Path from 'path';
 import Logger from './logger';
-import { Model } from './model';
+import { ModelCallbacks } from './callbacks';
 
-export function loadModels(dir: string): Model {
-  return requireDir(dir, (m: Model, src: any) => {
+export function loadModels(dir: string): ModelCallbacks {
+  return requireDir(dir, (m: ModelCallbacks, src: any) => {
     m = clone(m);
     src = clone(src);
 

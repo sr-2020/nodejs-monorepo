@@ -1,11 +1,11 @@
 import { Context } from './context';
 import Logger from './logger';
-import * as model from './model';
 import { ModelApiFactory } from './model_api';
 
 import { Event } from 'alice-model-engine-api';
+import { Callback } from './callbacks';
 
-export type CallbacksList = model.Callback | null | Array<model.Callback | null>;
+export type CallbacksList = Callback | null | Array<Callback | null>;
 
 export interface DispatcherInterface {
   on(name: string, callbacks: CallbacksList): void;
@@ -14,7 +14,7 @@ export interface DispatcherInterface {
 
 export class Dispatcher implements DispatcherInterface {
   private store: {
-    [key: string]: model.Callback[];
+    [key: string]: Callback[];
   };
 
   constructor() {

@@ -7,13 +7,13 @@ import * as config from './config';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
-import * as model from './model';
 import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
+import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
 
 export class Engine {
   private dispatcher: dispatcher.DispatcherInterface = new dispatcher.Dispatcher();
 
-  constructor(private _model: model.Model, private _config: config.ConfigInterface) {
+  constructor(private _model: ModelCallbacks, private _config: config.ConfigInterface) {
     Logger.debug('engine', 'Loaded config', { config: inspect(_config, false, null) });
     _config.events.forEach((e) => {
       const callbacks = e.effects.map((c) => this.resolveCallback(c));
@@ -79,7 +79,7 @@ export class Engine {
     };
   }
 
-  private resolveCallback(callback: config.Callback): model.Callback | null {
+  private resolveCallback(callback: config.Callback): Callback | null {
     const result = this._model.callbacks[callback];
     if (result == null) {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
@@ -133,7 +133,7 @@ export class Engine {
 
     return reduce(
       this._model.viewModelCallbacks,
-      (vm: any, f: model.ViewModelCallback, base: string) => {
+      (vm: any, f: ViewModelCallback, base: string) => {
         vm[base] = f(api, data);
         return vm;
       },

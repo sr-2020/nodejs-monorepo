@@ -6,7 +6,7 @@ export type ViewModelCallback = (api: ViewModelApiInterface, model: any) => any;
 
 export type PreprocessCallback = (api: PreprocessApiInterface, events: Event[]) => any;
 
-export interface Model {
+export interface ModelCallbacks {
   callbacks: { [key: string]: Callback };
   preprocessCallbacks: PreprocessCallback[];
   viewModelCallbacks: { [base: string]: ViewModelCallback };
