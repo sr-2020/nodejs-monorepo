@@ -137,7 +137,6 @@ export interface ReadModelApiInterface<T extends EmptyModel> {
   getModifiersByClass(className: string): Modifier[];
   getModifiersBySystem(systemName: string): Modifier[];
 
-  getEffectsByName(name: string): Effect[];
   getEffectsByClass(className: string): Effect[];
 
   getConditionById(id: string): Condition | undefined;
