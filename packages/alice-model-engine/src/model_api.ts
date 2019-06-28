@@ -7,6 +7,8 @@ import {
   PreprocessApiInterface,
   ReadModelApiInterface,
   ViewModelApiInterface,
+  Modifier,
+  Effect,
 } from 'alice-model-engine-api';
 import cuid = require('cuid');
 import * as _ from 'lodash';
@@ -85,16 +87,16 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
     Logger.error('model', msg, additionalData);
   }
 
-  private getModifiersBy(predicate: (m: any) => boolean) {
+  private getModifiersBy(predicate: (m: Modifier) => boolean) {
     return this.contextGetter().modifiers.filter(predicate);
   }
 
-  private getEffectsBy(predicate: (m: any) => boolean) {
+  private getEffectsBy(predicate: (e: Effect) => boolean) {
     const effects = this.contextGetter().effects.filter(predicate);
     return effects;
   }
 
-  private getConditionsBy(predicate: (m: any) => boolean) {
+  private getConditionsBy(predicate: (c: Condition) => boolean) {
     return this.contextGetter().conditions.filter(predicate);
   }
 }
