@@ -1,4 +1,4 @@
-import { EngineResultOk, EmptyModel, Effect } from 'alice-model-engine-api';
+import { EngineResultOk, Effect } from 'alice-model-engine-api';
 import { expect } from 'chai';
 import 'mocha';
 import { Config, EventHandler } from '../../src/config';
