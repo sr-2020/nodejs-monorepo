@@ -76,7 +76,6 @@ export function getExampleModel(id?: string): DeusExModel {
     timestamp: 0,
     conditions: [
       {
-        mID: 'demoState',
         id: 'demoState',
         class: 'physiology',
         text: 'Тестовое постоянное состояние!',

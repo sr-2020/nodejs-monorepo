@@ -151,7 +151,6 @@ function leaveShip(api: MagellanModelApiInterface, _data: null, _event: Event) {
 
 function onTheShip(api: MagellanModelApiInterface, modifier: OnTheShipModifier) {
   const c: Condition = {
-    mID: uuid(),
     id: 'on-the-ship',
     class: 'physiology',
     text: `Вы находитесь на корабле номер ${modifier.shipId}`,

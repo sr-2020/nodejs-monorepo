@@ -25,7 +25,6 @@ let chance = new Chance();
 function putConditionEvent(api: DeusExModelApiInterface, data, event) {
   if (data.text) {
     let cond = api.addCondition({
-      mID: '',
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
       text: data.text,
       details: data.details ? data.details : data.text,
@@ -37,21 +36,21 @@ function putConditionEvent(api: DeusExModelApiInterface, data, event) {
 
       const duration_ms = data.duration ? Number(data.duration) * 1000 : 7200000;
 
-      helpers.addDelayedEvent(api, duration_ms, 'remove-condition', { mID: cond.mID }, `remCond-${cond.mID}`);
+      helpers.addDelayedEvent(api, duration_ms, 'remove-condition', { id: cond.id }, `remCond-${cond.id}`);
     }
   }
 }
 
 /**
  * Обработчик события "remove-condition"
- * { mID: string }
+ * { id: string }
  *
  * Удаляет состояние персонажа
  */
 
 function removeConditionEvent(api: DeusExModelApiInterface, data, event) {
-  if (data.mID) {
-    let i = api.model.conditions.findIndex((c) => c.mID == data.mID);
+  if (data.id) {
+    let i = api.model.conditions.findIndex((c) => c.id == data.id);
 
     if (i != -1) {
       let text = api.model.conditions[i].text;

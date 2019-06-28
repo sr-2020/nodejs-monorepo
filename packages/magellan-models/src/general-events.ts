@@ -33,7 +33,6 @@ interface PutConditionData {
 function putConditionEvent(api: ModelApiInterface<OrganismModel>, data: PutConditionData, event: Event) {
   if (data.text) {
     const cond = api.addCondition({
-      mID: '',
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
       text: data.text,
       details: data.details ? data.details : data.text,
@@ -45,7 +44,7 @@ function putConditionEvent(api: ModelApiInterface<OrganismModel>, data: PutCondi
 
       const durationMs = data.duration ? Number(data.duration) * 1000 : 7200000;
 
-      helpers.addDelayedEvent(api, durationMs, 'remove-condition', { mID: cond.mID }, `remCond-${cond.mID}`);
+      helpers.addDelayedEvent(api, durationMs, 'remove-condition', { id: cond.id }, `remCond-${cond.id}`);
     }
   }
 }

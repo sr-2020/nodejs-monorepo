@@ -136,8 +136,8 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     c = cloneDeep(condition);
 
     if (c) {
-      if (!c.mID) {
-        c.mID = cuid();
+      if (!c.id) {
+        c.id = cuid();
       }
 
       this.contextGetter().conditions.push(c);

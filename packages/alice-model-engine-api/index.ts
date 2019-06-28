@@ -46,7 +46,6 @@ export type Modifier = {
 };
 
 export type Condition = {
-  mID: string;
   id: string;
   class: string;
   text: string;
