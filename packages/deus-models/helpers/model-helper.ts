@@ -1,5 +1,6 @@
-import { ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Modifier } from '@sr2020/alice-model-engine-api/index';
 import { MindData } from '../src/medicViewModel';
+import { DeusExModelApiInterface } from '../helpers/model';
 
 /**
  * Хелперы для разных моделей
@@ -9,7 +10,7 @@ let type = require('type-detect');
 let Chance = require('chance');
 let chance = new Chance();
 
-function loadImplant(api: ModelApiInterface, id: string) {
+function loadImplant(api: DeusExModelApiInterface, id: string) {
   let implant = api.getCatalogObject('implants', id.toLowerCase());
 
   if (!implant) {
@@ -38,7 +39,7 @@ function loadImplant(api: ModelApiInterface, id: string) {
 /**
  * Загружает болезнь и ее эффект из каталога
  */
-function loadIllness(api: ModelApiInterface, id: string) {
+function loadIllness(api: DeusExModelApiInterface, id: string) {
   let illness = api.getCatalogObject('illnesses', id.toLowerCase());
 
   if (!illness) {
@@ -62,7 +63,7 @@ function loadIllness(api: ModelApiInterface, id: string) {
 }
 
 //TODO проверить какой timestamp в модели в момент обработки changes
-function addChangeRecord(api: ModelApiInterface, text: string, timestamp: number) {
+function addChangeRecord(api: DeusExModelApiInterface, text: string, timestamp: number) {
   if (text) {
     if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
 
@@ -76,7 +77,7 @@ function addChangeRecord(api: ModelApiInterface, text: string, timestamp: number
 
 //Проверка предиката и возвращение данных для работы эффекта
 //Вовращается объект Params (если он есть)
-function checkPredicate(api: ModelApiInterface, mID: string, effectName: string, multi = false) {
+function checkPredicate(api: DeusExModelApiInterface, mID: string, effectName: string, multi = false) {
   let implant = api.getModifierById(mID);
 
   //api.info("checkPredicate: " + JSON.stringify(implant));
@@ -114,7 +115,7 @@ function checkPredicate(api: ModelApiInterface, mID: string, effectName: string,
   return null;
 }
 
-function isMindCubeMatch(api: ModelApiInterface, variable: string, condition: string) {
+function isMindCubeMatch(api: DeusExModelApiInterface, variable: string, condition: string) {
   let parts = variable.match(/^([A-G])(\d)/i);
   //console.log(`isMindCubeMatch: ${variable}`);
   if (parts) {
@@ -170,7 +171,7 @@ function checkValue(value: string, condition: string) {
   }
 }
 
-function isGenomeMatch(api: ModelApiInterface, variable: string, value: string) {
+function isGenomeMatch(api: DeusExModelApiInterface, variable: string, value: string) {
   let parts = variable.match(/^Z(\d\d?)/i);
 
   if (parts) {
@@ -195,7 +196,7 @@ function isGenomeMatch(api: ModelApiInterface, variable: string, value: string) 
  *
  * scaleFactor = 100 (default) to apply normal change
  */
-function modifyMindCubes(api: ModelApiInterface, mind: MindData, changeText: string, scaleFactor: number = 100) {
+function modifyMindCubes(api: DeusExModelApiInterface, mind: MindData, changeText: string, scaleFactor: number = 100) {
   api.error('=======================================================');
   changeText.split(',').forEach((exp) => {
     api.error(`MMC:  Part: ${exp}`);
@@ -247,7 +248,7 @@ function uuidv4() {
 /**
  *  Устанавливает значение состояния системы в модели по ее имени (англоязычному)
  */
-function addCharacterCondition(api: ModelApiInterface, condId: string) {
+function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
   if (condId) {
     let condition = api.getCatalogObject('conditions', condId);
 
@@ -268,7 +269,7 @@ function addCharacterCondition(api: ModelApiInterface, condId: string) {
  * Так же нельзя установить один имплант два раза
  */
 
-//  function isImpantCanBeInstalled(api: ModelApiInterface, implant){
+//  function isImpantCanBeInstalled(api: DeusExModelApiInterface, implant){
 //     if(implant && implant.system){
 //         let systemInfo = consts.medicSystems.find( s => s.name == implant.system);
 
@@ -289,7 +290,7 @@ function addCharacterCondition(api: ModelApiInterface, condId: string) {
  *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
  *  Задержка (duration) задается в миллисекундах
  */
-function addDelayedEvent(api: ModelApiInterface, duration: number, eventType: string, data: any, prefix = 'delayed') {
+function addDelayedEvent(api: DeusExModelApiInterface, duration: number, eventType: string, data: any, prefix = 'delayed') {
   if (api && duration && eventType && data) {
     let timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
@@ -350,7 +351,7 @@ let restrictedVars = [
  * Можно менять только простые переменные (string/number), не входящие в структуры
  * Нельзя менять ключевые поля, меняемые через специальные события и методы
  */
-function modifyModelProperties(api: ModelApiInterface, operations: string) {
+function modifyModelProperties(api: DeusExModelApiInterface, operations: string) {
   if (operations) {
     operations
       .replace(/\s/gi, '')
@@ -378,7 +379,7 @@ function modifyModelProperties(api: ModelApiInterface, operations: string) {
   }
 }
 
-function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
+function modifyModelStringProperty(api: DeusExModelApiInterface, varName, value) {
   if (restrictedVars.find((v) => varName == v)) {
     return false;
   }
@@ -398,7 +399,7 @@ function modifyModelStringProperty(api: ModelApiInterface, varName, value) {
   return true;
 }
 
-function modifyModelDigitProperty(api: ModelApiInterface, varName: string, op: string, value: string) {
+function modifyModelDigitProperty(api: DeusExModelApiInterface, varName: string, op: string, value: string) {
   if (restrictedVars.find((v) => varName == v)) {
     return false;
   }
@@ -430,7 +431,7 @@ function modifyModelDigitProperty(api: ModelApiInterface, varName: string, op: s
   return true;
 }
 
-function setTimerToKillModifier(api: ModelApiInterface, modifier, timestamp) {
+function setTimerToKillModifier(api: DeusExModelApiInterface, modifier, timestamp) {
   api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, timestamp - 1, 'stop-narco-modifier', { mID: modifier.mID });
 }
 
@@ -458,7 +459,7 @@ function isIllness(modifier: Modifier) {
   return false;
 }
 
-function getImplantsBySystem(api: ModelApiInterface, systemName) {
+function getImplantsBySystem(api: DeusExModelApiInterface, systemName) {
   return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
@@ -474,12 +475,12 @@ function getChanceFromModel(model) {
   return model.randomSeed ? new Chance(model.randomSeed) : new Chance();
 }
 
-function removeImplant(api: ModelApiInterface, implantForRemove, timestamp) {
+function removeImplant(api: DeusExModelApiInterface, implantForRemove, timestamp) {
   api.removeModifier(implantForRemove.mID);
   addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
 }
 
-function createEffectModifier(api: ModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
+function createEffectModifier(api: DeusExModelApiInterface, effectName, modifierId, displayName, modifierClass): Modifier | undefined {
   var effect = api.getCatalogObject('effects', effectName);
 
   if (!effect) {

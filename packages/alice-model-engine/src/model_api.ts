@@ -1,5 +1,6 @@
 import {
   Condition,
+  EmptyModel,
   Event,
   LogApiInterface,
   ModelApiInterface,
@@ -14,8 +15,8 @@ import { cloneDeep } from 'lodash';
 import { Context } from './context';
 import Logger from './logger';
 
-class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
-  constructor(protected contextGetter: () => Context) {}
+class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {
+  constructor(protected contextGetter: () => Context<T>) {}
 
   get model() {
     return this.contextGetter().ctx;
@@ -102,8 +103,8 @@ class ReadModelApi implements ReadModelApiInterface, LogApiInterface {
   }
 }
 
-class ModelApi extends ReadModelApi implements ModelApiInterface {
-  constructor(contextGetter: () => Context, private currentEvent?: Event) {
+class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApiInterface<T> {
+  constructor(contextGetter: () => Context<T>, private currentEvent?: Event) {
     super(contextGetter);
   }
 
@@ -167,8 +168,8 @@ class ModelApi extends ReadModelApi implements ModelApiInterface {
   }
 }
 
-class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
-  constructor(contextGetter: () => Context, protected baseContextGetter: () => Context) {
+class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ViewModelApiInterface<T> {
+  constructor(contextGetter: () => Context<T>, protected baseContextGetter: () => Context<T>) {
     super(contextGetter);
   }
 
@@ -177,21 +178,21 @@ class ViewModelApi extends ReadModelApi implements ViewModelApiInterface {
   }
 }
 
-class PreprocessApi extends ReadModelApi implements PreprocessApiInterface {
+class PreprocessApi<T extends EmptyModel> extends ReadModelApi<T> implements PreprocessApiInterface<T> {
   public aquire(db: string, id: string) {
     this.contextGetter().pendingAquire.push([db, id]);
     return this;
   }
 }
 
-export function ModelApiFactory(context: Context, event?: Event): ModelApiInterface {
+export function ModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): ModelApiInterface<T> {
   return new ModelApi(() => context, event);
 }
 
-export function ViewModelApiFactory(context: Context, baseContext: Context): ViewModelApiInterface {
+export function ViewModelApiFactory<T extends EmptyModel>(context: Context<T>, baseContext: Context<T>): ViewModelApiInterface<T> {
   return new ViewModelApi(() => context, () => baseContext);
 }
 
-export function PreprocessApiFactory(context: Context): PreprocessApiInterface {
+export function PreprocessApiFactory<T extends EmptyModel>(context: Context<T>): PreprocessApiInterface<T> {
   return new PreprocessApi(() => context);
 }

@@ -1,4 +1,4 @@
-import { Condition, ModelApiInterface, Modifier } from 'alice-model-engine-api';
+import { ModelApiInterface, EmptyModel } from 'alice-model-engine-api';
 
 // TODO(aeremin) Move to alice-model-engine-api?
 export interface Change {
@@ -106,15 +106,12 @@ export interface System {
   lastModified: number;
 }
 
-export interface OrganismModel {
+export interface OrganismModel extends EmptyModel {
   _id: string;
-  timestamp: number;
   // Debug only
   showTechnicalInfo?: boolean;
 
   changes: Change[];
-  conditions: Condition[];
-  modifiers: Modifier[];
 
   isAlive: boolean;
 
@@ -133,8 +130,27 @@ export interface OrganismModel {
   profileType: string;
 }
 
-export function getTypedOrganismModel(api: ModelApiInterface): OrganismModel {
-  return api.model;
+export type MagellanModelApiInterface = ModelApiInterface<OrganismModel>;
+
+export interface LabTest {
+  name: string;
+  displayableName: string;
+}
+
+export interface PatientHistoryEntry {
+  timestamp: number;
+  patientId: string;
+  patientFullName: string;
+  text: string;
+  type: string;
+}
+
+export interface MedicModel extends EmptyModel {
+  _id: string;
+  profileType: 'medic';
+  numTests: number;
+  availableTests: LabTest[];
+  patientHistory: PatientHistoryEntry[];
 }
 
 export interface LabTerminalRefillData {

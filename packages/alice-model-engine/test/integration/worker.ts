@@ -1,4 +1,4 @@
-import { EngineResultOk } from 'alice-model-engine-api';
+import { EngineResultOk, EmptyModel, Effect } from 'alice-model-engine-api';
 import { expect } from 'chai';
 import 'mocha';
 import { Config, EventHandler } from '../../src/config';
@@ -48,7 +48,7 @@ describe('Worker', () => {
   });
 
   it('Should process some models', async () => {
-    const context = { timestamp: 0, value: 0 };
+    const context = { characterId: '0', timestamp: 0, value: 0 };
 
     const timestamp = Date.now();
 
@@ -63,12 +63,12 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
+    expect(result.baseModel).to.deep.equal({ characterId: '0', timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
   it('Should process some timers', async () => {
-    const context = { timestamp: 0, value: '' };
+    const context = { characterId: '0', timestamp: 0, value: '' };
     const timestamp = Date.now();
 
     const events = [
@@ -88,12 +88,12 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: 'AABA', timers: {} });
+    expect(result.baseModel).to.deep.equal({ characterId: '0', timestamp: timestamp, value: 'AABA', timers: {} });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
   it('Should leave unprocessed timers intact', async () => {
-    const context = { timestamp: 0, value: '' };
+    const context = { characterId: '0', timestamp: 0, value: '' };
     const timestamp = Date.now();
 
     const events = [
@@ -113,12 +113,17 @@ describe('Worker', () => {
       data: { operand: 'value', value: 'B' },
     };
 
-    expect(result.baseModel).to.deep.equal({ timestamp: timestamp, value: 'A', timers: { delayedConcat: expectedTimer } });
+    expect(result.baseModel).to.deep.equal({
+      characterId: '0',
+      timestamp: timestamp,
+      value: 'A',
+      timers: { delayedConcat: expectedTimer },
+    });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
   it('Should produce view model', async () => {
-    const context = { timestamp: 0, value: 0 };
+    const context = { characterId: '0', timestamp: 0, value: 0 };
     const timestamp = Date.now();
 
     const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
@@ -136,7 +141,7 @@ describe('Worker', () => {
   });
 
   it('Should return outbound events', async () => {
-    const context = { timestamp: 0, value: 0 };
+    const context = { characterId: '0', timestamp: 0, value: 0 };
     const timestamp = Date.now();
 
     const events = [
@@ -160,19 +165,23 @@ describe('Worker', () => {
   });
 
   it('Should run modifiers', async () => {
+    const effects: Effect[] = [
+      { id: 'add A', type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
+      { id: 'add A', type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
+    ];
+
     const context = {
+      characterId: '0',
       timestamp: 0,
       value: '',
       modifiers: [
         {
-          id: 'test modifier',
+          mID: 'test modifier',
           enabled: true,
           operand: 'value',
+          class: 'normal',
           value: 'A',
-          effects: [
-            { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
-            { id: 'add A', type: 'normal', enabled: true, handler: 'concat' },
-          ],
+          effects,
         },
       ],
     };

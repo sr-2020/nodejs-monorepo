@@ -1,4 +1,4 @@
-import { ModelApiInterface, ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 /**
  *  В ViewModel для медиков и психологов должны входить:
@@ -33,7 +33,7 @@ interface MemoryElement {
   mID: string;
 }
 
-function getViewModel(api: ViewModelApiInterface, data) {
+function getViewModel(api: ViewModelApiInterface<any>, data) {
   let props = ['_id', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
   let ret: any = {};
 
@@ -94,7 +94,7 @@ function getViewModel(api: ViewModelApiInterface, data) {
 
 module.exports = () => {
   return {
-    view_medic_viewmodel(api: ViewModelApiInterface, model) {
+    view_medic_viewmodel(api: ViewModelApiInterface<any>, model) {
       return getViewModel(api, model);
     },
   };

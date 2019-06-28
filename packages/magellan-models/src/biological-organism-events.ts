@@ -1,10 +1,10 @@
-import { Condition, Effect, Event, ModelApiInterface, Modifier } from 'alice-model-engine-api';
+import { Condition, Effect, Event, Modifier, ModelApiInterface } from 'alice-model-engine-api';
 import uuid = require('uuid/v1');
 import {
   allSystemsIndices,
   colorOfChange,
-  getTypedOrganismModel,
   OrganismModel,
+  MagellanModelApiInterface,
   organismSystemsIndices,
   SystemColor,
   systemCorrespondsToColor,
@@ -18,33 +18,31 @@ function updateIsAlive(model: OrganismModel) {
   if (getSymptoms(model).has(Symptoms.Death)) model.isAlive = false;
 }
 
-function modifySystemsInstant(api: ModelApiInterface, data: number[], event: Event) {
-  const model = getTypedOrganismModel(api);
-  if (!model.isAlive) return;
+function modifySystemsInstant(api: MagellanModelApiInterface, data: number[], event: Event) {
+  if (!api.model.isAlive) return;
 
   helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
 
-  for (const i of organismSystemsIndices(model)) {
+  for (const i of organismSystemsIndices(api.model)) {
     if (data[i] != 0) {
-      model.systems[i].value += data[i];
-      model.systems[i].lastModified = event.timestamp;
+      api.model.systems[i].value += data[i];
+      api.model.systems[i].lastModified = event.timestamp;
     }
   }
 
-  updateIsAlive(model);
+  updateIsAlive(api.model);
 }
 
-function modifyNucleotideInstant(api: ModelApiInterface, data: number[], _event: Event) {
-  const model = getTypedOrganismModel(api);
-  if (!model.isAlive) return;
+function modifyNucleotideInstant(api: MagellanModelApiInterface, data: number[], _event: Event) {
+  if (!api.model.isAlive) return;
 
-  for (const i of organismSystemsIndices(model)) {
+  for (const i of organismSystemsIndices(api.model)) {
     if (data[i] != 0) {
-      model.systems[i].nucleotide += data[i];
+      api.model.systems[i].nucleotide += data[i];
     }
   }
 
-  updateIsAlive(model);
+  updateIsAlive(api.model);
 }
 
 interface PreMutationData {
@@ -58,18 +56,17 @@ interface DiseaseTickData {
   preMutationData?: PreMutationData;
 }
 
-function diseaseTick(api: ModelApiInterface, data: DiseaseTickData, event: Event) {
+function diseaseTick(api: MagellanModelApiInterface, data: DiseaseTickData, event: Event) {
   modifySystemsInstant(api, data.systemsModification, event);
   const preMutationData = data.preMutationData;
   if (preMutationData) {
-    const model = getTypedOrganismModel(api);
     const mutationData: MutationData = {
       color: preMutationData.mutationColor,
       diseaseStartTimestamp: preMutationData.diseaseStartTimestamp,
       newNucleotideValues: allSystemsIndices().map((i) => {
-        if (!model.systems[i].present) return undefined;
+        if (!api.model.systems[i].present) return undefined;
         if (!systemCorrespondsToColor(preMutationData.mutationColor, i)) return undefined;
-        return model.systems[i].nucleotide + getSymptomValue(model.systems[i]);
+        return api.model.systems[i].nucleotide + getSymptomValue(api.model.systems[i]);
       }),
     };
     api.setTimer(uuid(), consts.MAGELLAN_TICK_MILLISECONDS, 'mutation', mutationData);
@@ -82,26 +79,24 @@ interface MutationData {
   newNucleotideValues: Array<number | undefined>;
 }
 
-function mutation(api: ModelApiInterface, data: MutationData, _event: Event) {
-  const model = getTypedOrganismModel(api);
+function mutation(api: MagellanModelApiInterface, data: MutationData, _event: Event) {
+  if (!api.model.isAlive) return;
 
-  if (!model.isAlive) return;
-
-  for (const i of organismSystemsIndices(model)) {
-    if (!systemCorrespondsToColor(data.color, i) && model.systems[i].lastModified >= data.diseaseStartTimestamp) return; // Cancel mutation due to the change in the system of incompatible color
+  for (const i of organismSystemsIndices(api.model)) {
+    if (!systemCorrespondsToColor(data.color, i) && api.model.systems[i].lastModified >= data.diseaseStartTimestamp) return; // Cancel mutation due to the change in the system of incompatible color
   }
 
-  for (const i of organismSystemsIndices(model)) {
+  for (const i of organismSystemsIndices(api.model)) {
     const newValueOrUndefined = data.newNucleotideValues[i];
     if (newValueOrUndefined != undefined) {
-      model.systems[i].nucleotide = newValueOrUndefined;
+      api.model.systems[i].nucleotide = newValueOrUndefined;
     }
   }
 
-  updateIsAlive(model);
+  updateIsAlive(api.model);
 }
 
-function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[], event: Event) {
+function biologicalSystemsInfluence(api: MagellanModelApiInterface, totalChange: number[], event: Event) {
   const totalTicks = Math.max(...totalChange.map((v) => Math.abs(v)));
   for (let i = 0; i < totalTicks; ++i) {
     const adjustment = totalChange.map((v) => {
@@ -110,7 +105,7 @@ function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[
     });
     const tickData: DiseaseTickData = { systemsModification: adjustment };
     if (i == totalTicks - 1) {
-      const color = colorOfChange(getTypedOrganismModel(api), totalChange);
+      const color = colorOfChange(api.model, totalChange);
       if (color != undefined) {
         tickData.preMutationData = {
           mutationColor: color,
@@ -123,10 +118,9 @@ function biologicalSystemsInfluence(api: ModelApiInterface, totalChange: number[
   }
 }
 
-function xenoDisease(api: ModelApiInterface, data: XenoDisease, event: Event) {
-  const model = getTypedOrganismModel(api);
-  if (model.spaceSuit.on) {
-    model.spaceSuit.diseases.push(data);
+function xenoDisease(api: MagellanModelApiInterface, data: XenoDisease, event: Event) {
+  if (api.model.spaceSuit.on) {
+    api.model.spaceSuit.diseases.push(data);
   } else {
     biologicalSystemsInfluence(api, data.influence, event);
   }
@@ -136,7 +130,7 @@ interface OnTheShipModifier extends Modifier {
   shipId: number;
 }
 
-function enterShip(api: ModelApiInterface, data: number, event: Event) {
+function enterShip(api: MagellanModelApiInterface, data: number, event: Event) {
   const counter = api.aquired('counters', `ship_${data}`);
   if (counter && counter.shield) {
     const shieldValue = Number(counter.shield);
@@ -151,11 +145,11 @@ function enterShip(api: ModelApiInterface, data: number, event: Event) {
   api.addModifier(m);
 }
 
-function leaveShip(api: ModelApiInterface, _data: null, _event: Event) {
+function leaveShip(api: MagellanModelApiInterface, _data: null, _event: Event) {
   api.removeModifier('OnTheShip');
 }
 
-function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
+function onTheShip(api: MagellanModelApiInterface, modifier: OnTheShipModifier) {
   const c: Condition = {
     mID: uuid(),
     id: 'on-the-ship',
@@ -163,7 +157,7 @@ function onTheShip(api: ModelApiInterface, modifier: OnTheShipModifier) {
     text: `Вы находитесь на корабле номер ${modifier.shipId}`,
   };
   api.addCondition(c);
-  getTypedOrganismModel(api).location = `ship_${modifier.shipId}`;
+  api.model.location = `ship_${modifier.shipId}`;
 }
 
 export interface SpaceSuitRefillData {
@@ -171,7 +165,7 @@ export interface SpaceSuitRefillData {
   time: number;
 }
 
-function spaceSuitRefill(api: ModelApiInterface, data: SpaceSuitRefillData, event: Event) {
+function spaceSuitRefill(api: MagellanModelApiInterface, data: SpaceSuitRefillData, event: Event) {
   const counter = api.aquired('counters', data.uniqueId);
   if (!counter) {
     api.error("spaceSuitRefill: can't aquire space suit refill code", { uniqueId: data.uniqueId });
@@ -191,20 +185,20 @@ function spaceSuitRefill(api: ModelApiInterface, data: SpaceSuitRefillData, even
   // If person forgot about disinfecting it first... Well, too bad!
   spaceSuitTakeOff(api, 0, event);
   const oxygenTimeMs = data.time * 60 * 1000;
-  getTypedOrganismModel(api).spaceSuit.oxygenCapacity = oxygenTimeMs;
-  getTypedOrganismModel(api).spaceSuit.timestampWhenPutOn = event.timestamp;
+  api.model.spaceSuit.oxygenCapacity = oxygenTimeMs;
+  api.model.spaceSuit.timestampWhenPutOn = event.timestamp;
 
   api.setTimer('spacesuit', oxygenTimeMs, 'space-suit-take-off', 0);
-  getTypedOrganismModel(api).spaceSuit.on = true;
+  api.model.spaceSuit.on = true;
 }
 
-function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, event: Event) {
-  if (!getTypedOrganismModel(api).spaceSuit.on) return;
+function spaceSuitTakeOff(api: MagellanModelApiInterface, disinfectionLevel: number, event: Event) {
+  if (!api.model.spaceSuit.on) return;
 
-  getTypedOrganismModel(api).spaceSuit.on = false;
+  api.model.spaceSuit.on = false;
   api.removeTimer('spacesuit');
 
-  for (const disease of getTypedOrganismModel(api).spaceSuit.diseases) {
+  for (const disease of api.model.spaceSuit.diseases) {
     const diff = disease.power - disinfectionLevel;
     if (diff > Math.random() * 100) {
       biologicalSystemsInfluence(api, disease.influence, event);
@@ -212,9 +206,8 @@ function spaceSuitTakeOff(api: ModelApiInterface, disinfectionLevel: number, eve
   }
 }
 
-function fullRollback(api: ModelApiInterface, _: any, event: Event) {
-  const m = getTypedOrganismModel(api);
-  for (const i of allSystemsIndices()) m.systems[i].value = 0;
+function fullRollback(api: MagellanModelApiInterface, _: any, event: Event) {
+  for (const i of allSystemsIndices()) api.model.systems[i].value = 0;
   api.model.timers = {};
   helpers.addChangeRecord(api, 'Извините за баги :(', event.timestamp);
 }

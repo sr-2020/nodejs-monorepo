@@ -1,7 +1,7 @@
 import { reduce } from 'lodash';
 import { inspect } from 'util';
 
-import { EngineContext, EngineResult, Event, Modifier } from 'alice-model-engine-api';
+import { EmptyModel, EngineResult, Event, Modifier } from 'alice-model-engine-api';
 
 import * as config from './config';
 import { Context } from './context';
@@ -10,10 +10,10 @@ import Logger from './logger';
 import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
 import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
 
-export class Engine {
-  private dispatcher: dispatcher.DispatcherInterface = new dispatcher.Dispatcher();
+export class Engine<T extends EmptyModel> {
+  private dispatcher: dispatcher.DispatcherInterface<T> = new dispatcher.Dispatcher<T>();
 
-  constructor(private _model: ModelCallbacks, private _config: config.ConfigInterface) {
+  constructor(private _model: ModelCallbacks<T>, private _config: config.ConfigInterface) {
     Logger.debug('engine', 'Loaded config', { config: inspect(_config, false, null) });
     _config.events.forEach((e) => {
       const callbacks = e.effects.map((c) => this.resolveCallback(c));
@@ -21,7 +21,7 @@ export class Engine {
     });
   }
 
-  public preProcess(context: EngineContext, events: Event[]): Context {
+  public preProcess(context: T, events: Event[]): Context<T> {
     const baseCtx = new Context(context, events, this._config.dictionaries);
     const characterId = baseCtx.ctx.characterId;
     Logger.info('engine', 'Preprocessing model', { characterId, events });
@@ -29,7 +29,7 @@ export class Engine {
     return baseCtx;
   }
 
-  public process(baseCtx: Context): EngineResult {
+  public process(baseCtx: Context<T>): EngineResult {
     const characterId = baseCtx.ctx.characterId;
 
     let workingCtx = baseCtx.clone();
@@ -79,7 +79,7 @@ export class Engine {
     };
   }
 
-  private resolveCallback(callback: config.Callback): Callback | null {
+  private resolveCallback(callback: config.Callback): Callback<T> | null {
     const result = this._model.callbacks[callback];
     if (result == null) {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
@@ -87,12 +87,12 @@ export class Engine {
     return result;
   }
 
-  private runEvent(context: Context, event: Event): number {
+  private runEvent(context: Context<T>, event: Event): number {
     this.dispatcher.dispatch(event, context);
     return (context.timestamp = event.timestamp);
   }
 
-  private getEnabledModifiers(workingCtx: Context): Modifier[] {
+  private getEnabledModifiers(workingCtx: Context<T>): Modifier[] {
     return workingCtx.modifiers
       .filter((m) => m.enabled)
       .sort((a, b) => {
@@ -102,7 +102,7 @@ export class Engine {
       });
   }
 
-  private runModifiers(baseCtx: Context): Context {
+  private runModifiers(baseCtx: Context<T>): Context<T> {
     const workingCtx = baseCtx.clone();
     const characterId = workingCtx.ctx.characterId;
     const api = ModelApiFactory(workingCtx);
@@ -127,13 +127,13 @@ export class Engine {
     return workingCtx;
   }
 
-  private runViewModels(workingCtx: Context, baseCtx: Context) {
+  private runViewModels(workingCtx: Context<T>, baseCtx: Context<T>) {
     const data = workingCtx.valueOf();
     const api = ViewModelApiFactory(workingCtx, baseCtx);
 
     return reduce(
       this._model.viewModelCallbacks,
-      (vm: any, f: ViewModelCallback, base: string) => {
+      (vm: any, f: ViewModelCallback<T>, base: string) => {
         vm[base] = f(api, data);
         return vm;
       },
@@ -141,7 +141,7 @@ export class Engine {
     );
   }
 
-  private runPreprocess(baseCtx: Context, events: Event[]) {
+  private runPreprocess(baseCtx: Context<T>, events: Event[]) {
     if (!this._model.preprocessCallbacks.length) return;
 
     const ctx = baseCtx.clone();

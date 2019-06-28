@@ -3,9 +3,7 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import consts = require('../helpers/constants');
-import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
-
+import { DeusExModelApiInterface } from '../helpers/model';
 /**
  * Обработчик события "enterVr" (вход в VR)
  *
@@ -13,7 +11,7 @@ import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
  * (время события - время входа)
  *
  */
-function enterVREvent(api: ModelApiInterface, data, event) {
+function enterVREvent(api: DeusExModelApiInterface, data, event) {
   if (!api.model.isAlive) {
     api.error("Dead can't enter VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
@@ -30,7 +28,7 @@ function enterVREvent(api: ModelApiInterface, data, event) {
  * И увеличивает счетчик суммарного нахождения в VR для персонажа
  * (время события - время выхода)
  */
-function exitVREvent(api: ModelApiInterface, data, event) {
+function exitVREvent(api: DeusExModelApiInterface, data, event) {
   if (!api.model.isAlive) {
     api.error("Dead can't exit VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);

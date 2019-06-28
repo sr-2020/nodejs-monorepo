@@ -51,7 +51,7 @@ function getStartPage(model: OrganismModel) {
     });
   }
 
-  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
+  const illnesses = (model.modifiers || []).filter((e) => e.class == 'illness' && e.currentStage > 2);
 
   if (illnesses && illnesses.length) {
     pageInfo.body.items.push({
@@ -109,7 +109,7 @@ function getConditionsPage(model: OrganismModel) {
     menuTitle: 'Состояния',
     body: {
       title: 'Ваши состояния',
-      items: model.conditions.map(getConditionsPageItem),
+      items: (model.conditions || []).map(getConditionsPageItem),
       filters: ['Физиология', 'Психология'],
     },
   };
@@ -243,7 +243,7 @@ function getViewModel(model: OrganismModel) {
 
 module.exports = () => {
   return {
-    _view(api: ViewModelApiInterface, model: any) {
+    _view(api: ViewModelApiInterface<OrganismModel>, model: any) {
       if (hasMobileViewModel(model)) {
         try {
           return getViewModel(model);

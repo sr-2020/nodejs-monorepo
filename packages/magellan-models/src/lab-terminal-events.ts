@@ -1,6 +1,6 @@
 import { Event, ModelApiInterface } from 'alice-model-engine-api';
 import * as shuffle from 'shuffle-array';
-import { BiologicalSystems, LabTerminalRefillData, OrganismModel, organismSystemsIndices } from '../helpers/basic-types';
+import { BiologicalSystems, LabTerminalRefillData, OrganismModel, organismSystemsIndices, MedicModel } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';
 
 interface RunLabTestData {
@@ -65,7 +65,7 @@ const tests: { [testName: string]: (model: OrganismModel) => TestResult } = {
   },
 };
 
-function medicRunLabTest(api: ModelApiInterface, data: RunLabTestData, event: Event) {
+function medicRunLabTest(api: ModelApiInterface<MedicModel>, data: RunLabTestData, event: Event) {
   if (!hasMedicViewModel(api.model)) {
     api.error('medic-run-lab-test event sent to non-medic account');
     return;
@@ -110,7 +110,7 @@ interface AddCommentData {
   model: any;
 }
 
-function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Event) {
+function medicAddComment(api: ModelApiInterface<MedicModel>, data: AddCommentData, event: Event) {
   if (!hasMedicViewModel(api.model)) {
     api.error('medic-add-comment event sent to non-medic account');
     return;
@@ -127,7 +127,7 @@ function medicAddComment(api: ModelApiInterface, data: AddCommentData, event: Ev
   api.model.patientHistory.push(historyEntry);
 }
 
-function labTerminalRefill(api: ModelApiInterface, data: LabTerminalRefillData, _: Event) {
+function labTerminalRefill(api: ModelApiInterface<MedicModel>, data: LabTerminalRefillData, _: Event) {
   const counter = api.aquired('counters', data.uniqueId);
   if (!counter) {
     api.error("labTerminalRefill: can't aquire lab terminal refill code", { uniqueId: data.uniqueId });

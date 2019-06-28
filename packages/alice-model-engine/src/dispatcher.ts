@@ -2,26 +2,26 @@ import { Context } from './context';
 import Logger from './logger';
 import { ModelApiFactory } from './model_api';
 
-import { Event } from 'alice-model-engine-api';
+import { EmptyModel, Event } from 'alice-model-engine-api';
 import { Callback } from './callbacks';
 
-export type CallbacksList = Callback | null | Array<Callback | null>;
+export type CallbacksList<T extends EmptyModel> = Callback<T> | null | Array<Callback<T> | null>;
 
-export interface DispatcherInterface {
-  on(name: string, callbacks: CallbacksList): void;
-  dispatch(event: Event, context: Context): Context;
+export interface DispatcherInterface<T extends EmptyModel> {
+  on(name: string, callbacks: CallbacksList<T>): void;
+  dispatch(event: Event, context: Context<T>): Context<T>;
 }
 
-export class Dispatcher implements DispatcherInterface {
+export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> {
   private store: {
-    [key: string]: Callback[];
+    [key: string]: Callback<T>[];
   };
 
   constructor() {
     this.store = {};
   }
 
-  public on(name: string, callbacks: CallbacksList) {
+  public on(name: string, callbacks: CallbacksList<T>) {
     if (!this.store[name]) this.store[name] = [];
 
     if (Array.isArray(callbacks)) {
@@ -33,7 +33,7 @@ export class Dispatcher implements DispatcherInterface {
     }
   }
 
-  public dispatch(event: Event, context: Context): Context {
+  public dispatch(event: Event, context: Context<T>): Context<T> {
     // TODO: Should it be filtered out earlier?
     if (event.eventType.startsWith('_')) return context;
 

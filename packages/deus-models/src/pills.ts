@@ -2,11 +2,12 @@ import _ = require('lodash');
 import medichelpers = require('../helpers/medic-helper');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { Modifier, ModelApiInterface, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { Modifier, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 
-function useCure(api: ModelApiInterface, pill) {
+function useCure(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
 
   api.sendEvent(null, 'delay-illness', { system: pill.curedSystem, delay: pill.duration * 1000 });
@@ -15,7 +16,7 @@ function useCure(api: ModelApiInterface, pill) {
   }
 }
 
-function useStamm(api: ModelApiInterface, pill) {
+function useStamm(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
 
   if (api.model.genome) {
@@ -23,7 +24,7 @@ function useStamm(api: ModelApiInterface, pill) {
   }
 }
 
-function useAid(api: ModelApiInterface, pill, event) {
+function useAid(api: DeusExModelApiInterface, pill, event) {
   if (api.model.profileType != 'human') return;
 
   medichelpers.restoreDamage(api, 1, event.timestamp);
@@ -32,7 +33,7 @@ function useAid(api: ModelApiInterface, pill, event) {
   }
 }
 
-function useLastChance(api: ModelApiInterface, pill) {
+function useLastChance(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
 
   let deathTimer = api.getTimer(consts.DEATH_TIMER);
@@ -44,12 +45,12 @@ function useLastChance(api: ModelApiInterface, pill) {
   }
 }
 
-function useNarco(api: ModelApiInterface, pill) {
+function useNarco(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
   api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
 }
 
-function useImmortal(api: ModelApiInterface, pill, event) {
+function useImmortal(api: DeusExModelApiInterface, pill, event) {
   if (api.model.profileType != 'human') return;
   api.model.profileType = 'exhuman-program';
 
@@ -78,11 +79,11 @@ function useImmortal(api: ModelApiInterface, pill, event) {
   api.info('IMMORTAL PANAM');
 }
 
-function useGeneric(api: ModelApiInterface, pill) {
+function useGeneric(api: DeusExModelApiInterface, pill) {
   api.sendEvent(null, pill.eventType, { pill });
 }
 
-function usePill(api: ModelApiInterface, data, event) {
+function usePill(api: DeusExModelApiInterface, data, event) {
   if (!api.model.isAlive) {
     api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
     return;
@@ -149,7 +150,7 @@ function usePill(api: ModelApiInterface, data, event) {
   code.usedBy = api.model._id;
 }
 
-function aquirePills(api: PreprocessApiInterface, events) {
+function aquirePills(api: PreprocessApiInterface<any>, events) {
   if (!api.model.isAlive) return;
 
   events.filter((event) => event.eventType == 'usePill').forEach((event) => api.aquire('pills', event.data.id));

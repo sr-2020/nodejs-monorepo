@@ -55,11 +55,6 @@ export type Condition = {
   level?: number;
 };
 
-export type EngineContext = {
-  timestamp: number;
-  [key: string]: any;
-};
-
 export type EngineMessageEvents = {
   type: 'events';
   context: any;
@@ -119,8 +114,22 @@ export type EngineReplyReady = {
 
 export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog | EngineReplyAquire;
 
-export interface ReadModelApiInterface {
-  model: any;
+export interface Timers {
+  [name: string]: Timer;
+}
+
+export interface EmptyModel {
+  characterId: string;
+  timestamp: number;
+
+  modifiers?: Modifier[];
+  conditions?: Condition[];
+
+  timers?: Timers;
+}
+
+export interface ReadModelApiInterface<T extends EmptyModel> {
+  model: T;
 
   getCatalogObject(catalog: string, id: string): any;
 
@@ -174,14 +183,14 @@ export interface WriteModelApiInterface {
   sendEvent(characterId: string | null, event: string, data: any): this;
 }
 
-export interface PreprocessApiInterface extends ReadModelApiInterface, LogApiInterface {
+export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
   aquire(db: string, id: string): this;
 }
 
-export interface ViewModelApiInterface extends ReadModelApiInterface, LogApiInterface {
+export interface ViewModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
   baseModel: any;
 }
 
-export interface ModelApiInterface extends ReadModelApiInterface, WriteModelApiInterface, LogApiInterface {
+export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface, LogApiInterface {
   aquired(db: string, id: string): any;
 }

@@ -6,7 +6,7 @@ import type = require('type-detect');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import Chance = require('chance');
-import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 let chance = new Chance();
 
 /**
@@ -22,7 +22,7 @@ let chance = new Chance();
  * параметр duration задается в секундах, и он опционален.
  * Если не задано, то состояния добавляются на 2 часа
  */
-function putConditionEvent(api: ModelApiInterface, data, event) {
+function putConditionEvent(api: DeusExModelApiInterface, data, event) {
   if (data.text) {
     let cond = api.addCondition({
       mID: '',
@@ -49,7 +49,7 @@ function putConditionEvent(api: ModelApiInterface, data, event) {
  * Удаляет состояние персонажа
  */
 
-function removeConditionEvent(api: ModelApiInterface, data, event) {
+function removeConditionEvent(api: DeusExModelApiInterface, data, event) {
   if (data.mID) {
     let i = api.model.conditions.findIndex((c) => c.mID == data.mID);
 
@@ -71,7 +71,7 @@ function removeConditionEvent(api: ModelApiInterface, data, event) {
  *   text: string,
  * }
  */
-function sendMessageEvent(api: ModelApiInterface, data, event) {
+function sendMessageEvent(api: DeusExModelApiInterface, data, event) {
   if (data.title && api.model.messages) {
     let message = {
       mID: helpers.uuidv4(),
@@ -98,7 +98,7 @@ function sendMessageEvent(api: ModelApiInterface, data, event) {
  *   operations: string
  * }
  */
-function changeMindCubeEvent(api: ModelApiInterface, data, event) {
+function changeMindCubeEvent(api: DeusExModelApiInterface, data, event) {
   api.error('=============================');
 
   if (data.operations) {
@@ -116,7 +116,7 @@ function changeMindCubeEvent(api: ModelApiInterface, data, event) {
  *   timestamp: number
  * }
  */
-function addChangeRecord(api: ModelApiInterface, data, event) {
+function addChangeRecord(api: DeusExModelApiInterface, data, event) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }
@@ -136,7 +136,7 @@ function addChangeRecord(api: ModelApiInterface, data, event) {
  *   value: string,
  * }
  */
-function changeModelVariableEvent(api: ModelApiInterface, data, event) {
+function changeModelVariableEvent(api: DeusExModelApiInterface, data, event) {
   if (data.name && data.value) {
     let restricted = [
       '_id',
@@ -184,7 +184,7 @@ function changeModelVariableEvent(api: ModelApiInterface, data, event) {
  *   owner: string
  * }
  */
-function changeAndroidOwnerEvent(api: ModelApiInterface, data, event) {
+function changeAndroidOwnerEvent(api: DeusExModelApiInterface, data, event) {
   if (data.owner && api.model.profileType == 'robot') {
     api.info(`changeAndroidOwner:  ${api.model.owner} ===> ${data.owner}`);
 
@@ -215,7 +215,7 @@ function changeAndroidOwnerEvent(api: ModelApiInterface, data, event) {
  *      ]
  * }
  */
-function changeMemoryEvent(api: ModelApiInterface, data, event) {
+function changeMemoryEvent(api: DeusExModelApiInterface, data, event) {
   if (data.remove) {
     data.remove.forEach((mID) => {
       api.info(`changeMemory: remove element with ${mID}`);
@@ -265,7 +265,7 @@ function changeMemoryEvent(api: ModelApiInterface, data, event) {
  *   "Level": 2
  * }
  */
-function changeInsuranceEvent(api: ModelApiInterface, data, event) {
+function changeInsuranceEvent(api: DeusExModelApiInterface, data, event) {
   if (data.Insurance && data.Level) {
     api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}`);
 

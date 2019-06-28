@@ -7,14 +7,15 @@ import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import clone = require('clone');
 import infection = require('../helpers/infection-illness');
-import { Event, ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Event, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 
 /**
  * Обработчик события start-illness
  * Добавляет в модель болезнь (таким образом запуская ее)
  * { id: ilness-id }
  */
-function startIllnessEvent(api: ModelApiInterface, data: any, event: Event) {
+function startIllnessEvent(api: DeusExModelApiInterface, data: any, event: Event) {
   if (data.id && api.model.profileType == 'human') {
     api.info(`startIllnessEvent: try to start illness: ${data.id}`);
 
@@ -59,7 +60,7 @@ function startIllnessEvent(api: ModelApiInterface, data: any, event: Event) {
  * Эффект "болезни". Название эффекта "illness-effect"
  * Отображает состояние для данного этапа - симптомы.
  */
-function illnessEffect(api: ModelApiInterface, modifier: Modifier) {
+function illnessEffect(api: DeusExModelApiInterface, modifier: Modifier) {
   if (modifier.class == 'illness') {
     api.info(`illnessEffect: illness: ${modifier.displayName}, stage: ${modifier.currentStage}`);
 
@@ -81,7 +82,7 @@ function illnessEffect(api: ModelApiInterface, modifier: Modifier) {
  * Если это был последний этап, то убивает систему для которой болезнь (и не ставит таймер)
  * Модификатор болезни остается до тех пор, пока не будет установлен имплант на эту систему
  */
-function illnessNextStageEvent(api: ModelApiInterface, data: any, event: Event) {
+function illnessNextStageEvent(api: DeusExModelApiInterface, data: any, event: Event) {
   if (data.mID) {
     let illness = api.getModifierById(data.mID);
     if (illness) {
@@ -99,7 +100,9 @@ function illnessNextStageEvent(api: ModelApiInterface, data: any, event: Event) 
         //Если это последний этап, то убить систему
         let totalTime = Math.round((event.timestamp - illness.startTime) / 1000);
         api.info(
-          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
+          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${
+            illness.system
+          }!`,
         );
         api.model.systems[medhelpers.getSystemID(illness.system)] = 0;
       }
@@ -115,7 +118,7 @@ function illnessNextStageEvent(api: ModelApiInterface, data: any, event: Event) 
  * 1. Находит все болезни для данной системы
  * 2. Берет текущее значение таймера для каждой из болезни и увеличивает его значение на delay миллисекунд
  */
-function delayIllnessEvent(api: ModelApiInterface, data: any, event: Event) {
+function delayIllnessEvent(api: DeusExModelApiInterface, data: any, event: Event) {
   if (data.system && data.delay) {
     //console.log(JSON.stringify(api.model.modifiers, null, 4));
     api.model.modifiers
@@ -169,7 +172,7 @@ const illneses = [
   'tuberculosis',
 ];
 
-function rollForInfection(api: ModelApiInterface, data: any, event: Event) {
+function rollForInfection(api: DeusExModelApiInterface, data: any, event: Event) {
   api.debug('Start rolling for infection');
   if (api.model.profileType == 'human') {
     let systemId = infection.whatSystemShouldBeInfected(api.model);

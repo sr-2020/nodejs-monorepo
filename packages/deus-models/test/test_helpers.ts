@@ -4,7 +4,7 @@ import { Config } from '@sr2020/alice-model-engine/config';
 import { requireDir } from '@sr2020/alice-model-engine/utils';
 import * as Winston from 'winston';
 
-import { EngineContext, Event, EngineResult, EngineResultOk } from '@sr2020/alice-model-engine-api/index';
+import { Event, EngineResult, EngineResultOk, EmptyModel } from '@sr2020/alice-model-engine-api/index';
 
 let WORKER_INSTANCE: Worker | null = null;
 
@@ -20,11 +20,11 @@ export function getWorker() {
   return (WORKER_INSTANCE = Worker.load(modelsPath).configure(config));
 }
 
-export function process_(model: EngineContext, events: Event[]): Promise<EngineResult> {
+export function process_(model: EmptyModel, events: Event[]): Promise<EngineResult> {
   return getWorker().process(model, events);
 }
 
-export async function process(model: EngineContext, events: Event[]): Promise<EngineResultOk> {
+export async function process(model: EmptyModel, events: Event[]): Promise<EngineResultOk> {
   let result = await process_(model, events);
   if (result.status == 'error') throw result.error;
   return result;

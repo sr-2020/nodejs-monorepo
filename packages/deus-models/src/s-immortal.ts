@@ -1,8 +1,7 @@
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
-import clone = require('clone');
-import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 
 /**
  * Обработчик события "serenity_immortality_ready"
@@ -10,7 +9,7 @@ import { ModelApiInterface } from '@sr2020/alice-model-engine-api/index';
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
-function serenityImmortalityReadyEvent(api: ModelApiInterface, data, event) {
+function serenityImmortalityReadyEvent(api: DeusExModelApiInterface, data, event) {
   let implant = api.getModifierById(data.mID);
 
   if (implant) {
@@ -25,7 +24,7 @@ function serenityImmortalityReadyEvent(api: ModelApiInterface, data, event) {
  * Эффект serenity_immortality_s01
  * Показывает состояние готовности, когда immortalityReady == "true"
  */
-function serenityImmortalityS01Effect(api: ModelApiInterface, implant) {
+function serenityImmortalityS01Effect(api: DeusExModelApiInterface, implant) {
   api.debug(`serenityImmortalityS01Effect: start stage 01 visibility effect`);
 
   if (implant && implant.id == consts.S_IMMORTAL_NAME_01 && implant.immortalityReady) {
@@ -39,7 +38,7 @@ function serenityImmortalityS01Effect(api: ModelApiInterface, implant) {
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
-function serenityImmortalityGoEvent(api: ModelApiInterface, data, event) {
+function serenityImmortalityGoEvent(api: DeusExModelApiInterface, data, event) {
   let implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {

@@ -1,27 +1,11 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { Condition, Event, Modifier, Timer } from 'alice-model-engine-api';
+import { Condition, EmptyModel, Event, Modifier, Timer, Timers } from 'alice-model-engine-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
 export type Timestamp = number;
-
-export interface Timers {
-  [name: string]: Timer;
-}
-
-export interface Character {
-  characterId: string;
-  timestamp: number;
-
-  modifiers: Modifier[];
-  conditions: Condition[];
-
-  timers: Timers;
-
-  [key: string]: any;
-}
 
 export interface Dictionaries {
   [catalog: string]: any[];
@@ -45,8 +29,8 @@ export interface AquiredObjects {
   };
 }
 
-export class Context {
-  private _ctx: Character;
+export class Context<T extends EmptyModel> {
+  private _ctx: T;
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
@@ -54,7 +38,7 @@ export class Context {
   private _aquired: AquiredObjects;
 
   constructor(
-    contextSrc: any,
+    contextSrc: T,
     events: Event[],
     dictionaries?: any,
     outboundEvents?: OutboundEvents,
@@ -135,7 +119,7 @@ export class Context {
     return this._pendingAquire;
   }
 
-  public clone(): Context {
+  public clone(): Context<T> {
     const clone = new Context(this._ctx, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
     clone.timers = this.timers;
     return clone;
@@ -194,7 +178,8 @@ export class Context {
     const firstEvent = this._events[0];
 
     if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
-      delete this._ctx.timers[firstTimer.name];
+      // !! is safe as firstTimer != null means that there are timers indeed.
+      delete this._ctx.timers!![firstTimer.name];
       return this.timerEvent(firstTimer);
     } else {
       this._events.shift();

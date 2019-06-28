@@ -4,8 +4,9 @@ import { Config } from '../../../alice-model-engine/src/config';
 import { requireDir } from '../../../alice-model-engine/src/utils';
 import { Worker } from '../../../alice-model-engine/src/worker';
 
-import { EngineContext, EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
+import { EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
 import * as Winston from 'winston';
+import { OrganismModel } from 'magellan-models/helpers/basic-types';
 
 let WORKER_INSTANCE: Worker | null = null;
 
@@ -21,11 +22,11 @@ function getWorker() {
   return (WORKER_INSTANCE = Worker.load(modelsPath).configure(config));
 }
 
-function process_(model: EngineContext, events: Event[]): Promise<EngineResult> {
+function process_(model: OrganismModel, events: Event[]): Promise<EngineResult> {
   return getWorker().process(model, events);
 }
 
-export async function process(model: EngineContext, events: Event[]): Promise<EngineResultOk> {
+export async function process(model: OrganismModel, events: Event[]): Promise<EngineResultOk> {
   const result = await process_(model, events);
   if (result.status == 'error') throw result.error;
   return result;

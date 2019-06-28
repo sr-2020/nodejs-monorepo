@@ -1,6 +1,7 @@
-import { Event, ModelApiInterface, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { Event, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 
-function scanQR(api: ModelApiInterface, data: any) {
+function scanQR(api: DeusExModelApiInterface, data: any) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case 1:
@@ -10,7 +11,7 @@ function scanQR(api: ModelApiInterface, data: any) {
   }
 }
 
-function aquirePills(api: PreprocessApiInterface, events: Event[]) {
+function aquirePills(api: PreprocessApiInterface<any>, events: Event[]) {
   if (!api.model.isAlive) return;
 
   events.filter((event) => event.eventType == 'scanQr' && event.data.type == 1).forEach((event) => api.aquire('pills', event.data.payload));

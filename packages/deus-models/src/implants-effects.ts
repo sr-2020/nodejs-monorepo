@@ -3,7 +3,8 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import { ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Modifier } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModelApiInterface } from '../helpers/model';
 
 /**
  * Эффект показывающий состояние пока работает импланта.
@@ -16,7 +17,7 @@ import { ModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/inde
  * }
  */
 
-function showCondition(api: ModelApiInterface, modifier: Modifier) {
+function showCondition(api: DeusExModelApiInterface, modifier: Modifier) {
   //Получить СПИСОК предикатов для показа (может быть несколько состояний)
   let params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
   api.info('showCondition: start, predicate: ' + JSON.stringify(params));
@@ -34,7 +35,7 @@ function showCondition(api: ModelApiInterface, modifier: Modifier) {
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api: ModelApiInterface, modifier: Modifier) {
+function showAlwaysCondition(api: DeusExModelApiInterface, modifier: Modifier) {
   api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
   if (modifier.conditions) {
     //Пройти по всем совпадаениям в предикатах и показать все состояния
@@ -56,7 +57,7 @@ function showAlwaysCondition(api: ModelApiInterface, modifier: Modifier) {
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
  *
  */
-function changeProperties(api: ModelApiInterface, modifier: Modifier) {
+function changeProperties(api: DeusExModelApiInterface, modifier: Modifier) {
   let params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
   api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 

@@ -1,4 +1,4 @@
-import { ViewModelApiInterface, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Modifier, ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 
 interface PageViewModel {
   menuTitle: string;
@@ -517,7 +517,7 @@ function getViewModel(model) {
 
 module.exports = () => {
   return {
-    _view(api: ViewModelApiInterface, model) {
+    _view(api: ViewModelApiInterface<any>, model) {
       try {
         return getViewModel(model);
       } catch (err) {

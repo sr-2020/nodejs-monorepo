@@ -1,45 +1,9 @@
 {
     "events": [
         {
-            "eventType": "usePill",
-            "effects": [
-                "usePill"
-            ]
-        },
-        {
             "eventType": "put-condition",
             "effects": [
                 "putConditionEvent"
-            ]
-        },
-        {
-            "eventType": "remove-condition",
-            "effects": [
-                "removeConditionEvent"
-            ]
-        },
-        {
-            "eventType": "send-message",
-            "effects": [
-                "sendMessageEvent"
-            ]
-        },
-        {
-            "eventType": "change-model-variable",
-            "effects": [
-                "changeModelVariableEvent"
-            ]
-        },
-        {
-            "eventType": "enterVr",
-            "effects": [
-                "enterVREvent"
-            ]
-        },
-        {
-            "eventType": "exitVr",
-            "effects": [
-                "exitVREvent"
             ]
         },
         {
@@ -103,6 +67,6 @@
         {
             "eventType": "full-rollback",
             "effects": ["fullRollback"]
-        }        
+        }
     ]
 }

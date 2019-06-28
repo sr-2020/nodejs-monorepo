@@ -1,12 +1,12 @@
 import { Event, ModelApiInterface, PreprocessApiInterface } from 'alice-model-engine-api';
-import { LabTerminalRefillData, QrType, ScanQRData, XenoDisease } from '../helpers/basic-types';
+import { LabTerminalRefillData, QrType, ScanQRData, XenoDisease, OrganismModel } from '../helpers/basic-types';
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
   const [uniqueId, numTests] = payload.split(',');
   return { uniqueId, numTests: Number(numTests) };
 }
 
-function scanQR(api: ModelApiInterface, data: ScanQRData) {
+function scanQR(api: ModelApiInterface<OrganismModel>, data: ScanQRData) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case QrType.Pill:
@@ -62,7 +62,7 @@ function scanQR(api: ModelApiInterface, data: ScanQRData) {
   }
 }
 
-function aquireDocuments(api: PreprocessApiInterface, events: Event[]) {
+function aquireDocuments(api: PreprocessApiInterface<OrganismModel>, events: Event[]) {
   events
     .filter(
       (event) => event.eventType == 'scanQr' && (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill),

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { EngineContext, EngineMessage, EngineMessageConfigure, EngineMessageEvents, EngineResult, Event } from 'alice-model-engine-api';
+import { EngineMessage, EngineMessageConfigure, EngineMessageEvents, EngineResult, Event, EmptyModel } from 'alice-model-engine-api';
 
 import * as config from './config';
 import { Context } from './context';
@@ -13,7 +13,7 @@ import { ModelCallbacks } from './callbacks';
 declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {
-  private _engine: Engine;
+  private _engine: Engine<EmptyModel>;
 
   public static load(dir: string): Worker {
     const m = loadModels(dir);
@@ -21,7 +21,7 @@ export class Worker {
     return new Worker(m);
   }
 
-  constructor(private _modelCallbacks: ModelCallbacks) {}
+  constructor(private _modelCallbacks: ModelCallbacks<EmptyModel>) {}
 
   public configure(newConfig: config.ConfigInterface): Worker {
     Logger.debug('engine', 'Loaded config', { config: inspect(newConfig, false, null) });
@@ -29,9 +29,9 @@ export class Worker {
     return this;
   }
 
-  public async process(context: EngineContext, events: Event[]): Promise<EngineResult> {
+  public async process(context: EmptyModel, events: Event[]): Promise<EngineResult> {
     const characterId = context.characterId;
-    let contextForAquire: Context;
+    let contextForAquire: Context<EmptyModel>;
     try {
       contextForAquire = this._engine.preProcess(context, events);
     } catch (e) {
@@ -95,7 +95,7 @@ export class Worker {
     this.configure(cfg);
   }
 
-  private async waitAquire(baseCtx: Context) {
+  private async waitAquire(baseCtx: Context<EmptyModel>) {
     Logger.debug('engine', 'Waitin to aquire', { pendingAquire: baseCtx.pendingAquire, characterId: baseCtx.ctx.characterId });
 
     return new Promise((resolve, reject) => {
