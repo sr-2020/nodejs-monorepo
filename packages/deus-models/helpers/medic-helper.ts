@@ -133,6 +133,10 @@ function isSystemAlive(api: DeusExModelApiInterface, name) {
  */
 function removeIllness(api: DeusExModelApiInterface, mID) {
   if (mID) {
+    if (!api.model.modifiers) {
+      api.error(`removeIllness: illness ${mID} not found!`);
+      return;
+    }
     let index = api.model.modifiers.findIndex((m) => m.mID == mID);
 
     if (index != -1) {

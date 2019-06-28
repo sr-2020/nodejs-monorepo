@@ -67,7 +67,7 @@ function restoreDamageEvent(api: DeusExModelApiInterface, data, event) {
 }
 
 function hasAnyEffect(api: DeusExModelApiInterface, effectName) {
-  return api.model.modifiers.filter((m) => m.enabled).find((m) => helpers.checkPredicate(api, m.mID, effectName));
+  return api.model.modifiers && api.model.modifiers.filter((m) => m.enabled).find((m) => helpers.checkPredicate(api, m.mID, effectName));
 }
 
 /**

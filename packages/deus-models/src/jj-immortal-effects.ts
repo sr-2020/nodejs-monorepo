@@ -181,7 +181,7 @@ function jjImmortalTwoAwakeEvent(api: DeusExModelApiInterface, data, event) {
   api.removeModifier(jjOne.mID);
 
   api.info('jjImmortalTwoAwakeEvent: remove implants');
-  api.model.modifiers = api.model.modifiers.filter((m) => !helpers.isImplant(m));
+  api.model.modifiers = (api.model.modifiers || []).filter((m) => !helpers.isImplant(m));
 
   api.info('jjImmortalTwoAwakeEvent: remove illnesses');
   helpers.getAllIlnesses(api).forEach((m) => {

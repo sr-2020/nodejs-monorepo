@@ -119,7 +119,7 @@ function illnessNextStageEvent(api: DeusExModelApiInterface, data: any, event: E
  * 2. Берет текущее значение таймера для каждой из болезни и увеличивает его значение на delay миллисекунд
  */
 function delayIllnessEvent(api: DeusExModelApiInterface, data: any, event: Event) {
-  if (data.system && data.delay) {
+  if (data.system && data.delay && api.model.modifiers) {
     //console.log(JSON.stringify(api.model.modifiers, null, 4));
     api.model.modifiers
       .filter((m: Modifier) => m.system == data.system && m.class == 'illness')

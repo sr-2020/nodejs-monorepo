@@ -1,10 +1,12 @@
+import { DeusExModel } from 'deus-models/helpers/model';
+
 function randomId() {
   return Math.floor(Math.random() * 10000)
     .toString()
     .padStart(4, '0');
 }
 
-export function getExampleModel(id?: string): any {
+export function getExampleModel(id?: string): DeusExModel {
   id = id || randomId();
   return {
     _id: id,
@@ -41,7 +43,7 @@ export function getExampleModel(id?: string): any {
     sex: 'male',
     corporation: 'Корпорация Pan American Sunrise Technology Corp.',
     salaryLevel: 2,
-    insurance: 2057,
+    insurance: '2057',
     insuranceLevel: 1,
     insuranceDiplayName: 'Pan American Sunrise Technology Corp., Уровень: 1',
     hackingLogin: 'octopus',
@@ -74,6 +76,7 @@ export function getExampleModel(id?: string): any {
     timestamp: 0,
     conditions: [
       {
+        mID: 'demoState',
         id: 'demoState',
         class: 'physiology',
         text: 'Тестовое постоянное состояние!',
@@ -131,6 +134,6 @@ export function getExampleModel(id?: string): any {
         text: '42',
       },
     ],
-    timers: [],
+    timers: {},
   };
 }

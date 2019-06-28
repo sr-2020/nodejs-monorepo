@@ -39,7 +39,7 @@ function serenityImmortalityS01Effect(api: DeusExModelApiInterface, implant) {
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
 function serenityImmortalityGoEvent(api: DeusExModelApiInterface, data, event) {
-  let implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
+  let implant = (api.model.modifiers || []).find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {
     api.info(`serenityImmortalityGo: character not ready (no s_immortal01 implant or no ready flag). Stop processing`);
@@ -64,11 +64,11 @@ function serenityImmortalityGoEvent(api: DeusExModelApiInterface, data, event) {
   api.info(`serenityImmortalityGo: character new profile type ${api.model.profileType}, maxhp=${api.model.maxHp}`);
 
   //Убрать все болезни
-  let illnesses = api.model.modifiers.filter((m) => helpers.isIllness(m));
+  let illnesses = (api.model.modifiers || []).filter((m) => helpers.isIllness(m));
   illnesses.forEach((ill) => medhelpers.removeIllness(api, ill.mID));
 
   //Убрать все импланты
-  api.model.modifiers = api.model.modifiers.filter((m) => !helpers.isImplant(m));
+  api.model.modifiers = (api.model.modifiers || []).filter((m) => !helpers.isImplant(m));
 
   api.info(`serenityImmortalityGo: character modifiers after transform ${api.model.modifiers.map((m) => m.id).join(',')}`);
 
