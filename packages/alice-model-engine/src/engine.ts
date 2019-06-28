@@ -13,7 +13,7 @@ import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
 export class Engine<T extends EmptyModel> {
   private dispatcher: dispatcher.DispatcherInterface<T> = new dispatcher.Dispatcher<T>();
 
-  constructor(private _model: ModelCallbacks<T>, private _config: config.ConfigInterface) {
+  constructor(private _modelCallbacks: ModelCallbacks<T>, private _config: config.ConfigInterface) {
     Logger.debug('engine', 'Loaded config', { config: inspect(_config, false, null) });
     _config.events.forEach((e) => {
       const callbacks = e.effects.map((c) => this.resolveCallback(c));
@@ -82,7 +82,7 @@ export class Engine<T extends EmptyModel> {
   }
 
   private resolveCallback(callback: config.Callback): Callback<T> | null {
-    const result = this._model.callbacks[callback];
+    const result = this._modelCallbacks.callbacks[callback];
     if (result == null) {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
     }
@@ -134,7 +134,7 @@ export class Engine<T extends EmptyModel> {
     const api = ViewModelApiFactory(workingCtx, baseCtx);
 
     return reduce(
-      this._model.viewModelCallbacks,
+      this._modelCallbacks.viewModelCallbacks,
       (vm: any, f: ViewModelCallback<T>, base: string) => {
         vm[base] = f(api, data);
         return vm;
@@ -144,12 +144,12 @@ export class Engine<T extends EmptyModel> {
   }
 
   private runPreprocess(baseCtx: Context<T>, events: Event[]) {
-    if (!this._model.preprocessCallbacks.length) return;
+    if (!this._modelCallbacks.preprocessCallbacks.length) return;
 
     const ctx = baseCtx.clone();
     const api = PreprocessApiFactory(ctx);
 
-    for (const f of this._model.preprocessCallbacks) {
+    for (const f of this._modelCallbacks.preprocessCallbacks) {
       f(api, events);
     }
 
