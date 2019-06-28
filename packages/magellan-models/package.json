@@ -6,7 +6,8 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "test": "yarn run build && mocha test/**/*.js",
+    "pretest": "yarn build",
+    "test": "mocha test/**/*.js",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier \"**/*.ts\"",
