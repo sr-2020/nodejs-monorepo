@@ -1,7 +1,7 @@
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
-import { CharacterlessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'alice-model-engine-api';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, ProcessRequest, StatusAndBody } from './connection';
@@ -74,7 +74,7 @@ export class EventsProcessor {
     return Container.get(DatabasesContainerToken);
   }
 
-  private async processTokenUpdateEvents(id: string, events: CharacterlessEvent[]) {
+  private async processTokenUpdateEvents(id: string, events: IdLessEvent[]) {
     const tokenUpdatedEvents = events.filter(
       (event) => event.eventType == 'tokenUpdated' && event.data && event.data.token && event.data.token.registrationId,
     );

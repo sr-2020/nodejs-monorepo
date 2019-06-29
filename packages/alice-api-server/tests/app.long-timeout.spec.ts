@@ -69,7 +69,7 @@ describe('API Server - long timeout', () => {
     const events = await dbContainer.allEventsSortedByTimestamp();
     expect(events.length).to.eq(1);
     expect(events[0].doc).to.deep.include(event);
-    expect(events[0].doc).to.deep.include({ characterId: '00001' });
+    expect(events[0].doc).to.deep.include({ modelId: '00001' });
   });
 });
 

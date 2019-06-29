@@ -205,19 +205,19 @@ describe('General Magellan events: ', () => {
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [0, 2, -2, 0, 1, 0, 0],
         timestamp: 100,
       },
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [0, 1, 0, 0, 0, 0, 0],
         timestamp: 200,
       },
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [0, -1, 0, 0, 0, 0, 0],
         timestamp: 300,
@@ -236,19 +236,19 @@ describe('General Magellan events: ', () => {
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [0, 2, -2, 0, 1, 0, 0],
         timestamp: 100,
       },
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [1, 0, 0, 0, 0, 0, 0],
         timestamp: 200,
       },
       {
-        characterId: model._id,
+        modelId: model._id,
         eventType: 'biological-systems-influence',
         data: [-1, 0, 0, 0, 0, 0, 0],
         timestamp: 300,

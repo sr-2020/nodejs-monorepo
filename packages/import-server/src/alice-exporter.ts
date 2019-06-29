@@ -109,7 +109,7 @@ export class AliceExporter {
    */
   private async clearEvents(characterId: string) {
     const selector = {
-      selector: { characterId },
+      selector: { modelId: characterId },
       limit: 10000,
     };
 

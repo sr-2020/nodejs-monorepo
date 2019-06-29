@@ -3,14 +3,14 @@ import { Event } from '@sr2020/alice-model-engine-api/index';
 const REFRESH_EVENT_TYPE = '_RefreshModel';
 
 export const getEvent = (characterId: string, eventType: string, data: any, timestamp = Date.now()): Event => ({
-  characterId,
+  modelId: characterId,
   eventType,
   timestamp,
   data,
 });
 
 export const getRefreshEvent = (characterId: string, timestamp = Date.now()): Event => ({
-  characterId,
+  modelId: characterId,
   eventType: REFRESH_EVENT_TYPE,
   timestamp,
 });
@@ -19,7 +19,7 @@ type PartialEvent = { eventType: string; data?: any };
 
 export const getEvents = (characterId: string, events: PartialEvent[], timestamp = Date.now(), withRefresh = true): Event[] => {
   let result: Event[] = events.map((e, i) => ({
-    characterId,
+    modelId: characterId,
     timestamp: timestamp + i,
     ...e,
   }));

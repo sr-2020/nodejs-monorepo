@@ -115,7 +115,7 @@ export class Worker extends EventEmitter {
       if (syncEvent) {
         message.params = message.params || [];
         message.params.push({
-          characterId: syncEvent.characterId,
+          modelId: syncEvent.modelId,
           eventTimestamp: syncEvent.scheduledUpdateTimestamp,
         });
       }

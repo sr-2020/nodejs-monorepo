@@ -8,15 +8,15 @@ export function eventStorageFactory(config: Config, dbConnector: DBConnectorInte
 
 export class EventStorage {
   constructor(private db: DBInterface) {
-    db.createIndex({ index: { fields: ['characterId', 'timestamp'] } });
+    db.createIndex({ index: { fields: ['modelId', 'timestamp'] } });
   }
 
-  public range(characterId: string, since: number, till: number): Promise<Event[]> {
-    return this._range(characterId, since, till);
+  public range(modelId: string, since: number, till: number): Promise<Event[]> {
+    return this._range(modelId, since, till);
   }
 
-  public async removeOlderThan(characterId: string, till: number): Promise<void> {
-    const docs = await this._range(characterId, 0, till);
+  public async removeOlderThan(modelId: string, till: number): Promise<void> {
+    const docs = await this._range(modelId, 0, till);
     await Promise.all(
       docs.map((doc) => {
         if (doc._rev) this.db.remove(doc._id, doc._rev);
@@ -29,14 +29,14 @@ export class EventStorage {
     return this.db.put(event);
   }
 
-  private async _range(characterId: string, since: number, till: number): Promise<Array<PouchDB.Core.ExistingDocument<Event>>> {
+  private async _range(modelId: string, since: number, till: number): Promise<Array<PouchDB.Core.ExistingDocument<Event>>> {
     if (since >= till) return [];
 
     const result = await this.db.query<Event>({
       selector: {
         $and: [
           {
-            characterId,
+            modelId,
           },
           {
             timestamp: {

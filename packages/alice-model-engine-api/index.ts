@@ -1,18 +1,18 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
-export interface CharacterlessEvent {
+export interface IdLessEvent {
   eventType: string;
   timestamp: number;
   data?: any;
 }
 
-export interface Event extends CharacterlessEvent {
-  characterId: string;
+export interface Event extends IdLessEvent {
+  modelId: string;
 }
 
 export interface SyncRequest {
-  characterId: string;
+  modelId: string;
   scheduledUpdateTimestamp: number;
 }
 
@@ -118,7 +118,7 @@ export interface Timers {
 }
 
 export interface EmptyModel {
-  characterId: string;
+  modelId: string;
   timestamp: number;
 
   modifiers: Modifier[];
@@ -175,10 +175,10 @@ export interface WriteModelApiInterface {
   // NB: timer must exist!
   removeTimer(name: string): this;
 
-  // Adds event to events queue of characterId. If characterId is null,
-  // event is send to currently processed character. Timestamp of event
+  // Adds event to events queue of modelId. If modelId is null,
+  // event is send to currently processed model. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendEvent(characterId: string | null, event: string, data: any): this;
+  sendEvent(modelId: string | null, event: string, data: any): this;
 }
 
 export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {

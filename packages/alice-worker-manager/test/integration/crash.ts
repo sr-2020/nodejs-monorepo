@@ -37,7 +37,7 @@ describe('Crash scenarios', function() {
     let timestamp = crashModel.timestamp + 1;
 
     await pushEvent({
-      characterId: crashModel._id,
+      modelId: crashModel._id,
       eventType: 'crash',
       timestamp,
     });
@@ -56,7 +56,7 @@ describe('Crash scenarios', function() {
     timestamp = anotherModel.timestamp + 1;
 
     await pushEvent({
-      characterId: anotherModel._id,
+      modelId: anotherModel._id,
       eventType: 'concat',
       timestamp,
       data: { value: 'A' },
@@ -90,7 +90,7 @@ describe('Crash scenarios', function() {
     let timestamp = crashModel.timestamp + 1;
 
     await pushEvent({
-      characterId: crashModel._id,
+      modelId: crashModel._id,
       eventType: 'kill',
       timestamp,
     });
@@ -109,7 +109,7 @@ describe('Crash scenarios', function() {
     timestamp = anotherModel.timestamp + 1;
 
     await pushEvent({
-      characterId: anotherModel._id,
+      modelId: anotherModel._id,
       eventType: 'concat',
       timestamp,
       data: { value: 'A' },

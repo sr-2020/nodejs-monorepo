@@ -15,14 +15,14 @@ export class Manager {
   private stopped: Subject<{}> = new Subject();
 
   private processors: {
-    [characterId: string]: {
+    [modelId: string]: {
       current: Processor;
       pending?: Processor;
     };
   } = {};
 
   private errors: {
-    [characterId: string]: number;
+    [modelId: string]: number;
   } = {};
 
   constructor(
@@ -53,14 +53,14 @@ export class Manager {
   }
 
   public logEvent = (event: SyncRequest) => {
-    this.logger.info('manager', `Get sync request for ${event.characterId}`, { characterId: event.characterId, event });
+    this.logger.info('manager', `Get sync request for ${event.modelId}`, { modelId: event.modelId, event });
   };
 
   public filterErroredModels = (event: SyncRequest) => {
-    const characterId = event.characterId;
+    const modelId = event.modelId;
 
-    if (this.errors[characterId] && this.errors[characterId] >= MAX_ERRORS) {
-      this.logger.warn('manager', 'Character exceed MAX_ERRORS value', { characterId, totalErrors: this.errors[characterId], MAX_ERRORS });
+    if (this.errors[modelId] && this.errors[modelId] >= MAX_ERRORS) {
+      this.logger.warn('manager', 'Character exceed MAX_ERRORS value', { modelId, totalErrors: this.errors[modelId], MAX_ERRORS });
       return false;
     }
 
@@ -68,10 +68,10 @@ export class Manager {
   };
 
   public onSyncEvent = (event: SyncRequest) => {
-    const characterId = event.characterId;
+    const modelId = event.modelId;
 
-    if (this.processors[characterId]) {
-      const processors = this.processors[characterId];
+    if (this.processors[modelId]) {
+      const processors = this.processors[modelId];
       if (processors.current.acceptingEvents()) {
         processors.current.pushEvent(event);
       } else {
@@ -82,7 +82,7 @@ export class Manager {
       }
     } else {
       const processor = this.processorFactory();
-      this.processors[characterId] = { current: processor };
+      this.processors[modelId] = { current: processor };
       processor
         .pushEvent(event)
         .run()
@@ -91,27 +91,27 @@ export class Manager {
   };
 
   public processorFulfilled = (event: SyncRequest) => {
-    const characterId = event.characterId;
+    const modelId = event.modelId;
 
-    delete this.errors[characterId];
-    this.rotateProcessors(characterId);
+    delete this.errors[modelId];
+    this.rotateProcessors(modelId);
   };
 
   public processorRejected = (event: SyncRequest) => {
-    this.errors[event.characterId] = (this.errors[event.characterId] || 0) + 1;
-    this.rotateProcessors(event.characterId);
+    this.errors[event.modelId] = (this.errors[event.modelId] || 0) + 1;
+    this.rotateProcessors(event.modelId);
   };
 
-  public rotateProcessors(characterId: string) {
-    if (!this.processors[characterId]) return;
+  public rotateProcessors(modelId: string) {
+    if (!this.processors[modelId]) return;
 
-    const processors = this.processors[characterId];
+    const processors = this.processors[modelId];
     if (processors.pending) {
       processors.current = processors.pending;
       delete processors.pending;
       processors.current.run().then(this.processorFulfilled, this.processorRejected);
     } else {
-      delete this.processors[characterId];
+      delete this.processors[modelId];
     }
   }
 

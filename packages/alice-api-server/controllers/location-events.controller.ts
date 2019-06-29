@@ -9,7 +9,7 @@ import { EventsProcessor } from '../events.processor';
 import { DatabasesContainerToken } from '../services/db-container';
 import { AccessPropagation, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
-import { CharacterlessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'alice-model-engine-api';
 import { AliceAccount } from '../models/alice-account';
 
 interface LocationEvent {
@@ -31,7 +31,7 @@ export class LocationEventsController {
       // Any way to make it better but still be sure that everything will be processed?
       let timestamp = currentTimestamp() + 2000;
 
-      const events: CharacterlessEvent[] = body.events.map((event) => ({ ...event, timestamp: timestamp++ }));
+      const events: IdLessEvent[] = body.events.map((event) => ({ ...event, timestamp: timestamp++ }));
 
       const modelDb = Container.get(DatabasesContainerToken).modelsDb();
       const charactersInLocation = await modelDb.find({ selector: { location: locationId } });

@@ -33,7 +33,7 @@ describe('Prepopulated events', function() {
     const timestamp = model.timestamp;
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 5,
       data: { value: 'A' },
@@ -67,7 +67,7 @@ describe('Prepopulated events', function() {
 
     // Following 2 events are in model "past"
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp - 5,
       data: { value: 'A' },

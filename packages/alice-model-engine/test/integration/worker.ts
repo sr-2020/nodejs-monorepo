@@ -6,7 +6,7 @@ import { Worker } from '../../src/worker';
 
 describe('Worker', () => {
   let worker: Worker;
-  const defaultModel: EmptyModel = { characterId: '0', timestamp: 0, modifiers: [], conditions: [], timers: {} };
+  const defaultModel: EmptyModel = { modelId: '0', timestamp: 0, modifiers: [], conditions: [], timers: {} };
 
   beforeEach(() => {
     const eventHandlers: EventHandler[] = [
@@ -54,9 +54,9 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'add', data: { operand: 'value', value: '2' }, timestamp: timestamp - 2000 },
-      { characterId: '0000', eventType: 'add', data: { operand: 'value', value: '3' }, timestamp: timestamp - 1000 },
-      { characterId: '0000', eventType: 'mul', data: { operand: 'value', value: '2' }, timestamp },
+      { modelId: '0000', eventType: 'add', data: { operand: 'value', value: '2' }, timestamp: timestamp - 2000 },
+      { modelId: '0000', eventType: 'add', data: { operand: 'value', value: '3' }, timestamp: timestamp - 1000 },
+      { modelId: '0000', eventType: 'mul', data: { operand: 'value', value: '2' }, timestamp },
     ];
 
     let result = await worker.process(context, events);
@@ -73,15 +73,15 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 10000 },
+      { modelId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 10000 },
       {
-        characterId: '0000',
+        modelId: '0000',
         eventType: 'delayedConcat',
         data: { operand: 'value', value: 'B', delay: 3000 },
         timestamp: timestamp - 10000,
       },
-      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 9000 },
-      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
+      { modelId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp - 9000 },
+      { modelId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
     ];
 
     let result = await worker.process(context, events);
@@ -98,8 +98,8 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'delayedConcat', data: { operand: 'value', value: 'B', delay: 3000 }, timestamp: timestamp - 1000 },
-      { characterId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
+      { modelId: '0000', eventType: 'delayedConcat', data: { operand: 'value', value: 'B', delay: 3000 }, timestamp: timestamp - 1000 },
+      { modelId: '0000', eventType: 'concat', data: { operand: 'value', value: 'A' }, timestamp: timestamp },
     ];
 
     let result = await worker.process(context, events);
@@ -127,7 +127,7 @@ describe('Worker', () => {
     const context = { ...defaultModel, value: 0 };
     const timestamp = Date.now();
 
-    const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
+    const events = [{ modelId: '0000', eventType: '_', timestamp, data: undefined }];
 
     let result = await worker.process(context, events);
 
@@ -146,8 +146,8 @@ describe('Worker', () => {
     const timestamp = Date.now();
 
     const events = [
-      { characterId: '0000', eventType: 'sendMessage', timestamp, data: { receiver: '0001', message: 'test message' } },
-      { characterId: '0000', eventType: '_', timestamp, data: undefined },
+      { modelId: '0000', eventType: 'sendMessage', timestamp, data: { receiver: '0001', message: 'test message' } },
+      { modelId: '0000', eventType: '_', timestamp, data: undefined },
     ];
 
     let result = await worker.process(context, events);
@@ -157,7 +157,7 @@ describe('Worker', () => {
 
     expect(result.outboundEvents).length(1);
     expect(result.outboundEvents[0]).to.deep.include({
-      characterId: '0001',
+      modelId: '0001',
       eventType: 'message',
       data: {
         message: 'test message',
@@ -188,7 +188,7 @@ describe('Worker', () => {
 
     const timestamp = Date.now();
 
-    const events = [{ characterId: '0000', eventType: '_', timestamp, data: undefined }];
+    const events = [{ modelId: '0000', eventType: '_', timestamp, data: undefined }];
 
     let result = await worker.process(context, events);
 

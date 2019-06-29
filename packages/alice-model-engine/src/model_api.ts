@@ -159,9 +159,9 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return this;
   }
 
-  public sendEvent(characterId: string | null, event: string, data: any) {
+  public sendEvent(modelId: string | null, event: string, data: any) {
     const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
-    this.contextGetter().sendEvent(characterId, event, timestamp, data);
+    this.contextGetter().sendEvent(modelId, event, timestamp, data);
     return this;
   }
 }

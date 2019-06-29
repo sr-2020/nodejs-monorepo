@@ -43,7 +43,7 @@ describe('Green way', function() {
     const timestamp = model.timestamp;
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 5,
       data: { value: 'A' },
@@ -77,21 +77,21 @@ describe('Green way', function() {
     const timestamp = model.timestamp;
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 100,
       data: { value: 'A' },
     });
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 50,
       data: { value: 'B' },
     });
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 200,
       data: { value: 'C' },
@@ -116,7 +116,7 @@ describe('Green way', function() {
     let timestamp = model.timestamp;
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 10,
       data: { value: 'A' },
@@ -129,7 +129,7 @@ describe('Green way', function() {
     timestamp = Date.now();
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'concat',
       timestamp: timestamp + 10,
       data: { value: 'B' },
@@ -170,7 +170,7 @@ describe('Green way', function() {
     });
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'increaseExternalCounterAbc',
       timestamp: timestamp + 10,
     });
@@ -178,7 +178,7 @@ describe('Green way', function() {
     await pushRefreshEvent(model._id, timestamp + 20);
 
     await pushEvent({
-      characterId: model._id,
+      modelId: model._id,
       eventType: 'increaseExternalCounterAbc',
       timestamp: timestamp + 30,
     });

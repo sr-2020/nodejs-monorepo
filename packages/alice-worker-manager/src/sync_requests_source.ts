@@ -26,7 +26,7 @@ export class MetadataSyncRequestsSource implements SyncRequestsSource {
         const doc = change.doc;
         if (doc._deleted) return;
         this.subject.next({
-          characterId: doc._id,
+          modelId: doc._id,
           scheduledUpdateTimestamp: doc.scheduledUpdateTimestamp,
         });
       },

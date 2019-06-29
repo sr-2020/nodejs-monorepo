@@ -30,12 +30,12 @@ export class Worker {
   }
 
   public async process(context: EmptyModel, events: Event[]): Promise<EngineResult> {
-    const characterId = context.characterId;
+    const modelId = context.modelId;
     let pendingAquire: PendingAquire;
     try {
       pendingAquire = this._engine.preProcess(context, events);
     } catch (e) {
-      Logger.error('engine', `Exception ${e.toString()} caught when running preproces`, { events, characterId });
+      Logger.error('engine', `Exception ${e.toString()} caught when running preproces`, { events, modelId });
       return { status: 'error', error: e };
     }
 
@@ -43,13 +43,13 @@ export class Worker {
       const aquired = pendingAquire.length
         ? await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', {
             pendingAquire,
-            characterId,
+            modelId,
           })(() => this.waitAquire(pendingAquire))
         : undefined;
-      Logger.debug('engine', 'Aquired objects', { aquired, characterId });
+      Logger.debug('engine', 'Aquired objects', { aquired, modelId });
       return this._engine.process(context, aquired, events);
     } catch (e) {
-      Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { characterId });
+      Logger.error('engine', `Exception ${e.toString()} caught when aquiring external objects`, { modelId });
       return { status: 'error', error: e };
     }
   }

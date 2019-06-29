@@ -23,16 +23,16 @@ export class Engine<T extends EmptyModel> {
 
   public preProcess(model: T, events: Event[]): PendingAquire {
     const baseCtx = new Context(model, events, this._config.dictionaries);
-    const characterId = baseCtx.model.characterId;
-    Logger.info('engine', 'Preprocessing model', { characterId, events });
-    Logger.logStep('engine', 'info', 'Preprocess', { characterId })(() => this.runPreprocess(baseCtx, events));
+    const modelId = baseCtx.model.modelId;
+    Logger.info('engine', 'Preprocessing model', { modelId, events });
+    Logger.logStep('engine', 'info', 'Preprocess', { modelId })(() => this.runPreprocess(baseCtx, events));
     return baseCtx.pendingAquire;
   }
 
   public process(model: T, aquired: AquiredObjects, events: Event[]): EngineResult {
     const baseCtx = new Context(model, events, this._config.dictionaries);
     baseCtx.aquired = aquired;
-    const characterId = baseCtx.model.characterId;
+    const modelId = baseCtx.model.modelId;
 
     let workingCtx = baseCtx.clone();
 
@@ -43,16 +43,16 @@ export class Engine<T extends EmptyModel> {
       baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
 
       try {
-        Logger.logStep('engine', 'info', 'Running event', { event, characterId })(() => this.runEvent(baseCtx, event));
+        Logger.logStep('engine', 'info', 'Running event', { event, modelId })(() => this.runEvent(baseCtx, event));
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, characterId });
+        Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, modelId });
         return { status: 'error', error: e };
       }
 
       try {
-        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { characterId })(() => this.runModifiers(baseCtx));
+        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(baseCtx));
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { characterId });
+        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId });
         return { status: 'error', error: e };
       }
 
@@ -65,9 +65,9 @@ export class Engine<T extends EmptyModel> {
     let viewModels;
 
     try {
-      viewModels = Logger.logStep('engine', 'info', 'Running view models', { characterId })(() => this.runViewModels(workingCtx, baseCtx));
+      viewModels = Logger.logStep('engine', 'info', 'Running view models', { modelId })(() => this.runViewModels(workingCtx, baseCtx));
     } catch (e) {
-      Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { characterId });
+      Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { modelId });
       return { status: 'error', error: e };
     }
 
@@ -106,7 +106,7 @@ export class Engine<T extends EmptyModel> {
 
   private runModifiers(baseCtx: Context<T>): Context<T> {
     const workingCtx = baseCtx.clone();
-    const characterId = workingCtx.model.characterId;
+    const modelId = workingCtx.model.modelId;
     const api = ModelApiFactory(workingCtx);
 
     // First process all functional events, then all normal ones.
@@ -118,8 +118,8 @@ export class Engine<T extends EmptyModel> {
           if (!f) {
             continue;
           }
-          Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { characterId })(() => {
-            Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, characterId });
+          Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { modelId })(() => {
+            Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, modelId });
             (f as any)(api, modifier);
           });
         }

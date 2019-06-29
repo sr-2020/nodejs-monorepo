@@ -1,4 +1,4 @@
-import { CharacterlessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'alice-model-engine-api';
 import * as express from 'express';
 import { Body, CurrentUser, JsonController, Param, Post, Res } from 'routing-controllers';
 import { Container } from 'typedi';
@@ -39,7 +39,7 @@ export class MedicController {
 
       let timestamp = currentTimestamp();
 
-      const events: CharacterlessEvent[] = req.tests.map((test: string) => {
+      const events: IdLessEvent[] = req.tests.map((test: string) => {
         return {
           eventType: 'medic-run-lab-test',
           timestamp: timestamp++,
@@ -72,7 +72,7 @@ export class MedicController {
       const model = await dbContainer.modelsDb().get(req.patientId);
 
       let timestamp = currentTimestamp();
-      const events: CharacterlessEvent[] = [
+      const events: IdLessEvent[] = [
         {
           eventType: 'medic-add-comment',
           timestamp: timestamp++,
@@ -103,7 +103,7 @@ export class MedicController {
       await checkAccess(user, id);
 
       let timestamp = currentTimestamp();
-      const events: CharacterlessEvent[] = [
+      const events: IdLessEvent[] = [
         {
           eventType: 'scanQr',
           timestamp: timestamp++,

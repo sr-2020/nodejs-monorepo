@@ -1,6 +1,6 @@
 import * as PouchDB from 'pouchdb';
 
-import { CharacterlessEvent, Event, ModelMetadata } from 'alice-model-engine-api';
+import { IdLessEvent, Event, ModelMetadata } from 'alice-model-engine-api';
 import { EventEmitter } from 'events';
 
 export interface StatusAndBody {
@@ -9,7 +9,7 @@ export interface StatusAndBody {
 }
 
 export interface ProcessRequest {
-  events: CharacterlessEvent[];
+  events: IdLessEvent[];
   scheduledUpdateTimestamp?: number;
 }
 
@@ -29,7 +29,7 @@ export class Connection {
     const scheduledUpdateTimestamp = request.scheduledUpdateTimestamp;
     try {
       for (const event of request.events) {
-        const eventsWithCharId: Event = { characterId: id, ...event };
+        const eventsWithCharId: Event = { modelId: id, ...event };
         await this.eventsDb.post(eventsWithCharId);
         latestSavedEventTimestamp = event.timestamp;
       }

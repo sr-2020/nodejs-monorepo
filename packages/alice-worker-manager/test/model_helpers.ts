@@ -76,11 +76,11 @@ export function pushEvent(event: Event) {
   return eventsDb.put(event);
 }
 
-export async function pushRefreshEvent(characterId: string, timestamp: number) {
+export async function pushRefreshEvent(modelId: string, timestamp: number) {
   const metadataDb = Container.get(ConfigToken).db.metadata;
   const metadata: any = (await Container.get(DBConnectorToken)
     .use(metadataDb)
-    .getOrNull(characterId)) || { _id: characterId };
+    .getOrNull(modelId)) || { _id: modelId };
   metadata.scheduledUpdateTimestamp = timestamp;
   await Container.get(DBConnectorToken)
     .use(metadataDb)

@@ -2,7 +2,7 @@ import { Event } from 'alice-model-engine-api';
 
 export function getEvent(characterId: string, eventType: string, data: any, timestamp = Date.now()): Event {
   return {
-    characterId,
+    modelId: characterId,
     eventType,
     timestamp,
     data,
@@ -11,7 +11,7 @@ export function getEvent(characterId: string, eventType: string, data: any, time
 
 export function getNoOpEvent(characterId: string, timestamp = Date.now()): Event {
   return {
-    characterId,
+    modelId: characterId,
     eventType: '_',
     timestamp,
   };
@@ -24,7 +24,7 @@ export interface PartialEvent {
 
 export function getEvents(characterId: string, events: PartialEvent[], timestamp = Date.now()): Event[] {
   const result: Event[] = events.map((e, i) => ({
-    characterId,
+    modelId: characterId,
     timestamp: timestamp + i,
     ...e,
   }));

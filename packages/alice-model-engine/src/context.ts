@@ -141,17 +141,17 @@ export class Context<T extends EmptyModel> {
     return this;
   }
 
-  public sendEvent(characterId: string | null, eventType: string, timestamp: number, data: any) {
-    if (!characterId || characterId == this._model.characterId) {
+  public sendEvent(modelId: string | null, eventType: string, timestamp: number, data: any) {
+    if (!modelId || modelId == this._model.modelId) {
       this._events.unshift({
-        characterId: this._model.characterId,
+        modelId: this._model.modelId,
         eventType,
         timestamp: timestamp,
         data,
       });
     } else {
       this._outboundEvents.push({
-        characterId,
+        modelId,
         eventType,
         timestamp: timestamp,
         data,
@@ -220,7 +220,7 @@ export class Context<T extends EmptyModel> {
 
   private timerEvent(timer: Timer): Event {
     return {
-      characterId: this._model.characterId,
+      modelId: this._model.modelId,
       eventType: timer.eventType,
       timestamp: this.timestamp + timer.miliseconds,
       data: timer.data,

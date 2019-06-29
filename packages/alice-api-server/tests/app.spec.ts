@@ -424,7 +424,7 @@ describe('API Server', () => {
       expect(docs.length).to.equal(1);
       const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[1]);
-      expect(doc).to.deep.include({ characterId: '00001' });
+      expect(doc).to.deep.include({ modelId: '00001' });
     });
 
     it('Filters scheduledUpdateTimestamp too far in future', async () => {
@@ -450,7 +450,7 @@ describe('API Server', () => {
       expect(docs.length).to.equal(1);
       const doc: any = docs[0].doc;
       expect(doc).to.deep.include(events[0]);
-      expect(doc).to.deep.include({ characterId: '00001' });
+      expect(doc).to.deep.include({ modelId: '00001' });
 
       const metadata = await dbContainer.metadataDb().get('00001');
       expect(metadata.scheduledUpdateTimestamp).to.eq(0);
@@ -797,7 +797,7 @@ describe('API Server', () => {
       expect(docs.length).to.equal(1);
       const doc = docs[0].doc;
       expect(doc).to.deep.include(event);
-      expect(doc).to.deep.include({ characterId: '00001' });
+      expect(doc).to.deep.include({ modelId: '00001' });
       expect(doc.timestamp).to.be.approximately(currentTimestamp() + 2000, 200);
     });
 
