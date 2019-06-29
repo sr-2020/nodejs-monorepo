@@ -54,6 +54,14 @@ export type Condition = {
   level?: number;
 };
 
+export type PendingAquire = Array<[string, string]>;
+
+export interface AquiredObjects {
+  [db: string]: {
+    [id: string]: any;
+  };
+}
+
 export type EngineMessageEvents = {
   type: 'events';
   context: any;
@@ -67,11 +75,7 @@ export type EngineMessageConfigure = {
 
 export type EngineMessageAquired = {
   type: 'aquired';
-  data: {
-    [db: string]: {
-      [id: string]: any;
-    };
-  };
+  data: AquiredObjects;
 };
 
 export type EngineMessage = EngineMessageEvents | EngineMessageConfigure | EngineMessageAquired;
@@ -81,7 +85,7 @@ export type EngineResultOk = {
   baseModel: any;
   workingModel: any;
   viewModels: { [base: string]: any };
-  aquired?: { [key: string]: any };
+  aquired: AquiredObjects;
   outboundEvents: Event[];
 };
 
@@ -186,7 +190,7 @@ export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelA
 }
 
 export interface ViewModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
-  baseModel: any;
+  baseModel: T;
 }
 
 export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface, LogApiInterface {

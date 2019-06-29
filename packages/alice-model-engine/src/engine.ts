@@ -1,10 +1,10 @@
 import { reduce } from 'lodash';
 import { inspect } from 'util';
 
-import { EmptyModel, EngineResult, Event, Modifier } from 'alice-model-engine-api';
+import { AquiredObjects, EmptyModel, EngineResult, Event, Modifier, PendingAquire } from 'alice-model-engine-api';
 
 import * as config from './config';
-import { Context, PendingAquire, AquiredObjects } from './context';
+import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
 import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';

@@ -1,4 +1,5 @@
 import {
+  AquiredObjects,
   Condition,
   EmptyModel,
   Event,
@@ -14,7 +15,7 @@ import cuid = require('cuid');
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { Context, AquiredObjects } from './context';
+import { Context } from './context';
 import Logger from './logger';
 
 class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {

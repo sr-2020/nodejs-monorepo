@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { Condition, EmptyModel, Event, Modifier, Timer, Timers } from 'alice-model-engine-api';
+import { AquiredObjects, Condition, EmptyModel, Event, Modifier, PendingAquire, Timer, Timers } from 'alice-model-engine-api';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
@@ -21,14 +21,6 @@ export class OutboundEvents {
   public valueOf() {
     return cloneDeep(this.events);
   }
-}
-
-export type PendingAquire = Array<[string, string]>;
-
-export interface AquiredObjects {
-  [db: string]: {
-    [id: string]: any;
-  };
 }
 
 export class Context<T extends EmptyModel> {

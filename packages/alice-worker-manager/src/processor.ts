@@ -1,6 +1,6 @@
 import { cloneDeep, isNil, keyBy } from 'lodash';
 
-import { EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
+import { AquiredObjects, EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
 
 import { Config } from './config';
 import { EventStorage } from './event_storage';
@@ -174,7 +174,7 @@ export class Processor {
     return Promise.all(pending);
   }
 
-  private async storeAquiredObjects(objectStorage: BoundObjectStorage, aquired: any) {
+  private async storeAquiredObjects(objectStorage: BoundObjectStorage, aquired: AquiredObjects) {
     try {
       await objectStorage.store(aquired);
     } catch (e) {

@@ -1,10 +1,18 @@
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { EngineMessage, EngineMessageConfigure, EngineMessageEvents, EngineResult, Event, EmptyModel } from 'alice-model-engine-api';
+import {
+  AquiredObjects,
+  EngineMessage,
+  EngineMessageConfigure,
+  EngineMessageEvents,
+  EngineResult,
+  Event,
+  EmptyModel,
+  PendingAquire,
+} from 'alice-model-engine-api';
 
 import * as config from './config';
-import { PendingAquire, AquiredObjects } from './context';
 import Logger from './logger';
 import { loadModels } from './utils';
 import { Engine } from './engine';
@@ -40,12 +48,12 @@ export class Worker {
     }
 
     try {
-      const aquired = pendingAquire.length
+      const aquired: AquiredObjects = pendingAquire.length
         ? await Logger.logAsyncStep('engine', 'info', 'Waiting for aquired objects', {
             pendingAquire,
             modelId,
           })(() => this.waitAquire(pendingAquire))
-        : undefined;
+        : {};
       Logger.debug('engine', 'Aquired objects', { aquired, modelId });
       return this._engine.process(context, aquired, events);
     } catch (e) {
