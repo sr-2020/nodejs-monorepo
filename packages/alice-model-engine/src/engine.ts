@@ -52,7 +52,7 @@ export class Engine<T extends EmptyModel> {
       try {
         workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(baseCtx));
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId });
+        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: baseCtx.model });
         return { status: 'error', error: e };
       }
 

@@ -24,7 +24,10 @@ export function createModelObj(id?: string, fields?: any) {
   const model = merge(
     {
       _id: id,
+      modelId: id,
       timestamp: Date.now(),
+      modifiers: [],
+      conditions: [],
     },
     fields,
   );
