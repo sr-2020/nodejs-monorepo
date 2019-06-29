@@ -21,8 +21,6 @@
   "devDependencies": {
     "@types/chai": "^4.0.1",
     "@types/node": "^8.0.4",
-    "alice-model-engine": "file:../alice-model-engine",
-    "alice-model-engine-api": "file:../alice-model-engine-api",
     "chai": "^4.0.2",
     "chokidar-cli": "^1.2.0"
   },

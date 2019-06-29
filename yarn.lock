@@ -1950,25 +1950,6 @@ ajv@^6.10.0, ajv@^6.5.5, ajv@^6.9.1:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-"alice-model-engine-api@file:packages/alice-model-engine-api":
-  version "0.0.1"
-
-"alice-model-engine@file:packages/alice-model-engine":
-  version "0.0.1"
-  dependencies:
-    "@types/cuid" "^1.3.0"
-    "@types/glob" "^5.0.35"
-    "@types/lodash" "^4.14.106"
-    "@types/meow" "^4.0.1"
-    "@types/node" "^9.6.1"
-    "@types/systemjs" "^0.20.6"
-    "@types/winston" "^2.3.8"
-    cuid "^2.1.0"
-    glob "^7.1.1"
-    lodash "^4.17.5"
-    meow "^4.0.0"
-    winston "^2.4.1"
-
 ansi-align@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-2.0.0.tgz#c36aeccba563b89ceb556f3690f0b1d9e3547f7f"
