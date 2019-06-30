@@ -197,9 +197,9 @@ function isGenomeMatch(api: DeusExModelApiInterface, variable: string, value: st
  * scaleFactor = 100 (default) to apply normal change
  */
 function modifyMindCubes(api: DeusExModelApiInterface, mind: MindData, changeText: string, scaleFactor: number = 100) {
-  api.error('=======================================================');
+  api.debug('=======================================================');
   changeText.split(',').forEach((exp) => {
-    api.error(`MMC:  Part: ${exp}`);
+    api.debug(`MMC:  Part: ${exp}`);
 
     let exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
     if (exParts) {
