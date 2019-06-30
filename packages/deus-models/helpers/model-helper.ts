@@ -1,6 +1,7 @@
-import { Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Modifier, Effect, Condition } from '@sr2020/alice-model-engine-api/index';
 import { MindData } from '../src/medicViewModel';
 import { DeusExModelApiInterface, DeusExModel } from '../helpers/model';
+import { Implant, Illness } from './catalog_types';
 
 /**
  * Хелперы для разных моделей
@@ -11,7 +12,7 @@ let Chance = require('chance');
 let chance = new Chance();
 
 function loadImplant(api: DeusExModelApiInterface, id: string) {
-  let implant = api.getCatalogObject('implants', id.toLowerCase());
+  let implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
 
   if (!implant) {
     api.error(`loadImplant: implant id=${id} not found!`);
@@ -21,7 +22,7 @@ function loadImplant(api: DeusExModelApiInterface, id: string) {
   let effects: any[] = [];
 
   implant.effects.forEach((eID: string) => {
-    let effect = api.getCatalogObject('effects', eID.toLowerCase());
+    let effect = api.getCatalogObject<Effect>('effects', eID.toLowerCase());
     if (effect) {
       effect.enabled = true;
       effects.push(effect);
@@ -40,7 +41,7 @@ function loadImplant(api: DeusExModelApiInterface, id: string) {
  * Загружает болезнь и ее эффект из каталога
  */
 function loadIllness(api: DeusExModelApiInterface, id: string) {
-  let illness = api.getCatalogObject('illnesses', id.toLowerCase());
+  let illness = api.getCatalogObject<Illness>('illnesses', id.toLowerCase());
 
   if (!illness) {
     api.error(`loadIllness: illness id=${id} not found!`);
@@ -48,7 +49,7 @@ function loadIllness(api: DeusExModelApiInterface, id: string) {
   }
 
   let effectName = consts.ILLNESS_EFFECT_NAME;
-  let effect = api.getCatalogObject('effects', effectName);
+  let effect = api.getCatalogObject<Effect>('effects', effectName);
 
   if (!effect) {
     api.error(`loadIllness: effect id = ${effectName} not found`);
@@ -89,7 +90,7 @@ function checkPredicate(api: DeusExModelApiInterface, mID: string, effectName: s
     if (!predicates) {
       //api.info("checkPredicate: try to load predicates from catalog");
 
-      let catalogImplant = api.getCatalogObject('implants', implant.id);
+      let catalogImplant = api.getCatalogObject<Implant>('implants', implant.id);
       if (catalogImplant) {
         predicates = catalogImplant.predicates;
       }
@@ -250,7 +251,7 @@ function uuidv4() {
  */
 function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
   if (condId) {
-    let condition = api.getCatalogObject('conditions', condId);
+    let condition = api.getCatalogObject<Condition>('conditions', condId);
 
     if (condition) {
       api.debug(JSON.stringify(condition));
@@ -487,7 +488,7 @@ function createEffectModifier(
   displayName: string,
   modifierClass: string,
 ): Modifier | undefined {
-  let effect = api.getCatalogObject('effects', effectName);
+  let effect = api.getCatalogObject<Effect>('effects', effectName);
 
   if (!effect) {
     api.error("Can't load effect " + effectName);

@@ -9,6 +9,7 @@ import clone = require('clone');
 import infection = require('../helpers/infection-illness');
 import { Event, Modifier } from '@sr2020/alice-model-engine-api/index';
 import { DeusExModelApiInterface } from '../helpers/model';
+import { Illness } from 'deus-models/helpers/catalog_types';
 
 /**
  * Обработчик события start-illness
@@ -40,12 +41,14 @@ function startIllnessEvent(api: DeusExModelApiInterface, data: any, event: Event
       api.info(`startIllnessEvent: Add illness: ${illness.displayName}`);
 
       //Установка болезни
-      illness = api.addModifier(illness);
+      illness = api.addModifier(illness as any) as any;
 
       illness.currentStage = 0;
 
       //Запуск таймера болезни
       let timerName = `${illness.id}-${illness.mID}`;
+
+      api.error(`Ilness = ${illness}`);
 
       api.info(`startIllnessEvent: start timer: ${timerName} to ${illness.illnessStages[0].duration} sec (stage 0)`);
 
@@ -182,7 +185,9 @@ function rollForInfection(api: DeusExModelApiInterface, data: any, event: Event)
 
       let chance = helpers.getChanceFromModel(api.model);
 
-      let illnessModels = chance.pickone(illneses.map((i) => api.getCatalogObject('illnesses', i)).filter((i) => i.system == systemName));
+      let illnessModels = chance.pickone(
+        illneses.map((i) => api.getCatalogObject<Illness>('illnesses', i)!!).filter((i) => i.system == systemName),
+      );
 
       api.debug('Roll for infection: will start illness ' + illnessModels.id);
 

@@ -8,6 +8,6 @@ describe('ModelApi', () => {
     const context = new Context({ modelId: '', timestamp: 0, modifiers: [], conditions: [] }, [], { foo: [{ id: 'bar' }] });
     const api = ModelApiFactory(context);
 
-    expect(api.getCatalogObject('foo', 'bar')).to.deep.equal({ id: 'bar' });
+    expect(api.getCatalogObject<{ id: string }>('foo', 'bar')).to.deep.equal({ id: 'bar' });
   });
 });

@@ -4,6 +4,7 @@ import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import { Modifier, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
 import { DeusExModelApiInterface } from '../helpers/model';
+import { Narcotic } from 'deus-models/helpers/catalog_types';
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 
@@ -100,7 +101,7 @@ function usePill(api: DeusExModelApiInterface, data, event) {
     return;
   }
 
-  let pill = api.getCatalogObject('pills', code.pillId);
+  let pill = api.getCatalogObject<Narcotic>('pills', code.pillId);
   if (!pill) {
     api.error(`usePill: can't load pill ${code.pillId}`);
     return;

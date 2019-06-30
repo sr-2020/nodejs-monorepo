@@ -3,9 +3,10 @@
 import helpers = require('../helpers/model-helper');
 import { Modifier } from '@sr2020/alice-model-engine-api/index';
 import { DeusExModelApiInterface } from '../helpers/model';
+import { Narcotic } from 'deus-models/helpers/catalog_types';
 
 function loadNarco(api: DeusExModelApiInterface, id) {
-  let drug = api.getCatalogObject('pills', id);
+  let drug = api.getCatalogObject<Narcotic>('pills', id);
   if (drug && drug.pillType == 'narco') {
     return drug;
   } else {

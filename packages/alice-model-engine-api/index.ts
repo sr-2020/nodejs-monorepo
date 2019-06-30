@@ -134,7 +134,7 @@ export interface EmptyModel {
 export interface ReadModelApiInterface<T extends EmptyModel> {
   model: T;
 
-  getCatalogObject(catalog: string, id: string): any;
+  getCatalogObject<O>(catalog: string, id: string): O | undefined;
 
   getModifierById(id: string): Modifier | undefined;
   getModifiersByName(name: string): Modifier[];
