@@ -8,13 +8,14 @@ describe('Meidc and Mind ViewModel Generation', () => {
 
   before(async function() {
     let model = getExampleModel('1234');
-    let events = getRefreshEvent(model._id);
+    let events = getRefreshEvent(model.modelId);
     result = (await process(model, [events])).viewModels.medic_viewmodel;
   });
 
   it('Creation and _id, login, generation', async function() {
+    console.log(JSON.stringify(result));
     expect(result).is.not.null;
-    expect(result).has.nested.property('_id', '1234');
+    expect(result).has.nested.property('modelId', '1234');
 
     expect(result).has.nested.property('login', 'john.smith');
     expect(result).has.nested.property('generation', 'W');

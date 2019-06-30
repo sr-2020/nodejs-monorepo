@@ -43,11 +43,11 @@ describe('Infecton: ', () => {
     model.genome[4] = 1;
     model.genome[5] = 1;
 
-    let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
 
     let { baseModel } = await process(model, events);
 
-    events = [getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
+    events = [getRefreshEvent(model.modelId, model.timestamp + 24 * 60 * 60 * 1000)];
 
     ({ baseModel } = await process(baseModel, events));
 
@@ -61,11 +61,11 @@ describe('Infecton: ', () => {
     model.genome = [];
     model.profileType = 'exhuman-program';
 
-    let events = getEvents(model._id, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'roll-illness', data: {} }], model.timestamp);
 
     let { baseModel } = await process(model, events);
 
-    events = [getRefreshEvent(model._id, model.timestamp + 24 * 60 * 60 * 1000)];
+    events = [getRefreshEvent(model.modelId, model.timestamp + 24 * 60 * 60 * 1000)];
 
     ({ baseModel } = await process(baseModel, events));
 

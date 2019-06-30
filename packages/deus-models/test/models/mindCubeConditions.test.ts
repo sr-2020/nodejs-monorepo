@@ -12,7 +12,7 @@ describe('Mind Cubes conditions tests: ', () => {
     model.mind.A[0] = 19; //mcube-condition-A0-2
     model.mind.F[0] = 20; //mcube-condition-F0-3
 
-    let events = [getRefreshEvent(model._id, model.timestamp + 100)];
+    let events = [getRefreshEvent(model.modelId, model.timestamp + 100)];
     let { baseModel, workingModel } = await process(model, events);
 
     let cond1 = workingModel.conditions.find((c: any) => c.id == 'mcube-condition-A0-2');

@@ -147,7 +147,7 @@ function usePill(api: DeusExModelApiInterface, data, event) {
 
   _.set(api.model, ['usedPills', pill.id], event.timestamp);
   code.usedAt = event.timestamp;
-  code.usedBy = api.model._id;
+  code.usedBy = api.model.modelId;
 }
 
 function aquirePills(api: PreprocessApiInterface<any>, events) {

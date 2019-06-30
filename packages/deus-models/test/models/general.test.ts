@@ -22,7 +22,7 @@ describe('General events: ', () => {
 
     let model = getExampleModel();
     let events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'put-condition', data: eventData }, { eventType: 'put-condition', data: eventData2 }],
       model.timestamp + 100,
     );
@@ -35,7 +35,7 @@ describe('General events: ', () => {
     expect(cond2).to.exist;
 
     //Проверить через 600 секунд
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 610 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 610 * 1000)];
     ({ baseModel } = await process(baseModel, events));
 
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
@@ -45,7 +45,7 @@ describe('General events: ', () => {
     expect(cond2).to.not.exist;
 
     //Проверить через 2 часа секунд
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 7200 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 7200 * 1000)];
     ({ baseModel } = await process(baseModel, events));
 
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
@@ -62,7 +62,7 @@ describe('General events: ', () => {
     };
 
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'send-message', data: msgData }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'send-message', data: msgData }], model.timestamp + 100);
     let { baseModel } = await process(model, events);
 
     let msg = baseModel.messages.find((c: any) => c.title == 'Test Message');
@@ -75,7 +75,7 @@ describe('General events: ', () => {
   it('Change variable', async function() {
     let model = getExampleModel();
     let events = getEvents(
-      model._id,
+      model.modelId,
       [
         { eventType: 'change-model-variable', data: { name: 'sweethome', value: 'new_location' } },
         { eventType: 'change-model-variable', data: { name: 'login', value: 'test-login' } },
@@ -93,7 +93,7 @@ describe('General events: ', () => {
       operations: 'A2+20, B4-5, F1=27',
     };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'change-mind-cube', data: eventData }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'change-mind-cube', data: eventData }], model.timestamp + 100);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.mind.A[2]).is.equal(76);
@@ -107,7 +107,7 @@ describe('General events: ', () => {
     model.profileType = 'robot';
     model.owner = 'ivan.ivanovich';
 
-    let events = getEvents(model._id, [{ eventType: 'change-android-owner', data: { owner: 'vasya.pupkin' } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'change-android-owner', data: { owner: 'vasya.pupkin' } }], model.timestamp + 100);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.owner).is.equal('vasya.pupkin');
@@ -140,7 +140,7 @@ describe('General events: ', () => {
       update: [data3],
     };
 
-    let events = getEvents(model._id, [{ eventType: 'change-memory', data: modelData }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'change-memory', data: modelData }], model.timestamp + 100);
     let { baseModel } = await process(model, events);
 
     //printModel(baseModel);
@@ -160,7 +160,7 @@ describe('General events: ', () => {
   it('Change insurance', async function() {
     let model = getExampleModel();
 
-    let events = getEvents(model._id, [{ eventType: 'change-insurance', data: { Insurance: 'JJ', Level: 2 } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'change-insurance', data: { Insurance: 'JJ', Level: 2 } }], model.timestamp + 100);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.insurance).is.equal('JJ');

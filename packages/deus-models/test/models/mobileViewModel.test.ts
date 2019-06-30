@@ -9,7 +9,7 @@ async function getViewModel(model: any) {
 
 function getRobotViewModel() {
   let x = {
-    _id: '1000',
+    modelId: '1000',
     timestamp: 0,
     general: {
       maxSecondsInVr: 1200,
@@ -176,7 +176,7 @@ function getRobotViewModel() {
 
 function getProgramViewModel() {
   let x = {
-    _id: '1000',
+    modelId: '1000',
     timestamp: 0,
     general: {
       maxSecondsInVr: 1200,
@@ -303,7 +303,7 @@ describe('mobileViewModel', () => {
     const model = getExampleModel();
     const viewModel = await getViewModel(model);
     expect(viewModel).to.be.deep.equal(JSON.parse(JSON.stringify(viewModel)));
-    expect(viewModel).to.have.property('_id');
+    expect(viewModel).to.have.property('modelId');
     expect(viewModel).to.have.property('timestamp');
 
     //console.log(JSON.stringify(viewModel, null, 4));
@@ -331,7 +331,7 @@ describe('mobileViewModel', () => {
 
   it('Start Illness and check illness life path', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     printModel(workingModel.conditions);
@@ -343,7 +343,7 @@ describe('mobileViewModel', () => {
     expect(cond).is.exist;
 
     console.log('================= Stage 0 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 7210 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 7210 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let viewModel = await getViewModel(model);
@@ -351,7 +351,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 1 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 5410 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 5410 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     viewModel = await getViewModel(model);
@@ -359,7 +359,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 2 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 3610 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 3610 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     viewModel = await getViewModel(model);
@@ -367,7 +367,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 3 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 2710 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 2710 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     viewModel = await getViewModel(model);
@@ -375,7 +375,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 4 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 1810 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1810 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     viewModel = await getViewModel(model);
@@ -383,7 +383,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 5 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 910 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 910 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     viewModel = await getViewModel(model);
@@ -391,7 +391,7 @@ describe('mobileViewModel', () => {
     expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
 
     console.log('================= Stage 6 duration ============================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 610 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 610 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;

@@ -173,13 +173,13 @@ function spaceSuitRefill(api: MagellanModelApiInterface, data: SpaceSuitRefillDa
 
   if (counter.usedBy) {
     api.warn('spaceSuitRefill: already used space suit refill code. Cheaters gonna cheat?', {
-      terminalId: api.model._id,
+      terminalId: api.model.modelId,
       uniqueId: data.uniqueId,
     });
     return;
   }
 
-  counter.usedBy = api.model._id;
+  counter.usedBy = api.model.modelId;
 
   // If person forgot about disinfecting it first... Well, too bad!
   spaceSuitTakeOff(api, 0, event);

@@ -148,7 +148,7 @@ function characterDeathEvent(api: DeusExModelApiInterface, event) {
 
     if (deadSystem) {
       api.model.isAlive = false;
-      api.info(`characterDeath: character id=${api.model._id} login=${api.model.login || ''} id dead!`);
+      api.info(`characterDeath: character id=${api.model.modelId} login=${api.model.login || ''} id dead!`);
       helpers.addChangeRecord(api, `Вы умерли. Отказала ${deadSystem} система организма.`, event.timestamp);
     }
   }
@@ -408,7 +408,7 @@ function characterResurectEvent(api: DeusExModelApiInterface, event) {
 
     api.model.isAlive = true;
 
-    api.info(`characterResurectEvent: character id=${api.model._id} login=${api.model.login || ''} is live again!`);
+    api.info(`characterResurectEvent: character id=${api.model.modelId} login=${api.model.login || ''} is live again!`);
 
     helpers.addChangeRecord(api, `Базовые функции жизнедеятельности организма восстановлены`, event.timestamp);
   }
@@ -498,7 +498,9 @@ function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modif
 
     if (!api.getTimer(timerName)) {
       api.info(
-        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
+        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${
+          params.recoveryTime
+        } sec!`,
       );
       api.setTimer(timerName, params.recoveryTime * 1000, 'recover-systems', { mID: modifier.mID, hpRemain });
     } else {

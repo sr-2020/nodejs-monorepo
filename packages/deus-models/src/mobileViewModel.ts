@@ -1,4 +1,5 @@
-import { Modifier, ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { Modifier, ViewModelApiInterface, Condition } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModel, Message, Change, MemoryEntry } from 'deus-models/helpers/model';
 
 interface PageViewModel {
   menuTitle: string;
@@ -13,11 +14,11 @@ interface Row {
   valueColor?: string;
 }
 
-function getCharacterName(model) {
+function getCharacterName(model: DeusExModel) {
   return model.firstName + ' ' + model.lastName;
 }
 
-function getRussianSex(sex) {
+function getRussianSex(sex: string) {
   switch (sex) {
     case 'male':
       return 'мужской';
@@ -30,7 +31,7 @@ function getRussianSex(sex) {
   }
 }
 
-function getHandicaps(model) {
+function getHandicaps(model: DeusExModel) {
   if (model.hp == 0) {
     return 'только лежать';
   } else {
@@ -38,7 +39,7 @@ function getHandicaps(model) {
   }
 }
 
-function getStartPage(model) {
+function getStartPage(model: DeusExModel) {
   let isHuman = model.profileType == 'human';
   let isProgram = model.profileType == 'program';
   let isExHumanProgram = model.profileType == 'exhuman-program';
@@ -52,7 +53,7 @@ function getStartPage(model) {
     },
     {
       text: 'ID',
-      value: model._id,
+      value: model.modelId,
     },
     {
       text: 'e-mail',
@@ -168,7 +169,7 @@ function getStartPage(model) {
   return pageInfo;
 }
 
-function getRussianConditionTag(tag) {
+function getRussianConditionTag(tag: string) {
   switch (tag) {
     case 'physiology':
       return 'Физиология';
@@ -179,7 +180,7 @@ function getRussianConditionTag(tag) {
   }
 }
 
-function getConditionsPageItem(cond) {
+function getConditionsPageItem(cond: Condition) {
   let header = cond.text;
   let details = cond.details ? cond.details : header;
   let condClass = cond.class ? cond.class : 'physiology';
@@ -200,7 +201,7 @@ function getConditionsPageItem(cond) {
   };
 }
 
-function getConditionsPage(model) {
+function getConditionsPage(model: DeusExModel) {
   return {
     __type: 'ListPageViewModel',
     viewId: 'page:conditions',
@@ -229,11 +230,11 @@ function getEconomyPage() {
   };
 }
 
-function getEnabledText(enabled) {
+function getEnabledText(enabled: boolean) {
   return enabled ? 'ON' : 'OFF';
 }
 
-function getEnabledColor(enabled) {
+function getEnabledColor(enabled: boolean) {
   // TODO: Use magic color provided by the app
   return enabled ? '' : '#FF373F';
 }
@@ -295,7 +296,7 @@ function getImplantsPageItem(modifier: Modifier) {
   };
 }
 
-function getImplantsPage(model) {
+function getImplantsPage(model: DeusExModel) {
   let pageTitle = model.profileType == 'human' ? 'Импланты' : 'Прошивки';
 
   return {
@@ -309,7 +310,7 @@ function getImplantsPage(model) {
   };
 }
 
-function getMemoryPageItem(mem) {
+function getMemoryPageItem(mem: MemoryEntry) {
   let header = mem.title;
 
   if (mem.text == mem.title || mem.text == mem.title + '.') {
@@ -329,7 +330,7 @@ function getMemoryPageItem(mem) {
   };
 }
 
-function getMemoryPage(model) {
+function getMemoryPage(model: DeusExModel) {
   return {
     __type: 'ListPageViewModel',
     viewId: 'page:memory',
@@ -342,7 +343,7 @@ function getMemoryPage(model) {
 }
 
 // TODO: Get data from model
-function getAdminsPage(model) {
+function getAdminsPage(model: DeusExModel) {
   return {
     __type: 'ListPageViewModel',
     menuTitle: 'Администраторы',
@@ -384,7 +385,7 @@ function getAdminsPage(model) {
   };
 }
 
-function getChangesPageItem(change) {
+function getChangesPageItem(change: Change) {
   return {
     viewId: 'mid:' + change.mID,
     text: change.text,
@@ -396,7 +397,7 @@ function getChangesPageItem(change) {
   };
 }
 
-function getChangesPage(model) {
+function getChangesPage(model: DeusExModel) {
   return {
     __type: 'ListPageViewModel',
     viewId: 'page:changes',
@@ -408,7 +409,7 @@ function getChangesPage(model) {
   };
 }
 
-function getMessagesPageItem(message) {
+function getMessagesPageItem(message: Message) {
   return {
     viewId: 'mid:' + message.mID,
     text: message.title,
@@ -419,7 +420,7 @@ function getMessagesPageItem(message) {
   };
 }
 
-function getMessagesPage(model) {
+function getMessagesPage(model: DeusExModel) {
   return {
     __type: 'ListPageViewModel',
     viewId: 'page:messages',
@@ -431,7 +432,7 @@ function getMessagesPage(model) {
   };
 }
 
-function getPages(model) {
+function getPages(model: DeusExModel) {
   let pages: PageViewModel[] = [];
 
   let isHuman = model.profileType == 'human';
@@ -468,19 +469,19 @@ function getPages(model) {
 }
 
 // General characteristics not tied to any page or UI element.
-function getGeneral(model) {
+function getGeneral(model: DeusExModel) {
   return {
     maxSecondsInVr: model.maxSecondsInVr,
   };
 }
 
-function getMenu(model) {
+function getMenu(model: DeusExModel) {
   return {
     characterName: getCharacterName(model),
   };
 }
 
-function getToolbar(model) {
+function getToolbar(model: DeusExModel) {
   let ret = {
     hitPoints: model.hp,
     maxHitPoints: model.maxHp,
@@ -493,9 +494,9 @@ function getToolbar(model) {
   return ret;
 }
 
-function getPassportScreen(model) {
+function getPassportScreen(model: DeusExModel) {
   return {
-    id: model._id,
+    id: model.modelId,
     fullName: model.firstName + ' ' + model.lastName,
     corporation: model.corporation ? model.corporation : '',
     email: model.mail ? model.mail : '',
@@ -503,9 +504,9 @@ function getPassportScreen(model) {
   };
 }
 
-function getViewModel(model) {
+function getViewModel(model: DeusExModel) {
   return {
-    _id: model._id,
+    modelId: model.modelId,
     timestamp: model.timestamp,
     general: getGeneral(model),
     menu: getMenu(model),

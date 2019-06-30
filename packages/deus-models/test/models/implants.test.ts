@@ -9,7 +9,7 @@ describe('Implants: ', () => {
   it('Add implant', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }]);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }]);
 
     let { baseModel } = await process(model, events);
 
@@ -27,7 +27,7 @@ describe('Implants: ', () => {
 
     model.profileType = 'exhuman-program';
 
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_and_basic' } }]);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_and_basic' } }]);
 
     let { baseModel } = await process(model, events);
 
@@ -41,7 +41,7 @@ describe('Implants: ', () => {
 
     model.profileType = 'robot';
 
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_and_basic' } }]);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_and_basic' } }]);
 
     let { baseModel } = await process(model, events);
 
@@ -58,7 +58,7 @@ describe('Implants: ', () => {
   it('Add double implant', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel } = await process(model, events);
 
@@ -70,7 +70,7 @@ describe('Implants: ', () => {
     let changeRecord = baseModel.changes.find((e: any) => e.text == 'Установлен имплант: Киберпротез ноги «Стабильность»');
     expect(changeRecord).to.exist;
 
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], baseModel.timestamp + 100, true);
     ({ baseModel } = await process(baseModel, events));
 
     let implants = baseModel.modifiers.filter((e: any) => e.id == 's_stability');
@@ -81,7 +81,7 @@ describe('Implants: ', () => {
   it('Add two implants for one system', async function() {
     let model = getExampleModel();
     let events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'add-implant', data: { id: 's_stability' } }, { eventType: 'add-implant', data: { id: 's_orphey' } }],
       model.timestamp + 100,
     );
@@ -105,7 +105,7 @@ describe('Implants: ', () => {
 
   it('Add implant and stop illness', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     let illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
@@ -114,7 +114,7 @@ describe('Implants: ', () => {
     let cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
     expect(cond).is.exist;
 
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_stability' } }], baseModel.timestamp + 100);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_stability' } }], baseModel.timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
@@ -128,7 +128,7 @@ describe('Implants: ', () => {
 
   it('Add implant and stop illness 2', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'start-illness', data: { id: 'acromegaly' } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'acromegaly' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     let illness = baseModel.modifiers.find((m: any) => m.id == 'acromegaly');
@@ -137,7 +137,7 @@ describe('Implants: ', () => {
     let cond = workingModel.conditions.find((c: any) => c.id == 'acromegaly-0');
     expect(cond).is.exist;
 
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 'jj_i_am_girl' } }], baseModel.timestamp + 100);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 'jj_i_am_girl' } }], baseModel.timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 'jj_i_am_girl');
@@ -152,14 +152,14 @@ describe('Implants: ', () => {
   it('Remove implant', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel } = await process(model, events);
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
 
     //console.log(JSON.stringify(baseModel, null, 4));
 
-    events = getEvents(model._id, [{ eventType: 'remove-implant', data: { mID: implant.mID } }], 1500825900, true);
+    events = getEvents(model.modelId, [{ eventType: 'remove-implant', data: { mID: implant.mID } }], 1500825900, true);
     baseModel = (await process(baseModel, events)).baseModel;
 
     implant = baseModel.modifiers.find((e: any) => e.id == 's_stability');
@@ -174,7 +174,7 @@ describe('Implants: ', () => {
   it('Show condition effect', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
@@ -186,7 +186,7 @@ describe('Implants: ', () => {
 
     //Genome[6] = 1
     baseModel.genome[6] = 1;
-    events = [getRefreshEvent(model._id, 1500825900)];
+    events = [getRefreshEvent(model.modelId, 1500825900)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     condition = workingModel.conditions.find((e: any) => e.id == 's_stability-1');
@@ -194,7 +194,7 @@ describe('Implants: ', () => {
 
     //Genome[6] = 4
     baseModel.genome[6] = 4;
-    events = [getRefreshEvent(model._id, 1500825920)];
+    events = [getRefreshEvent(model.modelId, 1500825920)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     condition = workingModel.conditions.find((e: any) => e.id == 's_stability-2');
@@ -202,7 +202,7 @@ describe('Implants: ', () => {
 
     //Genome[6] = 2 (no conditions)
     baseModel.genome[6] = 2;
-    events = [getRefreshEvent(model._id, 1500825940)];
+    events = [getRefreshEvent(model.modelId, 1500825940)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     condition = workingModel.conditions.find((e: any) => e.id.startsWith('s_stability'));
@@ -214,7 +214,7 @@ describe('Implants: ', () => {
 
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel } = await process(model, events);
 
@@ -224,7 +224,7 @@ describe('Implants: ', () => {
     //С7 == 63  => A1+10,B2-10,C3=20
     model = getExampleModel();
     model.mind.C[7] = 63;
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
     ({ baseModel } = await process(model, events));
 
     expect(baseModel.mind.A[1]).is.equal(57);
@@ -235,7 +235,7 @@ describe('Implants: ', () => {
   it('Enable & Disable implant', async function() {
     let eventData = { id: 's_stability' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel } = await process(model, events);
 
@@ -266,7 +266,7 @@ describe('Implants: ', () => {
   it('Disable implant with duration', async function() {
     let duration = 300; //5 minutes
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_stability' } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_stability' } }], model.timestamp + 100, true);
 
     let { baseModel } = await process(model, events);
 
@@ -314,7 +314,7 @@ describe('Implants: ', () => {
     let model = getExampleModel();
     model.genome[9] = 2;
 
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 'lab_maninthemiddle' } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 'lab_maninthemiddle' } }], model.timestamp + 100, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
@@ -325,7 +325,7 @@ describe('Implants: ', () => {
 
     expect(workingModel.maxProxy).is.equal(102);
 
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 'jj_i_am_girl' } }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 'jj_i_am_girl' } }], baseModel.timestamp + 100, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     implant = baseModel.modifiers.find((e: any) => e.id == 'jj_i_am_girl');

@@ -75,7 +75,7 @@ function medicRunLabTest(api: ModelApiInterface<MedicModel>, data: RunLabTestDat
     // tslint:disable-next-line:no-shadowed-variable
     const historyEntry = {
       timestamp: event.timestamp,
-      patientId: data.model._id,
+      patientId: data.model.modelId,
       patientFullName: data.model.firstName + ' ' + data.model.lastName,
       type: 'Ошибка',
       text: 'Недостачно реактивов для проведения анализа',
@@ -96,7 +96,7 @@ function medicRunLabTest(api: ModelApiInterface<MedicModel>, data: RunLabTestDat
 
   const historyEntry = {
     timestamp: event.timestamp,
-    patientId: data.model._id,
+    patientId: data.model.modelId,
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     type: testResult.type,
     text: testResult.message,

@@ -9,7 +9,7 @@ describe('VR events: ', () => {
   it('Enter VR', async function() {
     let model = getExampleModel();
     let enterTimestamp = model.timestamp + 100;
-    let events = getEvents(model._id, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.lastVREnterTimestamp).to.exist;
@@ -19,7 +19,7 @@ describe('VR events: ', () => {
   it('Enter & Exit VR', async function() {
     let model = getExampleModel();
     let enterTimestamp = model.timestamp + 100;
-    let events = getEvents(model._id, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'enterVr', data: {} }], enterTimestamp);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.lastVREnterTimestamp).to.exist;
@@ -27,7 +27,7 @@ describe('VR events: ', () => {
 
     let exitTimestamp = model.timestamp + 610 * 1000;
 
-    events = getEvents(model._id, [{ eventType: 'exitVr', data: {} }], exitTimestamp);
+    events = getEvents(model.modelId, [{ eventType: 'exitVr', data: {} }], exitTimestamp);
     ({ baseModel } = await process(baseModel, events));
 
     expect(baseModel.lastVREnterDuration).to.exist;

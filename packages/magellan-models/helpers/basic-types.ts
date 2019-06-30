@@ -107,7 +107,6 @@ export interface System {
 }
 
 export interface OrganismModel extends EmptyModel {
-  _id: string;
   // Debug only
   showTechnicalInfo?: boolean;
 

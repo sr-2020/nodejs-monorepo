@@ -7,7 +7,7 @@ describe('Medicine: ', () => {
   it('Compute HP', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
@@ -27,11 +27,11 @@ describe('Medicine: ', () => {
   it('Reduce HP event', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
-    events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
+    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP 5-2 = 3
@@ -43,7 +43,7 @@ describe('Medicine: ', () => {
 
     model.profileType = 'program';
 
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
     let { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
@@ -54,7 +54,7 @@ describe('Medicine: ', () => {
 
     model.profileType = 'exhuman-program';
 
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
     let { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
@@ -63,14 +63,14 @@ describe('Medicine: ', () => {
   it('Reduce HP event and heal +5', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
-    events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
+    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], 1500825800, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    events = getEvents(model._id, [{ eventType: 'addHp', data: { hpAdd: 5 } }], 1500825900, true);
+    events = getEvents(model.modelId, [{ eventType: 'addHp', data: { hpAdd: 5 } }], 1500825900, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP
@@ -81,13 +81,13 @@ describe('Medicine: ', () => {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
     model.maxHp = 2;
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     //model.hp = 1;
 
     let { baseModel, workingModel } = await process(model, events);
 
-    events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 3 } }], 1500825800, true);
+    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 3 } }], 1500825800, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //После опускания хитов <= 0 должно показывать 0
@@ -101,7 +101,7 @@ describe('Medicine: ', () => {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
     model.maxHp = 2;
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     //model.hp = 1;
 
@@ -110,7 +110,7 @@ describe('Medicine: ', () => {
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'subtractHp', data: { hpLost: 3 } }, { eventType: 'disable-implant', data: { mID: implant.mID } }],
       baseModel.timestamp + 100,
       true,
@@ -135,7 +135,7 @@ describe('Medicine: ', () => {
   it('Reduce HP below 0 and get +4 HP pill', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     //model.hp = 1;
 
@@ -144,7 +144,7 @@ describe('Medicine: ', () => {
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
-      model._id,
+      model.modelId,
       [
         { eventType: 'subtractHp', data: { hpLost: 3 } },
         { eventType: 'disable-implant', data: { mID: implant.mID } },
@@ -165,13 +165,13 @@ describe('Medicine: ', () => {
     let model = getExampleModel();
     //model.hp = 1;
 
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
     let { baseModel, workingModel } = await process(model, events);
 
     let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'subtractHp', data: { hpLost: 3 } }, { eventType: 'disable-implant', data: { mID: implant.mID } }],
       1500825800,
       true,
@@ -182,7 +182,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(0);
 
     //Установить имплант на сердечно-сосудистую систему
-    events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_steelheart' } }], 1500825900, true);
+    events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_steelheart' } }], 1500825900, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP
@@ -192,7 +192,7 @@ describe('Medicine: ', () => {
     expect(cond1).to.not.exist;
 
     //Включить имплант
-    events = getEvents(model._id, [{ eventType: 'enable-implant', data: { mID: implant.mID } }], 1500826000, true);
+    events = getEvents(model.modelId, [{ eventType: 'enable-implant', data: { mID: implant.mID } }], 1500826000, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP (base 1, implant +1)
@@ -207,19 +207,19 @@ describe('Medicine: ', () => {
   it('Reduce HP and bleeding (hp leak)', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
     //Нанесли повреждения
-    events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp + 100, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) + impant(1) - damage (2)
     expect(workingModel.hp).is.equal(3);
 
     //Прошло 10 минут (должен списаться хит)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 700000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 700000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) + impant(1) - damage (2) - leak(1)
@@ -228,7 +228,7 @@ describe('Medicine: ', () => {
     console.log(JSON.stringify(baseModel.timers, null, 4));
 
     //Прошло 20 минут (должно списаться еще 2 хита)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 1200 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1200 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) + impant(1) - damage (2) - leak(2)
@@ -238,7 +238,7 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[1]).is.equal(0);
 
     //Прошло еще 10 минут (не должно ничего списываться т.е. одна из систем уничтожена и по идее должен запускаться таймер на умирание)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 650 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 650 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Уничтожена одна система -> хитов нет
@@ -252,21 +252,21 @@ describe('Medicine: ', () => {
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp + 100, true);
     let { baseModel, workingModel } = await process(model, events);
 
     //Check HP: model(4)- damage (2)
     expect(workingModel.hp).is.equal(2);
 
     //Прошло 10 минут (хиты не утекают))
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 700000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 700000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) - damage (2)
     expect(workingModel.hp).is.equal(2);
 
     //Прошло 20 минут (все на месте)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 1200 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1200 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) - damage (2)
@@ -280,14 +280,14 @@ describe('Medicine: ', () => {
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp + 100, true);
     let { baseModel, workingModel } = await process(model, events);
 
     //Check HP: model(4)- damage (4)
     expect(workingModel.hp).is.equal(0);
 
     //Прошло 20 минут (все на месте)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 1200 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1200 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(baseModel.systems[1]).is.equal(1);
@@ -298,14 +298,14 @@ describe('Medicine: ', () => {
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], model.timestamp + 100, true);
     let { baseModel, workingModel } = await process(model, events);
 
     //Check HP: model(4)- damage (2)
     expect(workingModel.hp).is.equal(2);
 
     //Прошло 20 минут (все на месте)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 1200 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1200 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.hp).is.equal(4);
@@ -316,14 +316,14 @@ describe('Medicine: ', () => {
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], model.timestamp + 100, true);
     let { baseModel, workingModel } = await process(model, events);
 
     //Check HP: model(4)- damage (0)
     expect(workingModel.hp).is.equal(0);
 
     //Прошло 40 минут (все на месте)
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 2400 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 2400 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.hp).is.equal(4);
@@ -332,13 +332,13 @@ describe('Medicine: ', () => {
   it('Reduce HP and death and resurect', async function() {
     let eventData = { id: 's_orphey' };
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
     //Нанесли повреждения и добавили болезнь
     events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'subtractHp', data: { hpLost: 2 } }, { eventType: 'start-illness', data: { id: 'acromegaly' } }],
       baseModel.timestamp + 100,
       true,
@@ -356,7 +356,7 @@ describe('Medicine: ', () => {
 
     //Прошло 30 минут (должно списаться 3 хита)
     console.log('========== pass 30 minutes ===========================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 30 * 60 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 30 * 60 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     //Check HP: model(4) + impant(1) - damage (2) - leak(3)
@@ -367,7 +367,7 @@ describe('Medicine: ', () => {
 
     //Прошло еще 25 минут - персонаж умирает
     console.log('========== pass 25 minutes ===========================');
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 25 * 60 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 25 * 60 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let cond = baseModel.changes.find((c: any) => c.text.startsWith('Вы умерли'));
@@ -376,7 +376,7 @@ describe('Medicine: ', () => {
     expect(cond).is.exist;
 
     //Вернуть персонажа к жизни
-    events = getEvents(model._id, [{ eventType: 'character-resurect', data: {} }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'character-resurect', data: {} }], baseModel.timestamp + 100, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(baseModel.isAlive).is.true;

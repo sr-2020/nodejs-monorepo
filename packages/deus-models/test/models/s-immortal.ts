@@ -6,7 +6,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 describe('Serenity immortality: ', () => {
   it('Install first stage implant', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'add-implant', data: { id: 's_immortal01' } }], model.timestamp + 100);
+    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_immortal01' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'serenity_immortality_ready');
@@ -16,7 +16,7 @@ describe('Serenity immortality: ', () => {
 
     console.log('================Pass 60 minutes ===============');
 
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 700 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 700 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     cond = workingModel.conditions.find((c: any) => c.id == 'serenity_immortality_ready');
@@ -27,20 +27,20 @@ describe('Serenity immortality: ', () => {
     //Подготовить к модернизации
     let model = getExampleModel();
     let events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'add-implant', data: { id: 'jj_meditation' } }, { eventType: 'add-implant', data: { id: 's_immortal01' } }],
       model.timestamp + 100,
     );
     let { baseModel, workingModel } = await process(model, events);
 
-    events = [getRefreshEvent(model._id, baseModel.timestamp + 700 * 1000)];
+    events = [getRefreshEvent(model.modelId, baseModel.timestamp + 700 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     console.log('============ Damage and illness ===============');
 
     //Поранить и заразить персонажа
     events = getEvents(
-      model._id,
+      model.modelId,
       [{ eventType: 'start-illness', data: { id: 'arthritis' } }, { eventType: 'subtractHp', data: { hpLost: 1 } }],
       baseModel.timestamp + 100,
     );
@@ -54,7 +54,7 @@ describe('Serenity immortality: ', () => {
     console.log('============ Start modernization ===============');
 
     //Принять "таблетку" модернизации
-    events = getEvents(model._id, [{ eventType: 'serenity_immortality_go', data: {} }], baseModel.timestamp + 100);
+    events = getEvents(model.modelId, [{ eventType: 'serenity_immortality_go', data: {} }], baseModel.timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(baseModel.profileType).is.equal('ex-human-robot');
@@ -75,7 +75,7 @@ describe('Serenity immortality: ', () => {
   it('Install first stage implant and try install another', async function() {
     let model = getExampleModel();
     let events = getEvents(
-      model._id,
+      model.modelId,
       [
         { eventType: 'add-implant', data: { id: 's_immortal01' } },
         { eventType: 'add-implant', data: { id: 'lab_maninthemiddle' } },

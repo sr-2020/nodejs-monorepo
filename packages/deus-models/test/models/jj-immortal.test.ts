@@ -28,7 +28,7 @@ describe('JJ Immortality', () => {
   it('Use step one pill', async function() {
     let model = getExampleModel();
     model.changes = [];
-    let events = getEvents(model._id, [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }]);
+    let events = getEvents(model.modelId, [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }]);
 
     let { baseModel, workingModel } = await process(model, events);
 
@@ -39,7 +39,7 @@ describe('JJ Immortality', () => {
     expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
     expect(findChangeRecord(STEP1.stages[1].text, workingModel)).not.to.exist;
 
-    events = [getRefreshEvent(model._id, Date.now() + STEP1.stages[0].duration * 1000 + 10)];
+    events = [getRefreshEvent(model.modelId, Date.now() + STEP1.stages[0].duration * 1000 + 10)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(findModifier('jj-immortal-one', baseModel)).to.has.property('currentStage', 1);
@@ -47,7 +47,7 @@ describe('JJ Immortality', () => {
     expect(findChangeRecord(STEP1.stages[1].text, workingModel)).to.exist;
     expect(findChangeRecord(STEP1.stages[2].text, workingModel)).not.to.exist;
 
-    events = [getRefreshEvent(model._id, Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10)];
+    events = [getRefreshEvent(model.modelId, Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(findModifier('jj-immortal-one', baseModel)).to.has.property('currentStage', 2);
@@ -57,7 +57,7 @@ describe('JJ Immortality', () => {
 
     events = [
       getRefreshEvent(
-        model._id,
+        model.modelId,
         Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + STEP1.stages[2].duration * 1000 + 10,
       ),
     ];
@@ -75,15 +75,15 @@ describe('JJ Immortality', () => {
     model.changes = [];
     let timestamp = Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10;
     let events = getEvents(
-      model._id,
-      [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }, getRefreshEvent(model._id, timestamp)],
+      model.modelId,
+      [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }, getRefreshEvent(model.modelId, timestamp)],
       Date.now(),
       false,
     );
 
     let { baseModel, workingModel } = await process(model, events);
 
-    events = getEvents(model._id, [{ eventType: 'jj-immortal-two-start', data: { pill: STEP2 } }], timestamp + 100);
+    events = getEvents(model.modelId, [{ eventType: 'jj-immortal-two-start', data: { pill: STEP2 } }], timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let jjOne = findModifier('jj-immortal-one', baseModel);
@@ -94,7 +94,7 @@ describe('JJ Immortality', () => {
     expect(findChangeRecord(STEP2.stages[0], workingModel)).to.exist;
     expect(findChangeRecord(STEP2.stages[1], workingModel)).not.to.exist;
 
-    events = [getRefreshEvent(model._id, timestamp + 5 * 60 * 1000 + 200)];
+    events = [getRefreshEvent(model.modelId, timestamp + 5 * 60 * 1000 + 200)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(findModifier('jj-immortal-one', baseModel)).not.to.exist;
@@ -104,7 +104,7 @@ describe('JJ Immortality', () => {
   it('Usable with pill', async function() {
     let model = getExampleModel();
     model.changes = [];
-    let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
 
     let { baseModel } = await process(model, events);
 

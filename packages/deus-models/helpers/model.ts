@@ -20,7 +20,6 @@ export interface Message {
 }
 
 export interface DeusExModel extends EmptyModel {
-  _id: string;
   memory: MemoryEntry[];
   skills: void[];
   hp: number;
@@ -63,6 +62,9 @@ export interface DeusExModel extends EmptyModel {
   password: string;
   changes: Change[];
   messages: Message[];
+
+  adminTestUser?: boolean;
+  showTechnicalInfo?: boolean;
 }
 
 export type DeusExModelApiInterface = ModelApiInterface<DeusExModel>;

@@ -38,7 +38,7 @@ function makeSystems(values: number[], lastModifieds: number[] = [0, 0, 0, 0, 0,
 describe('General Magellan events: ', () => {
   it('No-op refresh model', async () => {
     const model = getExampleBiologicalOrganismModel();
-    const events = [getNoOpEvent(model._id, model.timestamp + 610 * 1000)];
+    const events = [getNoOpEvent(model.modelId, model.timestamp + 610 * 1000)];
     const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.timestamp).to.equal(610 * 1000);
@@ -52,7 +52,7 @@ describe('General Magellan events: ', () => {
   it('Modify nucleotide instant', async () => {
     const model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [1, 0, -1, 0, 2, 0, 0]);
-    const events = getEvents(model._id, [{ eventType: 'modify-nucleotide-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
+    const events = getEvents(model.modelId, [{ eventType: 'modify-nucleotide-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
 
     const { baseModel, workingModel } = await process(model, events);
 
@@ -63,7 +63,7 @@ describe('General Magellan events: ', () => {
   it('Modify systems instant', async () => {
     const model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, -1, 2, -3, 18, -2, 0]);
-    const events = getEvents(model._id, [{ eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
+    const events = getEvents(model.modelId, [{ eventType: 'modify-systems-instant', data: [1, 2, 3, 4, 5, 6, 0] }], 100);
 
     const { baseModel, workingModel } = await process(model, events);
 
@@ -74,7 +74,7 @@ describe('General Magellan events: ', () => {
   it('Can kill by modify-systems-instant', async () => {
     const model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
-    const events = getEvents(model._id, [{ eventType: 'modify-systems-instant', data: [8, 0, 0, 0, 0, 0, 0] }], 100);
+    const events = getEvents(model.modelId, [{ eventType: 'modify-systems-instant', data: [8, 0, 0, 0, 0, 0, 0] }], 100);
 
     const { baseModel, workingModel } = await process(model, events);
 
@@ -86,7 +86,7 @@ describe('General Magellan events: ', () => {
     const model = getExampleBiologicalOrganismModel();
     model.isAlive = false;
     model.systems = makeSystems([3, -1, 0, 0, 2, 0, 0]);
-    const events = getEvents(model._id, [{ eventType: 'modify-systems-instant', data: [1, 2, -1, 0, 3, 0, 0] }], 100);
+    const events = getEvents(model.modelId, [{ eventType: 'modify-systems-instant', data: [1, 2, -1, 0, 3, 0, 0] }], 100);
 
     const { baseModel, workingModel } = await process(model, events);
 
@@ -98,22 +98,22 @@ describe('General Magellan events: ', () => {
     let model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
-    let events = getEvents(model._id, [{ eventType: 'biological-systems-influence', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
+    let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
   });
@@ -129,22 +129,22 @@ describe('General Magellan events: ', () => {
       payload: '1,2,-2,-3,0,0,0',
     };
 
-    let events = getEvents(model._id, [{ eventType: 'scanQr', data }], 100);
+    let events = getEvents(model.modelId, [{ eventType: 'scanQr', data }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
   });
@@ -153,18 +153,18 @@ describe('General Magellan events: ', () => {
     let model = getExampleBiologicalOrganismModel();
     model.systems = makeSystems([0, 0, 0, 0, 0, 0, 0]);
 
-    let events = getEvents(model._id, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
+    let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 1, -1, 0, 1, 0, 0], [0, 100, 100, 0, 100, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0]));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0], [0, 2, -2, 0, 1, 0, 0]));
   });
@@ -180,18 +180,18 @@ describe('General Magellan events: ', () => {
 
     model.systems = disableSystems(model.systems);
 
-    let events = getEvents(model._id, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 2, 1, 0] }], 100);
+    let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 2, 1, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(disableSystems(makeSystems([0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 100, 0, 0])));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0])));
 
-    events = [getNoOpEvent(model._id, model.timestamp + p)];
+    events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(
       disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0], [0, 0, 0, 0, 2, 0, 0])),
@@ -205,24 +205,24 @@ describe('General Magellan events: ', () => {
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [0, 2, -2, 0, 1, 0, 0],
         timestamp: 100,
       },
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [0, 1, 0, 0, 0, 0, 0],
         timestamp: 200,
       },
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [0, -1, 0, 0, 0, 0, 0],
         timestamp: 300,
       },
-      getNoOpEvent(model._id, 100 + 2 * p),
+      getNoOpEvent(model.modelId, 100 + 2 * p),
     ];
 
     model = (await process(model, events)).baseModel;
@@ -236,24 +236,24 @@ describe('General Magellan events: ', () => {
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
     const events: Event[] = [
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [0, 2, -2, 0, 1, 0, 0],
         timestamp: 100,
       },
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [1, 0, 0, 0, 0, 0, 0],
         timestamp: 200,
       },
       {
-        modelId: model._id,
+        modelId: model.modelId,
         eventType: 'biological-systems-influence',
         data: [-1, 0, 0, 0, 0, 0, 0],
         timestamp: 300,
       },
-      getNoOpEvent(model._id, 100 + 2 * p),
+      getNoOpEvent(model.modelId, 100 + 2 * p),
     ];
 
     model = (await process(model, events)).baseModel;
@@ -264,7 +264,7 @@ describe('General Magellan events: ', () => {
     let baseModel = getExampleBiologicalOrganismModel();
     let workingModel: any;
 
-    let events = getEvents(baseModel._id, [{ eventType: 'enter-ship', data: 17 }]);
+    let events = getEvents(baseModel.modelId, [{ eventType: 'enter-ship', data: 17 }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
@@ -272,7 +272,7 @@ describe('General Magellan events: ', () => {
     expect(cond.text).to.contain('17');
     expect(workingModel.location).to.equal('ship_17');
 
-    events = getEvents(baseModel._id, [{ eventType: 'enter-ship', data: 22 }]);
+    events = getEvents(baseModel.modelId, [{ eventType: 'enter-ship', data: 22 }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
@@ -281,7 +281,7 @@ describe('General Magellan events: ', () => {
     expect(cond.text).not.to.contain('17');
     expect(workingModel.location).to.equal('ship_22');
 
-    events = getEvents(baseModel._id, [{ eventType: 'leave-ship', data: {} }]);
+    events = getEvents(baseModel.modelId, [{ eventType: 'leave-ship', data: {} }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.conditions).to.be.empty;
@@ -292,7 +292,7 @@ describe('General Magellan events: ', () => {
     let baseModel = getExampleBiologicalOrganismModel();
     let workingModel: any;
 
-    let events = getEvents(baseModel._id, [{ eventType: 'scanQr', data: { type: 5, kind: 0, validUntil: 0, payload: '17' } }]);
+    let events = getEvents(baseModel.modelId, [{ eventType: 'scanQr', data: { type: 5, kind: 0, validUntil: 0, payload: '17' } }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
@@ -300,7 +300,7 @@ describe('General Magellan events: ', () => {
     expect(cond.text).to.contain('17');
     expect(workingModel.location).to.equal('ship_17');
 
-    events = getEvents(baseModel._id, [{ eventType: 'scanQr', data: { type: 6, kind: 0, validUntil: 0, payload: '' } }]);
+    events = getEvents(baseModel.modelId, [{ eventType: 'scanQr', data: { type: 6, kind: 0, validUntil: 0, payload: '' } }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.conditions).to.be.empty;
@@ -314,7 +314,7 @@ describe('General Magellan events: ', () => {
       let workingModel: OrganismModel;
 
       let events = getEvents(
-        baseModel._id,
+        baseModel.modelId,
         [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-111,10' } }],
         100,
       );
@@ -323,7 +323,7 @@ describe('General Magellan events: ', () => {
       expect(workingModel.spaceSuit).to.deep.include({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
 
       events = getEvents(
-        baseModel._id,
+        baseModel.modelId,
         [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,100' } }],
         200,
       );
@@ -331,7 +331,7 @@ describe('General Magellan events: ', () => {
       expect(baseModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
       expect(workingModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
 
-      ({ baseModel, workingModel } = await process(baseModel, getEvents(baseModel._id, [], 600000 + 100)));
+      ({ baseModel, workingModel } = await process(baseModel, getEvents(baseModel.modelId, [], 600000 + 100)));
       expect(baseModel.spaceSuit).to.deep.include({ on: false });
       expect(workingModel.spaceSuit).to.deep.include({ on: false });
 
@@ -355,7 +355,7 @@ describe('General Magellan events: ', () => {
       // Add manual space suit take off action
       qrs.push({ type: 5, kind: 0, validUntil: 0, payload: '7' });
 
-      const events = getEvents(baseModel._id, qrs.map((data) => ({ eventType: 'scanQr', data })), 100);
+      const events = getEvents(baseModel.modelId, qrs.map((data) => ({ eventType: 'scanQr', data })), 100);
       ({ baseModel, workingModel } = await process(baseModel, events));
 
       expect(baseModel.spaceSuit.on).to.be.false;
@@ -376,7 +376,7 @@ describe('General Magellan events: ', () => {
       let workingModel: OrganismModel;
 
       const events = getEvents(
-        baseModel._id,
+        baseModel.modelId,
         [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,1' } }],
         200,
       );
@@ -389,13 +389,17 @@ describe('General Magellan events: ', () => {
       let baseModel = getExampleBiologicalOrganismModel();
       let workingModel: OrganismModel;
 
-      let events = getEvents(baseModel._id, [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }], 100);
+      let events = getEvents(
+        baseModel.modelId,
+        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
+        100,
+      );
       ({ baseModel, workingModel } = await process(baseModel, events));
       expect(baseModel.spaceSuit.on).to.be.true;
       expect(workingModel.spaceSuit.on).to.be.true;
 
       events = getEvents(
-        baseModel._id,
+        baseModel.modelId,
         [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
         60000 + 100,
       );

@@ -4,8 +4,9 @@ import { DBConnectorInterface, DBInterface, Document, ID } from './db/interface'
 export class ModelStorageBase {
   constructor(private db: DBInterface) {}
 
-  public find(id: ID): Promise<Document> {
-    return this.db.get(id);
+  public async find(id: ID): Promise<Document> {
+    const result = await this.db.get(id);
+    return { ...result, modelId: result._id };
   }
 
   public async findAll(ids?: ID[]): Promise<Document[]> {
@@ -14,10 +15,11 @@ export class ModelStorageBase {
       params.keys = ids;
     }
     const result = await this.db.list(params);
-    return result.rows.map((r) => r.doc);
+    return result.rows.map((r) => ({ ...r.doc, modelId: r.doc._id }));
   }
 
   public async store(doc: any) {
+    doc._id = doc.modelId;
     if (!doc._rev) {
       const stored = await this.db.getOrNull(doc._id);
       if (stored) {

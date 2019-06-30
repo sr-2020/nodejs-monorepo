@@ -34,23 +34,23 @@ describe('Pills', () => {
   it('Cures HP with firstAid pill', async () => {
     let model = getExampleModel();
 
-    let events = getEvents(model._id, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], Date.now(), true);
     let { baseModel, workingModel } = await process(model, events);
     expect(workingModel.hp).to.equals(2);
 
-    events = getEvents(model._id, [{ eventType: 'usePill', data: { id: '111-111' } }], Date.now(), true);
+    events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: '111-111' } }], Date.now(), true);
 
     ({ baseModel, workingModel } = await process(baseModel, events));
     expect(workingModel.hp).to.equals(3);
     expect(workingModel.usedPills).to.has.property('firstAid1');
 
-    expect(global.TEST_EXTERNAL_OBJECTS.pills['111-111']).to.has.property('usedBy', model._id);
+    expect(global.TEST_EXTERNAL_OBJECTS.pills['111-111']).to.has.property('usedBy', model.modelId);
   });
 
   it('Applies narco', async () => {
     let model = getExampleModel();
 
-    let events = getEvents(model._id, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
     let { baseModel } = await process(model, events);
 
     let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
@@ -60,7 +60,7 @@ describe('Pills', () => {
   it('Should apply pills with qr-codes', async () => {
     let model = getExampleModel();
 
-    let events = getEvents(model._id, [{ eventType: 'scanQr', data: { type: 1, payload: '111-113' } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'scanQr', data: { type: 1, payload: '111-113' } }], Date.now(), true);
     let { baseModel } = await process(model, events);
 
     let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');

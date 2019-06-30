@@ -29,7 +29,7 @@ function getStartPage(model: OrganismModel) {
     },
     {
       text: 'ID',
-      value: model._id,
+      value: model.modelId,
     },
   ];
 
@@ -208,7 +208,7 @@ function getMenu(model: OrganismModel) {
 
 function getPassportScreen(model: OrganismModel) {
   return {
-    id: model._id,
+    id: model.modelId,
     fullName: model.firstName + ' ' + model.lastName,
     corporation: model.corporation ? model.corporation : '',
   };
@@ -232,7 +232,7 @@ function getToolbar(model: OrganismModel) {
 
 function getViewModel(model: OrganismModel) {
   return {
-    _id: model._id,
+    _id: model.modelId,
     timestamp: model.timestamp,
     menu: getMenu(model),
     passportScreen: getPassportScreen(model),

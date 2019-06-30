@@ -145,7 +145,7 @@ export class Processor {
       viewModel.timestamp = timestamp;
       delete viewModel._rev;
       if (isNil(viewModel._id)) {
-        viewModel._id = modelId;
+        viewModel.modelId = modelId;
       }
 
       pending.push(this.viewModelStorage.store(alias, viewModel));

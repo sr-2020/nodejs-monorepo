@@ -1,8 +1,9 @@
 import { ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { DeusExModel } from 'deus-models/helpers/model';
 
 /**
  *  В ViewModel для медиков и психологов должны входить:
- *    _id: string;        //id в БД == JoinRPG ID
+ *    modelId: string;     // JoinRPG ID
  *    mail: string;       //loging@alice.digital
  *    login: string;      //login
  *    profileType: string;    //Тип профиля (human/robot/program)
@@ -25,16 +26,8 @@ import { ViewModelApiInterface } from '@sr2020/alice-model-engine-api/index';
 export interface MindData {
   [index: string]: number[];
 }
-
-interface MemoryElement {
-  title: string;
-  text?: string;
-  url?: string;
-  mID: string;
-}
-
-function getViewModel(api: ViewModelApiInterface<any>, data) {
-  let props = ['_id', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
+function getViewModel(api: ViewModelApiInterface<DeusExModel>, _) {
+  let props = ['modelId', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
   let ret: any = {};
 
   props.forEach((e) => {
@@ -50,7 +43,7 @@ function getViewModel(api: ViewModelApiInterface<any>, data) {
   }
 
   if (api.model.memory) {
-    ret.memory = Array.from(api.model.memory, (m: MemoryElement) => ({
+    ret.memory = Array.from(api.model.memory, (m) => ({
       title: m.title,
       text: m.text ? m.text : '',
       url: m.url ? m.url : '',
@@ -92,7 +85,7 @@ function getViewModel(api: ViewModelApiInterface<any>, data) {
 
 module.exports = () => {
   return {
-    view_medic_viewmodel(api: ViewModelApiInterface<any>, model) {
+    view_medic_viewmodel(api: ViewModelApiInterface<any>, model: DeusExModel) {
       return getViewModel(api, model);
     },
   };

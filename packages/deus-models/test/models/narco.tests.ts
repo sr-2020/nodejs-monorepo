@@ -10,7 +10,7 @@ function expectNarcoIgnoredForProfileType(profileType: string) {
   it(`Narco ignored for ${profileType}`, async function() {
     let model = getExampleModel();
     model.profileType = profileType;
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
     let { workingModel } = await process(model, events);
 
     let modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
@@ -21,7 +21,7 @@ function expectNarcoIgnoredForProfileType(profileType: string) {
 describe('Narco effects: ', () => {
   it('Change mind cube', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
     let { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[3]).is.equal(62);
@@ -44,8 +44,8 @@ describe('Narco effects: ', () => {
   it('Change mind cube back', async function() {
     let model = getExampleModel();
 
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
-    events.push(getRefreshEvent(model._id, model.timestamp + 18000 * 1101));
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1101));
     let { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[3]).is.equal(62); //permanent change is here
@@ -57,8 +57,8 @@ describe('Narco effects: ', () => {
 
   it('Mind cube pushback', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'altnarco_with_pushback' } }], model.timestamp);
-    events.push(getRefreshEvent(model._id, model.timestamp + 18000 * 1001));
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco_with_pushback' } }], model.timestamp);
+    events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
     let { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[2]).is.equal(47); //permanent change is here
@@ -70,7 +70,7 @@ describe('Narco effects: ', () => {
 
   it('Narco with condition', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     let { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(1);
@@ -78,8 +78,8 @@ describe('Narco effects: ', () => {
 
   it('Narco with condition ends', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
-    events.push(getRefreshEvent(model._id, model.timestamp + 18000 * 1001));
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
     let { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(0);
@@ -87,7 +87,7 @@ describe('Narco effects: ', () => {
 
   it('Narco with history record', async function() {
     let model = getExampleModel();
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     let { workingModel } = await process(model, events);
 
     expect(
@@ -120,7 +120,7 @@ describe('Narco effects: ', () => {
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 1;
 
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
     let { baseModel, workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(1);
@@ -138,7 +138,7 @@ describe('Narco effects: ', () => {
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
     let { workingModel } = await process(model, events);
 
@@ -153,11 +153,11 @@ describe('Narco effects: ', () => {
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
-    let refresh = [getRefreshEvent(model._id, 1)];
+    let refresh = [getRefreshEvent(model.modelId, 1)];
     let result = await process(baseModel, refresh);
 
     baseModel = result.baseModel;
@@ -176,11 +176,11 @@ describe('Narco effects: ', () => {
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model._id, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
     let { baseModel } = await process(model, events);
 
-    let refresh = [getRefreshEvent(model._id, 60 * 60 * 24 * 1000)];
+    let refresh = [getRefreshEvent(model.modelId, 60 * 60 * 24 * 1000)];
     let result = await process(baseModel, refresh);
 
     baseModel = result.baseModel;

@@ -7,10 +7,8 @@ function randomId() {
 }
 
 export function getExampleModel(id?: string): DeusExModel {
-  id = id || randomId();
   return {
-    _id: id,
-    modelId: id,
+    modelId: id || randomId(),
     memory: [
       {
         title: 'Название воспоминания №1',
