@@ -1,34 +1,34 @@
 module.exports = () => {
   return {
-    noop() { },
+    noop() {},
 
-    add(api, data) {
+    add(api: any, data: any) {
       let { operand, value } = data;
       api.model[operand] += Number(value);
     },
 
-    mul(api, data) {
+    mul(api: any, data: any) {
       let { operand, value } = data;
       api.model[operand] *= Number(value);
     },
 
-    concat(api, data) {
+    concat(api: any, data: any) {
       let { operand, value } = data;
       api.model[operand] = '' + api.model[operand] + value;
     },
 
-    delayedConcat(api, data) {
+    delayedConcat(api: any, data: any) {
       let { operand, value, delay } = data;
       api.setTimer('delayedConcat', delay, 'concat', { operand, value });
     },
 
-    sendMessage(api, data) {
+    sendMessage(api: any, data: any) {
       let { receiver, message } = data;
       api.sendEvent(receiver, 'message', { message });
     },
 
-    _view(api, data) {
+    _view(_: any, data: any) {
       return { value: data.value };
-    }
+    },
   };
 };
