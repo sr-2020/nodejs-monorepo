@@ -12,7 +12,7 @@
     "test": "mocha **/*.spec.js",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier \"**/*.ts\"",
+    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
     "prettier:check": "yarn run prettier:cli -l",
     "prettier:fix": "yarn run prettier:cli --write",
     "tslint": "lb-tslint -c ../../tslint.json",
