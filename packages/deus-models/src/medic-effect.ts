@@ -498,9 +498,7 @@ function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modif
 
     if (!api.getTimer(timerName)) {
       api.info(
-        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${
-          params.recoveryTime
-        } sec!`,
+        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
       );
       api.setTimer(timerName, params.recoveryTime * 1000, 'recover-systems', { mID: modifier.mID, hpRemain });
     } else {
