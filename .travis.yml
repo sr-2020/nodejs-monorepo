@@ -12,6 +12,7 @@ jobs:
         - lerna run build
         - lerna run test -- --forbid-only
         - lerna run lint
+      after_success: lerna run coverage
 
     - stage: build and push docker image
       script:
