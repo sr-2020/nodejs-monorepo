@@ -5,8 +5,7 @@
   "main": "./dist/server.js",
   "scripts": {
     "deps": "yarn install",
-    "pretest": "yarn build",
-    "test": "mocha ./test/*.js",
+    "test": "mocha",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
     "start": "tsc && forever start ./dist/server.js --server",
     "stop": "forever stop ./dist/server.js",

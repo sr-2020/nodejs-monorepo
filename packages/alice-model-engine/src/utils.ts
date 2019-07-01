@@ -38,7 +38,9 @@ export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T>
 
 export function requireDir(dir: string, merge = _merge): any {
   const extensions = Object.keys(require.extensions).join('|');
-  const files = glob.sync(`${dir}/**/*+(${extensions})`);
+  // Last filter is a bit of hack. When run under ts-node, require.extensions will include '.ts'.
+  // In the same time, we don't want to 'require' .d.ts files. Unfortunately, *.ts mask _will_ discover them.
+  const files = glob.sync(`${dir}/**/*+(${extensions})`).filter((f) => !f.endsWith('.d.ts'));
 
   return files.reduce((m, f) => {
     let src;

@@ -6,8 +6,7 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "pretest": "yarn run build",
-    "test": "mocha test/**/*.js",
+    "test": "mocha",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json"
   },
   "author": "",

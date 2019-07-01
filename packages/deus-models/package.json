@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "pretest": "yarn build",
-    "test": "mocha test/**/*.js",
+    "test": "mocha",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

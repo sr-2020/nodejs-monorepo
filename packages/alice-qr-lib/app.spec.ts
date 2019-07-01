@@ -8,7 +8,7 @@ import App from './app';
 const port = 3001;
 const address = 'http://localhost:' + port;
 
-describe('API Server', () => {
+describe('QR Service', () => {
   let app: App;
 
   beforeEach(async () => {
