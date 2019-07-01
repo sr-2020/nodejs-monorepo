@@ -24,7 +24,7 @@
     "tslint:fix": "yarn run tslint --fix",
     "test": "mocha",
     "coverage:test": "nyc mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../coverage.json",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/billing.json",
     "docker:build": "docker build -t sr2020/billing -f Dockerfile ../..",
     "docker:push": "docker push sr2020/billing",
     "migrate": "node -r tsconfig-paths/register ./src/migrate",

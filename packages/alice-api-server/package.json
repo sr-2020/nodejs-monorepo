@@ -10,7 +10,7 @@
     "stop": "forever stop ./main.js",
     "test": "mocha",
     "coverage:test": "nyc mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../coverage.json",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-api-server.json",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

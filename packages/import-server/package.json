@@ -7,7 +7,7 @@
     "deps": "yarn install",
     "test": "mocha",
     "coverage:test": "nyc mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../coverage.json",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/import-server.json",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
     "start": "tsc && forever start ./dist/server.js --server",
     "stop": "forever stop ./dist/server.js",
