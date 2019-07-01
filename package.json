@@ -10,7 +10,8 @@
     "build": "tsc -b",
     "clean": "find . -type f ( -name *.js -or -name *.map -or -name *.d.ts -or -name *.tsbuildinfo ) -not -path '*node_modules*' -delete",
     "build:watch": "tsc -b --watch",
-    "coverage:upload": "nyc report --reporter=text-lcov | coveralls"
+    "coverage:coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coverage:codecov": "codecov .nyc_output/"
   },
   "repository": {
     "type": "git"
@@ -44,6 +45,7 @@
     "@loopback/testlab": "^1.2.6",
     "@loopback/tslint-config": "^2.0.4",
     "@types/node": "^10.11.2",
+    "codecov": "^3.5.0",
     "lerna": "^3.1.4",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",

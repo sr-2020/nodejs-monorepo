@@ -8,7 +8,7 @@
     "build": "tsc -b",
     "test": "mocha",
     "coverage:test": "nyc mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-worker-manager.json",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-worker-manager.coverage.json",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json"
   },
   "author": "",

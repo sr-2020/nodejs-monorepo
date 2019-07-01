@@ -13,8 +13,9 @@ jobs:
         - lerna run coverage:test --concurrency=1 --stream -- --forbid-only
         - lerna run lint
       after_success:
-        - lerna run coverage:merge --concurrency=1
-        - yarn run coverage:upload
+        - lerna run coverage:merge
+        - yarn run coverage:coveralls
+        - yarn run coverage:codecov
 
     - stage: build and push docker image
       script:

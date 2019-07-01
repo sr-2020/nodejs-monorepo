@@ -7,7 +7,7 @@
     "build": "tsc -b",
     "test": "mocha",
     "coverage:test": "nyc mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/deus-models.json",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/deus-models.coverage.json",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
