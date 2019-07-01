@@ -6,7 +6,8 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
-    "test": "mocha",
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json"
   },
   "author": "",
