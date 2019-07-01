@@ -10,7 +10,7 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
       script:
         - lerna run build
-        - lerna run test -- --forbid-only
+        - lerna run test --concurrency=1 --stream -- --forbid-only
         - lerna run lint
       after_success: lerna run coverage
 
