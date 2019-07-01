@@ -10,9 +10,11 @@ jobs:
         - export PATH=$HOME/.yarn/bin:$PATH
       script:
         - lerna run build
-        - lerna run test --concurrency=1 --stream -- --forbid-only
+        - lerna run coverage:test --concurrency=1 --stream -- --forbid-only
         - lerna run lint
-      after_success: lerna run coverage
+      after_success:
+        - lerna run coverage:merge --concurrency=1
+        - yarn run coverage:upload
 
     - stage: build and push docker image
       script:

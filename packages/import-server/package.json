@@ -5,8 +5,9 @@
   "main": "./dist/server.js",
   "scripts": {
     "deps": "yarn install",
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "mocha",
+    "coverage:test": "nyc mocha",
+    "coverage:merge": "nyc merge .nyc_output ../../coverage.json",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
     "start": "tsc && forever start ./dist/server.js --server",
     "stop": "forever stop ./dist/server.js",
