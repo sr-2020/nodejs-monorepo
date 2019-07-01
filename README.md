@@ -1,6 +1,8 @@
 # Монорепозиторий для всех сервисов, написанных на Node.JS/Typescript
 
 [![Build Status](https://travis-ci.org/sr-2020/nodejs-monorepo.svg?branch=master)](https://travis-ci.org/sr-2020/nodejs-monorepo)
+[![codecov](https://codecov.io/gh/sr-2020/nodejs-monorepo/branch/master/graph/badge.svg)](https://codecov.io/gh/sr-2020/nodejs-monorepo)
+[![Coverage Status](https://coveralls.io/repos/github/sr-2020/nodejs-monorepo/badge.svg?branch=master)](https://coveralls.io/github/sr-2020/nodejs-monorepo?branch=master)
 
 ## Установка глобальных зависимостей
 
