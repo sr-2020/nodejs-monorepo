@@ -14,7 +14,7 @@ export function getWorker() {
   (Winston as any).level = 'error';
 
   const catalogsPath = Path.resolve(__dirname, '../catalogs');
-  const modelsPath = Path.resolve(__dirname, '../src');
+  const modelsPath = Path.resolve(__dirname, '../models');
 
   const config = Config.parse(requireDir(catalogsPath));
   return (WORKER_INSTANCE = Worker.load(modelsPath).configure(config));
