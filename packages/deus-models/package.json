@@ -14,7 +14,9 @@
     "prettier:check": "yarn run prettier:cli -l",
     "prettier:fix": "yarn run prettier:cli --write",
     "tslint": "lb-tslint -c ../../tslint.json",
-    "tslint:fix": "yarn run tslint --fix"
+    "tslint:fix": "yarn run tslint --fix",
+    "prestart": "yarn run build",
+    "start": "node -r tsconfig-paths/register ."
   },
   "repository": {
     "type": "git",
