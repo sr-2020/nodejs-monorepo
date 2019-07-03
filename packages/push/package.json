@@ -23,7 +23,7 @@
     "tslint": "lb-tslint -c ../../tslint.json",
     "tslint:fix": "yarn run tslint --fix",
     "test": "mocha",
-    "coverage:test": "nyc mocha",
+    "coverage:test": "nyc --cwd=.. --temp-dir=push/.nyc_output mocha",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/push.coverage.json",
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",

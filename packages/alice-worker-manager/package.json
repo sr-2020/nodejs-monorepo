@@ -7,7 +7,7 @@
     "deps": "yarn install",
     "build": "tsc -b",
     "test": "mocha",
-    "coverage:test": "nyc mocha",
+    "coverage:test": "nyc --cwd=.. --temp-dir=alice-worker-manager/.nyc_output mocha",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-worker-manager.coverage.json",
     "dev": "set NODE_ENV=develop && nodemon --config nodemon.json"
   },

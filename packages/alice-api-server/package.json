@@ -9,7 +9,7 @@
     "start": "yarn run build && forever start ./main.js",
     "stop": "forever stop ./main.js",
     "test": "mocha",
-    "coverage:test": "nyc mocha",
+    "coverage:test": "nyc --cwd=.. --temp-dir=alice-api-server/.nyc_output mocha",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-api-server.coverage.json",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
