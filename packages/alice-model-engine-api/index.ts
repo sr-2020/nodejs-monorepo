@@ -1,5 +1,6 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
+import { model, property } from '@loopback/repository';
 
 export interface IdLessEvent {
   eventType: string;
@@ -27,32 +28,68 @@ export type Timer = {
   data: any;
 };
 
-export type Effect = {
+@model()
+export class Effect {
+  @property({ required: true })
   enabled: boolean;
+
+  @property({ required: true })
   id: string;
+
+  @property({ required: true })
   class: string;
+
+  // TODO: Improve validation?
+  @property({ required: true })
   type: 'normal' | 'functional';
+
+  @property({ required: true })
   handler: string;
-};
+}
 
-export type Modifier = {
+@model()
+export class Modifier {
+  @property({ required: true })
   mID: string;
-  name?: string;
-  class?: string;
-  system?: string;
-  enabled: boolean;
-  effects: Effect[];
-  [key: string]: any;
-};
 
-export type Condition = {
+  @property()
+  name?: string;
+
+  @property()
+  class?: string;
+
+  @property()
+  system?: string;
+
+  @property({ required: true })
+  enabled: boolean;
+
+  @property.array(Effect, { required: true })
+  effects: Effect[];
+
+  [key: string]: any;
+}
+
+@model()
+export class Condition {
+  @property({ required: true })
   id: string;
+
+  @property({ required: true })
   class: string;
+
+  @property({ required: true })
   text: string;
+
+  @property()
   details?: string;
+
+  @property()
   group?: string;
+
+  @property()
   level?: number;
-};
+}
 
 export type PendingAquire = Array<[string, string]>;
 
@@ -121,13 +158,21 @@ export interface Timers {
   [name: string]: Timer;
 }
 
-export interface EmptyModel {
+@model()
+export class EmptyModel {
+  @property({ required: true })
   modelId: string;
+
+  @property({ required: true })
   timestamp: number;
 
+  @property.array(Modifier, { required: true })
   modifiers: Modifier[];
+
+  @property.array(Condition, { required: true })
   conditions: Condition[];
 
+  @property()
   timers?: Timers;
 }
 
