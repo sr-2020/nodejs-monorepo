@@ -21,7 +21,7 @@ export const defaultConfig: Config = {
   },
 
   pool: {
-    workerModule: '../alice-model-engine/src/worker_runner.js',
+    workerModule: '../alice-model-engine/src/worker_runner.ts',
     workerArgs: [__dirname + '/test-models/trivial/models'],
     options: {
       max: 2,

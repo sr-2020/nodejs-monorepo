@@ -25,15 +25,19 @@ export class BillingApplication extends BootMixin(ServiceMixin(RepositoryMixin(R
     this.bootOptions = {
       controllers: {
         dirs,
+        extensions: ['.controller.js', '.controller.ts'],
       },
       datasources: {
         dirs,
+        extensions: ['.datasource.js', '.datasource.ts'],
       },
       repositories: {
         dirs,
+        extensions: ['.repository.js', '.repository.ts'],
       },
       services: {
         dirs,
+        extensions: ['.service.js', '.service.ts'],
       },
     };
   }
