@@ -19,7 +19,7 @@ import {
 } from '../model_helpers';
 
 describe('Green way', function() {
-  this.timeout(5000);
+  this.timeout(10000);
 
   let manager: Manager | null;
   const di = Container;
