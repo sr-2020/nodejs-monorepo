@@ -3,7 +3,7 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 /**
  * Обработчик события "enterVr" (вход в VR)
  *

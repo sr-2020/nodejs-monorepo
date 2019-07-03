@@ -4,7 +4,7 @@
 
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 
 /**
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)

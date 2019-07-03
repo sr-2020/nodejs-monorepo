@@ -1,4 +1,4 @@
-import { DeusExModel } from 'deus-models/helpers/model';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
 function randomId() {
   return Math.floor(Math.random() * 10000)

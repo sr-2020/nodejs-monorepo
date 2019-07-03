@@ -1,5 +1,5 @@
 import { Modifier, ViewModelApiInterface, Condition } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel, Message, Change, MemoryEntry } from 'deus-models/helpers/model';
+import { DeusExModel, Message, Change, MemoryEntry } from '@sr2020/interface/models/deus-ex-model';
 
 interface PageViewModel {
   menuTitle: string;

@@ -1,7 +1,7 @@
 import helpers = require('../helpers/model-helper');
 import medichelpers = require('../helpers/medic-helper');
 import { Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 
 /*
   modifier jj-immortal-one: {

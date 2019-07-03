@@ -9,7 +9,7 @@ import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
 import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 
 /**
  * Формат специального модификатора в каждой модели для отображения и хранения ущерба

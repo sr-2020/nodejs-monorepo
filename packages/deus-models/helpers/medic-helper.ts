@@ -1,4 +1,4 @@
-import { DeusExModelApiInterface } from '../helpers/model';
+import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 
 /**
  * Хелперы для медицинских моделей

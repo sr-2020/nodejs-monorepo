@@ -1,5 +1,5 @@
 import { MindData } from '../models/medicViewModel';
-import { DeusExModelApiInterface, DeusExModel } from '../helpers/model';
+import { DeusExModelApiInterface, DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { Implant, Illness } from './catalog_types';
 import { Effect, Modifier, Condition } from '@sr2020/interface/models/alice-model-engine';
 
