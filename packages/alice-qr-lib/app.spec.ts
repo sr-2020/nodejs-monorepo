@@ -44,7 +44,7 @@ describe('QR Service', () => {
     expect(decodeResponse).to.deep.equal({ type: 1, kind: 26, validUntil: 1697919090, payload: 'UUID' });
   });
 
-  it('Encode bill', async () => {
+  it.skip('Encode bill', async () => {
     const encodeResponse = await rp
       .get(address + encodeURI('/encode_bill?receiver=vasya&amount=100&comment=Рыба'), {
         json: {},
