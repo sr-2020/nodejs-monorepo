@@ -23,7 +23,6 @@ export function getExampleModel(id?: string): DeusExModel {
         mID: '82eb411a-51cb-478d-9f90-5f6f52660a0d',
       },
     ],
-    skills: [],
     hp: 4,
     maxHp: 4,
 

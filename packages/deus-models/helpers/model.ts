@@ -21,7 +21,6 @@ export interface Message {
 
 export interface DeusExModel extends EmptyModel {
   memory: MemoryEntry[];
-  skills: void[];
   hp: number;
   maxHp: number;
   randomSeed: number;
