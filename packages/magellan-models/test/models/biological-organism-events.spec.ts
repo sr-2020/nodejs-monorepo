@@ -1,4 +1,4 @@
-import { Event } from 'alice-model-engine-api';
+import { Event } from 'interface/src/models/alice-model-engine';
 import { expect } from 'chai';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';

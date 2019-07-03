@@ -1,4 +1,4 @@
-import { Effect } from '@sr2020/alice-model-engine-api/index';
+import { Effect } from '@sr2020/interface/models/alice-model-engine';
 
 export interface Predicate {
   variable: string;

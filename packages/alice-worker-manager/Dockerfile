@@ -11,7 +11,7 @@ COPY yarn.lock .
 COPY packages/alice-worker-manager/package.json ./packages/alice-worker-manager/
 COPY packages/alice-worker-manager/yarn.lock ./packages/alice-worker-manager/
 
-COPY packages/alice-model-engine-api/package.json ./packages/alice-model-engine-api/
+COPY packages/interface/package.json ./packages/interface/
 
 COPY packages/alice-model-engine/package.json ./packages/alice-model-engine/
 COPY packages/alice-model-engine/yarn.lock ./packages/alice-model-engine/
@@ -20,7 +20,7 @@ RUN yarn
 RUN yarn run deps
 
 COPY packages/alice-worker-manager/.  ./packages/alice-worker-manager
-COPY packages/alice-model-engine-api/.  ./packages/alice-model-engine-api
+COPY packages/interface/.  ./packages/interface
 COPY packages/alice-model-engine/.  ./packages/alice-model-engine
 
 RUN yarn --cwd packages/alice-worker-manager run build

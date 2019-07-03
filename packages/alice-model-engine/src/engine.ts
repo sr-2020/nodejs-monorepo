@@ -1,7 +1,7 @@
 import { reduce } from 'lodash';
 import { inspect } from 'util';
 
-import { AquiredObjects, EmptyModel, EngineResult, Event, Modifier, PendingAquire } from 'alice-model-engine-api';
+import { AquiredObjects, EmptyModel, EngineResult, Event, Modifier, PendingAquire } from 'interface/src/models/alice-model-engine';
 
 import * as config from './config';
 import { Context } from './context';

@@ -1,4 +1,4 @@
-import { Modifier, ViewModelApiInterface, Condition } from '@sr2020/alice-model-engine-api/index';
+import { Modifier, ViewModelApiInterface, Condition } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel, Message, Change, MemoryEntry } from 'deus-models/helpers/model';
 
 interface PageViewModel {

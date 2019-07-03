@@ -4,7 +4,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import { Event, ModelMetadata } from 'alice-model-engine-api';
+import { Event, ModelMetadata } from 'interface/src/models/alice-model-engine';
 import { AliceAccount, Professions, ShieldValues } from '../models/alice-account';
 import { EconomyConstants } from '../models/economy-constants';
 import { BalancesDocument, DatabasesContainer, TransactionDocument } from '../services/db-container';

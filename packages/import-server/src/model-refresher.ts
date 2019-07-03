@@ -3,7 +3,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 
-import { ModelMetadata } from 'alice-model-engine-api';
+import { ModelMetadata } from 'interface/src/models/alice-model-engine';
 import { config } from './config';
 import { JoinCharacterDetail } from './join-importer';
 

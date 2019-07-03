@@ -2,7 +2,7 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import { ModelApiInterface, Event } from 'alice-model-engine-api';
+import { ModelApiInterface, Event } from 'interface/src/models/alice-model-engine';
 import Chance = require('chance');
 import helpers = require('../helpers/model-helper');
 import { OrganismModel, MagellanModelApiInterface } from 'magellan-models/helpers/basic-types';

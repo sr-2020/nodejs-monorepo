@@ -1,6 +1,6 @@
 import { cloneDeep, isNil, keyBy } from 'lodash';
 
-import { AquiredObjects, EngineResult, Event, SyncRequest } from 'alice-model-engine-api';
+import { AquiredObjects, EngineResult, Event, SyncRequest } from 'interface/src/models/alice-model-engine';
 
 import { Config } from './config';
 import { EventStorage } from './event_storage';

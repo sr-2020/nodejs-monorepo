@@ -1,4 +1,10 @@
-import { EmptyModel, Event, ModelApiInterface, PreprocessApiInterface, ViewModelApiInterface } from 'alice-model-engine-api';
+import {
+  EmptyModel,
+  Event,
+  ModelApiInterface,
+  PreprocessApiInterface,
+  ViewModelApiInterface,
+} from 'interface/src/models/alice-model-engine';
 
 export type Callback<T extends EmptyModel> = (api: ModelApiInterface<T>, data: any, event?: Event) => void;
 

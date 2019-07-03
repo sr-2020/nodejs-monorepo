@@ -1,4 +1,4 @@
-import { Condition, Modifier } from 'alice-model-engine-api';
+import { Condition, Modifier } from 'interface/src/models/alice-model-engine';
 import { System } from './model';
 
 export interface ChangesElement {

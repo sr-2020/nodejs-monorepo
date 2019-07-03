@@ -1,4 +1,4 @@
-import { ModelApiInterface } from 'alice-model-engine-api';
+import { ModelApiInterface } from 'interface/src/models/alice-model-engine';
 
 /**
  * Хелперы для разных моделей

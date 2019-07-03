@@ -2,7 +2,7 @@ import { Container, ContainerInstance } from 'winston';
 import * as winston from 'winston';
 import * as Elasticsearch from 'winston-elasticsearch';
 
-import { LogLevel, LogSource } from 'alice-model-engine-api';
+import { LogLevel, LogSource } from 'interface/src/models/alice-model-engine';
 import { Config, LoggerConfig } from './config';
 
 // Set default winston config

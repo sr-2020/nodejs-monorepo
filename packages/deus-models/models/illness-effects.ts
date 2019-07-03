@@ -7,7 +7,7 @@ import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import clone = require('clone');
 import infection = require('../helpers/infection-illness');
-import { Event, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModelApiInterface } from '../helpers/model';
 import { Illness } from 'deus-models/helpers/catalog_types';
 
@@ -103,7 +103,9 @@ function illnessNextStageEvent(api: DeusExModelApiInterface, data: any, event: E
         //Если это последний этап, то убить систему
         let totalTime = Math.round((event.timestamp - illness.startTime) / 1000);
         api.info(
-          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
+          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${
+            illness.system
+          }!`,
         );
         api.model.systems[medhelpers.getSystemID(illness.system)] = 0;
       }

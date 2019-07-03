@@ -9,7 +9,7 @@ import { EventsProcessor } from '../events.processor';
 import { DatabasesContainerToken } from '../services/db-container';
 import { AccessPropagation, checkAccess, currentTimestamp, returnCharacterNotFoundOrRethrow } from '../utils';
 
-import { IdLessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'interface/src/models/alice-model-engine';
 import { AliceAccount } from '../models/alice-account';
 
 interface LocationEvent {

@@ -10,7 +10,7 @@ import {
   ViewModelApiInterface,
   Modifier,
   Effect,
-} from 'alice-model-engine-api';
+} from 'interface/src/models/alice-model-engine';
 import cuid = require('cuid');
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';

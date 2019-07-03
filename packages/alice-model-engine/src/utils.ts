@@ -3,7 +3,7 @@ import { merge as _merge, clone, assign } from 'lodash';
 import * as Path from 'path';
 import Logger from './logger';
 import { ModelCallbacks } from './callbacks';
-import { EmptyModel } from '@sr2020/alice-model-engine-api/index';
+import { EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 
 export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T> {
   return requireDir(dir, (m: ModelCallbacks<T>, src: any) => {

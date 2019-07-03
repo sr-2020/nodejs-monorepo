@@ -1,4 +1,4 @@
-import { ModelMetadata, SyncRequest } from 'alice-model-engine-api';
+import { ModelMetadata, SyncRequest } from 'interface/src/models/alice-model-engine';
 import * as Rx from 'rxjs';
 import { Config } from './config';
 import { DBConnectorInterface, DBInterface } from './db/interface';

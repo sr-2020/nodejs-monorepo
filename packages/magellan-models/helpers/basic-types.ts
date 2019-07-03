@@ -1,6 +1,6 @@
-import { ModelApiInterface, EmptyModel } from 'alice-model-engine-api';
+import { ModelApiInterface, EmptyModel } from 'interface/src/models/alice-model-engine';
 
-// TODO(aeremin) Move to alice-model-engine-api?
+// TODO(aeremin) Move to interface package?
 export interface Change {
   mID: string;
   text: string;

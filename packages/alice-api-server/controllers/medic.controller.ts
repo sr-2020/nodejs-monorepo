@@ -1,4 +1,4 @@
-import { IdLessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'interface/src/models/alice-model-engine';
 import * as express from 'express';
 import { Body, CurrentUser, JsonController, Param, Post, Res } from 'routing-controllers';
 import { Container } from 'typedi';

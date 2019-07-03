@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-import { SyncRequest } from 'alice-model-engine-api';
+import { SyncRequest } from 'interface/src/models/alice-model-engine';
 
 import { CatalogsStorageInterface } from './catalogs_storage';
 import { LoggerInterface } from './logger';

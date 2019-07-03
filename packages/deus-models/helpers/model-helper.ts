@@ -1,7 +1,7 @@
-import { Modifier, Effect, Condition } from '@sr2020/alice-model-engine-api/index';
 import { MindData } from '../models/medicViewModel';
 import { DeusExModelApiInterface, DeusExModel } from '../helpers/model';
 import { Implant, Illness } from './catalog_types';
+import { Effect, Modifier, Condition } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Хелперы для разных моделей

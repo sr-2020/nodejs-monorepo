@@ -1,7 +1,7 @@
 import * as PouchDB from 'pouchdb';
 
-import { IdLessEvent, Event, ModelMetadata } from 'alice-model-engine-api';
 import { EventEmitter } from 'events';
+import { IdLessEvent, Event, ModelMetadata } from '@sr2020/interface/models/alice-model-engine';
 
 export interface StatusAndBody {
   status: number;

@@ -1,7 +1,7 @@
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
-import { IdLessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'interface/src/models/alice-model-engine';
 import { HttpError } from 'routing-controllers';
 import { Container } from 'typedi';
 import { Connection, ProcessRequest, StatusAndBody } from './connection';

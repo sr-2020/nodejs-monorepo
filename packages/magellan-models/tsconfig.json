@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "references": [
-    {"path": "../alice-model-engine-api"},
+    {"path": "../interface"},
     {"path": "../alice-model-engine"}
   ],
   "include": ["**/*", "**/*.json"]

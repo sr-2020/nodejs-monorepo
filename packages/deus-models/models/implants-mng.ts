@@ -2,7 +2,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import { DeusExModelApiInterface } from '../helpers/model';
-import { Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Modifier } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Обработчик события

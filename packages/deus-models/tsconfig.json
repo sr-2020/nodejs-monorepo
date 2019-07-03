@@ -5,9 +5,8 @@
     "noImplicitAny": false
   },
   "references": [
-    {"path": "../alice-model-engine-api"},
-    {"path": "../alice-model-engine"},
-    {"path": "../interface"}
+    {"path": "../interface"},
+    {"path": "../alice-model-engine"}
   ],
   "include": ["**/*", "**/*.json"]
 }

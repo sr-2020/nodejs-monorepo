@@ -8,7 +8,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
-import { Event, Modifier } from '@sr2020/alice-model-engine-api/index';
+import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModelApiInterface } from '../helpers/model';
 
 /**
@@ -498,7 +498,9 @@ function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modif
 
     if (!api.getTimer(timerName)) {
       api.info(
-        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
+        `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${
+          params.recoveryTime
+        } sec!`,
       );
       api.setTimer(timerName, params.recoveryTime * 1000, 'recover-systems', { mID: modifier.mID, hpRemain });
     } else {

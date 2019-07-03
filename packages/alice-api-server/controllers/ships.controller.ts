@@ -4,7 +4,7 @@ import * as PouchDBUpsert from 'pouchdb-upsert';
 PouchDB.plugin(PouchDBUpsert);
 PouchDB.plugin(PouchDBFind);
 
-import { IdLessEvent } from 'alice-model-engine-api';
+import { IdLessEvent } from 'interface/src/models/alice-model-engine';
 import { CurrentUser, Get, JsonController, Param } from 'routing-controllers';
 import { Container } from 'typedi';
 import { AliceAccount } from '../models/alice-account';

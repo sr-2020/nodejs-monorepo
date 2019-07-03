@@ -1,4 +1,4 @@
-import { Event, PreprocessApiInterface } from '@sr2020/alice-model-engine-api/index';
+import { Event, PreprocessApiInterface } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModelApiInterface } from '../helpers/model';
 
 function scanQR(api: DeusExModelApiInterface, data: any) {

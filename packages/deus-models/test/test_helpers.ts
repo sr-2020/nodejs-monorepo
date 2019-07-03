@@ -4,7 +4,7 @@ import { Config } from '@sr2020/alice-model-engine/config';
 import { requireDir } from '@sr2020/alice-model-engine/utils';
 import * as Winston from 'winston';
 
-import { Event, EngineResult, EngineResultOk, EmptyModel } from '@sr2020/alice-model-engine-api/index';
+import { Event, EngineResult, EngineResultOk, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 
 let WORKER_INSTANCE: Worker | null = null;
 

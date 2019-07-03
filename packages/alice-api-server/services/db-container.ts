@@ -2,7 +2,7 @@ import * as PouchDB from 'pouchdb';
 import * as PouchDBFind from 'pouchdb-find';
 import { TSMap } from 'typescript-map';
 PouchDB.plugin(PouchDBFind);
-import { Event, ModelMetadata } from 'alice-model-engine-api';
+import { Event, ModelMetadata } from 'interface/src/models/alice-model-engine';
 import { Token } from 'typedi';
 import { Connection } from '../connection';
 import { AliceAccount, ShieldValues } from '../models/alice-account';

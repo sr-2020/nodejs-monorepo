@@ -1,4 +1,4 @@
-import { ModelApiInterface, EmptyModel } from '@sr2020/alice-model-engine-api/index';
+import { ModelApiInterface, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()

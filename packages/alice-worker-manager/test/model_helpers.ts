@@ -1,4 +1,4 @@
-import { Event } from 'alice-model-engine-api';
+import { Event } from 'interface/src/models/alice-model-engine';
 import { merge } from 'lodash';
 import Container from 'typedi';
 import { Document } from '../src/db/interface';

@@ -1,7 +1,16 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { AquiredObjects, Condition, EmptyModel, Event, Modifier, PendingAquire, Timer, Timers } from 'alice-model-engine-api';
+import {
+  AquiredObjects,
+  Condition,
+  EmptyModel,
+  Event,
+  Modifier,
+  PendingAquire,
+  Timer,
+  Timers,
+} from 'interface/src/models/alice-model-engine';
 
 export type FieldName = string | string[];
 export type FieldValue = any;

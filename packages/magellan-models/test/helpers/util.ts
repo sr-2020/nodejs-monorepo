@@ -4,7 +4,7 @@ import { Config } from '../../../alice-model-engine/src/config';
 import { requireDir } from '../../../alice-model-engine/src/utils';
 import { Worker } from '../../../alice-model-engine/src/worker';
 
-import { EngineResult, EngineResultOk, Event } from 'alice-model-engine-api';
+import { EngineResult, EngineResultOk, Event } from 'interface/src/models/alice-model-engine';
 import * as Winston from 'winston';
 import { OrganismModel } from 'magellan-models/helpers/basic-types';
 

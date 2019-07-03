@@ -2,6 +2,6 @@
   "extends": "../../tsconfig.json",
   "include": ["**/*.ts"],
   "references": [
-    { "path": "../alice-model-engine-api" }
+    { "path": "../interface" }
   ]
 }

@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface } from 'alice-model-engine-api';
+import { Event, ModelApiInterface } from 'interface/src/models/alice-model-engine';
 import * as shuffle from 'shuffle-array';
 import { BiologicalSystems, LabTerminalRefillData, OrganismModel, organismSystemsIndices, MedicModel } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';

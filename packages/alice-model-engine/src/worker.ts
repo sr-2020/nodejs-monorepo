@@ -10,7 +10,7 @@ import {
   Event,
   EmptyModel,
   PendingAquire,
-} from 'alice-model-engine-api';
+} from 'interface/src/models/alice-model-engine';
 
 import * as config from './config';
 import Logger from './logger';

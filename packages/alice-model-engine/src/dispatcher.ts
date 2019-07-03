@@ -2,7 +2,7 @@ import { Context } from './context';
 import Logger from './logger';
 import { ModelApiFactory } from './model_api';
 
-import { EmptyModel, Event } from 'alice-model-engine-api';
+import { EmptyModel, Event } from 'interface/src/models/alice-model-engine';
 import { Callback } from './callbacks';
 
 export type CallbacksList<T extends EmptyModel> = Callback<T> | null | Array<Callback<T> | null>;
