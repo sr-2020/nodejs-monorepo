@@ -11,6 +11,8 @@ import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './mo
 import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
 
 export class Engine<T extends EmptyModel> {
+  public static readonly bindingKey = 'ModelEngine';
+
   private dispatcher: dispatcher.DispatcherInterface<T> = new dispatcher.Dispatcher<T>();
 
   constructor(private _modelCallbacks: ModelCallbacks<T>, private _config: config.ConfigInterface) {

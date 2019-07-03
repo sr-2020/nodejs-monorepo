@@ -1,4 +1,4 @@
-import { ModelApiInterface, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
+import { ModelApiInterface, EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
@@ -161,3 +161,24 @@ export class DeusExModel extends EmptyModel {
 }
 
 export type DeusExModelApiInterface = ModelApiInterface<DeusExModel>;
+
+@model()
+export class DeusExProcessModelRequest {
+  @property({ required: true })
+  baseModel: DeusExModel;
+
+  @property.array(Event, { required: true })
+  events: Event[];
+
+  @property({ required: true })
+  timestamp: number;
+}
+
+@model()
+export class DeusExProcessModelResponse {
+  @property({ required: true })
+  baseModel: DeusExModel;
+
+  @property({ required: true })
+  workModel: DeusExModel;
+}

@@ -2,13 +2,21 @@ export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' |
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
 
-export interface IdLessEvent {
+@model()
+export class IdLessEvent {
+  @property({ required: true })
   eventType: string;
+
+  @property({ required: true })
   timestamp: number;
+
+  @property()
   data?: any;
 }
 
-export interface Event extends IdLessEvent {
+@model()
+export class Event extends IdLessEvent {
+  @property({ required: true })
   modelId: string;
 }
 
