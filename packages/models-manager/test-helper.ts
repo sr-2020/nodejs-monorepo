@@ -20,7 +20,13 @@ export async function setupApplication(): Promise<AppWithClient> {
     connector: 'sqlite3',
     file: ':memory:',
   });
-
+  await sqlite.execute(`
+    CREATE TABLE 'deus-character' (
+      id int(11) NOT NULL,
+      model json NOT NULL,
+      PRIMARY KEY ('id')
+    );
+  `);
   app.bind('datasources.MySQL').to(sqlite);
   await app.start();
 
