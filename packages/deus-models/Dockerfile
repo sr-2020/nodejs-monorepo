@@ -1,20 +1,30 @@
-FROM node:carbon
+# Check out https://hub.docker.com/_/node to select a new base image
+FROM node:10-slim
 
-# Create app directory
-WORKDIR /app
+# Set to a non-root built-in user `node`
+USER node
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+# Create app directory (with user `node`)
+RUN mkdir -p /home/node/app
 
-RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
+WORKDIR /home/node/app
 
-COPY . .
+COPY --chown=node *.json ./
+COPY --chown=node yarn.lock ./
 
-RUN ["npm", "run", "build"]
+COPY --chown=node packages/deus-models/*.json ./packages/deus-models/
+COPY --chown=node packages/interface/*.json ./packages/interface/
+COPY --chown=node packages/alice-model-engine/*.json ./packages/alice-model-engine/
 
-# We don't need to stay alive, just copy data into volume
-CMD [ "true" ]
+RUN yarn
+
+COPY --chown=node packages/deus-models/. ./packages/deus-models
+COPY --chown=node packages/interface/. ./packages/interface
+COPY --chown=node packages/alice-model-engine/. ./packages/alice-model-engine
+
+RUN yarn --cwd packages/deus-models run build
+
+# Bind to all network interfaces so that it can be mapped to the host OS
+ENV HOST=0.0.0.0
+
+CMD [ "yarn", "--cwd", "packages/deus-models/", "start" ]

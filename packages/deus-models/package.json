@@ -16,7 +16,9 @@
     "tslint": "lb-tslint -c ../../tslint.json",
     "tslint:fix": "yarn run tslint --fix",
     "prestart": "yarn run build",
-    "start": "node -r tsconfig-paths/register ."
+    "start": "node -r tsconfig-paths/register .",
+    "docker:build": "docker build -t sr2020/deus-models -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/deus-models"
   },
   "repository": {
     "type": "git",

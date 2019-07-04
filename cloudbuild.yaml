@@ -9,16 +9,7 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     waitFor: ['pull_billing']
     args:
-      [
-        'build',
-        '-f',
-        'packages/billing/Dockerfile',
-        '-t',
-        'gcr.io/$PROJECT_ID/billing',
-        '--cache-from',
-        'gcr.io/$PROJECT_ID/billing',
-        '.',
-      ]
+      ['build', '-f', 'packages/billing/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/billing', '--cache-from', 'gcr.io/$PROJECT_ID/billing', '.']
   - id: pull_push
     name: 'gcr.io/cloud-builders/docker'
     args: ['pull', 'gcr.io/$PROJECT_ID/push']
@@ -26,19 +17,25 @@ steps:
   - id: build_push
     name: 'gcr.io/cloud-builders/docker'
     waitFor: ['pull_push']
-    args:
-      [
+    args: ['build', '-f', 'packages/push/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/push', '--cache-from', 'gcr.io/$PROJECT_ID/push', '.']
+  # - id: pull_billing
+  #  name: 'gcr.io/cloud-builders/docker'
+  #  args: ['pull', 'gcr.io/$PROJECT_ID/billing']
+  #  waitFor: ['-']
+  - id: build_deus_models
+    name: 'gcr.io/cloud-builders/docker'
+    #  waitFor: ['pull_billing']
+    args: [
         'build',
         '-f',
-        'packages/push/Dockerfile',
+        'packages/deus-models/Dockerfile',
         '-t',
-        'gcr.io/$PROJECT_ID/push',
-        '--cache-from',
-        'gcr.io/$PROJECT_ID/push',
+        'gcr.io/$PROJECT_ID/deus-models',
+        # '--cache-from', 'gcr.io/$PROJECT_ID/billing',
         '.',
       ]
-
 # Push container images
 images:
   - 'gcr.io/$PROJECT_ID/billing'
   - 'gcr.io/$PROJECT_ID/push'
+  - 'gcr.io/$PROJECT_ID/deus-models'
