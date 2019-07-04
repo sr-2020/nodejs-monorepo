@@ -22,22 +22,23 @@ export class PushApplication extends BootMixin(ServiceMixin(RepositoryMixin(Rest
     this.projectRoot = __dirname + '/../../';
     const dirs = ['push', 'interface'];
     // Customize @loopback/boot Booter Conventions here
+    const extension = require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {
       controllers: {
         dirs,
-        extensions: ['.controller.js', '.controller.ts'],
+        extensions: [`.controller.${extension}`],
       },
       datasources: {
         dirs,
-        extensions: ['.datasource.js', '.datasource.ts'],
+        extensions: [`.datasource.${extension}`],
       },
       repositories: {
         dirs,
-        extensions: ['.repository.js', '.repository.ts'],
+        extensions: [`.repository.${extension}`],
       },
       services: {
         dirs,
-        extensions: ['.service.js', '.service.ts'],
+        extensions: [`.service.${extension}`],
       },
     };
   }
