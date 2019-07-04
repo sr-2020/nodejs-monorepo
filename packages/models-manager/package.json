@@ -1,0 +1,28 @@
+{
+  "name": "models-manager",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "mocha",
+    "coverage:test": "nyc --cwd=.. --temp-dir=models-manager/.nyc_output mocha",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/models-manager.coverage.json",
+    "lint": "yarn run prettier:check && yarn run tslint",
+    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "tslint": "lb-tslint -c ../../tslint.json",
+    "tslint:fix": "yarn run tslint --fix",
+    "prestart": "yarn run build",
+    "start": "node -r tsconfig-paths/register .",
+    "docker:build": "docker build -t sr2020/models-manager -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/models-manager"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}
