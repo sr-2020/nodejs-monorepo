@@ -1,8 +1,8 @@
 import * as Path from 'path';
 // TODO: Figure out how to use proper absolutish paths
-import { Config } from '../../../alice-model-engine/src/config';
-import { requireDir } from '../../../alice-model-engine/src/utils';
-import { Worker } from '../../../alice-model-engine/src/worker';
+import { Config } from '@sr2020/alice-model-engine/config';
+import { requireDir } from '@sr2020/alice-model-engine/utils';
+import { Worker } from '@sr2020/alice-model-engine/worker';
 
 import { EngineResult, EngineResultOk, Event } from 'interface/src/models/alice-model-engine';
 import * as Winston from 'winston';

@@ -1,11 +1,5 @@
 import { ModelApiInterface, EmptyModel } from 'interface/src/models/alice-model-engine';
-
-// TODO(aeremin) Move to interface package?
-export interface Change {
-  mID: string;
-  text: string;
-  timestamp: number;
-}
+import { Change } from 'interface/src/models/deus-ex-model';
 
 export enum BiologicalSystems {
   Nervous,

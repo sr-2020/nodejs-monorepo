@@ -1,7 +1,8 @@
-import { ViewModelApiInterface, Condition } from 'interface/src/models/alice-model-engine';
-import { Change, OrganismModel } from '../helpers/basic-types';
+import { ViewModelApiInterface, Condition } from '@sr2020/interface/models/alice-model-engine';
+import { OrganismModel } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';
+import { Change } from '@sr2020/interface/models/deus-ex-model';
 
 interface PageViewModel {
   menuTitle: string;

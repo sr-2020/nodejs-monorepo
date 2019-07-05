@@ -34,7 +34,6 @@ export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> 
   }
 
   public dispatch(event: Event, context: Context<T>): Context<T> {
-    // TODO: Should it be filtered out earlier?
     if (event.eventType.startsWith('_')) return context;
 
     if (!this.store[event.eventType]) {

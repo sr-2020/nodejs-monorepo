@@ -235,7 +235,6 @@ function getEnabledText(enabled: boolean) {
 }
 
 function getEnabledColor(enabled: boolean) {
-  // TODO: Use magic color provided by the app
   return enabled ? '' : '#FF373F';
 }
 

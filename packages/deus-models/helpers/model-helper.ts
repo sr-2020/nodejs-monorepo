@@ -63,7 +63,6 @@ function loadIllness(api: DeusExModelApiInterface, id: string) {
   return illness;
 }
 
-//TODO проверить какой timestamp в модели в момент обработки changes
 function addChangeRecord(api: DeusExModelApiInterface, text: string, timestamp: number) {
   if (text) {
     if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
