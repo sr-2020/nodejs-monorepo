@@ -1,5 +1,4 @@
 import * as Path from 'path';
-// TODO: Figure out how to use proper absolutish paths
 import { Config } from '@sr2020/alice-model-engine/config';
 import { requireDir } from '@sr2020/alice-model-engine/utils';
 import { Worker } from '@sr2020/alice-model-engine/worker';
