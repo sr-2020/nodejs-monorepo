@@ -2,16 +2,21 @@ export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' |
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
 
+// This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
-export class IdLessEvent {
+export class EventRequest {
   @property({ required: true })
   eventType: string;
 
-  @property({ required: true })
-  timestamp: number;
-
   @property()
   data?: any;
+}
+
+// This one doesn't modelId (server can figure it out from model.modelId).
+@model()
+export class IdLessEvent extends EventRequest {
+  @property({ required: true })
+  timestamp: number;
 }
 
 @model()
