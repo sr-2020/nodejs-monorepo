@@ -43,7 +43,7 @@ export class ModelController {
   })
   async get(@param.path.number('id') id: number): Promise<DeusExProcessModelResponse> {
     const baseModel = await this.modelRepository.findById(id);
-    const result = await this.modelEngineService.send({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
+    const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
     // TODO: Make sure that simultaneous request haven't overwritten it earlier
     this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
     return result;
@@ -59,7 +59,7 @@ export class ModelController {
   })
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<DeusExProcessModelResponse> {
     const baseModel = await this.modelRepository.findById(id);
-    const result = await this.modelEngineService.send({ baseModel: baseModel.getModel(), events: [], timestamp });
+    const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp });
     return result;
   }
 
@@ -74,7 +74,7 @@ export class ModelController {
   async postEvent(@param.path.number('id') id: number, @requestBody() event: EventRequest): Promise<DeusExProcessModelResponse> {
     const baseModel = await this.modelRepository.findById(id);
     const timestamp = Date.now();
-    const result = await this.modelEngineService.send({
+    const result = await this.modelEngineService.process({
       baseModel: baseModel.getModel(),
       events: [{ ...event, modelId: id.toString(), timestamp }],
       timestamp,

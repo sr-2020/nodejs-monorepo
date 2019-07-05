@@ -4,7 +4,7 @@ import { DeusExProcessModelRequest, DeusExProcessModelResponse } from '../models
 import { ModelEngineHttpApiDataSource } from '../datasources/model-engine-http-api.datasource';
 
 export interface ModelEngineService {
-  send(req: DeusExProcessModelRequest): DeusExProcessModelResponse;
+  process(req: DeusExProcessModelRequest): DeusExProcessModelResponse;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {
