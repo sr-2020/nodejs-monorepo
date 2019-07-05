@@ -49,7 +49,7 @@ export class ModelController {
     return result;
   }
 
-  @get('/model/{id}', {
+  @get('/model/{id}/predict', {
     responses: {
       '200': {
         description: 'Transaction GET success',
