@@ -46,4 +46,27 @@ describe('ModelController', () => {
 
     expect(scope.isDone()).to.be.true();
   });
+
+  it.skip('GET /model many requests', async () => {
+    await repo.create(DeusExModelDbEntity.fromModel(model));
+
+    const scope = nock('http://instance.evarun.ru:7006')
+      .post('/process')
+      .times(21)
+      .reply(200, (url, body) => {
+        (body as any).baseModel.hp += 1;
+        return JSON.stringify(body);
+      });
+
+    const promises: any[] = [];
+    for (let i = 0; i < 20; ++i) promises.push(client.get(`/model/${model.modelId}`));
+    await Promise.all(promises);
+
+    await client
+      .get(`/model/${model.modelId}`)
+      .expect(200)
+      .then((res) => expect(res.body.baseModel.hp).to.equal(model.hp + 21));
+
+    expect(scope.isDone()).to.be.true();
+  });
 });
