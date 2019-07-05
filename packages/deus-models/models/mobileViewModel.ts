@@ -342,49 +342,6 @@ function getMemoryPage(model: DeusExModel) {
   };
 }
 
-// TODO: Get data from model
-function getAdminsPage(model: DeusExModel) {
-  return {
-    __type: 'ListPageViewModel',
-    menuTitle: 'Администраторы',
-    viewId: 'page:admins',
-    body: {
-      title: 'Администраторы',
-      items: [
-        {
-          text: 'Правая рука',
-          subtext: '007, 12, 13',
-          sublist: {
-            title: 'Админы: Правая рука',
-            eventType: 'setAdmins',
-            eventTag: 'rightHand',
-            items: [
-              {
-                text: '007',
-                deletable: false,
-              },
-              {
-                text: '12',
-                deletable: true,
-              },
-              {
-                text: '13',
-                deletable: true,
-              },
-            ],
-            addAction: {
-              buttonText: 'Добавить',
-              inputDialogTitle: 'ID администратора',
-              inputDialogMessage: 'Укажите ID нового администратора для системы <b>Правая рука</b>',
-              inputType: 'number',
-            },
-          },
-        },
-      ],
-    },
-  };
-}
-
 function getChangesPageItem(change: Change) {
   return {
     viewId: 'mid:' + change.mID,
@@ -456,10 +413,6 @@ function getPages(model: DeusExModel) {
   }
   pages.push(getChangesPage(model));
   pages.push(getMessagesPage(model));
-
-  if (model.adminTestUser) {
-    pages.push(getAdminsPage(model));
-  }
 
   if (model.hasOwnProperty('showTechnicalInfo') && model.showTechnicalInfo) {
     pages.push(getTechnicalInfoPage());

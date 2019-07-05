@@ -154,9 +154,6 @@ export class DeusExModel extends EmptyModel {
   messages: Message[];
 
   @property()
-  adminTestUser?: boolean;
-
-  @property()
   showTechnicalInfo?: boolean;
 }
 
