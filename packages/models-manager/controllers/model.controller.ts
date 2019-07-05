@@ -79,6 +79,7 @@ export class ModelController {
       events: [{ ...event, modelId: id.toString(), timestamp }],
       timestamp,
     });
+    this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
     return result;
   }
 }
