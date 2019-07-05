@@ -12,7 +12,7 @@ export class ModelController {
 
   @put('/model/{id}', {
     responses: {
-      '204': {
+      '200': {
         description: 'Transaction PUT success',
       },
     },
