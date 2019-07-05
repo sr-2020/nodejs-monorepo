@@ -20,7 +20,7 @@ describe('TransactionController', () => {
 
   it('invokes PUT /model', async () => {
     await client
-      .put('/model/5')
+      .put('/model')
       .send(model)
       .expect(200);
 
