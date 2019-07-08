@@ -46,12 +46,11 @@ export class ModelController {
   async get(@param.path.number('id') id: number): Promise<DeusExProcessModelResponse> {
     for (let i = 0; i < MAX_RETRIES; ++i) {
       const baseModel = await this.modelRepository.findById(id);
-      const timestamp = baseModel.timestamp;
       const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
       const updated = await this.modelRepository.updateAll(DeusExModelDbEntity.fromModel(result.baseModel), {
-        and: [{ id }, { timestamp }],
+        and: [{ id }, { timestamp: baseModel.timestamp }],
       });
-      if (updated) return result;
+      if (updated.count == 1) return result;
     }
     throw new HttpErrors.Conflict('Too many simultaneous model updates');
   }
@@ -88,9 +87,9 @@ export class ModelController {
         timestamp,
       });
       const updated = await this.modelRepository.updateAll(DeusExModelDbEntity.fromModel(result.baseModel), {
-        and: [{ id }, { timestamp }],
+        and: [{ id }, { timestamp: baseModel.timestamp }],
       });
-      if (updated) return result;
+      if (updated.count == 1) return result;
     }
     throw new HttpErrors.Conflict('Too many simultaneous model updates');
   }
