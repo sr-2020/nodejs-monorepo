@@ -45,7 +45,7 @@ export class ModelController {
     const baseModel = await this.modelRepository.findById(id);
     const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
     // TODO: Make sure that simultaneous request haven't overwritten it earlier
-    this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
+    await this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
     return result;
   }
 
@@ -79,7 +79,7 @@ export class ModelController {
       events: [{ ...event, modelId: id.toString(), timestamp }],
       timestamp,
     });
-    this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
+    await this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
     return result;
   }
 }
