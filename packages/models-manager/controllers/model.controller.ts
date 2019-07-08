@@ -1,5 +1,5 @@
 import { repository } from '@loopback/repository';
-import { param, put, requestBody, get, post } from '@loopback/rest';
+import { param, put, requestBody, get, post, HttpErrors } from '@loopback/rest';
 import { DeusExModelRepository } from 'models-manager/repositories/deus-ex-model.repository';
 import { DeusExModel, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
 import { Empty } from '@sr2020/interface/models/empty.model';
@@ -7,6 +7,8 @@ import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { DeusExModelDbEntity } from 'models-manager/models/deus-ex-model-db-entity';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+
+const MAX_RETRIES = 20;
 
 export class ModelController {
   constructor(
@@ -42,11 +44,16 @@ export class ModelController {
     },
   })
   async get(@param.path.number('id') id: number): Promise<DeusExProcessModelResponse> {
-    const baseModel = await this.modelRepository.findById(id);
-    const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
-    // TODO: Make sure that simultaneous request haven't overwritten it earlier
-    await this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
-    return result;
+    for (let i = 0; i < MAX_RETRIES; ++i) {
+      const baseModel = await this.modelRepository.findById(id);
+      const timestamp = baseModel.timestamp;
+      const result = await this.modelEngineService.process({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
+      const updated = await this.modelRepository.updateAll(DeusExModelDbEntity.fromModel(result.baseModel), {
+        and: [{ id }, { timestamp }],
+      });
+      if (updated) return result;
+    }
+    throw new HttpErrors.Conflict('Too many simultaneous model updates');
   }
 
   @get('/model/{id}/predict', {
@@ -72,14 +79,19 @@ export class ModelController {
     },
   })
   async postEvent(@param.path.number('id') id: number, @requestBody() event: EventRequest): Promise<DeusExProcessModelResponse> {
-    const baseModel = await this.modelRepository.findById(id);
-    const timestamp = Date.now();
-    const result = await this.modelEngineService.process({
-      baseModel: baseModel.getModel(),
-      events: [{ ...event, modelId: id.toString(), timestamp }],
-      timestamp,
-    });
-    await this.modelRepository.replaceById(id, DeusExModelDbEntity.fromModel(result.baseModel));
-    return result;
+    for (let i = 0; i < MAX_RETRIES; ++i) {
+      const baseModel = await this.modelRepository.findById(id);
+      const timestamp = Date.now();
+      const result = await this.modelEngineService.process({
+        baseModel: baseModel.getModel(),
+        events: [{ ...event, modelId: id.toString(), timestamp }],
+        timestamp,
+      });
+      const updated = await this.modelRepository.updateAll(DeusExModelDbEntity.fromModel(result.baseModel), {
+        and: [{ id }, { timestamp }],
+      });
+      if (updated) return result;
+    }
+    throw new HttpErrors.Conflict('Too many simultaneous model updates');
   }
 }

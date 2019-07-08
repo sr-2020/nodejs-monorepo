@@ -23,6 +23,7 @@ export async function setupApplication(): Promise<AppWithClient> {
   await sqlite.execute(`
     CREATE TABLE 'deus-character' (
       id int(11) NOT NULL,
+      timestamp int(11) NOT NULL,
       model json NOT NULL,
       PRIMARY KEY ('id')
     );
