@@ -5,6 +5,9 @@ import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
+import { Engine } from '@sr2020/alice-model-engine/engine';
+import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
+import { Config } from '@sr2020/alice-model-engine/config';
 
 export class SR2020ModelsApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
@@ -19,8 +22,12 @@ export class SR2020ModelsApplication extends BootMixin(ServiceMixin(RepositoryMi
     });
     this.component(RestExplorerComponent);
 
-    // TODO: Uncomment when models and catalogs are added
-    // this.bind(Engine.bindingKey).to(new Engine(loadModels('./models'), Config.parse(requireDir('./catalogs'))));
+    this.bind(Engine.bindingKey + '.Sr2020Character').to(
+      new Engine(loadModels('./scripts/character'), Config.parse(requireDir('./scripts/character/catalogs'))),
+    );
+    this.bind(Engine.bindingKey + '.Location').to(
+      new Engine(loadModels('./scripts/location'), Config.parse(requireDir('./scripts/location/catalogs'))),
+    );
 
     this.projectRoot = __dirname + '/../';
     const dirs = ['sr2020-models'];

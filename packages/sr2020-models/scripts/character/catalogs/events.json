@@ -1,0 +1,8 @@
+{
+    "events": [
+        {
+            "eventType": "dummy-spell",
+            "effects": ["dummySpell"]
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "events": [
+        {
+            "eventType": "reduce-mana-density",
+            "effects": ["reduceManaDensity"]
+        }
+    ]
+}
