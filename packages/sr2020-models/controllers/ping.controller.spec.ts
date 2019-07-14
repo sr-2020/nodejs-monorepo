@@ -1,13 +1,11 @@
 import { Client, expect } from '@loopback/testlab';
-import { SR2020ModelsApplication } from '../application';
 import { getApplication } from '../testing/test-helper';
 
 describe('PingController', () => {
-  let app: SR2020ModelsApplication;
   let client: Client;
 
   before('setupApplication', async () => {
-    ({ app, client } = await getApplication());
+    client = (await getApplication()).client;
   });
 
   it('invokes GET /ping', async () => {
