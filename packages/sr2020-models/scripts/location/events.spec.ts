@@ -1,5 +1,5 @@
 import { Client } from '@loopback/testlab';
-import { getApplication } from '../../testing/test-helper';
+import { getApplication, getDefaultLocation } from '../../testing/test-helper';
 import { LocationProcessResponse, LocationProcessRequest } from '@sr2020/interface/models/location.model';
 
 describe('Character events', () => {
@@ -12,16 +12,12 @@ describe('Character events', () => {
   it('Process reduceManaDensity event', async () => {
     const req: LocationProcessRequest = {
       baseModel: {
-        modelId: '1',
+        ...getDefaultLocation(),
         manaDensity: 100,
-        timestamp: 2,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
       events: [
         {
-          modelId: '1',
+          modelId: getDefaultLocation().modelId,
           eventType: 'reduce-mana-density',
           timestamp: 5,
           data: {
@@ -33,20 +29,14 @@ describe('Character events', () => {
     };
     const resp: LocationProcessResponse = {
       baseModel: {
-        modelId: '1',
+        ...getDefaultLocation(),
         manaDensity: 36,
         timestamp: 10,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
       workModel: {
-        modelId: '1',
+        ...getDefaultLocation(),
         manaDensity: 36,
         timestamp: 10,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
     };
     await client

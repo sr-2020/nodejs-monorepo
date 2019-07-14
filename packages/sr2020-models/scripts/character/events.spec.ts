@@ -1,5 +1,5 @@
 import { Client } from '@loopback/testlab';
-import { getApplication } from '../../testing/test-helper';
+import { getApplication, getDefaultCharacter } from '../../testing/test-helper';
 import { Sr2020CharacterProcessResponse, Sr2020CharacterProcessRequest } from '@sr2020/interface/models/sr2020-character.model';
 
 describe('Character events', () => {
@@ -12,16 +12,12 @@ describe('Character events', () => {
   it('Process dummySpell event', async () => {
     const req: Sr2020CharacterProcessRequest = {
       baseModel: {
-        modelId: '1',
+        ...getDefaultCharacter(),
         spellsCasted: 23,
-        timestamp: 2,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
       events: [
         {
-          modelId: '1',
+          modelId: getDefaultCharacter().modelId,
           eventType: 'dummy-spell',
           timestamp: 5,
           data: {},
@@ -31,20 +27,14 @@ describe('Character events', () => {
     };
     const resp: Sr2020CharacterProcessResponse = {
       baseModel: {
-        modelId: '1',
+        ...getDefaultCharacter(),
         spellsCasted: 24,
         timestamp: 10,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
       workModel: {
-        modelId: '1',
+        ...getDefaultCharacter(),
         spellsCasted: 24,
         timestamp: 10,
-        modifiers: [],
-        conditions: [],
-        timers: {},
       },
     };
     await client
