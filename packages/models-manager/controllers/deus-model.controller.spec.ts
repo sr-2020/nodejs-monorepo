@@ -9,7 +9,7 @@ import { DeusExModel, DeusExProcessModelResponse } from '@sr2020/interface/model
 
 const model = modelImport as DeusExModel;
 
-describe('ModelController', () => {
+describe('DeusModelController', () => {
   let app: ModelsManagerApplication;
   let client: Client;
   let repo: DeusExModelRepository;
@@ -25,7 +25,7 @@ describe('ModelController', () => {
 
   it('invokes PUT /model', async () => {
     await client
-      .put('/model')
+      .put('/deus/model')
       .send(model)
       .expect(200);
 
@@ -38,11 +38,11 @@ describe('ModelController', () => {
     await repo.create(DeusExModelDbEntity.fromModel(model));
 
     const r: DeusExProcessModelResponse = { baseModel: model, workModel: model };
-    const scope = nock('http://instance.evarun.ru:7006')
+    const scope = nock('http://instance.evarun.ru:7008')
       .post('/process')
       .reply(200, r);
 
-    await client.get(`/model/${model.modelId}`).expect(200);
+    await client.get(`/deus/model/${model.modelId}`).expect(200);
 
     expect(scope.isDone()).to.be.true();
   });
@@ -50,7 +50,7 @@ describe('ModelController', () => {
   it('GET /model many requests', async () => {
     await repo.create(DeusExModelDbEntity.fromModel(model));
 
-    nock('http://instance.evarun.ru:7006')
+    nock('http://instance.evarun.ru:7008')
       .post('/process')
       .reply(200, (url, body) => {
         (body as any).baseModel.hp += 1;
@@ -60,11 +60,11 @@ describe('ModelController', () => {
       .persist();
 
     const promises: any[] = [];
-    for (let i = 0; i < 20; ++i) promises.push(client.get(`/model/${model.modelId}`));
+    for (let i = 0; i < 20; ++i) promises.push(client.get(`/deus/model/${model.modelId}`));
     await Promise.all(promises);
 
     await client
-      .get(`/model/${model.modelId}`)
+      .get(`/deus/model/${model.modelId}`)
       .expect(200)
       .then((res) => expect(res.body.baseModel.hp).to.equal(model.hp + 21));
   });

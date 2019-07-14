@@ -1,7 +1,7 @@
 {
   "name": "ModelEngineHttpApi",
   "connector": "rest",
-  "baseURL": "http://instance.evarun.ru:7006",
+  "baseURL": "http://instance.evarun.ru:7008",
   "options": {
     "headers": {
       "accept": "application/json",
@@ -13,7 +13,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://instance.evarun.ru:7006/process",
+        "url": "http://instance.evarun.ru:7008/process",
         "body": "{req}"
       },
       "functions": {

@@ -10,7 +10,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 
 const MAX_RETRIES = 20;
 
-export class ModelController {
+export class DeusModelController {
   constructor(
     @repository(DeusExModelRepository)
     public modelRepository: DeusExModelRepository,
@@ -18,7 +18,7 @@ export class ModelController {
     protected modelEngineService: ModelEngineService,
   ) {}
 
-  @put('/model', {
+  @put('/deus/model', {
     responses: {
       '200': {
         description: 'Transaction PUT success',
@@ -35,7 +35,7 @@ export class ModelController {
     return new Empty();
   }
 
-  @get('/model/{id}', {
+  @get('/deus/model/{id}', {
     responses: {
       '200': {
         description: 'Transaction GET success',
@@ -55,7 +55,7 @@ export class ModelController {
     throw new HttpErrors.Conflict('Too many simultaneous model updates');
   }
 
-  @get('/model/{id}/predict', {
+  @get('/deus/model/{id}/predict', {
     responses: {
       '200': {
         description: 'Transaction GET success',
@@ -69,7 +69,7 @@ export class ModelController {
     return result;
   }
 
-  @post('/model/{id}', {
+  @post('/deus/model/{id}', {
     responses: {
       '200': {
         description: 'Transaction GET success',
