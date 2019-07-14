@@ -4,6 +4,8 @@ deploy:
 	docker image prune --all
 	docker-compose pull billing-app &&\
 	docker-compose up -d --no-deps billing-app &&\
+	docker-compose pull model-engine-app &&\
+	docker-compose up -d --no-deps model-engine-app &&\
 	docker-compose pull deus-model-engine-app &&\
 	docker-compose up -d --no-deps deus-model-engine-app &&\
 	docker-compose pull models-manager-app &&\

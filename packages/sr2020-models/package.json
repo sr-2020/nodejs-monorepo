@@ -4,8 +4,6 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-models/.nyc_output mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-models.coverage.json",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
