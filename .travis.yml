@@ -9,9 +9,11 @@ jobs:
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
         - export PATH=$HOME/.yarn/bin:$PATH
       script:
-        - lerna run lint
-        - lerna run build
+        # First we run test without building to confirm that it's supported...
         - lerna run coverage:test --concurrency=1 --stream -- --forbid-only
+        # ... then we build as we want to make sure that even the code not covered by tests is buildable
+        - lerna run build
+        - lerna run lint
       after_success:
         - lerna run coverage:merge
         - yarn run coverage:coveralls

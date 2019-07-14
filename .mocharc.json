@@ -1,5 +1,5 @@
 {
-  "spec": "**/*.spec.js",
-  "require": ["source-map-support/register", "tsconfig-paths/register"],
+  "spec": "**/*.spec.ts",
+  "require": ["source-map-support/register", "tsconfig-paths/register", "ts-node/register"],
   "timeout": 5000 // First test in deus-models/magellan-models can take up to 3 seconds due to models loading
 }
