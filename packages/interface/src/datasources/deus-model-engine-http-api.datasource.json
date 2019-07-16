@@ -1,0 +1,24 @@
+{
+  "name": "DeusModelEngineHttpApi",
+  "connector": "rest",
+  "baseURL": "http://instance.evarun.ru:7008",
+  "options": {
+    "headers": {
+      "accept": "application/json",
+      "content-type": "application/json"
+    }
+  },
+  "crud": false,
+  "operations": [
+    {
+      "template": {
+        "method": "POST",
+        "url": "http://instance.evarun.ru:7008/process",
+        "body": "{req}"
+      },
+      "functions": {
+        "process": ["req"]
+      }
+    }
+  ]
+}

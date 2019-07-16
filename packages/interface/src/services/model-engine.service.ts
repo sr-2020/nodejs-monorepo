@@ -1,15 +1,16 @@
 import { getService } from '@loopback/service-proxy';
 import { inject, Provider } from '@loopback/core';
-import { DeusExProcessModelRequest, DeusExProcessModelResponse } from '../models/deus-ex-model';
+import { Sr2020CharacterProcessRequest, Sr2020CharacterProcessResponse } from '../models/sr2020-character.model';
+import { LocationProcessRequest, LocationProcessResponse } from '../models/location.model';
 import { ModelEngineHttpApiDataSource } from '../datasources/model-engine-http-api.datasource';
 
 export interface ModelEngineService {
-  process(req: DeusExProcessModelRequest): DeusExProcessModelResponse;
+  processCharacter(req: Sr2020CharacterProcessRequest): Sr2020CharacterProcessResponse;
+  processLocation(req: LocationProcessRequest): LocationProcessResponse;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {
   constructor(
-    // ModelEngineHttpApi must match the name property in the datasource json file
     @inject('datasources.ModelEngineHttpApi')
     protected dataSource: ModelEngineHttpApiDataSource = new ModelEngineHttpApiDataSource(),
   ) {}

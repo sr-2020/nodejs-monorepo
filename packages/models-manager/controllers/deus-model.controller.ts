@@ -3,7 +3,7 @@ import { param, put, requestBody, get, post, HttpErrors } from '@loopback/rest';
 import { DeusExModelRepository } from 'models-manager/repositories/deus-ex-model.repository';
 import { DeusExModel, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { DeusModelEngineService } from '@sr2020/interface/services/deus-model-engine.service';
 import { inject } from '@loopback/core';
 import { DeusExModelDbEntity } from 'models-manager/models/deus-ex-model-db-entity';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
@@ -14,8 +14,8 @@ export class DeusModelController {
   constructor(
     @repository(DeusExModelRepository)
     public modelRepository: DeusExModelRepository,
-    @inject('services.ModelEngineService')
-    protected modelEngineService: ModelEngineService,
+    @inject('services.DeusModelEngineService')
+    protected modelEngineService: DeusModelEngineService,
   ) {}
 
   @put('/deus/model', {
