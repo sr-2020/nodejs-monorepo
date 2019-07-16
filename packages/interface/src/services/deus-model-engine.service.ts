@@ -9,7 +9,6 @@ export interface DeusModelEngineService {
 
 export class DeusModelEngineServiceProvider implements Provider<DeusModelEngineService> {
   constructor(
-    // ModelEngineHttpApi must match the name property in the datasource json file
     @inject('datasources.DeusModelEngineHttpApi')
     protected dataSource: DeusModelEngineHttpApiDataSource = new DeusModelEngineHttpApiDataSource(),
   ) {}
