@@ -1,29 +1,29 @@
-import { Entity, model, property } from '@loopback/repository';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 
-@model({
+@Entity({
   name: 'sr2020-character',
 })
-export class CharacterDbEntity extends Entity {
-  @property({ required: true, id: true })
+export class CharacterDbEntity {
+  @PrimaryColumn()
   id: number;
 
-  @property({ required: true })
+  @Column()
   timestamp: number;
 
   // TODO: Figure out how to store objects
-  @property({ required: true })
+  @Column()
   model: string;
 
   getModel(): Sr2020Character {
     return JSON.parse(this.model);
   }
+}
 
-  static fromModel(m: Sr2020Character): CharacterDbEntity {
-    return new CharacterDbEntity({ id: Number(m.modelId), timestamp: m.timestamp, model: JSON.stringify(m) });
-  }
-
-  constructor(data?: Partial<CharacterDbEntity>) {
-    super(data);
-  }
+export function fromModel(m: Sr2020Character) {
+  const result = new CharacterDbEntity();
+  result.id = Number(m.modelId);
+  result.timestamp = m.timestamp;
+  result.model = JSON.stringify(m);
+  return result;
 }
