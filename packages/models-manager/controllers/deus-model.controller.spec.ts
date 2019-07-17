@@ -10,7 +10,10 @@ import { Connection } from 'typeorm';
 
 const model = modelImport as DeusExModel;
 
-describe('DeusModelController', () => {
+describe('DeusModelController', function() {
+  // For some reason this test is quite slow to start
+  // tslint:disable-next-line: no-invalid-this
+  this.timeout(15000);
   let app: ModelsManagerApplication;
   let client: Client;
   let repo: DeusExModelRepository;
