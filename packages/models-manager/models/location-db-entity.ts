@@ -1,29 +1,29 @@
-import { Entity, model, property } from '@loopback/repository';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { Location } from '@sr2020/interface/models/location.model';
 
-@model({
+@Entity({
   name: 'location',
 })
-export class LocationDbEntity extends Entity {
-  @property({ required: true, id: true })
+export class LocationDbEntity {
+  @PrimaryColumn()
   id: number;
 
-  @property({ required: true })
+  @Column()
   timestamp: number;
 
   // TODO: Figure out how to store objects
-  @property({ required: true })
+  @Column()
   model: string;
 
   getModel(): Location {
     return JSON.parse(this.model);
   }
+}
 
-  static fromModel(m: Location): LocationDbEntity {
-    return new LocationDbEntity({ id: Number(m.modelId), timestamp: m.timestamp, model: JSON.stringify(m) });
-  }
-
-  constructor(data?: Partial<LocationDbEntity>) {
-    super(data);
-  }
+export function fromModel(m: Location) {
+  const result = new LocationDbEntity();
+  result.id = Number(m.modelId);
+  result.timestamp = m.timestamp;
+  result.model = JSON.stringify(m);
+  return result;
 }

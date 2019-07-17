@@ -3,6 +3,7 @@ import { ApplicationConfig } from '@loopback/core';
 import * as dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 import { CharacterDbEntity } from './models/character-db-entity';
+import { LocationDbEntity } from './models/location-db-entity';
 
 export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
@@ -15,7 +16,7 @@ export async function main(options: ApplicationConfig = {}) {
     host: process.env.MYSQL_HOST!!,
     username: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD!!,
-    entities: [CharacterDbEntity],
+    entities: [CharacterDbEntity, LocationDbEntity],
   });
 
   await app.boot();

@@ -1,19 +1,15 @@
-import { repository } from '@loopback/repository';
 import { param, put, requestBody, get, post, HttpErrors } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { LocationRepository } from 'models-manager/repositories/location.repository';
-import { LocationDbEntity } from 'models-manager/models/location-db-entity';
-
-const MAX_RETRIES = 20;
+import { LocationDbEntity, fromModel } from 'models-manager/models/location-db-entity';
+import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 export class LocationController {
   constructor(
-    @repository(LocationRepository)
-    public modelRepository: LocationRepository,
     @inject('services.ModelEngineService')
     protected modelEngineService: ModelEngineService,
   ) {}
@@ -26,12 +22,7 @@ export class LocationController {
     },
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
-    const dbEntry = LocationDbEntity.fromModel(model);
-    try {
-      await this.modelRepository.replaceById(dbEntry.id, dbEntry);
-    } catch {
-      await this.modelRepository.create(dbEntry);
-    }
+    await getRepository(LocationDbEntity).save([fromModel(model)]);
     return new Empty();
   }
 
@@ -43,16 +34,17 @@ export class LocationController {
       },
     },
   })
-  async get(@param.path.number('id') id: number): Promise<LocationProcessResponse> {
-    for (let i = 0; i < MAX_RETRIES; ++i) {
-      const baseModel = await this.modelRepository.findById(id);
-      const result = await this.modelEngineService.processLocation({ baseModel: baseModel.getModel(), events: [], timestamp: Date.now() });
-      const updated = await this.modelRepository.updateAll(LocationDbEntity.fromModel(result.baseModel), {
-        and: [{ id }, { timestamp: baseModel.timestamp }],
-      });
-      if (updated.count == 1) return result;
-    }
-    throw new HttpErrors.Conflict('Too many simultaneous model updates');
+  @Transaction()
+  async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<LocationProcessResponse> {
+    const baseModel = await this.getAndLockModel(manager, id);
+    const timestamp = Date.now();
+    const result = await this.modelEngineService.processLocation({
+      baseModel: baseModel!!.getModel(),
+      events: [],
+      timestamp,
+    });
+    await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
+    return result;
   }
 
   @get('/location/model/{id}/predict', {
@@ -64,9 +56,14 @@ export class LocationController {
     },
   })
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<LocationProcessResponse> {
-    const baseModel = await this.modelRepository.findById(id);
-    const result = await this.modelEngineService.processLocation({ baseModel: baseModel.getModel(), events: [], timestamp });
-    return result;
+    try {
+      const baseModel = await getRepository(LocationDbEntity).findOneOrFail(id);
+      const result = await this.modelEngineService.processLocation({ baseModel: baseModel!!.getModel(), events: [], timestamp });
+      return result;
+    } catch (e) {
+      if (e instanceof EntityNotFoundError) throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);
+      throw e;
+    }
   }
 
   @post('/location/model/{id}', {
@@ -77,20 +74,35 @@ export class LocationController {
       },
     },
   })
-  async postEvent(@param.path.number('id') id: number, @requestBody() event: EventRequest): Promise<LocationProcessResponse> {
-    for (let i = 0; i < MAX_RETRIES; ++i) {
-      const baseModel = await this.modelRepository.findById(id);
-      const timestamp = Date.now();
-      const result = await this.modelEngineService.processLocation({
-        baseModel: baseModel.getModel(),
-        events: [{ ...event, modelId: id.toString(), timestamp }],
-        timestamp,
-      });
-      const updated = await this.modelRepository.updateAll(LocationDbEntity.fromModel(result.baseModel), {
-        and: [{ id }, { timestamp: baseModel.timestamp }],
-      });
-      if (updated.count == 1) return result;
+  @Transaction()
+  async postEvent(
+    @param.path.number('id') id: number,
+    @requestBody() event: EventRequest,
+    @TransactionManager() manager: EntityManager,
+  ): Promise<LocationProcessResponse> {
+    const baseModel = await this.getAndLockModel(manager, id);
+    const timestamp = Date.now();
+    const result = await this.modelEngineService.processLocation({
+      baseModel: baseModel!!.getModel(),
+      events: [{ ...event, modelId: id.toString(), timestamp }],
+      timestamp,
+    });
+    await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
+    return result;
+  }
+
+  private async getAndLockModel(manager: EntityManager, id: number): Promise<LocationDbEntity> {
+    const maybeModel = await manager
+      .getRepository(LocationDbEntity)
+      .createQueryBuilder()
+      .select()
+      .setLock('pessimistic_write')
+      .where('id = :id', { id })
+      .getOne();
+
+    if (maybeModel == undefined) {
+      throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);
     }
-    throw new HttpErrors.Conflict('Too many simultaneous model updates');
+    return maybeModel;
   }
 }
