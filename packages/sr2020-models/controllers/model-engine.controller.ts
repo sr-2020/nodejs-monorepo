@@ -64,6 +64,12 @@ export class ModelEngineController {
         );
     });
 
+    if (timestamp < baseModel.timestamp) {
+      throw new HttpErrors.UnprocessableEntity(
+        `Model is is in the future (t = ${baseModel.timestamp} compared to calculation timestamp (${timestamp})`,
+      );
+    }
+
     events.push({ eventType: '_', modelId: baseModel.modelId, timestamp: timestamp });
     // TODO: Support preprocess
     const aquired: AquiredObjects = {};
