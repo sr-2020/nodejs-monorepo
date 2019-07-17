@@ -6,6 +6,7 @@ import { DeusExModelRepository } from '../repositories/deus-ex-model.repository'
 import * as modelImport from '@sr2020/interface/models/deus-ex-model-example.json';
 import { DeusExModelDbEntity } from 'models-manager/models/deus-ex-model-db-entity';
 import { DeusExModel, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
+import { Connection } from 'typeorm';
 
 const model = modelImport as DeusExModel;
 
@@ -13,14 +14,16 @@ describe('DeusModelController', () => {
   let app: ModelsManagerApplication;
   let client: Client;
   let repo: DeusExModelRepository;
+  let connection: Connection;
 
   beforeEach('setupApplication', async () => {
-    ({ app, client } = await setupApplication());
+    ({ app, client, connection } = await setupApplication());
     repo = await app.getRepository(DeusExModelRepository);
   });
 
   afterEach(async () => {
     await app.stop();
+    await connection.close();
   });
 
   it('invokes PUT /model', async () => {

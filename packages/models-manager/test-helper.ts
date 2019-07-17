@@ -1,6 +1,9 @@
 import { ModelsManagerApplication } from './application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { juggler } from '@loopback/repository';
+import { createConnection, Connection } from 'typeorm';
+import { CharacterDbEntity } from './models/character-db-entity';
+import { LocationDbEntity } from './models/location-db-entity';
 
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({
@@ -29,14 +32,21 @@ export async function setupApplication(): Promise<AppWithClient> {
     );
   `);
   app.bind('datasources.MySQL').to(sqlite);
+
+  const connection = await createConnection({
+    type: 'sqljs',
+    entities: [CharacterDbEntity, LocationDbEntity],
+  });
+
   await app.start();
 
   const client = createRestAppClient(app);
 
-  return { app, client };
+  return { app, connection, client };
 }
 
 export interface AppWithClient {
   app: ModelsManagerApplication;
   client: Client;
+  connection: Connection;
 }
