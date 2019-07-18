@@ -6,7 +6,7 @@ function scanQR(api: DeusExModelApiInterface, data: any) {
   switch (data.type) {
     case 1:
       if (!api.model.isAlive) return;
-      api.sendEvent(null, 'usePill', { id: data.payload });
+      api.sendSelfEvent('usePill', { id: data.payload });
       break;
   }
 }

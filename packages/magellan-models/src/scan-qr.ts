@@ -11,38 +11,38 @@ function scanQR(api: ModelApiInterface<OrganismModel>, data: ScanQRData) {
   switch (data.type) {
     case QrType.Pill:
       if (!api.model.isAlive) return;
-      api.sendEvent(null, 'usePill', { id: data.payload });
+      api.sendSelfEvent('usePill', { id: data.payload });
       break;
 
     case QrType.MagellanPill:
-      api.sendEvent(null, 'biological-systems-influence', data.payload.split(',').map(Number));
+      api.sendSelfEvent('biological-systems-influence', data.payload.split(',').map(Number));
       break;
 
     case QrType.EnterShip:
-      api.sendEvent(null, 'enter-ship', Number(data.payload));
+      api.sendSelfEvent('enter-ship', Number(data.payload));
       break;
 
     case QrType.LeaveShip:
-      api.sendEvent(null, 'leave-ship', {});
+      api.sendSelfEvent('leave-ship', {});
       break;
 
     case QrType.LabTerminalRefill:
-      api.sendEvent(null, 'lab-terminal-refill', parseLabTerminalRefillData(data.payload));
+      api.sendSelfEvent('lab-terminal-refill', parseLabTerminalRefillData(data.payload));
       break;
 
     case QrType.SpaceSuitRefill:
       {
         const [uniqueId, time] = data.payload.split(',');
-        api.sendEvent(null, 'space-suit-refill', { uniqueId, time: Number(time) });
+        api.sendSelfEvent('space-suit-refill', { uniqueId, time: Number(time) });
       }
       break;
 
     case QrType.SpaceSuitTakeOff:
-      api.sendEvent(null, 'space-suit-take-off', Number(data.payload));
+      api.sendSelfEvent('space-suit-take-off', Number(data.payload));
       break;
 
     case QrType.Rollback:
-      api.sendEvent(null, 'full-rollback', {});
+      api.sendSelfEvent('full-rollback', {});
       break;
 
     case QrType.XenoDisease:
@@ -53,7 +53,7 @@ function scanQR(api: ModelApiInterface<OrganismModel>, data: ScanQRData) {
           influence: values,
           power,
         };
-        api.sendEvent(null, 'xeno-disease', diseaseData);
+        api.sendSelfEvent('xeno-disease', diseaseData);
       }
       break;
 

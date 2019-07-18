@@ -157,6 +157,7 @@ describe('Worker', () => {
 
     expect(result.outboundEvents).length(1);
     expect(result.outboundEvents[0]).to.deep.include({
+      modelType: 'Recipient',
       modelId: '0001',
       eventType: 'message',
       data: {

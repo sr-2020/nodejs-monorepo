@@ -237,10 +237,13 @@ export interface WriteModelApiInterface {
   // NB: timer must exist!
   removeTimer(name: string): this;
 
-  // Adds event to events queue of modelId. If modelId is null,
-  // event is send to currently processed model. Timestamp of event
+  // Schedules and event for currently processed model. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendEvent(modelId: string | null, event: string, data: any): this;
+  sendSelfEvent(event: string, data: any): this;
+
+  // Adds event to events queue of modelId of type TModel. Timestamp of event
+  // is "now", i.e. equals to timestamp of event currently being processed.
+  sendOutboundEvent<TModel>(type: new () => TModel, modelId: string, event: string, data: any): this;
 }
 
 export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {

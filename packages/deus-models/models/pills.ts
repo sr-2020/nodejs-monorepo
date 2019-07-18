@@ -11,7 +11,7 @@ const PILL_TIMEOUT = 2 * 60 * 60 * 1000;
 function useCure(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
 
-  api.sendEvent(null, 'delay-illness', { system: pill.curedSystem, delay: pill.duration * 1000 });
+  api.sendSelfEvent('delay-illness', { system: pill.curedSystem, delay: pill.duration * 1000 });
   if (api.model.genome && _.get(api.model, ['usedPills', pill.id])) {
     _.set(api.model, ['genome', pill.affectedGenomePos - 1], pill.affectedGenomeVal);
   }
@@ -48,7 +48,7 @@ function useLastChance(api: DeusExModelApiInterface, pill) {
 
 function useNarco(api: DeusExModelApiInterface, pill) {
   if (api.model.profileType != 'human') return;
-  api.sendEvent(null, 'take-narco', { id: pill.id, narco: pill });
+  api.sendSelfEvent('take-narco', { id: pill.id, narco: pill });
 }
 
 function useImmortal(api: DeusExModelApiInterface, pill, event) {
@@ -81,7 +81,7 @@ function useImmortal(api: DeusExModelApiInterface, pill, event) {
 }
 
 function useGeneric(api: DeusExModelApiInterface, pill) {
-  api.sendEvent(null, pill.eventType, { pill });
+  api.sendSelfEvent(pill.eventType, { pill });
 }
 
 function usePill(api: DeusExModelApiInterface, data, event) {

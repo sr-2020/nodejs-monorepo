@@ -20,10 +20,14 @@ export interface Dictionaries {
   [catalog: string]: any[];
 }
 
-export class OutboundEvents {
-  private events: Event[] = [];
+interface EventForModelType extends Event {
+  modelType: string;
+}
 
-  public push(e: Event) {
+export class OutboundEvents {
+  private events: EventForModelType[] = [];
+
+  public push(e: EventForModelType) {
     this.events.push(e);
   }
 
@@ -142,22 +146,23 @@ export class Context<T extends EmptyModel> {
     return this;
   }
 
-  public sendEvent(modelId: string | null, eventType: string, timestamp: number, data: any) {
-    if (!modelId || modelId == this._model.modelId) {
-      this._events.unshift({
-        modelId: this._model.modelId,
-        eventType,
-        timestamp: timestamp,
-        data,
-      });
-    } else {
-      this._outboundEvents.push({
-        modelId,
-        eventType,
-        timestamp: timestamp,
-        data,
-      });
-    }
+  public sendSelfEvent(eventType: string, timestamp: number, data: any) {
+    this._events.unshift({
+      modelId: this._model.modelId,
+      eventType,
+      timestamp: timestamp,
+      data,
+    });
+  }
+
+  public sendOutboundEvent(modelType: string, modelId: string, eventType: string, timestamp: number, data: any) {
+    this._outboundEvents.push({
+      modelType: modelType!!,
+      modelId,
+      eventType,
+      timestamp: timestamp,
+      data,
+    });
   }
 
   public nextTimer(): Timer | null {

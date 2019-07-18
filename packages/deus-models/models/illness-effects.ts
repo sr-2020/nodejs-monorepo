@@ -194,7 +194,7 @@ function rollForInfection(api: DeusExModelApiInterface, data: any, event: Event)
       let deathAwaitTimeMs = chance.natural({ min: 0, max: 3 * 60 * 60 * 1000 });
 
       helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: illnessModels.id });
-      api.sendEvent(null, 'start-illness', { id: illnessModels.id });
+      api.sendSelfEvent('start-illness', { id: illnessModels.id });
     } else {
       api.info('Roll for infection: nothing will happen');
     }

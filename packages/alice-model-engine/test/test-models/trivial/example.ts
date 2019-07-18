@@ -1,3 +1,5 @@
+class Recipient {}
+
 module.exports = () => {
   return {
     noop() {},
@@ -24,7 +26,7 @@ module.exports = () => {
 
     sendMessage(api: any, data: any) {
       let { receiver, message } = data;
-      api.sendEvent(receiver, 'message', { message });
+      api.sendOutboundEvent(Recipient, receiver, 'message', { message });
     },
 
     _view(_: any, data: any) {

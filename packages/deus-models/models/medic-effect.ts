@@ -278,7 +278,7 @@ function damageEffect(api: DeusExModelApiInterface, modifier: Modifier) {
       api.info(`damageEffect: start death timer!`);
       api.setTimer(consts.DEATH_TIMER, consts.DEATH_DELAY, 'character-death', {});
 
-      api.sendEvent(null, 'add-change-record', {
+      api.sendSelfEvent('add-change-record', {
         text: `Тяжелое повреждение организма! Требуется немедленная реанимация, возможна смерть в течении 20 минут`,
         timestamp: api.model.timestamp,
       });
@@ -298,7 +298,7 @@ function damageEffect(api: DeusExModelApiInterface, modifier: Modifier) {
       //Послать событие - грохнуть случайную систему организма
       if (isHuman) {
         api.info(`damageEffect: hp = ${api.model.hp} ==> send "kill-random-system" event!`);
-        api.sendEvent(null, 'kill-random-system', { from: 'self' });
+        api.sendSelfEvent('kill-random-system', { from: 'self' });
       }
 
       api.model.hp = 0;
