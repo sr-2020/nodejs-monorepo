@@ -4,15 +4,59 @@
   "compilerOptions": {
     "composite": true,
     "declarationMap": true,
+    "noImplicitAny": false,
     "baseUrl": "./packages",
     "paths": {
-      "@sr2020/interface/*": ["interface/src/*"],
-      "@sr2020/alice-model-engine/*": ["alice-model-engine/src/*"]
+      "@sr2020/interface/*": [
+        "interface/src/*"
+      ],
+      "@sr2020/alice-model-engine/*": [
+        "alice-model-engine/src/*"
+      ]
     }
   },
   "references": [
-    {"path": "packages/interface/"},
-    {"path": "packages/billing"},
-    {"path": "packages/push"}
+    {
+      "path": "packages/alice-api-server/"
+    },
+    {
+      "path": "packages/alice-integration-testing"
+    },
+    {
+      "path": "packages/alice-model-engine"
+    },
+    {
+      "path": "packages/alice-qr-lib"
+    },
+    {
+      "path": "packages/alice-worker-manager"
+    },
+    {
+      "path": "packages/billing"
+    },
+    {
+      "path": "packages/deus-models"
+    },
+    {
+      "path": "packages/import-server"
+    },
+    {
+      "path": "packages/interface"
+    },
+    {
+      "path": "packages/magellan-models"
+    },
+    {
+      "path": "packages/models-manager"
+    },
+    {
+      "path": "packages/push"
+    },
+    {
+      "path": "packages/sr2020-models"
+    },
+    {
+      "path": "packages/telegram-bot"
+    }
   ]
 }

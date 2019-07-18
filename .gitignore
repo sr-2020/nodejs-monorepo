@@ -61,7 +61,7 @@ typings/
 api-docs/
 
 # Transpiled JavaScript files from Typescript
-*.js
+packages/**/*.js
 *.map
 *.d.ts
 
