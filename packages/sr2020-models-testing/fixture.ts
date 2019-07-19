@@ -6,6 +6,21 @@ import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Location } from '@sr2020/interface/models/location.model';
 import { getDefaultCharacter, getDefaultLocation } from '@sr2020/sr2020-models/testing/test-helper';
+import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
+import { Engine } from '@sr2020/alice-model-engine/engine';
+import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
+import { Config } from '@sr2020/alice-model-engine/config';
+import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+
+// Those are singletones intentionally - so model scripts are only loaded once.
+const characterEngine = new Engine<Sr2020Character>(
+  loadModels('../sr2020-models/scripts/character'),
+  Config.parse(requireDir('../sr2020-models/scripts/character/catalogs')),
+);
+const locationEngine = new Engine<Location>(
+  loadModels('../sr2020-models/scripts/location'),
+  Config.parse(requireDir('../sr2020-models/scripts/location/catalogs')),
+);
 
 export class TestFixture {
   constructor(public client: Client, private _connection: Connection, private _app: ModelsManagerApplication) {}
@@ -18,7 +33,8 @@ export class TestFixture {
     });
 
     await app.boot();
-    // TODO(aeremin): bind model engine service
+    app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine));
+
     const connection = await createConnection({
       type: 'sqljs',
       synchronize: true,
@@ -47,6 +63,20 @@ export class TestFixture {
   async getLocation(id: number | string = 0): Promise<Location> {
     const entity = await this._connection.getRepository(LocationDbEntity).findOneOrFail(id);
     return entity.getModel();
+  }
+
+  async sendCharacterEvent(event: EventRequest, id: number | string = 0) {
+    await this.client
+      .post(`/character/model/${id}`)
+      .send(event)
+      .expect(200);
+  }
+
+  async sendLocationEvent(event: EventRequest, id: number | string = 0) {
+    await this.client
+      .post(`/location/model/${id}`)
+      .send(event)
+      .expect(200);
   }
 
   async destroy() {
