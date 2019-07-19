@@ -8,11 +8,14 @@ import { CharacterDbEntity, fromModel } from 'models-manager/models/character-db
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
+import { TimeService } from '../services/time.service';
 
 export class CharacterController {
   constructor(
     @inject('services.ModelEngineService')
     protected modelEngineService: ModelEngineService,
+    @inject('services.TimeService')
+    protected timeService: TimeService,
   ) {}
 
   @put('/character/model', {
@@ -38,7 +41,7 @@ export class CharacterController {
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Sr2020CharacterProcessResponse> {
     const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
-    const timestamp = Date.now();
+    const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
       events: [],
@@ -82,7 +85,7 @@ export class CharacterController {
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
     const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
-    const timestamp = Date.now();
+    const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
       events: [{ ...event, modelId: id.toString(), timestamp }],

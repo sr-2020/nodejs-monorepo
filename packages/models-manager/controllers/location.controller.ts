@@ -8,11 +8,14 @@ import { LocationDbEntity, fromModel } from 'models-manager/models/location-db-e
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
+import { TimeService } from '../services/time.service';
 
 export class LocationController {
   constructor(
     @inject('services.ModelEngineService')
     protected modelEngineService: ModelEngineService,
+    @inject('services.TimeService')
+    protected timeService: TimeService,
   ) {}
 
   @put('/location/model', {
@@ -38,7 +41,7 @@ export class LocationController {
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<LocationProcessResponse> {
     const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
-    const timestamp = Date.now();
+    const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processLocation({
       baseModel: baseModel!!.getModel(),
       events: [],
@@ -82,7 +85,7 @@ export class LocationController {
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
     const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
-    const timestamp = Date.now();
+    const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processLocation({
       baseModel: baseModel!!.getModel(),
       events: [{ ...event, modelId: id.toString(), timestamp }],
