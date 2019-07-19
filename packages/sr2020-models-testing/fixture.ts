@@ -1,6 +1,7 @@
 import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { createConnection, Connection } from 'typeorm';
+import * as Winston from 'winston';
 import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
 import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
@@ -11,6 +12,8 @@ import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
 import { Config } from '@sr2020/alice-model-engine/config';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+
+(Winston as any).level = 'error';
 
 // Those are singletones intentionally - so model scripts are only loaded once.
 const characterEngine = new Engine<Sr2020Character>(
@@ -33,6 +36,7 @@ export class TestFixture {
     });
 
     await app.boot();
+
     app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine));
 
     const connection = await createConnection({
