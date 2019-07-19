@@ -1,32 +1,36 @@
 import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
-import { createConnection } from 'typeorm';
+import { createConnection, Connection } from 'typeorm';
 import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
 import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 
-export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({});
+export class TestFixture {
+  constructor(public client: Client, private _connection: Connection, private _app: ModelsManagerApplication) {}
 
-  const app = new ModelsManagerApplication({
-    rest: restConfig,
-  });
+  static async create(): Promise<TestFixture> {
+    const restConfig = givenHttpServerConfig({});
 
-  await app.boot();
-  // TODO(aeremin): bind model engine service
-  await createConnection({
-    type: 'sqljs',
-    synchronize: true,
-    entities: [CharacterDbEntity, LocationDbEntity],
-  });
-  await app.start();
+    const app = new ModelsManagerApplication({
+      rest: restConfig,
+    });
 
-  const client = createRestAppClient(app);
+    await app.boot();
+    // TODO(aeremin): bind model engine service
+    const connection = await createConnection({
+      type: 'sqljs',
+      synchronize: true,
+      entities: [CharacterDbEntity, LocationDbEntity],
+    });
+    await app.start();
 
-  // TODO(aeremin): return some helper which will allow to save/read models
-  return { app, client };
-}
+    const client = createRestAppClient(app);
 
-export interface AppWithClient {
-  app: ModelsManagerApplication;
-  client: Client;
+    // TODO(aeremin): return some helper which will allow to save/read models
+    return new TestFixture(client, connection, app);
+  }
+
+  async destroy() {
+    await this._connection.close();
+    await this._app.close();
+  }
 }

@@ -1,7 +1,4 @@
-import { Client } from '@loopback/testlab';
-import { ModelsManagerApplication } from '@sr2020/models-manager/application';
-import { setupApplication } from './fixture';
-import { getConnection } from 'typeorm';
+import { TestFixture } from './fixture';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { getDefaultCharacter } from '@sr2020/sr2020-models/testing/test-helper';
 
@@ -9,20 +6,18 @@ describe('Fixture', function() {
   // tslint:disable-next-line: no-invalid-this
   this.timeout(15000);
 
-  let app: ModelsManagerApplication;
-  let client: Client;
+  let fixture: TestFixture;
 
   beforeEach('setupApplication', async () => {
-    ({ app, client } = await setupApplication());
+    fixture = await TestFixture.create();
   });
 
   afterEach(async () => {
-    await app.stop();
-    await getConnection().close();
+    await fixture.destroy();
   });
 
   it('Ping', async () => {
-    await client.get('/ping').expect(200);
+    await fixture.client.get('/ping').expect(200);
   });
 
   it('Put character', async () => {
@@ -31,7 +26,7 @@ describe('Fixture', function() {
       spellsCasted: 0,
       ...getDefaultCharacter(),
     };
-    await client
+    await fixture.client
       .put('/character/model')
       .send(m)
       .expect(200);
