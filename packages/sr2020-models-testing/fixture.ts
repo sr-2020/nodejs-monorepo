@@ -1,8 +1,11 @@
 import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { createConnection, Connection } from 'typeorm';
-import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
-import { LocationDbEntity } from 'models-manager/models/location-db-entity';
+import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
+import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Location } from '@sr2020/interface/models/location.model';
+import { getDefaultCharacter, getDefaultLocation } from '@sr2020/sr2020-models/testing/test-helper';
 
 export class TestFixture {
   constructor(public client: Client, private _connection: Connection, private _app: ModelsManagerApplication) {}
@@ -25,8 +28,25 @@ export class TestFixture {
 
     const client = createRestAppClient(app);
 
-    // TODO(aeremin): return some helper which will allow to save/read models
     return new TestFixture(client, connection, app);
+  }
+
+  async saveCharacter(model: Partial<Sr2020Character>) {
+    await this._connection.getRepository(CharacterDbEntity).save(fromCharacterModel({ ...getDefaultCharacter(), ...model }));
+  }
+
+  async saveLocation(model: Partial<Location>) {
+    await this._connection.getRepository(LocationDbEntity).save(fromLocationModel({ ...getDefaultLocation(), ...model }));
+  }
+
+  async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
+    const entity = await this._connection.getRepository(CharacterDbEntity).findOneOrFail(id);
+    return entity.getModel();
+  }
+
+  async getLocation(id: number | string = 0): Promise<Location> {
+    const entity = await this._connection.getRepository(LocationDbEntity).findOneOrFail(id);
+    return entity.getModel();
   }
 
   async destroy() {
