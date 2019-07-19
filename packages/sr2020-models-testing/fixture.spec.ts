@@ -1,5 +1,4 @@
 import { TestFixture } from './fixture';
-import { getDefaultCharacter } from '@sr2020/sr2020-models/testing/test-helper';
 import { expect } from '@loopback/testlab';
 
 describe('Fixture', function() {
@@ -18,16 +17,6 @@ describe('Fixture', function() {
 
   it('Ping', async () => {
     await fixture.client.get('/ping').expect(200);
-  });
-
-  it('Put character', async () => {
-    const m = getDefaultCharacter();
-    await fixture.client
-      .put('/character/model')
-      .send(m)
-      .expect(200);
-    const c = await fixture.getCharacter(m.modelId);
-    expect(m).to.deepEqual(c);
   });
 
   it('Save and get location partial', async () => {

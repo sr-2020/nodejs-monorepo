@@ -6,7 +6,6 @@ import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manag
 import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Location } from '@sr2020/interface/models/location.model';
-import { getDefaultCharacter, getDefaultLocation } from '@sr2020/sr2020-models/testing/test-helper';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
@@ -87,4 +86,28 @@ export class TestFixture {
     await this._connection.close();
     await this._app.close();
   }
+}
+
+function getDefaultCharacter(): Sr2020Character {
+  return {
+    spellsCasted: 0,
+
+    modelId: '0',
+    timestamp: 0,
+    conditions: [],
+    modifiers: [],
+    timers: {},
+  };
+}
+
+function getDefaultLocation(): Location {
+  return {
+    manaDensity: 0,
+
+    modelId: '0',
+    timestamp: 0,
+    conditions: [],
+    modifiers: [],
+    timers: {},
+  };
 }
