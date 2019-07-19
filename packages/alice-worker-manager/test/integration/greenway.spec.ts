@@ -19,7 +19,8 @@ import {
 } from '../model_helpers';
 
 describe('Green way', function() {
-  this.timeout(10000);
+  // tslint:disable-next-line: no-invalid-this
+  this.timeout(25000);
 
   let manager: Manager | null;
   const di = Container;

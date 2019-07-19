@@ -6,7 +6,6 @@ import { DeusExModelRepository } from '../repositories/deus-ex-model.repository'
 import * as modelImport from '@sr2020/interface/models/deus-ex-model-example.json';
 import { DeusExModelDbEntity } from 'models-manager/models/deus-ex-model-db-entity';
 import { DeusExModel, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
-import { Connection } from 'typeorm';
 
 const model = modelImport as DeusExModel;
 

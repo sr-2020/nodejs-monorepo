@@ -1,18 +1,9 @@
 import { ModelsManagerApplication } from './application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { juggler } from '@loopback/repository';
-import { createConnection, Connection } from 'typeorm';
-import { CharacterDbEntity } from './models/character-db-entity';
-import { LocationDbEntity } from './models/location-db-entity';
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({
-    // Customize the server configuration here.
-    // Empty values (undefined, '') will be ignored by the helper.
-    //
-    // host: process.env.HOST,
-    // port: +process.env.PORT,
-  });
+  const restConfig = givenHttpServerConfig({});
 
   const app = new ModelsManagerApplication({
     rest: restConfig,
