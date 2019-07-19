@@ -249,7 +249,7 @@ export interface WriteModelApiInterface {
 
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendOutboundEvent<TModel>(type: new () => TModel, modelId: string, event: string, data: any): this;
+  sendOutboundEvent<TModel extends EmptyModel>(type: new () => TModel, modelId: string, event: string, data: any): this;
 }
 
 export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
