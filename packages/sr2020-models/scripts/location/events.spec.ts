@@ -38,6 +38,7 @@ describe('Character events', () => {
         manaDensity: 36,
         timestamp: 10,
       },
+      outboundEvents: [],
     };
     await client
       .post('/location/process')

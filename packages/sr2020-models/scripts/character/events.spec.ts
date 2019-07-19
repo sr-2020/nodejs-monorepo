@@ -36,6 +36,7 @@ describe('Character events', () => {
         spellsCasted: 24,
         timestamp: 10,
       },
+      outboundEvents: [],
     };
     await client
       .post('/character/process')
