@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "references": [
+    {
+      "path": "../interface"
+    },
+    {
+      "path": "../alice-model-engine"
+    },
+    {
+      "path": "../models-manager"
+    },
+    {
+      "path": "../sr2020-models"
+    }
+  ],
+  "include": [
+    "**/*",
+    "**/*.json"
+  ]
+}

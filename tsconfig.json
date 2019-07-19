@@ -12,6 +12,12 @@
       ],
       "@sr2020/alice-model-engine/*": [
         "alice-model-engine/src/*"
+      ],
+      "@sr2020/models-manager/*": [
+        "models-manager/*"
+      ],
+      "@sr2020/sr2020-models/*": [
+        "sr2020-models/*"
       ]
     }
   },
@@ -54,6 +60,9 @@
     },
     {
       "path": "packages/sr2020-models"
+    },
+    {
+      "path": "packages/sr2020-models-testing"
     },
     {
       "path": "packages/telegram-bot"
