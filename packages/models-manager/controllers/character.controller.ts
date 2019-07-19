@@ -7,6 +7,7 @@ import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interfa
 import { CharacterDbEntity, fromModel } from 'models-manager/models/character-db-entity';
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+import { getAndLockModel } from '../utils/db-utils';
 
 export class CharacterController {
   constructor(
@@ -36,7 +37,7 @@ export class CharacterController {
   })
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Sr2020CharacterProcessResponse> {
-    const baseModel = await this.getAndLockModel(manager, id);
+    const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
     const timestamp = Date.now();
     const result = await this.modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
@@ -80,7 +81,7 @@ export class CharacterController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    const baseModel = await this.getAndLockModel(manager, id);
+    const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
     const timestamp = Date.now();
     const result = await this.modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
@@ -89,20 +90,5 @@ export class CharacterController {
     });
     await manager.getRepository(CharacterDbEntity).save(fromModel(result.baseModel));
     return result;
-  }
-
-  private async getAndLockModel(manager: EntityManager, id: number): Promise<CharacterDbEntity> {
-    const maybeModel = await manager
-      .getRepository(CharacterDbEntity)
-      .createQueryBuilder()
-      .select()
-      .setLock('pessimistic_write')
-      .where('id = :id', { id })
-      .getOne();
-
-    if (maybeModel == undefined) {
-      throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);
-    }
-    return maybeModel;
   }
 }

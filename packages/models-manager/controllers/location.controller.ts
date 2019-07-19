@@ -7,6 +7,7 @@ import { Location, LocationProcessResponse } from '@sr2020/interface/models/loca
 import { LocationDbEntity, fromModel } from 'models-manager/models/location-db-entity';
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+import { getAndLockModel } from '../utils/db-utils';
 
 export class LocationController {
   constructor(
@@ -36,7 +37,7 @@ export class LocationController {
   })
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<LocationProcessResponse> {
-    const baseModel = await this.getAndLockModel(manager, id);
+    const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
     const timestamp = Date.now();
     const result = await this.modelEngineService.processLocation({
       baseModel: baseModel!!.getModel(),
@@ -80,7 +81,7 @@ export class LocationController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
-    const baseModel = await this.getAndLockModel(manager, id);
+    const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
     const timestamp = Date.now();
     const result = await this.modelEngineService.processLocation({
       baseModel: baseModel!!.getModel(),
@@ -89,20 +90,5 @@ export class LocationController {
     });
     await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
     return result;
-  }
-
-  private async getAndLockModel(manager: EntityManager, id: number): Promise<LocationDbEntity> {
-    const maybeModel = await manager
-      .getRepository(LocationDbEntity)
-      .createQueryBuilder()
-      .select()
-      .setLock('pessimistic_write')
-      .where('id = :id', { id })
-      .getOne();
-
-    if (maybeModel == undefined) {
-      throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);
-    }
-    return maybeModel;
   }
 }
