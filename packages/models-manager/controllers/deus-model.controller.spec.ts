@@ -17,16 +17,14 @@ describe('DeusModelController', function() {
   let app: ModelsManagerApplication;
   let client: Client;
   let repo: DeusExModelRepository;
-  let connection: Connection;
 
   beforeEach('setupApplication', async () => {
-    ({ app, client, connection } = await setupApplication());
+    ({ app, client } = await setupApplication());
     repo = await app.getRepository(DeusExModelRepository);
   });
 
   afterEach(async () => {
     await app.stop();
-    await connection.close();
   });
 
   it('invokes PUT /model', async () => {

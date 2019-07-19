@@ -33,20 +33,14 @@ export async function setupApplication(): Promise<AppWithClient> {
   `);
   app.bind('datasources.MySQL').to(sqlite);
 
-  const connection = await createConnection({
-    type: 'sqljs',
-    entities: [CharacterDbEntity, LocationDbEntity],
-  });
-
   await app.start();
 
   const client = createRestAppClient(app);
 
-  return { app, connection, client };
+  return { app, client };
 }
 
 export interface AppWithClient {
   app: ModelsManagerApplication;
   client: Client;
-  connection: Connection;
 }
