@@ -1,5 +1,6 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, Event } from './alice-model-engine';
+import { EmptyModel, ModelApiInterface } from './alice-model-engine';
+import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 
 @model()
 export class Location extends EmptyModel {
@@ -10,19 +11,13 @@ export class Location extends EmptyModel {
 export type LocationApi = ModelApiInterface<Location>;
 
 @model()
-export class LocationProcessRequest {
+export class LocationProcessRequest extends BaseModelProcessRequest {
   @property({ required: true })
   baseModel: Location;
-
-  @property.array(Event, { required: true })
-  events: Event[];
-
-  @property({ required: true })
-  timestamp: number;
 }
 
 @model()
-export class LocationProcessResponse {
+export class LocationProcessResponse extends BaseModelProcessResponse {
   @property({ required: true })
   baseModel: Location;
 

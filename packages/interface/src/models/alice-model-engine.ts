@@ -25,6 +25,12 @@ export class Event extends IdLessEvent {
   modelId: string;
 }
 
+@model()
+export class EventForModelType extends Event {
+  @property({ required: true })
+  modelType: string;
+}
+
 export interface SyncRequest {
   modelId: string;
   scheduledUpdateTimestamp: number;
@@ -136,7 +142,7 @@ export type EngineResultOk = {
   workingModel: any;
   viewModels: { [base: string]: any };
   aquired: AquiredObjects;
-  outboundEvents: Event[];
+  outboundEvents: EventForModelType[];
 };
 
 export type EngineResultError = {

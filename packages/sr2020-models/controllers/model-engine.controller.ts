@@ -77,7 +77,7 @@ export class ModelEngineController {
 
     // TODO: Also return viewmodels
     if (res.status == 'ok') {
-      return { baseModel: res.baseModel, workModel: res.workingModel };
+      return { baseModel: res.baseModel, workModel: res.workingModel, outboundEvents: res.outboundEvents };
     } else {
       throw new HttpErrors.InternalServerError(`Error during model processing: ${res.error}`);
     }

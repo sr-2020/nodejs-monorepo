@@ -1,5 +1,6 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, Event } from './alice-model-engine';
+import { EmptyModel, ModelApiInterface } from './alice-model-engine';
+import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 
 @model()
 export class Sr2020Character extends EmptyModel {
@@ -10,19 +11,13 @@ export class Sr2020Character extends EmptyModel {
 export type Sr2020CharacterApi = ModelApiInterface<Sr2020Character>;
 
 @model()
-export class Sr2020CharacterProcessRequest {
+export class Sr2020CharacterProcessRequest extends BaseModelProcessRequest {
   @property({ required: true })
   baseModel: Sr2020Character;
-
-  @property.array(Event, { required: true })
-  events: Event[];
-
-  @property({ required: true })
-  timestamp: number;
 }
 
 @model()
-export class Sr2020CharacterProcessResponse {
+export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
   @property({ required: true })
   baseModel: Sr2020Character;
 

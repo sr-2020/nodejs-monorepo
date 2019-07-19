@@ -10,6 +10,7 @@ import {
   PendingAquire,
   Timer,
   Timers,
+  EventForModelType,
 } from 'interface/src/models/alice-model-engine';
 
 export type FieldName = string | string[];
@@ -18,10 +19,6 @@ export type Timestamp = number;
 
 export interface Dictionaries {
   [catalog: string]: any[];
-}
-
-interface EventForModelType extends Event {
-  modelType: string;
 }
 
 export class OutboundEvents {
@@ -108,7 +105,7 @@ export class Context<T extends EmptyModel> {
     return this._model.conditions;
   }
 
-  get outboundEvents(): Event[] {
+  get outboundEvents(): EventForModelType[] {
     return this._outboundEvents.valueOf();
   }
 
