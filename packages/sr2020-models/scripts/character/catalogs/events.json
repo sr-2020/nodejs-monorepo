@@ -3,6 +3,10 @@
         {
             "eventType": "dummy-spell",
             "effects": ["dummySpell"]
+        },
+        {
+            "eventType": "density-drain-spell",
+            "effects": ["densityDrainSpell"]
         }
     ]
 }
