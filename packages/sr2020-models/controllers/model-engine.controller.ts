@@ -8,6 +8,7 @@ import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
 import { LocationProcessRequest, Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 
 function spec(modelType: string, responseType: any): OperationObject {
   return {
@@ -33,7 +34,7 @@ function spec(modelType: string, responseType: any): OperationObject {
   };
 }
 
-export class ModelEngineController {
+export class ModelEngineController implements ModelEngineService {
   constructor(
     @inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
     @inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,

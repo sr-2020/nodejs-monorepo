@@ -1,10 +1,11 @@
 import { post, requestBody, HttpErrors } from '@loopback/rest';
 import { DeusExModel, DeusExProcessModelRequest, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
+import { DeusModelEngineService } from '@sr2020/interface/services/deus-model-engine.service';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects } from '@sr2020/interface/models/alice-model-engine';
 
-export class ModelEngineController {
+export class ModelEngineController implements DeusModelEngineService {
   constructor(@inject(Engine.bindingKey) private _engine: Engine<DeusExModel>) {}
 
   @post('/process', {

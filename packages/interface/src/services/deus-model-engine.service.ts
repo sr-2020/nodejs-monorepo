@@ -4,7 +4,7 @@ import { DeusExProcessModelRequest, DeusExProcessModelResponse } from '../models
 import { DeusModelEngineHttpApiDataSource } from '../datasources/deus-model-engine-http-api.datasource';
 
 export interface DeusModelEngineService {
-  process(req: DeusExProcessModelRequest): DeusExProcessModelResponse;
+  process(req: DeusExProcessModelRequest): Promise<DeusExProcessModelResponse>;
 }
 
 export class DeusModelEngineServiceProvider implements Provider<DeusModelEngineService> {

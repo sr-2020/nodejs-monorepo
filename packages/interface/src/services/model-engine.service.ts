@@ -5,8 +5,8 @@ import { LocationProcessRequest, LocationProcessResponse } from '../models/locat
 import { ModelEngineHttpApiDataSource } from '../datasources/model-engine-http-api.datasource';
 
 export interface ModelEngineService {
-  processCharacter(req: Sr2020CharacterProcessRequest): Sr2020CharacterProcessResponse;
-  processLocation(req: LocationProcessRequest): LocationProcessResponse;
+  processCharacter(req: Sr2020CharacterProcessRequest): Promise<Sr2020CharacterProcessResponse>;
+  processLocation(req: LocationProcessRequest): Promise<LocationProcessResponse>;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {
