@@ -4,11 +4,13 @@ import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
-import { CharacterDbEntity, fromModel } from 'models-manager/models/character-db-entity';
+import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
+import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
 import { TimeService } from '../services/time.service';
+import { LocationProcessResponse } from '@sr2020/interface/models/location.model';
 
 export class CharacterController {
   constructor(
@@ -26,7 +28,7 @@ export class CharacterController {
     },
   })
   async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
-    await getRepository(CharacterDbEntity).save([fromModel(model)]);
+    await getRepository(CharacterDbEntity).save([fromCharacterModel(model)]);
     return new Empty();
   }
 
@@ -47,7 +49,7 @@ export class CharacterController {
       events: [],
       timestamp,
     });
-    await manager.getRepository(CharacterDbEntity).save(fromModel(result.baseModel));
+    await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
     return result;
   }
 
@@ -84,14 +86,50 @@ export class CharacterController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
+    const result = await this.dispatchCharacterEvent(manager, id, event);
+    let events = result.outboundEvents;
+    result.outboundEvents = [];
+    while (events.length) {
+      const promises = events.map((outboundEvent) => {
+        if (outboundEvent.modelType == 'Sr2020Character') {
+          return this.dispatchCharacterEvent(manager, Number(outboundEvent.modelId), outboundEvent);
+        }
+        if (outboundEvent.modelType == 'Location') {
+          return this.dispatchLocationEvent(manager, Number(outboundEvent.modelId), outboundEvent);
+        }
+
+        throw new Error('Unexpected modelType');
+      });
+      const outboundEventResults = await Promise.all<Sr2020CharacterProcessResponse | LocationProcessResponse>(promises);
+      events = [];
+      for (const r of outboundEventResults) {
+        events.unshift(...r.outboundEvents);
+      }
+    }
+    return result;
+  }
+
+  private async dispatchCharacterEvent(manager: EntityManager, modelId: number, event: EventRequest) {
+    const baseModel = await getAndLockModel(CharacterDbEntity, manager, modelId);
     const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
-      events: [{ ...event, modelId: id.toString(), timestamp }],
+      events: [{ ...event, modelId: modelId.toString(), timestamp }],
       timestamp,
     });
-    await manager.getRepository(CharacterDbEntity).save(fromModel(result.baseModel));
+    await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
+    return result;
+  }
+
+  private async dispatchLocationEvent(manager: EntityManager, modelId: number, event: EventRequest) {
+    const baseModel = await getAndLockModel(LocationDbEntity, manager, modelId);
+    const timestamp = this.timeService.timestamp();
+    const result = await this.modelEngineService.processLocation({
+      baseModel: baseModel!!.getModel(),
+      events: [{ ...event, modelId: modelId.toString(), timestamp }],
+      timestamp,
+    });
+    await manager.getRepository(LocationDbEntity).save(fromLocationModel(result.baseModel));
     return result;
   }
 }

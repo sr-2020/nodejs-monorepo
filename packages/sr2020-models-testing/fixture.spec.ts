@@ -42,8 +42,7 @@ describe('Fixture', function() {
     await fixture.saveLocation({ manaDensity: 10 });
     await fixture.sendCharacterEvent({ eventType: 'density-drain-spell', data: { locationId: '0', amount: 3 } });
     expect(await fixture.getCharacter()).containDeep({ spellsCasted: 6 });
-    // TODO(aeremin) Implement outbound events propagation and uncomment
-    // expect(await fixture.getLocation()).containDeep({ manaDensity: 7 });
+    expect(await fixture.getLocation()).containDeep({ manaDensity: 7 });
   });
 
   // TODO(aeremin): add more tests demonstrating fixture interaction
