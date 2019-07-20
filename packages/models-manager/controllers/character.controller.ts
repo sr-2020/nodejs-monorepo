@@ -1,16 +1,17 @@
-import { param, put, requestBody, get, post, HttpErrors } from '@loopback/rest';
-import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
+import { get, HttpErrors, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
-import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
-import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
-import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
-import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-import { getAndLockModel } from '../utils/db-utils';
-import { TimeService } from '../services/time.service';
+import { Empty } from '@sr2020/interface/models/empty.model';
 import { LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
+import { ModelEngineService } from '@sr2020/interface/services';
+import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
+import { EntityManager, getRepository, Transaction, TransactionManager } from 'typeorm';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+
+import { EventDispatcherService } from '../services/event-dispatcher.service';
+import { TimeService } from '../services/time.service';
+import { getAndLockModel } from '../utils/db-utils';
 
 export class CharacterController {
   constructor(
@@ -18,6 +19,8 @@ export class CharacterController {
     protected modelEngineService: ModelEngineService,
     @inject('services.TimeService')
     protected timeService: TimeService,
+    @inject('services.EventDispatcherService')
+    protected eventDispatcherService: EventDispatcherService,
   ) {}
 
   @put('/character/model', {
@@ -86,50 +89,19 @@ export class CharacterController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    const result = await this.dispatchCharacterEvent(manager, id, event);
+    const result = await this.eventDispatcherService.dispatchCharacterEvent(manager, id, event);
     let events = result.outboundEvents;
     result.outboundEvents = [];
     while (events.length) {
-      const promises = events.map((outboundEvent) => {
-        if (outboundEvent.modelType == 'Sr2020Character') {
-          return this.dispatchCharacterEvent(manager, Number(outboundEvent.modelId), outboundEvent);
-        }
-        if (outboundEvent.modelType == 'Location') {
-          return this.dispatchLocationEvent(manager, Number(outboundEvent.modelId), outboundEvent);
-        }
-
-        throw new Error('Unexpected modelType');
-      });
+      const promises = events.map((outboundEvent) =>
+        this.eventDispatcherService.dispatchEvent(manager, Number(outboundEvent.modelId), outboundEvent.modelType, outboundEvent),
+      );
       const outboundEventResults = await Promise.all<Sr2020CharacterProcessResponse | LocationProcessResponse>(promises);
       events = [];
       for (const r of outboundEventResults) {
         events.unshift(...r.outboundEvents);
       }
     }
-    return result;
-  }
-
-  private async dispatchCharacterEvent(manager: EntityManager, modelId: number, event: EventRequest) {
-    const baseModel = await getAndLockModel(CharacterDbEntity, manager, modelId);
-    const timestamp = this.timeService.timestamp();
-    const result = await this.modelEngineService.processCharacter({
-      baseModel: baseModel!!.getModel(),
-      events: [{ ...event, modelId: modelId.toString(), timestamp }],
-      timestamp,
-    });
-    await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
-    return result;
-  }
-
-  private async dispatchLocationEvent(manager: EntityManager, modelId: number, event: EventRequest) {
-    const baseModel = await getAndLockModel(LocationDbEntity, manager, modelId);
-    const timestamp = this.timeService.timestamp();
-    const result = await this.modelEngineService.processLocation({
-      baseModel: baseModel!!.getModel(),
-      events: [{ ...event, modelId: modelId.toString(), timestamp }],
-      timestamp,
-    });
-    await manager.getRepository(LocationDbEntity).save(fromLocationModel(result.baseModel));
     return result;
   }
 }
