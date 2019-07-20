@@ -2,7 +2,6 @@ import { inject } from '@loopback/core';
 import { get, HttpErrors, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/interface/services';
 import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
@@ -90,18 +89,8 @@ export class CharacterController {
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
     const result = await this.eventDispatcherService.dispatchCharacterEvent(manager, id, event);
-    let events = result.outboundEvents;
+    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents);
     result.outboundEvents = [];
-    while (events.length) {
-      const promises = events.map((outboundEvent) =>
-        this.eventDispatcherService.dispatchEvent(manager, Number(outboundEvent.modelId), outboundEvent.modelType, outboundEvent),
-      );
-      const outboundEventResults = await Promise.all<Sr2020CharacterProcessResponse | LocationProcessResponse>(promises);
-      events = [];
-      for (const r of outboundEventResults) {
-        events.unshift(...r.outboundEvents);
-      }
-    }
     return result;
   }
 }

@@ -9,6 +9,7 @@ import { getRepository, TransactionManager, EntityManager, Transaction } from 't
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
 import { TimeService } from '../services/time.service';
+import { EventDispatcherService } from '../services/event-dispatcher.service';
 
 export class LocationController {
   constructor(
@@ -16,6 +17,8 @@ export class LocationController {
     protected modelEngineService: ModelEngineService,
     @inject('services.TimeService')
     protected timeService: TimeService,
+    @inject('services.EventDispatcherService')
+    protected eventDispatcherService: EventDispatcherService,
   ) {}
 
   @put('/location/model', {
@@ -84,14 +87,9 @@ export class LocationController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
-    const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
-    const timestamp = this.timeService.timestamp();
-    const result = await this.modelEngineService.processLocation({
-      baseModel: baseModel!!.getModel(),
-      events: [{ ...event, modelId: id.toString(), timestamp }],
-      timestamp,
-    });
-    await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
+    const result = await this.eventDispatcherService.dispatchLocationEvent(manager, id, event);
+    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents);
+    result.outboundEvents = [];
     return result;
   }
 }

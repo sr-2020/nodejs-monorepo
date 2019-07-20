@@ -1,5 +1,5 @@
 import { inject, Provider } from '@loopback/core';
-import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+import { EventForModelType, EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/interface/services';
@@ -11,6 +11,8 @@ import { getAndLockModel } from '../utils/db-utils';
 import { TimeService } from './time.service';
 
 export interface EventDispatcherService {
+  dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[]): Promise<void>;
+
   dispatchEvent(
     manager: EntityManager,
     modelId: number,
@@ -24,6 +26,19 @@ export interface EventDispatcherService {
 
 export class EventDispatcherServiceImpl implements EventDispatcherService {
   constructor(private _timeService: TimeService, private _modelEngineService: ModelEngineService) {}
+
+  async dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[]): Promise<void> {
+    while (events.length) {
+      const promises = events.map((outboundEvent) =>
+        this.dispatchEvent(manager, Number(outboundEvent.modelId), outboundEvent.modelType, outboundEvent),
+      );
+      const outboundEventResults = await Promise.all<Sr2020CharacterProcessResponse | LocationProcessResponse>(promises);
+      events = [];
+      for (const r of outboundEventResults) {
+        events.unshift(...r.outboundEvents);
+      }
+    }
+  }
 
   dispatchEvent(manager: EntityManager, modelId: number, modelType: string, event: EventRequest) {
     if (modelType == 'Sr2020Character') {
