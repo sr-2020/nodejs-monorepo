@@ -3,6 +3,10 @@
         {
             "eventType": "reduce-mana-density",
             "effects": ["reduceManaDensity"]
+        },
+        {
+            "eventType": "schedule-event",
+            "effects": ["scheduleEvent"]
         }
     ]
 }

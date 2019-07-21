@@ -11,6 +11,7 @@ import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
 import { Config } from '@sr2020/alice-model-engine/config';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+import { TimeService } from '@sr2020/models-manager/services/time.service';
 
 (Winston as any).level = 'error';
 
@@ -24,8 +25,25 @@ const locationEngine = new Engine<Location>(
   Config.parse(requireDir('../sr2020-models/scripts/location/catalogs')),
 );
 
+class MockTimeService implements TimeService {
+  private _timestamp = 0;
+
+  timestamp(): number {
+    return this._timestamp;
+  }
+
+  advanceTime(seconds: number) {
+    this._timestamp += 1000 * seconds;
+  }
+}
+
 export class TestFixture {
-  constructor(public client: Client, private _connection: Connection, private _app: ModelsManagerApplication) {}
+  constructor(
+    public client: Client,
+    private _connection: Connection,
+    private _app: ModelsManagerApplication,
+    private _timeService: MockTimeService,
+  ) {}
 
   static async create(): Promise<TestFixture> {
     const restConfig = givenHttpServerConfig({});
@@ -38,6 +56,9 @@ export class TestFixture {
 
     app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine));
 
+    const timeService = new MockTimeService();
+    app.bind('services.TimeService').to(timeService);
+
     const connection = await createConnection({
       type: 'sqljs',
       synchronize: true,
@@ -47,15 +68,19 @@ export class TestFixture {
 
     const client = createRestAppClient(app);
 
-    return new TestFixture(client, connection, app);
+    return new TestFixture(client, connection, app, timeService);
   }
 
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
-    await this._connection.getRepository(CharacterDbEntity).save(fromCharacterModel({ ...getDefaultCharacter(), ...model }));
+    await this._connection
+      .getRepository(CharacterDbEntity)
+      .save(fromCharacterModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
   }
 
   async saveLocation(model: Partial<Location> = {}) {
-    await this._connection.getRepository(LocationDbEntity).save(fromLocationModel({ ...getDefaultLocation(), ...model }));
+    await this._connection
+      .getRepository(LocationDbEntity)
+      .save(fromLocationModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
   }
 
   async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
@@ -75,11 +100,23 @@ export class TestFixture {
       .expect(200);
   }
 
+  async refreshCharacter(id: number | string = 0) {
+    await this.client.get(`/character/model/${id}`).expect(200);
+  }
+
   async sendLocationEvent(event: EventRequest, id: number | string = 0) {
     await this.client
       .post(`/location/model/${id}`)
       .send(event)
       .expect(200);
+  }
+
+  async refreshLocation(id: number | string = 0) {
+    await this.client.get(`/location/model/${id}`).expect(200);
+  }
+
+  async advanceTime(seconds: number) {
+    await this._timeService.advanceTime(seconds);
   }
 
   async destroy() {
@@ -88,24 +125,24 @@ export class TestFixture {
   }
 }
 
-function getDefaultCharacter(): Sr2020Character {
+function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     spellsCasted: 0,
 
     modelId: '0',
-    timestamp: 0,
+    timestamp,
     conditions: [],
     modifiers: [],
     timers: {},
   };
 }
 
-function getDefaultLocation(): Location {
+function getDefaultLocation(timestamp: number): Location {
   return {
     manaDensity: 0,
 
     modelId: '0',
-    timestamp: 0,
+    timestamp,
     conditions: [],
     modifiers: [],
     timers: {},
