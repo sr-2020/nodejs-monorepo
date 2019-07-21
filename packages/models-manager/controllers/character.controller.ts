@@ -50,6 +50,7 @@ export class CharacterController {
       baseModel: baseModel!!.getModel(),
       events: [],
       timestamp,
+      aquiredObjects: {},
     });
     await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
     return result;
@@ -66,7 +67,12 @@ export class CharacterController {
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<Sr2020CharacterProcessResponse> {
     try {
       const baseModel = await getRepository(CharacterDbEntity).findOneOrFail(id);
-      const result = await this.modelEngineService.processCharacter({ baseModel: baseModel!!.getModel(), events: [], timestamp });
+      const result = await this.modelEngineService.processCharacter({
+        baseModel: baseModel!!.getModel(),
+        events: [],
+        timestamp,
+        aquiredObjects: {},
+      });
       return result;
     } catch (e) {
       if (e instanceof EntityNotFoundError) throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);

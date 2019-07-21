@@ -55,8 +55,9 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     const timestamp = this._timeService.timestamp();
     const result = await this._modelEngineService.processCharacter({
       baseModel: baseModel!!.getModel(),
-      events: [{ ...event, modelId: modelId.toString(), timestamp }],
+      events: [{ ...event, modelId: modelId.toString(), timestamp: timestamp }],
       timestamp,
+      aquiredObjects: {},
     });
     await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
     return result;
@@ -69,6 +70,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
       baseModel: baseModel!!.getModel(),
       events: [{ ...event, modelId: modelId.toString(), timestamp }],
       timestamp,
+      aquiredObjects: {},
     });
     await manager.getRepository(LocationDbEntity).save(fromLocationModel(result.baseModel));
     return result;

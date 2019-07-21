@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { Event, EventForModelType } from './alice-model-engine';
+import { Event, EventForModelType, AquiredObjects } from './alice-model-engine';
 
 @model()
 export class BaseModelProcessRequest {
@@ -8,6 +8,9 @@ export class BaseModelProcessRequest {
 
   @property({ required: true })
   timestamp: number;
+
+  @property()
+  aquiredObjects: AquiredObjects;
 }
 
 @model()

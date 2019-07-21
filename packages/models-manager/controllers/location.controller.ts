@@ -49,6 +49,7 @@ export class LocationController {
       baseModel: baseModel!!.getModel(),
       events: [],
       timestamp,
+      aquiredObjects: {},
     });
     await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
     return result;
@@ -65,7 +66,12 @@ export class LocationController {
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<LocationProcessResponse> {
     try {
       const baseModel = await getRepository(LocationDbEntity).findOneOrFail(id);
-      const result = await this.modelEngineService.processLocation({ baseModel: baseModel!!.getModel(), events: [], timestamp });
+      const result = await this.modelEngineService.processLocation({
+        baseModel: baseModel!!.getModel(),
+        events: [],
+        timestamp,
+        aquiredObjects: {},
+      });
       return result;
     } catch (e) {
       if (e instanceof EntityNotFoundError) throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);

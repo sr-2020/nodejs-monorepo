@@ -42,15 +42,15 @@ export class ModelEngineController implements ModelEngineService {
 
   @post('/character/process', spec('character', Sr2020CharacterProcessResponse))
   async processCharacter(@requestBody() req: Sr2020CharacterProcessRequest): Promise<Sr2020CharacterProcessResponse> {
-    return this.process(this._characterEngine, req.baseModel, req.events, req.timestamp);
+    return this.process(this._characterEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
   @post('/location/process', spec('location', LocationProcessResponse))
   async processLocation(@requestBody() req: LocationProcessRequest): Promise<LocationProcessResponse> {
-    return this.process(this._locationEngine, req.baseModel, req.events, req.timestamp);
+    return this.process(this._locationEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
-  async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number) {
+  async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {
     events.forEach((event) => {
       if (event.timestamp < baseModel.timestamp)
         throw new HttpErrors.UnprocessableEntity(
@@ -72,8 +72,6 @@ export class ModelEngineController implements ModelEngineService {
     }
 
     events.push({ eventType: '_', modelId: baseModel.modelId, timestamp: timestamp });
-    // TODO: Support preprocess
-    const aquired: AquiredObjects = {};
     const res = engine.process(baseModel, aquired, events);
 
     // TODO: Also return viewmodels
