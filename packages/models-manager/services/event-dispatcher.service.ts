@@ -1,8 +1,9 @@
 import { inject, Provider } from '@loopback/core';
-import { EventForModelType, Event } from '@sr2020/interface/models/alice-model-engine';
-import { LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
+import { Event, EventForModelType } from '@sr2020/interface/models/alice-model-engine';
+import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/interface/services';
+import _ = require('lodash');
 import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
 import { fromModel as fromLocationModel, LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { EntityManager } from 'typeorm';
@@ -48,9 +49,11 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   }
 
   async dispatchCharacterEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    const baseModel = await getAndLockModel(CharacterDbEntity, manager, Number(event.modelId));
+    const baseModel: Sr2020Character =
+      _.get(aquiredModels.baseModels, ['Character', event.modelId]) ||
+      (await getAndLockModel(CharacterDbEntity, manager, Number(event.modelId))).getModel();
     const result = await this._modelEngineService.processCharacter({
-      baseModel: baseModel!!.getModel(),
+      baseModel,
       events: [event],
       timestamp: event.timestamp,
       aquiredObjects: aquiredModels.workModels,
@@ -60,9 +63,11 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   }
 
   async dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    const baseModel = await getAndLockModel(LocationDbEntity, manager, Number(event.modelId));
+    const baseModel: Location =
+      _.get(aquiredModels.baseModels, ['Location', event.modelId]) ||
+      (await getAndLockModel(LocationDbEntity, manager, Number(event.modelId))).getModel();
     const result = await this._modelEngineService.processLocation({
-      baseModel: baseModel!!.getModel(),
+      baseModel,
       events: [event],
       timestamp: event.timestamp,
       aquiredObjects: aquiredModels.workModels,
