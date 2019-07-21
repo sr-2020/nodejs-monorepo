@@ -10,6 +10,7 @@ import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
+import { ModelAquirerService } from '../services/model-aquirer.service';
 
 export class LocationController {
   constructor(
@@ -19,6 +20,8 @@ export class LocationController {
     protected timeService: TimeService,
     @inject('services.EventDispatcherService')
     protected eventDispatcherService: EventDispatcherService,
+    @inject('services.ModelAquirerService')
+    protected modelAquirerService: ModelAquirerService,
   ) {}
 
   @put('/location/model', {
@@ -94,8 +97,13 @@ export class LocationController {
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
     const timestamp = this.timeService.timestamp();
-    const result = await this.eventDispatcherService.dispatchLocationEvent(manager, { ...event, modelId: id.toString(), timestamp });
-    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents);
+    const aquired = await this.modelAquirerService.aquireModels(manager, event, timestamp);
+    const result = await this.eventDispatcherService.dispatchLocationEvent(
+      manager,
+      { ...event, modelId: id.toString(), timestamp },
+      aquired,
+    );
+    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
     result.outboundEvents = [];
     return result;
   }

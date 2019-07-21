@@ -11,6 +11,7 @@ import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { TimeService } from '../services/time.service';
 import { getAndLockModel } from '../utils/db-utils';
+import { ModelAquirerService } from '../services/model-aquirer.service';
 
 export class CharacterController {
   constructor(
@@ -20,6 +21,8 @@ export class CharacterController {
     protected timeService: TimeService,
     @inject('services.EventDispatcherService')
     protected eventDispatcherService: EventDispatcherService,
+    @inject('services.ModelAquirerService')
+    protected modelAquirerService: ModelAquirerService,
   ) {}
 
   @put('/character/model', {
@@ -95,8 +98,13 @@ export class CharacterController {
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
     const timestamp = this.timeService.timestamp();
-    const result = await this.eventDispatcherService.dispatchCharacterEvent(manager, { ...event, modelId: id.toString(), timestamp });
-    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents);
+    const aquired = await this.modelAquirerService.aquireModels(manager, event, timestamp);
+    const result = await this.eventDispatcherService.dispatchCharacterEvent(
+      manager,
+      { ...event, modelId: id.toString(), timestamp },
+      aquired,
+    );
+    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
     result.outboundEvents = [];
     return result;
   }

@@ -11,9 +11,16 @@ function densityDrainSpell(api: Sr2020CharacterApi, data: { locationId: string; 
   api.sendOutboundEvent(Location, data.locationId, 'reduce-mana-density', { amount: data.amount });
 }
 
+function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: string }, _: Event) {
+  api.model.spellsCasted++;
+  const location = api.aquired('Location', data.locationId) as Location;
+  api.sendOutboundEvent(Location, data.locationId, 'reduce-mana-density', { amount: location.manaDensity / 2 });
+}
+
 module.exports = () => {
   return {
     dummySpell,
     densityDrainSpell,
+    densityHalveSpell,
   };
 };

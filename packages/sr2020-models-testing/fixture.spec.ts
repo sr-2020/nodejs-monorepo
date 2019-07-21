@@ -45,5 +45,12 @@ describe('Fixture', function() {
     expect(await fixture.getLocation()).containDeep({ manaDensity: 7 });
   });
 
+  it('Send character event which aquires location', async () => {
+    await fixture.saveCharacter();
+    await fixture.saveLocation({ manaDensity: 100 });
+    await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { locationId: '0' } });
+    expect(await fixture.getLocation()).containDeep({ manaDensity: 50 });
+  });
+
   // TODO(aeremin): add more tests demonstrating fixture interaction
 });
