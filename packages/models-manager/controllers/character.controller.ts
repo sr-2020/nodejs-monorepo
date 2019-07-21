@@ -94,7 +94,8 @@ export class CharacterController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    const result = await this.eventDispatcherService.dispatchCharacterEvent(manager, id, event);
+    const timestamp = this.timeService.timestamp();
+    const result = await this.eventDispatcherService.dispatchCharacterEvent(manager, { ...event, modelId: id.toString(), timestamp });
     await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents);
     result.outboundEvents = [];
     return result;
