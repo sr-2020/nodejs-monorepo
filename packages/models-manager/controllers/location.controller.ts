@@ -96,11 +96,10 @@ export class LocationController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
-    const timestamp = this.timeService.timestamp();
-    const aquired = await this.modelAquirerService.aquireModels(manager, event, timestamp);
+    const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
     const result = await this.eventDispatcherService.dispatchLocationEvent(
       manager,
-      { ...event, modelId: id.toString(), timestamp },
+      { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
       aquired,
     );
     await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);

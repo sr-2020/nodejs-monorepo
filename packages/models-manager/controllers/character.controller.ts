@@ -97,11 +97,10 @@ export class CharacterController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    const timestamp = this.timeService.timestamp();
-    const aquired = await this.modelAquirerService.aquireModels(manager, event, timestamp);
+    const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
     const result = await this.eventDispatcherService.dispatchCharacterEvent(
       manager,
-      { ...event, modelId: id.toString(), timestamp },
+      { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
       aquired,
     );
     await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
