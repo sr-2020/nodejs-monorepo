@@ -50,11 +50,11 @@ export class TestFixture {
     return new TestFixture(client, connection, app);
   }
 
-  async saveCharacter(model: Partial<Sr2020Character>) {
+  async saveCharacter(model: Partial<Sr2020Character> = {}) {
     await this._connection.getRepository(CharacterDbEntity).save(fromCharacterModel({ ...getDefaultCharacter(), ...model }));
   }
 
-  async saveLocation(model: Partial<Location>) {
+  async saveLocation(model: Partial<Location> = {}) {
     await this._connection.getRepository(LocationDbEntity).save(fromLocationModel({ ...getDefaultLocation(), ...model }));
   }
 
