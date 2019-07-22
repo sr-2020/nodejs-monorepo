@@ -18,12 +18,12 @@ export class LocationDbEntity {
   getModel(): Location {
     return JSON.parse(this.model);
   }
-}
 
-export function fromModel(m: Location) {
-  const result = new LocationDbEntity();
-  result.id = Number(m.modelId);
-  result.timestamp = m.timestamp;
-  result.model = JSON.stringify(m);
-  return result;
+  static fromModel(m: Location): LocationDbEntity {
+    const result = new LocationDbEntity();
+    result.id = Number(m.modelId);
+    result.timestamp = m.timestamp;
+    result.model = JSON.stringify(m);
+    return result;
+  }
 }

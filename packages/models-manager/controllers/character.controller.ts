@@ -4,7 +4,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/interface/services';
-import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
+import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
 import { EntityManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
@@ -33,7 +33,7 @@ export class CharacterController {
     },
   })
   async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
-    await getRepository(CharacterDbEntity).save([fromCharacterModel(model)]);
+    await getRepository(CharacterDbEntity).save([CharacterDbEntity.fromModel(model)]);
     return new Empty();
   }
 
@@ -55,7 +55,7 @@ export class CharacterController {
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
+    await manager.getRepository(CharacterDbEntity).save(CharacterDbEntity.fromModel(result.baseModel));
     return result;
   }
 

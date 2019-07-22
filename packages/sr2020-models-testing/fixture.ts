@@ -2,8 +2,8 @@ import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { createConnection, Connection } from 'typeorm';
 import * as Winston from 'winston';
-import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
-import { LocationDbEntity, fromModel as fromLocationModel } from 'models-manager/models/location-db-entity';
+import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
+import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Location } from '@sr2020/interface/models/location.model';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
@@ -74,13 +74,13 @@ export class TestFixture {
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
     await this._connection
       .getRepository(CharacterDbEntity)
-      .save(fromCharacterModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
+      .save(CharacterDbEntity.fromModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
   }
 
   async saveLocation(model: Partial<Location> = {}) {
     await this._connection
       .getRepository(LocationDbEntity)
-      .save(fromLocationModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
+      .save(LocationDbEntity.fromModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
   }
 
   async getCharacter(id: number | string = 0): Promise<Sr2020Character> {

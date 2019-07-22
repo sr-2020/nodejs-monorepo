@@ -4,7 +4,7 @@ import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { LocationDbEntity, fromModel } from 'models-manager/models/location-db-entity';
+import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
@@ -32,7 +32,7 @@ export class LocationController {
     },
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
-    await getRepository(LocationDbEntity).save([fromModel(model)]);
+    await getRepository(LocationDbEntity).save([LocationDbEntity.fromModel(model)]);
     return new Empty();
   }
 
@@ -54,7 +54,7 @@ export class LocationController {
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(LocationDbEntity).save(fromModel(result.baseModel));
+    await manager.getRepository(LocationDbEntity).save(LocationDbEntity.fromModel(result.baseModel));
     return result;
   }
 

@@ -18,12 +18,12 @@ export class CharacterDbEntity {
   getModel(): Sr2020Character {
     return JSON.parse(this.model);
   }
-}
 
-export function fromModel(m: Sr2020Character) {
-  const result = new CharacterDbEntity();
-  result.id = Number(m.modelId);
-  result.timestamp = m.timestamp;
-  result.model = JSON.stringify(m);
-  return result;
+  static fromModel(m: Sr2020Character): CharacterDbEntity {
+    const result = new CharacterDbEntity();
+    result.id = Number(m.modelId);
+    result.timestamp = m.timestamp;
+    result.model = JSON.stringify(m);
+    return result;
+  }
 }

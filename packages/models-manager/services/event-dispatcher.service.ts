@@ -4,8 +4,8 @@ import { Location, LocationProcessResponse } from '@sr2020/interface/models/loca
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/interface/services';
 import _ = require('lodash');
-import { CharacterDbEntity, fromModel as fromCharacterModel } from 'models-manager/models/character-db-entity';
-import { fromModel as fromLocationModel, LocationDbEntity } from 'models-manager/models/location-db-entity';
+import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
+import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { EntityManager } from 'typeorm';
 
 import { getAndLockModel } from '../utils/db-utils';
@@ -58,7 +58,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
       timestamp: event.timestamp,
       aquiredObjects: aquiredModels.workModels,
     });
-    await manager.getRepository(CharacterDbEntity).save(fromCharacterModel(result.baseModel));
+    await manager.getRepository(CharacterDbEntity).save(CharacterDbEntity.fromModel(result.baseModel));
     return result;
   }
 
@@ -72,7 +72,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
       timestamp: event.timestamp,
       aquiredObjects: aquiredModels.workModels,
     });
-    await manager.getRepository(LocationDbEntity).save(fromLocationModel(result.baseModel));
+    await manager.getRepository(LocationDbEntity).save(LocationDbEntity.fromModel(result.baseModel));
     return result;
   }
 }
