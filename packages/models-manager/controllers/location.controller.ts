@@ -32,7 +32,7 @@ export class LocationController {
     },
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
-    await getRepository(LocationDbEntity).save([LocationDbEntity.fromModel(model)]);
+    await getRepository(LocationDbEntity).save([new LocationDbEntity().fromModel(model)]);
     return new Empty();
   }
 
@@ -54,7 +54,7 @@ export class LocationController {
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(LocationDbEntity).save(LocationDbEntity.fromModel(result.baseModel));
+    await manager.getRepository(LocationDbEntity).save(new LocationDbEntity().fromModel(result.baseModel));
     return result;
   }
 

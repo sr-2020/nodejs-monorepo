@@ -1,9 +1,9 @@
 import { inject, Provider } from '@loopback/core';
-import { Event, EventForModelType } from '@sr2020/interface/models/alice-model-engine';
+import { Event, EventForModelType, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import _ = require('lodash');
 import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
 import { LocationDbEntity } from 'models-manager/models/location-db-entity';
@@ -15,7 +15,7 @@ import { AquiredModels } from './model-aquirer.service';
 export interface EventDispatcherService {
   dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[], aquiredModels: AquiredModels): Promise<void>;
 
-  dispatchEvent(
+  dispatchEventForModelType(
     manager: EntityManager,
     event: EventForModelType,
     aquiredModels: AquiredModels,
@@ -29,12 +29,17 @@ export interface EventDispatcherService {
   dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels): Promise<ModelProcessResponse<Location>>;
 }
 
+interface TEntityInterface {
+  getModel(): any;
+  fromModel(m: any): any;
+}
+
 export class EventDispatcherServiceImpl implements EventDispatcherService {
   constructor(private _modelEngineService: ModelEngineService) {}
 
   async dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[], aquiredModels: AquiredModels): Promise<void> {
     while (events.length) {
-      const promises = events.map((outboundEvent) => this.dispatchEvent(manager, outboundEvent, aquiredModels));
+      const promises = events.map((outboundEvent) => this.dispatchEventForModelType(manager, outboundEvent, aquiredModels));
       const outboundEventResults = await Promise.all<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>(promises);
       events = [];
       for (const r of outboundEventResults) {
@@ -43,7 +48,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     }
   }
 
-  dispatchEvent(manager: EntityManager, event: EventForModelType, aquiredModels: AquiredModels) {
+  dispatchEventForModelType(manager: EntityManager, event: EventForModelType, aquiredModels: AquiredModels) {
     if (event.modelType == 'Sr2020Character') {
       return this.dispatchCharacterEvent(manager, event, aquiredModels);
     }
@@ -54,30 +59,30 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   }
 
   async dispatchCharacterEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    const baseModel: Sr2020Character =
-      _.get(aquiredModels.baseModels, ['Character', event.modelId]) ||
-      (await getAndLockModel(CharacterDbEntity, manager, Number(event.modelId))).getModel();
-    const result = await this._modelEngineService.processCharacter({
-      baseModel,
-      events: [event],
-      timestamp: event.timestamp,
-      aquiredObjects: aquiredModels.workModels,
-    });
-    await manager.getRepository(CharacterDbEntity).save(CharacterDbEntity.fromModel(result.baseModel));
-    return result;
+    return this._dispatchEvent(Sr2020Character, CharacterDbEntity, manager, event, aquiredModels);
   }
 
   async dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    const baseModel: Location =
-      _.get(aquiredModels.baseModels, ['Location', event.modelId]) ||
-      (await getAndLockModel(LocationDbEntity, manager, Number(event.modelId))).getModel();
-    const result = await this._modelEngineService.processLocation({
+    return this._dispatchEvent(Location, LocationDbEntity, manager, event, aquiredModels);
+  }
+
+  async _dispatchEvent<TModel extends EmptyModel, TEntity extends TEntityInterface>(
+    tmodel: new () => TModel,
+    tentity: new () => TEntity,
+    manager: EntityManager,
+    event: Event,
+    aquiredModels: AquiredModels,
+  ) {
+    const baseModel: TModel =
+      _.get(aquiredModels.baseModels, [tmodel.name, event.modelId]) ||
+      (await getAndLockModel(tentity, manager, Number(event.modelId))).getModel();
+    const result = await processAny(tmodel, this._modelEngineService, {
       baseModel,
       events: [event],
       timestamp: event.timestamp,
       aquiredObjects: aquiredModels.workModels,
     });
-    await manager.getRepository(LocationDbEntity).save(LocationDbEntity.fromModel(result.baseModel));
+    await manager.getRepository(tentity).save(new tentity().fromModel(result.baseModel));
     return result;
   }
 }

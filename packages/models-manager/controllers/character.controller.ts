@@ -33,7 +33,7 @@ export class CharacterController {
     },
   })
   async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
-    await getRepository(CharacterDbEntity).save([CharacterDbEntity.fromModel(model)]);
+    await getRepository(CharacterDbEntity).save([new CharacterDbEntity().fromModel(model)]);
     return new Empty();
   }
 
@@ -55,7 +55,7 @@ export class CharacterController {
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(CharacterDbEntity).save(CharacterDbEntity.fromModel(result.baseModel));
+    await manager.getRepository(CharacterDbEntity).save(new CharacterDbEntity().fromModel(result.baseModel));
     return result;
   }
 

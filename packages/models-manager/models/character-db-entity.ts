@@ -19,11 +19,10 @@ export class CharacterDbEntity {
     return JSON.parse(this.model);
   }
 
-  static fromModel(m: Sr2020Character): CharacterDbEntity {
-    const result = new CharacterDbEntity();
-    result.id = Number(m.modelId);
-    result.timestamp = m.timestamp;
-    result.model = JSON.stringify(m);
-    return result;
+  fromModel(m: Sr2020Character): this {
+    this.id = Number(m.modelId);
+    this.timestamp = m.timestamp;
+    this.model = JSON.stringify(m);
+    return this;
   }
 }

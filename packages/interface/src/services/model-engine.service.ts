@@ -4,6 +4,7 @@ import { ModelEngineHttpApiDataSource } from '../datasources/model-engine-http-a
 import { ModelProcessRequest, ModelProcessResponse } from '../models/process-requests-respose';
 import { Sr2020Character } from '../models/sr2020-character.model';
 import { Location } from '../models/location.model';
+import { EmptyModel } from '../models/alice-model-engine';
 
 export interface ModelEngineService {
   processCharacter(req: ModelProcessRequest<Sr2020Character>): Promise<ModelProcessResponse<Sr2020Character>>;
@@ -19,4 +20,14 @@ export class ModelEngineServiceProvider implements Provider<ModelEngineService> 
   value(): Promise<ModelEngineService> {
     return getService(this.dataSource);
   }
+}
+
+export function processAny<TModel extends EmptyModel>(
+  tmodel: new () => TModel,
+  s: ModelEngineService,
+  req: ModelProcessRequest<TModel>,
+): Promise<ModelProcessResponse<TModel>> {
+  if (new tmodel() instanceof Location) return s.processLocation(req as any) as any;
+  if (new tmodel() instanceof Sr2020Character) return s.processCharacter(req as any) as any;
+  throw new Error(`Unknown model type: ${tmodel.name}`);
 }

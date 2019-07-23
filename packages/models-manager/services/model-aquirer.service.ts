@@ -1,9 +1,11 @@
 import { inject, Provider } from '@loopback/core';
 import { AquiredObjects, EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { EntityManager } from 'typeorm';
 import { LocationDbEntity } from '../models/location-db-entity';
 import { getAndLockModel } from '../utils/db-utils';
+import { Location } from '@sr2020/interface/models/location.model';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 
 export interface AquiredModels {
   baseModels: AquiredObjects;
@@ -45,11 +47,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         timestamp: aquiredModels.maximalTimestamp,
         aquiredObjects: {},
       };
-      let processingResult: any = null;
-      if (modelType == 'Location') processingResult = await this._modelEngineService.processLocation(req);
-      else if (modelType == 'Character') processingResult = await this._modelEngineService.processCharacter(req);
-      else throw new Error('Invalid modelType: ' + modelType);
-
+      let processingResult = await processAny({ Location: Location, Character: Sr2020Character }[modelType], this._modelEngineService, req);
       aquiredModels.baseModels[modelType][modelId] = processingResult.baseModel;
       aquiredModels.workModels[modelType][modelId] = processingResult.workModel;
     };

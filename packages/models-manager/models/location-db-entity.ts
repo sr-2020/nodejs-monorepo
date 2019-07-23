@@ -19,11 +19,10 @@ export class LocationDbEntity {
     return JSON.parse(this.model);
   }
 
-  static fromModel(m: Location): LocationDbEntity {
-    const result = new LocationDbEntity();
-    result.id = Number(m.modelId);
-    result.timestamp = m.timestamp;
-    result.model = JSON.stringify(m);
-    return result;
+  fromModel(m: Location): this {
+    this.id = Number(m.modelId);
+    this.timestamp = m.timestamp;
+    this.model = JSON.stringify(m);
+    return this;
   }
 }

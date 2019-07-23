@@ -74,13 +74,13 @@ export class TestFixture {
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
     await this._connection
       .getRepository(CharacterDbEntity)
-      .save(CharacterDbEntity.fromModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
+      .save(new CharacterDbEntity().fromModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
   }
 
   async saveLocation(model: Partial<Location> = {}) {
     await this._connection
       .getRepository(LocationDbEntity)
-      .save(LocationDbEntity.fromModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
+      .save(new LocationDbEntity().fromModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
   }
 
   async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
