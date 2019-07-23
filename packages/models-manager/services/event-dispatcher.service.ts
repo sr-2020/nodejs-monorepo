@@ -1,7 +1,8 @@
 import { inject, Provider } from '@loopback/core';
 import { Event, EventForModelType } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
+import { Location } from '@sr2020/interface/models/location.model';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { ModelEngineService } from '@sr2020/interface/services';
 import _ = require('lodash');
 import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
@@ -18,10 +19,14 @@ export interface EventDispatcherService {
     manager: EntityManager,
     event: EventForModelType,
     aquiredModels: AquiredModels,
-  ): Promise<Sr2020CharacterProcessResponse | LocationProcessResponse>;
+  ): Promise<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>;
 
-  dispatchCharacterEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels): Promise<Sr2020CharacterProcessResponse>;
-  dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels): Promise<LocationProcessResponse>;
+  dispatchCharacterEvent(
+    manager: EntityManager,
+    event: Event,
+    aquiredModels: AquiredModels,
+  ): Promise<ModelProcessResponse<Sr2020Character>>;
+  dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels): Promise<ModelProcessResponse<Location>>;
 }
 
 export class EventDispatcherServiceImpl implements EventDispatcherService {
@@ -30,7 +35,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   async dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[], aquiredModels: AquiredModels): Promise<void> {
     while (events.length) {
       const promises = events.map((outboundEvent) => this.dispatchEvent(manager, outboundEvent, aquiredModels));
-      const outboundEventResults = await Promise.all<Sr2020CharacterProcessResponse | LocationProcessResponse>(promises);
+      const outboundEventResults = await Promise.all<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>(promises);
       events = [];
       for (const r of outboundEventResults) {
         events.unshift(...r.outboundEvents);

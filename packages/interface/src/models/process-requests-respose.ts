@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { Event, EventForModelType, AquiredObjects } from './alice-model-engine';
+import { Event, EventForModelType, AquiredObjects, EmptyModel } from './alice-model-engine';
 
 @model()
 export class BaseModelProcessRequest {
@@ -17,4 +17,13 @@ export class BaseModelProcessRequest {
 export class BaseModelProcessResponse {
   @property.array(EventForModelType, { required: true })
   outboundEvents: EventForModelType[];
+}
+
+export class ModelProcessRequest<TModel extends EmptyModel> extends BaseModelProcessRequest {
+  baseModel: TModel;
+}
+
+export class ModelProcessResponse<TModel extends EmptyModel> extends BaseModelProcessResponse {
+  baseModel: TModel;
+  workModel: TModel;
 }
