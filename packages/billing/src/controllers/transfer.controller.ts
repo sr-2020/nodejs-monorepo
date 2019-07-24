@@ -1,7 +1,7 @@
 import { repository } from '@loopback/repository';
 import { TransactionRepository } from '../repositories';
 import { post, requestBody, HttpErrors } from '@loopback/rest';
-import { Transfer, Empty, PushNotification } from '@sr2020/interface/models';
+import { Transfer, Empty } from '@sr2020/interface/models';
 import { PushService } from '@sr2020/interface/services';
 import { balance } from '../lib/balance';
 import { inject } from '@loopback/core';
@@ -43,13 +43,10 @@ export class TransferController {
       created_at: new Date().toUTCString(),
     });
 
-    await this.pushService.send(
-      transferRequest.sin_to,
-      new PushNotification({
-        title: 'Получен перевод',
-        body: `Отправитель: ${transferRequest.sin_from}, сумма ${transferRequest.amount}, комментарий: ${transferRequest.comment}`,
-      }),
-    );
+    await this.pushService.send(transferRequest.sin_to, {
+      title: 'Получен перевод',
+      body: `Отправитель: ${transferRequest.sin_from}, сумма ${transferRequest.amount}, комментарий: ${transferRequest.comment}`,
+    });
 
     return new Empty();
   }

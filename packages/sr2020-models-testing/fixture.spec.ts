@@ -29,6 +29,7 @@ describe('Fixture', function() {
     await fixture.saveCharacter({ spellsCasted: 12 });
     await fixture.sendCharacterEvent({ eventType: 'dummy-spell', data: {} });
     expect(await fixture.getCharacter()).containDeep({ spellsCasted: 13 });
+    expect(fixture.getCharacterNotifications().length).to.equal(1);
   });
 
   it('Send location event', async () => {

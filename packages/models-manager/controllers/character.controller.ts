@@ -3,15 +3,14 @@ import { get, HttpErrors, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
 import { EntityManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-
 import { EventDispatcherService } from '../services/event-dispatcher.service';
+import { ModelAquirerService } from '../services/model-aquirer.service';
 import { TimeService } from '../services/time.service';
 import { getAndLockModel } from '../utils/db-utils';
-import { ModelAquirerService } from '../services/model-aquirer.service';
 
 export class CharacterController {
   constructor(
@@ -23,6 +22,8 @@ export class CharacterController {
     protected eventDispatcherService: EventDispatcherService,
     @inject('services.ModelAquirerService')
     protected modelAquirerService: ModelAquirerService,
+    @inject('services.PushService')
+    protected pushService: PushService,
   ) {}
 
   @put('/character/model', {
@@ -56,6 +57,8 @@ export class CharacterController {
       aquiredObjects: {},
     });
     await manager.getRepository(CharacterDbEntity).save(new CharacterDbEntity().fromModel(result.baseModel));
+    await this._sendNotifications(result);
+    result.notifications = [];
     return result;
   }
 
@@ -105,6 +108,12 @@ export class CharacterController {
     );
     await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
     result.outboundEvents = [];
+    await this._sendNotifications(result);
+    result.notifications = [];
     return result;
+  }
+
+  private async _sendNotifications(resp: Sr2020CharacterProcessResponse) {
+    await Promise.all(resp.notifications.map((notification) => this.pushService.send(Number(resp.baseModel.modelId), notification)));
   }
 }

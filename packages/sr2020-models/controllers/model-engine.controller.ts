@@ -76,7 +76,12 @@ export class ModelEngineController implements ModelEngineService {
 
     // TODO: Also return viewmodels
     if (res.status == 'ok') {
-      return { baseModel: res.baseModel, workModel: res.workingModel, outboundEvents: res.outboundEvents };
+      return {
+        baseModel: res.baseModel,
+        workModel: res.workingModel,
+        outboundEvents: res.outboundEvents,
+        notifications: res.notifications,
+      };
     } else {
       throw new HttpErrors.InternalServerError(`Error during model processing: ${res.error}`);
     }

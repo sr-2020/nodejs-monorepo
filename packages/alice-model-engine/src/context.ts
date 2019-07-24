@@ -12,6 +12,7 @@ import {
   Timers,
   EventForModelType,
 } from 'interface/src/models/alice-model-engine';
+import { PushNotification } from '@sr2020/interface/models';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
@@ -40,6 +41,7 @@ export class Context<T extends EmptyModel> {
   private _outboundEvents: OutboundEvents;
   private _pendingAquire: PendingAquire;
   private _aquired: AquiredObjects;
+  private _notifications: PushNotification[] = [];
 
   constructor(
     model: T,
@@ -109,6 +111,10 @@ export class Context<T extends EmptyModel> {
     return this._outboundEvents.valueOf();
   }
 
+  get notifications(): PushNotification[] {
+    return this._notifications;
+  }
+
   get aquired(): AquiredObjects {
     return this._aquired;
   }
@@ -160,6 +166,10 @@ export class Context<T extends EmptyModel> {
       timestamp: timestamp,
       data,
     });
+  }
+
+  public sendNotification(title: string, body: string) {
+    this._notifications.push({ title, body });
   }
 
   public nextTimer(): Timer | null {

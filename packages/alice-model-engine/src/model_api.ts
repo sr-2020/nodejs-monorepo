@@ -171,6 +171,11 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     this.contextGetter().sendOutboundEvent(type.name, modelId, event, timestamp, data);
     return this;
   }
+
+  public sendNotification(title: string, body: string): this {
+    this.contextGetter().sendNotification(title, body);
+    return this;
+  }
 }
 
 class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ViewModelApiInterface<T> {

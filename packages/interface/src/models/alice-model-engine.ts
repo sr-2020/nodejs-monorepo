@@ -1,6 +1,7 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
+import { PushNotification } from './push-notification.model';
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
@@ -143,6 +144,7 @@ export type EngineResultOk = {
   viewModels: { [base: string]: any };
   aquired: AquiredObjects;
   outboundEvents: EventForModelType[];
+  notifications: PushNotification[];
 };
 
 export type EngineResultError = {
@@ -250,6 +252,10 @@ export interface WriteModelApiInterface {
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
   sendOutboundEvent<TModel extends EmptyModel>(type: new () => TModel, modelId: string, event: string, data: any): this;
+
+  // Schedules sending of notification to the user "responsible" for model being processed.
+  // If model being processed is not a "user" one, notification won't be sent.
+  sendNotification(title: string, body: string): this;
 }
 
 export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {

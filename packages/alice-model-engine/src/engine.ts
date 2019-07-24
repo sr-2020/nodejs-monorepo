@@ -80,6 +80,7 @@ export class Engine<T extends EmptyModel> {
       viewModels,
       aquired: baseCtx.aquired,
       outboundEvents: baseCtx.outboundEvents,
+      notifications: baseCtx.notifications,
     };
   }
 

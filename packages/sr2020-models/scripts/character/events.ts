@@ -4,6 +4,7 @@ import { Location } from '@sr2020/interface/models/location.model';
 
 function dummySpell(api: Sr2020CharacterApi, _data: void, _event: Event) {
   api.model.spellsCasted++;
+  api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
 function densityDrainSpell(api: Sr2020CharacterApi, data: { locationId: string; amount: number }, _: Event) {

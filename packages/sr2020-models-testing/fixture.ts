@@ -12,6 +12,8 @@ import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
 import { Config } from '@sr2020/alice-model-engine/config';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { TimeService } from '@sr2020/models-manager/services/time.service';
+import { PushService } from '@sr2020/interface/services/push.service';
+import { PushNotification, PushResult } from '@sr2020/interface/models';
 
 (Winston as any).level = 'error';
 
@@ -37,12 +39,35 @@ class MockTimeService implements TimeService {
   }
 }
 
+class MockPushService implements PushService {
+  private notifications: { [characterId: number]: PushNotification[] };
+
+  send(recipient: number, notification: PushNotification): PushResult {
+    if (this.notifications[recipient] == undefined) {
+      this.notifications[recipient] = [];
+    }
+
+    this.notifications[recipient].push(notification);
+
+    return new PushResult();
+  }
+
+  get(characterId: number | string) {
+    return this.notifications[Number(characterId)];
+  }
+
+  reset() {
+    this.notifications = {};
+  }
+}
+
 export class TestFixture {
   constructor(
     public client: Client,
     private _connection: Connection,
     private _app: ModelsManagerApplication,
     private _timeService: MockTimeService,
+    private _pushService: MockPushService,
   ) {}
 
   static async create(): Promise<TestFixture> {
@@ -59,6 +84,9 @@ export class TestFixture {
     const timeService = new MockTimeService();
     app.bind('services.TimeService').to(timeService);
 
+    const pushService = new MockPushService();
+    app.bind('services.PushService').to(pushService);
+
     const connection = await createConnection({
       type: 'sqljs',
       synchronize: true,
@@ -68,7 +96,7 @@ export class TestFixture {
 
     const client = createRestAppClient(app);
 
-    return new TestFixture(client, connection, app, timeService);
+    return new TestFixture(client, connection, app, timeService, pushService);
   }
 
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
@@ -88,12 +116,17 @@ export class TestFixture {
     return entity.getModel();
   }
 
+  getCharacterNotifications(id: number | string = 0): PushNotification[] {
+    return this._pushService.get(id);
+  }
+
   async getLocation(id: number | string = 0): Promise<Location> {
     const entity = await this._connection.getRepository(LocationDbEntity).findOneOrFail(id);
     return entity.getModel();
   }
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0) {
+    this._pushService.reset();
     await this.client
       .post(`/character/model/${id}`)
       .send(event)
@@ -105,6 +138,7 @@ export class TestFixture {
   }
 
   async sendLocationEvent(event: EventRequest, id: number | string = 0) {
+    this._pushService.reset();
     await this.client
       .post(`/location/model/${id}`)
       .send(event)
