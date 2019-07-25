@@ -86,7 +86,7 @@ function dieHorribleDeath(api) {
   helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: 'Dementia' });
 }
 
-function applyNarcoEffect(api: DeusExModelApiInterface, data, event) {
+function takeNarcoEvent(api: DeusExModelApiInterface, data, event) {
   api.info(`Taking narco effect: ${event.data.id}`);
 
   let narco = event.data.narco || loadNarco(api, event.data.id);
@@ -132,7 +132,7 @@ function applyNarcoEffect(api: DeusExModelApiInterface, data, event) {
 /**
  * Remove narco modifier by id
  */
-function removeNarcoEffect(api: DeusExModelApiInterface, data, event) {
+function stopNarcoModifier(api: DeusExModelApiInterface, data, event) {
   api.info(`Removing narco effect ${data.mID}`);
   if (data.mID) {
     let modifier = api.getModifierById(data.mID);
@@ -144,7 +144,7 @@ function removeNarcoEffect(api: DeusExModelApiInterface, data, event) {
 
 module.exports = () => {
   return {
-    applyNarcoEffect,
-    removeNarcoEffect,
+    takeNarcoEvent,
+    stopNarcoModifier,
   };
 };

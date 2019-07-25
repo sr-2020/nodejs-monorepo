@@ -92,7 +92,7 @@ export class MedicController {
   }
 
   @Post('/medic/scan_qr/:id')
-  public async scanQr(
+  public async scanQR(
     @CurrentUser() user: AliceAccount,
     @Param('id') id: string,
     @Body() req: ScanQrRequest,
@@ -105,7 +105,7 @@ export class MedicController {
       let timestamp = currentTimestamp();
       const events: IdLessEvent[] = [
         {
-          eventType: 'scanQr',
+          eventType: 'scanQR',
           timestamp: timestamp++,
           data: req.data,
         },

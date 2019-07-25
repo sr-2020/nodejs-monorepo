@@ -13,7 +13,7 @@ describe('Recovery Implants: ', () => {
 
     expect(workingModel.hp).is.equal(3);
 
-    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], baseModel.timestamp + 100, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.hp).is.equal(1);
@@ -45,7 +45,7 @@ describe('Recovery Implants: ', () => {
 
     console.log('TEST:======================== character damage! ==============================================');
     //Нанесли повреждения
-    events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 4 } }], baseModel.timestamp + 100, true);
+    events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 4 } }], baseModel.timestamp + 100, true);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.hp).is.equal(0);

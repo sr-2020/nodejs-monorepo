@@ -131,9 +131,9 @@ function removeImplantEvent(api: DeusExModelApiInterface, data, event) {
 /**
  *  TODO для подключения
  *  1. Добавить импланты: s_immortal01
- *  2. Добавить события: serenity_immortality_ready, serenity_immortality_go
+ *  2. Добавить события: serenity-immortality-ready, serenity-immortality-go
  *  3. Доработать функцию instantInstallEffect для добавления вызова installSImmortalStage1 при установке
- *  4. Добавить состояние "serenity_immortality_ready" (готовность к модернизации)
+ *  4. Добавить состояние "serenity-immortality-ready" (готовность к модернизации)
  *  5. Добавить эффект serenityImmortalityS01Effect
  */
 
@@ -149,7 +149,7 @@ function installSImmortalStage1(api: DeusExModelApiInterface, implant) {
     api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
     if (!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)) {
-      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600 * 1000, 'serenity_immortality_ready', { mID: implant.mID });
+      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600 * 1000, 'serenity-immortality-ready', { mID: implant.mID });
     }
   }
 }

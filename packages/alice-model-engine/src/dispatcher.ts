@@ -8,47 +8,41 @@ import { Callback } from './callbacks';
 export type CallbacksList<T extends EmptyModel> = Callback<T> | null | Array<Callback<T> | null>;
 
 export interface DispatcherInterface<T extends EmptyModel> {
-  on(name: string, callbacks: CallbacksList<T>): void;
   dispatch(event: Event, context: Context<T>): Context<T>;
 }
 
 export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> {
-  private store: {
-    [key: string]: Callback<T>[];
-  };
-
-  constructor() {
-    this.store = {};
-  }
-
-  public on(name: string, callbacks: CallbacksList<T>) {
-    if (!this.store[name]) this.store[name] = [];
-
-    if (Array.isArray(callbacks)) {
-      callbacks.forEach((f) => {
-        if (f) this.store[name].push(f);
-      });
-    } else if (callbacks) {
-      this.store[name].push(callbacks);
-    }
-  }
+  constructor(private callbacks: { [key: string]: Callback<T> }) {}
 
   public dispatch(event: Event, context: Context<T>): Context<T> {
     if (event.eventType.startsWith('_')) return context;
 
-    if (!this.store[event.eventType]) {
+    const handler =
+      this.callbacks[event.eventType] ||
+      this.callbacks[this.kebabCaseToCamelCase(event.eventType)] ||
+      this.callbacks[this.kebabCaseToCamelCase(event.eventType) + 'Event'];
+
+    if (!handler) {
       Logger.error(
         'model',
-        `Unknown event type ${event.eventType}. ` + `Make sure there is corresponding eventType --> effects mapping in events DB/file`,
+        `Unknown event type ${event.eventType}. ` +
+          `Make sure there corresponding handler function is defined. ` +
+          `Handler should have one of the following names: ` +
+          `[${event.eventType}, ${this.kebabCaseToCamelCase(event.eventType)}, ${this.kebabCaseToCamelCase(event.eventType) + 'Event'}]`,
       );
       return context;
     }
 
     const api = ModelApiFactory(context, event);
-    const handlers = this.store[event.eventType];
-
-    handlers.forEach((f) => f(api, event.data, event));
+    handler(api, event.data, event);
 
     return context;
+  }
+
+  private kebabCaseToCamelCase(s: string): string {
+    return s
+      .split('-')
+      .map((word, i) => (i > 0 ? word[0].toUpperCase() + word.slice(1) : word))
+      .join('');
   }
 }

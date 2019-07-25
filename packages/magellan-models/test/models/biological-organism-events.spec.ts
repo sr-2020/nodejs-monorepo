@@ -129,7 +129,7 @@ describe('General Magellan events: ', () => {
       payload: '1,2,-2,-3,0,0,0',
     };
 
-    let events = getEvents(model.modelId, [{ eventType: 'scanQr', data }], 100);
+    let events = getEvents(model.modelId, [{ eventType: 'scanQR', data }], 100);
 
     model = (await process(model, events)).baseModel;
     expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
@@ -292,7 +292,7 @@ describe('General Magellan events: ', () => {
     let baseModel = getExampleBiologicalOrganismModel();
     let workingModel: any;
 
-    let events = getEvents(baseModel.modelId, [{ eventType: 'scanQr', data: { type: 5, kind: 0, validUntil: 0, payload: '17' } }]);
+    let events = getEvents(baseModel.modelId, [{ eventType: 'scanQR', data: { type: 5, kind: 0, validUntil: 0, payload: '17' } }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
@@ -300,7 +300,7 @@ describe('General Magellan events: ', () => {
     expect(cond.text).to.contain('17');
     expect(workingModel.location).to.equal('ship_17');
 
-    events = getEvents(baseModel.modelId, [{ eventType: 'scanQr', data: { type: 6, kind: 0, validUntil: 0, payload: '' } }]);
+    events = getEvents(baseModel.modelId, [{ eventType: 'scanQR', data: { type: 6, kind: 0, validUntil: 0, payload: '' } }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.conditions).to.be.empty;
@@ -315,7 +315,7 @@ describe('General Magellan events: ', () => {
 
       let events = getEvents(
         baseModel.modelId,
-        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-111,10' } }],
+        [{ eventType: 'scanQR', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-111,10' } }],
         100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
@@ -324,7 +324,7 @@ describe('General Magellan events: ', () => {
 
       events = getEvents(
         baseModel.modelId,
-        [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,100' } }],
+        [{ eventType: 'scanQR', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,100' } }],
         200,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
@@ -355,7 +355,7 @@ describe('General Magellan events: ', () => {
       // Add manual space suit take off action
       qrs.push({ type: 5, kind: 0, validUntil: 0, payload: '7' });
 
-      const events = getEvents(baseModel.modelId, qrs.map((data) => ({ eventType: 'scanQr', data })), 100);
+      const events = getEvents(baseModel.modelId, qrs.map((data) => ({ eventType: 'scanQR', data })), 100);
       ({ baseModel, workingModel } = await process(baseModel, events));
 
       expect(baseModel.spaceSuit.on).to.be.false;
@@ -377,7 +377,7 @@ describe('General Magellan events: ', () => {
 
       const events = getEvents(
         baseModel.modelId,
-        [{ eventType: 'scanQr', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,1' } }],
+        [{ eventType: 'scanQR', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,1' } }],
         200,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
@@ -391,7 +391,7 @@ describe('General Magellan events: ', () => {
 
       let events = getEvents(
         baseModel.modelId,
-        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
+        [{ eventType: 'scanQR', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
         100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
@@ -400,7 +400,7 @@ describe('General Magellan events: ', () => {
 
       events = getEvents(
         baseModel.modelId,
-        [{ eventType: 'scanQr', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
+        [{ eventType: 'scanQR', data: { type: 7, kind: 0, validUntil: 0, payload: 'ss-113,1' } }],
         60000 + 100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));

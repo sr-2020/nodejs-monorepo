@@ -5,7 +5,7 @@
 import helpers = require('../helpers/model-helper');
 import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 /**
- * Обработчик события "enterVr" (вход в VR)
+ * Обработчик события "enterVR" (вход в VR)
  *
  * Сохраняет информацию о времени входа в VR в модели
  * (время события - время входа)
@@ -22,7 +22,7 @@ function enterVREvent(api: DeusExModelApiInterface, data, event) {
 }
 
 /**
- * Обработчик события "exitVr" (выход из VR)
+ * Обработчик события "exitVR" (выход из VR)
  *
  * Сохраняет информацию о времени нахождения в VR в последний раз
  * И увеличивает счетчик суммарного нахождения в VR для персонажа

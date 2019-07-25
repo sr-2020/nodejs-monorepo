@@ -34,7 +34,7 @@ describe('Pills', () => {
   it('Cures HP with firstAid pill', async () => {
     let model = getExampleModel();
 
-    let events = getEvents(model.modelId, [{ eventType: 'subtractHp', data: { hpLost: 2 } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], Date.now(), true);
     let { baseModel, workingModel } = await process(model, events);
     expect(workingModel.hp).to.equals(2);
 
@@ -60,7 +60,7 @@ describe('Pills', () => {
   it('Should apply pills with qr-codes', async () => {
     let model = getExampleModel();
 
-    let events = getEvents(model.modelId, [{ eventType: 'scanQr', data: { type: 1, payload: '111-113' } }], Date.now(), true);
+    let events = getEvents(model.modelId, [{ eventType: 'scanQR', data: { type: 1, payload: '111-113' } }], Date.now(), true);
     let { baseModel } = await process(model, events);
 
     let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');

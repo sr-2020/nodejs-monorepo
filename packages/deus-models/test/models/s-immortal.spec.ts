@@ -9,7 +9,7 @@ describe('Serenity immortality: ', () => {
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_immortal01' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
-    let cond = workingModel.conditions.find((c: any) => c.id == 'serenity_immortality_ready');
+    let cond = workingModel.conditions.find((c: any) => c.id == 'serenity-immortality-ready');
 
     expect(baseModel.timers).to.has.property('_s_immortal01_timer');
     expect(cond).is.not.exist;
@@ -19,7 +19,7 @@ describe('Serenity immortality: ', () => {
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 700 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    cond = workingModel.conditions.find((c: any) => c.id == 'serenity_immortality_ready');
+    cond = workingModel.conditions.find((c: any) => c.id == 'serenity-immortality-ready');
     expect(cond).is.exist;
   });
 
@@ -41,7 +41,7 @@ describe('Serenity immortality: ', () => {
     //Поранить и заразить персонажа
     events = getEvents(
       model.modelId,
-      [{ eventType: 'start-illness', data: { id: 'arthritis' } }, { eventType: 'subtractHp', data: { hpLost: 1 } }],
+      [{ eventType: 'start-illness', data: { id: 'arthritis' } }, { eventType: 'get-damage', data: { hpLost: 1 } }],
       baseModel.timestamp + 100,
     );
     ({ baseModel, workingModel } = await process(baseModel, events));
@@ -54,7 +54,7 @@ describe('Serenity immortality: ', () => {
     console.log('============ Start modernization ===============');
 
     //Принять "таблетку" модернизации
-    events = getEvents(model.modelId, [{ eventType: 'serenity_immortality_go', data: {} }], baseModel.timestamp + 100);
+    events = getEvents(model.modelId, [{ eventType: 'serenity-immortality-go', data: {} }], baseModel.timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(baseModel.profileType).is.equal('ex-human-robot');

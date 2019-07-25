@@ -41,7 +41,7 @@ describe('Medic Magellan events: ', () => {
       payload: '111-111,12',
     };
 
-    const events = getEvents(model._id, [{ eventType: 'scanQr', data }], 100);
+    const events = getEvents(model._id, [{ eventType: 'scanQR', data }], 100);
 
     model.numTests = 10;
     model = (await process(model, events)).baseModel;
@@ -58,7 +58,7 @@ describe('Medic Magellan events: ', () => {
       payload: '111-112,12',
     };
 
-    let events = getEvents(model._id, [{ eventType: 'scanQr', data }], 100);
+    let events = getEvents(model._id, [{ eventType: 'scanQR', data }], 100);
 
     model.numTests = 10;
     model = (await process(model, events)).baseModel;
@@ -66,7 +66,7 @@ describe('Medic Magellan events: ', () => {
 
     expect(global.TEST_EXTERNAL_OBJECTS.counters['111-112']).to.has.property('usedBy', model._id);
 
-    events = getEvents(model._id, [{ eventType: 'scanQr', data }], 200);
+    events = getEvents(model._id, [{ eventType: 'scanQR', data }], 200);
     model = (await process(model, events)).baseModel;
     expect(model.numTests).to.equal(10 + 12);
   });

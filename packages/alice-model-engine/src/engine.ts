@@ -13,14 +13,11 @@ import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
 export class Engine<T extends EmptyModel> {
   public static readonly bindingKey = 'ModelEngine';
 
-  private dispatcher: dispatcher.DispatcherInterface<T> = new dispatcher.Dispatcher<T>();
+  private dispatcher: dispatcher.DispatcherInterface<T>;
 
-  constructor(private _modelCallbacks: ModelCallbacks<T>, private _config: config.ConfigInterface) {
+  constructor(private _modelCallbacks: ModelCallbacks<T>, private _config: config.ConfigInterface = { dictionaries: {} }) {
     Logger.debug('engine', 'Loaded config', { config: inspect(_config, false, null) });
-    _config.events.forEach((e) => {
-      const callbacks = e.effects.map((c) => this.resolveCallback(c));
-      this.dispatcher.on(e.eventType, callbacks);
-    });
+    this.dispatcher = new dispatcher.Dispatcher<T>(_modelCallbacks.callbacks);
   }
 
   public preProcess(model: T, events: Event[]): PendingAquire {

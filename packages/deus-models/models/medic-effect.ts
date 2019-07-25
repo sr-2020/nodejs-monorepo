@@ -47,7 +47,7 @@ import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model'
 */
 
 /**
- * Функция вызывается событием "subtractHp" когда игрок нажимает кнопку снятия хитов
+ * Функция вызывается событием "get-damage" когда игрок нажимает кнопку снятия хитов
  *  "data": { "hpLost": 1  }
  */
 function getDamageEvent(api: DeusExModelApiInterface, data, event: Event) {
@@ -57,7 +57,7 @@ function getDamageEvent(api: DeusExModelApiInterface, data, event: Event) {
 }
 
 /**
- * Функция вызывается тестоым событием "addHp"
+ * Функция вызывается тестоым событием "restore-damage"
  *  "data": { "hpAdd": 1  }
  */
 function restoreDamageEvent(api: DeusExModelApiInterface, data, event) {

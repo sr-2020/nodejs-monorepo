@@ -4,7 +4,7 @@ import medhelpers = require('../helpers/medic-helper');
 import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
 
 /**
- * Обработчик события "serenity_immortality_ready"
+ * Обработчик события "serenity-immortality-ready"
  *
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
@@ -28,12 +28,12 @@ function serenityImmortalityS01Effect(api: DeusExModelApiInterface, implant) {
   api.debug(`serenityImmortalityS01Effect: start stage 01 visibility effect`);
 
   if (implant && implant.id == consts.S_IMMORTAL_NAME_01 && implant.immortalityReady) {
-    helpers.addCharacterCondition(api, 'serenity_immortality_ready');
+    helpers.addCharacterCondition(api, 'serenity-immortality-ready');
   }
 }
 
 /**
- * Обработчик события "serenity_immortality_go"
+ * Обработчик события "serenity-immortality-go"
  *
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady

@@ -65,12 +65,12 @@ function scanQR(api: ModelApiInterface<OrganismModel>, data: ScanQRData) {
 function aquireDocuments(api: PreprocessApiInterface<OrganismModel>, events: Event[]) {
   events
     .filter(
-      (event) => event.eventType == 'scanQr' && (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill),
+      (event) => event.eventType == 'scanQR' && (event.data.type == QrType.LabTerminalRefill || event.data.type == QrType.SpaceSuitRefill),
     )
     .forEach((event) => api.aquire('counters', parseLabTerminalRefillData(event.data.payload).uniqueId));
 
   events
-    .filter((event) => event.eventType == 'scanQr' && event.data.type == QrType.EnterShip)
+    .filter((event) => event.eventType == 'scanQR' && event.data.type == QrType.EnterShip)
     .forEach((event) => api.aquire('counters', `ship_${Number(event.data.payload)}`));
 }
 

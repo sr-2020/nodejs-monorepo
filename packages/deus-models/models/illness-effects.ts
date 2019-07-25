@@ -173,7 +173,7 @@ const illneses = [
   'tuberculosis',
 ];
 
-function rollForInfection(api: DeusExModelApiInterface, data: any, event: Event) {
+function rollIllnessEvent(api: DeusExModelApiInterface, data: any, event: Event) {
   api.debug('Start rolling for infection');
   if (api.model.profileType == 'human') {
     let systemId = infection.whatSystemShouldBeInfected(api.model);
@@ -207,6 +207,6 @@ module.exports = () => {
     illnessEffect,
     illnessNextStageEvent,
     delayIllnessEvent,
-    rollForInfection,
+    rollIllnessEvent,
   };
 };
