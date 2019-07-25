@@ -1,5 +1,5 @@
 import { inject } from '@loopback/core';
-import { get, HttpErrors, param, post, put, requestBody } from '@loopback/rest';
+import { get, HttpErrors, param, post, put, requestBody, del } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
@@ -35,6 +35,20 @@ export class CharacterController {
   })
   async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
     await getRepository(CharacterDbEntity).save([new CharacterDbEntity().fromModel(model)]);
+    return new Empty();
+  }
+
+  @del('/character/model/{id}', {
+    responses: {
+      '200': {
+        description: 'Transaction DELETE success',
+        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
+      },
+    },
+  })
+  @Transaction()
+  async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
+    await manager.getRepository(CharacterDbEntity).delete(id);
     return new Empty();
   }
 

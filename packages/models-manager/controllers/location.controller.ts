@@ -1,4 +1,4 @@
-import { param, put, requestBody, get, post, HttpErrors } from '@loopback/rest';
+import { param, put, requestBody, get, post, HttpErrors, del } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
@@ -33,6 +33,20 @@ export class LocationController {
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
     await getRepository(LocationDbEntity).save([new LocationDbEntity().fromModel(model)]);
+    return new Empty();
+  }
+
+  @del('/location/model/{id}', {
+    responses: {
+      '200': {
+        description: 'Transaction DELETE success',
+        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
+      },
+    },
+  })
+  @Transaction()
+  async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
+    await manager.getRepository(LocationDbEntity).delete(id);
     return new Empty();
   }
 
