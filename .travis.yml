@@ -23,8 +23,19 @@ jobs:
       install:
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - lerna run docker:build --concurrency=1 --stream
-        - lerna run docker:push --concurrency=1 --stream
+        - lerna run docker:build --scope billing && lerna run docker:push --scope billing
+    - install:
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - lerna run docker:build --scope models-manager && lerna run docker:push --scope models-manager
+    - install:
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - lerna run docker:build --scope push && lerna run docker:push --scope push
+    - install:
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - lerna run docker:build --scope sr2020-models && lerna run docker:push --scope sr2020-models
 
     - stage: deploy production
       install:
