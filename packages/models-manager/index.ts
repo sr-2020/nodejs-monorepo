@@ -16,6 +16,7 @@ export async function main(options: ApplicationConfig = {}) {
     host: process.env.MYSQL_HOST!!,
     username: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD!!,
+    synchronize: true,
     entities: [CharacterDbEntity, LocationDbEntity],
   });
 
