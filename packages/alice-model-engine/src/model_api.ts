@@ -17,6 +17,7 @@ import { cloneDeep } from 'lodash';
 
 import { Context } from './context';
 import Logger from './logger';
+import { Callback } from '@sr2020/interface/callbacks';
 
 class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {
   constructor(protected contextGetter: () => Context<T>) {}
@@ -166,8 +167,16 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return this;
   }
 
-  public sendOutboundEvent<TModel>(type: new () => TModel, modelId: string, event: string, data: any) {
+  sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
+    type: new () => TModel,
+    modelId: string,
+    event: string | Callback<TModel, TEventData>,
+    data: TEventData,
+  ) {
     const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+    if (typeof event != 'string') {
+      event = event.name;
+    }
     this.contextGetter().sendOutboundEvent(type.name, modelId, event, timestamp, data);
     return this;
   }

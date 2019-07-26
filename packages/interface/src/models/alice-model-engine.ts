@@ -2,6 +2,7 @@ export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' |
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
 import { PushNotification } from './push-notification.model';
+import { Callback } from '@sr2020/interface/callbacks';
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
@@ -251,7 +252,14 @@ export interface WriteModelApiInterface {
 
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendOutboundEvent<TModel extends EmptyModel>(type: new () => TModel, modelId: string, event: string, data: any): this;
+  // 'event' parameter can be either event handler function (in that case 'data' will be type-checked),
+  // or the name of the event handler function (no type-checking then).
+  sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
+    type: new () => TModel,
+    modelId: string,
+    event: Callback<TModel, TEventData> | string,
+    data: TEventData,
+  ): this;
 
   // Schedules sending of notification to the user "responsible" for model being processed.
   // If model being processed is not a "user" one, notification won't be sent.

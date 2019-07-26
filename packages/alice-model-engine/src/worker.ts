@@ -7,7 +7,7 @@ import * as config from './config';
 import Logger from './logger';
 import { loadModels } from './utils';
 import { Engine } from './engine';
-import { ModelCallbacks } from './callbacks';
+import { ModelCallbacks } from '@sr2020/interface/callbacks';
 
 declare var TEST_EXTERNAL_OBJECTS: any;
 

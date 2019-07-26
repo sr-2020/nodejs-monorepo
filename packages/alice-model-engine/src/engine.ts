@@ -8,7 +8,7 @@ import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
 import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
-import { ModelCallbacks, Callback, ViewModelCallback } from './callbacks';
+import { ModelCallbacks, Callback, ViewModelCallback } from '@sr2020/interface/callbacks';
 
 export class Engine<T extends EmptyModel> {
   public static readonly bindingKey = 'ModelEngine';

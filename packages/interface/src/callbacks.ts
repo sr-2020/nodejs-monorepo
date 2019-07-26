@@ -6,7 +6,7 @@ import {
   ViewModelApiInterface,
 } from 'interface/src/models/alice-model-engine';
 
-export type Callback<T extends EmptyModel> = (api: ModelApiInterface<T>, data: any, event?: Event) => void;
+export type Callback<T extends EmptyModel, U = any> = (api: ModelApiInterface<T>, data: U, event: Event) => void;
 
 export type ViewModelCallback<T extends EmptyModel> = (api: ViewModelApiInterface<T>, model: any) => any;
 

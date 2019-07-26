@@ -3,7 +3,7 @@ import Logger from './logger';
 import { ModelApiFactory } from './model_api';
 
 import { EmptyModel, Event } from 'interface/src/models/alice-model-engine';
-import { Callback } from './callbacks';
+import { Callback } from '@sr2020/interface/callbacks';
 
 export type CallbacksList<T extends EmptyModel> = Callback<T> | null | Array<Callback<T> | null>;
 
