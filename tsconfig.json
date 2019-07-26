@@ -23,9 +23,6 @@
   },
   "references": [
     {
-      "path": "packages/alice-api-server/"
-    },
-    {
       "path": "packages/alice-integration-testing"
     },
     {
@@ -33,9 +30,6 @@
     },
     {
       "path": "packages/alice-qr-lib"
-    },
-    {
-      "path": "packages/alice-worker-manager"
     },
     {
       "path": "packages/billing"
