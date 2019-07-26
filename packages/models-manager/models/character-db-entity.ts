@@ -8,7 +8,7 @@ export class CharacterDbEntity {
   @PrimaryColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'bigint' })
   timestamp: number;
 
   // TODO: Figure out how to store objects
