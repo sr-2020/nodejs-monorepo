@@ -12,3 +12,7 @@ export function reduceManaDensity(api: LocationApi, data: { amount: number }, ev
 export function scheduleEvent(api: LocationApi, data: { event: Event; delayInSeconds: number }, _: Event) {
   api.setTimer(uuid.v4(), 1000 * data.delayInSeconds, data.event.eventType, data.event.data);
 }
+
+export function increaseManaDensityDelayed(api: LocationApi, data: { amount: number; delayInSeconds: number }, event: Event) {
+  api.setTimer(uuid.v4(), 1000 * data.delayInSeconds, reduceManaDensity, { amount: -data.amount });
+}

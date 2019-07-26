@@ -53,6 +53,21 @@ describe('Fixture', function() {
     expect(await fixture.getLocation()).containDeep({ manaDensity: 2 });
   });
 
+  it('Send increaseManaDensityDelayed event', async () => {
+    await fixture.saveLocation({ manaDensity: 5 });
+    await fixture.sendLocationEvent({
+      eventType: 'increase-mana-density-delayed',
+      data: { delayInSeconds: 10, amount: 10 },
+    });
+    expect(await fixture.getLocation()).containDeep({ manaDensity: 5 });
+    fixture.advanceTime(5);
+    await fixture.refreshLocation();
+    expect(await fixture.getLocation()).containDeep({ manaDensity: 5 });
+    fixture.advanceTime(5);
+    await fixture.refreshLocation();
+    expect(await fixture.getLocation()).containDeep({ manaDensity: 15 });
+  });
+
   it('Send character event with location event as side-effect', async () => {
     await fixture.saveCharacter({ spellsCasted: 5 });
     await fixture.saveLocation({ manaDensity: 10 });

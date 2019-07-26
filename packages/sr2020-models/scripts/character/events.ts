@@ -3,8 +3,12 @@ import { Sr2020CharacterApi } from '@sr2020/interface/models/sr2020-character.mo
 import { Location } from '@sr2020/interface/models/location.model';
 import { reduceManaDensity } from '../location/events';
 
-export function dummySpell(api: Sr2020CharacterApi, _data: void, _event: Event) {
+export function increaseSpellsCasted(api: Sr2020CharacterApi, _data: {}, _event: Event) {
   api.model.spellsCasted++;
+}
+
+export function dummySpell(api: Sr2020CharacterApi, _data: void, _event: Event) {
+  api.sendSelfEvent(increaseSpellsCasted, {});
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 

@@ -224,7 +224,7 @@ export interface LogApiInterface {
   error(msg: string, additionalData?: any): void;
 }
 
-export interface WriteModelApiInterface {
+export interface WriteModelApiInterface<TModel extends EmptyModel> {
   // If modifier.mID is not present, will generate new unique one.
   // Returns added modifier.
   addModifier(modifier: Modifier): Modifier;
@@ -241,23 +241,23 @@ export interface WriteModelApiInterface {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer(name: string, miliseconds: number, eventType: string, data: any): this;
+  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<TModel, TEventData> | string, data: TEventData): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;
 
   // Schedules and event for currently processed model. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendSelfEvent(event: string, data: any): this;
+  sendSelfEvent<TEventData = any>(event: Callback<TModel, TEventData> | string, data: TEventData): this;
 
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
   // 'event' parameter can be either event handler function (in that case 'data' will be type-checked),
   // or the name of the event handler function (no type-checking then).
-  sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
-    type: new () => TModel,
+  sendOutboundEvent<TOtherModel extends EmptyModel, TEventData = any>(
+    type: new () => TOtherModel,
     modelId: string,
-    event: Callback<TModel, TEventData> | string,
+    event: Callback<TOtherModel, TEventData> | string,
     data: TEventData,
   ): this;
 
@@ -274,6 +274,6 @@ export interface ViewModelApiInterface<T extends EmptyModel> extends ReadModelAp
   baseModel: T;
 }
 
-export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface, LogApiInterface {
+export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface<T>, LogApiInterface {
   aquired(db: string, id: string): any;
 }

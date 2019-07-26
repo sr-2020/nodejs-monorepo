@@ -151,7 +151,10 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return this;
   }
 
-  public setTimer(name: string, miliseconds: number, eventType: string, data: any) {
+  public setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<T, TEventData> | string, data: TEventData) {
+    if (typeof eventType != 'string') {
+      eventType = eventType.name;
+    }
     this.contextGetter().setTimer(name, miliseconds, eventType, data);
     return this;
   }
@@ -161,8 +164,11 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return this;
   }
 
-  public sendSelfEvent(event: string, data: any) {
+  public sendSelfEvent<TEventData = any>(event: Callback<T, TEventData> | string, data: TEventData) {
     const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+    if (typeof event != 'string') {
+      event = event.name;
+    }
     this.contextGetter().sendSelfEvent(event, timestamp, data);
     return this;
   }
