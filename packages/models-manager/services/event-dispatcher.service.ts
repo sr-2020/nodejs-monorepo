@@ -79,7 +79,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     const result = await processAny(tmodel, this._modelEngineService, {
       baseModel,
       events: [event],
-      timestamp: event.timestamp,
+      timestamp: Math.max(event.timestamp, baseModel.timestamp),
       aquiredObjects: aquiredModels.workModels,
     });
     await manager.getRepository(tentity).save(new tentity().fromModel(result.baseModel));
