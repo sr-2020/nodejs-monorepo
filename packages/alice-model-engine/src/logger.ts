@@ -1,5 +1,5 @@
 import * as Winston from 'winston';
-(Winston as any).level = 'debug';
+(Winston as any).level = 'warn';
 
 import { LogLevel, LogSource } from 'interface/src/models/alice-model-engine';
 
