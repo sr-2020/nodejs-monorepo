@@ -1,16 +1,7 @@
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import {
-  AquiredObjects,
-  EngineMessage,
-  EngineMessageConfigure,
-  EngineMessageEvents,
-  EngineResult,
-  Event,
-  EmptyModel,
-  PendingAquire,
-} from 'interface/src/models/alice-model-engine';
+import { AquiredObjects, EngineResult, Event, EmptyModel, PendingAquire } from 'interface/src/models/alice-model-engine';
 
 import * as config from './config';
 import Logger from './logger';
@@ -62,64 +53,11 @@ export class Worker {
     }
   }
 
-  public listen() {
-    if (process.send) {
-      process.on('disconnect', () => {
-        console.log('Disconnected');
-        process.exit();
-      });
-
-      process.on('message', (message: EngineMessage) => {
-        switch (message.type) {
-          case 'configure':
-            return this.onConfigure(message);
-
-          case 'events':
-            return this.onEvents(message);
-        }
-      });
-
-      process.send({ type: 'ready' });
-
-      Logger.info('engine', 'Worker started');
-    } else {
-      throw new Error('process.send is undefined');
-    }
-  }
-
-  private async onEvents(message: EngineMessageEvents) {
-    const { context, events } = message;
-
-    const result = await this.process(context, events);
-
-    if (process && process.send) {
-      process.send({ type: 'result', ...result });
-    }
-  }
-
-  private onConfigure(message: EngineMessageConfigure) {
-    const cfg = config.Config.parse(message.data);
-    this.configure(cfg);
-  }
-
   private async waitAquire(pendingAquire: PendingAquire): Promise<AquiredObjects> {
     Logger.debug('engine', 'Waitin to aquire', { pendingAquire });
 
     return new Promise((resolve, reject) => {
-      if (process && process.send) {
-        process.once('message', (msg: EngineMessage) => {
-          if (msg.type == 'aquired') {
-            resolve(msg.data);
-          } else {
-            reject();
-          }
-        });
-
-        process.send({
-          type: 'aquire',
-          keys: pendingAquire,
-        });
-      } else if (TEST_EXTERNAL_OBJECTS) {
+      if (TEST_EXTERNAL_OBJECTS) {
         const result = pendingAquire.reduce<any>((aquired, [db, id]) => {
           const obj = _.get(TEST_EXTERNAL_OBJECTS, [db, id]);
           if (obj) _.set(aquired, [db, id], obj);

@@ -7,17 +7,7 @@ function log(source: LogSource, level: LogLevel, msg: string, additionalData?: a
   additionalData = additionalData ? additionalData : {};
   additionalData.timestamp = Date.now();
   additionalData.pid = process.pid;
-  if (process && process.send) {
-    process.send({
-      type: 'log',
-      source,
-      level,
-      msg,
-      additionalData,
-    });
-  } else {
-    Winston.log(level, msg, additionalData);
-  }
+  Winston.log(level, msg, additionalData);
 }
 
 function logStep(source: LogSource, level: LogLevel, step: string, additionalData?: any) {
