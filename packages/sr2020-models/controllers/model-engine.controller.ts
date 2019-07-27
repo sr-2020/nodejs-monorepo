@@ -8,6 +8,7 @@ import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
 import { LocationProcessRequest, Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { QrCodeProcessRequest, QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 
 function spec(modelType: string, responseType: any): OperationObject {
@@ -38,6 +39,7 @@ export class ModelEngineController implements ModelEngineService {
   constructor(
     @inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
     @inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,
+    @inject(Engine.bindingKey + '.QrCode') private _qrCodeEngine: Engine<QrCode>,
   ) {}
 
   @post('/character/process', spec('character', Sr2020CharacterProcessResponse))
@@ -48,6 +50,11 @@ export class ModelEngineController implements ModelEngineService {
   @post('/location/process', spec('location', LocationProcessResponse))
   async processLocation(@requestBody() req: LocationProcessRequest): Promise<LocationProcessResponse> {
     return this.process(this._locationEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
+  }
+
+  @post('/qr/process', spec('qr', QrCodeProcessResponse))
+  async processQr(@requestBody() req: QrCodeProcessRequest): Promise<QrCodeProcessResponse> {
+    return this.process(this._qrCodeEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
   async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {

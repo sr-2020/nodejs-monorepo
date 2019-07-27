@@ -1,20 +1,20 @@
-import { ModelsManagerApplication } from '@sr2020/models-manager/application';
-import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
-import { createConnection, Connection } from 'typeorm';
-import * as Winston from 'winston';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { Location } from '@sr2020/interface/models/location.model';
-import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
+import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
+import { Config } from '@sr2020/alice-model-engine/config';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
-import { Config } from '@sr2020/alice-model-engine/config';
-import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { TimeService } from '@sr2020/models-manager/services/time.service';
-import { PushService } from '@sr2020/interface/services/push.service';
 import { PushNotification, PushResult } from '@sr2020/interface/models';
+import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+import { Location } from '@sr2020/interface/models/location.model';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { PushService } from '@sr2020/interface/services/push.service';
+import { ModelsManagerApplication } from '@sr2020/models-manager/application';
+import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
-
+import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
+import { Connection, createConnection } from 'typeorm';
+import * as Winston from 'winston';
 
 (Winston as any).level = 'error';
 
@@ -26,6 +26,10 @@ const characterEngine = new Engine<Sr2020Character>(
 const locationEngine = new Engine<Location>(
   loadModels('../sr2020-models/scripts/location'),
   Config.parse(requireDir('../sr2020-models/scripts/location/catalogs')),
+);
+const qrCodeEngine = new Engine<QrCode>(
+  loadModels('../sr2020-models/scripts/qr'),
+  Config.parse(requireDir('../sr2020-models/scripts/qr/catalogs')),
 );
 
 class MockTimeService implements TimeService {
@@ -80,7 +84,7 @@ export class TestFixture {
 
     await app.boot();
 
-    app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine));
+    app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine, qrCodeEngine));
 
     const timeService = new MockTimeService();
     app.bind('services.TimeService').to(timeService);
@@ -111,6 +115,10 @@ export class TestFixture {
     await this._connection.getRepository(Location).save({ ...getDefaultLocation(this._timeService.timestamp()), ...model });
   }
 
+  async saveQrCode(model: Partial<QrCode> = {}) {
+    await this._connection.getRepository(QrCode).save({ ...getDefaultQrCode(this._timeService.timestamp()), ...model });
+  }
+
   async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
     return await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
   }
@@ -121,6 +129,10 @@ export class TestFixture {
 
   async getLocation(id: number | string = 0): Promise<Location> {
     return this._connection.getRepository(Location).findOneOrFail(id);
+  }
+
+  async getQrCode(id: number | string = 0): Promise<QrCode> {
+    return this._connection.getRepository(QrCode).findOneOrFail(id);
   }
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0) {
@@ -139,6 +151,14 @@ export class TestFixture {
     this._pushService.reset();
     await this.client
       .post(`/location/model/${id}`)
+      .send(event)
+      .expect(200);
+  }
+
+  async sendQrCodeEvent(event: EventRequest, id: number | string = 0) {
+    this._pushService.reset();
+    await this.client
+      .post(`/qr/model/${id}`)
       .send(event)
       .expect(200);
   }
@@ -172,6 +192,22 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
 function getDefaultLocation(timestamp: number): Location {
   return {
     manaDensity: 0,
+
+    modelId: '0',
+    timestamp,
+    conditions: [],
+    modifiers: [],
+    timers: {},
+  };
+}
+
+function getDefaultQrCode(timestamp: number): QrCode {
+  return {
+    type: 'empty',
+    eventType: '_',
+    description: '',
+    usesLeft: 0,
+    data: {},
 
     modelId: '0',
     timestamp,

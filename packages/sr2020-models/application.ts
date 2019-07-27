@@ -23,6 +23,7 @@ export class SR2020ModelsApplication extends BootMixin(ServiceMixin(RepositoryMi
 
     this.bind(Engine.bindingKey + '.Sr2020Character').to(new Engine(loadModels('./scripts/character')));
     this.bind(Engine.bindingKey + '.Location').to(new Engine(loadModels('./scripts/location')));
+    this.bind(Engine.bindingKey + '.QrCode').to(new Engine(loadModels('./scripts/qr')));
 
     this.projectRoot = __dirname + '/../';
     const dirs = ['sr2020-models'];

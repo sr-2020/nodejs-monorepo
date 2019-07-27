@@ -95,5 +95,17 @@ describe('Fixture', function() {
     expect(await fixture.getLocation()).containDeep({ manaDensity: 40 });
   });
 
+  it('Consume some QR codes', async () => {
+    await fixture.saveCharacter();
+    await fixture.saveQrCode({ modelId: '0', usesLeft: 5, type: 'pill' });
+    await fixture.saveQrCode({ modelId: '1', usesLeft: 1, type: 'pill' });
+    await fixture.sendCharacterEvent({
+      eventType: 'consume-qrs',
+      data: { qrCodes: [0, 1] },
+    });
+    expect(await fixture.getQrCode(0)).containDeep({ usesLeft: 4, type: 'pill' });
+    expect(await fixture.getQrCode(1)).containDeep({ usesLeft: 0, type: 'empty' });
+  });
+
   // TODO(aeremin): add more tests demonstrating fixture interaction
 });

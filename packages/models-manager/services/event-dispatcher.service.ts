@@ -2,6 +2,7 @@ import { inject, Provider } from '@loopback/core';
 import { Event, EventForModelType, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import _ = require('lodash');
@@ -17,7 +18,7 @@ export interface EventDispatcherService {
     manager: EntityManager,
     event: EventForModelType,
     aquiredModels: AquiredModels,
-  ): Promise<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>;
+  ): Promise<ModelProcessResponse<EmptyModel>>;
 
   dispatchEvent<TModel extends EmptyModel>(
     tmodel: new () => TModel,
@@ -33,7 +34,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   async dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[], aquiredModels: AquiredModels): Promise<void> {
     while (events.length) {
       const promises = events.map((outboundEvent) => this.dispatchEventForModelType(manager, outboundEvent, aquiredModels));
-      const outboundEventResults = await Promise.all<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>(promises);
+      const outboundEventResults = await Promise.all<ModelProcessResponse<EmptyModel>>(promises);
       events = [];
       for (const r of outboundEventResults) {
         events.unshift(...r.outboundEvents);
@@ -75,6 +76,6 @@ export class EventDispatcherServiceProvider implements Provider<EventDispatcherS
   ) {}
 
   value(): EventDispatcherService {
-    return new EventDispatcherServiceImpl(this._modelEngineService, [Sr2020Character, Location]);
+    return new EventDispatcherServiceImpl(this._modelEngineService, [Sr2020Character, Location, QrCode]);
   }
 }

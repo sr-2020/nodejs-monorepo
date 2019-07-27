@@ -29,6 +29,16 @@
       "functions": {
         "processLocation": ["req"]
       }
+    },
+    {
+      "template": {
+        "method": "POST",
+        "url": "http://model-engine.evarun.ru/qr/process",
+        "body": "{req}"
+      },
+      "functions": {
+        "processQr": ["req"]
+      }
     }
   ]
 }

@@ -5,6 +5,7 @@ import { EntityManager } from 'typeorm';
 import { getAndLockModel } from '../utils/db-utils';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 
 export interface AquiredModels {
   baseModels: AquiredObjects;
@@ -21,8 +22,8 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModels> {
     const result: AquiredModels = {
-      baseModels: { Location: {}, Character: {} },
-      workModels: { Location: {}, Character: {} },
+      baseModels: { Location: {}, Character: {}, QrCode: {} },
+      workModels: { Location: {}, Character: {}, QrCode: {} },
       maximalTimestamp: now,
     };
     // Aquire location if event.data has locationId set.
@@ -31,6 +32,16 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       const baseModel = await getAndLockModel(Location, manager, locationId);
       result.baseModels['Location'][locationId] = baseModel;
       result.maximalTimestamp = Math.max(result.maximalTimestamp, baseModel.timestamp);
+    }
+
+    // Aquire QR codes if event.data has qrCodes set.
+    if (event.data && event.data.qrCodes) {
+      const codes: number[] = event.data.qrCodes;
+      for (const code of codes) {
+        const baseModel = await getAndLockModel(QrCode, manager, code);
+        result.baseModels['QrCode'][code] = baseModel;
+        result.maximalTimestamp = Math.max(result.maximalTimestamp, baseModel.timestamp);
+      }
     }
     // TODO(aeremin): Add support for other cases requiring acquiring.
 
@@ -46,7 +57,11 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         timestamp: aquiredModels.maximalTimestamp,
         aquiredObjects: {},
       };
-      let processingResult = await processAny({ Location: Location, Character: Sr2020Character }[modelType], this._modelEngineService, req);
+      let processingResult = await processAny(
+        { Location: Location, Character: Sr2020Character, QrCode: QrCode }[modelType],
+        this._modelEngineService,
+        req,
+      );
       aquiredModels.baseModels[modelType][modelId] = processingResult.baseModel;
       aquiredModels.workModels[modelType][modelId] = processingResult.workModel;
     };
