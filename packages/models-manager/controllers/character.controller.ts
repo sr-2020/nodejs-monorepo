@@ -114,7 +114,8 @@ export class CharacterController {
     @TransactionManager() manager: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
     const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
-    const result = await this.eventDispatcherService.dispatchCharacterEvent(
+    const result = await this.eventDispatcherService.dispatchEvent(
+      Sr2020Character,
       manager,
       { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
       aquired,

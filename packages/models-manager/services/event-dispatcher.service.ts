@@ -19,16 +19,16 @@ export interface EventDispatcherService {
     aquiredModels: AquiredModels,
   ): Promise<ModelProcessResponse<Sr2020Character> | ModelProcessResponse<Location>>;
 
-  dispatchCharacterEvent(
+  dispatchEvent<TModel extends EmptyModel>(
+    tmodel: new () => TModel,
     manager: EntityManager,
     event: Event,
     aquiredModels: AquiredModels,
-  ): Promise<ModelProcessResponse<Sr2020Character>>;
-  dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels): Promise<ModelProcessResponse<Location>>;
+  ): Promise<ModelProcessResponse<TModel>>;
 }
 
 export class EventDispatcherServiceImpl implements EventDispatcherService {
-  constructor(private _modelEngineService: ModelEngineService) {}
+  constructor(private _modelEngineService: ModelEngineService, private _knownModelTypes: (new () => any)[]) {}
 
   async dispatchEventsRecursively(manager: EntityManager, events: EventForModelType[], aquiredModels: AquiredModels): Promise<void> {
     while (events.length) {
@@ -42,24 +42,14 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   }
 
   dispatchEventForModelType(manager: EntityManager, event: EventForModelType, aquiredModels: AquiredModels) {
-    if (event.modelType == 'Sr2020Character') {
-      return this.dispatchCharacterEvent(manager, event, aquiredModels);
+    const modelType = this._knownModelTypes.find((t) => t.name == event.modelType);
+    if (!modelType) {
+      throw new Error('Unsupported modelType: ' + event.modelType);
     }
-    if (event.modelType == 'Location') {
-      return this.dispatchLocationEvent(manager, event, aquiredModels);
-    }
-    throw new Error('Unsupported modelType: ' + event.modelType);
+    return this.dispatchEvent(modelType, manager, event, aquiredModels);
   }
 
-  async dispatchCharacterEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    return this._dispatchEvent(Sr2020Character, manager, event, aquiredModels);
-  }
-
-  async dispatchLocationEvent(manager: EntityManager, event: Event, aquiredModels: AquiredModels) {
-    return this._dispatchEvent(Location, manager, event, aquiredModels);
-  }
-
-  async _dispatchEvent<TModel extends EmptyModel>(
+  async dispatchEvent<TModel extends EmptyModel>(
     tmodel: new () => TModel,
     manager: EntityManager,
     event: Event,
@@ -85,6 +75,6 @@ export class EventDispatcherServiceProvider implements Provider<EventDispatcherS
   ) {}
 
   value(): EventDispatcherService {
-    return new EventDispatcherServiceImpl(this._modelEngineService);
+    return new EventDispatcherServiceImpl(this._modelEngineService, [Sr2020Character, Location]);
   }
 }
