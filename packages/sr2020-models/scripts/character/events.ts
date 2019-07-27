@@ -30,3 +30,19 @@ export function consumeQrs(api: Sr2020CharacterApi, data: { qrCodes: number[] },
     api.sendOutboundEvent(QrCode, code.toString(), consume, {});
   }
 }
+
+export function scanQr(api: Sr2020CharacterApi, data: { qrCode: number }, _: Event) {
+  const qr: QrCode = api.aquired('QrCode', data.qrCode.toString());
+  if (qr.type == 'empty') {
+    api.sendNotification('Неожиданный QR', 'Этот QR-код - пустышка, его нельзя использовать');
+    return;
+  }
+
+  if (!qr.eventType) {
+    api.sendNotification('Неожиданный QR', 'Этот QR-код нельзя использовать напрямую');
+    return;
+  }
+
+  api.sendSelfEvent(qr.eventType, qr.data);
+  api.sendOutboundEvent(QrCode, data.qrCode.toString(), consume, {});
+}
