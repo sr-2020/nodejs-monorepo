@@ -107,5 +107,16 @@ describe('Fixture', function() {
     expect(await fixture.getQrCode(1)).containDeep({ usesLeft: 0, type: 'empty' });
   });
 
+  it('QR codes with events', async () => {
+    await fixture.saveCharacter({ spellsCasted: 10 });
+    await fixture.saveQrCode({ usesLeft: 5, type: 'event', eventType: 'dummy-spell', data: {} });
+    await fixture.sendCharacterEvent({
+      eventType: 'scan-qr',
+      data: { qrCode: 0 },
+    });
+    expect(await fixture.getQrCode()).containDeep({ usesLeft: 4, type: 'event' });
+    expect(await fixture.getCharacter()).containDeep({ spellsCasted: 11 });
+  });
+
   // TODO(aeremin): add more tests demonstrating fixture interaction
 });
