@@ -3,7 +3,11 @@ import { BillingApplication } from '../../application';
 import { setupApplication } from './test-helper';
 import { TransactionRepository } from '../../repositories';
 
-describe('AccountInfoController', () => {
+describe('AccountInfoController', async function() {
+  // For some reason this test is quite slow to start
+  // tslint:disable-next-line: no-invalid-this
+  this.timeout(15000);
+
   let app: BillingApplication;
   let client: Client;
   let repo: TransactionRepository;
