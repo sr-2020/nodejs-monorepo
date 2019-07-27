@@ -2,7 +2,6 @@ import { inject, Provider } from '@loopback/core';
 import { AquiredObjects, EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { EntityManager } from 'typeorm';
-import { LocationDbEntity } from '../models/location-db-entity';
 import { getAndLockModel } from '../utils/db-utils';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
@@ -29,7 +28,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
     // Aquire location if event.data has locationId set.
     if (event.data && event.data.locationId) {
       const locationId: number = event.data.locationId;
-      const baseModel = (await getAndLockModel(LocationDbEntity, manager, locationId)).getModel();
+      const baseModel = await getAndLockModel(Location, manager, locationId);
       result.baseModels['Location'][locationId] = baseModel;
       result.maximalTimestamp = Math.max(result.maximalTimestamp, baseModel.timestamp);
     }

@@ -1,10 +1,15 @@
 import { model, property } from '@loopback/repository';
 import { EmptyModel, ModelApiInterface } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
+import { Entity, Column } from 'typeorm';
 
 @model()
+@Entity({
+  name: 'sr2020-character',
+})
 export class Sr2020Character extends EmptyModel {
   @property({ required: true })
+  @Column()
   spellsCasted: number;
 }
 

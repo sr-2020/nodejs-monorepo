@@ -2,8 +2,6 @@ import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
 import { createConnection, Connection } from 'typeorm';
 import * as Winston from 'winston';
-import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
-import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Location } from '@sr2020/interface/models/location.model';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
@@ -106,20 +104,15 @@ export class TestFixture {
   }
 
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
-    await this._connection
-      .getRepository(CharacterDbEntity)
-      .save(new CharacterDbEntity().fromModel({ ...getDefaultCharacter(this._timeService.timestamp()), ...model }));
+    await this._connection.getRepository(Sr2020Character).save({ ...getDefaultCharacter(this._timeService.timestamp()), ...model });
   }
 
   async saveLocation(model: Partial<Location> = {}) {
-    await this._connection
-      .getRepository(LocationDbEntity)
-      .save(new LocationDbEntity().fromModel({ ...getDefaultLocation(this._timeService.timestamp()), ...model }));
+    await this._connection.getRepository(Location).save({ ...getDefaultLocation(this._timeService.timestamp()), ...model });
   }
 
   async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
-    const entity = await this._connection.getRepository(CharacterDbEntity).findOneOrFail(id);
-    return entity.getModel();
+    return await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
   }
 
   getCharacterNotifications(id: number | string = 0): PushNotification[] {
@@ -127,8 +120,7 @@ export class TestFixture {
   }
 
   async getLocation(id: number | string = 0): Promise<Location> {
-    const entity = await this._connection.getRepository(LocationDbEntity).findOneOrFail(id);
-    return entity.getModel();
+    return this._connection.getRepository(Location).findOneOrFail(id);
   }
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0) {

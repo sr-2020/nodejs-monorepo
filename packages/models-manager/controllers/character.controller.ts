@@ -4,7 +4,6 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
-import { CharacterDbEntity } from 'models-manager/models/character-db-entity';
 import { EntityManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
@@ -34,7 +33,7 @@ export class CharacterController {
     },
   })
   async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
-    await getRepository(CharacterDbEntity).save([new CharacterDbEntity().fromModel(model)]);
+    await getRepository(Sr2020Character).save([model]);
     return new Empty();
   }
 
@@ -48,7 +47,7 @@ export class CharacterController {
   })
   @Transaction()
   async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
-    await manager.getRepository(CharacterDbEntity).delete(id);
+    await manager.getRepository(Sr2020Character).delete(id);
     return new Empty();
   }
 
@@ -62,15 +61,15 @@ export class CharacterController {
   })
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Sr2020CharacterProcessResponse> {
-    const baseModel = await getAndLockModel(CharacterDbEntity, manager, id);
+    const baseModel = await getAndLockModel(Sr2020Character, manager, id);
     const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processCharacter({
-      baseModel: baseModel!!.getModel(),
+      baseModel,
       events: [],
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(CharacterDbEntity).save(new CharacterDbEntity().fromModel(result.baseModel));
+    await manager.getRepository(Sr2020Character).save(result.baseModel);
     await this._sendNotifications(result);
     result.notifications = [];
     return result;
@@ -86,9 +85,9 @@ export class CharacterController {
   })
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<Sr2020CharacterProcessResponse> {
     try {
-      const baseModel = await getRepository(CharacterDbEntity).findOneOrFail(id);
+      const baseModel = await getRepository(Sr2020Character).findOneOrFail(id);
       const result = await this.modelEngineService.processCharacter({
-        baseModel: baseModel!!.getModel(),
+        baseModel,
         events: [],
         timestamp,
         aquiredObjects: {},

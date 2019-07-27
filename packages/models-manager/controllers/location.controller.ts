@@ -4,7 +4,6 @@ import { ModelEngineService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { LocationDbEntity } from 'models-manager/models/location-db-entity';
 import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { getAndLockModel } from '../utils/db-utils';
@@ -32,7 +31,7 @@ export class LocationController {
     },
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
-    await getRepository(LocationDbEntity).save([new LocationDbEntity().fromModel(model)]);
+    await getRepository(Location).save([model]);
     return new Empty();
   }
 
@@ -46,7 +45,7 @@ export class LocationController {
   })
   @Transaction()
   async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
-    await manager.getRepository(LocationDbEntity).delete(id);
+    await manager.getRepository(Location).delete(id);
     return new Empty();
   }
 
@@ -60,15 +59,15 @@ export class LocationController {
   })
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<LocationProcessResponse> {
-    const baseModel = await getAndLockModel(LocationDbEntity, manager, id);
+    const baseModel = await getAndLockModel(Location, manager, id);
     const timestamp = this.timeService.timestamp();
     const result = await this.modelEngineService.processLocation({
-      baseModel: baseModel!!.getModel(),
+      baseModel,
       events: [],
       timestamp,
       aquiredObjects: {},
     });
-    await manager.getRepository(LocationDbEntity).save(new LocationDbEntity().fromModel(result.baseModel));
+    await manager.getRepository(Location).save(result.baseModel);
     return result;
   }
 
@@ -82,9 +81,9 @@ export class LocationController {
   })
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<LocationProcessResponse> {
     try {
-      const baseModel = await getRepository(LocationDbEntity).findOneOrFail(id);
+      const baseModel = await getRepository(Location).findOneOrFail(id);
       const result = await this.modelEngineService.processLocation({
-        baseModel: baseModel!!.getModel(),
+        baseModel,
         events: [],
         timestamp,
         aquiredObjects: {},

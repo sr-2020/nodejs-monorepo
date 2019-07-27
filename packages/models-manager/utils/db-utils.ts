@@ -1,4 +1,4 @@
-import { EntityManager, ValueTransformer, Column } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 
 export async function getAndLockModel<TModelEntity>(
@@ -10,7 +10,7 @@ export async function getAndLockModel<TModelEntity>(
     .getRepository(tmodel)
     .createQueryBuilder()
     .select()
-    .where('id = :id', { id });
+    .where('modelId = :id', { id });
 
   // Hack to support unit-testing as sqljs doesn't support pessimistic_write.
   if (manager.connection.options.type != 'sqljs') {
@@ -22,17 +22,4 @@ export async function getAndLockModel<TModelEntity>(
     throw new HttpErrors.NotFound(`${tmodel.name} model with id = ${id} not found`);
   }
   return maybeModel;
-}
-
-class JsonToTextTransformer implements ValueTransformer {
-  to = (v: any) => JSON.stringify(v);
-  from = (v: any) => JSON.parse(v);
-}
-
-export function JsonColumn(): Function {
-  if (process.env.NODE_ENV == 'test') {
-    return Column({ type: 'text', transformer: new JsonToTextTransformer() });
-  } else {
-    return Column({ type: 'json' });
-  }
 }

@@ -3,6 +3,20 @@ export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
 import { PushNotification } from './push-notification.model';
 import { Callback } from '@sr2020/interface/callbacks';
+import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
+
+class JsonToTextTransformer implements ValueTransformer {
+  to = (v: any) => JSON.stringify(v);
+  from = (v: any) => JSON.parse(v);
+}
+
+export function JsonColumn(): Function {
+  if (process.env.NODE_ENV == 'test') {
+    return Column({ type: 'text', transformer: new JsonToTextTransformer() });
+  } else {
+    return Column({ type: 'json' });
+  }
+}
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
@@ -183,18 +197,23 @@ export interface Timers {
 @model()
 export class EmptyModel {
   @property({ required: true })
+  @PrimaryColumn()
   modelId: string;
 
   @property({ required: true })
+  @Column()
   timestamp: number;
 
   @property.array(Modifier, { required: true })
+  @JsonColumn()
   modifiers: Modifier[];
 
   @property.array(Condition, { required: true })
+  @JsonColumn()
   conditions: Condition[];
 
   @property()
+  @JsonColumn()
   timers?: Timers;
 }
 
