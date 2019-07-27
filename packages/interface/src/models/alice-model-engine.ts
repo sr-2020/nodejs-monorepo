@@ -201,7 +201,7 @@ export class EmptyModel {
   modelId: string;
 
   @property({ required: true })
-  @Column()
+  @Column({ type: 'bigint' })
   timestamp: number;
 
   @property.array(Modifier, { required: true })
