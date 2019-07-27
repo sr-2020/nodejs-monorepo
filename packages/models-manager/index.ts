@@ -2,7 +2,7 @@ import { ModelsManagerApplication } from './application';
 import { ApplicationConfig } from '@loopback/core';
 import * as dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
-import { getDbConnectionOptions } from './utils/db-utils';
+import { getDbConnectionOptions } from './utils/connection';
 
 export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });

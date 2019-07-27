@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { JsonColumn } from '../utils/db-utils';
 
 @Entity({
   name: 'sr2020-character',
@@ -11,18 +12,17 @@ export class CharacterDbEntity {
   @Column({ type: 'bigint' })
   timestamp: number;
 
-  // TODO: Figure out how to store objects
-  @Column()
-  model: string;
+  @JsonColumn()
+  model: Sr2020Character;
 
   getModel(): Sr2020Character {
-    return JSON.parse(this.model);
+    return this.model;
   }
 
   fromModel(m: Sr2020Character): this {
     this.id = Number(m.modelId);
     this.timestamp = m.timestamp;
-    this.model = JSON.stringify(m);
+    this.model = m;
     return this;
   }
 }

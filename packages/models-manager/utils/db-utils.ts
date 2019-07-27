@@ -1,19 +1,5 @@
-import { EntityManager, ConnectionOptions } from 'typeorm';
+import { EntityManager, ValueTransformer, Column } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
-import { CharacterDbEntity } from '../models/character-db-entity';
-import { LocationDbEntity } from '../models/location-db-entity';
-
-export function getDbConnectionOptions(): ConnectionOptions {
-  return {
-    type: 'mysql',
-    database: 'model',
-    host: process.env.MYSQL_HOST!!,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD!!,
-    synchronize: true,
-    entities: [CharacterDbEntity, LocationDbEntity],
-  };
-}
 
 export async function getAndLockModel<TModelEntity>(
   tmodel: new () => TModelEntity,
@@ -36,4 +22,17 @@ export async function getAndLockModel<TModelEntity>(
     throw new HttpErrors.NotFound(`${tmodel.name} model with id = ${id} not found`);
   }
   return maybeModel;
+}
+
+class JsonToTextTransformer implements ValueTransformer {
+  to = (v: any) => JSON.stringify(v);
+  from = (v: any) => JSON.parse(v);
+}
+
+export function JsonColumn(): Function {
+  if (process.env.NODE_ENV == 'test') {
+    return Column({ type: 'text', transformer: new JsonToTextTransformer() });
+  } else {
+    return Column({ type: 'json' });
+  }
 }

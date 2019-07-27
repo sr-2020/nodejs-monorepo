@@ -14,7 +14,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { PushService } from '@sr2020/interface/services/push.service';
 import { PushNotification, PushResult } from '@sr2020/interface/models';
-import { getDbConnectionOptions } from '@sr2020/models-manager/utils/db-utils';
+import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
 
 import * as dotenv from 'dotenv';
 

@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { Location } from '@sr2020/interface/models/location.model';
+import { JsonColumn } from '../utils/db-utils';
 
 @Entity({
   name: 'location',
@@ -11,18 +12,17 @@ export class LocationDbEntity {
   @Column({ type: 'bigint' })
   timestamp: number;
 
-  // TODO: Figure out how to store objects
-  @Column()
-  model: string;
+  @JsonColumn()
+  model: Location;
 
   getModel(): Location {
-    return JSON.parse(this.model);
+    return this.model;
   }
 
   fromModel(m: Location): this {
     this.id = Number(m.modelId);
     this.timestamp = m.timestamp;
-    this.model = JSON.stringify(m);
+    this.model = m;
     return this;
   }
 }
