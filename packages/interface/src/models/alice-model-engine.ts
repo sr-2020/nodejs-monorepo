@@ -10,6 +10,11 @@ class JsonToTextTransformer implements ValueTransformer {
   from = (v: any) => JSON.parse(v);
 }
 
+class BigIntTransformer implements ValueTransformer {
+  to = (v: number) => v.toString();
+  from = (v: string) => Number(v);
+}
+
 export function JsonColumn(): Function {
   if (process.env.NODE_ENV == 'test') {
     return Column({ type: 'text', transformer: new JsonToTextTransformer() });
@@ -201,7 +206,7 @@ export class EmptyModel {
   modelId: string;
 
   @property({ required: true })
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint', transformer: new BigIntTransformer() })
   timestamp: number;
 
   @property.array(Modifier, { required: true })
