@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "mocha --exit",
-    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-models-testing/.nyc_output mocha --exit",
+    "test": "cross-env NODE_ENV=test mocha --exit",
+    "test:realdb": "mocha --exit",
+    "coverage:test": "cross-env NODE_ENV=test nyc --cwd=.. --temp-dir=sr2020-models-testing/.nyc_output mocha --exit",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-models-testing.coverage.json",
     "lint": "yarn run prettier:check && yarn run tslint",
     "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
@@ -19,6 +20,7 @@
   "license": "Apache-2.0",
   "devDependencies": {},
   "dependencies": {
+    "cross-env": "^5.2.0",
     "typeorm": "^0.2.18"
   }
 }

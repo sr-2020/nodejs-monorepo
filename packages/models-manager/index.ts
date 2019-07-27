@@ -2,23 +2,14 @@ import { ModelsManagerApplication } from './application';
 import { ApplicationConfig } from '@loopback/core';
 import * as dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
-import { CharacterDbEntity } from './models/character-db-entity';
-import { LocationDbEntity } from './models/location-db-entity';
+import { getDbConnectionOptions } from './utils/db-utils';
 
 export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
 
   const app = new ModelsManagerApplication(options);
 
-  await createConnection({
-    type: 'mysql',
-    database: 'model',
-    host: process.env.MYSQL_HOST!!,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD!!,
-    synchronize: true,
-    entities: [CharacterDbEntity, LocationDbEntity],
-  });
+  await createConnection(getDbConnectionOptions());
 
   await app.boot();
   await app.start();

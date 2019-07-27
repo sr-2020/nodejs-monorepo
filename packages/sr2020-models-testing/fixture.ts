@@ -14,6 +14,9 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { PushService } from '@sr2020/interface/services/push.service';
 import { PushNotification, PushResult } from '@sr2020/interface/models';
+import { getDbConnectionOptions } from '@sr2020/models-manager/utils/db-utils';
+
+import * as dotenv from 'dotenv';
 
 (Winston as any).level = 'error';
 
@@ -87,11 +90,14 @@ export class TestFixture {
     const pushService = new MockPushService();
     app.bind('services.PushService').to(pushService);
 
-    const connection = await createConnection({
-      type: 'sqljs',
-      synchronize: true,
-      entities: [CharacterDbEntity, LocationDbEntity],
-    });
+    let connection: Connection;
+    if (process.env.NODE_ENV == 'test') {
+      connection = await createConnection({ ...getDbConnectionOptions(), database: undefined, type: 'sqljs' });
+    } else {
+      dotenv.config({ path: '../../.env' });
+      connection = await createConnection(getDbConnectionOptions());
+    }
+
     await app.start();
 
     const client = createRestAppClient(app);
