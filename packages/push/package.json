@@ -27,7 +27,6 @@
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/push.coverage.json",
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",
-    "migrate": "node -r tsconfig-paths/register ./src/migrate",
     "start": "node -r tsconfig-paths/register ./src"
   },
   "repository": {
