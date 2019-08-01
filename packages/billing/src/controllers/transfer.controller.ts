@@ -31,7 +31,9 @@ export class TransferController {
     },
   })
   async transfer(@requestBody() transferRequest: Transfer): Promise<Empty> {
-    console.log(JSON.stringify(transferRequest));
+    // TODO(https://trello.com/c/cwNTqjTs) Remove when properly fixed.
+    delete (transferRequest as any).id;
+
     if (transferRequest.amount <= 0) throw new HttpErrors.BadRequest('Величина транзакции должна быть положительной.');
 
     if (transferRequest.sin_from == transferRequest.sin_to) throw new HttpErrors.BadRequest('Нельзя переводить деньги самому себе.');
