@@ -1,5 +1,5 @@
-import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface } from './alice-model-engine';
+import { model } from '@loopback/repository';
+import { EmptyModel, ModelApiInterface, rproperty } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -8,7 +8,7 @@ import { Entity, Column } from 'typeorm';
   name: 'location',
 })
 export class Location extends EmptyModel {
-  @property({ required: true })
+  @rproperty()
   @Column()
   manaDensity: number;
 }
@@ -17,15 +17,15 @@ export type LocationApi = ModelApiInterface<Location>;
 
 @model()
 export class LocationProcessRequest extends BaseModelProcessRequest {
-  @property({ required: true })
+  @rproperty()
   baseModel: Location;
 }
 
 @model()
 export class LocationProcessResponse extends BaseModelProcessResponse {
-  @property({ required: true })
+  @rproperty()
   baseModel: Location;
 
-  @property({ required: true })
+  @rproperty()
   workModel: Location;
 }

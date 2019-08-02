@@ -23,10 +23,14 @@ export function JsonColumn(): Function {
   }
 }
 
+export function rproperty(): Function {
+  return property({ required: true });
+}
+
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
 export class EventRequest {
-  @property({ required: true })
+  @rproperty()
   eventType: string;
 
   @property()
@@ -36,19 +40,19 @@ export class EventRequest {
 // This one doesn't modelId (server can figure it out from model.modelId).
 @model()
 export class IdLessEvent extends EventRequest {
-  @property({ required: true })
+  @rproperty()
   timestamp: number;
 }
 
 @model()
 export class Event extends IdLessEvent {
-  @property({ required: true })
+  @rproperty()
   modelId: string;
 }
 
 @model()
 export class EventForModelType extends Event {
-  @property({ required: true })
+  @rproperty()
   modelType: string;
 }
 
@@ -70,26 +74,26 @@ export type Timer = {
 
 @model()
 export class Effect {
-  @property({ required: true })
+  @rproperty()
   enabled: boolean;
 
-  @property({ required: true })
+  @rproperty()
   id: string;
 
-  @property({ required: true })
+  @rproperty()
   class: string;
 
   // TODO: Improve validation?
-  @property({ required: true })
+  @rproperty()
   type: 'normal' | 'functional';
 
-  @property({ required: true })
+  @rproperty()
   handler: string;
 }
 
 @model()
 export class Modifier {
-  @property({ required: true })
+  @rproperty()
   mID: string;
 
   @property()
@@ -101,7 +105,7 @@ export class Modifier {
   @property()
   system?: string;
 
-  @property({ required: true })
+  @rproperty()
   enabled: boolean;
 
   @property.array(Effect, { required: true })
@@ -112,13 +116,13 @@ export class Modifier {
 
 @model()
 export class Condition {
-  @property({ required: true })
+  @rproperty()
   id: string;
 
-  @property({ required: true })
+  @rproperty()
   class: string;
 
-  @property({ required: true })
+  @rproperty()
   text: string;
 
   @property()
@@ -201,11 +205,11 @@ export interface Timers {
 
 @model()
 export class EmptyModel {
-  @property({ required: true })
+  @rproperty()
   @PrimaryColumn()
   modelId: string;
 
-  @property({ required: true })
+  @rproperty()
   @Column({ type: 'bigint', transformer: new BigIntTransformer() })
   timestamp: number;
 

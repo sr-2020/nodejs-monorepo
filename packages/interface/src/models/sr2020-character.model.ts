@@ -1,5 +1,5 @@
-import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface } from './alice-model-engine';
+import { model } from '@loopback/repository';
+import { EmptyModel, ModelApiInterface, rproperty } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -8,7 +8,7 @@ import { Entity, Column } from 'typeorm';
   name: 'sr2020-character',
 })
 export class Sr2020Character extends EmptyModel {
-  @property({ required: true })
+  @rproperty()
   @Column()
   spellsCasted: number;
 }
@@ -17,15 +17,15 @@ export type Sr2020CharacterApi = ModelApiInterface<Sr2020Character>;
 
 @model()
 export class Sr2020CharacterProcessRequest extends BaseModelProcessRequest {
-  @property({ required: true })
+  @rproperty()
   baseModel: Sr2020Character;
 }
 
 @model()
 export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
-  @property({ required: true })
+  @rproperty()
   baseModel: Sr2020Character;
 
-  @property({ required: true })
+  @rproperty()
   workModel: Sr2020Character;
 }

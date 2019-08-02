@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, JsonColumn } from './alice-model-engine';
+import { EmptyModel, ModelApiInterface, JsonColumn, rproperty } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -8,15 +8,15 @@ import { Entity, Column } from 'typeorm';
   name: 'qr',
 })
 export class QrCode extends EmptyModel {
-  @property({ required: true })
+  @rproperty()
   @Column()
   usesLeft: number = 0;
 
-  @property({ required: true })
+  @rproperty()
   @Column()
   type: string = 'empty';
 
-  @property({ required: true })
+  @rproperty()
   @Column()
   description: string = '';
 
@@ -33,15 +33,15 @@ export type QrCodeApi = ModelApiInterface<QrCode>;
 
 @model()
 export class QrCodeProcessRequest extends BaseModelProcessRequest {
-  @property({ required: true })
+  @rproperty()
   baseModel: QrCode;
 }
 
 @model()
 export class QrCodeProcessResponse extends BaseModelProcessResponse {
-  @property({ required: true })
+  @rproperty()
   baseModel: QrCode;
 
-  @property({ required: true })
+  @rproperty()
   workModel: QrCode;
 }

@@ -1,42 +1,42 @@
-import { ModelApiInterface, EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
+import { ModelApiInterface, EmptyModel, Event, rproperty } from '@sr2020/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
 export class MemoryEntry {
-  @property({ required: true })
+  @rproperty()
   title: string;
 
-  @property({ required: true })
+  @rproperty()
   text: string;
 
-  @property({ required: true })
+  @rproperty()
   url: string;
 
-  @property({ required: true })
+  @rproperty()
   mID: string;
 }
 
 @model()
 export class Change {
-  @property({ required: true })
+  @rproperty()
   mID: string;
 
-  @property({ required: true })
+  @rproperty()
   text: string;
 
-  @property({ required: true })
+  @rproperty()
   timestamp: number;
 }
 
 @model()
 export class Message {
-  @property({ required: true })
+  @rproperty()
   mID: string;
 
-  @property({ required: true })
+  @rproperty()
   title: string;
 
-  @property({ required: true })
+  @rproperty()
   text: string;
 }
 
@@ -45,97 +45,97 @@ export class DeusExModel extends EmptyModel {
   @property.array(MemoryEntry, { required: true })
   memory: MemoryEntry[];
 
-  @property({ required: true })
+  @rproperty()
   hp: number;
 
-  @property({ required: true })
+  @rproperty()
   maxHp: number;
 
-  @property({ required: true })
+  @rproperty()
   randomSeed: number;
 
-  @property({ required: true })
+  @rproperty()
   login: string;
 
-  @property({ required: true })
+  @rproperty()
   mail: string;
 
-  @property({ required: true })
+  @rproperty()
   generation: string;
 
-  @property({ required: true })
+  @rproperty()
   profileType: string;
 
-  @property({ required: true })
+  @rproperty()
   firstName: string;
 
-  @property({ required: true })
+  @rproperty()
   nicName: string;
 
-  @property({ required: true })
+  @rproperty()
   lastName: string;
 
-  @property({ required: true })
+  @rproperty()
   model: string; //For droids
 
-  @property({ required: true })
+  @rproperty()
   sweethome: string;
 
-  @property({ required: true })
+  @rproperty()
   sex: string;
 
-  @property({ required: true })
+  @rproperty()
   corporation: string;
 
-  @property({ required: true })
+  @rproperty()
   salaryLevel: number;
 
-  @property({ required: true })
+  @rproperty()
   insurance: string;
 
-  @property({ required: true })
+  @rproperty()
   insuranceLevel: number;
 
-  @property({ required: true })
+  @rproperty()
   insuranceDiplayName: string;
 
   @property()
   hackingLogin?: string;
 
-  @property({ required: true })
+  @rproperty()
   hackingProtection: number;
 
-  @property({ required: true })
+  @rproperty()
   lockReduction: number;
 
-  @property({ required: true })
+  @rproperty()
   proxyRegen: number;
 
-  @property({ required: true })
+  @rproperty()
   maxProxy: number;
 
-  @property({ required: true })
+  @rproperty()
   maxSecondsInVr: number;
 
-  @property({ required: true })
+  @rproperty()
   owner: string;
 
-  @property({ required: true })
+  @rproperty()
   creator: string;
 
-  @property({ required: true })
+  @rproperty()
   isAlive: boolean;
 
-  @property({ required: true })
+  @rproperty()
   lastVREnterTimestamp: number;
 
-  @property({ required: true })
+  @rproperty()
   lastVREnterDuration: number;
 
-  @property({ required: true })
+  @rproperty()
   totalSpentInVR: number;
 
-  @property({ required: true })
+  @rproperty()
   mind: any;
 
   @property.array(Number, { required: true })
@@ -144,7 +144,7 @@ export class DeusExModel extends EmptyModel {
   @property.array(Number, { required: true })
   systems: number[];
 
-  @property({ required: true })
+  @rproperty()
   password: string;
 
   @property.array(Change, { required: true })
@@ -161,21 +161,21 @@ export type DeusExModelApiInterface = ModelApiInterface<DeusExModel>;
 
 @model()
 export class DeusExProcessModelRequest {
-  @property({ required: true })
+  @rproperty()
   baseModel: DeusExModel;
 
   @property.array(Event, { required: true })
   events: Event[];
 
-  @property({ required: true })
+  @rproperty()
   timestamp: number;
 }
 
 @model()
 export class DeusExProcessModelResponse {
-  @property({ required: true })
+  @rproperty()
   baseModel: DeusExModel;
 
-  @property({ required: true })
+  @rproperty()
   workModel: DeusExModel;
 }
