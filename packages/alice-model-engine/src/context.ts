@@ -78,6 +78,10 @@ export class Context<T extends EmptyModel> {
     return this._model;
   }
 
+  set model(m: T) {
+    this._model = m;
+  }
+
   get timers(): Timers {
     return _.get(this._model, 'timers', {});
   }

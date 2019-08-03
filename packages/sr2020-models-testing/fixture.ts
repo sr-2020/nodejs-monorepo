@@ -172,6 +172,9 @@ export class TestFixture {
   }
 
   async destroy() {
+    await this._connection.getRepository(Sr2020Character).clear();
+    await this._connection.getRepository(Location).clear();
+    await this._connection.getRepository(QrCode).clear();
     await this._connection.close();
     await this._app.close();
   }
@@ -180,7 +183,7 @@ export class TestFixture {
 function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     spellsCasted: 0,
-
+    spells: [],
     modelId: '0',
     timestamp,
     conditions: [],

@@ -16,8 +16,8 @@ export function consume(api: QrCodeApi, data: {}, _: Event) {
 
 export function create(api: QrCodeApi, data: Partial<QrCode>, _: Event) {
   if (api.model.type != 'empty') {
-    throw Error('QR-код записан!');
+    throw Error('QR-код уже записан!');
   }
 
-  api.model = { ...api.model, data };
+  api.model = { ...api.model, ...data };
 }

@@ -1,7 +1,17 @@
-import { model } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, rproperty } from './alice-model-engine';
+import { model, property } from '@loopback/repository';
+import { EmptyModel, ModelApiInterface, rproperty, JsonColumn } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
+
+@model()
+export class Spell {
+  @rproperty() eventType: string;
+  @rproperty() description: string;
+  @rproperty() canTargetSelf: boolean = false;
+  @rproperty() canTargetSingleTarget: boolean = false;
+  @rproperty() canTargetLocation: boolean = false;
+  @rproperty() canTargetItem: boolean = false;
+}
 
 @model()
 @Entity({
@@ -11,6 +21,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column()
   spellsCasted: number;
+
+  @property.array(Spell, { required: true })
+  @JsonColumn()
+  spells: Spell[];
 }
 
 export type Sr2020CharacterApi = ModelApiInterface<Sr2020Character>;

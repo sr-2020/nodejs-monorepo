@@ -26,6 +26,10 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
     return this.contextGetter().model;
   }
 
+  set model(m: T) {
+    this.contextGetter().model = m;
+  }
+
   public getCatalogObject(catalogName: string, id: string) {
     const catalog = this.contextGetter().getDictionary(catalogName);
     if (catalog) {
