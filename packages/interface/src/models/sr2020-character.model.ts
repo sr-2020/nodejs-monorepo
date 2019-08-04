@@ -5,8 +5,9 @@ import { Entity, Column } from 'typeorm';
 
 @model()
 export class Spell {
-  @rproperty() eventType: string;
+  @rproperty() humanReadableName: string;
   @rproperty() description: string;
+  @rproperty() eventType: string;
   @rproperty() canTargetSelf: boolean = false;
   @rproperty() canTargetSingleTarget: boolean = false;
   @rproperty() canTargetLocation: boolean = false;

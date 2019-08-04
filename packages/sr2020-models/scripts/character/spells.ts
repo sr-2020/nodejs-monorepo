@@ -7,16 +7,18 @@ import { create } from '../qr/events';
 
 const AllSpells: Spell[] = [
   {
-    eventType: dummySpell.name,
+    humanReadableName: 'Заглушка',
     description: 'Спелл-заглушка, просто увеличивает число скастованных спеллов. Может быть наложен на артефакт.',
+    eventType: dummySpell.name,
     canTargetSelf: true,
     canTargetItem: true,
     canTargetLocation: false,
     canTargetSingleTarget: false,
   },
   {
-    eventType: densityHalveSpell.name,
+    humanReadableName: 'Плотность пополам!',
     description: 'Уменьшает плотность маны в локации вдвое. Может быть наложен на артефакт.',
+    eventType: densityHalveSpell.name,
     canTargetSelf: false,
     canTargetItem: true,
     canTargetLocation: true,
