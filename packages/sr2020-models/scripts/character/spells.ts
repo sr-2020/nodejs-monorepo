@@ -24,7 +24,26 @@ const AllSpells: Spell[] = [
     canTargetLocation: true,
     canTargetSingleTarget: false,
   },
+  {
+    humanReadableName: 'Исцеление',
+    description: 'Восстанавливает все хиты.',
+    eventType: fullHealSpell.name,
+    canTargetSelf: true,
+    canTargetItem: true,
+    canTargetLocation: false,
+    canTargetSingleTarget: true,
+  },
 ];
+
+function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
+  api.sendOutboundEvent(QrCode, qrCode.toString(), create, {
+    type: 'artifact',
+    description: `Этот артефакт позволяет ${whatItDoes} даже не будучи магом!`,
+    eventType,
+    usesLeft,
+  });
+  api.sendNotification('Успех', 'Артефакт зачарован!');
+}
 
 export function increaseSpellsCasted(api: Sr2020CharacterApi, _data: {}, _event: Event) {
   api.model.spellsCasted++;
@@ -32,14 +51,7 @@ export function increaseSpellsCasted(api: Sr2020CharacterApi, _data: {}, _event:
 
 export function dummySpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _event: Event) {
   if (data.qrCode != undefined) {
-    api.sendOutboundEvent(QrCode, data.qrCode.toString(), create, {
-      type: 'artifact',
-      description: 'Этот артефакт позволяет скастовать спелл-заглушку даже не будучи магом!',
-      eventType: dummySpell.name,
-      usesLeft: 3,
-    });
-    api.sendNotification('Успех', 'Артефакт зачарован!');
-    return;
+    return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', dummySpell.name, 3);
   }
   api.sendSelfEvent(increaseSpellsCasted, {});
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
@@ -52,19 +64,19 @@ export function densityDrainSpell(api: Sr2020CharacterApi, data: { locationId: s
 
 export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: string; qrCode?: number }, _: Event) {
   if (data.qrCode != undefined) {
-    console.log('densityHalveSpell');
-    api.sendOutboundEvent(QrCode, data.qrCode.toString(), create, {
-      type: 'artifact',
-      description: 'Этот артефакт позволяет поделить плотность маны пополам даже не будучи магом!',
-      eventType: densityHalveSpell.name,
-      usesLeft: 3,
-    });
-    api.sendNotification('Успех', 'Артефакт зачарован!');
-    return;
+    return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
   api.model.spellsCasted++;
   const location = api.aquired('Location', data.locationId) as Location;
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
+}
+
+export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _: Event) {
+  if (data.qrCode != undefined) {
+    return createArtifact(api, data.qrCode, 'восстановить все хиты', densityHalveSpell.name);
+  }
+
+  api.sendNotification('Лечение', 'Хиты полностью восстановлены');
 }
 
 export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {
