@@ -1,7 +1,15 @@
 import { reduce } from 'lodash';
 import { inspect } from 'util';
 
-import { AquiredObjects, EmptyModel, EngineResult, Event, Modifier, PendingAquire } from 'interface/src/models/alice-model-engine';
+import {
+  AquiredObjects,
+  EmptyModel,
+  EngineResult,
+  Event,
+  Modifier,
+  PendingAquire,
+  UserVisibleError,
+} from 'interface/src/models/alice-model-engine';
 
 import * as config from './config';
 import { Context } from './context';
@@ -44,14 +52,16 @@ export class Engine<T extends EmptyModel> {
       try {
         Logger.logStep('engine', 'info', 'Running event', { event, modelId })(() => this.runEvent(baseCtx, event));
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, modelId });
+        if (!(e instanceof UserVisibleError))
+          Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, modelId });
         return { status: 'error', error: e };
       }
 
       try {
         workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(baseCtx));
       } catch (e) {
-        Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: baseCtx.model });
+        if (!(e instanceof UserVisibleError))
+          Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: baseCtx.model });
         return { status: 'error', error: e };
       }
 
@@ -66,7 +76,8 @@ export class Engine<T extends EmptyModel> {
     try {
       viewModels = Logger.logStep('engine', 'info', 'Running view models', { modelId })(() => this.runViewModels(workingCtx, baseCtx));
     } catch (e) {
-      Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { modelId });
+      if (!(e instanceof UserVisibleError))
+        Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { modelId });
       return { status: 'error', error: e };
     }
 

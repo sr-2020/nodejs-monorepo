@@ -305,3 +305,5 @@ export interface ViewModelApiInterface<T extends EmptyModel> extends ReadModelAp
 export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface<T>, LogApiInterface {
   aquired(db: string, id: string): any;
 }
+
+export class UserVisibleError extends Error {}

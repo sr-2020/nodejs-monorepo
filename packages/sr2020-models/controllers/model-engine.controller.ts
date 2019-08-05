@@ -6,7 +6,7 @@ import {
 } from '@sr2020/interface/models/sr2020-character.model';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
-import { AquiredObjects, EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { LocationProcessRequest, Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { QrCodeProcessRequest, QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
@@ -90,7 +90,11 @@ export class ModelEngineController implements ModelEngineService {
         notifications: res.notifications,
       };
     } else {
-      throw new HttpErrors.InternalServerError(`Error during model processing: ${res.error}`);
+      if (res.error instanceof UserVisibleError) {
+        throw new HttpErrors.BadRequest(`${res.error.message}`);
+      } else {
+        throw new HttpErrors.InternalServerError(`Error during model processing: ${res.error}`);
+      }
     }
   }
 }
