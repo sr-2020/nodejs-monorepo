@@ -73,7 +73,7 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
 
 export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _: Event) {
   if (data.qrCode != undefined) {
-    return createArtifact(api, data.qrCode, 'восстановить все хиты', densityHalveSpell.name);
+    return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
 
   api.sendNotification('Лечение', 'Хиты полностью восстановлены');
