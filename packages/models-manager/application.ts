@@ -2,9 +2,10 @@ import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
-import { RestApplication } from '@loopback/rest';
+import { RestApplication, RestBindings } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
+import { CustomRejectProvider } from '@sr2020/interface/services/reject.service';
 
 export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
@@ -18,6 +19,8 @@ export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryM
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
+
+    this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
     this.projectRoot = __dirname + '/../';
     const dirs = ['models-manager', 'interface'];
