@@ -1,6 +1,6 @@
 import { Event } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
-import { Spell, Sr2020CharacterApi } from '@sr2020/interface/models/sr2020-character.model';
+import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
@@ -71,9 +71,14 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
-export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _: Event) {
+export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; targetCharacterId?: number }, _: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
+  }
+
+  if (data.targetCharacterId != undefined) {
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), fullHealSpell, {});
+    return;
   }
 
   api.sendNotification('Лечение', 'Хиты полностью восстановлены');

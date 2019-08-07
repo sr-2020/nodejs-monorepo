@@ -124,7 +124,7 @@ export class TestFixture {
   }
 
   getCharacterNotifications(id: number | string = 0): PushNotification[] {
-    return this._pushService.get(id);
+    return this._pushService.get(id) || [];
   }
 
   async getLocation(id: number | string = 0): Promise<Location> {

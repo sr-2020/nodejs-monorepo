@@ -34,6 +34,14 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       result.maximalTimestamp = Math.max(result.maximalTimestamp, baseModel.timestamp);
     }
 
+    // Aquire character if event.data has targetCharacterId set.
+    if (event.data && event.data.targetCharacterId) {
+      const characterId: number = event.data.targetCharacterId;
+      const baseModel = await getAndLockModel(Sr2020Character, manager, characterId);
+      result.baseModels['Character'][characterId] = baseModel;
+      result.maximalTimestamp = Math.max(result.maximalTimestamp, baseModel.timestamp);
+    }
+
     // Aquire QR codes if event.data has qrCodes set.
     if (event.data && (event.data.qrCodes != undefined || event.data.qrCode != undefined)) {
       const codes: number[] = event.data.qrCodes || [];

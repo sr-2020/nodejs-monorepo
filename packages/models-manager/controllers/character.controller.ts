@@ -71,7 +71,6 @@ export class CharacterController {
     });
     await manager.getRepository(Sr2020Character).save(result.baseModel);
     await this._sendNotifications(result);
-    result.notifications = [];
     return result;
   }
 
@@ -122,8 +121,6 @@ export class CharacterController {
     );
     await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
     result.outboundEvents = [];
-    await this._sendNotifications(result);
-    result.notifications = [];
     return result;
   }
 

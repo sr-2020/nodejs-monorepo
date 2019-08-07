@@ -72,4 +72,20 @@ describe('Spells', function() {
     expect(await fixture.getCharacter(2)).containDeep({ spellsCasted: 1 });
     expect(await fixture.getLocation(2)).containDeep({ manaDensity: 200 });
   });
+
+  it('Heal self', async () => {
+    await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'fullHealSpell', data: {} });
+    expect(fixture.getCharacterNotifications().length).to.equal(1);
+    expect(fixture.getCharacterNotifications()[0].body).containEql('полностью восстановл');
+  });
+
+  it('Heal other', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.sendCharacterEvent({ eventType: 'fullHealSpell', data: { targetCharacterId: 2 } }, 1);
+    expect(fixture.getCharacterNotifications(1).length).to.equal(0);
+    expect(fixture.getCharacterNotifications(2).length).to.equal(1);
+    expect(fixture.getCharacterNotifications(2)[0].body).containEql('полностью восстановл');
+  });
 });
