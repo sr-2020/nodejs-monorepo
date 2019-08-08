@@ -1,7 +1,6 @@
 import * as request from 'request-promise-native';
 
-// TODO: Take from google sheets directly
-import * as emails from './beta-testers.json';
+const emails = [];
 
 const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
 
@@ -53,16 +52,37 @@ async function provideBilling(login: LoginResponse) {
   await request.post('http://billing.evarun.ru/transactions', { json: transaction, resolveWithFullResponse: true }).promise();
 }
 
-async function provideEverything(email: string) {
+async function providePlayer(email: string) {
   console.log(`Generating data for ${email}`);
   const login = await loginOrRegister(email, '1');
   await provideCharacter(login);
   await provideBilling(login);
 }
 
+async function provideEmptyQr(modelId: string) {
+  const qrData = {
+    modelId,
+    usesLeft: 0,
+    type: 'empty',
+    description: '',
+    eventType: '',
+    data: {},
+    timestamp: 0,
+    modifiers: [],
+    conditions: [],
+    timers: {},
+  };
+
+  await request.put('http://models-manager.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();
+}
+
 async function main() {
   for (const email of emails) {
-    await provideEverything(email);
+    await providePlayer(email);
+  }
+
+  for (let i = 1; i < 100; ++i) {
+    await provideEmptyQr(i.toString());
   }
 }
 

@@ -69,4 +69,3 @@ packages/**/*.js
 .idea
 *.tsbuildinfo
 packages/*/dist/
-packages/import-server/src/beta-testers.json
