@@ -58,6 +58,10 @@ export class ModelEngineController implements ModelEngineService {
   }
 
   async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {
+    console.log(
+      `Processing ${baseModel.modelId} with timestamp ${baseModel.timestamp}. ` +
+        `Got incoming events: ${JSON.stringify(events)}. Want to know state for timestamp = ${timestamp}`,
+    );
     events.forEach((event) => {
       if (event.timestamp < baseModel.timestamp)
         throw new HttpErrors.UnprocessableEntity(
