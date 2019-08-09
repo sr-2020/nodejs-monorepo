@@ -4,7 +4,7 @@ import { PushHttpApiDataSource } from '../datasources';
 import { PushResult, PushNotification } from '@sr2020/interface/models';
 
 export interface PushService {
-  send(recipient: number, notification: PushNotification): PushResult;
+  send(recipient: number, notification: PushNotification): Promise<PushResult>;
 }
 
 export class PushServiceProvider implements Provider<PushService> {

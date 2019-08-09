@@ -10,6 +10,7 @@ import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { TimeService } from '../services/time.service';
 import { getAndLockModel } from '../utils/db-utils';
+import { PushResult } from '@sr2020/interface/models';
 
 export class CharacterController {
   constructor(
@@ -119,7 +120,17 @@ export class CharacterController {
       { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
       aquired,
     );
-    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
+    const consequentResults = await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
+    consequentResults.push(result);
+
+    const promises: Promise<PushResult>[] = [];
+    for (const r of consequentResults) {
+      for (const notification of r.notifications) {
+        promises.push(this.pushService.send(Number(r.baseModel.modelId), notification));
+      }
+    }
+    await Promise.all(promises);
+
     result.outboundEvents = [];
     return result;
   }

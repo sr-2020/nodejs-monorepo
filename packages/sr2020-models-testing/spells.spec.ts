@@ -44,6 +44,19 @@ describe('Spells', function() {
     expect(fixture.getCharacterNotifications().length).to.equal(1);
   });
 
+  it("Can't enchant already enchanted", async () => {
+    await fixture.saveCharacter();
+    await fixture.saveQrCode({ type: 'something' });
+
+    await fixture.client
+      .post(`/character/model/0`)
+      .send({ eventType: 'dummySpell', data: { qrCode: 0 } })
+      .expect(400);
+    expect(fixture.getCharacterNotifications()).to.be.empty();
+
+    expect(await fixture.getQrCode()).containDeep({ type: 'something' });
+  });
+
   it('Enchant artifact and activate it later', async () => {
     await fixture.saveCharacter();
     await fixture.saveQrCode();

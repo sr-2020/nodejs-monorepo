@@ -45,9 +45,9 @@ class MockTimeService implements TimeService {
 }
 
 class MockPushService implements PushService {
-  private notifications: { [characterId: number]: PushNotification[] };
+  private notifications: { [characterId: number]: PushNotification[] } = {};
 
-  send(recipient: number, notification: PushNotification): PushResult {
+  async send(recipient: number, notification: PushNotification): Promise<PushResult> {
     if (this.notifications[recipient] == undefined) {
       this.notifications[recipient] = [];
     }
