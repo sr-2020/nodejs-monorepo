@@ -1,4 +1,5 @@
 import { Entity, model, property } from '@loopback/repository';
+import { rproperty } from './alice-model-engine';
 
 @model({
   name: 'transactions',
@@ -7,22 +8,22 @@ export class Transaction extends Entity {
   @property({ type: 'number', generated: true, id: true })
   id?: number;
 
-  @property({ type: 'date', required: true })
+  @property()
   created_at: string;
 
-  @property({ type: 'number', required: true })
+  @rproperty()
   sin_from: number;
 
-  @property({ type: 'number', required: true })
+  @rproperty()
   sin_to: number;
 
-  @property({ type: 'number', required: true })
+  @rproperty()
   amount: number;
 
-  @property({ type: 'string' })
+  @property()
   comment?: string;
 
-  @property({ type: 'number' })
+  @property()
   recurrent_payment_id?: number;
 
   constructor(data?: Partial<Transaction>) {
