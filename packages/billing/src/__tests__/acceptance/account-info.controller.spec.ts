@@ -24,14 +24,12 @@ describe('AccountInfoController', async function() {
 
   describe('GET /account_info', () => {
     it('User with no transactions', async () => {
-      await client
-        .get('/account_info/123')
-        .expect(200)
-        .expect({
-          sin: 123,
-          balance: 0,
-          history: [],
-        });
+      const resposne = await client.get('/account_info/123').expect(200);
+      expect(resposne.body).containDeep({
+        sin: 123,
+        balance: 0,
+        history: [],
+      });
     });
 
     it('User with some transactions', async () => {

@@ -29,10 +29,15 @@ export class AccountInfoController {
       where: { or: [{ sin_from: sin }, { sin_to: sin }] },
       order: ['created_at DESC'],
     });
-    return new AccountInfo({
+    return {
       sin,
+      modelId: sin.toString(),
       balance: await balance(this.transactionRepository, sin),
       history: await history,
-    });
+      timestamp: 0,
+      conditions: [],
+      modifiers: [],
+      timers: {},
+    };
   }
 }

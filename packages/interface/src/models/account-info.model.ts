@@ -1,18 +1,37 @@
-import { Model, model, property } from '@loopback/repository';
+import { model, property } from '@loopback/repository';
 import { Transaction } from './transaction.model';
+import { rproperty, EmptyModel, JsonColumn, ModelApiInterface } from './alice-model-engine';
+import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
+import { Entity } from 'typeorm';
 
 @model()
-export class AccountInfo extends Model {
-  @property({ type: 'number', required: true })
-  sin: number;
+@Entity({
+  name: 'account-info',
+})
+export class AccountInfo extends EmptyModel {
+  sin?: number;
 
-  @property({ type: 'number', required: true })
+  @rproperty()
   balance: number;
 
   @property.array(Transaction, { required: true })
+  @JsonColumn()
   history: Transaction[];
+}
 
-  constructor(data?: Partial<AccountInfo>) {
-    super(data);
-  }
+export type AccountInfoApi = ModelApiInterface<AccountInfo>;
+
+@model()
+export class AccountInfoProcessRequest extends BaseModelProcessRequest {
+  @rproperty()
+  baseModel: AccountInfo;
+}
+
+@model()
+export class AccountInfoProcessResponse extends BaseModelProcessResponse {
+  @rproperty()
+  baseModel: AccountInfo;
+
+  @rproperty()
+  workModel: AccountInfo;
 }
