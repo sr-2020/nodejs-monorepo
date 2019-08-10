@@ -1,17 +1,16 @@
-import { param, put, requestBody, get, post, HttpErrors, del } from '@loopback/rest';
+import { param, put, requestBody, get, post, del } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { getRepository, TransactionManager, EntityManager, Transaction } from 'typeorm';
-import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-import { getAndLockModel } from '../utils/db-utils';
+import { TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
+import { AnyModelController } from './anymodel.controller';
 
-export class LocationController {
+export class LocationController extends AnyModelController<Location> {
   constructor(
     @inject('services.ModelEngineService')
     protected modelEngineService: ModelEngineService,
@@ -21,7 +20,11 @@ export class LocationController {
     protected eventDispatcherService: EventDispatcherService,
     @inject('services.ModelAquirerService')
     protected modelAquirerService: ModelAquirerService,
-  ) {}
+    @inject('services.PushService')
+    protected pushService: PushService,
+  ) {
+    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService);
+  }
 
   @put('/location/model', {
     responses: {
@@ -31,8 +34,7 @@ export class LocationController {
     },
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
-    await getRepository(Location).save([model]);
-    return new Empty();
+    return super.replaceById(model);
   }
 
   @del('/location/model/{id}', {
@@ -45,8 +47,7 @@ export class LocationController {
   })
   @Transaction()
   async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
-    await manager.getRepository(Location).delete(id);
-    return new Empty();
+    return super.delete(id, manager);
   }
 
   @get('/location/model/{id}', {
@@ -59,16 +60,7 @@ export class LocationController {
   })
   @Transaction()
   async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<LocationProcessResponse> {
-    const baseModel = await getAndLockModel(Location, manager, id);
-    const timestamp = this.timeService.timestamp();
-    const result = await this.modelEngineService.processLocation({
-      baseModel,
-      events: [],
-      timestamp,
-      aquiredObjects: {},
-    });
-    await manager.getRepository(Location).save(result.baseModel);
-    return result;
+    return super.get(id, manager);
   }
 
   @get('/location/model/{id}/predict', {
@@ -80,19 +72,7 @@ export class LocationController {
     },
   })
   async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<LocationProcessResponse> {
-    try {
-      const baseModel = await getRepository(Location).findOneOrFail(id);
-      const result = await this.modelEngineService.processLocation({
-        baseModel,
-        events: [],
-        timestamp,
-        aquiredObjects: {},
-      });
-      return result;
-    } catch (e) {
-      if (e instanceof EntityNotFoundError) throw new HttpErrors.NotFound(`Character model with id = ${id} not found`);
-      throw e;
-    }
+    return super.predict(id, timestamp);
   }
 
   @post('/location/model/{id}', {
@@ -109,15 +89,6 @@ export class LocationController {
     @requestBody() event: EventRequest,
     @TransactionManager() manager: EntityManager,
   ): Promise<LocationProcessResponse> {
-    const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
-    const result = await this.eventDispatcherService.dispatchEvent(
-      Location,
-      manager,
-      { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
-      aquired,
-    );
-    await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
-    result.outboundEvents = [];
-    return result;
+    return super.postEvent(id, event, manager);
   }
 }
