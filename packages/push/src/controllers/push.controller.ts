@@ -38,7 +38,7 @@ export class PushController {
       },
     },
   })
-  async test(@param.path.number('id') id: number, @requestBody() notification: PushNotification): Promise<PushResult> {
+  async sendNotification(@param.path.number('id') id: number, @requestBody() notification: PushNotification): Promise<PushResult> {
     if (!(await this.firebaseTokenRepository.exists(id))) {
       return new PushResult({ success: 0, failure: 1 });
     }
