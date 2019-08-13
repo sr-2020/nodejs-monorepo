@@ -49,11 +49,11 @@ jobs:
     - stage: deploy production
       install: 'true'
       script:
-        - make deploy server=35.234.112.65 password=$USER_PASSWORD
+        - make deploy server=instance.evarun.ru password=$USER_PASSWORD
 
 addons:
   ssh_known_hosts:
-    - 35.234.112.65
+    - instance.evarun.ru
   apt:
     packages:
       - sshpass
