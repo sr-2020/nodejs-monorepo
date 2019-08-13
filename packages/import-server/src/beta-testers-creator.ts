@@ -3,6 +3,7 @@ import * as request from 'request-promise-native';
 const emails = [];
 
 const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
+const kQrsToRecreate = 0;
 
 interface LoginResponse {
   id: number;
@@ -81,7 +82,7 @@ async function main() {
     await providePlayer(email);
   }
 
-  for (let i = 1; i < 100; ++i) {
+  for (let i = 1; i < kQrsToRecreate; ++i) {
     await provideEmptyQr(i.toString());
   }
 }
