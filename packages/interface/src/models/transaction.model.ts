@@ -8,7 +8,7 @@ export class Transaction extends Entity {
   @property({ type: 'number', generated: true, id: true })
   id?: number;
 
-  @property({ type: 'date', required: true })
+  @property()
   created_at: string;
 
   @rproperty()
