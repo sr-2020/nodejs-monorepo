@@ -81,6 +81,7 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
     return;
   }
 
+  api.model.healthState = 'healthy';
   api.sendNotification('Лечение', 'Хиты полностью восстановлены');
 }
 
