@@ -11,10 +11,12 @@ export function consumeQrs(api: Sr2020CharacterApi, data: { qrCodes: number[] },
 
 export function wound(api: Sr2020CharacterApi, _data: {}, _: Event) {
   api.model.healthState = 'wounded';
+  api.sendNotification('Ранение', 'Вы тяжело ранены');
 }
 
 export function revive(api: Sr2020CharacterApi, _data: {}, _: Event) {
   api.model.healthState = 'healthy';
+  api.sendNotification('Ранение', 'Вы снова в строю');
 }
 
 export function scanQr(api: Sr2020CharacterApi, data: { qrCode: number; locationId?: string }, _: Event) {
