@@ -19,6 +19,10 @@ export class Spell {
   name: 'sr2020-character',
 })
 export class Sr2020Character extends EmptyModel {
+  @property({ required: true, type: 'string' })
+  @Column({ type: 'text' })
+  healthState: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
+
   @rproperty()
   @Column()
   spellsCasted: number;

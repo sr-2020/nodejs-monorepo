@@ -182,6 +182,7 @@ export class TestFixture {
 
 function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
+    healthState: 'healthy',
     spellsCasted: 0,
     spells: [],
     modelId: '0',
