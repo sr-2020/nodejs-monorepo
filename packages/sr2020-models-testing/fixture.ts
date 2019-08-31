@@ -15,6 +15,7 @@ import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-e
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import * as Winston from 'winston';
+import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 
 (Winston as any).level = 'error';
 
@@ -119,55 +120,47 @@ export class TestFixture {
     await this._connection.getRepository(QrCode).save({ ...getDefaultQrCode(this._timeService.timestamp()), ...model });
   }
 
-  async getCharacter(id: number | string = 0): Promise<Sr2020Character> {
-    return await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
-  }
-
   getCharacterNotifications(id: number | string = 0): PushNotification[] {
     return this._pushService.get(id) || [];
   }
 
-  async getLocation(id: number | string = 0): Promise<Location> {
-    return this._connection.getRepository(Location).findOneOrFail(id);
-  }
-
-  async getQrCode(id: number | string = 0): Promise<QrCode> {
-    return this._connection.getRepository(QrCode).findOneOrFail(id);
-  }
-
-  async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<Sr2020Character> {
+  async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     this._pushService.reset();
     const resp = await this.client
       .post(`/character/model/${id}`)
       .send(event)
       .expect(200);
-    return resp.body.workModel;
+    return resp.body;
   }
 
-  async refreshCharacter(id: number | string = 0): Promise<Sr2020Character> {
-    return (await this.client.get(`/character/model/${id}`).expect(200)).body.workModel;
+  async getCharacter(id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
+    return (await this.client.get(`/character/model/${id}`).expect(200)).body;
   }
 
-  async sendLocationEvent(event: EventRequest, id: number | string = 0): Promise<Location> {
+  async sendLocationEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Location>> {
     this._pushService.reset();
     const resp = await this.client
       .post(`/location/model/${id}`)
       .send(event)
       .expect(200);
-    return resp.body.workModel;
+    return resp.body;
   }
 
-  async sendQrCodeEvent(event: EventRequest, id: number | string = 0): Promise<QrCode> {
+  async getLocation(id: number | string = 0): Promise<ModelProcessResponse<Location>> {
+    return (await this.client.get(`/location/model/${id}`).expect(200)).body;
+  }
+
+  async sendQrCodeEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<QrCode>> {
     this._pushService.reset();
     const resp = await this.client
       .post(`/qr/model/${id}`)
       .send(event)
       .expect(200);
-    return resp.body.workModel;
+    return resp.body;
   }
 
-  async refreshLocation(id: number | string = 0) {
-    await this.client.get(`/location/model/${id}`).expect(200);
+  async getQrCode(id: number | string = 0): Promise<ModelProcessResponse<QrCode>> {
+    return (await this.client.get(`/qr/model/${id}`).expect(200)).body;
   }
 
   async advanceTime(seconds: number) {

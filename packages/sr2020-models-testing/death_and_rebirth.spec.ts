@@ -17,22 +17,20 @@ describe('Death & Rebirth', function() {
   it('Healthy -> Wounded -> Clinically dead -> Healthy', async () => {
     await fixture.saveCharacter({ healthState: 'healthy' });
     await fixture.sendCharacterEvent({ eventType: 'wound' });
-    expect(await fixture.getCharacter()).containDeep({ healthState: 'wounded' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
     await fixture.advanceTime(300);
-    await fixture.refreshCharacter();
-    expect(await fixture.getCharacter()).containDeep({ healthState: 'clinically_dead' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'clinically_dead' } });
     await fixture.sendCharacterEvent({ eventType: 'revive' });
-    expect(await fixture.getCharacter()).containDeep({ healthState: 'healthy' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
   });
 
   it('Revive cancels death timer', async () => {
     await fixture.saveCharacter({ healthState: 'healthy' });
     await fixture.sendCharacterEvent({ eventType: 'wound' });
-    expect(await fixture.getCharacter()).containDeep({ healthState: 'wounded' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
     await fixture.advanceTime(150);
     await fixture.sendCharacterEvent({ eventType: 'revive' });
     await fixture.advanceTime(150);
-    await fixture.refreshCharacter();
-    expect(await fixture.getCharacter()).containDeep({ healthState: 'healthy' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
   });
 });

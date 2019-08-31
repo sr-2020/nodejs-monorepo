@@ -16,31 +16,35 @@ describe('Spells', function() {
 
   it('Learn and forget dummy spell', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
-    expect(await fixture.getCharacter()).containDeep({ spells: [{ eventType: 'dummySpell' }] });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
+      expect(workModel).containDeep({ spells: [{ eventType: 'dummySpell' }] });
+    }
 
-    await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
-    expect((await fixture.getCharacter()).spells).to.be.empty();
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
+      expect(workModel.spells).to.be.empty();
+    }
   });
 
   it('Forget unlearned spell', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
-    expect((await fixture.getCharacter()).spells).to.be.empty();
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
+    expect(workModel.spells).to.be.empty();
   });
 
   it('Forget all spells', async () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
-    await fixture.sendCharacterEvent({ eventType: 'forgetAllSpells', data: {} });
-    expect((await fixture.getCharacter()).spells).to.be.empty();
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetAllSpells', data: {} });
+    expect(workModel.spells).to.be.empty();
   });
 
   it('Cast dummy spell', async () => {
     await fixture.saveCharacter({ spellsCasted: 12 });
     await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
-    await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: {} });
-    expect(await fixture.getCharacter()).containDeep({ spellsCasted: 13 });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: {} });
+    expect(workModel).containDeep({ spellsCasted: 13 });
     expect(fixture.getCharacterNotifications().length).to.equal(1);
   });
 
@@ -54,20 +58,22 @@ describe('Spells', function() {
       .expect(400);
     expect(fixture.getCharacterNotifications()).to.be.empty();
 
-    expect(await fixture.getQrCode()).containDeep({ type: 'something' });
+    expect(await fixture.getQrCode()).containDeep({ workModel: { type: 'something' } });
   });
 
   it('Enchant artifact and activate it later', async () => {
     await fixture.saveCharacter();
     await fixture.saveQrCode();
-
-    await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: { qrCode: 0 } });
-    expect(await fixture.getCharacter()).containDeep({ spellsCasted: 0 });
-    expect(await fixture.getQrCode()).containDeep({ usesLeft: 3 });
-
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0 } });
-    expect(await fixture.getCharacter()).containDeep({ spellsCasted: 1 });
-    expect(await fixture.getQrCode()).containDeep({ usesLeft: 2 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: { qrCode: 0 } });
+      expect(workModel).containDeep({ spellsCasted: 0 });
+      expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 3 } });
+    }
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0 } });
+      expect(workModel).containDeep({ spellsCasted: 1 });
+      expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 2 } });
+    }
   });
 
   it('Enchant artifact, give it to another character, activate in another location', async () => {
@@ -77,13 +83,17 @@ describe('Spells', function() {
     await fixture.saveLocation({ modelId: '1', manaDensity: 500 });
     await fixture.saveLocation({ modelId: '2', manaDensity: 400 });
 
-    await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, locationId: '1' } }, 1);
-    expect(await fixture.getCharacter(1)).containDeep({ spellsCasted: 0 });
-    expect(await fixture.getLocation(1)).containDeep({ manaDensity: 500 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, locationId: '1' } }, 1);
+      expect(workModel).containDeep({ spellsCasted: 0 });
+      expect(await fixture.getLocation(1)).containDeep({ workModel: { manaDensity: 500 } });
+    }
 
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, locationId: '2' } }, 2);
-    expect(await fixture.getCharacter(2)).containDeep({ spellsCasted: 1 });
-    expect(await fixture.getLocation(2)).containDeep({ manaDensity: 200 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, locationId: '2' } }, 2);
+      expect(workModel).containDeep({ spellsCasted: 1 });
+      expect(await fixture.getLocation(2)).containDeep({ workModel: { manaDensity: 200 } });
+    }
   });
 
   it('Heal self', async () => {
@@ -104,25 +114,30 @@ describe('Spells', function() {
 
   it('Light Heal self', async () => {
     await fixture.saveCharacter({ magic: 10 });
-    let workModel = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 5 } });
-    expect(fixture.getCharacterNotifications().length).to.equal(1);
-    expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
-    expect((await fixture.getCharacter()).history.length).to.equal(2); // Spell casted + Hp restored
-    expect(workModel.magic).to.equal(7); // Spell casted + Hp restored
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 5 } });
+      expect(fixture.getCharacterNotifications().length).to.equal(1);
+      expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
+      expect(workModel.history.length).to.equal(2); // Spell casted + Hp restored
+      expect(workModel.magic).to.equal(7); // Spell casted + Hp restored
+    }
 
-    fixture.advanceTime(299);
-    expect((await fixture.refreshCharacter()).magic).to.equal(10);
+    {
+      fixture.advanceTime(300);
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magic).to.equal(10);
+    }
   });
 
   it('Light Heal other', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.saveCharacter({ modelId: '2' });
-    await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { targetCharacterId: 2, power: 3 } }, 1);
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { targetCharacterId: 2, power: 3 } }, 1);
     expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-    expect((await fixture.getCharacter(1)).history.length).to.equal(1); // Spell casted
+    expect(workModel.history.length).to.equal(1); // Spell casted
 
     expect(fixture.getCharacterNotifications(2).length).to.equal(1);
     expect(fixture.getCharacterNotifications(2)[0].body).containEql('хитов: 3');
-    expect((await fixture.getCharacter(2)).history.length).to.equal(1); // Hp restored
+    expect((await fixture.getCharacter(2)).workModel.history.length).to.equal(1); // Hp restored
   });
 });
