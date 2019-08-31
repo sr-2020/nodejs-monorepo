@@ -168,8 +168,8 @@ describe('Worker', () => {
 
   it('Should run modifiers', async () => {
     const effects: Effect[] = [
-      { id: 'add A', type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
-      { id: 'add A', type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
+      { type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
+      { type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
     ];
 
     const context = {

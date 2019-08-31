@@ -74,11 +74,15 @@ export type Timer = {
 
 @model()
 export class Effect {
-  @rproperty()
-  enabled: boolean;
+  // Unique id of this effect "kind" (not of specific effect instance).
+  // Doesn't really used by the scripts code, typical usage is to get effect
+  // by id from some external static data storage (e.g. DB containing all existing effects.
+  // If Effect is created from the code, can be skipped altogether.
+  @property()
+  id?: string;
 
   @rproperty()
-  id: string;
+  enabled: boolean;
 
   @rproperty()
   class: string;

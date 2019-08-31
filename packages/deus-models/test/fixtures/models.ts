@@ -88,7 +88,6 @@ export function getExampleModel(id?: string): DeusExModel {
         class: '_internal',
         effects: [
           {
-            id: 'damage-effect',
             class: 'physiology',
             type: 'normal',
             handler: 'damageEffect',
@@ -105,7 +104,6 @@ export function getExampleModel(id?: string): DeusExModel {
         class: '_internal',
         effects: [
           {
-            id: 'show-condition',
             class: 'physiology',
             type: 'normal',
             handler: 'showCondition',

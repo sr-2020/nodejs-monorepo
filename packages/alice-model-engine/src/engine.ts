@@ -129,7 +129,7 @@ export class Engine<T extends EmptyModel> {
           if (!f) {
             continue;
           }
-          Logger.logStep('engine', 'info', `Running ${effect.id} of modifier ${modifier.mID}`, { modelId })(() => {
+          Logger.logStep('engine', 'info', `Running ${effect.handler} of modifier ${modifier.mID}`, { modelId })(() => {
             Logger.debug('engine', 'Full effect and modifier data', { effect, modifier, modelId });
             (f as any)(api, modifier);
           });
