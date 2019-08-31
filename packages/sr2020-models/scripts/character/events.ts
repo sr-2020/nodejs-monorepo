@@ -1,9 +1,14 @@
 import { Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020CharacterApi } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consume } from '../qr/events';
 
-export function consumeQrs(api: Sr2020CharacterApi, data: { qrCodes: number[] }, _: Event) {
+export function consumeQrs(api: Sr2020CharacterApi, data: { qrCodes: number[]; targetCharacterId?: number }, _: Event) {
+  if (data.targetCharacterId != undefined) {
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), consumeQrs, { qrCodes: data.qrCodes });
+    return;
+  }
+
   for (const code of data.qrCodes) {
     api.sendOutboundEvent(QrCode, code.toString(), consume, {});
   }
