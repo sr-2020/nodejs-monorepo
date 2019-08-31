@@ -1,4 +1,4 @@
-import { Event } from '@sr2020/interface/models/alice-model-engine';
+import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity } from '../location/events';
@@ -6,6 +6,8 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord, addHistoryRecord } from './util';
+import uuid = require('uuid');
+import { removeModifierDelayed } from './events';
 
 const AllSpells: Spell[] = [
   {
@@ -32,6 +34,15 @@ const AllSpells: Spell[] = [
     eventType: fullHealSpell.name,
     canTargetSelf: true,
     canTargetItem: true,
+    canTargetLocation: false,
+    canTargetSingleTarget: true,
+  },
+  {
+    humanReadableName: 'Light Heal',
+    description: 'Восстанавливает текущие хиты.',
+    eventType: lightHealSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
     canTargetLocation: false,
     canTargetSingleTarget: true,
   },
@@ -90,6 +101,30 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
   revive(api, data, event);
 }
 
+//
+// Healing spells
+//
+export function lightHealSpell(api: Sr2020CharacterApi, data: { targetCharacterId?: number; power: number }, event: Event) {
+  if (data.targetCharacterId != undefined) {
+    addHistoryRecord(api, 'Заклинание', 'Light Heal: на цель');
+    api.sendNotification('Успех', 'Заклинание совершено');
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), lightHeal, data);
+    return;
+  } else {
+    addHistoryRecord(api, 'Заклинание', 'Light Heal: на себя');
+    api.sendSelfEvent(lightHeal, data);
+  }
+  magicFeedback(api, data.power, event);
+}
+
+export function lightHeal(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+  const hpRestored = data.power;
+  sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
+}
+
+//
+// Events for learning and forgetting spells
+//
 export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {
   const spell = AllSpells.find((s) => s.eventType == data.spellName);
   if (!spell) {
@@ -104,4 +139,31 @@ export function forgetSpell(api: Sr2020CharacterApi, data: { spellName: string }
 
 export function forgetAllSpells(api: Sr2020CharacterApi, data: {}, _: Event) {
   api.model.spells = [];
+}
+
+// Magic feedback implementation
+function magicFeedback(api: Sr2020CharacterApi, power: number, event: Event) {
+  const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
+  const feedbackAmount = Math.floor((power + 1) / 2);
+
+  const m = api.addModifier({
+    mID: 'magic-feedback-' + uuid.v4(),
+    enabled: true,
+    effects: [
+      {
+        enabled: true,
+        id: 'magic-feedback-effect',
+        class: '',
+        type: 'normal',
+        handler: magicFeedbackEffect.name,
+      },
+    ],
+    amount: feedbackAmount,
+  });
+
+  removeModifierDelayed(api, { mID: m.mID, delayInSeconds: feedbackTimeSeconds }, event);
+}
+
+export function magicFeedbackEffect(api: Sr2020CharacterApi, m: Modifier) {
+  api.model.magic -= m.amount;
 }

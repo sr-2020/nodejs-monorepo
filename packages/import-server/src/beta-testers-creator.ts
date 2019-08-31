@@ -27,6 +27,8 @@ async function provideCharacter(login: LoginResponse) {
   const characterData: Sr2020Character = {
     modelId: login.id.toString(),
     timestamp: 0,
+    magic: 5,
+    magicPowerBonus: 0,
     healthState: 'healthy',
     spells: [],
     history: [],

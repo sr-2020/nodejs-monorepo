@@ -101,4 +101,28 @@ describe('Spells', function() {
     expect(fixture.getCharacterNotifications(2).length).to.equal(1);
     expect(fixture.getCharacterNotifications(2)[0].body).containEql('полностью восстановл');
   });
+
+  it('Light Heal self', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    let workModel = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 5 } });
+    expect(fixture.getCharacterNotifications().length).to.equal(1);
+    expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
+    expect((await fixture.getCharacter()).history.length).to.equal(2); // Spell casted + Hp restored
+    expect(workModel.magic).to.equal(7); // Spell casted + Hp restored
+
+    fixture.advanceTime(299);
+    expect((await fixture.refreshCharacter()).magic).to.equal(10);
+  });
+
+  it('Light Heal other', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { targetCharacterId: 2, power: 3 } }, 1);
+    expect(fixture.getCharacterNotifications(1).length).to.equal(1);
+    expect((await fixture.getCharacter(1)).history.length).to.equal(1); // Spell casted
+
+    expect(fixture.getCharacterNotifications(2).length).to.equal(1);
+    expect(fixture.getCharacterNotifications(2)[0].body).containEql('хитов: 3');
+    expect((await fixture.getCharacter(2)).history.length).to.equal(1); // Hp restored
+  });
 });

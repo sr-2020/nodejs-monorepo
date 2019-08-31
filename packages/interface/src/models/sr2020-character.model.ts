@@ -43,6 +43,14 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column()
+  magic: number;
+
+  @rproperty()
+  @Column()
+  magicPowerBonus: number;
+
+  @rproperty()
+  @Column()
   spellsCasted: number;
 
   @property.array(Spell, { required: true })

@@ -135,32 +135,35 @@ export class TestFixture {
     return this._connection.getRepository(QrCode).findOneOrFail(id);
   }
 
-  async sendCharacterEvent(event: EventRequest, id: number | string = 0) {
+  async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<Sr2020Character> {
     this._pushService.reset();
-    await this.client
+    const resp = await this.client
       .post(`/character/model/${id}`)
       .send(event)
       .expect(200);
+    return resp.body.workModel;
   }
 
-  async refreshCharacter(id: number | string = 0) {
-    await this.client.get(`/character/model/${id}`).expect(200);
+  async refreshCharacter(id: number | string = 0): Promise<Sr2020Character> {
+    return (await this.client.get(`/character/model/${id}`).expect(200)).body.workModel;
   }
 
-  async sendLocationEvent(event: EventRequest, id: number | string = 0) {
+  async sendLocationEvent(event: EventRequest, id: number | string = 0): Promise<Location> {
     this._pushService.reset();
-    await this.client
+    const resp = await this.client
       .post(`/location/model/${id}`)
       .send(event)
       .expect(200);
+    return resp.body.workModel;
   }
 
-  async sendQrCodeEvent(event: EventRequest, id: number | string = 0) {
+  async sendQrCodeEvent(event: EventRequest, id: number | string = 0): Promise<QrCode> {
     this._pushService.reset();
-    await this.client
+    const resp = await this.client
       .post(`/qr/model/${id}`)
       .send(event)
       .expect(200);
+    return resp.body.workModel;
   }
 
   async refreshLocation(id: number | string = 0) {
@@ -184,6 +187,8 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     healthState: 'healthy',
     spellsCasted: 0,
+    magic: 5,
+    magicPowerBonus: 0,
     spells: [],
     history: [],
     modelId: '0',
