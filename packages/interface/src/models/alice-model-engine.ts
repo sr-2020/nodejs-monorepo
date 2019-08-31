@@ -84,9 +84,6 @@ export class Effect {
   @rproperty()
   enabled: boolean;
 
-  @rproperty()
-  class: string;
-
   // TODO: Improve validation?
   @rproperty()
   type: 'normal' | 'functional';
@@ -239,8 +236,6 @@ export interface ReadModelApiInterface<T extends EmptyModel> {
   getModifiersByName(name: string): Modifier[];
   getModifiersByClass(className: string): Modifier[];
   getModifiersBySystem(systemName: string): Modifier[];
-
-  getEffectsByClass(className: string): Effect[];
 
   getConditionById(id: string): Condition | undefined;
   getConditionsByClass(className: string): Condition[];

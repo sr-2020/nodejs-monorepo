@@ -53,10 +53,6 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
     return this.getModifiersBy((m) => m.system == systemName);
   }
 
-  public getEffectsByClass(className: string) {
-    return this.getEffectsBy((e) => e.class == className);
-  }
-
   public getConditionById(id: string) {
     return this.contextGetter().conditions.find((c) => c.id == id);
   }

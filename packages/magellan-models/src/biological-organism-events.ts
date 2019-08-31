@@ -140,7 +140,7 @@ function enterShip(api: MagellanModelApiInterface, data: number, event: Event) {
   }
 
   leaveShip(api, null, event);
-  const eff: Effect = { enabled: true, class: 'physiology', type: 'normal', handler: 'onTheShip' };
+  const eff: Effect = { enabled: true, type: 'normal', handler: 'onTheShip' };
   const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
 }

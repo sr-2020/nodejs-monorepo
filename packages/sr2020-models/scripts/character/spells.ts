@@ -152,7 +152,6 @@ function magicFeedback(api: Sr2020CharacterApi, power: number, event: Event) {
     effects: [
       {
         enabled: true,
-        class: '',
         type: 'normal',
         handler: magicFeedbackEffect.name,
       },

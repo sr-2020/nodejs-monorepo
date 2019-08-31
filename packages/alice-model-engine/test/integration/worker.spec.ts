@@ -167,10 +167,7 @@ describe('Worker', () => {
   });
 
   it('Should run modifiers', async () => {
-    const effects: Effect[] = [
-      { type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
-      { type: 'normal', enabled: true, handler: 'concat', class: 'normal' },
-    ];
+    const effects: Effect[] = [{ type: 'normal', enabled: true, handler: 'concat' }, { type: 'normal', enabled: true, handler: 'concat' }];
 
     const context = {
       ...defaultModel,

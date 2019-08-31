@@ -2,19 +2,16 @@
     "effects" : [
         {
             "id"    : "show-condition",
-            "class"   : "physiology",
             "type"    : "normal",
             "handler" : "showCondition"
         },
         {
             "id"    : "show-always-condition",
-            "class"   : "physiology",
             "type"    : "normal",
             "handler" : "showAlwaysCondition"
         },
         {
             "id"    : "change-properties",
-            "class"   : "physiology",
             "type"    : "normal",
             "handler" : "changeProperties"
         }
