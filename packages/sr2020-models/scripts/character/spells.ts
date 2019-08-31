@@ -4,6 +4,7 @@ import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/mo
 import { reduceManaDensity } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
+import { revive } from './events';
 
 const AllSpells: Spell[] = [
   {
@@ -71,7 +72,7 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
-export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; targetCharacterId?: number }, _: Event) {
+export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
@@ -81,8 +82,11 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
     return;
   }
 
-  api.model.healthState = 'healthy';
-  api.sendNotification('Лечение', 'Хиты полностью восстановлены');
+  if (api.model.healthState == 'healthy') {
+    api.sendNotification('Лечение', 'Хиты полностью восстановлены');
+  } else {
+    revive(api, data, event);
+  }
 }
 
 export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {
