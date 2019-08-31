@@ -15,6 +15,24 @@ export class Spell {
 }
 
 @model()
+export class HistoryRecord {
+  @rproperty()
+  id: string;
+
+  @rproperty()
+  timestamp: number;
+
+  @rproperty()
+  title: string;
+
+  @rproperty()
+  shortText: string;
+
+  @rproperty()
+  longText: string;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -30,6 +48,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];
+
+  @property.array(HistoryRecord, { required: true })
+  @JsonColumn()
+  history: HistoryRecord[];
 }
 
 export type Sr2020CharacterApi = ModelApiInterface<Sr2020Character>;

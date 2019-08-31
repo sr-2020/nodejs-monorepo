@@ -5,6 +5,7 @@ import { reduceManaDensity } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
+import { sendNotificationAndHistoryRecord, addHistoryRecord } from './util';
 
 const AllSpells: Spell[] = [
   {
@@ -74,19 +75,19 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
 
 export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
   if (data.qrCode != undefined) {
+    addHistoryRecord(api, 'Заклинание', 'Лечение: на артефакт');
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
 
   if (data.targetCharacterId != undefined) {
+    addHistoryRecord(api, 'Заклинание', 'Лечение: на цель');
     api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), fullHealSpell, {});
     return;
   }
 
-  if (api.model.healthState == 'healthy') {
-    api.sendNotification('Лечение', 'Хиты полностью восстановлены');
-  } else {
-    revive(api, data, event);
-  }
+  addHistoryRecord(api, 'Заклинание', 'Лечение: на себя');
+  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
+  revive(api, data, event);
 }
 
 export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {

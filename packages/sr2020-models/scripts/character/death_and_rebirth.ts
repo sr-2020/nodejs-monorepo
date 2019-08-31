@@ -1,5 +1,6 @@
 import { Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Event } from '@sr2020/interface/models/alice-model-engine';
+import { sendNotificationAndHistoryRecord } from './util';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = 5 * 60 * 1000;
@@ -8,7 +9,7 @@ export function wound(api: Sr2020CharacterApi, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
 
   api.model.healthState = 'wounded';
-  api.sendNotification('Ранение', 'Вы тяжело ранены');
+  sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы тяжело ранены');
 
   api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
 }
@@ -17,7 +18,7 @@ export function clinicalDeath(api: Sr2020CharacterApi, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') return;
 
   api.model.healthState = 'clinically_dead';
-  api.sendNotification('Смерть. Почти.', 'Вы в состоянии клинической смерти!');
+  sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
 }
 
 export function clinicalDeathOnTarget(api: Sr2020CharacterApi, data: { targetCharacterId: number }, _: Event) {
@@ -30,9 +31,6 @@ export function reviveOnTarget(api: Sr2020CharacterApi, data: { targetCharacterI
 
 export function revive(api: Sr2020CharacterApi, _data: {}, _: Event) {
   if (api.model.healthState == 'biologically_dead') return;
-
   api.model.healthState = 'healthy';
-  api.sendNotification('Восстановление', 'Вы снова в строю');
-
   api.removeTimer(kClinicalDeathTimerName);
 }

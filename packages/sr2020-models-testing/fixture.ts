@@ -185,6 +185,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     healthState: 'healthy',
     spellsCasted: 0,
     spells: [],
+    history: [],
     modelId: '0',
     timestamp,
     conditions: [],
