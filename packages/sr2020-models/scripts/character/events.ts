@@ -14,16 +14,6 @@ export function consumeQrs(api: Sr2020CharacterApi, data: { qrCodes: number[]; t
   }
 }
 
-export function wound(api: Sr2020CharacterApi, _data: {}, _: Event) {
-  api.model.healthState = 'wounded';
-  api.sendNotification('Ранение', 'Вы тяжело ранены');
-}
-
-export function revive(api: Sr2020CharacterApi, _data: {}, _: Event) {
-  api.model.healthState = 'healthy';
-  api.sendNotification('Восстановление', 'Вы снова в строю');
-}
-
 export function scanQr(api: Sr2020CharacterApi, data: { qrCode: number; locationId?: string }, _: Event) {
   const qr: QrCode = api.aquired('QrCode', data.qrCode.toString());
   if (qr.type == 'empty') throw new UserVisibleError('Этот QR-код - пустышка, его нельзя использовать');

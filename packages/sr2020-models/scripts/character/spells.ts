@@ -4,7 +4,7 @@ import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/mo
 import { reduceManaDensity } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
-import { revive } from './events';
+import { revive } from './death_and_rebirth';
 
 const AllSpells: Spell[] = [
   {
