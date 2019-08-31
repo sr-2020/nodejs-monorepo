@@ -1,4 +1,7 @@
 import * as request from 'request-promise-native';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { Transaction } from '@sr2020/interface/models/transaction.model';
 
 const emails = [];
 
@@ -21,10 +24,12 @@ async function loginOrRegister(email: string, password: string): Promise<LoginRe
 }
 
 async function provideCharacter(login: LoginResponse) {
-  const characterData = {
+  const characterData: Sr2020Character = {
     modelId: login.id.toString(),
     timestamp: 0,
+    healthState: 'healthy',
     spells: [],
+    history: [],
     modifiers: [],
     conditions: [],
     timers: {},
@@ -42,13 +47,13 @@ async function provideCharacter(login: LoginResponse) {
 }
 
 async function provideBilling(login: LoginResponse) {
-  const transaction = {
+  const transaction = new Transaction({
     created_at: new Date().toISOString(),
     sin_from: 0,
     sin_to: login.id,
     amount: 1000,
     comment: 'Тестирование',
-  };
+  });
 
   await request.post('http://billing.evarun.ru/transactions', { json: transaction, resolveWithFullResponse: true }).promise();
 }
@@ -61,7 +66,7 @@ async function providePlayer(email: string) {
 }
 
 async function provideEmptyQr(modelId: string) {
-  const qrData = {
+  const qrData: QrCode = {
     modelId,
     usesLeft: 0,
     type: 'empty',
