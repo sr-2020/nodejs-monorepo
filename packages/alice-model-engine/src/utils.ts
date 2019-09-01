@@ -51,7 +51,7 @@ export function requireDir(dir: string, merge = _merge): any {
       Logger.info('engine', `Loading model from file ${f}`);
       src = require(f);
     } catch (e) {
-      Logger.warn('engine', `Haven't managed to load models from ${f}, trying file ${Path.join(process.cwd(), f)}`);
+      Logger.info('engine', `Haven't managed to load models from ${f}, trying file ${Path.join(process.cwd(), f)}`);
       src = require(Path.join(process.cwd(), f));
     }
 
