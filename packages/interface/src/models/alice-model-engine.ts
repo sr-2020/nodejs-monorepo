@@ -81,13 +81,20 @@ export class Effect {
   @property()
   id?: string;
 
+  // If set to false, Effect won't be applied. Can be useful to temporarily disable something
+  // without removing the whole Effect.
   @rproperty()
   enabled: boolean;
 
-  // TODO: Improve validation?
+  // 'Functional' effects can change enabled/disabed state of 'normal' effects.
+  // In particular, all functional effects are applied before normal ones.
+  // If your effect doesn't change enabled/disabled state - make it normal.
   @rproperty()
   type: 'normal' | 'functional';
 
+  // Name of TypeScript/JavaScript function which will be called to apply this Effect.
+  // If set from the code, consider passing foo.name instead of "foo" so you will get compilation failure
+  // if handler function is removed, but there is an effect referencing it.
   @rproperty()
   handler: string;
 }
