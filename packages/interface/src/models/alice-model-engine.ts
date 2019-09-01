@@ -142,7 +142,6 @@ export class Condition {
   @property()
   level?: number;
 }
-
 export type PendingAquire = Array<[string, string]>;
 
 export interface AquiredObjects {
@@ -225,10 +224,6 @@ export class EmptyModel {
   @JsonColumn()
   modifiers: Modifier[];
 
-  @property.array(Condition, { required: true })
-  @JsonColumn()
-  conditions: Condition[];
-
   @property()
   @JsonColumn()
   timers?: Timers;
@@ -243,10 +238,6 @@ export interface ReadModelApiInterface<T extends EmptyModel> {
   getModifiersByName(name: string): Modifier[];
   getModifiersByClass(className: string): Modifier[];
   getModifiersBySystem(systemName: string): Modifier[];
-
-  getConditionById(id: string): Condition | undefined;
-  getConditionsByClass(className: string): Condition[];
-  getConditionsByGroup(group: string): Condition[];
 
   getTimer(name: string): Timer | undefined;
 }
@@ -264,14 +255,6 @@ export interface WriteModelApiInterface<TModel extends EmptyModel> {
   addModifier(modifier: Modifier): Modifier;
   // Will do nothing if no modifier with such mID is present.
   removeModifier(mID: string): this;
-
-  // If condition with same id is present, will do nothing
-  // and return existing condition.
-  // If condition.mID is not present, will generate new unique one.
-  // Returns added condition.
-  addCondition(condition: Condition): Condition;
-  // Will do nothing if no condition with such id is present.
-  removeCondition(id: string): this;
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.

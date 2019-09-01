@@ -3,7 +3,6 @@ import { cloneDeep } from 'lodash';
 
 import {
   AquiredObjects,
-  Condition,
   EmptyModel,
   Event,
   Modifier,
@@ -105,10 +104,6 @@ export class Context<T extends EmptyModel> {
   get effects() {
     const enabledModifiers = this.modifiers.filter((m) => m.enabled);
     return _.flatMap(enabledModifiers, (c) => c.effects);
-  }
-
-  get conditions(): Condition[] {
-    return this._model.conditions;
   }
 
   get outboundEvents(): EventForModelType[] {

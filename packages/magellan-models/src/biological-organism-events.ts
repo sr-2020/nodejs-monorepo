@@ -155,7 +155,7 @@ function onTheShip(api: MagellanModelApiInterface, modifier: OnTheShipModifier) 
     class: 'physiology',
     text: `Вы находитесь на корабле номер ${modifier.shipId}`,
   };
-  api.addCondition(c);
+  helpers.addCondition(api, c);
   api.model.location = `ship_${modifier.shipId}`;
 }
 

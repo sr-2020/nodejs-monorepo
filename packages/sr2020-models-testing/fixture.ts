@@ -187,7 +187,6 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     history: [],
     modelId: '0',
     timestamp,
-    conditions: [],
     modifiers: [],
     timers: {},
   };
@@ -199,7 +198,6 @@ function getDefaultLocation(timestamp: number): Location {
 
     modelId: '0',
     timestamp,
-    conditions: [],
     modifiers: [],
     timers: {},
   };
@@ -215,7 +213,6 @@ function getDefaultQrCode(timestamp: number): QrCode {
 
     modelId: '0',
     timestamp,
-    conditions: [],
     modifiers: [],
     timers: {},
   };

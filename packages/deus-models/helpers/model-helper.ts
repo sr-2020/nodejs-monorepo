@@ -2,6 +2,8 @@ import { MindData } from '../models/medicViewModel';
 import { DeusExModelApiInterface, DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { Implant, Illness } from './catalog_types';
 import { Effect, Modifier, Condition } from '@sr2020/interface/models/alice-model-engine';
+import { cloneDeep } from 'lodash';
+import cuid = require('cuid');
 
 /**
  * Хелперы для разных моделей
@@ -254,7 +256,7 @@ function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
 
     if (condition) {
       api.debug(JSON.stringify(condition));
-      return api.addCondition(condition);
+      return addCondition(api, condition);
     } else {
       api.info("Couldn't find condition " + condId);
     }
@@ -509,6 +511,19 @@ function createEffectModifier(
   return modifier;
 }
 
+function addCondition(api: DeusExModelApiInterface, condition: Condition): Condition {
+  let c = api.model.conditions.find((cond) => cond.id == condition.id);
+  if (c) return c;
+  c = cloneDeep(condition);
+  if (c) {
+    if (!c.id) {
+      c.id = cuid();
+    }
+    api.model.conditions.push(c);
+  }
+  return c;
+}
+
 export = {
   loadImplant,
   addChangeRecord,
@@ -518,6 +533,7 @@ export = {
   isGenomeMatch,
   checkPredicate,
   modifyMindCubes,
+  addCondition,
   addCharacterCondition,
   addDelayedEvent,
   removeElementByMID,

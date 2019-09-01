@@ -1,4 +1,4 @@
-import { ModelApiInterface, EmptyModel } from 'interface/src/models/alice-model-engine';
+import { ModelApiInterface, EmptyModel, Condition } from 'interface/src/models/alice-model-engine';
 import { Change } from 'interface/src/models/deus-ex-model';
 
 export enum BiologicalSystems {
@@ -117,6 +117,7 @@ export interface OrganismModel extends EmptyModel {
 
   location?: string;
   systems: System[];
+  conditions: Condition[];
 
   spaceSuit: SpaceSuit;
 

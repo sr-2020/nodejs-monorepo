@@ -25,7 +25,7 @@ interface PutConditionData {
 
 function putConditionEvent(api: DeusExModelApiInterface, data: PutConditionData, _: Event) {
   if (data.text) {
-    let cond = api.addCondition({
+    let cond = helpers.addCondition(api, {
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
       text: data.text,
       details: data.details ? data.details : data.text,

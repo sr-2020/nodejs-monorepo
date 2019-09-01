@@ -1,4 +1,4 @@
-import { ModelApiInterface } from 'interface/src/models/alice-model-engine';
+import { ModelApiInterface, Condition } from 'interface/src/models/alice-model-engine';
 
 /**
  * Хелперы для разных моделей
@@ -6,6 +6,8 @@ import { ModelApiInterface } from 'interface/src/models/alice-model-engine';
 import Chance = require('chance');
 import consts = require('./constants');
 import { OrganismModel, MagellanModelApiInterface } from './basic-types';
+import { cloneDeep } from 'lodash';
+import cuid = require('cuid');
 const chance = new Chance();
 
 function addChangeRecord(api: MagellanModelApiInterface, text: string, timestamp: number) {
@@ -69,8 +71,22 @@ function addDelayedEvent(api: ModelApiInterface<OrganismModel>, duration: number
   }
 }
 
+function addCondition(api: ModelApiInterface<OrganismModel>, condition: Condition): Condition {
+  let c = api.model.conditions.find((cond) => cond.id == condition.id);
+  if (c) return c;
+  c = cloneDeep(condition);
+  if (c) {
+    if (!c.id) {
+      c.id = cuid();
+    }
+    api.model.conditions.push(c);
+  }
+  return c;
+}
+
 export = {
   addChangeRecord,
   uuidv4,
   addDelayedEvent,
+  addCondition,
 };

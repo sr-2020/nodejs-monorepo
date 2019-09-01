@@ -34,7 +34,6 @@ async function provideCharacter(login: LoginResponse) {
     activeAbilities: [],
     history: [],
     modifiers: [],
-    conditions: [],
     timers: {},
     spellsCasted: 0,
   };
@@ -78,7 +77,6 @@ async function provideEmptyQr(modelId: string) {
     data: {},
     timestamp: 0,
     modifiers: [],
-    conditions: [],
     timers: {},
   };
 

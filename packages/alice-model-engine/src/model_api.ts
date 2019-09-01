@@ -1,6 +1,5 @@
 import {
   AquiredObjects,
-  Condition,
   EmptyModel,
   Event,
   LogApiInterface,
@@ -53,18 +52,6 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
     return this.getModifiersBy((m) => m.system == systemName);
   }
 
-  public getConditionById(id: string) {
-    return this.contextGetter().conditions.find((c) => c.id == id);
-  }
-
-  public getConditionsByClass(className: string) {
-    return this.getConditionsBy((c) => c.class == className);
-  }
-
-  public getConditionsByGroup(group: string) {
-    return this.getConditionsBy((c) => c.group == group);
-  }
-
   public getTimer(name: string) {
     return this.contextGetter().timers[name];
   }
@@ -97,10 +84,6 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
     const effects = this.contextGetter().effects.filter(predicate);
     return effects;
   }
-
-  private getConditionsBy(predicate: (c: Condition) => boolean) {
-    return this.contextGetter().conditions.filter(predicate);
-  }
 }
 
 class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApiInterface<T> {
@@ -125,29 +108,6 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
 
   public removeModifier(mID: string) {
     _.remove(this.contextGetter().modifiers, (m) => m.mID == mID);
-    return this;
-  }
-
-  public addCondition(condition: Condition): Condition {
-    let c = _.find(this.contextGetter().conditions, (cond) => cond.id == condition.id);
-
-    if (c) return c;
-
-    c = cloneDeep(condition);
-
-    if (c) {
-      if (!c.id) {
-        c.id = cuid();
-      }
-
-      this.contextGetter().conditions.push(c);
-    }
-
-    return c;
-  }
-
-  public removeCondition(id: string) {
-    _.remove(this.contextGetter().conditions, (c) => c.id == id);
     return this;
   }
 

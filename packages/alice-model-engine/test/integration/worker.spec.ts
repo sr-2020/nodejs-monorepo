@@ -6,7 +6,7 @@ import { Worker } from '../../src/worker';
 
 describe('Worker', () => {
   let worker: Worker;
-  const defaultModel: EmptyModel = { modelId: '0', timestamp: 0, modifiers: [], conditions: [], timers: {} };
+  const defaultModel: EmptyModel = { modelId: '0', timestamp: 0, modifiers: [], timers: {} };
 
   beforeEach(() => {
     const eventHandlers: EventHandler[] = [
