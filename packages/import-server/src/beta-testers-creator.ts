@@ -26,6 +26,7 @@ async function loginOrRegister(email: string, password: string): Promise<LoginRe
 async function provideCharacter(login: LoginResponse) {
   const characterData: Sr2020Character = {
     modelId: login.id.toString(),
+    maxHp: 3,
     timestamp: 0,
     magic: 5,
     magicPowerBonus: 0,

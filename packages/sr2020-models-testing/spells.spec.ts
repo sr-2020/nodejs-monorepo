@@ -183,4 +183,50 @@ describe('Spells', function() {
     const { workModel } = await fixture.getCharacter();
     expect(workModel.activeAbilities.length).to.equal(0);
   });
+
+  it('Live long and prosper self', async () => {
+    await fixture.saveCharacter({ magic: 10, maxHp: 3 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'liveLongAndProsperSpell', data: { power: 10 } });
+      expect(fixture.getCharacterNotifications().length).to.equal(1);
+      expect(fixture.getCharacterNotifications()[0].body).containEql('увеличены на 3');
+      expect(workModel.history.length).to.equal(2); // Spell casted + Hp restored
+      expect(workModel.magic).to.equal(5);
+      expect(workModel.maxHp).to.equal(6);
+    }
+
+    {
+      fixture.advanceTime(180);
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magic).to.equal(5);
+      expect(workModel.maxHp).to.equal(3);
+    }
+
+    {
+      fixture.advanceTime(120);
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magic).to.equal(10);
+    }
+  });
+
+  it('Live long and prosper other', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '2', maxHp: 5 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'liveLongAndProsperSpell', data: { targetCharacterId: 2, power: 4 } },
+        1,
+      );
+      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
+      expect(workModel.history.length).to.equal(1); // Spell casted
+    }
+
+    {
+      expect(fixture.getCharacterNotifications(2).length).to.equal(1);
+      expect(fixture.getCharacterNotifications(2)[0].body).containEql('увеличены на 2');
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.history.length).to.equal(1); // Hp restored
+      expect(workModel.maxHp).to.equal(6); // Not 7 as global maximum is 6
+    }
+  });
 });

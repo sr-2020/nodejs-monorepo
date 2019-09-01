@@ -7,6 +7,7 @@ import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
 import { AllActiveAbilities } from './abilities';
+import { MAX_POSSIBLE_HP } from './consts';
 
 const AllSpells: Spell[] = [
   {
@@ -71,6 +72,15 @@ const AllSpells: Spell[] = [
     canTargetItem: false,
     canTargetLocation: false,
     canTargetSingleTarget: false,
+  },
+  {
+    humanReadableName: 'Live long and prosper',
+    description: 'Увеличивает текущие и максимальные хиты',
+    eventType: liveLongAndProsperSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
+    canTargetLocation: false,
+    canTargetSingleTarget: true,
   },
 ];
 
@@ -159,6 +169,32 @@ export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number }
 
 export function groundHealEffect(api: Sr2020CharacterApi, m: Modifier) {
   api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
+}
+
+export function liveLongAndProsperSpell(api: Sr2020CharacterApi, data: { targetCharacterId?: number; power: number }, event: Event) {
+  if (data.targetCharacterId != undefined) {
+    addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
+    api.sendNotification('Успех', 'Заклинание совершено');
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), liveLongAndProsper, data);
+    return;
+  } else {
+    addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на себя');
+    api.sendSelfEvent(liveLongAndProsper, data);
+  }
+  magicFeedback(api, data.power, event);
+}
+
+export function liveLongAndProsper(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+  const hpIncrease = Math.round(Math.sqrt(data.power));
+  const durationInSeconds = Math.round(Math.sqrt(data.power)) * 60;
+  sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
+  const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
+  addTemporaryModifier(api, m, durationInSeconds);
+}
+
+export function maxHpIncreaseEffect(api: Sr2020CharacterApi, m: Modifier) {
+  api.model.maxHp += m.amount;
+  api.model.maxHp = Math.min(api.model.maxHp, MAX_POSSIBLE_HP);
 }
 
 //

@@ -43,6 +43,10 @@ export class HistoryRecord {
   name: 'sr2020-character',
 })
 export class Sr2020Character extends EmptyModel {
+  @rproperty()
+  @Column()
+  maxHp: number;
+
   @property({ required: true, type: 'string' })
   @Column({ type: 'text' })
   healthState: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';

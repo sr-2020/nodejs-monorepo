@@ -180,6 +180,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     healthState: 'healthy',
     spellsCasted: 0,
+    maxHp: 3,
     magic: 5,
     magicPowerBonus: 0,
     spells: [],
