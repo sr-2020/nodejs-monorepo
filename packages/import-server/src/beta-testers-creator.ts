@@ -32,6 +32,7 @@ async function provideCharacter(login: LoginResponse) {
     healthState: 'healthy',
     spells: [],
     activeAbilities: [],
+    passiveAbilities: [],
     history: [],
     modifiers: [],
     timers: {},

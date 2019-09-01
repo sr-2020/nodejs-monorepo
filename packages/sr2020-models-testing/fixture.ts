@@ -184,6 +184,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     magicPowerBonus: 0,
     spells: [],
     activeAbilities: [],
+    passiveAbilities: [],
     history: [],
     modelId: '0',
     timestamp,

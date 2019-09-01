@@ -54,6 +54,15 @@ const AllSpells: Spell[] = [
     canTargetLocation: false,
     canTargetSingleTarget: false,
   },
+  {
+    humanReadableName: 'Fireball',
+    description: 'Дает временную возможность кинуть несколько огненных шаров',
+    eventType: fireballSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
+    canTargetLocation: false,
+    canTargetSingleTarget: false,
+  },
 ];
 
 function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
@@ -141,6 +150,26 @@ export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number }
 
 export function groundHealEffect(api: Sr2020CharacterApi, m: Modifier) {
   api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
+}
+
+//
+// Offensive spells
+//
+
+export function fireballSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
+  const durationInSeconds = (data.power * 60) / 2;
+  const amount = Math.floor(data.power / 2);
+  const m = modifierFromEffect(fireballEffect, { amount, durationInSeconds });
+  addTemporaryModifier(api, m, durationInSeconds);
+  magicFeedback(api, data.power, event);
+}
+
+export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
+  api.model.passiveAbilities.push({
+    humanReadableName: 'Fireball',
+    description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
+  });
 }
 
 //

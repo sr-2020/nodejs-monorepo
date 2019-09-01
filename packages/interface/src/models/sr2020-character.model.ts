@@ -24,6 +24,12 @@ export class ActiveAbility {
 }
 
 @model()
+export class PassiveAbility {
+  @rproperty() humanReadableName: string;
+  @rproperty() description: string;
+}
+
+@model()
 export class HistoryRecord {
   @rproperty() id: string;
   @rproperty() timestamp: number;
@@ -60,6 +66,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(ActiveAbility, { required: true })
   @JsonColumn()
   activeAbilities: ActiveAbility[];
+
+  @property.array(PassiveAbility, { required: true })
+  @JsonColumn()
+  passiveAbilities: PassiveAbility[];
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
