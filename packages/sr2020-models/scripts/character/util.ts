@@ -22,7 +22,7 @@ export function sendNotificationAndHistoryRecord(api: Sr2020CharacterApi, title:
 
 // Сreates an modifier having a single Effect. additionalData will be embedded into Modifier so effect handler will be able
 // access it.
-export function modifierFromEffect(effect: (api: Sr2020CharacterApi, m: Modifier) => void, additionalData: any): Modifier {
+export function modifierFromEffect(effect: (api: Sr2020CharacterApi, m: Modifier) => void, additionalData: any = {}): Modifier {
   const handler = effect.name;
   return {
     ...additionalData,

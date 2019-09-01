@@ -63,6 +63,15 @@ const AllSpells: Spell[] = [
     canTargetLocation: false,
     canTargetSingleTarget: false,
   },
+  {
+    humanReadableName: 'Field of denial',
+    description: 'Дает частичную защиту от тяжелого оружия',
+    eventType: fieldOfDenialSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
+    canTargetLocation: false,
+    canTargetSingleTarget: false,
+  },
 ];
 
 function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
@@ -169,6 +178,25 @@ export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
   api.model.passiveAbilities.push({
     humanReadableName: 'Fireball',
     description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
+  });
+}
+
+//
+// Defensive spells
+//
+
+export function fieldOfDenialSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
+  const durationInSeconds = 40 * 60;
+  const m = modifierFromEffect(fieldOfDenialEffect);
+  addTemporaryModifier(api, m, durationInSeconds);
+  magicFeedback(api, data.power, event);
+}
+
+export function fieldOfDenialEffect(api: Sr2020CharacterApi, m: Modifier) {
+  api.model.passiveAbilities.push({
+    humanReadableName: 'Field of denial',
+    description: `Попадание в зонтик тяжелым оружием игнорируется.`,
   });
 }
 
