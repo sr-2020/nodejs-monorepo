@@ -5,9 +5,7 @@ import { reduceManaDensity } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
-import { sendNotificationAndHistoryRecord, addHistoryRecord } from './util';
-import uuid = require('uuid');
-import { removeModifierDelayed } from './events';
+import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
 
 const AllSpells: Spell[] = [
   {
@@ -146,20 +144,8 @@ function magicFeedback(api: Sr2020CharacterApi, power: number, event: Event) {
   const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
   const feedbackAmount = Math.floor((power + 1) / 2);
 
-  const m = api.addModifier({
-    mID: 'magic-feedback-' + uuid.v4(),
-    enabled: true,
-    effects: [
-      {
-        enabled: true,
-        type: 'normal',
-        handler: magicFeedbackEffect.name,
-      },
-    ],
-    amount: feedbackAmount,
-  });
-
-  removeModifierDelayed(api, { mID: m.mID, delayInSeconds: feedbackTimeSeconds }, event);
+  const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
+  addTemporaryModifier(api, m, feedbackTimeSeconds);
 }
 
 export function magicFeedbackEffect(api: Sr2020CharacterApi, m: Modifier) {
