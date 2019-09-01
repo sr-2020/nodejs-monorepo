@@ -15,6 +15,15 @@ export class Spell {
 }
 
 @model()
+export class ActiveAbility {
+  @rproperty() humanReadableName: string;
+  @rproperty() description: string;
+  @rproperty() eventType: string;
+  @rproperty() canTargetSelf: boolean = false;
+  @rproperty() canTargetSingleTarget: boolean = false;
+}
+
+@model()
 export class HistoryRecord {
   @rproperty() id: string;
   @rproperty() timestamp: number;
@@ -47,6 +56,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];
+
+  @property.array(ActiveAbility, { required: true })
+  @JsonColumn()
+  activeAbilities: ActiveAbility[];
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()

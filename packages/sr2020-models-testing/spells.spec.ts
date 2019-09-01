@@ -140,4 +140,47 @@ describe('Spells', function() {
     expect(fixture.getCharacterNotifications(2)[0].body).containEql('хитов: 3');
     expect((await fixture.getCharacter(2)).workModel.history.length).to.equal(1); // Hp restored
   });
+
+  it('Ground Heal used', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 2 } }, 1);
+      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
+      expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
+      expect(workModel.activeAbilities.length).to.equal(1);
+      expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
+      expect(workModel.magic).to.equal(9);
+    }
+
+    let abilityEventType: string;
+    {
+      // Power 2 is 20 minutes = 1200 seconds.
+      fixture.advanceTime(1199);
+      const { workModel } = await fixture.getCharacter(1);
+      expect(workModel.activeAbilities.length).to.equal(1);
+      expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
+      abilityEventType = workModel.activeAbilities[0].eventType;
+      expect(workModel.magic).to.equal(10);
+    }
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: abilityEventType, data: { targetCharacterId: 2 } }, 1);
+      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
+      expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
+      expect(fixture.getCharacterNotifications(2).length).to.equal(1);
+      expect(fixture.getCharacterNotifications(2)[0].body).containEql('Хиты полностью восстановлены');
+      expect(workModel.activeAbilities.length).to.equal(0);
+    }
+  });
+
+  it('Ground Heal expired', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 2 } });
+    // Power 2 is 20 minutes = 1200 seconds.
+    fixture.advanceTime(1200);
+    const { workModel } = await fixture.getCharacter();
+    expect(workModel.activeAbilities.length).to.equal(0);
+  });
 });

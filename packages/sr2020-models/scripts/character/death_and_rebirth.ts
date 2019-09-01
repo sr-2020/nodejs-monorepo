@@ -31,6 +31,7 @@ export function reviveOnTarget(api: Sr2020CharacterApi, data: { targetCharacterI
 
 export function revive(api: Sr2020CharacterApi, _data: {}, _: Event) {
   if (api.model.healthState == 'biologically_dead') return;
+  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
   api.model.healthState = 'healthy';
   api.removeTimer(kClinicalDeathTimerName);
 }

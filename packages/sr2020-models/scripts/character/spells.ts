@@ -6,6 +6,7 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
+import { AllActiveAbilities } from './abilities';
 
 const AllSpells: Spell[] = [
   {
@@ -43,6 +44,15 @@ const AllSpells: Spell[] = [
     canTargetItem: false,
     canTargetLocation: false,
     canTargetSingleTarget: true,
+  },
+  {
+    humanReadableName: 'Ground Heal',
+    description: 'Дает временную одноразовую способность поднять одну цель из КС/тяжрана в полные хиты',
+    eventType: groundHealSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
+    canTargetLocation: false,
+    canTargetSingleTarget: false,
   },
 ];
 
@@ -95,7 +105,6 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
   }
 
   addHistoryRecord(api, 'Заклинание', 'Лечение: на себя');
-  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
   revive(api, data, event);
 }
 
@@ -118,6 +127,20 @@ export function lightHealSpell(api: Sr2020CharacterApi, data: { targetCharacterI
 export function lightHeal(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
   const hpRestored = data.power;
   sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
+}
+
+export const GROUND_HEAL_MODIFIER_NAME = 'ground-heal-modifier';
+
+export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
+  const durationInSeconds = 10 * data.power * 60;
+  const m = modifierFromEffect(groundHealEffect, { name: GROUND_HEAL_MODIFIER_NAME });
+  addTemporaryModifier(api, m, durationInSeconds);
+  magicFeedback(api, data.power, event);
+}
+
+export function groundHealEffect(api: Sr2020CharacterApi, m: Modifier) {
+  api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
 }
 
 //
