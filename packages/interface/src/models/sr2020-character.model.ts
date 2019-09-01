@@ -16,20 +16,11 @@ export class Spell {
 
 @model()
 export class HistoryRecord {
-  @rproperty()
-  id: string;
-
-  @rproperty()
-  timestamp: number;
-
-  @rproperty()
-  title: string;
-
-  @rproperty()
-  shortText: string;
-
-  @rproperty()
-  longText: string;
+  @rproperty() id: string;
+  @rproperty() timestamp: number;
+  @rproperty() title: string;
+  @rproperty() shortText: string;
+  @rproperty() longText: string;
 }
 
 @model()
