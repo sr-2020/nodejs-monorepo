@@ -144,7 +144,6 @@ export function lightHealSpell(api: Sr2020CharacterApi, data: { targetCharacterI
     addHistoryRecord(api, 'Заклинание', 'Light Heal: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
     api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), lightHeal, data);
-    return;
   } else {
     addHistoryRecord(api, 'Заклинание', 'Light Heal: на себя');
     api.sendSelfEvent(lightHeal, data);
@@ -176,7 +175,6 @@ export function liveLongAndProsperSpell(api: Sr2020CharacterApi, data: { targetC
     addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
     api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), liveLongAndProsper, data);
-    return;
   } else {
     addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на себя');
     api.sendSelfEvent(liveLongAndProsper, data);

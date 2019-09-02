@@ -130,11 +130,12 @@ describe('Spells', function() {
   });
 
   it('Light Heal other', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 7 });
     await fixture.saveCharacter({ modelId: '2' });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { targetCharacterId: 2, power: 3 } }, 1);
     expect(fixture.getCharacterNotifications(1).length).to.equal(1);
     expect(workModel.history.length).to.equal(1); // Spell casted
+    expect(workModel.magic).to.equal(5);
 
     expect(fixture.getCharacterNotifications(2).length).to.equal(1);
     expect(fixture.getCharacterNotifications(2)[0].body).containEql('хитов: 3');
@@ -210,7 +211,7 @@ describe('Spells', function() {
   });
 
   it('Live long and prosper other', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.saveCharacter({ modelId: '2', maxHp: 5 });
     {
       const { workModel } = await fixture.sendCharacterEvent(
@@ -219,6 +220,7 @@ describe('Spells', function() {
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(workModel.history.length).to.equal(1); // Spell casted
+      expect(workModel.magic).to.equal(8);
     }
 
     {
