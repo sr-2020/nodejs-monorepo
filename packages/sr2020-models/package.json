@@ -22,7 +22,9 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/chance": "^1.0.6"
   },
   "dependencies": {
+    "chance": "^1.1.0"
   }
 }

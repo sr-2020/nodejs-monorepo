@@ -183,6 +183,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     maxHp: 3,
     magic: 5,
     magicPowerBonus: 0,
+    magicAura: 'aaaabbbbccccddddeeee',
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],
@@ -197,8 +198,8 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
 function getDefaultLocation(timestamp: number): Location {
   return {
     manaDensity: 0,
-
     modelId: '0',
+    spellTraces: [],
     timestamp,
     modifiers: [],
     timers: {},

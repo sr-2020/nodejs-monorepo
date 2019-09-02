@@ -89,6 +89,7 @@ export class Engine<T extends EmptyModel> {
       aquired: baseCtx.aquired,
       outboundEvents: baseCtx.outboundEvents,
       notifications: baseCtx.notifications,
+      tableResponse: baseCtx.tableResponse,
     };
   }
 

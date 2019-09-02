@@ -61,6 +61,10 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column()
+  magicAura: string;
+
+  @rproperty()
+  @Column()
   spellsCasted: number;
 
   @property.array(Spell, { required: true })

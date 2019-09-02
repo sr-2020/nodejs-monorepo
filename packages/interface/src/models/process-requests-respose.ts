@@ -21,6 +21,10 @@ export class BaseModelProcessResponse {
 
   @property.array(PushNotification, { required: true })
   notifications: PushNotification[];
+
+  // TODO: Can we improve typings or do something else to make it less hacky?
+  @property()
+  tableResponse?: any;
 }
 
 export class ModelProcessRequest<TModel extends EmptyModel> extends BaseModelProcessRequest {

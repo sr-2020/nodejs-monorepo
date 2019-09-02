@@ -41,6 +41,7 @@ export class Context<T extends EmptyModel> {
   private _pendingAquire: PendingAquire;
   private _aquired: AquiredObjects;
   private _notifications: PushNotification[] = [];
+  private _tableResponse?: any = undefined;
 
   constructor(
     model: T,
@@ -169,6 +170,14 @@ export class Context<T extends EmptyModel> {
 
   public sendNotification(title: string, body: string) {
     this._notifications.push({ title, body });
+  }
+
+  public setTableResponse(table: any) {
+    this._tableResponse = table;
+  }
+
+  get tableResponse() {
+    return this._tableResponse;
   }
 
   public nextTimer(): Timer | null {

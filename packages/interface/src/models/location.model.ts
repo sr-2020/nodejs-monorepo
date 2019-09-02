@@ -1,7 +1,16 @@
-import { model } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, rproperty } from './alice-model-engine';
+import { model, property } from '@loopback/repository';
+import { EmptyModel, ModelApiInterface, rproperty, JsonColumn } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
+
+@model()
+export class SpellTrace {
+  @rproperty() timestamp: number;
+  @rproperty() spellName: string;
+  @rproperty() casterAura: string;
+  @rproperty() power: number;
+  @rproperty() magicFeedback: number;
+}
 
 @model()
 @Entity({
@@ -11,6 +20,10 @@ export class Location extends EmptyModel {
   @rproperty()
   @Column()
   manaDensity: number;
+
+  @property.array(SpellTrace, { required: true })
+  @JsonColumn()
+  spellTraces: SpellTrace[];
 }
 
 export type LocationApi = ModelApiInterface<Location>;

@@ -8,6 +8,7 @@ describe('Spells', function() {
 
   beforeEach('setupApplication', async () => {
     fixture = await TestFixture.create();
+    await fixture.saveLocation();
   });
 
   afterEach(async () => {
@@ -229,6 +230,46 @@ describe('Spells', function() {
       const { workModel } = await fixture.getCharacter(2);
       expect(workModel.history.length).to.equal(1); // Hp restored
       expect(workModel.maxHp).to.equal(6); // Not 7 as global maximum is 6
+    }
+  });
+
+  it('Trackpoint', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 2 } }, 1);
+    await fixture.advanceTime(2 * 60);
+    await fixture.sendCharacterEvent({ eventType: 'fireballSpell', data: { power: 4 } }, 1);
+    await fixture.advanceTime(15 * 60);
+    await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 6 } }, 2);
+
+    await fixture.saveCharacter({ modelId: '3', magic: 5 });
+    const { workModel, tableResponse } = await fixture.sendCharacterEvent(
+      { eventType: 'trackpointSpell', data: { power: 1, locationId: '0' } },
+      3,
+    );
+    expect(workModel.magic).to.equal(4);
+    expect(tableResponse.length).to.equal(2);
+    expect(tableResponse).containDeep([
+      {
+        spellName: 'Fireball',
+        timestamp: 120000,
+        power: 4,
+        magicFeedback: 2,
+      },
+      {
+        spellName: 'Ground heal',
+        timestamp: 1020000,
+        power: 6,
+        magicFeedback: 3,
+      },
+    ]);
+
+    for (const entry of tableResponse) {
+      const aura: string = entry.casterAura;
+      expect(aura).match(
+        /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
+      );
+      expect((aura.match(/[a-z]/g) || []).length).to.equal(2);
     }
   });
 });

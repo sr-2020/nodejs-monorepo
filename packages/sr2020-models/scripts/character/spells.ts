@@ -1,13 +1,15 @@
 import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { reduceManaDensity } from '../location/events';
+import { reduceManaDensity, recordSpellTrace } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
 import { AllActiveAbilities } from './abilities';
-import { MAX_POSSIBLE_HP } from './consts';
+import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
+import Chance = require('chance');
+const chance = new Chance();
 
 const AllSpells: Spell[] = [
   {
@@ -82,6 +84,15 @@ const AllSpells: Spell[] = [
     canTargetLocation: false,
     canTargetSingleTarget: true,
   },
+  {
+    humanReadableName: 'Trackpoint',
+    description: 'Получает информацию о скастванных в локации заклинаниях',
+    eventType: trackpointSpell.name,
+    canTargetSelf: true,
+    canTargetItem: false,
+    canTargetLocation: false,
+    canTargetSingleTarget: false,
+  },
 ];
 
 function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
@@ -139,7 +150,12 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
 //
 // Healing spells
 //
-export function lightHealSpell(api: Sr2020CharacterApi, data: { targetCharacterId?: number; power: number }, event: Event) {
+export function lightHealSpell(
+  api: Sr2020CharacterApi,
+  data: { targetCharacterId?: number; power: number; locationId: string },
+  event: Event,
+) {
+  if (data.locationId == undefined) data.locationId = '0';
   if (data.targetCharacterId != undefined) {
     addHistoryRecord(api, 'Заклинание', 'Light Heal: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
@@ -148,7 +164,7 @@ export function lightHealSpell(api: Sr2020CharacterApi, data: { targetCharacterI
     addHistoryRecord(api, 'Заклинание', 'Light Heal: на себя');
     api.sendSelfEvent(lightHeal, data);
   }
-  magicFeedback(api, data.power, event);
+  magicFeedbackAndSpellTrace(api, 'Light heal', data.power, data.locationId, event);
 }
 
 export function lightHeal(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
@@ -158,19 +174,25 @@ export function lightHeal(api: Sr2020CharacterApi, data: { power: number }, even
 
 export const GROUND_HEAL_MODIFIER_NAME = 'ground-heal-modifier';
 
-export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const durationInSeconds = 10 * data.power * 60;
   const m = modifierFromEffect(groundHealEffect, { name: GROUND_HEAL_MODIFIER_NAME });
   addTemporaryModifier(api, m, durationInSeconds);
-  magicFeedback(api, data.power, event);
+  magicFeedbackAndSpellTrace(api, 'Ground heal', data.power, data.locationId, event);
 }
 
 export function groundHealEffect(api: Sr2020CharacterApi, m: Modifier) {
   api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
 }
 
-export function liveLongAndProsperSpell(api: Sr2020CharacterApi, data: { targetCharacterId?: number; power: number }, event: Event) {
+export function liveLongAndProsperSpell(
+  api: Sr2020CharacterApi,
+  data: { targetCharacterId?: number; power: number; locationId: string },
+  event: Event,
+) {
+  if (data.locationId == undefined) data.locationId = '0';
   if (data.targetCharacterId != undefined) {
     addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
@@ -179,7 +201,7 @@ export function liveLongAndProsperSpell(api: Sr2020CharacterApi, data: { targetC
     addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на себя');
     api.sendSelfEvent(liveLongAndProsper, data);
   }
-  magicFeedback(api, data.power, event);
+  magicFeedbackAndSpellTrace(api, 'Live long and prosper', data.power, data.locationId, event);
 }
 
 export function liveLongAndProsper(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
@@ -199,13 +221,14 @@ export function maxHpIncreaseEffect(api: Sr2020CharacterApi, m: Modifier) {
 // Offensive spells
 //
 
-export function fireballSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+export function fireballSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
   const durationInSeconds = (data.power * 60) / 2;
   const amount = Math.floor(data.power / 2);
   const m = modifierFromEffect(fireballEffect, { amount, durationInSeconds });
   addTemporaryModifier(api, m, durationInSeconds);
-  magicFeedback(api, data.power, event);
+  magicFeedbackAndSpellTrace(api, 'Fireball', data.power, data.locationId, event);
 }
 
 export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
@@ -219,12 +242,13 @@ export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
 // Defensive spells
 //
 
-export function fieldOfDenialSpell(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+export function fieldOfDenialSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
   const durationInSeconds = 40 * 60;
   const m = modifierFromEffect(fieldOfDenialEffect);
   addTemporaryModifier(api, m, durationInSeconds);
-  magicFeedback(api, data.power, event);
+  magicFeedbackAndSpellTrace(api, 'Field of denial', data.power, data.locationId, event);
 }
 
 export function fieldOfDenialEffect(api: Sr2020CharacterApi, m: Modifier) {
@@ -232,6 +256,30 @@ export function fieldOfDenialEffect(api: Sr2020CharacterApi, m: Modifier) {
     humanReadableName: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
   });
+}
+
+//
+// Investigation spells
+//
+
+export function trackpointSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+  if (data.locationId == undefined) data.locationId = '0';
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
+  const durationInSeconds = (10 + 5 * data.power) * 60;
+  const location = api.aquired('Location', data.locationId) as Location;
+  const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
+  const positions = Array.from(Array(AURA_LENGTH).keys());
+  for (const spell of spellTraces) {
+    const picked = chance.pickset(positions, 2);
+    const chars: string[] = [];
+    for (let i = 0; i < AURA_LENGTH; ++i) {
+      if (i > 0 && i % 4 == 0) chars.push('-');
+      chars.push(picked.includes(i) ? spell.casterAura[i] : '?');
+    }
+    spell.casterAura = chars.join('');
+  }
+  api.setTableResponse(spellTraces);
+  magicFeedbackAndSpellTrace(api, 'Trackpoint', data.power, data.locationId, event);
 }
 
 //
@@ -254,12 +302,20 @@ export function forgetAllSpells(api: Sr2020CharacterApi, data: {}, _: Event) {
 }
 
 // Magic feedback implementation
-function magicFeedback(api: Sr2020CharacterApi, power: number, event: Event) {
+function magicFeedbackAndSpellTrace(api: Sr2020CharacterApi, spellName: string, power: number, locationId: string, event: Event) {
   const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
   const feedbackAmount = Math.floor((power + 1) / 2);
 
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
   addTemporaryModifier(api, m, feedbackTimeSeconds);
+
+  api.sendOutboundEvent(Location, locationId, recordSpellTrace, {
+    spellName,
+    timestamp: event.timestamp,
+    casterAura: api.model.magicAura,
+    power,
+    magicFeedback: feedbackAmount,
+  });
 }
 
 export function magicFeedbackEffect(api: Sr2020CharacterApi, m: Modifier) {

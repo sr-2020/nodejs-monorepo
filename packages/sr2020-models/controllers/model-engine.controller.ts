@@ -88,6 +88,7 @@ export class ModelEngineController implements ModelEngineService {
         workModel: res.workingModel,
         outboundEvents: res.outboundEvents,
         notifications: res.notifications,
+        tableResponse: res.tableResponse,
       };
     } else {
       if (res.error instanceof UserVisibleError) {

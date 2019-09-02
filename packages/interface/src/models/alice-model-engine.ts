@@ -176,6 +176,7 @@ export type EngineResultOk = {
   aquired: AquiredObjects;
   outboundEvents: EventForModelType[];
   notifications: PushNotification[];
+  tableResponse: any;
 };
 
 export type EngineResultError = {
@@ -281,6 +282,10 @@ export interface WriteModelApiInterface<TModel extends EmptyModel> {
   // Schedules sending of notification to the user "responsible" for model being processed.
   // If model being processed is not a "user" one, notification won't be sent.
   sendNotification(title: string, body: string): this;
+
+  // Quick hack to be able to send some table data to the user
+  // Needs some reconsideration
+  setTableResponse(table: any): this;
 }
 
 export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {

@@ -151,6 +151,11 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     this.contextGetter().sendNotification(title, body);
     return this;
   }
+
+  public setTableResponse(table: any): this {
+    this.contextGetter().setTableResponse(table);
+    return this;
+  }
 }
 
 class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ViewModelApiInterface<T> {
