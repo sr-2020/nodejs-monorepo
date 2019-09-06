@@ -95,7 +95,8 @@ export class TestFixture {
 
     let connection: Connection;
     if (process.env.NODE_ENV == 'test') {
-      connection = await createConnection({ ...getDbConnectionOptions(), database: undefined, type: 'sqljs' });
+      const prodConnectionOptions = getDbConnectionOptions();
+      connection = await createConnection({ type: 'sqljs', entities: prodConnectionOptions.entities, synchronize: true });
     } else {
       dotenv.config({ path: '../../.env' });
       connection = await createConnection(getDbConnectionOptions());

@@ -5,11 +5,11 @@ import { ConnectionOptions } from 'typeorm';
 
 export function getDbConnectionOptions(): ConnectionOptions {
   return {
-    type: 'mysql',
+    type: 'postgres',
     database: 'model',
-    host: process.env.MYSQL_HOST!!,
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD!!,
+    host: process.env.POSTGRESQL_HOST!!,
+    username: process.env.POSTGRESQL_USER,
+    password: process.env.POSTGRESQL_PASSWORD!!,
     synchronize: true,
     entities: [Sr2020Character, Location, QrCode],
   };

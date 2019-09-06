@@ -10,7 +10,7 @@ export async function getAndLockModel<TModelEntity>(
     .getRepository(tmodel)
     .createQueryBuilder()
     .select()
-    .where('modelId = :id', { id });
+    .where('"modelId" = :id', { id });
 
   // Hack to support unit-testing as sqljs doesn't support pessimistic_write.
   if (manager.connection.options.type != 'sqljs') {
