@@ -16,6 +16,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
+    "@google-cloud/firestore": "^2.2.9",
     "@types/command-line-args": "^4.0.0",
     "@types/request": "0.0.45",
     "@types/request-promise": "^4.1.35",
