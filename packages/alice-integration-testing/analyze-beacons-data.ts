@@ -26,12 +26,22 @@ async function main() {
       .where('timestamp', '>=', from)
       .where('timestamp', '<=', to)
       .get();
-    const totalWakeups = latestDocs.size;
-    const wakeupsWithBeacons = latestDocs.docs.filter((d) => d.data().total_beacons > 0).length;
+
+    const wakeups = latestDocs.docs
+      .map((d) => d.data() as { total_beacons: number; timestamp: Timestamp })
+      .sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
+
+    const totalWakeups = wakeups.length;
+    let maxDiff = 0;
+    for (let j = 0; j < totalWakeups - 1; ++j) {
+      maxDiff = Math.max(maxDiff, wakeups[j + 1].timestamp.seconds - wakeups[j].timestamp.seconds);
+    }
+    const wakeupsWithBeacons = wakeups.filter((w) => w.total_beacons > 0).length;
     console.log(
       `In the interval ${formatTimestamp(from)}-${formatTimestamp(
         to,
-      )} there were ${totalWakeups} wakeups total, from them ${wakeupsWithBeacons} were with beacon(s).`,
+      )} there were ${totalWakeups} wakeups total, from them ${wakeupsWithBeacons} were with beacon(s). Max delay = ${maxDiff /
+        60} minutes`,
     );
   }
 }
