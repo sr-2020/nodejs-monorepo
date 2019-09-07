@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "tsc -b",
-    "clean": "find . -type f ( -name *.js -or -name *.map -or -name *.d.ts -or -name *.tsbuildinfo ) -not -path '*node_modules*' -delete",
+    "clean": "find . -type f ( -name *.js -or -name *.map -or -name *.d.ts -or -name *.tsbuildinfo ) -not -path '*node_modules*' -print -delete",
     "build:watch": "tsc -b --watch",
     "test": "lerna run test --concurrency=1 --stream",
     "coverage:coveralls": "nyc report --reporter=text-lcov | coveralls",
