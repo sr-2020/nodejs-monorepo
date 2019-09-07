@@ -35,7 +35,7 @@ export async function setupApplication(): Promise<AppWithClient> {
       recurrent_payment_id int(11) DEFAULT NULL
     )
   `);
-  app.bind('datasources.MySQL').to(sqlite);
+  app.bind('datasources.PostgreSQL').to(sqlite);
   await app.start();
 
   const client = createRestAppClient(app);

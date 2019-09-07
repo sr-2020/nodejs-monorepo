@@ -15,7 +15,7 @@ docker build -t billing:latest
 Запуск собранного docker-образа выполняется с помощью
 
 ```
-docker run -p 3000:3000 -e MYSQL_HOST=<...> -e MYSQL_PASSWORD=<...> billing:latest
+docker run -p 3000:3000 -e POSTGRESQL_HOST=<...> -e POSTGRESQL_PASSWORD=<...> billing:latest
 ```
 
 ## Доступные методы

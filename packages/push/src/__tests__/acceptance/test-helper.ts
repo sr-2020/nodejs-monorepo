@@ -28,7 +28,7 @@ export async function setupApplication(): Promise<AppWithClient> {
       PRIMARY KEY ('id')
     );
   `);
-  app.bind('datasources.MySQL').to(sqlite);
+  app.bind('datasources.PostgreSQL').to(sqlite);
 
   await app.start();
 

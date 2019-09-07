@@ -1,9 +1,9 @@
 {
-  "name": "MySQL",
-  "connector": "mysql",
+  "name": "PostgreSQL",
+  "connector": "postgresql",
   "url": "",
   "host": "???",
-  "port": 3306,
+  "port": 5432,
   "user": "root",
   "password": "???",
   "database": "billing"

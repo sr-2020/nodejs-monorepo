@@ -1,1 +1,1 @@
-export * from './my-sql.datasource';
+export * from './postgre-sql.datasource';

@@ -1,6 +1,6 @@
 import { DefaultCrudRepository } from '@loopback/repository';
 import { FirebaseToken, FirebaseTokenRelations } from '@sr2020/interface/models';
-import { MySqlDataSource } from '../datasources';
+import { PostgreSqlDataSource } from '../datasources';
 import { inject } from '@loopback/core';
 
 export class FirebaseTokenRepository extends DefaultCrudRepository<
@@ -8,7 +8,7 @@ export class FirebaseTokenRepository extends DefaultCrudRepository<
   typeof FirebaseToken.prototype.id,
   FirebaseTokenRelations
 > {
-  constructor(@inject('datasources.MySQL') dataSource: MySqlDataSource) {
+  constructor(@inject('datasources.PostgreSQL') dataSource: PostgreSqlDataSource) {
     super(FirebaseToken, dataSource);
   }
 }

@@ -34,7 +34,7 @@
     "@types/dotenv": "^6.1.1",
     "@types/nock": "^10.0.3",
     "dotenv": "^8.0.0",
-    "loopback-connector-mysql": "^5.4.0",
+    "loopback-connector-postgresql": "^3.7.0",
     "loopback-connector-rest": "^3.4.1",
     "loopback-connector-sqlite3": "^3.0.0",
     "nock": "^10.0.6",
