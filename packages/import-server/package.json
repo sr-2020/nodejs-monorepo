@@ -9,7 +9,7 @@
     "coverage:test": "nyc --cwd=.. --temp-dir=import-server/.nyc_output mocha",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/import-server.coverage.json",
     "test:watch": "chokidar src/**/* test/**/* -c \"npm test\"",
-    "start": "tsc && forever start ./dist/server.js --server",
+    "start": "node -r tsconfig-paths/register ./src/beta-testers-creator.js",
     "stop": "forever stop ./dist/server.js",
     "dev": "tsc && node ./dist/server.js",
     "build": "tsc -b",

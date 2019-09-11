@@ -3,7 +3,12 @@ import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { Transaction } from '@sr2020/interface/models/transaction.model';
 
-const emails = [];
+interface User {
+  email: string;
+  name: string;
+}
+
+const users: User[] = [{ email: '', name: '' }];
 
 const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
 const kQrsToRecreate = 0;
@@ -13,12 +18,12 @@ interface LoginResponse {
   api_key: string;
 }
 
-async function loginOrRegister(email: string, password: string): Promise<LoginResponse> {
+async function loginOrRegister(email: string, name: string, password: string): Promise<LoginResponse> {
   try {
     return (await request.post(gatewayAddress + 'auth/login', { json: { email, password }, resolveWithFullResponse: true }).promise()).body;
   } catch (e) {
     return (await request
-      .post(gatewayAddress + 'auth/register', { json: { email, password, name: email }, resolveWithFullResponse: true })
+      .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
       .promise()).body;
   }
 }
@@ -63,9 +68,9 @@ async function provideBilling(login: LoginResponse) {
   await request.post('http://billing.evarun.ru/transactions', { json: transaction, resolveWithFullResponse: true }).promise();
 }
 
-async function providePlayer(email: string) {
-  console.log(`Generating data for ${email}`);
-  const login = await loginOrRegister(email, '1');
+async function providePlayer(user: User) {
+  console.log(`Generating data for ${user.email}`);
+  const login = await loginOrRegister(user.email, user.name, '1');
   await provideCharacter(login);
   await provideBilling(login);
 }
@@ -87,8 +92,8 @@ async function provideEmptyQr(modelId: string) {
 }
 
 async function main() {
-  for (const email of emails) {
-    await providePlayer(email);
+  for (const user of users) {
+    await providePlayer(user);
   }
 
   for (let i = 1; i < kQrsToRecreate; ++i) {
