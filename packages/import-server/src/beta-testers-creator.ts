@@ -22,9 +22,9 @@ async function loginOrRegister(email: string, name: string, password: string): P
   try {
     return (await request.post(gatewayAddress + 'auth/login', { json: { email, password }, resolveWithFullResponse: true }).promise()).body;
   } catch (e) {
-    return (
-      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
-    ).body;
+    return (await request
+      .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
+      .promise()).body;
   }
 }
 
