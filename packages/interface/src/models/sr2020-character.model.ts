@@ -81,6 +81,26 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column()
+  magicFeedbackReduction: number;
+
+  @rproperty()
+  @Column()
+  magicRecoverySpeed: number;
+
+  @rproperty()
+  @Column()
+  spiritResistanceMultiplier: number;
+
+  @rproperty()
+  @Column()
+  auraReadingMultiplier: number;
+
+  @rproperty()
+  @Column()
+  auraMarkMultiplier: number;
+
+  @rproperty()
+  @Column()
   spellsCasted: number;
 
   @property.array(Spell, { required: true })
