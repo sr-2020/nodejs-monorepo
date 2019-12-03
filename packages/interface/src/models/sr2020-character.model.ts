@@ -53,15 +53,31 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column()
-  magic: number;
-
-  @rproperty()
-  @Column()
   magicPowerBonus: number;
 
   @rproperty()
   @Column()
   magicAura: string;
+
+  @rproperty()
+  @Column()
+  body: number;
+
+  @rproperty()
+  @Column()
+  intelligence: number;
+
+  @rproperty()
+  @Column()
+  charisma: number;
+
+  @rproperty()
+  @Column()
+  magic: number;
+
+  @rproperty()
+  @Column()
+  resonance: number;
 
   @rproperty()
   @Column()

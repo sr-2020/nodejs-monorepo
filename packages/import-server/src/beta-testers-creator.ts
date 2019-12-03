@@ -22,9 +22,9 @@ async function loginOrRegister(email: string, name: string, password: string): P
   try {
     return (await request.post(gatewayAddress + 'auth/login', { json: { email, password }, resolveWithFullResponse: true }).promise()).body;
   } catch (e) {
-    return (await request
-      .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
-      .promise()).body;
+    return (
+      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
+    ).body;
   }
 }
 
@@ -33,7 +33,11 @@ async function provideCharacter(login: LoginResponse) {
     modelId: login.id.toString(),
     maxHp: 3,
     timestamp: 0,
+    body: 0,
+    intelligence: 0,
+    charisma: 0,
     magic: 5,
+    resonance: 0,
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
