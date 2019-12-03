@@ -24,3 +24,8 @@ export function increaseMagicRecoverySpeed(api: Sr2020CharacterApi, m: ModifierW
   // As this is a coefficient - we use 1/3 and 5/3 instead of 1 and 5 from the sheet.
   api.model.magicRecoverySpeed = clamp(api.model.magicRecoverySpeed, 1.0 / 3.0, 5.0 / 3.0);
 }
+
+export function increaseSpiritResistanceMultiplier(api: Sr2020CharacterApi, m: ModifierWithAmount) {
+  api.model.spiritResistanceMultiplier += m.amount;
+  api.model.spiritResistanceMultiplier = clamp(api.model.spiritResistanceMultiplier, 0.2, 2.0);
+}
