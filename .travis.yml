@@ -46,10 +46,10 @@ jobs:
         - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
         - lerna run docker:build --scope sr2020-models && lerna run docker:push --scope sr2020-models
 
-    - stage: deploy production
-      install: 'true'
-      script:
-        - make deploy server=instance.evarun.ru password=$USER_PASSWORD
+#    - stage: deploy production
+#      install: 'true'
+#      script:
+#        - make deploy server=instance.evarun.ru password=$USER_PASSWORD
 
 addons:
   ssh_known_hosts:
