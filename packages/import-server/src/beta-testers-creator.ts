@@ -49,6 +49,7 @@ async function provideCharacter(login: LoginResponse) {
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
     spells: [],
+    features: [],
     activeAbilities: [],
     passiveAbilities: [],
     history: [],

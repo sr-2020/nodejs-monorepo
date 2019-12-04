@@ -193,6 +193,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     auraMarkMultiplier: 1,
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
+    features: [],
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],

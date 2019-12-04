@@ -39,6 +39,14 @@ export class HistoryRecord {
 }
 
 @model()
+export class AddedFeature {
+  @rproperty() id: string;
+  @rproperty() name: string;
+  @rproperty() description: string;
+  @property.array(String, { required: true }) modifierIds: string[];
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -110,6 +118,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(PassiveAbility, { required: true })
   @JsonColumn()
   passiveAbilities: PassiveAbility[];
+
+  @property.array(AddedFeature, { required: true })
+  @JsonColumn()
+  features: AddedFeature[];
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
