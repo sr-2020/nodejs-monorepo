@@ -19,7 +19,7 @@ export function JsonColumn(): Function {
   if (process.env.NODE_ENV == 'test') {
     return Column({ type: 'text', transformer: new JsonToTextTransformer() });
   } else {
-    return Column({ type: 'json' });
+    return Column({ type: 'json', default: [] });
   }
 }
 
