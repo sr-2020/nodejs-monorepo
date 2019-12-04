@@ -20,11 +20,13 @@ interface LoginResponse {
 
 async function loginOrRegister(email: string, name: string, password: string): Promise<LoginResponse> {
   try {
-    return (await request.post(gatewayAddress + 'auth/login', { json: { email, password }, resolveWithFullResponse: true }).promise()).body;
-  } catch (e) {
     return (await request
       .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
       .promise()).body;
+  } catch (e) {
+    return (
+      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
+    ).body;
   }
 }
 
@@ -52,7 +54,6 @@ async function provideCharacter(login: LoginResponse) {
     history: [],
     modifiers: [],
     timers: {},
-    spellsCasted: 0,
   };
 
   await request.put('http://models-manager.evarun.ru/character/model', { json: characterData, resolveWithFullResponse: true }).promise();

@@ -26,9 +26,9 @@ describe('Fixture', function() {
   });
 
   it('Send character event', async () => {
-    await fixture.saveCharacter({ spellsCasted: 12 });
-    await fixture.sendCharacterEvent({ eventType: 'dummy-spell', data: {} });
-    expect(await fixture.getCharacter()).containDeep({ workModel: { spellsCasted: 13 } });
+    await fixture.saveCharacter({ resonance: 12 });
+    await fixture.sendCharacterEvent({ eventType: 'increase-resonance-spell', data: {} });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 13 } });
     expect(fixture.getCharacterNotifications().length).to.equal(1);
   });
 
@@ -65,10 +65,9 @@ describe('Fixture', function() {
   });
 
   it('Send character event with location event as side-effect', async () => {
-    await fixture.saveCharacter({ spellsCasted: 5 });
+    await fixture.saveCharacter();
     await fixture.saveLocation({ manaDensity: 10 });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'density-drain-spell', data: { locationId: '0', amount: 3 } });
-    expect(workModel).containDeep({ spellsCasted: 6 });
+    await fixture.sendCharacterEvent({ eventType: 'density-drain-spell', data: { locationId: '0', amount: 3 } });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 7 } });
   });
 
@@ -104,14 +103,14 @@ describe('Fixture', function() {
   });
 
   it('QR codes with events', async () => {
-    await fixture.saveCharacter({ spellsCasted: 10 });
-    await fixture.saveQrCode({ usesLeft: 5, type: 'event', eventType: 'dummy-spell', data: {} });
+    await fixture.saveCharacter({ resonance: 10 });
+    await fixture.saveQrCode({ usesLeft: 5, type: 'event', eventType: 'increase-resonance-spell', data: {} });
     await fixture.sendCharacterEvent({
       eventType: 'scan-qr',
       data: { qrCode: 0 },
     });
     expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
-    expect(await fixture.getCharacter()).containDeep({ workModel: { spellsCasted: 11 } });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 11 } });
   });
 
   // TODO(aeremin): add more tests demonstrating fixture interaction

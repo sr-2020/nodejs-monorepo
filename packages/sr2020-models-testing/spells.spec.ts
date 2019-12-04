@@ -15,37 +15,37 @@ describe('Spells', function() {
     await fixture.destroy();
   });
 
-  it('Learn and forget dummy spell', async () => {
+  it('Learn and forget increase resonance spell', async () => {
     await fixture.saveCharacter();
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
-      expect(workModel).containDeep({ spells: [{ eventType: 'dummySpell' }] });
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
+      expect(workModel).containDeep({ spells: [{ eventType: 'increaseResonanceSpell' }] });
     }
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'increaseResonanceSpell' } });
       expect(workModel.spells).to.be.empty();
     }
   });
 
   it('Forget unlearned spell', async () => {
     await fixture.saveCharacter();
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'dummySpell' } });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'increaseResonanceSpell' } });
     expect(workModel.spells).to.be.empty();
   });
 
   it('Forget all spells', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
+    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetAllSpells', data: {} });
     expect(workModel.spells).to.be.empty();
   });
 
   it('Cast dummy spell', async () => {
-    await fixture.saveCharacter({ spellsCasted: 12 });
-    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'dummySpell' } });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: {} });
-    expect(workModel).containDeep({ spellsCasted: 13 });
+    await fixture.saveCharacter({ resonance: 12 });
+    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: {} });
+    expect(workModel).containDeep({ resonance: 13 });
     expect(fixture.getCharacterNotifications().length).to.equal(1);
   });
 
@@ -55,7 +55,7 @@ describe('Spells', function() {
 
     await fixture.client
       .post(`/character/model/0`)
-      .send({ eventType: 'dummySpell', data: { qrCode: 0 } })
+      .send({ eventType: 'increaseResonanceSpell', data: { qrCode: 0 } })
       .expect(400);
     expect(fixture.getCharacterNotifications()).to.be.empty();
 
@@ -66,33 +66,31 @@ describe('Spells', function() {
     await fixture.saveCharacter();
     await fixture.saveQrCode();
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dummySpell', data: { qrCode: 0 } });
-      expect(workModel).containDeep({ spellsCasted: 0 });
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: { qrCode: 0 } });
+      expect(workModel).containDeep({ resonance: 0 });
       expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 3 } });
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0 } });
-      expect(workModel).containDeep({ spellsCasted: 1 });
+      expect(workModel).containDeep({ resonance: 1 });
       expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 2 } });
     }
   });
 
   it('Enchant artifact, give it to another character, activate in another location', async () => {
-    await fixture.saveCharacter({ modelId: '1', spellsCasted: 0 });
-    await fixture.saveCharacter({ modelId: '2', spellsCasted: 0 });
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '2' });
     await fixture.saveQrCode();
     await fixture.saveLocation({ modelId: '1', manaDensity: 500 });
     await fixture.saveLocation({ modelId: '2', manaDensity: 400 });
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, locationId: '1' } }, 1);
-      expect(workModel).containDeep({ spellsCasted: 0 });
+      await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, locationId: '1' } }, 1);
       expect(await fixture.getLocation(1)).containDeep({ workModel: { manaDensity: 500 } });
     }
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, locationId: '2' } }, 2);
-      expect(workModel).containDeep({ spellsCasted: 1 });
+      await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, locationId: '2' } }, 2);
       expect(await fixture.getLocation(2)).containDeep({ workModel: { manaDensity: 200 } });
     }
   });

@@ -180,7 +180,6 @@ export class TestFixture {
 function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     healthState: 'healthy',
-    spellsCasted: 0,
     maxHp: 3,
     body: 0,
     intelligence: 0,

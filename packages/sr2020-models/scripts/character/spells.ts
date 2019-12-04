@@ -14,8 +14,8 @@ const chance = new Chance();
 const AllSpells: Spell[] = [
   {
     humanReadableName: 'Заглушка',
-    description: 'Спелл-заглушка, просто увеличивает число скастованных спеллов. Может быть наложен на артефакт.',
-    eventType: dummySpell.name,
+    description: 'Спелл-заглушка, увеличивает резонанс. Может быть наложен на артефакт.',
+    eventType: increaseResonanceSpell.name,
     canTargetSelf: true,
     canTargetItem: true,
     canTargetLocation: false,
@@ -105,20 +105,19 @@ function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: str
   api.sendNotification('Успех', 'Артефакт зачарован!');
 }
 
-export function increaseSpellsCasted(api: Sr2020CharacterApi, _data: {}, _event: Event) {
-  api.model.spellsCasted++;
+export function increaseResonance(api: Sr2020CharacterApi, _data: {}, _event: Event) {
+  api.model.resonance++;
 }
 
-export function dummySpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _event: Event) {
+export function increaseResonanceSpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _event: Event) {
   if (data.qrCode != undefined) {
-    return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', dummySpell.name, 3);
+    return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', increaseResonanceSpell.name, 3);
   }
-  api.sendSelfEvent(increaseSpellsCasted, {});
+  api.sendSelfEvent(increaseResonance, {});
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
 export function densityDrainSpell(api: Sr2020CharacterApi, data: { locationId: string; amount: number }, _: Event) {
-  api.model.spellsCasted++;
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: data.amount });
 }
 
@@ -126,7 +125,6 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
-  api.model.spellsCasted++;
   const location = api.aquired('Location', data.locationId) as Location;
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
 }
