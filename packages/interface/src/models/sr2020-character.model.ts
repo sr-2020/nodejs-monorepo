@@ -60,43 +60,43 @@ export class Sr2020Character extends EmptyModel {
   magicAura: string;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   body: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   intelligence: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   charisma: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   magic: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   resonance: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   magicFeedbackReduction: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 1.0 })
   magicRecoverySpeed: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 1.0 })
   spiritResistanceMultiplier: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 1.0 })
   auraReadingMultiplier: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 1.0 })
   auraMarkMultiplier: number;
 
   @rproperty()
