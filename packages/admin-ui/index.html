@@ -29,57 +29,57 @@
         <span v-if="characterModel">
           <b-card no-body>
             <b-card-body>
-          <b-table-simple>
-            <caption>
-              Персонаж {{ characterModel.modelId }}, состояние на {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
-            </caption>
-            <b-tbody>
-              <b-tr>
-                <b-th>Максимальные хиты</b-th>
-                <b-td> {{ characterModel.maxHp }}</b-td>
-              </b-tr>
+              <b-table-simple>
+                <caption>
+                  Персонаж {{ characterModel.modelId }}, состояние на {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
+                </caption>
+                <b-tbody>
+                  <b-tr>
+                    <b-th>Максимальные хиты</b-th>
+                    <b-td> {{ characterModel.maxHp }}</b-td>
+                  </b-tr>
                   <b-tr>
                       <b-th>Magic</b-th>
                       <b-td>{{ characterModel.magic }}</b-td>
                     </b-tr>
-              <b-tr>
-                <b-th>Body</b-th>
-                <b-td>{{ characterModel.body }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Intelligence</b-th>
-                <b-td>{{ characterModel.body }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Charisma</b-th>
-                <b-td>{{ characterModel.charisma }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Resonance</b-th>
-                <b-td>{{ characterModel.resonance }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Снижение отката</b-th>
-                <b-td> {{ characterModel.magicFeedbackReduction }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Восстановление Магии</b-th>
-                <b-td>{{ characterModel.magicRecoverySpeed }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Коэффициент Сопротивления Духов</b-th>
-                <b-td>{{ characterModel.spiritResistanceMultiplier }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Коэффициент Чтения Астральных Следов</b-th>
-                <b-td>{{ characterModel.auraReadingMultiplier }}</b-td>
-              </b-tr>
-              <b-tr>
-                <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
-                <b-td>{{ characterModel.auraMarkMultiplier }}</b-td>
-              </b-tr>
-            </b-tbody>
-          </b-table-simple>
+                  <b-tr>
+                    <b-th>Body</b-th>
+                    <b-td>{{ characterModel.body }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Intelligence</b-th>
+                    <b-td>{{ characterModel.body }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Charisma</b-th>
+                    <b-td>{{ characterModel.charisma }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Resonance</b-th>
+                    <b-td>{{ characterModel.resonance }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Снижение отката</b-th>
+                    <b-td> {{ characterModel.magicFeedbackReduction }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Восстановление Магии</b-th>
+                    <b-td>{{ characterModel.magicRecoverySpeed }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Коэффициент Сопротивления Духов</b-th>
+                    <b-td>{{ characterModel.spiritResistanceMultiplier }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Коэффициент Чтения Астральных Следов</b-th>
+                    <b-td>{{ characterModel.auraReadingMultiplier }}</b-td>
+                  </b-tr>
+                  <b-tr>
+                    <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
+                    <b-td>{{ characterModel.auraMarkMultiplier }}</b-td>
+                  </b-tr>
+                </b-tbody>
+              </b-table-simple>
             </b-card-body>
           </b-card>
           <b-card no-body>
@@ -91,6 +91,15 @@
                 <b-table :items="characterModel.features"></b-table>
               </b-card-body>
             </b-collapse>
+          </b-card>
+          <b-card no-body>
+            <b-card-header>Добавление/удаление фичи</b-card-header>
+            <b-card-body>
+            <b-form-select v-model="selectedFeature">
+              <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
+            </b-form-select>
+            <b-button variant="danger" v-on:click="addFeature">Добавить</b-button>
+            <b-button variant="success" v-on:click="removeFeature">Удалить</b-button>
           </b-card>
         </span>
       </b-container>
