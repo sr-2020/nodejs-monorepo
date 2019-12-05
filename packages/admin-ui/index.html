@@ -1,11 +1,61 @@
-<!-- development version, includes helpful console warnings -->
+<!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Required Stylesheets -->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+
+    <!-- Load polyfills to support older browsers -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+
+    <!-- Required scripts -->
+    <!-- Vue itself -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- bootstrap-vue (bootstap components for Vue, https://bootstrap-vue.js.org/docs/components/ -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <!-- vue-resource (http client) -->
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
   </head>
   <body>
     <div id="app">
-      {{ message }}
+      <b-container>
+        <b-input-group prepend="ID персонажа">
+          <b-form-input type="number" v-model="desiredCharacterId"></b-form-input>
+          <b-input-group-append>
+            <b-button variant="outline-primary" v-on:click="chooseCharacter">Выбрать</b-button>
+          </b-input-group-append>
+        </b-input-group>
+        <span v-if="characterModel">
+          <b-table-simple>
+            <caption>
+              Персонаж
+            </caption>
+            <b-tbody>
+              <b-tr>
+                <b-th>Максимальные хиты</b-th>
+                <b-td> {{ characterModel.maxHp }}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Body</b-th>
+                <b-td>{{ characterModel.body }}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Intelligence</b-th>
+                <b-td>{{ characterModel.body }}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Charisma</b-th>
+                <b-td>{{ characterModel.charisma }}</b-td>
+              </b-tr>
+              <b-tr>
+                <b-th>Resonance</b-th>
+                <b-td>{{ characterModel.resonance }}</b-td>
+              </b-tr>
+            </b-tbody>
+          </b-table-simple>
+        </span>
+      </b-container>
     </div>
     <script src="index.js"></script>
   </body>
