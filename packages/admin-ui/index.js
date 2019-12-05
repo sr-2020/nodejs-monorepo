@@ -22,10 +22,20 @@ var app = new Vue({
       });
     },
 
+    showFailureToast(text) {
+      this.$bvToast.toast(text, {
+        variant: 'danger',
+      });
+    },
+
     async chooseCharacter() {
-      const response = await this.$http.get(this.url(this.desiredCharacterId));
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Персонаж загружен');
+      try {
+        const response = await this.$http.get(this.url(this.desiredCharacterId));
+        this.setCharacterModel(response.body.workModel);
+        this.showSuccessToast('Персонаж загружен');
+      } catch (e) {
+        this.showFailureToast(e.status == 404 ? 'Персонаж не найден' : `Неожиданная ошибка сервера: ${e.statusText}`);
+      }
     },
 
     setCharacterModel(model) {
