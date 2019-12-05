@@ -23,13 +23,13 @@
         <b-input-group prepend="ID персонажа">
           <b-form-input type="number" v-model="desiredCharacterId"></b-form-input>
           <b-input-group-append>
-            <b-button variant="outline-primary" v-on:click="chooseCharacter">Выбрать</b-button>
+            <b-button variant="outline-primary" v-on:click="chooseCharacter">Обновить</b-button>
           </b-input-group-append>
         </b-input-group>
         <span v-if="characterModel">
           <b-table-simple>
             <caption>
-              Персонаж
+              Персонаж {{ characterModel.modelId }}, состояние на {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
             </caption>
             <b-tbody>
               <b-tr>
