@@ -93,7 +93,7 @@
             </b-collapse>
           </b-card>
           <b-card no-body>
-            <b-card-header>Добавление/удаление фичи</b-card-header>
+            <b-card-header>Добавление/удаление фичи (без проверки пререквизитов)</b-card-header>
             <b-card-body>
             <b-form-select v-model="selectedFeature">
               <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
