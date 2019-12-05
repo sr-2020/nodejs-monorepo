@@ -98,8 +98,9 @@
             <b-form-select v-model="selectedFeature">
               <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
             </b-form-select>
-            <b-button variant="danger" v-on:click="addFeature">Добавить</b-button>
-            <b-button variant="success" v-on:click="removeFeature">Удалить</b-button>
+            <b-button variant="success" v-on:click="addFeature">Добавить</b-button>
+            <b-button variant="danger" v-on:click="removeFeature">Удалить</b-button>
+            (Если добавляемая фича уже присутствует в персонаже/удаляемая фича не присутствует - ничего не произойдет!)
           </b-card>
         </span>
       </b-container>
