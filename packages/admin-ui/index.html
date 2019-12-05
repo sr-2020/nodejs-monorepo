@@ -27,6 +27,8 @@
           </b-input-group-append>
         </b-input-group>
         <span v-if="characterModel">
+          <b-card no-body>
+            <b-card-body>
           <b-table-simple>
             <caption>
               Персонаж {{ characterModel.modelId }}, состояние на {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
@@ -78,6 +80,8 @@
               </b-tr>
             </b-tbody>
           </b-table-simple>
+            </b-card-body>
+          </b-card>
           <b-card no-body>
             <b-card-header>
               <b-button block href="#" v-b-toggle.features variant="info">Всего фич: {{ characterModel.features.length }}</b-button>
