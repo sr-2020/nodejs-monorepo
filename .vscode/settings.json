@@ -11,7 +11,9 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/CVS": true,
-    "**/*.js": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
     "**/*.map": true,
     "**/*.d.ts": true
   },
