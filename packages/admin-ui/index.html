@@ -74,6 +74,16 @@
               </b-tr>
             </b-tbody>
           </b-table-simple>
+          <b-card no-body>
+            <b-card-header>
+              <b-button block href="#" v-b-toggle.features variant="info">Всего фич: {{ characterModel.features.length }}</b-button>
+            </b-card-header>
+            <b-collapse id="features">
+              <b-card-body>
+                <b-table :items="characterModel.features"></b-table>
+              </b-card-body>
+            </b-collapse>
+          </b-card>
         </span>
       </b-container>
     </div>
