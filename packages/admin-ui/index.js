@@ -16,9 +16,16 @@ var app = new Vue({
       return `http://instance.evarun.ru:7007/character/model/${id}`;
     },
 
+    showSuccessToast(text) {
+      this.$bvToast.toast(text, {
+        variant: 'success',
+      });
+    },
+
     async chooseCharacter() {
       const response = await this.$http.get(this.url(this.desiredCharacterId));
       this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Персонаж загружен');
     },
 
     setCharacterModel(model) {
@@ -30,12 +37,14 @@ var app = new Vue({
       const response = await this.$http.post(this.url(this.characterModel.modelId),
         { eventType: 'addFeature', data: { id: this.selectedFeature } });
       this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Фича добавлена');
     },
 
     async removeFeature() {
       const response = await this.$http.post(this.url(this.characterModel.modelId),
         { eventType: 'removeFeature', data: { id: this.selectedFeature } });
       this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Фича удалена');
     },
   }
 })
