@@ -10,6 +10,7 @@ import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model
 import { PushService } from '@sr2020/interface/services/push.service';
 import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { TimeService } from '@sr2020/models-manager/services/time.service';
+import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
@@ -67,6 +68,12 @@ class MockPushService implements PushService {
   }
 }
 
+class MockPubSubService implements PubSubService {
+  async publish(topic: string, message: any): Promise<string> {
+    return '';
+  }
+}
+
 export class TestFixture {
   constructor(
     public client: Client,
@@ -92,6 +99,9 @@ export class TestFixture {
 
     const pushService = new MockPushService();
     app.bind('services.PushService').to(pushService);
+
+    const pubSubService = new MockPubSubService();
+    app.bind('services.PubSubService').to(pubSubService);
 
     let connection: Connection;
     if (process.env.NODE_ENV == 'test') {

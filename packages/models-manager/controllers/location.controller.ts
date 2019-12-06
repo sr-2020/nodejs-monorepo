@@ -5,6 +5,7 @@ import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { TransactionManager, EntityManager, Transaction } from 'typeorm';
+import { PubSubService } from '../services/pubsub.service';
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
@@ -22,8 +23,10 @@ export class LocationController extends AnyModelController<Location> {
     protected modelAquirerService: ModelAquirerService,
     @inject('services.PushService')
     protected pushService: PushService,
+    @inject('services.PubSubService')
+    protected pubSubService: PubSubService,
   ) {
-    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService);
+    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
   }
 
   @put('/location/model', {

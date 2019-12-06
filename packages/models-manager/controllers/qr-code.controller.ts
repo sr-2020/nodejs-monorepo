@@ -5,6 +5,7 @@ import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { TransactionManager, EntityManager, Transaction } from 'typeorm';
 import { TimeService } from '../services/time.service';
+import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
@@ -22,8 +23,10 @@ export class QrCodeController extends AnyModelController<QrCode> {
     protected modelAquirerService: ModelAquirerService,
     @inject('services.PushService')
     protected pushService: PushService,
+    @inject('services.PubSubService')
+    protected pubSubService: PubSubService,
   ) {
-    super(QrCode, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService);
+    super(QrCode, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
   }
 
   @put('/qr/model', {

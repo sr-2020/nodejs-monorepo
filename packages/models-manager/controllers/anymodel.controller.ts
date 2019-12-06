@@ -3,6 +3,7 @@ import { ModelEngineService, PushService, processAny } from '@sr2020/interface/s
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
+import { PubSubService } from '../services/pubsub.service';
 import { Empty, PushResult } from '@sr2020/interface/models';
 import { getRepository, EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
@@ -18,6 +19,7 @@ export class AnyModelController<TModel extends EmptyModel> {
     protected eventDispatcherService: EventDispatcherService,
     protected modelAquirerService: ModelAquirerService,
     protected pushService: PushService,
+    protected pubSubService: PubSubService,
   ) {}
 
   async replaceById(model: TModel): Promise<Empty> {
@@ -78,11 +80,14 @@ export class AnyModelController<TModel extends EmptyModel> {
 
   private async _sendNotifications(results: ModelProcessResponse<EmptyModel>[]) {
     const promises: Promise<PushResult>[] = [];
+    const pubSubPromises: Promise<string>[] = [];
     for (const r of results) {
       for (const notification of r.notifications) {
         promises.push(this.pushService.send(Number(r.baseModel.modelId), notification));
+        pubSubPromises.push(this.pubSubService.publish('push', { characterId: Number(r.baseModel.modelId), ...notification }));
       }
     }
     await Promise.all(promises);
+    await Promise.all(pubSubPromises);
   }
 }

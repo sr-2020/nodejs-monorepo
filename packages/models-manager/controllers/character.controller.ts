@@ -5,6 +5,7 @@ import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
+import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { TimeService } from '../services/time.service';
@@ -22,8 +23,10 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     protected modelAquirerService: ModelAquirerService,
     @inject('services.PushService')
     protected pushService: PushService,
+    @inject('services.PubSubService')
+    protected pubSubService: PubSubService,
   ) {
-    super(Sr2020Character, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService);
+    super(Sr2020Character, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
   }
 
   @put('/character/model', {
