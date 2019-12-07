@@ -9,7 +9,7 @@ export class PubSubServiceImpl implements PubSubService {
   readonly pubsub = new PubSub();
 
   publish(topic: string, message: any): Promise<string> {
-    return this.pubsub.topic(`projects/imposing-elixir-249711/topics/${topic}`).publish(Buffer.from(JSON.stringify(message)));
+    return this.pubsub.topic(topic).publishJSON(message);
   }
 }
 
