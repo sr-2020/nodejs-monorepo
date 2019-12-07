@@ -5,7 +5,6 @@ var app = new Vue({
     characterModel: undefined,
     allFeatures: undefined,
     selectedFeature: 'magic-1',
-    modelsManagerUrl: 'http://instance.evarun.ru:7007/character/model/'
   },
   async created() {
     const response = await this.$http.get(`http://instance.evarun.ru:7006/features`);
@@ -13,7 +12,7 @@ var app = new Vue({
   },
   methods: {
     url(id) {
-      return `http://instance.evarun.ru:7007/character/model/${id}`;
+      return `http://models-manager.evarun.ru/character/model/${id}`;
     },
 
     showSuccessToast(text) {
