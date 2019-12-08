@@ -7,7 +7,7 @@ var app = new Vue({
     selectedFeature: 'magic-1',
   },
   async created() {
-    const response = await this.$http.get(`http://instance.evarun.ru:7006/features`);
+    const response = await this.$http.get(`http://model-engine.evarun.ru/features`);
     this.allFeatures = response.body;
   },
   methods: {
