@@ -13,7 +13,4 @@ jobs:
       with:
        node-version: '10.x'
     - run: yarn install
-    - run: npx lerna run coverage:test --concurrency=1 --stream -- --forbid-only
-    - run: npx lerna run coverage:merge
-    - run: yarn run coverage:coveralls
-    - run: yarn run coverage:codecov
+    - run: yarn test
