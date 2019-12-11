@@ -29,11 +29,19 @@ var app = new Vue({
     },
 
     async sendEvent(event, successMessage) {
+      try {
       console.log(`Sending an event: ${JSON.stringify(event)}`);
       const response = await this.$http.post(this.url(this.characterModel.modelId), event);
       console.debug(`Received response: ${JSON.stringify(response.body)}`);
       this.setCharacterModel(response.body.workModel);
       this.showSuccessToast(successMessage || 'Успех!');
+      } catch (e) {
+        if (e.body && e.body.error && e.body.error.message) {
+          this.showFailureToast(e.body.error.message)
+        } else {
+          this.showFailureToast('Неизвестная ошибка сервера :(');
+        }
+      }
     },
 
     async chooseCharacter() {
