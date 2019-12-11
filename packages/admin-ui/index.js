@@ -5,6 +5,7 @@ var app = new Vue({
     characterModel: undefined,
     allFeatures: undefined,
     selectedFeature: 'magic-1',
+    clinicalDeathTarget: 128,
   },
   async created() {
     const response = await this.$http.get(`http://model-engine.evarun.ru/features`);
@@ -55,5 +56,26 @@ var app = new Vue({
       this.setCharacterModel(response.body.workModel);
       this.showSuccessToast('Фича удалена');
     },
+
+    async wound() {
+      const response = await this.$http.post(this.url(this.characterModel.modelId),
+        { eventType: 'wound' });
+      this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Успех!');
+    },
+
+    async revive() {
+      const response = await this.$http.post(this.url(this.characterModel.modelId),
+        { eventType: 'revive' });
+      this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Успех!');
+    },
+
+    async clinicalDeathOnTarget() {
+      const response = await this.$http.post(this.url(this.characterModel.modelId),
+        { eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
+      this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast('Успех!');
+    }
   }
 })
