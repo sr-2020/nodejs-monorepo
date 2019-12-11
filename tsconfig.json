@@ -32,9 +32,6 @@
       "path": "packages/alice-qr-lib"
     },
     {
-      "path": "packages/billing"
-    },
-    {
       "path": "packages/deus-models"
     },
     {

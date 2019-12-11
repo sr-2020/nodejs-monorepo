@@ -1,15 +1,6 @@
 timeout: 3600s
 # Google Cloud Build script
 steps:
-  - id: pull_billing
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['pull', 'gcr.io/$PROJECT_ID/billing']
-    waitFor: ['-']
-  - id: build_billing
-    name: 'gcr.io/cloud-builders/docker'
-    waitFor: ['pull_billing']
-    args:
-      ['build', '-f', 'packages/billing/Dockerfile', '-t', 'gcr.io/$PROJECT_ID/billing', '--cache-from', 'gcr.io/$PROJECT_ID/billing', '.']
   - id: pull_push
     name: 'gcr.io/cloud-builders/docker'
     args: ['pull', 'gcr.io/$PROJECT_ID/push']
@@ -33,11 +24,10 @@ steps:
         '-t',
         'gcr.io/$PROJECT_ID/deus-models',
         '--cache-from',
-        'gcr.io/$PROJECT_ID/billing',
+        'gcr.io/$PROJECT_ID/deus-models',
         '.',
       ]
 # Push container images
 images:
-  - 'gcr.io/$PROJECT_ID/billing'
   - 'gcr.io/$PROJECT_ID/push'
   - 'gcr.io/$PROJECT_ID/deus-models'
