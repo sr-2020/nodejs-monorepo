@@ -28,6 +28,12 @@ var app = new Vue({
       });
     },
 
+    async sendEvent(event, successMessage) {
+      const response = await this.$http.post(this.url(this.characterModel.modelId), event);
+      this.setCharacterModel(response.body.workModel);
+      this.showSuccessToast(successMessage || 'Успех!');
+    },
+
     async chooseCharacter() {
       try {
         const response = await this.$http.get(this.url(this.desiredCharacterId));
@@ -44,38 +50,23 @@ var app = new Vue({
     },
 
     async addFeature() {
-      const response = await this.$http.post(this.url(this.characterModel.modelId),
-        { eventType: 'addFeature', data: { id: this.selectedFeature } });
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Фича добавлена');
+      return this.sendEvent({ eventType: 'addFeature', data: { id: this.selectedFeature } }, 'Фича добавлена');
     },
 
     async removeFeature() {
-      const response = await this.$http.post(this.url(this.characterModel.modelId),
-        { eventType: 'removeFeature', data: { id: this.selectedFeature } });
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Фича удалена');
+      return this.sendEvent({ eventType: 'removeFeature', data: { id: this.selectedFeature } }, 'Фича удалена');
     },
 
     async wound() {
-      const response = await this.$http.post(this.url(this.characterModel.modelId),
-        { eventType: 'wound' });
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Успех!');
+      return this.sendEvent({ eventType: 'wound' });
     },
 
     async revive() {
-      const response = await this.$http.post(this.url(this.characterModel.modelId),
-        { eventType: 'revive' });
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Успех!');
+      return this.sendEvent({ eventType: 'revive' });
     },
 
     async clinicalDeathOnTarget() {
-      const response = await this.$http.post(this.url(this.characterModel.modelId),
-        { eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast('Успех!');
+      return this.sendEvent({ eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
     }
   }
 })
