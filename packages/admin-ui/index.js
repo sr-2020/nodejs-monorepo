@@ -29,7 +29,9 @@ var app = new Vue({
     },
 
     async sendEvent(event, successMessage) {
+      console.log(`Sending an event: ${JSON.stringify(event)}`);
       const response = await this.$http.post(this.url(this.characterModel.modelId), event);
+      console.debug(`Received response: ${JSON.stringify(response.body)}`);
       this.setCharacterModel(response.body.workModel);
       this.showSuccessToast(successMessage || 'Успех!');
     },
