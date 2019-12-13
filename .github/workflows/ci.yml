@@ -87,8 +87,11 @@ jobs:
   deploy_gcloud:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - uses: actions-hub/gcloud@272.0.0
         env:
+          PROJECT_ID: imposing-elixir-249711
           APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          CLI: gsutil
         with:
-          args: info
+          args: cp packages/admin-ui/* gs://admin-ui.evarun.ru
