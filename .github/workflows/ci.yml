@@ -42,3 +42,33 @@ jobs:
           node-version: '10.x'
       - uses: bahmutov/npm-install@v1.1.0
       - run: npx lerna run build
+  docker_models_manager:
+    needs: [test, lint, build]
+    steps:
+      - name: Build & push to dockerhub
+        uses: HurricanKai/Publish-Docker-Github-Action@1.12.1
+        with:
+          name: sr2020/models-manager
+          dockerfile: packages/models-manager/Dockerfile
+          username: sr2020
+          password: ${{ secrets.DOCKER_PASSWORD }}
+  docker_model_engine:
+    needs: [test, lint, build]
+    steps:
+      - name: Build & push to dockerhub
+        uses: HurricanKai/Publish-Docker-Github-Action@1.12.1
+        with:
+          name: sr2020/model-engine
+          dockerfile: packages/sr2020-models/Dockerfile
+          username: sr2020
+          password: ${{ secrets.DOCKER_PASSWORD }}
+  docker_push:
+    needs: [test, lint, build]
+    steps:
+      - name: Build & push to dockerhub
+        uses: HurricanKai/Publish-Docker-Github-Action@1.12.1
+        with:
+          name: sr2020/push
+          dockerfile: packages/push/Dockerfile
+          username: sr2020
+          password: ${{ secrets.DOCKER_PASSWORD }}
