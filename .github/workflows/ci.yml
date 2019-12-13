@@ -13,14 +13,14 @@ jobs:
       - uses: bahmutov/npm-install@v1.1.0
       - run: npx lerna run coverage:test --concurrency=1 --stream -- --forbid-only
       - run: npx lerna run coverage:merge
-      - name: Coveralls upload
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Codecov upload
         run: yarn run coverage:codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Coveralls upload
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   lint:
     runs-on: ubuntu-latest
     steps:
