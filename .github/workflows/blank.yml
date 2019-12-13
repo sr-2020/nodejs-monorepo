@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: yarn install
+      - uses: bahmutov/npm-install@v1.1.0
       - run: yarn test
   lint:
     runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: yarn install
+      - uses: bahmutov/npm-install@v1.1.0
       - run: npx lerna run lint
   build:
     runs-on: ubuntu-latest
@@ -28,5 +28,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-      - run: yarn install
+      - uses: bahmutov/npm-install@v1.1.0
       - run: npx lerna run build
