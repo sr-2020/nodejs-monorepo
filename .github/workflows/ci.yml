@@ -43,6 +43,7 @@ jobs:
       - uses: bahmutov/npm-install@v1.1.0
       - run: npx lerna run build
   docker_models_manager:
+    runs-on: ubuntu-latest
     needs: [test, lint, build]
     steps:
       - name: Build & push to dockerhub
@@ -53,6 +54,7 @@ jobs:
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_model_engine:
+    runs-on: ubuntu-latest
     needs: [test, lint, build]
     steps:
       - name: Build & push to dockerhub
@@ -63,6 +65,7 @@ jobs:
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_push:
+    runs-on: ubuntu-latest
     needs: [test, lint, build]
     steps:
       - name: Build & push to dockerhub
