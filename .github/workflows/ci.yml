@@ -80,6 +80,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy_prod:
     runs-on: ubuntu-latest
+    needs: [docker_models_manager, docker_model_engine, docker_push]
     steps:
       - uses: actions/checkout@v1
       - run: make deploy server=instance.evarun.ru password=${{ secrets.USER_PASSWORD }}
