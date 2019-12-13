@@ -17,6 +17,8 @@ jobs:
         run: yarn run coverage:codecov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Coveralls prepare
+        run: npx nyc report --reporter=text-lcov > ./coverage/lcov.info
       - name: Coveralls upload
         uses: coverallsapp/github-action@master
         with:
