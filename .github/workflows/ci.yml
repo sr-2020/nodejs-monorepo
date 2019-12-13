@@ -84,3 +84,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: make deploy server=instance.evarun.ru password=${{ secrets.USER_PASSWORD }}
+  deploy_gcloud:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-hub/gcloud@272.0.0
+        env:
+          APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        with:
+          args: info
