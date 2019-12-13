@@ -6,6 +6,7 @@ var app = new Vue({
     allFeatures: undefined,
     selectedFeature: 'magic-1',
     clinicalDeathTarget: 128,
+    qrCodeId: 1,
   },
   async created() {
     const response = await this.$http.get(`http://model-engine.evarun.ru/features`);
@@ -30,11 +31,11 @@ var app = new Vue({
 
     async sendEvent(event, successMessage) {
       try {
-      console.log(`Sending an event: ${JSON.stringify(event)}`);
-      const response = await this.$http.post(this.url(this.characterModel.modelId), event);
-      console.debug(`Received response: ${JSON.stringify(response.body)}`);
-      this.setCharacterModel(response.body.workModel);
-      this.showSuccessToast(successMessage || 'Успех!');
+        console.log(`Sending an event: ${JSON.stringify(event)}`);
+        const response = await this.$http.post(this.url(this.characterModel.modelId), event);
+        console.debug(`Received response: ${JSON.stringify(response.body)}`);
+        this.setCharacterModel(response.body.workModel);
+        this.showSuccessToast(successMessage || 'Успех!');
       } catch (e) {
         if (e.body && e.body.error && e.body.error.message) {
           this.showFailureToast(e.body.error.message)
@@ -77,6 +78,10 @@ var app = new Vue({
 
     async clinicalDeathOnTarget() {
       return this.sendEvent({ eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
-    }
+    },
+
+    async scanQr() {
+      return this.sendEvent({ eventType: 'scanQr', data: { qrCode: this.qrCodeId } });
+    },
   }
 })

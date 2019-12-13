@@ -121,6 +121,17 @@
               </b-input-group>
             </b-card-body>
           </b-card>
+          <b-card no-body>
+            <b-card-header>Сканирование QR-кода</b-card-header>
+            <b-card-body>
+              <b-input-group prepend="ID QR-кода">
+                <b-form-input type="number" v-model="qrCodeId"></b-form-input>
+                <b-input-group-append>
+                  <b-button variant="success" v-on:click="scanQr">Отсканировать</b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-card-body>
+          </b-card>
         </span>
       </b-container>
     </div>
