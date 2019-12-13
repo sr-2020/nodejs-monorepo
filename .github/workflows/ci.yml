@@ -82,4 +82,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: make deploy server=instance.evarun.ru password={{ secrets.USER_PASSWORD }}
+      - run: make deploy server=instance.evarun.ru password={{ secrets.USER_PASSWORD }}
