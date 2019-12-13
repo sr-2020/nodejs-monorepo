@@ -11,7 +11,10 @@ jobs:
         with:
           node-version: '10.x'
       - uses: bahmutov/npm-install@v1.1.0
-      - run: yarn test
+      - run: lerna run coverage:test --concurrency=1 --stream -- --forbid-only
+      - run: lerna run coverage:merge
+      - run: yarn run coverage:coveralls
+      - run: yarn run coverage:codecov
   lint:
     runs-on: ubuntu-latest
     steps:
