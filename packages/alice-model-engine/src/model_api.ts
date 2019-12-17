@@ -19,25 +19,25 @@ import Logger from './logger';
 import { Callback } from '@sr2020/interface/callbacks';
 
 class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {
-  constructor(protected contextGetter: () => Context<T>) {}
+  constructor(protected context: Context<T>) {}
 
   get model() {
-    return this.contextGetter().model;
+    return this.context.model;
   }
 
   set model(m: T) {
-    this.contextGetter().model = m;
+    this.context.model = m;
   }
 
   public getCatalogObject(catalogName: string, id: string) {
-    const catalog = this.contextGetter().getDictionary(catalogName);
+    const catalog = this.context.getDictionary(catalogName);
     if (catalog) {
       return cloneDeep(catalog.find((c) => c.id == id));
     }
   }
 
   public getModifierById(id: string) {
-    return this.contextGetter().modifiers.find((m) => m.mID == id);
+    return this.context.modifiers.find((m) => m.mID == id);
   }
 
   public getModifiersByName(name: string) {
@@ -53,7 +53,7 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
   }
 
   public getTimer(name: string) {
-    return this.contextGetter().timers[name];
+    return this.context.timers[name];
   }
 
   public debug(msg: string, additionalData?: any) {
@@ -77,18 +77,18 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
   }
 
   private getModifiersBy(predicate: (m: Modifier) => boolean) {
-    return this.contextGetter().modifiers.filter(predicate);
+    return this.context.modifiers.filter(predicate);
   }
 
   private getEffectsBy(predicate: (e: Effect) => boolean) {
-    const effects = this.contextGetter().effects.filter(predicate);
+    const effects = this.context.effects.filter(predicate);
     return effects;
   }
 }
 
 class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApiInterface<T> {
-  constructor(contextGetter: () => Context<T>, private currentEvent?: Event) {
-    super(contextGetter);
+  constructor(context: Context<T>, private currentEvent?: Event) {
+    super(context);
   }
 
   public addModifier(modifier: Modifier) {
@@ -98,16 +98,16 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
       m.mID = cuid();
     }
 
-    this.contextGetter().modifiers.push(m);
+    this.context.modifiers.push(m);
     return m;
   }
 
   public aquired(db: string, id: string): AquiredObjects {
-    return _.get(this.contextGetter(), ['aquired', db, id]);
+    return _.get(this.context, ['aquired', db, id]);
   }
 
   public removeModifier(mID: string) {
-    _.remove(this.contextGetter().modifiers, (m) => m.mID == mID);
+    _.remove(this.context.modifiers, (m) => m.mID == mID);
     return this;
   }
 
@@ -115,21 +115,21 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     if (typeof eventType != 'string') {
       eventType = eventType.name;
     }
-    this.contextGetter().setTimer(name, miliseconds, eventType, data);
+    this.context.setTimer(name, miliseconds, eventType, data);
     return this;
   }
 
   public removeTimer(name: string) {
-    delete this.contextGetter().timers[name];
+    delete this.context.timers[name];
     return this;
   }
 
   public sendSelfEvent<TEventData = any>(event: Callback<T, TEventData> | string, data: TEventData) {
-    const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+    const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.context.timestamp;
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.contextGetter().sendSelfEvent(event, timestamp, data);
+    this.context.sendSelfEvent(event, timestamp, data);
     return this;
   }
 
@@ -139,50 +139,50 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     event: string | Callback<TModel, TEventData>,
     data: TEventData,
   ) {
-    const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.contextGetter().timestamp;
+    const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.context.timestamp;
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.contextGetter().sendOutboundEvent(type.name, modelId, event, timestamp, data);
+    this.context.sendOutboundEvent(type.name, modelId, event, timestamp, data);
     return this;
   }
 
   public sendNotification(title: string, body: string): this {
-    this.contextGetter().sendNotification(title, body);
+    this.context.sendNotification(title, body);
     return this;
   }
 
   public setTableResponse(table: any): this {
-    this.contextGetter().setTableResponse(table);
+    this.context.setTableResponse(table);
     return this;
   }
 }
 
 class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ViewModelApiInterface<T> {
-  constructor(contextGetter: () => Context<T>, protected baseContextGetter: () => Context<T>) {
-    super(contextGetter);
+  constructor(context: Context<T>, protected baseContext: Context<T>) {
+    super(context);
   }
 
   get baseModel() {
-    return this.baseContextGetter().model;
+    return this.baseContext.model;
   }
 }
 
 class PreprocessApi<T extends EmptyModel> extends ReadModelApi<T> implements PreprocessApiInterface<T> {
   public aquire(db: string, id: string) {
-    this.contextGetter().pendingAquire.push([db, id]);
+    this.context.pendingAquire.push([db, id]);
     return this;
   }
 }
 
 export function ModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): ModelApiInterface<T> {
-  return new ModelApi(() => context, event);
+  return new ModelApi(context, event);
 }
 
 export function ViewModelApiFactory<T extends EmptyModel>(context: Context<T>, baseContext: Context<T>): ViewModelApiInterface<T> {
-  return new ViewModelApi(() => context, () => baseContext);
+  return new ViewModelApi(context, baseContext);
 }
 
 export function PreprocessApiFactory<T extends EmptyModel>(context: Context<T>): PreprocessApiInterface<T> {
-  return new PreprocessApi(() => context);
+  return new PreprocessApi(context);
 }
