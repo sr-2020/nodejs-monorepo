@@ -128,7 +128,7 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     return this;
   }
 
-  sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
+  public sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
     type: new () => TModel,
     modelId: string,
     event: string | Callback<TModel, TEventData>,
