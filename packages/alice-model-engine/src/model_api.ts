@@ -79,11 +79,6 @@ class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, Lo
   private getModifiersBy(predicate: (m: Modifier) => boolean) {
     return this.context.modifiers.filter(predicate);
   }
-
-  private getEffectsBy(predicate: (e: Effect) => boolean) {
-    const effects = this.context.effects.filter(predicate);
-    return effects;
-  }
 }
 
 class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApiInterface<T> {
