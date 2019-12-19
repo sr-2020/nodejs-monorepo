@@ -5,7 +5,6 @@ import {
   LogApiInterface,
   ModelApiInterface,
   PreprocessApiInterface,
-  ReadModelApiInterface,
   ViewModelApiInterface,
   Modifier,
 } from 'interface/src/models/alice-model-engine';
@@ -17,7 +16,7 @@ import { Context } from './context';
 import Logger from './logger';
 import { Callback } from '@sr2020/interface/callbacks';
 
-class ReadModelApi<T extends EmptyModel> implements ReadModelApiInterface<T>, LogApiInterface {
+class ReadModelApi<T extends EmptyModel> implements LogApiInterface {
   constructor(protected context: Context<T>) {}
 
   get model() {

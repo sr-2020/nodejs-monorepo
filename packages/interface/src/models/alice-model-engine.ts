@@ -230,7 +230,24 @@ export class EmptyModel {
   timers?: Timers;
 }
 
-export interface ReadModelApiInterface<T extends EmptyModel> {
+export interface LogApiInterface {
+  debug(msg: string, additionalData?: any): void;
+  info(msg: string, additionalData?: any): void;
+  warn(msg: string, additionalData?: any): void;
+  error(msg: string, additionalData?: any): void;
+}
+
+export interface PreprocessApiInterface<T extends EmptyModel> extends LogApiInterface {
+  readonly model: T;
+  aquire(db: string, id: string): this;
+}
+
+export interface ViewModelApiInterface<T extends EmptyModel> extends LogApiInterface {
+  readonly model: T;
+  readonly baseModel: T;
+}
+
+export interface ModelApiInterface<T extends EmptyModel> extends LogApiInterface {
   model: T;
 
   getCatalogObject<O>(catalog: string, id: string): O | undefined;
@@ -241,16 +258,9 @@ export interface ReadModelApiInterface<T extends EmptyModel> {
   getModifiersBySystem(systemName: string): Modifier[];
 
   getTimer(name: string): Timer | undefined;
-}
 
-export interface LogApiInterface {
-  debug(msg: string, additionalData?: any): void;
-  info(msg: string, additionalData?: any): void;
-  warn(msg: string, additionalData?: any): void;
-  error(msg: string, additionalData?: any): void;
-}
+  aquired(db: string, id: string): any;
 
-export interface WriteModelApiInterface<TModel extends EmptyModel> {
   // If modifier.mID is not present, will generate new unique one.
   // Returns added modifier.
   addModifier(modifier: Modifier): Modifier;
@@ -259,14 +269,14 @@ export interface WriteModelApiInterface<TModel extends EmptyModel> {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<TModel, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<T, TEventData> | string, data: TEventData): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;
 
   // Schedules and event for currently processed model. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendSelfEvent<TEventData = any>(event: Callback<TModel, TEventData> | string, data: TEventData): this;
+  sendSelfEvent<TEventData = any>(event: Callback<T, TEventData> | string, data: TEventData): this;
 
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
@@ -286,18 +296,6 @@ export interface WriteModelApiInterface<TModel extends EmptyModel> {
   // Quick hack to be able to send some table data to the user
   // Needs some reconsideration
   setTableResponse(table: any): this;
-}
-
-export interface PreprocessApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
-  aquire(db: string, id: string): this;
-}
-
-export interface ViewModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, LogApiInterface {
-  baseModel: T;
-}
-
-export interface ModelApiInterface<T extends EmptyModel> extends ReadModelApiInterface<T>, WriteModelApiInterface<T>, LogApiInterface {
-  aquired(db: string, id: string): any;
 }
 
 export class UserVisibleError extends Error {}
