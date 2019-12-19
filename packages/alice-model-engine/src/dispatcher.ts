@@ -1,18 +1,18 @@
 import { Context } from './context';
 import Logger from './logger';
-import { ModelApiFactory } from './model_api';
+import { EventModelApiFactory } from './model_api';
 
 import { EmptyModel, Event } from 'interface/src/models/alice-model-engine';
-import { Callback } from '@sr2020/interface/callbacks';
+import { EventCallback } from '@sr2020/interface/callbacks';
 
-export type CallbacksList<T extends EmptyModel> = Callback<T> | null | Array<Callback<T> | null>;
+export type CallbacksList<T extends EmptyModel> = EventCallback<T> | null | Array<EventCallback<T> | null>;
 
 export interface DispatcherInterface<T extends EmptyModel> {
   dispatch(event: Event, context: Context<T>): Context<T>;
 }
 
 export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> {
-  constructor(private callbacks: { [key: string]: Callback<T> }) {}
+  constructor(private callbacks: { [key: string]: EventCallback<T> }) {}
 
   public dispatch(event: Event, context: Context<T>): Context<T> {
     if (event.eventType.startsWith('_')) return context;
@@ -33,7 +33,7 @@ export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> 
       return context;
     }
 
-    const api = ModelApiFactory(context, event);
+    const api = EventModelApiFactory(context, event);
     handler(api, event.data, event);
 
     return context;

@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import 'mocha';
 import { Context } from '../../src/context';
-import { ModelApiFactory } from '../../src/model_api';
+import { EventModelApiFactory } from '../../src/model_api';
 
 describe('ModelApi', () => {
   it('getCatalogObject', () => {
     const context = new Context({ modelId: '', timestamp: 0, modifiers: [], conditions: [] }, [], { foo: [{ id: 'bar' }] });
-    const api = ModelApiFactory(context);
+    const api = EventModelApiFactory(context);
 
     expect(api.getCatalogObject<{ id: string }>('foo', 'bar')).to.deep.equal({ id: 'bar' });
   });

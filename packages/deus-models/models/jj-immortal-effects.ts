@@ -1,7 +1,7 @@
 import helpers = require('../helpers/model-helper');
 import medichelpers = require('../helpers/medic-helper');
-import { Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
 /*
   modifier jj-immortal-one: {
@@ -27,7 +27,7 @@ import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model'
 */
 
 // Событие jj-immortal-one-start
-function jjImmortalOneStartEvent(api: DeusExModelApiInterface, data, event) {
+function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -69,7 +69,7 @@ function jjImmortalOneStartEvent(api: DeusExModelApiInterface, data, event) {
 }
 
 // Событие jj-immortal-one-next-stage
-function jjImmortalOneNextStageEvent(api: DeusExModelApiInterface, data, event) {
+function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (!data.mID) {
     api.error('jjImmortalOneNextStage: no mID');
     return;
@@ -105,7 +105,7 @@ function jjImmortalOneNextStageEvent(api: DeusExModelApiInterface, data, event) 
 }
 
 // Событие jj-immortal-two-start
-function jjImmortalTwoStartEvent(api: DeusExModelApiInterface, data, event) {
+function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -143,7 +143,7 @@ function jjImmortalTwoStartEvent(api: DeusExModelApiInterface, data, event) {
 }
 
 // Событие jj-immortal-two-awake
-function jjImmortalTwoAwakeEvent(api: DeusExModelApiInterface, data, event) {
+function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info('jjImmortalOneAwakeEvent');
 
   if (api.model.profileType != 'human') {

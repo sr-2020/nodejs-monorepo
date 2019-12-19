@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, rproperty, JsonColumn } from './alice-model-engine';
+import { EmptyModel, rproperty, JsonColumn } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -127,8 +127,6 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   history: HistoryRecord[];
 }
-
-export type Sr2020CharacterApi = ModelApiInterface<Sr2020Character>;
 
 @model()
 export class Sr2020CharacterProcessRequest extends BaseModelProcessRequest {

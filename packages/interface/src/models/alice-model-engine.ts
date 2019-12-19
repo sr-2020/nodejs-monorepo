@@ -2,7 +2,7 @@ export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' |
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
 import { PushNotification } from './push-notification.model';
-import { Callback } from '@sr2020/interface/callbacks';
+import { EventCallback } from '@sr2020/interface/callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
 
 class JsonToTextTransformer implements ValueTransformer {
@@ -247,7 +247,7 @@ export interface ViewModelApiInterface<T extends EmptyModel> extends LogApiInter
   readonly baseModel: T;
 }
 
-export interface ModelApiInterface<T extends EmptyModel> extends LogApiInterface {
+export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
   model: T;
 
   getCatalogObject<O>(catalog: string, id: string): O | undefined;
@@ -269,14 +269,14 @@ export interface ModelApiInterface<T extends EmptyModel> extends LogApiInterface
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<T, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;
 
   // Schedules and event for currently processed model. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
-  sendSelfEvent<TEventData = any>(event: Callback<T, TEventData> | string, data: TEventData): this;
+  sendSelfEvent<TEventData = any>(event: EventCallback<T, TEventData> | string, data: TEventData): this;
 
   // Adds event to events queue of modelId of type TModel. Timestamp of event
   // is "now", i.e. equals to timestamp of event currently being processed.
@@ -285,7 +285,7 @@ export interface ModelApiInterface<T extends EmptyModel> extends LogApiInterface
   sendOutboundEvent<TOtherModel extends EmptyModel, TEventData = any>(
     type: new () => TOtherModel,
     modelId: string,
-    event: Callback<TOtherModel, TEventData> | string,
+    event: EventCallback<TOtherModel, TEventData> | string,
     data: TEventData,
   ): this;
 
@@ -296,6 +296,30 @@ export interface ModelApiInterface<T extends EmptyModel> extends LogApiInterface
   // Quick hack to be able to send some table data to the user
   // Needs some reconsideration
   setTableResponse(table: any): this;
+}
+
+export interface EffectModelApi<T extends EmptyModel> extends LogApiInterface {
+  model: T;
+
+  getCatalogObject<O>(catalog: string, id: string): O | undefined;
+
+  getModifierById(id: string): Modifier | undefined;
+  getModifiersByName(name: string): Modifier[];
+  getModifiersByClass(className: string): Modifier[];
+  getModifiersBySystem(systemName: string): Modifier[];
+
+  getTimer(name: string): Timer | undefined;
+
+  // Schedules delayed event for current character.
+  // name should be unique - in other case new timer will override existing one.
+  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: EventCallback<T, TEventData> | string, data: TEventData): this;
+  // Cancels existing timer.
+  // NB: timer must exist!
+  removeTimer(name: string): this;
+
+  // Schedules and event for currently processed model. Timestamp of event
+  // is "now", i.e. equals to timestamp of event currently being processed.
+  sendSelfEvent<TEventData = any>(event: EventCallback<T, TEventData> | string, data: TEventData): this;
 }
 
 export class UserVisibleError extends Error {}

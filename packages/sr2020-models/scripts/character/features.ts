@@ -1,8 +1,8 @@
-import { AddedFeature, Sr2020CharacterApi } from '@sr2020/interface/models/sr2020-character.model';
-import { Event } from '@sr2020/interface/models/alice-model-engine';
+import { AddedFeature, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { kAllFeatures } from './features_library';
 
-export function addFeature(api: Sr2020CharacterApi, data: { id: string }, _: Event) {
+export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   const feature = kAllFeatures.get(data.id);
   if (feature == undefined) throw Error('No such feature in the features library');
 
@@ -15,7 +15,7 @@ export function addFeature(api: Sr2020CharacterApi, data: { id: string }, _: Eve
   api.model.features.push(addedFeature);
 }
 
-export function removeFeature(api: Sr2020CharacterApi, data: { id: string }, _: Event) {
+export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   const featureToRemove = api.model.features.find((f) => f.id == data.id);
   if (featureToRemove == undefined) return;
   for (const modifierId of featureToRemove.modifierIds) api.removeModifier(modifierId);

@@ -1,7 +1,7 @@
-import { Event, PreprocessApiInterface } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { Event, PreprocessApiInterface, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
-function scanQR(api: DeusExModelApiInterface, data: any) {
+function scanQR(api: EventModelApi<DeusExModel>, data: any) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case 1:

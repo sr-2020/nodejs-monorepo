@@ -1,7 +1,8 @@
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Обработчик события "serenity-immortality-ready"
@@ -9,7 +10,7 @@ import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model'
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
-function serenityImmortalityReadyEvent(api: DeusExModelApiInterface, data, event) {
+function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data, event) {
   let implant = api.getModifierById(data.mID);
 
   if (implant) {
@@ -24,7 +25,7 @@ function serenityImmortalityReadyEvent(api: DeusExModelApiInterface, data, event
  * Эффект serenity_immortality_s01
  * Показывает состояние готовности, когда immortalityReady == "true"
  */
-function serenityImmortalityS01Effect(api: DeusExModelApiInterface, implant) {
+function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant) {
   api.debug(`serenityImmortalityS01Effect: start stage 01 visibility effect`);
 
   if (implant && implant.id == consts.S_IMMORTAL_NAME_01 && implant.immortalityReady) {
@@ -38,7 +39,7 @@ function serenityImmortalityS01Effect(api: DeusExModelApiInterface, implant) {
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
-function serenityImmortalityGoEvent(api: DeusExModelApiInterface, data, event) {
+function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event) {
   let implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {

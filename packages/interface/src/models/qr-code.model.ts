@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, JsonColumn, rproperty } from './alice-model-engine';
+import { EmptyModel, JsonColumn, rproperty } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -28,8 +28,6 @@ export class QrCode extends EmptyModel {
   @JsonColumn()
   data?: any;
 }
-
-export type QrCodeApi = ModelApiInterface<QrCode>;
 
 @model()
 export class QrCodeProcessRequest extends BaseModelProcessRequest {

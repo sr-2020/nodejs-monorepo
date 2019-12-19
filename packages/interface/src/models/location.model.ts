@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, ModelApiInterface, rproperty, JsonColumn } from './alice-model-engine';
+import { EmptyModel, rproperty, JsonColumn } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -25,8 +25,6 @@ export class Location extends EmptyModel {
   @JsonColumn()
   spellTraces: SpellTrace[];
 }
-
-export type LocationApi = ModelApiInterface<Location>;
 
 @model()
 export class LocationProcessRequest extends BaseModelProcessRequest {

@@ -1,16 +1,16 @@
-import { ModelApiInterface, Condition } from 'interface/src/models/alice-model-engine';
+import { Condition, EventModelApi, EffectModelApi } from 'interface/src/models/alice-model-engine';
 
 /**
  * Хелперы для разных моделей
  */
 import Chance = require('chance');
 import consts = require('./constants');
-import { OrganismModel, MagellanModelApiInterface } from './basic-types';
+import { OrganismModel } from './basic-types';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 const chance = new Chance();
 
-function addChangeRecord(api: MagellanModelApiInterface, text: string, timestamp: number) {
+function addChangeRecord(api: EventModelApi<OrganismModel>, text: string, timestamp: number) {
   if (text) {
     if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
 
@@ -59,7 +59,7 @@ function uuidv4() {
  *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
  *  Задержка (duration) задается в миллисекундах
  */
-function addDelayedEvent(api: ModelApiInterface<OrganismModel>, duration: number, eventType: string, data: any, prefix = 'delayed') {
+function addDelayedEvent(api: EventModelApi<OrganismModel>, duration: number, eventType: string, data: any, prefix = 'delayed') {
   if (api && duration && eventType && data) {
     const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
@@ -71,7 +71,7 @@ function addDelayedEvent(api: ModelApiInterface<OrganismModel>, duration: number
   }
 }
 
-function addCondition(api: ModelApiInterface<OrganismModel>, condition: Condition): Condition {
+function addCondition(api: EffectModelApi<OrganismModel>, condition: Condition): Condition {
   let c = api.model.conditions.find((cond) => cond.id == condition.id);
   if (c) return c;
   c = cloneDeep(condition);

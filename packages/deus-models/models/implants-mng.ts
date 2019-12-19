@@ -1,15 +1,15 @@
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
-import { Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Обработчик события
  * Добавляет имплант в модель
  * { id: implant-id }
  */
-function addImplantEvent(api: DeusExModelApiInterface, data, event) {
+function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.id) {
     if (!api.model.isAlive) {
       api.error("Can't install implant to deadman. Why are you doing this...");
@@ -115,7 +115,7 @@ function addImplantEvent(api: DeusExModelApiInterface, data, event) {
  * Удвляет имплант из модели
  * { mID: implant-model-id }
  */
-function removeImplantEvent(api: DeusExModelApiInterface, data, event) {
+function removeImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
     let implant = api.getModifierById(data.mID);
 
@@ -144,7 +144,7 @@ function removeImplantEvent(api: DeusExModelApiInterface, data, event) {
  * При установке имплант появляется на нервной системе и не делает ничего
  * Через час выводится сообщение
  */
-function installSImmortalStage1(api: DeusExModelApiInterface, implant) {
+function installSImmortalStage1(api: EventModelApi<DeusExModel>, implant) {
   if (implant && implant.id == consts.S_IMMORTAL_NAME_01) {
     api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
@@ -158,7 +158,7 @@ function installSImmortalStage1(api: DeusExModelApiInterface, implant) {
  * Обработчик мгновенного эффекта при установке импланта
  * Пока умеет обрабатывать только install_changeMindCube
  */
-function instantInstallEffect(api: DeusExModelApiInterface, implant) {
+function instantInstallEffect(api: EventModelApi<DeusExModel>, implant) {
   let params = helpers.checkPredicate(api, implant.mID, 'inst_changeMindCube');
   if (params && api.model.mind && params.change) {
     helpers.modifyMindCubes(api, api.model.mind, params.change);
@@ -176,7 +176,7 @@ function instantInstallEffect(api: DeusExModelApiInterface, implant) {
  * параметр duration задается в секундах, и он опционален.
  * Если задан - имплант отключается на это время
  */
-function disableImplantEvent(api: DeusExModelApiInterface, data, event) {
+function disableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
     let implant = api.getModifierById(data.mID);
     if (implant) {
@@ -196,7 +196,7 @@ function disableImplantEvent(api: DeusExModelApiInterface, data, event) {
  * Обработчик события "включить имплант"
  * { mID: implant-model-id }
  */
-function enableImplantEvent(api: DeusExModelApiInterface, data, event) {
+function enableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
     let implant = api.getModifierById(data.mID);
     if (implant) {

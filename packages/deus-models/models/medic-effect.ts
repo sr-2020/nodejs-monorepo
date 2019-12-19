@@ -8,8 +8,8 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
-import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
 /**
  * Формат специального модификатора в каждой модели для отображения и хранения ущерба
@@ -50,7 +50,7 @@ import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model'
  * Функция вызывается событием "get-damage" когда игрок нажимает кнопку снятия хитов
  *  "data": { "hpLost": 1  }
  */
-function getDamageEvent(api: DeusExModelApiInterface, data, event: Event) {
+function getDamageEvent(api: EventModelApi<DeusExModel>, data, event: Event) {
   if (Number(data.hpLost) && api.model.hp) {
     medhelpers.addDamage(api, Number(data.hpLost), event.timestamp);
   }
@@ -60,13 +60,13 @@ function getDamageEvent(api: DeusExModelApiInterface, data, event: Event) {
  * Функция вызывается тестоым событием "restore-damage"
  *  "data": { "hpAdd": 1  }
  */
-function restoreDamageEvent(api: DeusExModelApiInterface, data, event) {
+function restoreDamageEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (Number(data.hpAdd) && api.model.hp) {
     medhelpers.restoreDamage(api, Number(data.hpAdd), event.timestamp);
   }
 }
 
-function hasAnyEffect(api: DeusExModelApiInterface, effectName) {
+function hasAnyEffect(api: EventModelApi<DeusExModel>, effectName) {
   return api.model.modifiers && api.model.modifiers.filter((m) => m.enabled).find((m) => helpers.checkPredicate(api, m.mID, effectName));
 }
 
@@ -75,7 +75,7 @@ function hasAnyEffect(api: DeusExModelApiInterface, effectName) {
  * Этот обаботчик должен в случае, если damage >0 списывать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function leakHpEvent(api: DeusExModelApiInterface, event) {
+function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -102,7 +102,7 @@ function leakHpEvent(api: DeusExModelApiInterface, event) {
  * Этот обаботчик должен в случае, если damage >0 восстанавливать один хит
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
-function regenHpEvent(api: DeusExModelApiInterface, event) {
+function regenHpEvent(api: EventModelApi<DeusExModel>, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
@@ -130,7 +130,7 @@ function regenHpEvent(api: DeusExModelApiInterface, event) {
  * и если нет - ничего не делает (значит уже вылечили)
  * если все еще есть - умирает
  */
-function characterDeathEvent(api: DeusExModelApiInterface, event) {
+function characterDeathEvent(api: EventModelApi<DeusExModel>, event) {
   //проверить системы и импланты на них (все только для Human'ов пока)
   if (api.model.systems) {
     let deadSystem: any = null;
@@ -158,7 +158,7 @@ function characterDeathEvent(api: DeusExModelApiInterface, event) {
  * Обработчик события kill-random-system
  * Вызывается когда хиты доходят до нуля
  */
-function killRandomSystemEvent(api: DeusExModelApiInterface, data, event) {
+function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.from && data.from == 'self' && api.model.profileType == 'human') {
     api.info('killRandomSystem: event handler start!');
 
@@ -234,7 +234,7 @@ function killRandomSystemEvent(api: DeusExModelApiInterface, data, event) {
  *
  * Предполагается что никакие другие импланты не вносят корректировки в HP
  */
-function damageEffect(api: DeusExModelApiInterface, modifier: Modifier) {
+function damageEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   //Если персонаж мертв ничего больше не делаем
   if (!api.model.isAlive) {
     api.model.maxHp = 0;
@@ -314,7 +314,7 @@ function damageEffect(api: DeusExModelApiInterface, modifier: Modifier) {
   }
 }
 
-function handleDroidsWounded(api) {
+function handleDroidsWounded(api: EffectModelApi<DeusExModel>) {
   if (api.model.hp < api.model.maxHp) {
     startRegenTimerIfRequired(api);
   } else {
@@ -322,21 +322,21 @@ function handleDroidsWounded(api) {
   }
 }
 
-function startRegenTimerIfRequired(api) {
+function startRegenTimerIfRequired(api: EffectModelApi<DeusExModel>) {
   if (!api.getTimer(consts.HP_REGEN_TIMER)) {
     api.info(`damageEffect: damage detected ==> start regen HP timer!`);
     api.setTimer(consts.HP_REGEN_TIMER, consts.HP_LEAK_DELAY, 'regen-hp', {});
   }
 }
 
-function stopRegenTimerIfRequired(api) {
+function stopRegenTimerIfRequired(api: EffectModelApi<DeusExModel>) {
   if (api.getTimer(consts.HP_REGEN_TIMER)) {
     api.info(`damageEffect: damage was healed ==> stop regen HP timer!`);
     api.removeTimer(consts.HP_REGEN_TIMER);
   }
 }
 
-function handleHumansWounded(api: DeusExModelApiInterface, deadSystems) {
+function handleHumansWounded(api: EffectModelApi<DeusExModel>, deadSystems) {
   if (api.model.hp < api.model.maxHp && !deadSystems) {
     //Установить таймер для утечки хитов, либо если он уже есть - не трогать
     //api.info(JSON.stringify(api.model.timers, null, 4));
@@ -370,7 +370,7 @@ function stopLeakTimerIfRequired(api) {
  * 3. Сбрасывает damage в 0 (на всякий случай)
  * 4. Ставит флаг isAlive в true
  */
-function characterResurectEvent(api: DeusExModelApiInterface, event) {
+function characterResurectEvent(api: EventModelApi<DeusExModel>, event) {
   //проверить системы и импланты на них (все только для Human'ов пока)
   if (api.model.systems && !api.model.isAlive) {
     api.info(`characterResurectEvent: systems ${medhelpers.getSystemsStateString(api)}`);
@@ -427,7 +427,7 @@ function characterResurectEvent(api: DeusExModelApiInterface, event) {
  * Если это был не последний хит, то таймер само обновится.
  * Название таймера хранится внутри импланта
  */
-function timedRecoveryEffect(api: DeusExModelApiInterface, modifier: Modifier) {
+function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   if (!api.model.isAlive) {
     api.info('timedRecoveryEffect: character already dead. Stop processing');
     return;
@@ -454,7 +454,7 @@ function timedRecoveryEffect(api: DeusExModelApiInterface, modifier: Modifier) {
  * Обработчик уменьшает damage на 1 и перевзводит таймер. Если это был последний хит, то следюущий вызов
  * просто отключит таймер (повреждения в минус уйти не могут)
  */
-function recoverHpEvent(api: DeusExModelApiInterface, event) {
+function recoverHpEvent(api: EventModelApi<DeusExModel>, event) {
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   if (m && m.damage && api.model.isAlive) {
@@ -479,7 +479,7 @@ function recoverHpEvent(api: DeusExModelApiInterface, event) {
  * 1. вылечит все отключенные системы, на которых нет имплантов
  * 2. выставить повреждения в зависимости от параметров
  */
-function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modifier) {
+function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   if (!api.model.isAlive) {
     api.info('timedRecoverSystemsEffect: character already dead. Stop processing');
     return;
@@ -511,7 +511,7 @@ function timedRecoverSystemsEffect(api: DeusExModelApiInterface, modifier: Modif
  * Обработчик события recover-systems
  * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-systems
  */
-function recoverSystemsEvent(api: DeusExModelApiInterface, data, event) {
+function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
   let modifier = api.getModifierById(data.mID);
 
   if (!modifier || !modifier.enabled) {

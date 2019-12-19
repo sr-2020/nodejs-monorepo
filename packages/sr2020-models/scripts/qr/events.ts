@@ -1,7 +1,7 @@
-import { Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCodeApi, QrCode } from '@sr2020/interface/models/qr-code.model';
+import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 
-export function consume(api: QrCodeApi, data: {}, _: Event) {
+export function consume(api: EventModelApi<QrCode>, data: {}, _: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
     throw new UserVisibleError('QR-код уже использован!');
   }
@@ -14,7 +14,7 @@ export function consume(api: QrCodeApi, data: {}, _: Event) {
   }
 }
 
-export function create(api: QrCodeApi, data: Partial<QrCode>, _: Event) {
+export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Event) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }

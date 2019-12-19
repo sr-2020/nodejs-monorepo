@@ -1,4 +1,4 @@
-import { ModelApiInterface, EmptyModel, Condition } from 'interface/src/models/alice-model-engine';
+import { EmptyModel, Condition } from 'interface/src/models/alice-model-engine';
 import { Change } from 'interface/src/models/deus-ex-model';
 
 export enum BiologicalSystems {
@@ -123,8 +123,6 @@ export interface OrganismModel extends EmptyModel {
 
   profileType: string;
 }
-
-export type MagellanModelApiInterface = ModelApiInterface<OrganismModel>;
 
 export interface LabTest {
   name: string;

@@ -30,7 +30,9 @@ export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T>
       }
     }
 
-    m.callbacks = assign({}, m.callbacks, src);
+    // TODO(aeremin) Separate event and effect callbacks.
+    m.eventCallbacks = assign({}, m.eventCallbacks, src);
+    m.effectCallbacks = assign({}, m.effectCallbacks, src);
 
     return m;
   });

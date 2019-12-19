@@ -1,5 +1,5 @@
-import { ActiveAbility, Sr2020CharacterApi } from '@sr2020/interface/models/sr2020-character.model';
-import { Event } from '@sr2020/interface/models/alice-model-engine';
+import { ActiveAbility, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { reviveOnTarget } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from './util';
 import { GROUND_HEAL_MODIFIER_NAME } from './spells';
@@ -14,7 +14,7 @@ export const AllActiveAbilities: ActiveAbility[] = [
   },
 ];
 
-export function oneTimeRevive(api: Sr2020CharacterApi, data: { targetCharacterId: number }, event: Event) {
+export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: number }, event: Event) {
   sendNotificationAndHistoryRecord(
     api,
     'Навык',

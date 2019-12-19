@@ -1,11 +1,11 @@
 ///  Narco effects
 
 import helpers = require('../helpers/model-helper');
-import { Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { Narcotic } from 'deus-models/helpers/catalog_types';
 
-function loadNarco(api: DeusExModelApiInterface, id) {
+function loadNarco(api: EventModelApi<DeusExModel>, id) {
   let drug = api.getCatalogObject<Narcotic>('pills', id);
   if (drug && drug.pillType == 'narco') {
     return drug;
@@ -15,18 +15,18 @@ function loadNarco(api: DeusExModelApiInterface, id) {
   }
 }
 
-function createNarcoEffectModifier(api: DeusExModelApiInterface, effectName, modifierId): Modifier | undefined {
+function createNarcoEffectModifier(api: EventModelApi<DeusExModel>, effectName, modifierId): Modifier | undefined {
   return helpers.createEffectModifier(api, effectName, modifierId, 'Воздействие каких-то таблеток', 'narco');
 }
 
-function addModifierTemporary(api: DeusExModelApiInterface, modifier, duration) {
+function addModifierTemporary(api: EventModelApi<DeusExModel>, modifier, duration) {
   modifier = api.addModifier(modifier);
   api.debug(modifier);
   helpers.setTimerToKillModifier(api, modifier, duration);
   return modifier;
 }
 
-function startTemporaryCubeChange(api: DeusExModelApiInterface, narco) {
+function startTemporaryCubeChange(api: EventModelApi<DeusExModel>, narco) {
   api.debug('Narco will add modifier');
   //Изменение должно быть временным. Накладываем эффект
 
@@ -42,7 +42,7 @@ function startTemporaryCubeChange(api: DeusExModelApiInterface, narco) {
   addModifierTemporary(api, modifier, duration + modifier.pushbackDuration);
 }
 
-function addTemporaryConditons(api: DeusExModelApiInterface, narco) {
+function addTemporaryConditons(api: EventModelApi<DeusExModel>, narco) {
   api.debug('Narco will add modifier');
 
   let modifier = createNarcoEffectModifier(api, 'show-always-condition', 'narcoEffectsCondition');
@@ -86,7 +86,7 @@ function dieHorribleDeath(api) {
   helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: 'Dementia' });
 }
 
-function takeNarcoEvent(api: DeusExModelApiInterface, data, event) {
+function takeNarcoEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info(`Taking narco effect: ${event.data.id}`);
 
   let narco = event.data.narco || loadNarco(api, event.data.id);
@@ -132,7 +132,7 @@ function takeNarcoEvent(api: DeusExModelApiInterface, data, event) {
 /**
  * Remove narco modifier by id
  */
-function stopNarcoModifier(api: DeusExModelApiInterface, data, event) {
+function stopNarcoModifier(api: EventModelApi<DeusExModel>, data, event) {
   api.info(`Removing narco effect ${data.mID}`);
   if (data.mID) {
     let modifier = api.getModifierById(data.mID);

@@ -1,6 +1,6 @@
-import { Event, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
-import { Spell, Sr2020CharacterApi, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Spell, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity, recordSpellTrace } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
@@ -95,7 +95,7 @@ const AllSpells: Spell[] = [
   },
 ];
 
-function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
+function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
   api.sendOutboundEvent(QrCode, qrCode.toString(), create, {
     type: 'artifact',
     description: `Этот артефакт позволяет ${whatItDoes} даже не будучи магом!`,
@@ -105,11 +105,11 @@ function createArtifact(api: Sr2020CharacterApi, qrCode: number, whatItDoes: str
   api.sendNotification('Успех', 'Артефакт зачарован!');
 }
 
-export function increaseResonance(api: Sr2020CharacterApi, _data: {}, _event: Event) {
+export function increaseResonance(api: EventModelApi<Sr2020Character>, _data: {}, _event: Event) {
   api.model.resonance++;
 }
 
-export function increaseResonanceSpell(api: Sr2020CharacterApi, data: { qrCode?: number }, _event: Event) {
+export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number }, _event: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', increaseResonanceSpell.name, 3);
   }
@@ -117,11 +117,11 @@ export function increaseResonanceSpell(api: Sr2020CharacterApi, data: { qrCode?:
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
-export function densityDrainSpell(api: Sr2020CharacterApi, data: { locationId: string; amount: number }, _: Event) {
+export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { locationId: string; amount: number }, _: Event) {
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: data.amount });
 }
 
-export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: string; qrCode?: number }, _: Event) {
+export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { locationId: string; qrCode?: number }, _: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
@@ -129,7 +129,7 @@ export function densityHalveSpell(api: Sr2020CharacterApi, data: { locationId: s
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
-export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
+export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
   if (data.qrCode != undefined) {
     addHistoryRecord(api, 'Заклинание', 'Лечение: на артефакт');
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
@@ -149,7 +149,7 @@ export function fullHealSpell(api: Sr2020CharacterApi, data: { qrCode?: number; 
 // Healing spells
 //
 export function lightHealSpell(
-  api: Sr2020CharacterApi,
+  api: EventModelApi<Sr2020Character>,
   data: { targetCharacterId?: number; power: number; locationId: string },
   event: Event,
 ) {
@@ -165,14 +165,14 @@ export function lightHealSpell(
   magicFeedbackAndSpellTrace(api, 'Light heal', data.power, data.locationId, event);
 }
 
-export function lightHeal(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
   const hpRestored = data.power;
   sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
 }
 
 export const GROUND_HEAL_MODIFIER_NAME = 'ground-heal-modifier';
 
-export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const durationInSeconds = 10 * data.power * 60;
@@ -181,12 +181,12 @@ export function groundHealSpell(api: Sr2020CharacterApi, data: { power: number; 
   magicFeedbackAndSpellTrace(api, 'Ground heal', data.power, data.locationId, event);
 }
 
-export function groundHealEffect(api: Sr2020CharacterApi, m: Modifier) {
+export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
 }
 
 export function liveLongAndProsperSpell(
-  api: Sr2020CharacterApi,
+  api: EventModelApi<Sr2020Character>,
   data: { targetCharacterId?: number; power: number; locationId: string },
   event: Event,
 ) {
@@ -202,7 +202,7 @@ export function liveLongAndProsperSpell(
   magicFeedbackAndSpellTrace(api, 'Live long and prosper', data.power, data.locationId, event);
 }
 
-export function liveLongAndProsper(api: Sr2020CharacterApi, data: { power: number }, event: Event) {
+export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
   const hpIncrease = Math.round(Math.sqrt(data.power));
   const durationInSeconds = Math.round(Math.sqrt(data.power)) * 60;
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
@@ -210,7 +210,7 @@ export function liveLongAndProsper(api: Sr2020CharacterApi, data: { power: numbe
   addTemporaryModifier(api, m, durationInSeconds);
 }
 
-export function maxHpIncreaseEffect(api: Sr2020CharacterApi, m: Modifier) {
+export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.maxHp += m.amount;
   api.model.maxHp = Math.min(api.model.maxHp, MAX_POSSIBLE_HP);
 }
@@ -219,7 +219,7 @@ export function maxHpIncreaseEffect(api: Sr2020CharacterApi, m: Modifier) {
 // Offensive spells
 //
 
-export function fireballSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+export function fireballSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
   const durationInSeconds = (data.power * 60) / 2;
@@ -229,7 +229,7 @@ export function fireballSpell(api: Sr2020CharacterApi, data: { power: number; lo
   magicFeedbackAndSpellTrace(api, 'Fireball', data.power, data.locationId, event);
 }
 
-export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
+export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.passiveAbilities.push({
     humanReadableName: 'Fireball',
     description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
@@ -240,7 +240,7 @@ export function fireballEffect(api: Sr2020CharacterApi, m: Modifier) {
 // Defensive spells
 //
 
-export function fieldOfDenialSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
   const durationInSeconds = 40 * 60;
@@ -249,7 +249,7 @@ export function fieldOfDenialSpell(api: Sr2020CharacterApi, data: { power: numbe
   magicFeedbackAndSpellTrace(api, 'Field of denial', data.power, data.locationId, event);
 }
 
-export function fieldOfDenialEffect(api: Sr2020CharacterApi, m: Modifier) {
+export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.passiveAbilities.push({
     humanReadableName: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
@@ -260,7 +260,7 @@ export function fieldOfDenialEffect(api: Sr2020CharacterApi, m: Modifier) {
 // Investigation spells
 //
 
-export function trackpointSpell(api: Sr2020CharacterApi, data: { power: number; locationId: string }, event: Event) {
+export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
   const durationInSeconds = (10 + 5 * data.power) * 60;
@@ -283,7 +283,7 @@ export function trackpointSpell(api: Sr2020CharacterApi, data: { power: number; 
 //
 // Events for learning and forgetting spells
 //
-export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {
+export function learnSpell(api: EventModelApi<Sr2020Character>, data: { spellName: string }, _: Event) {
   const spell = AllSpells.find((s) => s.eventType == data.spellName);
   if (!spell) {
     throw Error('learnSpell: Unknown spellName');
@@ -291,16 +291,22 @@ export function learnSpell(api: Sr2020CharacterApi, data: { spellName: string },
   api.model.spells.push(spell);
 }
 
-export function forgetSpell(api: Sr2020CharacterApi, data: { spellName: string }, _: Event) {
+export function forgetSpell(api: EventModelApi<Sr2020Character>, data: { spellName: string }, _: Event) {
   api.model.spells = api.model.spells.filter((s) => s.eventType != data.spellName);
 }
 
-export function forgetAllSpells(api: Sr2020CharacterApi, data: {}, _: Event) {
+export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   api.model.spells = [];
 }
 
 // Magic feedback implementation
-function magicFeedbackAndSpellTrace(api: Sr2020CharacterApi, spellName: string, power: number, locationId: string, event: Event) {
+function magicFeedbackAndSpellTrace(
+  api: EventModelApi<Sr2020Character>,
+  spellName: string,
+  power: number,
+  locationId: string,
+  event: Event,
+) {
   const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
   const feedbackAmount = Math.floor((power + 1) / 2);
 
@@ -316,6 +322,6 @@ function magicFeedbackAndSpellTrace(api: Sr2020CharacterApi, spellName: string, 
   });
 }
 
-export function magicFeedbackEffect(api: Sr2020CharacterApi, m: Modifier) {
+export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic -= m.amount;
 }

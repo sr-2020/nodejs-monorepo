@@ -15,8 +15,8 @@ import * as config from './config';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
-import { ModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
-import { ModelCallbacks, Callback, ViewModelCallback } from '@sr2020/interface/callbacks';
+import { PreprocessApiFactory, ViewModelApiFactory, EffectModelApiFactory } from './model_api';
+import { ModelCallbacks, ViewModelCallback, EffectCallback } from '@sr2020/interface/callbacks';
 
 export class Engine<T extends EmptyModel> {
   public static readonly bindingKey = 'ModelEngine';
@@ -25,7 +25,7 @@ export class Engine<T extends EmptyModel> {
 
   constructor(private _modelCallbacks: ModelCallbacks<T>, private _config: config.ConfigInterface = { dictionaries: {} }) {
     Logger.debug('engine', 'Loaded config', { config: inspect(_config, false, null) });
-    this.dispatcher = new dispatcher.Dispatcher<T>(_modelCallbacks.callbacks);
+    this.dispatcher = new dispatcher.Dispatcher<T>(_modelCallbacks.eventCallbacks);
   }
 
   public preProcess(model: T, events: Event[]): PendingAquire {
@@ -91,8 +91,8 @@ export class Engine<T extends EmptyModel> {
     };
   }
 
-  private resolveCallback(callback: config.Callback): Callback<T> | null {
-    const result = this._modelCallbacks.callbacks[callback];
+  private resolveCallback(callback: config.Callback): EffectCallback<T> | null {
+    const result = this._modelCallbacks.effectCallbacks[callback];
     if (result == null) {
       Logger.error('model', `Unable to find handler ${callback}. Make sure it's defined and exported.`, {});
     }
@@ -117,7 +117,7 @@ export class Engine<T extends EmptyModel> {
   private runModifiers(baseCtx: Context<T>): Context<T> {
     const workingCtx = baseCtx.clone();
     const modelId = workingCtx.model.modelId;
-    const api = ModelApiFactory(workingCtx);
+    const api = EffectModelApiFactory(workingCtx);
 
     // First process all functional events, then all normal ones.
     for (const effectType of ['functional', 'normal']) {

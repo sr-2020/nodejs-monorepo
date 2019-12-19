@@ -1,4 +1,4 @@
-import { ModelApiInterface, EmptyModel, Event, rproperty, Condition } from '@sr2020/interface/models/alice-model-engine';
+import { EmptyModel, Event, rproperty, Condition } from '@sr2020/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
@@ -159,8 +159,6 @@ export class DeusExModel extends EmptyModel {
   @property()
   showTechnicalInfo?: boolean;
 }
-
-export type DeusExModelApiInterface = ModelApiInterface<DeusExModel>;
 
 @model()
 export class DeusExProcessModelRequest {

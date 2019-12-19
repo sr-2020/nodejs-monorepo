@@ -1,4 +1,5 @@
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Хелперы для медицинских моделей
@@ -7,7 +8,7 @@ import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model'
 let helpers = require('./model-helper');
 let consts = require('./constants');
 
-function addDamage(api: DeusExModelApiInterface, hpLost, timestamp) {
+function addDamage(api: EventModelApi<DeusExModel>, hpLost, timestamp) {
   if (hpLost && api.model.hp && api.model.profileType != 'program' && api.model.profileType != 'exhuman-program') {
     let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
@@ -25,7 +26,7 @@ function addDamage(api: DeusExModelApiInterface, hpLost, timestamp) {
  * Т.е. если на данный момент maxHP < damage, то надо скорректировать damage так,
  * что бы лечение начиналось с 0 хитов
  */
-function restoreDamage(api: DeusExModelApiInterface, hpHeal, timestamp) {
+function restoreDamage(api: EventModelApi<DeusExModel>, hpHeal, timestamp) {
   api.info(`removeDamage: ${hpHeal}`);
 
   if (hpHeal && api.model.hp) {
@@ -67,7 +68,7 @@ function calcMaxHP(api) {
 /**
  * Поставить состояние системы по названию
  */
-function setMedSystem(api: DeusExModelApiInterface, system, value) {
+function setMedSystem(api: EventModelApi<DeusExModel>, system, value) {
   let i = consts.medicSystems.findIndex((m) => m.name == system);
 
   if (i != -1 && api.model.systems) {
@@ -121,7 +122,7 @@ function getSystemID(name) {
   return consts.medicSystems.findIndex((s) => s.name == name);
 }
 
-function isSystemAlive(api: DeusExModelApiInterface, name) {
+function isSystemAlive(api: EventModelApi<DeusExModel>, name) {
   let i = consts.medicSystems.findIndex((s) => s.name == name);
   if (i != -1 && api.model.systems) {
     return api.model.systems[i] == 1;
@@ -131,7 +132,7 @@ function isSystemAlive(api: DeusExModelApiInterface, name) {
 /**
  * Удалить болезь
  */
-function removeIllness(api: DeusExModelApiInterface, mID) {
+function removeIllness(api: EventModelApi<DeusExModel>, mID) {
   if (mID) {
     let index = api.model.modifiers.findIndex((m) => m.mID == mID);
 

@@ -3,10 +3,11 @@ import {
   EmptyModel,
   Event,
   LogApiInterface,
-  ModelApiInterface,
   PreprocessApiInterface,
   ViewModelApiInterface,
   Modifier,
+  EventModelApi,
+  EffectModelApi,
 } from 'interface/src/models/alice-model-engine';
 import cuid = require('cuid');
 import * as _ from 'lodash';
@@ -14,7 +15,7 @@ import { cloneDeep } from 'lodash';
 
 import { Context } from './context';
 import Logger from './logger';
-import { Callback } from '@sr2020/interface/callbacks';
+import { EventCallback } from '@sr2020/interface/callbacks';
 
 class LogApi implements LogApiInterface {
   public debug(msg: string, additionalData?: any) {
@@ -38,7 +39,7 @@ class LogApi implements LogApiInterface {
   }
 }
 
-class ModelApi<T extends EmptyModel> extends LogApi implements ModelApiInterface<T> {
+class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>, EffectModelApi<T> {
   constructor(private context: Context<T>, private currentEvent?: Event) {
     super();
   }
@@ -98,11 +99,11 @@ class ModelApi<T extends EmptyModel> extends LogApi implements ModelApiInterface
     return this;
   }
 
-  public setTimer<TEventData = any>(name: string, miliseconds: number, eventType: Callback<T, TEventData> | string, data: TEventData) {
-    if (typeof eventType != 'string') {
-      eventType = eventType.name;
+  public setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData) {
+    if (typeof event != 'string') {
+      event = event.name;
     }
-    this.context.setTimer(name, miliseconds, eventType, data);
+    this.context.setTimer(name, miliseconds, event, data);
     return this;
   }
 
@@ -111,7 +112,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements ModelApiInterface
     return this;
   }
 
-  public sendSelfEvent<TEventData = any>(event: Callback<T, TEventData> | string, data: TEventData) {
+  public sendSelfEvent<TEventData = any>(event: EventCallback<T, TEventData> | string, data: TEventData) {
     const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.context.timestamp;
     if (typeof event != 'string') {
       event = event.name;
@@ -123,7 +124,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements ModelApiInterface
   public sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
     type: new () => TModel,
     modelId: string,
-    event: string | Callback<TModel, TEventData>,
+    event: string | EventCallback<TModel, TEventData>,
     data: TEventData,
   ) {
     const timestamp = this.currentEvent ? this.currentEvent.timestamp : this.context.timestamp;
@@ -178,7 +179,11 @@ class PreprocessApi<T extends EmptyModel> extends LogApi implements PreprocessAp
   }
 }
 
-export function ModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): ModelApiInterface<T> {
+export function EffectModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): EffectModelApi<T> {
+  return new ModelApi(context, event);
+}
+
+export function EventModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): EventModelApi<T> {
   return new ModelApi(context, event);
 }
 

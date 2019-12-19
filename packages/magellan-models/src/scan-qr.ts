@@ -1,4 +1,4 @@
-import { Event, ModelApiInterface, PreprocessApiInterface } from 'interface/src/models/alice-model-engine';
+import { Event, PreprocessApiInterface, EventModelApi } from 'interface/src/models/alice-model-engine';
 import { LabTerminalRefillData, QrType, ScanQRData, XenoDisease, OrganismModel } from '../helpers/basic-types';
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
@@ -6,7 +6,7 @@ function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
   return { uniqueId, numTests: Number(numTests) };
 }
 
-function scanQR(api: ModelApiInterface<OrganismModel>, data: ScanQRData) {
+function scanQR(api: EventModelApi<OrganismModel>, data: ScanQRData) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case QrType.Pill:

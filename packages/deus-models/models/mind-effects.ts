@@ -4,13 +4,14 @@
 
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { DeusExModelApiInterface } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 
 /**
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)
  * Аналогичен changeMindCubeEvent
  */
-function changeMindCubesEffect(api: DeusExModelApiInterface, modifier) {
+function changeMindCubesEffect(api: EffectModelApi<DeusExModel>, modifier) {
   api.debug('changeMindCubesEffect: start, change: ' + JSON.stringify(modifier));
   let changeCommand = modifier.mindCubeChange;
 

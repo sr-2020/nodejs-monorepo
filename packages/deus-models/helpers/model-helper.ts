@@ -1,7 +1,7 @@
 import { MindData } from '../models/medicViewModel';
-import { DeusExModelApiInterface, DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { Implant, Illness } from './catalog_types';
-import { Effect, Modifier, Condition } from '@sr2020/interface/models/alice-model-engine';
+import { Effect, Modifier, Condition, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 
@@ -13,7 +13,7 @@ let type = require('type-detect');
 let Chance = require('chance');
 let chance = new Chance();
 
-function loadImplant(api: DeusExModelApiInterface, id: string) {
+function loadImplant(api: EventModelApi<DeusExModel>, id: string) {
   let implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
 
   if (!implant) {
@@ -42,7 +42,7 @@ function loadImplant(api: DeusExModelApiInterface, id: string) {
 /**
  * Загружает болезнь и ее эффект из каталога
  */
-function loadIllness(api: DeusExModelApiInterface, id: string) {
+function loadIllness(api: EventModelApi<DeusExModel>, id: string) {
   let illness = api.getCatalogObject<Illness>('illnesses', id.toLowerCase());
 
   if (!illness) {
@@ -65,7 +65,7 @@ function loadIllness(api: DeusExModelApiInterface, id: string) {
   return illness;
 }
 
-function addChangeRecord(api: DeusExModelApiInterface, text: string, timestamp: number) {
+function addChangeRecord(api: EventModelApi<DeusExModel>, text: string, timestamp: number) {
   if (text) {
     if (api.model.changes.length >= consts.MAX_CHANGES_LINES) api.model.changes.shift();
 
@@ -79,7 +79,7 @@ function addChangeRecord(api: DeusExModelApiInterface, text: string, timestamp: 
 
 //Проверка предиката и возвращение данных для работы эффекта
 //Вовращается объект Params (если он есть)
-function checkPredicate(api: DeusExModelApiInterface, mID: string, effectName: string, multi = false) {
+function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectName: string, multi = false) {
   let implant = api.getModifierById(mID);
 
   //api.info("checkPredicate: " + JSON.stringify(implant));
@@ -117,7 +117,7 @@ function checkPredicate(api: DeusExModelApiInterface, mID: string, effectName: s
   return null;
 }
 
-function isMindCubeMatch(api: DeusExModelApiInterface, variable: string, condition: string) {
+function isMindCubeMatch(api: EffectModelApi<DeusExModel>, variable: string, condition: string) {
   let parts = variable.match(/^([A-G])(\d)/i);
   //console.log(`isMindCubeMatch: ${variable}`);
   if (parts) {
@@ -173,7 +173,7 @@ function checkValue(value: string, condition: string) {
   }
 }
 
-function isGenomeMatch(api: DeusExModelApiInterface, variable: string, value: string) {
+function isGenomeMatch(api: EffectModelApi<DeusExModel>, variable: string, value: string) {
   let parts = variable.match(/^Z(\d\d?)/i);
 
   if (parts) {
@@ -198,7 +198,7 @@ function isGenomeMatch(api: DeusExModelApiInterface, variable: string, value: st
  *
  * scaleFactor = 100 (default) to apply normal change
  */
-function modifyMindCubes(api: DeusExModelApiInterface, mind: MindData, changeText: string, scaleFactor: number = 100) {
+function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, changeText: string, scaleFactor: number = 100) {
   api.debug('=======================================================');
   changeText.split(',').forEach((exp) => {
     api.debug(`MMC:  Part: ${exp}`);
@@ -250,7 +250,7 @@ function uuidv4() {
 /**
  *  Устанавливает значение состояния системы в модели по ее имени (англоязычному)
  */
-function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
+function addCharacterCondition(api: EffectModelApi<DeusExModel>, condId: string) {
   if (condId) {
     let condition = api.getCatalogObject<Condition>('conditions', condId);
 
@@ -271,7 +271,7 @@ function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
  * Так же нельзя установить один имплант два раза
  */
 
-//  function isImpantCanBeInstalled(api: DeusExModelApiInterface, implant){
+//  function isImpantCanBeInstalled(api: EventModelApi<DeusExModel>, implant){
 //     if(implant && implant.system){
 //         let systemInfo = consts.medicSystems.find( s => s.name == implant.system);
 
@@ -292,7 +292,7 @@ function addCharacterCondition(api: DeusExModelApiInterface, condId: string) {
  *  Установка отложенного исполнения какого-то эффекта (одноразовый таймер)
  *  Задержка (duration) задается в миллисекундах
  */
-function addDelayedEvent(api: DeusExModelApiInterface, duration: number, eventType: string, data: any, prefix = 'delayed') {
+function addDelayedEvent(api: EventModelApi<DeusExModel>, duration: number, eventType: string, data: any, prefix = 'delayed') {
   if (api && duration && eventType && data) {
     let timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
@@ -353,7 +353,7 @@ let restrictedVars = [
  * Можно менять только простые переменные (string/number), не входящие в структуры
  * Нельзя менять ключевые поля, меняемые через специальные события и методы
  */
-function modifyModelProperties(api: DeusExModelApiInterface, operations: string) {
+function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: string) {
   if (operations) {
     operations
       .replace(/\s/gi, '')
@@ -381,7 +381,7 @@ function modifyModelProperties(api: DeusExModelApiInterface, operations: string)
   }
 }
 
-function modifyModelStringProperty(api: DeusExModelApiInterface, varName, value) {
+function modifyModelStringProperty(api: EffectModelApi<DeusExModel>, varName, value) {
   if (restrictedVars.find((v) => varName == v)) {
     return false;
   }
@@ -401,7 +401,7 @@ function modifyModelStringProperty(api: DeusExModelApiInterface, varName, value)
   return true;
 }
 
-function modifyModelDigitProperty(api: DeusExModelApiInterface, varName: string, op: string, value: string) {
+function modifyModelDigitProperty(api: EffectModelApi<DeusExModel>, varName: string, op: string, value: string) {
   if (restrictedVars.find((v) => varName == v)) {
     return false;
   }
@@ -433,7 +433,7 @@ function modifyModelDigitProperty(api: DeusExModelApiInterface, varName: string,
   return true;
 }
 
-function setTimerToKillModifier(api: DeusExModelApiInterface, modifier: Modifier, timestamp: number) {
+function setTimerToKillModifier(api: EventModelApi<DeusExModel>, modifier: Modifier, timestamp: number) {
   api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, timestamp - 1, 'stop-narco-modifier', { mID: modifier.mID });
 }
 
@@ -461,15 +461,15 @@ function isIllness(modifier: Modifier) {
   return false;
 }
 
-function getImplantsBySystem(api: DeusExModelApiInterface, systemName: string) {
+function getImplantsBySystem(api: EffectModelApi<DeusExModel>, systemName: string) {
   return api.getModifiersBySystem(systemName).filter((m) => isImplant(m));
 }
 
-function getAllImplants(api: DeusExModelApiInterface) {
+function getAllImplants(api: EventModelApi<DeusExModel>) {
   return api.model.modifiers.filter((m) => isImplant(m));
 }
 
-function getAllIlnesses(api: DeusExModelApiInterface) {
+function getAllIlnesses(api: EventModelApi<DeusExModel>) {
   return api.model.modifiers.filter((m) => isIllness(m));
 }
 
@@ -477,13 +477,13 @@ function getChanceFromModel(model: DeusExModel) {
   return model.randomSeed ? new Chance(model.randomSeed) : new Chance();
 }
 
-function removeImplant(api: DeusExModelApiInterface, implantForRemove: Modifier, timestamp: number) {
+function removeImplant(api: EventModelApi<DeusExModel>, implantForRemove: Modifier, timestamp: number) {
   api.removeModifier(implantForRemove.mID);
   addChangeRecord(api, `Удален имплант: ${implantForRemove.displayName} при установке нового`, timestamp);
 }
 
 function createEffectModifier(
-  api: DeusExModelApiInterface,
+  api: EventModelApi<DeusExModel>,
   effectName: string,
   modifierId: string,
   displayName: string,
@@ -511,7 +511,7 @@ function createEffectModifier(
   return modifier;
 }
 
-function addCondition(api: DeusExModelApiInterface, condition: Condition): Condition {
+function addCondition(api: EffectModelApi<DeusExModel>, condition: Condition): Condition {
   let c = api.model.conditions.find((cond) => cond.id == condition.id);
   if (c) return c;
   c = cloneDeep(condition);
