@@ -47,8 +47,6 @@ export class Engine<T extends EmptyModel> {
     // main loop
     //
     for (const event of baseCtx.iterateEvents()) {
-      baseCtx.decreaseTimers(event.timestamp - baseCtx.timestamp);
-
       try {
         Logger.logStep('engine', 'info', 'Running event', { event, modelId })(() => this.runEvent(baseCtx, event));
       } catch (e) {
@@ -101,9 +99,9 @@ export class Engine<T extends EmptyModel> {
     return result;
   }
 
-  private runEvent(context: Context<T>, event: Event): number {
+  private runEvent(context: Context<T>, event: Event) {
+    context.advanceTimeBy(event.timestamp - context.timestamp);
     this.dispatcher.dispatch(event, context);
-    return (context.timestamp = event.timestamp);
   }
 
   private getEnabledModifiers(workingCtx: Context<T>): Modifier[] {

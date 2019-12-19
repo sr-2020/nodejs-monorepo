@@ -94,10 +94,6 @@ export class Context<T extends EmptyModel> {
     return this._model.timestamp;
   }
 
-  set timestamp(value: number) {
-    this._model.timestamp = value;
-  }
-
   get modifiers(): Modifier[] {
     return this._model.modifiers;
   }
@@ -183,7 +179,16 @@ export class Context<T extends EmptyModel> {
     }
   }
 
-  public decreaseTimers(diff: number): void {
+  public advanceTimeBy(diff: number) {
+    this.decreaseTimers(diff);
+    this._model.timestamp += diff;
+  }
+
+  public valueOf() {
+    return cloneDeep(this._model);
+  }
+
+  private decreaseTimers(diff: number): void {
     if (!this._model.timers) return;
 
     this._model.timers = _.mapValues(this._model.timers, (t) => {
@@ -194,10 +199,6 @@ export class Context<T extends EmptyModel> {
         data: t.data,
       };
     });
-  }
-
-  public valueOf() {
-    return cloneDeep(this._model);
   }
 
   private nextEvent(): Event | undefined {
