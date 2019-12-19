@@ -16,8 +16,32 @@ import { Context } from './context';
 import Logger from './logger';
 import { Callback } from '@sr2020/interface/callbacks';
 
-class ReadModelApi<T extends EmptyModel> implements LogApiInterface {
-  constructor(protected context: Context<T>) {}
+class LogApi implements LogApiInterface {
+  public debug(msg: string, additionalData?: any) {
+    Logger.debug('model', msg, additionalData);
+  }
+
+  public info(msg: string, additionalData?: any) {
+    Logger.info('model', msg, additionalData);
+  }
+
+  public notice(msg: string, additionalData?: any) {
+    Logger.notice('model', msg, additionalData);
+  }
+
+  public warn(msg: string, additionalData?: any) {
+    Logger.warn('model', msg, additionalData);
+  }
+
+  public error(msg: string, additionalData?: any) {
+    Logger.error('model', msg, additionalData);
+  }
+}
+
+class ModelApi<T extends EmptyModel> extends LogApi implements ModelApiInterface<T> {
+  constructor(private context: Context<T>, private currentEvent?: Event) {
+    super();
+  }
 
   get model() {
     return this.context.model;
@@ -52,36 +76,6 @@ class ReadModelApi<T extends EmptyModel> implements LogApiInterface {
 
   public getTimer(name: string) {
     return this.context.timers[name];
-  }
-
-  public debug(msg: string, additionalData?: any) {
-    Logger.debug('model', msg, additionalData);
-  }
-
-  public info(msg: string, additionalData?: any) {
-    Logger.info('model', msg, additionalData);
-  }
-
-  public notice(msg: string, additionalData?: any) {
-    Logger.notice('model', msg, additionalData);
-  }
-
-  public warn(msg: string, additionalData?: any) {
-    Logger.warn('model', msg, additionalData);
-  }
-
-  public error(msg: string, additionalData?: any) {
-    Logger.error('model', msg, additionalData);
-  }
-
-  private getModifiersBy(predicate: (m: Modifier) => boolean) {
-    return this.context.modifiers.filter(predicate);
-  }
-}
-
-class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApiInterface<T> {
-  constructor(context: Context<T>, private currentEvent?: Event) {
-    super(context);
   }
 
   public addModifier(modifier: Modifier) {
@@ -149,11 +143,19 @@ class ModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ModelApi
     this.context.setTableResponse(table);
     return this;
   }
+
+  private getModifiersBy(predicate: (m: Modifier) => boolean) {
+    return this.context.modifiers.filter(predicate);
+  }
 }
 
-class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements ViewModelApiInterface<T> {
-  constructor(context: Context<T>, protected baseContext: Context<T>) {
-    super(context);
+class ViewModelApi<T extends EmptyModel> extends LogApi implements ViewModelApiInterface<T> {
+  constructor(private context: Context<T>, private baseContext: Context<T>) {
+    super();
+  }
+
+  get model() {
+    return this.context.model;
   }
 
   get baseModel() {
@@ -161,7 +163,15 @@ class ViewModelApi<T extends EmptyModel> extends ReadModelApi<T> implements View
   }
 }
 
-class PreprocessApi<T extends EmptyModel> extends ReadModelApi<T> implements PreprocessApiInterface<T> {
+class PreprocessApi<T extends EmptyModel> extends LogApi implements PreprocessApiInterface<T> {
+  constructor(private context: Context<T>) {
+    super();
+  }
+
+  get model() {
+    return this.context.model;
+  }
+
   public aquire(db: string, id: string) {
     this.context.pendingAquire.push([db, id]);
     return this;
