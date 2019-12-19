@@ -57,6 +57,9 @@ export function requireDir(dir: string, merge = _merge): any {
       src = require(Path.join(process.cwd(), f));
     }
 
+    // This is to support
+    // module.exports = () => {...}
+    // kind of exporting.
     if (typeof src == 'function') {
       src = src();
     }
