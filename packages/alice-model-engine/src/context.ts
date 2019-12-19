@@ -102,11 +102,6 @@ export class Context<T extends EmptyModel> {
     return this._model.modifiers;
   }
 
-  get effects() {
-    const enabledModifiers = this.modifiers.filter((m) => m.enabled);
-    return _.flatMap(enabledModifiers, (c) => c.effects);
-  }
-
   get outboundEvents(): EventForModelType[] {
     return this._outboundEvents.valueOf();
   }
@@ -180,34 +175,6 @@ export class Context<T extends EmptyModel> {
     return this._tableResponse;
   }
 
-  public nextTimer(): Timer | null {
-    return _.reduce(
-      this.timers,
-      (current: Timer | null, t) => {
-        if (!current) return t;
-        if (current.miliseconds > t.miliseconds) return t;
-        return current;
-      },
-      null,
-    );
-  }
-
-  public nextEvent(): Event | undefined {
-    if (!this._events.length) return;
-
-    const firstTimer = this.nextTimer();
-    const firstEvent = this._events[0];
-
-    if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
-      // !! is safe as firstTimer != null means that there are timers indeed.
-      delete this._model.timers!![firstTimer.name];
-      return this.timerEvent(firstTimer);
-    } else {
-      this._events.shift();
-      return firstEvent;
-    }
-  }
-
   public *iterateEvents(): Iterable<Event> {
     let event = this.nextEvent();
     while (event) {
@@ -231,6 +198,34 @@ export class Context<T extends EmptyModel> {
 
   public valueOf() {
     return cloneDeep(this._model);
+  }
+
+  private nextEvent(): Event | undefined {
+    if (!this._events.length) return;
+
+    const firstTimer = this.nextTimer();
+    const firstEvent = this._events[0];
+
+    if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
+      // !! is safe as firstTimer != null means that there are timers indeed.
+      delete this._model.timers!![firstTimer.name];
+      return this.timerEvent(firstTimer);
+    } else {
+      this._events.shift();
+      return firstEvent;
+    }
+  }
+
+  private nextTimer(): Timer | null {
+    return _.reduce(
+      this.timers,
+      (current: Timer | null, t) => {
+        if (!current) return t;
+        if (current.miliseconds > t.miliseconds) return t;
+        return current;
+      },
+      null,
+    );
   }
 
   private sortEvents() {
