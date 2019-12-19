@@ -8,7 +8,6 @@ import {
   ReadModelApiInterface,
   ViewModelApiInterface,
   Modifier,
-  Effect,
 } from 'interface/src/models/alice-model-engine';
 import cuid = require('cuid');
 import * as _ from 'lodash';
