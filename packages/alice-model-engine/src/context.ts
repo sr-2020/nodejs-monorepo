@@ -1,17 +1,9 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import {
-  AquiredObjects,
-  EmptyModel,
-  Event,
-  Modifier,
-  PendingAquire,
-  Timer,
-  Timers,
-  EventForModelType,
-} from 'interface/src/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, Event, PendingAquire, Timer, EventForModelType } from 'interface/src/models/alice-model-engine';
 import { PushNotification } from '@sr2020/interface/models';
+import { assert } from 'console';
 
 export type FieldName = string | string[];
 export type FieldValue = any;
@@ -34,7 +26,8 @@ export class OutboundEvents {
 }
 
 export class Context<T extends EmptyModel> {
-  private _model: T;
+  public baseModel: T;
+  public workModel: T;
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
@@ -44,14 +37,15 @@ export class Context<T extends EmptyModel> {
   private _tableResponse?: any = undefined;
 
   constructor(
-    model: T,
+    baseModel: T,
     events: Event[],
     dictionaries?: any,
     outboundEvents?: OutboundEvents,
     pendingAquire?: PendingAquire,
     aquired?: AquiredObjects,
   ) {
-    this._model = cloneDeep(model);
+    this.baseModel = cloneDeep(baseModel);
+    this.workModel = cloneDeep(baseModel);
 
     this._events = cloneDeep(events);
     this.sortEvents();
@@ -74,28 +68,9 @@ export class Context<T extends EmptyModel> {
     this.sortEvents();
   }
 
-  get model() {
-    return this._model;
-  }
-
-  set model(m: T) {
-    this._model = m;
-  }
-
-  get timers(): Timers {
-    return _.get(this._model, 'timers', {});
-  }
-
-  set timers(value: Timers) {
-    this._model.timers = cloneDeep(value);
-  }
-
   get timestamp() {
-    return this._model.timestamp;
-  }
-
-  get modifiers(): Modifier[] {
-    return this._model.modifiers;
+    assert(this.baseModel.timestamp == this.workModel.timestamp);
+    return this.baseModel.timestamp;
   }
 
   get outboundEvents(): EventForModelType[] {
@@ -118,11 +93,11 @@ export class Context<T extends EmptyModel> {
     return this._pendingAquire;
   }
 
-  public clone(): Context<T> {
-    const clone = new Context(this._model, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
+  /*public clone(): Context<T> {
+    const clone = new Context(this._workModel, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
     clone.timers = this.timers;
     return clone;
-  }
+  }*/
 
   public getDictionary(name: FieldName): any[] | undefined {
     return _.get(this._dictionaries, name, undefined);
@@ -135,14 +110,14 @@ export class Context<T extends EmptyModel> {
       eventType,
       data,
     };
-    if (!this._model.timers) this._model.timers = {};
-    this._model.timers[timer.name] = timer;
+    if (!this.baseModel.timers) this.baseModel.timers = {};
+    this.baseModel.timers[timer.name] = timer;
     return this;
   }
 
   public sendSelfEvent(eventType: string, timestamp: number, data: any) {
     this._events.unshift({
-      modelId: this._model.modelId,
+      modelId: this.baseModel.modelId,
       eventType,
       timestamp: timestamp,
       data,
@@ -181,17 +156,13 @@ export class Context<T extends EmptyModel> {
 
   public advanceTimeBy(diff: number) {
     this.decreaseTimers(diff);
-    this._model.timestamp += diff;
-  }
-
-  public valueOf() {
-    return cloneDeep(this._model);
+    this.baseModel.timestamp += diff;
+    this.workModel.timestamp += diff;
+    assert(this.baseModel.timestamp == this.workModel.timestamp);
   }
 
   private decreaseTimers(diff: number): void {
-    if (!this._model.timers) return;
-
-    this._model.timers = _.mapValues(this._model.timers, (t) => {
+    this.baseModel.timers = _.mapValues(this.baseModel.timers, (t) => {
       return {
         name: t.name,
         miliseconds: t.miliseconds - diff,
@@ -199,6 +170,7 @@ export class Context<T extends EmptyModel> {
         data: t.data,
       };
     });
+    this.workModel.timers = this.baseModel.timers;
   }
 
   private nextEvent(): Event | undefined {
@@ -209,7 +181,7 @@ export class Context<T extends EmptyModel> {
 
     if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
       // !! is safe as firstTimer != null means that there are timers indeed.
-      delete this._model.timers!![firstTimer.name];
+      delete this.baseModel.timers!![firstTimer.name];
       return this.timerEvent(firstTimer);
     } else {
       this._events.shift();
@@ -219,7 +191,7 @@ export class Context<T extends EmptyModel> {
 
   private nextTimer(): Timer | null {
     return _.reduce(
-      this.timers,
+      this.baseModel.timers,
       (current: Timer | null, t) => {
         if (!current) return t;
         if (current.miliseconds > t.miliseconds) return t;
@@ -237,7 +209,7 @@ export class Context<T extends EmptyModel> {
 
   private timerEvent(timer: Timer): Event {
     return {
-      modelId: this._model.modelId,
+      modelId: this.baseModel.modelId,
       eventType: timer.eventType,
       timestamp: this.timestamp + timer.miliseconds,
       data: timer.data,

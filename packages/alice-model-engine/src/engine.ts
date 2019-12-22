@@ -1,4 +1,4 @@
-import { reduce } from 'lodash';
+import { reduce, cloneDeep } from 'lodash';
 import { inspect } from 'util';
 
 import {
@@ -29,26 +29,32 @@ export class Engine<T extends EmptyModel> {
   }
 
   public preProcess(model: T, events: Event[]): PendingAquire {
-    const baseCtx = new Context(model, events, this._config.dictionaries);
-    const modelId = baseCtx.model.modelId;
+    const context = new Context(model, events, this._config.dictionaries);
+    const modelId = context.baseModel.modelId;
     Logger.info('engine', 'Preprocessing model', { modelId, events });
-    Logger.logStep('engine', 'info', 'Preprocess', { modelId })(() => this.runPreprocess(baseCtx, events));
-    return baseCtx.pendingAquire;
+    Logger.logStep('engine', 'info', 'Preprocess', { modelId })(() => this.runPreprocess(context, events));
+    return context.pendingAquire;
   }
 
   public process(model: T, aquired: AquiredObjects, events: Event[]): EngineResult {
-    const baseCtx = new Context(model, events, this._config.dictionaries);
-    baseCtx.aquired = aquired;
-    const modelId = baseCtx.model.modelId;
-
-    let workingCtx = baseCtx.clone();
+    const context = new Context(model, events, this._config.dictionaries);
+    context.aquired = aquired;
+    const modelId = context.baseModel.modelId;
 
     //
     // main loop
     //
-    for (const event of baseCtx.iterateEvents()) {
+    for (const event of context.iterateEvents()) {
       try {
-        Logger.logStep('engine', 'info', 'Running event', { event, modelId })(() => this.runEvent(baseCtx, event));
+        Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(context));
+      } catch (e) {
+        if (!(e instanceof UserVisibleError))
+          Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: context.baseModel });
+        return { status: 'error', error: e };
+      }
+
+      try {
+        Logger.logStep('engine', 'info', 'Running event', { event, modelId })(() => this.runEvent(context, event));
       } catch (e) {
         if (!(e instanceof UserVisibleError))
           Logger.error('engine', `Exception ${e.toString()} caught when processing event`, { event, modelId });
@@ -56,23 +62,18 @@ export class Engine<T extends EmptyModel> {
       }
 
       try {
-        workingCtx = Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(baseCtx));
+        Logger.logStep('engine', 'info', 'Running modifiers', { modelId })(() => this.runModifiers(context));
       } catch (e) {
         if (!(e instanceof UserVisibleError))
-          Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: baseCtx.model });
+          Logger.error('engine', `Exception ${e.toString()} caught when applying modifiers`, { modelId, model: context.baseModel });
         return { status: 'error', error: e };
       }
-
-      baseCtx.timers = workingCtx.timers;
-      baseCtx.events = workingCtx.events;
     }
 
-    const baseCtxValue = baseCtx.valueOf();
-    const workingCtxValue = workingCtx.valueOf();
     let viewModels;
 
     try {
-      viewModels = Logger.logStep('engine', 'info', 'Running view models', { modelId })(() => this.runViewModels(workingCtx, baseCtx));
+      viewModels = Logger.logStep('engine', 'info', 'Running view models', { modelId })(() => this.runViewModels(context));
     } catch (e) {
       if (!(e instanceof UserVisibleError))
         Logger.error('engine', `Exception caught when running view models: ${e.toString()}`, { modelId });
@@ -81,13 +82,13 @@ export class Engine<T extends EmptyModel> {
 
     return {
       status: 'ok',
-      baseModel: baseCtxValue,
-      workingModel: workingCtxValue,
+      baseModel: context.baseModel,
+      workingModel: context.workModel,
       viewModels,
-      aquired: baseCtx.aquired,
-      outboundEvents: baseCtx.outboundEvents,
-      notifications: baseCtx.notifications,
-      tableResponse: baseCtx.tableResponse,
+      aquired: context.aquired,
+      outboundEvents: context.outboundEvents,
+      notifications: context.notifications,
+      tableResponse: context.tableResponse,
     };
   }
 
@@ -104,8 +105,8 @@ export class Engine<T extends EmptyModel> {
     this.dispatcher.dispatch(event, context);
   }
 
-  private getEnabledModifiers(workingCtx: Context<T>): Modifier[] {
-    return workingCtx.modifiers
+  private getEnabledModifiers(context: Context<T>): Modifier[] {
+    return context.workModel.modifiers
       .filter((m) => m.enabled)
       .sort((a, b) => {
         if (a.class != '_internal' && b.class == '_internal') return -1;
@@ -114,14 +115,14 @@ export class Engine<T extends EmptyModel> {
       });
   }
 
-  private runModifiers(baseCtx: Context<T>): Context<T> {
-    const workingCtx = baseCtx.clone();
-    const modelId = workingCtx.model.modelId;
-    const api = EffectModelApiFactory(workingCtx);
+  private runModifiers(context: Context<T>) {
+    context.workModel = cloneDeep(context.baseModel);
+    const modelId = context.baseModel.modelId;
+    const api = EffectModelApiFactory(context);
 
     // First process all functional events, then all normal ones.
     for (const effectType of ['functional', 'normal']) {
-      for (const modifier of this.getEnabledModifiers(workingCtx)) {
+      for (const modifier of this.getEnabledModifiers(context)) {
         const effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
         for (const effect of effects) {
           const f = this.resolveCallback(effect.handler);
@@ -135,13 +136,11 @@ export class Engine<T extends EmptyModel> {
         }
       }
     }
-
-    return workingCtx;
   }
 
-  private runViewModels(workingCtx: Context<T>, baseCtx: Context<T>) {
-    const data = workingCtx.valueOf();
-    const api = ViewModelApiFactory(workingCtx, baseCtx);
+  private runViewModels(context: Context<T>) {
+    const data = context.workModel;
+    const api = ViewModelApiFactory(context);
 
     return reduce(
       this._modelCallbacks.viewModelCallbacks,
@@ -156,13 +155,12 @@ export class Engine<T extends EmptyModel> {
   private runPreprocess(baseCtx: Context<T>, events: Event[]) {
     if (!this._modelCallbacks.preprocessCallbacks.length) return;
 
-    const ctx = baseCtx.clone();
-    const api = PreprocessApiFactory(ctx);
+    const api = PreprocessApiFactory(baseCtx);
 
     for (const f of this._modelCallbacks.preprocessCallbacks) {
       f(api, events);
     }
 
-    baseCtx.events = ctx.events;
+    baseCtx.events = baseCtx.events;
   }
 }

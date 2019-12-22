@@ -39,17 +39,21 @@ class LogApi implements LogApiInterface {
   }
 }
 
-class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>, EffectModelApi<T> {
+class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventModelApi<T> {
   constructor(private context: Context<T>, private currentEvent?: Event) {
     super();
   }
 
+  get workModel() {
+    return this.context.workModel;
+  }
+
   get model() {
-    return this.context.model;
+    return this.context.baseModel;
   }
 
   set model(m: T) {
-    this.context.model = m;
+    this.context.baseModel = m;
   }
 
   public getCatalogObject(catalogName: string, id: string) {
@@ -60,7 +64,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
   }
 
   public getModifierById(id: string) {
-    return this.context.modifiers.find((m) => m.mID == id);
+    return this.context.baseModel.modifiers.find((m) => m.mID == id);
   }
 
   public getModifiersByName(name: string) {
@@ -76,7 +80,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
   }
 
   public getTimer(name: string) {
-    return this.context.timers[name];
+    return (this.context.baseModel.timers || {})[name];
   }
 
   public addModifier(modifier: Modifier) {
@@ -86,7 +90,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
       m.mID = cuid();
     }
 
-    this.context.modifiers.push(m);
+    this.context.baseModel.modifiers.push(m);
     return m;
   }
 
@@ -95,7 +99,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
   }
 
   public removeModifier(mID: string) {
-    _.remove(this.context.modifiers, (m) => m.mID == mID);
+    _.remove(this.context.baseModel.modifiers, (m) => m.mID == mID);
     return this;
   }
 
@@ -108,7 +112,7 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
   }
 
   public removeTimer(name: string) {
-    delete this.context.timers[name];
+    delete (this.context.baseModel.timers || {})[name];
     return this;
   }
 
@@ -146,21 +150,102 @@ class ModelApi<T extends EmptyModel> extends LogApi implements EventModelApi<T>,
   }
 
   private getModifiersBy(predicate: (m: Modifier) => boolean) {
-    return this.context.modifiers.filter(predicate);
+    return this.context.baseModel.modifiers.filter(predicate);
   }
 }
 
-class ViewModelApi<T extends EmptyModel> extends LogApi implements ViewModelApiInterface<T> {
-  constructor(private context: Context<T>, private baseContext: Context<T>) {
+class EffectModelApiImpl<T extends EmptyModel> extends LogApi implements EffectModelApi<T> {
+  constructor(private context: Context<T>) {
     super();
   }
 
   get model() {
-    return this.context.model;
+    return this.context.workModel;
+  }
+
+  set model(m: T) {
+    this.context.workModel = m;
+  }
+
+  public getCatalogObject(catalogName: string, id: string) {
+    const catalog = this.context.getDictionary(catalogName);
+    if (catalog) {
+      return cloneDeep(catalog.find((c) => c.id == id));
+    }
+  }
+
+  public getModifierById(id: string) {
+    return this.context.workModel.modifiers.find((m) => m.mID == id);
+  }
+
+  public getModifiersByName(name: string) {
+    return this.getModifiersBy((m) => m.name == name);
+  }
+
+  public getModifiersByClass(className: string) {
+    return this.getModifiersBy((m) => m.class == className);
+  }
+
+  public getModifiersBySystem(systemName: string) {
+    return this.getModifiersBy((m) => m.system == systemName);
+  }
+
+  public getTimer(name: string) {
+    return (this.context.workModel.timers || {})[name];
+  }
+
+  public setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData) {
+    if (typeof event != 'string') {
+      event = event.name;
+    }
+    this.context.setTimer(name, miliseconds, event, data);
+    return this;
+  }
+
+  public removeTimer(name: string) {
+    delete (this.context.workModel.timers || {})[name];
+    return this;
+  }
+
+  public sendSelfEvent<TEventData = any>(event: EventCallback<T, TEventData> | string, data: TEventData) {
+    const timestamp = this.context.timestamp;
+    if (typeof event != 'string') {
+      event = event.name;
+    }
+    this.context.sendSelfEvent(event, timestamp, data);
+    return this;
+  }
+
+  public sendOutboundEvent<TModel extends EmptyModel, TEventData = any>(
+    type: new () => TModel,
+    modelId: string,
+    event: string | EventCallback<TModel, TEventData>,
+    data: TEventData,
+  ) {
+    const timestamp = this.context.timestamp;
+    if (typeof event != 'string') {
+      event = event.name;
+    }
+    this.context.sendOutboundEvent(type.name, modelId, event, timestamp, data);
+    return this;
+  }
+
+  private getModifiersBy(predicate: (m: Modifier) => boolean) {
+    return this.context.workModel.modifiers.filter(predicate);
+  }
+}
+
+class ViewModelApi<T extends EmptyModel> extends LogApi implements ViewModelApiInterface<T> {
+  constructor(private context: Context<T>) {
+    super();
+  }
+
+  get model() {
+    return this.context.workModel;
   }
 
   get baseModel() {
-    return this.baseContext.model;
+    return this.context.baseModel;
   }
 }
 
@@ -170,7 +255,7 @@ class PreprocessApi<T extends EmptyModel> extends LogApi implements PreprocessAp
   }
 
   get model() {
-    return this.context.model;
+    return this.context.baseModel;
   }
 
   public aquire(db: string, id: string) {
@@ -179,16 +264,16 @@ class PreprocessApi<T extends EmptyModel> extends LogApi implements PreprocessAp
   }
 }
 
-export function EffectModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): EffectModelApi<T> {
-  return new ModelApi(context, event);
+export function EffectModelApiFactory<T extends EmptyModel>(context: Context<T>): EffectModelApi<T> {
+  return new EffectModelApiImpl(context);
 }
 
 export function EventModelApiFactory<T extends EmptyModel>(context: Context<T>, event?: Event): EventModelApi<T> {
-  return new ModelApi(context, event);
+  return new EventModelApiImpl(context, event);
 }
 
-export function ViewModelApiFactory<T extends EmptyModel>(context: Context<T>, baseContext: Context<T>): ViewModelApiInterface<T> {
-  return new ViewModelApi(context, baseContext);
+export function ViewModelApiFactory<T extends EmptyModel>(context: Context<T>): ViewModelApiInterface<T> {
+  return new ViewModelApi(context);
 }
 
 export function PreprocessApiFactory<T extends EmptyModel>(context: Context<T>): PreprocessApiInterface<T> {

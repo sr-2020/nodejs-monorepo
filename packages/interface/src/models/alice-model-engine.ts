@@ -249,6 +249,7 @@ export interface ViewModelApiInterface<T extends EmptyModel> extends LogApiInter
 
 export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
   model: T;
+  readonly workModel: T;
 
   getCatalogObject<O>(catalog: string, id: string): O | undefined;
 

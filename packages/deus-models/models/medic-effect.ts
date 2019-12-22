@@ -434,7 +434,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
   }
 
   let params = helpers.checkPredicate(api, modifier.mID, 'timed-recover-hp');
-  api.info('timedRecoveryEffect: start, predicate: ' + JSON.stringify(params));
+  api.warn('timedRecoveryEffect: start, predicate: ' + JSON.stringify(params));
 
   let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
@@ -442,7 +442,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
     let timerName = 'hpRecovery-' + modifier.mID;
 
     if (!api.getTimer(timerName)) {
-      api.info(`timedRecoveryEffect: damage detected ==> set HP recovery timer, with name ${timerName} to ${params.recoveryRate}sec!`);
+      api.warn(`timedRecoveryEffect: damage detected ==> set HP recovery timer, with name ${timerName} to ${params.recoveryRate}sec!`);
       api.setTimer(timerName, params.recoveryRate * 1000, 'recover-hp', {});
     }
   }
