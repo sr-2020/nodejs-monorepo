@@ -24,7 +24,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Напиши большую статью об интересующем тебя человеке или организации. Добейся, чтобы эта статья вошла в топ-20 понравившихся материалов. Получи от МГ компромат на этого человека или организацию. Степень подробности информации зависит от положения статьи в рейтинге топ-20. Вы не можете собирать компромат в течении 12 часов после получения прошлых итогов компромата.',
     // 43
     // САБЖ, как в описании. Выдаем какую-то прикольную сюжетную инфу
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -35,7 +34,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Чтобы с вами ни происходило, в каком бы вы ни были состоянии, как бы вас ни заколдовали, если вы живы - вы можете пользоваться телеграммом для передачи игровых сообщений. В мире игре этого не видно, по вам нельзя понять, что вы что-то пишете, отнять телефон и так далее.',
     // 44
     // САБЖ, как в описании.
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -46,7 +44,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Если вас каким-либо образом все-таки убили, вы можете написать сообщение с описанием подробностей вашей смерти, как все это происходило, что вы об этом думаете, оставить последние пожелания для подписчиков и опубликовать это в вашем телеграмм-канале. Вы можете описывать что происходило с вашим телом и вокруг него. ',
     // 45
     // САБЖ, как в описании.
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -57,7 +54,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Раз в 12 часов вы можете получить ответ от мастеров на любой вопрос, подразумевающий ответ "да или нет" или подробный ответ на вопрос, касающийся бэка игры и событий, произошедших в мире игры до ее начала. Кто-то из ваших читателей скинул вам эту инфу в личку. Данную информацию нельзя использовать как доказательства в суде - ведь остальные могут сомневаться в том, что анонимус знает все. Но вы не сомневаетесь в этом. ',
     // 46
     // САБЖ, как в описании.
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -68,7 +64,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Раз в 12 часов вы можете назвать мастерам некую личность или организацию и защитить ее от использования способности "собрать компромат" на 12 часов.',
     // 47
     // САБЖ, как в описании.
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -78,7 +73,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 66
     // возможность пользоваться модами 1 уровня
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -88,7 +82,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 67
     // возможность пользоваться модами 2 уровня
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['deck-mods-1'],
     modifier: [],
   },
 
@@ -98,7 +92,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 68
     // возможность пользоваться модами 3 уровня
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['deck-mods-2'],
     modifier: [],
   },
 
@@ -108,7 +102,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 69
     // возможность пользоваться модами 4 уровня
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['deck-mods-3'],
     modifier: [],
   },
 
@@ -118,7 +112,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'linklock <target>',
     // 101
     // Захват цели в линк лок
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -128,7 +121,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'autolock <target>',
     // 102
     // Автоматический захват цели в линклок при появлении
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['auto-link-lock'],
     modifier: [],
   },
 
@@ -138,7 +131,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 103
     // позволяет читать данные из геоапи
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -148,7 +140,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 104
     // позволяет читать данные из геоапи - лучше. Позволяет изменять данные
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['geo-pro-1'],
     modifier: [],
   },
 
@@ -158,7 +150,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 105
     // позволяет читать данные из геоапи - лучше. Позволяет изменять данные лучше
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['geo-pro-3'],
     modifier: [],
   },
 
@@ -168,7 +160,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 106
     // позволяет читать данные из эконом апи
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -178,7 +169,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 107
     // позволяет читать данные из эконом- лучше. Позволяет немного воровать
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['economics-pro-1'],
     modifier: [],
   },
 
@@ -188,7 +179,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 108
     // позволяет читать данные из эконом- лучше. Позволяет немного воровать. Работа с магазин/корпа
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['economics-pro-2'],
     modifier: [],
   },
 
@@ -198,7 +189,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 109
     // преодолевает анонимизацию фиксира
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -208,7 +198,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 110
     // позволяет читать данные из реестров
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -218,7 +207,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 111
     // позволяет читать данные из реестров - лучше. Позволяет изменять данные
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['rus-registry-1'],
     modifier: [],
   },
 
@@ -228,7 +217,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 112
     // позволяет читать данные из реестров - лучше. Позволяет изменять данные лучше
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['rus-registry-2'],
     modifier: [],
   },
 
@@ -238,7 +227,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 113
     // позволяет читать данные из реестров
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -248,7 +236,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 114
     // позволяет читать данные из реестров - лучше. Позволяет изменять данные
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['meds-and-chrome-1'],
     modifier: [],
   },
 
@@ -258,7 +246,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 115
     // позволяет читать данные из реестров - лучше. Позволяет изменять данные лучше
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['meds-and-chrome-2'],
     modifier: [],
   },
 
@@ -268,7 +256,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 116
     // работа с прочими контролями -1
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -278,7 +265,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 117
     // работа с прочими контролями -2
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['other-control-1'],
     modifier: [],
   },
 
@@ -288,7 +275,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 118
     // работа с прочими контролями -3
-    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['other-control-2'],
     modifier: [],
   },
 
@@ -298,7 +285,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'reactivate <target>',
     // 119
     // Позволяет реактивировать вырубленный IC
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -308,7 +294,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 120
     // Позволяет пережить одну атаку черного льда
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -318,6 +303,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 122
     // Еще 3 хоста, на защиту которых ты можешь подписаться
+    // [+3] Хакер_число_админ_хостов
     // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
@@ -328,7 +314,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 123
     // Ты можешь создавать объединять декеров в команду (имунки френдли файр)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -338,7 +323,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 124
     // Разобрался со всеми примудростями квантовой компрессии. Позволяет экономить 10% памяти кибердеки при записи софта в деку
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -348,7 +332,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 125
     // Позволяет реактивировать вырубленый IC
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -518,7 +501,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 148
     // Меньше лаг данных контроля (по умолчанию данные контроля  старее чем 30 минут от момента запроса)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -558,7 +540,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 163
     // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -568,7 +549,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 164
     // Позволяет игнорировать атаку активного агента хоста. (PvE игротеха)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -580,7 +560,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // борьба с чужим софтом (если повезет - то и со спрайтами)
     //
     // IT: команда в Кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -595,7 +574,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // -- persistent (если есть абилка persistent deploy)
     //
     // IT: команда в Кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -607,7 +585,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // очистка хоста от чужой дряни / пользы
     //
     // IT: команда в Кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -620,7 +597,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
     //
     // IT: Команда в Кривда-Матрице, основного IT нет
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -656,7 +632,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // мини-корова декеров, закрытая этикой
     //
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -667,7 +642,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
     // 197
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -677,7 +651,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
     // 198
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -687,7 +660,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
     // 199
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -697,7 +669,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
     // 200
     // IT: буду запрашивать сам факт наличия фичи
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -740,7 +711,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
     // 204
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -751,7 +721,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
     // 205
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -794,7 +763,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет попытаться сбежать из линклока. \n\nЗависит от соотношения значений  вашего Sleaze и Attack цели',
     // 209
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -941,7 +909,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     // 222
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -952,7 +919,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Выводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
     // 223
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -962,7 +928,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Отображает якорь PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
     // 224
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -973,7 +938,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Находясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
     // 225
     // IT: команда в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -984,7 +948,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Разблокирует ключи команды steal\n\n--enterprize: работа с кошельками юр лиц\n--comment: позволяет ввести текст "основания перевода", вместо билиберды по умолчанию',
     // 226
     // IT: ключ команды в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -994,7 +957,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Разблокирует ключи команды steal\n\n--SIN: переводит сумму на другой SIN',
     // 227
     // IT: ключ команды в кривда-матрице
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -1078,7 +1040,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'при прохождении данжа ГМ выносит из данжа больше ',
     // 302
     // при прохождении данжа ГМ выносит из данжа + 10% от базовой стоимости лута (бонус зачисляется на счет гм)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -1088,7 +1049,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке химоты',
     // 304
     // Скидка 5% при покупке химоты
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin, sluchaj): Use it to calculate discount
     modifier: [],
   },
 
@@ -1098,7 +1059,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке имплантов',
     // 305
     // Скидка 5% при покупке имплантов
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin, sluchaj): Use it to calculate discount
     modifier: [],
   },
 
@@ -1108,7 +1069,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке оружия и брони',
     // 306
     // Скидка 5% при покупке оружия и брони
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin, sluchaj): Use it to calculate discount
     modifier: [],
   },
 
@@ -1118,7 +1079,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке маг реагентов  и маг товаров',
     // 307
     // Скидка 5% при покупке маг реагентов  и маг товаров
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin, sluchaj): Use it to calculate discount
     modifier: [],
   },
 
@@ -1128,7 +1089,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке дронов и модов для дронов',
     // 308
     // Скидка 5% при покупке дронов и модов для дронов
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin, sluchaj): Use it to calculate discount
     modifier: [],
   },
 
@@ -1533,7 +1494,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Импланты, установленные у тебя сложнее вырезать рипоменам.',
     // 517
     // Отбивает с шансом 50% попытку вырезать у тебя имплант.
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(aeremin): Implement corresponding mechanic
     modifier: [],
   },
 
@@ -1563,7 +1524,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'разрешает использовать гранаты',
     // 533
     // разрешает игроку использовать гранаты
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 ];
