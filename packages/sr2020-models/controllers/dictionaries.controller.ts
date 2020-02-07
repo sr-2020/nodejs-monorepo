@@ -1,5 +1,5 @@
 import { get } from '@loopback/rest';
-import { kAllFeatures } from '../scripts/character/features_library';
+import { kAllPassiveAbilities } from '../scripts/character/features_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -25,6 +25,6 @@ export class DictionariesController {
     },
   })
   features(): object {
-    return [...kAllFeatures.values()].map((f) => ({ id: f.id, name: f.name, description: f.description }));
+    return [...kAllPassiveAbilities.values()].map((f) => ({ id: f.id, name: f.name, description: f.description }));
   }
 }

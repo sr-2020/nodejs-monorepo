@@ -1,9 +1,9 @@
 import { Sr2020Character, AddedPassiveAbility } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { kAllFeatures } from './features_library';
+import { kAllPassiveAbilities } from './features_library';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
-  const feature = kAllFeatures.get(data.id);
+  const feature = kAllPassiveAbilities.get(data.id);
   // TODO: Support other kinds of features (e.g. active abilities).
   if (feature == undefined) throw Error('No such feature in the features library');
 

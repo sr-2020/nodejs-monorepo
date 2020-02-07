@@ -15,7 +15,7 @@ interface PassiveAbility {
   modifier: Modifier | Modifier[];
 }
 
-// Not exported by design, use kAllFeatures instead.
+// Not exported by design, use kAllPassiveAbilities instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Магия 1-5
   {
@@ -159,7 +159,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 ];
 
-export const kAllFeatures: Map<string, PassiveAbility> = (() => {
+export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
   const result = new Map<string, PassiveAbility>();
   kAllPassiveAbilitiesList.forEach((f) => {
     if (result.has(f.id)) throw new Error('Non-unique passive ability id: ' + f.id);
