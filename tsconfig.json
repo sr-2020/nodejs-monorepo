@@ -23,7 +23,7 @@
   },
   "references": [
     {
-      "path": "packages/alice-integration-testing"
+      "path": "packages/utility-scripts"
     },
     {
       "path": "packages/alice-model-engine"
