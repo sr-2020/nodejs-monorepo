@@ -15,6 +15,11 @@ export function increaseMagicFeedbackReduction(api: EffectModelApi<Sr2020Charact
   api.model.magicFeedbackReduction = clamp(api.model.magicFeedbackReduction, -9000, 9000);
 }
 
+export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.resonance += m.amount;
+  api.model.resonance = clamp(api.model.resonance, -9000, 9000);
+}
+
 export function increaseMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magicRecoverySpeed += m.amount;
   // As this is a coefficient - we use 1/3 and 5/3 instead of 1 and 5 from the sheet.

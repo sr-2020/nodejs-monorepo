@@ -5,6 +5,7 @@ import {
   increaseMagicFeedbackReduction,
   increaseMagicRecoverySpeed,
   increaseSpiritResistanceMultiplier,
+  increaseResonance,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -431,8 +432,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 139
     // Резонанс +1
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
   {
@@ -441,8 +441,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 140
     // Резонанс +1
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['resonance-1'],
+    modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
   {
@@ -451,8 +451,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 141
     // Резонанс +1
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['resonance-2'],
+    modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
   {
@@ -461,8 +461,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 142
     // Резонанс +1
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['resonance-3'],
+    modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
   {
@@ -471,8 +471,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 143
     // Резонанс +1
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['resonance-4'],
+    modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
   {
@@ -621,7 +621,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // [-1] Sleaze
     // [-1] DataProcessing
     // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseResonance, { amount: -1 })],
   },
 
   {
