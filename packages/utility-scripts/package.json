@@ -21,6 +21,7 @@
     "@types/request": "0.0.45",
     "@types/request-promise": "^4.1.35",
     "command-line-args": "^4.0.6",
+    "googleapis": "^47.0.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   }

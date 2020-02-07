@@ -4704,6 +4704,14 @@ gcp-metadata@^3.2.0:
     gaxios "^2.1.0"
     json-bigint "^0.3.0"
 
+gcp-metadata@^3.3.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/gcp-metadata/-/gcp-metadata-3.3.1.tgz#1c5c05591e7a9c1613463b05dab9642319f08f1f"
+  integrity sha512-RrASg1HaVAxoB9Q/8sYfJ++v9PMiiqIgOrOxZeagMgS4osZtICT1lKBx2uvzYgwetxj8i6K99Z0iuKMg7WraTg==
+  dependencies:
+    gaxios "^2.1.0"
+    json-bigint "^0.3.0"
+
 genfun@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/genfun/-/genfun-5.0.0.tgz#9dd9710a06900a5c4a5bf57aca5da4e52fe76537"
@@ -4958,6 +4966,20 @@ google-auth-library@^5.5.0:
     jws "^3.1.5"
     lru-cache "^5.0.0"
 
+google-auth-library@^5.6.1:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-5.9.2.tgz#e528f4f1cd10657073d7ae2b9a9ce17ac97c3538"
+  integrity sha512-rBE1YTOZ3/Hu6Mojkr+UUmbdc/F28hyMGYEGxjyfVA9ZFmq12oqS3AeftX4h9XpdVIcxPooSo8hECYGT6B9XqQ==
+  dependencies:
+    arrify "^2.0.0"
+    base64-js "^1.3.0"
+    fast-text-encoding "^1.0.0"
+    gaxios "^2.1.0"
+    gcp-metadata "^3.3.0"
+    gtoken "^4.1.0"
+    jws "^4.0.0"
+    lru-cache "^5.0.0"
+
 google-gax@^1.1.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/google-gax/-/google-gax-1.5.2.tgz#996cf70778667cc22befbeae4b8a9d76fce0fabb"
@@ -5031,6 +5053,18 @@ googleapis-common@^0.2.0:
     url-template "^2.0.8"
     uuid "^3.2.1"
 
+googleapis-common@^3.2.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/googleapis-common/-/googleapis-common-3.2.1.tgz#1c81dfce74876948fb1e68a2a99f842da6123877"
+  integrity sha512-lPAJXYpZLvY4AZp57RWj1eUXS2D5LxS3y6W0n9Jbl6eKOWmyLgz99f84XVCxVnyq8DcgV/ZAxt1lpFEzGZkVvQ==
+  dependencies:
+    extend "^3.0.2"
+    gaxios "^2.0.1"
+    google-auth-library "^5.6.1"
+    qs "^6.7.0"
+    url-template "^2.0.8"
+    uuid "^3.3.2"
+
 googleapis@^33.0.0:
   version "33.0.0"
   resolved "https://registry.yarnpkg.com/googleapis/-/googleapis-33.0.0.tgz#9963391eb93d63ea0e3810148eb27371e3a36862"
@@ -5038,6 +5072,14 @@ googleapis@^33.0.0:
   dependencies:
     google-auth-library "^1.6.0"
     googleapis-common "^0.2.0"
+
+googleapis@^47.0.0:
+  version "47.0.0"
+  resolved "https://registry.yarnpkg.com/googleapis/-/googleapis-47.0.0.tgz#33f2ce796b420d56360279df3c217b9a9d25bdf2"
+  integrity sha512-+Fnjgcc3Na/rk57dwxqW1V0HJXJFjnt3aqFlckULqAqsPkmex/AyJJe6MSlXHC37ZmlXEb9ZtPGUp5ZzRDXpHg==
+  dependencies:
+    google-auth-library "^5.6.1"
+    googleapis-common "^3.2.0"
 
 got@^6.7.1:
   version "6.7.1"
@@ -6132,12 +6174,29 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
+jwa@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jwa/-/jwa-2.0.0.tgz#a7e9c3f29dae94027ebcaf49975c9345593410fc"
+  integrity sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==
+  dependencies:
+    buffer-equal-constant-time "1.0.1"
+    ecdsa-sig-formatter "1.0.11"
+    safe-buffer "^5.0.1"
+
 jws@^3.0.0, jws@^3.1.4, jws@^3.1.5:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
   integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
   dependencies:
     jwa "^1.4.1"
+    safe-buffer "^5.0.1"
+
+jws@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jws/-/jws-4.0.0.tgz#2d4e8cf6a318ffaa12615e9dec7e86e6c97310f4"
+  integrity sha512-KDncfTmOZoOMTFG4mBlG0qUIOlc03fmzH+ru6RgYVZhPkyiy/92Owlt/8UEN+a4TXR1FQetfIpJE8ApdvdVxTg==
+  dependencies:
+    jwa "^2.0.0"
     safe-buffer "^5.0.1"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
