@@ -234,7 +234,6 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
     id: 'fireball-able',
     name: 'Fireball',
     description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
-    modifierIds: [],
   });
 }
 
@@ -256,7 +255,6 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
     id: 'field-of-denial-able',
     name: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
-    modifierIds: [],
   });
 }
 

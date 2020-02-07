@@ -23,12 +23,23 @@ export class ActiveAbility {
   @rproperty() canTargetSingleTarget: boolean = false;
 }
 
+// Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).
 @model()
 export class AddedPassiveAbility {
+  // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
+  // other features: active abilities, etc.
   @rproperty() id: string;
+
+  // Short-ish human-readable name to be shown in the UI.
   @rproperty() name: string;
+
+  // Full description. Can be multiline.
   @rproperty() description: string;
-  @property.array(String, { required: true }) modifierIds: string[];
+
+  // List of modifiers added by this passive ability. Used to remove them when feature is being removed.
+  // Can be omitted if this passive abiliy doesn't have any modifiers (i.e. it's only effect is to
+  // show some text to the user).
+  @property.array(String) modifierIds?: string[];
 }
 
 @model()
