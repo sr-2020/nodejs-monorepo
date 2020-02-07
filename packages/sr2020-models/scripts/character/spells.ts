@@ -231,8 +231,10 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: { power
 
 export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.passiveAbilities.push({
-    humanReadableName: 'Fireball',
+    id: 'fireball-able',
+    name: 'Fireball',
     description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
+    modifierIds: [],
   });
 }
 
@@ -251,8 +253,10 @@ export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { 
 
 export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.passiveAbilities.push({
-    humanReadableName: 'Field of denial',
+    id: 'field-of-denial-able',
+    name: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
+    modifierIds: [],
   });
 }
 

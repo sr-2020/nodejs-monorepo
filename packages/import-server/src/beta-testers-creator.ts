@@ -20,13 +20,13 @@ interface LoginResponse {
 
 async function loginOrRegister(email: string, name: string, password: string): Promise<LoginResponse> {
   try {
-    return (await request
-      .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
-      .promise()).body;
+    return (
+      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
+    ).body;
   } catch (e) {
-    return (await request
-      .post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true })
-      .promise()).body;
+    return (
+      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
+    ).body;
   }
 }
 
@@ -49,7 +49,6 @@ async function provideCharacter(login: LoginResponse) {
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
     spells: [],
-    features: [],
     activeAbilities: [],
     passiveAbilities: [],
     history: [],

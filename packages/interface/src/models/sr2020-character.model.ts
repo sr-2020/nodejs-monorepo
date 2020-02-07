@@ -24,9 +24,11 @@ export class ActiveAbility {
 }
 
 @model()
-export class PassiveAbility {
-  @rproperty() humanReadableName: string;
+export class AddedPassiveAbility {
+  @rproperty() id: string;
+  @rproperty() name: string;
   @rproperty() description: string;
+  @property.array(String, { required: true }) modifierIds: string[];
 }
 
 @model()
@@ -36,14 +38,6 @@ export class HistoryRecord {
   @rproperty() title: string;
   @rproperty() shortText: string;
   @rproperty() longText: string;
-}
-
-@model()
-export class AddedFeature {
-  @rproperty() id: string;
-  @rproperty() name: string;
-  @rproperty() description: string;
-  @property.array(String, { required: true }) modifierIds: string[];
 }
 
 @model()
@@ -115,13 +109,9 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   activeAbilities: ActiveAbility[];
 
-  @property.array(PassiveAbility, { required: true })
+  @property.array(AddedPassiveAbility, { required: true })
   @JsonColumn()
-  passiveAbilities: PassiveAbility[];
-
-  @property.array(AddedFeature, { required: true })
-  @JsonColumn()
-  features: AddedFeature[];
+  passiveAbilities: AddedPassiveAbility[];
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()

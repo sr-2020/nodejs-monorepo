@@ -7,7 +7,7 @@ import {
   increaseSpiritResistanceMultiplier,
 } from './basic_effects';
 
-interface Feature {
+interface PassiveAbility {
   id: string;
   name: string;
   description: string;
@@ -16,7 +16,7 @@ interface Feature {
 }
 
 // Not exported by design, use kAllFeatures instead.
-const kAllFeaturesList: Feature[] = [
+const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Магия 1-5
   {
     id: 'magic-1',
@@ -159,10 +159,10 @@ const kAllFeaturesList: Feature[] = [
   },
 ];
 
-export const kAllFeatures: Map<string, Feature> = (() => {
-  const result = new Map<string, Feature>();
-  kAllFeaturesList.forEach((f) => {
-    if (result.has(f.id)) throw new Error('Non-unique feature id: ' + f.id);
+export const kAllFeatures: Map<string, PassiveAbility> = (() => {
+  const result = new Map<string, PassiveAbility>();
+  kAllPassiveAbilitiesList.forEach((f) => {
+    if (result.has(f.id)) throw new Error('Non-unique passive ability id: ' + f.id);
     result.set(f.id, f);
   });
   return result;
