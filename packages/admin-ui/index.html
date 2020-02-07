@@ -89,11 +89,11 @@
           </b-card>
           <b-card no-body>
             <b-card-header>
-              <b-button block href="#" v-b-toggle.features variant="info">Всего фич: {{ characterModel.features.length }}</b-button>
+              <b-button block href="#" v-b-toggle.features variant="info">Всего фич: {{ characterModel.passiveAbilities.length }}</b-button>
             </b-card-header>
             <b-collapse id="features">
               <b-card-body>
-                <b-table :items="characterModel.features"></b-table>
+                <b-table :items="characterModel.passiveAbilities"></b-table>
               </b-card-body>
             </b-collapse>
           </b-card>

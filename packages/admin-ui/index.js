@@ -56,7 +56,7 @@ var app = new Vue({
     },
 
     setCharacterModel(model) {
-      model.features.forEach((f) => delete f.modifierIds);
+      model.passiveAbilities.forEach((f) => delete f.modifierIds);
       this.characterModel = model;
     },
 
