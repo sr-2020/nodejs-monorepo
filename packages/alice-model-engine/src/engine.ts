@@ -160,7 +160,5 @@ export class Engine<T extends EmptyModel> {
     for (const f of this._modelCallbacks.preprocessCallbacks) {
       f(api, events);
     }
-
-    baseCtx.events = baseCtx.events;
   }
 }
