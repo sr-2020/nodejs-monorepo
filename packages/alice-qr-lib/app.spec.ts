@@ -13,7 +13,7 @@ describe('QR Service', () => {
 
   beforeEach(async () => {
     app = new App('some_user', 'qwerty');
-    await app.listen(port);
+    app.listen(port);
   });
 
   afterEach(() => {

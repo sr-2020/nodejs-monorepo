@@ -175,7 +175,7 @@ export class TestFixture {
   }
 
   async advanceTime(seconds: number) {
-    await this._timeService.advanceTime(seconds);
+    this._timeService.advanceTime(seconds);
   }
 
   async destroy() {
@@ -183,7 +183,7 @@ export class TestFixture {
     await this._connection.getRepository(Location).clear();
     await this._connection.getRepository(QrCode).clear();
     await this._connection.close();
-    await this._app.close();
+    this._app.close();
   }
 }
 
