@@ -6,6 +6,14 @@ import {
   increaseMagicRecoverySpeed,
   increaseSpiritResistanceMultiplier,
   increaseResonance,
+  increaseMaxTimeAtHost,
+  increaseHostEntrySpeed,
+  increaseConversionFirewall,
+  increaseConversionAttack,
+  increaseConversionSleaze,
+  increaseConversionDataprocessing,
+  increaseSpriteLevel,
+  increaseAdminHostNumber,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -122,7 +130,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'autolock <target>',
     // 102
     // Автоматический захват цели в линклок при появлении
-    prerequisites: ['auto-link-lock'],
+    prerequisites: ['link-lock'],
     modifier: [],
   },
 
@@ -151,7 +159,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read/update',
     // 105
     // позволяет читать данные из геоапи - лучше. Позволяет изменять данные лучше
-    prerequisites: ['geo-pro-3'],
+    prerequisites: ['geo-pro-2'],
     modifier: [],
   },
 
@@ -305,8 +313,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 122
     // Еще 3 хоста, на защиту которых ты можешь подписаться
     // [+3] Хакер_число_админ_хостов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAdminHostNumber, { amount: 3 })],
   },
 
   {
@@ -680,7 +687,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+5] Декер_макс_время_на_хосте
     // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 })],
   },
 
   {
@@ -690,8 +697,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 202
     // IT:
     // [+10] Декер_макс_время_на_хосте
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['stubbornness-1'],
+    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 })],
   },
 
   {
@@ -701,8 +708,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 203
     // IT:
     // [+10] Декер_макс_время_на_хосте
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['stubbornness-2'],
+    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 })],
   },
 
   {
@@ -731,8 +738,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 206
     // IT:
     // [+5] Декер_скорость_входа_на_хост
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 5 })],
   },
 
   {
@@ -742,8 +748,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 207
     // IT:
     // [+10] Декер_скорость_входа_на_хост
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['quick-to-enter-1'],
+    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 10 })],
   },
 
   {
@@ -753,8 +759,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 208
     // IT:
     // [+10] Декер_скорость_входа_на_хост
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['quick-to-enter-2'],
+    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 10 })],
   },
 
   {
@@ -774,8 +780,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Firewall
     // IT:
     // [+2] Декер_конверсия_Firewall
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
   },
 
   {
@@ -785,8 +790,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 211
     // IT:
     // [+2] Декер_конверсия_Firewall
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['breacher-1'],
+    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
   },
 
   {
@@ -796,8 +801,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 212
     // IT:
     // [+2] Декер_конверсия_Firewall
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['breacher-2'],
+    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
   },
 
   {
@@ -808,8 +813,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Attack
     // IT:
     // [+2] Декер_конверсия_Attack
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
   },
 
   {
@@ -819,8 +823,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 214
     // IT:
     // [+2] Декер_конверсия_Attack
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['fencer-1'],
+    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
   },
 
   {
@@ -830,8 +834,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 215
     // IT:
     // [+2] Декер_конверсия_Attack
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['fencer-2'],
+    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
   },
 
   {
@@ -842,8 +846,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Sleaze
     // IT:
     // [+2] Декер_конверсия_Sleaze
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
   },
 
   {
@@ -853,8 +856,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 217
     // IT:
     // [+2] Декер_конверсия_Sleaze
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['sly-1'],
+    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
   },
 
   {
@@ -864,8 +867,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 218
     // IT:
     // [+2] Декер_конверсия_Sleaze
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['sly-2'],
+    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
   },
 
   {
@@ -876,8 +879,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Dataprocessing
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
   },
 
   {
@@ -887,8 +889,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 220
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['miner-1'],
+    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
   },
 
   {
@@ -898,8 +900,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 221
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['miner-2'],
+    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
   },
 
   {
@@ -968,8 +970,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 228
     // IT:
     // [+5] Хакер_число_админ_хостов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAdminHostNumber, { amount: 5 })],
   },
 
   {
@@ -1006,8 +1007,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
   },
 
   {
@@ -1018,8 +1018,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['sprites-1'],
+    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
   },
 
   {
@@ -1030,8 +1030,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['sprites-2'],
+    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
   },
 
   {

@@ -94,6 +94,38 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column({ default: 0 })
+  maxTimeAtHost: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  hostEntrySpeed: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionAttack: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionFirewall: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionSleaze: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionDataprocessing: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  adminHostNumber: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  spriteLevel: number;
+
+  @rproperty()
+  @Column({ default: 0 })
   magicFeedbackReduction: number;
 
   @rproperty()
