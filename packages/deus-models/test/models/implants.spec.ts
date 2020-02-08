@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 //Тесты для моделей управления имплантами
 
 import { expect } from 'chai';

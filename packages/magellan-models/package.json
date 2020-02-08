@@ -9,13 +9,13 @@
     "test": "mocha",
     "coverage:test": "nyc --cwd=.. --temp-dir=magellan-models/.nyc_output mocha",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/magellan-models.coverage.json",
-    "lint": "yarn run prettier:check && yarn run tslint",
-    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "lint": "yarn run prettier:check && yarn run eslint",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
     "prettier:check": "yarn run prettier:cli -l",
     "prettier:fix": "yarn run prettier:cli --write",
-    "tslint": "lb-tslint -c ../../tslint.json",
-    "tslint:fix": "yarn run tslint --fix"
+    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -40,8 +40,6 @@
     "lodash": "^4.17.4",
     "shuffle-array": "^1.0.1",
     "source-map-support": "^0.4.15",
-    "tslint": "^5.10.0",
-    "tslint-consistent-codestyle": "^1.13.1",
     "type-detect": "^4.0.8",
     "uuid": "^3.2.1",
     "yn": "^2.0.0"

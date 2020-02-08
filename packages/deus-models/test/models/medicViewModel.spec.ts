@@ -14,6 +14,7 @@ describe('Meidc and Mind ViewModel Generation', () => {
 
   it('Creation and _id, login, generation', async function() {
     console.log(JSON.stringify(result));
+    // eslint-disable-next-line no-unused-expressions
     expect(result).is.not.null;
     expect(result).has.nested.property('modelId', '1234');
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { Event } from 'interface/src/models/alice-model-engine';
 import { expect } from 'chai';
 import { merge } from 'lodash';
@@ -11,7 +12,9 @@ interface Global {
   TEST_EXTERNAL_OBJECTS: any;
 }
 
+// eslint-disable-next-line no-var
 declare var global: Global;
+
 global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
   counters: {
     'ss-111': { _id: 'ss-111' },
@@ -356,6 +359,7 @@ describe('General Magellan events: ', () => {
       qrs.push({ type: 5, kind: 0, validUntil: 0, payload: '7' });
 
       const events = getEvents(baseModel.modelId, qrs.map((data) => ({ eventType: 'scanQR', data })), 100);
+      // eslint-disable-next-line prefer-const
       ({ baseModel, workingModel } = await process(baseModel, events));
 
       expect(baseModel.spaceSuit.on).to.be.false;
@@ -380,6 +384,7 @@ describe('General Magellan events: ', () => {
         [{ eventType: 'scanQR', data: { type: 9, kind: 0, validUntil: 0, payload: '1,0,0,0,0,0,0,1' } }],
         200,
       );
+      // eslint-disable-next-line prefer-const
       ({ baseModel, workingModel } = await process(baseModel, events));
       expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
       expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));

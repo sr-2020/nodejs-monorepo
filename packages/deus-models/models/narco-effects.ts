@@ -36,7 +36,8 @@ function startTemporaryCubeChange(api: EventModelApi<DeusExModel>, narco) {
   }
 
   const duration = narco.duration * 1000;
-  (modifier.mindCubeChange = narco.mindCubeTemp), (modifier.pushbackDuration = narco.mindCubePushbackEnabled ? duration / 10 : 0);
+  modifier.mindCubeChange = narco.mindCubeTemp;
+  modifier.pushbackDuration = narco.mindCubePushbackEnabled ? duration / 10 : 0;
 
   //Установка модификатора
   addModifierTemporary(api, modifier, duration + modifier.pushbackDuration);

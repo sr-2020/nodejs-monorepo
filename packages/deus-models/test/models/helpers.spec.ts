@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import helpers = require('../../helpers/model-helper');
 import { expect } from 'chai';
 

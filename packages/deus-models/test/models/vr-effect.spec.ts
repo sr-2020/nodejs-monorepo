@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 //Тесты для событий VR
 
 import { expect } from 'chai';

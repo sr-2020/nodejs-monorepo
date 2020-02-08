@@ -10,7 +10,7 @@ import { DeusModel } from './interfaces/deus-model';
 import { JoinCharacterDetail } from './join-importer';
 import { JoinMetadata } from './join-importer';
 
-export interface INameParts {
+export interface NameParts {
   firstName: string;
   nicName: string;
   lastName: string;

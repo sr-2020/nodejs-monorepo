@@ -24,6 +24,7 @@ export default class DeleteAccounts implements MapperInterface {
     console.log(doc._id);
     try {
       await this.accountsDb.remove(doc._id);
+      // eslint-disable-next-line no-empty
     } catch (e) {}
   }
 }

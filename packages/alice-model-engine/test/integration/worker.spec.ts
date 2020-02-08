@@ -136,6 +136,7 @@ describe('Worker', () => {
 
     const { viewModels } = result;
 
+    // eslint-disable-next-line no-unused-expressions
     expect(viewModels).to.exist;
     expect(viewModels).to.has.property('default');
     expect(viewModels.default).to.deep.equal({ value: 0 });

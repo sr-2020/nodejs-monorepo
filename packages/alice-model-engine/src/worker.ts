@@ -9,6 +9,7 @@ import { loadModels } from './utils';
 import { Engine } from './engine';
 import { ModelCallbacks } from '@sr2020/interface/callbacks';
 
+// eslint-disable-next-line no-var
 declare var TEST_EXTERNAL_OBJECTS: any;
 
 export class Worker {

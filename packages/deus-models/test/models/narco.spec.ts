@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 //Тесты наркотиков
 
 import { expect } from 'chai';

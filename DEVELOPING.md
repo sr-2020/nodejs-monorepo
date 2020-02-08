@@ -7,8 +7,8 @@ users.
 
 Install the following extensions:
 
- - [tslint](https://marketplace.visualstudio.com/items?itemName=eg2.tslint)
- - [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## Development workflow
 

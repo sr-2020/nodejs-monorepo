@@ -4,7 +4,7 @@ import { FirebaseHttpApiDataSource } from '../datasources';
 import { PushResult } from '@sr2020/interface/models';
 
 export interface FirebaseMessagingService {
-  send(recipient: string, title: string, body: string): PushResult;
+  send(recipient: string, title: string, body: string): Promise<PushResult>;
 }
 
 export class FirebaseMessagingServiceProvider implements Provider<FirebaseMessagingService> {

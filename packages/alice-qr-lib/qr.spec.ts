@@ -9,7 +9,7 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Changing any symbol fails signature check', () => {
-    const properContent: string = '92c2EQ1ybkhZHello';
+    const properContent = '92c2EQ1ybkhZHello';
     for (let i = 0; i < properContent.length; ++i) {
       const changedContent = properContent.slice(0, i) + 'A' + properContent.slice(i + 1);
       expect(() => decode(changedContent)).to.throw('Validation Error');
@@ -22,7 +22,7 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Invalid symbols in header lead to exception', () => {
-    const properContent: string = '92c2EQ1ybkhZHello';
+    const properContent = '92c2EQ1ybkhZHello';
     for (let i = 4; i < 4 + 8; ++i) {
       // ! is not base64 symbol
       const changedContent = properContent.slice(0, i) + '?' + properContent.slice(i + 1);

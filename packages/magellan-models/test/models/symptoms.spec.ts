@@ -3,7 +3,7 @@ import { allSystemsIndices, System } from '../../helpers/basic-types';
 import { getSymptoms, getSymptomValue, Symptoms, systemToSymptoms } from '../../helpers/symptoms';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 
-function makeSystem(value: number, nucleotide: number, lastModified: number = 0, present: boolean = true): System {
+function makeSystem(value: number, nucleotide: number, lastModified = 0, present = true): System {
   return { value, nucleotide, lastModified, present };
 }
 
@@ -11,6 +11,7 @@ describe('Symptoms helper', () => {
   it('Symtoms table have correct number of elements', () => {
     for (const indice of allSystemsIndices()) {
       const symptoms = systemToSymptoms.get(indice);
+      // eslint-disable-next-line no-unused-expressions
       expect(symptoms).to.exist;
       expect(symptoms).to.have.length(7 + 7);
     }

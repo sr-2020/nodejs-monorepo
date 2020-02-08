@@ -3,7 +3,7 @@ import { AliceAccount } from './interfaces/alice-account';
 import { DeusModel } from './interfaces/deus-model';
 
 import * as winston from 'winston';
-import { INameParts } from './alice-exporter';
+import { NameParts } from './alice-exporter';
 import { Company, Professions, System, TradeUnions } from './interfaces/model';
 
 export interface ConversionResults {
@@ -180,8 +180,8 @@ class AliceModelConverter {
   }
 
   // Установить имя песрнажа.
-  private parseFullName(name: string): INameParts {
-    const ret: INameParts = {
+  private parseFullName(name: string): NameParts {
+    const ret: NameParts = {
       firstName: '',
       nicName: '',
       lastName: '',

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { merge } from 'lodash';
 import { expect } from 'chai';
 import { process, findModifier, findChangeRecord } from '../test_helpers';
@@ -13,6 +14,7 @@ interface Global {
   TEST_EXTERNAL_OBJECTS: any;
 }
 
+// eslint-disable-next-line no-var
 declare var global: Global;
 
 global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {

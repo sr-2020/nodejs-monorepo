@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 //Тесты для событий общего назначения (для хакеров и т.д.)
 
 import { expect } from 'chai';
@@ -107,7 +108,11 @@ describe('General events: ', () => {
     model.profileType = 'robot';
     model.owner = 'ivan.ivanovich';
 
-    const events = getEvents(model.modelId, [{ eventType: 'change-android-owner', data: { owner: 'vasya.pupkin' } }], model.timestamp + 100);
+    const events = getEvents(
+      model.modelId,
+      [{ eventType: 'change-android-owner', data: { owner: 'vasya.pupkin' } }],
+      model.timestamp + 100,
+    );
     const { baseModel } = await process(model, events);
 
     expect(baseModel.owner).is.equal('vasya.pupkin');
@@ -160,7 +165,11 @@ describe('General events: ', () => {
   it('Change insurance', async function() {
     const model = getExampleModel();
 
-    const events = getEvents(model.modelId, [{ eventType: 'change-insurance', data: { Insurance: 'JJ', Level: 2 } }], model.timestamp + 100);
+    const events = getEvents(
+      model.modelId,
+      [{ eventType: 'change-insurance', data: { Insurance: 'JJ', Level: 2 } }],
+      model.timestamp + 100,
+    );
     const { baseModel } = await process(model, events);
 
     expect(baseModel.insurance).is.equal('JJ');

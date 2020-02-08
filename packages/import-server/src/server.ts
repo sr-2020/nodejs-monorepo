@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import * as express from 'express';
 import * as moment from 'moment';
 import * as PouchDB from 'pouchdb';
@@ -33,7 +34,7 @@ class ModelImportData {
   public charList: JoinCharacter[] = [];
   public charDetails: JoinCharacterDetail[] = [];
 
-  public importCouter: number = 0;
+  public importCouter = 0;
 }
 
 const params = processCliParams();
@@ -122,7 +123,7 @@ async function saveCharacterToCache(char: JoinCharacterDetail, data: ModelImport
   return char;
 }
 
-async function perfromProvide(provider: Provider, char: JoinCharacterDetail, exportModel: boolean = true): Promise<void> {
+async function perfromProvide(provider: Provider, char: JoinCharacterDetail, exportModel = true): Promise<void> {
   if (!exportModel) {
     return;
   }
@@ -159,11 +160,7 @@ async function perfromProvide(provider: Provider, char: JoinCharacterDetail, exp
 /**
  * Создание модели персонажа по данным из Join и экспорт в Model-базу
  */
-async function exportCharacterModel(
-  char: JoinCharacterDetail,
-  data: ModelImportData,
-  exportModel: boolean = true,
-): Promise<JoinCharacterDetail> {
+async function exportCharacterModel(char: JoinCharacterDetail, data: ModelImportData, exportModel = true): Promise<JoinCharacterDetail> {
   if (!exportModel) {
     return Observable.from([char]).toPromise();
   }
@@ -277,12 +274,12 @@ function loadCharactersFromCache(data: ModelImportData): Observable<JoinCharacte
  *  (т.е. вся цепочка)
  */
 async function importAndCreate(
-  id: number = 0,
-  importJoin: boolean = true,
-  exportModel: boolean = true,
-  onlyList: boolean = false,
-  updateStats: boolean = true,
-  refreshModel: boolean = true,
+  id = 0,
+  importJoin = true,
+  exportModel = true,
+  onlyList = false,
+  updateStats = true,
+  refreshModel = true,
   updatedSince: moment.Moment | null = null,
 ): Promise<void> {
   const sinceText = updatedSince ? updatedSince.format('DD-MM-YYYY HH:mm:SS') : '';

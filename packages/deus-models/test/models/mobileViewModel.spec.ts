@@ -337,9 +337,11 @@ describe('mobileViewModel', () => {
     printModel(workingModel.conditions);
 
     const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
+    // eslint-disable-next-line no-unused-expressions
     expect(illness).is.exist;
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
+    // eslint-disable-next-line no-unused-expressions
     expect(cond).is.exist;
 
     console.log('================= Stage 0 duration ============================');

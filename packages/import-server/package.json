@@ -21,13 +21,13 @@
     "import:test": "tsc && node ./dist/server.js -- --test",
     "import:db": "ts-node src/db-docs-creator.ts",
     "processor": "ts-node src/processors/index.ts",
-    "lint": "yarn run prettier:check && yarn run tslint",
-    "lint:fix": "yarn run tslint:fix && yarn run prettier:fix",
+    "lint": "yarn run prettier:check && yarn run eslint",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
     "prettier:check": "yarn run prettier:cli -l",
     "prettier:fix": "yarn run prettier:cli --write",
-    "tslint": "lb-tslint -c ../../tslint.json",
-    "tslint:fix": "yarn run tslint --fix"
+    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix"
   },
   "license": "Apache-2.0",
   "dependencies": {

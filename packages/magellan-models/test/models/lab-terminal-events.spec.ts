@@ -8,6 +8,7 @@ interface Global {
   TEST_EXTERNAL_OBJECTS: any;
 }
 
+// eslint-disable-next-line no-var
 declare var global: Global;
 
 global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {

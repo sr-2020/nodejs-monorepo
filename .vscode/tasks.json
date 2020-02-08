@@ -21,7 +21,7 @@
     {
       "label": "Build, Test and Lint",
       "type": "shell",
-      "command": "y",
+      "command": "yarn",
       "args": [
         "--silent",
         "run",
@@ -33,7 +33,8 @@
       },
       "problemMatcher": [
         "$tsc",
-        "$tslint5"
+        "$eslint-compact",
+        "$eslint-stylish"
       ]
     }
   ]

@@ -55,6 +55,7 @@ describe('QR Service', () => {
       .promise();
     const finalUrl = encodeResponse.request.href;
     const match = /&data=([^&]*)&/.exec(finalUrl);
+    // eslint-disable-next-line no-unused-expressions
     expect(match).not.to.be.null;
     const data = decodeURI((match as RegExpExecArray)[1]);
     const decodeResponse = await rp.get(address + encodeURI(`/decode?content=${data}`), { json: {} }).promise();

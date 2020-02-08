@@ -2,7 +2,7 @@ import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 
 describe('Death & Rebirth', function() {
-  // tslint:disable-next-line: no-invalid-this
+  // eslint-disable-next-line no-invalid-this
   this.timeout(15000);
   let fixture: TestFixture;
 

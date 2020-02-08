@@ -13,7 +13,7 @@
 - [lerna](https://github.com/lerna/lerna). Утилита, упрощающая работу с nodejs-монорепозиториями. Установка: `yarn global add lerna`.
 - [Visual Studio Code](https://code.visualstudio.com/) с установленными плагинами
 
-  - TSLint
+  - ESLint
   - Prettier - Code formatter
   - TypeScript Hero
   - (опционально) npm

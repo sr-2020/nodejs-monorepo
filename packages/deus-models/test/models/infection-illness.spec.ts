@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { getTotalChance, getPotentialSystemsIds, whatSystemShouldBeInfected } from '../../helpers/infection-illness';
 import { expect } from 'chai';
 import { getExampleModel } from '../fixtures/models';

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';

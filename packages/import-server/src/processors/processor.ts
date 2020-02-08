@@ -20,6 +20,7 @@ export class Processor {
     let lastId;
     let total = 0;
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const params: any = {
         include_docs: true,

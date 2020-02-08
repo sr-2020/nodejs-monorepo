@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 //Тесты для показа состояний в зависимости от знаений кубиков сознания
 
 import { expect } from 'chai';
