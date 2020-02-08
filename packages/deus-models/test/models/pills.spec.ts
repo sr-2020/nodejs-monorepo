@@ -32,7 +32,7 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
 
 describe('Pills', () => {
   it('Cures HP with firstAid pill', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     let events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], Date.now(), true);
     let { baseModel, workingModel } = await process(model, events);
@@ -48,22 +48,22 @@ describe('Pills', () => {
   });
 
   it('Applies narco', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
-    let events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
-    let { baseModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: '111-112' } }], Date.now(), true);
+    const { baseModel } = await process(model, events);
 
-    let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
+    const effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
     expect(effect).to.exist;
   });
 
   it('Should apply pills with qr-codes', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
-    let events = getEvents(model.modelId, [{ eventType: 'scanQR', data: { type: 1, payload: '111-113' } }], Date.now(), true);
-    let { baseModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'scanQR', data: { type: 1, payload: '111-113' } }], Date.now(), true);
+    const { baseModel } = await process(model, events);
 
-    let effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
+    const effect = find(baseModel.modifiers, (m: any) => m.id == 'narcoEffectsCondition');
     expect(effect).to.exist;
   });
 });

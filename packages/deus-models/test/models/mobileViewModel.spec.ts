@@ -8,7 +8,7 @@ async function getViewModel(model: any) {
 }
 
 function getRobotViewModel() {
-  let x = {
+  const x = {
     modelId: '1000',
     timestamp: 0,
     general: {
@@ -175,7 +175,7 @@ function getRobotViewModel() {
 }
 
 function getProgramViewModel() {
-  let x = {
+  const x = {
     modelId: '1000',
     timestamp: 0,
     general: {
@@ -310,7 +310,7 @@ describe('mobileViewModel', () => {
   });
 
   it('_view for robot is not so complicated', async function() {
-    let model = getExampleModel('1000');
+    const model = getExampleModel('1000');
     model.model = 'Sex-droid';
     model.profileType = 'robot';
     model.owner = 'ничей';
@@ -320,7 +320,7 @@ describe('mobileViewModel', () => {
   });
 
   it('_view for programs is really dumb', async function() {
-    let model = getExampleModel('1000');
+    const model = getExampleModel('1000');
 
     model.profileType = 'program';
     model.owner = 'ничей';
@@ -330,16 +330,16 @@ describe('mobileViewModel', () => {
   });
 
   it('Start Illness and check illness life path', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     printModel(workingModel.conditions);
 
-    let illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
+    const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
     expect(illness).is.exist;
 
-    let cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
+    const cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
     expect(cond).is.exist;
 
     console.log('================= Stage 0 duration ============================');

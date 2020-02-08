@@ -16,7 +16,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
       return;
     }
-    let loadedImplant = helpers.loadImplant(api, data.id);
+    const loadedImplant = helpers.loadImplant(api, data.id);
 
     if (!loadedImplant) {
       api.error(`addImplantEvent: implant not found: ${data.id}`);
@@ -46,10 +46,10 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       api.info(`addImplantEvent: Install implant: ${implant.displayName}`);
 
       //Получить все существующие импланты на эту систему
-      let existingImplants = helpers.getImplantsBySystem(api, implant.system!!);
+      const existingImplants = helpers.getImplantsBySystem(api, implant.system!!);
 
       //Информация про систему
-      let systemInfo = consts.medicSystems.find((s) => s.name == implant.system);
+      const systemInfo = consts.medicSystems.find((s) => s.name == implant.system);
       if (!systemInfo) {
         api.error('Implants affects non-existant system');
         return;
@@ -57,7 +57,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
 
       //Проверить на дубль - два одинаковых импланта поставить нельзя (старый будет удален)
       //И проверить количество слотов на одной системе
-      let oldDoubleImplant = existingImplants.find((m) => m.id == implant.id);
+      const oldDoubleImplant = existingImplants.find((m) => m.id == implant.id);
 
       let implantForRemove: any = null;
       if (oldDoubleImplant) {
@@ -92,7 +92,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       }
 
       //Если у персонажа были болезни для этой системы их надо найти и удалить
-      let illnesses = api.getModifiersByClass('illness').filter((ill) => ill.system == implant.system);
+      const illnesses = api.getModifiersByClass('illness').filter((ill) => ill.system == implant.system);
       illnesses.forEach((ill) => {
         api.removeModifier(ill.mID);
         api.removeTimer(`${ill._id}-${ill.mID}`);
@@ -117,7 +117,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
  */
 function removeImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
-    let implant = api.getModifierById(data.mID);
+    const implant = api.getModifierById(data.mID);
 
     if (implant && helpers.isImplant(implant) && !implant.unremovable) {
       helpers.addChangeRecord(api, `Удален имплант: ${implant.displayName}`, event.timestamp);
@@ -159,7 +159,7 @@ function installSImmortalStage1(api: EventModelApi<DeusExModel>, implant) {
  * Пока умеет обрабатывать только install_changeMindCube
  */
 function instantInstallEffect(api: EventModelApi<DeusExModel>, implant) {
-  let params = helpers.checkPredicate(api, implant.mID, 'inst_changeMindCube');
+  const params = helpers.checkPredicate(api, implant.mID, 'inst_changeMindCube');
   if (params && api.model.mind && params.change) {
     helpers.modifyMindCubes(api, api.model.mind, params.change);
   }
@@ -178,7 +178,7 @@ function instantInstallEffect(api: EventModelApi<DeusExModel>, implant) {
  */
 function disableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
-    let implant = api.getModifierById(data.mID);
+    const implant = api.getModifierById(data.mID);
     if (implant) {
       implant.enabled = false;
       helpers.addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, event.timestamp);
@@ -198,7 +198,7 @@ function disableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
  */
 function enableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
   if (data.mID) {
-    let implant = api.getModifierById(data.mID);
+    const implant = api.getModifierById(data.mID);
     if (implant) {
       implant.enabled = true;
       helpers.addChangeRecord(api, `Включен имплант: ${implant.displayName}`, event.timestamp);

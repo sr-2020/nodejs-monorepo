@@ -5,13 +5,13 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Illnesses: ', () => {
   it('Start Illness and check illness life path', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     printModel(workingModel.conditions);
 
-    let illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
+    const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
     expect(illness).is.exist;
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
@@ -68,25 +68,25 @@ describe('Illnesses: ', () => {
   });
 
   it('Start Illness ignored for exhuman-program', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = 'exhuman-program';
-    let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
-    let { baseModel, workingModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
+    const { baseModel, workingModel } = await process(model, events);
 
     printModel(workingModel.conditions);
 
-    let illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
+    const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
     expect(illness).is.not.exist;
   });
 
   it('Start Illness and check delay event', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
     printModel(workingModel.conditions);
 
-    let illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
+    const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
     expect(illness).is.exist;
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');

@@ -11,7 +11,7 @@ import { EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-mo
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
 function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data, event) {
-  let implant = api.getModifierById(data.mID);
+  const implant = api.getModifierById(data.mID);
 
   if (implant) {
     implant.immortalityReady = 'true';
@@ -40,7 +40,7 @@ function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant)
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
 function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event) {
-  let implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
+  const implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {
     api.info(`serenityImmortalityGo: character not ready (no s_immortal01 implant or no ready flag). Stop processing`);
@@ -53,7 +53,7 @@ function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event
   api.model.profileType = 'ex-human-robot';
   api.model.maxHp = 4;
 
-  let dmg = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const dmg = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
   if (dmg) {
     dmg.damage = 0;
   }
@@ -65,7 +65,7 @@ function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event
   api.info(`serenityImmortalityGo: character new profile type ${api.model.profileType}, maxhp=${api.model.maxHp}`);
 
   //Убрать все болезни
-  let illnesses = api.model.modifiers.filter((m) => helpers.isIllness(m));
+  const illnesses = api.model.modifiers.filter((m) => helpers.isIllness(m));
   illnesses.forEach((ill) => medhelpers.removeIllness(api, ill.mID));
 
   //Убрать все импланты

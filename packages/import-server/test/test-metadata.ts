@@ -1,4 +1,4 @@
-export let metadata: any = {
+export const metadata: any = {
   ProjectId: 329,
   ProjectName: 'Магеллан: Время для звезд',
   Fields: [

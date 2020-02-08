@@ -1,4 +1,4 @@
-export let testCharData01: any = {
+export const testCharData01: any = {
   CharacterId: 20118,
   UpdatedAt: '2018-08-07T10:56:40.807',
   IsActive: true,

@@ -7,8 +7,8 @@ describe('Meidc and Mind ViewModel Generation', () => {
   let result: any = null;
 
   before(async function() {
-    let model = getExampleModel('1234');
-    let events = getRefreshEvent(model.modelId);
+    const model = getExampleModel('1234');
+    const events = getRefreshEvent(model.modelId);
     result = (await process(model, [events])).viewModels.medic_viewmodel;
   });
 

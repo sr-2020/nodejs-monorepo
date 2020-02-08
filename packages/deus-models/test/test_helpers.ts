@@ -25,7 +25,7 @@ export function process_(model: EmptyModel, events: Event[]): Promise<EngineResu
 }
 
 export async function process(model: EmptyModel, events: Event[]): Promise<EngineResultOk> {
-  let result = await process_(model, events);
+  const result = await process_(model, events);
   if (result.status == 'error') throw result.error;
   return result;
 }

@@ -8,30 +8,30 @@ import * as fs from 'async-file';
 
 function expectNarcoIgnoredForProfileType(profileType: string) {
   it(`Narco ignored for ${profileType}`, async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = profileType;
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
-    let { workingModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    const { workingModel } = await process(model, events);
 
-    let modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
+    const modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
     expect(modifiers.length).is.equal(0);
   });
 }
 
 describe('Narco effects: ', () => {
   it('Change mind cube', async function() {
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
-    let { baseModel, workingModel } = await process(model, events);
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[3]).is.equal(62);
     expect(workingModel.mind.E[1]).is.equal(100);
     expect(baseModel.mind.E[1]).is.equal(57);
 
-    let modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
+    const modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
     expect(modifiers.length).is.equal(1);
 
-    let conditions = workingModel.conditions.filter((e: any) => e.id == 'mcube-condition-F3-1');
+    const conditions = workingModel.conditions.filter((e: any) => e.id == 'mcube-condition-F3-1');
 
     expect(conditions.length).is.equal(1);
   });
@@ -42,53 +42,53 @@ describe('Narco effects: ', () => {
   expectNarcoIgnoredForProfileType('exhuman-robot');
 
   it('Change mind cube back', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1101));
-    let { baseModel, workingModel } = await process(model, events);
+    const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[3]).is.equal(62); //permanent change is here
     expect(workingModel.mind.E[1]).is.equal(57); //temporary change rolled back
 
-    let modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
+    const modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
     expect(modifiers.length).is.equal(0);
   });
 
   it('Mind cube pushback', async function() {
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco_with_pushback' } }], model.timestamp);
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco_with_pushback' } }], model.timestamp);
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
-    let { baseModel, workingModel } = await process(model, events);
+    const { baseModel, workingModel } = await process(model, events);
 
     expect(baseModel.mind.F[2]).is.equal(47); //permanent change is here
     expect(workingModel.mind.E[1]).is.equal(0); //temporary change is pushed back
 
-    let modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
+    const modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
     expect(modifiers.length).is.equal(1);
   });
 
   it('Narco with condition', async function() {
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
-    let { workingModel } = await process(model, events);
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    const { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(1);
   });
 
   it('Narco with condition ends', async function() {
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
-    let { workingModel } = await process(model, events);
+    const { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(0);
   });
 
   it('Narco with history record', async function() {
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
-    let { workingModel } = await process(model, events);
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
+    const { workingModel } = await process(model, events);
 
     expect(
       workingModel.changes.filter((e: any) => e.text == 'Таблетка начала действовать. Надень браслет и следуй указаниям дилера.').length,
@@ -96,13 +96,13 @@ describe('Narco effects: ', () => {
   });
 
   it('All narcos parsed', async function() {
-    let all_narcos = JSON.parse(await fs.readTextFile('catalogs/narco.json')).pills;
-    let conditions = JSON.parse(await fs.readTextFile('catalogs/conditions.json')).conditions;
+    const all_narcos = JSON.parse(await fs.readTextFile('catalogs/narco.json')).pills;
+    const conditions = JSON.parse(await fs.readTextFile('catalogs/conditions.json')).conditions;
 
     all_narcos.forEach((narco: any) => {
       if (narco.conditions) {
         narco.conditions.forEach((condition: string) => {
-          let conditionObj = conditions.filter((c: any) => c.id == condition);
+          const conditionObj = conditions.filter((c: any) => c.id == condition);
           expect(conditionObj.length).is.equal(1);
         });
 
@@ -113,15 +113,15 @@ describe('Narco effects: ', () => {
   });
 
   it('Narco ascend', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
     model.genome[7 - 1] = 3;
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 1;
 
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
-    let { baseModel, workingModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    const { baseModel, workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(1);
 
@@ -131,57 +131,57 @@ describe('Narco effects: ', () => {
   });
 
   it('Narco ascend failed', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
     model.genome[7 - 1] = 3;
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
-    let { workingModel } = await process(model, events);
+    const { workingModel } = await process(model, events);
 
     expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(0);
   });
 
   it('Narco ascend no immediate lllness', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
     model.genome[7 - 1] = 3;
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
     let { baseModel, workingModel } = await process(model, events);
 
-    let refresh = [getRefreshEvent(model.modelId, 1)];
-    let result = await process(baseModel, refresh);
+    const refresh = [getRefreshEvent(model.modelId, 1)];
+    const result = await process(baseModel, refresh);
 
     baseModel = result.baseModel;
     workingModel = result.workingModel;
 
-    let illness = workingModel.modifiers.filter((m: any) => m.id == 'ankylosingspondylitis');
+    const illness = workingModel.modifiers.filter((m: any) => m.id == 'ankylosingspondylitis');
 
     expect(illness.length).is.equal(0);
   });
 
   it('Narco ascend failed and leads to death', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
     model.genome[7 - 1] = 3;
     model.genome[10 - 1] = 2;
     model.genome[12 - 1] = 2;
 
-    let events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
+    const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
 
     let { baseModel } = await process(model, events);
 
-    let refresh = [getRefreshEvent(model.modelId, 60 * 60 * 24 * 1000)];
-    let result = await process(baseModel, refresh);
+    const refresh = [getRefreshEvent(model.modelId, 60 * 60 * 24 * 1000)];
+    const result = await process(baseModel, refresh);
 
     baseModel = result.baseModel;
 

@@ -9,7 +9,7 @@ const db = new Firestore();
 const optionDefinitions = [{ name: 'id', type: String }];
 const userId = commandLineArgs(optionDefinitions).id;
 
-let allDocs = db.collection(`characters/${userId}/wakeups`);
+const allDocs = db.collection(`characters/${userId}/wakeups`);
 
 function formatTimestamp(t: Timestamp) {
   const d = t.toDate();

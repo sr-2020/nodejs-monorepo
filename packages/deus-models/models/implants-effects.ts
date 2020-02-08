@@ -19,7 +19,7 @@ import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
 function showCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   //Получить СПИСОК предикатов для показа (может быть несколько состояний)
-  let params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
+  const params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
   api.info('showCondition: start, predicate: ' + JSON.stringify(params));
 
   if (params) {
@@ -58,7 +58,7 @@ function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifie
  *
  */
 function changeProperties(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
-  let params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
+  const params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
   api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 
   if (params) {

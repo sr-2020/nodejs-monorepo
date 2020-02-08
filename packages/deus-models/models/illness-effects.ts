@@ -20,7 +20,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Ev
   if (data.id && api.model.profileType == 'human') {
     api.info(`startIllnessEvent: try to start illness: ${data.id}`);
 
-    let _illness = helpers.loadIllness(api, data.id);
+    const _illness = helpers.loadIllness(api, data.id);
 
     if (_illness && _illness.illnessStages && _illness.illnessStages.length) {
       //Если система уже мертвая - то болезнь не запускается
@@ -46,7 +46,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Ev
       illness.currentStage = 0;
 
       //Запуск таймера болезни
-      let timerName = `${illness.id}-${illness.mID}`;
+      const timerName = `${illness.id}-${illness.mID}`;
 
       api.error(`Ilness = ${illness}`);
 
@@ -68,8 +68,8 @@ function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
     api.info(`illnessEffect: illness: ${modifier.displayName}, stage: ${modifier.currentStage}`);
 
     //Отладка
-    let timer = api.getTimer(`${modifier.id}-${modifier.mID}`);
-    let remain = timer ? timer.miliseconds : 0;
+    const timer = api.getTimer(`${modifier.id}-${modifier.mID}`);
+    const remain = timer ? timer.miliseconds : 0;
     api.info(
       `illnessEffect:  ${modifier.illnessStages[modifier.currentStage].condition}, time to next stage: ${Math.round(remain / 1000)}`,
     );
@@ -87,21 +87,21 @@ function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
  */
 function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any, event: Event) {
   if (data.mID) {
-    let illness = api.getModifierById(data.mID);
+    const illness = api.getModifierById(data.mID);
     if (illness) {
       //Если это промежуточный этап, просто перевести на следующий и поставить таймер
       if (illness.currentStage < illness.illnessStages.length - 1) {
         illness.currentStage += 1;
 
-        let duration = illness.illnessStages[illness.currentStage].duration || 1;
-        let timerName = `${illness.id}-${illness.mID}`;
+        const duration = illness.illnessStages[illness.currentStage].duration || 1;
+        const timerName = `${illness.id}-${illness.mID}`;
 
         api.info(`startIllnessEvent: illness ${illness.id}, start stage ${illness.currentStage}, set timer to ${duration} sec`);
 
         api.setTimer(timerName, duration * 1000, 'illness-next-stage', { mID: illness.mID });
       } else {
         //Если это последний этап, то убить систему
-        let totalTime = Math.round((event.timestamp - illness.startTime) / 1000);
+        const totalTime = Math.round((event.timestamp - illness.startTime) / 1000);
         api.info(
           `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
         );
@@ -126,7 +126,7 @@ function delayIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Ev
       .filter((m: Modifier) => m.system == data.system && m.class == 'illness')
       .forEach((m: Modifier) => {
         api.info(`delayIllness: found illness=${m.id}, try to change timer`);
-        let timer = api.getTimer(`${m.id}-${m.mID}`);
+        const timer = api.getTimer(`${m.id}-${m.mID}`);
         if (timer) {
           api.info(
             `delayIllness: change timer for illness=${m.id}. Current: ${Math.round(timer.miliseconds / 1000)}sec, update:  +${Math.round(
@@ -176,22 +176,22 @@ const illneses = [
 function rollIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Event) {
   api.debug('Start rolling for infection');
   if (api.model.profileType == 'human') {
-    let systemId = infection.whatSystemShouldBeInfected(api.model);
+    const systemId = infection.whatSystemShouldBeInfected(api.model);
 
     if (systemId && systemId > -1) {
-      let systemName = consts.medicSystems[systemId].name;
+      const systemName = consts.medicSystems[systemId].name;
 
       api.info('Roll for infection: will infect ' + systemName + ' system.');
 
-      let chance = helpers.getChanceFromModel(api.model);
+      const chance = helpers.getChanceFromModel(api.model);
 
-      let illnessModels = chance.pickone(
+      const illnessModels = chance.pickone(
         illneses.map((i) => api.getCatalogObject<Illness>('illnesses', i)!!).filter((i) => i.system == systemName),
       );
 
       api.debug('Roll for infection: will start illness ' + illnessModels.id);
 
-      let deathAwaitTimeMs = chance.natural({ min: 0, max: 3 * 60 * 60 * 1000 });
+      const deathAwaitTimeMs = chance.natural({ min: 0, max: 3 * 60 * 60 * 1000 });
 
       helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: illnessModels.id });
       api.sendSelfEvent('start-illness', { id: illnessModels.id });

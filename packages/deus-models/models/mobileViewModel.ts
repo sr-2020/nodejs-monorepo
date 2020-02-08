@@ -40,11 +40,11 @@ function getHandicaps(model: DeusExModel) {
 }
 
 function getStartPage(model: DeusExModel) {
-  let isHuman = model.profileType == 'human';
-  let isProgram = model.profileType == 'program';
-  let isExHumanProgram = model.profileType == 'exhuman-program';
-  let isRobot = model.profileType == 'robot';
-  let isExHumanRobot = model.profileType == 'ex-human-robot';
+  const isHuman = model.profileType == 'human';
+  const isProgram = model.profileType == 'program';
+  const isExHumanProgram = model.profileType == 'exhuman-program';
+  const isRobot = model.profileType == 'robot';
+  const isExHumanRobot = model.profileType == 'ex-human-robot';
 
   const items: Row[] = [
     {
@@ -61,7 +61,7 @@ function getStartPage(model: DeusExModel) {
     },
   ];
 
-  let pageInfo = {
+  const pageInfo = {
     __type: 'ListPageViewModel',
     viewId: 'page:general',
     menuTitle: 'Общая информация',
@@ -108,12 +108,12 @@ function getStartPage(model: DeusExModel) {
     pageInfo.body.items.push({ text: 'Проживание', value: model.sweethome });
   }
 
-  let workRow = {
+  const workRow = {
     text: 'Работа',
     value: model.corporation,
   };
 
-  let insuranceRow = {
+  const insuranceRow = {
     text: 'Страховка',
     value: model.insuranceDiplayName,
   };
@@ -124,7 +124,7 @@ function getStartPage(model: DeusExModel) {
   }
 
   if (!isProgram && !isExHumanProgram) {
-    let hpRow: Row = {
+    const hpRow: Row = {
       text: 'Hit Points',
       value: model.hp + ' / ' + model.maxHp,
       percent: 0,
@@ -141,7 +141,7 @@ function getStartPage(model: DeusExModel) {
     pageInfo.body.items.push(hpRow);
   }
 
-  let illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
+  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
 
   if (illnesses && illnesses.length) {
     pageInfo.body.items.push({
@@ -157,7 +157,7 @@ function getStartPage(model: DeusExModel) {
     });
   }
 
-  let handicaps = getHandicaps(model);
+  const handicaps = getHandicaps(model);
   if (handicaps) {
     pageInfo.body.items.push({
       text: 'Ограничения движения',
@@ -182,8 +182,8 @@ function getRussianConditionTag(tag: string) {
 
 function getConditionsPageItem(cond: Condition) {
   let header = cond.text;
-  let details = cond.details ? cond.details : header;
-  let condClass = cond.class ? cond.class : 'physiology';
+  const details = cond.details ? cond.details : header;
+  const condClass = cond.class ? cond.class : 'physiology';
 
   if (details == header || details == header + '.') {
     header = 'Состояние';
@@ -254,7 +254,7 @@ const systemNames = {
 };
 
 function getImplantDetails(modifier: Modifier) {
-  let details = modifier.details || 'подробного описания нет';
+  const details = modifier.details || 'подробного описания нет';
 
   if (modifier.system) {
     return `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;
@@ -296,7 +296,7 @@ function getImplantsPageItem(modifier: Modifier) {
 }
 
 function getImplantsPage(model: DeusExModel) {
-  let pageTitle = model.profileType == 'human' ? 'Импланты' : 'Прошивки';
+  const pageTitle = model.profileType == 'human' ? 'Импланты' : 'Прошивки';
 
   return {
     __type: 'ListPageViewModel',
@@ -389,12 +389,12 @@ function getMessagesPage(model: DeusExModel) {
 }
 
 function getPages(model: DeusExModel) {
-  let pages: PageViewModel[] = [];
+  const pages: PageViewModel[] = [];
 
-  let isHuman = model.profileType == 'human';
-  let isProgram = model.profileType == 'program';
-  let isExHumanProgram = model.profileType == 'exhuman-program';
-  let isExHumanRobot = model.profileType == 'ex-human-robot';
+  const isHuman = model.profileType == 'human';
+  const isProgram = model.profileType == 'program';
+  const isExHumanProgram = model.profileType == 'exhuman-program';
+  const isExHumanRobot = model.profileType == 'ex-human-robot';
 
   pages.push(getStartPage(model));
   pages.push(getMemoryPage(model));
@@ -434,7 +434,7 @@ function getMenu(model: DeusExModel) {
 }
 
 function getToolbar(model: DeusExModel) {
-  let ret = {
+  const ret = {
     hitPoints: model.hp,
     maxHitPoints: model.maxHp,
   };

@@ -8,23 +8,23 @@ import cuid = require('cuid');
 /**
  * Хелперы для разных моделей
  */
-let consts = require('./constants');
-let type = require('type-detect');
-let Chance = require('chance');
-let chance = new Chance();
+const consts = require('./constants');
+const type = require('type-detect');
+const Chance = require('chance');
+const chance = new Chance();
 
 function loadImplant(api: EventModelApi<DeusExModel>, id: string) {
-  let implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
+  const implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
 
   if (!implant) {
     api.error(`loadImplant: implant id=${id} not found!`);
     return null;
   }
 
-  let effects: any[] = [];
+  const effects: any[] = [];
 
   implant.effects.forEach((eID: string) => {
-    let effect = api.getCatalogObject<Effect>('effects', eID.toLowerCase());
+    const effect = api.getCatalogObject<Effect>('effects', eID.toLowerCase());
     if (effect) {
       effect.enabled = true;
       effects.push(effect);
@@ -43,15 +43,15 @@ function loadImplant(api: EventModelApi<DeusExModel>, id: string) {
  * Загружает болезнь и ее эффект из каталога
  */
 function loadIllness(api: EventModelApi<DeusExModel>, id: string) {
-  let illness = api.getCatalogObject<Illness>('illnesses', id.toLowerCase());
+  const illness = api.getCatalogObject<Illness>('illnesses', id.toLowerCase());
 
   if (!illness) {
     api.error(`loadIllness: illness id=${id} not found!`);
     return null;
   }
 
-  let effectName = consts.ILLNESS_EFFECT_NAME;
-  let effect = api.getCatalogObject<Effect>('effects', effectName);
+  const effectName = consts.ILLNESS_EFFECT_NAME;
+  const effect = api.getCatalogObject<Effect>('effects', effectName);
 
   if (!effect) {
     api.error(`loadIllness: effect id = ${effectName} not found`);
@@ -80,7 +80,7 @@ function addChangeRecord(api: EventModelApi<DeusExModel>, text: string, timestam
 //Проверка предиката и возвращение данных для работы эффекта
 //Вовращается объект Params (если он есть)
 function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectName: string, multi = false) {
-  let implant = api.getModifierById(mID);
+  const implant = api.getModifierById(mID);
 
   //api.info("checkPredicate: " + JSON.stringify(implant));
 
@@ -91,7 +91,7 @@ function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectNam
     if (!predicates) {
       //api.info("checkPredicate: try to load predicates from catalog");
 
-      let catalogImplant = api.getCatalogObject<Implant>('implants', implant.id);
+      const catalogImplant = api.getCatalogObject<Implant>('implants', implant.id);
       if (catalogImplant) {
         predicates = catalogImplant.predicates;
       }
@@ -118,11 +118,11 @@ function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectNam
 }
 
 function isMindCubeMatch(api: EffectModelApi<DeusExModel>, variable: string, condition: string) {
-  let parts = variable.match(/^([A-G])(\d)/i);
+  const parts = variable.match(/^([A-G])(\d)/i);
   //console.log(`isMindCubeMatch: ${variable}`);
   if (parts) {
-    let cube = parts[1];
-    let index = Number(parts[2]);
+    const cube = parts[1];
+    const index = Number(parts[2]);
 
     //console.log(`isMindCubeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
 
@@ -141,7 +141,7 @@ function isMindCubeMatch(api: EffectModelApi<DeusExModel>, variable: string, con
 function checkValue(value: string, condition: string) {
   let l = -1;
   let h = -1;
-  let v = Number.parseInt(value);
+  const v = Number.parseInt(value);
 
   l = Number.parseInt(condition);
   if (!Number.isNaN(l)) {
@@ -174,10 +174,10 @@ function checkValue(value: string, condition: string) {
 }
 
 function isGenomeMatch(api: EffectModelApi<DeusExModel>, variable: string, value: string) {
-  let parts = variable.match(/^Z(\d\d?)/i);
+  const parts = variable.match(/^Z(\d\d?)/i);
 
   if (parts) {
-    let index = Number.parseInt(parts[1]) - 1;
+    const index = Number.parseInt(parts[1]) - 1;
     if (api.model.genome && index < api.model.genome.length) {
       if (api.model.genome[index] == Number.parseInt(value)) {
         return true;
@@ -203,15 +203,15 @@ function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, chang
   changeText.split(',').forEach((exp) => {
     api.debug(`MMC:  Part: ${exp}`);
 
-    let exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
+    const exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
     if (exParts) {
-      let cube = exParts[1];
-      let index = Number(exParts[2]);
-      let op = exParts[3];
-      let mod = Math.trunc((Number(exParts[4]) * scaleFactor) / 100);
+      const cube = exParts[1];
+      const index = Number(exParts[2]);
+      const op = exParts[3];
+      const mod = Math.trunc((Number(exParts[4]) * scaleFactor) / 100);
 
       //console.log(`MMC parsed: ${cube}${index} ${op} ${mod}`);
-      let beforeOp = mind[cube][index];
+      const beforeOp = mind[cube][index];
 
       if (mind[cube] && index < mind[cube].length) {
         switch (op) {
@@ -241,7 +241,7 @@ function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, chang
 
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    let r = (Math.random() * 16) | 0,
+    const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
@@ -252,7 +252,7 @@ function uuidv4() {
  */
 function addCharacterCondition(api: EffectModelApi<DeusExModel>, condId: string) {
   if (condId) {
-    let condition = api.getCatalogObject<Condition>('conditions', condId);
+    const condition = api.getCatalogObject<Condition>('conditions', condId);
 
     if (condition) {
       api.debug(JSON.stringify(condition));
@@ -294,7 +294,7 @@ function addCharacterCondition(api: EffectModelApi<DeusExModel>, condId: string)
  */
 function addDelayedEvent(api: EventModelApi<DeusExModel>, duration: number, eventType: string, data: any, prefix = 'delayed') {
   if (api && duration && eventType && data) {
-    let timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
+    const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
     api.setTimer(timerName, Number(duration), eventType, data);
 
@@ -314,9 +314,9 @@ function addDelayedEvent(api: EventModelApi<DeusExModel>, duration: number, even
  */
 function removeElementByMID(list: Modifier[], mID: string): Modifier | null {
   if (list) {
-    let i = list.findIndex((e) => (e.mID ? e.mID == mID : false));
+    const i = list.findIndex((e) => (e.mID ? e.mID == mID : false));
     if (i != -1) {
-      let e = list[i];
+      const e = list[i];
 
       list.slice(i, 1);
 
@@ -327,7 +327,7 @@ function removeElementByMID(list: Modifier[], mID: string): Modifier | null {
   return null;
 }
 
-let restrictedVars = [
+const restrictedVars = [
   '_id',
   'id',
   'hp',
@@ -359,7 +359,7 @@ function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: str
       .replace(/\s/gi, '')
       .split(',')
       .forEach((op) => {
-        let parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
+        const parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
 
         if (parts) {
           let result = false;
@@ -371,7 +371,7 @@ function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: str
           }
 
           if (result) {
-            let varName = parts[1] || parts[4];
+            const varName = parts[1] || parts[4];
             api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
           } else {
             api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
@@ -390,7 +390,7 @@ function modifyModelStringProperty(api: EffectModelApi<DeusExModel>, varName, va
     return false;
   }
 
-  let t = type(api.model[varName]);
+  const t = type(api.model[varName]);
 
   if (t != 'string' && t != 'null' && t != 'undefined') {
     return false;
@@ -410,7 +410,7 @@ function modifyModelDigitProperty(api: EffectModelApi<DeusExModel>, varName: str
     return false;
   }
 
-  let t = type(api.model[varName]);
+  const t = type(api.model[varName]);
 
   if (t != 'number') {
     return false;
@@ -489,7 +489,7 @@ function createEffectModifier(
   displayName: string,
   modifierClass: string,
 ): Modifier | undefined {
-  let effect = api.getCatalogObject<Effect>('effects', effectName);
+  const effect = api.getCatalogObject<Effect>('effects', effectName);
 
   if (!effect) {
     api.error("Can't load effect " + effectName);
@@ -498,7 +498,7 @@ function createEffectModifier(
 
   effect.enabled = true;
 
-  let modifier = {
+  const modifier = {
     mID: '',
     id: modifierId,
     name: modifierId,

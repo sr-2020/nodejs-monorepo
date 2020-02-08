@@ -26,13 +26,13 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
 
 describe('JJ Immortality', () => {
   it('Use step one pill', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.changes = [];
     let events = getEvents(model.modelId, [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }]);
 
     let { baseModel, workingModel } = await process(model, events);
 
-    let jjOne = findModifier('jj-immortal-one', baseModel);
+    const jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;
     expect(jjOne.currentStage).to.equals(0);
     expect(baseModel.timers).to.has.property('jj-immortal-one-' + jjOne.mID);
@@ -71,9 +71,9 @@ describe('JJ Immortality', () => {
   });
 
   it('Use step 2 pill', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.changes = [];
-    let timestamp = Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10;
+    const timestamp = Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10;
     let events = getEvents(
       model.modelId,
       [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }, getRefreshEvent(model.modelId, timestamp)],
@@ -86,7 +86,7 @@ describe('JJ Immortality', () => {
     events = getEvents(model.modelId, [{ eventType: 'jj-immortal-two-start', data: { pill: STEP2 } }], timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    let jjOne = findModifier('jj-immortal-one', baseModel);
+    const jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;
     expect(baseModel.timers).not.to.has.property('jj-immortal-one-' + jjOne.mID);
     expect(baseModel.timers).to.has.property('jj-immortal-two-awake');
@@ -102,13 +102,13 @@ describe('JJ Immortality', () => {
   });
 
   it('Usable with pill', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.changes = [];
-    let events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
+    const events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);
 
-    let { baseModel } = await process(model, events);
+    const { baseModel } = await process(model, events);
 
-    let jjOne = findModifier('jj-immortal-one', baseModel);
+    const jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;
     expect(jjOne.currentStage).to.equals(0);
   });

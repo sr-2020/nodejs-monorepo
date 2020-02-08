@@ -5,7 +5,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Serenity immortality: ', () => {
   it('Install first stage implant', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_immortal01' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
 
@@ -25,7 +25,7 @@ describe('Serenity immortality: ', () => {
 
   it('Run modernization', async function() {
     //Подготовить к модернизации
-    let model = getExampleModel();
+    const model = getExampleModel();
     let events = getEvents(
       model.modelId,
       [{ eventType: 'add-implant', data: { id: 'jj_meditation' } }, { eventType: 'add-implant', data: { id: 's_immortal01' } }],
@@ -73,8 +73,8 @@ describe('Serenity immortality: ', () => {
   });
 
   it('Install first stage implant and try install another', async function() {
-    let model = getExampleModel();
-    let events = getEvents(
+    const model = getExampleModel();
+    const events = getEvents(
       model.modelId,
       [
         { eventType: 'add-implant', data: { id: 's_immortal01' } },
@@ -83,11 +83,11 @@ describe('Serenity immortality: ', () => {
       ],
       model.timestamp + 100,
     );
-    let { baseModel } = await process(model, events);
+    const { baseModel } = await process(model, events);
 
-    let imp = baseModel.modifiers.find((m: any) => m.id == 's_immortal01');
-    let imp2 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle');
-    let imp3 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle2');
+    const imp = baseModel.modifiers.find((m: any) => m.id == 's_immortal01');
+    const imp2 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle');
+    const imp3 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle2');
 
     expect(imp).is.exist;
     expect(imp2).is.exist;

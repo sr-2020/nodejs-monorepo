@@ -13,14 +13,14 @@ import { EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
  */
 function changeMindCubesEffect(api: EffectModelApi<DeusExModel>, modifier) {
   api.debug('changeMindCubesEffect: start, change: ' + JSON.stringify(modifier));
-  let changeCommand = modifier.mindCubeChange;
+  const changeCommand = modifier.mindCubeChange;
 
-  let timerValue = api.getTimer(consts.NARCO_TIME_PREFIX + modifier.mID);
+  const timerValue = api.getTimer(consts.NARCO_TIME_PREFIX + modifier.mID);
 
   if (timerValue) {
     api.debug('Timer: ' + JSON.stringify(timerValue));
 
-    let scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
+    const scale = timerValue.miliseconds < modifier.pushbackDuration ? -110 : 100;
 
     if (changeCommand) {
       helpers.modifyMindCubes(api, api.model.mind, changeCommand, scale);

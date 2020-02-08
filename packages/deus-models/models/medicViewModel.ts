@@ -27,8 +27,8 @@ export interface MindData {
   [index: string]: number[];
 }
 function getViewModel(api: ViewModelApiInterface<DeusExModel>, _) {
-  let props = ['modelId', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
-  let ret: any = {};
+  const props = ['modelId', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
+  const ret: any = {};
 
   props.forEach((e) => {
     ret[e] = api.model[e] ? api.model[e] : '';

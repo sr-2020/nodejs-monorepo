@@ -37,7 +37,7 @@ function useAid(api: EventModelApi<DeusExModel>, pill, event) {
 function useLastChance(api: EventModelApi<DeusExModel>, pill) {
   if (api.model.profileType != 'human') return;
 
-  let deathTimer = api.getTimer(consts.DEATH_TIMER);
+  const deathTimer = api.getTimer(consts.DEATH_TIMER);
   if (deathTimer) {
     deathTimer.miliseconds += 20 * 60 * 1000;
     api.info('new death timer: %s', deathTimer.miliseconds);
@@ -90,7 +90,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
     return;
   }
 
-  let code = api.aquired('pills', data.id);
+  const code = api.aquired('pills', data.id);
   if (!code) {
     api.error(`usePill: can't aquire code ${data.id}`);
     return;
@@ -101,7 +101,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
     return;
   }
 
-  let pill = api.getCatalogObject<Narcotic>('pills', code.pillId);
+  const pill = api.getCatalogObject<Narcotic>('pills', code.pillId);
   if (!pill) {
     api.error(`usePill: can't load pill ${code.pillId}`);
     return;
@@ -112,7 +112,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
   const previousUsage = _.get(api.model, ['usedPills', pill.id]);
 
   if (code._id.startsWith('9c5d9d84-dbf2')) {
-    let pillText = code._id.substring(code._id.length - 6);
+    const pillText = code._id.substring(code._id.length - 6);
     helpers.addChangeRecord(api, `Вы использовали препарат ${pillText}`, event.timestamp);
   }
 

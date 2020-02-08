@@ -66,7 +66,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         timestamp: aquiredModels.maximalTimestamp,
         aquiredObjects: {},
       };
-      let processingResult = await processAny(
+      const processingResult = await processAny(
         { Location: Location, Character: Sr2020Character, QrCode: QrCode }[modelType],
         this._modelEngineService,
         req,

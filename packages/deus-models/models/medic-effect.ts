@@ -2,7 +2,7 @@
  * Эффекты и события связанные с медициной и хитами
  */
 
-let Chance = require('chance');
+const Chance = require('chance');
 
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
@@ -76,11 +76,11 @@ function hasAnyEffect(api: EventModelApi<DeusExModel>, effectName) {
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
-  let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
   //если такие импланты есть, то тогда хиты списывать не надо
-  let imp = hasAnyEffect(api, 'timed-recover-hp');
+  const imp = hasAnyEffect(api, 'timed-recover-hp');
 
   if (imp) {
     api.info(`leakHpEvent: Installed recovery HP implant: ${imp.id}, don't reduce HP`);
@@ -103,7 +103,7 @@ function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function regenHpEvent(api: EventModelApi<DeusExModel>, event) {
-  let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
   //если такие импланты есть, то тогда хиты списывать не надо
@@ -138,7 +138,7 @@ function characterDeathEvent(api: EventModelApi<DeusExModel>, event) {
     api.info(`characterDeath: systems ${medhelpers.getSystemsStateString(api)}`);
 
     api.model.systems.forEach((sys, i) => {
-      let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
+      const implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
 
       if (!sys && !implants.length) {
         api.info(`characterDeath: system ${consts.medicSystems[i].name} is dead. Kill the character!`);
@@ -191,7 +191,7 @@ function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
         sys = -1;
       } else {
         //Если система уже дохлая, но на ней есть имплант - он уничтожается (если больше одного - первый)
-        let implants = api.getModifiersBySystem(consts.medicSystems[sys].name);
+        const implants = api.getModifiersBySystem(consts.medicSystems[sys].name);
         if (implants[0]) {
           if (implants.length == 1) {
             sys = -1;
@@ -207,7 +207,7 @@ function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
     } while (sys == 0);
 
     //Сбросить счетчик повреждений HP в 0, т.к. теперь отключена одна система целиком
-    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
     if (m) {
       api.info(`killRandomSystem: set damage == 0`);
       m.damage = 0;
@@ -242,9 +242,9 @@ function damageEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
     return;
   }
 
-  let isHuman = api.model.profileType == 'human';
+  const isHuman = api.model.profileType == 'human';
 
-  let curMaxHP = medhelpers.calcMaxHP(api);
+  const curMaxHP = medhelpers.calcMaxHP(api);
 
   api.model.maxHp = curMaxHP;
 
@@ -257,7 +257,7 @@ function damageEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
     api.info(`damageEffect: systems ${medhelpers.getSystemsStateString(api)}`);
 
     api.model.systems.forEach((sys, i) => {
-      let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
+      const implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
 
       //api.info(`system: ${sys}, implants: ${implants.map(x=>x.id).join(',')}`);
       if (!sys && !implants.length) {
@@ -378,7 +378,7 @@ function characterResurectEvent(api: EventModelApi<DeusExModel>, event) {
     //Пройти по всем системам
     api.model.systems = api.model.systems.map((_, systemID) => {
       //Найти все модификаторы для системы
-      let systemName = consts.medicSystems[systemID].name;
+      const systemName = consts.medicSystems[systemID].name;
       let systemState = 1;
 
       //Убить все болезни
@@ -401,7 +401,7 @@ function characterResurectEvent(api: EventModelApi<DeusExModel>, event) {
 
     api.info(`characterResurectEvent: systems after ${medhelpers.getSystemsStateString(api)}`);
 
-    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
     if (m) {
       m.damage = 0;
     }
@@ -433,13 +433,13 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
     return;
   }
 
-  let params = helpers.checkPredicate(api, modifier.mID, 'timed-recover-hp');
+  const params = helpers.checkPredicate(api, modifier.mID, 'timed-recover-hp');
   api.warn('timedRecoveryEffect: start, predicate: ' + JSON.stringify(params));
 
-  let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   if (m && m.damage && params && params.recoveryRate) {
-    let timerName = 'hpRecovery-' + modifier.mID;
+    const timerName = 'hpRecovery-' + modifier.mID;
 
     if (!api.getTimer(timerName)) {
       api.warn(`timedRecoveryEffect: damage detected ==> set HP recovery timer, with name ${timerName} to ${params.recoveryRate}sec!`);
@@ -455,7 +455,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
  * просто отключит таймер (повреждения в минус уйти не могут)
  */
 function recoverHpEvent(api: EventModelApi<DeusExModel>, event) {
-  let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
   if (m && m.damage && api.model.isAlive) {
     m.damage -= 1;
@@ -485,16 +485,16 @@ function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: M
     return;
   }
 
-  let params = helpers.checkPredicate(api, modifier.mID, 'timed-recover-systems');
+  const params = helpers.checkPredicate(api, modifier.mID, 'timed-recover-systems');
   api.info('timedRecoverSystemsEffect: start, predicate: ' + JSON.stringify(params));
 
-  let deadSystems = medhelpers.getDeadSystems(api);
+  const deadSystems = medhelpers.getDeadSystems(api);
 
   if (deadSystems.length) {
     api.info(`timedRecoverSystemsEffect: has dead systems ${medhelpers.getSystemsStateString(api)}`);
 
-    let hpRemain = params.hpRemain ? params.hpRemain : 0;
-    let timerName = 'hpRecoverySys-' + modifier.mID;
+    const hpRemain = params.hpRemain ? params.hpRemain : 0;
+    const timerName = 'hpRecoverySys-' + modifier.mID;
 
     if (!api.getTimer(timerName)) {
       api.info(
@@ -512,7 +512,7 @@ function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: M
  * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-systems
  */
 function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
-  let modifier = api.getModifierById(data.mID);
+  const modifier = api.getModifierById(data.mID);
 
   if (!modifier || !modifier.enabled) {
     api.info(`recoverSystemsEvent: implant removed or disabled. Stop processing`);
@@ -547,7 +547,7 @@ function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
     api.info(`recoverSystemsEvent: counter ${modifier.count}, systems before ${medhelpers.getSystemsStateString(api)}`);
 
     //Найти все отключенные системы организма, для которых нет имплантов и "починить их"
-    let deadSystems = medhelpers.getDeadSystems(api);
+    const deadSystems = medhelpers.getDeadSystems(api);
 
     deadSystems.forEach((si) => {
       api.info(`recoverSystemsEvent: Recovering system ${consts.medicSystems[si].name}`);
@@ -562,8 +562,8 @@ function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
   //Повреждения выставляются "примерно" т.к. внутри обработчика события нельзя понять точно MaxHP персонажа
   //Если hpRemain не передается или ==0 то персонаж восстанавливается с полными хитами
   if (data.hpRemain) {
-    let maxHP = medhelpers.calcMaxHP(api);
-    let dmgMod = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const maxHP = medhelpers.calcMaxHP(api);
+    const dmgMod = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
     if (!dmgMod) {
       api.error(`Damage modifier (with id=${consts.DAMAGE_MODIFIER_MID} not found`);
       return;

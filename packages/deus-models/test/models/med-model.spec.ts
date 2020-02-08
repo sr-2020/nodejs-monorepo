@@ -5,13 +5,13 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Medicine: ', () => {
   it('Compute HP', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
-    let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
+    const events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
-    let { baseModel, workingModel } = await process(model, events);
+    const { baseModel, workingModel } = await process(model, events);
 
-    let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
+    const implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     //Check existing
     expect(implant).to.exist;
@@ -25,8 +25,8 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP event', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
@@ -39,30 +39,30 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP event for program ignored', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.profileType = 'program';
 
-    let events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], 1500825800, true);
-    let { workingModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], 1500825800, true);
+    const { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
   });
 
   it('Reduce HP event for exhuman-program ignored', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.profileType = 'exhuman-program';
 
-    let events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], 1500825800, true);
-    let { workingModel } = await process(model, events);
+    const events = getEvents(model.modelId, [{ eventType: 'get-damage', data: { hpLost: 2 } }], 1500825800, true);
+    const { workingModel } = await process(model, events);
 
     expect(workingModel.hp).is.equal(4);
   });
 
   it('Reduce HP event and heal +5', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     let { baseModel, workingModel } = await process(model, events);
@@ -78,8 +78,8 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP below 0', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     model.maxHp = 2;
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
@@ -98,8 +98,8 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP below 0 and disable implant', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     model.maxHp = 2;
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
@@ -107,7 +107,7 @@ describe('Medicine: ', () => {
 
     let { baseModel, workingModel } = await process(model, events);
 
-    let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
+    const implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
       model.modelId,
@@ -125,23 +125,23 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[1]).is.equal(0);
 
     //Появившиеся в модели состояния для игрока
-    let cond1 = workingModel.conditions.find((c: any) => c.id == 'system_damage_0');
-    let cond2 = workingModel.conditions.find((c: any) => c.id == 'system_damage_1');
+    const cond1 = workingModel.conditions.find((c: any) => c.id == 'system_damage_0');
+    const cond2 = workingModel.conditions.find((c: any) => c.id == 'system_damage_1');
 
     expect(cond1).to.exist;
     expect(cond2).to.exist;
   });
 
   it('Reduce HP below 0 and get +4 HP pill', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
 
     //model.hp = 1;
 
     let { baseModel, workingModel } = await process(model, events);
 
-    let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
+    const implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
       model.modelId,
@@ -161,14 +161,14 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP below 0, install another implant and enable existed', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     //model.hp = 1;
 
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
     let { baseModel, workingModel } = await process(model, events);
 
-    let implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
+    const implant = baseModel.modifiers.find((e: any) => e.id == 's_orphey');
 
     events = getEvents(
       model.modelId,
@@ -188,7 +188,7 @@ describe('Medicine: ', () => {
     //Check HP
     expect(workingModel.hp).is.equal(0);
 
-    let cond1 = workingModel.conditions.find((c: any) => c.id == 'system_damage_1');
+    const cond1 = workingModel.conditions.find((c: any) => c.id == 'system_damage_1');
     expect(cond1).to.not.exist;
 
     //Включить имплант
@@ -198,15 +198,15 @@ describe('Medicine: ', () => {
     //Check HP (base 1, implant +1)
     expect(workingModel.hp).is.equal(2);
 
-    let cond2 = workingModel.conditions.find((c: any) => c.id == 'system_damage_0');
+    const cond2 = workingModel.conditions.find((c: any) => c.id == 'system_damage_0');
     expect(cond2).to.not.exist;
 
     //console.log(JSON.stringify(workingModel, null, 4));
   });
 
   it('Reduce HP and bleeding (hp leak)', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel, workingModel } = await process(model, events);
@@ -248,7 +248,7 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP and no bleeding  for non-humans', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
@@ -276,7 +276,7 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP and no system death for non-humans', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
@@ -294,7 +294,7 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP and regen  for robots', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
@@ -312,7 +312,7 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP and regen for robots from zero', async function() {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
     //Нанесли повреждения
@@ -330,8 +330,8 @@ describe('Medicine: ', () => {
   });
 
   it('Reduce HP and death and resurect', async function() {
-    let eventData = { id: 's_orphey' };
-    let model = getExampleModel();
+    const eventData = { id: 's_orphey' };
+    const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
 
     let { baseModel, workingModel } = await process(model, events);
@@ -362,7 +362,7 @@ describe('Medicine: ', () => {
     //Check HP: model(4) + impant(1) - damage (2) - leak(3)
     expect(workingModel.hp).is.equal(0);
 
-    let change = workingModel.changes.find((c: any) => c.text.startsWith('Тяжелое повреждение организма'));
+    const change = workingModel.changes.find((c: any) => c.text.startsWith('Тяжелое повреждение организма'));
     expect(change).is.exist;
 
     //Прошло еще 25 минут - персонаж умирает
@@ -370,7 +370,7 @@ describe('Medicine: ', () => {
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 25 * 60 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    let cond = baseModel.changes.find((c: any) => c.text.startsWith('Вы умерли'));
+    const cond = baseModel.changes.find((c: any) => c.text.startsWith('Вы умерли'));
 
     expect(baseModel.isAlive).is.false;
     expect(cond).is.exist;

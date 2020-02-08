@@ -7,25 +7,25 @@ import { getEvents } from '../fixtures/events';
 
 describe('VR events: ', () => {
   it('Enter VR', async function() {
-    let model = getExampleModel();
-    let enterTimestamp = model.timestamp + 100;
-    let events = getEvents(model.modelId, [{ eventType: 'enterVR', data: {} }], enterTimestamp);
-    let { baseModel } = await process(model, events);
+    const model = getExampleModel();
+    const enterTimestamp = model.timestamp + 100;
+    const events = getEvents(model.modelId, [{ eventType: 'enterVR', data: {} }], enterTimestamp);
+    const { baseModel } = await process(model, events);
 
     expect(baseModel.lastVREnterTimestamp).to.exist;
     expect(baseModel.lastVREnterTimestamp).is.equal(enterTimestamp);
   });
 
   it('Enter & Exit VR', async function() {
-    let model = getExampleModel();
-    let enterTimestamp = model.timestamp + 100;
+    const model = getExampleModel();
+    const enterTimestamp = model.timestamp + 100;
     let events = getEvents(model.modelId, [{ eventType: 'enterVR', data: {} }], enterTimestamp);
     let { baseModel } = await process(model, events);
 
     expect(baseModel.lastVREnterTimestamp).to.exist;
     expect(baseModel.lastVREnterTimestamp).is.equal(enterTimestamp);
 
-    let exitTimestamp = model.timestamp + 610 * 1000;
+    const exitTimestamp = model.timestamp + 610 * 1000;
 
     events = getEvents(model.modelId, [{ eventType: 'exitVR', data: {} }], exitTimestamp);
     ({ baseModel } = await process(baseModel, events));

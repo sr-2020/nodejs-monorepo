@@ -5,12 +5,12 @@ import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
  * Хелперы для медицинских моделей
  */
 
-let helpers = require('./model-helper');
-let consts = require('./constants');
+const helpers = require('./model-helper');
+const consts = require('./constants');
 
 function addDamage(api: EventModelApi<DeusExModel>, hpLost, timestamp) {
   if (hpLost && api.model.hp && api.model.profileType != 'program' && api.model.profileType != 'exhuman-program') {
-    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     if (m) {
       m.damage += hpLost;
@@ -30,16 +30,16 @@ function restoreDamage(api: EventModelApi<DeusExModel>, hpHeal, timestamp) {
   api.info(`removeDamage: ${hpHeal}`);
 
   if (hpHeal && api.model.hp) {
-    let m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
     if (m) {
-      let maxHP = calcMaxHP(api);
+      const maxHP = calcMaxHP(api);
 
       if (m.damage > maxHP) {
         m.damage = maxHP;
       }
 
-      let dmgBefore = m.damage;
+      const dmgBefore = m.damage;
 
       m.damage -= hpHeal;
       if (m.damage < 0) {
@@ -56,7 +56,7 @@ function restoreDamage(api: EventModelApi<DeusExModel>, hpHeal, timestamp) {
  *  Посчитать текущее MaxHP для всех имплантов вида "+2 хита" и базовых хитов персонажа
  */
 function calcMaxHP(api) {
-  let maxHP = api.model.modifiers
+  const maxHP = api.model.modifiers
     .filter((m) => m.enabled)
     .map((m) => helpers.checkPredicate(api, m.mID, 'change-max-hp'))
     .map((p) => (p ? p.maxHp : 0))
@@ -69,7 +69,7 @@ function calcMaxHP(api) {
  * Поставить состояние системы по названию
  */
 function setMedSystem(api: EventModelApi<DeusExModel>, system, value) {
-  let i = consts.medicSystems.findIndex((m) => m.name == system);
+  const i = consts.medicSystems.findIndex((m) => m.name == system);
 
   if (i != -1 && api.model.systems) {
     api.model.systems[i] = value;
@@ -83,11 +83,11 @@ function setMedSystem(api: EventModelApi<DeusExModel>, system, value) {
  * Если у персонажа нет систем - возвращает пустой массив
  */
 function getDeadSystems(api) {
-  let ret: any = [];
+  const ret: any = [];
 
   if (api.model.systems) {
     api.model.systems.forEach((sys, i) => {
-      let implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
+      const implants = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
 
       if (!sys && !implants.length) {
         ret.push(i);
@@ -103,10 +103,10 @@ function getDeadSystems(api) {
  */
 function getSystemsStateString(api) {
   if (api.model.systems) {
-    let systemsStr = api.model.systems
+    const systemsStr = api.model.systems
       .map((s, i) => {
-        let imps = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
-        let impDat = imps.length ? ` (+${imps.length})` : '';
+        const imps = helpers.getImplantsBySystem(api, consts.medicSystems[i].name).filter((m) => m.enabled);
+        const impDat = imps.length ? ` (+${imps.length})` : '';
 
         return `${consts.medicSystems[i].name.substring(0, 3)}: ${s}${impDat}`;
       })
@@ -123,7 +123,7 @@ function getSystemID(name) {
 }
 
 function isSystemAlive(api: EventModelApi<DeusExModel>, name) {
-  let i = consts.medicSystems.findIndex((s) => s.name == name);
+  const i = consts.medicSystems.findIndex((s) => s.name == name);
   if (i != -1 && api.model.systems) {
     return api.model.systems[i] == 1;
   }
@@ -134,10 +134,10 @@ function isSystemAlive(api: EventModelApi<DeusExModel>, name) {
  */
 function removeIllness(api: EventModelApi<DeusExModel>, mID) {
   if (mID) {
-    let index = api.model.modifiers.findIndex((m) => m.mID == mID);
+    const index = api.model.modifiers.findIndex((m) => m.mID == mID);
 
     if (index != -1) {
-      let ill = api.model.modifiers[index];
+      const ill = api.model.modifiers[index];
 
       api.info(`removeIllness: remove ${ill.id} and timer ${ill.id}-${ill.mID}`);
 

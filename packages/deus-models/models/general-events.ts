@@ -8,7 +8,7 @@ import consts = require('../helpers/constants');
 import Chance = require('chance');
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-let chance = new Chance();
+const chance = new Chance();
 
 /**
  * Обработчик события "put-condition"
@@ -25,7 +25,7 @@ interface PutConditionData {
 
 function putConditionEvent(api: EventModelApi<DeusExModel>, data: PutConditionData, _: Event) {
   if (data.text) {
-    let cond = helpers.addCondition(api, {
+    const cond = helpers.addCondition(api, {
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
       text: data.text,
       details: data.details ? data.details : data.text,
@@ -53,10 +53,10 @@ interface RemoveConditionData {
 
 function removeConditionEvent(api: EventModelApi<DeusExModel>, data: RemoveConditionData, _: Event) {
   if (data.id) {
-    let i = api.model.conditions.findIndex((c) => c.id == data.id);
+    const i = api.model.conditions.findIndex((c) => c.id == data.id);
 
     if (i != -1) {
-      let text = api.model.conditions[i].text;
+      const text = api.model.conditions[i].text;
       api.model.conditions.splice(i, 1);
 
       api.info(`removeConditionEvent: removed condition "${text.substring(0, 20)}..."`);
@@ -75,7 +75,7 @@ interface SendMessageData {
 
 function sendMessageEvent(api: EventModelApi<DeusExModel>, data: SendMessageData, _: Event) {
   if (data.title && api.model.messages) {
-    let message = {
+    const message = {
       mID: helpers.uuidv4(),
       title: data.title,
       text: data.text ? data.text : data.title,
@@ -104,7 +104,7 @@ function changeMindCubeEvent(api: EventModelApi<DeusExModel>, data: ChangeMindCu
   api.error('=============================');
 
   if (data.operations) {
-    let norm = data.operations.toUpperCase().replace(/\s/gi, '');
+    const norm = data.operations.toUpperCase().replace(/\s/gi, '');
     helpers.modifyMindCubes(api, api.model.mind, norm);
   }
 }
@@ -140,7 +140,7 @@ interface ChangeModelVariableData {
 
 function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeModelVariableData, _: Event) {
   if (data.name && data.value) {
-    let restricted = [
+    const restricted = [
       '_id',
       'id',
       'hp',
@@ -163,10 +163,10 @@ function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeM
     }
 
     if (api.model[data.name]) {
-      let t = type(api.model[data.name]);
+      const t = type(api.model[data.name]);
 
       if (t == 'number' || t == 'string' || t == 'null' || t == 'undefined') {
-        let oldValue = api.model[data.name];
+        const oldValue = api.model[data.name];
 
         api.model[data.name] = data.value;
 
@@ -228,7 +228,7 @@ function changeMemoryEvent(api: EventModelApi<DeusExModel>, data, event: Event) 
   if (data.update) {
     data.update.forEach((mem) => {
       if (mem.title && mem.mID) {
-        let elem = api.model.memory.find((e) => e.mID == mem.mID);
+        const elem = api.model.memory.find((e) => e.mID == mem.mID);
         if (elem) {
           elem.title = mem.title;
           if (mem.text) {

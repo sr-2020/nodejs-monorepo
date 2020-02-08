@@ -5,27 +5,27 @@ module.exports = () => {
     noop() {},
 
     add(api: any, data: any) {
-      let { operand, value } = data;
+      const { operand, value } = data;
       api.model[operand] += Number(value);
     },
 
     mul(api: any, data: any) {
-      let { operand, value } = data;
+      const { operand, value } = data;
       api.model[operand] *= Number(value);
     },
 
     concat(api: any, data: any) {
-      let { operand, value } = data;
+      const { operand, value } = data;
       api.model[operand] = '' + api.model[operand] + value;
     },
 
     delayedConcat(api: any, data: any) {
-      let { operand, value, delay } = data;
+      const { operand, value, delay } = data;
       api.setTimer('delayedConcat', delay, 'concat', { operand, value });
     },
 
     sendMessage(api: any, data: any) {
-      let { receiver, message } = data;
+      const { receiver, message } = data;
       api.sendOutboundEvent(Recipient, receiver, 'message', { message });
     },
 

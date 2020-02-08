@@ -6,21 +6,21 @@ import { process } from '../test_helpers';
 
 describe('Infecton: ', () => {
   it('Calculate potentially bad systems', async () => {
-    let model = getExampleModel();
-    let count = getPotentialSystemsIds(model).length;
+    const model = getExampleModel();
+    const count = getPotentialSystemsIds(model).length;
 
     expect(count).is.equal(2);
   });
 
   it('Calculate total chance for W', async () => {
-    let model = getExampleModel();
-    let chance = getTotalChance(model);
+    const model = getExampleModel();
+    const chance = getTotalChance(model);
 
     expect(chance).is.closeTo(0.0396, 0.00001);
   });
 
   it('What systems should be infected', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
     model.generation = 'X/Y';
     model.genome[0] = 1;
     model.genome[1] = 1;
@@ -28,12 +28,12 @@ describe('Infecton: ', () => {
     model.genome[3] = 1;
     model.genome[4] = 1;
     model.genome[5] = 1;
-    let system = whatSystemShouldBeInfected(model);
+    const system = whatSystemShouldBeInfected(model);
     expect(system).is.equal(4);
   });
 
   it('Roll for infection', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.generation = 'X/Y';
     model.genome[0] = 1;
@@ -55,7 +55,7 @@ describe('Infecton: ', () => {
   });
 
   it('Roll for infection for exhuman program', async () => {
-    let model = getExampleModel();
+    const model = getExampleModel();
 
     model.generation = 'X/Y';
     model.genome = [];
