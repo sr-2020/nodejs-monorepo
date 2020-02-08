@@ -70,7 +70,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     aquiredModels: AquiredModels,
   ) {
     const baseModel: TModel =
-      _.get(aquiredModels.baseModels, [tmodel.name, event.modelId]) || (await getAndLockModel(tmodel, manager, Number(event.modelId)));
+      _.get(aquiredModels.baseModels, [tmodel.name, event.modelId]) ?? (await getAndLockModel(tmodel, manager, Number(event.modelId)));
     event.timestamp = Math.max(event.timestamp, baseModel.timestamp);
     const result = await processAny(tmodel, this._modelEngineService, {
       baseModel,

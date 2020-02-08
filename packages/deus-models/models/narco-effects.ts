@@ -90,7 +90,7 @@ function dieHorribleDeath(api) {
 function takeNarcoEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info(`Taking narco effect: ${event.data.id}`);
 
-  const narco = event.data.narco || loadNarco(api, event.data.id);
+  const narco = event.data.narco ?? loadNarco(api, event.data.id);
 
   api.debug(JSON.stringify(narco));
 
@@ -124,7 +124,7 @@ function takeNarcoEvent(api: EventModelApi<DeusExModel>, data, event) {
     }
   }
 
-  narco.history_record = narco.history_record || 'Вы приняли таблетку.';
+  narco.history_record = narco.history_record ?? 'Вы приняли таблетку.';
 
   api.debug('Narco will add history record ' + narco.history_record);
   helpers.addChangeRecord(api, narco.history_record, event.timestamp);

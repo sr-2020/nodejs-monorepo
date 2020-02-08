@@ -52,7 +52,7 @@ class AliceModelConverter {
     const account: AliceAccount = {
       _id: model._id,
       login: model.login,
-      password: this.character.joinStrFieldValue(3630) || '0000',
+      password: this.character.joinStrFieldValue(3630) ?? '0000',
       professions: this.getProfessions(),
       companyAccess: this.getCompanyAccess(),
       jobs: {
@@ -120,7 +120,7 @@ class AliceModelConverter {
 
   private getLogin() {
     // Защита от цифрового логина
-    const login = this.character.joinStrFieldValue(3631) || 'user' + this.character.characterId;
+    const login = this.character.joinStrFieldValue(3631) ?? 'user' + this.character.characterId;
 
     if (!login.match(/^[\w\#\$\-\*\&\%\.]{3,30}$/i) || login.match(/^\d+$/i)) {
       this.conversionProblems.push(`Incorrect login ${login}`);

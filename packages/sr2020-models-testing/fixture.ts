@@ -132,7 +132,7 @@ export class TestFixture {
   }
 
   getCharacterNotifications(id: number | string = 0): PushNotification[] {
-    return this._pushService.get(id) || [];
+    return this._pushService.get(id) ?? [];
   }
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {

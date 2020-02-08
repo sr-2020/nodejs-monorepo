@@ -11,7 +11,7 @@ export class CustomRejectProvider extends RejectProvider {
     let err = <HttpError>error;
 
     try {
-      error = <HttpError>JSON.parse(err.message).error || error;
+      error = <HttpError>JSON.parse(err.message).error ?? error;
     } catch (e) {
       // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
     }

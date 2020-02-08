@@ -92,7 +92,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data, even
   const text = modifier.stages[modifier.currentStage].text;
   helpers.addChangeRecord(api, text, event.timestamp);
 
-  const duration = modifier.stages[modifier.currentStage].duration || 1;
+  const duration = modifier.stages[modifier.currentStage].duration ?? 1;
   const timerName = 'jj-immortal-one-' + modifier.mID;
 
   if (modifier.currentStage >= modifier.stages.length - 1) {
@@ -156,7 +156,7 @@ function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data, event) {
     return;
   }
 
-  const pill = data.pill || {};
+  const pill = data.pill ?? {};
 
   if (pill.id != 'jj-immortal-two') {
     api.error('jjImmortalOneAwakeEvent: wrong pill %s', pill.id);

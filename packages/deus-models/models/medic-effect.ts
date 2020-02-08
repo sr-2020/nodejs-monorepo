@@ -148,7 +148,7 @@ function characterDeathEvent(api: EventModelApi<DeusExModel>, event) {
 
     if (deadSystem) {
       api.model.isAlive = false;
-      api.info(`characterDeath: character id=${api.model.modelId} login=${api.model.login || ''} id dead!`);
+      api.info(`characterDeath: character id=${api.model.modelId} login=${api.model.login ?? ''} id dead!`);
       helpers.addChangeRecord(api, `Вы умерли. Отказала ${deadSystem} система организма.`, event.timestamp);
     }
   }
@@ -408,7 +408,7 @@ function characterResurectEvent(api: EventModelApi<DeusExModel>, event) {
 
     api.model.isAlive = true;
 
-    api.info(`characterResurectEvent: character id=${api.model.modelId} login=${api.model.login || ''} is live again!`);
+    api.info(`characterResurectEvent: character id=${api.model.modelId} login=${api.model.login ?? ''} is live again!`);
 
     helpers.addChangeRecord(api, `Базовые функции жизнедеятельности организма восстановлены`, event.timestamp);
   }

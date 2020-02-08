@@ -254,7 +254,7 @@ const systemNames = {
 };
 
 function getImplantDetails(modifier: Modifier) {
-  const details = modifier.details || 'подробного описания нет';
+  const details = modifier.details ?? 'подробного описания нет';
 
   if (modifier.system) {
     return `<p><b>Система организма:</b> ${systemNames[modifier.system]}</p><p><b>Описание:</b></p><p>${details}</p>`;

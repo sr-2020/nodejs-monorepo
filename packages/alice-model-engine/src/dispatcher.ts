@@ -18,8 +18,8 @@ export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> 
     if (event.eventType.startsWith('_')) return context;
 
     const handler =
-      this.callbacks[event.eventType] ||
-      this.callbacks[this.kebabCaseToCamelCase(event.eventType)] ||
+      this.callbacks[event.eventType] ??
+      this.callbacks[this.kebabCaseToCamelCase(event.eventType)] ??
       this.callbacks[this.kebabCaseToCamelCase(event.eventType) + 'Event'];
 
     if (!handler) {

@@ -93,7 +93,7 @@ function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any, event
       if (illness.currentStage < illness.illnessStages.length - 1) {
         illness.currentStage += 1;
 
-        const duration = illness.illnessStages[illness.currentStage].duration || 1;
+        const duration = illness.illnessStages[illness.currentStage].duration ?? 1;
         const timerName = `${illness.id}-${illness.mID}`;
 
         api.info(`startIllnessEvent: illness ${illness.id}, start stage ${illness.currentStage}, set timer to ${duration} sec`);

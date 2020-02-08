@@ -371,7 +371,7 @@ function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: str
           }
 
           if (result) {
-            const varName = parts[1] || parts[4];
+            const varName = parts[1] ?? parts[4];
             api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
           } else {
             api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
