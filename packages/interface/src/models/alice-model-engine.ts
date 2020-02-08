@@ -99,7 +99,7 @@ export class Effect {
   handler: string;
 }
 
-@model()
+@model({ settings: { strict: false } })
 export class Modifier {
   @rproperty()
   mID: string;
