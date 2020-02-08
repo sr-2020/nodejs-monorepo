@@ -5,6 +5,7 @@
     "composite": true,
     "declarationMap": true,
     "noImplicitAny": false,
+    "esModuleInterop": false,
     "baseUrl": "./packages",
     "paths": {
       "@sr2020/interface/*": [
