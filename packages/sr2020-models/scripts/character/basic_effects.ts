@@ -60,6 +60,11 @@ export function increaseSpriteLevel(api: EffectModelApi<Sr2020Character>, m: Mod
   api.model.spriteLevel = clamp(api.model.spriteLevel, 0, 3);
 }
 
+export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.maxTimeInVr += m.amount;
+  api.model.maxTimeInVr = clamp(api.model.maxTimeInVr, 30, 9000);
+}
+
 export function increaseMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magicRecoverySpeed += m.amount;
   // As this is a coefficient - we use 1/3 and 5/3 instead of 1 and 5 from the sheet.

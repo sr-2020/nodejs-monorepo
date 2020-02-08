@@ -204,6 +204,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     conversionDataprocessing: 5,
     adminHostNumber: 3,
     spriteLevel: 0,
+    maxTimeInVr: 0,
     magicFeedbackReduction: 0,
     magicRecoverySpeed: 1,
     spiritResistanceMultiplier: 1,

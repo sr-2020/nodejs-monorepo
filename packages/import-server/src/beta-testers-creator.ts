@@ -48,6 +48,7 @@ async function provideCharacter(login: LoginResponse) {
     conversionDataprocessing: 5,
     adminHostNumber: 3,
     spriteLevel: 0,
+    maxTimeInVr: 0,
     magicFeedbackReduction: 0,
     magicRecoverySpeed: 1,
     spiritResistanceMultiplier: 1,

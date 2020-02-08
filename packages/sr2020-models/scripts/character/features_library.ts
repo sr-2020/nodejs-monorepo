@@ -14,6 +14,7 @@ import {
   increaseConversionDataprocessing,
   increaseSpriteLevel,
   increaseAdminHostNumber,
+  increaseMaxTimeInVr,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -399,8 +400,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 134
     // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
 
   {
@@ -409,8 +409,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 135
     // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 120 })],
   },
 
   {
@@ -419,8 +418,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 136
     // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 })],
   },
 
   {
@@ -429,8 +427,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 138
     // Пассивка нормов, увеличивает время в виаре\основании.
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
   },
 
   {

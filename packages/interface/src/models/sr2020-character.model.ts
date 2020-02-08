@@ -126,6 +126,10 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column({ default: 0 })
+  maxTimeInVr: number;
+
+  @rproperty()
+  @Column({ default: 0 })
   magicFeedbackReduction: number;
 
   @rproperty()
