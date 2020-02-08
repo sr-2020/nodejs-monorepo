@@ -358,7 +358,11 @@ describe('General Magellan events: ', () => {
       // Add manual space suit take off action
       qrs.push({ type: 5, kind: 0, validUntil: 0, payload: '7' });
 
-      const events = getEvents(baseModel.modelId, qrs.map((data) => ({ eventType: 'scanQR', data })), 100);
+      const events = getEvents(
+        baseModel.modelId,
+        qrs.map((data) => ({ eventType: 'scanQR', data })),
+        100,
+      );
       // eslint-disable-next-line prefer-const
       ({ baseModel, workingModel } = await process(baseModel, events));
 

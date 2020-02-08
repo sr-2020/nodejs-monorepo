@@ -63,8 +63,8 @@ bot.on('callback_query', async (query) => {
   currentValue = currentValue + Number(query.data);
   await bot.editMessageText(`Текущее значение: ${currentValue}`, {
     reply_markup: m,
-    chat_id: query.message!!.chat.id,
-    message_id: query.message!!.message_id,
+    chat_id: query.message!.chat.id,
+    message_id: query.message!.message_id,
   });
   await bot.answerCallbackQuery(query.id);
 });

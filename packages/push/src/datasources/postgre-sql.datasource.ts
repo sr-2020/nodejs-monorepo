@@ -9,9 +9,9 @@ export class PostgreSqlDataSource extends juggler.DataSource {
     @inject('datasources.config.PostgreSql', { optional: true })
     dsConfig = config,
   ) {
-    dsConfig.host = process.env.POSTGRESQL_HOST!!;
-    dsConfig.user = process.env.POSTGRESQL_USER || dsConfig.user;
-    dsConfig.password = process.env.POSTGRESQL_PASSWORD!!;
+    dsConfig.host = process.env.POSTGRESQL_HOST!;
+    dsConfig.user = process.env.POSTGRESQL_USER ?? dsConfig.user;
+    dsConfig.password = process.env.POSTGRESQL_PASSWORD!;
     super(dsConfig);
   }
 }

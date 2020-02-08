@@ -131,7 +131,7 @@ interface OnTheShipModifier extends Modifier {
 
 function enterShip(api: EventModelApi<OrganismModel>, data: number, event: Event) {
   const counter = api.aquired('counters', `ship_${data}`);
-  if (counter && counter.shield) {
+  if (counter?.shield) {
     const shieldValue = Number(counter.shield);
     spaceSuitTakeOff(api, shieldValue, event);
   } else {

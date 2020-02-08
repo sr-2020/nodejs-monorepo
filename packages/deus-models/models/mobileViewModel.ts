@@ -143,7 +143,7 @@ function getStartPage(model: DeusExModel) {
 
   const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
 
-  if (illnesses && illnesses.length) {
+  if (illnesses?.length) {
     pageInfo.body.items.push({
       text: 'Внимание!',
       value: 'Больно и плохо, врача!',
@@ -413,7 +413,7 @@ function getPages(model: DeusExModel) {
   pages.push(getChangesPage(model));
   pages.push(getMessagesPage(model));
 
-  if (model.hasOwnProperty('showTechnicalInfo') && model.showTechnicalInfo) {
+  if (model.showTechnicalInfo) {
     pages.push(getTechnicalInfoPage());
   }
 

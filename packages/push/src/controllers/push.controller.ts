@@ -42,7 +42,7 @@ export class PushController {
     if (!(await this.firebaseTokenRepository.exists(id))) {
       return new PushResult({ success: 0, failure: 1 });
     }
-    const receiverToken = (await this.firebaseTokenRepository.findById(id)).token!!;
+    const receiverToken = (await this.firebaseTokenRepository.findById(id)).token!;
     const sendResult = await this.firebaseService.send(receiverToken, notification.title, notification.body);
     return new PushResult({ ...sendResult, token_used: receiverToken });
   }

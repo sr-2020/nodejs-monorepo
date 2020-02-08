@@ -54,9 +54,9 @@ export class Context<T extends EmptyModel> {
       this._dictionaries = cloneDeep(dictionaries);
     }
 
-    this._outboundEvents = outboundEvents || new OutboundEvents();
-    this._pendingAquire = pendingAquire || [];
-    this._aquired = aquired || {};
+    this._outboundEvents = outboundEvents ?? new OutboundEvents();
+    this._pendingAquire = pendingAquire ?? [];
+    this._aquired = aquired ?? {};
   }
 
   get events() {
@@ -126,7 +126,7 @@ export class Context<T extends EmptyModel> {
 
   public sendOutboundEvent(modelType: string, modelId: string, eventType: string, timestamp: number, data: any) {
     this._outboundEvents.push({
-      modelType: modelType!!,
+      modelType: modelType!,
       modelId,
       eventType,
       timestamp: timestamp,
@@ -181,7 +181,7 @@ export class Context<T extends EmptyModel> {
 
     if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
       // !! is safe as firstTimer != null means that there are timers indeed.
-      delete this.baseModel.timers!![firstTimer.name];
+      delete this.baseModel.timers![firstTimer.name];
       return this.timerEvent(firstTimer);
     } else {
       this._events.shift();

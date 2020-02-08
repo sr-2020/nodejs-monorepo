@@ -29,7 +29,10 @@ describe('Serenity immortality: ', () => {
     const model = getExampleModel();
     let events = getEvents(
       model.modelId,
-      [{ eventType: 'add-implant', data: { id: 'jj_meditation' } }, { eventType: 'add-implant', data: { id: 's_immortal01' } }],
+      [
+        { eventType: 'add-implant', data: { id: 'jj_meditation' } },
+        { eventType: 'add-implant', data: { id: 's_immortal01' } },
+      ],
       model.timestamp + 100,
     );
     let { baseModel, workingModel } = await process(model, events);
@@ -42,7 +45,10 @@ describe('Serenity immortality: ', () => {
     //Поранить и заразить персонажа
     events = getEvents(
       model.modelId,
-      [{ eventType: 'start-illness', data: { id: 'arthritis' } }, { eventType: 'get-damage', data: { hpLost: 1 } }],
+      [
+        { eventType: 'start-illness', data: { id: 'arthritis' } },
+        { eventType: 'get-damage', data: { hpLost: 1 } },
+      ],
       baseModel.timestamp + 100,
     );
     ({ baseModel, workingModel } = await process(baseModel, events));

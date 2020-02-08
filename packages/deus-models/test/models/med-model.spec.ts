@@ -112,7 +112,10 @@ describe('Medicine: ', () => {
 
     events = getEvents(
       model.modelId,
-      [{ eventType: 'get-damage', data: { hpLost: 3 } }, { eventType: 'disable-implant', data: { mID: implant.mID } }],
+      [
+        { eventType: 'get-damage', data: { hpLost: 3 } },
+        { eventType: 'disable-implant', data: { mID: implant.mID } },
+      ],
       baseModel.timestamp + 100,
       true,
     );
@@ -173,7 +176,10 @@ describe('Medicine: ', () => {
 
     events = getEvents(
       model.modelId,
-      [{ eventType: 'get-damage', data: { hpLost: 3 } }, { eventType: 'disable-implant', data: { mID: implant.mID } }],
+      [
+        { eventType: 'get-damage', data: { hpLost: 3 } },
+        { eventType: 'disable-implant', data: { mID: implant.mID } },
+      ],
       1500825800,
       true,
     );
@@ -340,7 +346,10 @@ describe('Medicine: ', () => {
     //Нанесли повреждения и добавили болезнь
     events = getEvents(
       model.modelId,
-      [{ eventType: 'get-damage', data: { hpLost: 2 } }, { eventType: 'start-illness', data: { id: 'acromegaly' } }],
+      [
+        { eventType: 'get-damage', data: { hpLost: 2 } },
+        { eventType: 'start-illness', data: { id: 'acromegaly' } },
+      ],
       baseModel.timestamp + 100,
       true,
     );

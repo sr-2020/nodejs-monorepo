@@ -7,9 +7,9 @@ export function getDbConnectionOptions(): ConnectionOptions {
   return {
     type: 'postgres',
     database: 'model',
-    host: process.env.POSTGRESQL_HOST!!,
+    host: process.env.POSTGRESQL_HOST!,
     username: process.env.POSTGRESQL_USER,
-    password: process.env.POSTGRESQL_PASSWORD!!,
+    password: process.env.POSTGRESQL_PASSWORD!,
     synchronize: true,
     entities: [Sr2020Character, Location, QrCode],
   };

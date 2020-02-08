@@ -104,7 +104,7 @@ function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectNam
 
       // api.info(`charID: ${api.model._id}: checkPredicate for ${mID}, effect: ${effectName} => ${JSON.stringify(p)}`);
 
-      if (predicates && predicates.length) {
+      if (predicates?.length) {
         if (!multi) {
           return predicates[0].params;
         } else {
@@ -198,7 +198,7 @@ function isGenomeMatch(api: EffectModelApi<DeusExModel>, variable: string, value
  *
  * scaleFactor = 100 (default) to apply normal change
  */
-function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, changeText: string, scaleFactor: number = 100) {
+function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, changeText: string, scaleFactor = 100) {
   api.debug('=======================================================');
   changeText.split(',').forEach((exp) => {
     api.debug(`MMC:  Part: ${exp}`);
@@ -386,6 +386,7 @@ function modifyModelStringProperty(api: EffectModelApi<DeusExModel>, varName, va
     return false;
   }
 
+  // eslint-disable-next-line no-prototype-builtins
   if (!api.model.hasOwnProperty(varName)) {
     return false;
   }
@@ -406,6 +407,7 @@ function modifyModelDigitProperty(api: EffectModelApi<DeusExModel>, varName: str
     return false;
   }
 
+  // eslint-disable-next-line no-prototype-builtins
   if (!api.model.hasOwnProperty(varName)) {
     return false;
   }

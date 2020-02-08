@@ -5,7 +5,7 @@ import { JoinCharacterDetail } from '../join-importer';
 import { ProvideResult } from './interface';
 
 export class EconProvider {
-  public name: string = 'economic account';
+  public name = 'economic account';
 
   public async provide(character: JoinCharacterDetail): Promise<ProvideResult> {
     if (!character.account) {

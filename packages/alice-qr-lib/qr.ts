@@ -2,12 +2,12 @@ import * as md5 from 'md5';
 import { QrData } from './qr.types';
 
 export class FormatError implements Error {
-  public name: string = 'FormatError';
+  public name = 'FormatError';
   constructor(public message: string) {}
 }
 
 export class ValidationError implements Error {
-  public name: string = 'ValidationError';
+  public name = 'ValidationError';
   constructor(public message: string) {}
 }
 

@@ -46,4 +46,7 @@ async function main() {
   }
 }
 
-main().then(() => console.log('Finished OK'), (e) => console.log(`Finished with error: ${e}`));
+main().then(
+  () => console.log('Finished OK'),
+  (e) => console.log(`Finished with error: ${e}`),
+);

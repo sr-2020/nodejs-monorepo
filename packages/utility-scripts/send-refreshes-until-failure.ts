@@ -3,7 +3,10 @@ import * as rp from 'request-promise';
 
 const address = 'https://api.alice.aerem.in';
 
-const optionDefinitions = [{ name: 'id', type: String }, { name: 'password', type: String }];
+const optionDefinitions = [
+  { name: 'id', type: String },
+  { name: 'password', type: String },
+];
 
 const usernamePrefix = commandLineArgs(optionDefinitions).id;
 const password = commandLineArgs(optionDefinitions).password;

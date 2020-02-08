@@ -24,7 +24,10 @@ describe('General events: ', () => {
     const model = getExampleModel();
     let events = getEvents(
       model.modelId,
-      [{ eventType: 'put-condition', data: eventData }, { eventType: 'put-condition', data: eventData2 }],
+      [
+        { eventType: 'put-condition', data: eventData },
+        { eventType: 'put-condition', data: eventData2 },
+      ],
       model.timestamp + 100,
     );
     let { baseModel } = await process(model, events);

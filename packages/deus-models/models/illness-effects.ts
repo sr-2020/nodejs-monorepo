@@ -22,7 +22,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Ev
 
     const _illness = helpers.loadIllness(api, data.id);
 
-    if (_illness && _illness.illnessStages && _illness.illnessStages.length) {
+    if (_illness?.illnessStages?.length) {
       //Если система уже мертвая - то болезнь не запускается
       if (!medhelpers.isSystemAlive(api, _illness.system)) {
         api.info(`startIllnessEvent: system: ${_illness.system} is dead. Stop processing`);
@@ -186,7 +186,7 @@ function rollIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Eve
       const chance = helpers.getChanceFromModel(api.model);
 
       const illnessModels = chance.pickone(
-        illneses.map((i) => api.getCatalogObject<Illness>('illnesses', i)!!).filter((i) => i.system == systemName),
+        illneses.map((i) => api.getCatalogObject<Illness>('illnesses', i)!).filter((i) => i.system == systemName),
       );
 
       api.debug('Roll for infection: will start illness ' + illnessModels.id);

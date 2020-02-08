@@ -16,7 +16,7 @@ export function getExampleLabTerminalModel() {
 }
 
 export const getExampleDeusModel = (id?: string) => ({
-  _id: id || randomId(),
+  _id: id ?? randomId(),
   login: 'john.smith',
 
   profileType: 'human',

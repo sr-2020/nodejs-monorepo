@@ -67,7 +67,7 @@ export class AliceExporter {
     winston.info(`Will export converted Character(${this.model._id})`);
 
     const existingModel = await this.getExistingModel();
-    if (existingModel && existingModel.inGame) {
+    if (existingModel?.inGame) {
       winston.info(`Character model ${existingModel._id} already in game!`);
       return { account: 'ok', model: 'ok' };
     }
@@ -97,7 +97,7 @@ export class AliceExporter {
     }
 
     try {
-      return this.con.get(this.model._id);
+      return await this.con.get(this.model._id);
     } catch (err) {
       winston.info(`Model doesnt exist`, err);
       return null;

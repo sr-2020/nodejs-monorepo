@@ -83,7 +83,10 @@ describe('Implants: ', () => {
     const model = getExampleModel();
     const events = getEvents(
       model.modelId,
-      [{ eventType: 'add-implant', data: { id: 's_stability' } }, { eventType: 'add-implant', data: { id: 's_orphey' } }],
+      [
+        { eventType: 'add-implant', data: { id: 's_stability' } },
+        { eventType: 'add-implant', data: { id: 's_orphey' } },
+      ],
       model.timestamp + 100,
     );
 

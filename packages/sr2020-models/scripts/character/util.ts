@@ -3,7 +3,7 @@ import { MAX_HISTORY_LINES } from './consts';
 import uuid = require('uuid');
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 
-export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText: string = '', longText = '') {
+export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {
   if (api.model.history.length >= MAX_HISTORY_LINES) api.model.history.shift();
 
   api.model.history.push({
@@ -15,12 +15,7 @@ export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: str
   });
 }
 
-export function sendNotificationAndHistoryRecord(
-  api: EventModelApi<Sr2020Character>,
-  title: string,
-  shortText: string = '',
-  longText = '',
-) {
+export function sendNotificationAndHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {
   api.sendNotification(title, shortText);
   addHistoryRecord(api, title, shortText, longText);
 }

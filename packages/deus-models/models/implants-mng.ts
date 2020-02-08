@@ -46,7 +46,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       api.info(`addImplantEvent: Install implant: ${implant.displayName}`);
 
       //Получить все существующие импланты на эту систему
-      const existingImplants = helpers.getImplantsBySystem(api, implant.system!!);
+      const existingImplants = helpers.getImplantsBySystem(api, implant.system!);
 
       //Информация про систему
       const systemInfo = consts.medicSystems.find((s) => s.name == implant.system);

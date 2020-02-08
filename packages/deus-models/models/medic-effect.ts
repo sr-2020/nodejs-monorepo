@@ -87,7 +87,7 @@ function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
     return;
   }
 
-  if (m && m.damage && api.model.isAlive) {
+  if (m?.damage && api.model.isAlive) {
     m.damage += 1;
     api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
@@ -112,7 +112,7 @@ function regenHpEvent(api: EventModelApi<DeusExModel>, event) {
     return;
   }
 
-  if (m && m.damage && api.model.isAlive) {
+  if (m?.damage && api.model.isAlive) {
     m.damage -= 1;
     api.info(`regenHpEvent: damage -1 => ${m.damage}`);
 
@@ -438,7 +438,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
 
   const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
-  if (m && m.damage && params && params.recoveryRate) {
+  if (m?.damage && params && params.recoveryRate) {
     const timerName = 'hpRecovery-' + modifier.mID;
 
     if (!api.getTimer(timerName)) {
@@ -457,7 +457,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
 function recoverHpEvent(api: EventModelApi<DeusExModel>, event) {
   const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
 
-  if (m && m.damage && api.model.isAlive) {
+  if (m?.damage && api.model.isAlive) {
     m.damage -= 1;
     api.info(`recoverHpEvent: damage-1 => damage == ${m.damage}`);
 

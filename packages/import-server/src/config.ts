@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export const config = {
-  port: process.env.PORT || 8100,
+  port: process.env.PORT ?? 8100,
 
   url: 'https://couchdb.alice.aerem.in/',
   username: process.env.COUCHDB_USER,

@@ -31,7 +31,11 @@ describe('Magellan helpers', () => {
   });
 
   it('There are 3 systems of each color', () => {
-    const c = new Map<SystemColor, number>([[SystemColor.Blue, 0], [SystemColor.Orange, 0], [SystemColor.Green, 0]]);
+    const c = new Map<SystemColor, number>([
+      [SystemColor.Blue, 0],
+      [SystemColor.Orange, 0],
+      [SystemColor.Green, 0],
+    ]);
 
     for (const i of allSystemsIndices()) {
       for (const color of biologicalSystemsColors.get(i) as SystemColor[]) {
@@ -39,7 +43,13 @@ describe('Magellan helpers', () => {
       }
     }
 
-    expect(c).to.deep.equal(new Map<SystemColor, number>([[SystemColor.Blue, 3], [SystemColor.Orange, 3], [SystemColor.Green, 3]]));
+    expect(c).to.deep.equal(
+      new Map<SystemColor, number>([
+        [SystemColor.Blue, 3],
+        [SystemColor.Orange, 3],
+        [SystemColor.Green, 3],
+      ]),
+    );
   });
 
   it('systemCorrespondsToColor', () => {

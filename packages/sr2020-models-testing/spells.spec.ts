@@ -267,7 +267,7 @@ describe('Spells', function() {
       expect(aura).match(
         /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
       );
-      expect((aura.match(/[a-z]/g) || []).length).to.equal(2);
+      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(2);
     }
   });
 });

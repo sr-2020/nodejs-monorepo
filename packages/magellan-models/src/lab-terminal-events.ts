@@ -23,7 +23,13 @@ function nucleotideTest(model: OrganismModel): string {
 }
 
 function genericTest(model: OrganismModel, systems: BiologicalSystems[]): string {
-  return 'Результат: ' + shuffle(systems.map((s) => model.systems[s].value), { copy: true }).join(', ');
+  return (
+    'Результат: ' +
+    shuffle(
+      systems.map((s) => model.systems[s].value),
+      { copy: true },
+    ).join(', ')
+  );
 }
 
 const tests: { [testName: string]: (model: OrganismModel) => TestResult } = {

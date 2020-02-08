@@ -95,7 +95,7 @@ const AllSpells: Spell[] = [
   },
 ];
 
-function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft: number = 1) {
+function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft = 1) {
   api.sendOutboundEvent(QrCode, qrCode.toString(), create, {
     type: 'artifact',
     description: `Этот артефакт позволяет ${whatItDoes} даже не будучи магом!`,
@@ -182,7 +182,7 @@ export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { pow
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!!);
+  api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!);
 }
 
 export function liveLongAndProsperSpell(

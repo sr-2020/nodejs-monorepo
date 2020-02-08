@@ -69,9 +69,9 @@ export class CharacterParser {
   public convertToDescription(fieldID: number, variantID: number): string | null {
     const field = this.metadata.Fields.find((f) => f.ProjectFieldId === fieldID);
 
-    if (field && field.ValueList) {
+    if (field?.ValueList) {
       const value = field.ValueList.find((fv) => fv.ProjectFieldVariantId === variantID);
-      if (value && value.Description) {
+      if (value?.Description) {
         return value.Description.replace(/\<(.*?)\>/gi, '');
       }
     }
