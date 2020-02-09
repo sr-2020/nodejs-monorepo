@@ -6,6 +6,7 @@ import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { getAndLockModel } from './db-utils';
+import { PubSubService } from '../services/pubsub.service';
 
 export interface AquiredModelsStorage {
   // Returns the maximal timestamp of all models currently present in storage.
@@ -41,7 +42,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Character: {}, QrCode: {} };
   private _workModels = { Location: {}, Character: {}, QrCode: {} };
 
-  constructor(private _manager: EntityManager, public maximalTimestamp: number) {}
+  constructor(private _manager: EntityManager, private _pubSubService: PubSubService, public maximalTimestamp: number) {}
 
   private getDbName<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity): 'Character' | 'Location' | 'QrCode' {
     if (tmodel.name == 'Sr2020Character') return 'Character';
@@ -102,14 +103,20 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     for (const m in this._baseModels['Location']) {
       const location: Location = this._baseModels['Location'][m];
       dbWritePromises.push(this._manager.getRepository(Location).save(location));
+      const locationWork: Location = this._workModels['Location'][m];
+      dbWritePromises.push(this._pubSubService.publish('location_update', locationWork));
     }
     for (const m in this._baseModels['Character']) {
       const character: Sr2020Character = this._baseModels['Character'][m];
       dbWritePromises.push(this._manager.getRepository(Sr2020Character).save(character));
+      const characterWork: Sr2020Character = this._workModels['Character'][m];
+      dbWritePromises.push(this._pubSubService.publish('character_update', characterWork));
     }
     for (const m in this._baseModels['QrCode']) {
       const qr: QrCode = this._baseModels['QrCode'][m];
       dbWritePromises.push(this._manager.getRepository(QrCode).save(qr));
+      const qrWork: QrCode = this._workModels['QrCode'][m];
+      dbWritePromises.push(this._pubSubService.publish('qr_update', qrWork));
     }
     await Promise.all(dbWritePromises);
   }

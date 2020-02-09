@@ -6,16 +6,17 @@ import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { AquiredModelsStorageTypeOrm, AquiredModelsStorage } from '../utils/aquired-models-storage';
+import { PubSubService } from './pubsub.service';
 
 export interface ModelAquirerService {
   aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage>;
 }
 
 class ModelAquirerServiceImpl implements ModelAquirerService {
-  constructor(private _modelEngineService: ModelEngineService) {}
+  constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage> {
-    const result = new AquiredModelsStorageTypeOrm(manager, now);
+    const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, now);
     // Aquire location if event.data has locationId set.
     if (event.data && event.data.locationId) {
       const locationId: number = event.data.locationId;
@@ -47,9 +48,11 @@ export class ModelAquirerServiceProvider implements Provider<ModelAquirerService
   constructor(
     @inject('services.ModelEngineService')
     private _modelEngineService: ModelEngineService,
+    @inject('services.PubSubService')
+    private _pubSubService: PubSubService,
   ) {}
 
   value(): ModelAquirerService {
-    return new ModelAquirerServiceImpl(this._modelEngineService);
+    return new ModelAquirerServiceImpl(this._modelEngineService, this._pubSubService);
   }
 }
