@@ -110,6 +110,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       const character: Sr2020Character = this._baseModels['Character'][m];
       dbWritePromises.push(this._manager.getRepository(Sr2020Character).save(character));
       const characterWork: Sr2020Character = this._workModels['Character'][m];
+      characterWork.history = [];
       dbWritePromises.push(this._pubSubService.publish('character_update', characterWork));
     }
     for (const m in this._baseModels['QrCode']) {
