@@ -72,7 +72,7 @@ export class AnyModelController<TModel extends EmptyModel> {
     const consequentResults = await this.eventDispatcherService.dispatchEventsRecursively(result.outboundEvents, aquired);
     consequentResults.push(result);
     await this._sendNotifications(consequentResults);
-
+    await aquired.flush();
     result.outboundEvents = [];
     return result;
   }

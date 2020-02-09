@@ -29,6 +29,9 @@ export interface AquiredModelsStorage {
   // NB: Until this is called, getWorkModels() will return empty dict.
   synchronizeModels(modelEngineService: ModelEngineService): Promise<void>;
 
+  // Actually writes models to the DB and sends change notifications if needed.
+  flush(): Promise<void>;
+
   // Compatiblity methods, needed to pass this data to model engine.
   getBaseModels(): AquiredObjects;
   getWorkModels(): AquiredObjects;
@@ -62,7 +65,6 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     baseModel: TModelEntity,
     workModel: TModelEntity,
   ): Promise<void> {
-    await this._manager.getRepository(tmodel).save(baseModel as any);
     this.maximalTimestamp = Math.max(this.maximalTimestamp, baseModel.timestamp);
     this._baseModels[this.getDbName(tmodel)][Number(baseModel.modelId)] = baseModel;
     this._workModels[this.getDbName(tmodel)][Number(workModel.modelId)] = workModel;
@@ -93,6 +95,23 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     }
 
     await Promise.all(promises);
+  }
+
+  async flush(): Promise<void> {
+    const dbWritePromises: Promise<any>[] = [];
+    for (const m in this._baseModels['Location']) {
+      const location: Location = this._baseModels['Location'][m];
+      dbWritePromises.push(this._manager.getRepository(Location).save(location));
+    }
+    for (const m in this._baseModels['Character']) {
+      const character: Sr2020Character = this._baseModels['Character'][m];
+      dbWritePromises.push(this._manager.getRepository(Sr2020Character).save(character));
+    }
+    for (const m in this._baseModels['QrCode']) {
+      const qr: QrCode = this._baseModels['QrCode'][m];
+      dbWritePromises.push(this._manager.getRepository(QrCode).save(qr));
+    }
+    await Promise.all(dbWritePromises);
   }
 
   getBaseModels(): AquiredObjects {
