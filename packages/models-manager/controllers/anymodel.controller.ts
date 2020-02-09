@@ -66,11 +66,10 @@ export class AnyModelController<TModel extends EmptyModel> {
     const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
     const result = await this.eventDispatcherService.dispatchEvent(
       this.tmodel,
-      manager,
       { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
       aquired,
     );
-    const consequentResults = await this.eventDispatcherService.dispatchEventsRecursively(manager, result.outboundEvents, aquired);
+    const consequentResults = await this.eventDispatcherService.dispatchEventsRecursively(result.outboundEvents, aquired);
     consequentResults.push(result);
     await this._sendNotifications(consequentResults);
 

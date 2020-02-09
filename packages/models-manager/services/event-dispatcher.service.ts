@@ -5,30 +5,17 @@ import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
-import _ = require('lodash');
-import { EntityManager } from 'typeorm';
-
-import { getAndLockModel } from '../utils/db-utils';
-import { AquiredModels } from './model-aquirer.service';
+import { AquiredModelsStorage } from '../utils/aquired-models-storage';
 
 export interface EventDispatcherService {
-  dispatchEventsRecursively(
-    manager: EntityManager,
-    events: EventForModelType[],
-    aquiredModels: AquiredModels,
-  ): Promise<ModelProcessResponse<EmptyModel>[]>;
+  dispatchEventsRecursively(events: EventForModelType[], aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>[]>;
 
-  dispatchEventForModelType(
-    manager: EntityManager,
-    event: EventForModelType,
-    aquiredModels: AquiredModels,
-  ): Promise<ModelProcessResponse<EmptyModel>>;
+  dispatchEventForModelType(event: EventForModelType, aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>>;
 
   dispatchEvent<TModel extends EmptyModel>(
     tmodel: new () => TModel,
-    manager: EntityManager,
     event: Event,
-    aquiredModels: AquiredModels,
+    aquiredModels: AquiredModelsStorage,
   ): Promise<ModelProcessResponse<TModel>>;
 }
 
@@ -36,13 +23,12 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
   constructor(private _modelEngineService: ModelEngineService, private _knownModelTypes: (new () => any)[]) {}
 
   async dispatchEventsRecursively(
-    manager: EntityManager,
     events: EventForModelType[],
-    aquiredModels: AquiredModels,
+    aquiredModels: AquiredModelsStorage,
   ): Promise<ModelProcessResponse<EmptyModel>[]> {
     const result: ModelProcessResponse<EmptyModel>[] = [];
     while (events.length) {
-      const promises = events.map((outboundEvent) => this.dispatchEventForModelType(manager, outboundEvent, aquiredModels));
+      const promises = events.map((outboundEvent) => this.dispatchEventForModelType(outboundEvent, aquiredModels));
       const outboundEventResults = await Promise.all<ModelProcessResponse<EmptyModel>>(promises);
       result.unshift(...outboundEventResults);
       events = [];
@@ -53,32 +39,26 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     return result;
   }
 
-  async dispatchEventForModelType(manager: EntityManager, event: EventForModelType, aquiredModels: AquiredModels) {
+  async dispatchEventForModelType(event: EventForModelType, aquiredModels: AquiredModelsStorage) {
     const modelType = this._knownModelTypes.find((t) => t.name == event.modelType);
     if (!modelType) {
       throw new Error('Unsupported modelType: ' + event.modelType);
     }
 
-    const result = await this.dispatchEvent(modelType, manager, event, aquiredModels);
+    const result = await this.dispatchEvent(modelType, event, aquiredModels);
     return result;
   }
 
-  async dispatchEvent<TModel extends EmptyModel>(
-    tmodel: new () => TModel,
-    manager: EntityManager,
-    event: Event,
-    aquiredModels: AquiredModels,
-  ) {
-    const baseModel: TModel =
-      _.get(aquiredModels.baseModels, [tmodel.name, event.modelId]) ?? (await getAndLockModel(tmodel, manager, Number(event.modelId)));
+  async dispatchEvent<TModel extends EmptyModel>(tmodel: new () => TModel, event: Event, aquiredModels: AquiredModelsStorage) {
+    const baseModel: TModel = await aquiredModels.lockAndGetBaseModel(tmodel, Number(event.modelId));
     event.timestamp = Math.max(event.timestamp, baseModel.timestamp);
     const result = await processAny(tmodel, this._modelEngineService, {
       baseModel,
       events: [event],
       timestamp: event.timestamp,
-      aquiredObjects: aquiredModels.workModels,
+      aquiredObjects: aquiredModels.getWorkModels(),
     });
-    await manager.getRepository(tmodel).save(result.baseModel as any);
+    await aquiredModels.setModel(tmodel, result.baseModel, result.workModel);
     return result;
   }
 }
