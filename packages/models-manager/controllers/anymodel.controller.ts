@@ -7,7 +7,6 @@ import { PubSubService } from '../services/pubsub.service';
 import { Empty, PushResult } from '@sr2020/interface/models';
 import { getRepository, EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
-import { getAndLockModel } from '../utils/db-utils';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 
@@ -32,18 +31,8 @@ export class AnyModelController<TModel extends EmptyModel> {
     return new Empty();
   }
 
-  async get(id: number, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
-    const baseModel = await getAndLockModel(this.tmodel, manager, id);
-    const timestamp = this.timeService.timestamp();
-    const result = await processAny(this.tmodel, this.modelEngineService, {
-      baseModel,
-      events: [],
-      timestamp,
-      aquiredObjects: {},
-    });
-    await manager.getRepository(this.tmodel).save(result.baseModel as any);
-    await this._sendNotifications([result]);
-    return result;
+  get(id: number, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
+    return this.postEventImpl(id, { eventType: '_' }, manager);
   }
 
   async predict(id: number, timestamp: number): Promise<ModelProcessResponse<TModel>> {
@@ -62,7 +51,14 @@ export class AnyModelController<TModel extends EmptyModel> {
     }
   }
 
-  async postEvent(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
+  postEvent(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
+    return this.postEventImpl(id, event, manager);
+  }
+
+  // We can't call postEvent directly from get(...) because it will call child's this.postEvent(...). And that wouldn't work
+  // because of @Transaction decorator on this method - basically it will be applied twice (on initial child's get(...) call, and then
+  // on child's postEvent(...) call.
+  async postEventImpl(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
     const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
     const result = await this.eventDispatcherService.dispatchEvent(
       this.tmodel,
