@@ -50,4 +50,11 @@ describe('Features-related events', function() {
     expect(c.workModel).containDeep({ magic: 3 });
     expect(c.workModel.passiveAbilities).length(1);
   });
+
+  it('Dump shock reduces resonance', async () => {
+    await fixture.saveCharacter({ resonance: 5 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dump-shock-survivor' } });
+    const c = await fixture.getCharacter();
+    expect(c.workModel).containDeep({ resonance: 4 });
+  });
 });
