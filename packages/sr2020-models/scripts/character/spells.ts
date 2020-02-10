@@ -105,7 +105,7 @@ function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, wha
   api.sendNotification('Успех', 'Артефакт зачарован!');
 }
 
-export function increaseResonance(api: EventModelApi<Sr2020Character>, _data: {}, _event: Event) {
+export function increaseResonanceByOne(api: EventModelApi<Sr2020Character>, _data: {}, _event: Event) {
   api.model.resonance++;
 }
 
@@ -113,7 +113,7 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', increaseResonanceSpell.name, 3);
   }
-  api.sendSelfEvent(increaseResonance, {});
+  api.sendSelfEvent(increaseResonanceByOne, {});
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 

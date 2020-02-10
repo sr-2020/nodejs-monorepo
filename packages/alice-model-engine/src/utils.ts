@@ -28,24 +28,35 @@ export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T>
         m.viewModelCallbacks[fname.substr('view_'.length)] = src[fname];
         delete src[fname];
       }
+
+      if (typeof src[fname] != 'function') {
+        delete src[fname];
+      }
     }
 
     // TODO(aeremin) Separate event and effect callbacks.
-    m.eventCallbacks = assign({}, m.eventCallbacks, src);
-    m.effectCallbacks = assign({}, m.effectCallbacks, src);
+    for (const fname in src) {
+      if (m.eventCallbacks && m.eventCallbacks[fname] && m.eventCallbacks[fname] != src[fname])
+        throw new Error(`Event callback with the name ${fname} was already defined!`);
+      if (m.effectCallbacks && m.effectCallbacks[fname] && m.effectCallbacks[fname] != src[fname])
+        throw new Error(`Effect callback with the name ${fname} was already defined!`);
+    }
+    m.eventCallbacks = assign(m.eventCallbacks, src);
+    m.effectCallbacks = assign(m.effectCallbacks, src);
 
     return m;
   });
 }
 
 export function requireDir(dir: string, merge = _merge): any {
-  const extensions = Object.keys(require.extensions).join('|');
+  const runningUnderTsNode = require.extensions['.ts'] != undefined;
+  const scriptsExt = runningUnderTsNode ? '.ts' : '.js';
   // First filter is a bit of hack. When run under ts-node, require.extensions will include '.ts'.
   // In the same time, we don't want to 'require' .d.ts files. Unfortunately, *.ts mask _will_ discover them.
   const files = glob
-    .sync(`${dir}/**/*+(${extensions})`)
+    .sync(`${dir}/**/*+(${scriptsExt}|*.json)`)
     .filter((f) => !f.endsWith('.d.ts'))
-    .filter((f) => !(f.endsWith('.spec.ts') || f.endsWith('.spec.js')));
+    .filter((f) => !f.endsWith(`.spec${scriptsExt}`));
 
   return files.reduce((m, f) => {
     let src;
