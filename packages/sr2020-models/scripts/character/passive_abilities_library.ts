@@ -19,6 +19,7 @@ import {
   increaseEthicGroupMaxSize,
   decreaseChemoPillDetectableThresholdTo,
   decreaseChemoBodyDetectableThresholdTo,
+  increaseСhemoCrysisThreshold,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1498,8 +1499,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 516
     // повышает порог кризисной ситуации при употреблении химоты
     // Модификатор: ХимотаКризис +10
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 10 }),
   },
 
   {

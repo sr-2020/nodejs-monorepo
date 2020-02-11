@@ -160,6 +160,18 @@ export class Sr2020Character extends EmptyModel {
   @Column({ default: 9000 })
   chemoPillDetectableThreshold: number;
 
+  @rproperty()
+  @Column({ default: 50 })
+  chemoBaseEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 70 })
+  chemoSuperEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 120 })
+  chemoCrysisThreshold: number;
+
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];

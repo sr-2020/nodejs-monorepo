@@ -93,3 +93,18 @@ export function decreaseChemoBodyDetectableThresholdTo(api: EffectModelApi<Sr202
 export function decreaseChemoPillDetectableThresholdTo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.chemoPillDetectableThreshold = Math.min(api.model.chemoPillDetectableThreshold, m.amount);
 }
+
+export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.chemoBaseEffectThreshold += m.amount;
+  api.model.chemoBaseEffectThreshold = clamp(api.model.chemoBaseEffectThreshold, 0, 9000);
+}
+
+export function increaseСhemoSuperEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.chemoSuperEffectThreshold += m.amount;
+  api.model.chemoSuperEffectThreshold = clamp(api.model.chemoSuperEffectThreshold, 0, 9000);
+}
+
+export function increaseСhemoCrysisThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.chemoCrysisThreshold += m.amount;
+  api.model.chemoCrysisThreshold = clamp(api.model.chemoCrysisThreshold, 0, 9000);
+}
