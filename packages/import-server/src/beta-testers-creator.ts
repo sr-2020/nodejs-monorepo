@@ -58,6 +58,8 @@ async function provideCharacter(login: LoginResponse) {
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
     ethicGroupMaxSize: 0,
+    chemoBodyDetectableThreshold: 9000,
+    chemoPillDetectableThreshold: 9000,
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],

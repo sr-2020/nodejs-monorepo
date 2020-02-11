@@ -17,6 +17,8 @@ import {
   increaseMaxTimeInVr,
   increaseAuraMarkMultiplier,
   increaseEthicGroupMaxSize,
+  decreaseChemoPillDetectableThresholdTo,
+  decreaseChemoBodyDetectableThresholdTo,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1380,6 +1382,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
+    id: 'microscope-usage',
+    name: 'Микроскоп',
+    description: 'Теперь ты можешь пользоваться микроскопом. Ты можешь видеть высокую концентрацию вещества в препарате.',
+    // 473
+    // Персонаж видит что в таблетке, грубо. 70% контент и больше
+    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 70 }),
+  },
+
+  {
     id: 'more-chemo-to-sell-1',
     name: 'апгрейд аптеки 1',
     description: 'Ассортимент твоей аптеки расширился.',
@@ -1405,8 +1416,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь видеть среднюю концентрацию вещества в препарате.',
     // 476
     // Персонаж видит что в таблетке, средне. 40% контент и больше
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['microscope-usage'],
+    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 40 }),
   },
 
   {
@@ -1415,8 +1426,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь видеть низкую концентрацию вещества в препарате.',
     // 477
     // Персонаж видит что в таблетке, тонко. 10% контент и больше
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['whats-in-the-pill-2'],
+    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 10 }),
   },
 
   {
@@ -1425,8 +1436,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты можешь анализировать через автодок, что за вещества находятся в теле пациента.\n',
     // 478
     // Персонаж видит состав фуфломицина в поциенте, грубо. 150% контент и больше
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 150 }),
   },
 
   {
@@ -1435,8 +1445,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты можешь лучше анализировать через автодок, что за вещества находятся в теле пациента.\n',
     // 479
     // Персонаж видит состав фуфломицина в поциенте, средне. 100% контент и больше
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['whats-in-the-body-1'],
+    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 100 }),
   },
 
   {
@@ -1445,8 +1455,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты можешь ещё лучше анализировать через автодок, что за вещества находятся в теле пациента.\n',
     // 480
     // Персонаж видит состав фуфломицина в поциенте, тонко. 50% контент и больше
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['whats-in-the-body-2'],
+    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 50 }),
   },
 
   {

@@ -152,6 +152,14 @@ export class Sr2020Character extends EmptyModel {
   @Column({ default: 0 })
   ethicGroupMaxSize: number;
 
+  @rproperty()
+  @Column({ default: 9000 })
+  chemoBodyDetectableThreshold: number;
+
+  @rproperty()
+  @Column({ default: 9000 })
+  chemoPillDetectableThreshold: number;
+
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];

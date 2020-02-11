@@ -213,6 +213,8 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
     ethicGroupMaxSize: 0,
+    chemoBodyDetectableThreshold: 9000,
+    chemoPillDetectableThreshold: 9000,
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],
