@@ -1396,7 +1396,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ассортимент твоей аптеки расширился.',
     // 474
     // более лучшая химота в продаже
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
     modifier: [],
   },
 
@@ -1406,7 +1406,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ассортимент твоей аптеки расширился ещё больше.',
     // 475
     // Аптека умеет юзать прототипы (с лимитом на штуки)
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
     prerequisites: ['more-chemo-to-sell-1'],
     modifier: [],
   },
