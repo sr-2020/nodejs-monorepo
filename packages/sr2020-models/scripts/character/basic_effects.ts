@@ -75,3 +75,8 @@ export function increaseSpiritResistanceMultiplier(api: EffectModelApi<Sr2020Cha
   api.model.spiritResistanceMultiplier += m.amount;
   api.model.spiritResistanceMultiplier = clamp(api.model.spiritResistanceMultiplier, 0.2, 2.0);
 }
+
+export function increaseAuraMarkMultiplier(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.auraMarkMultiplier += m.amount;
+  api.model.auraMarkMultiplier = clamp(api.model.auraMarkMultiplier, 0.1, 2.0);
+}

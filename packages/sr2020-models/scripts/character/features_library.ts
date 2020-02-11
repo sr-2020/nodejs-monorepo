@@ -15,6 +15,7 @@ import {
   increaseSpriteLevel,
   increaseAdminHostNumber,
   increaseMaxTimeInVr,
+  increaseAuraMarkMultiplier,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1348,8 +1349,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'След твоих заклинаний содержит меньше ауры',
     // 390
     // В астральном следе заклинаний обладателя абилки остается только 60% ауры. То есть Коэффициент Отчетливости Астральных Следов у него равен 0.6
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 })],
+  },
+
+  {
+    id: 'weightless-step',
+    name: 'Weightless Step ',
+    description: 'ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ. След содержит по минимуму ауры',
+    modifier: [modifierFromEffect(increaseAuraMarkMultiplier, { amount: -1 })],
   },
 
   {

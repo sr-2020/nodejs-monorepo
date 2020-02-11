@@ -11,6 +11,8 @@ import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 const chance = new Chance();
 
+const kUnknowAuraCharacter = '?';
+
 const AllSpells: Spell[] = [
   {
     humanReadableName: 'Заглушка',
@@ -274,7 +276,7 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { pow
     const chars: string[] = [];
     for (let i = 0; i < AURA_LENGTH; ++i) {
       if (i > 0 && i % 4 == 0) chars.push('-');
-      chars.push(picked.includes(i) ? spell.casterAura[i] : '?');
+      chars.push(picked.includes(i) ? spell.casterAura[i] : kUnknowAuraCharacter);
     }
     spell.casterAura = chars.join('');
   }
@@ -315,10 +317,14 @@ function magicFeedbackAndSpellTrace(
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
   addTemporaryModifier(api, m, feedbackTimeSeconds);
 
+  const positions = Array.from(Array(AURA_LENGTH).keys());
+  const picked = chance.pickset(positions, api.workModel.auraMarkMultiplier * AURA_LENGTH);
+  const casterAura = positions.map((i) => (picked.includes(i) ? api.workModel.magicAura[i] : kUnknowAuraCharacter)).join('');
+
   api.sendOutboundEvent(Location, locationId, recordSpellTrace, {
     spellName,
     timestamp: event.timestamp,
-    casterAura: api.model.magicAura,
+    casterAura,
     power,
     magicFeedback: feedbackAmount,
   });
