@@ -316,7 +316,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 122
     // Еще 3 хоста, на защиту которых ты можешь подписаться
     // [+3] Хакер_число_админ_хостов
-    modifier: [modifierFromEffect(increaseAdminHostNumber, { amount: 3 })],
+    modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
 
   {
@@ -402,7 +402,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 134
     // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
-    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
+    modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
 
   {
@@ -411,7 +411,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 135
     // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
-    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 120 })],
+    modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
 
   {
@@ -420,7 +420,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 136
     // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
-    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 })],
+    modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 }),
   },
 
   {
@@ -429,7 +429,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 138
     // Пассивка нормов, увеличивает время в виаре\основании.
-    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
+    modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 30 }),
   },
 
   {
@@ -685,7 +685,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 201
     // IT:
     // [+5] Декер_макс_время_на_хосте
-    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 })],
+    modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
 
   {
@@ -696,7 +696,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+10] Декер_макс_время_на_хосте
     prerequisites: ['stubbornness-1'],
-    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 })],
+    modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
 
   {
@@ -707,7 +707,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+10] Декер_макс_время_на_хосте
     prerequisites: ['stubbornness-2'],
-    modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 })],
+    modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
 
   {
@@ -736,7 +736,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 206
     // IT:
     // [+5] Декер_скорость_входа_на_хост
-    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 5 })],
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
   },
 
   {
@@ -747,7 +747,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+10] Декер_скорость_входа_на_хост
     prerequisites: ['quick-to-enter-1'],
-    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 10 })],
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
 
   {
@@ -758,7 +758,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+10] Декер_скорость_входа_на_хост
     prerequisites: ['quick-to-enter-2'],
-    modifier: [modifierFromEffect(increaseHostEntrySpeed, { amount: 10 })],
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
 
   {
@@ -778,7 +778,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Firewall
     // IT:
     // [+2] Декер_конверсия_Firewall
-    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
 
   {
@@ -789,7 +789,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Firewall
     prerequisites: ['breacher-1'],
-    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
 
   {
@@ -800,7 +800,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Firewall
     prerequisites: ['breacher-2'],
-    modifier: [modifierFromEffect(increaseConversionFirewall, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
 
   {
@@ -811,7 +811,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Attack
     // IT:
     // [+2] Декер_конверсия_Attack
-    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
 
   {
@@ -822,7 +822,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Attack
     prerequisites: ['fencer-1'],
-    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
 
   {
@@ -833,7 +833,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Attack
     prerequisites: ['fencer-2'],
-    modifier: [modifierFromEffect(increaseConversionAttack, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
 
   {
@@ -844,7 +844,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Sleaze
     // IT:
     // [+2] Декер_конверсия_Sleaze
-    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
 
   {
@@ -855,7 +855,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Sleaze
     prerequisites: ['sly-1'],
-    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
 
   {
@@ -866,7 +866,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Sleaze
     prerequisites: ['sly-2'],
-    modifier: [modifierFromEffect(increaseConversionSleaze, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
 
   {
@@ -877,7 +877,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Dataprocessing
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
-    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
 
   {
@@ -888,7 +888,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
     prerequisites: ['miner-1'],
-    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
 
   {
@@ -899,7 +899,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
     prerequisites: ['miner-2'],
-    modifier: [modifierFromEffect(increaseConversionDataprocessing, { amount: 2 })],
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
 
   {
@@ -968,7 +968,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 228
     // IT:
     // [+5] Хакер_число_админ_хостов
-    modifier: [modifierFromEffect(increaseAdminHostNumber, { amount: 5 })],
+    modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
 
   {
@@ -1005,7 +1005,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
-    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
+    modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
 
   {
@@ -1017,7 +1017,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
     prerequisites: ['sprites-1'],
-    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
+    modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
 
   {
@@ -1029,7 +1029,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
     prerequisites: ['sprites-2'],
-    modifier: [modifierFromEffect(increaseSpriteLevel, { amount: 1 })],
+    modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
 
   {
@@ -1349,14 +1349,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'След твоих заклинаний содержит меньше ауры',
     // 390
     // В астральном следе заклинаний обладателя абилки остается только 60% ауры. То есть Коэффициент Отчетливости Астральных Следов у него равен 0.6
-    modifier: [modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 })],
+    modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
 
   {
     id: 'weightless-step',
     name: 'Weightless Step ',
     description: 'ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ. След содержит по минимуму ауры',
-    modifier: [modifierFromEffect(increaseAuraMarkMultiplier, { amount: -1 })],
+    modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -1 }),
   },
 
   {
