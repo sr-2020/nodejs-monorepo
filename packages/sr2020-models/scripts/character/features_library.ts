@@ -350,7 +350,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 126
     // Вэрианс на 10% быстрее падает
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/MpQX1qld/102-описать-абилку-вэрианс-на-10-быстрее-падает): Implement and add modifier here
     modifier: [],
   },
 
@@ -360,7 +360,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 127
     // Фейдинг на 10% меньше
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/CMLLkATK/103-описать-абилку-фейдинг-на-10-меньше): Implement and add modifier here
     modifier: [],
   },
 
@@ -370,7 +370,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 130
     // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/x5sZnzHz/104-описать-абилку-увеличивает-возможное-количество-бэкдоров-зависит-от-уровня-резонанса): Implement and add modifier here
     modifier: [],
   },
 
@@ -380,7 +380,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 131
     // Бэкдоры дохнут медленнее
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/HQ0ZOpyH/105-описать-абилки-бэкдоры-дохнут-медленнее): Implement and add modifier here
     modifier: [],
   },
 
@@ -390,7 +390,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 132
     // Бэкдоры дохнут ну еще медленнее.
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/HQ0ZOpyH/105-описать-абилки-бэкдоры-дохнут-медленнее): Implement and add modifier here
     modifier: [],
   },
 
@@ -485,7 +485,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 146
     // Еще один связанный спрайт
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/5soHeH5T/106-описать-абилку-еще-один-связанный-спрайт): Implement and add modifier here
     modifier: [],
   },
 
@@ -495,7 +495,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 147
     // Еще один запрос к контролю
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/gmWH0D2Z/107-описать-абилку-еще-один-запрос-к-контролю): Implement and add modifier here
     modifier: [],
   },
 
@@ -514,7 +514,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Не нравится мне название :(',
     // 149
     // Добавляет время пребывания в Основании партии ( + Х секунд)
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     modifier: [],
   },
 
@@ -524,7 +524,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 150
     // Добавляет время пребывания в Основании партии ( + Х секунд)
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     modifier: [],
   },
 
@@ -534,7 +534,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 151
     // Добавляет время пребывания в Основании партии ( + Х секунд)
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     modifier: [],
   },
 
@@ -624,7 +624,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // [-1] Firewall
     // [-1] Sleaze
     // [-1] DataProcessing
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/9TJlmsbV/100-переписать-дамп-шок-в-терминах-конверсий-атаки-файрвола): Implement and add modifier here
     modifier: [modifierFromEffect(increaseResonance, { amount: -1 })],
   },
 
@@ -683,7 +683,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 201
     // IT:
     // [+5] Декер_макс_время_на_хосте
-    // TODO(aeremin): Implement and add modifier here
     modifier: [modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 })],
   },
 
@@ -979,7 +978,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+xxxx] Техномант_Устойчивость_Фейдингу_Компиляция
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/BJ0sZy0Y/101-нативная-компиляция-глубокая-компиляция): Implement and add modifier here
     modifier: [],
   },
 
@@ -992,7 +991,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+xxxx] Техномант_Устойчивость_Фейдингу_Компиляция
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/BJ0sZy0Y/101-нативная-компиляция-глубокая-компиляция): Implement and add modifier here
     modifier: [],
   },
 
@@ -1359,7 +1358,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При чтении астральных следов извлекается больше ауры',
     // 391
     // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает на 20% ауры больше. То есть его Коэффициент чтения астральных следов равен 1.2
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/aQcxrkDW/108-уточнить-поведение-абилки-dictator-control): Implement and add modifier here
     modifier: [],
   },
 
@@ -1501,7 +1500,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты восстанавливаешь все хиты за 45 минут',
     // 518
     // Ускоряет респавн хитов после легкого ранения (45 минут все хиты)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
@@ -1511,7 +1509,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты восстанавливаешь все хиты за 30 минут',
     // 519
     // Ускоряет респавн хитов после легкого ранения (30 минут все хиты)
-    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
