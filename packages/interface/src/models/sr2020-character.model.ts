@@ -148,6 +148,10 @@ export class Sr2020Character extends EmptyModel {
   @Column({ default: 1.0 })
   auraMarkMultiplier: number;
 
+  @rproperty()
+  @Column({ default: 0 })
+  ethicGroupMaxSize: number;
+
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];

@@ -57,6 +57,7 @@ async function provideCharacter(login: LoginResponse) {
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
+    ethicGroupMaxSize: 0,
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],

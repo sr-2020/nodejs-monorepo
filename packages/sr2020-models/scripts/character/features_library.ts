@@ -16,6 +16,7 @@ import {
   increaseAdminHostNumber,
   increaseMaxTimeInVr,
   increaseAuraMarkMultiplier,
+  increaseEthicGroupMaxSize,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1096,8 +1097,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 314
     // начальный лимит группы 5; нельзя принимать других дискурс-монгеров
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 5 }),
   },
 
   {
@@ -1106,8 +1106,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 315
     // -2 к лимиту группы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['ethic-group-creation'],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: -2 }),
   },
 
   {
@@ -1116,8 +1116,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 316
     // +2 лимиту группы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['ethic-group-creation'],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 2 }),
   },
 
   {
@@ -1126,8 +1126,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 317
     // +2 лимиту группы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['ethic-group-larger-1'],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 2 }),
   },
 
   {
@@ -1136,8 +1136,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 318
     // +4 к лимиту группы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['ethic-group-larger-2'],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 4 }),
   },
 
   {
@@ -1146,8 +1146,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 319
     // +4 к лимиту группы
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    prerequisites: ['ethic-group-larger-3'],
+    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 4 }),
   },
 
   {
