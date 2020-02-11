@@ -1047,7 +1047,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке химоты',
     // 304
     // Скидка 5% при покупке химоты
-    // TODO(aeremin, sluchaj): Use it to calculate discount
+    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
     modifier: [],
   },
 
@@ -1057,7 +1057,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке имплантов',
     // 305
     // Скидка 5% при покупке имплантов
-    // TODO(aeremin, sluchaj): Use it to calculate discount
+    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
     modifier: [],
   },
 
@@ -1067,7 +1067,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке оружия и брони',
     // 306
     // Скидка 5% при покупке оружия и брони
-    // TODO(aeremin, sluchaj): Use it to calculate discount
+    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
     modifier: [],
   },
 
@@ -1077,7 +1077,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке маг реагентов  и маг товаров',
     // 307
     // Скидка 5% при покупке маг реагентов  и маг товаров
-    // TODO(aeremin, sluchaj): Use it to calculate discount
+    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
     modifier: [],
   },
 
@@ -1087,7 +1087,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке дронов и модов для дронов',
     // 308
     // Скидка 5% при покупке дронов и модов для дронов
-    // TODO(aeremin, sluchaj): Use it to calculate discount
+    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
     modifier: [],
   },
 
