@@ -125,7 +125,7 @@ export class Sr2020Character extends EmptyModel {
   spriteLevel: number;
 
   @rproperty()
-  @Column({ default: 0 })
+  @Column({ default: 30 })
   maxTimeInVr: number;
 
   @rproperty()
