@@ -1,5 +1,5 @@
 import { get } from '@loopback/rest';
-import { kAllPassiveAbilities } from '../scripts/character/features_library';
+import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_library';
 
 export class DictionariesController {
   @get('/features', {

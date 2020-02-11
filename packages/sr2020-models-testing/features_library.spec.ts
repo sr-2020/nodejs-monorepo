@@ -1,5 +1,5 @@
 import { expect } from '@loopback/testlab';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-models/scripts/character/features_library';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-models/scripts/character/passive_abilities_library';
 
 describe('Features library', () => {
   it('Not empty', async () => {

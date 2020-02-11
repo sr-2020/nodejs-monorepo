@@ -1,6 +1,6 @@
 import { Sr2020Character, AddedPassiveAbility } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { kAllPassiveAbilities } from './features_library';
+import { kAllPassiveAbilities } from './passive_abilities_library';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   const feature = kAllPassiveAbilities.get(data.id);
