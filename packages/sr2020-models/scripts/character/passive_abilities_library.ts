@@ -1407,6 +1407,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 475
     // Аптека умеет юзать прототипы (с лимитом на штуки)
     // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['more-chemo-to-sell-1'],
     modifier: [],
   },
 
