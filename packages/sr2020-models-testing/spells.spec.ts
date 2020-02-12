@@ -242,10 +242,10 @@ describe('Spells', function() {
 
     await fixture.saveCharacter({ modelId: '3', magic: 5 });
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'trackpointSpell', data: { power: 1, locationId: '0' } },
+      { eventType: 'trackpointSpell', data: { power: 5, locationId: '0' } },
       3,
     );
-    expect(workModel.magic).to.equal(4);
+    expect(workModel.magic).to.equal(2);
     expect(tableResponse.length).to.equal(2);
     expect(tableResponse).containDeep([
       {
@@ -267,22 +267,23 @@ describe('Spells', function() {
       expect(aura).match(
         /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
       );
-      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(2);
+      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(7);
     }
   });
 
-  it('Trackpoint against Weightless Step', async () => {
+  it('Trackpoint against Light Step', async () => {
     await fixture.saveCharacter({ modelId: '1' });
-    await fixture.saveCharacter({ modelId: '2', magic: 5 });
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'weightless-step' } }, 1);
+    await fixture.saveCharacter({ modelId: '2', magic: 10, auraReadingMultiplier: 2.0 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'light-step' } }, 1);
     await fixture.advanceTime(2 * 60);
     await fixture.sendCharacterEvent({ eventType: 'fireballSpell', data: { power: 4 } }, 1);
 
+    // power 8 + auraReadingMultiplier 2.0 gives us 100% read
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'trackpointSpell', data: { power: 1, locationId: '0' } },
+      { eventType: 'trackpointSpell', data: { power: 8, locationId: '0' } },
       2,
     );
-    expect(workModel.magic).to.equal(4);
+    expect(workModel.magic).to.equal(6);
     expect(tableResponse.length).to.equal(1);
     expect(tableResponse).containDeep([
       {
@@ -298,9 +299,7 @@ describe('Spells', function() {
       expect(aura).match(
         /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
       );
-      // Okay, technically it can still fail: with Weightless Step we leave 2 symbols and there is chance to read exactly them.
-      // But that chance is (2 * 1) / (20 * 19) = 1/190.
-      expect((aura.match(/[a-z]/g) ?? []).length).to.be.lessThan(2);
+      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(12);
     }
   });
 });

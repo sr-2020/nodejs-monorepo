@@ -20,6 +20,7 @@ import {
   decreaseChemoPillDetectableThresholdTo,
   decreaseChemoBodyDetectableThresholdTo,
   increaseСhemoCrysisThreshold,
+  increaseAuraReadingMultiplier,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1356,20 +1357,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'weightless-step',
-    name: 'Weightless Step ',
-    description: 'ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ. След содержит по минимуму ауры',
-    modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -1 }),
-  },
-
-  {
     id: 'dictator-control',
     name: 'Dictator Control',
     description: 'При чтении астральных следов извлекается больше ауры',
     // 391
     // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает на 20% ауры больше. То есть его Коэффициент чтения астральных следов равен 1.2
-    // TODO(https://trello.com/c/aQcxrkDW/108-уточнить-поведение-абилки-dictator-control): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseAuraReadingMultiplier, { amount: 0.2 }),
   },
 
   {

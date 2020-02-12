@@ -267,12 +267,13 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
-  const durationInSeconds = (10 + 5 * data.power) * 60;
+  const durationInSeconds = (10 + data.power) * 60;
+  const symbolsRead = Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.auraReadingMultiplier) / 100);
   const location = api.aquired('Location', data.locationId) as Location;
   const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
   const positions = Array.from(Array(AURA_LENGTH).keys());
   for (const spell of spellTraces) {
-    const picked = chance.pickset(positions, 2);
+    const picked = chance.pickset(positions, symbolsRead);
     const chars: string[] = [];
     for (let i = 0; i < AURA_LENGTH; ++i) {
       if (i > 0 && i % 4 == 0) chars.push('-');

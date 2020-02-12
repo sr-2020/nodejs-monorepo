@@ -81,6 +81,11 @@ export function increaseAuraMarkMultiplier(api: EffectModelApi<Sr2020Character>,
   api.model.auraMarkMultiplier = clamp(api.model.auraMarkMultiplier, 0.1, 2.0);
 }
 
+export function increaseAuraReadingMultiplier(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.auraReadingMultiplier += m.amount;
+  api.model.auraReadingMultiplier = clamp(api.model.auraReadingMultiplier, 0.1, 2.0);
+}
+
 export function increaseEthicGroupMaxSize(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.ethicGroupMaxSize += m.amount;
   api.model.ethicGroupMaxSize = clamp(api.model.ethicGroupMaxSize, 0, 100);
