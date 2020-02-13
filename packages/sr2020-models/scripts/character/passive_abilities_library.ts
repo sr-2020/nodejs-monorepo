@@ -1096,52 +1096,85 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'discount-chemo',
+    id: 'discount-chemo-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке химоты',
-    // 304
+    // 310
     // Скидка 5% при покупке химоты
-    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
+    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
   {
-    id: 'discount-implants',
+    id: 'discount-chemo-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке химоты',
+    // 311
+    // Скидка 10% при покупке химоты
+    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['discount-chemo-1'],
+    modifier: [],
+  },
+
+  {
+    id: 'discount-chemo-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке химоты',
+    // 312
+    // Скидка 15% при покупке химоты
+    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['discount-chemo-2'],
+    modifier: [],
+  },
+
+  {
+    id: 'discount-chemo-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке химоты',
+    // 313
+    // Скидка 20% при покупке химоты
+    // TODO(aeremin): Implement and add modifier here
+    prerequisites: ['discount-chemo-3'],
+    modifier: [],
+  },
+
+  {
+    id: 'discount-implants-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке имплантов',
-    // 305
+    // 314
     // Скидка 5% при покупке имплантов
-    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
+    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
   {
-    id: 'discount-weapons',
+    id: 'discount-weapons-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке оружия и брони',
-    // 306
+    // 318
     // Скидка 5% при покупке оружия и брони
-    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
+    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
   {
-    id: 'discount-magic',
+    id: 'discount-magic-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке маг реагентов  и маг товаров',
-    // 307
+    // 322
     // Скидка 5% при покупке маг реагентов  и маг товаров
-    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
+    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
   {
-    id: 'discount-drones',
+    id: 'discount-drones-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке дронов и модов для дронов',
-    // 308
+    // 326
     // Скидка 5% при покупке дронов и модов для дронов
-    // TODO(https://trello.com/c/sN70t49E/149-экономика-скидки): Use it to calculate discount
+    // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },
 
