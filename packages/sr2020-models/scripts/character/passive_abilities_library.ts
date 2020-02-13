@@ -21,6 +21,7 @@ import {
   decreaseChemoBodyDetectableThresholdTo,
   increaseСhemoCrysisThreshold,
   increaseAuraReadingMultiplier,
+  increaseCharisma,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1034,6 +1035,55 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // [+1] Техномант_Уровень_Спрайтов
     prerequisites: ['sprites-2'],
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
+  },
+
+  {
+    id: 'increase-the-charisma-1',
+    name: 'Повышение Харизмы',
+    description: 'Перманентное увеличение Харизмы персонажа - 1',
+    // 278
+    // Увеличивает Харизму персонажа менталиста с 3 до 4
+    modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
+  },
+
+  {
+    id: 'increase-the-charisma-2',
+    name: 'Повышение Харизмы',
+    description: 'Перманентное увеличение Харизмы персонажа - 2',
+    // 279
+    // Увеличивает Харизму персонажа менталиста с 4 до 5
+    prerequisites: ['increase-the-charisma-1'],
+    modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
+  },
+
+  {
+    id: 'increase-the-charisma-3',
+    name: 'Повышение Харизмы',
+    description: 'Перманентное увеличение Харизмы персонажа - 3',
+    // 280
+    // Увеличивает Харизму персонажа менталиста с 5 до 6
+    prerequisites: ['increase-the-charisma-2'],
+    modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
+  },
+
+  {
+    id: 'increase-the-charisma-4',
+    name: 'Повышение Харизмы',
+    description: 'Перманентное увеличение Харизмы персонажа - 4',
+    // 281
+    // Увеличивает Харизму персонажа менталиста с 6 до 7
+    prerequisites: ['increase-the-charisma-3'],
+    modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
+  },
+
+  {
+    id: 'increase-the-charisma-5',
+    name: 'Повышение Харизмы',
+    description: 'Перманентное увеличение Харизмы персонажа - 5',
+    // 282
+    // Увеличивает Харизму персонажа менталиста с 7 до 8
+    prerequisites: ['increase-the-charisma-4'],
+    modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
 
   {

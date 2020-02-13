@@ -5,6 +5,11 @@ import { clamp } from 'lodash';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 
+export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.charisma += m.amount;
+  api.model.charisma = clamp(api.model.charisma, 0, 10);
+}
+
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic += m.amount;
   api.model.magic = clamp(api.model.magic, -9000, 9000);
