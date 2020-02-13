@@ -30,8 +30,6 @@ async function main() {
     throw new Error('Failed to get spreadsheet range');
   }
 
-  const promises: Promise<any>[] = [];
-  console.log('const kAllPassiveAbilitiesList: PassiveAbility[] = [');
   for (let r = 1; r < 600; ++r) {
     const row = data[r];
     const id = row[6];
@@ -44,21 +42,26 @@ async function main() {
         gmDescription: row[8],
         originalLine: r + 1,
       };
-      promises.push(passiveAbilitiesRef.doc(id).set(ability));
-      console.log(`
-        {
-          id: '${ability.id}',
-          name: '${ability.name}',
-          description: '${ability.description.replace(/\n/g, '\\n')}',
-          // ${ability.originalLine}
-          // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
-          // TODO(aeremin): Implement and add modifier here
-          modifier: [],
-        },`);
+      const existingDoc = await passiveAbilitiesRef.doc(id).get();
+      if (
+        existingDoc.data()?.name != ability.name ||
+        existingDoc.data()?.description != ability.description ||
+        existingDoc.data()?.gmDescription != ability.gmDescription
+      ) {
+        console.log(`
+          {
+            id: '${ability.id}',
+            name: '${ability.name}',
+            description: '${ability.description.replace(/\n/g, '\\n')}',
+            // ${ability.originalLine}
+            // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
+            // TODO(aeremin): Implement and add modifier here
+            modifier: [],
+          },`);
+      }
+      await passiveAbilitiesRef.doc(id).set(ability);
     }
   }
-  console.log('];');
-  await Promise.all(promises);
 }
 
 main().then(
