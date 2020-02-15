@@ -1277,6 +1277,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
+    id: 'discount-drones-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке дронов и модов для дронов',
+    // 351
+    // Скидка 20% при покупке дронов и модов для дронов
+    prerequisites: ['discount-drones-3'],
+    modifier: modifierFromEffect(increaseDiscountDrones, { amount: 5 }),
+  },
+
+  {
     id: 'discount-chemo-1',
     name: 'Скидосы',
     description: 'Скидка 5% при покупке химоты',
