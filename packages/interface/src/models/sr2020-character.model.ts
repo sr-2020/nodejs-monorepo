@@ -172,6 +172,30 @@ export class Sr2020Character extends EmptyModel {
   @Column({ default: 120 })
   chemoCrysisThreshold: number;
 
+  @rproperty()
+  @Column({ default: 0 })
+  stockGainPercentage: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  discountWeaponsArmor: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  discountDrones: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  discountChemo: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  discountImplants: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  discountMagicStuff: number;
+
   @property.array(Spell, { required: true })
   @JsonColumn()
   spells: Spell[];

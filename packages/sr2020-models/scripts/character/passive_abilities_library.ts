@@ -22,6 +22,12 @@ import {
   increaseСhemoCrysisThreshold,
   increaseAuraReadingMultiplier,
   increaseCharisma,
+  increaseStockGainPercentage,
+  increaseDiscountImplants,
+  increaseDiscountWeaponsArmor,
+  increaseDiscountMagicStuff,
+  increaseDiscountDrones,
+  increaseDiscountChemo,
 } from './basic_effects';
 
 interface PassiveAbility {
@@ -1096,46 +1102,32 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'discount-chemo-1',
-    name: 'Скидосы',
-    description: 'Скидка 5% при покупке химоты',
-    // 310
-    // Скидка 5% при покупке химоты
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    id: 'igra-na-birge-1',
+    name: 'Игра на бирже',
+    description: 'гм может выгодно вкладывать временно свободные финансы и получать небольшой процент с оборота.',
+    // 307
+    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 5% бонусом
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
   },
 
   {
-    id: 'discount-chemo-2',
-    name: 'Скидосы',
-    description: 'Скидка 10% при покупке химоты',
-    // 311
-    // Скидка 10% при покупке химоты
-    // TODO(aeremin): Implement and add modifier here
-    prerequisites: ['discount-chemo-1'],
-    modifier: [],
+    id: 'igra-na-birge-2',
+    name: 'Игра на бирже',
+    description: 'гм может выгодно вкладывать временно свободные финансы и получать небольшой процент с оборота.',
+    // 308
+    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 5% бонусом
+    prerequisites: ['igra-na-birge-1'],
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
   },
 
   {
-    id: 'discount-chemo-3',
-    name: 'Скидосы',
-    description: 'Скидка 15% при покупке химоты',
-    // 312
-    // Скидка 15% при покупке химоты
-    // TODO(aeremin): Implement and add modifier here
-    prerequisites: ['discount-chemo-2'],
-    modifier: [],
-  },
-
-  {
-    id: 'discount-chemo-4',
-    name: 'Скидосы',
-    description: 'Скидка 20% при покупке химоты',
-    // 313
-    // Скидка 20% при покупке химоты
-    // TODO(aeremin): Implement and add modifier here
-    prerequisites: ['discount-chemo-3'],
-    modifier: [],
+    id: 'igra-na-birge-3',
+    name: 'Игра на бирже',
+    description: 'гм может выгодно вкладывать временно свободные финансы и получать небольшой процент с оборота.',
+    // 309
+    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 5% бонусом
+    prerequisites: ['igra-na-birge-2'],
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
   },
 
   {
@@ -1144,8 +1136,37 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке имплантов',
     // 314
     // Скидка 5% при покупке имплантов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseDiscountImplants, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-implants-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке имплантов',
+    // 315
+    // Скидка 10% при покупке имплантов
+    prerequisites: ['discount-implants-1'],
+    modifier: modifierFromEffect(increaseDiscountImplants, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-implants-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке имплантов',
+    // 316
+    // Скидка 15% при покупке имплантов
+    prerequisites: ['discount-implants-2'],
+    modifier: modifierFromEffect(increaseDiscountImplants, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-implants-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке имплантов',
+    // 317
+    // Скидка 20% при покупке имплантов
+    prerequisites: ['discount-implants-3'],
+    modifier: modifierFromEffect(increaseDiscountImplants, { amount: 5 }),
   },
 
   {
@@ -1154,8 +1175,37 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке оружия и брони',
     // 318
     // Скидка 5% при покупке оружия и брони
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseDiscountWeaponsArmor, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-weapons-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке оружия и брони',
+    // 319
+    // Скидка 10% при покупке оружия и брони
+    prerequisites: ['discount-weapons-1'],
+    modifier: modifierFromEffect(increaseDiscountWeaponsArmor, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-weapons-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке оружия и брони',
+    // 320
+    // Скидка 15% при покупке оружия и брони
+    prerequisites: ['discount-weapons-2'],
+    modifier: modifierFromEffect(increaseDiscountWeaponsArmor, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-weapons-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке оружия и брони',
+    // 321
+    // Скидка 20% при покупке оружия и брони
+    prerequisites: ['discount-weapons-3'],
+    modifier: modifierFromEffect(increaseDiscountWeaponsArmor, { amount: 5 }),
   },
 
   {
@@ -1164,8 +1214,37 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке маг реагентов  и маг товаров',
     // 322
     // Скидка 5% при покупке маг реагентов  и маг товаров
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseDiscountMagicStuff, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-magic-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке маг реагентов  и маг товаров',
+    // 323
+    // Скидка 10% при покупке маг реагентов  и маг товаров
+    prerequisites: ['discount-magic-1'],
+    modifier: modifierFromEffect(increaseDiscountMagicStuff, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-magic-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке маг реагентов  и маг товаров',
+    // 324
+    // Скидка 15% при покупке маг реагентов  и маг товаров
+    prerequisites: ['discount-magic-2'],
+    modifier: modifierFromEffect(increaseDiscountMagicStuff, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-magic-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке маг реагентов  и маг товаров',
+    // 325
+    // Скидка 20% при покупке маг реагентов  и маг товаров
+    prerequisites: ['discount-magic-3'],
+    modifier: modifierFromEffect(increaseDiscountMagicStuff, { amount: 5 }),
   },
 
   {
@@ -1174,8 +1253,66 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка 5% при покупке дронов и модов для дронов',
     // 326
     // Скидка 5% при покупке дронов и модов для дронов
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseDiscountDrones, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-drones-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке дронов и модов для дронов',
+    // 327
+    // Скидка 10% при покупке дронов и модов для дронов
+    prerequisites: ['discount-drones-1'],
+    modifier: modifierFromEffect(increaseDiscountDrones, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-drones-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке дронов и модов для дронов',
+    // 328
+    // Скидка 15% при покупке дронов и модов для дронов
+    prerequisites: ['discount-drones-2'],
+    modifier: modifierFromEffect(increaseDiscountDrones, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-chemo-1',
+    name: 'Скидосы',
+    description: 'Скидка 5% при покупке химоты',
+    // 310
+    // Скидка 5% при покупке химоты
+    modifier: modifierFromEffect(increaseDiscountChemo, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-chemo-2',
+    name: 'Скидосы',
+    description: 'Скидка 10% при покупке химоты',
+    // 311
+    // Скидка 10% при покупке химоты
+    prerequisites: ['discount-chemo-1'],
+    modifier: modifierFromEffect(increaseDiscountChemo, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-chemo-3',
+    name: 'Скидосы',
+    description: 'Скидка 15% при покупке химоты',
+    // 312
+    // Скидка 15% при покупке химоты
+    prerequisites: ['discount-chemo-2'],
+    modifier: modifierFromEffect(increaseDiscountChemo, { amount: 5 }),
+  },
+
+  {
+    id: 'discount-chemo-4',
+    name: 'Скидосы',
+    description: 'Скидка 20% при покупке химоты',
+    // 313
+    // Скидка 20% при покупке химоты
+    prerequisites: ['discount-chemo-3'],
+    modifier: modifierFromEffect(increaseDiscountChemo, { amount: 5 }),
   },
 
   {

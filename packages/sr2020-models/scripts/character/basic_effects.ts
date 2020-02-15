@@ -118,3 +118,33 @@ export function increaseСhemoCrysisThreshold(api: EffectModelApi<Sr2020Characte
   api.model.chemoCrysisThreshold += m.amount;
   api.model.chemoCrysisThreshold = clamp(api.model.chemoCrysisThreshold, 0, 9000);
 }
+
+export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.stockGainPercentage += m.amount;
+  api.model.stockGainPercentage = clamp(api.model.stockGainPercentage, 0, 50);
+}
+
+export function increaseDiscountWeaponsArmor(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discountWeaponsArmor += m.amount;
+  api.model.discountWeaponsArmor = clamp(api.model.discountWeaponsArmor, 0, 50);
+}
+
+export function increaseDiscountDrones(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discountDrones += m.amount;
+  api.model.discountDrones = clamp(api.model.discountDrones, 0, 50);
+}
+
+export function increaseDiscountChemo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discountChemo += m.amount;
+  api.model.discountChemo = clamp(api.model.discountChemo, 0, 50);
+}
+
+export function increaseDiscountImplants(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discountImplants += m.amount;
+  api.model.discountImplants = clamp(api.model.discountImplants, 0, 50);
+}
+
+export function increaseDiscountMagicStuff(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discountMagicStuff += m.amount;
+  api.model.discountMagicStuff = clamp(api.model.discountMagicStuff, 0, 50);
+}
