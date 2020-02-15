@@ -45,6 +45,7 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
       throw new Error('Unsupported modelType: ' + event.modelType);
     }
 
+    delete event.modelType;
     const result = await this.dispatchEvent(modelType, event, aquiredModels);
     return result;
   }
