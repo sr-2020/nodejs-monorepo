@@ -32,14 +32,14 @@ async function main() {
 
   for (let r = 1; r < 600; ++r) {
     const row = data[r];
-    const id = row[6];
-    const kind = row[27];
+    const id = row[5];
+    const kind = row[0];
     if (id && kind == 'Пассивная абилка') {
       const ability: PassiveAbility = {
         id,
-        name: row[3],
-        description: row[4],
-        gmDescription: row[8],
+        name: row[6],
+        description: row[13],
+        gmDescription: row[14],
         originalLine: r + 1,
       };
       const existingDoc = await passiveAbilitiesRef.doc(id).get();
