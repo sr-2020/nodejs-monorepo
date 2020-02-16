@@ -14,11 +14,21 @@ interface PassiveAbility {
   gmDescription: string;
 }
 
+interface Spell {
+  id: string;
+  humanReadableName: string;
+  description: string;
+  originalLine: number;
+  gmDescription: string;
+}
+
 const db = new Firestore();
 
 class SpreadsheetProcessor {
   passiveAbilitiesRef = db.collection('passive_abilities');
+  spellsRef = db.collection('spells');
   passiveAbilities: PassiveAbility[] = [];
+  spells: Spell[] = [];
 
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
@@ -38,6 +48,24 @@ class SpreadsheetProcessor {
     }
   }
 
+  async processSpell(line: number, id: string, row: any[]) {
+    const spell: Spell = {
+      id,
+      humanReadableName: row[6],
+      description: row[13],
+      gmDescription: row[14],
+      originalLine: line + 1,
+    };
+    const existingDoc = await this.spellsRef.doc(id).get();
+    if (
+      existingDoc.data()?.humanReadableName != spell.humanReadableName ||
+      existingDoc.data()?.description != spell.description ||
+      existingDoc.data()?.gmDescription != spell.gmDescription
+    ) {
+      this.spells.push(spell);
+    }
+  }
+
   async printAndSavePassiveAbilities() {
     console.log('//*************************** Passive abilities ***************************//');
     for (const ability of this.passiveAbilities) {
@@ -52,6 +80,23 @@ class SpreadsheetProcessor {
         modifier: [],
       },`);
       await this.passiveAbilitiesRef.doc(ability.id).set(ability);
+    }
+  }
+
+  async printAndSaveSpells() {
+    console.log('//********************************* Spells ********************************//');
+    for (const spell of this.spells) {
+      console.log(`
+      {
+        id: '${spell.id}',
+        humanReadableName: '${spell.humanReadableName}',
+        description: '${spell.description.replace(/\n/g, '\\n')}',
+        // ${spell.originalLine}
+        // ${spell.gmDescription.replace(/\n/g, '\n          // ')}
+        // TODO(aeremin): Add proper implementation
+        eventType: dummySpell.name,
+      },`);
+      await this.spellsRef.doc(spell.id).set(spell);
     }
   }
 
@@ -77,8 +122,14 @@ class SpreadsheetProcessor {
         if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
         await this.processPassiveAbility(r, id, row);
       }
+
+      if (kind == 'Заклинание') {
+        if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
+        await this.processSpell(r, id, row);
+      }
     }
-    this.printAndSavePassiveAbilities();
+    await this.printAndSavePassiveAbilities();
+    await this.printAndSaveSpells();
   }
 }
 
