@@ -235,3 +235,7 @@ function magicFeedbackAndSpellTrace(
 export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic -= m.amount;
 }
+
+export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  api.sendNotification('Спелл еще не реализован :(', 'Приходите завтра. Или послезавтра?');
+}
