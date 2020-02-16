@@ -1,6 +1,6 @@
 import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
-import { Spell, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity, recordSpellTrace } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
@@ -12,90 +12,6 @@ import Chance = require('chance');
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '?';
-
-const AllSpells: Spell[] = [
-  {
-    humanReadableName: 'Заглушка',
-    description: 'Спелл-заглушка, увеличивает резонанс. Может быть наложен на артефакт.',
-    eventType: increaseResonanceSpell.name,
-    canTargetSelf: true,
-    canTargetItem: true,
-    canTargetLocation: false,
-    canTargetSingleTarget: false,
-  },
-  {
-    humanReadableName: 'Плотность пополам!',
-    description: 'Уменьшает плотность маны в локации вдвое. Может быть наложен на артефакт.',
-    eventType: densityHalveSpell.name,
-    canTargetSelf: false,
-    canTargetItem: true,
-    canTargetLocation: true,
-    canTargetSingleTarget: false,
-  },
-  {
-    humanReadableName: 'Исцеление',
-    description: 'Восстанавливает все хиты.',
-    eventType: fullHealSpell.name,
-    canTargetSelf: true,
-    canTargetItem: true,
-    canTargetLocation: false,
-    canTargetSingleTarget: true,
-  },
-  {
-    humanReadableName: 'Light Heal',
-    description: 'Восстанавливает текущие хиты.',
-    eventType: lightHealSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: true,
-  },
-  {
-    humanReadableName: 'Ground Heal',
-    description: 'Дает временную одноразовую способность поднять одну цель из КС/тяжрана в полные хиты',
-    eventType: groundHealSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: false,
-  },
-  {
-    humanReadableName: 'Fireball',
-    description: 'Дает временную возможность кинуть несколько огненных шаров',
-    eventType: fireballSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: false,
-  },
-  {
-    humanReadableName: 'Field of denial',
-    description: 'Дает частичную защиту от тяжелого оружия',
-    eventType: fieldOfDenialSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: false,
-  },
-  {
-    humanReadableName: 'Live long and prosper',
-    description: 'Увеличивает текущие и максимальные хиты',
-    eventType: liveLongAndProsperSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: true,
-  },
-  {
-    humanReadableName: 'Trackpoint',
-    description: 'Получает информацию о скастванных в локации заклинаниях',
-    eventType: trackpointSpell.name,
-    canTargetSelf: true,
-    canTargetItem: false,
-    canTargetLocation: false,
-    canTargetSingleTarget: false,
-  },
-];
 
 function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft = 1) {
   api.sendOutboundEvent(QrCode, qrCode.toString(), create, {
@@ -283,21 +199,6 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { pow
   }
   api.setTableResponse(spellTraces);
   magicFeedbackAndSpellTrace(api, 'Trackpoint', data.power, data.locationId, event);
-}
-
-//
-// Events for learning and forgetting spells
-//
-export function learnSpell(api: EventModelApi<Sr2020Character>, data: { spellName: string }, _: Event) {
-  const spell = AllSpells.find((s) => s.eventType == data.spellName);
-  if (!spell) {
-    throw Error('learnSpell: Unknown spellName');
-  }
-  api.model.spells.push(spell);
-}
-
-export function forgetSpell(api: EventModelApi<Sr2020Character>, data: { spellName: string }, _: Event) {
-  api.model.spells = api.model.spells.filter((s) => s.eventType != data.spellName);
 }
 
 export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {

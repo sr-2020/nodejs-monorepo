@@ -3,15 +3,19 @@ import { EmptyModel, rproperty, JsonColumn } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
+// Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
-export class Spell {
+export class AddedSpell {
+  // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
+  // other features: active abilities, spells, etc.
+  @rproperty() id: string;
+
+  // Short-ish human-readable name to be shown in the UI.
   @rproperty() humanReadableName: string;
+
+  // Full description. Can be multiline.
   @rproperty() description: string;
   @rproperty() eventType: string;
-  @rproperty() canTargetSelf: boolean = false;
-  @rproperty() canTargetSingleTarget: boolean = false;
-  @rproperty() canTargetLocation: boolean = false;
-  @rproperty() canTargetItem: boolean = false;
 }
 
 @model()
@@ -27,7 +31,7 @@ export class ActiveAbility {
 @model()
 export class AddedPassiveAbility {
   // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
-  // other features: active abilities, etc.
+  // other features: active abilities, spells, etc.
   @rproperty() id: string;
 
   // Short-ish human-readable name to be shown in the UI.
@@ -196,9 +200,9 @@ export class Sr2020Character extends EmptyModel {
   @Column({ default: 0 })
   discountMagicStuff: number;
 
-  @property.array(Spell, { required: true })
+  @property.array(AddedSpell, { required: true })
   @JsonColumn()
-  spells: Spell[];
+  spells: AddedSpell[];
 
   @property.array(ActiveAbility, { required: true })
   @JsonColumn()

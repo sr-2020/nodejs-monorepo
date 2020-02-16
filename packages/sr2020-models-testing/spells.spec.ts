@@ -15,35 +15,35 @@ describe('Spells', function() {
     await fixture.destroy();
   });
 
-  it('Learn and forget increase resonance spell', async () => {
+  it('Learn and forget increase ground heal spell', async () => {
     await fixture.saveCharacter();
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
-      expect(workModel).containDeep({ spells: [{ eventType: 'increaseResonanceSpell' }] });
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
+      expect(workModel).containDeep({ spells: [{ eventType: 'groundHealSpell' }] });
     }
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'increaseResonanceSpell' } });
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { id: 'ground-heal' } });
       expect(workModel.spells).to.be.empty();
     }
   });
 
   it('Forget unlearned spell', async () => {
     await fixture.saveCharacter();
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetSpell', data: { spellName: 'increaseResonanceSpell' } });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { spellName: 'ground-heal' } });
     expect(workModel.spells).to.be.empty();
   });
 
   it('Forget all spells', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetAllSpells', data: {} });
     expect(workModel.spells).to.be.empty();
   });
 
   it('Cast dummy spell', async () => {
     await fixture.saveCharacter({ resonance: 12 });
-    await fixture.sendCharacterEvent({ eventType: 'learnSpell', data: { spellName: 'increaseResonanceSpell' } });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: {} });
     expect(workModel).containDeep({ resonance: 13 });
     expect(fixture.getCharacterNotifications().length).to.equal(1);

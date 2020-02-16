@@ -30,7 +30,7 @@ import {
   increaseDiscountChemo,
 } from './basic_effects';
 
-interface PassiveAbility {
+export interface PassiveAbility {
   id: string;
   name: string;
   description: string;
