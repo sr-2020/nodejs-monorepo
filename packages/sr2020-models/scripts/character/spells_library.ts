@@ -10,6 +10,8 @@ import {
   trackpointSpell,
   dummySpell,
   spiritsRelatedSpell,
+  dummyAreaSpell,
+  dummyManaControlSpell,
 } from './spells';
 
 export interface Spell {
@@ -144,7 +146,7 @@ const kAllSpellsList: Spell[] = [
     // 521
     // время каста 5 минут, разовое уменьшение всем персонажам, присутствующим в реале в текущей локации, максимальных хитов на N с задержкой в 30-5*N секунд. N=Мощь/2 (не меньше 1)
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -155,7 +157,7 @@ const kAllSpellsList: Spell[] = [
     // 522
     // время каста 10 минут, в течение T минут каждые 60 секунд у всех присутствующих в реале в текущей локации на данный момент максимальные хиты уменьшаются на 1 на срок 30 минут. Если максимальные хиты уменьшились таким образом до нуля, то персонаж оказывается в тяжране. T=Мощь*3
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -166,7 +168,7 @@ const kAllSpellsList: Spell[] = [
     // 523
     // время каста 10 минут, после активации заклинания в течение T минут каждые 60 секунд у всех присутствующих в астрале в этой локации на данный момент максимальные хиты астрального тела (ат) уменьшаются на 1 на срок 30 минут. Если максимальные хиты (ат) уменьшились таким образом до нуля, то персонажа выбрасывает из астрала. T=Мощь*5
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -177,7 +179,7 @@ const kAllSpellsList: Spell[] = [
     // 524
     // время каста 5 минут, после активации заклинания в течение T минут каждые 180 секунд все присутствующие в реале в текущей локации на данный момент восстанавливают текущие хиты до максимума. T=Мощь*20
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -188,7 +190,7 @@ const kAllSpellsList: Spell[] = [
     // 525
     // время каста 15 минут, после активации заклинания в течение T минут каждые 60 секунд у всех присутствующих в реале в текущей локации текущие хиты уменьшаются на √X. X - число имплантов у каждой конкретной жертвы. T=Мощь*3
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -199,7 +201,7 @@ const kAllSpellsList: Spell[] = [
     // 526
     // каст занимает 15 минут, после активации заклинания в течение T минут каждые 60 секунд все, присутствующие в реале в этой локации И имеющие характеристику Магия>0, получают Откат (дополнительно к имеющемуся), равный их Магии/2 (округленный вверх). Т=Мощь*3
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {
@@ -289,7 +291,7 @@ const kAllSpellsList: Spell[] = [
     // 537
     // время каста 10 минут. В течение Мощь*3 минут каждые 60с будет сделана попытка (с вероятностью 100-Мощь*20) вытянуть 1 уровень плотности маны из случайной соседней локации (там понизится, тут повысится).
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyManaControlSpell.name,
   },
 
   {
@@ -300,7 +302,7 @@ const kAllSpellsList: Spell[] = [
     // 538
     // время каста 10 минут. В течение Мощь*3 минут каждые 60с будет сделана попытка (с вероятностью 100-Мощь*20) выгнать 1 уровень плотности маны в случайную соседнюю локацию (там понизится, тут повысится).
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyManaControlSpell.name,
   },
 
   {
@@ -388,7 +390,7 @@ const kAllSpellsList: Spell[] = [
     // 547
     // каст занимает 5 минут. Маг получает в приложении текстом список неточных слепков (10%+N*5%-R*5%) ауры всех, кто присутствует в локации на момент активации заклинания. N=Мощь. R это уровень сопротивления сканированию ауры (маска ауры) каждой цели.
     // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: dummyAreaSpell.name,
   },
 
   {

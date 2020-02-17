@@ -243,3 +243,11 @@ export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _ev
 export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
 }
+
+export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  api.sendNotification('Спелл еще не реализован :(', 'Площадные заклинания не реализованы.');
+}
+
+export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  api.sendNotification('Спелл еще не реализован :(', 'Заклинания влияющие на уровень маны не реализованы.');
+}
