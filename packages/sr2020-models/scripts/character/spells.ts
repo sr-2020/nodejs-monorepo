@@ -239,3 +239,7 @@ export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
   api.sendNotification('Спелл еще не реализован :(', 'Приходите завтра. Или послезавтра?');
 }
+
+export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
+}
