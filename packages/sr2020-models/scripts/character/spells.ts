@@ -5,7 +5,7 @@ import { reduceManaDensity, recordSpellTrace } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
-import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
+import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
 import { AllActiveAbilities } from './abilities';
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
@@ -94,13 +94,18 @@ export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { pow
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const durationInSeconds = 10 * data.power * 60;
-  const m = modifierFromEffect(groundHealEffect, { name: GROUND_HEAL_MODIFIER_NAME });
+  const m = modifierFromEffect(groundHealEffect, {
+    name: GROUND_HEAL_MODIFIER_NAME,
+    validUntil: validUntil(api, durationInSeconds),
+  });
   addTemporaryModifier(api, m, durationInSeconds);
   magicFeedbackAndSpellTrace(api, 'Ground heal', data.power, data.locationId, event);
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.activeAbilities.push(AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!);
+  const ability = AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!;
+  ability.validUntil = m.validUntil;
+  api.model.activeAbilities.push(ability);
 }
 
 export function liveLongAndProsperSpell(
@@ -142,7 +147,7 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: { power
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
   const durationInSeconds = (data.power * 60) / 2;
   const amount = Math.floor(data.power / 2);
-  const m = modifierFromEffect(fireballEffect, { amount, durationInSeconds });
+  const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, durationInSeconds) });
   addTemporaryModifier(api, m, durationInSeconds);
   magicFeedbackAndSpellTrace(api, 'Fireball', data.power, data.locationId, event);
 }
@@ -151,7 +156,8 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
   api.model.passiveAbilities.push({
     id: 'fireball-able',
     name: 'Fireball',
-    description: `Можете кинуть ${m.amount} огненных шаров в течение ${m.durationInSeconds / 60} минут.`,
+    description: `Можете кинуть ${m.amount} огненных шаров.`,
+    validUntil: m.validUntil,
   });
 }
 
@@ -163,7 +169,7 @@ export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { 
   if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
   const durationInSeconds = 40 * 60;
-  const m = modifierFromEffect(fieldOfDenialEffect);
+  const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, durationInSeconds) });
   addTemporaryModifier(api, m, durationInSeconds);
   magicFeedbackAndSpellTrace(api, 'Field of denial', data.power, data.locationId, event);
 }
@@ -173,6 +179,7 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
     id: 'field-of-denial-able',
     name: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
+    validUntil: m.validUntil,
   });
 }
 

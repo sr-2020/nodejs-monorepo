@@ -52,3 +52,8 @@ export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Mod
 export function removeModifier(api: EventModelApi<Sr2020Character>, data: { mID: string }, _: Event) {
   api.removeModifier(data.mID);
 }
+
+// Returns a unix timestamp (in seconds!)
+export function validUntil(api: EventModelApi<Sr2020Character>, durationInSeconds: number) {
+  return api.model.timestamp / 1000 + durationInSeconds;
+}

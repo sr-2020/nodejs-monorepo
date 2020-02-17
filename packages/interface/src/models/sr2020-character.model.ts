@@ -25,6 +25,10 @@ export class ActiveAbility {
   @rproperty() eventType: string;
   @rproperty() canTargetSelf: boolean = false;
   @rproperty() canTargetSingleTarget: boolean = false;
+
+  // Unix timestamp in seconds. Set only if ability is temporary
+  // (e.g. was added by effect of some other ability or spell)
+  @property() validUntil?: number;
 }
 
 // Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).
@@ -39,6 +43,10 @@ export class AddedPassiveAbility {
 
   // Full description. Can be multiline.
   @rproperty() description: string;
+
+  // Unix timestamp in seconds. Set only if ability is temporary
+  // (e.g. was added by effect of some other ability or spell)
+  @property() validUntil?: number;
 
   // List of modifiers added by this passive ability. Used to remove them when feature is being removed.
   // Can be omitted if this passive abiliy doesn't have any modifiers (i.e. it's only effect is to
