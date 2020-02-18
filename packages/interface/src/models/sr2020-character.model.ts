@@ -26,7 +26,7 @@ export class ActiveAbility {
   @rproperty() canTargetSelf: boolean = false;
   @rproperty() canTargetSingleTarget: boolean = false;
 
-  // Unix timestamp in seconds. Set only if ability is temporary
+  // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
   @property() validUntil?: number;
 }
@@ -44,7 +44,7 @@ export class AddedPassiveAbility {
   // Full description. Can be multiline.
   @rproperty() description: string;
 
-  // Unix timestamp in seconds. Set only if ability is temporary
+  // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
   @property() validUntil?: number;
 
