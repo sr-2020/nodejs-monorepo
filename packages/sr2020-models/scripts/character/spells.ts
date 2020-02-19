@@ -93,7 +93,6 @@ export function lightHealSpell(
   data: { targetCharacterId?: number; power: number; locationId: string },
   event: Event,
 ) {
-  if (data.locationId == undefined) data.locationId = '0';
   if (data.targetCharacterId != undefined) {
     addHistoryRecord(api, 'Заклинание', 'Light Heal: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
@@ -112,7 +111,6 @@ export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: nu
 export const GROUND_HEAL_MODIFIER_NAME = 'ground-heal-modifier';
 
 export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
-  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const durationInSeconds = 10 * data.power * 60;
   const m = modifierFromEffect(groundHealEffect, {
@@ -133,7 +131,6 @@ export function liveLongAndProsperSpell(
   data: { targetCharacterId?: number; power: number; locationId: string },
   event: Event,
 ) {
-  if (data.locationId == undefined) data.locationId = '0';
   if (data.targetCharacterId != undefined) {
     addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
@@ -162,7 +159,6 @@ export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 //
 
 export function fireballSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
-  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
   const durationInSeconds = (data.power * 60) / 2;
   const amount = Math.floor(data.power / 2);
@@ -184,7 +180,6 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 //
 
 export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
-  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
   const durationInSeconds = 40 * 60;
   const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, durationInSeconds) });
@@ -205,7 +200,6 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 //
 
 export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
-  if (data.locationId == undefined) data.locationId = '0';
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
   const durationInSeconds = (10 + data.power) * 60;
   const symbolsRead = Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.auraReadingMultiplier) / 100);
