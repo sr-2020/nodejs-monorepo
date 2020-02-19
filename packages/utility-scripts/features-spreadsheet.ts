@@ -1,7 +1,7 @@
 // Prerequisite: GOOGLE_APPLICATION_CREDENTIALS environment variable should point to the key file for the service account with an access
 // to the spreadsheet and Firestore.
 // Running:
-//   npx ts-node features-spreadsheet.ts > out.txt
+//   npx ts-node packages/utility-scripts/features-spreadsheet.ts
 import { Firestore } from '@google-cloud/firestore';
 import { google } from 'googleapis';
 const sheets = google.sheets('v4');
