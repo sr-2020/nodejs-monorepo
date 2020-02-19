@@ -253,6 +253,7 @@ export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: n
 }
 
 export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   api.sendNotification('Спелл еще не реализован :(', 'Площадные заклинания не реализованы.');
 }
 
