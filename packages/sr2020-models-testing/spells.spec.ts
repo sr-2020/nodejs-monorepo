@@ -113,8 +113,12 @@ describe('Spells', function() {
 
   it('Light Heal self', async () => {
     await fixture.saveCharacter({ magic: 10 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dummy-light-heal' } });
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 5 } });
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'dummy-light-heal', locationId: '0', power: 5 },
+      });
       expect(fixture.getCharacterNotifications().length).to.equal(1);
       expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
       expect(workModel.history.length).to.equal(2); // Spell casted + Hp restored
@@ -131,7 +135,11 @@ describe('Spells', function() {
   it('Light Heal other', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 7 });
     await fixture.saveCharacter({ modelId: '2' });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { targetCharacterId: 2, power: 3 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dummy-light-heal' } }, 1);
+    const { workModel } = await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'dummy-light-heal', locationId: '0', targetCharacterId: 2, power: 3 } },
+      1,
+    );
     expect(fixture.getCharacterNotifications(1).length).to.equal(1);
     expect(workModel.history.length).to.equal(1); // Spell casted
     expect(workModel.magic).to.equal(5);
@@ -144,11 +152,15 @@ describe('Spells', function() {
   it('Ground Heal used', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
 
     fixture.advanceTime(300);
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 2 } }, 1);
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 2 } },
+        1,
+      );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
       expect(workModel.activeAbilities.length).to.equal(1);
@@ -181,44 +193,21 @@ describe('Spells', function() {
 
   it('Ground Heal expired', async () => {
     await fixture.saveCharacter({ magic: 10 });
-    await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 2 } });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 2 } });
     // Power 2 is 20 minutes = 1200 seconds.
     fixture.advanceTime(1200);
     const { workModel } = await fixture.getCharacter();
     expect(workModel.activeAbilities.length).to.equal(0);
   });
 
-  it('Live long and prosper self', async () => {
-    await fixture.saveCharacter({ magic: 10, maxHp: 3 });
-    {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'liveLongAndProsperSpell', data: { power: 10 } });
-      expect(fixture.getCharacterNotifications().length).to.equal(1);
-      expect(fixture.getCharacterNotifications()[0].body).containEql('увеличены на 3');
-      expect(workModel.history.length).to.equal(2); // Spell casted + Hp restored
-      expect(workModel.magic).to.equal(5);
-      expect(workModel.maxHp).to.equal(6);
-    }
-
-    {
-      fixture.advanceTime(180);
-      const { workModel } = await fixture.getCharacter();
-      expect(workModel.magic).to.equal(5);
-      expect(workModel.maxHp).to.equal(3);
-    }
-
-    {
-      fixture.advanceTime(120);
-      const { workModel } = await fixture.getCharacter();
-      expect(workModel.magic).to.equal(10);
-    }
-  });
-
-  it('Live long and prosper other', async () => {
+  it('Live long and prosper', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.saveCharacter({ modelId: '2', maxHp: 5 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'live-long-and-prosper' } }, 1);
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'liveLongAndProsperSpell', data: { targetCharacterId: 2, power: 4 } },
+        { eventType: 'castSpell', data: { id: 'live-long-and-prosper', locationId: '0', targetCharacterId: 2, power: 4 } },
         1,
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
@@ -237,16 +226,23 @@ describe('Spells', function() {
 
   it('Trackpoint', async () => {
     await fixture.saveCharacter({ modelId: '1' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dummy-light-heal' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
+
     await fixture.saveCharacter({ modelId: '2' });
-    await fixture.sendCharacterEvent({ eventType: 'lightHealSpell', data: { power: 2 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 2);
+
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'dummy-light-heal', locationId: '0', power: 2 } }, 1);
     await fixture.advanceTime(2 * 60);
-    await fixture.sendCharacterEvent({ eventType: 'fireballSpell', data: { power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
     await fixture.advanceTime(15 * 60);
-    await fixture.sendCharacterEvent({ eventType: 'groundHealSpell', data: { power: 6 } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 6 } }, 2);
 
     await fixture.saveCharacter({ modelId: '3', magic: 5 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 3);
+
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'trackpointSpell', data: { power: 5, locationId: '0' } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', locationId: '0', power: 5 } },
       3,
     );
     expect(workModel.magic).to.equal(2);
@@ -259,7 +255,7 @@ describe('Spells', function() {
         magicFeedback: 2,
       },
       {
-        spellName: 'Ground heal',
+        spellName: 'Ground Heal',
         timestamp: 1020000,
         power: 6,
         magicFeedback: 3,
@@ -277,14 +273,18 @@ describe('Spells', function() {
 
   it('Trackpoint against Light Step', async () => {
     await fixture.saveCharacter({ modelId: '1' });
-    await fixture.saveCharacter({ modelId: '2', magic: 10, auraReadingMultiplier: 2.0 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'light-step' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
+
+    await fixture.saveCharacter({ modelId: '2', magic: 10, auraReadingMultiplier: 2.0 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 2);
+
     await fixture.advanceTime(2 * 60);
-    await fixture.sendCharacterEvent({ eventType: 'fireballSpell', data: { power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
 
     // power 8 + auraReadingMultiplier 2.0 gives us 100% read
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'trackpointSpell', data: { power: 8, locationId: '0' } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', locationId: '0', power: 8 } },
       2,
     );
     expect(workModel.magic).to.equal(6);
