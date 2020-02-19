@@ -6,6 +6,12 @@ import { Firestore } from '@google-cloud/firestore';
 import { google } from 'googleapis';
 const sheets = google.sheets('v4');
 
+const kKindColumn = 0;
+const kIdColumn = 5;
+const kNameColumn = 6;
+const kPlayerDescriptionColumn = 12;
+const kMasterDescriptionColumn = 13;
+
 interface PassiveAbility {
   id: string;
   name: string;
@@ -33,9 +39,9 @@ class SpreadsheetProcessor {
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
       id,
-      name: row[6],
-      description: row[13],
-      gmDescription: row[14],
+      name: row[kNameColumn],
+      description: row[kPlayerDescriptionColumn] ?? '',
+      gmDescription: row[kMasterDescriptionColumn] ?? '',
       originalLine: line + 1,
     };
     const existingDoc = await this.passiveAbilitiesRef.doc(id).get();
@@ -51,9 +57,9 @@ class SpreadsheetProcessor {
   async processSpell(line: number, id: string, row: any[]) {
     const spell: Spell = {
       id,
-      humanReadableName: row[6],
-      description: row[13],
-      gmDescription: row[14],
+      humanReadableName: row[kNameColumn],
+      description: row[kPlayerDescriptionColumn] ?? '',
+      gmDescription: row[kMasterDescriptionColumn] ?? '',
       originalLine: line + 1,
     };
     const existingDoc = await this.spellsRef.doc(id).get();
@@ -113,10 +119,31 @@ class SpreadsheetProcessor {
       throw new Error('Failed to get spreadsheet range');
     }
 
+    const header = data[0];
+    if (!header[kKindColumn].startsWith('Сущность')) {
+      throw new Error('Kind column was moved! Exiting.');
+    }
+
+    if (header[kIdColumn] != 'ID (техническое ID)') {
+      throw new Error('Id column was moved! Exiting.');
+    }
+
+    if (header[kNameColumn] != 'Название') {
+      throw new Error('Name column was moved! Exiting.');
+    }
+
+    if (!header[kPlayerDescriptionColumn].startsWith('Описание игроцкое')) {
+      throw new Error('Player description column was moved! Exiting.');
+    }
+
+    if (!header[kMasterDescriptionColumn].startsWith('Описание МАСТЕРСКОЕ')) {
+      throw new Error('Master description column was moved! Exiting.');
+    }
+
     for (let r = 1; r < 600; ++r) {
       const row = data[r];
-      const id = row[5];
-      const kind = row[0];
+      const id = row[kIdColumn];
+      const kind = row[kKindColumn];
 
       if (kind == 'Пассивная абилка') {
         if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
