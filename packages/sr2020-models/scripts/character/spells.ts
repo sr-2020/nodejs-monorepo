@@ -258,5 +258,6 @@ export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never,
 }
 
 export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   api.sendNotification('Спелл еще не реализован :(', 'Заклинания влияющие на уровень маны не реализованы.');
 }
