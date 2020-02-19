@@ -248,6 +248,7 @@ export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _ev
 }
 
 export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
 }
 
