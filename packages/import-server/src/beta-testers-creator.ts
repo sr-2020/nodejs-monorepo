@@ -1,7 +1,6 @@
 import * as request from 'request-promise-native';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { Transaction } from '@sr2020/interface/models/transaction.model';
 
 interface User {
   email: string;
@@ -10,8 +9,12 @@ interface User {
 
 const users: User[] = [{ email: '', name: '' }];
 
+for (let i = 0; i < 100; ++i) {
+  users.push({ email: `t${i}@foo.bar`, name: `Tester #${i}` });
+}
+
 const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
-const kQrsToRecreate = 0;
+const kQrsToRecreate = 1000;
 
 interface LoginResponse {
   id: number;
@@ -24,9 +27,7 @@ async function loginOrRegister(email: string, name: string, password: string): P
       await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
     ).body;
   } catch (e) {
-    return (
-      await request.post(gatewayAddress + 'auth/register', { json: { email, password, name }, resolveWithFullResponse: true }).promise()
-    ).body;
+    return (await request.post(gatewayAddress + 'auth/login', { json: { email, password }, resolveWithFullResponse: true }).promise()).body;
   }
 }
 
@@ -88,15 +89,7 @@ async function provideCharacter(login: LoginResponse) {
 }
 
 async function provideBilling(login: LoginResponse) {
-  const transaction = new Transaction({
-    created_at: new Date().toISOString(),
-    sin_from: 0,
-    sin_to: login.id,
-    amount: 1000,
-    comment: 'Тестирование',
-  });
-
-  await request.post('http://billing.evarun.ru/transactions', { json: transaction, resolveWithFullResponse: true }).promise();
+  // TODO: Call new billing service
 }
 
 async function providePlayer(user: User) {
