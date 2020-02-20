@@ -13,6 +13,7 @@ import {
   dummyAreaSpell,
   dummyManaControlSpell,
   keepYourselfSpell,
+  fastChargeSpell,
 } from './spells';
 
 export interface Spell {
@@ -91,8 +92,7 @@ const kAllSpellsList: Spell[] = [
     description: 'Зарядиться на время молниями. Чем больше Мощь, тем больше снарядов и срок',
     // 516
     // время каста 2 минуты, у мага на время T появляется пассивная способность “кинуть N молний”. Снаряд выглядит как мягкий шар с длинным (не менее 2м) хвостом, и его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). N=Мощь-2 (но не меньше 1), T=Мощь*10 минут
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: fastChargeSpell.name,
   },
 
   {

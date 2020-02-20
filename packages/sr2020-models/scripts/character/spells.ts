@@ -184,6 +184,27 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
   });
 }
 
+// время каста 2 минуты, у мага на время T появляется пассивная способность “кинуть N молний”.
+// Снаряд выглядит как мягкий шар с длинным (не менее 2м) хвостом, и его попадание обрабатывается согласно правилам по боевке
+// (тяжелое магическое оружие). N=Мощь-2 (но не меньше 1), T=Мощь*10 минут
+export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationInMinutes = 10 * data.power;
+  const durationInSeconds = 60 * durationInMinutes;
+  const amount = Math.max(1, data.power - 2);
+  sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${durationInMinutes} минут`);
+  const m = modifierFromEffect(fastChargeEffect, { amount, validUntil: validUntil(api, durationInSeconds) });
+  addTemporaryModifier(api, m, durationInSeconds);
+}
+
+export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    id: 'fast-charge-able',
+    name: 'Fast Charge',
+    description: `Можете кинуть ${m.amount} молний.`,
+    validUntil: m.validUntil,
+  });
+}
+
 //
 // Defensive spells
 //
