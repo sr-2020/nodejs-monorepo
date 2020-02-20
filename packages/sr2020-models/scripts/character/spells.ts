@@ -154,6 +154,15 @@ export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Mod
   api.model.maxHp = Math.min(api.model.maxHp, MAX_POSSIBLE_HP);
 }
 
+export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const hpIncrease = data.power;
+  const durationInMinutes = 10 * data.power;
+  const durationInSeconds = 60 * durationInMinutes;
+  sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${durationInMinutes} минут.`);
+  const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
+  addTemporaryModifier(api, m, durationInSeconds);
+}
+
 //
 // Offensive spells
 //

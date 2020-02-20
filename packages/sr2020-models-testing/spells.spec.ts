@@ -224,6 +224,26 @@ describe('Spells', function() {
     }
   });
 
+  it('Keep yourself', async () => {
+    await fixture.saveCharacter({ magic: 10, maxHp: 2 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'keep-yourself' } });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'keep-yourself', locationId: '0', power: 3 },
+      });
+      expect(fixture.getCharacterNotifications().length).to.equal(1);
+      expect(fixture.getCharacterNotifications()[0].body).containEql('на 3 на 30 минут');
+      expect(workModel.maxHp).to.equal(5);
+    }
+
+    {
+      fixture.advanceTime(30 * 60);
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.maxHp).to.equal(2);
+    }
+  });
+
   it('Trackpoint', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dummy-light-heal' } }, 1);

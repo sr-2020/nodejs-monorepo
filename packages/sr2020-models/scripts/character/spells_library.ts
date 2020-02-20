@@ -12,6 +12,7 @@ import {
   spiritsRelatedSpell,
   dummyAreaSpell,
   dummyManaControlSpell,
+  keepYourselfSpell,
 } from './spells';
 
 export interface Spell {
@@ -61,8 +62,7 @@ const kAllSpellsList: Spell[] = [
     description: 'Увеличение своих хитов. Чем больше Мощь, тем больше хитов и дольше срок',
     // 513
     // время каста 3 минуты, маг может увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше шести
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: keepYourselfSpell.name,
   },
 
   {
