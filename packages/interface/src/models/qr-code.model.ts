@@ -13,15 +13,15 @@ export class QrCode extends EmptyModel {
   usesLeft: number = 0;
 
   @rproperty()
-  @Column()
+  @Column({ default: 'empty' })
   type: string = 'empty';
 
   @rproperty()
-  @Column()
+  @Column({ default: '' })
   name: string = '';
 
   @rproperty()
-  @Column()
+  @Column({ default: '' })
   description: string = '';
 
   @property()
