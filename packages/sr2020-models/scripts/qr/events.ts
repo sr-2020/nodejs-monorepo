@@ -19,5 +19,5 @@ export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Eve
     throw new UserVisibleError('QR-код уже записан!');
   }
 
-  api.model = { ...api.model, ...data };
+  api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: undefined };
 }
