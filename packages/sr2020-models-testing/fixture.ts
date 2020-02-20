@@ -250,6 +250,7 @@ function getDefaultQrCode(timestamp: number): QrCode {
   return {
     type: 'empty',
     eventType: '_',
+    name: '',
     description: '',
     usesLeft: 0,
     data: {},

@@ -104,6 +104,7 @@ async function provideEmptyQr(modelId: string) {
     modelId,
     usesLeft: 0,
     type: 'empty',
+    name: '',
     description: '',
     eventType: '',
     data: {},

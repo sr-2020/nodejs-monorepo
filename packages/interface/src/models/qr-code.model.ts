@@ -18,6 +18,10 @@ export class QrCode extends EmptyModel {
 
   @rproperty()
   @Column()
+  name: string = '';
+
+  @rproperty()
+  @Column()
   description: string = '';
 
   @property()
