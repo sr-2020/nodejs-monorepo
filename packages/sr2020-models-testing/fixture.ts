@@ -190,6 +190,8 @@ export class TestFixture {
 function getDefaultCharacter(timestamp: number): Sr2020Character {
   return {
     healthState: 'healthy',
+    gender: 'мужчина',
+    metarace: 'meta-norm',
     maxHp: 3,
     body: 0,
     intelligence: 0,
@@ -210,6 +212,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     spiritResistanceMultiplier: 1,
     auraReadingMultiplier: 1,
     auraMarkMultiplier: 1,
+    auraMask: 0,
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
     ethicGroupMaxSize: 0,

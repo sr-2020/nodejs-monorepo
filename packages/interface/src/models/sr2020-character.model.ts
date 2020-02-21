@@ -83,8 +83,16 @@ export class Sr2020Character extends EmptyModel {
   maxHp: number;
 
   @property({ required: true, type: 'string' })
-  @Column({ type: 'text' })
+  @Column({ type: 'text', default: 'healthy' })
   healthState: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
+
+  @property({ required: true, type: 'string' })
+  @Column({ type: 'text', default: 'мужчина' })
+  gender: 'мужчина' | 'женщина';
+
+  @property({ required: true, type: 'string' })
+  @Column({ type: 'text', default: 'meta-norm' })
+  metarace: 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
 
   @rproperty()
   @Column()
@@ -169,6 +177,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column({ default: 1.0 })
   auraMarkMultiplier: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  auraMask: number;
 
   @rproperty()
   @Column({ default: 0 })

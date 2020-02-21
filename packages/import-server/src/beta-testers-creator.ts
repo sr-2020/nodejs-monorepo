@@ -34,6 +34,8 @@ async function loginOrRegister(email: string, name: string, password: string): P
 async function provideCharacter(login: LoginResponse) {
   const characterData: Sr2020Character = {
     modelId: login.id.toString(),
+    gender: 'мужчина',
+    metarace: 'meta-norm',
     maxHp: 3,
     timestamp: 0,
     body: 0,
@@ -55,6 +57,7 @@ async function provideCharacter(login: LoginResponse) {
     spiritResistanceMultiplier: 1,
     auraReadingMultiplier: 1,
     auraMarkMultiplier: 1,
+    auraMask: 0,
     magicPowerBonus: 0,
     magicAura: 'aaaabbbbccccddddeeee',
     healthState: 'healthy',
