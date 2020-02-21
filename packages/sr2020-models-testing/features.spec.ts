@@ -12,7 +12,7 @@ describe('Features-related events', function() {
     await fixture.destroy();
   });
 
-  it('Add and remove magic-3 feature', async () => {
+  it('Add and remove passive ability', async () => {
     await fixture.saveCharacter({ magic: 2 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'magic-3' } });
     let c = await fixture.getCharacter();
@@ -23,6 +23,17 @@ describe('Features-related events', function() {
     c = await fixture.getCharacter();
     expect(c.workModel).containDeep({ magic: 2 });
     expect(c.workModel.passiveAbilities).length(0);
+  });
+
+  it('Add and remove spell', async () => {
+    await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
+    let c = await fixture.getCharacter();
+    expect(c.workModel.spells).length(1);
+
+    await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { id: 'ground-heal' } });
+    c = await fixture.getCharacter();
+    expect(c.workModel.spells).length(0);
   });
 
   it('Removing non-present feature does nothing', async () => {
