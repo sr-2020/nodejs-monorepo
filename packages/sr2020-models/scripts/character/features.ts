@@ -1,12 +1,19 @@
-import { Sr2020Character, AddedPassiveAbility, AddedSpell } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, AddedPassiveAbility, AddedSpell, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';
+import { kAllActiveAbilities, ActiveAbility } from './active_abilities_library';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   const passiveAbility = kAllPassiveAbilities.get(data.id);
   if (passiveAbility) {
     addPassiveAbility(api, passiveAbility);
+    return;
+  }
+
+  const activeAbility = kAllActiveAbilities.get(data.id);
+  if (activeAbility) {
+    addActiveAbility(api, activeAbility);
     return;
   }
 
@@ -16,7 +23,7 @@ export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: stri
     return;
   }
 
-  // TODO: Support other kinds of features (e.g. active abilities).
+  // TODO: Support other kinds of features (e.g. archetypes).
   throw Error('No such feature in the features library');
 }
 
@@ -29,6 +36,12 @@ function addPassiveAbility(api: EventModelApi<Sr2020Character>, ability: Passive
   for (const m of modifiersToAdd) modifierIds.push(api.addModifier(m).mID);
   const addedAbility: AddedPassiveAbility = { id: ability.id, name: ability.name, description: ability.description, modifierIds };
   api.model.passiveAbilities.push(addedAbility);
+}
+
+function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAbility) {
+  // Ability is already present in the character - won't add again.
+  if (api.model.activeAbilities.find((f) => f.id == ability.id)) return;
+  api.model.activeAbilities.push(ability);
 }
 
 function addSpell(api: EventModelApi<Sr2020Character>, spell: Spell) {
@@ -44,6 +57,12 @@ export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: s
     return;
   }
 
+  const activeAbility = api.model.activeAbilities.find((f) => f.id == data.id);
+  if (activeAbility) {
+    removeActiveAbility(api, activeAbility);
+    return;
+  }
+
   const spell = api.model.spells.find((f) => f.id == data.id);
   if (spell) {
     removeSpell(api, spell);
@@ -56,6 +75,10 @@ function removePassiveAbility(api: EventModelApi<Sr2020Character>, ability: Adde
     for (const modifierId of ability.modifierIds) api.removeModifier(modifierId);
   }
   api.model.passiveAbilities = api.model.passiveAbilities.filter((f) => f.id != ability.id);
+}
+
+function removeActiveAbility(api: EventModelApi<Sr2020Character>, ability: AddedActiveAbility) {
+  api.model.activeAbilities = api.model.activeAbilities.filter((f) => f.id != ability.id);
 }
 
 function removeSpell(api: EventModelApi<Sr2020Character>, spell: AddedSpell) {

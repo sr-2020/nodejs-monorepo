@@ -25,6 +25,17 @@ describe('Features-related events', function() {
     expect(c.workModel.passiveAbilities).length(0);
   });
 
+  it('Add and remove active ability', async () => {
+    await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal-ability' } });
+    let c = await fixture.getCharacter();
+    expect(c.workModel.activeAbilities).length(1);
+
+    await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { id: 'ground-heal-ability' } });
+    c = await fixture.getCharacter();
+    expect(c.workModel.activeAbilities).length(0);
+  });
+
   it('Add and remove spell', async () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
