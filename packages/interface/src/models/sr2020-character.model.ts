@@ -18,17 +18,27 @@ export class AddedSpell {
   @rproperty() eventType: string;
 }
 
+// Active ability contained in the model object (as opposed to ActiveAbility which is configuration/dictionary kind).
 @model()
-export class ActiveAbility {
+export class AddedActiveAbility {
+  // Unique string identifier. Should be unique not only among all AddedActiveAbility, but also among
+  // other features: passive abilities, spells, etc.
+  @rproperty() id: string;
+
+  // Short-ish human-readable name to be shown in the UI.
   @rproperty() humanReadableName: string;
+
+  // Full description. Can be multiline.
   @rproperty() description: string;
-  @rproperty() eventType: string;
-  @rproperty() canTargetSelf: boolean = false;
-  @rproperty() canTargetSingleTarget: boolean = false;
+
+  // True if ability needs a target - other character or object
+  @rproperty() hasTarget: boolean = false;
 
   // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
   @property() validUntil?: number;
+
+  @rproperty() eventType: string;
 }
 
 // Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).
@@ -212,9 +222,9 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   spells: AddedSpell[];
 
-  @property.array(ActiveAbility, { required: true })
+  @property.array(AddedActiveAbility, { required: true })
   @JsonColumn()
-  activeAbilities: ActiveAbility[];
+  activeAbilities: AddedActiveAbility[];
 
   @property.array(AddedPassiveAbility, { required: true })
   @JsonColumn()

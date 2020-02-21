@@ -6,9 +6,9 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
-import { AllActiveAbilities } from './abilities';
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
+import { kAllActiveAbilities } from './active_abilities_library';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '?';
@@ -108,22 +108,22 @@ export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: nu
   sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
 }
 
-export const GROUND_HEAL_MODIFIER_NAME = 'ground-heal-modifier';
-
 export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const durationInSeconds = 10 * data.power * 60;
   const m = modifierFromEffect(groundHealEffect, {
-    name: GROUND_HEAL_MODIFIER_NAME,
+    name: 'ground-heal-modifier',
     validUntil: validUntil(api, durationInSeconds),
   });
   addTemporaryModifier(api, m, durationInSeconds);
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  const ability = AllActiveAbilities.find((a) => (a.humanReadableName = 'Ground Heal'))!;
-  ability.validUntil = m.validUntil;
-  api.model.activeAbilities.push(ability);
+  const ability = kAllActiveAbilities.get('ground-heal-ability')!;
+  api.model.activeAbilities.push({
+    ...ability,
+    validUntil: m.validUntil,
+  });
 }
 
 export function liveLongAndProsperSpell(
