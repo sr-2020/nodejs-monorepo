@@ -181,6 +181,18 @@
           </b-card>
           <b-card no-body>
             <b-card-header>
+              <b-button block href="#" v-b-toggle.active_abilities variant="info">
+                Всего активных способностей: {{ characterModel.activeAbilities.length }}
+              </b-button>
+            </b-card-header>
+            <b-collapse id="active_abilities">
+              <b-card-body>
+                <b-table :items="characterModel.activeAbilities"></b-table>
+              </b-card-body>
+            </b-collapse>
+          </b-card>
+          <b-card no-body>
+            <b-card-header>
               <b-button block href="#" v-b-toggle.spells variant="info">
                 Всего спеллов: {{ characterModel.spells.length }}
               </b-button>
