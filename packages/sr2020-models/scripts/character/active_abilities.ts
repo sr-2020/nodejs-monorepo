@@ -9,7 +9,7 @@ interface ActiveAbilityData {
 export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
   const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);
   if (!ability) {
-    throw new UserVisibleError('Нельзя использовать способностей, которой у вас нет!');
+    throw new UserVisibleError('Нельзя использовать способность, которой у вас нет!');
   }
 
   // TODO(aeremin) Handle cooldown
