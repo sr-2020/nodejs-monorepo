@@ -1,6 +1,7 @@
 import { get } from '@loopback/rest';
 import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_library';
 import { kAllSpells } from '../scripts/character/spells_library';
+import { kAllActiveAbilities } from '../scripts/character/active_abilities_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -27,7 +28,12 @@ export class DictionariesController {
   })
   features(): { id: string; name: string; description: string }[] {
     const pasiveAbilities = [...kAllPassiveAbilities.values()].map((f) => ({ id: f.id, name: f.name, description: f.description }));
+    const activeAbilities = [...kAllActiveAbilities.values()].map((f) => ({
+      id: f.id,
+      name: f.humanReadableName,
+      description: f.description,
+    }));
     const spells = [...kAllSpells.values()].map((f) => ({ id: f.id, name: f.humanReadableName, description: f.description }));
-    return [...spells, ...pasiveAbilities];
+    return [...spells, ...pasiveAbilities, ...activeAbilities];
   }
 }
