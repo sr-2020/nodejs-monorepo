@@ -18,7 +18,7 @@ interface SpellData {
   power: number; // Magic power
   locationId: string; // Current location
   reagentIds: string[]; // Identifiers of reagents/blood QRs
-  ritualMembersIds: string[]; // Identifiers of other ritual participants
+  ritualMembersIds?: string[]; // Identifiers of other ritual participants
   focusId?: string; // Identifier of focus QR
   targetCharacterId?: string; // Identifier of target character
 }
@@ -29,9 +29,32 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     throw new UserVisibleError('Нельзя скастовать спелл, которого у вас нет!');
   }
 
+  let ritualPowerBonus = 0;
+  let ritualFeedbackReduction = 0;
+
+  if (data.ritualMembersIds?.length) {
+    if (!api.workModel.passiveAbilities.some((a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic')) {
+      throw new UserVisibleError('Нет навыков разрешающих проводить ритуалы!');
+    }
+
+    const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
+    let totalParticipans = 0;
+    for (const participantId of ritualParticipantIds) {
+      const participant = api.aquired('Character', participantId) as Sr2020Character;
+      totalParticipans += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
+    }
+
+    const ritualBonus = Math.floor(Math.sqrt(totalParticipans));
+    ritualPowerBonus = ritualBonus;
+    if (api.workModel.passiveAbilities.some((a) => 'orthodox-ritual-magic')) {
+      ritualFeedbackReduction = ritualBonus;
+    }
+  }
+
+  data.power += ritualPowerBonus;
   api.sendSelfEvent(spell.eventType, data);
 
-  const feedback = applyAndGetMagicFeedback(api, data.power);
+  const feedback = applyAndGetMagicFeedback(api, data.power, ritualFeedbackReduction);
   saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
 }
 
@@ -252,7 +275,11 @@ export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _
   api.model.spells = [];
 }
 
-function applyAndGetMagicFeedback(api: EventModelApi<Sr2020Character>, power: number) {
+function applyAndGetMagicFeedback(api: EventModelApi<Sr2020Character>, power: number, reduction: number) {
+  // TODO(https://trello.com/c/9nnYn7DH/115-предоставить-исправленную-формулу-вычисления-восстановления-отката):
+  // * Use proper formulas
+  // * Use reduction
+  // * Use api.model.magicFeedbackReduction
   const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
   const feedbackAmount = Math.floor((power + 1) / 2);
 

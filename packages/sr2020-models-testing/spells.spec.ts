@@ -326,4 +326,37 @@ describe('Spells', function() {
       expect((aura.match(/[a-z]/g) ?? []).length).to.equal(12);
     }
   });
+
+  it('Ritual with 2 participants increase power by 1', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ritual-magic' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
+
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.saveCharacter({ modelId: '3' });
+
+    const { workModel } = await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4, ritualMembersIds: ['2', '3'] } },
+      1,
+    );
+    expect(workModel.activeAbilities.length).to.equal(1);
+    expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 5 * 1000); // power was 4, but 2 ritual participants add +1
+  });
+
+  it('Ritual with agnus dei', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ritual-magic' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
+
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'agnus-dei' } }, 2);
+    await fixture.saveCharacter({ modelId: '3' });
+
+    const { workModel } = await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4, ritualMembersIds: ['2', '3'] } },
+      1,
+    );
+    expect(workModel.activeAbilities.length).to.equal(1);
+    expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 6 * 1000); // power was 4, but ritual participants add +2
+  });
 });
