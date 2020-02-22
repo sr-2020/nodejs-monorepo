@@ -5,7 +5,14 @@ import { reduceManaDensity, recordSpellTrace, shiftSpellTraces, brasiliaEffect }
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
-import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
+import {
+  sendNotificationAndHistoryRecord,
+  addHistoryRecord,
+  addTemporaryModifier,
+  modifierFromEffect,
+  validUntil,
+  addTemporaryModifierEvent,
+} from './util';
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
@@ -314,31 +321,43 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 //
 
 export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationSeconds = 10 * data.power * 60;
+  const durationInSeconds = 10 * data.power * 60;
   const amount = -Math.max(10, 10 * data.power);
   const m = modifierFromEffect(increaseAllDiscounts, { amount });
-  addTemporaryModifier(api, m, durationSeconds);
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
 }
 
 export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationSeconds = 10 * data.power * 60;
+  const durationInSeconds = 10 * data.power * 60;
   const amount = Math.min(90, 10 * data.power);
   const m = modifierFromEffect(increaseAllDiscounts, { amount });
-  addTemporaryModifier(api, m, durationSeconds);
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
 }
 
 export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationSeconds = 10 * data.power * 60;
+  const durationInSeconds = 10 * data.power * 60;
   const amount = -Math.max(1, data.power - 1);
   const m = modifierFromEffect(increaseCharisma, { amount });
-  addTemporaryModifier(api, m, durationSeconds);
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
 }
 
 export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationSeconds = 10 * data.power * 60;
+  const durationInSeconds = 10 * data.power * 60;
   const amount = Math.max(1, data.power - 2);
   const m = modifierFromEffect(increaseCharisma, { amount });
-  addTemporaryModifier(api, m, durationSeconds);
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
 }
 
 //

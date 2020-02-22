@@ -41,6 +41,14 @@ export function modifierFromEffect(
   };
 }
 
+export function addTemporaryModifierEvent(
+  api: EventModelApi<Sr2020Character>,
+  data: { modifier: Modifier; durationInSeconds: number },
+  event: Event,
+) {
+  addTemporaryModifier(api, data.modifier, data.durationInSeconds);
+}
+
 // Adds 'self-destructing' modifier. If you need some temporary Effect - use it in the composition with modifierFromEffect.
 export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Modifier, durationInSeconds: number) {
   api.addModifier(m);

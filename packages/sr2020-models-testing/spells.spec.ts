@@ -424,4 +424,22 @@ describe('Spells', function() {
       },
     ]);
   });
+
+  it('Frog skin', async () => {
+    await fixture.saveCharacter({ modelId: '1', charisma: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', charisma: 3 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'frog-skin' } }, 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'frog-skin', locationId: '0', targetCharacterId: 2, power: 2 } },
+        1,
+      );
+      expect(workModel.charisma).equal(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.charisma).equal(2);
+    }
+  });
 });

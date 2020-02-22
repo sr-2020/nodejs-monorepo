@@ -443,6 +443,7 @@ const kAllSpellsList: Spell[] = [
     // 552
     // каст занимает 10 минут, у цели на время T понижается Харизма на N. T=Мощь*10 минут. N=Мощь-1, но не меньше 1
     eventType: frogSkinSpell.name,
+    hasTarget: true,
   },
 
   {
@@ -453,6 +454,7 @@ const kAllSpellsList: Spell[] = [
     // 553
     // каст занимает 10 минут, у цели на время T повышается Харизма на N. T=Мощь*10 минут. N=Мощь-2, но не меньше 1
     eventType: charmSpell.name,
+    hasTarget: true,
   },
 
   {
