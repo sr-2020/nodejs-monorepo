@@ -27,14 +27,15 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     aquiredModels: AquiredModelsStorage,
   ): Promise<ModelProcessResponse<EmptyModel>[]> {
     const result: ModelProcessResponse<EmptyModel>[] = [];
+    let nextEvents: EventForModelType[] = [];
     while (events.length) {
-      const promises = events.map((outboundEvent) => this.dispatchEventForModelType(outboundEvent, aquiredModels));
-      const outboundEventResults = await Promise.all<ModelProcessResponse<EmptyModel>>(promises);
-      result.unshift(...outboundEventResults);
-      events = [];
-      for (const r of outboundEventResults) {
-        events.unshift(...r.outboundEvents);
+      for (const outboundEvent of events) {
+        const r = await this.dispatchEventForModelType(outboundEvent, aquiredModels);
+        result.push(r);
+        nextEvents.unshift(...r.outboundEvents);
       }
+      events = nextEvents;
+      nextEvents = [];
     }
     return result;
   }
