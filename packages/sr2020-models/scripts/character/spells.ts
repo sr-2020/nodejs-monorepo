@@ -9,7 +9,7 @@ import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifie
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
-import { increaseAllDiscounts } from './basic_effects';
+import { increaseAllDiscounts, increaseCharisma } from './basic_effects';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '?';
@@ -326,6 +326,24 @@ export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
   const m = modifierFromEffect(increaseAllDiscounts, { amount });
   addTemporaryModifier(api, m, durationSeconds);
 }
+
+export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationSeconds = 10 * data.power * 60;
+  const amount = -Math.max(1, data.power - 1);
+  const m = modifierFromEffect(increaseCharisma, { amount });
+  addTemporaryModifier(api, m, durationSeconds);
+}
+
+export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationSeconds = 10 * data.power * 60;
+  const amount = Math.max(1, data.power - 2);
+  const m = modifierFromEffect(increaseCharisma, { amount });
+  addTemporaryModifier(api, m, durationSeconds);
+}
+
+//
+// Helper functons
+//
 
 export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   api.model.spells = [];

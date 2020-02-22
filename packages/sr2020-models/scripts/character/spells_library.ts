@@ -19,6 +19,8 @@ import {
   brasiliaSpell,
   shtoppingSpell,
   taxFreeSpell,
+  frogSkinSpell,
+  charmSpell,
 } from './spells';
 
 export interface Spell {
@@ -440,8 +442,7 @@ const kAllSpellsList: Spell[] = [
       'Временно понизить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 552
     // каст занимает 10 минут, у цели на время T понижается Харизма на N. T=Мощь*10 минут. N=Мощь-1, но не меньше 1
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: frogSkinSpell.name,
   },
 
   {
@@ -451,8 +452,7 @@ const kAllSpellsList: Spell[] = [
       'Временно повысить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 553
     // каст занимает 10 минут, у цели на время T повышается Харизма на N. T=Мощь*10 минут. N=Мощь-2, но не меньше 1
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: charmSpell.name,
   },
 
   {
