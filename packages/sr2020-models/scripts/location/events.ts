@@ -32,3 +32,9 @@ export function shiftSpellTraces(api: EventModelApi<Location>, data: { shiftTime
     })
     .sort((t1, t2) => t1.timestamp - t2.timestamp);
 }
+
+export function brasiliaEffect(api: EventModelApi<Location>, data: { durationMinutes: number }, event: Event) {
+  for (let i = 1; i <= data.durationMinutes; ++i) {
+    api.setTimer(uuid.v4(), i * 60 * 1000, shiftSpellTraces, { maxLookupSeconds: 600, shiftTimeSeconds: 300 });
+  }
+}

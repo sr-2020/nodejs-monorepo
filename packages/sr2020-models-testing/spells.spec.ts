@@ -385,6 +385,43 @@ describe('Spells', function() {
         timestamp: (1300 - 480) * 1000,
         spellName: 'Ground Heal',
       },
+      {
+        timestamp: (1600 - 480) * 1000,
+        spellName: 'Tempus Fugit',
+      },
+    ]);
+  });
+
+  it('Brasilia', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'brasilia' } }, 1);
+
+    await fixture.advanceTime(200);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
+
+    await fixture.advanceTime(300);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 2 } }, 1);
+
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', locationId: '0', power: 1 } }, 1);
+
+    await fixture.advanceTime(60);
+
+    const { workModel } = await fixture.getLocation();
+    expect(workModel.spellTraces).containDeep([
+      {
+        timestamp: -100000,
+        spellName: 'Ground Heal',
+      },
+      {
+        timestamp: 200000,
+        spellName: 'Fireball',
+      },
+      {
+        timestamp: 200000,
+        spellName: 'Brasilia',
+      },
     ]);
   });
 });

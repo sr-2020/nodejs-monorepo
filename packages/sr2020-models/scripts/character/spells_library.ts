@@ -16,6 +16,7 @@ import {
   fastChargeSpell,
   trackBallSpell,
   tempusFugitSpell,
+  brasiliaSpell,
 } from './spells';
 
 export interface Spell {
@@ -245,8 +246,7 @@ const kAllSpellsList: Spell[] = [
       'Пока не кончится заклинание, все следы всех заклинаний, попадающих в интервал "последние 10 минут", будут каждую минуту сдвигаться в прошлое на 5 минут. Чем больше Мощь, тем больше срок',
     // 531
     // время каста 10 минут. В течение Мощь*8 минут даты активации всех заклинаний с датой "sysdate - 1/24/60/60" каждые 60с сдвигаются в прошлое на 300с минут.
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: brasiliaSpell.name,
   },
 
   {

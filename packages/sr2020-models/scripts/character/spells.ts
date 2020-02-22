@@ -1,7 +1,7 @@
 import { Event, Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { reduceManaDensity, recordSpellTrace, shiftSpellTraces } from '../location/events';
+import { reduceManaDensity, recordSpellTrace, shiftSpellTraces, brasiliaEffect } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
@@ -307,6 +307,13 @@ export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: Spel
   api.sendOutboundEvent(Location, data.locationId, shiftSpellTraces, {
     maxLookupSeconds: data.power * 5 * 60,
     shiftTimeSeconds: data.power * 4 * 60,
+  });
+}
+
+export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Brasilia');
+  api.sendOutboundEvent(Location, data.locationId, brasiliaEffect, {
+    durationMinutes: 8 * data.power,
   });
 }
 
