@@ -15,6 +15,7 @@ import {
   keepYourselfSpell,
   fastChargeSpell,
   trackBallSpell,
+  tempusFugitSpell,
 } from './spells';
 
 export interface Spell {
@@ -234,8 +235,7 @@ const kAllSpellsList: Spell[] = [
     // время каста 5 минут. При активации заклинания в текущей локации у всех заклинаний с датой активации позже, чем (Текущий момент - T1 минут), дата активации в следе сдвигается в прошлое на T2 минут (то есть activation_moment = activation_moment - T2). T1=Мощь*5. T2=Мощь*4.
     // Пример: заклинание Fireball было сотворено в 10:42. В 10:45 минут маг1 кастует поверх него заклинание Tempus Fugit, T1=10, T2=10. Теперь согласно следу у заклинания Fireball время активации станет 10:32 минуты. И когда в 10:55 минут маг2 захочет считать все заклинания на глубину 20 минут, то Fireball он уже не увидит. А без Tempus Fugit увидел бы.
     // В то же время, если маг1 в 10:50 минут захочет сдвинуть метку Fireball еще дальше в прошлое, и у него будет такое же T1=10, то он уже не сможет этого сделать (потому что 10:50-10=10:40, и Fireball уже не попадает в область видимости)
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: tempusFugitSpell.name,
   },
 
   {

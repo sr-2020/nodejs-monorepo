@@ -359,4 +359,32 @@ describe('Spells', function() {
     expect(workModel.activeAbilities.length).to.equal(1);
     expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 6 * 1000); // power was 4, but ritual participants add +2
   });
+
+  it('Tempus Fugit', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'tempus-fugit' } }, 1);
+
+    await fixture.advanceTime(600);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
+
+    await fixture.advanceTime(700);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
+
+    await fixture.advanceTime(300);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'tempus-fugit', locationId: '0', power: 2 } }, 1);
+
+    const { workModel } = await fixture.getLocation();
+    expect(workModel.spellTraces).containDeep([
+      {
+        timestamp: 600000,
+        spellName: 'Fireball',
+      },
+      {
+        timestamp: (1300 - 480) * 1000,
+        spellName: 'Ground Heal',
+      },
+    ]);
+  });
 });

@@ -1,7 +1,7 @@
 import { Event, Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { reduceManaDensity, recordSpellTrace } from '../location/events';
+import { reduceManaDensity, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { revive } from './death_and_rebirth';
@@ -297,6 +297,17 @@ function dumpSpellTraces(
     spell.casterAura = chars.join('');
   }
   api.setTableResponse(spellTraces);
+}
+
+// время каста 5 минут. При активации заклинания в текущей локации у всех заклинаний с датой активации позже,
+// чем (Текущий момент - T1 минут), дата активации в следе сдвигается в прошлое на T2 минут
+// (то есть activation_moment = activation_moment - T2). T1=Мощь*5. T2=Мощь*4.
+export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Tempus Fugit');
+  api.sendOutboundEvent(Location, data.locationId, shiftSpellTraces, {
+    maxLookupSeconds: data.power * 5 * 60,
+    shiftTimeSeconds: data.power * 4 * 60,
+  });
 }
 
 export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {

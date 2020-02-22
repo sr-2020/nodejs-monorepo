@@ -23,3 +23,12 @@ export function recordSpellTrace(api: EventModelApi<Location>, data: SpellTrace,
   if (api.model.spellTraces.length > MAX_SPELL_TRACES) api.model.spellTraces.shift();
   api.model.spellTraces.push(data);
 }
+
+export function shiftSpellTraces(api: EventModelApi<Location>, data: { shiftTimeSeconds: number; maxLookupSeconds: number }, event: Event) {
+  api.model.spellTraces = api.model.spellTraces
+    .map((trace) => {
+      if (trace.timestamp >= event.timestamp - data.maxLookupSeconds * 1000) trace.timestamp -= data.shiftTimeSeconds * 1000;
+      return trace;
+    })
+    .sort((t1, t2) => t1.timestamp - t2.timestamp);
+}
