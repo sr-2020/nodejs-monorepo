@@ -16,6 +16,8 @@ export class AddedSpell {
   // Full description. Can be multiline.
   @rproperty() description: string;
   @rproperty() eventType: string;
+
+  @rproperty() hasTarget: boolean;
 }
 
 // Active ability contained in the model object (as opposed to ActiveAbility which is configuration/dictionary kind).

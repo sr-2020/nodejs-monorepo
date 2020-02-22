@@ -47,7 +47,7 @@ function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAb
 function addSpell(api: EventModelApi<Sr2020Character>, spell: Spell) {
   // Spell is already present in the character - won't add again.
   if (api.model.spells.find((f) => f.id == spell.id)) return;
-  api.model.spells.push(spell);
+  api.model.spells.push({ ...spell, hasTarget: spell.hasTarget ?? false });
 }
 
 export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
