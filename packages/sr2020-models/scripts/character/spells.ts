@@ -252,11 +252,39 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 // Investigation spells
 //
 
-export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
+// время каста 2 минуты. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
+// последние 10+Мощь минут - список (название заклинания,  Мощь, Откат, (10+N)% ауры творца, пол и метарасу творца).
+// N=Мощь*5, но не более 40
+export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
   const durationInSeconds = (10 + data.power) * 60;
-  const symbolsRead = Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.auraReadingMultiplier) / 100);
-  const location = api.aquired('Location', data.locationId) as Location;
+  const symbolsRead = Math.min(
+    AURA_LENGTH,
+    Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.auraReadingMultiplier) / 100),
+  );
+  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
+}
+
+// время каста 5 минут. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
+// последние 60 минут - список (название заклинания,  Мощь, Откат, (20+N)% ауры творца, пол и метарасу творца). N=Мощь*10, но не более 60
+export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackball: на себя');
+  const durationInSeconds = 60 * 60;
+  const symbolsRead = Math.min(
+    AURA_LENGTH,
+    Math.floor((AURA_LENGTH * (20 + Math.min(60, data.power * 10)) * api.workModel.auraReadingMultiplier) / 100),
+  );
+  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
+}
+
+function dumpSpellTraces(
+  api: EventModelApi<Sr2020Character>,
+  durationInSeconds: number,
+  symbolsRead: number,
+  locationId: string,
+  event: Event,
+) {
+  const location = api.aquired('Location', locationId) as Location;
   const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
   const positions = Array.from(Array(AURA_LENGTH).keys());
   for (const spell of spellTraces) {
