@@ -124,6 +124,14 @@ export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>
   api.model.stockGainPercentage = clamp(api.model.stockGainPercentage, 0, 50);
 }
 
+export function increaseAllDiscounts(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  increaseDiscountWeaponsArmor(api, m);
+  increaseDiscountDrones(api, m);
+  increaseDiscountChemo(api, m);
+  increaseDiscountImplants(api, m);
+  increaseDiscountMagicStuff(api, m);
+}
+
 export function increaseDiscountWeaponsArmor(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.discountWeaponsArmor += m.amount;
   api.model.discountWeaponsArmor = clamp(api.model.discountWeaponsArmor, 0, 50);

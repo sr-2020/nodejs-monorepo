@@ -9,6 +9,7 @@ import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifie
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
+import { increaseAllDiscounts } from './basic_effects';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '?';
@@ -306,6 +307,24 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   api.sendOutboundEvent(Location, data.locationId, brasiliaEffect, {
     durationMinutes: 8 * data.power,
   });
+}
+
+//
+// Parameter-adjusting spells
+//
+
+export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationSeconds = 10 * data.power * 60;
+  const amount = -Math.max(10, 10 * data.power);
+  const m = modifierFromEffect(increaseAllDiscounts, { amount });
+  addTemporaryModifier(api, m, durationSeconds);
+}
+
+export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationSeconds = 10 * data.power * 60;
+  const amount = Math.min(90, 10 * data.power);
+  const m = modifierFromEffect(increaseAllDiscounts, { amount });
+  addTemporaryModifier(api, m, durationSeconds);
 }
 
 export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {

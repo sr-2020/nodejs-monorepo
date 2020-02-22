@@ -17,6 +17,8 @@ import {
   trackBallSpell,
   tempusFugitSpell,
   brasiliaSpell,
+  shtoppingSpell,
+  taxFreeSpell,
 } from './spells';
 
 export interface Spell {
@@ -460,8 +462,8 @@ const kAllSpellsList: Spell[] = [
       'Временно повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 554
     // каст занимает 10 минут, у цели на время T на N% повышается стоимость любых покупок (через скоринг?).  T=Мощь*10 минут. N=Мощь*10, но не меньше 10
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: shtoppingSpell.name,
+    hasTarget: true,
   },
 
   {
@@ -471,8 +473,8 @@ const kAllSpellsList: Spell[] = [
       'Временно понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 555
     // каст занимает 10 минут, у цели на время T на N% понижается стоимость любых покупок (через скоринг?). T=Мощь*10 минут. N=Мощь*10, но не больше 90
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: taxFreeSpell.name,
+    hasTarget: true,
   },
 
   {
