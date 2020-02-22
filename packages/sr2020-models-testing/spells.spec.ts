@@ -203,7 +203,7 @@ describe('Spells', function() {
 
   it('Live long and prosper', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.saveCharacter({ modelId: '2', maxHp: 5 });
+    await fixture.saveCharacter({ modelId: '2', maxHp: 3 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'live-long-and-prosper' } }, 1);
     {
       const { workModel } = await fixture.sendCharacterEvent(
@@ -217,7 +217,7 @@ describe('Spells', function() {
 
     {
       expect(fixture.getCharacterNotifications(2).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(2)[0].body).containEql('увеличены на 2');
+      expect(fixture.getCharacterNotifications(2)[0].body).containEql('увеличены на 4');
       const { workModel } = await fixture.getCharacter(2);
       expect(workModel.history.length).to.equal(1); // Hp restored
       expect(workModel.maxHp).to.equal(6); // Not 7 as global maximum is 6

@@ -149,24 +149,15 @@ export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   });
 }
 
-export function liveLongAndProsperSpell(
-  api: EventModelApi<Sr2020Character>,
-  data: { targetCharacterId?: number; power: number; locationId: string },
-  event: Event,
-) {
-  if (data.targetCharacterId != undefined) {
-    addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
-    api.sendNotification('Успех', 'Заклинание совершено');
-    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), liveLongAndProsper, data);
-  } else {
-    addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на себя');
-    api.sendSelfEvent(liveLongAndProsper, data);
-  }
+export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
+  api.sendNotification('Успех', 'Заклинание совершено');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, liveLongAndProsper, data);
 }
 
 export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
-  const hpIncrease = Math.round(Math.sqrt(data.power));
-  const durationInSeconds = Math.round(Math.sqrt(data.power)) * 60;
+  const hpIncrease = data.power;
+  const durationInSeconds = 10 * data.power * 60;
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
   const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
   addTemporaryModifier(api, m, durationInSeconds);
@@ -190,10 +181,10 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
 // Offensive spells
 //
 
-export function fireballSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
+export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
-  const durationInSeconds = (data.power * 60) / 2;
-  const amount = Math.floor(data.power / 2);
+  const durationInSeconds = 8 * data.power * 60;
+  const amount = Math.max(1, data.power - 3);
   const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, durationInSeconds) });
   addTemporaryModifier(api, m, durationInSeconds);
 }

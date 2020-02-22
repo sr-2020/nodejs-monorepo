@@ -25,6 +25,7 @@ export interface Spell {
   description: string;
   prerequisites?: string[];
   eventType: string;
+  hasTarget?: boolean;
 }
 
 // Not exported by design, use kAllSpells instead.
@@ -75,7 +76,6 @@ const kAllSpellsList: Spell[] = [
     description: 'Поднять кого-то из тяжрана. Чем больше Мощь, тем на большее время запасено заклинание',
     // 514
     // время каста 5 минут, у мага появляется на время T/на одно использование (что раньше закончится) способность перевести одну цель из состояние "тяжран" в состояние "текущие хиты равны максимальным". T=Мощь*10 минут
-    // TODO(aeremin): Double-check if implementation is correct
     eventType: groundHealSpell.name,
   },
 
@@ -85,8 +85,8 @@ const kAllSpellsList: Spell[] = [
     description: 'Увеличить кому-то количество хитов. Чем больше Мощь, тем больше хитов и дольше срок',
     // 515
     // время каста 5 минут, маг увеличивает указанной во время каста цели количество максимальных и текущих хитов на N на время T. N=Мощь. T=10*Мощь минут. Общее количество хитов не может быть больше 6 (согласно правилам по боевке)
-    // TODO(aeremin): Double-check if implementation is correct
     eventType: liveLongAndProsperSpell.name,
+    hasTarget: true,
   },
 
   {
@@ -104,7 +104,6 @@ const kAllSpellsList: Spell[] = [
     description: 'Зарядиться на время файерболами. Чем больше Мощь, тем больше снарядов и срок',
     // 517
     // время каста 3 минуты, у мага на время T появляется пассивная способность “кинуть N огненных шаров”. T и N зависят от Мощи. Снаряд выглядит как мягкий шар, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). N=Мощь-3 (но не меньше 1), T=Мощь*8 минут
-    // TODO(aeremin): Double-check implementation
     eventType: fireballSpell.name,
   },
 
