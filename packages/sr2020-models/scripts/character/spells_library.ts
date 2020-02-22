@@ -21,6 +21,8 @@ import {
   taxFreeSpell,
   frogSkinSpell,
   charmSpell,
+  nothingSpecialSpell,
+  odusSpell,
 } from './spells';
 
 export interface Spell {
@@ -410,8 +412,8 @@ const kAllSpellsList: Spell[] = [
     description: 'Временно усилить цели маску ауру. Чем больше Мощь, тем больше защита',
     // 548
     // каст занимает 5 минут. У цели в течение 120 минут маска ауры увеличена на Мощь*2
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: nothingSpecialSpell.name,
+    hasTarget: true,
   },
 
   {
@@ -431,8 +433,8 @@ const kAllSpellsList: Spell[] = [
       'Временно понизить Резонанс цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 551
     // каст занимает 10 минут, у цели на время T понижается Резонанс на N. T=Мощь*10 минут. N=Мощь-1, но не меньше 1
-    // TODO(aeremin): Add proper implementation
-    eventType: dummySpell.name,
+    eventType: odusSpell.name,
+    hasTarget: true,
   },
 
   {

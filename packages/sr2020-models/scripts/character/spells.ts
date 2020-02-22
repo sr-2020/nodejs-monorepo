@@ -16,7 +16,7 @@ import {
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
-import { increaseAllDiscounts, increaseCharisma } from './basic_effects';
+import { increaseAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '?';
@@ -354,6 +354,26 @@ export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData,
   const durationInSeconds = 10 * data.power * 60;
   const amount = Math.max(1, data.power - 2);
   const m = modifierFromEffect(increaseCharisma, { amount });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
+}
+
+export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationInSeconds = 120 * 60;
+  const amount = 2 * data.power;
+  const m = modifierFromEffect(increaseAuraMask, { amount });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds,
+  });
+}
+
+export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const durationInSeconds = 10 * data.power * 60;
+  const amount = -Math.max(1, data.power - 1);
+  const m = modifierFromEffect(increaseResonance, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds,
