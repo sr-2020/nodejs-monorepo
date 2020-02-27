@@ -20,6 +20,14 @@ interface PassiveAbility {
   gmDescription: string;
 }
 
+interface ActiveAbility {
+  id: string;
+  humanReadableName: string;
+  description: string;
+  originalLine: number;
+  gmDescription: string;
+}
+
 interface Spell {
   id: string;
   humanReadableName: string;
@@ -32,8 +40,10 @@ const db = new Firestore();
 
 class SpreadsheetProcessor {
   passiveAbilitiesRef = db.collection('passive_abilities');
+  activeAbilitiesRef = db.collection('active_abilities');
   spellsRef = db.collection('spells');
   passiveAbilities: PassiveAbility[] = [];
+  activeAbilities: ActiveAbility[] = [];
   spells: Spell[] = [];
 
   async processPassiveAbility(line: number, id: string, row: any[]) {
@@ -51,6 +61,24 @@ class SpreadsheetProcessor {
       existingDoc.data()?.gmDescription != ability.gmDescription
     ) {
       this.passiveAbilities.push(ability);
+    }
+  }
+
+  async processActiveAbility(line: number, id: string, row: any[]) {
+    const ability: ActiveAbility = {
+      id,
+      humanReadableName: row[kNameColumn],
+      description: row[kPlayerDescriptionColumn] ?? '',
+      gmDescription: row[kMasterDescriptionColumn] ?? '',
+      originalLine: line + 1,
+    };
+    const existingDoc = await this.activeAbilitiesRef.doc(id).get();
+    if (
+      existingDoc.data()?.humanReadableName != ability.humanReadableName ||
+      existingDoc.data()?.description != ability.description ||
+      existingDoc.data()?.gmDescription != ability.gmDescription
+    ) {
+      this.activeAbilities.push(ability);
     }
   }
 
@@ -86,6 +114,24 @@ class SpreadsheetProcessor {
         modifier: [],
       },`);
       await this.passiveAbilitiesRef.doc(ability.id).set(ability);
+    }
+  }
+
+  async printAndSaveActiveAbilities() {
+    console.log('//*************************** Active abilities ***************************//');
+    for (const ability of this.activeAbilities) {
+      console.log(`
+      {
+        id: '${ability.id}',
+        humanReadableName: '${ability.humanReadableName}',
+        description: '${ability.description.replace(/\n/g, '\\n')}',
+        // ${ability.originalLine}
+        // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
+        // TODO(aeremin): Add proper implementation
+        hasTarget: false,
+        eventType: dummyAbility.name,
+      },`);
+      await this.activeAbilitiesRef.doc(ability.id).set(ability);
     }
   }
 
@@ -150,12 +196,18 @@ class SpreadsheetProcessor {
         await this.processPassiveAbility(r, id, row);
       }
 
+      if (kind == 'Активная абилка') {
+        if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
+        await this.processActiveAbility(r, id, row);
+      }
+
       if (kind == 'Заклинание') {
         if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
         await this.processSpell(r, id, row);
       }
     }
     await this.printAndSavePassiveAbilities();
+    await this.printAndSaveActiveAbilities();
     await this.printAndSaveSpells();
   }
 }
