@@ -19,3 +19,7 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: { targe
 
   reviveOnTarget(api, data, event);
 }
+
+export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void, event: Event) {
+  api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
+}
