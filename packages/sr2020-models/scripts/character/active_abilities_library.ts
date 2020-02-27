@@ -181,23 +181,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'total-recall',
-    humanReadableName: 'вспомнить всё',
-    description: 'Персонаж не забывает события перед КС',
-    // 310
-    // Целевой персонаж не забывает события перед КС,
-    // TODO(aeremin): Add proper implementation
-    hasTarget: false,
-    eventType: dummyAbility.name,
-  },
-
-  {
     id: 'tell-me-truth',
     humanReadableName: 'Скажи как есть.',
     description: 'Целевой персонаж честно отвечает на 3 вопроса. \nТы честно отвечаешь на ',
     // 311
     // Цель честно отвечает на 3 вопроса.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -208,7 +197,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Целевой персонаж не может скрыть свою ложь.',
     // 312
     // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 10 минут должна воспроизводить этот признак, если врет.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -219,7 +208,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 313
     // Цель на 10 минут принимает одно утверждение как истину - при условии, что оно не требует действий, явно противоречащих текущему кодексу персонажа. Если у цели уже есть действующая установка, то та установка забывается и начинает действовать эта.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -231,7 +220,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.',
     // 314
     // Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -242,7 +231,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.',
     // 315
     // Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -254,7 +243,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель боится и убегает как можно дальше от менталиста. У цели заблоктрована активация всех абилок на 10 минут. Через 10 минут эффект проходит.',
     // 316
     // Цель боится и убегает как можно дальше от менталиста. Через 10 минут эффект проходит.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -265,7 +254,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться 5 минут или пока ей не нанесён физический урон (-1хит)',
     // 317
     // Цель не может двигаться 5 минут или пока ей не нанесён физический урон (-1хит)
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -276,7 +265,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться 10 минут.',
     // 318
     // Цель не может двигаться 10 минут.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -287,7 +276,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться и произносить звуки 10 минут.',
     // 319
     // Цель не может двигаться и говорить 10 минут.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -299,7 +288,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям ) ',
     // 320
     // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -310,7 +299,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель пытается убить персонажа, на которого указывает менталист.',
     // 321
     // Цель пытается убить персонажа, на которого указывает менталист.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -321,7 +310,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. (Прописать, что нельзя подарить дрон, например)',
     // 322
     // Цель дарит менталисту 1 игровой предмет по выбору менталиста.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -332,7 +321,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель переводит на счет менталиста некоторую часть денег со своего счета.',
     // 323
     // Убеждает жертву перевести со своего на счет менталиста Х% (15% например)
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
