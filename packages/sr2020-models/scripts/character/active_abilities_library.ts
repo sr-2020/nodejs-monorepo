@@ -72,7 +72,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
     //
     // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -86,7 +86,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
     //
     // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -100,7 +100,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Способ поиска чужих спрайтов (например - бэкдоров) в этой ноде хоста Основания.
     //
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -114,7 +114,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Способ уничтожения чужих спрайтов. У нас нет таргетинга, поэтому удаляем рандомых спрайтов, число которых зависит от Резонанса
     //
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -128,7 +128,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
     //
     // IT: вызов Кривдиного REST, отобразить текст
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -153,7 +153,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (сняты хиты).',
     // 306
     // Целевой персонаж забывает события "этой сцены", если персонажу не был нанесен физический урон (снят хотя бы 1 хит) за это время.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -164,7 +164,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Персонаж не помнит события последней сцены.',
     // 307
     // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -332,7 +332,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'на 24 часа увеличивает сопротивляемость целевого персонажа ментальному воздействию. ',
     // 330
     // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -343,7 +343,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'на 12 часов  уменьшает сопротивляемость целевого персонажа ментальному воздействию. ',
     // 331
     // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -354,7 +354,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно увеличивает сопротивляемость менталиста ментальному воздействию.',
     // 332
     // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -365,7 +365,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно увеличивает сопротивляемость персонажа ментальному воздействию.',
     // 333
     // Менталист увеличивает ментальную защиту другого персонажа на +8 на 30 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -376,7 +376,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Немного снижает кулдаун абилок менталиста',
     // 334
     // В течение 30 минут снижает кулдаун каждой активации абилки менталиста на 20%
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -387,7 +387,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Существенно снижает кулдаун абилок менталиста',
     // 335
     // В течение 30 минут снижает кулдаун активации абилки на 50%
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -398,7 +398,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Сильно снижает кулдаун абилок менталиста',
     // 336
     // В течение 30 минут снижает кулдаун активации абилки на 80%
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -409,7 +409,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'посмотреть на qr и сказать сколько это стоит, базовую цену товара',
     // 347
     // посмотреть на qr и сказать сколько это стоит, базовую цену товара
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -420,7 +420,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Гешефтмахер может сказать кому это нужно. ',
     // 348
     // посмотреть на qr и сказать кому это может быть нужно. после сканирования куар в приложеньке гм должно отобразиться персонажи с какими аспектами это используют. В идеале - какой квест есть на эту сущность.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -431,7 +431,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'ГМ может переписать кредит за 1 предмет на себя',
     // 349
     // ГМ может переписать кредит за 1 предмет на себя и может применить свой коэффициент скоринга на текущий момент.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -442,7 +442,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'переписать долг за 1 предмет по выбору с персонажа А на персонажа Б.',
     // 350
     // переписать долг за 1 предмет по выбору с персонажа А на персонажа Б. Должно быть добровольное согласие персонажа А и персонажа  Б.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -453,7 +453,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь посмотреть из каких коэффициентов состоит скоринг другого персонажа',
     // 352
     // Показывает актуальные коэффициенты, которые влияют на скоринг.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -464,7 +464,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'ГМ может целевому персонажу переоформить контракт с новым коэфициентом скоринга. ',
     // 353
     // Целевому персонажу переоформить контракт с новым коэфициентом скоринга.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -475,7 +475,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'где это продается',
     // 380
     // где это продается
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -486,7 +486,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'гм производит анонимный перевод между двумя персонажами. ',
     // 381
     // анонимизация перевода - IT генерирует в логах  для игроков левые транзакции вместо реальной
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -497,7 +497,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ненадолго перейти в астральное тело, слабо готовое к астральному бою',
     // 448
     // Время действия 15 минут, кулдаун 45 минут После активации маг переключается в астральное тело. У него 2 хита, 2 меча и 1 щит
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -508,7 +508,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Перейти в астральное тело, готовое к астральному бою',
     // 449
     // Время действия 45 минут, кулдаун 55 минут После активации маг переключается в астральное тело. У него 5 хитов, 4 меча и 3 щита
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -519,7 +519,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'На долгий срок перейти в астральное тело, отлично готовое к астральному бою.',
     // 450
     // Время действия 120 минут, кулдаун 125 минут После активации маг переключается в астральное тело. У него 12 хитов, 6 мечей и 5 щитов
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -530,7 +530,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно частично изменить цели ее ауру',
     // 453
     // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/qATKkQtq/140-магия-реализовать-способности-связанные-с-аурой-silentium-est-aurum-light-step-dictator-control)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -541,7 +541,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Извлечение доз крови из жертв, у которых сканируются qr-коды мясных тел',
     // 455
     // - время действия 5 минут, кулдаун 30 минут. За время активации можно сосканировать Qr-код мясных тел до 3 уникальных целей (добровольно или в тяжране) - это приведет к созданию соответствующего количества чипов “кровь”.  Если цель не была в тяжране, то она там оказывается.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-заклинания-и-абилки-связанные-с-чипами-крови-blood-feast-bathory-charger-sense-of-essence)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -552,7 +552,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемый статус "тяжелое" для одноручного оружия',
     // 459
     // - время действия 10+N минут, кулдаун 5 минут. Одноручное оружие считается тяжёлым. N=умвл*3 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -563,7 +563,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая защита от дистанционного легкого оружия',
     // 460
     // - время действия 5+N минут, кулдаун 15 минут. Дает защиту от дистанционных атак (только от нерфов). N=умвл*1 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -574,7 +574,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая тяжелая броня',
     // 461
     // - время действия 5+N минут, кулдаун 30 минут. Дает тяжелую броню. N=умвл*2 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -585,7 +585,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая возможность подняться из тяжрана в течение некоторого времени',
     // 462
     // - время действия 5+N минут, кулдаун 20 минут. Позволяет автоматически подняться из тяжрана через 30с с полным запасом текущих хитов. N=умвл*2 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -596,7 +596,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Излечение цели',
     // 463
     // - мгновенное, кулдаун 30 минут. Позволяет поднять из тяжрана N других персонажей с полным запасом текущих хитов. N зависит от уровня маны в локации. При умвл < 6, N=1. Иначе 2
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -607,7 +607,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Перезарядка артефакта',
     // 464
     // - мгновенное, кулдаун 60 минут. Позволяет восстановить от 1 до N активированных (то есть потраченных) артефактов с любым заклинанием - в такое же состояние, какое они имели до активации. N зависит от уровня маны в локации. При умвл меньше 8, N = 1. Иначе 3
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -618,7 +618,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Enlarge Your Pencil',
     // 465
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Enlarge Your Pencil. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -629,7 +629,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Stone skin',
     // 466
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Stone skin. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -640,7 +640,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Tempus Fugit',
     // 467
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tempus Fugit. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -651,7 +651,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Beacon',
     // 468
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Beacon После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -662,7 +662,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Run, spirit, run',
     // 469
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Run, spirit, run. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -673,7 +673,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание InputStream',
     // 470
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание InputStream. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -684,7 +684,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание OutputStream',
     // 471
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание OutputStream. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -695,7 +695,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Mosquito Tree',
     // 472
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Mosquito Tree. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -706,7 +706,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Feed the cat',
     // 473
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Feed the cat. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -717,7 +717,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Tame the dog',
     // 474
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tame the dog. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
@@ -728,7 +728,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь создавать артефакты, содержащие заклинание Exorcizamus',
     // 475
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Exorcizamus. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     hasTarget: false,
     eventType: dummyAbility.name,
   },
