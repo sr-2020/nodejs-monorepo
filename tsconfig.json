@@ -58,6 +58,9 @@
     },
     {
       "path": "packages/telegram-bot"
+    },
+    {
+      "path": "packages/utility-scripts"
     }
   ]
 }

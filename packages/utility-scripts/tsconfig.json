@@ -1,5 +1,14 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "references": [
+    {
+      "path": "../sr2020-models"
+    },
+  ],
 }
