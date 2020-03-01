@@ -22,7 +22,92 @@ export interface EthicLevel {
   triggers: EthicTrigger[];
 }
 
-export const kAllCrysises: EthicTrigger[] = [];
+export const kAllCrysises: EthicTrigger[] = [
+  {
+    description: 'Сформулируйте, почему милосердие лучше насилия, и любым образом опубликуйте свое мнение\n',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [
+      { change: -1, conditionMax: 3, conditionMin: 0, scale: 'individualism' },
+      { change: 1, conditionMax: 2, conditionMin: 0, scale: 'mind' },
+    ],
+  },
+  {
+    description: 'Пожертвуйте денег социальной службе или выполните ее контракт\n',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [{ change: 1, conditionMax: -1, conditionMin: -3, scale: 'control' }],
+  },
+  {
+    description: 'Поговорите о своем грехе с тем, кого считаете моральным авторитетом, и выполните его совет, как искупить вину.',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [
+      { change: -1, conditionMax: 3, conditionMin: 0, scale: 'individualism' },
+      { change: 1, conditionMax: 1, conditionMin: -1, scale: 'control' },
+    ],
+  },
+  {
+    description: 'Напейтесь с горя в любом кабаке и расскажите о своей беде любому собеседнику',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [{ change: -1, conditionMax: 2, conditionMin: -2, scale: 'mind' }],
+  },
+  {
+    description: 'Пойдите в любой кабак и поставьте выпивку первому встречному\n',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [
+      { change: -1, conditionMax: 2, conditionMin: -1, scale: 'mind' },
+      { change: -1, conditionMax: 1, conditionMin: -1, scale: 'control' },
+    ],
+  },
+  {
+    description: 'Откройте новую атакующую (воздействующую на другого человека по вашей инициативе) абилку в любом архетипе\n',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [{ change: 1, conditionMax: 2, conditionMin: -1, scale: 'mind' }],
+  },
+  {
+    description: 'Выполните открытый контракт на поиск должника или преступника',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [{ change: 1, conditionMax: 2, conditionMin: 0, scale: 'control' }],
+  },
+  {
+    description: 'Оскорбите кого-нибудь публично (не менее трех свидетелей, или в открытом канале)\n',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [
+      { change: -1, conditionMax: 3, conditionMin: -2, scale: 'control' },
+      { change: -1, conditionMax: 2, conditionMin: -2, scale: 'mind' },
+    ],
+  },
+  {
+    description: 'Убейте до клинической смерти близкого человека (друга, родственника, любовника)',
+    kind: 'crysis',
+    crysises: [],
+    shifts: [
+      { change: 2, conditionMax: 1, conditionMin: -3, scale: 'individualism' },
+      { change: -1, conditionMax: 2, conditionMin: 0, scale: 'control' },
+    ],
+  },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+  { description: '', kind: 'crysis', crysises: [], shifts: [] },
+];
 export const kEthicLevels: EthicLevel[] = [
   {
     value: -4,

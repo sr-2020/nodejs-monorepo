@@ -109,7 +109,23 @@ class SpreadsheetProcessor {
       }
     }
 
-    console.log(JSON.stringify(this.ethicLevels));
+    {
+      // Parse crysises
+      const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range: 'Кризисные триггеры!A2:G500' });
+      const data = response.data.values;
+      if (!data) {
+        throw new Error('Failed to get spreadsheet range');
+      }
+      for (const r of data) {
+        if (r[0]?.length) {
+          this.allCrysises.push(this.parseTrigger(r.slice(1)));
+          if (r[0] != `#${this.allCrysises.length}`) throw new Error(`Unexpected crysis number: ${r[0]}`);
+        }
+      }
+    }
+
+    console.log(`export const kAllCrysises: EthicTrigger[] = ${JSON.stringify(this.allCrysises)};`);
+    console.log(`export const kEthicLevels: EthicLevel[] = ${JSON.stringify(this.ethicLevels)};`);
   }
 }
 
