@@ -76,6 +76,8 @@ async function provideCharacter(login: LoginResponse) {
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],
+    ethicTrigger: [],
+    ethicState: [],
     history: [],
     modifiers: [],
     timers: {},

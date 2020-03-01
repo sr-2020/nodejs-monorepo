@@ -66,6 +66,29 @@ export class AddedPassiveAbility {
   @property.array(String) modifierIds?: string[];
 }
 
+// Ethic trigger contained in the model object (as opposed to EthicTrigger which is configuration/dictionary kind).
+@model()
+export class AddedEthicTrigger {
+  @rproperty() id: string;
+
+  @property({ required: true, type: 'string' })
+  kind: 'action' | 'crysis' | 'principle';
+
+  // Full description. Can be multiline.
+  @rproperty() description: string;
+}
+
+@model()
+export class AddedEthicState {
+  @property({ required: true, type: 'string' })
+  scale: 'violence' | 'control' | 'individualism' | 'mind';
+
+  @rproperty() value: number;
+
+  // Full description. Can be multiline.
+  @rproperty() description: string;
+}
+
 @model()
 export class HistoryRecord {
   @rproperty() id: string;
@@ -243,6 +266,14 @@ export class Sr2020Character extends EmptyModel {
   @property.array(AddedPassiveAbility, { required: true })
   @JsonColumn()
   passiveAbilities: AddedPassiveAbility[];
+
+  @property.array(AddedEthicState, { required: true })
+  @JsonColumn()
+  ethicState: AddedEthicState[];
+
+  @property.array(AddedEthicTrigger, { required: true })
+  @JsonColumn()
+  ethicTrigger: AddedEthicTrigger[];
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()

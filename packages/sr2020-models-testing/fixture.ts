@@ -230,6 +230,8 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     spells: [],
     activeAbilities: [],
     passiveAbilities: [],
+    ethicState: [],
+    ethicTrigger: [],
     history: [],
     modelId: '0',
     timestamp,
