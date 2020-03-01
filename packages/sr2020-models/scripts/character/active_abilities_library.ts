@@ -371,39 +371,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'mental-cooldown-reduction-1',
-    humanReadableName: '',
-    description: 'Немного снижает кулдаун абилок менталиста',
-    // 334
-    // В течение 30 минут снижает кулдаун каждой активации абилки менталиста на 20%
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
-    hasTarget: false,
-    eventType: dummyAbility.name,
-  },
-
-  {
-    id: 'mental-cooldown-reduction-2',
-    humanReadableName: '',
-    description: 'Существенно снижает кулдаун абилок менталиста',
-    // 335
-    // В течение 30 минут снижает кулдаун активации абилки на 50%
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
-    hasTarget: false,
-    eventType: dummyAbility.name,
-  },
-
-  {
-    id: 'mental-cooldown-reduction-3',
-    humanReadableName: '',
-    description: 'Сильно снижает кулдаун абилок менталиста',
-    // 336
-    // В течение 30 минут снижает кулдаун активации абилки на 80%
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
-    hasTarget: false,
-    eventType: dummyAbility.name,
-  },
-
-  {
     id: 'how-much-it-costs',
     humanReadableName: 'Чо почем',
     description: 'посмотреть на qr и сказать сколько это стоит, базовую цену товара',

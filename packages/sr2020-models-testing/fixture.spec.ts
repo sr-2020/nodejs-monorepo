@@ -112,6 +112,4 @@ describe('Fixture', function() {
     expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
     expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 11 } });
   });
-
-  // TODO(aeremin): add more tests demonstrating fixture interaction
 });
