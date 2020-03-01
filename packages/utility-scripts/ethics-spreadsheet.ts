@@ -25,6 +25,46 @@ class SpreadsheetProcessor {
     throw new Error(`Unsupported ethic trigger kind: ${s}`);
   }
 
+  parseTrigger(cells: string[]) {
+    const description = cells[0];
+    const kind = this.parseKind(cells[1]);
+    const trigger: EthicTrigger = { description, kind, crysises: [], shifts: [] };
+    for (let i = 0; i < 4; ++i) {
+      const unparsed: string | undefined = cells[2 + i];
+      if (unparsed?.length) {
+        const m1 = unparsed.match(/ДобавитьКризис\(#(\d+)\)/);
+        if (m1) {
+          trigger.crysises.push(Number(m1[1]));
+          continue;
+        }
+
+        const m2 = unparsed.match(/СменитьСостояние\((.*)([\+-]\d+)\), если (.*) = \[(.*);(.*)\]/);
+        if (m2) {
+          if (m2[1] != m2[3]) throw new Error(`Changed scale != conditional scale: ${unparsed}`);
+          trigger.shifts.push({
+            change: Number(m2[2]),
+            conditionMax: Number(m2[5]),
+            conditionMin: Number(m2[4]),
+            scale: this.parseScale(m2[1]),
+          });
+          continue;
+        }
+
+        const m3 = unparsed.match(/СменитьСостояние\((.*)([\+-]\d+)\)/);
+        if (m3) {
+          trigger.shifts.push({
+            change: Number(m3[2]),
+            conditionMax: 10,
+            conditionMin: -10,
+            scale: this.parseScale(m3[1]),
+          });
+          continue;
+        }
+      }
+    }
+    return trigger;
+  }
+
   async run() {
     const auth = await google.auth.getClient({
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
@@ -64,44 +104,8 @@ class SpreadsheetProcessor {
       for (const r of data) {
         const scale = this.parseScale(r[0]);
         const value = Number(r[1]);
-        const description = r[2];
-        const kind = this.parseKind(r[3]);
-        const trigger: EthicTrigger = { description, kind, crysises: [], shifts: [] };
-        for (let i = 0; i < 4; ++i) {
-          const unparsed: string | undefined = r[4 + i];
-          if (unparsed?.length) {
-            const m1 = unparsed.match(/ДобавитьКризис\(#(\d+)\)/);
-            if (m1) {
-              trigger.crysises.push(Number(m1[1]));
-              continue;
-            }
-
-            const m2 = unparsed.match(/СменитьСостояние\((.*)([\+-]\d+)\), если (.*) = \[(.*);(.*)\]/);
-            if (m2) {
-              if (m2[1] != m2[3]) throw new Error(`Changed scale != conditional scale: ${unparsed}`);
-              trigger.shifts.push({
-                change: Number(m2[2]),
-                conditionMax: Number(m2[5]),
-                conditionMin: Number(m2[4]),
-                scale: this.parseScale(m2[1]),
-              });
-              continue;
-            }
-
-            const m3 = unparsed.match(/СменитьСостояние\((.*)([\+-]\d+)\)/);
-            if (m3) {
-              trigger.shifts.push({
-                change: Number(m3[2]),
-                conditionMax: 10,
-                conditionMin: -10,
-                scale: this.parseScale(m3[1]),
-              });
-              continue;
-            }
-          }
-        }
         const level = this.ethicLevels.find((l) => l.scale == scale && l.value == value);
-        if (level) level.triggers.push(trigger);
+        if (level) level.triggers.push(this.parseTrigger(r.slice(2)));
       }
     }
 
