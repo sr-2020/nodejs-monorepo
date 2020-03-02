@@ -238,6 +238,31 @@
               </b-input-group>
             </b-card-body>
           </b-card>
+          <b-card no-body>
+            <b-card-header>
+              Этика
+              <b-button block href="#" v-b-toggle.ethic_details variant="info">
+                Подробности
+              </b-button>
+            </b-card-header>
+            <b-card-body>
+              <b-collapse id="ethic_details">
+                <b-table :items="characterModel.ethicState"></b-table>
+                <b-table :items="characterModel.ethicTrigger"></b-table>
+              </b-collapse>
+              <div>
+                <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">
+                  <b-form-select v-model="violence" :options="ethicOptions"></b-form-select>
+                  <b-form-select v-model="control" :options="ethicOptions"></b-form-select>
+                  <b-form-select v-model="individualism" :options="ethicOptions"></b-form-select>
+                  <b-form-select v-model="mind" :options="ethicOptions"></b-form-select>
+                  <b-input-group-append>
+                    <b-button variant="success" v-on:click="ethicSet">Установить</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </div>
+            </b-card-body>
+          </b-card>
         </span>
       </b-container>
     </div>

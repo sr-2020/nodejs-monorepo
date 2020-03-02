@@ -7,6 +7,12 @@ var app = new Vue({
     selectedFeature: 'magic-1',
     clinicalDeathTarget: 128,
     qrCodeId: 1,
+
+    violence: 0,
+    control: 0,
+    individualism: 0,
+    mind: 0,
+    ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
   },
   async created() {
     const response = await this.$http.get(`http://model-engine.evarun.ru/features`);
@@ -58,6 +64,10 @@ var app = new Vue({
     setCharacterModel(model) {
       model.passiveAbilities.forEach((f) => delete f.modifierIds);
       this.characterModel = model;
+      this.violence = model.ethicState.find((s) => s.scale == 'violence').value;
+      this.control = model.ethicState.find((s) => s.scale == 'control').value;
+      this.individualism = model.ethicState.find((s) => s.scale == 'individualism').value;
+      this.mind = model.ethicState.find((s) => s.scale == 'mind').value;
     },
 
     async addFeature() {
@@ -83,5 +93,16 @@ var app = new Vue({
     async scanQr() {
       return this.sendEvent({ eventType: 'scanQr', data: { qrCode: this.qrCodeId } });
     },
+
+    async ethicSet() {
+      return this.sendEvent({
+        eventType: 'ethicSet', data: {
+          violence: this.violence,
+          control: this.control,
+          individualism: this.individualism,
+          mind: this.mind
+        }
+      });
+    }
   }
 })
