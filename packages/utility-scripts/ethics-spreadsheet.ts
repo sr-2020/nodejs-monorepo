@@ -4,6 +4,7 @@
 //   npx ts-node packages/utility-scripts/ethics-spreadsheet.ts
 import { google } from 'googleapis';
 import { EthicLevel, EthicTrigger, EthicScale, EthicTriggerKind } from '@sr2020/sr2020-models/scripts/character/ethics_library';
+import uuid = require('uuid');
 const sheets = google.sheets('v4');
 
 class SpreadsheetProcessor {
@@ -25,10 +26,14 @@ class SpreadsheetProcessor {
     throw new Error(`Unsupported ethic trigger kind: ${s}`);
   }
 
+  generateId(): string {
+    return uuid.v1();
+  }
+
   parseTrigger(cells: string[]) {
     const description = cells[0];
     const kind = this.parseKind(cells[1]);
-    const trigger: EthicTrigger = { description, kind, crysises: [], shifts: [] };
+    const trigger: EthicTrigger = { id: this.generateId(), description, kind, crysises: [], shifts: [] };
     for (let i = 0; i < 4; ++i) {
       const unparsed: string | undefined = cells[2 + i];
       if (unparsed?.length) {

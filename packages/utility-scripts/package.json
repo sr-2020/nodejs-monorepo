@@ -23,6 +23,7 @@
     "command-line-args": "^4.0.6",
     "googleapis": "^47.0.0",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "uuid": "^7.0.1"
   }
 }
