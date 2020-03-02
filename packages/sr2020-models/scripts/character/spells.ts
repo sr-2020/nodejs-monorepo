@@ -19,7 +19,7 @@ import { kAllActiveAbilities } from './active_abilities_library';
 import { increaseAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 const chance = new Chance();
 
-const kUnknowAuraCharacter = '?';
+const kUnknowAuraCharacter = '*';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
