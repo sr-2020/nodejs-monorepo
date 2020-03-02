@@ -2,6 +2,9 @@ import * as request from 'request-promise-native';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
+import { google } from 'googleapis';
+import { getDataFromSpreadsheet } from './spreadsheet_helper';
+const sheets = google.sheets('v4');
 
 // Run with
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/beta-testers-creator.ts
@@ -9,12 +12,6 @@ import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
 interface User {
   email: string;
   name: string;
-}
-
-const users: User[] = [{ email: '', name: '' }];
-
-for (let i = 0; i < 100; ++i) {
-  users.push({ email: `t${i}@foo.bar`, name: `Tester #${i}` });
 }
 
 const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
@@ -99,7 +96,7 @@ async function provideCharacter(login: LoginResponse) {
 }
 
 async function provideBilling(login: LoginResponse) {
-  // TODO: Call new billing service
+  await request.get(`http://billing.evarun.ru/api/Billing/admin/createphysicalwallet?character=${login.id}&balance=1000`).promise();
 }
 
 async function providePlayer(user: User) {
@@ -127,6 +124,19 @@ async function provideEmptyQr(modelId: string) {
 }
 
 async function main() {
+  // https://docs.google.com/spreadsheets/d/1yvH46R28hIGnwRkqD0MUKUr23AQUb07Kdw6AgUfLyjs
+  const data = await getDataFromSpreadsheet('1yvH46R28hIGnwRkqD0MUKUr23AQUb07Kdw6AgUfLyjs', 'МГ!A2:B50');
+  const users: User[] = [];
+  for (const r of data) {
+    if (r[0]?.length && r[1]?.length) {
+      users.push({ email: r[0], name: r[1] });
+    }
+  }
+
+  for (let i = 0; i < 100; ++i) {
+    users.push({ email: `t${i}@foo.bar`, name: `Tester #${i}` });
+  }
+
   for (const user of users) {
     await providePlayer(user);
   }
