@@ -3,6 +3,7 @@ import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger } from './ethics_l
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 
 const MAX_ETHIC_VALUE = 4;
+const ETHIC_COOLDOWN_MS = 30 * 60 * 1000;
 
 export function initEthic(model: Sr2020Character) {
   updateEthic(
@@ -68,12 +69,14 @@ export function ethicSet(
   );
 }
 
-export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }, event: Event) {
   const trigger = findTrigger(data.id);
   const values: Map<EthicScale, number> = new Map();
   for (const l of api.model.ethicState) values.set(l.scale, l.value);
 
   if (trigger.kind == 'crysis') api.model.ethicTrigger = api.model.ethicTrigger.filter((t) => t.id != data.id);
+
+  let valuesShifted = false;
 
   for (const shift of trigger.shifts) {
     const v = values.get(shift.scale)!;
@@ -84,6 +87,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
         }
       }
       values.set(shift.scale, v + shift.change);
+      valuesShifted = true;
     }
   }
 
@@ -94,8 +98,10 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
     }
   }
 
-  // TODO(https://trello.com/c/oU50sFq6/198-личная-этика-задача-6-разработать-процедуру-пересчета-абилок)
-  // TODO(aeremin): Handle cooldown
+  if (valuesShifted) {
+    api.model.ethicLockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
 
-  updateEthic(api.model, values);
+    // TODO(https://trello.com/c/oU50sFq6/198-личная-этика-задача-6-разработать-процедуру-пересчета-абилок)
+    updateEthic(api.model, values);
+  }
 }

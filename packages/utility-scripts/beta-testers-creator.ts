@@ -82,6 +82,7 @@ async function provideCharacter(login: LoginResponse) {
     passiveAbilities: [],
     ethicTrigger: [],
     ethicState: [],
+    ethicLockedUntil: 0,
     history: [],
     modifiers: [],
     timers: {},

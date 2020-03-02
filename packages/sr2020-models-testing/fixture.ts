@@ -233,6 +233,7 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     passiveAbilities: [],
     ethicState: [],
     ethicTrigger: [],
+    ethicLockedUntil: 0,
     history: [],
     modelId: '0',
     timestamp,

@@ -275,6 +275,10 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   ethicTrigger: AddedEthicTrigger[];
 
+  @rproperty()
+  @Column({ default: 0 })
+  ethicLockedUntil: number;
+
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
   history: HistoryRecord[];
