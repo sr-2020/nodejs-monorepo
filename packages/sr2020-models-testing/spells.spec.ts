@@ -285,7 +285,7 @@ describe('Spells', function() {
     for (const entry of tableResponse) {
       const aura: string = entry.casterAura;
       expect(aura).match(
-        /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
+        /[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]/,
       );
       expect((aura.match(/[a-z]/g) ?? []).length).to.equal(7);
     }
@@ -321,7 +321,7 @@ describe('Spells', function() {
     for (const entry of tableResponse) {
       const aura: string = entry.casterAura;
       expect(aura).match(
-        /[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]-[a-z?][a-z?][a-z?][a-z?]/,
+        /[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]/,
       );
       expect((aura.match(/[a-z]/g) ?? []).length).to.equal(12);
     }
