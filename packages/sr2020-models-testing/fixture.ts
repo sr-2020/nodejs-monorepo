@@ -13,6 +13,7 @@ import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
+import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import * as Winston from 'winston';
@@ -188,7 +189,7 @@ export class TestFixture {
 }
 
 function getDefaultCharacter(timestamp: number): Sr2020Character {
-  return {
+  const result: Sr2020Character = {
     healthState: 'healthy',
     gender: 'мужчина',
     metarace: 'meta-norm',
@@ -238,6 +239,8 @@ function getDefaultCharacter(timestamp: number): Sr2020Character {
     modifiers: [],
     timers: {},
   };
+  initEthic(result);
+  return result;
 }
 
 function getDefaultLocation(timestamp: number): Location {
