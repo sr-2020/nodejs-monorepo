@@ -3,8 +3,7 @@
 // Running:
 //   npx ts-node packages/utility-scripts/features-spreadsheet.ts
 import { Firestore } from '@google-cloud/firestore';
-import { google } from 'googleapis';
-const sheets = google.sheets('v4');
+import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 const kKindColumn = 0;
 const kIdColumn = 5;
@@ -153,17 +152,9 @@ class SpreadsheetProcessor {
   }
 
   async run() {
-    const auth = await google.auth.getClient({
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
     // https://docs.google.com/spreadsheets/d/1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A
     const spreadsheetId = '1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A';
-    const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range: 'Фичи!A1:AE700' });
-    const data = response.data.values;
-    if (!data) {
-      throw new Error('Failed to get spreadsheet range');
-    }
+    const data = await getDataFromSpreadsheet(spreadsheetId, 'Фичи!A1:AE700');
 
     const header = data[0];
     if (!header[kKindColumn].startsWith('Сущность')) {

@@ -2,10 +2,9 @@
 // to the spreadsheet and Firestore.
 // Running:
 //   npx ts-node packages/utility-scripts/ethics-spreadsheet.ts
-import { google } from 'googleapis';
 import { EthicLevel, EthicTrigger, EthicScale, EthicTriggerKind } from '@sr2020/sr2020-models/scripts/character/ethics_library';
 import uuid = require('uuid');
-const sheets = google.sheets('v4');
+import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 class SpreadsheetProcessor {
   allCrysises: EthicTrigger[] = [];
@@ -71,20 +70,12 @@ class SpreadsheetProcessor {
   }
 
   async run() {
-    const auth = await google.auth.getClient({
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
     // https://docs.google.com/spreadsheets/d/1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A
     const spreadsheetId = '1BsdcTYZ4Kvv3oTB1bJsq5VfsLKhuFS5_cEOMV_CJggc';
 
     {
       // Parse level descriptions
-      const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range: 'Сводка по  шкалам!B3:E11' });
-      const data = response.data.values;
-      if (!data) {
-        throw new Error('Failed to get spreadsheet range');
-      }
+      const data = await getDataFromSpreadsheet(spreadsheetId, 'Сводка по  шкалам!B3:E11');
       const scales: EthicScale[] = ['violence', 'control', 'individualism', 'mind'];
       for (let i = 0; i < 4; ++i) {
         for (let l = -4; l <= 4; ++l) {
@@ -101,11 +92,7 @@ class SpreadsheetProcessor {
 
     {
       // Parse level triggers
-      const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range: 'Триггеры по шкалам!A2:H500' });
-      const data = response.data.values;
-      if (!data) {
-        throw new Error('Failed to get spreadsheet range');
-      }
+      const data = await getDataFromSpreadsheet(spreadsheetId, 'Триггеры по шкалам!A2:H500');
       for (const r of data) {
         const scale = this.parseScale(r[0]);
         const value = Number(r[1]);
@@ -116,11 +103,7 @@ class SpreadsheetProcessor {
 
     {
       // Parse crysises
-      const response = await sheets.spreadsheets.values.get({ auth, spreadsheetId, range: 'Кризисные триггеры!A2:G500' });
-      const data = response.data.values;
-      if (!data) {
-        throw new Error('Failed to get spreadsheet range');
-      }
+      const data = await getDataFromSpreadsheet(spreadsheetId, 'Кризисные триггеры!A2:G500');
       for (const r of data) {
         if (r[0]?.length) {
           this.allCrysises.push(this.parseTrigger(r.slice(1)));
