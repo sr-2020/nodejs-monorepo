@@ -16,7 +16,7 @@ describe('Ethic events', function() {
     await fixture.saveCharacter();
     const { baseModel } = await fixture.sendCharacterEvent({
       eventType: 'ethicTrigger',
-      data: { id: 'e13587dc-5cb1-11ea-86b6-136c0966c3fe' },
+      data: { id: '30df06cb-5d9e-11ea-b518-e5c6714f0b78' },
     });
     expect(baseModel).containDeep({
       ethicState: [
@@ -32,7 +32,7 @@ describe('Ethic events', function() {
     await fixture.saveCharacter();
     const { baseModel } = await fixture.sendCharacterEvent({
       eventType: 'ethicTrigger',
-      data: { id: 'e13587dd-5cb1-11ea-86b6-136c0966c3fe' },
+      data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
     });
     expect(baseModel).containDeep({
       ethicState: [
@@ -50,7 +50,7 @@ describe('Ethic events', function() {
       // Break a principle, get a crysis
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicTrigger',
-        data: { id: 'e13587db-5cb1-11ea-86b6-136c0966c3fe' },
+        data: { id: '30df06ca-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
         ethicState: [
@@ -59,14 +59,14 @@ describe('Ethic events', function() {
           { scale: 'individualism', value: 0 },
           { scale: 'mind', value: 0 },
         ],
-        ethicTrigger: [{ id: 'e157dce4-5cb1-11ea-86b6-136c0966c3fe', kind: 'crysis' }],
+        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
       });
     }
     {
       // Do an action, shift to another level, but crysis stays with you
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicTrigger',
-        data: { id: 'e13587dd-5cb1-11ea-86b6-136c0966c3fe' },
+        data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
         ethicState: [
@@ -75,14 +75,14 @@ describe('Ethic events', function() {
           { scale: 'individualism', value: 0 },
           { scale: 'mind', value: 0 },
         ],
-        ethicTrigger: [{ id: 'e157dce4-5cb1-11ea-86b6-136c0966c3fe', kind: 'crysis' }],
+        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
       });
     }
     {
       // Resolve it crysis, it changes stats and goes away
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicTrigger',
-        data: { id: 'e157dce4-5cb1-11ea-86b6-136c0966c3fe' },
+        data: { id: '3104de44-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
         ethicState: [
@@ -93,7 +93,7 @@ describe('Ethic events', function() {
         ],
       });
       expect(baseModel).not.containDeep({
-        ethicTrigger: [{ id: 'e157dce4-5cb1-11ea-86b6-136c0966c3fe', kind: 'crysis' }],
+        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
       });
     }
   });
@@ -104,29 +104,29 @@ describe('Ethic events', function() {
       // Set to pre-max value
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicSet',
-        data: { violence: 3, control: -3, individualism: 2, mind: 2 },
+        data: { violence: 3, control: -3, individualism: 2, mind: -3 },
       });
       expect(baseModel).containDeep({
         ethicState: [
           { scale: 'violence', value: 3 },
           { scale: 'control', value: -3 },
           { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: 2 },
+          { scale: 'mind', value: -3 },
         ],
       });
     }
     {
-      // Get to max (ok, min) on control
+      // Get to max (ok, min) on mind
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicTrigger',
-        data: { id: 'e13587ed-5cb1-11ea-86b6-136c0966c3fe' },
+        data: { id: '30df070e-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
         ethicState: [
           { scale: 'violence', value: 3 },
-          { scale: 'control', value: -4 },
+          { scale: 'control', value: -3 },
           { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: 2 },
+          { scale: 'mind', value: -4 },
         ],
       });
     }
@@ -134,14 +134,14 @@ describe('Ethic events', function() {
       // Get to max on violence
       const { baseModel } = await fixture.sendCharacterEvent({
         eventType: 'ethicTrigger',
-        data: { id: 'e13587e5-5cb1-11ea-86b6-136c0966c3fe' },
+        data: { id: '30df06d4-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
         ethicState: [
           { scale: 'violence', value: 4 },
           { scale: 'control', value: -3 },
           { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: 2 },
+          { scale: 'mind', value: -3 },
         ],
       });
     }
