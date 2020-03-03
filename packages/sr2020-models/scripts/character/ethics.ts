@@ -94,7 +94,11 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
   for (const crysisIndex of trigger.crysises) {
     const crysis = kAllCrysises[crysisIndex - 1];
     if (!api.model.ethicTrigger.some((t) => t.id == crysis.id)) {
-      api.model.ethicTrigger.push(crysis);
+      api.model.ethicTrigger.push({
+        id: crysis.id,
+        kind: crysis.kind,
+        description: crysis.description,
+      });
     }
   }
 
