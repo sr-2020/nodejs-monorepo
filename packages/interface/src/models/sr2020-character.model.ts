@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, rproperty, JsonColumn } from './alice-model-engine';
+import { EmptyModel, rproperty, JsonColumn, BigIntTransformer } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -276,7 +276,7 @@ export class Sr2020Character extends EmptyModel {
   ethicTrigger: AddedEthicTrigger[];
 
   @rproperty()
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
   ethicLockedUntil: number;
 
   @property.array(HistoryRecord, { required: true })

@@ -10,7 +10,7 @@ class JsonToTextTransformer implements ValueTransformer {
   from = (v: any) => JSON.parse(v);
 }
 
-class BigIntTransformer implements ValueTransformer {
+export class BigIntTransformer implements ValueTransformer {
   to = (v: number) => v.toString();
   from = (v: string) => Number(v);
 }
