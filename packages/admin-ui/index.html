@@ -248,7 +248,13 @@
             <b-card-body>
               <b-collapse id="ethic_details">
                 <b-table :items="characterModel.ethicState"></b-table>
-                <b-table :items="characterModel.ethicTrigger"></b-table>
+                <b-table :items="characterModel.ethicTrigger">
+                  <template v-slot:cell(Id)="row">
+                    <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
+                      Активировать
+                    </b-button>
+                  </template>
+                </b-table>
               </b-collapse>
               <div>
                 <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">

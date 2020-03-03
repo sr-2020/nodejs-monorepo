@@ -103,6 +103,11 @@ var app = new Vue({
           mind: this.mind
         }
       });
+    },
+
+    async ethicTrigger(id) {
+      console.log({ eventType: 'ethicTrigger', data: { id } });
+      return this.sendEvent({ eventType: 'ethicTrigger', data: { id } });
     }
   }
 })
