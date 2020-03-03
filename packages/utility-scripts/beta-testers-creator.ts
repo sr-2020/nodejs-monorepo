@@ -2,9 +2,7 @@ import * as request from 'request-promise-native';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
-import { google } from 'googleapis';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-const sheets = google.sheets('v4');
 
 // Run with
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/beta-testers-creator.ts
