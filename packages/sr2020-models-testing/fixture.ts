@@ -13,7 +13,6 @@ import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
-import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import * as Winston from 'winston';
@@ -121,7 +120,10 @@ export class TestFixture {
   }
 
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
-    await this._connection.getRepository(Sr2020Character).save({ ...getDefaultCharacter(this._timeService.timestamp()), ...model });
+    const id = model.modelId ?? 0;
+    await this.client.put(`/character/default/${id}`).expect(200);
+    const character = await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
+    await this._connection.getRepository(Sr2020Character).save({ ...character, ...model });
   }
 
   async saveLocation(model: Partial<Location> = {}) {
@@ -186,62 +188,6 @@ export class TestFixture {
     await this._connection.close();
     this._app.close();
   }
-}
-
-function getDefaultCharacter(timestamp: number): Sr2020Character {
-  const result: Sr2020Character = {
-    healthState: 'healthy',
-    gender: 'мужчина',
-    metarace: 'meta-norm',
-    maxHp: 3,
-    body: 0,
-    intelligence: 0,
-    charisma: 0,
-    magic: 5,
-    resonance: 0,
-    maxTimeAtHost: 15,
-    hostEntrySpeed: 5,
-    conversionAttack: 5,
-    conversionFirewall: 5,
-    conversionSleaze: 5,
-    conversionDataprocessing: 5,
-    adminHostNumber: 3,
-    spriteLevel: 0,
-    maxTimeInVr: 0,
-    magicFeedbackReduction: 0,
-    magicRecoverySpeed: 1,
-    spiritResistanceMultiplier: 1,
-    auraReadingMultiplier: 1,
-    auraMarkMultiplier: 1,
-    auraMask: 0,
-    magicPowerBonus: 0,
-    magicAura: 'aaaabbbbccccddddeeee',
-    ethicGroupMaxSize: 0,
-    chemoBodyDetectableThreshold: 9000,
-    chemoPillDetectableThreshold: 9000,
-    chemoBaseEffectThreshold: 50,
-    chemoSuperEffectThreshold: 70,
-    chemoCrysisThreshold: 120,
-    stockGainPercentage: 0,
-    discountWeaponsArmor: 0,
-    discountDrones: 0,
-    discountChemo: 0,
-    discountImplants: 0,
-    discountMagicStuff: 0,
-    spells: [],
-    activeAbilities: [],
-    passiveAbilities: [],
-    ethicState: [],
-    ethicTrigger: [],
-    ethicLockedUntil: 0,
-    history: [],
-    modelId: '0',
-    timestamp,
-    modifiers: [],
-    timers: {},
-  };
-  initEthic(result);
-  return result;
 }
 
 function getDefaultLocation(timestamp: number): Location {

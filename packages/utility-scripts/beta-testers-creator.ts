@@ -1,7 +1,5 @@
 import * as request from 'request-promise-native';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { initEthic } from '@sr2020/sr2020-models/scripts/character/ethics';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 // Run with
@@ -31,66 +29,7 @@ async function loginOrRegister(email: string, name: string, password: string): P
 }
 
 async function provideCharacter(login: LoginResponse) {
-  const characterData: Sr2020Character = {
-    modelId: login.id.toString(),
-    gender: 'мужчина',
-    metarace: 'meta-norm',
-    maxHp: 3,
-    timestamp: 0,
-    body: 0,
-    intelligence: 0,
-    charisma: 0,
-    magic: 5,
-    resonance: 0,
-    maxTimeAtHost: 15,
-    hostEntrySpeed: 5,
-    conversionAttack: 5,
-    conversionFirewall: 5,
-    conversionSleaze: 5,
-    conversionDataprocessing: 5,
-    adminHostNumber: 3,
-    spriteLevel: 0,
-    maxTimeInVr: 30,
-    magicFeedbackReduction: 0,
-    magicRecoverySpeed: 1,
-    spiritResistanceMultiplier: 1,
-    auraReadingMultiplier: 1,
-    auraMarkMultiplier: 1,
-    auraMask: 0,
-    magicPowerBonus: 0,
-    magicAura: 'aaaabbbbccccddddeeee',
-    healthState: 'healthy',
-    ethicGroupMaxSize: 0,
-    chemoBodyDetectableThreshold: 9000,
-    chemoPillDetectableThreshold: 9000,
-    chemoBaseEffectThreshold: 50,
-    chemoSuperEffectThreshold: 70,
-    chemoCrysisThreshold: 120,
-    stockGainPercentage: 0,
-    discountWeaponsArmor: 0,
-    discountDrones: 0,
-    discountChemo: 0,
-    discountImplants: 0,
-    discountMagicStuff: 0,
-    spells: [],
-    activeAbilities: [],
-    passiveAbilities: [],
-    ethicTrigger: [],
-    ethicState: [],
-    ethicLockedUntil: 0,
-    history: [],
-    modifiers: [],
-    timers: {},
-  };
-  initEthic(characterData);
-  await request.put('http://models-manager.evarun.ru/character/model', { json: characterData, resolveWithFullResponse: true }).promise();
-  await request
-    .post(gatewayAddress + 'models-manager/character/model', {
-      json: { eventType: 'learnSpell', data: { spellName: 'fullHealSpell' } },
-      auth: { bearer: login.api_key },
-      resolveWithFullResponse: true,
-    })
-    .promise();
+  await request.put(`http://models-manager.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true }).promise();
 }
 
 async function provideBilling(login: LoginResponse) {

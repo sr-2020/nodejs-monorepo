@@ -40,6 +40,21 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     return super.replaceById(model);
   }
 
+  @put('/character/default/{id}', {
+    summary: 'Inits character default character model',
+    description: 'Creates and saves default character model. Some field can be randomly populated, other will have default "empty" state.',
+    responses: {
+      content: {
+        'application/json': { schema: { 'x-ts-type': Sr2020Character } },
+      },
+    },
+  })
+  async setDefault(@param.path.number('id') id: number, @requestBody() req: Empty): Promise<Empty> {
+    const model = await this.modelEngineService.defaultCharacter(req);
+    model.modelId = id.toString();
+    return super.replaceById(model);
+  }
+
   @del('/character/model/{id}', {
     responses: {
       '200': {

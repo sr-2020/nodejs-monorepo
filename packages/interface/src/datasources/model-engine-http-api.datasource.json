@@ -39,6 +39,16 @@
       "functions": {
         "processQr": ["req"]
       }
+    },
+    {
+      "template": {
+        "method": "POST",
+        "url": "http://model-engine.evarun.ru/character/default",
+        "body": "{req}"
+      },
+      "functions": {
+        "defaultCharacter": ["req"]
+      }
     }
   ]
 }

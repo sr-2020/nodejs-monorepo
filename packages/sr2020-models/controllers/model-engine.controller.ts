@@ -10,6 +10,8 @@ import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/int
 import { LocationProcessRequest, Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { QrCodeProcessRequest, QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { Empty } from '@sr2020/interface/models';
+import { initEthic } from '../scripts/character/ethics';
 
 function spec(modelType: string, responseType: any): OperationObject {
   return {
@@ -55,6 +57,73 @@ export class ModelEngineController implements ModelEngineService {
   @post('/qr/process', spec('qr', QrCodeProcessResponse))
   async processQr(@requestBody() req: QrCodeProcessRequest): Promise<QrCodeProcessResponse> {
     return this.process(this._qrCodeEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
+  }
+
+  @post('/character/default', {
+    summary: 'Returns default character object.',
+    description: 'Returns default character object. Some field can be randomly populated, other will have default "empty" state.',
+    responses: {
+      '200': {
+        content: {
+          'application/json': { schema: { 'x-ts-type': Sr2020Character } },
+        },
+      },
+    },
+  })
+  async defaultCharacter(@requestBody() _: Empty): Promise<Sr2020Character> {
+    const result: Sr2020Character = {
+      modelId: '',
+      gender: 'мужчина',
+      metarace: 'meta-norm',
+      maxHp: 3,
+      timestamp: 0,
+      body: 0,
+      intelligence: 0,
+      charisma: 0,
+      magic: 5,
+      resonance: 0,
+      maxTimeAtHost: 15,
+      hostEntrySpeed: 5,
+      conversionAttack: 5,
+      conversionFirewall: 5,
+      conversionSleaze: 5,
+      conversionDataprocessing: 5,
+      adminHostNumber: 3,
+      spriteLevel: 0,
+      maxTimeInVr: 30,
+      magicFeedbackReduction: 0,
+      magicRecoverySpeed: 1,
+      spiritResistanceMultiplier: 1,
+      auraReadingMultiplier: 1,
+      auraMarkMultiplier: 1,
+      auraMask: 0,
+      magicPowerBonus: 0,
+      magicAura: 'aaaabbbbccccddddeeee',
+      healthState: 'healthy',
+      ethicGroupMaxSize: 0,
+      chemoBodyDetectableThreshold: 9000,
+      chemoPillDetectableThreshold: 9000,
+      chemoBaseEffectThreshold: 50,
+      chemoSuperEffectThreshold: 70,
+      chemoCrysisThreshold: 120,
+      stockGainPercentage: 0,
+      discountWeaponsArmor: 0,
+      discountDrones: 0,
+      discountChemo: 0,
+      discountImplants: 0,
+      discountMagicStuff: 0,
+      spells: [],
+      activeAbilities: [],
+      passiveAbilities: [],
+      ethicTrigger: [],
+      ethicState: [],
+      ethicLockedUntil: 0,
+      history: [],
+      modifiers: [],
+      timers: {},
+    };
+    initEthic(result);
+    return result;
   }
 
   async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {
