@@ -3,7 +3,7 @@ import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger } from './ethics_l
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 
 const MAX_ETHIC_VALUE = 4;
-const ETHIC_COOLDOWN_MS = 30 * 60 * 1000;
+const ETHIC_COOLDOWN_MS = 30 * 1000;
 
 export function initEthic(model: Sr2020Character) {
   updateEthic(
