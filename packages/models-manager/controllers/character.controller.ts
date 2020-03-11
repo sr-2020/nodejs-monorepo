@@ -49,10 +49,21 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
-  async setDefault(@param.path.number('id') id: number, @requestBody() req: Empty): Promise<Empty> {
+  async setDefault(
+    @param.path.number('id') id: number,
+    @requestBody() req: Empty,
+    @param.query.boolean('noAbilities') noAbilities: boolean,
+  ): Promise<Empty> {
     const model = await this.modelEngineService.defaultCharacter(req);
     model.modelId = id.toString();
-    return super.replaceById(model);
+    await super.replaceById(model);
+    if (!noAbilities) {
+      for (const f of ['ask-anon', 'ground-heal', 'fireball']) {
+        await this.postEvent(id, { eventType: 'addFeature', data: { id: f } }, undefined);
+      }
+    }
+
+    return new Empty();
   }
 
   @del('/character/model/{id}', {
@@ -105,8 +116,8 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   async postEvent(
     @param.path.number('id') id: number,
     @requestBody() event: EventRequest,
-    @TransactionManager() manager: EntityManager,
+    @TransactionManager() manager?: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
-    return super.postEvent(id, event, manager);
+    return super.postEvent(id, event, manager!);
   }
 }
