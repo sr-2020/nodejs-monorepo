@@ -74,7 +74,12 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
   const values: Map<EthicScale, number> = new Map();
   for (const l of api.model.ethicState) values.set(l.scale, l.value);
 
-  if (trigger.kind == 'crysis') api.model.ethicTrigger = api.model.ethicTrigger.filter((t) => t.id != data.id);
+  let crysisResolved = false;
+
+  if (trigger.kind == 'crysis') {
+    api.model.ethicTrigger = api.model.ethicTrigger.filter((t) => t.id != data.id);
+    crysisResolved = true;
+  }
 
   let valuesShifted = false;
 
@@ -91,6 +96,8 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
     }
   }
 
+  let crysisAdded = false;
+
   for (const crysisIndex of trigger.crysises) {
     const crysis = kAllCrysises[crysisIndex - 1];
     if (!api.model.ethicTrigger.some((t) => t.id == crysis.id)) {
@@ -99,6 +106,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
         kind: crysis.kind,
         description: crysis.description,
       });
+      crysisAdded = true;
     }
   }
 
@@ -107,5 +115,23 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
 
     // TODO(https://trello.com/c/oU50sFq6/198-личная-этика-задача-6-разработать-процедуру-пересчета-абилок)
     updateEthic(api.model, values);
+  }
+
+  if (valuesShifted) {
+    // We assume that situation valuesShifted && crysisAdded is not possible
+    if (crysisResolved) {
+      api.sendNotification('Этика', 'Кризис разрешен и это вызвало изменение этических параметров');
+    } else {
+      api.sendNotification('Этика', 'Ваше действие вызвало изменение этических параметров');
+    }
+  } else {
+    // We assume that situation crysisResolved && crysisAdded is not possible
+    if (crysisResolved) {
+      api.sendNotification('Этика', 'Кризис разрешен');
+    }
+
+    if (crysisAdded) {
+      api.sendNotification('Этика', 'Ваше действие привело к кризису');
+    }
   }
 }
