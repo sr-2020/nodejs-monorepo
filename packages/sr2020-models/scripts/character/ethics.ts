@@ -1,5 +1,7 @@
+import { isEqual } from 'lodash';
+
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger } from './ethics_library';
+import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger, kEthicAbilities } from './ethics_library';
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 
 const MAX_ETHIC_VALUE = 4;
@@ -19,7 +21,8 @@ export function initEthic(model: Sr2020Character) {
 
 // Update ethic profile based on the new ethic values.
 // Will remove all non-crysis triggers and recalculate state.
-function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>) {
+// Returns true if ethic ability was added and false otherwise.
+function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
   model.ethicState = [];
   model.ethicTrigger = model.ethicTrigger.filter((t) => t.kind == 'crysis');
   for (const [scale, value] of ethicValues) {
@@ -39,6 +42,25 @@ function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number
       }),
     );
   }
+
+  const allEthicAbilitiesIds = kEthicAbilities.map((it) => it.abilityId);
+  const characterEthicAbilities = [
+    ...model.activeAbilities.filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
+    ...model.passiveAbilities.filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
+  ];
+
+  const newEthicAbilities = kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId);
+
+  const abilitiesChanged = !isEqual(characterEthicAbilities.sort(), newEthicAbilities.sort());
+  if (abilitiesChanged) {
+    model.passiveAbilities = model.passiveAbilities.filter(
+      (it) => !characterEthicAbilities.includes(it.id) || newEthicAbilities.includes(it.id),
+    );
+    model.activeAbilities = model.activeAbilities.filter(
+      (it) => !characterEthicAbilities.includes(it.id) || newEthicAbilities.includes(it.id),
+    );
+  }
+  return abilitiesChanged;
 }
 
 function findTrigger(id: string): EthicTrigger {
@@ -110,19 +132,23 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
     }
   }
 
+  let gotNewAbility = false;
+
   if (valuesShifted) {
     api.model.ethicLockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
 
     // TODO(https://trello.com/c/oU50sFq6/198-личная-этика-задача-6-разработать-процедуру-пересчета-абилок)
-    updateEthic(api.model, values);
+    gotNewAbility = updateEthic(api.model, values);
   }
 
   if (valuesShifted) {
     // We assume that situation valuesShifted && crysisAdded is not possible
-    if (crysisResolved) {
-      api.sendNotification('Этика', 'Кризис разрешен и это вызвало изменение этических параметров');
-    } else {
-      api.sendNotification('Этика', 'Ваше действие вызвало изменение этических параметров');
+    let message = crysisResolved
+      ? 'Кризис разрешен и это вызвало изменение этических параметров'
+      : 'Ваше действие вызвало изменение этических параметров';
+    if (gotNewAbility) {
+      message = message + '. Вы получили этическую способность!';
+      api.sendNotification('Этика', message);
     }
   } else {
     // We assume that situation crysisResolved && crysisAdded is not possible

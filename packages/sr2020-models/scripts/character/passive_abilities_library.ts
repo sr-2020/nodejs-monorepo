@@ -1778,6 +1778,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // разрешает игроку использовать гранаты
     modifier: [],
   },
+
+  {
+    id: 'comcon-ethic-ability',
+    name: 'Вы достигли!',
+    description: 'Приходите на наш воскресный семинар по приложению и выиграйте футболку в лотерее!',
+    modifier: [],
+  },
 ];
 
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {

@@ -23,6 +23,23 @@ export interface EthicLevel {
   triggers: EthicTrigger[];
 }
 
+export interface EthicAbilityCondition {
+  scale: EthicScale;
+  value: number;
+  abilityId: string;
+}
+
+export const kEthicAbilities: EthicAbilityCondition[] = [
+  { scale: 'control', value: -4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'control', value: 4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'individualism', value: -4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'individualism', value: 4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'mind', value: -4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'mind', value: 4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'violence', value: -4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'violence', value: 4, abilityId: 'comcon-ethic-ability' },
+];
+
 export const kAllCrysises: EthicTrigger[] = [
   {
     id: '628f86b0-6486-11ea-a399-09a05ee6ca4f',
