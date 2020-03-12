@@ -5,7 +5,7 @@ import { setupApplication } from '../test-helper';
 describe('PingController', function() {
   // For some reason this test is quite slow to start
   // eslint-disable-next-line no-invalid-this
-  this.timeout(15000);
+  this.timeout(25000);
 
   let app: ModelsManagerApplication;
   let client: Client;
