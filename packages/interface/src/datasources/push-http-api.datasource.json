@@ -1,7 +1,7 @@
 {
   "name": "PushHttpApi",
   "connector": "rest",
-  "baseURL": "http://gateway.evarun.ru/api/v1/push/",
+  "baseURL": "http://push.evarun.ru/",
   "options": {
     "headers": {
       "accept": "application/json",
@@ -13,7 +13,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://gateway.evarun.ru/api/v1/push/send_notification/{recipient}",
+        "url": "http://push.evarun.ru/send_notification/{recipient}",
         "body": "{notification}"
       },
       "functions": {
