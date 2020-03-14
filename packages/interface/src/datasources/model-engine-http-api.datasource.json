@@ -1,7 +1,7 @@
 {
   "name": "ModelEngineHttpApi",
   "connector": "rest",
-  "baseURL": "http://model-engine.evarun.ru",
+  "baseURL": "https://model-engine.k.evarun.ru",
   "options": {
     "headers": {
       "accept": "application/json",
@@ -13,7 +13,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://model-engine.evarun.ru/character/process",
+        "url": "https://model-engine.k.evarun.ru/character/process",
         "body": "{req}"
       },
       "functions": {
@@ -23,7 +23,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://model-engine.evarun.ru/location/process",
+        "url": "https://model-engine.k.evarun.ru/location/process",
         "body": "{req}"
       },
       "functions": {
@@ -33,7 +33,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://model-engine.evarun.ru/qr/process",
+        "url": "https://model-engine.k.evarun.ru/qr/process",
         "body": "{req}"
       },
       "functions": {
@@ -43,7 +43,7 @@
     {
       "template": {
         "method": "POST",
-        "url": "http://model-engine.evarun.ru/character/default",
+        "url": "https://model-engine.k.evarun.ru/character/default",
         "body": "{req}"
       },
       "functions": {
