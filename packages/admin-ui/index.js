@@ -15,7 +15,7 @@ var app = new Vue({
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
   },
   async created() {
-    const response = await this.$http.get(`http://model-engine.evarun.ru/features`);
+    const response = await this.$http.get(`https://model-engine.k.evarun.ru/features`);
     this.allFeatures = response.body;
   },
   methods: {
