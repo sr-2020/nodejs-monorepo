@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: model-engine
+  name: model-engine
+spec:
+  selector:
+    matchLabels:
+      app: model-engine
+  template:
+    metadata:
+      labels:
+        app: model-engine
+    spec:
+      containers:
+      - image: sr2020/model-engine:latest
+        name: model-engine
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-engine
+spec:
+  type: LoadBalancer
+  selector:
+    app: model-engine
+  ports:
+  - name: http
+    port: 7006
+    targetPort: 3000

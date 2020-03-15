@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ppa
+  name: ppa
+spec:
+  selector:
+    matchLabels:
+      app: ppa
+  template:
+    metadata:
+      labels:
+        app: ppa
+    spec:
+      containers:
+      - image: dockage/phppgadmin:latest
+        name: ppa
+        ports:
+        - containerPort: 80
+        env:
+        - name: PHP_PG_ADMIN_SERVER_HOST
+          value: postgres-service 
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ppa
+spec:
+  type: LoadBalancer
+  selector:
+    app: ppa
+  ports:
+  - name: http
+    port: 7051
+    targetPort: 80

@@ -1,0 +1,28 @@
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: model-engine
+spec:
+  domains:
+    - model-engine.k8.evarun.ru
+
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: models-manager
+spec:
+  domains:
+    - models-manager.k8.evarun.ru
+
+---
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: push
+spec:
+  domains:
+    - push.k8.evarun.ru
+
+---
+

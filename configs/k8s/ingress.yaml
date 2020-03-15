@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    kubernetes.io/ingress.allow-http: true
+    networking.gke.io/managed-certificates: "model-engine,models-manager,push"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: model-engine
+          servicePort: http
+    host: model-engine.k8.evarun.ru
+  - http:
+      paths:
+      - backend:
+          serviceName: models-manager
+          servicePort: http
+    host: models-manager.k8.evarun.ru
+  - http:
+      paths:
+      - backend:
+          serviceName: push
+          servicePort: http
+    host: push.k8.evarun.ru    
+  - http:
+      paths:
+      - backend:
+          serviceName: ppa
+          servicePort: http
+    host: ppa.k8.evarun.ru    

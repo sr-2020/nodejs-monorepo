@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: push
+  name: push
+spec:
+  selector:
+    matchLabels:
+      app: push
+  template:
+    metadata:
+      labels:
+        app: push
+    spec:
+      containers:
+      - image: sr2020/push:latest
+        name: push
+        ports:
+        - containerPort: 3000
+        env:
+        - name: POSTGRESQL_HOST
+          value: postgres-service 
+        - name: POSTGRESQL_DATABASE
+          value: push        
+        - name: POSTGRESQL_USER
+          valueFrom: 
+            secretKeyRef:
+              name: postgres-secret
+              key: user
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password      
+        - name: POSTGRES_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        - name: FIREBASE_SERVER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: firebase-secret
+              key: server_token                
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: push
+spec:
+  type: LoadBalancer
+  selector:
+    app: push
+  ports:
+  - name: http
+    port: 7005
+    targetPort: 3000
