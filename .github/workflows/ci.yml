@@ -95,3 +95,11 @@ jobs:
           CLI: gsutil
         with:
           args: -h "Cache-Control:no-cache,max-age=0" cp packages/admin-ui/* gs://admin-ui.evarun.ru
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_email: ${{ secrets.SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - run: gcloud components install kubectl
+      - run: gcloud container clusters get-credentials prod --project imposing-elixir-249711 --zone europe-west3-b
+      - run: kubectl describe Deployment push
+      - run: kubectl rollout restart deployment/{models-manager,model-engine,push}
