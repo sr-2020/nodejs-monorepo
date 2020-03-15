@@ -37,6 +37,10 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: password
+      volumes:
+        - name: postgres-disk
+          persistentVolumeClaim:
+            claimName: postgres-disk
 ---
 apiVersion: v1
 kind: Service
@@ -52,4 +56,3 @@ spec:
   selector:
     app: postgres
   type: ClusterIP
-
