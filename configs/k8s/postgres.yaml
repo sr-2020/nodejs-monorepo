@@ -14,26 +14,29 @@ spec:
         app: postgres
     spec:
       containers:
-      - image: postgres:11.5
-        name: postgres
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password      
-        - name: POSTGRES_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password                   
+        - image: postgres:11.5
+          name: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-disk
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: POSTGRES_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service
@@ -43,9 +46,9 @@ metadata:
     app: postgres
 spec:
   ports:
-  - protocol: TCP
-    port: 5432
-    targetPort: 5432
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
   selector:
     app: postgres
   type: ClusterIP
