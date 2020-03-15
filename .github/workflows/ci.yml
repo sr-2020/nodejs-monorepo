@@ -83,7 +83,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, lint, build, docker_models_manager, docker_model_engine, docker_push]
     steps:
-      - uses: imranismail/setup-kustomize@master
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           service_account_email: ${{ secrets.SA_EMAIL }}
@@ -92,6 +91,10 @@ jobs:
       - run: gcloud container clusters get-credentials prod --project imposing-elixir-249711 --zone europe-west3-b
 
       - uses: actions/checkout@v1
+      - name: Set up Kustomize
+        run: |
+          curl -o kustomize --location https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+          chmod u+x ./kustomize
       - uses: actions-hub/gcloud@272.0.0
         env:
           PROJECT_ID: imposing-elixir-249711
@@ -100,7 +103,7 @@ jobs:
         with:
           args: -h "Cache-Control:no-cache,max-age=0" cp packages/admin-ui/* gs://admin-ui.evarun.ru
       - run: |
-          kustomize edit set image sr2020/models-manager:TAG=sr2020/models-manager:$GITHUB_SHA
-          kustomize edit set image sr2020/model-engine:TAG=sr2020/model-engine:$GITHUB_SHA
-          kustomize edit set image sr2020/push:TAG=sr2020/push:$GITHUB_SHA
-          kustomize build ./configs/k8s | kubectl apply -f -
+          ./kustomize edit set image sr2020/models-manager:TAG=sr2020/models-manager:$GITHUB_SHA
+          ./kustomize edit set image sr2020/model-engine:TAG=sr2020/model-engine:$GITHUB_SHA
+          ./kustomize edit set image sr2020/push:TAG=sr2020/push:$GITHUB_SHA
+          ./kustomize build ./configs/k8s | kubectl apply -f -
