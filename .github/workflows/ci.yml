@@ -102,8 +102,11 @@ jobs:
           CLI: gsutil
         with:
           args: -h "Cache-Control:no-cache,max-age=0" cp packages/admin-ui/* gs://admin-ui.evarun.ru
+      # All those ../.. relative paths are rather ugly, but I can't figure out how to pass a path to the kustomization.yaml to
+      # kustomize edit :(
       - run: |
-          ./kustomize edit set image sr2020/models-manager:TAG=sr2020/models-manager:$GITHUB_SHA
-          ./kustomize edit set image sr2020/model-engine:TAG=sr2020/model-engine:$GITHUB_SHA
-          ./kustomize edit set image sr2020/push:TAG=sr2020/push:$GITHUB_SHA
-          ./kustomize build ./configs/k8s | kubectl apply -f -
+          cd ./configs/k8s
+          ../../kustomize edit set image sr2020/models-manager:TAG=sr2020/models-manager:$GITHUB_SHA
+          ../../kustomize edit set image sr2020/model-engine:TAG=sr2020/model-engine:$GITHUB_SHA
+          ../../kustomize edit set image sr2020/push:TAG=sr2020/push:$GITHUB_SHA
+          ../../kustomize build . | kubectl apply -f -
