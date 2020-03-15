@@ -41,5 +41,5 @@ spec:
     app: model-engine
   ports:
     - name: http
-      port: 7006
+      port: 80
       targetPort: 3000
