@@ -71,7 +71,7 @@ class SpreadsheetProcessor {
 
   async run() {
     // https://docs.google.com/spreadsheets/d/1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A
-    const spreadsheetId = '1qQsvZVzjCj7O03tNQcGto0wDkEYaJOb2nFimladh9HA';
+    const spreadsheetId = '1BsdcTYZ4Kvv3oTB1bJsq5VfsLKhuFS5_cEOMV_CJggc';
 
     {
       // Parse level descriptions
