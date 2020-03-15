@@ -1,5 +1,5 @@
 {
   "spec": "**/*.spec.ts",
   "require": ["source-map-support/register", "tsconfig-paths/register", "../../ts-node-prefer-ts"],
-  "timeout": 10000
+  "timeout": 100000
 }
