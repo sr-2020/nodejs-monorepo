@@ -14,47 +14,47 @@ spec:
         app: push
     spec:
       containers:
-      - image: sr2020/push:latest
-        name: push
-        ports:
-        - containerPort: 3000
-        env:
-        - name: POSTGRESQL_HOST
-          value: postgres-service 
-        - name: POSTGRESQL_DATABASE
-          value: push        
-        - name: POSTGRESQL_USER
-          valueFrom: 
-            secretKeyRef:
-              name: postgres-secret
-              key: user
-        - name: POSTGRESQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password      
-        - name: POSTGRES_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password
-        - name: FIREBASE_SERVER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: firebase-secret
-              key: server_token                
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 3
-          periodSeconds: 20
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 3
-          periodSeconds: 20
+        - image: sr2020/push:TAG
+          name: push
+          ports:
+            - containerPort: 3000
+          env:
+            - name: POSTGRESQL_HOST
+              value: postgres-service
+            - name: POSTGRESQL_DATABASE
+              value: push
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: POSTGRES_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: FIREBASE_SERVER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-secret
+                  key: server_token
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
@@ -65,6 +65,6 @@ spec:
   selector:
     app: push
   ports:
-  - name: http
-    port: 7005
-    targetPort: 3000
+    - name: http
+      port: 7005
+      targetPort: 3000
