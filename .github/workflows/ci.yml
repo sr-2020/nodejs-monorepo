@@ -86,6 +86,7 @@ jobs:
       - run: make deploy server=instance.evarun.ru password=${{ secrets.USER_PASSWORD }}
   deploy_gcloud:
     runs-on: ubuntu-latest
+    needs: [docker_models_manager, docker_model_engine, docker_push]
     steps:
       - uses: actions/checkout@v1
       - uses: actions-hub/gcloud@272.0.0
@@ -101,5 +102,4 @@ jobs:
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
       - run: gcloud components install kubectl
       - run: gcloud container clusters get-credentials prod --project imposing-elixir-249711 --zone europe-west3-b
-      - run: kubectl describe Deployment push
       - run: kubectl rollout restart deployment/{models-manager,model-engine,push}
