@@ -44,47 +44,44 @@ jobs:
       - run: npx lerna run build
   docker_models_manager:
     runs-on: ubuntu-latest
-    needs: [test, lint, build]
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: sr2020/models-manager
-          tags: latest,$GITHUB_SHA
+          tags: $GITHUB_SHA
           dockerfile: packages/models-manager/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
 
   docker_model_engine:
     runs-on: ubuntu-latest
-    needs: [test, lint, build]
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: sr2020/model-engine
-          tags: latest,$GITHUB_SHA
+          tags: $GITHUB_SHA
           dockerfile: packages/sr2020-models/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_push:
     runs-on: ubuntu-latest
-    needs: [test, lint, build]
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: sr2020/push
-          tags: latest,$GITHUB_SHA
+          tags: $GITHUB_SHA
           dockerfile: packages/push/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   deploy_gcloud:
     runs-on: ubuntu-latest
-    needs: [docker_models_manager, docker_model_engine, docker_push]
+    needs: [test, lint, build, docker_models_manager, docker_model_engine, docker_push]
     steps:
       - uses: actions/checkout@v1
       - uses: actions-hub/gcloud@272.0.0
