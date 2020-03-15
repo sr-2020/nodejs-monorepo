@@ -22,6 +22,10 @@ spec:
             - mountPath: /var/lib/postgresql/data
               name: postgres-disk
           env:
+            # Can't use default (/var/lib/postgresql/data/) directly, as PostgreSQL expects it to be empty.
+            # See https://github.com/docker-library/postgres/issues/263.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
