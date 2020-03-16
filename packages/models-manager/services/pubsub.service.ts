@@ -6,10 +6,10 @@ export interface PubSubService {
 }
 
 export class PubSubServiceImpl implements PubSubService {
-  readonly pubsub = new PubSub();
+  static readonly pubsub = new PubSub();
 
   publish(topic: string, message: any): Promise<string> {
-    return this.pubsub.topic(topic).publishJSON(message);
+    return PubSubServiceImpl.pubsub.topic(topic).publishJSON(message);
   }
 }
 
