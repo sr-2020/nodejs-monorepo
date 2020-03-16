@@ -15,7 +15,7 @@
     "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "prestart": "yarn run build",
-    "start": "node -r tsconfig-paths/register .",
+    "start": "node --inspect=3001 -r tsconfig-paths/register .",
     "docker:build": "docker build -t sr2020/models-manager -f Dockerfile ../..",
     "docker:push": "docker push sr2020/models-manager"
   },
