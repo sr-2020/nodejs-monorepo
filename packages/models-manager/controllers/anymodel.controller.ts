@@ -80,7 +80,12 @@ export class AnyModelController<TModel extends EmptyModel> {
         promises.push(this.pushService.send(Number(r.baseModel.modelId), notification));
         pubSubPromises.push(this.pubSubService.publish('push', { characterId: Number(r.baseModel.modelId), ...notification }));
       }
+
+      for (const pubSubNotification of r.pubSubNotifications) {
+        pubSubPromises.push(this.pubSubService.publish(pubSubNotification.topic, pubSubNotification.body));
+      }
     }
+
     await Promise.all(promises);
     await Promise.all(pubSubPromises);
   }

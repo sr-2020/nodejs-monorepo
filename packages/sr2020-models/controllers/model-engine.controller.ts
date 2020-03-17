@@ -157,6 +157,7 @@ export class ModelEngineController implements ModelEngineService {
         workModel: res.workingModel,
         outboundEvents: res.outboundEvents,
         notifications: res.notifications,
+        pubSubNotifications: res.pubSubNotifications,
         tableResponse: res.tableResponse,
       };
     } else {

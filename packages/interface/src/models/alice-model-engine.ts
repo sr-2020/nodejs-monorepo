@@ -1,7 +1,7 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { model, property } from '@loopback/repository';
-import { PushNotification } from './push-notification.model';
+import { PushNotification, PubSubNotification } from './push-notification.model';
 import { EventCallback } from '@sr2020/interface/callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
 
@@ -176,6 +176,7 @@ export type EngineResultOk = {
   aquired: AquiredObjects;
   outboundEvents: EventForModelType[];
   notifications: PushNotification[];
+  pubSubNotifications: PubSubNotification[];
   tableResponse: any;
 };
 
@@ -293,6 +294,9 @@ export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
   // Schedules sending of notification to the user "responsible" for model being processed.
   // If model being processed is not a "user" one, notification won't be sent.
   sendNotification(title: string, body: string): this;
+
+  // Schedules sending of PubSub notification.
+  sendPubSubNotification(topic: string, body: any): this;
 
   // Quick hack to be able to send some table data to the user
   // Needs some reconsideration

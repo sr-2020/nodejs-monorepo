@@ -88,6 +88,7 @@ export class Engine<T extends EmptyModel> {
       aquired: context.aquired,
       outboundEvents: context.outboundEvents,
       notifications: context.notifications,
+      pubSubNotifications: context.pubSubNotifications,
       tableResponse: context.tableResponse,
     };
   }

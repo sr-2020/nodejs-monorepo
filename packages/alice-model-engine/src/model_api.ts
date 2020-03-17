@@ -144,6 +144,11 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
     return this;
   }
 
+  public sendPubSubNotification(topic: string, body: any) {
+    this.context.sendPubSubNotification(topic, body);
+    return this;
+  }
+
   public setTableResponse(table: any): this {
     this.context.setTableResponse(table);
     return this;

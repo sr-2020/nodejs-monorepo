@@ -1,6 +1,6 @@
 import { model, property } from '@loopback/repository';
 import { Event, EventForModelType, AquiredObjects, EmptyModel, rproperty } from './alice-model-engine';
-import { PushNotification } from './push-notification.model';
+import { PushNotification, PubSubNotification } from './push-notification.model';
 
 @model()
 export class BaseModelProcessRequest {
@@ -21,6 +21,9 @@ export class BaseModelProcessResponse {
 
   @property.array(PushNotification, { required: true })
   notifications: PushNotification[];
+
+  @property.array(PubSubNotification, { required: true })
+  pubSubNotifications: PubSubNotification[];
 
   // TODO: Can we improve typings or do something else to make it less hacky?
   @property()

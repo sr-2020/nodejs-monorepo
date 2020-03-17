@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
 import { AquiredObjects, EmptyModel, Event, PendingAquire, Timer, EventForModelType } from 'interface/src/models/alice-model-engine';
-import { PushNotification } from '@sr2020/interface/models';
+import { PushNotification, PubSubNotification } from '@sr2020/interface/models';
 import { assert } from 'console';
 
 export type FieldName = string | string[];
@@ -31,6 +31,7 @@ export class Context<T extends EmptyModel> {
   private _events: Event[];
   private _dictionaries: Dictionaries = {};
   private _outboundEvents: OutboundEvents;
+  private _pubsubNotifications: PubSubNotification[] = [];
   private _pendingAquire: PendingAquire;
   private _aquired: AquiredObjects;
   private _notifications: PushNotification[] = [];
@@ -79,6 +80,10 @@ export class Context<T extends EmptyModel> {
 
   get notifications(): PushNotification[] {
     return this._notifications;
+  }
+
+  get pubSubNotifications(): PubSubNotification[] {
+    return this._pubsubNotifications;
   }
 
   get aquired(): AquiredObjects {
@@ -136,6 +141,10 @@ export class Context<T extends EmptyModel> {
 
   public sendNotification(title: string, body: string) {
     this._notifications.push({ title, body });
+  }
+
+  public sendPubSubNotification(topic: string, body: any) {
+    this._pubsubNotifications.push({ topic, body });
   }
 
   public setTableResponse(table: any) {

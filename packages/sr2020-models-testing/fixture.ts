@@ -2,7 +2,7 @@ import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/te
 import { Config } from '@sr2020/alice-model-engine/config';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
-import { PushNotification, PushResult } from '@sr2020/interface/models';
+import { PushNotification, PushResult, PubSubNotification } from '@sr2020/interface/models';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
@@ -69,8 +69,19 @@ class MockPushService implements PushService {
 }
 
 class MockPubSubService implements PubSubService {
-  async publish(topic: string, message: any): Promise<string> {
+  private notifications: PubSubNotification[] = [];
+
+  async publish(topic: string, body: any): Promise<string> {
+    this.notifications.push({ topic, body });
     return '';
+  }
+
+  get() {
+    return this.notifications;
+  }
+
+  reset() {
+    this.notifications = [];
   }
 }
 
@@ -81,6 +92,7 @@ export class TestFixture {
     private _app: ModelsManagerApplication,
     private _timeService: MockTimeService,
     private _pushService: MockPushService,
+    private _pubSubService: MockPubSubService,
   ) {}
 
   static async create(): Promise<TestFixture> {
@@ -116,7 +128,7 @@ export class TestFixture {
 
     const client = createRestAppClient(app);
 
-    return new TestFixture(client, connection, app, timeService, pushService);
+    return new TestFixture(client, connection, app, timeService, pushService, pubSubService);
   }
 
   async saveCharacter(model: Partial<Sr2020Character> = {}) {
@@ -136,6 +148,10 @@ export class TestFixture {
 
   getCharacterNotifications(id: number | string = 0): PushNotification[] {
     return this._pushService.get(id) ?? [];
+  }
+
+  getPubSubNotifications(): PubSubNotification[] {
+    return this._pubSubService.get();
   }
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {

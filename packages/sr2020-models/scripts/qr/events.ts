@@ -1,5 +1,6 @@
 import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { consumeFood, installImplant } from '../character/merchandise';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, _: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -30,6 +31,18 @@ interface Merchandise {
   additionalData: any;
 }
 
+function merchandiseIdToEventType(id: string) {
+  if (id == 'food') {
+    return consumeFood.name;
+  }
+
+  for (const grade of ['alpha', 'beta', 'gamma', 'delta', 'bio']) {
+    if (id.endsWith(`-${grade}`)) return installImplant.name;
+  }
+
+  return undefined;
+}
+
 export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise, _: Event) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
@@ -41,7 +54,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
     description: data.description,
     usesLeft: data.numberOfUses ?? 1,
     data: { ...data.additionalData, id: data.id },
-
+    eventType: merchandiseIdToEventType(data.id),
     timestamp: api.model.timestamp,
     modifiers: [],
     modelId: api.model.modelId,
