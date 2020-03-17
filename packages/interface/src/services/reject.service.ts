@@ -8,7 +8,7 @@ import { HttpError } from 'http-errors';
 // Here we unwrap error.message if possible.
 export class CustomRejectProvider extends RejectProvider {
   action({ request, response }: HandlerContext, error: Error) {
-    let err = <HttpError>error;
+    const err = <HttpError>error;
 
     try {
       error = <HttpError>JSON.parse(err.message).error ?? error;
