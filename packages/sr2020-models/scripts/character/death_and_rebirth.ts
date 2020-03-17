@@ -8,7 +8,7 @@ const kClinicalDeathTimerTime = 5 * 60 * 1000;
 export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
 
-  api.model.healthState = 'wounded';
+  saveHealthStateAndSendPubSub(api, 'wounded');
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы тяжело ранены');
 
   api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
@@ -17,7 +17,7 @@ export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) 
 export function clinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') return;
 
-  api.model.healthState = 'clinically_dead';
+  saveHealthStateAndSendPubSub(api, 'clinically_dead');
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
 }
 
@@ -32,6 +32,14 @@ export function reviveOnTarget(api: EventModelApi<Sr2020Character>, data: { targ
 export function revive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState == 'biologically_dead') return;
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
-  api.model.healthState = 'healthy';
+  saveHealthStateAndSendPubSub(api, 'healthy');
   api.removeTimer(kClinicalDeathTimerName);
+}
+
+function saveHealthStateAndSendPubSub(
+  api: EventModelApi<Sr2020Character>,
+  state: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead',
+) {
+  api.model.healthState = state;
+  api.sendPubSubNotification('health_state', { characterId: api.model.modelId, state });
 }
