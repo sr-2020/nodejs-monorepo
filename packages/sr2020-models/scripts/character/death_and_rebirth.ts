@@ -41,5 +41,5 @@ function saveHealthStateAndSendPubSub(
   state: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead',
 ) {
   api.model.healthState = state;
-  api.sendPubSubNotification('health_state', { characterId: api.model.modelId, state });
+  api.sendPubSubNotification('health_state', { characterId: Number(api.model.modelId), state });
 }
