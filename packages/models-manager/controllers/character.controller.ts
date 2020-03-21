@@ -4,7 +4,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
-import { EntityManager, Transaction, TransactionManager } from 'typeorm';
+import { EntityManager, Transaction, TransactionManager, getManager } from 'typeorm';
 import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
@@ -50,12 +50,10 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
-  @Transaction()
   async setDefault(
     @param.path.number('id') id: number,
     @requestBody() req: Empty,
     @param.query.boolean('noAbilities') noAbilities: boolean,
-    @TransactionManager() manager: EntityManager,
   ): Promise<Empty> {
     const model = await this.modelEngineService.defaultCharacter(req);
     model.modelId = id.toString();
@@ -73,8 +71,11 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       timers: {},
       data: {},
     };
-    await manager.getRepository(Sr2020Character).save(model);
-    await manager.getRepository(QrCode).save(code);
+
+    await getManager().transaction(async (manager) => {
+      await manager.getRepository(Sr2020Character).save(model);
+      await manager.getRepository(QrCode).save(code);
+    });
 
     if (!noAbilities) {
       for (const f of ['ask-anon', 'ground-heal', 'fireball']) {
