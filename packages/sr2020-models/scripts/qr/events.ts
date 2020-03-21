@@ -60,3 +60,38 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
     modelId: api.model.modelId,
   };
 }
+
+export interface MentalQrData {
+  attackerId: string;
+  attack: number;
+  eventType: string;
+  name: string;
+  description: string;
+}
+
+export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrData, _: Event) {
+  api.model.usesLeft = 1;
+  api.model.type = 'ability';
+  api.model.name = 'Способность ' + data.name;
+  api.model.description = data.description;
+  api.model.eventType = data.eventType;
+  api.model.data = data;
+  api.model.modifiers = [];
+  api.model.timers = {};
+
+  api.setTimer('clear', 5 * 60 * 1000, clearMentalAbility, undefined);
+}
+
+export function clearMentalAbility(api: EventModelApi<QrCode>, data: undefined, _: Event) {
+  api.model = {
+    usesLeft: 100,
+    description: '',
+    modelId: api.model.modelId,
+    modifiers: [],
+    timers: {},
+    name: '',
+    timestamp: api.model.timestamp,
+    type: 'ability',
+    eventType: 'scannedConsumedMentalAbility',
+  };
+}

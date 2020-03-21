@@ -61,7 +61,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
 
     const code: QrCode = {
       modelId: model.mentalQrId.toString(),
-      eventType: 'mentalAbility',
+      eventType: '_',
       type: 'ability',
       name: '',
       description: '',
