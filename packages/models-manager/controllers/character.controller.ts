@@ -10,6 +10,7 @@ import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { TimeService } from '../services/time.service';
 import { AnyModelController } from './anymodel.controller';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 
 export class CharacterController extends AnyModelController<Sr2020Character> {
   constructor(
@@ -49,14 +50,32 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
+  @Transaction()
   async setDefault(
     @param.path.number('id') id: number,
     @requestBody() req: Empty,
     @param.query.boolean('noAbilities') noAbilities: boolean,
+    @TransactionManager() manager: EntityManager,
   ): Promise<Empty> {
     const model = await this.modelEngineService.defaultCharacter(req);
     model.modelId = id.toString();
-    await super.replaceById(model);
+    model.mentalQrId = id + 10000;
+
+    const code: QrCode = {
+      modelId: model.mentalQrId.toString(),
+      eventType: 'mentalAbility',
+      type: 'ability',
+      name: '',
+      description: '',
+      usesLeft: 0,
+      timestamp: model.timestamp,
+      modifiers: [],
+      timers: {},
+      data: {},
+    };
+    await manager.getRepository(Sr2020Character).save(model);
+    await manager.getRepository(QrCode).save(code);
+
     if (!noAbilities) {
       for (const f of ['ask-anon', 'ground-heal', 'fireball']) {
         await this.postEvent(id, { eventType: 'addFeature', data: { id: f } }, undefined);
