@@ -141,6 +141,18 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column({ default: 0 })
+  mentalAttackBonus: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  mentalDefenceBonus: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  mentalQrId: number;
+
+  @rproperty()
+  @Column({ default: 0 })
   magic: number;
 
   @rproperty()
