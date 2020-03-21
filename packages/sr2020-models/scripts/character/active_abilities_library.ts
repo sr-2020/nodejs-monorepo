@@ -1,4 +1,4 @@
-import { oneTimeRevive, dummyAbility } from './abilities';
+import { oneTimeRevive, dummyAbility } from './active_abilities';
 import { useMentalAbility } from './mental';
 
 export type TargetType = 'none' | 'scan' | 'show';
