@@ -18,7 +18,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ground-heal-ability',
     humanReadableName: 'Ground Heal',
     description: 'Поднимает одну цель из КС/тяжрана в полные хиты.',
-    target: 'show',
+    target: 'scan',
     eventType: oneTimeRevive.name,
   },
 
