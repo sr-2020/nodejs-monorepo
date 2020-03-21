@@ -16,7 +16,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   // TODO(aeremin) Handle cooldown
 
-  api.sendSelfEvent(ability.eventType, data);
+  api.sendSelfEvent(ability.eventType, ability);
 }
 
 export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: number }, event: Event) {
