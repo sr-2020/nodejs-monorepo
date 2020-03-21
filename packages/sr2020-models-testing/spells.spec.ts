@@ -63,7 +63,7 @@ describe('Spells', function() {
   });
 
   it('Enchant artifact and activate it later', async () => {
-    await fixture.saveCharacter();
+    await fixture.saveCharacter({ resonance: 0 });
     await fixture.saveQrCode();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: { qrCode: 0 } });
