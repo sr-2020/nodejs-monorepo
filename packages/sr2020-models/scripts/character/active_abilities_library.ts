@@ -1,4 +1,5 @@
 import { oneTimeRevive, dummyAbility } from './abilities';
+import { useMentalAbility } from './mental';
 
 export interface ActiveAbility {
   id: string;
@@ -153,9 +154,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (сняты хиты).',
     // 306
     // Целевой персонаж забывает события "этой сцены", если персонажу не был нанесен физический урон (снят хотя бы 1 хит) за это время.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -164,9 +164,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Персонаж не помнит события последней сцены.',
     // 307
     // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -186,9 +185,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Целевой персонаж честно отвечает на 3 вопроса. \nТы честно отвечаешь на ',
     // 311
     // Цель честно отвечает на 3 вопроса.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -197,9 +195,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Целевой персонаж не может скрыть свою ложь.',
     // 312
     // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 10 минут должна воспроизводить этот признак, если врет.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -208,9 +205,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 313
     // Цель на 10 минут принимает одно утверждение как истину - при условии, что оно не требует действий, явно противоречащих текущему кодексу персонажа. Если у цели уже есть действующая установка, то та установка забывается и начинает действовать эта.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -220,9 +216,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.',
     // 314
     // Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -231,9 +226,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.',
     // 315
     // Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -243,9 +237,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель боится и убегает как можно дальше от менталиста. У цели заблоктрована активация всех абилок на 10 минут. Через 10 минут эффект проходит.',
     // 316
     // Цель боится и убегает как можно дальше от менталиста. Через 10 минут эффект проходит.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -254,9 +247,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться 5 минут или пока ей не нанесён физический урон (-1хит)',
     // 317
     // Цель не может двигаться 5 минут или пока ей не нанесён физический урон (-1хит)
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -265,9 +257,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться 10 минут.',
     // 318
     // Цель не может двигаться 10 минут.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    prerequisites: ['paralysis-1'],
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -276,9 +268,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель не может двигаться и произносить звуки 10 минут.',
     // 319
     // Цель не может двигаться и говорить 10 минут.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    prerequisites: ['paralysis-2'],
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -288,9 +280,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям ) ',
     // 320
     // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -299,9 +290,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель пытается убить персонажа, на которого указывает менталист.',
     // 321
     // Цель пытается убить персонажа, на которого указывает менталист.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -310,9 +300,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. (Прописать, что нельзя подарить дрон, например)',
     // 322
     // Цель дарит менталисту 1 игровой предмет по выбору менталиста.
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
@@ -321,9 +310,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Цель переводит на счет менталиста некоторую часть денег со своего счета.',
     // 323
     // Убеждает жертву перевести со своего на счет менталиста Х% (15% например)
-    // TODO(https://trello.com/c/9JXFVrd1/167-инфраструктура-для-менталистских-абилок)
     hasTarget: false,
-    eventType: dummyAbility.name,
+    eventType: useMentalAbility.name,
   },
 
   {
