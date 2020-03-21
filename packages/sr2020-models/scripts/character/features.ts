@@ -41,7 +41,13 @@ function addPassiveAbility(api: EventModelApi<Sr2020Character>, ability: Passive
 function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAbility) {
   // Ability is already present in the character - won't add again.
   if (api.model.activeAbilities.find((f) => f.id == ability.id)) return;
-  api.model.activeAbilities.push(ability);
+  api.model.activeAbilities.push({
+    id: ability.id,
+    humanReadableName: ability.humanReadableName,
+    description: ability.description,
+    hasTarget: ability.hasTarget,
+    eventType: ability.eventType,
+  });
 }
 
 function addSpell(api: EventModelApi<Sr2020Character>, spell: Spell) {
