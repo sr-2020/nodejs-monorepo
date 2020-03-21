@@ -45,7 +45,7 @@ function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAb
     id: ability.id,
     humanReadableName: ability.humanReadableName,
     description: ability.description,
-    hasTarget: ability.hasTarget,
+    target: ability.target,
     eventType: ability.eventType,
   });
 }

@@ -34,7 +34,7 @@ export class AddedActiveAbility {
   @rproperty() description: string;
 
   // True if ability needs a target - other character or object
-  @rproperty() hasTarget: boolean = false;
+  @property({ required: true, type: 'string' }) target: 'none' | 'scan' | 'show';
 
   // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
