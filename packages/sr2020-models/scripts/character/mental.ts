@@ -3,6 +3,9 @@ import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models
 import Chance = require('chance');
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { MentalQrData, writeMentalAbility } from '../qr/events';
+import { FullTargetedAbilityData, FullActiveAbilityData } from './active_abilities';
+import { addTemporaryModifier, modifierFromEffect } from './util';
+import { increaseMentalProtection } from './basic_effects';
 const chance = new Chance();
 
 // Returns a result of the roll of X dices DY
@@ -55,4 +58,28 @@ export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { s
   } else {
     api.sendNotification('Провал!', 'Цель защитилась от вашего воздействия.');
   }
+}
+
+export function increaseTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 24 * 60 });
+}
+
+export function reduceTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: -8, durationMinutes: 24 * 60 });
+}
+
+export function iDontTrustAnybody(api: EventModelApi<Sr2020Character>, _data: FullActiveAbilityData, _: Event) {
+  api.sendSelfEvent(adjustMentalProtectionEvent, { amount: 8, durationMinutes: 30 });
+}
+
+export function youDontTrustAnybody(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 30 });
+}
+
+export function adjustMentalProtectionEvent(
+  api: EventModelApi<Sr2020Character>,
+  data: { amount: number; durationMinutes: number },
+  _: Event,
+) {
+  addTemporaryModifier(api, modifierFromEffect(increaseMentalProtection, { amount: data.amount }), 60 * data.durationMinutes);
 }

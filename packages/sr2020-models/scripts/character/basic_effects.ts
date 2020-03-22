@@ -161,3 +161,11 @@ export function increaseDiscountMagicStuff(api: EffectModelApi<Sr2020Character>,
   api.model.discountMagicStuff += m.amount;
   api.model.discountMagicStuff = clamp(api.model.discountMagicStuff, 0, 50);
 }
+
+export function increaseMentalProtection(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.mentalDefenceBonus += m.amount;
+}
+
+export function increaseMentalAttack(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.mentalAttackBonus += m.amount;
+}

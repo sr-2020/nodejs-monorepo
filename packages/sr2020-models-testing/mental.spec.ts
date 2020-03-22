@@ -75,4 +75,31 @@ describe('Mentalistic events', function() {
       .expect(400);
     expect(resp.body.error.message).containEql('уже закончилось');
   });
+
+  it('I do not trust anybody', async () => {
+    await fixture.saveCharacter({ mentalDefenceBonus: 3 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'i-dont-trust-anybody' } });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+    expect(workModel.mentalDefenceBonus).to.equal(11);
+    fixture.advanceTime(29 * 60);
+    expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(11);
+    fixture.advanceTime(1 * 60);
+    expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(3);
+  });
+
+  it('You do not trust anybody', async () => {
+    await fixture.saveCharacter({ modelId: '1', mentalDefenceBonus: 3 });
+    await fixture.saveCharacter({ modelId: '2', mentalDefenceBonus: 2 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'you-dont-trust-anybody' } }, 1);
+    const { workModel } = await fixture.sendCharacterEvent(
+      { eventType: 'useAbility', data: { id: 'you-dont-trust-anybody', targetCharacterId: '2' } },
+      1,
+    );
+    expect(workModel.mentalDefenceBonus).to.equal(3);
+    expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(10);
+    fixture.advanceTime(29 * 60);
+    expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(10);
+    fixture.advanceTime(1 * 60);
+    expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(2);
+  });
 });

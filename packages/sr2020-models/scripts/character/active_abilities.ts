@@ -1,6 +1,6 @@
 import { EventModelApi, UserVisibleError, Event } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { sendNotificationAndHistoryRecord } from './util';
+import { sendNotificationAndHistoryRecord, addHistoryRecord } from './util';
 import { reviveOnTarget } from './death_and_rebirth';
 
 interface ActiveAbilityData {
@@ -21,6 +21,8 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // TODO(aeremin) Handle cooldown
 
   api.sendSelfEvent(ability.eventType, { ...ability, ...data });
+
+  addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 }
 
 export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, event: Event) {

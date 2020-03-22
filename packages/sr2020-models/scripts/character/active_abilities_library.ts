@@ -1,5 +1,11 @@
 import { oneTimeRevive, dummyAbility } from './active_abilities';
-import { useMentalAbility } from './mental';
+import {
+  useMentalAbility,
+  increaseTheMentalProtectionAbility,
+  reduceTheMentalProtectionAbility,
+  iDontTrustAnybody,
+  youDontTrustAnybody,
+} from './mental';
 
 export type TargetType = 'none' | 'scan' | 'show';
 
@@ -323,9 +329,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'на 24 часа увеличивает сопротивляемость целевого персонажа ментальному воздействию. ',
     // 330
     // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     target: 'none',
-    eventType: dummyAbility.name,
+    eventType: increaseTheMentalProtectionAbility.name,
   },
 
   {
@@ -334,9 +339,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'на 12 часов  уменьшает сопротивляемость целевого персонажа ментальному воздействию. ',
     // 331
     // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     target: 'none',
-    eventType: dummyAbility.name,
+    eventType: reduceTheMentalProtectionAbility.name,
   },
 
   {
@@ -345,9 +349,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно увеличивает сопротивляемость менталиста ментальному воздействию.',
     // 332
     // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     target: 'none',
-    eventType: dummyAbility.name,
+    eventType: iDontTrustAnybody.name,
   },
 
   {
@@ -356,9 +359,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно увеличивает сопротивляемость персонажа ментальному воздействию.',
     // 333
     // Менталист увеличивает ментальную защиту другого персонажа на +8 на 30 минут
-    // TODO(https://trello.com/c/9rQMWoDJ/201-реализовать-менталистские-абилки-влияющие-на-параметры-увеличивающие-уменьшающие-харизму-ментальную-защиту-атаку-меняющие-кулдау)
     target: 'none',
-    eventType: dummyAbility.name,
+    eventType: youDontTrustAnybody.name,
   },
 
   {
