@@ -15,12 +15,12 @@ var app = new Vue({
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
   },
   async created() {
-    const response = await this.$http.get(`http://model-engine.k8.evarun.ru/features`);
+    const response = await this.$http.get(`https://model-engine.k8.evarun.ru/features`);
     this.allFeatures = response.body;
   },
   methods: {
     url(id) {
-      return `http://models-manager.k8.evarun.ru/character/model/${id}`;
+      return `https://models-manager.k8.evarun.ru/character/model/${id}`;
     },
 
     showSuccessToast(text) {
