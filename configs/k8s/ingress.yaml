@@ -4,8 +4,9 @@ metadata:
   name: ingress
   annotations:
     kubernetes.io/ingress.allow-http: true
-    networking.gke.io/managed-certificates: "model-engine,models-manager,push"
 spec:
+  tls:
+    - secretName: tls-secret
   rules:
   - http:
       paths:
