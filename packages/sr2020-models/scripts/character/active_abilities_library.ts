@@ -167,6 +167,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 307
     // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
     target: 'show',
+    prerequisites: ['oblivion'],
     eventType: useMentalAbility.name,
   },
 
