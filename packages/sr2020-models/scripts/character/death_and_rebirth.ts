@@ -1,6 +1,7 @@
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { sendNotificationAndHistoryRecord } from './util';
+import { FullTargetedAbilityData } from './active_abilities';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = 5 * 60 * 1000;
@@ -21,11 +22,11 @@ export function clinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _:
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
 }
 
-export function clinicalDeathOnTarget(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: number }, _: Event) {
+export function clinicalDeathOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), clinicalDeath, {});
 }
 
-export function reviveOnTarget(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: number }, _: Event) {
+export function reviveOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), revive, {});
 }
 
