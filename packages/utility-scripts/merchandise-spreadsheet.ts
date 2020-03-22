@@ -1,20 +1,14 @@
 // Prerequisite: GOOGLE_APPLICATION_CREDENTIALS environment variable should point to the key file for the service account with an access
 // to the spreadsheet and Firestore.
 // Running:
-//   npx ts-node packages/utility-scripts/merchandise-spreadsheet.ts
+//   npx ts-node -r tsconfig-paths/register packages/utility-scripts/merchandise-spreadsheet.ts
+
 import * as request from 'request-promise-native';
 
+import { Implant as LibraryImplant } from '@sr2020/sr2020-models/scripts/character/implants_library';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
-interface Implant {
-  id: string;
-  name: string;
-  slot: string;
-  description: string;
-  effect: string;
-  grade: string;
-  essence: number;
-  complexity: number;
+interface Implant extends LibraryImplant {
   cost: number;
 }
 
@@ -33,7 +27,6 @@ async function run() {
   }
 
   const implants: Implant[] = [];
-
   for (let i = 1; i < data.length; ++i) {
     const row = data[i];
     if (!row[0]?.length) continue;
@@ -41,13 +34,20 @@ async function run() {
     const m: Implant = {
       id: row[0],
       name: row[1],
-      slot: row[2],
+      slot: {
+        корпус: 'body',
+        рука: 'arm',
+        'слот под биомонитор': 'biomonitor',
+        голова: 'head',
+        'слот под RCC': 'rcc',
+        'слот под коммлинк': 'commlink',
+      }[(row[2] as string).trim()],
       description: row[3],
-      effect: row[4],
-      grade: row[5],
-      essence: row[6],
-      complexity: row[7],
-      cost: row[8],
+      grade: { альфа: 'alpha', бета: 'beta', гамма: 'gamma', дельта: 'delta', био: 'bio' }[(row[5] as string).trim()],
+      essenceCost: Number(row[6]),
+      installDifficulty: Number(row[7]),
+      cost: Number(row[8]),
+      modifiers: [],
     };
     implants.push(m);
   }
@@ -69,6 +69,14 @@ async function run() {
       })
       .promise();
   }
+  console.log(
+    `export const kAllImplants: Implant[] = ${JSON.stringify(
+      implants.map((x) => {
+        delete x.cost;
+        return x;
+      }),
+    )};`,
+  );
 }
 
 run().then(
