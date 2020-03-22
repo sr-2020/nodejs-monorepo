@@ -1153,16 +1153,6 @@
     source-map-support "^0.5.16"
     typescript "~3.8.3"
 
-"@loopback/context@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@loopback/context/-/context-2.1.1.tgz#a03adbd84fbf08b81d296251abb4ac805c5f7bc8"
-  integrity sha512-shkzVZZLua7MTjBvaBbFz9Q3/8M21kdgX0XiGc5M6RWkUL6+ipuyVcPEQMC+L6KNn7omZxDNdagbfwcTB97wmA==
-  dependencies:
-    "@loopback/metadata" "^1.4.1"
-    debug "^4.1.1"
-    p-event "^4.1.0"
-    uuid "^3.4.0"
-
 "@loopback/context@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@loopback/context/-/context-3.1.0.tgz#211619813dfb09ea7d1f06023966d88cc1f3df80"
@@ -1173,15 +1163,6 @@
     p-event "^4.1.0"
     tslib "^1.11.1"
     uuid "^7.0.2"
-
-"@loopback/core@^1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@loopback/core/-/core-1.12.4.tgz#1f94e75fcf69686c7a4759e1e44f41c709476f89"
-  integrity sha512-W1OzwhBc1GUcwQVNzhQMf3tpvhEDKkh+2HPLZVOuYxN+b66uZI7poTxKSJ156dgNGAi+luCvkZiGkNQXS1tpRA==
-  dependencies:
-    "@loopback/context" "^2.1.1"
-    debug "^4.1.1"
-    p-event "^4.1.0"
 
 "@loopback/core@^2.1.0":
   version "2.1.0"
@@ -1198,14 +1179,6 @@
   resolved "https://registry.yarnpkg.com/@loopback/eslint-config/-/eslint-config-6.0.1.tgz#7de78247fd5ecf0f74cd971a7581ba72cc948207"
   integrity sha512-5k3fvkIH1IlK+h7BN0Xkav0YAmd5IC4utXsYIjVqBXi28WaFNf2P8o79hNLWIUxDJqP+fbAOsGZZaQcWMO+l5g==
 
-"@loopback/http-server@^1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@loopback/http-server/-/http-server-1.5.4.tgz#67151a4db3a26f1b5f4e6bd3f64c8a1bbf7bf396"
-  integrity sha512-oLwCA6KpjVqZgmjnOvr5chS7cjJOMbe/hFs5Ky6RsiYgoCrnAv3Z8lsucV5hZkaO4n+TXq+tcSvH+KE91fV1LQ==
-  dependencies:
-    p-event "^4.1.0"
-    stoppable "^1.1.0"
-
 "@loopback/http-server@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@loopback/http-server/-/http-server-2.0.1.tgz#e23f2abb4a8cf31573942d18b4f445fb143cad98"
@@ -1214,15 +1187,6 @@
     p-event "^4.1.0"
     stoppable "^1.1.0"
     tslib "^1.11.1"
-
-"@loopback/metadata@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@loopback/metadata/-/metadata-1.4.1.tgz#66bd8f361c93ae691ba33c8cdf3aba785d8e82ea"
-  integrity sha512-3nPHeaoztNrU61oIKnDP2E4aTqDsRPnsDThgTXeE3IPejNnp5WBneaRDXpUz9Ql/KYZ/IZLRUkRCzEE3DPBbRQ==
-  dependencies:
-    debug "^4.1.1"
-    lodash "^4.17.15"
-    reflect-metadata "^0.1.13"
 
 "@loopback/metadata@^2.0.1":
   version "2.0.1"
@@ -1241,18 +1205,6 @@
   dependencies:
     tslib "^1.11.1"
 
-"@loopback/openapi-v3@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@loopback/openapi-v3/-/openapi-v3-2.0.0.tgz#484b3a9f125f2bcc78c7b88c942d98f3017755b0"
-  integrity sha512-MSyML2W+2RNxLnMCs0IwbzhxI6n3vp5RJ8vT+gEwwL5ttEm4+6d3TzpW80j9b5OVxRQQlhoE9RR9zvYoF6SvFg==
-  dependencies:
-    "@loopback/core" "^1.12.4"
-    "@loopback/repository-json-schema" "^1.12.2"
-    debug "^4.1.1"
-    json-merge-patch "^0.2.3"
-    lodash "^4.17.15"
-    openapi3-ts "^1.3.0"
-
 "@loopback/openapi-v3@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@loopback/openapi-v3/-/openapi-v3-3.1.0.tgz#0dd24e64d9980979748dddf26fbe7f0b9116bc68"
@@ -1267,17 +1219,6 @@
     openapi3-ts "^1.3.0"
     tslib "^1.11.1"
 
-"@loopback/repository-json-schema@^1.12.2":
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/@loopback/repository-json-schema/-/repository-json-schema-1.12.2.tgz#45451c72c234444b1efd3b75d55c7d667cd84ad2"
-  integrity sha512-wrcL4X7Smma8Pk1YymyXc3LJaO8GmXvItvChoozvqYAKpduUtDYL+RwPHFhhxOOvZJw/CrXuNKYSDCCFvKsr7g==
-  dependencies:
-    "@loopback/context" "^2.1.1"
-    "@loopback/metadata" "^1.4.1"
-    "@loopback/repository" "^1.19.1"
-    "@types/json-schema" "^7.0.4"
-    debug "^4.1.1"
-
 "@loopback/repository-json-schema@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@loopback/repository-json-schema/-/repository-json-schema-2.0.1.tgz#7fc870b6184564099f6c0bc91a974a1d6ff83379"
@@ -1289,18 +1230,6 @@
     "@types/json-schema" "^7.0.4"
     debug "^4.1.1"
     tslib "^1.11.1"
-
-"@loopback/repository@^1.19.1":
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/@loopback/repository/-/repository-1.19.1.tgz#b05b16b5d4fd3b94952e356656858926b2607ca0"
-  integrity sha512-7LwZEOtjkzz3mu9TVyOyNolW30pWt862d6IzZRQL9JRGpDkTlbIralm18sICyVF6UgBNX+IcK+IpA6CrhktlFg==
-  dependencies:
-    "@loopback/context" "^2.1.1"
-    "@loopback/core" "^1.12.4"
-    "@types/debug" "^4.1.5"
-    debug "^4.1.1"
-    lodash "^4.17.15"
-    loopback-datasource-juggler "^4.18.1"
 
 "@loopback/repository@^2.0.1":
   version "2.0.1"
@@ -1326,40 +1255,6 @@
     ejs "^3.0.1"
     swagger-ui-dist "^3.25.0"
     tslib "^1.11.1"
-
-"@loopback/rest@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@loopback/rest/-/rest-2.0.0.tgz#b3ac7a9025f6a5899486efbf7e0be818e2d2fd8c"
-  integrity sha512-EqRWHtEG0YN9HY6juysbKEoZQ+O4plQRLD90kr4pwCXNQWpKfsEJL0DQzwWgsSHHUGGilve8bUHc5C3q+3w+bQ==
-  dependencies:
-    "@loopback/context" "^2.1.1"
-    "@loopback/core" "^1.12.4"
-    "@loopback/http-server" "^1.5.4"
-    "@loopback/openapi-v3" "^2.0.0"
-    "@types/body-parser" "^1.17.1"
-    "@types/cors" "^2.8.6"
-    "@types/express" "^4.17.2"
-    "@types/express-serve-static-core" "^4.17.2"
-    "@types/http-errors" "^1.6.3"
-    "@types/on-finished" "^2.3.1"
-    "@types/serve-static" "1.13.3"
-    "@types/type-is" "^1.6.3"
-    ajv "^6.11.0"
-    ajv-keywords "^3.4.1"
-    body-parser "^1.19.0"
-    cors "^2.8.5"
-    debug "^4.1.1"
-    express "^4.17.1"
-    http-errors "^1.7.3"
-    js-yaml "^3.13.1"
-    lodash "^4.17.15"
-    on-finished "^2.3.0"
-    openapi-schema-to-json-schema "^2.2.0"
-    path-to-regexp "^6.1.0"
-    qs "^6.9.1"
-    strong-error-handler "^3.4.0"
-    type-is "^1.6.18"
-    validator "^12.2.0"
 
 "@loopback/rest@^3.0.1":
   version "3.0.1"
@@ -1622,7 +1517,7 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/body-parser@^1.17.1", "@types/body-parser@^1.19.0":
+"@types/body-parser@^1.19.0":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.0.tgz#0685b3c47eb3006ffed117cdd55164b61f80538f"
   integrity sha512-W98JrE0j2K78swW4ukqMleo8R7h/pFETjM2DQ90MF6XK2i4LO4W3gQ71Lt4w3bfm2EvVSyWHplECvB5sK22yFQ==
@@ -1760,7 +1655,7 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/express@^4.17.2", "@types/express@^4.17.3":
+"@types/express@^4.17.3":
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.3.tgz#38e4458ce2067873b09a73908df488870c303bd9"
   integrity sha512-I8cGRJj3pyOLs/HndoP+25vOqhqWkAZsWMEmq1qXy/b/M3ppufecUwaK2/TVDVxcV61/iSdhykUjQQ2DLSrTdg==
@@ -2429,7 +2324,7 @@ ajv@^6.10.0, ajv@^6.5.5, ajv@^6.9.1:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^6.11.0, ajv@^6.12.0:
+ajv@^6.12.0:
   version "6.12.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.0.tgz#06d60b96d87b8454a5adaba86e7854da629db4b7"
   integrity sha512-D6gFiFA0RRLyUbvijN74DWAjXSFxWKaWP7mldxkVhyhAV3+SWA9HEJPHQ2c9soIeTFJqcSdFDGFgdqs1iUU2Hw==
@@ -7474,7 +7369,7 @@ loopback-connector@^4.4.0, loopback-connector@^4.5.1:
     strong-globalize "^4.1.1"
     uuid "^3.0.1"
 
-loopback-datasource-juggler@^4.18.1, loopback-datasource-juggler@^4.19.2:
+loopback-datasource-juggler@^4.19.2:
   version "4.19.2"
   resolved "https://registry.yarnpkg.com/loopback-datasource-juggler/-/loopback-datasource-juggler-4.19.2.tgz#a9bc9cfb039eea9d6929adf73e0e498b31324354"
   integrity sha512-nt6xyCQ99HDhY6KkcFax8AY7DBqVZcedgowb0jEPpVfuuGodK7o8AI6sZcor4RyKn05CValxt15J8gllLbNlbw==
@@ -8662,13 +8557,6 @@ onetime@^5.1.0:
   integrity sha512-5NcSkPHhwTVFIQN+TUqXoS5+dlElHXdpAWu9I0HP20YOtIi+aZ0Ct82jdlILDxjLEAWwvm+qj1m6aEtsDVmm6Q==
   dependencies:
     mimic-fn "^2.1.0"
-
-openapi-schema-to-json-schema@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/openapi-schema-to-json-schema/-/openapi-schema-to-json-schema-2.2.0.tgz#5f41b3485c7fa5a67003215cd1ab1889ca1372a3"
-  integrity sha512-a8ouPAEl7U4MCpQBje+9cDIDSL6xCtWBPat/2i2Py42D5q9EPuB0IkXh4mNRc/cECjHjsgsEn2+GTeMvgE58+w==
-  dependencies:
-    deep-equal "^1.0.1"
 
 openapi3-ts@^1.3.0:
   version "1.3.0"
@@ -11679,7 +11567,7 @@ uuid@^3.0.1, uuid@^3.2.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-uuid@^3.3.3, uuid@^3.4.0:
+uuid@^3.3.3:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
