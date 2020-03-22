@@ -118,6 +118,7 @@ export class ModelEngineController implements ModelEngineService {
       spells: [],
       activeAbilities: [],
       passiveAbilities: [],
+      implants: [],
       ethicTrigger: [],
       ethicState: [],
       ethicLockedUntil: 0,

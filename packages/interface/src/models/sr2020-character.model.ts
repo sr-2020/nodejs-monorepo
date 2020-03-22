@@ -90,6 +90,19 @@ export class AddedEthicState {
 }
 
 @model()
+export class AddedImplant {
+  @rproperty() id: string;
+  @rproperty() name: string;
+  @rproperty() description: string;
+
+  @property({ required: true, type: 'string' })
+  slot: 'body' | 'arm' | 'biomonitor' | 'head' | 'rcc' | 'commlink';
+
+  @property({ required: true, type: 'string' })
+  grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
+}
+
+@model()
 export class HistoryRecord {
   @rproperty() id: string;
   @rproperty() timestamp: number;
@@ -286,6 +299,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(AddedEthicTrigger, { required: true })
   @JsonColumn()
   ethicTrigger: AddedEthicTrigger[];
+
+  @property.array(AddedImplant, { required: true })
+  @JsonColumn()
+  implants: AddedImplant[];
 
   @rproperty()
   @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
