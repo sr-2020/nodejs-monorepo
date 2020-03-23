@@ -122,26 +122,26 @@ export function increaseEthicGroupMaxSize(api: EffectModelApi<Sr2020Character>, 
 }
 
 export function decreaseChemoBodyDetectableThresholdTo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemoBodyDetectableThreshold = Math.min(api.model.chemoBodyDetectableThreshold, m.amount);
+  api.model.chemo.bodyDetectableThreshold = Math.min(api.model.chemo.bodyDetectableThreshold, m.amount);
 }
 
 export function decreaseChemoPillDetectableThresholdTo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemoPillDetectableThreshold = Math.min(api.model.chemoPillDetectableThreshold, m.amount);
+  api.model.chemo.pillDetectableThreshold = Math.min(api.model.chemo.pillDetectableThreshold, m.amount);
 }
 
 export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemoBaseEffectThreshold += m.amount;
-  api.model.chemoBaseEffectThreshold = clamp(api.model.chemoBaseEffectThreshold, 0, 9000);
+  api.model.chemo.baseEffectThreshold += m.amount;
+  api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
 }
 
 export function increaseСhemoSuperEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemoSuperEffectThreshold += m.amount;
-  api.model.chemoSuperEffectThreshold = clamp(api.model.chemoSuperEffectThreshold, 0, 9000);
+  api.model.chemo.superEffectThreshold += m.amount;
+  api.model.chemo.superEffectThreshold = clamp(api.model.chemo.superEffectThreshold, 0, 9000);
 }
 
 export function increaseСhemoCrysisThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemoCrysisThreshold += m.amount;
-  api.model.chemoCrysisThreshold = clamp(api.model.chemoCrysisThreshold, 0, 9000);
+  api.model.chemo.crysisThreshold += m.amount;
+  api.model.chemo.crysisThreshold = clamp(api.model.chemo.crysisThreshold, 0, 9000);
 }
 
 export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>, m: Modifier) {

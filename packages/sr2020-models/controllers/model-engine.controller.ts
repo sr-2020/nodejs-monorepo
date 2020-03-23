@@ -107,11 +107,13 @@ export class ModelEngineController implements ModelEngineService {
       magicAura: 'aaaabbbbccccddddeeee',
       healthState: 'healthy',
       ethicGroupMaxSize: 0,
-      chemoBodyDetectableThreshold: 9000,
-      chemoPillDetectableThreshold: 9000,
-      chemoBaseEffectThreshold: 50,
-      chemoSuperEffectThreshold: 70,
-      chemoCrysisThreshold: 120,
+      chemo: {
+        bodyDetectableThreshold: 9000,
+        pillDetectableThreshold: 9000,
+        baseEffectThreshold: 50,
+        superEffectThreshold: 70,
+        crysisThreshold: 120,
+      },
       stockGainPercentage: 0,
       discounts: {
         weaponsArmor: 0,

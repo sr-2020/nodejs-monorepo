@@ -135,6 +135,29 @@ export class Discounts {
 }
 
 @model()
+export class Chemo {
+  @rproperty()
+  @Column({ default: 9000 })
+  bodyDetectableThreshold: number;
+
+  @rproperty()
+  @Column({ default: 9000 })
+  pillDetectableThreshold: number;
+
+  @rproperty()
+  @Column({ default: 50 })
+  baseEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 70 })
+  superEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 120 })
+  crysisThreshold: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -272,24 +295,8 @@ export class Sr2020Character extends EmptyModel {
   ethicGroupMaxSize: number;
 
   @rproperty()
-  @Column({ default: 9000 })
-  chemoBodyDetectableThreshold: number;
-
-  @rproperty()
-  @Column({ default: 9000 })
-  chemoPillDetectableThreshold: number;
-
-  @rproperty()
-  @Column({ default: 50 })
-  chemoBaseEffectThreshold: number;
-
-  @rproperty()
-  @Column({ default: 70 })
-  chemoSuperEffectThreshold: number;
-
-  @rproperty()
-  @Column({ default: 120 })
-  chemoCrysisThreshold: number;
+  @Column((type) => Chemo, { prefix: 'chemo' })
+  chemo: Chemo;
 
   @rproperty()
   @Column({ default: 0 })
