@@ -28,6 +28,14 @@ import {
   increaseDiscountMagicStuff,
   increaseDiscountDrones,
   increaseDiscountChemo,
+  increaseFadingResistance,
+  increaseBackdoorTtl,
+  increaseBackdoors,
+  increaseVarianceResistance,
+  increaseSpriteCount,
+  increaseControlRequests,
+  increaseCompilationFadingResistance,
+  increaseMentalProtection,
 } from './basic_effects';
 
 export interface PassiveAbility {
@@ -363,8 +371,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 126
     // Вэрианс на 10% быстрее падает
-    // TODO(https://trello.com/c/MpQX1qld/102-описать-абилку-вэрианс-на-10-быстрее-падает): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseVarianceResistance, { amount: 10 })],
   },
 
   {
@@ -373,8 +380,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 127
     // Фейдинг на 10% меньше
-    // TODO(https://trello.com/c/CMLLkATK/103-описать-абилку-фейдинг-на-10-меньше): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 10 })],
   },
 
   {
@@ -383,8 +389,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 130
     // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
-    // TODO(https://trello.com/c/x5sZnzHz/104-описать-абилку-увеличивает-возможное-количество-бэкдоров-зависит-от-уровня-резонанса): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoors, { amount: 3 })],
   },
 
   {
@@ -393,8 +398,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 131
     // Бэкдоры дохнут медленнее
-    // TODO(https://trello.com/c/HQ0ZOpyH/105-описать-абилки-бэкдоры-дохнут-медленнее): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoorTtl, { amount: 20 })],
   },
 
   {
@@ -403,8 +407,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 132
     // Бэкдоры дохнут ну еще медленнее.
-    // TODO(https://trello.com/c/HQ0ZOpyH/105-описать-абилки-бэкдоры-дохнут-медленнее): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoorTtl, { amount: 40 })],
   },
 
   {
@@ -498,8 +501,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 146
     // Еще один связанный спрайт
-    // TODO(https://trello.com/c/5soHeH5T/106-описать-абилку-еще-один-связанный-спрайт): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseSpriteCount, { amount: 1 })],
   },
 
   {
@@ -508,8 +510,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 147
     // Еще один запрос к контролю
-    // TODO(https://trello.com/c/gmWH0D2Z/107-описать-абилку-еще-один-запрос-к-контролю): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseControlRequests, { amount: 1 })],
   },
 
   {
@@ -990,9 +991,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
     //
     // IT:
-    // [+xxxx] Техномант_Устойчивость_Фейдингу_Компиляция
-    // TODO(https://trello.com/c/BJ0sZy0Y/101-нативная-компиляция-глубокая-компиляция): Implement and add modifier here
-    modifier: [],
+    // [+20] Техномант_Устойчивость_Фейдингу_Компиляция
+    modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 20 }),
   },
 
   {
@@ -1003,9 +1003,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
     //
     // IT:
-    // [+xxxx] Техномант_Устойчивость_Фейдингу_Компиляция
-    // TODO(https://trello.com/c/BJ0sZy0Y/101-нативная-компиляция-глубокая-компиляция): Implement and add modifier here
-    modifier: [],
+    // [+30] Техномант_Устойчивость_Фейдингу_Компиляция
+    modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 30 }),
   },
 
   {
@@ -1728,8 +1727,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 515
     // Повышает защиту от ментальных заклинаний
     // Модификатор: МентальнаяЗащита +4
-    // TODO(aeremin): Implement and add modifier here
-    modifier: [],
+    modifier: modifierFromEffect(increaseMentalProtection, { amount: 4 }),
   },
 
   {

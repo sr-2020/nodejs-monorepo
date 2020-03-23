@@ -40,6 +40,11 @@ export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: Modif
   api.model.resonance = clamp(api.model.resonance, -9000, 9000);
 }
 
+export function increaseResonanceForControl(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.resonanceForControlBonus += m.amount;
+  api.model.hacking.resonanceForControlBonus = clamp(api.model.hacking.resonanceForControlBonus, 0, 3);
+}
+
 export function increaseMaxTimeAtHost(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.hacking.maxTimeAtHost += m.amount;
   api.model.hacking.maxTimeAtHost = clamp(api.model.hacking.maxTimeAtHost, 15, 60);
@@ -75,6 +80,16 @@ export function increaseFadingResistance(api: EffectModelApi<Sr2020Character>, m
   api.model.hacking.fadingResistance = clamp(api.model.hacking.fadingResistance, 1, 50);
 }
 
+export function increaseCompilationFadingResistance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.compilationFadingResistance += m.amount;
+  api.model.hacking.compilationFadingResistance = clamp(api.model.hacking.compilationFadingResistance, 0, 100);
+}
+
+export function increaseVarianceResistance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.varianceResistance += m.amount;
+  api.model.hacking.varianceResistance = clamp(api.model.hacking.varianceResistance, 0, 100);
+}
+
 export function increaseBiofeedbackResistance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.hacking.biofeedbackResistance += m.amount;
   api.model.hacking.biofeedbackResistance = clamp(api.model.hacking.biofeedbackResistance, 0, 50);
@@ -90,9 +105,29 @@ export function increaseAdminHostNumber(api: EffectModelApi<Sr2020Character>, m:
   api.model.hacking.adminHostNumber = clamp(api.model.hacking.adminHostNumber, 3, 10);
 }
 
+export function increaseBackdoors(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.additionalBackdoors += m.amount;
+  api.model.hacking.additionalBackdoors = clamp(api.model.hacking.additionalBackdoors, 0, 5);
+}
+
+export function increaseBackdoorTtl(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.backdoorTtl += m.amount;
+  api.model.hacking.backdoorTtl = clamp(api.model.hacking.backdoorTtl, 0, 9000);
+}
+
+export function increaseControlRequests(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.additionalRequests += m.amount;
+  api.model.hacking.additionalRequests = clamp(api.model.hacking.additionalRequests, 0, 5);
+}
+
 export function increaseSpriteLevel(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.hacking.spriteLevel += m.amount;
   api.model.hacking.spriteLevel = clamp(api.model.hacking.spriteLevel, 0, 3);
+}
+
+export function increaseSpriteCount(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.hacking.additionalSprites += m.amount;
+  api.model.hacking.additionalSprites = clamp(api.model.hacking.additionalSprites, 0, 5);
 }
 
 export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: Modifier) {

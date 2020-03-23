@@ -4,7 +4,7 @@ import {
   increaseMagic,
   increaseMaxHp,
   increaseMaxTimeInVr,
-  increaseResonance,
+  increaseResonanceForControl,
   increaseFadingResistance,
   increaseMatrixHp,
   increaseBiofeedbackResistance,
@@ -206,7 +206,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
     id: 'сerebellum-beta',
@@ -217,7 +217,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
     id: 'сerebellum-gamma',
@@ -228,7 +228,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
     id: 'сerebellum-delta',
@@ -239,7 +239,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
     id: 'сerebellum-bio',
@@ -250,7 +250,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
     id: 'scratcher-alpha',
