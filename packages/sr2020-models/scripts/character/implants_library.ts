@@ -843,7 +843,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
     id: 'elbrus-beta',
@@ -853,7 +853,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
     id: 'elbrus-gamma',
@@ -863,7 +863,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
     id: 'elbrus-delta',
@@ -873,7 +873,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
     id: 'elbrus-bio',
@@ -883,7 +883,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
     id: 'dreamcast-alpha',
