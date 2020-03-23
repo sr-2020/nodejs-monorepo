@@ -198,6 +198,34 @@ export class Hacking {
   @rproperty()
   @Column({ default: 0 })
   spriteLevel: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  resonanceForControlBonus: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  varianceResistance: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  compilationFadingResistance: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  additionalRequests: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  additionalSprites: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  additionalBackdoors: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  backdoorTtl: number;
 }
 
 @model()
