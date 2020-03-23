@@ -36,6 +36,8 @@ import {
   increaseControlRequests,
   increaseCompilationFadingResistance,
   increaseMentalProtection,
+  increaseIntelligence,
+  increaseBody,
 } from './basic_effects';
 
 export interface PassiveAbility {
@@ -371,7 +373,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 126
     // Вэрианс на 10% быстрее падает
-    modifier: [modifierFromEffect(increaseVarianceResistance, { amount: 10 })],
+    modifier: modifierFromEffect(increaseVarianceResistance, { amount: 10 }),
   },
 
   {
@@ -380,7 +382,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 127
     // Фейдинг на 10% меньше
-    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 10 })],
+    modifier: modifierFromEffect(increaseFadingResistance, { amount: 10 }),
   },
 
   {
@@ -389,7 +391,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 130
     // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
-    modifier: [modifierFromEffect(increaseBackdoors, { amount: 3 })],
+    modifier: modifierFromEffect(increaseBackdoors, { amount: 3 }),
   },
 
   {
@@ -398,7 +400,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 131
     // Бэкдоры дохнут медленнее
-    modifier: [modifierFromEffect(increaseBackdoorTtl, { amount: 20 })],
+    modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 20 }),
   },
 
   {
@@ -407,7 +409,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 132
     // Бэкдоры дохнут ну еще медленнее.
-    modifier: [modifierFromEffect(increaseBackdoorTtl, { amount: 40 })],
+    modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
 
   {
@@ -501,7 +503,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 146
     // Еще один связанный спрайт
-    modifier: [modifierFromEffect(increaseSpriteCount, { amount: 1 })],
+    modifier: modifierFromEffect(increaseSpriteCount, { amount: 1 }),
   },
 
   {
@@ -510,7 +512,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 147
     // Еще один запрос к контролю
-    modifier: [modifierFromEffect(increaseControlRequests, { amount: 1 })],
+    modifier: modifierFromEffect(increaseControlRequests, { amount: 1 }),
   },
 
   {
@@ -634,12 +636,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // [-1] Тело
     // [-1] Харизма
     // [-1] Интеллект
-    // [-1] Attack
-    // [-1] Firewall
-    // [-1] Sleaze
-    // [-1] DataProcessing
-    // TODO(https://trello.com/c/9TJlmsbV/100-переписать-дамп-шок-в-терминах-конверсий-атаки-файрвола): Implement and add modifier here
-    modifier: [modifierFromEffect(increaseResonance, { amount: -1 })],
+    // TODO(aeremin): Should be additive ==> shouldn't be a passive ability
+    modifier: [
+      modifierFromEffect(increaseResonance, { amount: -1 }),
+      modifierFromEffect(increaseBody, { amount: -1 }),
+      modifierFromEffect(increaseCharisma, { amount: -1 }),
+      modifierFromEffect(increaseIntelligence, { amount: -1 }),
+    ],
   },
 
   {
