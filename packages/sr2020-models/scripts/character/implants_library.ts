@@ -14,7 +14,7 @@ export interface Implant {
   id: string;
   name: string;
   description: string;
-  slot: 'body' | 'arm' | 'biomonitor' | 'head' | 'rcc' | 'commlink';
+  slot: 'body' | 'arm' | 'head' | 'rcc' | 'commlink';
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
   essenceCost: number;
   installDifficulty: number;
@@ -172,26 +172,6 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет использовать автоматическое оружие',
     grade: 'bio',
     essenceCost: 0.5,
-    installDifficulty: 7,
-    modifiers: [],
-  },
-  {
-    id: 'biomonitor-alpha',
-    name: 'биомонитор',
-    slot: 'biomonitor',
-    description: 'даёт иммунитет к пандемиям\n',
-    grade: 'alpha',
-    essenceCost: 0.1,
-    installDifficulty: 3,
-    modifiers: [],
-  },
-  {
-    id: 'biomonitor-beta',
-    name: 'биомонитор',
-    slot: 'biomonitor',
-    description: 'даёт иммунитет к пандемиям\n',
-    grade: 'bio',
-    essenceCost: 0,
     installDifficulty: 7,
     modifiers: [],
   },

@@ -37,7 +37,6 @@ async function run() {
       slot: {
         корпус: 'body',
         рука: 'arm',
-        'слот под биомонитор': 'biomonitor',
         голова: 'head',
         'слот под RCC': 'rcc',
         'слот под коммлинк': 'commlink',
