@@ -15,6 +15,16 @@ export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: Modifi
   api.model.charisma = clamp(api.model.charisma, 0, 10);
 }
 
+export function increaseIntelligence(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.intelligence += m.amount;
+  api.model.intelligence = clamp(api.model.intelligence, 0, 6);
+}
+
+export function increaseBody(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.body += m.amount;
+  api.model.body = clamp(api.model.body, 0, 6);
+}
+
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic += m.amount;
   api.model.magic = clamp(api.model.magic, -9000, 9000);

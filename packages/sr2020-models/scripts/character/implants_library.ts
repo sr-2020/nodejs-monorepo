@@ -8,6 +8,8 @@ import {
   increaseFadingResistance,
   increaseMatrixHp,
   increaseBiofeedbackResistance,
+  increaseBody,
+  increaseIntelligence,
 } from './basic_effects';
 
 export interface Implant {
@@ -723,7 +725,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
     id: 'under-oak-beta',
@@ -733,7 +735,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
     id: 'under-oak-gamma',
@@ -743,7 +745,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
     id: 'under-oak-delta',
@@ -753,7 +755,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
     id: 'under-oak-bio',
@@ -763,7 +765,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
     id: 'neuroprocessor-alpha',
@@ -773,7 +775,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
     id: 'neuroprocessor-beta',
@@ -783,7 +785,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
     id: 'neuroprocessor-gamma',
@@ -793,7 +795,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
     id: 'neuroprocessor-delta',
@@ -803,7 +805,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
     id: 'neuroprocessor-bio',
@@ -813,7 +815,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
     id: 'elbrus-alpha',
