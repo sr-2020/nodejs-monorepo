@@ -1,6 +1,14 @@
 import { Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
-import { increaseMagic } from './basic_effects';
+import {
+  increaseMagic,
+  increaseMaxHp,
+  increaseMaxTimeInVr,
+  increaseResonance,
+  increaseFadingResistance,
+  increaseMatrixHp,
+  increaseBiofeedbackResistance,
+} from './basic_effects';
 
 export interface Implant {
   id: string;
@@ -25,7 +33,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-beta',
@@ -35,7 +43,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-gamma',
@@ -45,7 +53,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-delta',
@@ -55,7 +63,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-bio',
@@ -65,7 +73,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-back-alpha',
@@ -75,7 +83,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-back-beta',
@@ -85,7 +93,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-back-gamma',
@@ -95,7 +103,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-back-delta',
@@ -105,7 +113,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'strong-back-bio',
@@ -115,7 +123,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
   },
   {
     id: 'cyber-hand-alpha',
@@ -125,7 +133,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'cyber-hand-beta',
@@ -135,7 +143,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'cyber-hand-gamma',
@@ -145,7 +153,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'cyber-hand-delta',
@@ -155,7 +163,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'cyber-hand-bio',
@@ -165,7 +173,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'biomonitor-alpha',
@@ -175,7 +183,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 0.1,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'biomonitor-beta',
@@ -185,7 +193,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'comm-link-alpha',
@@ -216,7 +224,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   {
     id: 'сerebellum-beta',
@@ -227,7 +235,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   {
     id: 'сerebellum-gamma',
@@ -238,7 +246,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   {
     id: 'сerebellum-delta',
@@ -249,7 +257,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   {
     id: 'сerebellum-bio',
@@ -260,7 +268,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   {
     id: 'scratcher-alpha',
@@ -270,7 +278,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 0 })],
   },
   {
     id: 'scratcher-beta',
@@ -280,7 +288,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 0 })],
   },
   {
     id: 'scratcher-gamma',
@@ -290,7 +298,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 0 })],
   },
   {
     id: 'scratcher-delta',
@@ -300,7 +308,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 0 })],
   },
   {
     id: 'scratcher-bio',
@@ -310,7 +318,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 0 })],
   },
   {
     id: 'shaper-alpha',
@@ -321,7 +329,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 0 })],
   },
   {
     id: 'shaper-beta',
@@ -332,7 +340,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 0 })],
   },
   {
     id: 'shaper-bio',
@@ -343,7 +351,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 0 })],
   },
   {
     id: 'shaper-gamma',
@@ -354,7 +362,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 0 })],
   },
   {
     id: 'shaper-bio',
@@ -365,7 +373,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 0 })],
   },
   {
     id: 'condom-alpha',
@@ -376,7 +384,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
     id: 'condom-beta',
@@ -387,7 +395,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
     id: 'condom-gamma',
@@ -398,7 +406,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
     id: 'condom-delta',
@@ -409,7 +417,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
     id: 'condom-bio',
@@ -420,7 +428,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
     id: 'backup-alpha',
@@ -430,7 +438,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'backup-beta',
@@ -440,7 +448,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'backup-gamma',
@@ -450,7 +458,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'backup-delta',
@@ -460,7 +468,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'backup-bio',
@@ -470,7 +478,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [],
   },
   {
     id: 'auto-soft-1-alpha',
@@ -885,7 +893,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
     id: 'dreamcast-beta',
@@ -895,7 +903,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
     id: 'dreamcast-gamma',
@@ -905,7 +913,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
     id: 'dreamcast-delta',
@@ -915,7 +923,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
     id: 'dreamcast-bio',
@@ -925,7 +933,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
     id: 'autopilot-alpha',

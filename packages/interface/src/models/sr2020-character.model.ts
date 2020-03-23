@@ -198,6 +198,18 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column({ default: 0 })
+  fadingResistance: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  biofeedbackResistance: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  matrixHp: number;
+
+  @rproperty()
+  @Column({ default: 0 })
   adminHostNumber: number;
 
   @rproperty()
