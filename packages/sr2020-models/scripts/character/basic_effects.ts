@@ -82,7 +82,7 @@ export function increaseBiofeedbackResistance(api: EffectModelApi<Sr2020Characte
 
 export function increaseMatrixHp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.matrixHp += m.amount;
-  api.model.matrixHp = clamp(api.model.matrixHp, 1, 9000);
+  api.model.matrixHp = clamp(api.model.matrixHp, 1, 6);
 }
 
 export function increaseAdminHostNumber(api: EffectModelApi<Sr2020Character>, m: Modifier) {
