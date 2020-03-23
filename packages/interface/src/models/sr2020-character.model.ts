@@ -112,6 +112,29 @@ export class HistoryRecord {
 }
 
 @model()
+export class Discounts {
+  @rproperty()
+  @Column({ default: 0 })
+  weaponsArmor: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  drones: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  chemo: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  implants: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  magicStuff: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -273,24 +296,8 @@ export class Sr2020Character extends EmptyModel {
   stockGainPercentage: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  discountWeaponsArmor: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  discountDrones: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  discountChemo: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  discountImplants: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  discountMagicStuff: number;
+  @Column((type) => Discounts, { prefix: 'discounts' })
+  discounts: Discounts;
 
   @property.array(AddedSpell, { required: true })
   @JsonColumn()

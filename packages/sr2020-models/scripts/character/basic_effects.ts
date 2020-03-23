@@ -158,28 +158,28 @@ export function increaseAllDiscounts(api: EffectModelApi<Sr2020Character>, m: Mo
 }
 
 export function increaseDiscountWeaponsArmor(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discountWeaponsArmor += m.amount;
-  api.model.discountWeaponsArmor = clamp(api.model.discountWeaponsArmor, 0, 50);
+  api.model.discounts.weaponsArmor += m.amount;
+  api.model.discounts.weaponsArmor = clamp(api.model.discounts.weaponsArmor, 0, 50);
 }
 
 export function increaseDiscountDrones(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discountDrones += m.amount;
-  api.model.discountDrones = clamp(api.model.discountDrones, 0, 50);
+  api.model.discounts.drones += m.amount;
+  api.model.discounts.drones = clamp(api.model.discounts.drones, 0, 50);
 }
 
 export function increaseDiscountChemo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discountChemo += m.amount;
-  api.model.discountChemo = clamp(api.model.discountChemo, 0, 50);
+  api.model.discounts.chemo += m.amount;
+  api.model.discounts.chemo = clamp(api.model.discounts.chemo, 0, 50);
 }
 
 export function increaseDiscountImplants(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discountImplants += m.amount;
-  api.model.discountImplants = clamp(api.model.discountImplants, 0, 50);
+  api.model.discounts.implants += m.amount;
+  api.model.discounts.implants = clamp(api.model.discounts.implants, 0, 50);
 }
 
 export function increaseDiscountMagicStuff(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discountMagicStuff += m.amount;
-  api.model.discountMagicStuff = clamp(api.model.discountMagicStuff, 0, 50);
+  api.model.discounts.magicStuff += m.amount;
+  api.model.discounts.magicStuff = clamp(api.model.discounts.magicStuff, 0, 50);
 }
 
 export function increaseMentalProtection(api: EffectModelApi<Sr2020Character>, m: Modifier) {
