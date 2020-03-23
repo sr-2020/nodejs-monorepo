@@ -41,43 +41,43 @@ export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: Modif
 }
 
 export function increaseMaxTimeAtHost(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.maxTimeAtHost += m.amount;
-  api.model.maxTimeAtHost = clamp(api.model.maxTimeAtHost, 15, 60);
+  api.model.hacking.maxTimeAtHost += m.amount;
+  api.model.hacking.maxTimeAtHost = clamp(api.model.hacking.maxTimeAtHost, 15, 60);
 }
 
 export function increaseHostEntrySpeed(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.hostEntrySpeed += m.amount;
-  api.model.hostEntrySpeed = clamp(api.model.hostEntrySpeed, 5, 20);
+  api.model.hacking.hostEntrySpeed += m.amount;
+  api.model.hacking.hostEntrySpeed = clamp(api.model.hacking.hostEntrySpeed, 5, 20);
 }
 
 export function increaseConversionAttack(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.conversionAttack += m.amount;
-  api.model.conversionAttack = clamp(api.model.conversionAttack, 5, 20);
+  api.model.hacking.conversionAttack += m.amount;
+  api.model.hacking.conversionAttack = clamp(api.model.hacking.conversionAttack, 5, 20);
 }
 
 export function increaseConversionFirewall(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.conversionFirewall += m.amount;
-  api.model.conversionFirewall = clamp(api.model.conversionFirewall, 5, 20);
+  api.model.hacking.conversionFirewall += m.amount;
+  api.model.hacking.conversionFirewall = clamp(api.model.hacking.conversionFirewall, 5, 20);
 }
 
 export function increaseConversionSleaze(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.conversionSleaze += m.amount;
-  api.model.conversionSleaze = clamp(api.model.conversionSleaze, 5, 20);
+  api.model.hacking.conversionSleaze += m.amount;
+  api.model.hacking.conversionSleaze = clamp(api.model.hacking.conversionSleaze, 5, 20);
 }
 
 export function increaseConversionDataprocessing(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.conversionDataprocessing += m.amount;
-  api.model.conversionDataprocessing = clamp(api.model.conversionDataprocessing, 5, 20);
+  api.model.hacking.conversionDataprocessing += m.amount;
+  api.model.hacking.conversionDataprocessing = clamp(api.model.hacking.conversionDataprocessing, 5, 20);
 }
 
 export function increaseFadingResistance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.fadingResistance += m.amount;
-  api.model.fadingResistance = clamp(api.model.fadingResistance, 1, 50);
+  api.model.hacking.fadingResistance += m.amount;
+  api.model.hacking.fadingResistance = clamp(api.model.hacking.fadingResistance, 1, 50);
 }
 
 export function increaseBiofeedbackResistance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.biofeedbackResistance += m.amount;
-  api.model.biofeedbackResistance = clamp(api.model.biofeedbackResistance, 0, 50);
+  api.model.hacking.biofeedbackResistance += m.amount;
+  api.model.hacking.biofeedbackResistance = clamp(api.model.hacking.biofeedbackResistance, 0, 50);
 }
 
 export function increaseMatrixHp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -86,13 +86,13 @@ export function increaseMatrixHp(api: EffectModelApi<Sr2020Character>, m: Modifi
 }
 
 export function increaseAdminHostNumber(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.adminHostNumber += m.amount;
-  api.model.adminHostNumber = clamp(api.model.adminHostNumber, 3, 10);
+  api.model.hacking.adminHostNumber += m.amount;
+  api.model.hacking.adminHostNumber = clamp(api.model.hacking.adminHostNumber, 3, 10);
 }
 
 export function increaseSpriteLevel(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.spriteLevel += m.amount;
-  api.model.spriteLevel = clamp(api.model.spriteLevel, 0, 3);
+  api.model.hacking.spriteLevel += m.amount;
+  api.model.hacking.spriteLevel = clamp(api.model.hacking.spriteLevel, 0, 3);
 }
 
 export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: Modifier) {

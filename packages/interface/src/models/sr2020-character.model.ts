@@ -158,6 +158,49 @@ export class Chemo {
 }
 
 @model()
+export class Hacking {
+  @rproperty()
+  @Column({ default: 0 })
+  maxTimeAtHost: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  hostEntrySpeed: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionAttack: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionFirewall: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionSleaze: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  conversionDataprocessing: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  fadingResistance: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  biofeedbackResistance: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  adminHostNumber: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  spriteLevel: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -219,48 +262,8 @@ export class Sr2020Character extends EmptyModel {
   resonance: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  maxTimeAtHost: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  hostEntrySpeed: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  conversionAttack: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  conversionFirewall: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  conversionSleaze: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  conversionDataprocessing: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  fadingResistance: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  biofeedbackResistance: number;
-
-  @rproperty()
   @Column({ default: 1 })
   matrixHp: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  adminHostNumber: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  spriteLevel: number;
 
   @rproperty()
   @Column({ default: 30 })
@@ -293,6 +296,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column({ default: 0 })
   ethicGroupMaxSize: number;
+
+  @rproperty()
+  @Column((type) => Hacking, { prefix: 'hacking' })
+  hacking: Hacking;
 
   @rproperty()
   @Column((type) => Chemo, { prefix: 'chemo' })
