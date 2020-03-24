@@ -251,10 +251,6 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column()
-  magicPowerBonus: number;
-
-  @rproperty()
-  @Column()
   magicAura: string;
 
   @rproperty()

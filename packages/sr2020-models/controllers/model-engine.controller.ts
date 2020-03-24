@@ -112,7 +112,6 @@ export class ModelEngineController implements ModelEngineService {
       auraReadingMultiplier: 1,
       auraMarkMultiplier: 1,
       auraMask: 0,
-      magicPowerBonus: 0,
       magicAura: 'aaaabbbbccccddddeeee',
       healthState: 'healthy',
       ethicGroupMaxSize: 0,
