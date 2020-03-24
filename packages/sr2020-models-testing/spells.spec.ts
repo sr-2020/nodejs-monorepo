@@ -296,7 +296,7 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'light-step' } }, 1);
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
 
-    await fixture.saveCharacter({ modelId: '2', magic: 10, auraReadingMultiplier: 2.0 });
+    await fixture.saveCharacter({ modelId: '2', magic: 10, magicStats: { auraReadingMultiplier: 2.0 } });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 2);
 
     await fixture.advanceTime(2 * 60);

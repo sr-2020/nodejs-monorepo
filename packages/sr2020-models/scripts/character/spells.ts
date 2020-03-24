@@ -259,7 +259,7 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: Spell
   const durationInSeconds = (10 + data.power) * 60;
   const symbolsRead = Math.min(
     AURA_LENGTH,
-    Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.auraReadingMultiplier) / 100),
+    Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
   );
   dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
 }
@@ -271,7 +271,7 @@ export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   const durationInSeconds = 60 * 60;
   const symbolsRead = Math.min(
     AURA_LENGTH,
-    Math.floor((AURA_LENGTH * (20 + Math.min(60, data.power * 10)) * api.workModel.auraReadingMultiplier) / 100),
+    Math.floor((AURA_LENGTH * (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
   );
   dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
 }
@@ -405,8 +405,8 @@ function applyAndGetMagicFeedback(api: EventModelApi<Sr2020Character>, power: nu
 // Magic feedback implementation
 function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number, event: Event) {
   const positions = Array.from(Array(AURA_LENGTH).keys());
-  const picked = chance.pickset(positions, api.workModel.auraMarkMultiplier * AURA_LENGTH);
-  const casterAura = positions.map((i) => (picked.includes(i) ? api.workModel.magicAura[i] : kUnknowAuraCharacter)).join('');
+  const picked = chance.pickset(positions, api.workModel.magicStats.auraMarkMultiplier * AURA_LENGTH);
+  const casterAura = positions.map((i) => (picked.includes(i) ? api.workModel.magicStats.aura[i] : kUnknowAuraCharacter)).join('');
 
   api.sendOutboundEvent(Location, data.locationId, recordSpellTrace, {
     spellName,

@@ -158,6 +158,37 @@ export class Chemo {
 }
 
 @model()
+export class MagicStats {
+  @rproperty()
+  @Column({ default: 0 })
+  feedbackReduction: number;
+
+  @rproperty()
+  @Column({ default: 1.0 })
+  recoverySpeed: number;
+
+  @rproperty()
+  @Column({ default: 1.0 })
+  spiritResistanceMultiplier: number;
+
+  @rproperty()
+  @Column({ default: 1.0 })
+  auraReadingMultiplier: number;
+
+  @rproperty()
+  @Column({ default: 1.0 })
+  auraMarkMultiplier: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  auraMask: number;
+
+  @rproperty()
+  @Column()
+  aura: string;
+}
+
+@model()
 export class Hacking {
   @rproperty()
   @Column({ default: 0 })
@@ -250,10 +281,6 @@ export class Sr2020Character extends EmptyModel {
   metarace: 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
 
   @rproperty()
-  @Column()
-  magicAura: string;
-
-  @rproperty()
   @Column({ default: 0 })
   body: number;
 
@@ -295,31 +322,11 @@ export class Sr2020Character extends EmptyModel {
 
   @rproperty()
   @Column({ default: 0 })
-  magicFeedbackReduction: number;
-
-  @rproperty()
-  @Column({ default: 1.0 })
-  magicRecoverySpeed: number;
-
-  @rproperty()
-  @Column({ default: 1.0 })
-  spiritResistanceMultiplier: number;
-
-  @rproperty()
-  @Column({ default: 1.0 })
-  auraReadingMultiplier: number;
-
-  @rproperty()
-  @Column({ default: 1.0 })
-  auraMarkMultiplier: number;
-
-  @rproperty()
-  @Column({ default: 0 })
-  auraMask: number;
-
-  @rproperty()
-  @Column({ default: 0 })
   ethicGroupMaxSize: number;
+
+  @rproperty()
+  @Column((type) => MagicStats, { prefix: 'magic' })
+  magicStats: MagicStats;
 
   @rproperty()
   @Column((type) => Hacking, { prefix: 'hacking' })

@@ -20,6 +20,14 @@ import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-
 
 (Winston as any).level = 'error';
 
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepPartial<U>>
+    : DeepPartial<T[P]>;
+};
+
 // Those are singletones intentionally - so model scripts are only loaded once.
 const characterEngine = new Engine<Sr2020Character>(
   loadModels('../sr2020-models/scripts/character'),
@@ -131,7 +139,7 @@ export class TestFixture {
     return new TestFixture(client, connection, app, timeService, pushService, pubSubService);
   }
 
-  async saveCharacter(model: Partial<Sr2020Character> = {}) {
+  async saveCharacter(model: DeepPartial<Sr2020Character> = {}) {
     const id = model.modelId ?? 0;
     await this.client
       .put(`/character/default/${id}?noAbilities=true`)
@@ -141,11 +149,11 @@ export class TestFixture {
     await this._connection.getRepository(Sr2020Character).save({ ...character, ...model });
   }
 
-  async saveLocation(model: Partial<Location> = {}) {
+  async saveLocation(model: DeepPartial<Location> = {}) {
     await this._connection.getRepository(Location).save({ ...getDefaultLocation(this._timeService.timestamp()), ...model });
   }
 
-  async saveQrCode(model: Partial<QrCode> = {}) {
+  async saveQrCode(model: DeepPartial<QrCode> = {}) {
     await this._connection.getRepository(QrCode).save({ ...getDefaultQrCode(this._timeService.timestamp()), ...model });
   }
 

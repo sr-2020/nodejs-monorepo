@@ -31,8 +31,8 @@ export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: Modifier)
 }
 
 export function increaseMagicFeedbackReduction(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.magicFeedbackReduction += m.amount;
-  api.model.magicFeedbackReduction = clamp(api.model.magicFeedbackReduction, -9000, 9000);
+  api.model.magicStats.feedbackReduction += m.amount;
+  api.model.magicStats.feedbackReduction = clamp(api.model.magicStats.feedbackReduction, -9000, 9000);
 }
 
 export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -136,29 +136,29 @@ export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: Mod
 }
 
 export function increaseMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.magicRecoverySpeed += m.amount;
+  api.model.magicStats.recoverySpeed += m.amount;
   // As this is a coefficient - we use 1/3 and 5/3 instead of 1 and 5 from the sheet.
-  api.model.magicRecoverySpeed = clamp(api.model.magicRecoverySpeed, 1.0 / 3.0, 5.0 / 3.0);
+  api.model.magicStats.recoverySpeed = clamp(api.model.magicStats.recoverySpeed, 1.0 / 3.0, 5.0 / 3.0);
 }
 
 export function increaseSpiritResistanceMultiplier(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.spiritResistanceMultiplier += m.amount;
-  api.model.spiritResistanceMultiplier = clamp(api.model.spiritResistanceMultiplier, 0.2, 2.0);
+  api.model.magicStats.spiritResistanceMultiplier += m.amount;
+  api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
 }
 
 export function increaseAuraMarkMultiplier(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.auraMarkMultiplier += m.amount;
-  api.model.auraMarkMultiplier = clamp(api.model.auraMarkMultiplier, 0.1, 2.0);
+  api.model.magicStats.auraMarkMultiplier += m.amount;
+  api.model.magicStats.auraMarkMultiplier = clamp(api.model.magicStats.auraMarkMultiplier, 0.1, 2.0);
 }
 
 export function increaseAuraReadingMultiplier(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.auraReadingMultiplier += m.amount;
-  api.model.auraReadingMultiplier = clamp(api.model.auraReadingMultiplier, 0.1, 2.0);
+  api.model.magicStats.auraReadingMultiplier += m.amount;
+  api.model.magicStats.auraReadingMultiplier = clamp(api.model.magicStats.auraReadingMultiplier, 0.1, 2.0);
 }
 
 export function increaseAuraMask(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.auraMask += m.amount;
-  api.model.auraMask = clamp(api.model.auraMask, 0, 9000);
+  api.model.magicStats.auraMask += m.amount;
+  api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 9000);
 }
 
 export function increaseEthicGroupMaxSize(api: EffectModelApi<Sr2020Character>, m: Modifier) {
