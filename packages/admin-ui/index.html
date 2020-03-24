@@ -44,7 +44,7 @@
                     <b-td> {{ characterModel.maxHp }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Magic</b-th>
+                    <b-th>Магия</b-th>
                     <b-td>{{ characterModel.magic }}</b-td>
                   </b-tr>
                   <b-tr>
@@ -52,119 +52,215 @@
                     <b-td>{{ characterModel.body }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Intelligence</b-th>
+                    <b-th>Интеллект</b-th>
                     <b-td>{{ characterModel.body }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Charisma</b-th>
-                    <b-td>{{ characterModel.charisma }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Resonance</b-th>
+                    <b-th>Резонанс</b-th>
                     <b-td>{{ characterModel.resonance }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Максимальное время на хосте</b-th>
-                    <b-td>{{ characterModel.maxTimeAtHost }}</b-td>
+                    <b-th>Харизма</b-th>
+                    <b-td>{{ characterModel.charisma }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Скорость входа на хост</b-th>
-                    <b-td>{{ characterModel.hostEntrySpeed }}</b-td>
+                    <b-th>Бонус к ментальной атаке</b-th>
+                    <b-td>{{ characterModel.mentalAttackBonus }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Конверсия атаки</b-th>
-                    <b-td>{{ characterModel.conversionAttack }}</b-td>
+                    <b-th>Бонус к ментальной защите</b-th>
+                    <b-td>{{ characterModel.mentalDefenceBonus }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Конверсия файрвола</b-th>
-                    <b-td>{{ characterModel.conversionFirewall }}</b-td>
+                    <b-th>Матричное состояние</b-th>
+                    <b-td> {{ characterModel.matrixHp }}</b-td>
                   </b-tr>
                   <b-tr>
-                    <b-th>Конверсия слизи</b-th>
-                    <b-td>{{ characterModel.conversionSleaze }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Конверсия датапроцессинга</b-th>
-                    <b-td>{{ characterModel.conversionDataprocessing }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Число администрируемых хостов</b-th>
-                    <b-td>{{ characterModel.adminHostNumber }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Уровень спрайтов</b-th>
-                    <b-td>{{ characterModel.spriteLevel }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Снижение отката</b-th>
-                    <b-td> {{ characterModel.magicFeedbackReduction }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Восстановление Магии</b-th>
-                    <b-td>{{ characterModel.magicRecoverySpeed }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Коэффициент Сопротивления Духов</b-th>
-                    <b-td>{{ characterModel.spiritResistanceMultiplier }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Коэффициент Чтения Астральных Следов</b-th>
-                    <b-td>{{ characterModel.auraReadingMultiplier }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
-                    <b-td>{{ characterModel.auraMarkMultiplier }}</b-td>
+                    <b-th>Максимальное время в VR</b-th>
+                    <b-td>{{ characterModel.maxTimeInVr }}</b-td>
                   </b-tr>
                   <b-tr>
                     <b-th>Максимальный размер этической группы</b-th>
                     <b-td>{{ characterModel.ethicGroupMaxSize }}</b-td>
                   </b-tr>
-                  <b-tr>
-                    <b-th>Обнаруживаемый уровень фуфломицина в чаммере</b-th>
-                    <b-td>{{ characterModel.chemo.bodyDetectableThreshold }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Обнаруживаемый уровень фуфломицина в таблетке</b-th>
-                    <b-td>{{ characterModel.chemo.pillDetectableThreshold }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Химота Базовый Эффект</b-th>
-                    <b-td>{{ characterModel.chemo.baseEffectThreshold }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Химота Супер Эффект</b-th>
-                    <b-td>{{ characterModel.chemo.superEffectThreshold }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Химота Кризис</b-th>
-                    <b-td>{{ characterModel.chemo.crysisThreshold }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Безусловный доход в процентах от оборота</b-th>
-                    <b-td>{{ characterModel.stockGainPercentage }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Скидка на оружие и броню</b-th>
-                    <b-td>{{ characterModel.discounts.weaponsArmor }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Скидка на дроны</b-th>
-                    <b-td>{{ characterModel.discounts.drones }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Скидка на химоту</b-th>
-                    <b-td>{{ characterModel.discounts.chemo }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Скидка на импланты</b-th>
-                    <b-td>{{ characterModel.discounts.implants }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Скидка на магические штуки</b-th>
-                    <b-td>{{ characterModel.discounts.magicStuff }}</b-td>
-                  </b-tr>
                 </b-tbody>
               </b-table-simple>
+              <b-button block href="#" v-b-toggle.magic variant="info">
+                Магические характеристики
+              </b-button>
+              <b-collapse id="magic">
+                <b-table-simple small>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Снижение отката</b-th>
+                      <b-td> {{ characterModel.magicFeedbackReduction }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Восстановление Магии</b-th>
+                      <b-td>{{ characterModel.magicRecoverySpeed }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Коэффициент Сопротивления Духов</b-th>
+                      <b-td>{{ characterModel.spiritResistanceMultiplier }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Коэффициент Чтения Астральных Следов</b-th>
+                      <b-td>{{ characterModel.auraReadingMultiplier }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
+                      <b-td>{{ characterModel.auraMarkMultiplier }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Аура</b-th>
+                      <b-td>{{ characterModel.magicAura }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Маска ауры</b-th>
+                      <b-td>{{ characterModel.auraMask }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+              </b-collapse>
+              <b-button block href="#" v-b-toggle.hacker variant="info">
+                Хакерские характеристики
+              </b-button>
+              <b-collapse id="hacker">
+                <b-table-simple small>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Бонус к резонансу для контроля</b-th>
+                      <b-td>{{ characterModel.hacking.resonanceForControlBonus }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальное время на хосте</b-th>
+                      <b-td>{{ characterModel.hacking.maxTimeAtHost }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скорость входа на хост</b-th>
+                      <b-td>{{ characterModel.hacking.hostEntrySpeed }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Конверсия атаки</b-th>
+                      <b-td>{{ characterModel.hacking.conversionAttack }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Конверсия файрвола</b-th>
+                      <b-td>{{ characterModel.hacking.conversionFirewall }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Конверсия слизи</b-th>
+                      <b-td>{{ characterModel.hacking.conversionSleaze }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Конверсия датапроцессинга</b-th>
+                      <b-td>{{ characterModel.hacking.conversionDataprocessing }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Число администрируемых хостов</b-th>
+                      <b-td>{{ characterModel.hacking.adminHostNumber }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Уровень спрайтов</b-th>
+                      <b-td>{{ characterModel.hacking.spriteLevel }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Дополнительные спрайты</b-th>
+                      <b-td>{{ characterModel.hacking.additionalSprites }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Дополнительные бекдоры</b-th>
+                      <b-td>{{ characterModel.hacking.additionalBackdoors }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Время жизни бекдоров</b-th>
+                      <b-td>{{ characterModel.hacking.backdoorTtl }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Дополнительные запросы к контролю</b-th>
+                      <b-td>{{ characterModel.hacking.additionalRequests }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Сопротивление фейдингу</b-th>
+                      <b-td>{{ characterModel.hacking.fadingResistance }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Сопротивление фейдингу для компиляции</b-th>
+                      <b-td>{{ characterModel.hacking.compilationFadingResistance }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Сопротивление биофидбеку</b-th>
+                      <b-td>{{ characterModel.hacking.biofeedbackResistance }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Сопротивление вэриансу</b-th>
+                      <b-td>{{ characterModel.hacking.varianceResistance }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+              </b-collapse>
+              <b-button block href="#" v-b-toggle.discounts variant="info">
+                Экономические характеристики
+              </b-button>
+              <b-collapse id="discounts">
+                <b-table-simple small>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Безусловный доход в процентах от оборота</b-th>
+                      <b-td>{{ characterModel.stockGainPercentage }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скидка на оружие и броню</b-th>
+                      <b-td>{{ characterModel.discounts.weaponsArmor }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скидка на дроны</b-th>
+                      <b-td>{{ characterModel.discounts.drones }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скидка на химоту</b-th>
+                      <b-td>{{ characterModel.discounts.chemo }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скидка на импланты</b-th>
+                      <b-td>{{ characterModel.discounts.implants }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Скидка на магические штуки</b-th>
+                      <b-td>{{ characterModel.discounts.magicStuff }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+              </b-collapse>
+              <b-button block href="#" v-b-toggle.chemo variant="info">
+                Химота
+              </b-button>
+              <b-collapse id="chemo">
+                <b-table-simple small>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Обнаруживаемый уровень фуфломицина в чаммере</b-th>
+                      <b-td>{{ characterModel.chemo.bodyDetectableThreshold }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Обнаруживаемый уровень фуфломицина в таблетке</b-th>
+                      <b-td>{{ characterModel.chemo.pillDetectableThreshold }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Химота Базовый Эффект</b-th>
+                      <b-td>{{ characterModel.chemo.baseEffectThreshold }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Химота Супер Эффект</b-th>
+                      <b-td>{{ characterModel.chemo.superEffectThreshold }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Химота Кризис</b-th>
+                      <b-td>{{ characterModel.chemo.crysisThreshold }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+              </b-collapse>
             </b-card-body>
           </b-card>
           <b-card no-body>
