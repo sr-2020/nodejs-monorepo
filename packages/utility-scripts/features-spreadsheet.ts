@@ -179,6 +179,7 @@ class SpreadsheetProcessor {
 
     for (let r = 1; r < 600; ++r) {
       const row = data[r];
+      if (!row) continue;
       const id = row[kIdColumn];
       const kind = row[kKindColumn];
 
