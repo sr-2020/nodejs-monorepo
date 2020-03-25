@@ -1047,7 +1047,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
 
   {
     id: 'increase-the-charisma-1',
-    name: 'Повышение Харизмы',
+    name: 'Повышение Харизмы от 3 до 4',
     description: 'Перманентное увеличение Харизмы персонажа - 1',
     // 278
     // Увеличивает Харизму персонажа менталиста с 3 до 4
@@ -1056,7 +1056,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
 
   {
     id: 'increase-the-charisma-2',
-    name: 'Повышение Харизмы',
+    name: 'Повышение Харизмы от 4 до 5',
     description: 'Перманентное увеличение Харизмы персонажа - 2',
     // 279
     // Увеличивает Харизму персонажа менталиста с 4 до 5
@@ -1066,7 +1066,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
 
   {
     id: 'increase-the-charisma-3',
-    name: 'Повышение Харизмы',
+    name: 'Повышение Харизмы от 5 до 6',
     description: 'Перманентное увеличение Харизмы персонажа - 3',
     // 280
     // Увеличивает Харизму персонажа менталиста с 5 до 6
@@ -1076,7 +1076,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
 
   {
     id: 'increase-the-charisma-4',
-    name: 'Повышение Харизмы',
+    name: 'Повышение Харизмы от 6 до 7',
     description: 'Перманентное увеличение Харизмы персонажа - 4',
     // 281
     // Увеличивает Харизму персонажа менталиста с 6 до 7
@@ -1086,7 +1086,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
 
   {
     id: 'increase-the-charisma-5',
-    name: 'Повышение Харизмы',
+    name: 'Повышение Харизмы от 7 до 8',
     description: 'Перманентное увеличение Харизмы персонажа - 5',
     // 282
     // Увеличивает Харизму персонажа менталиста с 7 до 8
