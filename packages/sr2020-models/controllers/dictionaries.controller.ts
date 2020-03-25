@@ -2,6 +2,7 @@ import { get } from '@loopback/rest';
 import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_library';
 import { kAllSpells } from '../scripts/character/spells_library';
 import { kAllActiveAbilities } from '../scripts/character/active_abilities_library';
+import { kAllImplants } from '../scripts/character/implants_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -35,5 +36,31 @@ export class DictionariesController {
     }));
     const spells = [...kAllSpells.values()].map((f) => ({ id: f.id, name: f.humanReadableName, description: f.description }));
     return [...spells, ...pasiveAbilities, ...activeAbilities];
+  }
+
+  @get('/implants', {
+    summary: `Returns the list of implemented implants`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  implants(): { id: string; name: string; description: string }[] {
+    return kAllImplants.map((it) => ({ id: it.id, name: it.name, description: it.description }));
   }
 }
