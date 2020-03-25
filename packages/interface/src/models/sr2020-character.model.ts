@@ -100,6 +100,9 @@ export class AddedImplant {
 
   @property({ required: true, type: 'string' })
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
+
+  // List of modifiers added by this implant. Used to remove them when implant is being removed.
+  @property.array(String) modifierIds: string[];
 }
 
 @model()
