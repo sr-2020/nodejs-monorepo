@@ -18,7 +18,7 @@ export interface Implant {
   id: string;
   name: string;
   description: string;
-  slot: 'body' | 'arm' | 'head' | 'rcc' | 'commlink';
+  slot: 'body' | 'arm' | 'head' | 'rcc';
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
   essenceCost: number;
   installDifficulty: number;
@@ -178,26 +178,6 @@ export const kAllImplants: Implant[] = [
     essenceCost: 0.5,
     installDifficulty: 7,
     modifiers: [],
-  },
-  {
-    id: 'comm-link-alpha',
-    name: 'коммлинк',
-    slot: 'commlink',
-    description: 'позволяет подключаться к матрице',
-    grade: 'alpha',
-    essenceCost: 0.1,
-    installDifficulty: 3,
-    modifiers: [dummyModifier],
-  },
-  {
-    id: 'comm-link-beta',
-    name: 'коммлинк',
-    slot: 'commlink',
-    description: 'позволяет подключаться к матрице',
-    grade: 'bio',
-    essenceCost: 0,
-    installDifficulty: 7,
-    modifiers: [dummyModifier],
   },
   {
     id: 'сerebellum-alpha',

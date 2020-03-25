@@ -96,7 +96,7 @@ export class AddedImplant {
   @rproperty() description: string;
 
   @property({ required: true, type: 'string' })
-  slot: 'body' | 'arm' | 'head' | 'rcc' | 'commlink';
+  slot: 'body' | 'arm' | 'head' | 'rcc';
 
   @property({ required: true, type: 'string' })
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
