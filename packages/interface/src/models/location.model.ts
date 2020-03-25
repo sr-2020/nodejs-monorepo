@@ -8,7 +8,6 @@ export class SpellTrace {
   @rproperty() timestamp: number;
   @rproperty() spellName: string;
   @rproperty() casterAura: string;
-  @rproperty() gender: string;
   @rproperty() metarace: string;
   @rproperty() power: number;
   @rproperty() magicFeedback: number;

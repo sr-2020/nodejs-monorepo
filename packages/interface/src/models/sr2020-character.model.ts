@@ -291,10 +291,6 @@ export class Sr2020Character extends EmptyModel {
   healthState: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
 
   @property({ required: true, type: 'string' })
-  @Column({ type: 'text', default: 'мужчина' })
-  gender: 'мужчина' | 'женщина';
-
-  @property({ required: true, type: 'string' })
   @Column({ type: 'text', default: 'meta-norm' })
   metarace: 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
 

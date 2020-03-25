@@ -412,7 +412,6 @@ function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, sp
     spellName,
     timestamp: event.timestamp,
     casterAura,
-    gender: api.workModel.gender,
     metarace: api.workModel.metarace,
     power: data.power,
     magicFeedback: feedbackAmount,

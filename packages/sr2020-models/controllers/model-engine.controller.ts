@@ -73,7 +73,6 @@ export class ModelEngineController implements ModelEngineService {
   async defaultCharacter(@requestBody() _: Empty): Promise<Sr2020Character> {
     const result: Sr2020Character = {
       modelId: '',
-      gender: 'мужчина',
       metarace: 'meta-norm',
       maxHp: 3,
       timestamp: 0,
