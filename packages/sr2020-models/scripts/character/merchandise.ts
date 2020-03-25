@@ -1,16 +1,19 @@
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
-import { kAllImplants } from './implants_library';
+import { kAllImplants, ImplantSlot } from './implants_library';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
   api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
 }
-
 export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   const implant = kAllImplants.find((it) => it.id == data.id);
   if (!implant) {
     throw new UserVisibleError(`Импланта ${data.id} не существует`);
+  }
+
+  if (api.model.implants.filter((it) => it.slot == implant.slot).length >= maxImplantsPerSlot(implant.slot)) {
+    throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имлант из одного из них.`);
   }
 
   const addedImplant: AddedImplant = {
@@ -32,4 +35,9 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
 
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
   api.model.implants.splice(implantIndex);
+}
+
+function maxImplantsPerSlot(slot: ImplantSlot) {
+  if (slot == 'rcc') return 1;
+  return 2;
 }

@@ -14,11 +14,13 @@ import {
   increaseMaxDroneDifficulty,
 } from './basic_effects';
 
+export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
+
 export interface Implant {
   id: string;
   name: string;
   description: string;
-  slot: 'body' | 'arm' | 'head' | 'rcc';
+  slot: ImplantSlot;
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
   essenceCost: number;
   installDifficulty: number;
