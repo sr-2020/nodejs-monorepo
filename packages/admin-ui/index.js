@@ -64,6 +64,7 @@ var app = new Vue({
 
     setCharacterModel(model) {
       model.passiveAbilities.forEach((f) => delete f.modifierIds);
+      model.implants.forEach((f) => delete f.modifierIds);
       this.characterModel = model;
       this.violence = model.ethicState.find((s) => s.scale == 'violence').value;
       this.control = model.ethicState.find((s) => s.scale == 'control').value;
