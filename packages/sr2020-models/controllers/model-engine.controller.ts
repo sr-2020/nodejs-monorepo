@@ -124,6 +124,11 @@ export class ModelEngineController implements ModelEngineService {
         superEffectThreshold: 70,
         crysisThreshold: 120,
       },
+      drones: {
+        maxDifficulty: -1000,
+        maxTimeInside: 60,
+        recoveryTime: 50,
+      },
       stockGainPercentage: 0,
       discounts: {
         weaponsArmor: 0,

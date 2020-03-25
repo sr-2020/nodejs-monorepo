@@ -234,3 +234,18 @@ export function increaseMentalProtection(api: EffectModelApi<Sr2020Character>, m
 export function increaseMentalAttack(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.mentalAttackBonus += m.amount;
 }
+
+export function increaseMaxDroneDifficulty(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.drones.maxDifficulty += m.amount;
+  api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
+}
+
+export function increaseMaxTimeInDrone(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.drones.maxTimeInside += m.amount;
+  api.model.drones.maxTimeInside = clamp(api.model.drones.maxTimeInside, 6, 120);
+}
+
+export function increasePostDroneRecoveryTime(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.drones.recoveryTime += m.amount;
+  api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
+}

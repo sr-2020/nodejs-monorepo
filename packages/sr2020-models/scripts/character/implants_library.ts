@@ -10,6 +10,8 @@ import {
   increaseBiofeedbackResistance,
   increaseBody,
   increaseIntelligence,
+  increaseMaxTimeInDrone,
+  increaseMaxDroneDifficulty,
 } from './basic_effects';
 
 export interface Implant {
@@ -470,7 +472,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 2 })],
   },
   {
     id: 'auto-soft-1-beta',
@@ -480,7 +482,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 2 })],
   },
   {
     id: 'auto-soft-1-gamma',
@@ -490,7 +492,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 2 })],
   },
   {
     id: 'auto-soft-1-delta',
@@ -500,7 +502,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 2 })],
   },
   {
     id: 'auto-soft-1-bio',
@@ -510,7 +512,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 2 })],
   },
   {
     id: 'auto-soft-2-alpha',
@@ -520,7 +522,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 4 })],
   },
   {
     id: 'auto-soft-2-beta',
@@ -530,7 +532,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 4 })],
   },
   {
     id: 'auto-soft-2-gamma',
@@ -540,7 +542,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 4 })],
   },
   {
     id: 'auto-soft-2-delta',
@@ -550,7 +552,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 4 })],
   },
   {
     id: 'auto-soft-2-bio',
@@ -560,7 +562,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 4 })],
   },
   {
     id: 'auto-soft-3-alpha',
@@ -570,7 +572,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 8 })],
   },
   {
     id: 'auto-soft-3-beta',
@@ -580,7 +582,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 8 })],
   },
   {
     id: 'auto-soft-3-gamma',
@@ -590,7 +592,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 8 })],
   },
   {
     id: 'auto-soft-3-delta',
@@ -600,7 +602,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 8 })],
   },
   {
     id: 'auto-soft-3-bio',
@@ -610,7 +612,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 8 })],
   },
   {
     id: 'medkit-alpha',
@@ -675,7 +677,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1006 })],
   },
   {
     id: 'rcc-beta',
@@ -685,7 +687,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1008 })],
   },
   {
     id: 'rcc-gamma',
@@ -695,7 +697,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1010 })],
   },
   {
     id: 'rcc-delta',
@@ -705,7 +707,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1012 })],
   },
   {
     id: 'rcc-bio',
@@ -715,7 +717,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1006 })],
   },
   {
     id: 'under-oak-alpha',
@@ -925,7 +927,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
     id: 'autopilot-beta',
@@ -935,7 +937,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
     id: 'autopilot-gamma',
@@ -945,7 +947,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
     id: 'autopilot-delta',
@@ -955,7 +957,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
     id: 'autopilot-bio',
@@ -965,6 +967,6 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
 ];

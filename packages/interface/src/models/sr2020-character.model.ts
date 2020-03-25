@@ -260,6 +260,21 @@ export class Hacking {
 }
 
 @model()
+export class Drones {
+  @rproperty()
+  @Column({ default: -1000 })
+  maxDifficulty: number;
+
+  @rproperty()
+  @Column({ default: 60 })
+  maxTimeInside: number;
+
+  @rproperty()
+  @Column({ default: 50 })
+  recoveryTime: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -331,6 +346,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column((type) => Hacking, { prefix: 'hacking' })
   hacking: Hacking;
+
+  @rproperty()
+  @Column((type) => Drones, { prefix: 'drones' })
+  drones: Drones;
 
   @rproperty()
   @Column((type) => Chemo, { prefix: 'chemo' })
