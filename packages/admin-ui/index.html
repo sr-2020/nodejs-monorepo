@@ -370,15 +370,11 @@
           <b-card no-body>
             <b-card-header>Установка/удаление импланта</b-card-header>
             <b-card-body>
-              <b-input-group prepend="ID импланта">
-                <b-form-input type="string" v-model="implantId"></b-form-input>
-                <b-input-group-append>
-                  <b-button variant="success" v-on:click="installImplant">Установить</b-button>
-                </b-input-group-append>
-                <b-input-group-append>
-                  <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
-                </b-input-group-append>
-              </b-input-group>
+              <b-form-select v-model="selectedImplant">
+                <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} ) </option>
+              </b-form-select>
+              <b-button variant="success" v-on:click="installImplant">Установить</b-button>
+              <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
             </b-card-body>
           </b-card>
           <b-card no-body>

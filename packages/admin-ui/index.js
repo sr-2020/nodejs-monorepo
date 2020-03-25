@@ -4,7 +4,9 @@ var app = new Vue({
     desiredCharacterId: 128,
     characterModel: undefined,
     allFeatures: undefined,
+    allImplants: undefined,
     selectedFeature: 'magic-1',
+    selectedImplant: 'rcc-alpha',
     clinicalDeathTarget: 128,
     qrCodeId: 1,
 
@@ -13,11 +15,17 @@ var app = new Vue({
     individualism: 0,
     mind: 0,
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-    implantId: 'rcc-alpha'
   },
   async created() {
-    const response = await this.$http.get(`https://model-engine.k8.evarun.ru/features`);
-    this.allFeatures = response.body;
+    {
+      const response = await this.$http.get(`https://model-engine.k8.evarun.ru/features`);
+      this.allFeatures = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.k8.evarun.ru/implants`);
+      this.allImplants = response.body;
+    }
   },
   methods: {
     url(id) {
@@ -97,11 +105,11 @@ var app = new Vue({
     },
 
     async installImplant() {
-      return this.sendEvent({ eventType: 'installImplant', data: { id: this.implantId } }, 'Имплант установлен');
+      return this.sendEvent({ eventType: 'installImplant', data: { id: this.selectedImplant } }, 'Имплант установлен');
     },
 
     async removeImplant() {
-      return this.sendEvent({ eventType: 'removeImplant', data: { id: this.implantId } }, 'Имплант удален');
+      return this.sendEvent({ eventType: 'removeImplant', data: { id: this.selectedImplant } }, 'Имплант удален');
     },
 
     async ethicSet() {
