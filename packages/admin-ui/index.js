@@ -12,7 +12,8 @@ var app = new Vue({
     control: 0,
     individualism: 0,
     mind: 0,
-    ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+    ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+    implantId: 'rcc-alpha'
   },
   async created() {
     const response = await this.$http.get(`https://model-engine.k8.evarun.ru/features`);
@@ -92,6 +93,14 @@ var app = new Vue({
 
     async scanQr() {
       return this.sendEvent({ eventType: 'scanQr', data: { qrCode: this.qrCodeId } });
+    },
+
+    async installImplant() {
+      return this.sendEvent({ eventType: 'installImplant', data: { id: this.implantId } }, 'Имплант установлен');
+    },
+
+    async removeImplant() {
+      return this.sendEvent({ eventType: 'removeImplant', data: { id: this.implantId } }, 'Имплант удален');
     },
 
     async ethicSet() {
