@@ -261,6 +261,27 @@
                   </b-tbody>
                 </b-table-simple>
               </b-collapse>
+              <b-button block href="#" v-b-toggle.drones variant="info">
+                Дроны
+              </b-button>
+              <b-collapse id="drones">
+                <b-table-simple small>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Максимальная сложность дрона</b-th>
+                      <b-td>{{ characterModel.drones.maxDifficulty }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальное время в дроне</b-th>
+                      <b-td>{{ characterModel.drones.maxTimeInside }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Время восстановления после</b-th>
+                      <b-td>{{ characterModel.drones.recoveryTime }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+              </b-collapse>
             </b-card-body>
           </b-card>
           <b-card no-body>
