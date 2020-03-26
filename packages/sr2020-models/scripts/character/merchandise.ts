@@ -34,7 +34,7 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
   }
 
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
-  api.model.implants.splice(implantIndex);
+  api.model.implants.splice(implantIndex, 1);
 }
 
 function maxImplantsPerSlot(slot: ImplantSlot) {
