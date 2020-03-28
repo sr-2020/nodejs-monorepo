@@ -79,12 +79,25 @@ describe('Mentalistic events', function() {
   it('I do not trust anybody', async () => {
     await fixture.saveCharacter({ mentalDefenceBonus: 3 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'i-dont-trust-anybody' } });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+    let { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
     expect(workModel.mentalDefenceBonus).to.equal(11);
+    expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
     fixture.advanceTime(29 * 60);
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(11);
     fixture.advanceTime(1 * 60);
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(3);
+
+    // Check on-cooldown behaviour
+    const resp = await fixture.client
+      .post(`/character/model/0`)
+      .send({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } })
+      .expect(400);
+    expect(resp.body.error.message).containEql('кулдаун');
+
+    fixture.advanceTime(30 * 60);
+
+    workModel = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } })).workModel;
+    expect(workModel.activeAbilities[0].cooldownUntil).to.equal(7200 * 1000);
   });
 
   it('You do not trust anybody', async () => {

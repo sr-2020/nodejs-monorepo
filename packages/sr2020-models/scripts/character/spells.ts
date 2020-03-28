@@ -152,8 +152,14 @@ export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { pow
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   const ability = kAllActiveAbilities.get('ground-heal-ability')!;
   api.model.activeAbilities.push({
-    ...ability,
+    id: ability.id,
+    humanReadableName: ability.humanReadableName,
+    description: ability.description,
+    target: ability.target,
+    cooldownMinutes: ability.cooldownMinutes,
+    cooldownUntil: 0,
     validUntil: m.validUntil,
+    eventType: ability.eventType,
   });
 }
 

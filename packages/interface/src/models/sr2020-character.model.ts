@@ -40,6 +40,12 @@ export class AddedActiveAbility {
   // (e.g. was added by effect of some other ability or spell)
   @property() validUntil?: number;
 
+  // Normal cooldown in minutes.
+  @property() cooldownMinutes: number;
+
+  // Unix timestamp in milliseconds.
+  @property() cooldownUntil: number;
+
   @rproperty() eventType: string;
 }
 
