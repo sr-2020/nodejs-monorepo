@@ -1,7 +1,6 @@
 import { Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
-  increaseMagic,
   increaseMaxHp,
   increaseMaxTimeInVr,
   increaseResonanceForControl,

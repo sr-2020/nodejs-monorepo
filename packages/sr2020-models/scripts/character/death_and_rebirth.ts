@@ -74,6 +74,6 @@ export function disableMedkit(api: EffectModelApi<Sr2020Character>, m: Modifier)
 }
 
 function hasEnabledMedkit(api: EventModelApi<Sr2020Character>): boolean {
-  const m = api.workModel.modifiers.find((m) => m.mID == kReviveModifierId);
-  return m != undefined && m.enabled;
+  const medkit = api.workModel.modifiers.find((m) => m.mID == kReviveModifierId);
+  return medkit?.enabled == true;
 }
