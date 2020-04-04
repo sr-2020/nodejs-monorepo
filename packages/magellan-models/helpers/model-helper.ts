@@ -9,6 +9,7 @@ import { OrganismModel } from './basic-types';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 const chance = new Chance();
+import * as moment from 'moment';
 
 function addChangeRecord(api: EventModelApi<OrganismModel>, text: string, timestamp: number) {
   if (text) {
@@ -63,7 +64,7 @@ function addDelayedEvent(api: EventModelApi<OrganismModel>, duration: number, ev
   if (api && duration && eventType && data) {
     const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
-    api.setTimer(timerName, Number(duration), eventType, data);
+    api.setTimer(timerName, moment.duration(duration, 'milliseconds'), eventType, data);
 
     api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms`);
   } else {

@@ -1,5 +1,6 @@
 export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
+import { Duration } from 'moment';
 import { model, property } from '@loopback/repository';
 import { PushNotification, PubSubNotification } from './push-notification.model';
 import { EventCallback } from '@sr2020/interface/callbacks';
@@ -271,7 +272,7 @@ export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;
@@ -317,7 +318,7 @@ export interface EffectModelApi<T extends EmptyModel> extends LogApiInterface {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, miliseconds: number, eventType: EventCallback<T, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(name: string, duration: Duration, eventType: EventCallback<T, TEventData> | string, data: TEventData): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;

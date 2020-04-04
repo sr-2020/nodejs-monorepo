@@ -2,6 +2,7 @@
  * Эффекты и события для работы болезней
  */
 
+import * as moment from 'moment';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
@@ -52,7 +53,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any, event: Ev
 
       api.info(`startIllnessEvent: start timer: ${timerName} to ${illness.illnessStages[0].duration} sec (stage 0)`);
 
-      api.setTimer(timerName, illness.illnessStages[0].duration * 1000, 'illness-next-stage', { mID: illness.mID });
+      api.setTimer(timerName, moment.duration(illness.illnessStages[0].duration, 'seconds'), 'illness-next-stage', { mID: illness.mID });
     } else {
       api.error(`startIllnessEvent: can't load illness: ${data.id}`);
     }
@@ -98,7 +99,7 @@ function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any, event
 
         api.info(`startIllnessEvent: illness ${illness.id}, start stage ${illness.currentStage}, set timer to ${duration} sec`);
 
-        api.setTimer(timerName, duration * 1000, 'illness-next-stage', { mID: illness.mID });
+        api.setTimer(timerName, moment.duration(duration, 'seconds'), 'illness-next-stage', { mID: illness.mID });
       } else {
         //Если это последний этап, то убить систему
         const totalTime = Math.round((event.timestamp - illness.startTime) / 1000);

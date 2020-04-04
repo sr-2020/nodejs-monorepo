@@ -1,5 +1,6 @@
 import { Condition, Effect, Event, Modifier, EventModelApi, EffectModelApi } from 'interface/src/models/alice-model-engine';
 import uuid = require('uuid/v1');
+import * as moment from 'moment';
 import {
   allSystemsIndices,
   colorOfChange,
@@ -68,7 +69,7 @@ function diseaseTick(api: EventModelApi<OrganismModel>, data: DiseaseTickData, e
         return api.model.systems[i].nucleotide + getSymptomValue(api.model.systems[i]);
       }),
     };
-    api.setTimer(uuid(), consts.MAGELLAN_TICK_MILLISECONDS, 'mutation', mutationData);
+    api.setTimer(uuid(), moment.duration(consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'mutation', mutationData);
   }
 }
 
@@ -113,7 +114,7 @@ function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChan
       }
     }
 
-    api.setTimer(uuid(), i * consts.MAGELLAN_TICK_MILLISECONDS, 'disease-tick', tickData);
+    api.setTimer(uuid(), moment.duration(i * consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'disease-tick', tickData);
   }
 }
 
@@ -186,7 +187,7 @@ function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefil
   api.model.spaceSuit.oxygenCapacity = oxygenTimeMs;
   api.model.spaceSuit.timestampWhenPutOn = event.timestamp;
 
-  api.setTimer('spacesuit', oxygenTimeMs, 'space-suit-take-off', 0);
+  api.setTimer('spacesuit', moment.duration(oxygenTimeMs, 'milliseconds'), 'space-suit-take-off', 0);
   api.model.spaceSuit.on = true;
 }
 

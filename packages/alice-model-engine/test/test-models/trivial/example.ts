@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 class Recipient {}
 
 module.exports = () => {
@@ -21,7 +23,7 @@ module.exports = () => {
 
     delayedConcat(api: any, data: any) {
       const { operand, value, delay } = data;
-      api.setTimer('delayedConcat', delay, 'concat', { operand, value });
+      api.setTimer('delayedConcat', moment.duration(delay, 'milliseconds'), 'concat', { operand, value });
     },
 
     sendMessage(api: any, data: any) {

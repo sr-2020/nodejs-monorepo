@@ -17,6 +17,7 @@ import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
 import { increaseAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
+import { duration } from 'moment';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '*';
@@ -141,12 +142,12 @@ export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: nu
 
 export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const m = modifierFromEffect(groundHealEffect, {
     name: 'ground-heal-modifier',
-    validUntil: validUntil(api, durationInSeconds),
+    validUntil: validUntil(api, d),
   });
-  addTemporaryModifier(api, m, durationInSeconds);
+  addTemporaryModifier(api, m, d);
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -171,10 +172,10 @@ export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, dat
 
 export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
   const hpIncrease = data.power;
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
   const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
-  addTemporaryModifier(api, m, durationInSeconds);
+  addTemporaryModifier(api, m, d);
 }
 
 export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -184,11 +185,10 @@ export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 
 export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   const hpIncrease = data.power;
-  const durationInMinutes = 10 * data.power;
-  const durationInSeconds = 60 * durationInMinutes;
-  sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${durationInMinutes} минут.`);
+  const d = duration(10 * data.power, 'minutes');
+  sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${d.asMinutes()} минут.`);
   const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
-  addTemporaryModifier(api, m, durationInSeconds);
+  addTemporaryModifier(api, m, d);
 }
 
 //
@@ -197,10 +197,10 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
 
 export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
-  const durationInSeconds = 8 * data.power * 60;
+  const d = duration(8 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 3);
-  const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, durationInSeconds) });
-  addTemporaryModifier(api, m, durationInSeconds);
+  const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, d) });
+  addTemporaryModifier(api, m, d);
 }
 
 export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -216,12 +216,11 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 // Снаряд выглядит как мягкий шар с длинным (не менее 2м) хвостом, и его попадание обрабатывается согласно правилам по боевке
 // (тяжелое магическое оружие). N=Мощь-2 (но не меньше 1), T=Мощь*10 минут
 export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInMinutes = 10 * data.power;
-  const durationInSeconds = 60 * durationInMinutes;
+  const d = duration(10 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 2);
-  sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${durationInMinutes} минут`);
-  const m = modifierFromEffect(fastChargeEffect, { amount, validUntil: validUntil(api, durationInSeconds) });
-  addTemporaryModifier(api, m, durationInSeconds);
+  sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${d.asMinutes()} минут`);
+  const m = modifierFromEffect(fastChargeEffect, { amount, validUntil: validUntil(api, d) });
+  addTemporaryModifier(api, m, d);
 }
 
 export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -239,9 +238,9 @@ export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
 
 export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
-  const durationInSeconds = 40 * 60;
-  const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, durationInSeconds) });
-  addTemporaryModifier(api, m, durationInSeconds);
+  const d = duration(40, 'minutes');
+  const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, d) });
+  addTemporaryModifier(api, m, d);
 }
 
 export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -327,62 +326,62 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 //
 
 export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const amount = -Math.max(10, 10 * data.power);
   const m = modifierFromEffect(increaseAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asMinutes(),
   });
 }
 
 export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const amount = Math.min(90, 10 * data.power);
   const m = modifierFromEffect(increaseAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asSeconds(),
   });
 }
 
 export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const amount = -Math.max(1, data.power - 1);
   const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asSeconds(),
   });
 }
 
 export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 2);
   const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asSeconds(),
   });
 }
 
 export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 120 * 60;
+  const d = duration(120, 'minutes');
   const amount = 2 * data.power;
   const m = modifierFromEffect(increaseAuraMask, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asSeconds(),
   });
 }
 
 export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  const durationInSeconds = 10 * data.power * 60;
+  const d = duration(10 * data.power, 'minutes');
   const amount = -Math.max(1, data.power - 1);
   const m = modifierFromEffect(increaseResonance, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
-    durationInSeconds,
+    durationInSeconds: d.asSeconds(),
   });
 }
 
@@ -399,11 +398,11 @@ function applyAndGetMagicFeedback(api: EventModelApi<Sr2020Character>, power: nu
   // * Use proper formulas
   // * Use reduction
   // * Use api.model.magicFeedbackReduction
-  const feedbackTimeSeconds = Math.floor((power + 1) / 2) * 60;
+  const feedbackDuration = duration(Math.floor((power + 1) / 2), 'minutes');
   const feedbackAmount = Math.floor((power + 1) / 2);
 
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
-  addTemporaryModifier(api, m, feedbackTimeSeconds);
+  addTemporaryModifier(api, m, feedbackDuration);
 
   return feedbackAmount;
 }

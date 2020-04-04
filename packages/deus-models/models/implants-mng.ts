@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
@@ -149,7 +150,7 @@ function installSImmortalStage1(api: EventModelApi<DeusExModel>, implant) {
     api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
     if (!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)) {
-      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, 600 * 1000, 'serenity-immortality-ready', { mID: implant.mID });
+      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, moment.duration(600, 'seconds'), 'serenity-immortality-ready', { mID: implant.mID });
     }
   }
 }

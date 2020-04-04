@@ -1,6 +1,7 @@
 import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consumeFood, installImplant } from '../character/merchandise';
+import { duration } from 'moment';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, _: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -79,7 +80,7 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrDat
   api.model.modifiers = [];
   api.model.timers = {};
 
-  api.setTimer('clear', 5 * 60 * 1000, clearMentalAbility, undefined);
+  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, undefined);
 }
 
 export function clearMentalAbility(api: EventModelApi<QrCode>, data: undefined, _: Event) {

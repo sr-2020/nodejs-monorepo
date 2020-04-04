@@ -1,3 +1,4 @@
+import { duration } from 'moment';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
@@ -5,10 +6,10 @@ import { FullTargetedAbilityData } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
-const kClinicalDeathTimerTime = 30 * 60 * 1000;
+const kClinicalDeathTimerTime = duration(30, 'minutes');
 
 const kMedkitReviveTimerName = 'timer-medkit-revive';
-const kMedkitReviveTimerTime = 10 * 60 * 1000;
+const kMedkitReviveTimerTime = duration(10, 'minutes');
 
 export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
@@ -65,7 +66,7 @@ function healthStateTransition(
 export function medkitTryToRevive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (!hasEnabledMedkit(api)) return;
   revive(api, {}, _);
-  addTemporaryModifier(api, modifierFromEffect(disableMedkit, {}), 4 * 3600);
+  addTemporaryModifier(api, modifierFromEffect(disableMedkit, {}), duration(4, 'hours'));
 }
 
 export function disableMedkit(api: EffectModelApi<Sr2020Character>, m: Modifier) {

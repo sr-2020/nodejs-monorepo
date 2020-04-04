@@ -6,6 +6,7 @@ import { MentalQrData, writeMentalAbility } from '../qr/events';
 import { FullTargetedAbilityData, FullActiveAbilityData } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { increaseMentalProtection } from './basic_effects';
+import { duration } from 'moment';
 const chance = new Chance();
 
 // Returns a result of the roll of X dices DY
@@ -81,5 +82,9 @@ export function adjustMentalProtectionEvent(
   data: { amount: number; durationMinutes: number },
   _: Event,
 ) {
-  addTemporaryModifier(api, modifierFromEffect(increaseMentalProtection, { amount: data.amount }), 60 * data.durationMinutes);
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(increaseMentalProtection, { amount: data.amount }),
+    duration(data.durationMinutes, 'minutes'),
+  );
 }

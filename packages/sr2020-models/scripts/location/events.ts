@@ -1,6 +1,7 @@
 import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { SpellTrace, Location } from '@sr2020/interface/models/location.model';
 import * as uuid from 'uuid';
+import { duration } from 'moment';
 
 const MAX_SPELL_TRACES = 100;
 
@@ -12,11 +13,11 @@ export function reduceManaDensity(api: EventModelApi<Location>, data: { amount: 
 }
 
 export function scheduleEvent(api: EventModelApi<Location>, data: { event: Event; delayInSeconds: number }, _: Event) {
-  api.setTimer(uuid.v4(), 1000 * data.delayInSeconds, data.event.eventType, data.event.data);
+  api.setTimer(uuid.v4(), duration(data.delayInSeconds, 'seconds'), data.event.eventType, data.event.data);
 }
 
 export function increaseManaDensityDelayed(api: EventModelApi<Location>, data: { amount: number; delayInSeconds: number }, event: Event) {
-  api.setTimer(uuid.v4(), 1000 * data.delayInSeconds, reduceManaDensity, { amount: -data.amount });
+  api.setTimer(uuid.v4(), duration(data.delayInSeconds, 'seconds'), reduceManaDensity, { amount: -data.amount });
 }
 
 export function recordSpellTrace(api: EventModelApi<Location>, data: SpellTrace, _: Event) {
@@ -35,6 +36,6 @@ export function shiftSpellTraces(api: EventModelApi<Location>, data: { shiftTime
 
 export function brasiliaEffect(api: EventModelApi<Location>, data: { durationMinutes: number }, event: Event) {
   for (let i = 1; i <= data.durationMinutes; ++i) {
-    api.setTimer(uuid.v4(), i * 60 * 1000, shiftSpellTraces, { maxLookupSeconds: 600, shiftTimeSeconds: 300 });
+    api.setTimer(uuid.v4(), duration(i, 'minutes'), shiftSpellTraces, { maxLookupSeconds: 600, shiftTimeSeconds: 300 });
   }
 }

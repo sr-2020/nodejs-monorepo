@@ -1,6 +1,8 @@
+import { Duration } from 'moment';
 import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { MAX_HISTORY_LINES } from './consts';
 import uuid = require('uuid');
+import * as moment from 'moment';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 
 export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {
@@ -46,13 +48,13 @@ export function addTemporaryModifierEvent(
   data: { modifier: Modifier; durationInSeconds: number },
   event: Event,
 ) {
-  addTemporaryModifier(api, data.modifier, data.durationInSeconds);
+  addTemporaryModifier(api, data.modifier, moment.duration(data.durationInSeconds, 'seconds'));
 }
 
 // Adds 'self-destructing' modifier. If you need some temporary Effect - use it in the composition with modifierFromEffect.
-export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Modifier, durationInSeconds: number) {
+export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Modifier, duration: Duration) {
   api.addModifier(m);
-  api.setTimer(uuid.v4(), durationInSeconds * 1000, removeModifier, { mID: m.mID });
+  api.setTimer(uuid.v4(), duration, removeModifier, { mID: m.mID });
 }
 
 // Implementation detail: we need to have it as an Event handler so we can call it on Timer.
@@ -62,6 +64,6 @@ export function removeModifier(api: EventModelApi<Sr2020Character>, data: { mID:
 }
 
 // Returns a unix timestamp in ms
-export function validUntil(api: EventModelApi<Sr2020Character>, durationInSeconds: number) {
-  return api.model.timestamp + 1000 * durationInSeconds;
+export function validUntil(api: EventModelApi<Sr2020Character>, duration: Duration) {
+  return api.model.timestamp + duration.asMilliseconds();
 }

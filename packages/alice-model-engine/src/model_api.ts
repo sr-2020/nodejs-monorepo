@@ -16,6 +16,7 @@ import { cloneDeep } from 'lodash';
 import { Context } from './context';
 import Logger from './logger';
 import { EventCallback } from '@sr2020/interface/callbacks';
+import { Duration } from 'moment';
 
 class LogApi implements LogApiInterface {
   public debug(msg: string, additionalData?: any) {
@@ -103,11 +104,11 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
     return this;
   }
 
-  public setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData) {
+  public setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData) {
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.context.setTimer(name, miliseconds, event, data);
+    this.context.setTimer(name, duration.asMilliseconds(), event, data);
     return this;
   }
 
@@ -199,11 +200,11 @@ class EffectModelApiImpl<T extends EmptyModel> extends LogApi implements EffectM
     return (this.context.workModel.timers ?? {})[name];
   }
 
-  public setTimer<TEventData = any>(name: string, miliseconds: number, event: EventCallback<T, TEventData> | string, data: TEventData) {
+  public setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData) {
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.context.setTimer(name, miliseconds, event, data);
+    this.context.setTimer(name, duration.asMilliseconds(), event, data);
     return this;
   }
 
