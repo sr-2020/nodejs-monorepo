@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { duration } from 'moment';
 
 describe('Fixture', function() {
   // eslint-disable-next-line no-invalid-this
@@ -45,9 +46,9 @@ describe('Fixture', function() {
       data: { delayInSeconds: 10, event: { eventType: 'reduce-mana-density', data: { amount: 3 } } },
     });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 5 } });
-    fixture.advanceTime(5);
+    fixture.advanceTime(duration(5, 'seconds'));
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 5 } });
-    fixture.advanceTime(5);
+    fixture.advanceTime(duration(5, 'seconds'));
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 2 } });
   });
 
@@ -58,9 +59,9 @@ describe('Fixture', function() {
       data: { delayInSeconds: 10, amount: 10 },
     });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 5 } });
-    fixture.advanceTime(5);
+    fixture.advanceTime(duration(5, 'seconds'));
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 5 } });
-    fixture.advanceTime(5);
+    fixture.advanceTime(duration(5, 'seconds'));
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 15 } });
   });
 
@@ -85,7 +86,7 @@ describe('Fixture', function() {
       eventType: 'schedule-event',
       data: { delayInSeconds: 10, event: { eventType: 'reduce-mana-density', data: { amount: 20 } } },
     });
-    fixture.advanceTime(10);
+    fixture.advanceTime(duration(10, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { locationId: '0' } });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 40 } });
   });

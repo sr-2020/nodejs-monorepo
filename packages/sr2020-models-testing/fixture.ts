@@ -17,6 +17,7 @@ import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import * as Winston from 'winston';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
+import { Duration } from 'moment';
 
 (Winston as any).level = 'error';
 
@@ -49,8 +50,8 @@ class MockTimeService implements TimeService {
     return this._timestamp;
   }
 
-  advanceTime(seconds: number) {
-    this._timestamp += 1000 * seconds;
+  advanceTime(d: Duration) {
+    this._timestamp += d.asMilliseconds();
   }
 }
 
@@ -204,8 +205,8 @@ export class TestFixture {
     return (await this.client.get(`/qr/model/${id}`).expect(200)).body;
   }
 
-  async advanceTime(seconds: number) {
-    this._timeService.advanceTime(seconds);
+  async advanceTime(d: Duration) {
+    this._timeService.advanceTime(d);
   }
 
   async destroy() {

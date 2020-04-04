@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { duration } from 'moment';
 
 describe('Spells', function() {
   // eslint-disable-next-line no-invalid-this
@@ -126,7 +127,7 @@ describe('Spells', function() {
     }
 
     {
-      fixture.advanceTime(300);
+      fixture.advanceTime(duration(5, 'minutes'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.magic).to.equal(10);
     }
@@ -154,7 +155,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 1);
 
-    fixture.advanceTime(300);
+    fixture.advanceTime(duration(5, 'minutes'));
 
     {
       const { workModel } = await fixture.sendCharacterEvent(
@@ -172,7 +173,7 @@ describe('Spells', function() {
     let abilityEventType: string;
     {
       // Power 2 is 20 minutes = 1200 seconds.
-      fixture.advanceTime(1199);
+      fixture.advanceTime(duration(1199, 'seconds'));
       const { workModel } = await fixture.getCharacter(1);
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
@@ -195,8 +196,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 2 } });
-    // Power 2 is 20 minutes = 1200 seconds.
-    fixture.advanceTime(1200);
+    fixture.advanceTime(duration(20, 'minutes'));
     const { workModel } = await fixture.getCharacter();
     expect(workModel.activeAbilities.length).to.equal(0);
   });
@@ -238,7 +238,7 @@ describe('Spells', function() {
     }
 
     {
-      fixture.advanceTime(30 * 60);
+      fixture.advanceTime(duration(30, 'minutes'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.maxHp).to.equal(2);
     }
@@ -253,9 +253,9 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 2);
 
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'dummy-light-heal', locationId: '0', power: 2 } }, 1);
-    await fixture.advanceTime(2 * 60);
+    await fixture.advanceTime(duration(2, 'minutes'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
-    await fixture.advanceTime(15 * 60);
+    await fixture.advanceTime(duration(15, 'minutes'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 6 } }, 2);
 
     await fixture.saveCharacter({ modelId: '3', magic: 5 });
@@ -299,7 +299,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '2', magic: 10, magicStats: { auraReadingMultiplier: 2.0 } });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 2);
 
-    await fixture.advanceTime(2 * 60);
+    await fixture.advanceTime(duration(2, 'minutes'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
 
     // power 8 + auraReadingMultiplier 2.0 gives us 100% read
@@ -366,13 +366,13 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'tempus-fugit' } }, 1);
 
-    await fixture.advanceTime(600);
+    await fixture.advanceTime(duration(600, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
 
-    await fixture.advanceTime(700);
+    await fixture.advanceTime(duration(700, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
 
-    await fixture.advanceTime(300);
+    await fixture.advanceTime(duration(300, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'tempus-fugit', locationId: '0', power: 2 } }, 1);
 
     const { workModel } = await fixture.getLocation();
@@ -398,15 +398,15 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } }, 1);
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'brasilia' } }, 1);
 
-    await fixture.advanceTime(200);
+    await fixture.advanceTime(duration(200, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
 
-    await fixture.advanceTime(300);
+    await fixture.advanceTime(duration(300, 'seconds'));
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 2 } }, 1);
 
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', locationId: '0', power: 1 } }, 1);
 
-    await fixture.advanceTime(60);
+    await fixture.advanceTime(duration(60, 'seconds'));
 
     const { workModel } = await fixture.getLocation();
     expect(workModel.spellTraces).containDeep([
