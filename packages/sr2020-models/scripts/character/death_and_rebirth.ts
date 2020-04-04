@@ -4,7 +4,7 @@ import { sendNotificationAndHistoryRecord } from './util';
 import { FullTargetedAbilityData } from './active_abilities';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
-const kClinicalDeathTimerTime = 5 * 60 * 1000;
+const kClinicalDeathTimerTime = 30 * 60 * 1000;
 
 export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
