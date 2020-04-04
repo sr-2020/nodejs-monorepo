@@ -1,15 +1,19 @@
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { sendNotificationAndHistoryRecord } from './util';
+import { Event, EventModelApi, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
 import { FullTargetedAbilityData } from './active_abilities';
+import { kReviveModifierId } from './implants_library';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = 30 * 60 * 1000;
 
+const kMedkitReviveTimerName = 'timer-medkit-revive';
+const kMedkitReviveTimerTime = 10 * 60 * 1000;
+
 export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
 
-  saveHealthStateAndSendPubSub(api, 'wounded');
+  healthStateTransition(api, 'wounded');
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы тяжело ранены');
 
   api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
@@ -18,7 +22,7 @@ export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) 
 export function clinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') return;
 
-  saveHealthStateAndSendPubSub(api, 'clinically_dead');
+  healthStateTransition(api, 'clinically_dead');
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
 }
 
@@ -33,14 +37,43 @@ export function reviveOnTarget(api: EventModelApi<Sr2020Character>, data: FullTa
 export function revive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState == 'biologically_dead') return;
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
-  saveHealthStateAndSendPubSub(api, 'healthy');
+  healthStateTransition(api, 'healthy');
   api.removeTimer(kClinicalDeathTimerName);
 }
 
-function saveHealthStateAndSendPubSub(
+function healthStateTransition(
   api: EventModelApi<Sr2020Character>,
-  state: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead',
+  stateTo: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead',
 ) {
-  api.model.healthState = state;
-  api.sendPubSubNotification('health_state', { characterId: Number(api.model.modelId), state });
+  const stateFrom = api.model.healthState;
+  if (stateFrom == stateTo) return;
+
+  if (stateFrom == 'wounded') {
+    api.removeTimer(kMedkitReviveTimerName);
+  }
+
+  if (stateFrom == 'healthy' && stateTo == 'wounded') {
+    if (hasEnabledMedkit(api)) {
+      api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
+    }
+  }
+
+  api.model.healthState = stateTo;
+  api.sendPubSubNotification('health_state', { characterId: Number(api.model.modelId), stateFrom, stateTo });
+}
+
+export function medkitTryToRevive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (!hasEnabledMedkit(api)) return;
+  revive(api, {}, _);
+  addTemporaryModifier(api, modifierFromEffect(disableMedkit, {}), 4 * 3600);
+}
+
+export function disableMedkit(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  const medkit = api.getModifierById(kReviveModifierId);
+  if (medkit) medkit.enabled = false;
+}
+
+function hasEnabledMedkit(api: EventModelApi<Sr2020Character>): boolean {
+  const m = api.workModel.modifiers.find((m) => m.mID == kReviveModifierId);
+  return m != undefined && m.enabled;
 }

@@ -27,8 +27,11 @@ export interface Implant {
   modifiers: Modifier[];
 }
 
-// TODO(aeremin): Remove when proper implementations are provided for all implants
-export const dummyModifier: Modifier = modifierFromEffect(increaseMagic, { amount: 0 });
+export const kReviveModifierId = 'medkit-revive-modifier';
+
+function createReviveModifier(): Modifier {
+  return { mID: kReviveModifierId, enabled: true, effects: [] };
+}
 
 export const kAllImplants: Implant[] = [
   {
@@ -605,7 +608,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [dummyModifier],
+    modifiers: [createReviveModifier()],
   },
   {
     id: 'medkit-beta',
@@ -616,7 +619,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [dummyModifier],
+    modifiers: [createReviveModifier()],
   },
   {
     id: 'medkit-gamma',
@@ -627,7 +630,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [dummyModifier],
+    modifiers: [createReviveModifier()],
   },
   {
     id: 'medkit-delta',
@@ -638,7 +641,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [dummyModifier],
+    modifiers: [createReviveModifier()],
   },
   {
     id: 'medkit-bio',
@@ -649,7 +652,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [dummyModifier],
+    modifiers: [createReviveModifier()],
   },
   {
     id: 'rcc-alpha',

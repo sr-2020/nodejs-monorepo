@@ -33,4 +33,38 @@ describe('Death & Rebirth', function() {
     await fixture.advanceTime(900);
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
   });
+
+  it('Healthy -> Wounded -> Revived by implant -> Wound -> No revive because cooldown', async () => {
+    await fixture.saveCharacter({ healthState: 'healthy' });
+    await fixture.sendCharacterEvent({ eventType: 'installImplant', data: { id: 'medkit-alpha' } });
+
+    await fixture.sendCharacterEvent({ eventType: 'wound' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
+
+    await fixture.advanceTime(600);
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
+
+    await fixture.sendCharacterEvent({ eventType: 'wound' });
+    await fixture.advanceTime(1800);
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'clinically_dead' } });
+  });
+
+  it('Healthy -> Wounded -> Revived by implant -> (wait) -> Wound -> Revived by implant', async () => {
+    await fixture.saveCharacter({ healthState: 'healthy' });
+    await fixture.sendCharacterEvent({ eventType: 'installImplant', data: { id: 'medkit-alpha' } });
+
+    await fixture.sendCharacterEvent({ eventType: 'wound' });
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
+
+    await fixture.advanceTime(600);
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
+
+    await fixture.advanceTime(4 * 3600);
+
+    await fixture.sendCharacterEvent({ eventType: 'wound' });
+    await fixture.advanceTime(600);
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
+    await fixture.advanceTime(1800);
+    expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
+  });
 });
