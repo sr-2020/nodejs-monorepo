@@ -110,3 +110,11 @@ jobs:
           ../../kustomize edit set image sr2020/model-engine:TAG=sr2020/model-engine:$GITHUB_SHA
           ../../kustomize edit set image sr2020/push:TAG=sr2020/push:$GITHUB_SHA
           ../../kustomize build . | kubectl apply -f -
+      - run: |
+          kubectl config set-context --current --namespace=production
+          kubectl set image deployment/push push=sr2020/push:$GITHUB_SHA --record
+          kubectl rollout status deployment/push
+          kubectl set image deployment/model-engine model-engine=sr2020/model-engine:$GITHUB_SHA --record
+          kubectl rollout status deployment/model-engine
+          kubectl set image deployment/models-manager models-manager=sr2020/models-manager:$GITHUB_SHA --record
+          kubectl rollout status deployment/models-manager
