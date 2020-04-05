@@ -17,8 +17,6 @@ import {
   increaseMaxTimeInVr,
   increaseAuraMarkMultiplier,
   increaseEthicGroupMaxSize,
-  decreaseChemoPillDetectableThresholdTo,
-  decreaseChemoBodyDetectableThresholdTo,
   increaseСhemoCrysisThreshold,
   increaseAuraReadingMultiplier,
   increaseCharisma,
@@ -1625,15 +1623,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'microscope-usage',
-    name: 'Микроскоп',
-    description: 'Теперь ты можешь пользоваться микроскопом. Ты можешь видеть высокую концентрацию вещества в препарате.',
-    // 473
-    // Персонаж видит что в таблетке, грубо. 70% контент и больше
-    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 70 }),
-  },
-
-  {
     id: 'more-chemo-to-sell-1',
     name: 'апгрейд аптеки 1',
     description: 'Ассортимент твоей аптеки расширился.',
@@ -1652,55 +1641,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
     prerequisites: ['more-chemo-to-sell-1'],
     modifier: [],
-  },
-
-  {
-    id: 'whats-in-the-pill-2',
-    name: 'Что в таблетке 2',
-    description: 'Ты можешь видеть среднюю концентрацию вещества в препарате.',
-    // 476
-    // Персонаж видит что в таблетке, средне. 40% контент и больше
-    prerequisites: ['microscope-usage'],
-    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 40 }),
-  },
-
-  {
-    id: 'whats-in-the-pill-3',
-    name: 'Что в таблетке 3',
-    description: 'Ты можешь видеть низкую концентрацию вещества в препарате.',
-    // 477
-    // Персонаж видит что в таблетке, тонко. 10% контент и больше
-    prerequisites: ['whats-in-the-pill-2'],
-    modifier: modifierFromEffect(decreaseChemoPillDetectableThresholdTo, { amount: 10 }),
-  },
-
-  {
-    id: 'whats-in-the-body-1',
-    name: 'Что в теле 1',
-    description: 'ты можешь анализировать через автодок, что за вещества находятся в теле пациента.\n',
-    // 478
-    // Персонаж видит состав фуфломицина в поциенте, грубо. 150% контент и больше
-    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 150 }),
-  },
-
-  {
-    id: 'whats-in-the-body-2',
-    name: 'Что в теле 2',
-    description: 'ты можешь лучше анализировать через автодок, что за вещества находятся в теле пациента.\n',
-    // 479
-    // Персонаж видит состав фуфломицина в поциенте, средне. 100% контент и больше
-    prerequisites: ['whats-in-the-body-1'],
-    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 100 }),
-  },
-
-  {
-    id: 'whats-in-the-body-3',
-    name: 'Что в теле 3',
-    description: 'ты можешь ещё лучше анализировать через автодок, что за вещества находятся в теле пациента.\n',
-    // 480
-    // Персонаж видит состав фуфломицина в поциенте, тонко. 50% контент и больше
-    prerequisites: ['whats-in-the-body-2'],
-    modifier: modifierFromEffect(decreaseChemoBodyDetectableThresholdTo, { amount: 50 }),
   },
 
   {

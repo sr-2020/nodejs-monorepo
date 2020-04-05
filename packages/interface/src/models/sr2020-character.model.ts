@@ -146,14 +146,6 @@ export class Discounts {
 @model()
 export class Chemo {
   @rproperty()
-  @Column({ default: 9000 })
-  bodyDetectableThreshold: number;
-
-  @rproperty()
-  @Column({ default: 9000 })
-  pillDetectableThreshold: number;
-
-  @rproperty()
   @Column({ default: 50 })
   baseEffectThreshold: number;
 

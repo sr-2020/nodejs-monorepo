@@ -117,8 +117,6 @@ export class ModelEngineController implements ModelEngineService {
       healthState: 'healthy',
       ethicGroupMaxSize: 0,
       chemo: {
-        bodyDetectableThreshold: 9000,
-        pillDetectableThreshold: 9000,
         baseEffectThreshold: 50,
         superEffectThreshold: 70,
         crysisThreshold: 120,

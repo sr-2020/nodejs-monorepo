@@ -166,14 +166,6 @@ export function increaseEthicGroupMaxSize(api: EffectModelApi<Sr2020Character>, 
   api.model.ethicGroupMaxSize = clamp(api.model.ethicGroupMaxSize, 0, 100);
 }
 
-export function decreaseChemoBodyDetectableThresholdTo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemo.bodyDetectableThreshold = Math.min(api.model.chemo.bodyDetectableThreshold, m.amount);
-}
-
-export function decreaseChemoPillDetectableThresholdTo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.chemo.pillDetectableThreshold = Math.min(api.model.chemo.pillDetectableThreshold, m.amount);
-}
-
 export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.chemo.baseEffectThreshold += m.amount;
   api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
