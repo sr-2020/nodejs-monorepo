@@ -54,9 +54,7 @@ function healthStateTransition(
   }
 
   if (stateFrom == 'healthy' && stateTo == 'wounded') {
-    if (hasEnabledMedkit(api)) {
-      api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
-    }
+    api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
   }
 
   api.model.healthState = stateTo;
