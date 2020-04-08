@@ -29,9 +29,7 @@ async function loginOrRegister(email: string, name: string, password: string): P
 }
 
 async function provideCharacter(login: LoginResponse) {
-  await request
-    .put(`http://models-manager.k8.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true })
-    .promise();
+  await request.put(`http://models-manager.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true }).promise();
 }
 
 async function provideBilling(login: LoginResponse) {
@@ -59,7 +57,7 @@ async function provideEmptyQr(modelId: string) {
     timers: {},
   };
 
-  await request.put('http://models-manager.k8.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();
+  await request.put('http://models-manager.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();
 }
 
 async function main() {

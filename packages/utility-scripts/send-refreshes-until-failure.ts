@@ -4,7 +4,7 @@ import * as rp from 'request-promise';
 // Run with
 //   npx ts-node packages/utility-scripts/send-refreshes-until-failure.ts --id=130
 
-const address = 'http://models-manager.k8.evarun.ru/character/model';
+const address = 'http://models-manager.evarun.ru/character/model';
 
 const optionDefinitions = [{ name: 'id', type: String }];
 

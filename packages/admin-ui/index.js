@@ -18,18 +18,18 @@ var app = new Vue({
   },
   async created() {
     {
-      const response = await this.$http.get(`https://model-engine.k8.evarun.ru/features`);
+      const response = await this.$http.get(`https://model-engine.evarun.ru/features`);
       this.allFeatures = response.body;
     }
 
     {
-      const response = await this.$http.get(`https://model-engine.k8.evarun.ru/implants`);
+      const response = await this.$http.get(`https://model-engine.evarun.ru/implants`);
       this.allImplants = response.body;
     }
   },
   methods: {
     url(id) {
-      return `https://models-manager.k8.evarun.ru/character/model/${id}`;
+      return `https://models-manager.evarun.ru/character/model/${id}`;
     },
 
     showSuccessToast(text) {
