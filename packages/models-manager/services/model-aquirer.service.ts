@@ -38,7 +38,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       }
     }
 
-    // Aquire ritual participants if event.data has ritualParticipants set.
+    // Aquire ritual participants if event.data has ritualMembersIds set.
     if (event.data?.ritualMembersIds) {
       for (const id of event.data?.ritualMembersIds) {
         await result.lockAndGetBaseModel(Sr2020Character, Number(id));
