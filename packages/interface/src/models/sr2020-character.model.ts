@@ -3,6 +3,8 @@ import { EmptyModel, rproperty, JsonColumn, BigIntTransformer } from './alice-mo
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
+export type HealthState = 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
+
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
 export class AddedSpell {
@@ -118,6 +120,16 @@ export class HistoryRecord {
   @rproperty() title: string;
   @rproperty() shortText: string;
   @rproperty() longText: string;
+}
+
+@model()
+export class AnalyzedBody {
+  @rproperty() healthState: HealthState;
+  @rproperty() essence: number;
+
+  @property.array(AddedImplant, { required: true })
+  @JsonColumn()
+  implants: AddedImplant[];
 }
 
 @model()
@@ -297,7 +309,7 @@ export class Sr2020Character extends EmptyModel {
 
   @property({ required: true, type: 'string' })
   @Column({ type: 'text', default: 'healthy' })
-  healthState: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
+  healthState: HealthState;
 
   @property({ required: true, type: 'string' })
   @Column({ type: 'text', default: 'meta-norm' })
@@ -394,6 +406,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(AddedImplant, { required: true })
   @JsonColumn()
   implants: AddedImplant[];
+
+  @property(AnalyzedBody)
+  @JsonColumn()
+  analyzedBody?: AnalyzedBody;
 
   @rproperty()
   @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })

@@ -1,5 +1,5 @@
 import { duration } from 'moment';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, HealthState } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
 import { FullTargetedAbilityData } from './active_abilities';
@@ -42,10 +42,7 @@ export function revive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event)
   api.removeTimer(kClinicalDeathTimerName);
 }
 
-function healthStateTransition(
-  api: EventModelApi<Sr2020Character>,
-  stateTo: 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead',
-) {
+function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: HealthState) {
   const stateFrom = api.model.healthState;
   if (stateFrom == stateTo) return;
 
