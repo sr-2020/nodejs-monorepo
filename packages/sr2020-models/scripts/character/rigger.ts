@@ -6,7 +6,7 @@ export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetC
   const patient: Sr2020Character = api.aquired('Character', data.targetCharacterId);
 
   api.model.analyzedBody = {
-    // TODO(aeremin) Implement
+    // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Implement
     essence: 666,
     healthState: patient.healthState,
     implants: patient.implants,

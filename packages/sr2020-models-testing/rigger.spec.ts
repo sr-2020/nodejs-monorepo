@@ -26,7 +26,7 @@ describe('Rigger abilities', () => {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'analyzeBody', data: { targetCharacterId: '2' } }, 1);
       expect(workModel.analyzedBody).ok();
-      // TODO(aeremin): Implement
+      // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Implement
       expect(workModel.analyzedBody?.essence).to.equal(666);
       expect(workModel.analyzedBody?.implants).to.containDeep([{ id: 'rcc-beta' }]);
     }
