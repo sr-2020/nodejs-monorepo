@@ -22,6 +22,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     description: implant.description,
     slot: implant.slot,
     grade: implant.grade,
+    installDifficulty: implant.installDifficulty,
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);
