@@ -98,12 +98,6 @@ export class Context<T extends EmptyModel> {
     return this._pendingAquire;
   }
 
-  /*public clone(): Context<T> {
-    const clone = new Context(this._workModel, this._events, this._dictionaries, this._outboundEvents, this._pendingAquire, this._aquired);
-    clone.timers = this.timers;
-    return clone;
-  }*/
-
   public getDictionary(name: FieldName): any[] | undefined {
     return _.get(this._dictionaries, name, undefined);
   }
