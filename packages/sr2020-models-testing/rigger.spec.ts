@@ -36,4 +36,44 @@ describe('Rigger abilities', () => {
       expect(workModel.analyzedBody).not.ok();
     }
   });
+
+  it('Implant installation and removal - happy path', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // patient
+    await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // rigger
+    await fixture.saveQrCode({ modelId: '3' }); // implant
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'rcc-beta' } }, 3);
+    {
+      await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: 3 } }, 2);
+      const patientWorkModel = (await fixture.getCharacter(1)).workModel;
+      const qrWorkModel = (await fixture.getQrCode(3)).workModel;
+      expect(qrWorkModel.type).to.equal('empty');
+      // TODO(https://trello.com/c/n5GJANqc/284-починить-посылку-события-в-себя) Fix and re-enable
+      /* expect(workModel.analyzedBody).to.containDeep({
+        implants: [
+          {
+            id: 'rcc-beta',
+          },
+        ],
+      }); */
+      expect(patientWorkModel).to.containDeep({
+        implants: [
+          {
+            id: 'rcc-beta',
+          },
+        ],
+      });
+    }
+    {
+      await fixture.sendCharacterEvent(
+        { eventType: 'riggerUninstallImplant', data: { targetCharacterId: '1', qrCode: 3, implantId: 'rcc-beta' } },
+        2,
+      );
+      const patientWorkModel = (await fixture.getCharacter(1)).workModel;
+      const qrWorkModel = (await fixture.getQrCode(3)).workModel;
+      expect(qrWorkModel).to.containDeep({ type: 'merchandise', usesLeft: 1, data: { id: 'rcc-beta' } });
+      // TODO(https://trello.com/c/n5GJANqc/284-починить-посылку-события-в-себя) Fix and re-enable
+      // expect(workModel.analyzedBody?.implants.length).to.equal(0);
+      expect(patientWorkModel.implants.length).to.equal(0);
+    }
+  });
 });

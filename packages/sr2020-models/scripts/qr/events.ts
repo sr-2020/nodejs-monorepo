@@ -1,6 +1,6 @@
 import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { consumeFood, installImplant } from '../character/merchandise';
+import { consumeFood } from '../character/merchandise';
 import { duration } from 'moment';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, _: Event) {
@@ -35,10 +35,6 @@ interface Merchandise {
 function merchandiseIdToEventType(id: string) {
   if (id == 'food') {
     return consumeFood.name;
-  }
-
-  for (const grade of ['alpha', 'beta', 'gamma', 'delta', 'bio']) {
-    if (id.endsWith(`-${grade}`)) return installImplant.name;
   }
 
   return undefined;
