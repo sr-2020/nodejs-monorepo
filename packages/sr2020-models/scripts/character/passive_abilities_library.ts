@@ -36,6 +36,8 @@ import {
   increaseMentalProtection,
   increaseIntelligence,
   increaseBody,
+  increaseImplantDifficultyBonus,
+  allowBiowareInstallation,
 } from './basic_effects';
 
 export interface PassiveAbility {
@@ -1659,6 +1661,82 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
     // 483
     // - лечит тяжран (3 заряда / 6 часов). То есть 3 заряда, у каждого CD 6 часов
+    // TODO(aeremin): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'auto-doc-1',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок.И ставить простые импланты, альфа и бета',
+    // 518
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран. Сложность установки 1
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+  },
+
+  {
+    id: 'auto-doc-2',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок. И ставить продвинутые импланты, гамма.',
+    // 519
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран. Сложность установки 2
+    prerequisites: ['auto-doc-1'],
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+  },
+
+  {
+    id: 'auto-doc-3',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок. И ставить высокотехнологичные импланты дельта.',
+    // 520
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран сложность установки 3
+    prerequisites: ['auto-doc-2'],
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+  },
+
+  {
+    id: 'auto-doc-neuro',
+    name: 'нейрохирургия',
+    description: 'Ты можешь использовать автодок для работы с биовэром',
+    // 521
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    // биовэр. Сложность установки 5
+    prerequisites: ['auto-doc-3'],
+    modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation)],
+  },
+
+  {
+    id: 'tuning-1',
+    name: 'Тюнинг 1',
+    description: 'Ты можешь использовать мастерскую и работать с лёгкими дронами',
+    // 522
+    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на лёгкие дроны
+    //
+    // TODO(aeremin): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'tuning-2',
+    name: 'Тюнинг 2',
+    description: 'Ты можешь использовать мастерскую и работать с тяжёлыми дронами',
+    // 523
+    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику
+    //
+    // TODO(aeremin): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'tuning-3',
+    name: 'Тюнинг 3',
+    description: 'Ты можешь использовать мастерскую и работать с боевыми дронами',
+    // 524
+    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику и боевую технику
+    //
     // TODO(aeremin): Implement and add modifier here
     modifier: [],
   },

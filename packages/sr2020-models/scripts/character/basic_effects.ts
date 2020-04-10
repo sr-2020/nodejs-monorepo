@@ -241,3 +241,11 @@ export function increasePostDroneRecoveryTime(api: EffectModelApi<Sr2020Characte
   api.model.drones.recoveryTime += m.amount;
   api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
 }
+
+export function increaseImplantDifficultyBonus(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.rigging.implantDifficultyBonus += m.amount;
+}
+
+export function allowBiowareInstallation(api: EffectModelApi<Sr2020Character>, _: Modifier) {
+  api.model.rigging.canWorkWithBioware = true;
+}
