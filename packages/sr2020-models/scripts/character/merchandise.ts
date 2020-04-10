@@ -26,6 +26,8 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);
+
+  // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Calculate essence change
 }
 
 export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
