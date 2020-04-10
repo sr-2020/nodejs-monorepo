@@ -34,10 +34,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'mugger',
     humanReadableName: 'Грабеж',
     description: '',
-    // 58
-    // при добивании из Тяжа в КС - получает процент от бабла жертвы (10%). Создаётся перевод без обоснования
+    // 60
+    // Самурай находит тушку в тяжране, применяет эту абилку, сканирует QR тушки. Со счета тушки переводится самураю 10% нуйен остатка счета тушки. Тушка автоматически переходит в КС. Перевод создается без обоснования. В поле назначение - "добровольное пожертвование".
     // TODO(aeremin): Add proper implementation
-    target: 'none',
+    target: 'scan',
     cooldownMinutes: 9000,
     eventType: dummyAbility.name,
   },
@@ -770,6 +770,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'none',
     cooldownMinutes: 360,
     eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'pill-name',
+    humanReadableName: 'фармацевтика',
+    description: 'отсканируй препарати пойми, что за это',
+    // 514
+    // При активации аблики игрок сканирует куар-код с препаратом и видит его название
+    // TODO(aeremin): Add proper implementation
+    target: 'scan',
+    eventType: dummyAbility.name,
+    cooldownMinutes: 9000,
   },
 ];
 
