@@ -13,7 +13,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
   }
 
   if (api.model.implants.filter((it) => it.slot == implant.slot).length >= maxImplantsPerSlot(implant.slot)) {
-    throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имлант из одного из них.`);
+    throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имплант из одного из них.`);
   }
 
   const addedImplant: AddedImplant = {
