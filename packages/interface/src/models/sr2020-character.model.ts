@@ -290,6 +290,17 @@ export class Drones {
 }
 
 @model()
+export class Rigging {
+  @rproperty()
+  @Column({ default: 0 })
+  implantDifficultyBonus: number;
+
+  @rproperty()
+  @Column({ default: false })
+  canWorkWithBioware: boolean;
+}
+
+@model()
 export class Billing {
   @rproperty()
   @Column({ default: false })
@@ -412,6 +423,10 @@ export class Sr2020Character extends EmptyModel {
   @property(AnalyzedBody)
   @JsonColumn()
   analyzedBody?: AnalyzedBody;
+
+  @rproperty()
+  @Column((type) => Rigging, { prefix: 'rigging' })
+  rigging: Rigging;
 
   @rproperty()
   @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })

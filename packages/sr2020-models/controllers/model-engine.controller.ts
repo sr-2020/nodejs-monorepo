@@ -126,6 +126,10 @@ export class ModelEngineController implements ModelEngineService {
         maxTimeInside: 60,
         recoveryTime: 50,
       },
+      rigging: {
+        implantDifficultyBonus: 0,
+        canWorkWithBioware: false,
+      },
       billing: {
         anonymous: false,
         stockGainPercentage: 0,
