@@ -126,7 +126,10 @@ export class ModelEngineController implements ModelEngineService {
         maxTimeInside: 60,
         recoveryTime: 50,
       },
-      stockGainPercentage: 0,
+      billing: {
+        anonymous: false,
+        stockGainPercentage: 0,
+      },
       discounts: {
         weaponsArmor: 0,
         drones: 0,

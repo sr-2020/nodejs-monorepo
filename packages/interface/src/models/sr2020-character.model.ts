@@ -276,6 +276,17 @@ export class Drones {
 }
 
 @model()
+export class Billing {
+  @rproperty()
+  @Column({ default: false })
+  anonymous: boolean;
+
+  @rproperty()
+  @Column({ default: 0 })
+  stockGainPercentage: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -353,8 +364,8 @@ export class Sr2020Character extends EmptyModel {
   chemo: Chemo;
 
   @rproperty()
-  @Column({ default: 0 })
-  stockGainPercentage: number;
+  @Column((type) => Billing, { prefix: 'billing' })
+  billing: Billing;
 
   @rproperty()
   @Column((type) => Discounts, { prefix: 'discounts' })

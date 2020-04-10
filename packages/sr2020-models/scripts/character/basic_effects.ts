@@ -182,8 +182,8 @@ export function increaseСhemoCrysisThreshold(api: EffectModelApi<Sr2020Characte
 }
 
 export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.stockGainPercentage += m.amount;
-  api.model.stockGainPercentage = clamp(api.model.stockGainPercentage, 0, 50);
+  api.model.billing.stockGainPercentage += m.amount;
+  api.model.billing.stockGainPercentage = clamp(api.model.billing.stockGainPercentage, 0, 50);
 }
 
 export function increaseAllDiscounts(api: EffectModelApi<Sr2020Character>, m: Modifier) {

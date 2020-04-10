@@ -207,7 +207,11 @@
                   <b-tbody>
                     <b-tr>
                       <b-th>Безусловный доход в процентах от оборота</b-th>
-                      <b-td>{{ characterModel.stockGainPercentage }}</b-td>
+                      <b-td>{{ characterModel.billing.stockGainPercentage }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Переводы анонимны</b-th>
+                      <b-td>{{ characterModel.billing.anonymous }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Скидка на оружие и броню</b-th>
