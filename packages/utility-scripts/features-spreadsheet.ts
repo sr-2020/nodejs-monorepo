@@ -127,7 +127,7 @@ class SpreadsheetProcessor {
         // ${ability.originalLine}
         // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
         // TODO(aeremin): Add proper implementation
-        hasTarget: false,
+        target: 'none',
         eventType: dummyAbility.name,
       },`);
       await this.activeAbilitiesRef.doc(ability.id).set(ability);
