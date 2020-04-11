@@ -258,7 +258,7 @@
                 </b-table-simple>
               </b-collapse>
               <b-button block href="#" v-b-toggle.drones variant="info">
-                Дроны
+                Риггерство
               </b-button>
               <b-collapse id="drones">
                 <b-table-simple small>
@@ -274,6 +274,14 @@
                     <b-tr>
                       <b-th>Время восстановления после</b-th>
                       <b-td>{{ characterModel.drones.recoveryTime }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Может работать с биоваром</b-th>
+                      <b-td>{{ characterModel.rigging.canWorkWithBioware }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальный уровень имплантов</b-th>
+                      <b-td>{{ characterModel.rigging.implantDifficultyBonus + characterModel.intelligence }}</b-td>
                     </b-tr>
                   </b-tbody>
                 </b-table-simple>
