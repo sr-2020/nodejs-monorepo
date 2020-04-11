@@ -95,8 +95,12 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
     return m;
   }
 
-  public aquired(db: string, id: string): AquiredObjects {
+  public aquiredDeprecated(db: string, id: string): AquiredObjects {
     return _.get(this.context, ['aquired', db, id]);
+  }
+
+  public aquired<TOtherModel extends EmptyModel>(type: new () => TOtherModel, id: string): TOtherModel {
+    return this.context.aquired[type.name][id];
   }
 
   public removeModifier(mID: string) {

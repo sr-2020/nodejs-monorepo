@@ -9,7 +9,6 @@ import { getRepository, EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
-import { getDbName } from '../utils/aquired-models-storage';
 
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(
@@ -74,8 +73,8 @@ export class AnyModelController<TModel extends EmptyModel> {
     );
     await Promise.all([this._sendNotifications(results), aquired.flush()]);
     return {
-      baseModel: aquired.getBaseModels()[getDbName(this.tmodel)][id.toString()],
-      workModel: aquired.getWorkModels()[getDbName(this.tmodel)][id.toString()],
+      baseModel: aquired.getBaseModels()[this.tmodel.name][id.toString()],
+      workModel: aquired.getWorkModels()[this.tmodel.name][id.toString()],
       notifications: [],
       outboundEvents: [],
       pubSubNotifications: [],

@@ -131,7 +131,7 @@ interface OnTheShipModifier extends Modifier {
 }
 
 function enterShip(api: EventModelApi<OrganismModel>, data: number, event: Event) {
-  const counter = api.aquired('counters', `ship_${data}`);
+  const counter = api.aquiredDeprecated('counters', `ship_${data}`);
   if (counter?.shield) {
     const shieldValue = Number(counter.shield);
     spaceSuitTakeOff(api, shieldValue, event);
@@ -165,7 +165,7 @@ export interface SpaceSuitRefillData {
 }
 
 function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefillData, event: Event) {
-  const counter = api.aquired('counters', data.uniqueId);
+  const counter = api.aquiredDeprecated('counters', data.uniqueId);
   if (!counter) {
     api.error("spaceSuitRefill: can't aquire space suit refill code", { uniqueId: data.uniqueId });
     return;

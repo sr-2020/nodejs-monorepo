@@ -14,7 +14,7 @@ export function scanQr(
   data: { qrCode: number; locationId?: string; targetCharacterId?: number },
   _: Event,
 ) {
-  const qr: QrCode = api.aquired('QrCode', data.qrCode.toString());
+  const qr = api.aquired(QrCode, data.qrCode.toString());
   if (qr.type == 'empty') throw new UserVisibleError('Этот QR-код - пустышка, его нельзя использовать');
   if (!qr.eventType) throw new UserVisibleError('Этот QR-код нельзя использовать напрямую');
 

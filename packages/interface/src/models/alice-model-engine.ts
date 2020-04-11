@@ -262,7 +262,8 @@ export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
 
   getTimer(name: string): Timer | undefined;
 
-  aquired(db: string, id: string): any;
+  aquired<TOtherModel extends EmptyModel>(type: new () => TOtherModel, id: string): TOtherModel;
+  aquiredDeprecated(db: string, id: string): any;
 
   // If modifier.mID is not present, will generate new unique one.
   // Returns added modifier.

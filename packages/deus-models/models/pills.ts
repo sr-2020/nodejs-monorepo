@@ -90,7 +90,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
     return;
   }
 
-  const code = api.aquired('pills', data.id);
+  const code = api.aquiredDeprecated('pills', data.id);
   if (!code) {
     api.error(`usePill: can't aquire code ${data.id}`);
     return;

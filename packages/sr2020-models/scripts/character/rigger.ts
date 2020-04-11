@@ -6,7 +6,7 @@ import { installImplant, removeImplant } from './merchandise';
 import { createMerchandise, consume } from '../qr/events';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
-  const patient: Sr2020Character = api.aquired('Character', data.targetCharacterId);
+  const patient = api.aquired(Sr2020Character, data.targetCharacterId);
 
   api.model.analyzedBody = {
     // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Implement
@@ -36,7 +36,7 @@ export function riggerInstallImplant(
   data: { targetCharacterId: string; qrCode: number },
   event: Event,
 ) {
-  const qr: QrCode = api.aquired('QrCode', data.qrCode.toString());
+  const qr = api.aquired(QrCode, data.qrCode.toString());
   if (qr.type != 'merchandise') {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
@@ -61,7 +61,7 @@ export function riggerUninstallImplant(
   data: { targetCharacterId: string; implantId: string; qrCode: number },
   event: Event,
 ) {
-  const patient: Sr2020Character = api.aquired('Character', data.targetCharacterId);
+  const patient = api.aquired(Sr2020Character, data.targetCharacterId);
   const implant = patient.implants.find((it) => it.id == data.implantId);
   if (implant == undefined) {
     throw new UserVisibleError('Имплант не найден. Попробуйте переподключиться к пациенту для актуализации списка имплантов.');
@@ -69,7 +69,7 @@ export function riggerUninstallImplant(
 
   checkIfCanWorkWithImplant(api.workModel, implant);
 
-  const qr: QrCode = api.aquired('QrCode', data.qrCode.toString());
+  const qr = api.aquired(QrCode, data.qrCode.toString());
   if (qr.type != 'empty') {
     throw new UserVisibleError('Отсканированный QR-код не является пустышкой.');
   }

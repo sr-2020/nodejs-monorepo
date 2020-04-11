@@ -49,7 +49,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
     let totalParticipans = 0;
     for (const participantId of ritualParticipantIds) {
-      const participant = api.aquired('Character', participantId) as Sr2020Character;
+      const participant = api.aquired(Sr2020Character, participantId);
       totalParticipans += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
     }
 
@@ -97,7 +97,7 @@ export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { l
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
-  const location = api.aquired('Location', data.locationId) as Location;
+  const location = api.aquired(Location, data.locationId);
   api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
@@ -288,7 +288,7 @@ function dumpSpellTraces(
   locationId: string,
   event: Event,
 ) {
-  const location = api.aquired('Location', locationId) as Location;
+  const location = api.aquired(Location, locationId);
   const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
   const positions = Array.from(Array(AURA_LENGTH).keys());
   for (const spell of spellTraces) {

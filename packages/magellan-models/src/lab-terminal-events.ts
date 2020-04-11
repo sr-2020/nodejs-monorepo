@@ -134,7 +134,7 @@ function medicAddComment(api: EventModelApi<MedicModel>, data: AddCommentData, e
 }
 
 function labTerminalRefill(api: EventModelApi<MedicModel>, data: LabTerminalRefillData, _: Event) {
-  const counter = api.aquired('counters', data.uniqueId);
+  const counter = api.aquiredDeprecated('counters', data.uniqueId);
   if (!counter) {
     api.error("labTerminalRefill: can't aquire lab terminal refill code", { uniqueId: data.uniqueId });
     return;

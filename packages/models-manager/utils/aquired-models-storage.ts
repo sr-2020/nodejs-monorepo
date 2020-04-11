@@ -4,7 +4,6 @@ import { Location } from '@sr2020/interface/models/location.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { EntityManager } from 'typeorm';
-import { HttpErrors } from '@loopback/rest';
 import { getAndLockModel } from './db-utils';
 import { PubSubService } from '../services/pubsub.service';
 import { cloneDeep } from 'lodash';
@@ -39,26 +38,19 @@ export interface AquiredModelsStorage {
   getWorkModels(): AquiredObjects;
 }
 
-export function getDbName<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity): 'Character' | 'Location' | 'QrCode' {
-  if (tmodel.name == 'Sr2020Character') return 'Character';
-  if (tmodel.name == 'Location') return 'Location';
-  if (tmodel.name == 'QrCode') return 'QrCode';
-  throw new HttpErrors.InternalServerError(`Unexpected entity type: ${tmodel.name}`);
-}
-
 export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
-  private _baseModels = { Location: {}, Character: {}, QrCode: {} };
-  private _workModels = { Location: {}, Character: {}, QrCode: {} };
+  private _baseModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
+  private _workModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
 
   constructor(private _manager: EntityManager, private _pubSubService: PubSubService, public maximalTimestamp: number) {}
 
   async lockAndGetBaseModel<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity, id: number): Promise<TModelEntity> {
-    if (this._baseModels[getDbName(tmodel)][id] != undefined) {
-      return this._baseModels[getDbName(tmodel)][id];
+    if (this._baseModels[tmodel.name][id] != undefined) {
+      return this._baseModels[tmodel.name][id];
     }
     const baseModel = await getAndLockModel(tmodel, this._manager, id);
     this.maximalTimestamp = Math.max(this.maximalTimestamp, baseModel.timestamp);
-    this._baseModels[getDbName(tmodel)][id] = baseModel;
+    this._baseModels[tmodel.name][id] = baseModel;
     return baseModel;
   }
 
@@ -68,8 +60,8 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     workModel: TModelEntity,
   ): Promise<void> {
     this.maximalTimestamp = Math.max(this.maximalTimestamp, baseModel.timestamp);
-    this._baseModels[getDbName(tmodel)][Number(baseModel.modelId)] = baseModel;
-    this._workModels[getDbName(tmodel)][Number(workModel.modelId)] = workModel;
+    this._baseModels[tmodel.name][Number(baseModel.modelId)] = baseModel;
+    this._workModels[tmodel.name][Number(workModel.modelId)] = workModel;
   }
 
   async synchronizeModels(modelEngineService: ModelEngineService): Promise<void> {
@@ -81,7 +73,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
         aquiredObjects: {},
       };
       const processingResult = await processAny(
-        { Location: Location, Character: Sr2020Character, QrCode: QrCode }[modelType],
+        { Location: Location, Sr2020Character: Sr2020Character, QrCode: QrCode }[modelType],
         modelEngineService,
         req,
       );
@@ -113,13 +105,13 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
         dbWritePromises.push(this._pubSubService.publish('location_update', locationWork));
       }
     }
-    for (const m in this._baseModels['Character']) {
+    for (const m in this._baseModels['Sr2020Character']) {
       {
-        const character: Sr2020Character = this._baseModels['Character'][m];
+        const character: Sr2020Character = this._baseModels['Sr2020Character'][m];
         dbWritePromises.push(this._manager.getRepository(Sr2020Character).save(character));
       }
       {
-        const characterWork: Sr2020Character = cloneDeep(this._workModels['Character'][m]);
+        const characterWork: Sr2020Character = cloneDeep(this._workModels['Sr2020Character'][m]);
         characterWork.history = [];
         delete characterWork.timers;
         characterWork.modifiers = [];
