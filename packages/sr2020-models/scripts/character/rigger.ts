@@ -90,6 +90,8 @@ export function riggerUninstallImplant(
 
 export function riggerRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocRevive, {});
+  // Not calling analyzeBody directly as we need for autodocRevive event above propagate first
+  api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);
 }
 
 export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
