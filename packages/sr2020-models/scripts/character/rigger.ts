@@ -4,6 +4,7 @@ import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
 import { createMerchandise, consume } from '../qr/events';
+import { autodocRevive, autodocHeal } from './death_and_rebirth';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -85,4 +86,12 @@ export function riggerUninstallImplant(
 
   // Not calling analyzeBody directly as we need for uninstall event above propagate first
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);
+}
+
+export function riggerRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocRevive, {});
+}
+
+export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocHeal, {});
 }

@@ -1,6 +1,6 @@
 import { duration } from 'moment';
 import { Sr2020Character, HealthState } from '@sr2020/interface/models/sr2020-character.model';
-import { Event, EventModelApi, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Event, EventModelApi, EffectModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
 import { FullTargetedAbilityData } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
@@ -16,8 +16,6 @@ export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) 
 
   healthStateTransition(api, 'wounded');
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы тяжело ранены');
-
-  api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
 }
 
 export function clinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
@@ -39,7 +37,21 @@ export function revive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event)
   if (api.model.healthState == 'biologically_dead') return;
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
   healthStateTransition(api, 'healthy');
-  api.removeTimer(kClinicalDeathTimerName);
+}
+
+export function autodocRevive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.model.healthState != 'wounded') {
+    throw new UserVisibleError('Пациент не находится в состоянии тяжелого ранения');
+  }
+  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
+  healthStateTransition(api, 'healthy');
+}
+
+export function autodocHeal(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.model.healthState != 'healthy') {
+    throw new UserVisibleError('Пациент ранен слишком тяжело для этого');
+  }
+  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
 }
 
 function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: HealthState) {
@@ -48,9 +60,11 @@ function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: Hea
 
   if (stateFrom == 'wounded') {
     api.removeTimer(kMedkitReviveTimerName);
+    api.removeTimer(kClinicalDeathTimerName);
   }
 
   if (stateFrom == 'healthy' && stateTo == 'wounded') {
+    api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
     api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
   }
 
