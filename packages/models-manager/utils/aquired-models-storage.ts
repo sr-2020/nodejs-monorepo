@@ -39,26 +39,26 @@ export interface AquiredModelsStorage {
   getWorkModels(): AquiredObjects;
 }
 
+export function getDbName<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity): 'Character' | 'Location' | 'QrCode' {
+  if (tmodel.name == 'Sr2020Character') return 'Character';
+  if (tmodel.name == 'Location') return 'Location';
+  if (tmodel.name == 'QrCode') return 'QrCode';
+  throw new HttpErrors.InternalServerError(`Unexpected entity type: ${tmodel.name}`);
+}
+
 export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Character: {}, QrCode: {} };
   private _workModels = { Location: {}, Character: {}, QrCode: {} };
 
   constructor(private _manager: EntityManager, private _pubSubService: PubSubService, public maximalTimestamp: number) {}
 
-  private getDbName<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity): 'Character' | 'Location' | 'QrCode' {
-    if (tmodel.name == 'Sr2020Character') return 'Character';
-    if (tmodel.name == 'Location') return 'Location';
-    if (tmodel.name == 'QrCode') return 'QrCode';
-    throw new HttpErrors.InternalServerError(`Unexpected entity type: ${tmodel.name}`);
-  }
-
   async lockAndGetBaseModel<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity, id: number): Promise<TModelEntity> {
-    if (this._baseModels[this.getDbName(tmodel)][id] != undefined) {
-      return this._baseModels[this.getDbName(tmodel)][id];
+    if (this._baseModels[getDbName(tmodel)][id] != undefined) {
+      return this._baseModels[getDbName(tmodel)][id];
     }
     const baseModel = await getAndLockModel(tmodel, this._manager, id);
     this.maximalTimestamp = Math.max(this.maximalTimestamp, baseModel.timestamp);
-    this._baseModels[this.getDbName(tmodel)][id] = baseModel;
+    this._baseModels[getDbName(tmodel)][id] = baseModel;
     return baseModel;
   }
 
@@ -68,8 +68,8 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     workModel: TModelEntity,
   ): Promise<void> {
     this.maximalTimestamp = Math.max(this.maximalTimestamp, baseModel.timestamp);
-    this._baseModels[this.getDbName(tmodel)][Number(baseModel.modelId)] = baseModel;
-    this._workModels[this.getDbName(tmodel)][Number(workModel.modelId)] = workModel;
+    this._baseModels[getDbName(tmodel)][Number(baseModel.modelId)] = baseModel;
+    this._workModels[getDbName(tmodel)][Number(workModel.modelId)] = workModel;
   }
 
   async synchronizeModels(modelEngineService: ModelEngineService): Promise<void> {

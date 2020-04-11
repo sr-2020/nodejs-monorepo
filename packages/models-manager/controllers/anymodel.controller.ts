@@ -9,6 +9,7 @@ import { getRepository, EntityManager } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
+import { getDbName } from '../utils/aquired-models-storage';
 
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(
@@ -60,16 +61,26 @@ export class AnyModelController<TModel extends EmptyModel> {
   // on child's postEvent(...) call.
   async postEventImpl(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
     const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
-    const result = await this.eventDispatcherService.dispatchEvent(
-      this.tmodel,
-      { ...event, modelId: id.toString(), timestamp: aquired.maximalTimestamp },
+    const results = await this.eventDispatcherService.dispatchEventsRecursively(
+      [
+        {
+          ...event,
+          timestamp: aquired.maximalTimestamp,
+          modelId: id.toString(),
+          modelType: this.tmodel.name,
+        },
+      ],
       aquired,
     );
-    const consequentResults = await this.eventDispatcherService.dispatchEventsRecursively(result.outboundEvents, aquired);
-    consequentResults.push(result);
-    await Promise.all([this._sendNotifications(consequentResults), aquired.flush()]);
-    result.outboundEvents = [];
-    return result;
+    await Promise.all([this._sendNotifications(results), aquired.flush()]);
+    return {
+      baseModel: aquired.getBaseModels()[getDbName(this.tmodel)][id.toString()],
+      workModel: aquired.getWorkModels()[getDbName(this.tmodel)][id.toString()],
+      notifications: [],
+      outboundEvents: [],
+      pubSubNotifications: [],
+      tableResponse: results[0].tableResponse,
+    };
   }
 
   private async _sendNotifications(results: ModelProcessResponse<EmptyModel>[]) {
