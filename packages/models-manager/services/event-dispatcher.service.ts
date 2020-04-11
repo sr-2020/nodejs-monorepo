@@ -9,14 +9,6 @@ import { AquiredModelsStorage } from '../utils/aquired-models-storage';
 
 export interface EventDispatcherService {
   dispatchEventsRecursively(events: EventForModelType[], aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>[]>;
-
-  dispatchEventForModelType(event: EventForModelType, aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>>;
-
-  dispatchEvent<TModel extends EmptyModel>(
-    tmodel: new () => TModel,
-    event: Event,
-    aquiredModels: AquiredModelsStorage,
-  ): Promise<ModelProcessResponse<TModel>>;
 }
 
 export class EventDispatcherServiceImpl implements EventDispatcherService {
@@ -40,7 +32,10 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     return result;
   }
 
-  async dispatchEventForModelType(event: EventForModelType, aquiredModels: AquiredModelsStorage) {
+  async dispatchEventForModelType(
+    event: EventForModelType,
+    aquiredModels: AquiredModelsStorage,
+  ): Promise<ModelProcessResponse<EmptyModel>> {
     const modelType = this._knownModelTypes.find((t) => t.name == event.modelType);
     if (!modelType) {
       throw new Error('Unsupported modelType: ' + event.modelType);
@@ -51,7 +46,11 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     return result;
   }
 
-  async dispatchEvent<TModel extends EmptyModel>(tmodel: new () => TModel, event: Event, aquiredModels: AquiredModelsStorage) {
+  async dispatchEvent<TModel extends EmptyModel>(
+    tmodel: new () => TModel,
+    event: Event,
+    aquiredModels: AquiredModelsStorage,
+  ): Promise<ModelProcessResponse<TModel>> {
     const baseModel: TModel = await aquiredModels.lockAndGetBaseModel(tmodel, Number(event.modelId));
     event.timestamp = Math.max(event.timestamp, baseModel.timestamp);
     const result = await processAny(tmodel, this._modelEngineService, {
