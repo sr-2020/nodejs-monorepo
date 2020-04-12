@@ -389,6 +389,44 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
+    id: 'discount-all-1',
+    humanReadableName: 'Скидосы - 10%',
+    description: 'Скидка 10% при покупке любого товара следующие 30 минут',
+    // 331
+    // Скидка 10% при покупке любого товара следующие 30 минут данным персонажем
+    // TODO(aeremin): Add proper implementation
+    target: 'none',
+    cooldownMinutes: 10,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'discount-all-2',
+    humanReadableName: 'Скидосы - 20%',
+    description: 'Скидка 20% при покупке любого товара следующие 30 минут',
+    // 332
+    // Скидка 20% при покупке любого товара следующие 30 минут данным персонажем
+    // TODO(aeremin): Add proper implementation
+    target: 'none',
+    cooldownMinutes: 30,
+    prerequisites: ['discount-all-1'],
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'discount-all-3',
+    humanReadableName: 'Скидосы - 30%',
+    description: 'Скидка 30% при покупке любого товара следующие 30 минут',
+    // 333
+    // Скидка 30% при покупке любого товара следующие 30 минут данным персонажем
+    // TODO(aeremin): Add proper implementation
+    target: 'none',
+    cooldownMinutes: 60,
+    prerequisites: ['discount-all-2'],
+    eventType: dummyAbility.name,
+  },
+
+  {
     id: 'how-much-it-costs',
     humanReadableName: 'Чо почем',
     description: 'посмотреть на qr и сказать сколько это стоит, базовую цену товара',
@@ -481,6 +519,44 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
     cooldownMinutes: 60,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'pray-s',
+    humanReadableName: 'Pray my lame',
+    description: 'Помогает нужному духу обрести силы для воплощения',
+    // 111
+    // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 5 минут
+    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
+    target: 'scan',
+    cooldownMinutes: 10,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'pray-m',
+    humanReadableName: 'Pray my name',
+    description: 'Сильно помогает нужному духу обрести силы для воплощения',
+    // 112
+    // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 10 минут
+    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
+    target: 'scan',
+    cooldownMinutes: 10,
+    prerequisites: ['pray-s'],
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'pray-xl',
+    humanReadableName: 'Pray my fame',
+    description: 'Как боженька помогает нужному духу обрести силы для воплощения',
+    // 113
+    // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 30 минут
+    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
+    target: 'scan',
+    cooldownMinutes: 10,
+    prerequisites: ['pray-m'],
     eventType: dummyAbility.name,
   },
 
