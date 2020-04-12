@@ -1,6 +1,7 @@
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllImplants, ImplantSlot } from './implants_library';
+import { sendNotificationAndHistoryRecord } from './util';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
@@ -26,7 +27,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);
-
+  sendNotificationAndHistoryRecord(api, 'Имплант установлен', `Установлен имплант ${addedImplant.name}`);
   // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Calculate essence change
 }
 
@@ -36,6 +37,7 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
     throw new UserVisibleError(`Импланта ${data.id} не установлено`);
   }
 
+  sendNotificationAndHistoryRecord(api, 'Имплант удален', `Удален имплант ${api.model.implants[implantIndex].name}`);
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
   api.model.implants.splice(implantIndex, 1);
 }
