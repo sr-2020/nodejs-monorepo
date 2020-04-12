@@ -130,7 +130,6 @@ export class ModelEngineController implements ModelEngineService {
         implantDifficultyBonus: 0,
         canWorkWithBioware: false,
       },
-      analyzedBody: undefined,
       billing: {
         anonymous: false,
         stockGainPercentage: 0,

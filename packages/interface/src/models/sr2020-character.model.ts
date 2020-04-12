@@ -1,5 +1,5 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, rproperty, JsonColumn, BigIntTransformer } from './alice-model-engine';
+import { EmptyModel, rproperty, JsonColumn, BigIntTransformer, JsonNullableColumn } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
@@ -421,7 +421,7 @@ export class Sr2020Character extends EmptyModel {
   implants: AddedImplant[];
 
   @property(AnalyzedBody)
-  @JsonColumn()
+  @JsonNullableColumn()
   analyzedBody?: AnalyzedBody;
 
   @rproperty()
