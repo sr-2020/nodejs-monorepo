@@ -421,6 +421,27 @@
             </b-card>
           </span>
         </b-tab>
+        <b-tab title="QR-код">
+          <b-input-group prepend="ID QR-кода">
+            <b-form-input type="number" v-model="desiredQrCodeId"></b-form-input>
+            <b-input-group-append>
+              <b-button variant="outline-primary" v-on:click="chooseQr">Обновить</b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <span v-if="qrModel">
+            <b-card no-body>
+              <b-card-body>
+                <b-table-simple small>
+                  <caption>
+                    QR-код {{ qrModel.modelId }}, состояние на
+                    {{ new Date(qrModel.timestamp).toLocaleString("ru-RU") }}. <br>
+                    Закодированный формат: {{ qrCodeEncoded }}.
+                  </caption>
+                </b-table-simple>
+              </b-card-body>
+            </b-card>
+          </span>
+        </b-tab>
       </b-tabs>
     </b-container>
   </div>

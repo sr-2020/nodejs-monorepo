@@ -2,7 +2,9 @@ var app = new Vue({
   el: '#app',
   data: {
     desiredCharacterId: 128,
+    desiredQrCodeId: 1,
     characterModel: undefined,
+    qrModel: undefined,
     allFeatures: undefined,
     allImplants: undefined,
     selectedFeature: 'magic-1',
@@ -15,6 +17,8 @@ var app = new Vue({
     individualism: 0,
     mind: 0,
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+
+    qrCodeEncoded: '',
   },
   async created() {
     {
@@ -28,8 +32,16 @@ var app = new Vue({
     }
   },
   methods: {
-    url(id) {
-      return `https://models-manager.evarun.ru/character/model/${id}`;
+    baseUrl() {
+      return 'https://models-manager.evarun.ru';
+    },
+
+    characterUrl(id) {
+      return `${this.baseUrl()}/character/model/${id}`;
+    },
+
+    qrUrl(id) {
+      return `${this.baseUrl()}/qr/model/${id}`;
     },
 
     showSuccessToast(text) {
@@ -44,10 +56,10 @@ var app = new Vue({
       });
     },
 
-    async sendEvent(event, successMessage) {
+    async sendCharacterEvent(event, successMessage) {
       try {
-        console.log(`Sending an event: ${JSON.stringify(event)}`);
-        const response = await this.$http.post(this.url(this.characterModel.modelId), event);
+        console.log(`Sending a character event: ${JSON.stringify(event)}`);
+        const response = await this.$http.post(this.characterUrl(this.characterModel.modelId), event);
         console.debug(`Received response: ${JSON.stringify(response.body)}`);
         this.setCharacterModel(response.body.workModel);
         this.showSuccessToast(successMessage || 'Успех!');
@@ -60,13 +72,39 @@ var app = new Vue({
       }
     },
 
+    async sendQrEvent(event, successMessage) {
+      try {
+        console.log(`Sending a qr code event: ${JSON.stringify(event)}`);
+        const response = await this.$http.post(this.qrUrl(this.qrModel.modelId), event);
+        console.debug(`Received response: ${JSON.stringify(response.body)}`);
+        this.setQrModel(response.body.workModel);
+        this.showSuccessToast(successMessage || 'Успех!');
+      } catch (e) {
+        if (e.body && e.body.error && e.body.error.message) {
+          this.showFailureToast(e.body.error.message)
+        } else {
+          this.showFailureToast('Неизвестная ошибка сервера :(');
+        }
+      }
+    },
+
     async chooseCharacter() {
       try {
-        const response = await this.$http.get(this.url(this.desiredCharacterId));
+        const response = await this.$http.get(this.characterUrl(this.desiredCharacterId));
         this.setCharacterModel(response.body.workModel);
         this.showSuccessToast('Персонаж загружен');
       } catch (e) {
         this.showFailureToast(e.status == 404 ? 'Персонаж не найден' : `Неожиданная ошибка сервера: ${e.statusText}`);
+      }
+    },
+
+    async chooseQr() {
+      try {
+        const response = await this.$http.get(this.qrUrl(this.desiredQrCodeId));
+        await this.setQrModel(response.body.workModel);
+        this.showSuccessToast('QR-код загружен');
+      } catch (e) {
+        this.showFailureToast(e.status == 404 ? 'QR-код не найден' : `Неожиданная ошибка сервера: ${e.statusText}`);
       }
     },
 
@@ -80,40 +118,47 @@ var app = new Vue({
       this.mind = model.ethicState.find((s) => s.scale == 'mind').value;
     },
 
+    async setQrModel(model) {
+      this.qrModel = model;
+      const timestamp = new Date().getTime() / 1000 + 3600;
+      const response = await this.$http.get(`http://qr.aerem.in/encode?type=1&kind=0&validUntil=${timestamp}&payload=${model.modelId}`);
+      this.qrCodeEncoded = response.body.content;
+    },
+
     async addFeature() {
-      return this.sendEvent({ eventType: 'addFeature', data: { id: this.selectedFeature } }, 'Фича добавлена');
+      return this.sendCharacterEvent({ eventType: 'addFeature', data: { id: this.selectedFeature } }, 'Фича добавлена');
     },
 
     async removeFeature() {
-      return this.sendEvent({ eventType: 'removeFeature', data: { id: this.selectedFeature } }, 'Фича удалена');
+      return this.sendCharacterEvent({ eventType: 'removeFeature', data: { id: this.selectedFeature } }, 'Фича удалена');
     },
 
     async wound() {
-      return this.sendEvent({ eventType: 'wound' });
+      return this.sendCharacterEvent({ eventType: 'wound' });
     },
 
     async revive() {
-      return this.sendEvent({ eventType: 'revive' });
+      return this.sendCharacterEvent({ eventType: 'revive' });
     },
 
     async clinicalDeathOnTarget() {
-      return this.sendEvent({ eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
+      return this.sendCharacterEvent({ eventType: 'clinicalDeathOnTarget', data: { targetCharacterId: this.clinicalDeathTarget } });
     },
 
     async scanQr() {
-      return this.sendEvent({ eventType: 'scanQr', data: { qrCode: this.qrCodeId } });
+      return this.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: this.qrCodeId } });
     },
 
     async installImplant() {
-      return this.sendEvent({ eventType: 'installImplant', data: { id: this.selectedImplant } }, 'Имплант установлен');
+      return this.sendCharacterEvent({ eventType: 'installImplant', data: { id: this.selectedImplant } }, 'Имплант установлен');
     },
 
     async removeImplant() {
-      return this.sendEvent({ eventType: 'removeImplant', data: { id: this.selectedImplant } }, 'Имплант удален');
+      return this.sendCharacterEvent({ eventType: 'removeImplant', data: { id: this.selectedImplant } }, 'Имплант удален');
     },
 
     async ethicSet() {
-      return this.sendEvent({
+      return this.sendCharacterEvent({
         eventType: 'ethicSet', data: {
           violence: this.violence,
           control: this.control,
@@ -125,7 +170,7 @@ var app = new Vue({
 
     async ethicTrigger(id) {
       console.log({ eventType: 'ethicTrigger', data: { id } });
-      return this.sendEvent({ eventType: 'ethicTrigger', data: { id } });
+      return this.sendCharacterEvent({ eventType: 'ethicTrigger', data: { id } });
     }
   }
 })
