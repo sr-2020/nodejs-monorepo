@@ -3,16 +3,13 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consumeFood } from '../character/merchandise';
 import { duration } from 'moment';
 
-export function consume(api: EventModelApi<QrCode>, data: {}, _: Event) {
+export function consume(api: EventModelApi<QrCode>, data: {}, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
     throw new UserVisibleError('QR-код уже использован!');
   }
   api.model.usesLeft -= 1;
   if (api.model.usesLeft == 0) {
-    api.model.type = 'empty';
-    api.model.description = '';
-    api.model.eventType = undefined;
-    api.model.data = undefined;
+    clear(api, {}, event);
   }
 }
 
@@ -22,6 +19,18 @@ export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Eve
   }
 
   api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: undefined };
+}
+
+export function clear(api: EventModelApi<QrCode>, data: {}, _: Event) {
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    usesLeft: 0,
+    type: 'empty',
+    name: 'Пустышка',
+    description: 'Не записанный QR-код. На него можно записать что угодно',
+    modifiers: [],
+  };
 }
 
 interface Merchandise {
