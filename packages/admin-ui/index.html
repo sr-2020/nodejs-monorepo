@@ -18,6 +18,8 @@
   <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
   <!-- vue-resource (http client) -->
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+
+  <script src="https://fengyuanchen.github.io/vue-qrcode/js/vue-qrcode.js"></script>
 </head>
 
 <body>
@@ -429,6 +431,11 @@
             </b-input-group-append>
           </b-input-group>
           <span v-if="qrModel">
+            <b-card>
+              <b-card-body>
+                <qrcode v-if="qrCodeEncoded" :value="qrCodeEncoded" :options="{ width: 300 }"></qrcode>
+              </b-card-body>
+            </b-card>
             <b-card no-body>
               <b-card-body>
                 <b-table-simple small>

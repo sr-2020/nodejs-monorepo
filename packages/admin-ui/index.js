@@ -1,4 +1,5 @@
-var app = new Vue({
+Vue.component(VueQrcode.name, VueQrcode);
+app = new Vue({
   el: '#app',
   data: {
     desiredCharacterId: 128,
@@ -18,7 +19,7 @@ var app = new Vue({
     mind: 0,
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
 
-    qrCodeEncoded: '',
+    qrCodeEncoded: undefined,
   },
   async created() {
     {
