@@ -172,6 +172,15 @@ app = new Vue({
     async ethicTrigger(id) {
       console.log({ eventType: 'ethicTrigger', data: { id } });
       return this.sendCharacterEvent({ eventType: 'ethicTrigger', data: { id } });
-    }
+    },
+
+    async clearQr() {
+      return this.sendQrEvent({ eventType: 'clear', data: {} });
+    },
+
+    async writeImplantQr() {
+      const implant = this.allImplants.find((v) => v.id == this.selectedImplant);
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: implant });
+    },
   }
 })

@@ -441,10 +441,44 @@
                 <b-table-simple small>
                   <caption>
                     QR-код {{ qrModel.modelId }}, состояние на
-                    {{ new Date(qrModel.timestamp).toLocaleString("ru-RU") }}. <br>
+                    {{ new Date(qrModel.timestamp).toLocaleString("ru-RU") }}.
                     Закодированный формат: {{ qrCodeEncoded }}.
                   </caption>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Тип</b-th>
+                      <b-td>{{ qrModel.type }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Количество использований</b-th>
+                      <b-td>{{ qrModel.usesLeft }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Название</b-th>
+                      <b-td>{{ qrModel.name }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Описание</b-th>
+                      <b-td>{{ qrModel.description }}</b-td>
+                    </b-tr>
+                  </b-tbody>
                 </b-table-simple>
+              </b-card-body>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>Стирание QR-кода</b-card-header>
+              <b-card-body>
+                <b-button variant="danger" v-on:click="clearQr">Очистить</b-button>
+              </b-card-body>
+            </b-card>
+            <b-card no-body v-if="qrModel.type == 'empty'">
+              <b-card-header>Запись импланта на QR</b-card-header>
+              <b-card-body>
+                <b-form-select v-model="selectedImplant">
+                  <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
+                  </option>
+                </b-form-select>
+                <b-button variant="success" v-on:click="writeImplantQr">Записать</b-button>
               </b-card-body>
             </b-card>
           </span>
