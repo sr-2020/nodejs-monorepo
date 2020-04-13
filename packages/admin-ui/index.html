@@ -1,420 +1,430 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Required Stylesheets -->
-    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
 
-    <!-- Load polyfills to support older browsers -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Required Stylesheets -->
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
 
-    <!-- Required scripts -->
-    <!-- Vue itself -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- bootstrap-vue (bootstap components for Vue, https://bootstrap-vue.js.org/docs/components/ -->
-    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-    <!-- vue-resource (http client) -->
-    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
-  </head>
-  <body>
-    <div id="app">
-      <b-container>
-        <b-input-group prepend="ID персонажа">
-          <b-form-input type="number" v-model="desiredCharacterId"></b-form-input>
-          <b-input-group-append>
-            <b-button variant="outline-primary" v-on:click="chooseCharacter">Обновить</b-button>
-          </b-input-group-append>
-        </b-input-group>
-        <span v-if="characterModel">
-          <b-card no-body>
-            <b-card-body>
-              <b-table-simple small>
-                <caption>
-                  Персонаж {{ characterModel.modelId }}, состояние на {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
-                </caption>
-                <b-tbody>
-                  <b-tr>
-                    <b-th>Состояние физического тела</b-th>
-                    <b-td> {{ characterModel.healthState }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Максимальные хиты</b-th>
-                    <b-td> {{ characterModel.maxHp }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Магия</b-th>
-                    <b-td>{{ characterModel.magic }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Body</b-th>
-                    <b-td>{{ characterModel.body }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Интеллект</b-th>
-                    <b-td>{{ characterModel.body }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Резонанс</b-th>
-                    <b-td>{{ characterModel.resonance }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Харизма</b-th>
-                    <b-td>{{ characterModel.charisma }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Бонус к ментальной атаке</b-th>
-                    <b-td>{{ characterModel.mentalAttackBonus }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Бонус к ментальной защите</b-th>
-                    <b-td>{{ characterModel.mentalDefenceBonus }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Матричное состояние</b-th>
-                    <b-td> {{ characterModel.matrixHp }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Максимальное время в VR</b-th>
-                    <b-td>{{ characterModel.maxTimeInVr }}</b-td>
-                  </b-tr>
-                  <b-tr>
-                    <b-th>Максимальный размер этической группы</b-th>
-                    <b-td>{{ characterModel.ethicGroupMaxSize }}</b-td>
-                  </b-tr>
-                </b-tbody>
-              </b-table-simple>
-              <b-button block href="#" v-b-toggle.magic variant="info">
-                Магические характеристики
-              </b-button>
-              <b-collapse id="magic">
-                <b-table-simple small>
-                  <b-tbody>
-                    <b-tr>
-                      <b-th>Снижение отката</b-th>
-                      <b-td> {{ characterModel.magicStats.feedbackReduction }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Восстановление Магии</b-th>
-                      <b-td>{{ characterModel.magicStats.recoverySpeed }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Коэффициент Сопротивления Духов</b-th>
-                      <b-td>{{ characterModel.magicStats.spiritResistanceMultiplier }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Коэффициент Чтения Астральных Следов</b-th>
-                      <b-td>{{ characterModel.magicStats.auraReadingMultiplier }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
-                      <b-td>{{ characterModel.magicStats.auraMarkMultiplier }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Аура</b-th>
-                      <b-td>{{ characterModel.magicStats.aura }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Маска ауры</b-th>
-                      <b-td>{{ characterModel.magicStats.auraMask }}</b-td>
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </b-collapse>
-              <b-button block href="#" v-b-toggle.hacker variant="info">
-                Хакерские характеристики
-              </b-button>
-              <b-collapse id="hacker">
-                <b-table-simple small>
-                  <b-tbody>
-                    <b-tr>
-                      <b-th>Бонус к резонансу для контроля</b-th>
-                      <b-td>{{ characterModel.hacking.resonanceForControlBonus }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Максимальное время на хосте</b-th>
-                      <b-td>{{ characterModel.hacking.maxTimeAtHost }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скорость входа на хост</b-th>
-                      <b-td>{{ characterModel.hacking.hostEntrySpeed }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Конверсия атаки</b-th>
-                      <b-td>{{ characterModel.hacking.conversionAttack }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Конверсия файрвола</b-th>
-                      <b-td>{{ characterModel.hacking.conversionFirewall }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Конверсия слизи</b-th>
-                      <b-td>{{ characterModel.hacking.conversionSleaze }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Конверсия датапроцессинга</b-th>
-                      <b-td>{{ characterModel.hacking.conversionDataprocessing }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Число администрируемых хостов</b-th>
-                      <b-td>{{ characterModel.hacking.adminHostNumber }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Уровень спрайтов</b-th>
-                      <b-td>{{ characterModel.hacking.spriteLevel }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Дополнительные спрайты</b-th>
-                      <b-td>{{ characterModel.hacking.additionalSprites }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Дополнительные бекдоры</b-th>
-                      <b-td>{{ characterModel.hacking.additionalBackdoors }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Время жизни бекдоров</b-th>
-                      <b-td>{{ characterModel.hacking.backdoorTtl }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Дополнительные запросы к контролю</b-th>
-                      <b-td>{{ characterModel.hacking.additionalRequests }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Сопротивление фейдингу</b-th>
-                      <b-td>{{ characterModel.hacking.fadingResistance }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Сопротивление фейдингу для компиляции</b-th>
-                      <b-td>{{ characterModel.hacking.compilationFadingResistance }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Сопротивление биофидбеку</b-th>
-                      <b-td>{{ characterModel.hacking.biofeedbackResistance }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Сопротивление вэриансу</b-th>
-                      <b-td>{{ characterModel.hacking.varianceResistance }}</b-td>
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </b-collapse>
-              <b-button block href="#" v-b-toggle.discounts variant="info">
-                Экономические характеристики
-              </b-button>
-              <b-collapse id="discounts">
-                <b-table-simple small>
-                  <b-tbody>
-                    <b-tr>
-                      <b-th>Безусловный доход в процентах от оборота</b-th>
-                      <b-td>{{ characterModel.billing.stockGainPercentage }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Переводы анонимны</b-th>
-                      <b-td>{{ characterModel.billing.anonymous }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скидка на оружие и броню</b-th>
-                      <b-td>{{ characterModel.discounts.weaponsArmor }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скидка на дроны</b-th>
-                      <b-td>{{ characterModel.discounts.drones }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скидка на химоту</b-th>
-                      <b-td>{{ characterModel.discounts.chemo }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скидка на импланты</b-th>
-                      <b-td>{{ characterModel.discounts.implants }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Скидка на магические штуки</b-th>
-                      <b-td>{{ characterModel.discounts.magicStuff }}</b-td>
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </b-collapse>
-              <b-button block href="#" v-b-toggle.chemo variant="info">
-                Химота
-              </b-button>
-              <b-collapse id="chemo">
-                <b-table-simple small>
-                  <b-tbody>
-                    <b-tr>
-                      <b-th>Химота Базовый Эффект</b-th>
-                      <b-td>{{ characterModel.chemo.baseEffectThreshold }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Химота Супер Эффект</b-th>
-                      <b-td>{{ characterModel.chemo.superEffectThreshold }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Химота Кризис</b-th>
-                      <b-td>{{ characterModel.chemo.crysisThreshold }}</b-td>
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </b-collapse>
-              <b-button block href="#" v-b-toggle.drones variant="info">
-                Риггерство
-              </b-button>
-              <b-collapse id="drones">
-                <b-table-simple small>
-                  <b-tbody>
-                    <b-tr>
-                      <b-th>Максимальная сложность дрона</b-th>
-                      <b-td>{{ characterModel.drones.maxDifficulty }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Максимальное время в дроне</b-th>
-                      <b-td>{{ characterModel.drones.maxTimeInside }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Время восстановления после</b-th>
-                      <b-td>{{ characterModel.drones.recoveryTime }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Может работать с биоваром</b-th>
-                      <b-td>{{ characterModel.rigging.canWorkWithBioware }}</b-td>
-                    </b-tr>
-                    <b-tr>
-                      <b-th>Максимальный уровень имплантов</b-th>
-                      <b-td>{{ characterModel.rigging.implantDifficultyBonus + characterModel.intelligence }}</b-td>
-                    </b-tr>
-                  </b-tbody>
-                </b-table-simple>
-              </b-collapse>
-            </b-card-body>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>
-              <b-button block href="#" v-b-toggle.passive_abilities variant="info">
-                Всего пассивных способностей: {{ characterModel.passiveAbilities.length }}
-              </b-button>
-            </b-card-header>
-            <b-collapse id="passive_abilities">
+  <!-- Load polyfills to support older browsers -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+
+  <!-- Required scripts -->
+  <!-- Vue itself -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- bootstrap-vue (bootstap components for Vue, https://bootstrap-vue.js.org/docs/components/ -->
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+  <!-- vue-resource (http client) -->
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+</head>
+
+<body>
+  <div id="app">
+    <b-container>
+      <b-tabs content-class="mt-3">
+        <b-tab title="Персонаж" active>
+          <b-input-group prepend="ID персонажа">
+            <b-form-input type="number" v-model="desiredCharacterId"></b-form-input>
+            <b-input-group-append>
+              <b-button variant="outline-primary" v-on:click="chooseCharacter">Обновить</b-button>
+            </b-input-group-append>
+          </b-input-group>
+          <span v-if="characterModel">
+            <b-card no-body>
               <b-card-body>
-                <b-table :items="characterModel.passiveAbilities"></b-table>
+                <b-table-simple small>
+                  <caption>
+                    Персонаж {{ characterModel.modelId }}, состояние на
+                    {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
+                  </caption>
+                  <b-tbody>
+                    <b-tr>
+                      <b-th>Состояние физического тела</b-th>
+                      <b-td> {{ characterModel.healthState }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальные хиты</b-th>
+                      <b-td> {{ characterModel.maxHp }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Магия</b-th>
+                      <b-td>{{ characterModel.magic }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Body</b-th>
+                      <b-td>{{ characterModel.body }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Интеллект</b-th>
+                      <b-td>{{ characterModel.body }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Резонанс</b-th>
+                      <b-td>{{ characterModel.resonance }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Харизма</b-th>
+                      <b-td>{{ characterModel.charisma }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Бонус к ментальной атаке</b-th>
+                      <b-td>{{ characterModel.mentalAttackBonus }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Бонус к ментальной защите</b-th>
+                      <b-td>{{ characterModel.mentalDefenceBonus }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Матричное состояние</b-th>
+                      <b-td> {{ characterModel.matrixHp }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальное время в VR</b-th>
+                      <b-td>{{ characterModel.maxTimeInVr }}</b-td>
+                    </b-tr>
+                    <b-tr>
+                      <b-th>Максимальный размер этической группы</b-th>
+                      <b-td>{{ characterModel.ethicGroupMaxSize }}</b-td>
+                    </b-tr>
+                  </b-tbody>
+                </b-table-simple>
+                <b-button block href="#" v-b-toggle.magic variant="info">
+                  Магические характеристики
+                </b-button>
+                <b-collapse id="magic">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Снижение отката</b-th>
+                        <b-td> {{ characterModel.magicStats.feedbackReduction }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Восстановление Магии</b-th>
+                        <b-td>{{ characterModel.magicStats.recoverySpeed }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Коэффициент Сопротивления Духов</b-th>
+                        <b-td>{{ characterModel.magicStats.spiritResistanceMultiplier }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Коэффициент Чтения Астральных Следов</b-th>
+                        <b-td>{{ characterModel.magicStats.auraReadingMultiplier }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
+                        <b-td>{{ characterModel.magicStats.auraMarkMultiplier }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Аура</b-th>
+                        <b-td>{{ characterModel.magicStats.aura }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Маска ауры</b-th>
+                        <b-td>{{ characterModel.magicStats.auraMask }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
+                <b-button block href="#" v-b-toggle.hacker variant="info">
+                  Хакерские характеристики
+                </b-button>
+                <b-collapse id="hacker">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Бонус к резонансу для контроля</b-th>
+                        <b-td>{{ characterModel.hacking.resonanceForControlBonus }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Максимальное время на хосте</b-th>
+                        <b-td>{{ characterModel.hacking.maxTimeAtHost }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скорость входа на хост</b-th>
+                        <b-td>{{ characterModel.hacking.hostEntrySpeed }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Конверсия атаки</b-th>
+                        <b-td>{{ characterModel.hacking.conversionAttack }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Конверсия файрвола</b-th>
+                        <b-td>{{ characterModel.hacking.conversionFirewall }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Конверсия слизи</b-th>
+                        <b-td>{{ characterModel.hacking.conversionSleaze }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Конверсия датапроцессинга</b-th>
+                        <b-td>{{ characterModel.hacking.conversionDataprocessing }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Число администрируемых хостов</b-th>
+                        <b-td>{{ characterModel.hacking.adminHostNumber }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Уровень спрайтов</b-th>
+                        <b-td>{{ characterModel.hacking.spriteLevel }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Дополнительные спрайты</b-th>
+                        <b-td>{{ characterModel.hacking.additionalSprites }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Дополнительные бекдоры</b-th>
+                        <b-td>{{ characterModel.hacking.additionalBackdoors }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Время жизни бекдоров</b-th>
+                        <b-td>{{ characterModel.hacking.backdoorTtl }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Дополнительные запросы к контролю</b-th>
+                        <b-td>{{ characterModel.hacking.additionalRequests }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Сопротивление фейдингу</b-th>
+                        <b-td>{{ characterModel.hacking.fadingResistance }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Сопротивление фейдингу для компиляции</b-th>
+                        <b-td>{{ characterModel.hacking.compilationFadingResistance }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Сопротивление биофидбеку</b-th>
+                        <b-td>{{ characterModel.hacking.biofeedbackResistance }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Сопротивление вэриансу</b-th>
+                        <b-td>{{ characterModel.hacking.varianceResistance }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
+                <b-button block href="#" v-b-toggle.discounts variant="info">
+                  Экономические характеристики
+                </b-button>
+                <b-collapse id="discounts">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Безусловный доход в процентах от оборота</b-th>
+                        <b-td>{{ characterModel.billing.stockGainPercentage }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Переводы анонимны</b-th>
+                        <b-td>{{ characterModel.billing.anonymous }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скидка на оружие и броню</b-th>
+                        <b-td>{{ characterModel.discounts.weaponsArmor }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скидка на дроны</b-th>
+                        <b-td>{{ characterModel.discounts.drones }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скидка на химоту</b-th>
+                        <b-td>{{ characterModel.discounts.chemo }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скидка на импланты</b-th>
+                        <b-td>{{ characterModel.discounts.implants }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Скидка на магические штуки</b-th>
+                        <b-td>{{ characterModel.discounts.magicStuff }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
+                <b-button block href="#" v-b-toggle.chemo variant="info">
+                  Химота
+                </b-button>
+                <b-collapse id="chemo">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Химота Базовый Эффект</b-th>
+                        <b-td>{{ characterModel.chemo.baseEffectThreshold }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Химота Супер Эффект</b-th>
+                        <b-td>{{ characterModel.chemo.superEffectThreshold }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Химота Кризис</b-th>
+                        <b-td>{{ characterModel.chemo.crysisThreshold }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
+                <b-button block href="#" v-b-toggle.drones variant="info">
+                  Риггерство
+                </b-button>
+                <b-collapse id="drones">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Максимальная сложность дрона</b-th>
+                        <b-td>{{ characterModel.drones.maxDifficulty }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Максимальное время в дроне</b-th>
+                        <b-td>{{ characterModel.drones.maxTimeInside }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Время восстановления после</b-th>
+                        <b-td>{{ characterModel.drones.recoveryTime }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Может работать с биоваром</b-th>
+                        <b-td>{{ characterModel.rigging.canWorkWithBioware }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Максимальный уровень имплантов</b-th>
+                        <b-td>{{ characterModel.rigging.implantDifficultyBonus + characterModel.intelligence }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
               </b-card-body>
-            </b-collapse>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>
-              <b-button block href="#" v-b-toggle.active_abilities variant="info">
-                Всего активных способностей: {{ characterModel.activeAbilities.length }}
-              </b-button>
-            </b-card-header>
-            <b-collapse id="active_abilities">
-              <b-card-body>
-                <b-table :items="characterModel.activeAbilities"></b-table>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>
-              <b-button block href="#" v-b-toggle.spells variant="info">
-                Всего спеллов: {{ characterModel.spells.length }}
-              </b-button>
-            </b-card-header>
-            <b-collapse id="spells">
-              <b-card-body>
-                <b-table :items="characterModel.spells"></b-table>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>
-              <b-button block href="#" v-b-toggle.implants variant="info">
-                Всего имплантов: {{ characterModel.implants.length }}
-              </b-button>
-            </b-card-header>
-            <b-collapse id="implants">
-              <b-card-body>
-                <b-table :items="characterModel.implants"></b-table>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>Добавление/удаление фичи (без проверки пререквизитов)</b-card-header>
-            <b-card-body>
-              <b-form-select v-model="selectedFeature">
-                <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
-              </b-form-select>
-              <b-button variant="success" v-on:click="addFeature">Добавить</b-button>
-              <b-button variant="danger" v-on:click="removeFeature">Удалить</b-button>
-              (Если добавляемая фича уже присутствует в персонаже/удаляемая фича не присутствует - ничего не произойдет!)
-            </b-card-body>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>Ранения и смерть</b-card-header>
-            <b-card-body>
-              <b-button variant="danger" v-on:click="wound">Упасть в тяжран</b-button>
-              <b-button variant="success" v-on:click="revive">ОТЛАДКА: Воскресить</b-button>
-              <b-input-group prepend="ID персонажа">
-                <b-form-input type="number" v-model="clinicalDeathTarget"></b-form-input>
-                <b-input-group-append>
-                  <b-button variant="danger" v-on:click="clinicalDeathOnTarget">Добить</b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-card-body>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>Сканирование QR-кода</b-card-header>
-            <b-card-body>
-              <b-input-group prepend="ID QR-кода">
-                <b-form-input type="number" v-model="qrCodeId"></b-form-input>
-                <b-input-group-append>
-                  <b-button variant="success" v-on:click="scanQr">Отсканировать</b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </b-card-body>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>Установка/удаление импланта</b-card-header>
-            <b-card-body>
-              <b-form-select v-model="selectedImplant">
-                <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} ) </option>
-              </b-form-select>
-              <b-button variant="success" v-on:click="installImplant">Установить</b-button>
-              <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
-            </b-card-body>
-          </b-card>
-          <b-card no-body>
-            <b-card-header>
-              Этика
-              <b-button block href="#" v-b-toggle.ethic_details variant="info">
-                Подробности
-              </b-button>
-            </b-card-header>
-            <b-card-body>
-              <b-collapse id="ethic_details">
-                <b-table :items="characterModel.ethicState"></b-table>
-                <b-table :items="characterModel.ethicTrigger">
-                  <template v-slot:cell(Id)="row">
-                    <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
-                      Активировать
-                    </b-button>
-                  </template>
-                </b-table>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                <b-button block href="#" v-b-toggle.passive_abilities variant="info">
+                  Всего пассивных способностей: {{ characterModel.passiveAbilities.length }}
+                </b-button>
+              </b-card-header>
+              <b-collapse id="passive_abilities">
+                <b-card-body>
+                  <b-table :items="characterModel.passiveAbilities"></b-table>
+                </b-card-body>
               </b-collapse>
-              <div>
-                <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">
-                  <b-form-select v-model="violence" :options="ethicOptions"></b-form-select>
-                  <b-form-select v-model="control" :options="ethicOptions"></b-form-select>
-                  <b-form-select v-model="individualism" :options="ethicOptions"></b-form-select>
-                  <b-form-select v-model="mind" :options="ethicOptions"></b-form-select>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                <b-button block href="#" v-b-toggle.active_abilities variant="info">
+                  Всего активных способностей: {{ characterModel.activeAbilities.length }}
+                </b-button>
+              </b-card-header>
+              <b-collapse id="active_abilities">
+                <b-card-body>
+                  <b-table :items="characterModel.activeAbilities"></b-table>
+                </b-card-body>
+              </b-collapse>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                <b-button block href="#" v-b-toggle.spells variant="info">
+                  Всего спеллов: {{ characterModel.spells.length }}
+                </b-button>
+              </b-card-header>
+              <b-collapse id="spells">
+                <b-card-body>
+                  <b-table :items="characterModel.spells"></b-table>
+                </b-card-body>
+              </b-collapse>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                <b-button block href="#" v-b-toggle.implants variant="info">
+                  Всего имплантов: {{ characterModel.implants.length }}
+                </b-button>
+              </b-card-header>
+              <b-collapse id="implants">
+                <b-card-body>
+                  <b-table :items="characterModel.implants"></b-table>
+                </b-card-body>
+              </b-collapse>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>Добавление/удаление фичи (без проверки пререквизитов)</b-card-header>
+              <b-card-body>
+                <b-form-select v-model="selectedFeature">
+                  <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
+                </b-form-select>
+                <b-button variant="success" v-on:click="addFeature">Добавить</b-button>
+                <b-button variant="danger" v-on:click="removeFeature">Удалить</b-button>
+                (Если добавляемая фича уже присутствует в персонаже/удаляемая фича не присутствует - ничего не
+                произойдет!)
+              </b-card-body>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>Ранения и смерть</b-card-header>
+              <b-card-body>
+                <b-button variant="danger" v-on:click="wound">Упасть в тяжран</b-button>
+                <b-button variant="success" v-on:click="revive">ОТЛАДКА: Воскресить</b-button>
+                <b-input-group prepend="ID персонажа">
+                  <b-form-input type="number" v-model="clinicalDeathTarget"></b-form-input>
                   <b-input-group-append>
-                    <b-button variant="success" v-on:click="ethicSet">Установить</b-button>
+                    <b-button variant="danger" v-on:click="clinicalDeathOnTarget">Добить</b-button>
                   </b-input-group-append>
                 </b-input-group>
-              </div>
-            </b-card-body>
-          </b-card>
-        </span>
-      </b-container>
-    </div>
-    <script src="index.js"></script>
-  </body>
+              </b-card-body>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>Сканирование QR-кода</b-card-header>
+              <b-card-body>
+                <b-input-group prepend="ID QR-кода">
+                  <b-form-input type="number" v-model="qrCodeId"></b-form-input>
+                  <b-input-group-append>
+                    <b-button variant="success" v-on:click="scanQr">Отсканировать</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-card-body>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>Установка/удаление импланта</b-card-header>
+              <b-card-body>
+                <b-form-select v-model="selectedImplant">
+                  <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
+                  </option>
+                </b-form-select>
+                <b-button variant="success" v-on:click="installImplant">Установить</b-button>
+                <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
+              </b-card-body>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                Этика
+                <b-button block href="#" v-b-toggle.ethic_details variant="info">
+                  Подробности
+                </b-button>
+              </b-card-header>
+              <b-card-body>
+                <b-collapse id="ethic_details">
+                  <b-table :items="characterModel.ethicState"></b-table>
+                  <b-table :items="characterModel.ethicTrigger">
+                    <template v-slot:cell(Id)="row">
+                      <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
+                        Активировать
+                      </b-button>
+                    </template>
+                  </b-table>
+                </b-collapse>
+                <div>
+                  <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">
+                    <b-form-select v-model="violence" :options="ethicOptions"></b-form-select>
+                    <b-form-select v-model="control" :options="ethicOptions"></b-form-select>
+                    <b-form-select v-model="individualism" :options="ethicOptions"></b-form-select>
+                    <b-form-select v-model="mind" :options="ethicOptions"></b-form-select>
+                    <b-input-group-append>
+                      <b-button variant="success" v-on:click="ethicSet">Установить</b-button>
+                    </b-input-group-append>
+                  </b-input-group>
+                </div>
+              </b-card-body>
+            </b-card>
+          </span>
+        </b-tab>
+      </b-tabs>
+    </b-container>
+  </div>
+  <script src="index.js"></script>
+</body>
+
 </html>
