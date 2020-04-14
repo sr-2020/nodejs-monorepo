@@ -34,6 +34,18 @@ import {
   increaseImplantDifficultyBonus,
   allowBiowareInstallation,
   multiplyDiscountWeaponsArmor,
+  multiplyCorpDiscountAres,
+  multiplyCorpDiscountAztechnology,
+  multiplyCorpDiscountSaederKrupp,
+  multiplyCorpDiscountSpinradGlobal,
+  multiplyCorpDiscountNeonet1,
+  multiplyCorpDiscountEvo,
+  multiplyCorpDiscountHorizon,
+  multiplyCorpDiscountWuxing,
+  multiplyCorpDiscountRussia,
+  multiplyCorpDiscountRenraku,
+  multiplyCorpDiscountMutsuhama,
+  multiplyCorpDiscountShiavase,
 } from './basic_effects';
 
 export interface PassiveAbility {
@@ -1136,6 +1148,114 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
     // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
     modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-ares',
+    name: 'Ares Macrotechnolgy скидка',
+    description: 'скидка 10% на товары корпорации Ares Macrotechnolgy',
+    // 538
+    // множитель 0,9 на  все товары с параметром Corporation = Ares Macrotechnolgy
+    modifier: modifierFromEffect(multiplyCorpDiscountAres, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-aztechnology',
+    name: 'Aztechnology (ORO) скидка',
+    description: 'скидка 10% на товары корпорации Aztechnology (ORO)',
+    // 539
+    // множитель 0,9 на  все товары с параметром Corporation =Aztechnology (ORO)
+    modifier: modifierFromEffect(multiplyCorpDiscountAztechnology, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-saeder-krupp',
+    name: 'Saeder-Krupp скидка',
+    description: 'скидка 10% на товары корпорации Saeder-Krupp',
+    // 540
+    // множитель 0,9 на  все товары с параметром Corporation =Saeder-Krupp
+    modifier: modifierFromEffect(multiplyCorpDiscountSaederKrupp, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-spinradglobal',
+    name: 'Spinrad Global (JRJ INT) скидка',
+    description: 'скидка 10% на товары корпорации Spinrad Global (JRJ INT)',
+    // 541
+    // множитель 0,9 на  все товары с параметром Corporation =.Spinrad Global (JRJ INT)
+    modifier: modifierFromEffect(multiplyCorpDiscountSpinradGlobal, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-neonet1',
+    name: 'NeoNet1 (TransLatviaSeledir) скидка',
+    description: 'скидка 10% на товары корпорации NeoNet1 (TransLatviaSeledir)',
+    // 542
+    // множитель 0,9 на  все товары с параметром Corporation =NeoNet1 (TransLatviaSeledir)
+    modifier: modifierFromEffect(multiplyCorpDiscountNeonet1, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-evo',
+    name: 'EVO скидка',
+    description: 'скидка 10% на товары корпорации EVO',
+    // 543
+    // множитель 0,9 на  все товары с параметром Corporation =EVO
+    modifier: modifierFromEffect(multiplyCorpDiscountEvo, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-horizon',
+    name: 'Horizon скидка',
+    description: 'скидка 10% на товары корпорации Horizon',
+    // 544
+    // множитель 0,9 на  все товары с параметром Corporation =Horizon
+    modifier: modifierFromEffect(multiplyCorpDiscountHorizon, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-wuxing',
+    name: 'Wuxing скидка',
+    description: 'скидка 10% на товары корпорации Wuxing',
+    // 545
+    // множитель 0,9 на  все товары с параметром Corporation =Wuxing
+    modifier: modifierFromEffect(multiplyCorpDiscountWuxing, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-russia',
+    name: 'Россия скидка',
+    description: 'скидка 10% на товары корпорации Россия',
+    // 546
+    // множитель 0,9 на  все товары с параметром Corporation =Россия
+    modifier: modifierFromEffect(multiplyCorpDiscountRussia, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-renraku',
+    name: 'Renraku скидка',
+    description: 'скидка 10% на товары корпорации Renraku',
+    // 547
+    // множитель 0,9 на  все товары с параметром Corporation =Renraku
+    modifier: modifierFromEffect(multiplyCorpDiscountRenraku, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-mutsuhama',
+    name: 'Mutsuhama скидка',
+    description: 'скидка 10% на товары корпорации Mutsuhama',
+    // 548
+    // множитель 0,9 на  все товары с параметром Corporation =Mutsuhama
+    modifier: modifierFromEffect(multiplyCorpDiscountMutsuhama, { amount: 0.9 }),
+  },
+
+  {
+    id: 'discount-shiavase',
+    name: 'Shiavase скидка',
+    description: 'скидка 10% на товары корпорации Shiavase',
+    // 549
+    // множитель 0,9 на  все товары с параметром Corporation =Shiavase
+    modifier: modifierFromEffect(multiplyCorpDiscountShiavase, { amount: 0.9 }),
   },
 
   {
