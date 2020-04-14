@@ -391,9 +391,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'discount-all-1',
     humanReadableName: 'Скидосы - 10%',
-    description: 'Скидка 10% при покупке любого товара следующие 30 минут',
+    description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара следующие 30 минут',
     // 331
-    // Скидка 10% при покупке любого товара следующие 30 минут данным персонажем
+    // Множитель 0,9 на стоимость товара при покупке любого товара следующие 30 минут данным персонажем
+    //
     // TODO(aeremin): Add proper implementation
     target: 'none',
     cooldownMinutes: 10,
@@ -403,9 +404,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'discount-all-2',
     humanReadableName: 'Скидосы - 20%',
-    description: 'Скидка 20% при покупке любого товара следующие 30 минут',
+    description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара следующие 30 минут',
     // 332
-    // Скидка 20% при покупке любого товара следующие 30 минут данным персонажем
+    // Множитель 0,8 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
     cooldownMinutes: 30,
@@ -416,9 +417,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'discount-all-3',
     humanReadableName: 'Скидосы - 30%',
-    description: 'Скидка 30% при покупке любого товара следующие 30 минут',
+    description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара следующие 30 минут',
     // 333
-    // Скидка 30% при покупке любого товара следующие 30 минут данным персонажем
+    // Множитель 0,7 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
     cooldownMinutes: 60,

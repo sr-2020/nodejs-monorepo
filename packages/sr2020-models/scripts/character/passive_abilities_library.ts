@@ -1133,7 +1133,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     name: 'Скидка на броню и оружие',
     description: 'У тебя есть скидка 10% на покупку оружия и брони.',
     // 334
-    // скидка 10% при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
+    // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
     // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
     modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
   },
