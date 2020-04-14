@@ -1,7 +1,9 @@
 import { EventModelApi, UserVisibleError, Event } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { sendNotificationAndHistoryRecord, addHistoryRecord } from './util';
+import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
 import { reviveOnTarget } from './death_and_rebirth';
+import { multiplyAllDiscounts } from './basic_effects';
+import { duration } from 'moment';
 
 interface ActiveAbilityData {
   id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
@@ -50,4 +52,16 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
 
 export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void, event: Event) {
   api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
+}
+
+export function discountAll10(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
+  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }), duration(30, 'minutes'));
+}
+
+export function discountAll20(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
+  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }), duration(30, 'minutes'));
+}
+
+export function discountAll30(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
+  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }), duration(30, 'minutes'));
 }

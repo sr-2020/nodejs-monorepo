@@ -1,4 +1,4 @@
-import { oneTimeRevive, dummyAbility } from './active_abilities';
+import { oneTimeRevive, dummyAbility, discountAll10, discountAll20, discountAll30 } from './active_abilities';
 import {
   useMentalAbility,
   increaseTheMentalProtectionAbility,
@@ -397,8 +397,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     //
     // TODO(aeremin): Add proper implementation
     target: 'none',
-    cooldownMinutes: 10,
-    eventType: dummyAbility.name,
+    cooldownMinutes: 30,
+    eventType: discountAll10.name,
   },
 
   {
@@ -409,9 +409,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Множитель 0,8 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
-    cooldownMinutes: 30,
+    cooldownMinutes: 60,
     prerequisites: ['discount-all-1'],
-    eventType: dummyAbility.name,
+    eventType: discountAll20.name,
   },
 
   {
@@ -422,9 +422,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Множитель 0,7 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
-    cooldownMinutes: 60,
+    cooldownMinutes: 120,
     prerequisites: ['discount-all-2'],
-    eventType: dummyAbility.name,
+    eventType: discountAll30.name,
   },
 
   {
