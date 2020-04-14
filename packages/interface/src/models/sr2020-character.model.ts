@@ -405,10 +405,6 @@ export class Sr2020Character extends EmptyModel {
   maxTimeInVr: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  ethicGroupMaxSize: number;
-
-  @rproperty()
   @Column((type) => MagicStats, { prefix: 'magic' })
   magicStats: MagicStats;
 

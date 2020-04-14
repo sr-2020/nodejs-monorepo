@@ -161,11 +161,6 @@ export function increaseAuraMask(api: EffectModelApi<Sr2020Character>, m: Modifi
   api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 9000);
 }
 
-export function increaseEthicGroupMaxSize(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.ethicGroupMaxSize += m.amount;
-  api.model.ethicGroupMaxSize = clamp(api.model.ethicGroupMaxSize, 0, 100);
-}
-
 export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.chemo.baseEffectThreshold += m.amount;
   api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);

@@ -16,7 +16,6 @@ import {
   increaseAdminHostNumber,
   increaseMaxTimeInVr,
   increaseAuraMarkMultiplier,
-  increaseEthicGroupMaxSize,
   increaseСhemoCrysisThreshold,
   increaseAuraReadingMultiplier,
   increaseCharisma,
@@ -1256,65 +1255,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 549
     // множитель 0,9 на  все товары с параметром Corporation =Shiavase
     modifier: modifierFromEffect(multiplyCorpDiscountShiavase, { amount: 0.9 }),
-  },
-
-  {
-    id: 'ethic-group-creation',
-    name: 'Начальный лимит группы',
-    description: '',
-    // 314
-    // начальный лимит группы 5; нельзя принимать других дискурс-монгеров
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 5 }),
-  },
-
-  {
-    id: 'ethic-group-smaller',
-    name: 'Нас мало, но мы в тельняшках',
-    description: '',
-    // 315
-    // -2 к лимиту группы
-    prerequisites: ['ethic-group-creation'],
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: -2 }),
-  },
-
-  {
-    id: 'ethic-group-larger-1',
-    name: 'Ибо нас много 1',
-    description: '',
-    // 316
-    // +2 лимиту группы
-    prerequisites: ['ethic-group-creation'],
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 2 }),
-  },
-
-  {
-    id: 'ethic-group-larger-2',
-    name: 'Ибо нас много 2',
-    description: '',
-    // 317
-    // +2 лимиту группы
-    prerequisites: ['ethic-group-larger-1'],
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 2 }),
-  },
-
-  {
-    id: 'ethic-group-larger-3',
-    name: 'Имя нам легион 1',
-    description: '',
-    // 318
-    // +4 к лимиту группы
-    prerequisites: ['ethic-group-larger-2'],
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 4 }),
-  },
-
-  {
-    id: 'ethic-group-larger-4',
-    name: 'Имя нам легион 2',
-    description: '',
-    // 319
-    // +4 к лимиту группы
-    prerequisites: ['ethic-group-larger-3'],
-    modifier: modifierFromEffect(increaseEthicGroupMaxSize, { amount: 4 }),
   },
 
   {

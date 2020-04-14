@@ -115,7 +115,6 @@ export class ModelEngineController implements ModelEngineService {
         aura: 'aaaabbbbccccddddeeee',
       },
       healthState: 'healthy',
-      ethicGroupMaxSize: 0,
       chemo: {
         baseEffectThreshold: 50,
         superEffectThreshold: 70,
