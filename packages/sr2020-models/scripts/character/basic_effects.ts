@@ -186,37 +186,60 @@ export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>
   api.model.billing.stockGainPercentage = clamp(api.model.billing.stockGainPercentage, 0, 50);
 }
 
-export function increaseAllDiscounts(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  increaseDiscountWeaponsArmor(api, m);
-  increaseDiscountDrones(api, m);
-  increaseDiscountChemo(api, m);
-  increaseDiscountImplants(api, m);
-  increaseDiscountMagicStuff(api, m);
+export function multiplyCorpDiscountAres(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.ares *= m.amount;
 }
 
-export function increaseDiscountWeaponsArmor(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discounts.weaponsArmor += m.amount;
-  api.model.discounts.weaponsArmor = clamp(api.model.discounts.weaponsArmor, 0, 50);
+export function multiplyCorpDiscountAztechnology(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.aztechnology *= m.amount;
 }
 
-export function increaseDiscountDrones(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discounts.drones += m.amount;
-  api.model.discounts.drones = clamp(api.model.discounts.drones, 0, 50);
+export function multiplyCorpDiscountSaederKrupp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.saederKrupp *= m.amount;
 }
 
-export function increaseDiscountChemo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discounts.chemo += m.amount;
-  api.model.discounts.chemo = clamp(api.model.discounts.chemo, 0, 50);
+export function multiplyCorpDiscountSpinradGlobal(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.spinradGlobal *= m.amount;
 }
 
-export function increaseDiscountImplants(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discounts.implants += m.amount;
-  api.model.discounts.implants = clamp(api.model.discounts.implants, 0, 50);
+export function multiplyCorpDiscountNeonet1(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.neonet1 *= m.amount;
 }
 
-export function increaseDiscountMagicStuff(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.discounts.magicStuff += m.amount;
-  api.model.discounts.magicStuff = clamp(api.model.discounts.magicStuff, 0, 50);
+export function multiplyCorpDiscountEvo(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.evo *= m.amount;
+}
+
+export function multiplyCorpDiscountHorizon(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.horizon *= m.amount;
+}
+
+export function multiplyCorpDiscountWuxing(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.wuxing *= m.amount;
+}
+
+export function multiplyCorpDiscountRussia(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.russia *= m.amount;
+}
+
+export function multiplyCorpDiscountRenraku(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.renraku *= m.amount;
+}
+
+export function multiplyCorpDiscountMutsuhama(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.mutsuhama *= m.amount;
+}
+
+export function multiplyCorpDiscountShiavase(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.shiavase *= m.amount;
+}
+
+export function multiplyAllDiscounts(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.everything *= m.amount;
+}
+
+export function multiplyDiscountWeaponsArmor(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.discounts.weaponsArmor *= m.amount;
 }
 
 export function increaseMentalProtection(api: EffectModelApi<Sr2020Character>, m: Modifier) {

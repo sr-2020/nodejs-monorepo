@@ -16,7 +16,7 @@ import {
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
-import { increaseAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
+import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 import { duration } from 'moment';
 const chance = new Chance();
 
@@ -327,8 +327,8 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 
 export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = -Math.max(10, 10 * data.power);
-  const m = modifierFromEffect(increaseAllDiscounts, { amount });
+  const amount = 1 + Math.max(0.1, 0.05 * data.power);
+  const m = modifierFromEffect(multiplyAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asMinutes(),
@@ -337,8 +337,8 @@ export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellD
 
 export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = Math.min(90, 10 * data.power);
-  const m = modifierFromEffect(increaseAllDiscounts, { amount });
+  const amount = 1 - Math.min(0.9, 0.05 * data.power);
+  const m = modifierFromEffect(multiplyAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),

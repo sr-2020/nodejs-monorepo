@@ -137,24 +137,60 @@ export class AnalyzedBody {
 @model()
 export class Discounts {
   @rproperty()
-  @Column({ default: 0 })
+  @Column({ default: 1 })
   weaponsArmor: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  drones: number;
+  @Column({ default: 1 })
+  everything: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  chemo: number;
+  @Column({ default: 1 })
+  ares: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  implants: number;
+  @Column({ default: 1 })
+  aztechnology: number;
 
   @rproperty()
-  @Column({ default: 0 })
-  magicStuff: number;
+  @Column({ default: 1 })
+  saederKrupp: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  spinradGlobal: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  neonet1: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  evo: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  horizon: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  wuxing: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  russia: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  renraku: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  mutsuhama: number;
+
+  @rproperty()
+  @Column({ default: 1 })
+  shiavase: number;
 }
 
 @model()

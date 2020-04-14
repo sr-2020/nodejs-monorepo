@@ -21,7 +21,6 @@ import {
   increaseAuraReadingMultiplier,
   increaseCharisma,
   increaseStockGainPercentage,
-  increaseDiscountWeaponsArmor,
   increaseFadingResistance,
   increaseBackdoorTtl,
   increaseBackdoors,
@@ -34,6 +33,7 @@ import {
   increaseBody,
   increaseImplantDifficultyBonus,
   allowBiowareInstallation,
+  multiplyDiscountWeaponsArmor,
 } from './basic_effects';
 
 export interface PassiveAbility {
@@ -1135,7 +1135,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 334
     // скидка 10% при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
     // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
-    modifier: modifierFromEffect(increaseDiscountWeaponsArmor, { amount: 10 }),
+    modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
   },
 
   {
