@@ -15,7 +15,7 @@ import {
   iDontTrustAnybody,
   youDontTrustAnybody,
 } from './mental';
-import { reviveAbsoluteOnTarget } from './death_and_rebirth';
+import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 
 export type TargetType = 'none' | 'scan' | 'show';
 
@@ -682,10 +682,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Излечение цели',
     // 463
     // - мгновенное, кулдаун 30 минут. Позволяет поднять из тяжрана N других персонажей с полным запасом текущих хитов. N зависит от уровня маны в локации. При умвл < 6, N=1. Иначе 2
-    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    eventType: reviveOnTarget.name,
   },
 
   {
