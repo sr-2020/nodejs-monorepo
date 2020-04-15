@@ -3,7 +3,12 @@ import { EmptyModel, JsonColumn, rproperty } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
-export type QrType = 'empty' | 'merchandise' | 'ability' | 'artifact' | 'event';
+export type QrType =
+  | 'empty' // Empty QR, can be written.
+  | 'merchandise' // Anything bought in the shop.
+  | 'ability' // Used for mental abilities - ability which affects the person who scanned it.
+  | 'artifact' // Enchanted item.
+  | 'event'; // event which affects the person who scanned it.
 
 @model()
 @Entity({
