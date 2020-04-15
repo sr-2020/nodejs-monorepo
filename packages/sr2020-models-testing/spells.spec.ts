@@ -52,7 +52,7 @@ describe('Spells', function() {
 
   it("Can't enchant already enchanted", async () => {
     await fixture.saveCharacter();
-    await fixture.saveQrCode({ type: 'merchandise' });
+    await fixture.saveQrCode({ type: 'food' });
 
     await fixture.client
       .post(`/character/model/0`)
@@ -60,7 +60,7 @@ describe('Spells', function() {
       .expect(400);
     expect(fixture.getCharacterNotifications()).to.be.empty();
 
-    expect(await fixture.getQrCode()).containDeep({ workModel: { type: 'merchandise' } });
+    expect(await fixture.getQrCode()).containDeep({ workModel: { type: 'food' } });
   });
 
   it('Enchant artifact and activate it later', async () => {

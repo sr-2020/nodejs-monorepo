@@ -1,5 +1,5 @@
 import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode, QrType } from '@sr2020/interface/models/qr-code.model';
 import { consumeFood } from '../character/merchandise';
 import { duration } from 'moment';
 
@@ -41,8 +41,16 @@ interface Merchandise {
   additionalData: any;
 }
 
-function merchandiseIdToEventType(id: string) {
+function merchandiseIdToQrType(id: string): QrType {
   if (id == 'food') {
+    return 'food';
+  }
+
+  return 'implant';
+}
+
+function merchandiseIdToEventType(id: string) {
+  if (merchandiseIdToQrType(id) == 'food') {
     return consumeFood.name;
   }
 
@@ -55,7 +63,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
   }
 
   api.model = {
-    type: 'merchandise',
+    type: merchandiseIdToQrType(data.id),
     name: data.name,
     description: data.description,
     usesLeft: data.numberOfUses ?? 1,

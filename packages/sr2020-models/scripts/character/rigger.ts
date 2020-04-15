@@ -38,7 +38,7 @@ export function riggerInstallImplant(
   event: Event,
 ) {
   const qr = api.aquired(QrCode, data.qrCode.toString());
-  if (qr.type != 'merchandise') {
+  if (qr.type != 'implant') {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
 

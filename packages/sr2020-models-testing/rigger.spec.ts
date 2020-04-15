@@ -72,7 +72,7 @@ describe('Rigger abilities', () => {
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
       const qrWorkModel = (await fixture.getQrCode(3)).workModel;
-      expect(qrWorkModel).to.containDeep({ type: 'merchandise', usesLeft: 1, data: { id: 'rcc-beta' } });
+      expect(qrWorkModel).to.containDeep({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta' } });
       expect(workModel.analyzedBody?.implants.length).to.equal(0);
       expect(patientWorkModel.implants.length).to.equal(0);
     }
