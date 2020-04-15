@@ -1,4 +1,13 @@
-import { oneTimeRevive, dummyAbility, discountAll10, discountAll20, discountAll30 } from './active_abilities';
+import {
+  oneTimeRevive,
+  dummyAbility,
+  discountAll10,
+  discountAll20,
+  discountAll30,
+  hammerOfJustice,
+  arrowgant,
+  trollton,
+} from './active_abilities';
 import {
   useMentalAbility,
   increaseTheMentalProtectionAbility,
@@ -628,10 +637,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемый статус "тяжелое" для одноручного оружия',
     // 459
     // - время действия 10+N минут, кулдаун 5 минут. Одноручное оружие считается тяжёлым. N=умвл*3 минут
-    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 5,
-    eventType: dummyAbility.name,
+    eventType: hammerOfJustice.name,
   },
 
   {
@@ -640,10 +648,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая защита от дистанционного легкого оружия',
     // 460
     // - время действия 5+N минут, кулдаун 15 минут. Дает защиту от дистанционных атак (только от нерфов). N=умвл*1 минут
-    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 15,
-    eventType: dummyAbility.name,
+    eventType: arrowgant.name,
   },
 
   {
@@ -652,10 +659,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая тяжелая броня',
     // 461
     // - время действия 5+N минут, кулдаун 30 минут. Дает тяжелую броню. N=умвл*2 минут
-    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    eventType: trollton.name,
   },
 
   {
