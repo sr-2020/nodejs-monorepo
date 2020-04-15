@@ -6,6 +6,7 @@ import {
   iDontTrustAnybody,
   youDontTrustAnybody,
 } from './mental';
+import { reviveAbsoluteOnTarget } from './death_and_rebirth';
 
 export type TargetType = 'none' | 'scan' | 'show';
 
@@ -859,6 +860,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     eventType: dummyAbility.name,
     cooldownMinutes: 9000,
+  },
+
+  {
+    id: 'gm-respawn-normal',
+    humanReadableName: 'Воскрешение общее',
+    description: 'Воскрешение Норм, эльф, орк, тролль, гном',
+    // 527
+    // Эта абилка нужна как мастерская.
+    // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
+    target: 'scan',
+    eventType: reviveAbsoluteOnTarget.name,
+    cooldownMinutes: 0,
   },
 ];
 

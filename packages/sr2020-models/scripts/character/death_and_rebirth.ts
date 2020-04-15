@@ -39,6 +39,18 @@ export function revive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event)
   healthStateTransition(api, 'healthy');
 }
 
+export function reviveAbsoluteOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'].includes(api.model.metarace)) {
+    throw new UserVisibleError('Эта способность действует только на  нормов, эльфов, орков, троллей и гномов');
+  }
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), reviveAbsolute, {});
+}
+
+export function reviveAbsolute(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
+  healthStateTransition(api, 'healthy');
+}
+
 export function autodocRevive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') {
     throw new UserVisibleError('Пациент не находится в состоянии тяжелого ранения');
