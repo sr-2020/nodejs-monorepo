@@ -3,6 +3,8 @@ import { EmptyModel, JsonColumn, rproperty } from './alice-model-engine';
 import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
 
+export type QrType = 'empty' | 'merchandise' | 'ability' | 'artifact' | 'event';
+
 @model()
 @Entity({
   name: 'qr',
@@ -12,9 +14,9 @@ export class QrCode extends EmptyModel {
   @Column()
   usesLeft: number = 0;
 
-  @rproperty()
-  @Column({ default: 'empty' })
-  type: string = 'empty';
+  @property({ required: true, type: 'string' })
+  @Column({ type: 'text', default: 'empty' })
+  type: QrType = 'empty';
 
   @rproperty()
   @Column({ default: '' })

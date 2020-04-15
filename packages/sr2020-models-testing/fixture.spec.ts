@@ -93,13 +93,13 @@ describe('Fixture', function() {
 
   it('Consume some QR codes', async () => {
     await fixture.saveCharacter();
-    await fixture.saveQrCode({ modelId: '0', usesLeft: 5, type: 'pill' });
-    await fixture.saveQrCode({ modelId: '1', usesLeft: 1, type: 'pill' });
+    await fixture.saveQrCode({ modelId: '0', usesLeft: 5, type: 'event' });
+    await fixture.saveQrCode({ modelId: '1', usesLeft: 1, type: 'event' });
     await fixture.sendCharacterEvent({
       eventType: 'consume-qrs',
       data: { qrCodes: [0, 1] },
     });
-    expect(await fixture.getQrCode(0)).containDeep({ workModel: { usesLeft: 4, type: 'pill' } });
+    expect(await fixture.getQrCode(0)).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
     expect(await fixture.getQrCode(1)).containDeep({ workModel: { usesLeft: 0, type: 'empty' } });
   });
 
