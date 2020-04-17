@@ -112,7 +112,7 @@ function hasEnabledIWillSurvive(api: EventModelApi<Sr2020Character>): boolean {
   return mod != undefined;
 }
 
-function iWillSurviveRevive(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+export function iWillSurviveRevive(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
   revive(api, {}, event);
   api.removeModifier(kIWillSurviveModifierId);
 }
