@@ -6,6 +6,8 @@ import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 import { Location } from '@sr2020/interface/models/location.model';
 
+export const kIWillSurviveModifierId = 'i-will-survive-modifier';
+
 interface ActiveAbilityData {
   id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
   targetCharacterId?: string; // Identifier of target character
@@ -116,4 +118,10 @@ export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
     description: 'У вас тяжелая броня.',
     validUntil: m.validUntil,
   });
+}
+
+export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  const manaLevel = api.aquired(Location, data.locationId).manaDensity;
+  const d = duration(5 + 2 * manaLevel, 'minutes');
+  addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d);
 }

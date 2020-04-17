@@ -7,6 +7,7 @@ import {
   hammerOfJustice,
   arrowgant,
   trollton,
+  iWillSurvive,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -673,7 +674,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 20,
-    eventType: dummyAbility.name,
+    eventType: iWillSurvive.name,
   },
 
   {

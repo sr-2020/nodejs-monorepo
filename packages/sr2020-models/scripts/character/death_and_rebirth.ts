@@ -2,7 +2,7 @@ import { duration } from 'moment';
 import { Sr2020Character, HealthState } from '@sr2020/interface/models/sr2020-character.model';
 import { Event, EventModelApi, EffectModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
-import { FullTargetedAbilityData } from './active_abilities';
+import { FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
@@ -10,6 +10,9 @@ const kClinicalDeathTimerTime = duration(30, 'minutes');
 
 const kMedkitReviveTimerName = 'timer-medkit-revive';
 const kMedkitReviveTimerTime = duration(10, 'minutes');
+
+const kIWillSurviveReviveTimerName = 'timer-i-will-survive';
+const kIWillSurviveReviveTimerTime = duration(30, 'seconds');
 
 export function wound(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'healthy') return;
@@ -73,11 +76,15 @@ function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: Hea
   if (stateFrom == 'wounded') {
     api.removeTimer(kMedkitReviveTimerName);
     api.removeTimer(kClinicalDeathTimerName);
+    api.removeTimer(kIWillSurviveReviveTimerName);
   }
 
   if (stateFrom == 'healthy' && stateTo == 'wounded') {
     api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
     api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
+    if (hasEnabledIWillSurvive(api)) {
+      api.setTimer(kIWillSurviveReviveTimerName, kIWillSurviveReviveTimerTime, iWillSurviveRevive, {});
+    }
   }
 
   api.model.healthState = stateTo;
@@ -98,4 +105,14 @@ export function disableMedkit(api: EffectModelApi<Sr2020Character>, m: Modifier)
 function hasEnabledMedkit(api: EventModelApi<Sr2020Character>): boolean {
   const medkit = api.workModel.modifiers.find((m) => m.mID == kReviveModifierId);
   return medkit?.enabled == true;
+}
+
+function hasEnabledIWillSurvive(api: EventModelApi<Sr2020Character>): boolean {
+  const mod = api.workModel.modifiers.find((m) => m.mID == kIWillSurviveModifierId);
+  return mod != undefined;
+}
+
+function iWillSurviveRevive(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  revive(api, {}, event);
+  api.removeModifier(kIWillSurviveModifierId);
 }
