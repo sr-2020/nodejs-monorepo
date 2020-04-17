@@ -170,7 +170,7 @@ describe('Spells', function() {
       expect(workModel.magic).to.equal(9);
     }
 
-    let abilityEventType: string;
+    let abilityId: string;
     {
       // Power 2 is 20 minutes = 1200 seconds.
       fixture.advanceTime(duration(1199, 'seconds'));
@@ -178,12 +178,12 @@ describe('Spells', function() {
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
-      abilityEventType = workModel.activeAbilities[0].eventType;
+      abilityId = workModel.activeAbilities[0].id;
       expect(workModel.magic).to.equal(10);
     }
 
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: abilityEventType, data: { targetCharacterId: 2 } }, 1);
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: abilityId, targetCharacterId: 2 } }, 1);
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
       expect(fixture.getCharacterNotifications(2).length).to.equal(1);

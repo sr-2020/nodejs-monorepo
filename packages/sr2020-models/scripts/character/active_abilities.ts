@@ -30,7 +30,13 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   // Second `find` as we must change the value in (base) model, not in workModel.
   // (and the ability to use should be taken from workModel as there are temporary abilities.
-  api.model.activeAbilities.find((a) => a.id == data.id)!.cooldownUntil = event.timestamp + ability.cooldownMinutes * 60 * 1000;
+  const maybeAbility = api.model.activeAbilities.find((a) => a.id == data.id);
+  // This is needed to support the case when the ability is temporary and as such only present in workModel.
+  // This will lead to maybeAbility being undefined. But it's fine: such abilities are one-time-use anyway, so no need to
+  // set cooldown.
+  if (maybeAbility) {
+    maybeAbility.cooldownUntil = event.timestamp + ability.cooldownMinutes * 60 * 1000;
+  }
 
   api.sendSelfEvent(ability.eventType, { ...ability, ...data });
 
