@@ -174,6 +174,18 @@ app = new Vue({
       return this.sendCharacterEvent({ eventType: 'ethicTrigger', data: { id } });
     },
 
+    async increaseEssence() {
+      return this.sendCharacterEvent({ eventType: 'increaseMaxEssence', data: { amount: 100 } });
+    },
+
+    async decreaseEssence() {
+      return this.sendCharacterEvent({ eventType: 'increaseMaxEssence', data: { amount: -100 } });
+    },
+
+    async resetEssence() {
+      return this.sendCharacterEvent({ eventType: 'essenceReset', data: {} });
+    },
+
     async clearQr() {
       return this.sendQrEvent({ eventType: 'clear', data: {} });
     },

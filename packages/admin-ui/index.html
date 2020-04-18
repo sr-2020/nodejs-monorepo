@@ -479,6 +479,18 @@
                 </div>
               </b-card-body>
             </b-card>
+
+            <b-card no-body>
+              <b-card-header>
+                Эссенс
+              </b-card-header>
+              <b-card-body>
+                <b-button variant="success" v-on:click="increaseEssence">Увеличить макс. эссенс</b-button>
+                <b-button variant="warning" v-on:click="decreaseEssence">Уменьшить макс. эссенс</b-button>
+                <b-button variant="danger" v-on:click="resetEssence">Очистка эссенса и имплантов</b-button>
+              </b-card-body>
+            </b-card>
+
           </span>
         </b-tab>
         <b-tab title="QR-код">
