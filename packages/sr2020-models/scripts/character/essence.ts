@@ -1,5 +1,5 @@
 import { EffectModelApi, Modifier, Effect, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
 import { increaseMagic, increaseResonance, increaseCharisma } from './basic_effects';
 import { Implant } from './implants_library';
 
@@ -37,4 +37,10 @@ export function reduceEssenceDueToImplantInstall(api: EventModelApi<Sr2020Charac
 
   api.model.essenceDetails.used += cost;
   api.model.essenceDetails.gap -= Math.min(api.model.essenceDetails.gap, cost);
+}
+
+export function createGapDueToImplantUninstall(api: EventModelApi<Sr2020Character>, implant: AddedImplant) {
+  const cost = Math.floor(100 * implant.essenceCost);
+  api.model.essenceDetails.used -= cost;
+  api.model.essenceDetails.gap += cost;
 }

@@ -112,6 +112,7 @@ export class AddedImplant {
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
 
   @rproperty() installDifficulty: number;
+  @rproperty() essenceCost: number;
 
   // List of modifiers added by this implant. Used to remove them when implant is being removed.
   @property.array(String) modifierIds: string[];

@@ -80,6 +80,13 @@ describe('Rigger abilities', () => {
       expect(qrWorkModel).to.containDeep({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta' } });
       expect(workModel.analyzedBody?.implants.length).to.equal(0);
       expect(patientWorkModel.implants.length).to.equal(0);
+      expect(patientWorkModel).to.containDeep({
+        essence: 450,
+        essenceDetails: {
+          used: 0,
+          gap: 150,
+        },
+      });
     }
   });
 });

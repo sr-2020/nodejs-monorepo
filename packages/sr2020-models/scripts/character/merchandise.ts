@@ -2,7 +2,7 @@ import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models
 import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllImplants, ImplantSlot } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
-import { reduceEssenceDueToImplantInstall } from './essence';
+import { reduceEssenceDueToImplantInstall, createGapDueToImplantUninstall } from './essence';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
@@ -36,6 +36,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     slot: implant.slot,
     grade: implant.grade,
     installDifficulty: implant.installDifficulty,
+    essenceCost: implant.essenceCost,
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);
@@ -48,7 +49,11 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
     throw new UserVisibleError(`Импланта ${data.id} не установлено`);
   }
 
-  sendNotificationAndHistoryRecord(api, 'Имплант удален', `Удален имплант ${api.model.implants[implantIndex].name}`);
+  const implant = api.model.implants[implantIndex];
+
+  createGapDueToImplantUninstall(api, implant);
+
+  sendNotificationAndHistoryRecord(api, 'Имплант удален', `Удален имплант ${implant.name}`);
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
   api.model.implants.splice(implantIndex, 1);
 }
