@@ -348,6 +348,21 @@ export class Billing {
 }
 
 @model()
+export class EssenceDetails {
+  @rproperty()
+  @Column({ default: 600 })
+  max: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  used: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  gap: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -375,6 +390,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column({ default: 0 })
   charisma: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  essence: number;
 
   @rproperty()
   @Column({ default: 0 })
@@ -463,6 +482,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
   ethicLockedUntil: number;
+
+  @rproperty()
+  @Column((type) => EssenceDetails, { prefix: 'essence' })
+  essenceDetails: EssenceDetails;
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
