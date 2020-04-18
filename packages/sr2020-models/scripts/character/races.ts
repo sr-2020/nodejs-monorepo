@@ -7,6 +7,7 @@ const kHmhvvHungerPeriod = duration(1, 'hour');
 const kEssenceLostPerHungerTick = 50;
 
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }, _: Event) {
+  if (api.model.metarace == data.race) return;
   api.model.metarace = data.race;
 
   if (api.model.metarace == 'meta-hmhvv1' || api.model.metarace == 'meta-hmhvv3') {
