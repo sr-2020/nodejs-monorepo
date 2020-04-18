@@ -27,7 +27,7 @@ export function increaseBody(api: EffectModelApi<Sr2020Character>, m: Modifier) 
 
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic += m.amount;
-  api.model.magic = clamp(api.model.magic, -9000, 9000);
+  api.model.magic = clamp(api.model.magic, 0, 9000);
 }
 
 export function increaseMagicFeedbackReduction(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -37,7 +37,7 @@ export function increaseMagicFeedbackReduction(api: EffectModelApi<Sr2020Charact
 
 export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.resonance += m.amount;
-  api.model.resonance = clamp(api.model.resonance, -9000, 9000);
+  api.model.resonance = clamp(api.model.resonance, 0, 9000);
 }
 
 export function increaseResonanceForControl(api: EffectModelApi<Sr2020Character>, m: Modifier) {
