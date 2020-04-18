@@ -1,7 +1,8 @@
-import { EffectModelApi, Modifier, Effect, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, Modifier, Effect, UserVisibleError, EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
 import { increaseMagic, increaseResonance, increaseCharisma } from './basic_effects';
 import { Implant } from './implants_library';
+import { removeImplant } from './merchandise';
 
 export function createEssenceSystemEffect(): Effect {
   return {
@@ -43,4 +44,16 @@ export function createGapDueToImplantUninstall(api: EventModelApi<Sr2020Characte
   const cost = Math.floor(100 * implant.essenceCost);
   api.model.essenceDetails.used -= cost;
   api.model.essenceDetails.gap += cost;
+}
+
+export function increaseMaxEssence(api: EventModelApi<Sr2020Character>, data: { amount?: number }, _: Event) {
+  api.model.essenceDetails.max += data.amount ?? 100;
+}
+
+export function essenceReset(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  while (api.model.implants.length) {
+    removeImplant(api, { id: api.model.implants[api.model.implants.length - 1].id }, event);
+  }
+  api.model.essenceDetails.used = 0;
+  api.model.essenceDetails.gap = 0;
 }
