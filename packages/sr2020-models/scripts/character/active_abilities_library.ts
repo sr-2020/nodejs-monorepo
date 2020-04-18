@@ -671,7 +671,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активируемая возможность подняться из тяжрана в течение некоторого времени',
     // 462
     // - время действия 5+N минут, кулдаун 20 минут. Позволяет автоматически подняться из тяжрана через 30с с полным запасом текущих хитов. N=умвл*2 минут
-    // TODO(https://trello.com/c/Tkifs8m7/143-магия-реализовать-способности-адептов-связанные-с-боевкой-hammer-of-justice-arrowgant-trollton-i-will-survive-stand-up-and-fight)
     target: 'none',
     cooldownMinutes: 20,
     eventType: iWillSurvive.name,
@@ -681,10 +680,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'stand-up-and-fight',
     humanReadableName: 'Stand up and fight ',
     description: 'Излечение цели',
-    // 463
-    // - мгновенное, кулдаун 30 минут. Позволяет поднять из тяжрана N других персонажей с полным запасом текущих хитов. N зависит от уровня маны в локации. При умвл < 6, N=1. Иначе 2
-    target: 'none',
-    cooldownMinutes: 30,
+    // 419
+    // - мгновенное, кулдаун 5 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
+    target: 'scan',
+    cooldownMinutes: 5,
     eventType: reviveOnTarget.name,
   },
 
@@ -692,11 +691,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'fresh-new-day',
     humanReadableName: 'Fresh new day ',
     description: 'Перезарядка артефакта',
-    // 464
-    // - мгновенное, кулдаун 60 минут. Позволяет восстановить от 1 до N активированных (то есть потраченных) артефактов с любым заклинанием - в такое же состояние, какое они имели до активации. N зависит от уровня маны в локации. При умвл меньше 8, N = 1. Иначе 3
+    // 420
+    // - мгновенное, кулдаун 40 минут. Позволяет восстановить активированный (то есть потраченный) артефакт с любым заклинанием - в такое же состояние, какое они имели до активации.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
-    cooldownMinutes: 60,
+    cooldownMinutes: 40,
     eventType: dummyAbility.name,
   },
 
