@@ -10,7 +10,8 @@ app = new Vue({
     allImplants: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
-    clinicalDeathTarget: 128,
+    selectedRace: 'meta-norm',
+    clinicalDeathTarget: 130,
     qrCodeId: 1,
 
     violence: 0,
@@ -20,6 +21,18 @@ app = new Vue({
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
 
     qrCodeEncoded: undefined,
+
+    allRaces: [
+      { id: 'meta-norm', name: 'Норм' },
+      { id: 'meta-elf', name: 'Эльф' },
+      { id: 'meta-dwarf', name: 'Дварф' },
+      { id: 'meta-ork', name: 'Орк' },
+      { id: 'meta-troll', name: 'Тролль' },
+      { id: 'meta-hmhvv1', name: 'Вампир' },
+      { id: 'meta-hmhvv3', name: 'Гуль' },
+      { id: 'meta-digital', name: 'Цифровой' },
+      { id: 'meta-spirit', name: 'Дух' },
+    ]
   },
   async created() {
     {
@@ -184,6 +197,10 @@ app = new Vue({
 
     async resetEssence() {
       return this.sendCharacterEvent({ eventType: 'essenceReset', data: {} });
+    },
+
+    async setRace() {
+      return this.sendCharacterEvent({ eventType: 'setRace', data: { race: this.selectedRace } });
     },
 
     async clearQr() {

@@ -43,6 +43,10 @@
                   </caption>
                   <b-tbody>
                     <b-tr>
+                      <b-th>Метараса</b-th>
+                      <b-td> {{ characterModel.metarace }}</b-td>
+                    </b-tr>
+                    <b-tr>
                       <b-th>Состояние физического тела</b-th>
                       <b-td> {{ characterModel.healthState }}</b-td>
                     </b-tr>
@@ -488,6 +492,19 @@
                 <b-button variant="success" v-on:click="increaseEssence">Увеличить макс. эссенс</b-button>
                 <b-button variant="warning" v-on:click="decreaseEssence">Уменьшить макс. эссенс</b-button>
                 <b-button variant="danger" v-on:click="resetEssence">Очистка эссенса и имплантов</b-button>
+              </b-card-body>
+            </b-card>
+
+            <b-card no-body>
+              <b-card-header>
+                Смена расы
+              </b-card-header>
+              <b-card-body>
+                <b-form-select v-model="selectedRace">
+                  <option v-for="race in allRaces" :value="race.id"> {{ race.name }} ( {{ race.id }} )
+                  </option>
+                </b-form-select>
+                <b-button variant="success" v-on:click="setRace">Изменить</b-button>
               </b-card-body>
             </b-card>
 
