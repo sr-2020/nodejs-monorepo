@@ -12,6 +12,7 @@ import { QrCodeProcessRequest, QrCode, QrCodeProcessResponse } from '@sr2020/int
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 import { Empty } from '@sr2020/interface/models';
 import { initEthic } from '../scripts/character/ethics';
+import { createEssenceSystemEffect } from '../scripts/character/essence';
 
 function spec(modelType: string, responseType: any): OperationObject {
   return {
@@ -163,7 +164,13 @@ export class ModelEngineController implements ModelEngineService {
       ethicState: [],
       ethicLockedUntil: 0,
       history: [],
-      modifiers: [],
+      modifiers: [
+        {
+          mID: '_system',
+          enabled: true,
+          effects: [createEssenceSystemEffect()],
+        },
+      ],
       timers: {},
     };
     initEthic(result);
