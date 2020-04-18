@@ -18,4 +18,12 @@ export function systemEssenceEffect(api: EffectModelApi<Sr2020Character>, m: Mod
     increaseResonance(api, { ...m, amount });
     increaseCharisma(api, { ...m, amount });
   }
+
+  if (api.model.essence <= 100) {
+    if (api.model.essence != 0) {
+      api.model.mentalDefenceBonus += Math.floor(500 / api.model.essence);
+    } else {
+      api.model.mentalDefenceBonus += 500;
+    }
+  }
 }

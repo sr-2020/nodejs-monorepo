@@ -30,4 +30,18 @@ describe('Essence', function() {
     await fixture.saveCharacter({ charisma: 6, resonance: 6, magic: 6, essenceDetails: { max: 600, used: 500, gap: 100 } });
     expect((await fixture.getCharacter()).workModel).containDeep({ essence: 0, charisma: 1, resonance: 1, magic: 1 });
   });
+
+  it('Low essence increases mental defence', async () => {
+    await fixture.saveCharacter({ mentalDefenceBonus: 0, essenceDetails: { max: 600, used: 99, gap: 0 } });
+    expect((await fixture.getCharacter()).workModel).containDeep({ mentalDefenceBonus: 0 });
+
+    await fixture.saveCharacter({ mentalDefenceBonus: 0, essenceDetails: { max: 600, used: 500, gap: 0 } });
+    expect((await fixture.getCharacter()).workModel).containDeep({ mentalDefenceBonus: 5 });
+
+    await fixture.saveCharacter({ mentalDefenceBonus: 0, essenceDetails: { max: 600, used: 570, gap: 0 } });
+    expect((await fixture.getCharacter()).workModel).containDeep({ mentalDefenceBonus: 16 });
+
+    await fixture.saveCharacter({ mentalDefenceBonus: 0, essenceDetails: { max: 600, used: 600, gap: 0 } });
+    expect((await fixture.getCharacter()).workModel).containDeep({ mentalDefenceBonus: 500 });
+  });
 });
