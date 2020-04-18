@@ -10,8 +10,7 @@ export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetC
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
 
   api.model.analyzedBody = {
-    // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Implement
-    essence: 666,
+    essence: patient.essence / 100,
     healthState: patient.healthState,
     implants: patient.implants,
   };
