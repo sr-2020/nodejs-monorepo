@@ -325,6 +325,32 @@
                     </b-tbody>
                   </b-table-simple>
                 </b-collapse>
+
+                <b-button block href="#" v-b-toggle.essence variant="info">
+                  Эссенс
+                </b-button>
+                <b-collapse id="essence">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Итоговый эссенс</b-th>
+                        <b-td>{{ characterModel.essence }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Максимальный эссенс</b-th>
+                        <b-td>{{ characterModel.essenceDetails.max }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Занято имплантами</b-th>
+                        <b-td>{{ characterModel.essenceDetails.used }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Дыра эссенса</b-th>
+                        <b-td>{{ characterModel.essenceDetails.gap }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
               </b-card-body>
             </b-card>
             <b-card no-body>
