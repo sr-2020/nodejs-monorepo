@@ -1,5 +1,5 @@
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllImplants, ImplantSlot } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
 import { reduceEssenceDueToImplantInstall } from './essence';
@@ -16,6 +16,15 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
 
   if (api.model.implants.filter((it) => it.slot == implant.slot).length >= maxImplantsPerSlot(implant.slot)) {
     throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имплант из одного из них.`);
+  }
+
+  const supportedRaces: MetaRace[] = ['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'];
+  if (implant.grade == 'bio') {
+    supportedRaces.push('meta-hmhvv');
+  }
+
+  if (!supportedRaces.includes(api.model.metarace)) {
+    throw new UserVisibleError('Данный имплант нельзя установить представителю этой метарасы');
   }
 
   reduceEssenceDueToImplantInstall(api, implant);

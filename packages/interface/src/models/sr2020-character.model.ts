@@ -5,6 +5,8 @@ import { Entity, Column } from 'typeorm';
 
 export type HealthState = 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
 
+export type MetaRace = 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
+
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
 export class AddedSpell {
@@ -377,7 +379,7 @@ export class Sr2020Character extends EmptyModel {
 
   @property({ required: true, type: 'string' })
   @Column({ type: 'text', default: 'meta-norm' })
-  metarace: 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
+  metarace: MetaRace;
 
   @rproperty()
   @Column({ default: 0 })
