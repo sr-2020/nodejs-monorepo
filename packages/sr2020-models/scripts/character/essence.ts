@@ -1,6 +1,7 @@
-import { EffectModelApi, Modifier, Effect } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, Modifier, Effect, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { increaseMagic, increaseResonance, increaseCharisma } from './basic_effects';
+import { Implant } from './implants_library';
 
 export function createEssenceSystemEffect(): Effect {
   return {
@@ -26,4 +27,14 @@ export function systemEssenceEffect(api: EffectModelApi<Sr2020Character>, m: Mod
       api.model.mentalDefenceBonus += 500;
     }
   }
+}
+
+export function reduceEssenceDueToImplantInstall(api: EventModelApi<Sr2020Character>, implant: Implant) {
+  const cost = Math.floor(100 * implant.essenceCost);
+  if (cost > api.workModel.essence + api.workModel.essenceDetails.gap - 100) {
+    throw new UserVisibleError('Невозможно установить имплант в данное тело');
+  }
+
+  api.model.essenceDetails.used += cost;
+  api.model.essenceDetails.gap -= Math.min(api.model.essenceDetails.gap, cost);
 }

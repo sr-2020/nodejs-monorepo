@@ -58,6 +58,11 @@ describe('Rigger abilities', () => {
         ],
       });
       expect(patientWorkModel).to.containDeep({
+        essence: 450,
+        essenceDetails: {
+          used: 150,
+          gap: 0,
+        },
         implants: [
           {
             id: 'rcc-beta',

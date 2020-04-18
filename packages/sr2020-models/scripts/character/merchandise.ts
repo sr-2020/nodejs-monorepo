@@ -2,6 +2,7 @@ import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models
 import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllImplants, ImplantSlot } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
+import { reduceEssenceDueToImplantInstall } from './essence';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
@@ -17,6 +18,8 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имплант из одного из них.`);
   }
 
+  reduceEssenceDueToImplantInstall(api, implant);
+
   const addedImplant: AddedImplant = {
     id: implant.id,
     name: implant.name,
@@ -28,7 +31,6 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
   };
   api.model.implants.push(addedImplant);
   sendNotificationAndHistoryRecord(api, 'Имплант установлен', `Установлен имплант ${addedImplant.name}`);
-  // TODO(https://trello.com/c/bMqcwbvv/280-сделать-параметр-персонажа-эссенс): Calculate essence change
 }
 
 export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
