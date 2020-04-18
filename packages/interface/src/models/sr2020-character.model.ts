@@ -5,7 +5,16 @@ import { Entity, Column } from 'typeorm';
 
 export type HealthState = 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
 
-export type MetaRace = 'meta-norm' | 'meta-elf' | 'meta-dwarf' | 'meta-ork' | 'meta-troll' | 'meta-hmhvv' | 'meta-digital' | 'meta-spirit';
+export type MetaRace =
+  | 'meta-norm'
+  | 'meta-elf'
+  | 'meta-dwarf'
+  | 'meta-ork'
+  | 'meta-troll'
+  | 'meta-hmhvv1'
+  | 'meta-hmhvv3'
+  | 'meta-digital'
+  | 'meta-spirit';
 
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
