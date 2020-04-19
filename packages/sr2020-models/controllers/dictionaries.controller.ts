@@ -3,6 +3,7 @@ import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_lib
 import { kAllSpells } from '../scripts/character/spells_library';
 import { kAllActiveAbilities } from '../scripts/character/active_abilities_library';
 import { kAllImplants } from '../scripts/character/implants_library';
+import { kAllPills } from '../scripts/character/chemo_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -62,5 +63,30 @@ export class DictionariesController {
   })
   implants(): { id: string; name: string; description: string }[] {
     return kAllImplants.map((it) => ({ id: it.id, name: it.name, description: it.description }));
+  }
+
+  @get('/pills', {
+    summary: `Returns the list of implemented pills`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  pills(): { id: string; name: string }[] {
+    return kAllPills.map((p) => ({ id: p.id, name: p.name }));
   }
 }
