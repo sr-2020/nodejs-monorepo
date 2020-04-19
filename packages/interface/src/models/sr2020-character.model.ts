@@ -206,19 +206,7 @@ export class Discounts {
 }
 
 @model()
-export class Chemo {
-  @rproperty()
-  @Column({ default: 50 })
-  baseEffectThreshold: number;
-
-  @rproperty()
-  @Column({ default: 70 })
-  superEffectThreshold: number;
-
-  @rproperty()
-  @Column({ default: 120 })
-  crysisThreshold: number;
-
+export class Concentrations {
   @rproperty()
   @Column({ default: 0 })
   teqgel: number;
@@ -286,6 +274,25 @@ export class Chemo {
   @rproperty()
   @Column({ default: 0 })
   vampirium: number;
+}
+
+@model()
+export class Chemo {
+  @rproperty()
+  @Column({ default: 50 })
+  baseEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 70 })
+  superEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 120 })
+  crysisThreshold: number;
+
+  @rproperty()
+  @Column((type) => Concentrations, { prefix: 'concentration' })
+  concentration: Concentrations;
 }
 
 @model()
