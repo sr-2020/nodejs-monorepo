@@ -279,15 +279,19 @@ export class Concentrations {
 @model()
 export class Chemo {
   @rproperty()
-  @Column({ default: 50 })
+  @Column({ default: 160 })
   baseEffectThreshold: number;
 
   @rproperty()
-  @Column({ default: 70 })
+  @Column({ default: 220 })
+  uberEffectThreshold: number;
+
+  @rproperty()
+  @Column({ default: 280 })
   superEffectThreshold: number;
 
   @rproperty()
-  @Column({ default: 120 })
+  @Column({ default: 340 })
   crysisThreshold: number;
 
   @rproperty()

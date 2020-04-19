@@ -118,9 +118,10 @@ export class ModelEngineController implements ModelEngineService {
       },
       healthState: 'healthy',
       chemo: {
-        baseEffectThreshold: 50,
-        superEffectThreshold: 70,
-        crysisThreshold: 120,
+        baseEffectThreshold: 160,
+        uberEffectThreshold: 220,
+        superEffectThreshold: 280,
+        crysisThreshold: 340,
         concentration: {
           argon: 0,
           barium: 0,
