@@ -5,6 +5,7 @@ import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration } from 'moment';
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+  // TODO(aeremin) Check for body type
   const pill = kAllPills.find((it) => it.id == data.id);
   if (!pill) {
     throw new UserVisibleError('Такого препарата не существует');
@@ -14,7 +15,8 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
 }
 
 export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
-  // TODO(aeremin) Implement
+  // TODO(aeremin) Implement chemo effects
+  // TODO(aeremin) Implement addictions
 }
 
 export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: Modifier) {
