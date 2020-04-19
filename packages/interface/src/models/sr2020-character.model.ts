@@ -218,6 +218,74 @@ export class Chemo {
   @rproperty()
   @Column({ default: 120 })
   crysisThreshold: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  teqgel: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  iodine: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  argon: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  radium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  junius: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  custodium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  polonium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  silicon: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  magnium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  chromium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  opium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  elba: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  barium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  uranium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  moscovium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  iconium: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  vampirium: number;
 }
 
 @model()
