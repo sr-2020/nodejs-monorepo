@@ -2,6 +2,9 @@ import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models
 import { QrCode, QrType } from '@sr2020/interface/models/qr-code.model';
 import { consumeFood } from '../character/merchandise';
 import { duration } from 'moment';
+import { kAllImplants } from '../character/implants_library';
+import { kAllPills } from '../character/chemo_library';
+import { consumeChemo } from '../character/chemo';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -46,12 +49,20 @@ function merchandiseIdToQrType(id: string): QrType {
     return 'food';
   }
 
-  return 'implant';
+  if (kAllImplants.find((it) => it.id == id)) return 'implant';
+  if (kAllPills.find((it) => it.id == id)) return 'pill';
+
+  throw new UserVisibleError('Неизвестный ID товара');
 }
 
 function merchandiseIdToEventType(id: string) {
-  if (merchandiseIdToQrType(id) == 'food') {
+  const qrType = merchandiseIdToQrType(id);
+  if (qrType == 'food') {
     return consumeFood.name;
+  }
+
+  if (qrType == 'pill') {
+    return consumeChemo.name;
   }
 
   return undefined;

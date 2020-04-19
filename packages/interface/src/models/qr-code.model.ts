@@ -5,6 +5,7 @@ import { Entity, Column } from 'typeorm';
 
 export type QrType =
   | 'empty' // Empty QR, can be written.
+  | 'pill' // Pharmaceuticals and similar
   | 'implant' // Implant bought in the shop or cut from the body.
   | 'food' // Food item
   | 'ability' // Used for mental abilities - ability which affects the person who scanned it.

@@ -8,8 +8,10 @@ app = new Vue({
     qrModel: undefined,
     allFeatures: undefined,
     allImplants: undefined,
+    allPills: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
+    selectedPill: 'iodomarin',
     selectedRace: 'meta-norm',
     clinicalDeathTarget: 130,
     qrCodeId: 1,
@@ -43,6 +45,11 @@ app = new Vue({
     {
       const response = await this.$http.get(`https://model-engine.evarun.ru/implants`);
       this.allImplants = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.evarun.ru/pills`);
+      this.allPills = response.body;
     }
   },
   methods: {
@@ -210,6 +217,11 @@ app = new Vue({
     async writeImplantQr() {
       const implant = this.allImplants.find((v) => v.id == this.selectedImplant);
       return this.sendQrEvent({ eventType: 'createMerchandise', data: implant });
+    },
+
+    async writePillQr() {
+      const pill = this.allPills.find((v) => v.id == this.selectedPill);
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { ...pill, description: 'Какая-то таблетка' } });
     },
   }
 })
