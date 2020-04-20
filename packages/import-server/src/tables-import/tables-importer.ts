@@ -24,7 +24,7 @@ export class TablesImporter {
     [1, 1, 1, 1, 1, 1, 1], // Млекопитающие
   ];
 
-  public async authorize() {
+  public async authorize(): Promise<any> {
     return google.auth.getClient({
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
