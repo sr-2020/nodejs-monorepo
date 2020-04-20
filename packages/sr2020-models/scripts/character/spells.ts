@@ -65,6 +65,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
 
   const feedback = applyAndGetMagicFeedback(api, data.power, ritualFeedbackReduction);
   saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
+
+  api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }
 
 function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft = 1) {

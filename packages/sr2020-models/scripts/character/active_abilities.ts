@@ -41,6 +41,8 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.sendSelfEvent(ability.eventType, { ...ability, ...data });
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
+
+  api.sendPubSubNotification('ability_used', { ...data, characterId: api.model.modelId, name: ability.humanReadableName });
 }
 
 export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, event: Event) {
