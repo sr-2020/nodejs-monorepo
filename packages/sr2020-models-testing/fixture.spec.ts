@@ -68,14 +68,14 @@ describe('Fixture', function() {
   it('Send character event with location event as side-effect', async () => {
     await fixture.saveCharacter();
     await fixture.saveLocation({ manaDensity: 10 });
-    await fixture.sendCharacterEvent({ eventType: 'density-drain-spell', data: { locationId: '0', amount: 3 } });
+    await fixture.sendCharacterEvent({ eventType: 'density-drain-spell', data: { location: { id: 0, manaLevel: 10 }, amount: 3 } });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 7 } });
   });
 
   it('Send character event which aquires location', async () => {
     await fixture.saveCharacter();
     await fixture.saveLocation({ manaDensity: 100 });
-    await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { locationId: '0' } });
+    await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { location: { id: 0, manaLevel: 100 } } });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 50 } });
   });
 
@@ -87,7 +87,7 @@ describe('Fixture', function() {
       data: { delayInSeconds: 10, event: { eventType: 'reduce-mana-density', data: { amount: 20 } } },
     });
     fixture.advanceTime(duration(10, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { locationId: '0' } });
+    await fixture.sendCharacterEvent({ eventType: 'density-halve-spell', data: { location: { id: 0, manaLevel: 100 } } });
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 40 } });
   });
 

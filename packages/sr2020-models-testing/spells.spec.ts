@@ -86,12 +86,12 @@ describe('Spells', function() {
     await fixture.saveLocation({ modelId: '2', manaDensity: 400 });
 
     {
-      await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, locationId: '1' } }, 1);
+      await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: 0, location: { id: 1, manaLevel: 500 } } }, 1);
       expect(await fixture.getLocation(1)).containDeep({ workModel: { manaDensity: 500 } });
     }
 
     {
-      await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, locationId: '2' } }, 2);
+      await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 0, location: { id: 2, manaLevel: 400 } } }, 2);
       expect(await fixture.getLocation(2)).containDeep({ workModel: { manaDensity: 200 } });
     }
   });
@@ -118,7 +118,7 @@ describe('Spells', function() {
     {
       const { workModel } = await fixture.sendCharacterEvent({
         eventType: 'castSpell',
-        data: { id: 'dummy-light-heal', locationId: '0', power: 5 },
+        data: { id: 'dummy-light-heal', location: { id: 0, manaLevel: 0 }, power: 5 },
       });
       expect(fixture.getCharacterNotifications().length).to.equal(1);
       expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
@@ -138,7 +138,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '2' });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dummy-light-heal' } }, 1);
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'dummy-light-heal', locationId: '0', targetCharacterId: 2, power: 3 } },
+      { eventType: 'castSpell', data: { id: 'dummy-light-heal', location: { id: 0, manaLevel: 0 }, targetCharacterId: 2, power: 3 } },
       1,
     );
     expect(fixture.getCharacterNotifications(1).length).to.equal(1);
@@ -159,7 +159,7 @@ describe('Spells', function() {
 
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 2 } },
+        { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } },
         1,
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
@@ -195,7 +195,7 @@ describe('Spells', function() {
   it('Ground Heal expired', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 2 } });
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } });
     fixture.advanceTime(duration(20, 'minutes'));
     const { workModel } = await fixture.getCharacter();
     expect(workModel.activeAbilities.length).to.equal(0);
@@ -207,7 +207,10 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'live-long-and-prosper' } }, 1);
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'live-long-and-prosper', locationId: '0', targetCharacterId: 2, power: 4 } },
+        {
+          eventType: 'castSpell',
+          data: { id: 'live-long-and-prosper', location: { id: 0, manaLevel: 0 }, targetCharacterId: 2, power: 4 },
+        },
         1,
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
@@ -230,7 +233,7 @@ describe('Spells', function() {
     {
       const { workModel } = await fixture.sendCharacterEvent({
         eventType: 'castSpell',
-        data: { id: 'keep-yourself', locationId: '0', power: 3 },
+        data: { id: 'keep-yourself', location: { id: 0, manaLevel: 0 }, power: 3 },
       });
       expect(fixture.getCharacterNotifications().length).to.equal(1);
       expect(fixture.getCharacterNotifications()[0].body).containEql('на 3 на 30 минут');
@@ -252,17 +255,23 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '2' });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } }, 2);
 
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'dummy-light-heal', locationId: '0', power: 2 } }, 1);
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'dummy-light-heal', location: { id: 0, manaLevel: 0 }, power: 2 } },
+      1,
+    );
     await fixture.advanceTime(duration(2, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
     await fixture.advanceTime(duration(15, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 6 } }, 2);
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 6 } },
+      2,
+    );
 
     await fixture.saveCharacter({ modelId: '3', magic: 5 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 3);
 
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', locationId: '0', power: 5 } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 5 } },
       3,
     );
     expect(workModel.magic).to.equal(2);
@@ -300,11 +309,11 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'trackpoint' } }, 2);
 
     await fixture.advanceTime(duration(2, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
 
     // power 8 + auraReadingMultiplier 2.0 gives us 100% read
     const { workModel, tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', locationId: '0', power: 8 } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
       2,
     );
     expect(workModel.magic).to.equal(6);
@@ -336,7 +345,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '3' });
 
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4, ritualMembersIds: ['2', '3'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
     expect(workModel.activeAbilities.length).to.equal(1);
@@ -353,7 +362,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '3' });
 
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4, ritualMembersIds: ['2', '3'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
     expect(workModel.activeAbilities.length).to.equal(1);
@@ -367,13 +376,19 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'tempus-fugit' } }, 1);
 
     await fixture.advanceTime(duration(600, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
 
     await fixture.advanceTime(duration(700, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4 } },
+      1,
+    );
 
     await fixture.advanceTime(duration(300, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'tempus-fugit', locationId: '0', power: 2 } }, 1);
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'tempus-fugit', location: { id: 0, manaLevel: 0 }, power: 2 } },
+      1,
+    );
 
     const { workModel } = await fixture.getLocation();
     expect(workModel.spellTraces).containDeep([
@@ -399,12 +414,15 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'brasilia' } }, 1);
 
     await fixture.advanceTime(duration(200, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', locationId: '0', power: 4 } }, 1);
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4 } },
+      1,
+    );
 
     await fixture.advanceTime(duration(300, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', locationId: '0', power: 2 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 2 } }, 1);
 
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', locationId: '0', power: 1 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', location: { id: 0, manaLevel: 0 }, power: 1 } }, 1);
 
     await fixture.advanceTime(duration(60, 'seconds'));
 
@@ -431,7 +449,7 @@ describe('Spells', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'frog-skin' } }, 1);
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'frog-skin', locationId: '0', targetCharacterId: 2, power: 2 } },
+        { eventType: 'castSpell', data: { id: 'frog-skin', location: { id: 0, manaLevel: 0 }, targetCharacterId: 2, power: 2 } },
         1,
       );
       expect(workModel.charisma).equal(5);

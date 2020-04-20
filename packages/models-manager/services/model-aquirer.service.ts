@@ -17,9 +17,9 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage> {
     const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, now);
-    // Aquire location if event.data has locationId set.
-    if (event.data && event.data.locationId) {
-      const locationId: number = event.data.locationId;
+    // Aquire location if event.data has location set.
+    if (event.data && event.data.location) {
+      const locationId: number = event.data.location.id;
       await result.lockAndGetBaseModel(Location, locationId);
     }
 

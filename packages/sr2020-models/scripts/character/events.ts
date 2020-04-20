@@ -11,7 +11,7 @@ export function consumeQrs(api: EventModelApi<Sr2020Character>, data: { qrCodes:
 
 export function scanQr(
   api: EventModelApi<Sr2020Character>,
-  data: { qrCode: number; locationId?: string; targetCharacterId?: number },
+  data: { qrCode: number; location?: { id: string; manaLevel: string }; targetCharacterId?: number },
   _: Event,
 ) {
   const qr = api.aquired(QrCode, data.qrCode.toString());
@@ -19,9 +19,9 @@ export function scanQr(
   if (!qr.eventType) throw new UserVisibleError('Этот QR-код нельзя использовать напрямую');
 
   if (data.targetCharacterId != undefined) {
-    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), qr.eventType, { ...qr.data, locationId: data.locationId });
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), qr.eventType, { ...qr.data, location: data.location });
   } else {
-    api.sendSelfEvent(qr.eventType, { ...qr.data, locationId: data.locationId });
+    api.sendSelfEvent(qr.eventType, { ...qr.data, location: data.location });
   }
   api.sendOutboundEvent(QrCode, data.qrCode.toString(), consume, {});
 }

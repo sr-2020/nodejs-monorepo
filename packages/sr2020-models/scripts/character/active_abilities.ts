@@ -4,14 +4,16 @@ import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifie
 import { reviveOnTarget } from './death_and_rebirth';
 import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
-import { Location } from '@sr2020/interface/models/location.model';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
 interface ActiveAbilityData {
   id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
   targetCharacterId?: string; // Identifier of target character
-  locationId: string;
+  location: {
+    id: number;
+    manaLevel: number;
+  };
 }
 
 export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
@@ -81,7 +83,7 @@ export function discountAll30(api: EventModelApi<Sr2020Character>, data: never, 
 // Adept abilities
 
 export function hammerOfJustice(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const manaLevel = api.aquired(Location, data.locationId).manaDensity;
+  const manaLevel = data.location.manaLevel;
   const d = duration(10 + 3 * manaLevel, 'minutes');
   const m = modifierFromEffect(hammerOfJusticeEffect, { validUntil: validUntil(api, d) });
   addTemporaryModifier(api, m, d);
@@ -97,7 +99,7 @@ export function hammerOfJusticeEffect(api: EffectModelApi<Sr2020Character>, m: M
 }
 
 export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const manaLevel = api.aquired(Location, data.locationId).manaDensity;
+  const manaLevel = data.location.manaLevel;
   const d = duration(5 + 1 * manaLevel, 'minutes');
   const m = modifierFromEffect(arrowgantEffect, { validUntil: validUntil(api, d) });
   addTemporaryModifier(api, m, d);
@@ -113,7 +115,7 @@ export function arrowgantEffect(api: EffectModelApi<Sr2020Character>, m: Modifie
 }
 
 export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const manaLevel = api.aquired(Location, data.locationId).manaDensity;
+  const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   const m = modifierFromEffect(trolltonEffect, { validUntil: validUntil(api, d) });
   addTemporaryModifier(api, m, d);
@@ -129,7 +131,7 @@ export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 }
 
 export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const manaLevel = api.aquired(Location, data.locationId).manaDensity;
+  const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d);
 }

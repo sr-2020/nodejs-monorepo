@@ -19,7 +19,7 @@ describe('Active abilities', function() {
 
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'i-will-survive' } });
 
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-will-survive', locationId: '7' } });
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-will-survive', location: { id: 7, manaLevel: 5 } } });
     await fixture.sendCharacterEvent({ eventType: 'wound', data: {} });
 
     expect((await fixture.getCharacter()).workModel.healthState).equal('wounded');

@@ -25,7 +25,11 @@ const kUnknowAuraCharacter = '*';
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
   power: number; // Magic power
-  locationId: string; // Current location
+  location: {
+    // Current location
+    id: number;
+    manaLevel: number;
+  };
   reagentIds: string[]; // Identifiers of reagents/blood QRs
   ritualMembersIds?: string[]; // Identifiers of other ritual participants
   focusId?: string; // Identifier of focus QR
@@ -91,16 +95,16 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
-export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { locationId: string; amount: number }, _: Event) {
-  api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: data.amount });
+export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; amount: number }, _: Event) {
+  api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: data.amount });
 }
 
-export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { locationId: string; qrCode?: number }, _: Event) {
+export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: number }, _: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
-  const location = api.aquired(Location, data.locationId);
-  api.sendOutboundEvent(Location, data.locationId, reduceManaDensity, { amount: location.manaDensity / 2 });
+  const location = api.aquired(Location, data.location.id.toString());
+  api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
 export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
@@ -124,7 +128,7 @@ export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCod
 //
 export function lightHealSpell(
   api: EventModelApi<Sr2020Character>,
-  data: { targetCharacterId?: number; power: number; locationId: string },
+  data: { targetCharacterId?: number; power: number; location: { id: number; manaLevel: number } },
   event: Event,
 ) {
   if (data.targetCharacterId != undefined) {
@@ -142,7 +146,11 @@ export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: nu
   sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
 }
 
-export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
+export function groundHealSpell(
+  api: EventModelApi<Sr2020Character>,
+  data: { power: number; location: { id: number; manaLevel: number } },
+  event: Event,
+) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
   const d = duration(10 * data.power, 'minutes');
   const m = modifierFromEffect(groundHealEffect, {
@@ -238,7 +246,11 @@ export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
 // Defensive spells
 //
 
-export function fieldOfDenialSpell(api: EventModelApi<Sr2020Character>, data: { power: number; locationId: string }, event: Event) {
+export function fieldOfDenialSpell(
+  api: EventModelApi<Sr2020Character>,
+  data: { power: number; location: { id: number; manaLevel: number } },
+  event: Event,
+) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
   const d = duration(40, 'minutes');
   const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, d) });
@@ -268,7 +280,7 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: Spell
     AURA_LENGTH,
     Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
   );
-  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
+  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.location.id.toString(), event);
 }
 
 // время каста 5 минут. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
@@ -280,7 +292,7 @@ export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellD
     AURA_LENGTH,
     Math.floor((AURA_LENGTH * (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
   );
-  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.locationId, event);
+  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.location.id.toString(), event);
 }
 
 function dumpSpellTraces(
@@ -310,7 +322,7 @@ function dumpSpellTraces(
 // (то есть activation_moment = activation_moment - T2). T1=Мощь*5. T2=Мощь*4.
 export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Tempus Fugit');
-  api.sendOutboundEvent(Location, data.locationId, shiftSpellTraces, {
+  api.sendOutboundEvent(Location, data.location.id.toString(), shiftSpellTraces, {
     maxLookupSeconds: data.power * 5 * 60,
     shiftTimeSeconds: data.power * 4 * 60,
   });
@@ -318,7 +330,7 @@ export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: Spel
 
 export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   sendNotificationAndHistoryRecord(api, 'Заклинание', 'Brasilia');
-  api.sendOutboundEvent(Location, data.locationId, brasiliaEffect, {
+  api.sendOutboundEvent(Location, data.location.id.toString(), brasiliaEffect, {
     durationMinutes: 8 * data.power,
   });
 }
@@ -415,7 +427,7 @@ function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, sp
   const picked = chance.pickset(positions, api.workModel.magicStats.auraMarkMultiplier * AURA_LENGTH);
   const casterAura = positions.map((i) => (picked.includes(i) ? api.workModel.magicStats.aura[i] : kUnknowAuraCharacter)).join('');
 
-  api.sendOutboundEvent(Location, data.locationId, recordSpellTrace, {
+  api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, {
     spellName,
     timestamp: event.timestamp,
     casterAura,
