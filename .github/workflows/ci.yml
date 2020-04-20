@@ -102,7 +102,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
       - uses: actions/checkout@v1
       - run: |
-          gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated
+          gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated --project=imposing-elixir-249711
 
   deploy_gke:
     runs-on: ubuntu-latest
