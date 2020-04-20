@@ -92,18 +92,6 @@ jobs:
         with:
           args: -h "Cache-Control:no-cache,max-age=0" cp packages/admin-ui/* gs://admin-ui.evarun.ru
 
-  deploy_functions:
-    runs-on: ubuntu-latest
-    needs: [test, lint, build]
-    steps:
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          service_account_email: ${{ secrets.SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-      - uses: actions/checkout@v1
-      - run: |
-          gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated --project=imposing-elixir-249711
-
   deploy_gke:
     runs-on: ubuntu-latest
     needs: [test, lint, build, docker_models_manager, docker_model_engine, docker_push]
