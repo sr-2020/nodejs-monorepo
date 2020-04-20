@@ -60,7 +60,7 @@
       "path": "packages/telegram-bot"
     },
     {
-      "path": "packages/utility-scripts"
+      "path": "packages/sheets-export"
     }
   ]
 }
