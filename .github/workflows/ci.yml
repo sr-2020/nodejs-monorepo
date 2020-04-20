@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: '10.x'
       - uses: bahmutov/npm-install@v1.1.0
-      - run: npx lerna run build
+      - run: yarn build
   docker_models_manager:
     runs-on: ubuntu-latest
     steps:
