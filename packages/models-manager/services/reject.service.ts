@@ -16,6 +16,8 @@ export class CustomRejectProvider extends RejectProvider {
       // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
     }
 
+    console.error(error);
+
     super.action({ request, response }, error);
   }
 }
