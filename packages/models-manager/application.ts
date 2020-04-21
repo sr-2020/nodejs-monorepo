@@ -5,7 +5,7 @@ import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication, RestBindings } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
-import { CustomRejectProvider } from '@sr2020/interface/services/reject.service';
+import { CustomRejectProvider } from '@sr2020/models-manager/services/reject.service';
 
 export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
