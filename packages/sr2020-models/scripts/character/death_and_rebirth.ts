@@ -69,7 +69,7 @@ export function autodocHeal(api: EventModelApi<Sr2020Character>, _data: {}, _: E
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
 }
 
-function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: HealthState) {
+export function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: HealthState) {
   const stateFrom = api.model.healthState;
   if (stateFrom == stateTo) return;
 

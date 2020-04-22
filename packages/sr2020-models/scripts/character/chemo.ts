@@ -4,6 +4,7 @@ import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration, Duration } from 'moment';
 import { increaseMentalAttack } from './basic_effects';
+import { healthStateTransition } from './death_and_rebirth';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -27,6 +28,30 @@ interface ChemoEffect {
 }
 
 export const kAllChemoEffects: ChemoEffect[] = [
+  {
+    element: 'iodine',
+    level: 'base',
+    message: 'Ты восстановил один хит.',
+  },
+  {
+    element: 'iodine',
+    level: 'uber',
+    message: 'Ты вылечился из тяжелого ранения!',
+    instantEffect: {
+      handler: reviveTo1Hp,
+      amount: 0,
+    },
+  },
+  {
+    element: 'iodine',
+    level: 'super',
+    message: 'Ты восстановил два хита.',
+  },
+  {
+    element: 'iodine',
+    level: 'crysis',
+    message: 'Ты восстановил два хита. Появилась зависимость.',
+  },
   {
     element: 'opium',
     level: 'base',
@@ -125,4 +150,9 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
 
 export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.chemo.concentration[m.element] += m.amount;
+}
+
+export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.model.healthState != 'wounded') return;
+  healthStateTransition(api, 'healthy');
 }
