@@ -1,8 +1,31 @@
 import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
-import { duration } from 'moment';
+import { duration, Duration } from 'moment';
+
+type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
+
+interface InstantEffect {
+  handler: (api: EventModelApi<Sr2020Character>, data: { amount: number }, event: Event) => void;
+  amount: number;
+}
+
+interface DurationEffect {
+  handler: (api: EffectModelApi<Sr2020Character>, m: Modifier) => void;
+  duration: Duration;
+  amount: number;
+}
+
+interface ChemoEffect {
+  element: keyof Concentrations;
+  level: ChemoLevel;
+  instantEffect?: InstantEffect;
+  durationEffect?: DurationEffect;
+  message: string;
+}
+
+const kAllChemoEffects: ChemoEffect[] = [];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   // TODO(aeremin) Check for body type
@@ -20,11 +43,41 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
       addTemporaryModifier(api, modifierFromEffect(increaseConcentration, { element, amount }, modifierClass), duration(1, 'hour'));
     }
   }
-  api.sendSelfEvent(checkConcentrations, {});
+  api.sendSelfEvent(checkConcentrations, { concentrations: pill.content });
 }
 
-export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
-  // TODO(aeremin) Implement chemo effects
+export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }, _: Event) {
+  for (const element in data.concentrations) {
+    let level: ChemoLevel | undefined = undefined;
+    if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.crysisThreshold) {
+      level = 'crysis';
+    } else if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.superEffectThreshold) {
+      level = 'super';
+    } else if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.uberEffectThreshold) {
+      level = 'uber';
+    } else if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.baseEffectThreshold) {
+      level = 'base';
+    }
+    if (!level) continue;
+
+    const effect = kAllChemoEffects.find((it) => it.level == level && it.element == element);
+    if (!effect) continue;
+
+    if (effect.instantEffect) {
+      api.sendSelfEvent(effect.instantEffect.handler, { amount: effect.instantEffect.amount });
+    }
+
+    if (effect.durationEffect) {
+      const modifierClass = `${element}-effect`;
+      const mods = api.getModifiersByClass(modifierClass);
+      for (const m of mods) api.removeModifier(m.mID);
+      addTemporaryModifier(
+        api,
+        modifierFromEffect(effect.durationEffect.handler, { amount: effect.durationEffect.amount }, modifierClass),
+        effect.durationEffect.duration,
+      );
+    }
+  }
   // TODO(aeremin) Implement addictions
 }
 
