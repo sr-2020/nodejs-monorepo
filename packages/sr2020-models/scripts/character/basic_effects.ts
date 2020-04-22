@@ -267,3 +267,7 @@ export function increaseImplantDifficultyBonus(api: EffectModelApi<Sr2020Charact
 export function allowBiowareInstallation(api: EffectModelApi<Sr2020Character>, _: Modifier) {
   api.model.rigging.canWorkWithBioware = true;
 }
+
+export function multiplyCooldownCoefficient(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.cooldownCoefficient *= m.amount;
+}

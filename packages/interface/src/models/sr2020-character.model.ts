@@ -515,6 +515,10 @@ export class Sr2020Character extends EmptyModel {
   maxTimeInVr: number;
 
   @rproperty()
+  @Column({ default: 1.0 })
+  cooldownCoefficient: number;
+
+  @rproperty()
   @Column((type) => MagicStats, { prefix: 'magic' })
   magicStats: MagicStats;
 

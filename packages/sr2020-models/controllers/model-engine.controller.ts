@@ -117,6 +117,7 @@ export class ModelEngineController implements ModelEngineService {
         aura: 'aaaabbbbccccddddeeee',
       },
       healthState: 'healthy',
+      cooldownCoefficient: 1.0,
       chemo: {
         baseEffectThreshold: 160,
         uberEffectThreshold: 220,
