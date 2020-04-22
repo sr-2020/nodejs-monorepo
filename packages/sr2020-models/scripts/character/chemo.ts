@@ -1,7 +1,7 @@
 import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
-import { addTemporaryModifier, modifierFromEffect } from './util';
+import { addTemporaryModifier, modifierFromEffect, validUntil } from './util';
 import { duration, Duration } from 'moment';
 import { increaseMentalAttack, increaseCharisma, increaseIntelligence, increaseResonance } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
@@ -48,6 +48,31 @@ export const kAllChemoEffects: ChemoEffect[] = [
     element: 'teqgel',
     level: 'crysis',
     message: 'TODO',
+  },
+
+  {
+    element: 'iodine',
+    level: 'base',
+    message: 'Ты восстановил один хит.',
+  },
+  {
+    element: 'iodine',
+    level: 'uber',
+    message: 'Ты вылечился из тяжелого ранения!',
+    instantEffect: {
+      handler: reviveTo1Hp,
+      amount: 0,
+    },
+  },
+  {
+    element: 'iodine',
+    level: 'super',
+    message: 'Ты восстановил два хита.',
+  },
+  {
+    element: 'iodine',
+    level: 'crysis',
+    message: 'Ты восстановил два хита. Появилась зависимость.',
   },
 
   {
@@ -214,29 +239,47 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 
   {
-    element: 'iodine',
+    element: 'polonium',
     level: 'base',
-    message: 'Ты восстановил один хит.',
-  },
-  {
-    element: 'iodine',
-    level: 'uber',
-    message: 'Ты вылечился из тяжелого ранения!',
-    instantEffect: {
-      handler: reviveTo1Hp,
+    message: 'Ближайшие 5 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    durationEffect: {
+      handler: lightArmorEffect,
+      duration: duration(5, 'minutes'),
       amount: 0,
     },
   },
   {
-    element: 'iodine',
-    level: 'super',
-    message: 'Ты восстановил два хита.',
+    element: 'polonium',
+    level: 'uber',
+    message:
+      'На 30 минут ты Берсерк. Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран"',
+    durationEffect: {
+      handler: berserkEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
   },
   {
-    element: 'iodine',
-    level: 'crysis',
-    message: 'Ты восстановил два хита. Появилась зависимость.',
+    element: 'polonium',
+    level: 'super',
+    message: 'Ближайшие 30 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    durationEffect: {
+      handler: lightArmorEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
   },
+  {
+    element: 'polonium',
+    level: 'crysis',
+    message: 'Ближайшие 30 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони). Появилась зависимость.',
+    durationEffect: {
+      handler: lightArmorEffect,
+      duration: duration(5, 'minutes'),
+      amount: 0,
+    },
+  },
+
   {
     element: 'opium',
     level: 'base',
@@ -325,7 +368,14 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
       for (const m of mods) api.removeModifier(m.mID);
       addTemporaryModifier(
         api,
-        modifierFromEffect(effect.durationEffect.handler, { amount: effect.durationEffect.amount }, modifierClass),
+        modifierFromEffect(
+          effect.durationEffect.handler,
+          {
+            amount: effect.durationEffect.amount,
+            durationSeconds: effect.durationEffect.duration.asSeconds(),
+          },
+          modifierClass,
+        ),
         effect.durationEffect.duration,
       );
     }
@@ -346,4 +396,23 @@ export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, 
   // TODO(https://trello.com/c/dmKERpbb/215-реализовать-реагенты-в-игре) Implement
   // Ускоряет восстановление Магии, уменьшает время действия всех текущих штрафов
   // на Магию на data.amount минут. Не может снизить ниже 30с.
+}
+
+export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    name: 'Легкая броня',
+    description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    id: 'light-armor-chemo',
+    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+  });
+}
+
+export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    name: 'Берсерк',
+    description:
+      'Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран".',
+    id: 'berserk-chemo',
+    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+  });
 }

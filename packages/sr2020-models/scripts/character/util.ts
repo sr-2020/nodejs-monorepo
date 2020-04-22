@@ -66,6 +66,6 @@ export function removeModifier(api: EventModelApi<Sr2020Character>, data: { mID:
 }
 
 // Returns a unix timestamp in ms
-export function validUntil(api: EventModelApi<Sr2020Character>, duration: Duration) {
+export function validUntil(api: EffectModelApi<Sr2020Character>, duration: Duration) {
   return api.model.timestamp + duration.asMilliseconds();
 }
