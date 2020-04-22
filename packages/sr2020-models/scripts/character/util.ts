@@ -27,12 +27,14 @@ export function sendNotificationAndHistoryRecord(api: EventModelApi<Sr2020Charac
 export function modifierFromEffect(
   effect: (api: EffectModelApi<Sr2020Character>, m: Modifier) => void,
   additionalData: any = {},
+  reason: string = '',
 ): Modifier {
   const handler = effect.name;
   return {
     ...additionalData,
     mID: handler + '-' + uuid.v4(),
     enabled: true,
+    class: reason,
     effects: [
       {
         enabled: true,
