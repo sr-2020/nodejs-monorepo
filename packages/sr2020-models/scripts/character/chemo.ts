@@ -3,7 +3,13 @@ import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from './util';
 import { duration, Duration } from 'moment';
-import { increaseMentalAttack, increaseCharisma, increaseIntelligence, increaseResonance } from './basic_effects';
+import {
+  increaseMentalAttack,
+  increaseCharisma,
+  increaseIntelligence,
+  increaseResonance,
+  multiplyCooldownCoefficient,
+} from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
@@ -275,8 +281,49 @@ export const kAllChemoEffects: ChemoEffect[] = [
     message: 'Ближайшие 30 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони). Появилась зависимость.',
     durationEffect: {
       handler: lightArmorEffect,
-      duration: duration(5, 'minutes'),
+      duration: duration(30, 'minutes'),
       amount: 0,
+    },
+  },
+
+  {
+    element: 'silicon',
+    level: 'base',
+    message: 'В течение 30 минут снижает кулдаун каждой активации абилки на 20% ',
+    durationEffect: {
+      handler: multiplyCooldownCoefficient,
+      duration: duration(30, 'minutes'),
+      amount: 0.8,
+    },
+  },
+  {
+    element: 'silicon',
+    level: 'uber',
+    message: 'В течение 30 минут снижает кулдаун каждой активации абилки на 80%',
+    durationEffect: {
+      handler: multiplyCooldownCoefficient,
+      duration: duration(30, 'minutes'),
+      amount: 0.2,
+    },
+  },
+  {
+    element: 'silicon',
+    level: 'super',
+    message: 'В течение 30 минут снижает кулдаун каждой активации абилки на 40%',
+    durationEffect: {
+      handler: multiplyCooldownCoefficient,
+      duration: duration(30, 'minutes'),
+      amount: 0.6,
+    },
+  },
+  {
+    element: 'silicon',
+    level: 'crysis',
+    message: 'В течение 30 минут снижает кулдаун каждой активации абилки на 40% Появилась зависимость.',
+    durationEffect: {
+      handler: multiplyCooldownCoefficient,
+      duration: duration(30, 'minutes'),
+      amount: 0.6,
     },
   },
 

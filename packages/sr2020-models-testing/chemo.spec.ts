@@ -15,7 +15,7 @@ describe('Chemo events', function() {
   });
 
   it('All effects are present', () => {
-    for (const element of ['opium', 'iodine', 'teqgel', 'argon', 'radium', 'junius', 'custodium', 'polonium']) {
+    for (const element of ['opium', 'iodine', 'teqgel', 'argon', 'radium', 'junius', 'custodium', 'polonium', 'silicon']) {
       for (const level of ['base', 'super', 'uber', 'crysis']) {
         const entry = kAllChemoEffects.find((it) => it.level == level && it.element == element);
         expect(entry).not.undefined();
