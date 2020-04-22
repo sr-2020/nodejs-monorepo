@@ -174,6 +174,46 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 
   {
+    element: 'custodium',
+    level: 'base',
+    message: 'Ускоряет восстановление Магии',
+    instantEffect: {
+      handler: reduceCurrentMagicFeedback,
+      amount: 1,
+    },
+  },
+
+  {
+    element: 'custodium',
+    level: 'uber',
+    message: 'Ускоряет восстановление Магии',
+    instantEffect: {
+      handler: reduceCurrentMagicFeedback,
+      amount: 3,
+    },
+  },
+
+  {
+    element: 'custodium',
+    level: 'super',
+    message: 'Ускоряет восстановление Магии',
+    instantEffect: {
+      handler: reduceCurrentMagicFeedback,
+      amount: 2,
+    },
+  },
+
+  {
+    element: 'custodium',
+    level: 'crysis',
+    message: 'Ускоряет восстановление Магии',
+    instantEffect: {
+      handler: reduceCurrentMagicFeedback,
+      amount: 2,
+    },
+  },
+
+  {
     element: 'iodine',
     level: 'base',
     message: 'Ты восстановил один хит.',
@@ -300,4 +340,10 @@ export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: M
 export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') return;
   healthStateTransition(api, 'healthy');
+}
+
+export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+  // TODO(https://trello.com/c/dmKERpbb/215-реализовать-реагенты-в-игре) Implement
+  // Ускоряет восстановление Магии, уменьшает время действия всех текущих штрафов
+  // на Магию на data.amount минут. Не может снизить ниже 30с.
 }
