@@ -52,10 +52,3 @@ export const kAllPills: Pill[] = [
   { id: 'yurgen', name: 'Юрген-П', content: { moscovium: 200, uranium: 60, barium: 40 } },
   { id: 'skrepa', name: 'Скрепа-П', content: { iconium: 200, moscovium: 60, uranium: 40 } },
 ];
-
-export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
-
-interface ChemoEffect {
-  element: keyof Concentrations;
-  level: ChemoLevel;
-}

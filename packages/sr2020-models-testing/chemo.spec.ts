@@ -1,6 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
+import { kAllChemoEffects } from '@sr2020/sr2020-models/scripts/character/chemo';
 
 describe('Chemo events', function() {
   let fixture: TestFixture;
@@ -11,6 +12,15 @@ describe('Chemo events', function() {
 
   afterEach(async () => {
     await fixture.destroy();
+  });
+
+  it('All effects are present', () => {
+    for (const element of ['opium']) {
+      for (const level of ['base', 'super', 'uber', 'crysis']) {
+        const entry = kAllChemoEffects.find((it) => it.level == level && it.element == element);
+        expect(entry).not.undefined();
+      }
+    }
   });
 
   it('Elements expiration', async () => {
@@ -42,6 +52,35 @@ describe('Chemo events', function() {
       // Now argon also goes away.
       const { workModel } = await fixture.getCharacter();
       expect(workModel.chemo.concentration).to.containDeep({ argon: 0, iodine: 0, junius: 0, custodium: 0 });
+    }
+  });
+
+  it('Multi opium', async () => {
+    await fixture.saveCharacter();
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
+      expect(workModel.mentalAttackBonus).to.equal(3);
+    }
+
+    await fixture.advanceTime(duration(15, 'minutes'));
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam' } });
+      expect(workModel.mentalAttackBonus).to.equal(5);
+    }
+
+    await fixture.advanceTime(duration(15, 'minutes'));
+
+    {
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.mentalAttackBonus).to.equal(5);
+    }
+
+    await fixture.advanceTime(duration(15, 'minutes'));
+
+    {
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.mentalAttackBonus).to.equal(0);
     }
   });
 });

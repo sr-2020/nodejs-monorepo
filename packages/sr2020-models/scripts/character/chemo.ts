@@ -3,8 +3,9 @@ import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration, Duration } from 'moment';
+import { increaseMentalAttack } from './basic_effects';
 
-type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
+export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
 interface InstantEffect {
   handler: (api: EventModelApi<Sr2020Character>, data: { amount: number }, event: Event) => void;
@@ -25,7 +26,48 @@ interface ChemoEffect {
   message: string;
 }
 
-const kAllChemoEffects: ChemoEffect[] = [];
+export const kAllChemoEffects: ChemoEffect[] = [
+  {
+    element: 'opium',
+    level: 'base',
+    durationEffect: {
+      handler: increaseMentalAttack,
+      amount: 3,
+      duration: duration(30, 'minutes'),
+    },
+    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию.',
+  },
+  {
+    element: 'opium',
+    level: 'uber',
+    durationEffect: {
+      handler: increaseMentalAttack,
+      amount: 10,
+      duration: duration(30, 'minutes'),
+    },
+    message: 'На 30 минут сильно увеличивает способности персонажа-менталиста к ментальному воздействию.',
+  },
+  {
+    element: 'opium',
+    level: 'super',
+    durationEffect: {
+      handler: increaseMentalAttack,
+      amount: 5,
+      duration: duration(30, 'minutes'),
+    },
+    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию.',
+  },
+  {
+    element: 'opium',
+    level: 'crysis',
+    durationEffect: {
+      handler: increaseMentalAttack,
+      amount: 5,
+      duration: duration(30, 'minutes'),
+    },
+    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию. Появилась зависимость.',
+  },
+];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
   // TODO(aeremin) Check for body type
