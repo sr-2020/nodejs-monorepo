@@ -13,19 +13,33 @@ describe('Chemo events', function() {
     await fixture.destroy();
   });
 
-  it('Go to the next level with side-effect', async () => {
+  it('Elements expiration', async () => {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'iodomarin' } });
       expect(workModel.chemo.concentration).to.containDeep({ argon: 0, iodine: 200, junius: 100, custodium: 100 });
     }
+
+    await fixture.advanceTime(duration(30, 'minutes'));
+
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'argo' } });
       expect(workModel.chemo.concentration).to.containDeep({ argon: 200, iodine: 300, junius: 200, custodium: 100 });
     }
 
-    await fixture.advanceTime(duration(1, 'hour'));
+    await fixture.advanceTime(duration(30, 'minutes'));
+
     {
+      // It was just 30 minutes from the last iodine, junius and custodium intake, but 1h from the first - so they will be removed.
+      // But argon must stay.
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.chemo.concentration).to.containDeep({ argon: 200, iodine: 0, junius: 0, custodium: 0 });
+    }
+
+    await fixture.advanceTime(duration(30, 'minutes'));
+
+    {
+      // Now argon also goes away.
       const { workModel } = await fixture.getCharacter();
       expect(workModel.chemo.concentration).to.containDeep({ argon: 0, iodine: 0, junius: 0, custodium: 0 });
     }

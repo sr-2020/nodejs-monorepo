@@ -1,5 +1,5 @@
 import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration } from 'moment';
@@ -10,7 +10,16 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
   if (!pill) {
     throw new UserVisibleError('Такого препарата не существует');
   }
-  addTemporaryModifier(api, modifierFromEffect(increaseConcentration, { concentrations: pill.content }), duration(1, 'hour'));
+  for (const element in pill.content) {
+    const amount = pill.content[element];
+    const modifierClass = `${element}-concentration`;
+    const mods = api.getModifiersByClass(modifierClass);
+    if (mods.length) {
+      mods[0].amount += amount;
+    } else {
+      addTemporaryModifier(api, modifierFromEffect(increaseConcentration, { element, amount }, modifierClass), duration(1, 'hour'));
+    }
+  }
   api.sendSelfEvent(checkConcentrations, {});
 }
 
@@ -20,8 +29,5 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
 }
 
 export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  const concentrations: Concentrations = m.concentrations;
-  for (const element in concentrations) {
-    api.model.chemo.concentration[element] += concentrations[element];
-  }
+  api.model.chemo.concentration[m.element] += m.amount;
 }
