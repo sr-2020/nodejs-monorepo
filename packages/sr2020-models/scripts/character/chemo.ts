@@ -3,7 +3,7 @@ import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration, Duration } from 'moment';
-import { increaseMentalAttack, increaseCharisma } from './basic_effects';
+import { increaseMentalAttack, increaseCharisma, increaseIntelligence, increaseResonance } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
@@ -88,6 +88,88 @@ export const kAllChemoEffects: ChemoEffect[] = [
       handler: increaseCharisma,
       amount: 1,
       duration: duration(30, 'minutes'),
+    },
+  },
+
+  {
+    element: 'radium',
+    level: 'base',
+    message: 'У тебя повысился Интеллект на 30 минут',
+    durationEffect: {
+      handler: increaseIntelligence,
+      amount: 1,
+      duration: duration(30, 'minutes'),
+    },
+  },
+  {
+    element: 'radium',
+    level: 'uber',
+    message: 'У тебя сильно повысился Интеллект на 60 минут',
+    durationEffect: {
+      handler: increaseIntelligence,
+      amount: 3,
+      duration: duration(60, 'minutes'),
+    },
+  },
+  {
+    element: 'radium',
+    level: 'super',
+    message: 'У тебя повысился Интеллект на 60 минут',
+    durationEffect: {
+      handler: increaseIntelligence,
+      amount: 1,
+      duration: duration(60, 'minutes'),
+    },
+  },
+  {
+    element: 'radium',
+    level: 'crysis',
+    message: 'У тебя повысился Интеллект на 60 минут, появилась зависимость',
+    durationEffect: {
+      handler: increaseIntelligence,
+      amount: 1,
+      duration: duration(60, 'minutes'),
+    },
+  },
+
+  {
+    element: 'junius',
+    level: 'base',
+    message: 'У тебя повысился Резонанс на 30 минут',
+    durationEffect: {
+      handler: increaseResonance,
+      amount: 1,
+      duration: duration(30, 'minutes'),
+    },
+  },
+  {
+    element: 'junius',
+    level: 'uber',
+    message: 'У тебя сильно повысился Резонанс на 60 минут',
+    durationEffect: {
+      handler: increaseResonance,
+      amount: 3,
+      duration: duration(60, 'minutes'),
+    },
+  },
+  {
+    element: 'junius',
+    level: 'super',
+    message: 'У тебя повысился Резонанс на 60 минут',
+    durationEffect: {
+      handler: increaseResonance,
+      amount: 1,
+      duration: duration(60, 'minutes'),
+    },
+  },
+  {
+    element: 'junius',
+    level: 'crysis',
+    message: 'У тебя повысился Резонанс на 60 минут, появилась зависимость',
+    durationEffect: {
+      handler: increaseResonance,
+      amount: 1,
+      duration: duration(60, 'minutes'),
     },
   },
 
