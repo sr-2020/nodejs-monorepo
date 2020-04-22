@@ -3,7 +3,7 @@ import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { duration, Duration } from 'moment';
-import { increaseMentalAttack } from './basic_effects';
+import { increaseMentalAttack, increaseCharisma } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
@@ -49,6 +49,48 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'crysis',
     message: 'TODO',
   },
+
+  {
+    element: 'argon',
+    level: 'base',
+    message: 'У тебя увеличилась Харизма на 10 минут.',
+    durationEffect: {
+      handler: increaseCharisma,
+      amount: 1,
+      duration: duration(10, 'minutes'),
+    },
+  },
+  {
+    element: 'argon',
+    level: 'uber',
+    message: 'У тебя очень сильно увеличилась Харизма на 60 минут.',
+    durationEffect: {
+      handler: increaseCharisma,
+      amount: 2,
+      duration: duration(60, 'minutes'),
+    },
+  },
+  {
+    element: 'argon',
+    level: 'super',
+    message: 'У тебя увеличилась Харизма на 30 минут.',
+    durationEffect: {
+      handler: increaseCharisma,
+      amount: 1,
+      duration: duration(30, 'minutes'),
+    },
+  },
+  {
+    element: 'argon',
+    level: 'crysis',
+    message: 'У тебя увеличилась Харизма на 30 минут. Появилась зависимость.',
+    durationEffect: {
+      handler: increaseCharisma,
+      amount: 1,
+      duration: duration(30, 'minutes'),
+    },
+  },
+
   {
     element: 'iodine',
     level: 'base',
