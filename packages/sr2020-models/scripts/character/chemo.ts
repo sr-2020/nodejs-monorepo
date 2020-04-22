@@ -28,6 +28,27 @@ interface ChemoEffect {
 }
 
 export const kAllChemoEffects: ChemoEffect[] = [
+  // TODO(aeremin): Implement teqgel.
+  {
+    element: 'teqgel',
+    level: 'base',
+    message: 'TODO',
+  },
+  {
+    element: 'teqgel',
+    level: 'uber',
+    message: 'TODO',
+  },
+  {
+    element: 'teqgel',
+    level: 'super',
+    message: 'TODO',
+  },
+  {
+    element: 'teqgel',
+    level: 'crysis',
+    message: 'TODO',
+  },
   {
     element: 'iodine',
     level: 'base',
