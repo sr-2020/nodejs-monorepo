@@ -34,6 +34,21 @@ interface ChemoEffect {
   message: string;
 }
 
+export const kAllElements: Array<keyof Concentrations> = [
+  'iodine',
+  'teqgel',
+  'argon',
+  'radium',
+  'junius',
+  'custodium',
+  'polonium',
+  'silicon',
+  'magnium',
+  'chromium',
+  'opium',
+  'elba',
+];
+
 export const kAllChemoEffects: ChemoEffect[] = [
   // TODO(aeremin): Implement teqgel.
   {
@@ -447,6 +462,43 @@ export const kAllChemoEffects: ChemoEffect[] = [
     },
     message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию. Появилась зависимость.',
   },
+
+  {
+    element: 'elba',
+    level: 'base',
+    message: 'Полностью снимает все эффекты от химии и обнуляет концентрацию других веществ в теле, минус 1 хит на полчаса.',
+    instantEffect: {
+      handler: cleanAllСhemo,
+      amount: 0,
+    },
+  },
+  {
+    element: 'elba',
+    level: 'uber',
+    message: 'Снимает все зависимости (в том числе от самой себя)',
+    instantEffect: {
+      handler: cleanAddictions,
+      amount: 1,
+    },
+  },
+  {
+    element: 'elba',
+    level: 'super',
+    message: 'Снимает зависимость (кроме себя самой)',
+    instantEffect: {
+      handler: cleanAddictions,
+      amount: 0,
+    },
+  },
+  {
+    element: 'elba',
+    level: 'crysis',
+    message: 'Снимает зависимость (кроме себя самой), Появилась зависимость',
+    instantEffect: {
+      handler: cleanAddictions,
+      amount: 0,
+    },
+  },
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
@@ -547,5 +599,20 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier)
 export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
   for (const ability of api.model.activeAbilities) {
     ability.cooldownUntil -= duration(ability.cooldownMinutes, 'minutes').asMilliseconds() * data.amount;
+  }
+}
+
+export function cleanAllСhemo(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+  for (const element of kAllElements) {
+    const mods = [...api.getModifiersByClass(`${element}-effect`), ...api.getModifiersByClass(`${element}-concentration`)];
+    for (const m of mods) api.removeModifier(m.mID);
+  }
+}
+
+export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+  const addictionsToCure = kAllElements.filter((element) => element != 'elba' || data.amount == 1);
+  for (const element of addictionsToCure) {
+    // TODO(aeremin): Implement addictions curing
+    api.debug(`TODO: Cure addiction to ${element}`);
   }
 }

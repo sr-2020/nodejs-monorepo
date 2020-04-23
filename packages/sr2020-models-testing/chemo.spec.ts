@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
-import { kAllChemoEffects } from '@sr2020/sr2020-models/scripts/character/chemo';
+import { kAllChemoEffects, kAllElements } from '@sr2020/sr2020-models/scripts/character/chemo';
 
 describe('Chemo events', function() {
   let fixture: TestFixture;
@@ -15,23 +15,17 @@ describe('Chemo events', function() {
   });
 
   it('All effects are present', () => {
-    for (const element of [
-      'opium',
-      'iodine',
-      'teqgel',
-      'argon',
-      'radium',
-      'junius',
-      'custodium',
-      'polonium',
-      'silicon',
-      'magnium',
-      'chromium',
-    ]) {
+    for (const element of kAllElements) {
       for (const level of ['base', 'super', 'uber', 'crysis']) {
         const entry = kAllChemoEffects.find((it) => it.level == level && it.element == element);
         expect(entry).not.undefined();
       }
+    }
+  });
+
+  it('All elements are present', () => {
+    for (const effect of kAllChemoEffects) {
+      expect(kAllElements.includes(effect.element)).to.be.true();
     }
   });
 
@@ -106,6 +100,22 @@ describe('Chemo events', function() {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
       expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 700);
+    }
+  });
+
+  // TODO(aeremin) Add test for addiction cure.
+  it('Opium + Elba', async () => {
+    await fixture.saveCharacter();
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
+      expect(workModel.mentalAttackBonus).to.equal(3);
+      expect(workModel.chemo.concentration).to.containDeep({ opium: 200, polonium: 100, argon: 80 });
+    }
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'activated-coal' } });
+      expect(workModel.mentalAttackBonus).to.equal(0);
+      expect(workModel.chemo.concentration).to.containDeep({ opium: 0, polonium: 0, argon: 0 });
     }
   });
 });
