@@ -47,6 +47,7 @@ export const kAllElements: Array<keyof Concentrations> = [
   'chromium',
   'opium',
   'elba',
+  'barium',
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
@@ -499,6 +500,47 @@ export const kAllChemoEffects: ChemoEffect[] = [
       amount: 0,
     },
   },
+
+  {
+    element: 'barium',
+    level: 'base',
+    message: 'Позволяет использовать автоматическое оружие без кибер-рук 15 минут.',
+    durationEffect: {
+      handler: automaticWeaponsEffect,
+      duration: duration(15, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'barium',
+    level: 'uber',
+    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 1 час',
+    durationEffect: {
+      handler: automaticWeaponsEffect,
+      duration: duration(1, 'hour'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'barium',
+    level: 'super',
+    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 30 минут',
+    durationEffect: {
+      handler: automaticWeaponsEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'barium',
+    level: 'crysis',
+    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 30 минут. Появилась зависимость.',
+    durationEffect: {
+      handler: automaticWeaponsEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
+  },
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
@@ -606,6 +648,15 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier)
     description:
       'Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран".',
     id: 'berserk-chemo',
+    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+  });
+}
+
+export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    name: 'Автоматическое оружие',
+    description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
+    id: 'automatic-weapons-chemo',
     validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
   });
 }
