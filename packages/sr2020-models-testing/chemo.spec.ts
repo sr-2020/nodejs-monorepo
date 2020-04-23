@@ -15,7 +15,19 @@ describe('Chemo events', function() {
   });
 
   it('All effects are present', () => {
-    for (const element of ['opium', 'iodine', 'teqgel', 'argon', 'radium', 'junius', 'custodium', 'polonium', 'silicon', 'magnium']) {
+    for (const element of [
+      'opium',
+      'iodine',
+      'teqgel',
+      'argon',
+      'radium',
+      'junius',
+      'custodium',
+      'polonium',
+      'silicon',
+      'magnium',
+      'chromium',
+    ]) {
       for (const level of ['base', 'super', 'uber', 'crysis']) {
         const entry = kAllChemoEffects.find((it) => it.level == level && it.element == element);
         expect(entry).not.undefined();
@@ -81,6 +93,19 @@ describe('Chemo events', function() {
     {
       const { workModel } = await fixture.getCharacter();
       expect(workModel.mentalAttackBonus).to.equal(0);
+    }
+  });
+
+  it('Chromium', async () => {
+    await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'i-dont-trust-anybody' } });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
+    }
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
+      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 700);
     }
   });
 });

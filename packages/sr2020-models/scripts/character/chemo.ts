@@ -371,6 +371,43 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 
   {
+    element: 'chromium',
+    level: 'base',
+    message: 'Единоразово сокращает все активные кулдауны способностей ',
+    instantEffect: {
+      handler: reduceCooldowns,
+      amount: 0.3,
+    },
+  },
+  {
+    element: 'chromium',
+    level: 'uber',
+    message: 'Единоразово очень сильно сокращает все активные кулдауны способностей',
+    instantEffect: {
+      handler: reduceCooldowns,
+      amount: 0.7,
+    },
+  },
+  {
+    element: 'chromium',
+    level: 'super',
+    message: 'Единоразово сильно сокращает все активные кулдауны способностей.',
+    instantEffect: {
+      handler: reduceCooldowns,
+      amount: 0.5,
+    },
+  },
+  {
+    element: 'chromium',
+    level: 'crysis',
+    message: 'Единоразово сильно сокращает все активные кулдауны способностей. Появилась зависимость.',
+    instantEffect: {
+      handler: reduceCooldowns,
+      amount: 0.5,
+    },
+  },
+
+  {
     element: 'opium',
     level: 'base',
     durationEffect: {
@@ -505,4 +542,10 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier)
     id: 'berserk-chemo',
     validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
   });
+}
+
+export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+  for (const ability of api.model.activeAbilities) {
+    ability.cooldownUntil -= duration(ability.cooldownMinutes, 'minutes').asMilliseconds() * data.amount;
+  }
 }
