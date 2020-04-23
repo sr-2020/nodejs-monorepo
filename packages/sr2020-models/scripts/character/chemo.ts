@@ -1,7 +1,7 @@
 import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
-import { addTemporaryModifier, modifierFromEffect, validUntil } from './util';
+import { addTemporaryModifier, modifierFromEffect, validUntil, addHistoryRecord } from './util';
 import { duration, Duration } from 'moment';
 import {
   increaseMentalAttack,
@@ -521,6 +521,8 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
 }
 
 export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }, _: Event) {
+  let effectsCount = 0;
+  let effectMessage = '';
   for (const element in data.concentrations) {
     let level: ChemoLevel | undefined = undefined;
     if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.crysisThreshold) {
@@ -536,6 +538,10 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
 
     const effect = kAllChemoEffects.find((it) => it.level == level && it.element == element);
     if (!effect) continue;
+
+    effectsCount += 1;
+    addHistoryRecord(api, 'Химия', effect.message, effect.message);
+    effectMessage = effect.message;
 
     if (effect.instantEffect) {
       api.sendSelfEvent(effect.instantEffect.handler, { amount: effect.instantEffect.amount });
@@ -557,6 +563,14 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
         ),
         effect.durationEffect.duration,
       );
+    }
+  }
+
+  if (effectsCount > 0) {
+    if (effectsCount == 1) {
+      api.sendNotification('Химия', effectMessage);
+    } else {
+      api.sendNotification('Химия', `Вы чувствуете ${effectsCount} эффекта от химии. Подробности по каждому смотрите на экране истории.`);
     }
   }
   // TODO(aeremin) Implement addictions
