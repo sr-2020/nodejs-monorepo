@@ -9,6 +9,7 @@ import {
   increaseIntelligence,
   increaseResonance,
   multiplyCooldownCoefficient,
+  increaseMentalAttackAndProtection,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
@@ -325,6 +326,48 @@ export const kAllChemoEffects: ChemoEffect[] = [
       duration: duration(30, 'minutes'),
       amount: 0.6,
     },
+  },
+
+  {
+    element: 'magnium',
+    level: 'base',
+    durationEffect: {
+      handler: increaseMentalAttackAndProtection,
+      amount: 8,
+      duration: duration(30, 'minutes'),
+    },
+    message: 'Увеличивает силу воздействия: в течение 30 минут увеличивает на 8 единиц  ментальную атаку и ментальную защиту персонажа.',
+  },
+  {
+    element: 'magnium',
+    level: 'uber',
+    durationEffect: {
+      handler: increaseMentalAttackAndProtection,
+      amount: 16,
+      duration: duration(60, 'minutes'),
+    },
+    message: 'Увеличивает силу воздействия: в течение 60 минут увеличивает на 16 единиц ментальную атаку и ментальную защиту персонажа.',
+  },
+  {
+    element: 'magnium',
+    level: 'super',
+    durationEffect: {
+      handler: increaseMentalAttackAndProtection,
+      amount: 8,
+      duration: duration(60, 'minutes'),
+    },
+    message: 'Увеличивает силу воздействия: в течение 60 минут увеличивает на 8 единиц  ментальную атаку и ментальную защиту персонажа.',
+  },
+  {
+    element: 'magnium',
+    level: 'crysis',
+    durationEffect: {
+      handler: increaseMentalAttackAndProtection,
+      amount: 8,
+      duration: duration(60, 'minutes'),
+    },
+    message:
+      'Увеличивает силу воздействия: в течение 60 минут увеличивает на 8 единиц  ментальную атаку и ментальную защиту персонажа Появилась зависимость.',
   },
 
   {

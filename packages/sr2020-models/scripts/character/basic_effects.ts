@@ -245,6 +245,11 @@ export function increaseMentalAttack(api: EffectModelApi<Sr2020Character>, m: Mo
   api.model.mentalAttackBonus += m.amount;
 }
 
+export function increaseMentalAttackAndProtection(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  increaseMentalAttack(api, m);
+  increaseMentalProtection(api, m);
+}
+
 export function increaseMaxDroneDifficulty(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.drones.maxDifficulty += m.amount;
   api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
