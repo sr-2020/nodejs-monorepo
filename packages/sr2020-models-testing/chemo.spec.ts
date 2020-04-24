@@ -161,6 +161,19 @@ describe('Chemo events', function() {
     });
   });
 
+  it('Dropping to 0 max hp', async () => {
+    await fixture.saveCharacter({ maxHp: 1 });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+
+    await fixture.advanceTime(duration(4, 'hours'));
+
+    expect((await fixture.getCharacter()).workModel).containDeep({
+      maxHp: 0,
+      healthState: 'clinically_dead',
+    });
+  });
+
   it('Addiction to silicon cured by elba', async () => {
     await fixture.saveCharacter({ maxHp: 2, resonance: 3, body: 2, charisma: 4, intelligence: 5, magic: 1 });
     await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });

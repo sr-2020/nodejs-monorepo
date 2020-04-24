@@ -29,6 +29,12 @@ export function clinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _:
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
 }
 
+export function clinicalDeath0MaxHp(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.model.healthState == 'biologically_dead') return;
+  healthStateTransition(api, 'clinically_dead');
+  sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
+}
+
 export function clinicalDeathOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), clinicalDeath, {});
 }

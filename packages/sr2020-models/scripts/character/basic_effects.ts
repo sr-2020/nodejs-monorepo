@@ -8,6 +8,12 @@ import { Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-e
 export function increaseMaxHp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.maxHp += m.amount;
   api.model.maxHp = clamp(api.model.maxHp, 0, 6);
+  // Checking for healthState here to prevent infinite loop
+  // (sending event leads to effect being re-applied leading to event send)
+  if (api.model.maxHp == 0 && api.model.healthState != 'clinically_dead') {
+    // Sending as string to prevent circular dependency.
+    api.sendSelfEvent('clinicalDeath0MaxHp', {});
+  }
 }
 
 export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: Modifier) {
