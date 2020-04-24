@@ -51,6 +51,7 @@ export const kAllElements: Array<keyof Concentrations> = [
   'barium',
   'uranium',
   'moscovium',
+  'iconium',
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
@@ -618,6 +619,47 @@ export const kAllChemoEffects: ChemoEffect[] = [
       amount: 2,
     },
   },
+
+  {
+    element: 'iconium',
+    level: 'base',
+    message: 'Персонаж может использовать тяжёлое оружие 15 минут',
+    durationEffect: {
+      handler: heavyWeaponsEffect,
+      duration: duration(15, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'iconium',
+    level: 'uber',
+    message: 'Персонаж может использовать тяжёлое оружие 1 час',
+    durationEffect: {
+      handler: heavyWeaponsEffect,
+      duration: duration(1, 'hour'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'iconium',
+    level: 'super',
+    message: 'Персонаж может использовать тяжёлое оружие 30 минут',
+    durationEffect: {
+      handler: heavyWeaponsEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'iconium',
+    level: 'crysis',
+    message: 'Персонаж может использовать тяжёлое оружие 30 минут, Появилась зависимость',
+    durationEffect: {
+      handler: heavyWeaponsEffect,
+      duration: duration(30, 'minutes'),
+      amount: 0,
+    },
+  },
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
@@ -734,6 +776,15 @@ export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: 
     name: 'Автоматическое оружие',
     description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
     id: 'automatic-weapons-chemo',
+    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+  });
+}
+
+export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    name: 'Тяжелое оружие',
+    description: 'Позволяет использовать тяжелое оружие.',
+    id: 'heavy-weapons-chemo',
     validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
   });
 }
