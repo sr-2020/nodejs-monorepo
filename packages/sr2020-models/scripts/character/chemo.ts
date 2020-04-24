@@ -668,7 +668,7 @@ export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amo
 }
 
 export function cleanAllСhemo(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
-  for (const element of kAllElements) {
+  for (const element of kAllElements.filter((it) => it != 'elba')) {
     const mods = [...api.getModifiersByClass(`${element}-effect`), ...api.getModifiersByClass(`${element}-concentration`)];
     for (const m of mods) api.removeModifier(m.mID);
   }
