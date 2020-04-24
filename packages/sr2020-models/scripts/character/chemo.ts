@@ -48,6 +48,7 @@ export const kAllElements: Array<keyof Concentrations> = [
   'opium',
   'elba',
   'barium',
+  'uranium',
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
@@ -541,6 +542,39 @@ export const kAllChemoEffects: ChemoEffect[] = [
       amount: 0,
     },
   },
+
+  {
+    element: 'uranium',
+    level: 'base',
+    message: 'Мгновенно восстанавливает все потерянные хиты, если персонаж не в тяжране.',
+  },
+  {
+    element: 'uranium',
+    level: 'uber',
+    message: 'Вылечивает статус клиническая смерть.',
+    instantEffect: {
+      handler: uranusRecoverFromClinicalDeath,
+      amount: 0,
+    },
+  },
+  {
+    element: 'uranium',
+    level: 'super',
+    message: 'Вылечивает статус тяжёлое ранение.',
+    instantEffect: {
+      handler: uranusRecoverFromWounded,
+      amount: 0,
+    },
+  },
+  {
+    element: 'uranium',
+    level: 'crysis',
+    message: 'Персонаж переходит в статус абсолютная смерть.',
+    instantEffect: {
+      handler: uranusKill,
+      amount: 0,
+    },
+  },
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
@@ -680,4 +714,20 @@ export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amo
     // TODO(aeremin): Implement addictions curing
     api.debug(`TODO: Cure addiction to ${element}`);
   }
+}
+
+export function uranusRecoverFromClinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.workModel.healthState != 'biologically_dead') {
+    healthStateTransition(api, 'healthy');
+  }
+}
+
+export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.workModel.healthState == 'wounded') {
+    healthStateTransition(api, 'healthy');
+  }
+}
+
+export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  healthStateTransition(api, 'biologically_dead');
 }
