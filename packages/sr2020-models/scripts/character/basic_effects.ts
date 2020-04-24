@@ -10,6 +10,14 @@ export function increaseMaxHp(api: EffectModelApi<Sr2020Character>, m: Modifier)
   api.model.maxHp = clamp(api.model.maxHp, 0, 6);
 }
 
+export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  increaseResonance(api, m);
+  increaseIntelligence(api, m);
+  increaseCharisma(api, m);
+  increaseMagic(api, m);
+  increaseBody(api, m);
+}
+
 export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.charisma += m.amount;
   api.model.charisma = clamp(api.model.charisma, 0, 10);

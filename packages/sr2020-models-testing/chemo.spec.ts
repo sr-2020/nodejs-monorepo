@@ -118,4 +118,46 @@ describe('Chemo events', function() {
       expect(workModel.chemo.concentration).to.containDeep({ opium: 0, polonium: 0, argon: 0, elba: 200, iconium: 0, moscovium: 0 });
     }
   });
+
+  it('Addiction to silicon', async () => {
+    await fixture.saveCharacter({ maxHp: 2, resonance: 3, body: 2, charisma: 4, intelligence: 5, magic: 1 });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+
+    await fixture.advanceTime(duration(2, 'hours'));
+
+    expect((await fixture.getCharacter()).workModel).containDeep({
+      maxHp: 2,
+      resonance: 2,
+      body: 1,
+      charisma: 3,
+      intelligence: 4,
+      magic: 0,
+      healthState: 'healthy',
+    });
+
+    await fixture.advanceTime(duration(2, 'hours'));
+
+    expect((await fixture.getCharacter()).workModel).containDeep({
+      maxHp: 1,
+      resonance: 2,
+      body: 1,
+      charisma: 3,
+      intelligence: 4,
+      magic: 0,
+      healthState: 'healthy',
+    });
+
+    await fixture.advanceTime(duration(4, 'hours'));
+
+    expect((await fixture.getCharacter()).workModel).containDeep({
+      maxHp: 1,
+      resonance: 2,
+      body: 1,
+      charisma: 3,
+      intelligence: 4,
+      magic: 0,
+      healthState: 'clinically_dead',
+    });
+  });
 });

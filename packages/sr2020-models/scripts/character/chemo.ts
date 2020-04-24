@@ -1,7 +1,7 @@
 import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
-import { addTemporaryModifier, modifierFromEffect, validUntil, addHistoryRecord } from './util';
+import { addTemporaryModifier, modifierFromEffect, validUntil, addHistoryRecord, sendNotificationAndHistoryRecord } from './util';
 import { duration, Duration } from 'moment';
 import {
   increaseMentalAttack,
@@ -11,6 +11,9 @@ import {
   multiplyCooldownCoefficient,
   increaseMentalAttackAndProtection,
   increaseMaxHp,
+  increaseMagic,
+  increaseBody,
+  increaseAllBaseStats,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
@@ -726,7 +729,8 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
 export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }, _: Event) {
   let effectsCount = 0;
   let effectMessage = '';
-  for (const element in data.concentrations) {
+  for (const element of kAllElements) {
+    if (!data.concentrations[element]) continue;
     let level: ChemoLevel | undefined = undefined;
     if (api.workModel.chemo.concentration[element] >= api.workModel.chemo.crysisThreshold) {
       level = 'crysis';
@@ -741,6 +745,11 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
 
     const effect = kAllChemoEffects.find((it) => it.level == level && it.element == element);
     if (!effect) continue;
+
+    resetAddiction(api, element);
+    if (level == 'crysis') {
+      addAddiction(api, element);
+    }
 
     effectsCount += 1;
     addHistoryRecord(api, 'Химия', effect.message, effect.message);
@@ -776,7 +785,6 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
       api.sendNotification('Химия', `Вы чувствуете ${effectsCount} эффекта от химии. Подробности по каждому смотрите на экране истории.`);
     }
   }
-  // TODO(aeremin) Implement addictions
 }
 
 export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -875,4 +883,79 @@ export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, _d
 
 export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   healthStateTransition(api, 'biologically_dead');
+}
+
+interface Addiction extends Modifier {
+  stage: number;
+  amount: -1;
+}
+
+function createAddiction(element: keyof Concentrations): Addiction {
+  return {
+    mID: `${element}-addiction`,
+    class: `${element}-addiction`,
+    enabled: true,
+    stage: 0,
+    effects: [
+      { enabled: false, handler: increaseAllBaseStats.name, type: 'normal' },
+      { enabled: false, handler: increaseMaxHp.name, type: 'normal' },
+    ],
+    amount: -1,
+  };
+}
+
+function addictionTimerName(element: keyof Concentrations) {
+  return `${element}-addiction-timer`;
+}
+
+function hasAddiction(api, element: keyof Concentrations): boolean {
+  return api.getModifierById(`${element}-addiction`);
+}
+
+function addAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
+  if (!hasAddiction(api, element)) {
+    api.addModifier(createAddiction(element));
+    api.setTimer(addictionTimerName(element), duration(1, 'hour'), advanceAddiction, { element });
+  }
+}
+
+function removeAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
+  api.removeModifier(`${element}-addiction`);
+  api.removeTimer(addictionTimerName(element));
+}
+
+export function resetAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
+  if (hasAddiction(api, element)) {
+    removeAddiction(api, element);
+    addAddiction(api, element);
+  }
+}
+
+export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { element: keyof Concentrations }, _: Event) {
+  const m = api.getModifierById(`${data.element}-addiction`);
+  if (!m) return;
+  const addiction = m as Addiction;
+  addiction.stage += 1;
+  if (addiction.stage == 1) {
+    sendNotificationAndHistoryRecord(
+      api,
+      'Зависимость',
+      'Тебя крючит, хочется дозу. Садись (при возможности ложись), и пять минут активно ненавидь всех окружающих. Говори им гадости, страдай.',
+    );
+    api.setTimer(addictionTimerName(data.element), duration(1, 'hour'), advanceAddiction, data);
+  } else if (addiction.stage == 2) {
+    sendNotificationAndHistoryRecord(api, 'Зависимость', 'Базовые параметры персонажа уменьшились.');
+    addiction.effects[0].enabled = true;
+    api.setTimer(addictionTimerName(data.element), duration(2, 'hour'), advanceAddiction, data);
+  } else if (addiction.stage == 3) {
+    sendNotificationAndHistoryRecord(api, 'Зависимость', 'Максимальные хиты уменьшились.');
+    addiction.effects[1].enabled = true;
+    api.setTimer(addictionTimerName(data.element), duration(4, 'hour'), advanceAddiction, data);
+  } else if (addiction.stage == 4) {
+    if (api.workModel.healthState != 'biologically_dead') {
+      healthStateTransition(api, 'clinically_dead');
+    }
+  } else {
+    api.error(`Incorrect addiction stage: ${addiction.stage}`);
+  }
 }
