@@ -4,7 +4,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
-import { EntityManager, Transaction, TransactionManager, getManager } from 'typeorm';
+import { EntityManager, Transaction, TransactionManager, getManager, getRepository } from 'typeorm';
 import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
@@ -28,6 +28,36 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     protected pubSubService: PubSubService,
   ) {
     super(Sr2020Character, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
+  }
+
+  @get('/character/update_all', {
+    responses: {
+      '200': {
+        description: 'Transaction PUT success',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                count: { type: 'number' },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async updateAll(): Promise<{ count: number }> {
+    const characters = await getRepository(Sr2020Character)
+      .createQueryBuilder()
+      .getMany();
+    for (const character of characters) {
+      await getManager().transaction(async (transactionManager) => {
+        await this.get(Number(character.modelId), transactionManager);
+      });
+    }
+
+    return { count: characters.length };
   }
 
   @put('/character/model', {
