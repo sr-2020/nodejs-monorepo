@@ -11,8 +11,6 @@ import {
   multiplyCooldownCoefficient,
   increaseMentalAttackAndProtection,
   increaseMaxHp,
-  increaseMagic,
-  increaseBody,
   increaseAllBaseStats,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
