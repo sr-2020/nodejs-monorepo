@@ -921,7 +921,11 @@ function removeAddiction(api: EventModelApi<Sr2020Character>, element: keyof Con
   api.removeTimer(addictionTimerName(element));
 }
 
-export function resetAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
+export function resetAllAddictions(api: EventModelApi<Sr2020Character>) {
+  for (const element of kAllElements) resetAddiction(api, element);
+}
+
+function resetAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
   if (hasAddiction(api, element)) {
     removeAddiction(api, element);
     addAddiction(api, element);

@@ -4,6 +4,7 @@ import { Event, EventModelApi, EffectModelApi, Modifier, UserVisibleError } from
 import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
 import { FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
+import { resetAllAddictions } from './chemo';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
@@ -85,6 +86,10 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
     if (hasEnabledIWillSurvive(api)) {
       api.setTimer(kIWillSurviveReviveTimerName, kIWillSurviveReviveTimerTime, iWillSurviveRevive, {});
     }
+  }
+
+  if (stateFrom == 'biologically_dead' || stateFrom == 'clinically_dead') {
+    resetAllAddictions(api);
   }
 
   api.model.healthState = stateTo;
