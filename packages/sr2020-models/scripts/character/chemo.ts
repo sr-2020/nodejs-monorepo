@@ -52,6 +52,7 @@ export const kAllElements: Array<keyof Concentrations> = [
   'uranium',
   'moscovium',
   'iconium',
+  'vampirium',
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
@@ -660,6 +661,47 @@ export const kAllChemoEffects: ChemoEffect[] = [
       amount: 0,
     },
   },
+
+  {
+    element: 'vampirium',
+    level: 'base',
+    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    durationEffect: {
+      handler: vampiriumEffect,
+      duration: duration(10, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'vampirium',
+    level: 'uber',
+    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    durationEffect: {
+      handler: vampiriumEffect,
+      duration: duration(10, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'vampirium',
+    level: 'super',
+    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    durationEffect: {
+      handler: vampiriumEffect,
+      duration: duration(10, 'minutes'),
+      amount: 0,
+    },
+  },
+  {
+    element: 'vampirium',
+    level: 'crysis',
+    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    durationEffect: {
+      handler: vampiriumEffect,
+      duration: duration(10, 'minutes'),
+      amount: 0,
+    },
+  },
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
@@ -785,6 +827,15 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modi
     name: 'Тяжелое оружие',
     description: 'Позволяет использовать тяжелое оружие.',
     id: 'heavy-weapons-chemo',
+    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+  });
+}
+
+export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    name: 'Эйфория',
+    description: 'Вы пребываете в состоянии странной эйфории',
+    id: 'vampirium-bite-chemo',
     validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
   });
 }
