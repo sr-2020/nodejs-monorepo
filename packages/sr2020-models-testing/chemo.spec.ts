@@ -160,4 +160,25 @@ describe('Chemo events', function() {
       healthState: 'clinically_dead',
     });
   });
+
+  it('Addiction to silicon cured by elba', async () => {
+    await fixture.saveCharacter({ maxHp: 2, resonance: 3, body: 2, charisma: 4, intelligence: 5, magic: 1 });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam-p' } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'coal-p' } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'preper' } });
+
+    for (let i = 0; i < 10; ++i) {
+      await fixture.advanceTime(duration(1, 'hour'));
+      expect((await fixture.getCharacter()).workModel).containDeep({
+        maxHp: 2,
+        resonance: 3,
+        body: 2,
+        charisma: 4,
+        intelligence: 5,
+        magic: 1,
+        healthState: 'healthy',
+      });
+    }
+  });
 });

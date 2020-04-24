@@ -864,8 +864,7 @@ export function cleanAllСhemo(api: EventModelApi<Sr2020Character>, data: { amou
 export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
   const addictionsToCure = kAllElements.filter((element) => element != 'elba' || data.amount == 1);
   for (const element of addictionsToCure) {
-    // TODO(aeremin): Implement addictions curing
-    api.debug(`TODO: Cure addiction to ${element}`);
+    removeAddiction(api, element);
   }
 }
 
