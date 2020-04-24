@@ -115,7 +115,7 @@ describe('Chemo events', function() {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'activated-coal' } });
       expect(workModel.mentalAttackBonus).to.equal(0);
-      expect(workModel.chemo.concentration).to.containDeep({ opium: 0, polonium: 0, argon: 0, elba: 200 /*, iconium: 0, moscovium: 0 */ });
+      expect(workModel.chemo.concentration).to.containDeep({ opium: 0, polonium: 0, argon: 0, elba: 200 /*, iconium: 0 */, moscovium: 0 });
     }
   });
 });

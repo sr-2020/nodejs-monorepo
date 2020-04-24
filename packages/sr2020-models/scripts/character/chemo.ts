@@ -10,6 +10,7 @@ import {
   increaseResonance,
   multiplyCooldownCoefficient,
   increaseMentalAttackAndProtection,
+  increaseMaxHp,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 
@@ -49,6 +50,7 @@ export const kAllElements: Array<keyof Concentrations> = [
   'elba',
   'barium',
   'uranium',
+  'moscovium',
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
@@ -573,6 +575,47 @@ export const kAllChemoEffects: ChemoEffect[] = [
     instantEffect: {
       handler: uranusKill,
       amount: 0,
+    },
+  },
+
+  {
+    element: 'moscovium',
+    level: 'base',
+    message: 'Добавляет +1 максимальных хита на 30 минут',
+    durationEffect: {
+      handler: increaseMaxHp,
+      duration: duration(30, 'minutes'),
+      amount: 1,
+    },
+  },
+  {
+    element: 'moscovium',
+    level: 'uber',
+    message: 'Добавляет +4 максимальных хита на 30 минут',
+    durationEffect: {
+      handler: increaseMaxHp,
+      duration: duration(30, 'minutes'),
+      amount: 4,
+    },
+  },
+  {
+    element: 'moscovium',
+    level: 'super',
+    message: 'Добавляет +2 максимальных хита на 30 минут',
+    durationEffect: {
+      handler: increaseMaxHp,
+      duration: duration(30, 'minutes'),
+      amount: 2,
+    },
+  },
+  {
+    element: 'moscovium',
+    level: 'crysis',
+    message: 'Добавляет +2 максимальных хита на 30 минут Появилась зависимость.',
+    durationEffect: {
+      handler: increaseMaxHp,
+      duration: duration(30, 'minutes'),
+      amount: 2,
     },
   },
 ];
