@@ -48,7 +48,7 @@ export const kAllPills: Pill[] = [
   { id: 'skrepa', name: 'Скрепа', content: { iconium: 200, moscovium: 100, uranium: 100 } },
   { id: 'coal-p', name: 'Уголь-П', content: { elba: 200, iconium: 60, moscovium: 40 } },
   { id: 'browny-p', name: 'Брауни-П', content: { barium: 200, elba: 60, iconium: 40 } },
-  { id: 'preper', name: 'Препер-П', content: { uranium: 200, barium: 60, elba: 40 } },
-  { id: 'yurgen', name: 'Юрген-П', content: { moscovium: 200, uranium: 60, barium: 40 } },
-  { id: 'skrepa', name: 'Скрепа-П', content: { iconium: 200, moscovium: 60, uranium: 40 } },
+  { id: 'preper-p', name: 'Препер-П', content: { uranium: 200, barium: 60, elba: 40 } },
+  { id: 'yurgen-p', name: 'Юрген-П', content: { moscovium: 200, uranium: 60, barium: 40 } },
+  { id: 'skrepa-p', name: 'Скрепа-П', content: { iconium: 200, moscovium: 60, uranium: 40 } },
 ];
