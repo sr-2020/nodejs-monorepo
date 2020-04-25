@@ -11,6 +11,7 @@ import { ModelAquirerService } from '../services/model-aquirer.service';
 import { TimeService } from '../services/time.service';
 import { AnyModelController } from './anymodel.controller';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import moment = require('moment');
 
 export class CharacterController extends AnyModelController<Sr2020Character> {
   constructor(
@@ -47,9 +48,13 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
-  async updateAll(): Promise<{ count: number }> {
+  async updateAll(@param.query.number('older_than_seconds') olderThanSeconds: number = 0): Promise<{ count: number }> {
+    const ts = moment()
+      .subtract(olderThanSeconds, 'seconds')
+      .unix();
     const characters = await getRepository(Sr2020Character)
       .createQueryBuilder()
+      .where('timestamp < :ts', { ts })
       .getMany();
     for (const character of characters) {
       await getManager().transaction(async (transactionManager) => {
