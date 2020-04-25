@@ -334,6 +334,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
+    id: 'dgroup-add',
+    humanReadableName: 'Принять в дискурс-группу',
+    description: 'Принять персонажа в дискурс-группу',
+    // 317
+    // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.
+    // TODO(aeremin): Add proper implementation
+    target: 'none',
+    cooldownMinutes: 9000,
+    eventType: dummyAbility.name,
+  },
+
+  {
     id: 'really-need-it',
     humanReadableName: 'Очень надо.',
     description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. (Прописать, что нельзя подарить дрон, например)',
