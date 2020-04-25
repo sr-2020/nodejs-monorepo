@@ -10,6 +10,7 @@ const kIdColumn = 5;
 const kNameColumn = 6;
 const kPlayerDescriptionColumn = 12;
 const kMasterDescriptionColumn = 13;
+const kCooldownColumn = 16;
 
 interface PassiveAbility {
   id: string;
@@ -25,6 +26,7 @@ interface ActiveAbility {
   description: string;
   originalLine: number;
   gmDescription: string;
+  cooldown: number;
 }
 
 interface Spell {
@@ -69,13 +71,15 @@ class SpreadsheetProcessor {
       humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
+      cooldown: row[kCooldownColumn] ?? 9000,
       originalLine: line + 1,
     };
     const existingDoc = await this.activeAbilitiesRef.doc(id).get();
     if (
       existingDoc.data()?.humanReadableName != ability.humanReadableName ||
       existingDoc.data()?.description != ability.description ||
-      existingDoc.data()?.gmDescription != ability.gmDescription
+      existingDoc.data()?.gmDescription != ability.gmDescription ||
+      existingDoc.data()?.cooldown != ability.cooldown
     ) {
       this.activeAbilities.push(ability);
     }
@@ -128,6 +132,7 @@ class SpreadsheetProcessor {
         // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
         // TODO(aeremin): Add proper implementation
         target: 'none',
+        cooldownMinutes: ${ability.cooldown},
         eventType: dummyAbility.name,
       },`);
       await this.activeAbilitiesRef.doc(ability.id).set(ability);
@@ -175,6 +180,10 @@ class SpreadsheetProcessor {
 
     if (!header[kMasterDescriptionColumn].startsWith('Описание МАСТЕРСКОЕ')) {
       throw new Error('Master description column was moved! Exiting.');
+    }
+
+    if (!header[kCooldownColumn].startsWith('Кулдаун')) {
+      throw new Error('Column column was moved! Exiting.');
     }
 
     for (let r = 1; r < 600; ++r) {
