@@ -580,6 +580,16 @@
               </b-card-body>
             </b-card>
 
+            <b-card no-body>
+              <b-card-header>
+                Полный ресет персонажа
+              </b-card-header>
+              <b-card-body>
+                Полностью сбросить состояние персонажа (обнуляет все способности, эффекты, историю, ...)
+                <b-button variant="danger" v-on:click="resetCharacter">Сбросить (я знаю что делаю)</b-button>
+              </b-card-body>
+            </b-card>
+
           </span>
         </b-tab>
         <b-tab title="QR-код">

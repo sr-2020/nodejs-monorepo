@@ -210,6 +210,20 @@ app = new Vue({
       return this.sendCharacterEvent({ eventType: 'setRace', data: { race: this.selectedRace } });
     },
 
+    async resetCharacter() {
+      try {
+        const response = await this.$http.put(this.characterUrl(this.characterModel.modelId).replace('/model/', '/default/') + '?noAbilities=true', {});
+        await this.sendCharacterEvent({ eventType: '_', data: {} }, 'Персонаж пересоздан!');
+      } catch (e) {
+        if (e.body && e.body.error && e.body.error.message) {
+          this.showFailureToast(e.body.error.message)
+        } else {
+          this.showFailureToast('Неизвестная ошибка сервера :(');
+        }
+      }
+    },
+
+
     async clearQr() {
       return this.sendQrEvent({ eventType: 'clear', data: {} });
     },
