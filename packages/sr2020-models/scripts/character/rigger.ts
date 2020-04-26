@@ -10,7 +10,7 @@ export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetC
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
 
   api.model.analyzedBody = {
-    essence: patient.essence / 100,
+    essence: patient.essence,
     healthState: patient.healthState,
     implants: patient.implants,
   };

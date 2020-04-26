@@ -26,7 +26,7 @@ describe('Rigger abilities', () => {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'analyzeBody', data: { targetCharacterId: '2' } }, 1);
       expect(workModel.analyzedBody).ok();
-      expect(workModel.analyzedBody?.essence).to.equal(4.5);
+      expect(workModel.analyzedBody?.essence).to.equal(450);
       expect(workModel.analyzedBody?.implants).to.containDeep([{ id: 'rcc-beta' }]);
     }
 
