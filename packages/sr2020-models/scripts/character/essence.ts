@@ -26,12 +26,10 @@ export function systemEssenceEffect(api: EffectModelApi<Sr2020Character>, m: Mod
     }
   }
 
-  if (api.model.essence <= 100) {
-    if (api.model.essence != 0) {
-      api.model.mentalDefenceBonus += Math.floor(500 / api.model.essence);
-    } else {
-      api.model.mentalDefenceBonus += 500;
-    }
+  if (api.model.essence != 0) {
+    api.model.mentalDefenceBonus += Math.floor(500 / api.model.essence);
+  } else {
+    api.model.mentalDefenceBonus += 500;
   }
 }
 
