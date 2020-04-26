@@ -1,5 +1,5 @@
 import { BootMixin } from '@loopback/boot';
-import { ApplicationConfig } from '@loopback/core';
+import { ApplicationConfig, CoreBindings } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication, RestBindings } from '@loopback/rest';

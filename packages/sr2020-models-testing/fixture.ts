@@ -18,6 +18,7 @@ import { Connection, createConnection } from 'typeorm';
 import * as Winston from 'winston';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { Duration } from 'moment';
+import { LoggerService } from '@sr2020/models-manager/services/logger.service';
 
 (Winston as any).level = 'error';
 
@@ -94,6 +95,13 @@ class MockPubSubService implements PubSubService {
   }
 }
 
+class NoOpLoggerService implements LoggerService {
+  debug(msg: string, meta?: any): void {}
+  info(msg: string, meta?: any): void {}
+  warning(msg: string, meta?: any): void {}
+  error(msg: string, meta?: any): void {}
+}
+
 export class TestFixture {
   constructor(
     public client: Client,
@@ -123,6 +131,9 @@ export class TestFixture {
 
     const pubSubService = new MockPubSubService();
     app.bind('services.PubSubService').to(pubSubService);
+
+    const loggerService = new NoOpLoggerService();
+    app.bind('services.LoggerService').to(loggerService);
 
     let connection: Connection;
     if (process.env.NODE_ENV == 'test') {
