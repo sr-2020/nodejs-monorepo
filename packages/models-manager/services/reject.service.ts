@@ -16,15 +16,24 @@ export class CustomRejectProvider extends RejectProvider {
   }
 
   action({ request, response }: HandlerContext, error: Error) {
-    const err = <HttpError>error;
-
-    try {
-      error = <HttpError>JSON.parse(err.message).error ?? error;
-    } catch (e) {
-      // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
+    if (error instanceof HttpError) {
+      try {
+        error = <HttpError>JSON.parse(error.message).error ?? error;
+      } catch (e) {
+        // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
+      }
+      const httpError = error as HttpError;
+      if (httpError.statusCode == 404) {
+        this.logger.warning(error.message, error);
+      } else if (httpError.statusCode == 422) {
+        this.logger.error(error.message, error);
+      } else {
+        this.logger.error(error.message, error);
+      }
+    } else {
+      this.logger.error(error.message, error);
     }
 
-    this.logger.error(error.message, error);
     super.action({ request, response }, error);
   }
 }
