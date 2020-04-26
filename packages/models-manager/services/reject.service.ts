@@ -23,7 +23,12 @@ export class CustomRejectProvider extends RejectProvider {
         // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
       }
       const httpError = error as HttpError;
-      if (httpError.statusCode == 404) {
+      if (httpError.statusCode == 400) {
+        // UserVisibleError goes here, no need to alert or warn in logs.
+        this.logger.info(error.message, error);
+      } else if (httpError.statusCode == 404) {
+        // Typically still caused by a user doing something weird, no need to alert,
+        // but it's nice to have an error in logs.
         this.logger.warning(error.message, error);
       } else if (httpError.statusCode == 422) {
         this.logger.error(error.message, error);
