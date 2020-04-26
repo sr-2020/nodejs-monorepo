@@ -16,8 +16,8 @@ export class CustomRejectProvider extends RejectProvider {
   }
 
   action({ request, response }: HandlerContext, error: Error) {
-    this.logger.info(`error instanceof HttpError = ${error instanceof HttpError}`);
-    if (error instanceof HttpError) {
+    this.logger.info(`(error as HttpError).statusCode = ${(error as HttpError).statusCode}`);
+    if ((error as HttpError).statusCode) {
       try {
         error = <HttpError>JSON.parse(error.message).error ?? error;
       } catch (e) {
