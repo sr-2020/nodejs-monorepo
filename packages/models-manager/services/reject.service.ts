@@ -16,10 +16,12 @@ export class CustomRejectProvider extends RejectProvider {
   }
 
   action({ request, response }: HandlerContext, error: Error) {
+    this.logger.info(`error instanceof HttpError = ${error instanceof HttpError}`);
     if (error instanceof HttpError) {
       try {
         error = <HttpError>JSON.parse(error.message).error ?? error;
       } catch (e) {
+        this.logger.info(`Error when trying to re-parse error message = ${e}`);
         // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
       }
       const httpError = error as HttpError;
