@@ -27,7 +27,7 @@ class WinstonLogger implements LoggerService {
     WinstonLogger.logger.info(msg, meta);
   }
   warning(msg: string, meta?: any) {
-    WinstonLogger.logger.warning(msg, meta);
+    WinstonLogger.logger.warn(msg, meta);
   }
   error(msg: string, meta?: any) {
     WinstonLogger.logger.error(msg, meta);
