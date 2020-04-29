@@ -167,6 +167,7 @@ export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
     humanReadableName: ability.humanReadableName,
     description: ability.description,
     target: ability.target,
+    targetsSignature: ability.targetsSignature,
     cooldownMinutes: ability.cooldownMinutes,
     cooldownUntil: 0,
     validUntil: m.validUntil,

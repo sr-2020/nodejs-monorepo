@@ -2,6 +2,7 @@ import { model, property } from '@loopback/repository';
 import { EmptyModel, rproperty, JsonColumn, BigIntTransformer, JsonNullableColumn } from './alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
 import { Entity, Column } from 'typeorm';
+import { QrType } from './qr-code.model';
 
 export type HealthState = 'healthy' | 'wounded' | 'clinically_dead' | 'biologically_dead';
 
@@ -33,6 +34,20 @@ export class AddedSpell {
   @rproperty() hasTarget: boolean;
 }
 
+export interface Targetable {
+  targetCharacterId: string;
+  pillId: string;
+}
+
+@model()
+export class TargetSignature {
+  // Human-readable name to e.g. show on button
+  @rproperty() name: string;
+  @property.array(String) allowedTypes: QrType[];
+  // Name of field inside data in which client should pass an id of corresponding target
+  @property({ required: true, type: 'string' }) field: keyof Targetable;
+}
+
 // Active ability contained in the model object (as opposed to ActiveAbility which is configuration/dictionary kind).
 @model()
 export class AddedActiveAbility {
@@ -48,6 +63,9 @@ export class AddedActiveAbility {
 
   // True if ability needs a target - other character or object
   @property({ required: true, type: 'string' }) target: 'none' | 'scan' | 'show';
+
+  // True if ability needs a target - other character or object
+  @property.array(TargetSignature) targetsSignature: TargetSignature[];
 
   // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)

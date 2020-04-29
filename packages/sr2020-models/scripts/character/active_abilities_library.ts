@@ -8,7 +8,6 @@ import {
   arrowgant,
   trollton,
   iWillSurvive,
-  Targetable,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -19,6 +18,7 @@ import {
 } from './mental';
 import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
+import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
 
 // TODO(aeremin): Remove 'none', it's a special case of
 // 'scan' with targetsSignature = [].

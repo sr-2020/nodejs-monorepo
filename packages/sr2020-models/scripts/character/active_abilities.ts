@@ -1,16 +1,11 @@
 import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character, AddedActiveAbility, Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
 import { reviveOnTarget } from './death_and_rebirth';
 import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
-
-export interface Targetable {
-  targetCharacterId: string;
-  pillId: string;
-}
 
 export type ActiveAbilityData = Partial<Targetable> & {
   id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id

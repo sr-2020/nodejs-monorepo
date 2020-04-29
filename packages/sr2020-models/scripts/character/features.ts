@@ -46,6 +46,7 @@ function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAb
     humanReadableName: ability.humanReadableName,
     description: ability.description,
     target: ability.target,
+    targetsSignature: ability.targetsSignature,
     cooldownMinutes: ability.cooldownMinutes,
     cooldownUntil: 0,
     eventType: ability.eventType,
