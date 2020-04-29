@@ -131,7 +131,7 @@ class SpreadsheetProcessor {
         // ${ability.originalLine}
         // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
         // TODO(aeremin): Add proper implementation
-        target: 'none',
+        target: 'scan',
         cooldownMinutes: ${ability.cooldown},
         eventType: dummyAbility.name,
       },`);

@@ -63,7 +63,7 @@ export class AddedActiveAbility {
   @rproperty() description: string;
 
   // True if ability needs a target - other character or object
-  @property({ required: true, type: 'string' }) target: 'none' | 'scan' | 'show';
+  @property({ required: true, type: 'string' }) target: 'scan' | 'show';
 
   // True if ability needs a target - other character or object
   @property.array(TargetSignature) targetsSignature: TargetSignature[];
