@@ -8,6 +8,7 @@ import {
   arrowgant,
   trollton,
   iWillSurvive,
+  copyPasteQr,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -1025,6 +1026,27 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     eventType: reviveAbsoluteOnTarget.name,
     cooldownMinutes: 0,
+  },
+
+  {
+    id: 'test-only-copy-qr',
+    humanReadableName: 'Скопировать таблетку или имплант на QR-пустышку',
+    description: 'ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ',
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Откуда',
+        allowedTypes: ['pill', 'implant'],
+        field: 'pillId',
+      },
+      {
+        name: 'Куда',
+        allowedTypes: ['empty'],
+        field: 'qrCode',
+      },
+    ],
+    cooldownMinutes: 0,
+    eventType: copyPasteQr.name,
   },
 ];
 

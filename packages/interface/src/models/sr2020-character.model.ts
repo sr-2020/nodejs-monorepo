@@ -37,6 +37,7 @@ export class AddedSpell {
 export interface Targetable {
   targetCharacterId: string;
   pillId: string;
+  qrCode: string;
 }
 
 @model()

@@ -4,6 +4,8 @@ import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifie
 import { reviveOnTarget } from './death_and_rebirth';
 import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { create } from '../qr/events';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -133,4 +135,10 @@ export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAb
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d);
+}
+
+export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  const from = api.aquired(QrCode, data.pillId!);
+  const to = api.aquired(QrCode, data.qrCode!);
+  api.sendOutboundEvent(QrCode, to.modelId, create, from);
 }
