@@ -8,6 +8,7 @@ import {
   arrowgant,
   trollton,
   iWillSurvive,
+  Targetable,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -17,14 +18,36 @@ import {
   youDontTrustAnybody,
 } from './mental';
 import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import { QrType } from '@sr2020/interface/models/qr-code.model';
 
+// TODO(aeremin): Remove 'none', it's a special case of
+// 'scan' with targetsSignature = [].
 export type TargetType = 'none' | 'scan' | 'show';
+
+export interface TargetSignature {
+  // Human-readable name to e.g. show on button
+  name: string;
+  allowedTypes: QrType[];
+  // Name of field inside data in which client should pass an id of corresponding target
+  field: keyof Targetable;
+}
+
+const kAstralBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Дух',
+    allowedTypes: ['ASTRAL_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
+const kNoTarget: TargetSignature[] = [];
 
 export interface ActiveAbility {
   id: string;
   humanReadableName: string;
   description: string;
   target: TargetType;
+  targetsSignature: TargetSignature[];
   cooldownMinutes: number;
   prerequisites?: string[];
   eventType: string;
@@ -37,6 +60,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Ground Heal',
     description: 'Поднимает одну цель из КС/тяжрана в полные хиты.',
     target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 0,
     eventType: oneTimeRevive.name,
   },
@@ -49,6 +79,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Самурай находит тушку в тяжране, применяет эту абилку, сканирует QR тушки. Со счета тушки переводится самураю 10% нуйен остатка счета тушки. Тушка автоматически переходит в КС. Перевод создается без обоснования. В поле назначение - "добровольное пожертвование".
     // TODO(aeremin): Add proper implementation
     target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        allowedTypes: ['WOUNDED_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 9000,
     eventType: dummyAbility.name,
   },
@@ -61,6 +98,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // добивание до АС (из тяжрана или КС)
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        allowedTypes: ['WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 240,
     eventType: dummyAbility.name,
   },
@@ -73,6 +117,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // требует уровня Насилия
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     eventType: dummyAbility.name,
   },
@@ -85,6 +130,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // дает возможность персонажу зайти в Виар на 2 часа (или сколько-то), кулдаун есть.  Увеличение длительности виара ИЛИ уменьшение кулдауна - спец абилки.
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     eventType: dummyAbility.name,
   },
@@ -100,6 +146,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
     // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -115,6 +162,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
     // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -130,6 +178,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
     // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 15,
     eventType: dummyAbility.name,
   },
@@ -145,6 +194,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
     // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 15,
     eventType: dummyAbility.name,
   },
@@ -160,6 +210,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: вызов Кривдиного REST, отобразить текст
     // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 15,
     eventType: dummyAbility.name,
   },
@@ -175,6 +226,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 16 * 60,
     eventType: dummyAbility.name,
   },
@@ -187,6 +239,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 288
     // Целевой персонаж забывает события "этой сцены", если персонажу не был нанесен физический урон (снят хотя бы 1 хит) за это время.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -198,6 +251,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 307
     // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: ['oblivion'],
     eventType: useMentalAbility.name,
@@ -211,6 +265,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Целевой персонаж не забывает события перед КС. Для менталиста эта абилка  активная, кулдаун 4 часа. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 240,
     eventType: dummyAbility.name,
   },
@@ -222,6 +277,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 311
     // Цель честно отвечает на 3 вопроса.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -233,6 +289,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 312
     // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 10 минут должна воспроизводить этот признак, если врет.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -245,6 +302,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 295
     // Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: useMentalAbility.name,
   },
@@ -257,6 +315,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 296
     // Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: useMentalAbility.name,
   },
@@ -270,6 +329,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Цель боится и убегает как можно дальше от менталиста. Через 10 минут эффект проходит.
     // 2. У цели заблокирована активация всех активных абилок на 10 минут
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -282,6 +342,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 298
     // Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит)
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: useMentalAbility.name,
   },
@@ -293,6 +354,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 318
     // Цель не может двигаться 10 минут.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-1'],
     eventType: useMentalAbility.name,
@@ -305,6 +367,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 319
     // Цель не может двигаться и говорить 10 минут.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-2'],
     eventType: useMentalAbility.name,
@@ -318,6 +381,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 320
     // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     eventType: useMentalAbility.name,
   },
@@ -329,6 +393,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 302
     // Цель активно пытается убить персонажа, на которого указывает менталист.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 360,
     eventType: useMentalAbility.name,
   },
@@ -341,6 +406,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -352,6 +418,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 322
     // Цель дарит менталисту 1 игровой предмет по выбору менталиста.
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -363,6 +430,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 323
     // Убеждает жертву перевести со своего на счет менталиста Х% (15% например)
     target: 'show',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: useMentalAbility.name,
   },
@@ -374,6 +442,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 330
     // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 180,
     eventType: increaseTheMentalProtectionAbility.name,
   },
@@ -385,6 +454,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 331
     // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 180,
     eventType: reduceTheMentalProtectionAbility.name,
   },
@@ -396,6 +466,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 332
     // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: iDontTrustAnybody.name,
   },
@@ -407,6 +478,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 333
     // Менталист увеличивает ментальную защиту другого персонажа на +8 на 30 минут
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: youDontTrustAnybody.name,
   },
@@ -420,6 +492,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     //
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: discountAll10.name,
   },
@@ -432,6 +505,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Множитель 0,8 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: ['discount-all-1'],
     eventType: discountAll20.name,
@@ -445,6 +519,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Множитель 0,7 при покупке любого товара следующие 30 минут данным персонажем
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     prerequisites: ['discount-all-2'],
     eventType: discountAll30.name,
@@ -458,6 +533,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // посмотреть на qr и сказать сколько это стоит, базовую цену товара
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     eventType: dummyAbility.name,
   },
@@ -470,6 +546,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // посмотреть на qr и сказать кому это может быть нужно. после сканирования куар в приложеньке гм должно отобразиться персонажи с какими аспектами это используют. В идеале - какой квест есть на эту сущность.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     eventType: dummyAbility.name,
   },
@@ -482,6 +559,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // ГМ может переписать кредит за 1 предмет на себя и может применить свой коэффициент скоринга на текущий момент.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -494,6 +572,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // переписать долг за 1 предмет по выбору с персонажа А на персонажа Б.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -506,6 +585,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Показывает актуальные коэффициенты, которые влияют на скоринг.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -518,6 +598,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Целевому персонажу переоформить контракт с новым коэфициентом скоринга.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     eventType: dummyAbility.name,
   },
@@ -530,6 +611,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // где это продается
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 360,
     eventType: dummyAbility.name,
   },
@@ -542,6 +624,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // анонимизация перевода - не показываем это в логах никому кроме фиксера, его контрагента и мастеров
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     eventType: dummyAbility.name,
   },
@@ -554,6 +637,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 5 минут
     // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     target: 'scan',
+    targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
     eventType: dummyAbility.name,
   },
@@ -566,6 +650,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 10 минут
     // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     target: 'scan',
+    targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
     prerequisites: ['pray-s'],
     eventType: dummyAbility.name,
@@ -579,6 +664,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 30 минут
     // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     target: 'scan',
+    targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
     prerequisites: ['pray-m'],
     eventType: dummyAbility.name,
@@ -592,6 +678,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Время действия 15 минут, кулдаун 45 минут После активации маг переключается в астральное тело. У него 2 хита, 2 меча и 1 щит
     // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 45,
     eventType: dummyAbility.name,
   },
@@ -604,6 +691,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Время действия 45 минут, кулдаун 55 минут После активации маг переключается в астральное тело. У него 5 хитов, 4 меча и 3 щита
     // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 55,
     eventType: dummyAbility.name,
   },
@@ -616,6 +704,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Время действия 120 минут, кулдаун 125 минут После активации маг переключается в астральное тело. У него 12 хитов, 6 мечей и 5 щитов
     // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 125,
     eventType: dummyAbility.name,
   },
@@ -628,6 +717,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
     // TODO(https://trello.com/c/qATKkQtq/140-магия-реализовать-способности-связанные-с-аурой-silentium-est-aurum-light-step-dictator-control)
     target: 'none',
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 40,
     eventType: dummyAbility.name,
   },
@@ -640,6 +736,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - время действия 5 минут, кулдаун 30 минут. За время активации можно сосканировать Qr-код мясных тел до 3 уникальных целей (добровольно или в тяжране) - это приведет к созданию соответствующего количества чипов “кровь”.  Если цель не была в тяжране, то она там оказывается.
     // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-заклинания-и-абилки-связанные-с-чипами-крови-blood-feast-bathory-charger-sense-of-essence)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
@@ -651,6 +748,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 459
     // - время действия 10+N минут, кулдаун 5 минут. Одноручное оружие считается тяжёлым. N=умвл*3 минут
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 5,
     eventType: hammerOfJustice.name,
   },
@@ -662,6 +760,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 460
     // - время действия 5+N минут, кулдаун 15 минут. Дает защиту от дистанционных атак (только от нерфов). N=умвл*1 минут
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 15,
     eventType: arrowgant.name,
   },
@@ -673,6 +772,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 461
     // - время действия 5+N минут, кулдаун 30 минут. Дает тяжелую броню. N=умвл*2 минут
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     eventType: trollton.name,
   },
@@ -684,6 +784,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 462
     // - время действия 5+N минут, кулдаун 20 минут. Позволяет автоматически подняться из тяжрана через 30с с полным запасом текущих хитов. N=умвл*2 минут
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 20,
     eventType: iWillSurvive.name,
   },
@@ -695,6 +796,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 419
     // - мгновенное, кулдаун 5 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
     target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['WOUNDED_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 5,
     eventType: reviveOnTarget.name,
   },
@@ -707,6 +815,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 40 минут. Позволяет восстановить активированный (то есть потраченный) артефакт с любым заклинанием - в такое же состояние, какое они имели до активации.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 40,
     eventType: dummyAbility.name,
   },
@@ -719,6 +828,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Enlarge Your Pencil. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -731,6 +841,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Stone skin. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -743,6 +854,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tempus Fugit. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -755,6 +867,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Beacon После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -767,6 +880,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Run, spirit, run. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -779,6 +893,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание InputStream. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -791,6 +906,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание OutputStream. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -803,6 +919,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Mosquito Tree. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -815,6 +932,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Feed the cat. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -827,6 +945,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tame the dog. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -839,6 +958,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Exorcizamus. После активации способности маг кастует заклинание как обычно, но вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 120,
     eventType: dummyAbility.name,
   },
@@ -851,6 +971,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 10 минут
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     eventType: dummyAbility.name,
   },
@@ -863,6 +984,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - лечит тяжран (1 заряд / 6 часов). То есть 1 заряд с CD 6 часов.
     // TODO(aeremin): Add proper implementation
     target: 'none',
+    targetsSignature: kNoTarget,
     cooldownMinutes: 360,
     eventType: dummyAbility.name,
   },
@@ -875,6 +997,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // При активации аблики игрок сканирует куар-код с препаратом и видит его название
     // TODO(aeremin): Add proper implementation
     target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Препарат',
+        allowedTypes: ['pill'],
+        field: 'pillId',
+      },
+    ],
     eventType: dummyAbility.name,
     cooldownMinutes: 9000,
   },
@@ -887,6 +1016,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
     target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Препарат',
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY', 'ABSOLUTELY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     eventType: reviveAbsoluteOnTarget.name,
     cooldownMinutes: 0,
   },

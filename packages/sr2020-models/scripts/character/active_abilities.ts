@@ -7,14 +7,18 @@ import { duration } from 'moment';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
-interface ActiveAbilityData {
+export interface Targetable {
+  targetCharacterId: string;
+  pillId: string;
+}
+
+export type ActiveAbilityData = Partial<Targetable> & {
   id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
-  targetCharacterId?: string; // Identifier of target character
   location: {
     id: number;
     manaLevel: number;
   };
-}
+};
 
 export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
 
