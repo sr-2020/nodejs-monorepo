@@ -436,16 +436,6 @@ const kAllSpellsList: Spell[] = [
   },
 
   {
-    id: 'sense-of-essence',
-    humanReadableName: 'Sense of essence',
-    description: 'Узнать ауру того, кому принадлежала кровь (qr-код дозы которой был просканирован)',
-    // 549
-    // каст занимает 5 минут. Маг сканирует QR-код чипа крови (тот при этом расходуется) и получает текстом ауру того, кому эта кровь принадлежит.
-    // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-заклинания-и-абилки-связанные-с-чипами-крови-blood-feast-bathory-charger-sense-of-essence)
-    eventType: dummySpell.name,
-  },
-
-  {
     id: 'odus',
     humanReadableName: 'Odus',
     description:
