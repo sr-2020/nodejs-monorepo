@@ -29,7 +29,6 @@ export class AddedSpell {
 
   // Full description. Can be multiline.
   @rproperty() description: string;
-  @rproperty() eventType: string;
 
   @rproperty() hasTarget: boolean;
 }
@@ -77,8 +76,6 @@ export class AddedActiveAbility {
 
   // Unix timestamp in milliseconds.
   @property() cooldownUntil: number;
-
-  @rproperty() eventType: string;
 }
 
 // Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).

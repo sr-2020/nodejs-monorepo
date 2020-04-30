@@ -20,7 +20,7 @@ describe('Spells', function() {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'ground-heal' } });
-      expect(workModel).containDeep({ spells: [{ eventType: 'groundHealSpell' }] });
+      expect(workModel).containDeep({ spells: [{ id: 'ground-heal' }] });
     }
 
     {

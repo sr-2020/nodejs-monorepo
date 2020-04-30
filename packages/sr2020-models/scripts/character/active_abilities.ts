@@ -6,6 +6,7 @@ import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
+import { kAllActiveAbilities } from './active_abilities_library';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -27,6 +28,11 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Нельзя использовать способность, которой у вас нет!');
   }
 
+  const libraryAbility = kAllActiveAbilities.get(data.id);
+  if (!libraryAbility) {
+    throw new UserVisibleError('Несуществующая способность!');
+  }
+
   if (ability.cooldownUntil > event.timestamp) {
     throw new UserVisibleError('Способность еще на кулдауне!');
   }
@@ -41,7 +47,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     maybeAbility.cooldownUntil = event.timestamp + ability.cooldownMinutes * 60 * 1000 * api.workModel.cooldownCoefficient;
   }
 
-  api.sendSelfEvent(ability.eventType, { ...ability, ...data });
+  api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 

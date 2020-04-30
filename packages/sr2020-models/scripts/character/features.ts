@@ -49,14 +49,18 @@ function addActiveAbility(api: EventModelApi<Sr2020Character>, ability: ActiveAb
     targetsSignature: ability.targetsSignature,
     cooldownMinutes: ability.cooldownMinutes,
     cooldownUntil: 0,
-    eventType: ability.eventType,
   });
 }
 
 function addSpell(api: EventModelApi<Sr2020Character>, spell: Spell) {
   // Spell is already present in the character - won't add again.
   if (api.model.spells.find((f) => f.id == spell.id)) return;
-  api.model.spells.push({ ...spell, hasTarget: spell.hasTarget ?? false });
+  api.model.spells.push({
+    id: spell.id,
+    description: spell.description,
+    humanReadableName: spell.humanReadableName,
+    hasTarget: spell.hasTarget ?? false,
+  });
 }
 
 export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {

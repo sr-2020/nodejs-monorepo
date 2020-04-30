@@ -18,6 +18,7 @@ import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
 import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 import { duration } from 'moment';
+import { kAllSpells } from './spells_library';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '*';
@@ -40,6 +41,11 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
   const spell = api.workModel.spells.find((s) => s.id == data.id);
   if (!spell) {
     throw new UserVisibleError('Нельзя скастовать спелл, которого у вас нет!');
+  }
+
+  const librarySpell = kAllSpells.get(data.id);
+  if (!librarySpell) {
+    throw new UserVisibleError('Несуществующий спелл!');
   }
 
   let ritualPowerBonus = 0;
@@ -65,7 +71,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
   }
 
   data.power += ritualPowerBonus;
-  api.sendSelfEvent(spell.eventType, data);
+  api.sendSelfEvent(librarySpell.eventType, data);
 
   const feedback = applyAndGetMagicFeedback(api, data.power, ritualFeedbackReduction);
   saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
@@ -171,7 +177,6 @@ export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
     cooldownMinutes: ability.cooldownMinutes,
     cooldownUntil: 0,
     validUntil: m.validUntil,
-    eventType: ability.eventType,
   });
 }
 
