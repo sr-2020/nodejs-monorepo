@@ -285,13 +285,13 @@ describe('Spells', function() {
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 7,
+        magicFeedback: 38,
       },
       {
         spellName: 'Ground Heal',
         timestamp: 1020000,
         power: 6,
-        magicFeedback: 8,
+        magicFeedback: 53,
       },
     ]);
 
@@ -327,7 +327,7 @@ describe('Spells', function() {
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 7,
+        magicFeedback: 38,
       },
     ]);
 

@@ -19,7 +19,7 @@ import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
 import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
-import { duration } from 'moment';
+import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
 import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 const chance = new Chance();
@@ -38,6 +38,12 @@ interface SpellData {
   ritualMembersIds?: string[]; // Identifiers of other ritual participants
   focusId?: string; // Identifier of focus QR
   targetCharacterId?: string; // Identifier of target character
+}
+
+interface MagicFeedback {
+  feedback: number;
+  duration: Duration;
+  amount: number;
 }
 
 export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
@@ -121,9 +127,16 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     reagentFeedbackIncrease - ritualFeedbackReduction,
     canHaveZeroFeedback,
   );
-  saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
+  saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback), event);
 
-  addHistoryRecord(api, 'Заклинание', spell.humanReadableName, `Заклинание ${spell.humanReadableName} успешно скастовано`);
+  addHistoryRecord(
+    api,
+    'Заклинание',
+    spell.humanReadableName,
+    `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${
+      feedback.amount
+    } на ${feedback.duration.asMinutes()} минут.`,
+  );
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }
@@ -462,7 +475,7 @@ function applyAndGetMagicFeedback(
   spell: Spell,
   adjustment: number,
   canHaveZeroFeedback: boolean,
-) {
+): MagicFeedback {
   // TODO(aeremin) Fix use of api.model.magicFeedbackReduction
   const feedback = Math.max(
     0,
@@ -480,7 +493,7 @@ function applyAndGetMagicFeedback(
   api.addModifier(m);
   api.setTimer('feedback-recovery-' + uuid.v4(), feedbackDuration, removeModifier, { mID: m.mID });
 
-  return feedbackAmount;
+  return { amount: feedbackAmount, feedback, duration: feedbackDuration };
 }
 
 // Magic feedback implementation
