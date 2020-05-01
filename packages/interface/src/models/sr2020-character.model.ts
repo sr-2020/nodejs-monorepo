@@ -318,7 +318,7 @@ export class Chemo {
 @model()
 export class MagicStats {
   @rproperty()
-  @Column({ default: 0 })
+  @Column({ default: 1 })
   feedbackReduction: number;
 
   @rproperty()
