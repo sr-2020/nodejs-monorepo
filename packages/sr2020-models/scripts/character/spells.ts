@@ -214,7 +214,7 @@ export function groundHealSpell(
   data: { power: number; location: { id: number; manaLevel: number } },
   event: Event,
 ) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Ground Heal: на себя');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(10 * data.power, 'minutes');
   const m = modifierFromEffect(groundHealEffect, {
     name: 'ground-heal-modifier',
@@ -268,7 +268,7 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
 //
 
 export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Fireball: на себя');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(8 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 3);
   const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, d) });
@@ -313,7 +313,7 @@ export function fieldOfDenialSpell(
   data: { power: number; location: { id: number; manaLevel: number } },
   event: Event,
 ) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Field of denial: на себя');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(40, 'minutes');
   const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, d) });
   addTemporaryModifier(api, m, d);
@@ -336,7 +336,7 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 // последние 10+Мощь минут - список (название заклинания,  Мощь, Откат, (10+N)% ауры творца, пол и метарасу творца).
 // N=Мощь*5, но не более 40
 export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackpoint: на себя');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = (10 + data.power) * 60;
   const symbolsRead = Math.min(
     AURA_LENGTH,
@@ -348,7 +348,7 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: Spell
 // время каста 5 минут. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
 // последние 60 минут - список (название заклинания,  Мощь, Откат, (20+N)% ауры творца, пол и метарасу творца). N=Мощь*10, но не более 60
 export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Trackball: на себя');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = 60 * 60;
   const symbolsRead = Math.min(
     AURA_LENGTH,
@@ -383,7 +383,7 @@ function dumpSpellTraces(
 // чем (Текущий момент - T1 минут), дата активации в следе сдвигается в прошлое на T2 минут
 // (то есть activation_moment = activation_moment - T2). T1=Мощь*5. T2=Мощь*4.
 export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Tempus Fugit');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   api.sendOutboundEvent(Location, data.location.id.toString(), shiftSpellTraces, {
     maxLookupSeconds: data.power * 5 * 60,
     shiftTimeSeconds: data.power * 4 * 60,
@@ -391,7 +391,7 @@ export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: Spel
 }
 
 export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  sendNotificationAndHistoryRecord(api, 'Заклинание', 'Brasilia');
+  api.sendNotification('Успех', 'Заклинание успешно применено');
   api.sendOutboundEvent(Location, data.location.id.toString(), brasiliaEffect, {
     durationMinutes: 8 * data.power,
   });

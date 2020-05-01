@@ -168,7 +168,6 @@ describe('Spells', function() {
         1,
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
@@ -189,7 +188,6 @@ describe('Spells', function() {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: abilityId, targetCharacterId: 2 } }, 1);
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(1)[0].body).containEql('Ground Heal');
       expect(fixture.getCharacterNotifications(2).length).to.equal(1);
       expect(fixture.getCharacterNotifications(2)[0].body).containEql('Хиты полностью восстановлены');
       expect(workModel.activeAbilities.length).to.equal(0);
