@@ -795,9 +795,15 @@ export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}, _: E
 }
 
 export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
-  // TODO(https://trello.com/c/dmKERpbb/215-реализовать-реагенты-в-игре) Implement
-  // Ускоряет восстановление Магии, уменьшает время действия всех текущих штрафов
-  // на Магию на data.amount минут. Не может снизить ниже 30с.
+  for (const timerId in api.model.timers ?? {}) {
+    const timer = api.model.timers![timerId];
+    if (timer.name.startsWith('feedback-recovery-')) {
+      timer.miliseconds = Math.max(
+        duration(30, 'seconds').asMilliseconds(),
+        timer.miliseconds - duration(data.amount, 'minutes').asMilliseconds(),
+      );
+    }
+  }
 }
 
 export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {

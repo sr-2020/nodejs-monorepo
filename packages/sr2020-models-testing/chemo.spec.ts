@@ -103,7 +103,27 @@ describe('Chemo events', function() {
     }
   });
 
-  // TODO(aeremin) Add test for addiction cure.
+  it('Custodium', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.saveLocation();
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'fireball', power: 1, location: { manaLevel: 10, id: 0 } },
+      });
+      expect(workModel.magic).to.equal(6);
+    }
+
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'jack-p' } });
+    await fixture.advanceTime(duration(1023, 'minutes'));
+
+    {
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magic).to.equal(10);
+    }
+  });
+
   it('Opium + Elba', async () => {
     await fixture.saveCharacter();
     {

@@ -1,3 +1,4 @@
+import uuid = require('uuid');
 import { Event, Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
@@ -12,6 +13,7 @@ import {
   modifierFromEffect,
   validUntil,
   addTemporaryModifierEvent,
+  removeModifier,
 } from './util';
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
@@ -478,7 +480,9 @@ function applyAndGetMagicFeedback(
   const feedbackAmount = Math.max(Math.ceil(Math.sqrt(feedback) * api.workModel.magicStats.feedbackReduction), canHaveZeroFeedback ? 0 : 1);
 
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
-  addTemporaryModifier(api, m, feedbackDuration);
+
+  api.addModifier(m);
+  api.setTimer('feedback-recovery-' + uuid.v4(), feedbackDuration, removeModifier, { mID: m.mID });
 
   return feedbackAmount;
 }
