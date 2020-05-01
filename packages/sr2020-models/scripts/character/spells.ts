@@ -3,7 +3,7 @@ import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity, recordSpellTrace, shiftSpellTraces, brasiliaEffect } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { create } from '../qr/events';
+import { create, consume } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import {
   sendNotificationAndHistoryRecord,
@@ -18,7 +18,8 @@ import Chance = require('chance');
 import { kAllActiveAbilities } from './active_abilities_library';
 import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 import { duration } from 'moment';
-import { kAllSpells } from './spells_library';
+import { kAllSpells, Spell } from './spells_library';
+import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '*';
@@ -38,6 +39,10 @@ interface SpellData {
 }
 
 export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  if (data.power <= 0) {
+    throw new UserVisibleError('Мощь должна быть положительной!');
+  }
+
   const spell = api.workModel.spells.find((s) => s.id == data.id);
   if (!spell) {
     throw new UserVisibleError('Нельзя скастовать спелл, которого у вас нет!');
@@ -50,6 +55,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
 
   let ritualPowerBonus = 0;
   let ritualFeedbackReduction = 0;
+  let totalParticipans = 0;
 
   if (data.ritualMembersIds?.length) {
     if (!api.workModel.passiveAbilities.some((a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic')) {
@@ -57,7 +63,6 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     }
 
     const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
-    let totalParticipans = 0;
     for (const participantId of ritualParticipantIds) {
       const participant = api.aquired(Sr2020Character, participantId);
       totalParticipans += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
@@ -72,8 +77,48 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
 
   data.power += ritualPowerBonus;
   api.sendSelfEvent(librarySpell.eventType, data);
+  // Reagents
+  const totalContent = kEmptyContent;
+  for (const id of new Set(data.reagentIds)) {
+    const reagentReference = api.aquired(QrCode, id);
+    if (reagentReference?.type != 'reagent') throw new UserVisibleError('Использование не-реагента в качестве реагента!');
 
-  const feedback = applyAndGetMagicFeedback(api, data.power, ritualFeedbackReduction);
+    const reagent = kAllReagents.find((it) => it.id == reagentReference.data.id);
+    if (!reagent) throw new UserVisibleError('Такого реагента не существует!');
+
+    for (const element in reagent.content) {
+      totalContent[element] += reagent.content[element];
+    }
+    api.sendOutboundEvent(QrCode, id, consume, {});
+  }
+
+  let reagentFeedbackIncrease = 0;
+  const powerMultiplier = Math.ceil(data.power / 2);
+
+  if (librarySpell.sphere == 'healing' && totalContent.pisces < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  if (librarySpell.sphere == 'fighting' && totalContent.sagittarius < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  if (librarySpell.sphere == 'protection' && totalContent.leo < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  if (librarySpell.sphere == 'aura' && totalContent.libra < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  if (librarySpell.sphere == 'astral' && totalContent.aquarius < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  if (librarySpell.sphere == 'stats' && totalContent.scorpio < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+
+  if (api.workModel.metarace == 'meta-elf' && totalContent.virgo < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
+  if (api.workModel.metarace == 'meta-troll' && totalContent.taurus < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
+  if (api.workModel.metarace == 'meta-ork' && totalContent.aries < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
+  if (api.workModel.metarace == 'meta-dwarf' && totalContent.cancer < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
+  if (api.workModel.metarace == 'meta-norm' && totalContent.gemini < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
+  if ((api.workModel.metarace == 'meta-hmhvv1' || api.workModel.metarace == 'meta-hmhvv3') && totalContent.capricorn < 2 * powerMultiplier)
+    reagentFeedbackIncrease += 2;
+
+  const canHaveZeroFeedback = totalParticipans >= 300 || totalContent.ophiuchus >= powerMultiplier;
+
+  const feedback = applyAndGetMagicFeedback(
+    api,
+    data,
+    librarySpell,
+    reagentFeedbackIncrease - ritualFeedbackReduction,
+    canHaveZeroFeedback,
+  );
   saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
@@ -413,13 +458,24 @@ export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _
   api.model.spells = [];
 }
 
-function applyAndGetMagicFeedback(api: EventModelApi<Sr2020Character>, power: number, reduction: number) {
-  // TODO(https://trello.com/c/9nnYn7DH/115-предоставить-исправленную-формулу-вычисления-восстановления-отката):
-  // * Use proper formulas
-  // * Use reduction
-  // * Use api.model.magicFeedbackReduction
-  const feedbackDuration = duration(Math.floor((power + 1) / 2), 'minutes');
-  const feedbackAmount = Math.floor((power + 1) / 2);
+function applyAndGetMagicFeedback(
+  api: EventModelApi<Sr2020Character>,
+  data: { power: number; location: { manaLevel: number } },
+  spell: Spell,
+  adjustment: number,
+  canHaveZeroFeedback: boolean,
+) {
+  // TODO(aeremin) Fix use of api.model.magicFeedbackReduction
+  const feedback = Math.max(
+    0,
+    (5 * data.power + adjustment) * (api.workModel.currentBody == 'astral' ? 0.25 : 1) * (data.location.manaLevel < 4 ? 1.5 : 1),
+  );
+
+  const feedbackDuration = duration(
+    Math.max(1, Math.ceil(Math.pow(2, Math.min(14, feedback)) / api.workModel.magicStats.recoverySpeed)),
+    'minutes',
+  );
+  const feedbackAmount = Math.max(Math.ceil(Math.sqrt(feedback) * api.workModel.magicStats.feedbackReduction), canHaveZeroFeedback ? 0 : 1);
 
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
   addTemporaryModifier(api, m, feedbackDuration);

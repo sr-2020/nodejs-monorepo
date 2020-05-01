@@ -14,6 +14,22 @@ export interface ReagentContent {
   scorpio: number;
 }
 
+export const kEmptyContent: ReagentContent = {
+  virgo: 0,
+  taurus: 0,
+  aries: 0,
+  cancer: 0,
+  gemini: 0,
+  capricorn: 0,
+  ophiuchus: 0,
+  pisces: 0,
+  sagittarius: 0,
+  leo: 0,
+  libra: 0,
+  aquarius: 0,
+  scorpio: 0,
+};
+
 export interface Reagent {
   id: string;
   name: string;

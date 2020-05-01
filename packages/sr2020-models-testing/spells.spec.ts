@@ -123,11 +123,16 @@ describe('Spells', function() {
       expect(fixture.getCharacterNotifications().length).to.equal(1);
       expect(fixture.getCharacterNotifications()[0].body).containEql('хитов: 5');
       expect(workModel.history.length).to.equal(2); // Spell casted + Hp restored
-      expect(workModel.magic).to.equal(7); // Spell casted + Hp restored
+      expect(workModel.magic).to.equal(3);
     }
 
     {
-      fixture.advanceTime(duration(5, 'minutes'));
+      fixture.advanceTime(duration(5, 'days'));
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magic).to.equal(3);
+    }
+    {
+      fixture.advanceTime(duration(10, 'days'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.magic).to.equal(10);
     }
@@ -143,7 +148,7 @@ describe('Spells', function() {
     );
     expect(fixture.getCharacterNotifications(1).length).to.equal(1);
     expect(workModel.history.length).to.equal(1); // Spell casted
-    expect(workModel.magic).to.equal(5);
+    expect(workModel.magic).to.equal(1);
 
     expect(fixture.getCharacterNotifications(2).length).to.equal(1);
     expect(fixture.getCharacterNotifications(2)[0].body).containEql('хитов: 3');
@@ -167,7 +172,7 @@ describe('Spells', function() {
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
-      expect(workModel.magic).to.equal(9);
+      expect(workModel.magic).to.equal(5);
     }
 
     let abilityId: string;
@@ -179,7 +184,6 @@ describe('Spells', function() {
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
       abilityId = workModel.activeAbilities[0].id;
-      expect(workModel.magic).to.equal(10);
     }
 
     {
@@ -215,7 +219,7 @@ describe('Spells', function() {
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(workModel.history.length).to.equal(1); // Spell casted
-      expect(workModel.magic).to.equal(8);
+      expect(workModel.magic).to.equal(3);
     }
 
     {
@@ -274,20 +278,20 @@ describe('Spells', function() {
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 5 } },
       3,
     );
-    expect(workModel.magic).to.equal(2);
+    expect(workModel.magic).to.equal(-2);
     expect(tableResponse.length).to.equal(2);
     expect(tableResponse).containDeep([
       {
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 2,
+        magicFeedback: 7,
       },
       {
         spellName: 'Ground Heal',
         timestamp: 1020000,
         power: 6,
-        magicFeedback: 3,
+        magicFeedback: 8,
       },
     ]);
 
@@ -316,14 +320,14 @@ describe('Spells', function() {
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
       2,
     );
-    expect(workModel.magic).to.equal(6);
+    expect(workModel.magic).to.equal(1);
     expect(tableResponse.length).to.equal(1);
     expect(tableResponse).containDeep([
       {
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 2,
+        magicFeedback: 7,
       },
     ]);
 
@@ -458,6 +462,27 @@ describe('Spells', function() {
     {
       const { workModel } = await fixture.getCharacter(2);
       expect(workModel.charisma).equal(2);
+    }
+  });
+
+  it('Use reagents', async () => {
+    await fixture.saveCharacter({ metarace: 'meta-elf', magic: 10 });
+    const reagentIds = ['3', '6', '23'];
+    for (const modelId of reagentIds) {
+      await fixture.saveQrCode({ modelId });
+      await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'skalozub', name: '', description: '' } }, modelId);
+    }
+
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } });
+    const { workModel } = await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'fireball', location: { id: 0, manaLevel: 5 }, power: 3, reagentIds },
+    });
+    expect(workModel.magic).equal(6);
+
+    for (const modelId of reagentIds) {
+      const qr = await fixture.getQrCode(modelId);
+      expect(qr.workModel.type).equal('empty');
     }
   });
 });
