@@ -57,7 +57,6 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         await result.lockAndGetBaseModel(Sr2020Character, Number(id));
       }
     }
-    // TODO(aeremin): Add support for other cases requiring acquiring.
 
     await result.synchronizeModels(this._modelEngineService);
     return result;

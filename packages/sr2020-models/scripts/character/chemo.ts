@@ -57,7 +57,7 @@ export const kAllElements: Array<keyof Concentrations> = [
 ];
 
 export const kAllChemoEffects: ChemoEffect[] = [
-  // TODO(aeremin): Implement teqgel.
+  // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Implement teqgel.
   {
     element: 'teqgel',
     level: 'base',
@@ -706,7 +706,10 @@ export const kAllChemoEffects: ChemoEffect[] = [
 ];
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
-  // TODO(aeremin) Check for body type
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Только мясное тело может принимать препараты!');
+  }
+
   const pill = kAllPills.find((it) => it.id == data.id);
   if (!pill) {
     throw new UserVisibleError('Такого препарата не существует');

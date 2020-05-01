@@ -1524,7 +1524,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь использовать мобильный автодок.',
     // 481
     // Допуск: мобильный автодок
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     modifier: [],
   },
 
@@ -1534,7 +1534,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
     // 483
     // - лечит тяжран (3 заряда / 6 часов). То есть 3 заряда, у каждого CD 6 часов
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     modifier: [],
   },
 
@@ -1588,7 +1588,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 522
     // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на лёгкие дроны
     //
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
     modifier: [],
   },
 
@@ -1599,7 +1599,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 523
     // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику
     //
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
     modifier: [],
   },
 
@@ -1610,7 +1610,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 524
     // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику и боевую технику
     //
-    // TODO(aeremin): Implement and add modifier here
+    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
     modifier: [],
   },
 
@@ -1640,7 +1640,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Импланты, установленные у тебя сложнее вырезать рипоменам.',
     // 517
     // Отбивает с шансом 50% попытку вырезать у тебя имплант.
-    // TODO(aeremin): Implement corresponding mechanic
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
     modifier: [],
   },
 

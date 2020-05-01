@@ -76,7 +76,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 60
     // Самурай находит тушку в тяжране, применяет эту абилку, сканирует QR тушки. Со счета тушки переводится самураю 10% нуйен остатка счета тушки. Тушка автоматически переходит в КС. Перевод создается без обоснования. В поле назначение - "добровольное пожертвование".
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/ihi8Ffmu/320-реализовать-абилку-грабеж): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {
@@ -95,7 +95,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 64
     // добивание до АС (из тяжрана или КС)
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/7lQfqtiR/321-реализовать-абилку-абсолютная-смерть): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {
@@ -114,7 +114,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 113
     // требует уровня Насилия
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/RgKWvnBk/322-реализовать-добивание-тела-из-тяжрана-в-кс): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
@@ -127,7 +127,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     // 195
     // дает возможность персонажу зайти в Виар на 2 часа (или сколько-то), кулдаун есть.  Увеличение длительности виара ИЛИ уменьшение кулдауна - спец абилки.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
@@ -223,7 +223,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Ритуал инициации техноманта.
     //
     // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/EFwxEY3c/324-реализовать-абилку-вождь): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 16 * 60,
@@ -262,7 +262,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Персонаж не забывает события перед КС',
     // 308
     // Целевой персонаж не забывает события перед КС. Для менталиста эта абилка  активная, кулдаун 4 часа. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/5T9yvpOI/325-реализовать-абилку-облачная-память): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 240,
@@ -403,7 +403,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Принять персонажа в дискурс-группу',
     // 317
     // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/16aUiZjV/288-гэ-задача-2-реализовать-абилки-членства-и-абилку-принадлежности): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
@@ -488,8 +488,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара следующие 30 минут',
     // 331
     // Множитель 0,9 на стоимость товара при покупке любого товара следующие 30 минут данным персонажем
-    //
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
@@ -502,7 +500,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара следующие 30 минут',
     // 332
     // Множитель 0,8 при покупке любого товара следующие 30 минут данным персонажем
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
@@ -516,7 +513,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара следующие 30 минут',
     // 333
     // Множитель 0,7 при покупке любого товара следующие 30 минут данным персонажем
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
@@ -968,7 +964,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Взлом замков',
     // 479
     // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 10 минут
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/h7dYMqqX/326-реализовать-абилку-allo-homorus): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
@@ -981,7 +977,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
     // 550
     // - лечит тяжран (1 заряд / 6 часов). То есть 1 заряд с CD 6 часов.
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
@@ -990,11 +986,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
 
   {
     id: 'pill-name',
-    humanReadableName: 'фармацевтика',
-    description: 'отсканируй препарати пойми, что за это',
+    humanReadableName: 'Фармацевтика',
+    description: 'Отсканируй препарати и пойми, что за это',
     // 514
     // При активации аблики игрок сканирует куар-код с препаратом и видит его название
-    // TODO(aeremin): Add proper implementation
+    // TODO(https://trello.com/c/ac3aDyG0/329-реализовать-абилку-фармацевтика): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {
