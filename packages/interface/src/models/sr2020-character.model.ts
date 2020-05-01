@@ -475,6 +475,10 @@ export class EssenceDetails {
 })
 export class Sr2020Character extends EmptyModel {
   @rproperty()
+  @Column({ type: 'text', default: 'physical' })
+  currentBody: 'physical' | 'astral';
+
+  @rproperty()
   @Column()
   maxHp: number;
 

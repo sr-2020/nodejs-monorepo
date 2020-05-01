@@ -75,6 +75,7 @@ export class ModelEngineController implements ModelEngineService {
     const result: Sr2020Character = {
       modelId: '',
       metarace: 'meta-norm',
+      currentBody: 'physical',
       maxHp: 3,
       timestamp: 0,
       body: 3,
