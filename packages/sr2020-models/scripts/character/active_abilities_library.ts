@@ -961,7 +961,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'allo-homorus',
     humanReadableName: 'Allo, homorus!',
-    description: 'Взлом замков. Требуемая эссенция: больше 2',
+    description: 'Активация дает возможность открыть один замок. Требуемая эссенция: больше 2',
     // 400
     // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 10 минут
     // TODO(https://trello.com/c/h7dYMqqX/326-реализовать-абилку-allo-homorus): Add proper implementation
