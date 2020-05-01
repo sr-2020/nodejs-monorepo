@@ -660,6 +660,16 @@
                 <b-button variant="success" v-on:click="writePillQr">Записать</b-button>
               </b-card-body>
             </b-card>
+            <b-card no-body v-if="qrModel.type == 'empty'">
+              <b-card-header>Запись реагента на QR</b-card-header>
+              <b-card-body>
+                <b-form-select v-model="selectedReagent">
+                  <option v-for="reagent in allReagents" :value="reagent.id"> {{ reagent.name }} ( {{ reagent.id }} )
+                  </option>
+                </b-form-select>
+                <b-button variant="success" v-on:click="writeReagentQr">Записать</b-button>
+              </b-card-body>
+            </b-card>
           </span>
         </b-tab>
       </b-tabs>
