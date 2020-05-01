@@ -123,6 +123,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
   );
   saveSpellTrace(api, data, spell.humanReadableName, feedback, event);
 
+  addHistoryRecord(api, 'Заклинание', spell.humanReadableName, `Заклинание ${spell.humanReadableName} успешно скастовано`);
+
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }
 
@@ -162,17 +164,14 @@ export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { l
 
 export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
   if (data.qrCode != undefined) {
-    addHistoryRecord(api, 'Заклинание', 'Лечение: на артефакт');
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
 
   if (data.targetCharacterId != undefined) {
-    addHistoryRecord(api, 'Заклинание', 'Лечение: на цель');
     api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), fullHealSpell, {});
     return;
   }
 
-  addHistoryRecord(api, 'Заклинание', 'Лечение: на себя');
   revive(api, data, event);
 }
 
@@ -185,11 +184,9 @@ export function lightHealSpell(
   event: Event,
 ) {
   if (data.targetCharacterId != undefined) {
-    addHistoryRecord(api, 'Заклинание', 'Light Heal: на цель');
     api.sendNotification('Успех', 'Заклинание совершено');
     api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), lightHeal, data);
   } else {
-    addHistoryRecord(api, 'Заклинание', 'Light Heal: на себя');
     api.sendSelfEvent(lightHeal, data);
   }
 }
@@ -228,7 +225,6 @@ export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
 }
 
 export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
-  addHistoryRecord(api, 'Заклинание', 'Live Long and Prosper: на цель');
   api.sendNotification('Успех', 'Заклинание совершено');
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, liveLongAndProsper, data);
 }
