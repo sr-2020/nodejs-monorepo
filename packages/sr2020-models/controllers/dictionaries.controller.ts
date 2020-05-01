@@ -4,6 +4,7 @@ import { kAllSpells } from '../scripts/character/spells_library';
 import { kAllActiveAbilities } from '../scripts/character/active_abilities_library';
 import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
+import { kAllReagents } from '../scripts/qr/reagents_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -88,5 +89,30 @@ export class DictionariesController {
   })
   pills(): { id: string; name: string }[] {
     return kAllPills.map((p) => ({ id: p.id, name: p.name }));
+  }
+
+  @get('/reagents', {
+    summary: `Returns the list of implemented reagents`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  reagents(): { id: string; name: string }[] {
+    return kAllReagents.map((p) => ({ id: p.id, name: p.name }));
   }
 }
