@@ -5,6 +5,7 @@ import { duration } from 'moment';
 import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { consumeChemo } from '../character/chemo';
+import { kAllReagents } from './reagents_library';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -51,6 +52,7 @@ function merchandiseIdToQrType(id: string): QrType {
 
   if (kAllImplants.find((it) => it.id == id)) return 'implant';
   if (kAllPills.find((it) => it.id == id)) return 'pill';
+  if (kAllReagents.find((it) => it.id == id)) return 'reagent';
 
   throw new UserVisibleError('Неизвестный ID товара');
 }

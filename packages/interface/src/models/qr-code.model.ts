@@ -18,7 +18,8 @@ export type QrType =
   | 'food' // Food item
   | 'ability' // Used for mental abilities - ability which affects the person who scanned it.
   | 'artifact' // Enchanted item.
-  | 'event'; // Event which affects the person who scanned it.
+  | 'event' // Event which affects the person who scanned it.
+  | 'reagent'; // Magical reagent
 
 @model()
 @Entity({
