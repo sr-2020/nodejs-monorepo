@@ -23,6 +23,8 @@ import {
   charmSpell,
   nothingSpecialSpell,
   odusSpell,
+  readCharacterAuraSpell,
+  readLocationAuraSpell,
 } from './spells';
 
 type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
@@ -428,9 +430,9 @@ const kAllSpellsList: Spell[] = [
     description: 'Узнать часть ауры не сопротивляющегося человека',
     // 527
     // маг узнает часть ауры цели (90% для метачеловека, не сопротивляющегося сканированию своего qr).
-    // TODO(https://trello.com/c/mJ9s9q6Z/331-реализовать-спеллы-fares-и-mene): Add proper implementation
     sphere: 'aura',
-    eventType: dummySpell.name,
+    hasTarget: true,
+    eventType: readCharacterAuraSpell.name,
   },
 
   {
@@ -450,9 +452,8 @@ const kAllSpellsList: Spell[] = [
     description: 'Узнать часть ауры локации',
     // 529
     // маг узнает часть ауры цели (100% для текущей локации)
-    // TODO(https://trello.com/c/mJ9s9q6Z/331-реализовать-спеллы-fares-и-mene): Add proper implementation
     sphere: 'aura',
-    eventType: dummySpell.name,
+    eventType: readLocationAuraSpell.name,
   },
 
   {

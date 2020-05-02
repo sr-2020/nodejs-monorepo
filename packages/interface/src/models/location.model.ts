@@ -25,6 +25,10 @@ export class Location extends EmptyModel {
   @property.array(SpellTrace, { required: true })
   @JsonColumn()
   spellTraces: SpellTrace[];
+
+  @property()
+  @Column({ default: 'aaaaabbbbbcccccddddd' })
+  aura: string;
 }
 
 @model()

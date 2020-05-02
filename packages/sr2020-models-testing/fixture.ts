@@ -231,6 +231,7 @@ export class TestFixture {
 
 function getDefaultLocation(timestamp: number): Location {
   return {
+    aura: 'aaaaabbbbbcccccddddd',
     manaDensity: 0,
     modelId: '0',
     spellTraces: [],

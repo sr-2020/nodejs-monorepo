@@ -338,11 +338,8 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = (10 + data.power) * 60;
-  const symbolsRead = Math.min(
-    AURA_LENGTH,
-    Math.floor((AURA_LENGTH * (10 + Math.min(40, data.power * 5)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
-  );
-  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.location.id.toString(), event);
+  const auraPercentage = (10 + Math.min(40, data.power * 5)) * api.workModel.magicStats.auraReadingMultiplier;
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString(), event);
 }
 
 // время каста 5 минут. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
@@ -350,31 +347,32 @@ export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: Spell
 export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = 60 * 60;
-  const symbolsRead = Math.min(
-    AURA_LENGTH,
-    Math.floor((AURA_LENGTH * (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier) / 100),
-  );
-  dumpSpellTraces(api, durationInSeconds, symbolsRead, data.location.id.toString(), event);
+  const auraPercentage = (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier;
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString(), event);
+}
+
+function generateAuraSubset(fullAura: string, percentage: number): string {
+  const symbolsRead = Math.min(AURA_LENGTH, Math.floor((AURA_LENGTH * percentage) / 100));
+  const positions = Array.from(Array(AURA_LENGTH).keys());
+  const picked = chance.pickset(positions, symbolsRead);
+  return positions.map((i) => (picked.includes(i) ? fullAura[i] : kUnknowAuraCharacter)).join('');
+}
+
+function splitAuraByDashes(aura: string): string {
+  return aura.substr(0, 4) + '-' + aura.substr(4, 4) + '-' + aura.substr(8, 4) + '-' + aura.substr(12, 4) + '-' + aura.substr(16, 4);
 }
 
 function dumpSpellTraces(
   api: EventModelApi<Sr2020Character>,
   durationInSeconds: number,
-  symbolsRead: number,
+  auraPercentage: number,
   locationId: string,
   event: Event,
 ) {
   const location = api.aquired(Location, locationId);
   const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
-  const positions = Array.from(Array(AURA_LENGTH).keys());
   for (const spell of spellTraces) {
-    const picked = chance.pickset(positions, symbolsRead);
-    const chars: string[] = [];
-    for (let i = 0; i < AURA_LENGTH; ++i) {
-      if (i > 0 && i % 4 == 0) chars.push('-');
-      chars.push(picked.includes(i) ? spell.casterAura[i] : kUnknowAuraCharacter);
-    }
-    spell.casterAura = chars.join('');
+    spell.casterAura = splitAuraByDashes(generateAuraSubset(spell.casterAura, auraPercentage));
   }
   api.setTableResponse(spellTraces);
 }
@@ -498,14 +496,10 @@ function applyAndGetMagicFeedback(
 
 // Magic feedback implementation
 function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number, event: Event) {
-  const positions = Array.from(Array(AURA_LENGTH).keys());
-  const picked = chance.pickset(positions, api.workModel.magicStats.auraMarkMultiplier * AURA_LENGTH);
-  const casterAura = positions.map((i) => (picked.includes(i) ? api.workModel.magicStats.aura[i] : kUnknowAuraCharacter)).join('');
-
   api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, {
     spellName,
     timestamp: event.timestamp,
-    casterAura,
+    casterAura: generateAuraSubset(api.workModel.magicStats.aura, api.workModel.magicStats.auraMarkMultiplier * 100),
     metarace: api.workModel.metarace,
     power: data.power,
     magicFeedback: feedbackAmount,
@@ -514,6 +508,26 @@ function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, sp
 
 export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.magic -= m.amount;
+}
+
+export function readCharacterAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+  const auraPercentage = 90 * api.workModel.magicStats.auraReadingMultiplier;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Результат чтения ауры персонажа',
+    splitAuraByDashes(generateAuraSubset(target.magicStats.aura, auraPercentage)),
+  );
+}
+
+export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  const target = api.aquired(Location, data.location.id.toString());
+  const auraPercentage = 100 * api.workModel.magicStats.auraReadingMultiplier;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Результат чтения ауры локации',
+    splitAuraByDashes(generateAuraSubset(target.aura, auraPercentage)),
+  );
 }
 
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
