@@ -156,3 +156,23 @@ export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: 
 export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
   api.sendNotification('Взлом', 'Вы можете приступить к взлому замка в соответствии с правилами по взлому');
 }
+
+export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, cloudMemoryEnable, {});
+}
+
+export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+  const d = duration(6, 'hours');
+  const m = modifierFromEffect(cloudMemoryEffect, { validUntil: validUntil(api, d) });
+  api.sendNotification('Облачная память', 'Получена временная пассивная способность "Облачная память"');
+  addTemporaryModifier(api, m, d);
+}
+
+export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.passiveAbilities.push({
+    id: 'cloud-memory-temporary',
+    name: 'Облачная память',
+    description: 'Вы не забываете события произошедшие с вами непосредственно перед КС',
+    validUntil: m.validUntil,
+  });
+}

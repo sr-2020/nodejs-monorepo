@@ -11,6 +11,7 @@ import {
   copyPasteQr,
   absoluteDeathAbility,
   alloHomorusAbility,
+  cloudMemoryAbility,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -32,6 +33,14 @@ export interface TargetSignature {
   // Name of field inside data in which client should pass an id of corresponding target
   field: keyof Targetable;
 }
+
+const kHealthyBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Персонаж',
+    allowedTypes: ['HEALTHY_BODY'],
+    field: 'targetCharacterId',
+  },
+];
 
 const kAstralBodyTargeted: TargetSignature[] = [
   {
@@ -259,15 +268,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
 
   {
     id: 'cloud-memory',
-    humanReadableName: 'Облачная память (вариант? )',
-    description: 'Персонаж не забывает события перед КС',
-    // 308
-    // Целевой персонаж не забывает события перед КС. Для менталиста эта абилка  активная, кулдаун 4 часа. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
-    // TODO(https://trello.com/c/5T9yvpOI/325-реализовать-абилку-облачная-память): Add proper implementation
+    humanReadableName: 'Облачная память ',
+    description: 'Целевой персонаж не забывает события перед КС',
+    // 274
+    //  персонаж не забывает события перед КС, срок действия - 6 часов. Для менталиста эта абилка  активная, кулдаун 4 часа. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: 240,
-    eventType: dummyAbility.name,
+    eventType: cloudMemoryAbility.name,
   },
 
   {
