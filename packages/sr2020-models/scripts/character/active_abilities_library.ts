@@ -50,6 +50,19 @@ const kAstralBodyTargeted: TargetSignature[] = [
   },
 ];
 
+const kLocusAndPhysicalBody: TargetSignature[] = [
+  {
+    name: 'Локус',
+    allowedTypes: ['locus'],
+    field: 'qrCode',
+  },
+  {
+    name: 'Персонаж',
+    allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY', 'ABSOLUTELY_DEAD_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
 const kNoTarget: TargetSignature[] = [];
 
 export interface ActiveAbility {
@@ -416,6 +429,71 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'dgroup-exclude',
+    humanReadableName: 'Исключить из дискурс-группы',
+    description: 'Исключить персонажа из дискурс-группы',
+    // 318
+    // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок
+    // TODO(https://trello.com/c/16aUiZjV/288-гэ-задача-2-реализовать-абилки-членства-и-абилку-принадлежности): Add proper implementation
+    target: 'scan',
+    targetsSignature: kLocusAndPhysicalBody,
+    cooldownMinutes: 30,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'dm-add-guru',
+    humanReadableName: 'Гуру',
+    description: 'Принять персонажа в дискурс-группу, не расходуя заряд локуса',
+    // 320
+    // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.
+    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
+    target: 'scan',
+    targetsSignature: kLocusAndPhysicalBody,
+    cooldownMinutes: 60,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'dm-exclude-inq-1',
+    humanReadableName: 'Инквизитор-1',
+    description: 'Выгнать персонажа из дискурс-группы, восстановив заряд локуса',
+    // 321
+    // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 1. Запускается процедура пересчета дискурс-абилок
+    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
+    target: 'scan',
+    targetsSignature: kLocusAndPhysicalBody,
+    cooldownMinutes: 30,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'dm-exclude-inq-2',
+    humanReadableName: 'Инквизитор-2',
+    description: 'Выгнать персонажа из дискурс-группы, восстановив два заряда локуса',
+    // 322
+    // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 2. Запускается процедура пересчета дискурс-абилок
+    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
+    target: 'scan',
+    targetsSignature: kLocusAndPhysicalBody,
+    cooldownMinutes: 30,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'dm-prophet',
+    humanReadableName: 'Пророк',
+    description: 'Предъявите экран с описанием абилки региональному мастеру, чтобы получить новый QR локуса.',
+    // 323
+    // Абилка-сертификат с кулдауном. Предъявителю выдается QR локуса дискурс-группы, к которой он принадлежит.
+    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 360,
     eventType: dummyAbility.name,
   },
 

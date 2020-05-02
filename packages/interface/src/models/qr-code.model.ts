@@ -19,7 +19,8 @@ export type QrType =
   | 'ability' // Used for mental abilities - ability which affects the person who scanned it.
   | 'artifact' // Enchanted item.
   | 'event' // Event which affects the person who scanned it.
-  | 'reagent'; // Magical reagent
+  | 'reagent' // Magical reagent
+  | 'locus'; // Ethic group locus
 
 @model()
 @Entity({
