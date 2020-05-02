@@ -19,12 +19,14 @@ describe('Ethic events', function() {
       data: { id: '30df06cb-5d9e-11ea-b518-e5c6714f0b78' },
     });
     expect(baseModel).containDeep({
-      ethicState: [
-        { scale: 'violence', value: 1 },
-        { scale: 'control', value: 0 },
-        { scale: 'individualism', value: 0 },
-        { scale: 'mind', value: 1 },
-      ],
+      ethic: {
+        state: [
+          { scale: 'violence', value: 1 },
+          { scale: 'control', value: 0 },
+          { scale: 'individualism', value: 0 },
+          { scale: 'mind', value: 1 },
+        ],
+      },
     });
   });
 
@@ -35,12 +37,14 @@ describe('Ethic events', function() {
       data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
     });
     expect(baseModel).containDeep({
-      ethicState: [
-        { scale: 'violence', value: -1 },
-        { scale: 'control', value: 0 },
-        { scale: 'individualism', value: 0 },
-        { scale: 'mind', value: 0 },
-      ],
+      ethic: {
+        state: [
+          { scale: 'violence', value: -1 },
+          { scale: 'control', value: 0 },
+          { scale: 'individualism', value: 0 },
+          { scale: 'mind', value: 0 },
+        ],
+      },
     });
   });
 
@@ -53,13 +57,15 @@ describe('Ethic events', function() {
         data: { id: '30df06ca-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: 0 },
-          { scale: 'control', value: 0 },
-          { scale: 'individualism', value: 0 },
-          { scale: 'mind', value: 0 },
-        ],
-        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
+        ethic: {
+          state: [
+            { scale: 'violence', value: 0 },
+            { scale: 'control', value: 0 },
+            { scale: 'individualism', value: 0 },
+            { scale: 'mind', value: 0 },
+          ],
+          trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
+        },
       });
     }
     {
@@ -69,13 +75,15 @@ describe('Ethic events', function() {
         data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: -1 },
-          { scale: 'control', value: 0 },
-          { scale: 'individualism', value: 0 },
-          { scale: 'mind', value: 0 },
-        ],
-        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
+        ethic: {
+          state: [
+            { scale: 'violence', value: -1 },
+            { scale: 'control', value: 0 },
+            { scale: 'individualism', value: 0 },
+            { scale: 'mind', value: 0 },
+          ],
+          trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
+        },
       });
     }
     {
@@ -85,15 +93,17 @@ describe('Ethic events', function() {
         data: { id: '3104de44-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: -1 },
-          { scale: 'control', value: -1 },
-          { scale: 'individualism', value: 0 },
-          { scale: 'mind', value: -1 },
-        ],
+        ethic: {
+          state: [
+            { scale: 'violence', value: -1 },
+            { scale: 'control', value: -1 },
+            { scale: 'individualism', value: 0 },
+            { scale: 'mind', value: -1 },
+          ],
+        },
       });
       expect(baseModel).not.containDeep({
-        ethicTrigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
+        ethic: { trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }] },
       });
     }
   });
@@ -107,12 +117,14 @@ describe('Ethic events', function() {
         data: { violence: 3, control: -3, individualism: 2, mind: -3 },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: 3 },
-          { scale: 'control', value: -3 },
-          { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: -3 },
-        ],
+        ethic: {
+          state: [
+            { scale: 'violence', value: 3 },
+            { scale: 'control', value: -3 },
+            { scale: 'individualism', value: 2 },
+            { scale: 'mind', value: -3 },
+          ],
+        },
       });
     }
     {
@@ -122,12 +134,14 @@ describe('Ethic events', function() {
         data: { id: '30df070e-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: 3 },
-          { scale: 'control', value: -3 },
-          { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: -4 },
-        ],
+        ethic: {
+          state: [
+            { scale: 'violence', value: 3 },
+            { scale: 'control', value: -3 },
+            { scale: 'individualism', value: 2 },
+            { scale: 'mind', value: -4 },
+          ],
+        },
       });
     }
     {
@@ -137,12 +151,14 @@ describe('Ethic events', function() {
         data: { id: '30df06d4-5d9e-11ea-b518-e5c6714f0b78' },
       });
       expect(baseModel).containDeep({
-        ethicState: [
-          { scale: 'violence', value: 4 },
-          { scale: 'control', value: -3 },
-          { scale: 'individualism', value: 2 },
-          { scale: 'mind', value: -3 },
-        ],
+        ethic: {
+          state: [
+            { scale: 'violence', value: 4 },
+            { scale: 'control', value: -3 },
+            { scale: 'individualism', value: 2 },
+            { scale: 'mind', value: -3 },
+          ],
+        },
       });
     }
   });

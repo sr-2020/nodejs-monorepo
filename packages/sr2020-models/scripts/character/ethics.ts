@@ -24,16 +24,16 @@ export function initEthic(model: Sr2020Character) {
 // Will remove all non-crysis triggers and recalculate state.
 // Returns true if ethic ability was added and false otherwise.
 function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
-  model.ethicState = [];
-  model.ethicTrigger = model.ethicTrigger.filter((t) => t.kind == 'crysis');
+  model.ethic.state = [];
+  model.ethic.trigger = model.ethic.trigger.filter((t) => t.kind == 'crysis');
   for (const [scale, value] of ethicValues) {
     const level = kEthicLevels.find((l) => l.scale == scale && l.value == value)!;
-    model.ethicState.push({
+    model.ethic.state.push({
       scale,
       value,
       description: level.description,
     });
-    model.ethicTrigger.push(
+    model.ethic.trigger.push(
       ...level.triggers.map((t) => {
         return {
           id: t.id,
@@ -50,7 +50,7 @@ function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number
     ...model.passiveAbilities.filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
   ];
 
-  const newEthicAbilities = model.ethicTrigger.find((it) => it.kind == 'crysis')
+  const newEthicAbilities = model.ethic.trigger.find((it) => it.kind == 'crysis')
     ? []
     : kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId);
 
@@ -101,12 +101,12 @@ export function ethicSet(
 export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }, event: Event) {
   const trigger = findTrigger(data.id);
   const values: Map<EthicScale, number> = new Map();
-  for (const l of api.model.ethicState) values.set(l.scale, l.value);
+  for (const l of api.model.ethic.state) values.set(l.scale, l.value);
 
   let crysisResolved = false;
 
   if (trigger.kind == 'crysis') {
-    api.model.ethicTrigger = api.model.ethicTrigger.filter((t) => t.id != data.id);
+    api.model.ethic.trigger = api.model.ethic.trigger.filter((t) => t.id != data.id);
     crysisResolved = true;
   }
 
@@ -129,8 +129,8 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
 
   for (const crysisIndex of trigger.crysises) {
     const crysis = kAllCrysises[crysisIndex - 1];
-    if (!api.model.ethicTrigger.some((t) => t.id == crysis.id)) {
-      api.model.ethicTrigger.push({
+    if (!api.model.ethic.trigger.some((t) => t.id == crysis.id)) {
+      api.model.ethic.trigger.push({
         id: crysis.id,
         kind: crysis.kind,
         description: crysis.description,
@@ -142,7 +142,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
   const gotNewAbility = updateEthic(api.model, values);
 
   if (valuesShifted) {
-    api.model.ethicLockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
+    api.model.ethic.lockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
   }
 
   if (valuesShifted) {

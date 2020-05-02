@@ -140,10 +140,10 @@ app = new Vue({
       model.passiveAbilities.forEach((f) => delete f.modifierIds);
       model.implants.forEach((f) => delete f.modifierIds);
       this.characterModel = model;
-      this.violence = model.ethicState.find((s) => s.scale == 'violence').value;
-      this.control = model.ethicState.find((s) => s.scale == 'control').value;
-      this.individualism = model.ethicState.find((s) => s.scale == 'individualism').value;
-      this.mind = model.ethicState.find((s) => s.scale == 'mind').value;
+      this.violence = model.ethic.state.find((s) => s.scale == 'violence').value;
+      this.control = model.ethic.state.find((s) => s.scale == 'control').value;
+      this.individualism = model.ethic.state.find((s) => s.scale == 'individualism').value;
+      this.mind = model.ethic.state.find((s) => s.scale == 'mind').value;
     },
 
     async setQrModel(model) {

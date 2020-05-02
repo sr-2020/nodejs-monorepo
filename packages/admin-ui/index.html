@@ -533,8 +533,8 @@
               </b-card-header>
               <b-card-body>
                 <b-collapse id="ethic_details">
-                  <b-table :items="characterModel.ethicState"></b-table>
-                  <b-table :items="characterModel.ethicTrigger">
+                  <b-table :items="characterModel.ethic.state"></b-table>
+                  <b-table :items="characterModel.ethic.trigger">
                     <template v-slot:cell(Id)="row">
                       <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
                         Активировать

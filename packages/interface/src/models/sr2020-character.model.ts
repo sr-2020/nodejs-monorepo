@@ -470,6 +470,25 @@ export class EssenceDetails {
 }
 
 @model()
+export class Ethic {
+  @property.array(String, { required: true })
+  @JsonColumn()
+  groups: string[];
+
+  @property.array(AddedEthicState, { required: true })
+  @JsonColumn()
+  state: AddedEthicState[];
+
+  @property.array(AddedEthicTrigger, { required: true })
+  @JsonColumn()
+  trigger: AddedEthicTrigger[];
+
+  @rproperty()
+  @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
+  lockedUntil: number;
+}
+
+@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -574,13 +593,9 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   passiveAbilities: AddedPassiveAbility[];
 
-  @property.array(AddedEthicState, { required: true })
-  @JsonColumn()
-  ethicState: AddedEthicState[];
-
-  @property.array(AddedEthicTrigger, { required: true })
-  @JsonColumn()
-  ethicTrigger: AddedEthicTrigger[];
+  @rproperty()
+  @Column((type) => Ethic, { prefix: 'ethic' })
+  ethic: Ethic;
 
   @property.array(AddedImplant, { required: true })
   @JsonColumn()
@@ -593,10 +608,6 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column((type) => Rigging, { prefix: 'rigging' })
   rigging: Rigging;
-
-  @rproperty()
-  @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
-  ethicLockedUntil: number;
 
   @rproperty()
   @Column((type) => EssenceDetails, { prefix: 'essence' })
