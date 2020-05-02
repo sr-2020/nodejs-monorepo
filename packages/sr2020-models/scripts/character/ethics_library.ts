@@ -1,11 +1,14 @@
 export type EthicScale = 'violence' | 'control' | 'individualism' | 'mind';
 export type EthicTriggerKind = 'action' | 'crysis' | 'principle';
 
-export interface EthicStateShift {
+export interface EthicCondition {
   scale: EthicScale;
-  change: number;
   conditionMin: number;
   conditionMax: number;
+}
+
+export interface EthicStateShift extends EthicCondition {
+  change: number;
 }
 
 export interface EthicTrigger {
@@ -27,6 +30,13 @@ export interface EthicAbilityCondition {
   scale: EthicScale;
   value: number;
   abilityId: string;
+}
+
+export interface EthicGroup {
+  id: string; // Identifier of the group
+  name: string; // Human-readable name of the group.
+  ethicStyle: EthicCondition[]; // Member of the group must meet those conditions to get abilities.
+  abilityIds: string[];
 }
 
 export const kEthicAbilities: EthicAbilityCondition[] = [
@@ -1441,5 +1451,91 @@ export const kEthicLevels: EthicLevel[] = [
         ],
       },
     ],
+  },
+];
+
+export const kAllEthicGroups: EthicGroup[] = [
+  {
+    id: 'russian-orthodox-church',
+    name: 'Русская Православная Церковь',
+    ethicStyle: [
+      {
+        scale: 'violence',
+        conditionMin: -4,
+        conditionMax: 3,
+      },
+      {
+        scale: 'control',
+        conditionMin: -3,
+        conditionMax: 4,
+      },
+      {
+        scale: 'individualism',
+        conditionMin: -4,
+        conditionMax: 1,
+      },
+      {
+        scale: 'mind',
+        conditionMin: -4,
+        conditionMax: 4,
+      },
+    ],
+    abilityIds: [],
+  },
+
+  {
+    id: 'orthodox-miracle-doers',
+    name: 'Православные чудотворцы',
+    ethicStyle: [
+      {
+        scale: 'violence',
+        conditionMin: -4,
+        conditionMax: -3,
+      },
+      {
+        scale: 'control',
+        conditionMin: 2,
+        conditionMax: 3,
+      },
+      {
+        scale: 'individualism',
+        conditionMin: -3,
+        conditionMax: -2,
+      },
+      {
+        scale: 'mind',
+        conditionMin: 0,
+        conditionMax: 1,
+      },
+    ],
+    abilityIds: [],
+  },
+
+  {
+    id: 'cold-head-and-hot-heart',
+    name: 'Холодная голова и горячее сердце',
+    ethicStyle: [
+      {
+        scale: 'violence',
+        conditionMin: 3,
+        conditionMax: 4,
+      },
+      {
+        scale: 'control',
+        conditionMin: 2,
+        conditionMax: 4,
+      },
+      {
+        scale: 'individualism',
+        conditionMin: -2,
+        conditionMax: 0,
+      },
+      {
+        scale: 'mind',
+        conditionMin: 3,
+        conditionMax: 4,
+      },
+    ],
+    abilityIds: [],
   },
 ];
