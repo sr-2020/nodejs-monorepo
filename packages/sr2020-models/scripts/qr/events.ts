@@ -6,6 +6,7 @@ import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { consumeChemo } from '../character/chemo';
 import { kAllReagents } from './reagents_library';
+import { kAllEthicGroups } from '../character/ethics_library';
 
 export function consume(api: EventModelApi<QrCode>, data: {}, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -120,5 +121,41 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, data: undefined, 
     timestamp: api.model.timestamp,
     type: 'ability',
     eventType: 'scannedConsumedMentalAbility',
+  };
+}
+
+export interface LocusQrData {
+  groupId: string;
+}
+
+export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: string; numberOfUses: number }, _: Event) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  const group = kAllEthicGroups.find((it) => it.id == data.groupId);
+
+  if (!group) {
+    throw new UserVisibleError('Такой этической группы не существует!');
+  }
+
+  if (data.numberOfUses < 0) {
+    throw new UserVisibleError('Количество зарядов локуса не может быть отрицательным!');
+  }
+
+  const qrData: LocusQrData = {
+    groupId: data.groupId,
+  };
+
+  api.model = {
+    usesLeft: data.numberOfUses,
+    description: `Относится к группе "${group.name}"`,
+    modelId: api.model.modelId,
+    modifiers: [],
+    timers: {},
+    name: 'Локус этической группы',
+    timestamp: api.model.timestamp,
+    type: 'locus',
+    data: qrData,
   };
 }
