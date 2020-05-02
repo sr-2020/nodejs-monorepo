@@ -10,11 +10,13 @@ app = new Vue({
     allImplants: undefined,
     allPills: undefined,
     allReagents: undefined,
+    allEthicGroups: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
     selectedPill: 'iodomarin',
     selectedReagent: 'virgo',
     selectedRace: 'meta-norm',
+    selectedEthicGroup: 'russian-orthodox-church',
     clinicalDeathTarget: 130,
     qrCodeId: 1,
 
@@ -25,6 +27,8 @@ app = new Vue({
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
 
     qrCodeEncoded: undefined,
+
+    locusCharges: 5,
 
     allRaces: [
       { id: 'meta-norm', name: 'Норм' },
@@ -57,6 +61,11 @@ app = new Vue({
     {
       const response = await this.$http.get(`https://model-engine.evarun.ru/reagents`);
       this.allReagents = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.evarun.ru/ethic_groups`);
+      this.allEthicGroups = response.body;
     }
   },
   methods: {
@@ -248,6 +257,10 @@ app = new Vue({
     async writeReagentQr() {
       const reagent = this.allReagents.find((v) => v.id == this.selectedReagent);
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { ...reagent, description: '' } });
+    },
+
+    async writeLocusQr() {
+      return this.sendQrEvent({ eventType: 'createLocusQr', data: { groupId: this.selectedEthicGroup, numberOfUses: this.locusCharges } });
     },
   }
 })

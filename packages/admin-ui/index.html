@@ -670,6 +670,21 @@
                 <b-button variant="success" v-on:click="writeReagentQr">Записать</b-button>
               </b-card-body>
             </b-card>
+            <b-card no-body v-if="qrModel.type == 'empty'">
+              <b-card-header>Запись локуса этической группы на QR</b-card-header>
+              <b-card-body>
+                <b-input-group prepend="Зарядов">
+                  <b-form-input type="number" v-model="locusCharges"></b-form-input>
+                  <b-form-select v-model="selectedEthicGroup">
+                    <option v-for="group in allEthicGroups" :value="group.id"> {{ group.name }} ( {{ group.id }} )
+                    </option>
+                  </b-form-select>
+                  <b-input-group-append>
+                    <b-button variant="success" v-on:click="writeLocusQr">Записать</b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </b-card-body>
+            </b-card>
           </span>
         </b-tab>
       </b-tabs>
