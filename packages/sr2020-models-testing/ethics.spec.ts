@@ -162,4 +162,47 @@ describe('Ethic events', function() {
       });
     }
   });
+
+  it('Add and remove from ethic group', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // Discourse monger
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dgroup-add' } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dgroup-exclude' } }, 1);
+
+    await fixture.saveCharacter({ modelId: '2' }); // Acolyte
+
+    // Prepare locus
+    {
+      await fixture.saveQrCode({ modelId: '3' }); // Locus
+      const { baseModel } = await fixture.sendQrCodeEvent(
+        { eventType: 'createLocusQr', data: { groupId: 'russian-orthodox-church', numberOfUses: 1 } },
+        3,
+      );
+      expect(baseModel.usesLeft).to.equal(1);
+      expect(baseModel.type).to.equal('locus');
+    }
+
+    // Add to the group
+    {
+      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-add', qrCode: '3', targetCharacterId: '2' } }, 1);
+      const acolyte = await fixture.getCharacter(2);
+      expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
+      expect(acolyte.baseModel.passiveAbilities.length).to.equal(1);
+
+      const locus = await fixture.getQrCode(3);
+      expect(locus.baseModel.usesLeft).to.equal(0);
+      expect(locus.baseModel.type).to.equal('locus');
+    }
+
+    // Remove from the group
+    {
+      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-exclude', qrCode: '3', targetCharacterId: '2' } }, 1);
+      const acolyte = await fixture.getCharacter(2);
+      expect(acolyte.baseModel.ethic.groups).to.be.empty();
+      expect(acolyte.baseModel.passiveAbilities).to.be.empty();
+
+      const locus = await fixture.getQrCode(3);
+      expect(locus.baseModel.usesLeft).to.equal(0);
+      expect(locus.baseModel.type).to.equal('locus');
+    }
+  });
 });

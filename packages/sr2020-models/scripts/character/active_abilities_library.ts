@@ -23,6 +23,7 @@ import {
 import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
+import { discourseGroupAddAbility, discourseGroupExcludeAbility } from './ethics';
 
 export type TargetType = 'scan' | 'show';
 
@@ -425,11 +426,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Принять персонажа в дискурс-группу',
     // 317
     // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.
-    // TODO(https://trello.com/c/16aUiZjV/288-гэ-задача-2-реализовать-абилки-членства-и-абилку-принадлежности): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    eventType: discourseGroupAddAbility.name,
   },
 
   {
@@ -438,11 +438,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Исключить персонажа из дискурс-группы',
     // 318
     // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок
-    // TODO(https://trello.com/c/16aUiZjV/288-гэ-задача-2-реализовать-абилки-членства-и-абилку-принадлежности): Add proper implementation
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    eventType: discourseGroupExcludeAbility.name,
   },
 
   {

@@ -8,12 +8,12 @@ import { consumeChemo } from '../character/chemo';
 import { kAllReagents } from './reagents_library';
 import { kAllEthicGroups } from '../character/ethics_library';
 
-export function consume(api: EventModelApi<QrCode>, data: {}, event: Event) {
+export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
     throw new UserVisibleError('QR-код уже использован!');
   }
   api.model.usesLeft -= 1;
-  if (api.model.usesLeft == 0) {
+  if (api.model.usesLeft == 0 && !data.noClear) {
     clear(api, {}, event);
   }
 }

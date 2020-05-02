@@ -1,9 +1,12 @@
 import { isEqual } from 'lodash';
 
 import { Sr2020Character, AddedPassiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger, kEthicAbilities } from './ethics_library';
+import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger, kEthicAbilities, EthicGroup, kAllEthicGroups } from './ethics_library';
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { kAllPassiveAbilities } from './passive_abilities_library';
+import { ActiveAbilityData } from './active_abilities';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { LocusQrData } from '../qr/events';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;
@@ -164,4 +167,65 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
       api.sendNotification('Этика', 'Ваше действие привело к кризису');
     }
   }
+}
+
+function getLocus(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData): QrCode {
+  const locus = api.aquired(QrCode, data.qrCode!);
+  if (locus?.type != 'locus') {
+    throw new UserVisibleError('Отсканированный предмет не является валидным локусом');
+  }
+  return locus;
+}
+
+function getMember(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, locus: QrCode, mode: 'add' | 'remove'): Sr2020Character {
+  const groupId = (locus.data as LocusQrData).groupId;
+  const character = api.aquired(Sr2020Character, data.targetCharacterId!);
+  const inGroup = character.ethic.groups.includes(groupId);
+  if (inGroup && mode == 'add') {
+    throw new UserVisibleError('Персонаж уже состоит в этой этической группе!');
+  }
+  if (!inGroup && mode == 'remove') {
+    throw new UserVisibleError('Персонаж не состоит в этой этической группе!');
+  }
+  return character;
+}
+
+function getGroup(groupId: string): EthicGroup {
+  const group = kAllEthicGroups.find((it) => it.id == groupId);
+  if (!group) {
+    throw new UserVisibleError(`Несуществующая этическая группа: ${groupId}`);
+  }
+  return group;
+}
+
+export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  const locus = getLocus(api, data);
+  if (locus.usesLeft <= 0) {
+    throw new UserVisibleError('Недостаточно зарядов локуса!');
+  }
+
+  const target = getMember(api, data, locus, 'add');
+  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupAdd, locus.data);
+  api.sendOutboundEvent(QrCode, locus.modelId, 'consume', { noClear: true });
+}
+
+export function discourseGroupExcludeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  const locus = getLocus(api, data);
+  const target = getMember(api, data, locus, 'remove');
+  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupRemove, locus.data);
+}
+
+export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
+  const group = getGroup(data.groupId);
+  api.model.ethic.groups.push(group.id);
+  api.model.passiveAbilities.push({
+    id: data.groupId,
+    name: 'Член этической группы',
+    description: group.name,
+  });
+}
+
+export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
+  api.model.ethic.groups = api.model.ethic.groups.filter((it) => it != data.groupId);
+  api.model.passiveAbilities = api.model.passiveAbilities.filter((it) => it.id != data.groupId);
 }
