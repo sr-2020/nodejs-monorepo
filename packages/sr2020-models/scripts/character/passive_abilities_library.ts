@@ -1116,29 +1116,29 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     name: 'Игра на бирже',
     description: 'гм выгодно вкладывает временно свободные финансы и получать небольшой процент с оборота.',
     // 306
-    // Считаем среднее из количества денег на счете за цикл, ГМ получает + _% бонусом
-    // Среднее между началом-серединой-концом цикла
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
+    // Считаем среднее из количества денег на счете за цикл, ГМ получает + 10% бонусом
+    // Среднее между началом-(серединой?)-концом цикла
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
   },
 
   {
     id: 'igra-na-birge-2',
     name: 'Игра на бирже',
-    description: 'гм выгодно вкладывает временно свободные финансы и получать небольшой процент с оборота.',
+    description: 'гм выгодно вкладывает временно свободные финансы и получать среднийпроцент с оборота.',
     // 307
-    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + _% бонусом
+    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 20% бонусом
     prerequisites: ['igra-na-birge-1'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
   },
 
   {
     id: 'igra-na-birge-3',
     name: 'Игра на бирже',
-    description: 'гм выгодно вкладывает временно свободные финансы и получать небольшой процент с оборота.',
+    description: 'гм выгодно вкладывает временно свободные финансы и получать повышенный процент с оборота.',
     // 308
-    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + _% бонусом
+    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 30% бонусом
     prerequisites: ['igra-na-birge-2'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
   },
 
   {
