@@ -152,3 +152,7 @@ export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbi
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, {});
 }
+
+export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  api.sendNotification('Взлом', 'Вы можете приступить к взлому замка в соответствии с правилами по взлому');
+}

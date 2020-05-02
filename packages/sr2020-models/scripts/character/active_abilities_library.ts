@@ -10,6 +10,7 @@ import {
   iWillSurvive,
   copyPasteQr,
   absoluteDeathAbility,
+  alloHomorusAbility,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -964,11 +965,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Активация дает возможность открыть один замок. Требуемая эссенция: больше 2',
     // 400
     // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 10 минут
-    // TODO(https://trello.com/c/h7dYMqqX/326-реализовать-абилку-allo-homorus): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
-    eventType: dummyAbility.name,
+    eventType: alloHomorusAbility.name,
   },
 
   {
