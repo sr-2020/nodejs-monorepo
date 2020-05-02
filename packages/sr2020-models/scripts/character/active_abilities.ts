@@ -1,7 +1,7 @@
 import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedActiveAbility, Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
-import { reviveOnTarget } from './death_and_rebirth';
+import { reviveOnTarget, absoluteDeath } from './death_and_rebirth';
 import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
@@ -147,4 +147,8 @@ export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbi
   const from = api.aquired(QrCode, data.pillId!);
   const to = api.aquired(QrCode, data.qrCode!);
   api.sendOutboundEvent(QrCode, to.modelId, create, from);
+}
+
+export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, {});
 }

@@ -61,6 +61,14 @@ export function reviveAbsolute(api: EventModelApi<Sr2020Character>, _data: {}, _
   healthStateTransition(api, 'healthy');
 }
 
+export function absoluteDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+  if (api.model.healthState == 'healthy') {
+    throw new UserVisibleError('Цель не ранена!');
+  }
+  sendNotificationAndHistoryRecord(api, 'Абсолютная смерть', 'Вы окончательно мертвы');
+  healthStateTransition(api, 'biologically_dead');
+}
+
 export function autodocRevive(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
   if (api.model.healthState != 'wounded') {
     throw new UserVisibleError('Пациент не находится в состоянии тяжелого ранения');

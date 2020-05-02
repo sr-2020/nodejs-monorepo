@@ -9,6 +9,7 @@ import {
   trollton,
   iWillSurvive,
   copyPasteQr,
+  absoluteDeathAbility,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -91,11 +92,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
 
   {
     id: 'absolutely-finish-him',
-    humanReadableName: 'абсолютная смерть',
+    humanReadableName: 'Абсолютная смерть',
     description: '',
     // 64
     // добивание до АС (из тяжрана или КС)
-    // TODO(https://trello.com/c/7lQfqtiR/321-реализовать-абилку-абсолютная-смерть): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {
@@ -105,7 +105,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 240,
-    eventType: dummyAbility.name,
+    eventType: absoluteDeathAbility.name,
   },
 
   {
