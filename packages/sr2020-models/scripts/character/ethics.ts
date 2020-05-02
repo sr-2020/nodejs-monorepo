@@ -9,7 +9,7 @@ const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;
 
 export function initEthic(model: Sr2020Character) {
-  updateEthic(
+  updatePersonalEthic(
     model,
     new Map([
       ['violence', 0],
@@ -23,7 +23,7 @@ export function initEthic(model: Sr2020Character) {
 // Update ethic profile based on the new ethic values.
 // Will remove all non-crysis triggers and recalculate state.
 // Returns true if ethic ability was added and false otherwise.
-function updateEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
+function updatePersonalEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
   model.ethic.state = [];
   model.ethic.trigger = model.ethic.trigger.filter((t) => t.kind == 'crysis');
   for (const [scale, value] of ethicValues) {
@@ -87,7 +87,7 @@ export function ethicSet(
   data: { violence: number; control: number; individualism: number; mind: number },
   _: Event,
 ) {
-  updateEthic(
+  updatePersonalEthic(
     api.model,
     new Map([
       ['violence', data.violence],
@@ -139,7 +139,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
     }
   }
 
-  const gotNewAbility = updateEthic(api.model, values);
+  const gotNewAbility = updatePersonalEthic(api.model, values);
 
   if (valuesShifted) {
     api.model.ethic.lockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
