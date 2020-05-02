@@ -1,4 +1,6 @@
 import { post, requestBody, HttpErrors, OperationObject } from '@loopback/rest';
+import Chance = require('chance');
+const chance = new Chance();
 import {
   Sr2020Character,
   Sr2020CharacterProcessResponse,
@@ -13,6 +15,7 @@ import { ModelEngineService } from '@sr2020/interface/services/model-engine.serv
 import { Empty } from '@sr2020/interface/models';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
+import { AURA_LENGTH } from '../scripts/character/consts';
 
 function spec(modelType: string, responseType: any): OperationObject {
   return {
@@ -72,6 +75,10 @@ export class ModelEngineController implements ModelEngineService {
     },
   })
   async defaultCharacter(@requestBody() _: Empty): Promise<Sr2020Character> {
+    const auraChars: string[] = [];
+    for (let i = 0; i < AURA_LENGTH; ++i) auraChars.push(chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }));
+    const aura = auraChars.join('');
+
     const result: Sr2020Character = {
       modelId: '',
       metarace: 'meta-norm',
@@ -115,7 +122,7 @@ export class ModelEngineController implements ModelEngineService {
         auraReadingMultiplier: 1,
         auraMarkMultiplier: 1,
         auraMask: 0,
-        aura: 'aaaabbbbccccddddeeee',
+        aura,
       },
       healthState: 'healthy',
       cooldownCoefficient: 1.0,
