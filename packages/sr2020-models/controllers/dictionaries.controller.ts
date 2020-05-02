@@ -5,6 +5,7 @@ import { kAllActiveAbilities } from '../scripts/character/active_abilities_libra
 import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
+import { kAllEthicGroups } from '../scripts/character/ethics_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -114,5 +115,30 @@ export class DictionariesController {
   })
   reagents(): { id: string; name: string }[] {
     return kAllReagents.map((p) => ({ id: p.id, name: p.name }));
+  }
+
+  @get('/ethic_groups', {
+    summary: `Returns the list of implemented ethic groups`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  ethicGroups(): { id: string; name: string }[] {
+    return kAllEthicGroups.map((p) => ({ id: p.id, name: p.name }));
   }
 }
