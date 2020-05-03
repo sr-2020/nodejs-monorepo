@@ -51,6 +51,10 @@ function merchandiseIdToQrType(id: string): QrType {
     return 'food';
   }
 
+  if (id == 'locus-charge') {
+    return 'locus_charge';
+  }
+
   if (kAllImplants.find((it) => it.id == id)) return 'implant';
   if (kAllPills.find((it) => it.id == id)) return 'pill';
   if (kAllReagents.find((it) => it.id == id)) return 'reagent';

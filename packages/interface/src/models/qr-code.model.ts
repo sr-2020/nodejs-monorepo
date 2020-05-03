@@ -20,7 +20,8 @@ export type QrType =
   | 'artifact' // Enchanted item.
   | 'event' // Event which affects the person who scanned it.
   | 'reagent' // Magical reagent
-  | 'locus'; // Ethic group locus
+  | 'locus' // Ethic group locus
+  | 'locus_charge'; // Charge for the locus
 
 @model()
 @Entity({
