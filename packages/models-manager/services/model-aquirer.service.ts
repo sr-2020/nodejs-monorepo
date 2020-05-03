@@ -48,13 +48,10 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       }
     }
 
-    // Aquire QR codes if event.data has qrCodes set.
-    if (event.data && (event.data.qrCodes != undefined || event.data.qrCode != undefined)) {
-      const codes: number[] = event.data.qrCodes || [];
-      if (event.data.qrCode != undefined) codes.push(event.data.qrCode);
-      for (const code of codes) {
-        await result.lockAndGetBaseModel(QrCode, code);
-      }
+    // Aquire QR codes if event.data has qrCode set.
+    if (event.data && event.data.qrCode) {
+      const code: number = event.data.qrCode;
+      await result.lockAndGetBaseModel(QrCode, code);
     }
 
     // Aquire ritual participants if event.data has ritualMembersIds set.

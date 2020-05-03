@@ -3,12 +3,6 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consume } from '../qr/events';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 
-export function consumeQrs(api: EventModelApi<Sr2020Character>, data: { qrCodes: number[] }, _: Event) {
-  for (const code of data.qrCodes) {
-    api.sendOutboundEvent(QrCode, code.toString(), consume, {});
-  }
-}
-
 export function scanQr(
   api: EventModelApi<Sr2020Character>,
   data: { qrCode: string; location?: { id: string; manaLevel: string }; targetCharacterId?: string },

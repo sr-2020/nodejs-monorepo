@@ -91,16 +91,22 @@ describe('Fixture', function() {
     expect(await fixture.getLocation()).containDeep({ workModel: { manaDensity: 40 } });
   });
 
-  it('Consume some QR codes', async () => {
-    await fixture.saveCharacter();
-    await fixture.saveQrCode({ modelId: '0', usesLeft: 5, type: 'event' });
-    await fixture.saveQrCode({ modelId: '1', usesLeft: 1, type: 'event' });
-    await fixture.sendCharacterEvent({
-      eventType: 'consume-qrs',
-      data: { qrCodes: [0, 1] },
+  it('Consume QR code', async () => {
+    await fixture.saveQrCode({ usesLeft: 5, type: 'event' });
+    await fixture.sendQrCodeEvent({
+      eventType: 'consume',
+      data: { id: '0' },
     });
-    expect(await fixture.getQrCode(0)).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
-    expect(await fixture.getQrCode(1)).containDeep({ workModel: { usesLeft: 0, type: 'empty' } });
+    expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
+  });
+
+  it('Completely consume QR code', async () => {
+    await fixture.saveQrCode({ usesLeft: 1, type: 'event' });
+    await fixture.sendQrCodeEvent({
+      eventType: 'consume',
+      data: {},
+    });
+    expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 0, type: 'empty' } });
   });
 
   it('QR codes with events', async () => {
