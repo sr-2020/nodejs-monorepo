@@ -17,7 +17,7 @@ describe('Merchandise', () => {
     await fixture.saveQrCode({ modelId: '3' });
 
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'food', additionalData: { scoring: 0.5 } } }, 3);
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: 3 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '3' } }, 1);
 
     expect(fixture.getPubSubNotifications()).to.containDeep([
       {

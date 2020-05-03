@@ -33,10 +33,10 @@ function checkIfCanWorkWithImplant(rigger: Sr2020Character, implant: AddedImplan
 // Tries to install implant from the QR code.
 export function riggerInstallImplant(
   api: EventModelApi<Sr2020Character>,
-  data: { targetCharacterId: string; qrCode: number },
+  data: { targetCharacterId: string; qrCode: string },
   event: Event,
 ) {
-  const qr = api.aquired(QrCode, data.qrCode.toString());
+  const qr = api.aquired(QrCode, data.qrCode);
   if (qr.type != 'implant') {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
@@ -48,7 +48,7 @@ export function riggerInstallImplant(
 
   checkIfCanWorkWithImplant(api.workModel, implant);
 
-  api.sendOutboundEvent(QrCode, data.qrCode.toString(), consume, {});
+  api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, { id: qr.data.id });
 
   // Not calling analyzeBody directly as we need for install event above propagate first
@@ -58,7 +58,7 @@ export function riggerInstallImplant(
 // Tries to extract implant. Writes extracted implant to the QR code.
 export function riggerUninstallImplant(
   api: EventModelApi<Sr2020Character>,
-  data: { targetCharacterId: string; implantId: string; qrCode: number },
+  data: { targetCharacterId: string; implantId: string; qrCode: string },
   event: Event,
 ) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -69,13 +69,13 @@ export function riggerUninstallImplant(
 
   checkIfCanWorkWithImplant(api.workModel, implant);
 
-  const qr = api.aquired(QrCode, data.qrCode.toString());
+  const qr = api.aquired(QrCode, data.qrCode);
   if (qr.type != 'empty') {
     throw new UserVisibleError('Отсканированный QR-код не является пустышкой.');
   }
 
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, removeImplant, { id: implant.id });
-  api.sendOutboundEvent(QrCode, data.qrCode.toString(), createMerchandise, {
+  api.sendOutboundEvent(QrCode, data.qrCode, createMerchandise, {
     id: implant.id,
     name: implant.name,
     description: implant.description,

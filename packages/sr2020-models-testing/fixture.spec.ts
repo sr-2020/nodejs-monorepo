@@ -108,7 +108,7 @@ describe('Fixture', function() {
     await fixture.saveQrCode({ usesLeft: 5, type: 'event', eventType: 'increase-resonance-spell', data: {} });
     await fixture.sendCharacterEvent({
       eventType: 'scan-qr',
-      data: { qrCode: 0 },
+      data: { qrCode: '0' },
     });
     expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
     expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 11 } });

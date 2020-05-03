@@ -43,7 +43,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'rcc-beta' } }, 3);
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: 3 } },
+        { eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } },
         2,
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
@@ -71,7 +71,7 @@ describe('Rigger abilities', () => {
     }
     {
       const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'riggerUninstallImplant', data: { targetCharacterId: '1', qrCode: 3, implantId: 'rcc-beta' } },
+        { eventType: 'riggerUninstallImplant', data: { targetCharacterId: '1', qrCode: '3', implantId: 'rcc-beta' } },
         2,
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;

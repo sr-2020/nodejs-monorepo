@@ -19,7 +19,7 @@ describe('Mentalistic events', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'luke-i-am-your-father' } }, 1);
     const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
 
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
     expect(fixture.getCharacterNotifications(1)).to.deepEqual([{ title: 'Успех!', body: 'Ваша способность подействовала.' }]);
     expect(fixture.getCharacterNotifications(2)).to.deepEqual([
@@ -36,7 +36,7 @@ describe('Mentalistic events', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'luke-i-am-your-father' } }, 1);
     const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
 
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
     expect(fixture.getCharacterNotifications(1)).to.deepEqual([{ title: 'Провал!', body: 'Цель защитилась от вашего воздействия.' }]);
     expect(fixture.getCharacterNotifications(2)).to.deepEqual([
@@ -53,11 +53,11 @@ describe('Mentalistic events', function() {
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'luke-i-am-your-father' } }, 1);
     const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
 
-    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
     const resp = await fixture.client
       .post(`/character/model/2`)
-      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId } })
+      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } })
       .expect(400);
     expect(resp.body.error.message).containEql('пустышка');
   });
@@ -72,7 +72,7 @@ describe('Mentalistic events', function() {
 
     const resp = await fixture.client
       .post(`/character/model/2`)
-      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId } })
+      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } })
       .expect(400);
     expect(resp.body.error.message).containEql('уже закончилось');
   });

@@ -141,8 +141,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }
 
-function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: number, whatItDoes: string, eventType: string, usesLeft = 1) {
-  api.sendOutboundEvent(QrCode, qrCode.toString(), create, {
+function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: string, whatItDoes: string, eventType: string, usesLeft = 1) {
+  api.sendOutboundEvent(QrCode, qrCode, create, {
     type: 'artifact',
     description: `Этот артефакт позволяет ${whatItDoes} даже не будучи магом!`,
     eventType,
@@ -155,7 +155,7 @@ export function increaseResonanceByOne(api: EventModelApi<Sr2020Character>, _dat
   api.model.resonance++;
 }
 
-export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number }, _event: Event) {
+export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string }, _event: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', increaseResonanceSpell.name, 3);
   }
@@ -167,7 +167,7 @@ export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { l
   api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: data.amount });
 }
 
-export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: number }, _: Event) {
+export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: string }, _: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
@@ -175,7 +175,7 @@ export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { l
   api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
-export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: number; targetCharacterId?: number }, event: Event) {
+export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string; targetCharacterId?: number }, event: Event) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
