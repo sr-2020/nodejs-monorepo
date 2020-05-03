@@ -55,7 +55,7 @@ const kLocusAndPhysicalBody: TargetSignature[] = [
   {
     name: 'Локус',
     allowedTypes: ['locus'],
-    field: 'qrCode',
+    field: 'locusId',
   },
   {
     name: 'Персонаж',

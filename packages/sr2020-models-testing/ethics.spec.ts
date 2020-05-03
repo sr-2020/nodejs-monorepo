@@ -183,7 +183,7 @@ describe('Ethic events', function() {
 
     // Add to the group
     {
-      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-add', qrCode: '3', targetCharacterId: '2' } }, 1);
+      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-add', locusId: '3', targetCharacterId: '2' } }, 1);
       const acolyte = await fixture.getCharacter(2);
       expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
       expect(acolyte.baseModel.passiveAbilities.length).to.equal(1);
@@ -195,7 +195,10 @@ describe('Ethic events', function() {
 
     // Remove from the group
     {
-      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-exclude', qrCode: '3', targetCharacterId: '2' } }, 1);
+      await fixture.sendCharacterEvent(
+        { eventType: 'useAbility', data: { id: 'dgroup-exclude', locusId: '3', targetCharacterId: '2' } },
+        1,
+      );
       const acolyte = await fixture.getCharacter(2);
       expect(acolyte.baseModel.ethic.groups).to.be.empty();
       expect(acolyte.baseModel.passiveAbilities).to.be.empty();

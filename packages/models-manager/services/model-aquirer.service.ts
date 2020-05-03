@@ -35,6 +35,12 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       await result.lockAndGetBaseModel(QrCode, pillId);
     }
 
+    // Aquire locus if event.data has pillId set.
+    if (event.data && event.data.locusId) {
+      const locusId: number = event.data.locusId;
+      await result.lockAndGetBaseModel(QrCode, locusId);
+    }
+
     // Aquire reagents if event.data has reagentIds set.
     if (event.data && event.data.reagentIds) {
       for (const reagentId of event.data.reagentIds) {

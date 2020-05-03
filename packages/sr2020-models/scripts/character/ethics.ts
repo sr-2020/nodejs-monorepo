@@ -170,7 +170,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
 }
 
 function getLocus(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData): QrCode {
-  const locus = api.aquired(QrCode, data.qrCode!);
+  const locus = api.aquired(QrCode, data.locusId!);
   if (locus?.type != 'locus') {
     throw new UserVisibleError('Отсканированный предмет не является валидным локусом');
   }

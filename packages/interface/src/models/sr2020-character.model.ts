@@ -36,6 +36,7 @@ export class AddedSpell {
 export interface Targetable {
   targetCharacterId: string;
   pillId: string;
+  locusId: string;
   qrCode: string;
 }
 
