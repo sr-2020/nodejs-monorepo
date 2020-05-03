@@ -18,6 +18,13 @@ export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean },
   }
 }
 
+export function unconsume(api: EventModelApi<QrCode>, data: {}, event: Event) {
+  if (api.model.type == 'empty') {
+    throw new UserVisibleError('Нельзя зарядить пустышку!');
+  }
+  api.model.usesLeft += 1;
+}
+
 export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Event) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');

@@ -208,4 +208,25 @@ describe('Ethic events', function() {
       expect(locus.baseModel.type).to.equal('locus');
     }
   });
+
+  it('Charge locus', async () => {
+    await fixture.saveCharacter(); // Discourse monger
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dm-inc-counter' } });
+
+    await fixture.saveQrCode({ modelId: '3' }); // Locus
+    await fixture.sendQrCodeEvent({ eventType: 'createLocusQr', data: { groupId: 'russian-orthodox-church', numberOfUses: 8 } }, 3);
+
+    await fixture.saveQrCode({ modelId: '5' }); // Charge
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'locus-charge' } }, 5);
+
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dm-inc-counter', locusId: '3', qrCode: '5' } });
+
+    const locus = await fixture.getQrCode(3);
+    expect(locus.baseModel.type).equal('locus');
+    expect(locus.baseModel.usesLeft).equal(9);
+
+    const emptyCharge = await fixture.getQrCode(5);
+    expect(emptyCharge.baseModel.type).equal('empty');
+    expect(emptyCharge.baseModel.usesLeft).equal(0);
+  });
 });

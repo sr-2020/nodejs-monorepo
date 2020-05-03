@@ -23,7 +23,7 @@ import {
 import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
-import { discourseGroupAddAbility, discourseGroupExcludeAbility } from './ethics';
+import { discourseGroupAddAbility, discourseGroupExcludeAbility, chargeLocusAbility } from './ethics';
 
 export type TargetType = 'scan' | 'show';
 
@@ -442,6 +442,30 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
     eventType: discourseGroupExcludeAbility.name,
+  },
+
+  {
+    id: 'dm-inc-counter',
+    humanReadableName: 'Добавить заряд к локусу',
+    description: 'Добавить один заряд к локусу',
+    // 319
+    // Сканируется код локуса, код пополнения заряда. Количество зарядов на локусе увеличивается на 1.
+    // TODO(aeremin): Add proper implementation
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Локус',
+        allowedTypes: ['locus'],
+        field: 'locusId',
+      },
+      {
+        name: 'Заряд',
+        allowedTypes: ['locus_charge'],
+        field: 'qrCode',
+      },
+    ],
+    cooldownMinutes: 0,
+    eventType: chargeLocusAbility.name,
   },
 
   {

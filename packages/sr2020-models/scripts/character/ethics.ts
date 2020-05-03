@@ -229,3 +229,18 @@ export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: 
   api.model.ethic.groups = api.model.ethic.groups.filter((it) => it != data.groupId);
   api.model.passiveAbilities = api.model.passiveAbilities.filter((it) => it.id != data.groupId);
 }
+
+export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  getLocus(api, data);
+  const charge = api.aquired(QrCode, data.qrCode!);
+  if (!(charge && charge.type == 'locus_charge')) {
+    throw new UserVisibleError('Отсканированный предмет не является валидным зарядом локуса');
+  }
+
+  if (charge.usesLeft <= 0) {
+    throw new UserVisibleError('Нет зарядов');
+  }
+
+  api.sendOutboundEvent(QrCode, data.qrCode!, 'consume', {});
+  api.sendOutboundEvent(QrCode, data.locusId!, 'unconsume', {});
+}
