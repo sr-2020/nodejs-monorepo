@@ -1,13 +1,16 @@
-import * as Winston from 'winston';
-(Winston as any).level = 'warn';
-
+import * as winston from 'winston';
 import { LogLevel, LogSource } from 'interface/src/models/alice-model-engine';
+
+export const logger = winston.createLogger({
+  level: 'info',
+  transports: [new winston.transports.Console()],
+});
 
 function log(source: LogSource, level: LogLevel, msg: string, additionalData?: any) {
   additionalData = additionalData ? additionalData : {};
   additionalData.timestamp = Date.now();
   additionalData.pid = process.pid;
-  Winston.log(level, msg, additionalData);
+  logger.log(level, msg, additionalData);
 }
 
 function logStep(source: LogSource, level: LogLevel, step: string, additionalData?: any) {

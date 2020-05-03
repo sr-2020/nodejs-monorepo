@@ -15,12 +15,12 @@ import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection'
 import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
-import * as Winston from 'winston';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { Duration } from 'moment';
 import { LoggerService } from '@sr2020/models-manager/services/logger.service';
+import { logger } from '@sr2020/alice-model-engine/logger';
 
-(Winston as any).level = 'error';
+logger.level = 'error';
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
