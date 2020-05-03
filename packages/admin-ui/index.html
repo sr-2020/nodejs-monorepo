@@ -671,7 +671,7 @@
               </b-card-body>
             </b-card>
             <b-card no-body v-if="qrModel.type == 'empty'">
-              <b-card-header>Запись локуса этической группы на QR</b-card-header>
+              <b-card-header>Запись локуса этической группы / универсального заряда на QR</b-card-header>
               <b-card-body>
                 <b-input-group prepend="Зарядов">
                   <b-form-input type="number" v-model="locusCharges"></b-form-input>
@@ -680,7 +680,8 @@
                     </option>
                   </b-form-select>
                   <b-input-group-append>
-                    <b-button variant="success" v-on:click="writeLocusQr">Записать</b-button>
+                    <b-button variant="success" v-on:click="writeLocusQr">Записать локус</b-button>
+                    <b-button variant="success" v-on:click="writeLocusChargeQr">Записать заряд локуса</b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-card-body>

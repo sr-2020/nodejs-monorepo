@@ -259,6 +259,17 @@ app = new Vue({
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { ...reagent, description: '' } });
     },
 
+    async writeLocusChargeQr() {
+      return this.sendQrEvent({
+        eventType: 'createMerchandise',
+        data: {
+          id: 'locus-charge',
+          name: '', description: 'Позволяет зарядить любой локус при наличии соответствующей способности ',
+          numberOfUses: this.locusCharges
+        }
+      });
+    },
+
     async writeLocusQr() {
       return this.sendQrEvent({ eventType: 'createLocusQr', data: { groupId: this.selectedEthicGroup, numberOfUses: this.locusCharges } });
     },
