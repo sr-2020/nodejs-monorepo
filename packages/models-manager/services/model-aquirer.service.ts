@@ -17,50 +17,39 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage> {
     const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, now);
-    // Aquire location if event.data has location set.
-    if (event.data && event.data.location) {
-      const locationId: number = event.data.location.id;
-      await result.lockAndGetBaseModel(Location, locationId);
-    }
+    if (event.data) {
+      // Aquire location if event.data has location set.
+      if (event.data.location) {
+        const locationId = Number(event.data.location.id);
+        await result.lockAndGetBaseModel(Location, locationId);
+      }
 
-    // Aquire character if event.data has targetCharacterId set.
-    if (event.data && event.data.targetCharacterId) {
-      const characterId: number = event.data.targetCharacterId;
-      await result.lockAndGetBaseModel(Sr2020Character, characterId);
-    }
+      for (const key of ['pillId', 'locusId', 'qrCode']) {
+        if (event.data[key]) {
+          await result.lockAndGetBaseModel(QrCode, Number(event.data[key]));
+        }
+      }
 
-    // Aquire pill if event.data has pillId set.
-    if (event.data && event.data.pillId) {
-      const pillId: number = event.data.pillId;
-      await result.lockAndGetBaseModel(QrCode, pillId);
-    }
+      // Aquire character if event.data has targetCharacterId set.
+      if (event.data.targetCharacterId) {
+        const characterId = Number(event.data.targetCharacterId);
+        await result.lockAndGetBaseModel(Sr2020Character, characterId);
+      }
 
-    // Aquire locus if event.data has pillId set.
-    if (event.data && event.data.locusId) {
-      const locusId: number = event.data.locusId;
-      await result.lockAndGetBaseModel(QrCode, locusId);
-    }
+      // Aquire reagents if event.data has reagentIds set.
+      if (event.data.reagentIds) {
+        for (const reagentId of event.data.reagentIds) {
+          await result.lockAndGetBaseModel(QrCode, reagentId);
+        }
+      }
 
-    // Aquire reagents if event.data has reagentIds set.
-    if (event.data && event.data.reagentIds) {
-      for (const reagentId of event.data.reagentIds) {
-        await result.lockAndGetBaseModel(QrCode, reagentId);
+      // Aquire ritual participants if event.data has ritualMembersIds set.
+      if (event.data.ritualMembersIds) {
+        for (const id of event.data?.ritualMembersIds) {
+          await result.lockAndGetBaseModel(Sr2020Character, Number(id));
+        }
       }
     }
-
-    // Aquire QR codes if event.data has qrCode set.
-    if (event.data && event.data.qrCode) {
-      const code: number = event.data.qrCode;
-      await result.lockAndGetBaseModel(QrCode, code);
-    }
-
-    // Aquire ritual participants if event.data has ritualMembersIds set.
-    if (event.data?.ritualMembersIds) {
-      for (const id of event.data?.ritualMembersIds) {
-        await result.lockAndGetBaseModel(Sr2020Character, Number(id));
-      }
-    }
-
     await result.synchronizeModels(this._modelEngineService);
     return result;
   }
