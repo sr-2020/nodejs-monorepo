@@ -3,7 +3,8 @@ import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-c
 import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
-import { createMerchandise, consume } from '../qr/events';
+import { consume } from '../qr/events';
+import { createMerchandise } from '../qr/merchandise';
 import { autodocRevive, autodocHeal } from './death_and_rebirth';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {

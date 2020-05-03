@@ -6,7 +6,7 @@ import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models
 import { kAllPassiveAbilities } from './passive_abilities_library';
 import { ActiveAbilityData } from './active_abilities';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { LocusQrData } from '../qr/events';
+import { LocusQrData, consume, unconsume } from '../qr/events';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;
@@ -206,7 +206,7 @@ export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, da
 
   const target = getMember(api, data, locus, 'add');
   api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupAdd, locus.data);
-  api.sendOutboundEvent(QrCode, locus.modelId, 'consume', { noClear: true });
+  api.sendOutboundEvent(QrCode, locus.modelId, consume, { noClear: true });
 }
 
 export function discourseGroupExcludeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
@@ -241,6 +241,6 @@ export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: Ac
     throw new UserVisibleError('Нет зарядов');
   }
 
-  api.sendOutboundEvent(QrCode, data.qrCode!, 'consume', {});
-  api.sendOutboundEvent(QrCode, data.locusId!, 'unconsume', {});
+  api.sendOutboundEvent(QrCode, data.qrCode!, consume, {});
+  api.sendOutboundEvent(QrCode, data.locusId!, unconsume, {});
 }

@@ -1,11 +1,6 @@
 import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode, QrType } from '@sr2020/interface/models/qr-code.model';
-import { consumeFood } from '../character/merchandise';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
-import { kAllImplants } from '../character/implants_library';
-import { kAllPills } from '../character/chemo_library';
-import { consumeChemo } from '../character/chemo';
-import { kAllReagents } from './reagents_library';
 import { kAllEthicGroups } from '../character/ethics_library';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
@@ -14,11 +9,11 @@ export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean },
   }
   api.model.usesLeft -= 1;
   if (api.model.usesLeft == 0 && !data.noClear) {
-    clear(api, {}, event);
+    clear(api, event);
   }
 }
 
-export function unconsume(api: EventModelApi<QrCode>, data: {}, event: Event) {
+export function unconsume(api: EventModelApi<QrCode>) {
   if (api.model.type == 'empty') {
     throw new UserVisibleError('Нельзя зарядить пустышку!');
   }
@@ -33,7 +28,7 @@ export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Eve
   api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: undefined };
 }
 
-export function clear(api: EventModelApi<QrCode>, data: {}, _: Event) {
+export function clear(api: EventModelApi<QrCode>, _: Event) {
   api.model = {
     modelId: api.model.modelId,
     timestamp: api.model.timestamp,
@@ -45,61 +40,6 @@ export function clear(api: EventModelApi<QrCode>, data: {}, _: Event) {
   };
 }
 
-interface Merchandise {
-  id: string;
-  name: string;
-  description: string;
-  numberOfUses?: number;
-  additionalData: any;
-}
-
-function merchandiseIdToQrType(id: string): QrType {
-  if (id == 'food') {
-    return 'food';
-  }
-
-  if (id == 'locus-charge') {
-    return 'locus_charge';
-  }
-
-  if (kAllImplants.find((it) => it.id == id)) return 'implant';
-  if (kAllPills.find((it) => it.id == id)) return 'pill';
-  if (kAllReagents.find((it) => it.id == id)) return 'reagent';
-
-  throw new UserVisibleError('Неизвестный ID товара');
-}
-
-function merchandiseIdToEventType(id: string) {
-  const qrType = merchandiseIdToQrType(id);
-  if (qrType == 'food') {
-    return consumeFood.name;
-  }
-
-  if (qrType == 'pill') {
-    return consumeChemo.name;
-  }
-
-  return undefined;
-}
-
-export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise, _: Event) {
-  if (api.model.type != 'empty') {
-    throw new UserVisibleError('QR-код уже записан!');
-  }
-
-  api.model = {
-    type: merchandiseIdToQrType(data.id),
-    name: data.name,
-    description: data.description,
-    usesLeft: data.numberOfUses ?? 1,
-    data: { ...data.additionalData, id: data.id },
-    eventType: merchandiseIdToEventType(data.id),
-    timestamp: api.model.timestamp,
-    modifiers: [],
-    modelId: api.model.modelId,
-  };
-}
-
 export interface MentalQrData {
   attackerId: string;
   attack: number;
@@ -108,7 +48,7 @@ export interface MentalQrData {
   description: string;
 }
 
-export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrData, _: Event) {
+export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrData, event: Event) {
   api.model.usesLeft = 1;
   api.model.type = 'ability';
   api.model.name = 'Способность ' + data.name;
@@ -118,10 +58,10 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrDat
   api.model.modifiers = [];
   api.model.timers = {};
 
-  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, undefined);
+  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, event);
 }
 
-export function clearMentalAbility(api: EventModelApi<QrCode>, data: undefined, _: Event) {
+export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
   api.model = {
     usesLeft: 100,
     description: '',
