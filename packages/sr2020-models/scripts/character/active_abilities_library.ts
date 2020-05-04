@@ -23,7 +23,14 @@ import {
 import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
-import { discourseGroupAddAbility, discourseGroupExcludeAbility, chargeLocusAbility } from './ethics';
+import {
+  discourseGroupAddAbility,
+  discourseGroupExcludeAbility,
+  chargeLocusAbility,
+  discourseGroupAddGuru,
+  discourseGroupInquisitor1,
+  discourseGroupInquisitor2,
+} from './ethics';
 
 export type TargetType = 'scan' | 'show';
 
@@ -486,7 +493,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 60,
-    eventType: dummyAbility.name,
+    prerequisites: ['dgroup-add'],
+    eventType: discourseGroupAddGuru.name,
   },
 
   {
@@ -499,7 +507,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    prerequisites: ['dgroup-exclude'],
+    eventType: discourseGroupInquisitor1.name,
   },
 
   {
@@ -512,7 +521,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
-    eventType: dummyAbility.name,
+    prerequisites: ['dm-exclude-inq-1'],
+    eventType: discourseGroupInquisitor2.name,
   },
 
   {

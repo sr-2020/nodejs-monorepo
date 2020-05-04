@@ -199,6 +199,14 @@ function getGroup(groupId: string): EthicGroup {
 }
 
 export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  discourseGroupAddGeneric(api, data, true);
+}
+
+export function discourseGroupAddGuru(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  discourseGroupAddGeneric(api, data, false);
+}
+
+export function discourseGroupAddGeneric(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, consumeCharge: boolean) {
   const locus = getLocus(api, data);
   if (locus.usesLeft <= 0) {
     throw new UserVisibleError('Недостаточно зарядов локуса!');
@@ -206,13 +214,26 @@ export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, da
 
   const target = getMember(api, data, locus, 'add');
   api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupAdd, locus.data);
-  api.sendOutboundEvent(QrCode, locus.modelId, consume, { noClear: true });
+  if (consumeCharge) api.sendOutboundEvent(QrCode, locus.modelId, consume, { noClear: true });
 }
 
 export function discourseGroupExcludeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  discourseGroupExcludeGeneric(api, data, 0);
+}
+
+export function discourseGroupInquisitor1(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  discourseGroupExcludeGeneric(api, data, 1);
+}
+
+export function discourseGroupInquisitor2(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+  discourseGroupExcludeGeneric(api, data, 2);
+}
+
+export function discourseGroupExcludeGeneric(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, recoveredCharges: number) {
   const locus = getLocus(api, data);
   const target = getMember(api, data, locus, 'remove');
   api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupRemove, locus.data);
+  if (recoveredCharges) api.sendOutboundEvent(QrCode, locus.modelId, unconsume, { amount: recoveredCharges });
 }
 
 export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
