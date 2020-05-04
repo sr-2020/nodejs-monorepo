@@ -2,7 +2,7 @@ Vue.component(VueQrcode.name, VueQrcode);
 app = new Vue({
   el: '#app',
   data: {
-    desiredCharacterId: 128,
+    desiredCharacterId: 10198,
     desiredQrCodeId: 1,
     characterModel: undefined,
     qrModel: undefined,
