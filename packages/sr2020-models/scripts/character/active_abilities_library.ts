@@ -43,6 +43,14 @@ const kHealthyBodyTargeted: TargetSignature[] = [
   },
 ];
 
+const kNonDeadBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Персонаж',
+    allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
 const kAstralBodyTargeted: TargetSignature[] = [
   {
     name: 'Дух',
@@ -551,7 +559,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 330
     // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
     eventType: increaseTheMentalProtectionAbility.name,
   },
@@ -563,7 +571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 331
     // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
     eventType: reduceTheMentalProtectionAbility.name,
   },
@@ -587,7 +595,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 333
     // Менталист увеличивает ментальную защиту другого персонажа на +8 на 30 минут
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 60,
     eventType: youDontTrustAnybody.name,
   },
