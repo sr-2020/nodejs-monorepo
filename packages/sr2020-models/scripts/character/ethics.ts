@@ -265,3 +265,6 @@ export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: Ac
   api.sendOutboundEvent(QrCode, data.qrCode!, consume, {});
   api.sendOutboundEvent(QrCode, data.locusId!, unconsume, {});
 }
+
+// Intentionally don't do anything, the only purpose here is to set cooldown and add history record (which is done by useAbility).
+export function prophetAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {}

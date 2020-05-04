@@ -30,6 +30,7 @@ import {
   discourseGroupAddGuru,
   discourseGroupInquisitor1,
   discourseGroupInquisitor2,
+  prophetAbility,
 } from './ethics';
 
 export type TargetType = 'scan' | 'show';
@@ -528,11 +529,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Предъявите экран с описанием абилки региональному мастеру, чтобы получить новый QR локуса.',
     // 323
     // Абилка-сертификат с кулдауном. Предъявителю выдается QR локуса дискурс-группы, к которой он принадлежит.
-    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
-    eventType: dummyAbility.name,
+    eventType: prophetAbility.name,
   },
 
   {
