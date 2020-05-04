@@ -46,6 +46,7 @@ import {
   multiplyCorpDiscountMutsuhama,
   multiplyCorpDiscountShiavase,
 } from './basic_effects';
+import { multiplyDiscourseMongerCooldowns } from './basic_effects';
 
 export interface PassiveAbility {
   id: string;
@@ -1147,8 +1148,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 20%',
     // 324
     // Все кулдауны способностей дискурсмонгера снижены на 20%
-    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
-    modifier: [],
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.8 }),
   },
 
   {
@@ -1157,8 +1157,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 40%',
     // 325
     // Все кулдауны способностей дискурсмонгера снижены на 40%
-    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
-    modifier: [],
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.6 / 0.8 }),
   },
 
   {
@@ -1167,8 +1166,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 60%',
     // 326
     // Все кулдауны способностей дискурсмонгера снижены на 60%
-    // TODO(https://trello.com/c/1xNWPNrj/292-гэ-задача-6-реализовать-прокачиваемые-способности-дискурсмонгеров)
-    modifier: [],
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.4 / 0.6 }),
   },
 
   {

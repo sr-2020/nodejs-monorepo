@@ -290,3 +290,11 @@ export function allowBiowareInstallation(api: EffectModelApi<Sr2020Character>, _
 export function multiplyCooldownCoefficient(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.cooldownCoefficient *= m.amount;
 }
+
+export function multiplyDiscourseMongerCooldowns(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  for (const ability of api.model.activeAbilities) {
+    if (ability.id.startsWith('dgroup-') || ability.id.startsWith('dm-')) {
+      ability.cooldownMinutes = Math.round(ability.cooldownMinutes * m.amount);
+    }
+  }
+}
