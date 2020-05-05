@@ -3,7 +3,11 @@
 // Running:
 //   npx ts-node packages/utility-scripts/features-spreadsheet.ts
 import { Firestore } from '@google-cloud/firestore';
+import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
+
+const optionDefinitions: commandLineArgs.OptionDefinition[] = [{ name: 'update_db', type: Boolean, defaultValue: false }];
+const FLAGS = commandLineArgs(optionDefinitions);
 
 const kKindColumn = 0;
 const kIdColumn = 5;
@@ -116,7 +120,7 @@ class SpreadsheetProcessor {
         // TODO(aeremin): Implement and add modifier here
         modifier: [],
       },`);
-      await this.passiveAbilitiesRef.doc(ability.id).set(ability);
+      if (FLAGS.update_db) await this.passiveAbilitiesRef.doc(ability.id).set(ability);
     }
   }
 
@@ -135,7 +139,7 @@ class SpreadsheetProcessor {
         cooldownMinutes: ${ability.cooldown},
         eventType: dummyAbility.name,
       },`);
-      await this.activeAbilitiesRef.doc(ability.id).set(ability);
+      if (FLAGS.update_db) await this.activeAbilitiesRef.doc(ability.id).set(ability);
     }
   }
 
@@ -152,7 +156,7 @@ class SpreadsheetProcessor {
         // TODO(aeremin): Add proper implementation
         eventType: dummySpell.name,
       },`);
-      await this.spellsRef.doc(spell.id).set(spell);
+      if (FLAGS.update_db) await this.spellsRef.doc(spell.id).set(spell);
     }
   }
 
