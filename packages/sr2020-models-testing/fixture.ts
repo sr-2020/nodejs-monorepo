@@ -54,6 +54,10 @@ class MockTimeService implements TimeService {
   advanceTime(d: Duration) {
     this._timestamp += d.asMilliseconds();
   }
+
+  reset() {
+    this._timestamp = 0;
+  }
 }
 
 class MockPushService implements PushService {
@@ -112,7 +116,11 @@ export class TestFixture {
     private _pubSubService: MockPubSubService,
   ) {}
 
+  static cached: TestFixture | null = null;
+
   static async create(): Promise<TestFixture> {
+    if (this.cached) return this.cached;
+
     const restConfig = givenHttpServerConfig({});
 
     const app = new ModelsManagerApplication({
@@ -148,7 +156,8 @@ export class TestFixture {
 
     const client = createRestAppClient(app);
 
-    return new TestFixture(client, connection, app, timeService, pushService, pubSubService);
+    this.cached = new TestFixture(client, connection, app, timeService, pushService, pubSubService);
+    return this.cached;
   }
 
   async saveCharacter(model: DeepPartial<Sr2020Character> = {}) {
@@ -224,8 +233,9 @@ export class TestFixture {
     await this._connection.getRepository(Sr2020Character).clear();
     await this._connection.getRepository(Location).clear();
     await this._connection.getRepository(QrCode).clear();
-    await this._connection.close();
-    this._app.close();
+    this._pushService.reset();
+    this._pubSubService.reset();
+    this._timeService.reset();
   }
 }
 
