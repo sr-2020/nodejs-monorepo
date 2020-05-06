@@ -21,7 +21,8 @@ export type QrType =
   | 'event' // Event which affects the person who scanned it.
   | 'reagent' // Magical reagent
   | 'locus' // Ethic group locus
-  | 'locus_charge'; // Charge for the locus
+  | 'locus_charge' // Charge for the locus
+  | 'box'; // Empty box of some merchandise
 
 @model()
 @Entity({

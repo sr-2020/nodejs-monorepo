@@ -9,7 +9,11 @@ export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean },
   }
   api.model.usesLeft -= 1;
   if (api.model.usesLeft == 0 && !data.noClear) {
-    clear(api, event);
+    if (isMerchandise(api)) {
+      makeEmptyBox(api);
+    } else {
+      clear(api, event);
+    }
   }
 }
 
@@ -38,6 +42,16 @@ export function clear(api: EventModelApi<QrCode>, _: Event) {
     description: 'Не записанный QR-код. На него можно записать что угодно',
     modifiers: [],
   };
+}
+
+function isMerchandise(api: EventModelApi<QrCode>) {
+  return api.model.type == 'implant' || api.model.type == 'pill' || api.model.type == 'reagent' || api.model.type == 'locus_charge';
+}
+
+function makeEmptyBox(api: EventModelApi<QrCode>) {
+  api.model.type = 'box';
+  api.model.name = 'Коробка от ' + api.model.name;
+  api.model.description = 'Пустая коробка от товара. Нужна для операций с рентными платежами по товару.';
 }
 
 export interface MentalQrData {
