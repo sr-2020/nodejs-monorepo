@@ -483,7 +483,7 @@ describe('Spells', function() {
 
     for (const modelId of reagentIds) {
       const qr = await fixture.getQrCode(modelId);
-      expect(qr.workModel.type).equal('empty');
+      expect(qr.workModel.type).equal('box');
     }
   });
 });

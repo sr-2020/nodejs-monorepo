@@ -264,7 +264,7 @@ describe('Ethic events', function() {
     expect(locus.baseModel.usesLeft).equal(9);
 
     const emptyCharge = await fixture.getQrCode(5);
-    expect(emptyCharge.baseModel.type).equal('empty');
+    expect(emptyCharge.baseModel.type).equal('box');
     expect(emptyCharge.baseModel.usesLeft).equal(0);
   });
 });
