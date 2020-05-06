@@ -14,7 +14,7 @@
     <test-directory>$PROJECT_DIR$/packages/sr2020-models-testing</test-directory>
     <recursive>true</recursive>
     <method v="2">
-      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/packages/sr2020-models-testing/tsconfig.json" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="build" run_configuration_type="js.build_tools.npm" />
     </method>
   </configuration>
 </component>

@@ -427,6 +427,24 @@
                     </b-tbody>
                   </b-table-simple>
                 </b-collapse>
+
+                <b-button block href="#" v-b-toggle.karma variant="info">
+                  Карма
+                </b-button>
+                <b-collapse id="karma">
+                  <b-table-simple small>
+                    <b-tbody>
+                      <b-tr>
+                        <b-th>Доступно</b-th>
+                        <b-td>{{ characterModel.karma.available }}</b-td>
+                      </b-tr>
+                      <b-tr>
+                        <b-th>Потрачено</b-th>
+                        <b-td>{{ characterModel.karma.spent }}</b-td>
+                      </b-tr>
+                    </b-tbody>
+                  </b-table-simple>
+                </b-collapse>
               </b-card-body>
             </b-card>
             <b-card no-body>
