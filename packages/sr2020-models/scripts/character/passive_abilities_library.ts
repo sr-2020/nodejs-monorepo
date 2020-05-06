@@ -45,6 +45,7 @@ import {
   multiplyCorpDiscountRenraku,
   multiplyCorpDiscountMutsuhama,
   multiplyCorpDiscountShiavase,
+  multiplyAllDiscounts,
 } from './basic_effects';
 import { multiplyDiscourseMongerCooldowns } from './basic_effects';
 
@@ -1184,8 +1185,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 301
     // Множитель 0,9 на стоимость товара при покупке любого товара  данным персонажем
     //
-    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
-    modifier: [],
+    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }),
   },
 
   {
@@ -1194,9 +1194,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара',
     // 302
     // Множитель 0,8 при покупке любого товара  данным персонажем
-    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
     prerequisites: ['discount-all-1'],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }),
   },
 
   {
@@ -1205,9 +1204,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара ',
     // 303
     // Множитель 0,7 при покупке любого товара  данным персонажем
-    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
     prerequisites: ['discount-all-2'],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }),
   },
 
   {

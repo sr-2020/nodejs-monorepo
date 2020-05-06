@@ -2,7 +2,6 @@ import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from
 import { Sr2020Character, AddedActiveAbility, Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
 import { reviveOnTarget, absoluteDeath } from './death_and_rebirth';
-import { multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
@@ -73,18 +72,6 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
 
 export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void, event: Event) {
   api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
-}
-
-export function discountAll10(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
-  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }), duration(30, 'minutes'));
-}
-
-export function discountAll20(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
-  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }), duration(30, 'minutes'));
-}
-
-export function discountAll30(api: EventModelApi<Sr2020Character>, data: never, _: Event) {
-  addTemporaryModifier(api, modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }), duration(30, 'minutes'));
 }
 
 // Adept abilities
