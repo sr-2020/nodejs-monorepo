@@ -1,9 +1,6 @@
 import {
   oneTimeRevive,
   dummyAbility,
-  discountAll10,
-  discountAll20,
-  discountAll30,
   hammerOfJustice,
   arrowgant,
   trollton,
@@ -608,62 +605,27 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'discount-all-1',
-    humanReadableName: 'Скидосы - 10%',
-    description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара следующие 30 минут',
-    // 331
-    // Множитель 0,9 на стоимость товара при покупке любого товара следующие 30 минут данным персонажем
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 30,
-    eventType: discountAll10.name,
-  },
-
-  {
-    id: 'discount-all-2',
-    humanReadableName: 'Скидосы - 20%',
-    description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара следующие 30 минут',
-    // 332
-    // Множитель 0,8 при покупке любого товара следующие 30 минут данным персонажем
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 60,
-    prerequisites: ['discount-all-1'],
-    eventType: discountAll20.name,
-  },
-
-  {
-    id: 'discount-all-3',
-    humanReadableName: 'Скидосы - 30%',
-    description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара следующие 30 минут',
-    // 333
-    // Множитель 0,7 при покупке любого товара следующие 30 минут данным персонажем
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 120,
-    prerequisites: ['discount-all-2'],
-    eventType: discountAll30.name,
-  },
-
-  {
     id: 'how-much-it-costs',
     humanReadableName: 'Чо почем',
     description: 'посмотреть на qr и сказать сколько это стоит, базовую цену товара',
-    // 347
-    // посмотреть на qr и сказать сколько это стоит, базовую цену товара
+    // 289
+    // qr товара содержит информацию о базовой стоимости товара при его покупке
+    // При применении абилки на экране отображается записанная на QR baseprice товара.
+    // Если товар не был продан через магазин - возвращает 0.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: 10,
+    cooldownMinutes: 0,
     eventType: dummyAbility.name,
   },
 
   {
     id: 'who-needs-it',
-    humanReadableName: '',
-    description: 'Гешефтмахер может сказать кому это нужно. ',
-    // 348
-    // посмотреть на qr и сказать кому это может быть нужно. после сканирования куар в приложеньке гм должно отобразиться персонажи с какими аспектами это используют. В идеале - какой квест есть на эту сущность.
+    humanReadableName: 'Чей туфля?',
+    description: 'Ты можешь узнать что-то интересное про этот товар. ',
+    // 291
+    // Выводит на экран гм информацию из скрытого текстового поля товара .
+    // Текст по умолчанию: Ты не знаешь ничего интересного про этот товар.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -674,9 +636,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'let-me-pay',
     humanReadableName: 'Давай я заплачу',
-    description: 'ГМ может переписать кредит за 1 предмет на себя',
-    // 349
-    // ГМ может переписать кредит за 1 предмет на себя и может применить свой коэффициент скоринга на текущий момент.
+    description: 'Гешефтмахер может переписать кредит за 1 предмет на себя. Работает только если есть QR-код товара.',
+    // 292
+    // ГМ переписывает кредит за предмет с другого перонажа на себя. При этом сумма последующих рентных платежей пересчитывается. Новые рентные платежи рассчитываются исходя из скоринга гма на момент активации абилки.
+    // Механика:
+    // Активировать абилку, отсканировать QR-код товара.
+    // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -688,8 +653,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'let-him-pay',
     humanReadableName: 'Давай он заплатит',
     description: 'переписать долг за 1 предмет по выбору с персонажа А на персонажа Б.',
-    // 301
-    // переписать долг за 1 предмет по выбору с персонажа А на персонажа Б.
+    // 293
+    // Переписать долг за 1 предмет c QR с персонажа А на персонажа Б.
+    // При этом сумма последующих рентных платежей пересчитывается. Новые рентные платежи рассчитываются исходя из скоринга гма на момент активации абилки.
+    // Механика:
+    // Активировать абилку, отсканировать QR-код товара, отсканировать QR код персонажа, на которого .
+    // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -700,9 +669,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'investigate-scoring',
     humanReadableName: 'Посмотрим скоринг',
-    description: 'Ты можешь посмотреть из каких коэффициентов состоит скоринг другого персонажа',
-    // 352
-    // Показывает актуальные коэффициенты, которые влияют на скоринг.
+    description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
+    // 294
+    // Показывает актуальные коэффициенты, которые влияют на скоринг. У целевого персонажа в течение следующих 5 минут отображаются его коэффициенты скоринга.
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -714,25 +683,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 're-rent',
     humanReadableName: 'Переоформить ренту',
     description: 'ГМ может целевому персонажу переоформить контракт с новым коэфициентом скоринга. ',
-    // 353
-    // Целевому персонажу переоформить контракт с новым коэфициентом скоринга.
+    // 296
+    // ГМ переписывает кредит за предмет: пересчитывается сумма последующих рентных платежей . Новые рентные платежи рассчитываются исходя из скоринга персонажа, на которого записан кредит на момент активации абилки.
+    // Механика:
+    // Активировать абилку, отсканировать QR-код товара.
+    // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
     // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: 10,
-    eventType: dummyAbility.name,
-  },
-
-  {
-    id: 'where-to-buy-it',
-    humanReadableName: '',
-    description: 'где это продается',
-    // 380
-    // где это продается
-    // TODO(https://trello.com/c/RjyocJn3/200-реализовать-активные-гешефтмахерские-абилки-переписывание-кредитов-просмотр-скоринга)
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 360,
+    cooldownMinutes: 30,
     eventType: dummyAbility.name,
   },
 
@@ -1096,15 +1055,107 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'mobile-auto-doc-2',
-    humanReadableName: 'апгрейд мобильного автодока 1',
-    description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
-    // 550
-    // - лечит тяжран (1 заряд / 6 часов). То есть 1 заряд с CD 6 часов.
-    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Add proper implementation
+    id: 'medcart-healing',
+    humanReadableName: 'Полевое лечение тяжрана',
+    description: '',
+    // 464
+    // Аблика появляется в альтернативном теле Дрон медикарт. Кулдаен абилки 60 минут
+    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: 360,
+    cooldownMinutes: 9000,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'autodoc-healing',
+    humanReadableName: 'Лечение тяжрана',
+    description: '',
+    // 465
+    // Абилка появляется в альтернативном теле автодок. Кулдаун абилки 10 минут
+    // TODO(aeremin): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 9000,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'implant-active',
+    humanReadableName: 'Установка импланта',
+    description: 'Для установки импланта используй эту способность. Необходим автодок!',
+    // 475
+    // НЕОБХОДИМ АВТОДОК.
+    // Активирует процесс установки импланта.
+    // надо отсканировать:
+    // - QR автодока
+    // - QR целевого чаммера
+    // - QR импланта (?)
+    //
+    // TODO(aeremin): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'tuning-active',
+    humanReadableName: 'Установка мода в дронкибердеку',
+    description: 'Для установки мода в дронкибердеку используй эту способность.',
+    // 479
+    // Активирует процесс установки мода.
+    // надо отсканировать:
+    // - QR Мастерской
+    // - QR целевого дрона \ кибердеки
+    // - QR мода (?)
+    //
+    // особый экран НЕ показывается, все проверки проходят в бэкнде, выдается только результат "получилось \ не получилось"
+    // TODO(https://trello.com/c/lbmO5n8E/337-дроны-модификация-дронов-реализовать-возможность-установки-и-снятия-модов-в-дроны): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'repoman-active',
+    humanReadableName: 'Рипомен',
+    description: 'Активируй, чтобы снять имплантмод. Выберется самый слабый.',
+    // 483
+    // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ).  Выбираем самый слабый мод по параметру Сложности. Если несколько одинаково слабых - любой.  Если параметра can-do-repo +
+    // Int - не хватило - снятия не происходит.
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'repoman-black',
+    humanReadableName: 'Черный рипомен',
+    description: 'Активируй, чтобы снять имплантмод. Выберется самый сильный.',
+    // 487
+    // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ). Смотрим параметр can-do-repo + Int ,  Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр can-do-repo. Если несколько одинаково дорогих - любой. Если can-do-repo не хватило - ничего не происходит.
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'repoman-medic',
+    humanReadableName: 'Рипомен хирург',
+    description: 'Ты умеешь использовать автодок и выбирать сам, какой имплант хочешь снять.',
+    // 488
+    // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (can-do-repo + Int ) добавляется еще auto-doc-bonus.
+    // Вырезанный имплант записывается на QR чип
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
     eventType: dummyAbility.name,
   },
 

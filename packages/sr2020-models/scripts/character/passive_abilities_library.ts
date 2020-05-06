@@ -1105,41 +1105,40 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'look-its-shekel',
     name: 'Опа, шекель!',
-    description: 'при прохождении данжа ГМ выносит из данжа больше ',
-    // 305
+    description: 'При получении лута после прохождения данжа покажи данную абилку игротеху. Ты получаешь +10% от лута твоей команды.',
+    // 297
     // при прохождении данжа ГМ выносит из данжа + 10% от базовой стоимости лута
-    // Покажи игротеху абилку - получи больше лута на __% (добавить)
+    // Покажи игротеху абилку - получи больше лута на 10%
     modifier: [],
   },
 
   {
     id: 'igra-na-birge-1',
     name: 'Игра на бирже',
-    description: 'гм выгодно вкладывает временно свободные финансы и получать небольшой процент с оборота.',
-    // 306
-    // Считаем среднее из количества денег на счете за цикл, ГМ получает + 10% бонусом
-    // Среднее между началом-(серединой?)-концом цикла
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
+    description: 'ты получаешь кэшбэк 2% от всех своих рентных платежей.',
+    // 298
+    // После списания рентных платежей гм получает кэшбек в размере 2% от списанной суммы. Начисляется после каждого списания рентных платежей.
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 2 }),
   },
 
   {
     id: 'igra-na-birge-2',
     name: 'Игра на бирже',
-    description: 'гм выгодно вкладывает временно свободные финансы и получать среднийпроцент с оборота.',
-    // 307
-    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 20% бонусом
+    description: 'ты получаешь кэшбэк 5% от всех своих рентных платежей.',
+    // 299
+    // После списания рентных платежей гм получает кэшбек в размере 5% от списанной суммы. Начисляется после каждого списания рентных платежей.
     prerequisites: ['igra-na-birge-1'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 - 2 }),
   },
 
   {
     id: 'igra-na-birge-3',
     name: 'Игра на бирже',
-    description: 'гм выгодно вкладывает временно свободные финансы и получать повышенный процент с оборота.',
-    // 308
-    // Считаем среднее из оборота денег на счете за цикл, ГМ получает + 30% бонусом
+    description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
+    // 300
+    // После списания рентных платежей гм получает кэшбек в размере 13% от списанной суммы. Начисляется после каждого списания рентных платежей.
     prerequisites: ['igra-na-birge-2'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 10 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 13 - 5 }),
   },
 
   {
@@ -1175,6 +1174,39 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Предъявите этот экран игроку. Он обязан показать вам свой этикпрофиль.',
     // 327
     // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
+    modifier: [],
+  },
+
+  {
+    id: 'discount-all-1',
+    name: 'Скидосы - 10%',
+    description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара ',
+    // 301
+    // Множитель 0,9 на стоимость товара при покупке любого товара  данным персонажем
+    //
+    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
+    modifier: [],
+  },
+
+  {
+    id: 'discount-all-2',
+    name: 'Скидосы - 20%',
+    description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара',
+    // 302
+    // Множитель 0,8 при покупке любого товара  данным персонажем
+    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
+    prerequisites: ['discount-all-1'],
+    modifier: [],
+  },
+
+  {
+    id: 'discount-all-3',
+    name: 'Скидосы - 30%',
+    description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара ',
+    // 303
+    // Множитель 0,7 при покупке любого товара  данным персонажем
+    // TODO(https://trello.com/c/Y9cjnq3h/344-поменять-скидосы-с-активных-абилок-на-пассивные-у-гешефтмахеров): Add proper implementation
+    prerequisites: ['discount-all-2'],
     modifier: [],
   },
 
@@ -1566,45 +1598,54 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'mobile-auto-doc-3',
-    name: 'апгрейд мобильного автодока 2',
-    description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
-    // 483
-    // - лечит тяжран (3 заряда / 6 часов). То есть 3 заряда, у каждого CD 6 часов
+    id: 'mobile-auto-doc-2',
+    name: 'апгрейд мобильного автодока 1',
+    description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
+    // 456
+    // находясь в альтернативном теле "медикарт" игрок получает активную абилку "Полевое лечение тяжрана". Кулдаун абилки 60 минут
     // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
+    prerequisites: ['mobile-auto-doc-1'],
     modifier: [],
   },
 
   {
-    id: 'auto-doc-1',
-    name: 'хирургия',
-    description: 'Ты можешь использовать автодок. И ставить простые импланты',
-    // 505
-    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-    //  хром и лечить тяжран. Сложность установки 1
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+    id: 'mobile-auto-doc-3',
+    name: 'апгрейд мобильного автодока 2',
+    description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
+    // 455
+    // находясь в альтернативном теле "медикарт" игрок получает три  активных абилки "полевое  лечение тяжрана". Кулдаун абилки 60 минут
+    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
+    prerequisites: ['mobile-auto-doc-2'],
+    modifier: [],
   },
 
   {
-    id: 'auto-doc-2',
-    name: 'хирургия',
-    description: 'Ты можешь использовать автодок. И ставить продвинутые импланты',
-    // 506
-    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-    //  хром и лечить тяжран. Сложность установки 2
-    prerequisites: ['auto-doc-1'],
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+    id: 'implant-1',
+    name: 'хирургия 1 (базовый)',
+    description: 'Ты можешь ставить более сложные импланты.',
+    // 476
+    // can-do-implant = 4 (или +2)
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }),
   },
 
   {
-    id: 'auto-doc-3',
-    name: 'хирургия',
-    description: 'Ты можешь использовать автодок. И ставить высокотехнологичные импланты',
-    // 507
-    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-    //  хром и лечить тяжран сложность установки 3
-    prerequisites: ['auto-doc-2'],
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 1 }),
+    id: 'implant-2',
+    name: 'хирургия 2 (эксперт)',
+    description: 'Ты можешь ставить самые сложные импланты.',
+    // 477
+    // can-do-implant = 6 (или +2)
+    prerequisites: ['implant-1'],
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }),
+  },
+
+  {
+    id: 'implant-3',
+    name: 'хирургия 3 (мастер)',
+    description: 'Ты можешь ставить любые импланты, включая биовэр.',
+    // 478
+    // can-do-implant = 10 (или +4)
+    prerequisites: ['implant-2'],
+    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 4 }),
   },
 
   {
@@ -1614,40 +1655,70 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 521
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     // биовэр. Сложность установки 5
-    prerequisites: ['auto-doc-3'],
     modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation)],
   },
 
   {
     id: 'tuning-1',
-    name: 'Тюнинг 1',
-    description: 'Ты можешь использовать мастерскую и работать с лёгкими дронами',
-    // 522
-    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на лёгкие дроны
-    //
+    name: 'Тюнинг 1 (базовый)',
+    description: 'Ты можешь ставить простые моды.',
+    // 480
+    // can-do-tuning = 4 (или +2)
     // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
     modifier: [],
   },
 
   {
     id: 'tuning-2',
-    name: 'Тюнинг 2',
-    description: 'Ты можешь использовать мастерскую и работать с тяжёлыми дронами',
-    // 523
-    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику
-    //
+    name: 'Тюнинг 2 (эксперт)',
+    description: 'Ты можешь ставить сложные моды.',
+    // 481
+    // can-do-tuning = 6 (или +2)
     // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
+    prerequisites: ['tuning-1'],
     modifier: [],
   },
 
   {
     id: 'tuning-3',
-    name: 'Тюнинг 3',
-    description: 'Ты можешь использовать мастерскую и работать с боевыми дронами',
-    // 524
-    // находясь в альтернативном теле "мастерская" риггер может чинить дроны и ставить апгрейды на тяжёлую технику и боевую технику
-    //
+    name: 'Тюнинг 3 (мастер)',
+    description: 'Ты можешь ставить самые сложные моды.',
+    // 482
+    // can-do-tuning = 10 (или +4)
     // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
+    prerequisites: ['tuning-2'],
+    modifier: [],
+  },
+
+  {
+    id: 'repoman-1',
+    name: 'Рипомен 1 (базовый)',
+    description: 'Ты можешь снимать сложные импланты  моды.',
+    // 484
+    // can-do-repo = 4 (или +2)
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'repoman-2',
+    name: 'Рипомен 2 (эксперт)',
+    description: 'Ты можешь снимать самые сложные импланты  моды.',
+    // 485
+    // can-do-repo = 6 (или +2)
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
+    prerequisites: ['repoman-1'],
+    modifier: [],
+  },
+
+  {
+    id: 'repoman-3',
+    name: 'Рипомен 3 (мастер)',
+    description: 'Ты можешь снимать самые сложные импланты  моды, даже модифицированные. ',
+    // 486
+    // can-do-repo = 12 (или +6)
+    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
+    prerequisites: ['repoman-2'],
     modifier: [],
   },
 
