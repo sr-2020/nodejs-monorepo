@@ -9,9 +9,10 @@
       <env name="NODE_ENV" value="test" />
     </envs>
     <ui>bdd</ui>
-    <extra-mocha-options>--require=source-map-support/register --require=tsconfig-paths/register</extra-mocha-options>
-    <test-kind>PATTERN</test-kind>
-    <test-pattern>**/*.spec.js</test-pattern>
+    <extra-mocha-options>--config=.mocharc-fast.json</extra-mocha-options>
+    <test-kind>DIRECTORY</test-kind>
+    <test-directory>$PROJECT_DIR$/packages/sr2020-models-testing</test-directory>
+    <recursive>true</recursive>
     <method v="2">
       <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/packages/sr2020-models-testing/tsconfig.json" />
     </method>
