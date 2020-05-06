@@ -471,6 +471,17 @@ export class EssenceDetails {
 }
 
 @model()
+export class Karma {
+  @rproperty()
+  @Column({ default: 0 })
+  available: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  spent: number;
+}
+
+@model()
 export class Ethic {
   @property.array(String, { required: true })
   @JsonColumn()
@@ -613,6 +624,10 @@ export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column((type) => EssenceDetails, { prefix: 'essence' })
   essenceDetails: EssenceDetails;
+
+  @rproperty()
+  @Column((type) => Karma, { prefix: 'karma' })
+  karma: Karma;
 
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()

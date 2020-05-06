@@ -185,6 +185,10 @@ export class ModelEngineController implements ModelEngineService {
         gap: 0,
         used: 0,
       },
+      karma: {
+        available: 0,
+        spent: 0,
+      },
       spells: [],
       activeAbilities: [],
       passiveAbilities: [],
