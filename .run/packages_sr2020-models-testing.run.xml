@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All SR2020 tests" type="mocha-javascript-test-runner">
+    <node-interpreter>project</node-interpreter>
+    <node-options />
+    <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
+    <working-directory>$PROJECT_DIR$/packages/sr2020-models-testing</working-directory>
+    <pass-parent-env>true</pass-parent-env>
+    <envs>
+      <env name="NODE_ENV" value="test" />
+    </envs>
+    <ui>bdd</ui>
+    <extra-mocha-options>--require=source-map-support/register --require=tsconfig-paths/register</extra-mocha-options>
+    <test-kind>PATTERN</test-kind>
+    <test-pattern>**/*.spec.js</test-pattern>
+    <method v="2">
+      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/packages/sr2020-models-testing/tsconfig.json" />
+    </method>
+  </configuration>
+</component>
