@@ -237,7 +237,6 @@ export class ModelEngineController implements ModelEngineService {
     events.push({ eventType: '_', modelId: baseModel.modelId, timestamp: timestamp });
     const res = engine.process(baseModel, aquired, events);
 
-    // TODO: Also return viewmodels
     if (res.status == 'ok') {
       return {
         baseModel: res.baseModel,

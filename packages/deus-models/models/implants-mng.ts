@@ -130,7 +130,6 @@ function removeImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
 }
 
 /**
- *  TODO для подключения
  *  1. Добавить импланты: s_immortal01
  *  2. Добавить события: serenity-immortality-ready, serenity-immortality-go
  *  3. Доработать функцию instantInstallEffect для добавления вызова installSImmortalStage1 при установке

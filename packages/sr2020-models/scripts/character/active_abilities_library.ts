@@ -463,7 +463,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Добавить один заряд к локусу',
     // 319
     // Сканируется код локуса, код пополнения заряда. Количество зарядов на локусе увеличивается на 1.
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {

@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    // TODO: Fix and remove
     "noImplicitAny": false
   },
   "references": [

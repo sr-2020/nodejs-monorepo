@@ -29,7 +29,6 @@ export class ModelEngineController implements DeusModelEngineService {
       },
     },
   })
-  // TODO: Add at least some simple test.
   async process(@requestBody() req: DeusExProcessModelRequest): Promise<DeusExProcessModelResponse> {
     req.events.forEach((event) => {
       if (event.timestamp < req.baseModel.timestamp)
@@ -46,11 +45,9 @@ export class ModelEngineController implements DeusModelEngineService {
     });
 
     req.events.push({ eventType: '_', modelId: req.baseModel.modelId, timestamp: req.timestamp });
-    // TODO: Support preprocess
     const aquired: AquiredObjects = {};
     const res = this._engine.process(req.baseModel, aquired, req.events);
 
-    // TODO: Also return viewmodels
     if (res.status == 'ok') {
       return { baseModel: res.baseModel, workModel: res.workingModel };
     } else {

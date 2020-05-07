@@ -150,7 +150,6 @@ export interface LabTerminalRefillData {
   numTests: number;
 }
 
-// TODO: Merge with alice-qr-lib
 export enum QrType {
   Unknown = 0,
 
