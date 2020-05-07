@@ -22,7 +22,14 @@ export type QrType =
   | 'reagent' // Magical reagent
   | 'locus' // Ethic group locus
   | 'locus_charge' // Charge for the locus
-  | 'box'; // Empty box of some merchandise
+  | 'box' // Empty box of some merchandise
+  | 'body_storage'
+  | 'drone' // Not the drone body! This is drone you can jack in
+  | 'drone_mod'
+  | 'sprite'
+  | 'cyberdeck'
+  | 'cyberdeck_mod'
+  | 'foundation_node';
 
 @model()
 @Entity({
