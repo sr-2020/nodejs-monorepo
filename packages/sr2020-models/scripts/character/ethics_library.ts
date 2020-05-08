@@ -1480,7 +1480,7 @@ export const kAllEthicGroups: EthicGroup[] = [
         conditionMax: 4,
       },
     ],
-    abilityIds: [],
+    abilityIds: ['comcon-ethic-ability'],
   },
 
   {

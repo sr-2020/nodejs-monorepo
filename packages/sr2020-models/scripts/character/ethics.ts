@@ -23,32 +23,14 @@ export function initEthic(model: Sr2020Character) {
   );
 }
 
-// Update ethic profile based on the new ethic values.
-// Will remove all non-crysis triggers and recalculate state.
 // Returns true if ethic ability was added and false otherwise.
 function updatePersonalEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
   updateEthicStateAndTriggers(model, ethicValues);
-
-  const allEthicAbilitiesIds = kEthicAbilities.map((it) => it.abilityId);
-  const characterEthicAbilities = new Set(
-    [...model.activeAbilities, ...model.passiveAbilities].filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
-  );
-
-  const newEthicAbilities = hasCrysis(model)
-    ? new Set<string>()
-    : new Set<string>(kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId));
-
-  const abilitiesChanged = !isEqual(characterEthicAbilities, newEthicAbilities);
-  if (abilitiesChanged) {
-    const toAdd = [...newEthicAbilities].filter((id) => !characterEthicAbilities.has(id));
-    const toRemove = [...characterEthicAbilities].filter((id) => !newEthicAbilities.has(id));
-
-    for (const id of toAdd) addFeatureToModel(model, id);
-    for (const id of toRemove) removeFeatureFromModel(model, id);
-  }
-  return abilitiesChanged;
+  return updateEthicAbilities(model, ethicValues);
 }
 
+// Update ethic profile based on the new ethic values.
+// Will remove all non-crysis triggers and recalculate state.
 function updateEthicStateAndTriggers(model: Sr2020Character, ethicValues: Map<EthicScale, number>) {
   model.ethic.state = [];
   model.ethic.trigger = model.ethic.trigger.filter((t) => t.kind == 'crysis');
@@ -69,6 +51,48 @@ function updateEthicStateAndTriggers(model: Sr2020Character, ethicValues: Map<Et
       }),
     );
   }
+}
+
+export function updateGroupEthicAbilities(model: Sr2020Character) {
+  updateEthicAbilities(model, getEthicValues(model));
+}
+
+function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScale, number>) {
+  const allEthicAbilitiesIds = kEthicAbilities.map((it) => it.abilityId);
+  for (const group of kAllEthicGroups) {
+    allEthicAbilitiesIds.push(...group.abilityIds);
+  }
+
+  const characterEthicAbilities = new Set(
+    [...model.activeAbilities, ...model.passiveAbilities].filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
+  );
+
+  const newPersonalEthicAbilities = hasCrysis(model)
+    ? []
+    : kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId);
+
+  const newGroupEthicAbilities: string[] = [];
+  for (const groupId of model.ethic.groups) {
+    const libraryGroup = kAllEthicGroups.find((it) => it.id == groupId)!;
+    let fitsGroup = true;
+    for (const condition of libraryGroup.ethicStyle) {
+      const v = ethicValues[condition.scale];
+      if (v < condition.conditionMin || v > condition.conditionMax) fitsGroup = false;
+    }
+    if (fitsGroup) newGroupEthicAbilities.push(...libraryGroup.abilityIds);
+  }
+
+  const newEthicAbilities = new Set([...newPersonalEthicAbilities, ...newGroupEthicAbilities]);
+
+  const abilitiesChanged = !isEqual(characterEthicAbilities, newEthicAbilities);
+  if (abilitiesChanged) {
+    const toAdd = [...newEthicAbilities].filter((id) => !characterEthicAbilities.has(id));
+    const toRemove = [...characterEthicAbilities].filter((id) => !newEthicAbilities.has(id));
+
+    for (const id of toAdd) addFeatureToModel(model, id);
+    for (const id of toRemove) removeFeatureFromModel(model, id);
+  }
+  return abilitiesChanged;
 }
 
 function findTrigger(id: string): EthicTrigger {
@@ -103,10 +127,15 @@ export function ethicSet(
   );
 }
 
+function getEthicValues(model: Sr2020Character): Map<EthicScale, number> {
+  const values: Map<EthicScale, number> = new Map();
+  for (const l of model.ethic.state) values.set(l.scale, l.value);
+  return values;
+}
+
 export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }, event: Event) {
   const trigger = findTrigger(data.id);
-  const values: Map<EthicScale, number> = new Map();
-  for (const l of api.model.ethic.state) values.set(l.scale, l.value);
+  const values = getEthicValues(api.model);
 
   let crysisResolved = false;
 
@@ -246,11 +275,13 @@ export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: Loc
     name: 'Член этической группы',
     description: group.name,
   });
+  updateGroupEthicAbilities(api.model);
 }
 
 export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
   api.model.ethic.groups = api.model.ethic.groups.filter((it) => it != data.groupId);
   api.model.passiveAbilities = api.model.passiveAbilities.filter((it) => it.id != data.groupId);
+  updateGroupEthicAbilities(api.model);
 }
 
 export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
