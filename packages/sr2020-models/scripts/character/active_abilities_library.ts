@@ -87,6 +87,7 @@ export interface ActiveAbility {
   targetsSignature: TargetSignature[];
   cooldownMinutes: number;
   prerequisites?: string[];
+  minimalEssence: number; // in 0-6 range, not 0-600.
   eventType: string;
 }
 
@@ -105,6 +106,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 0,
+    minimalEssence: 0,
     eventType: oneTimeRevive.name,
   },
 
@@ -124,6 +126,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 9000,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -142,6 +145,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 240,
+    minimalEssence: 0,
     eventType: absoluteDeathAbility.name,
   },
 
@@ -155,6 +159,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -168,6 +173,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -184,6 +190,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -200,6 +207,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -216,6 +224,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 15,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -232,6 +241,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 15,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -248,6 +258,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 15,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -264,6 +275,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 16 * 60,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -277,6 +289,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -290,6 +303,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: ['oblivion'],
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -302,6 +316,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: 240,
+    minimalEssence: 0,
     eventType: cloudMemoryAbility.name,
   },
 
@@ -314,6 +329,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -326,6 +342,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -339,6 +356,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -352,6 +370,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -366,6 +385,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -379,6 +399,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -392,6 +413,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-1'],
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -405,6 +427,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-2'],
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -418,6 +441,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -430,6 +454,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -442,6 +467,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: discourseGroupAddAbility.name,
   },
 
@@ -454,6 +480,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: discourseGroupExcludeAbility.name,
   },
 
@@ -477,6 +504,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 0,
+    minimalEssence: 0,
     eventType: chargeLocusAbility.name,
   },
 
@@ -490,6 +518,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 60,
     prerequisites: ['dgroup-add'],
+    minimalEssence: 0,
     eventType: discourseGroupAddGuru.name,
   },
 
@@ -503,6 +532,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
     prerequisites: ['dgroup-exclude'],
+    minimalEssence: 0,
     eventType: discourseGroupInquisitor1.name,
   },
 
@@ -516,6 +546,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kLocusAndPhysicalBody,
     cooldownMinutes: 30,
     prerequisites: ['dm-exclude-inq-1'],
+    minimalEssence: 0,
     eventType: discourseGroupInquisitor2.name,
   },
 
@@ -528,6 +559,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
+    minimalEssence: 0,
     eventType: prophetAbility.name,
   },
 
@@ -540,6 +572,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -552,6 +585,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
 
@@ -564,6 +598,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
+    minimalEssence: 0,
     eventType: increaseTheMentalProtectionAbility.name,
   },
 
@@ -576,6 +611,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
+    minimalEssence: 0,
     eventType: reduceTheMentalProtectionAbility.name,
   },
 
@@ -588,6 +624,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: iDontTrustAnybody.name,
   },
 
@@ -600,6 +637,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 60,
+    minimalEssence: 0,
     eventType: youDontTrustAnybody.name,
   },
 
@@ -615,6 +653,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 0,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -629,6 +668,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -643,6 +683,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 0,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -659,6 +700,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -676,6 +718,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -689,6 +732,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -705,6 +749,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -718,6 +763,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -732,6 +778,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
     prerequisites: ['pray-s'],
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -746,6 +793,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kAstralBodyTargeted,
     cooldownMinutes: 10,
     prerequisites: ['pray-m'],
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -759,6 +807,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 45,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -772,6 +821,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 55,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -785,6 +835,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 125,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -804,6 +855,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 40,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -817,6 +869,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -829,6 +882,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 5,
+    minimalEssence: 3,
     eventType: hammerOfJustice.name,
   },
 
@@ -841,6 +895,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 15,
+    minimalEssence: 4,
     eventType: arrowgant.name,
   },
 
@@ -853,6 +908,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
+    minimalEssence: 2,
     eventType: trollton.name,
   },
 
@@ -865,6 +921,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 2,
     eventType: iWillSurvive.name,
   },
 
@@ -883,6 +940,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 5,
+    minimalEssence: 5,
     eventType: reviveOnTarget.name,
   },
 
@@ -896,6 +954,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 40,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -909,6 +968,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -922,6 +982,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -935,6 +996,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -948,6 +1010,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -961,6 +1024,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -974,6 +1038,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -987,6 +1052,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -1000,6 +1066,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -1013,6 +1080,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -1026,6 +1094,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -1039,6 +1108,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 120,
+    minimalEssence: 4,
     eventType: dummyAbility.name,
   },
 
@@ -1051,6 +1121,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
+    minimalEssence: 2,
     eventType: alloHomorusAbility.name,
   },
 
@@ -1064,6 +1135,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1077,6 +1149,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1096,6 +1169,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1115,6 +1189,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1129,6 +1204,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1142,6 +1218,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1156,6 +1233,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
+    minimalEssence: 0,
     eventType: dummyAbility.name,
   },
 
@@ -1174,6 +1252,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'pillId',
       },
     ],
+    minimalEssence: 0,
     eventType: dummyAbility.name,
     cooldownMinutes: 9000,
   },
@@ -1193,6 +1272,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
+    minimalEssence: 0,
     eventType: reviveAbsoluteOnTarget.name,
     cooldownMinutes: 0,
   },
@@ -1215,6 +1295,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: 0,
+    minimalEssence: 0,
     eventType: copyPasteQr.name,
   },
 ];
