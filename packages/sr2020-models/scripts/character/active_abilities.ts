@@ -36,6 +36,10 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Способность еще на кулдауне!');
   }
 
+  if (100 * libraryAbility.minimalEssence > api.workModel.essence) {
+    throw new UserVisibleError('Недостаточно эссенции для применения данной способности!');
+  }
+
   // Second `find` as we must change the value in (base) model, not in workModel.
   // (and the ability to use should be taken from workModel as there are temporary abilities.
   const maybeAbility = api.model.activeAbilities.find((a) => a.id == data.id);
