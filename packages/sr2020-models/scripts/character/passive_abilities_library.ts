@@ -46,6 +46,7 @@ import {
   multiplyCorpDiscountMutsuhama,
   multiplyCorpDiscountShiavase,
   multiplyAllDiscounts,
+  setTransactionAnonymous,
 } from './basic_effects';
 import { multiplyDiscourseMongerCooldowns } from './basic_effects';
 
@@ -1149,6 +1150,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // После списания рентных платежей гм получает кэшбек в размере 13% от списанной суммы. Начисляется после каждого списания рентных платежей.
     prerequisites: ['igra-na-birge-2'],
     modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 13 - 5 }),
+  },
+
+  {
+    id: 'anonymous-transaction',
+    name: 'фиксер',
+    description: 'гм производит анонимный перевод между двумя персонажами. ',
+    // 310
+    // анонимизация перевода - не показываем это в логах никому кроме фиксера, его контрагента и мастеров
+    modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
 
   {

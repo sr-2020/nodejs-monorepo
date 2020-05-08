@@ -298,3 +298,7 @@ export function multiplyDiscourseMongerCooldowns(api: EffectModelApi<Sr2020Chara
     }
   }
 }
+
+export function setTransactionAnonymous(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.billing.anonymous = true;
+}

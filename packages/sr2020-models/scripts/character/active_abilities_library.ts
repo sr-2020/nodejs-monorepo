@@ -709,19 +709,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'anonymous-transaction',
-    humanReadableName: 'фиксер',
-    description: 'гм производит анонимный перевод между двумя персонажами. ',
-    // 316
-    // анонимизация перевода - не показываем это в логах никому кроме фиксера, его контрагента и мастеров
-    // TODO(https://trello.com/c/G8Wx5NVu/356-абилка-гм-производит-анонимный-перевод-между-двумя-персонажами)
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 60,
-    eventType: dummyAbility.name,
-  },
-
-  {
     id: 'pray-s',
     humanReadableName: 'Pray my lame',
     description: 'Помогает нужному духу обрести силы для воплощения',
