@@ -17,7 +17,7 @@ import {
 } from './util';
 import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
 import Chance = require('chance');
-import { kAllActiveAbilities } from './active_abilities_library';
+import { getAllActiveAbilities } from './library_registrator';
 import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
 import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
@@ -224,7 +224,7 @@ export function groundHealSpell(
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  const ability = kAllActiveAbilities.get('ground-heal-ability')!;
+  const ability = getAllActiveAbilities().get('ground-heal-ability')!;
   api.model.activeAbilities.push({
     id: ability.id,
     humanReadableName: ability.humanReadableName,

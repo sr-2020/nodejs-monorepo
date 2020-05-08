@@ -5,7 +5,7 @@ import { reviveOnTarget, absoluteDeath } from './death_and_rebirth';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
-import { kAllActiveAbilities } from './active_abilities_library';
+import { getAllActiveAbilities } from './library_registrator';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -27,7 +27,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Нельзя использовать способность, которой у вас нет!');
   }
 
-  const libraryAbility = kAllActiveAbilities.get(data.id);
+  const libraryAbility = getAllActiveAbilities().get(data.id);
   if (!libraryAbility) {
     throw new UserVisibleError('Несуществующая способность!');
   }

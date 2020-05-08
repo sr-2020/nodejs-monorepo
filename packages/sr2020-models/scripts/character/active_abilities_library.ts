@@ -29,6 +29,7 @@ import {
   discourseGroupInquisitor2,
   prophetAbility,
 } from './ethics';
+import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 
 export type TargetType = 'scan' | 'show';
 
@@ -1300,11 +1301,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 ];
 
-export const kAllActiveAbilities: Map<string, ActiveAbility> = (() => {
-  const result = new Map<string, ActiveAbility>();
-  kAllActiveAbilitiesList.forEach((f) => {
-    if (result.has(f.id)) throw new Error('Non-unique active ability id: ' + f.id);
-    result.set(f.id, f);
-  });
-  return result;
-})();
+setAllActiveAbilities(
+  (() => {
+    const result = new Map<string, ActiveAbility>();
+    kAllActiveAbilitiesList.forEach((f) => {
+      if (result.has(f.id)) throw new Error('Non-unique active ability id: ' + f.id);
+      result.set(f.id, f);
+    });
+    return result;
+  })(),
+);

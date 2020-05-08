@@ -1,7 +1,7 @@
 import { get } from '@loopback/rest';
 import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_library';
 import { kAllSpells } from '../scripts/character/spells_library';
-import { kAllActiveAbilities } from '../scripts/character/active_abilities_library';
+import { getAllActiveAbilities } from '../scripts/character/library_registrator';
 import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
@@ -32,7 +32,7 @@ export class DictionariesController {
   })
   features(): { id: string; name: string; description: string }[] {
     const pasiveAbilities = [...kAllPassiveAbilities.values()].map((f) => ({ id: f.id, name: f.name, description: f.description }));
-    const activeAbilities = [...kAllActiveAbilities.values()].map((f) => ({
+    const activeAbilities = [...getAllActiveAbilities().values()].map((f) => ({
       id: f.id,
       name: f.humanReadableName,
       description: f.description,

@@ -1,12 +1,12 @@
 import { isEqual } from 'lodash';
 
-import { Sr2020Character, AddedPassiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { EthicScale, kEthicLevels, kAllCrysises, EthicTrigger, kEthicAbilities, EthicGroup, kAllEthicGroups } from './ethics_library';
-import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { kAllPassiveAbilities } from './passive_abilities_library';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { EthicGroup, EthicScale, EthicTrigger, kAllCrysises, kAllEthicGroups, kEthicAbilities, kEthicLevels } from './ethics_library';
+import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { ActiveAbilityData } from './active_abilities';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { LocusQrData, consume, unconsume } from '../qr/events';
+import { consume, LocusQrData, unconsume } from '../qr/events';
+import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-models/scripts/character/features';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;
@@ -27,6 +27,29 @@ export function initEthic(model: Sr2020Character) {
 // Will remove all non-crysis triggers and recalculate state.
 // Returns true if ethic ability was added and false otherwise.
 function updatePersonalEthic(model: Sr2020Character, ethicValues: Map<EthicScale, number>): boolean {
+  updateEthicStateAndTriggers(model, ethicValues);
+
+  const allEthicAbilitiesIds = kEthicAbilities.map((it) => it.abilityId);
+  const characterEthicAbilities = new Set(
+    [...model.activeAbilities, ...model.passiveAbilities].filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
+  );
+
+  const newEthicAbilities = hasCrysis(model)
+    ? new Set<string>()
+    : new Set<string>(kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId));
+
+  const abilitiesChanged = !isEqual(characterEthicAbilities, newEthicAbilities);
+  if (abilitiesChanged) {
+    const toAdd = [...newEthicAbilities].filter((id) => !characterEthicAbilities.has(id));
+    const toRemove = [...characterEthicAbilities].filter((id) => !newEthicAbilities.has(id));
+
+    for (const id of toAdd) addFeatureToModel(model, id);
+    for (const id of toRemove) removeFeatureFromModel(model, id);
+  }
+  return abilitiesChanged;
+}
+
+function updateEthicStateAndTriggers(model: Sr2020Character, ethicValues: Map<EthicScale, number>) {
   model.ethic.state = [];
   model.ethic.trigger = model.ethic.trigger.filter((t) => t.kind == 'crysis');
   for (const [scale, value] of ethicValues) {
@@ -46,31 +69,6 @@ function updatePersonalEthic(model: Sr2020Character, ethicValues: Map<EthicScale
       }),
     );
   }
-
-  const allEthicAbilitiesIds = kEthicAbilities.map((it) => it.abilityId);
-  const characterEthicAbilities = [
-    ...model.activeAbilities.filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
-    ...model.passiveAbilities.filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
-  ];
-
-  const newEthicAbilities = model.ethic.trigger.find((it) => it.kind == 'crysis')
-    ? []
-    : kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId);
-
-  const abilitiesChanged = !isEqual(characterEthicAbilities.sort(), newEthicAbilities.sort());
-  if (abilitiesChanged) {
-    model.passiveAbilities = model.passiveAbilities.filter((it) => !characterEthicAbilities.includes(it.id));
-    model.activeAbilities = model.activeAbilities.filter((it) => !characterEthicAbilities.includes(it.id));
-
-    for (const abilityId of newEthicAbilities) {
-      const ability = kAllPassiveAbilities.get(abilityId);
-      if (ability) {
-        const addedAbility: AddedPassiveAbility = { id: ability.id, name: ability.name, description: ability.description };
-        model.passiveAbilities.push(addedAbility);
-      }
-    }
-  }
-  return abilitiesChanged;
 }
 
 function findTrigger(id: string): EthicTrigger {
@@ -83,6 +81,10 @@ function findTrigger(id: string): EthicTrigger {
   }
 
   throw new UserVisibleError('Триггер не найден');
+}
+
+function hasCrysis(model: Sr2020Character): boolean {
+  return model.ethic.trigger.find((it) => it.kind == 'crysis') != undefined;
 }
 
 export function ethicSet(
