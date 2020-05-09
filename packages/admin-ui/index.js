@@ -157,8 +157,8 @@ app = new Vue({
 
     async setQrModel(model) {
       this.qrModel = model;
-      const timestamp = new Date().getTime() / 1000 + 3600;
-      const response = await this.$http.get(`http://qr.aerem.in/encode?type=1&kind=0&validUntil=${timestamp}&payload=${model.modelId}`);
+      const timestamp = Math.round(new Date().getTime() / 1000) + 3600;
+      const response = await this.$http.get(`https://qr.aerem.in/encode?type=1&kind=0&validUntil=${timestamp}&payload=${model.modelId}`);
       this.qrCodeEncoded = response.body.content;
     },
 
