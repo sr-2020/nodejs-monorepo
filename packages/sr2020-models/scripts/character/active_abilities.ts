@@ -171,30 +171,45 @@ export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: Modif
 
 // Гешефтмахерские способности
 
+function getMerchandiseData(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData): MerchandiseQrData {
+  if (!data.qrCode) throw new UserVisibleError('Нет данных о QR-коде');
+  const item = api.aquired(QrCode, data.qrCode);
+  return typedQrData<MerchandiseQrData>(item);
+}
+
 export function howMuchItCosts(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const item = api.aquired(QrCode, data.qrCode!);
-  sendNotificationAndHistoryRecord(
-    api,
-    'Цена товара',
-    `Базовая цена этого товара составляет ${typedQrData<MerchandiseQrData>(item).basePrice}`,
-  );
+  sendNotificationAndHistoryRecord(api, 'Цена товара', `Базовая цена этого товара составляет ${getMerchandiseData(api, data).basePrice}`);
 }
 
 export function howMuchTheRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const item = api.aquired(QrCode, data.qrCode!);
-  sendNotificationAndHistoryRecord(
-    api,
-    'Рента',
-    `Рентный платеж за этот товара составляет ${typedQrData<MerchandiseQrData>(item).rentPrice}`,
-  );
+  sendNotificationAndHistoryRecord(api, 'Рента', `Рентный платеж за этот товара составляет ${getMerchandiseData(api, data).rentPrice}`);
 }
 
 export function whoNeedsIt(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  const item = api.aquired(QrCode, data.qrCode!);
-  const description = typedQrData<MerchandiseQrData>(item).gmDescription;
+  const description = getMerchandiseData(api, data).gmDescription;
   if (description.length > 0) {
     sendNotificationAndHistoryRecord(api, 'Информация', description);
   } else {
     api.sendNotification('Информация', 'Этот товар ничем не примечателен.');
   }
+}
+
+export function letMePay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  transferRentFromTo(api, getMerchandiseData(api, data).dealId, api.model.modelId);
+}
+
+export function letHimPay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  transferRentFromTo(api, getMerchandiseData(api, data).dealId, data.targetCharacterId);
+}
+
+export function reRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  transferRentFromTo(api, getMerchandiseData(api, data).dealId, undefined);
+}
+
+function transferRentFromTo(api: EventModelApi<Sr2020Character>, dealId: string, toCharacterId?: string) {
+  api.sendPubSubNotification('change_rent', {
+    dealId,
+    toCharacterId,
+  });
 }

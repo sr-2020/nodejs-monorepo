@@ -12,6 +12,9 @@ import {
   howMuchItCosts,
   whoNeedsIt,
   howMuchTheRent,
+  letMePay,
+  letHimPay,
+  reRent,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -95,13 +98,11 @@ const kMerchandiseQrTypes: QrType[] = [
   'cyberdeck_mod',
 ];
 
-const kMerchandiseTargeted: TargetSignature[] = [
-  {
-    name: 'Товар',
-    allowedTypes: kMerchandiseQrTypes,
-    field: 'qrCode',
-  },
-];
+const kMerchandiseTargeted: TargetSignature = {
+  name: 'Товар',
+  allowedTypes: kMerchandiseQrTypes,
+  field: 'qrCode',
+};
 
 export interface ActiveAbility {
   id: string;
@@ -674,7 +675,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // При применении абилки на экране отображается записанная на QR baseprice товара.
     // Если товар не был продан через магазин - возвращает 0.
     target: 'scan',
-    targetsSignature: kMerchandiseTargeted,
+    targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 0,
     minimalEssence: 0,
     eventType: howMuchItCosts.name,
@@ -688,7 +689,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Выводит на экран гм информацию из скрытого текстового поля товара .
     // Текст по умолчанию: Ты не знаешь ничего интересного про этот товар.
     target: 'scan',
-    targetsSignature: kMerchandiseTargeted,
+    targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 10,
     minimalEssence: 0,
     eventType: whoNeedsIt.name,
@@ -702,7 +703,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Показывает (возвращает) размер рентного платежа по данному товару. Данная информация записывается на QR при его покупке.
     // Если товар не был продан через магазин - возвращает 0.
     target: 'scan',
-    targetsSignature: kMerchandiseTargeted,
+    targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 0,
     minimalEssence: 0,
     eventType: howMuchTheRent.name,
@@ -717,12 +718,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Механика:
     // Активировать абилку, отсканировать QR-код товара.
     // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
-    // TODO(https://trello.com/c/pLJb9DCv/355-абилки-переписывания-ренты-давай-я-заплачу-давай-он-заплатит-переоформить-ренту)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 30,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: letMePay.name,
   },
 
   {
@@ -735,26 +735,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Механика:
     // Активировать абилку, отсканировать QR-код товара, отсканировать QR код персонажа, на которого .
     // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
-    // TODO(https://trello.com/c/pLJb9DCv/355-абилки-переписывания-ренты-давай-я-заплачу-давай-он-заплатит-переоформить-ренту)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      kMerchandiseTargeted,
+      {
+        name: 'Новый плательщик',
+        field: 'targetCharacterId',
+        allowedTypes: ['HEALTHY_BODY'],
+      },
+    ],
     cooldownMinutes: 30,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-
-  {
-    id: 'investigate-scoring',
-    humanReadableName: 'Посмотрим скоринг',
-    description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
-    // 294
-    // Показывает актуальные коэффициенты, которые влияют на скоринг. У целевого персонажа в течение следующих 5 минут отображаются его коэффициенты скоринга.
-    // TODO(https://trello.com/c/pLJb9DCv/355-абилки-переписывания-ренты-давай-я-заплачу-давай-он-заплатит-переоформить-ренту)
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 30,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: letHimPay.name,
   },
 
   {
@@ -766,6 +758,19 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Механика:
     // Активировать абилку, отсканировать QR-код товара.
     // Если на данном товаре нет рентного платежа - отображается "на данном товаре нет рентного платежа"
+    target: 'scan',
+    targetsSignature: [kMerchandiseTargeted],
+    cooldownMinutes: 30,
+    minimalEssence: 0,
+    eventType: reRent.name,
+  },
+
+  {
+    id: 'investigate-scoring',
+    humanReadableName: 'Посмотрим скоринг',
+    description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
+    // 294
+    // Показывает актуальные коэффициенты, которые влияют на скоринг. У целевого персонажа в течение следующих 5 минут отображаются его коэффициенты скоринга.
     // TODO(https://trello.com/c/pLJb9DCv/355-абилки-переписывания-ренты-давай-я-заплачу-давай-он-заплатит-переоформить-ренту)
     target: 'scan',
     targetsSignature: kNoTarget,
