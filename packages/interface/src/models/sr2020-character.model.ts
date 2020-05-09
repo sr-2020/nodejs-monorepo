@@ -142,6 +142,12 @@ export class AddedImplant {
 
   // List of modifiers added by this implant. Used to remove them when implant is being removed.
   @property.array(String) modifierIds: string[];
+
+  // Various economics crap. Only needed to support implant extraction case
+  @rproperty() basePrice: number;
+  @rproperty() rentPrice: number;
+  @rproperty() gmDescription: string;
+  @rproperty() dealId: string;
 }
 
 @model()

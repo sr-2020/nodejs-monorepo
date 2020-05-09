@@ -187,7 +187,13 @@ app = new Vue({
     },
 
     async installImplant() {
-      return this.sendCharacterEvent({ eventType: 'installImplant', data: { id: this.selectedImplant } }, 'Имплант установлен');
+      return this.sendCharacterEvent({ eventType: 'installImplant', data: {
+        id: this.selectedImplant,
+        basePrice: 0,
+        rentPrice: 0,
+        offerId: '',
+        gmDescription: ''
+      } }, 'Имплант установлен');
     },
 
     async removeImplant() {

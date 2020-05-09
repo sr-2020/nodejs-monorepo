@@ -51,7 +51,7 @@ export function riggerInstallImplant(
   checkIfCanWorkWithImplant(api.workModel, implant);
 
   api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, { id: typedQrData<MerchandiseQrData>(qr).id });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, typedQrData<MerchandiseQrData>(qr));
 
   // Not calling analyzeBody directly as we need for install event above propagate first
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);
@@ -81,7 +81,10 @@ export function riggerUninstallImplant(
     id: implant.id,
     name: implant.name,
     description: implant.description,
-    // TODO(aeremin): Should we have some data here, like a globally-unique implant id?
+    basePrice: implant.basePrice,
+    rentPrice: implant.rentPrice,
+    gmDescription: implant.gmDescription,
+    dealId: implant.dealId,
     additionalData: {},
   });
 

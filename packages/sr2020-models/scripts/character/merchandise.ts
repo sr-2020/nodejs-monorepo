@@ -3,12 +3,14 @@ import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/model
 import { kAllImplants, ImplantSlot } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
 import { reduceEssenceDueToImplantInstall, createGapDueToImplantUninstall } from './essence';
+import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
   api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
 }
-export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+
+export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData, _: Event) {
   const implant = kAllImplants.find((it) => it.id == data.id);
   if (!implant) {
     throw new UserVisibleError(`Импланта ${data.id} не существует`);
@@ -37,6 +39,10 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: { id: 
     grade: implant.grade,
     installDifficulty: implant.installDifficulty,
     essenceCost: implant.essenceCost,
+    basePrice: data.basePrice,
+    rentPrice: data.rentPrice,
+    gmDescription: data.gmDescription,
+    dealId: data.dealId,
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);

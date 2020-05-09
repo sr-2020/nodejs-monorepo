@@ -41,7 +41,7 @@ describe('Rigger abilities', () => {
     await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // rigger
     await fixture.saveQrCode({ modelId: '3' }); // implant
     await fixture.saveQrCode({ modelId: '4' }); // implant
-    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'rcc-beta' } }, 3);
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'rcc-beta', basePrice: 10 } }, 3);
     {
       const { workModel } = await fixture.sendCharacterEvent(
         { eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } },
@@ -77,7 +77,7 @@ describe('Rigger abilities', () => {
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
       const qrWorkModel = (await fixture.getQrCode(4)).workModel;
-      expect(qrWorkModel).to.containDeep({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta' } });
+      expect(qrWorkModel).to.containDeep({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta', basePrice: 10 } });
       expect(workModel.analyzedBody?.implants.length).to.equal(0);
       expect(patientWorkModel.implants.length).to.equal(0);
       expect(patientWorkModel).to.containDeep({
