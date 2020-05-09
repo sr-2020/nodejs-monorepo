@@ -79,7 +79,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
 
     const ritualBonus = Math.floor(Math.sqrt(totalParticipans));
     ritualPowerBonus = ritualBonus;
-    if (api.workModel.passiveAbilities.some((a) => 'orthodox-ritual-magic')) {
+    if (api.workModel.passiveAbilities.some((a) => a.id == 'orthodox-ritual-magic')) {
       ritualFeedbackReduction = ritualBonus;
     }
   }
