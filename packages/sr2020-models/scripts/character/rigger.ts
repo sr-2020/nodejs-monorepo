@@ -85,6 +85,7 @@ export function riggerUninstallImplant(
     rentPrice: implant.rentPrice,
     gmDescription: implant.gmDescription,
     dealId: implant.dealId,
+    lifestyle: implant.lifestyle,
     additionalData: {},
   });
 

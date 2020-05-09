@@ -43,6 +43,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     rentPrice: data.rentPrice,
     gmDescription: data.gmDescription,
     dealId: data.dealId,
+    lifestyle: data.lifestyle,
     modifierIds: implant.modifiers.map((it) => api.addModifier(it).mID),
   };
   api.model.implants.push(addedImplant);

@@ -15,6 +15,7 @@ interface Merchandise {
   basePrice?: number;
   rentPrice?: number;
   dealId?: string;
+  lifestyle?: string;
   gmDescription?: string;
   additionalData: any;
 }
@@ -65,6 +66,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
       rentPrice: data.basePrice ?? 0,
       dealId: data.dealId ?? '',
       gmDescription: data.gmDescription ?? '',
+      lifestyle: data.lifestyle ?? '',
     },
     eventType: merchandiseIdToEventType(data.id),
     timestamp: api.model.timestamp,

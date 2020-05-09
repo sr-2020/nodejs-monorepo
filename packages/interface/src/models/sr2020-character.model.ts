@@ -148,6 +148,7 @@ export class AddedImplant {
   @rproperty() rentPrice: number;
   @rproperty() gmDescription: string;
   @rproperty() dealId: string;
+  @rproperty() lifestyle: string;
 }
 
 @model()

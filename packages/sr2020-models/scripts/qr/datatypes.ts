@@ -22,6 +22,7 @@ export interface MerchandiseQrData {
   rentPrice: number;
   gmDescription: string;
   dealId: string;
+  lifestyle: string;
 }
 
 export function typedQrData<T>(qr: QrCode) {

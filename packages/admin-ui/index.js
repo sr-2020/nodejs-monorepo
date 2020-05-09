@@ -191,7 +191,8 @@ app = new Vue({
         id: this.selectedImplant,
         basePrice: 0,
         rentPrice: 0,
-        offerId: '',
+        dealId: '',
+        lifestyle: '',
         gmDescription: ''
       } }, 'Имплант установлен');
     },
