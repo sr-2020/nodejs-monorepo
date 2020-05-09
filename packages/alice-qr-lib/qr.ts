@@ -11,10 +11,11 @@ export class ValidationError implements Error {
   constructor(public message: string) {}
 }
 
-function uint16LESignature(data: string): number {
+function uint16LESignature(buffer: Buffer, data: string): number {
   // TODO: get salt from config
   const salt = 'do you like ponies?';
-  const md5buffer = Buffer.from(md5(data + salt), 'hex');
+  const joinedBuffer = Buffer.concat([buffer, Buffer.from(data), Buffer.from(salt)]);
+  const md5buffer = Buffer.from(md5(joinedBuffer), 'hex');
   return md5buffer.readUInt16LE(0);
 }
 
@@ -28,7 +29,7 @@ export function decode(content: string): QrData {
     const kind = contentBuffer.readUInt8(1);
     const validUntil = contentBuffer.readUInt32LE(2);
     const signature = signatureBuffer.readUInt16LE(0);
-    const expectedSignature = uint16LESignature(contentBuffer + content.slice(12));
+    const expectedSignature = uint16LESignature(contentBuffer, content.slice(12));
     if (signature != expectedSignature) throw new ValidationError('Validation Error: Invalid signature');
     return { type: type, kind: kind, validUntil: validUntil, payload: content.slice(12) };
   } catch (e) {
@@ -45,6 +46,6 @@ export function encode(data: QrData): string {
   contentBuffer.writeUInt8(data.kind, 1);
   contentBuffer.writeUInt32LE(data.validUntil, 2);
   const signatureBuffer = Buffer.alloc(2);
-  signatureBuffer.writeUInt16LE(uint16LESignature(contentBuffer + data.payload), 0);
+  signatureBuffer.writeUInt16LE(uint16LESignature(contentBuffer, data.payload), 0);
   return signatureBuffer.toString('hex') + contentBuffer.toString('base64') + data.payload;
 }

@@ -8,10 +8,15 @@ describe('QR content encoding/decode', () => {
     expect(() => decode('EQ1ybkhZksI')).to.throw('Format Error');
   });
 
+  const validContent = '92c2EQ1ybkhZHello';
+
+  it('Decodable', () => {
+    decode(validContent);
+  });
+
   it('Changing any symbol fails signature check', () => {
-    const properContent = '92c2EQ1ybkhZHello';
-    for (let i = 0; i < properContent.length; ++i) {
-      const changedContent = properContent.slice(0, i) + 'A' + properContent.slice(i + 1);
+    for (let i = 0; i < validContent.length; ++i) {
+      const changedContent = validContent.slice(0, i) + 'A' + validContent.slice(i + 1);
       expect(() => decode(changedContent)).to.throw('Validation Error');
     }
   });
@@ -22,10 +27,9 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Invalid symbols in header lead to exception', () => {
-    const properContent = '92c2EQ1ybkhZHello';
     for (let i = 4; i < 4 + 8; ++i) {
-      // ! is not base64 symbol
-      const changedContent = properContent.slice(0, i) + '?' + properContent.slice(i + 1);
+      // ? is not base64 symbol
+      const changedContent = validContent.slice(0, i) + '?' + validContent.slice(i + 1);
       expect(() => decode(changedContent)).to.throw();
     }
   });
@@ -36,8 +40,18 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Can decode example content 2', () => {
-    const decoded = decode('ca7fBwAA8VNl123,1267,abc');
+    const decoded = decode('5472BwAA8VNl123,1267,abc');
     expect(decoded).to.deep.equal({ type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' });
+  });
+
+  it('Can decode example content 3', () => {
+    const decoded = decode('9447AQDQvrZe178').payload;
+    expect(decoded).to.equal('178');
+  });
+
+  it('Can decode example content 4', () => {
+    const decoded = decode('c112AQCIyrZe178').payload;
+    expect(decoded).to.equal('178');
   });
 
   it('Can encode example content', () => {
@@ -47,7 +61,7 @@ describe('QR content encoding/decode', () => {
 
   it('Can encode example content 2', () => {
     const data: QrData = { type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' };
-    expect(encode(data)).to.deep.equal('ca7fBwAA8VNl123,1267,abc');
+    expect(encode(data)).to.deep.equal('5472BwAA8VNl123,1267,abc');
   });
 
   it('Can encode and decode example content with cyrillic characters', () => {
