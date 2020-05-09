@@ -9,6 +9,9 @@ import {
   absoluteDeathAbility,
   alloHomorusAbility,
   cloudMemoryAbility,
+  howMuchItCosts,
+  whoNeedsIt,
+  howMuchTheRent,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -79,6 +82,26 @@ const kLocusAndPhysicalBody: TargetSignature[] = [
 ];
 
 const kNoTarget: TargetSignature[] = [];
+
+const kMerchandiseQrTypes: QrType[] = [
+  'implant',
+  'pill',
+  'reagent',
+  'locus_charge',
+  'box',
+  'drone',
+  'drone_mod',
+  'cyberdeck',
+  'cyberdeck_mod',
+];
+
+const kMerchandiseTargeted: TargetSignature[] = [
+  {
+    name: 'Товар',
+    allowedTypes: kMerchandiseQrTypes,
+    field: 'qrCode',
+  },
+];
 
 export interface ActiveAbility {
   id: string;
@@ -650,12 +673,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // qr товара содержит информацию о базовой стоимости товара при его покупке
     // При применении абилки на экране отображается записанная на QR baseprice товара.
     // Если товар не был продан через магазин - возвращает 0.
-    // TODO(https://trello.com/c/k28Eh3Jb/354-абилки-информации-о-товаре-чо-почем-чей-туфля-плачу-и-плачу)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMerchandiseTargeted,
     cooldownMinutes: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: howMuchItCosts.name,
   },
 
   {
@@ -665,12 +687,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 291
     // Выводит на экран гм информацию из скрытого текстового поля товара .
     // Текст по умолчанию: Ты не знаешь ничего интересного про этот товар.
-    // TODO(https://trello.com/c/k28Eh3Jb/354-абилки-информации-о-товаре-чо-почем-чей-туфля-плачу-и-плачу)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMerchandiseTargeted,
     cooldownMinutes: 10,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: whoNeedsIt.name,
   },
 
   {
@@ -680,12 +701,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // 292
     // Показывает (возвращает) размер рентного платежа по данному товару. Данная информация записывается на QR при его покупке.
     // Если товар не был продан через магазин - возвращает 0.
-    // TODO(https://trello.com/c/k28Eh3Jb/354-абилки-информации-о-товаре-чо-почем-чей-туфля-плачу-и-плачу)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMerchandiseTargeted,
     cooldownMinutes: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: howMuchTheRent.name,
   },
 
   {

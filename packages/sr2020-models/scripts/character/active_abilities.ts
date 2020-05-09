@@ -6,6 +6,7 @@ import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
+import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -166,4 +167,34 @@ export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: Modif
     description: 'Вы не забываете события произошедшие с вами непосредственно перед КС',
     validUntil: m.validUntil,
   });
+}
+
+// Гешефтмахерские способности
+
+export function howMuchItCosts(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  const item = api.aquired(QrCode, data.qrCode!);
+  sendNotificationAndHistoryRecord(
+    api,
+    'Цена товара',
+    `Базовая цена этого товара составляет ${typedQrData<MerchandiseQrData>(item).basePrice}`,
+  );
+}
+
+export function howMuchTheRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  const item = api.aquired(QrCode, data.qrCode!);
+  sendNotificationAndHistoryRecord(
+    api,
+    'Рента',
+    `Рентный платеж за этот товара составляет ${typedQrData<MerchandiseQrData>(item).rentPrice}`,
+  );
+}
+
+export function whoNeedsIt(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  const item = api.aquired(QrCode, data.qrCode!);
+  const description = typedQrData<MerchandiseQrData>(item).gmDescription;
+  if (description.length > 0) {
+    sendNotificationAndHistoryRecord(api, 'Информация', description);
+  } else {
+    api.sendNotification('Информация', 'Этот товар ничем не примечателен.');
+  }
 }
