@@ -48,6 +48,13 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
   };
   api.model.implants.push(addedImplant);
   sendNotificationAndHistoryRecord(api, 'Имплант установлен', `Установлен имплант ${addedImplant.name}`);
+  api.sendPubSubNotification('implant_install', {
+    characterId: api.model.modelId,
+    id: implant.id,
+    implantLifestyle: data.lifestyle,
+    // TODO(aeremin) Send actual autodoc lifestyle.
+    autodocLifestyle: 'irridium',
+  });
 }
 
 export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
