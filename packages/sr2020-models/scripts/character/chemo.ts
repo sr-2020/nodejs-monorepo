@@ -14,6 +14,7 @@ import {
   increaseAllBaseStats,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
+import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -705,7 +706,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 ];
 
-export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+export function consumeChemo(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData, _: Event) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Только мясное тело может принимать препараты!');
   }
@@ -725,6 +726,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: { id: st
     }
   }
   api.sendSelfEvent(checkConcentrations, { concentrations: pill.content });
+  api.sendPubSubNotification('pill_consumption', { characterId: api.model.modelId, id: data.id, lifestyle: data.lifestyle });
 }
 
 export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }, _: Event) {
