@@ -7,7 +7,7 @@ import { ActiveAbilityData } from './active_abilities';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consume, unconsume } from '../qr/events';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-models/scripts/character/features';
-import { LocusQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { LocusQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;
@@ -245,7 +245,7 @@ export function discourseGroupAddGeneric(api: EventModelApi<Sr2020Character>, da
   }
 
   const target = getMember(api, data, locus, 'add');
-  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupAdd, locus.data);
+  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupAdd, typedQrData<LocusQrData>(locus));
   if (consumeCharge) api.sendOutboundEvent(QrCode, locus.modelId, consume, { noClear: true });
 }
 
@@ -264,7 +264,7 @@ export function discourseGroupInquisitor2(api: EventModelApi<Sr2020Character>, d
 export function discourseGroupExcludeGeneric(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, recoveredCharges: number) {
   const locus = getLocus(api, data);
   const target = getMember(api, data, locus, 'remove');
-  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupRemove, locus.data);
+  api.sendOutboundEvent(Sr2020Character, target.modelId, discourseGroupRemove, typedQrData<LocusQrData>(locus));
   if (recoveredCharges) api.sendOutboundEvent(QrCode, locus.modelId, unconsume, { amount: recoveredCharges });
 }
 

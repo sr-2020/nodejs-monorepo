@@ -6,6 +6,7 @@ import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocRevive, autodocHeal } from './death_and_rebirth';
+import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -42,7 +43,7 @@ export function riggerInstallImplant(
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
 
-  const implant = kAllImplants.find((it) => it.id == qr.data.id);
+  const implant = kAllImplants.find((it) => it.id == typedQrData<MerchandiseQrData>(qr).id);
   if (implant == undefined) {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
@@ -50,7 +51,7 @@ export function riggerInstallImplant(
   checkIfCanWorkWithImplant(api.workModel, implant);
 
   api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, { id: qr.data.id });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, { id: typedQrData<MerchandiseQrData>(qr).id });
 
   // Not calling analyzeBody directly as we need for install event above propagate first
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);

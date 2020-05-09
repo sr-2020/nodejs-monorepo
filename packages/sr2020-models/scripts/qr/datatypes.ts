@@ -14,3 +14,12 @@ export interface MentalQrData {
   attackerId: string;
   attack: number;
 }
+
+// qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod'
+export interface MerchandiseQrData {
+  id: string;
+}
+
+export function typedQrData<T>(qr: QrCode) {
+  return qr.data as T;
+}

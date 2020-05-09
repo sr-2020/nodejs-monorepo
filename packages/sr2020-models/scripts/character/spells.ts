@@ -22,6 +22,7 @@ import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseReson
 import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
 import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
+import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '*';
@@ -91,7 +92,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     const reagentReference = api.aquired(QrCode, id);
     if (reagentReference?.type != 'reagent') throw new UserVisibleError('Использование не-реагента в качестве реагента!');
 
-    const reagent = kAllReagents.find((it) => it.id == reagentReference.data.id);
+    const reagent = kAllReagents.find((it) => it.id == typedQrData<MerchandiseQrData>(reagentReference).id);
     if (!reagent) throw new UserVisibleError('Такого реагента не существует!');
 
     for (const element in reagent.content) {
