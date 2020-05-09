@@ -5,12 +5,17 @@ import { kAllReagents } from './reagents_library';
 import { UserVisibleError, EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
 import { consumeFood } from '../character/merchandise';
 import { consumeChemo } from '../character/chemo';
+import { MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 interface Merchandise {
   id: string;
   name: string;
   description: string;
   numberOfUses?: number;
+  basePrice?: number;
+  rentPrice?: number;
+  dealId?: string;
+  gmDescription?: string;
   additionalData: any;
 }
 
@@ -48,12 +53,19 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
     throw new UserVisibleError('QR-код уже записан!');
   }
 
-  api.model = {
+  (api.model as TypedQrCode<MerchandiseQrData>) = {
     type: merchandiseIdToQrType(data.id),
     name: data.name,
     description: data.description,
     usesLeft: data.numberOfUses ?? 1,
-    data: { ...data.additionalData, id: data.id },
+    data: {
+      ...data.additionalData,
+      id: data.id,
+      basePrice: data.basePrice ?? 0,
+      rentPrice: data.basePrice ?? 0,
+      dealId: data.dealId ?? '',
+      gmDescription: data.gmDescription ?? '',
+    },
     eventType: merchandiseIdToEventType(data.id),
     timestamp: api.model.timestamp,
     modifiers: [],

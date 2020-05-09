@@ -2,7 +2,7 @@ import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
-import { LocusQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { LocusQrData, MentalQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -78,11 +78,11 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbili
 }
 
 export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
-  api.model = {
+  (api.model as TypedQrCode<MentalQrData>) = {
     usesLeft: 100,
     description: '',
     modelId: api.model.modelId,
-    data: {},
+    data: { attack: 0, attackerId: '' },
     modifiers: [],
     timers: {},
     name: '',

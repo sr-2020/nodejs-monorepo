@@ -18,6 +18,10 @@ export interface MentalQrData {
 // qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod'
 export interface MerchandiseQrData {
   id: string;
+  basePrice: number;
+  rentPrice: number;
+  gmDescription: string;
+  dealId: string;
 }
 
 export function typedQrData<T>(qr: QrCode) {
