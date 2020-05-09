@@ -233,6 +233,10 @@ app = new Vue({
       return this.sendCharacterEvent({ eventType: 'setRace', data: { race: this.selectedRace } });
     },
 
+    async dumpshock() {
+      return this.sendCharacterEvent({ eventType: 'dumpshock', data: { } });
+    },
+
     async resetCharacter() {
       try {
         const response = await this.$http.put(this.characterUrl(this.characterModel.modelId).replace('/model/', '/default/') + '?noAbilities=true', {});
