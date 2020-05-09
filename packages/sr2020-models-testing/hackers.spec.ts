@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { duration } from 'moment';
 
 describe('Hackers-related events', function() {
   let fixture: TestFixture;
@@ -22,5 +23,34 @@ describe('Hackers-related events', function() {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} });
       expect(workModel.resonance).equal(3);
     }
+  });
+
+  it('Dump shock versus dumpty humpty', async () => {
+    await fixture.saveCharacter({ modelId: '1', resonance: 5 }); // Hacker
+    await fixture.saveCharacter({ modelId: '2', magic: 10 }); // Caster
+    await fixture.saveLocation(); // Needed by spell
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dumpty-humpty' } }, '2');
+
+    const castEvent = {
+      eventType: 'castSpell',
+      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 1, location: { id: 0, manaLevel: 0 } },
+    };
+    await fixture.sendCharacterEvent(castEvent, '2');
+
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(5); // No increase
+    await fixture.advanceTime(duration(1, 'hour'));
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(5); // No decrease either
+
+    await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(4); // Damaged by dumpshock
+
+    await fixture.sendCharacterEvent(castEvent, '2');
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(5); // Healed a bit
+
+    await fixture.sendCharacterEvent(castEvent, '2');
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(5); // Not more!
+
+    await fixture.advanceTime(duration(10, 'minutes'));
+    expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(4); // Only temporary :(
   });
 });

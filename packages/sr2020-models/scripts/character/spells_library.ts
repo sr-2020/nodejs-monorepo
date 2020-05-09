@@ -25,6 +25,7 @@ import {
   odusSpell,
   readCharacterAuraSpell,
   readLocationAuraSpell,
+  dumptyHumptySpell,
 } from './spells';
 
 type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
@@ -547,9 +548,9 @@ const kAllSpellsList: Spell[] = [
       'Временно понизить штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
     // 504
     // у цели на время T штраф от дамп-шока уменьшается на 1. T=Мощь*10 минут.
-    // TODO(https://trello.com/c/GruceQ5c/114-уточнить-поведение-заклинания-dumpty-humpty)
     sphere: 'stats',
-    eventType: dummySpell.name,
+    eventType: dumptyHumptySpell.name,
+    hasTarget: true,
   },
 ];
 

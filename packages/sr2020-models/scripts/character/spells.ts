@@ -23,6 +23,7 @@ import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
 import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { temporaryAntiDumpshock } from '@sr2020/sr2020-models/scripts/character/hackers';
 const chance = new Chance();
 
 const kUnknowAuraCharacter = '*';
@@ -529,6 +530,11 @@ export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data:
     'Результат чтения ауры локации',
     splitAuraByDashes(generateAuraSubset(target.aura, auraPercentage)),
   );
+}
+
+export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: SpellData, _: Event) {
+  const durationInMinutes = 10 * data.power;
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, temporaryAntiDumpshock, { durationInMinutes });
 }
 
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
