@@ -28,8 +28,6 @@ import {
   increaseControlRequests,
   increaseCompilationFadingResistance,
   increaseMentalProtection,
-  increaseIntelligence,
-  increaseBody,
   increaseImplantDifficultyBonus,
   allowBiowareInstallation,
   multiplyDiscountWeaponsArmor,
@@ -649,31 +647,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT: Команда в Кривда-Матрице, основного IT нет
     modifier: [],
-  },
-
-  {
-    id: 'dump-shock-survivor',
-    name: 'Пережитый дамп-шок',
-    description:
-      'Ты пережил дамп-шок. Тебя преследует постоянная головная боль.\n\n[-1] Резонанс\n[-1] Тело\n[-1] Харизма\n[-1] Интеллект\n[-1] Attack\n[-1] Firewall\n[-1] Sleaze\n[-1] DataProcessing',
-    // 194
-    // Негативка за пережитый дамп-шок, эффект перманентный пока не излечат,
-    // кумулятивен. Присваивается с помощью API
-    //
-    //
-    // IT:
-    // [Клиническая смерть]
-    // [-1] Резонанс
-    // [-1] Тело
-    // [-1] Харизма
-    // [-1] Интеллект
-    // TODO(aeremin): Should be additive ==> shouldn't be a passive ability
-    modifier: [
-      modifierFromEffect(increaseResonance, { amount: -1 }),
-      modifierFromEffect(increaseBody, { amount: -1 }),
-      modifierFromEffect(increaseCharisma, { amount: -1 }),
-      modifierFromEffect(increaseIntelligence, { amount: -1 }),
-    ],
   },
 
   {

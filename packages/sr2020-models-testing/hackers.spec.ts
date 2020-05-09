@@ -14,8 +14,13 @@ describe('Hackers-related events', function() {
 
   it('Dump shock reduces resonance', async () => {
     await fixture.saveCharacter({ resonance: 5 });
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dump-shock-survivor' } });
-    const c = await fixture.getCharacter();
-    expect(c.workModel).containDeep({ resonance: 4 });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} });
+      expect(workModel.resonance).equal(4);
+    }
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} });
+      expect(workModel.resonance).equal(3);
+    }
   });
 });
