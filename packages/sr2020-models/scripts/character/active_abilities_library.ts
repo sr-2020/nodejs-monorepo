@@ -15,6 +15,7 @@ import {
   letMePay,
   letHimPay,
   reRent,
+  investigateScoring,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -771,12 +772,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
     // 294
     // Показывает актуальные коэффициенты, которые влияют на скоринг. У целевого персонажа в течение следующих 5 минут отображаются его коэффициенты скоринга.
-    // TODO(https://trello.com/c/pLJb9DCv/355-абилки-переписывания-ренты-давай-я-заплачу-давай-он-заплатит-переоформить-ренту)
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: 30,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: investigateScoring.name,
   },
 
   {

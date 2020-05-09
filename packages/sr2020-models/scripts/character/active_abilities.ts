@@ -7,6 +7,7 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { addFeatureToModel } from '@sr2020/sr2020-models/scripts/character/features';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -212,4 +213,17 @@ function transferRentFromTo(api: EventModelApi<Sr2020Character>, dealId: string,
     dealId,
     toCharacterId,
   });
+}
+
+export function investigateScoring(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, temporaryAddMyScoring, {});
+}
+
+export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+  api.sendNotification('Скоринг', 'В течение пяти минут на странице экономики отображаются подробности вашего скоринга');
+  addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect), duration(5, 'minutes'));
+}
+
+export function addMyScoringEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  addFeatureToModel(api.model, 'mу-scoring');
 }
