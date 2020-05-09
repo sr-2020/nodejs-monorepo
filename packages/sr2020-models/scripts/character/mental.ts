@@ -2,11 +2,12 @@ import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr
 import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import Chance = require('chance');
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { MentalQrData, writeMentalAbility } from '../qr/events';
+import { MentalAbilityData, writeMentalAbility } from '../qr/events';
 import { FullTargetedAbilityData, FullActiveAbilityData } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
+import { MentalQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 const chance = new Chance();
 
 // Returns a result of the roll of X dices DY
@@ -29,7 +30,7 @@ function mentalDefence(character: Sr2020Character) {
 }
 
 export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility, event: Event) {
-  const code: MentalQrData = {
+  const code: MentalAbilityData = {
     attack: mentalAttack(api.workModel),
     attackerId: api.model.modelId,
     name: data.humanReadableName,

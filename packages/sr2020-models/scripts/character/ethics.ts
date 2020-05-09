@@ -5,8 +5,9 @@ import { EthicGroup, EthicScale, EthicTrigger, kAllCrysises, kAllEthicGroups, kE
 import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { ActiveAbilityData } from './active_abilities';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { consume, LocusQrData, unconsume } from '../qr/events';
+import { consume, unconsume } from '../qr/events';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-models/scripts/character/features';
+import { LocusQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;

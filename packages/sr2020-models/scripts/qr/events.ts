@@ -2,6 +2,7 @@ import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
+import { LocusQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -40,6 +41,7 @@ export function clear(api: EventModelApi<QrCode>, _: Event) {
     type: 'empty',
     name: 'Пустышка',
     description: 'Не записанный QR-код. На него можно записать что угодно',
+    data: {},
     modifiers: [],
   };
 }
@@ -54,7 +56,7 @@ function makeEmptyBox(api: EventModelApi<QrCode>) {
   api.model.description = 'Пустая коробка от товара. Нужна для операций с рентными платежами по товару.';
 }
 
-export interface MentalQrData {
+export interface MentalAbilityData {
   attackerId: string;
   attack: number;
   eventType: string;
@@ -62,7 +64,7 @@ export interface MentalQrData {
   description: string;
 }
 
-export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalQrData, event: Event) {
+export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbilityData, event: Event) {
   api.model.usesLeft = 1;
   api.model.type = 'ability';
   api.model.name = 'Способность ' + data.name;
@@ -80,6 +82,7 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
     usesLeft: 100,
     description: '',
     modelId: api.model.modelId,
+    data: {},
     modifiers: [],
     timers: {},
     name: '',
@@ -87,10 +90,6 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
     type: 'ability',
     eventType: 'scannedConsumedMentalAbility',
   };
-}
-
-export interface LocusQrData {
-  groupId: string;
 }
 
 export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: string; numberOfUses: number }, _: Event) {
@@ -108,11 +107,7 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
     throw new UserVisibleError('Количество зарядов локуса не может быть отрицательным!');
   }
 
-  const qrData: LocusQrData = {
-    groupId: data.groupId,
-  };
-
-  api.model = {
+  (api.model as TypedQrCode<LocusQrData>) = {
     usesLeft: data.numberOfUses,
     description: `Относится к группе "${group.name}"`,
     modelId: api.model.modelId,
@@ -121,6 +116,6 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
     name: 'Локус этической группы',
     timestamp: api.model.timestamp,
     type: 'locus',
-    data: qrData,
+    data: { groupId: data.groupId },
   };
 }
