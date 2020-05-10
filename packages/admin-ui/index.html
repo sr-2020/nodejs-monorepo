@@ -495,129 +495,158 @@
                 </b-card-body>
               </b-collapse>
             </b-card>
-            <b-card no-body>
-              <b-card-header>Добавление/удаление фичи (без проверки пререквизитов)</b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedFeature">
-                  <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="addFeature">Добавить</b-button>
-                <b-button variant="danger" v-on:click="removeFeature">Удалить</b-button>
-                (Если добавляемая фича уже присутствует в персонаже/удаляемая фича не присутствует - ничего не
-                произойдет!)
-              </b-card-body>
-            </b-card>
-            <b-card no-body>
-              <b-card-header>Ранения и смерть</b-card-header>
-              <b-card-body>
-                <b-button variant="danger" v-on:click="wound">Упасть в тяжран</b-button>
-                <b-button variant="success" v-on:click="revive">ОТЛАДКА: Воскресить</b-button>
-                <b-input-group prepend="ID персонажа">
-                  <b-form-input type="number" v-model="clinicalDeathTarget"></b-form-input>
-                  <b-input-group-append>
-                    <b-button variant="danger" v-on:click="clinicalDeathOnTarget">Добить</b-button>
-                  </b-input-group-append>
-                </b-input-group>
-              </b-card-body>
-            </b-card>
-            <b-card no-body>
-              <b-card-header>Сканирование QR-кода</b-card-header>
-              <b-card-body>
-                <b-input-group prepend="ID QR-кода">
-                  <b-form-input type="number" v-model="qrCodeId"></b-form-input>
-                  <b-input-group-append>
-                    <b-button variant="success" v-on:click="scanQr">Отсканировать</b-button>
-                  </b-input-group-append>
-                </b-input-group>
-              </b-card-body>
-            </b-card>
-            <b-card no-body>
-              <b-card-header>Установка/удаление импланта</b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedImplant">
-                  <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
-                  </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="installImplant">Установить</b-button>
-                <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
-              </b-card-body>
-            </b-card>
-            <b-card no-body>
-              <b-card-header>
-                Этика
-                <b-button block href="#" v-b-toggle.ethic_details variant="info">
-                  Подробности
-                </b-button>
-              </b-card-header>
-              <b-card-body>
-                <b-collapse id="ethic_details">
-                  <b-table :items="characterModel.ethic.state"></b-table>
-                  <b-table :items="characterModel.ethic.trigger">
-                    <template v-slot:cell(Id)="row">
-                      <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
-                        Активировать
-                      </b-button>
-                    </template>
-                  </b-table>
-                </b-collapse>
-                <div>
-                  <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">
-                    <b-form-select v-model="violence" :options="ethicOptions"></b-form-select>
-                    <b-form-select v-model="control" :options="ethicOptions"></b-form-select>
-                    <b-form-select v-model="individualism" :options="ethicOptions"></b-form-select>
-                    <b-form-select v-model="mind" :options="ethicOptions"></b-form-select>
+            <div class="mt-3">
+              <b-card-group deck>
+                <b-card no-body>
+                  <b-card-header>Добавление/удаление фичи (без проверки пререквизитов)</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedFeature">
+                        <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="addFeature">Добавить</b-button>
+                        <b-button variant="danger" v-on:click="removeFeature">Удалить</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                    (Если добавляемая фича уже присутствует в персонаже/удаляемая фича не присутствует - ничего не
+                    произойдет!)
+                  </b-card-body>
+                </b-card>
+                <b-card no-body>
+                  <b-card-header>Установка/удаление импланта</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedImplant">
+                        <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="installImplant">Установить</b-button>
+                        <b-button variant="danger" v-on:click="removeImplant">Удалить</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
+              </b-card-group>
+            </div>
+            <div class="mt-3">
+              <b-card-group deck>
+                <b-card no-body>
+                  <b-card-header>Ранения и смерть</b-card-header>
+                  <b-card-body>
+                    <b-input-group prepend="ID персонажа">
+                      <b-form-input type="number" v-model="clinicalDeathTarget"></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="danger" v-on:click="clinicalDeathOnTarget">Добить</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                    <b-button variant="danger" v-on:click="wound">Упасть в тяжран</b-button>
+                    <b-button variant="success" v-on:click="revive">Воскресить</b-button>
+                  </b-card-body>
+                </b-card>
+                <b-card no-body>
+                  <b-card-header>Сканирование QR-кода</b-card-header>
+                  <b-card-body>
+                    <b-input-group prepend="ID QR-кода">
+                      <b-form-input type="number" v-model="qrCodeId"></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="scanQr">Отсканировать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
+              </b-card-group>
+            </div>
+
+            <div class="mt-3">
+              <b-card-group deck>
+                <b-card no-body>
+                  <b-card-header>
+                    Дампшок
+                  </b-card-header>
+                  <b-card-body>
+                    Долбануть дампшоком
+                    <b-button variant="danger" v-on:click="dumpshock">Бдыщ!</b-button>
+                  </b-card-body>
+                </b-card>
+              <b-card no-body>
+                <b-card-header>
+                  Смена расы
+                </b-card-header>
+                <b-card-body>
+                  <b-input-group>
+                    <b-form-select v-model="selectedRace">
+                      <option v-for="race in allRaces" :value="race.id"> {{ race.name }} ( {{ race.id }} )
+                      </option>
+                    </b-form-select>
                     <b-input-group-append>
-                      <b-button variant="success" v-on:click="ethicSet">Установить</b-button>
+                      <b-button variant="success" v-on:click="setRace">Изменить</b-button>
                     </b-input-group-append>
                   </b-input-group>
-                </div>
-              </b-card-body>
-            </b-card>
+                </b-card-body>
+              </b-card>
+              </b-card-group>
+            </div>
 
-            <b-card no-body>
-              <b-card-header>
-                Эссенс
-              </b-card-header>
-              <b-card-body>
-                <b-button variant="success" v-on:click="increaseEssence">Увеличить макс. эссенс</b-button>
-                <b-button variant="warning" v-on:click="decreaseEssence">Уменьшить макс. эссенс</b-button>
-                <b-button variant="danger" v-on:click="resetEssence">Очистка эссенса и имплантов</b-button>
-              </b-card-body>
-            </b-card>
+            <div class="mt-3">
+              <b-card no-body>
+                <b-card-header>
+                  Этика
+                </b-card-header>
+                <b-card-body>
+                  <div>
+                    <b-input-group prepend="Насилие, контроль, индивидуализм, разум" class="mb-2">
+                      <b-form-select v-model="violence" :options="ethicOptions"></b-form-select>
+                      <b-form-select v-model="control" :options="ethicOptions"></b-form-select>
+                      <b-form-select v-model="individualism" :options="ethicOptions"></b-form-select>
+                      <b-form-select v-model="mind" :options="ethicOptions"></b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="ethicSet">Установить</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </div>
+                  <b-button block href="#" v-b-toggle.ethic_details variant="info">
+                    Подробности
+                  </b-button>
+                  <b-collapse id="ethic_details">
+                    <b-table :items="characterModel.ethic.state"></b-table>
+                    <b-table :items="characterModel.ethic.trigger">
+                      <template v-slot:cell(Id)="row">
+                        <b-button size="sm" variant="warning" @click="ethicTrigger(row.item.id)" class="mr-1">
+                          Активировать
+                        </b-button>
+                      </template>
+                    </b-table>
+                  </b-collapse>
+                </b-card-body>
+              </b-card>
+            </div>
 
-            <b-card no-body>
-              <b-card-header>
-                Смена расы
-              </b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedRace">
-                  <option v-for="race in allRaces" :value="race.id"> {{ race.name }} ( {{ race.id }} )
-                  </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="setRace">Изменить</b-button>
-              </b-card-body>
-            </b-card>
+            <div class="mt-3">
+              <b-card no-body>
+                <b-card-header>
+                  Эссенс
+                </b-card-header>
+                <b-card-body>
+                  <b-button variant="success" v-on:click="increaseEssence">Увеличить макс. эссенс</b-button>
+                  <b-button variant="warning" v-on:click="decreaseEssence">Уменьшить макс. эссенс</b-button>
+                  <b-button variant="danger" v-on:click="resetEssence">Очистка эссенса и имплантов</b-button>
+                </b-card-body>
+              </b-card>
+            </div>
 
-            <b-card no-body>
-              <b-card-header>
-                Дампшок
-              </b-card-header>
-              <b-card-body>
-                Долбануть дампшоком
-                <b-button variant="danger" v-on:click="dumpshock">Бдыщ!</b-button>
-              </b-card-body>
-            </b-card>
-
-            <b-card no-body>
-              <b-card-header>
-                Полный ресет персонажа
-              </b-card-header>
-              <b-card-body>
-                Полностью сбросить состояние персонажа (обнуляет все способности, эффекты, историю, ...)
-                <b-button variant="danger" v-on:click="resetCharacter">Сбросить (я знаю что делаю)</b-button>
-              </b-card-body>
-            </b-card>
-
+            <div class="mt-3">
+              <b-card no-body>
+                <b-card-header>
+                  Полный ресет персонажа
+                </b-card-header>
+                <b-card-body>
+                  Полностью сбросить состояние персонажа (обнуляет все способности, эффекты, историю, ...)
+                  <b-button variant="danger" v-on:click="resetCharacter">Сбросить (я знаю что делаю)</b-button>
+                </b-card-body>
+              </b-card>
+            </div>
           </span>
         </b-tab>
         <b-tab title="QR-код">
@@ -662,58 +691,78 @@
                 </b-table-simple>
               </b-card-body>
             </b-card>
-            <b-card no-body>
-              <b-card-header>Стирание QR-кода</b-card-header>
-              <b-card-body>
-                <b-button variant="danger" v-on:click="clearQr">Очистить</b-button>
-              </b-card-body>
-            </b-card>
-            <b-card no-body v-if="qrModel.type == 'empty'">
-              <b-card-header>Запись импланта на QR</b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedImplant">
-                  <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
-                  </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="writeImplantQr">Записать</b-button>
-              </b-card-body>
-            </b-card>
-            <b-card no-body v-if="qrModel.type == 'empty'">
-              <b-card-header>Запись препарата на QR</b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedPill">
-                  <option v-for="pill in allPills" :value="pill.id"> {{ pill.name }} ( {{ pill.id }} )
-                  </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="writePillQr">Записать</b-button>
-              </b-card-body>
-            </b-card>
-            <b-card no-body v-if="qrModel.type == 'empty'">
-              <b-card-header>Запись реагента на QR</b-card-header>
-              <b-card-body>
-                <b-form-select v-model="selectedReagent">
-                  <option v-for="reagent in allReagents" :value="reagent.id"> {{ reagent.name }} ( {{ reagent.id }} )
-                  </option>
-                </b-form-select>
-                <b-button variant="success" v-on:click="writeReagentQr">Записать</b-button>
-              </b-card-body>
-            </b-card>
-            <b-card no-body v-if="qrModel.type == 'empty'">
-              <b-card-header>Запись локуса этической группы / универсального заряда на QR</b-card-header>
-              <b-card-body>
-                <b-input-group prepend="Зарядов">
-                  <b-form-input type="number" v-model="locusCharges"></b-form-input>
-                  <b-form-select v-model="selectedEthicGroup">
-                    <option v-for="group in allEthicGroups" :value="group.id"> {{ group.name }} ( {{ group.id }} )
-                    </option>
-                  </b-form-select>
-                  <b-input-group-append>
-                    <b-button variant="success" v-on:click="writeLocusQr">Записать локус</b-button>
-                    <b-button variant="success" v-on:click="writeLocusChargeQr">Записать заряд локуса</b-button>
-                  </b-input-group-append>
-                </b-input-group>
-              </b-card-body>
-            </b-card>
+            <div class="mt-3">
+              <b-card no-body v-if="qrModel.type != 'empty'">
+                <b-card-header>Стирание QR-кода</b-card-header>
+                <b-card-body>
+                  <b-button variant="danger" v-on:click="clearQr">Очистить</b-button>
+                </b-card-body>
+              </b-card>
+            </div>
+            <div class="mt-3">
+              <b-card-group deck>
+                <b-card no-body v-if="qrModel.type == 'empty'">
+                  <b-card-header>Запись импланта на QR</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedImplant">
+                        <option v-for="implant in allImplants" :value="implant.id"> {{ implant.name }} ( {{ implant.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeImplantQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
+                <b-card no-body v-if="qrModel.type == 'empty'">
+                  <b-card-header>Запись препарата на QR</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedPill">
+                        <option v-for="pill in allPills" :value="pill.id"> {{ pill.name }} ( {{ pill.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writePillQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
+                <b-card no-body v-if="qrModel.type == 'empty'">
+                  <b-card-header>Запись реагента на QR</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedReagent">
+                        <option v-for="reagent in allReagents" :value="reagent.id"> {{ reagent.name }} ( {{ reagent.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeReagentQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
+              </b-card-group>
+            </div>
+            <div class="mt-3">
+              <b-card no-body v-if="qrModel.type == 'empty'">
+                <b-card-header>Запись локуса этической группы / универсального заряда на QR</b-card-header>
+                <b-card-body>
+                  <b-input-group prepend="Зарядов">
+                    <b-form-input type="number" v-model="locusCharges"></b-form-input>
+                    <b-form-select v-model="selectedEthicGroup">
+                      <option v-for="group in allEthicGroups" :value="group.id"> {{ group.name }} ( {{ group.id }} )
+                      </option>
+                    </b-form-select>
+                    <b-input-group-append>
+                      <b-button variant="success" v-on:click="writeLocusQr">Записать локус</b-button>
+                      <b-button variant="success" v-on:click="writeLocusChargeQr">Записать заряд локуса</b-button>
+                    </b-input-group-append>
+                  </b-input-group>
+                </b-card-body>
+              </b-card>
+            </div>
           </span>
         </b-tab>
       </b-tabs>
