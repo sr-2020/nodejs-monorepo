@@ -6,6 +6,7 @@ import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
 import { kAllEthicGroups } from '../scripts/character/ethics_library';
+import { kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -115,6 +116,32 @@ export class DictionariesController {
   })
   reagents(): { id: string; name: string }[] {
     return kAllReagents.map((p) => ({ id: p.id, name: p.name }));
+  }
+
+  @get('/drones', {
+    summary: `Returns the list of implemented drones`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  drones(): { id: string; name: string; description: string }[] {
+    return kAllDrones.map((p) => ({ id: p.id, name: p.name, description: p.description }));
   }
 
   @get('/ethic_groups', {
