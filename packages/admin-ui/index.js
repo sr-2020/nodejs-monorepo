@@ -30,6 +30,8 @@ app = new Vue({
 
     locusCharges: 5,
 
+    bodyStorageName: '',
+
     allRaces: [
       { id: 'meta-norm', name: 'Норм' },
       { id: 'meta-elf', name: 'Эльф' },
@@ -283,6 +285,10 @@ app = new Vue({
 
     async writeLocusQr() {
       return this.sendQrEvent({ eventType: 'createLocusQr', data: { groupId: this.selectedEthicGroup, numberOfUses: this.locusCharges } });
+    },
+
+    async writeBodyStorageToQr() {
+      return this.sendQrEvent({ eventType: 'writeBodyStorage', data: { name: this.bodyStorageName } });
     },
   }
 })
