@@ -2,7 +2,7 @@ import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
-import { LocusQrData, MentalQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { BodyStorageQrData, LocusQrData, MentalQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -117,5 +117,20 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
     timestamp: api.model.timestamp,
     type: 'locus',
     data: { groupId: data.groupId },
+  };
+}
+
+export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: string }, event: Event) {
+  const qrData: BodyStorageQrData = {};
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'body_storage',
+    name: data.name,
+    description: '',
+    usesLeft: 1,
+    modifiers: [],
+    data: qrData,
   };
 }

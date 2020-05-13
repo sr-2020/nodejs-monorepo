@@ -17,6 +17,8 @@ export type MetaRace =
   | 'meta-digital'
   | 'meta-spirit';
 
+export type BodyType = 'physical' | 'astral';
+
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
 export class AddedSpell {
@@ -514,7 +516,7 @@ export class Ethic {
 export class Sr2020Character extends EmptyModel {
   @rproperty()
   @Column({ type: 'text', default: 'physical' })
-  currentBody: 'physical' | 'astral';
+  currentBody: BodyType;
 
   @rproperty()
   @Column()

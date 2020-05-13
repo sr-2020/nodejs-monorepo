@@ -1,4 +1,5 @@
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { BodyType } from '@sr2020/interface/models/sr2020-character.model';
 
 export interface TypedQrCode<T> extends QrCode {
   data: T;
@@ -23,6 +24,14 @@ export interface MerchandiseQrData {
   gmDescription: string;
   dealId: string;
   lifestyle: string;
+}
+
+// qr.type == 'body_storage'
+export interface BodyStorageQrData {
+  body?: {
+    characterId: string;
+    type: BodyType;
+  };
 }
 
 export function typedQrData<T>(qr: QrCode) {
