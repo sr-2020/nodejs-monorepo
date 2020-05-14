@@ -140,7 +140,9 @@ class SpreadsheetProcessor {
         // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
         // TODO(aeremin): Add proper implementation
         target: 'scan',
+        targetsSignature: kNoTarget,
         cooldownMinutes: ${ability.cooldown},
+        minimalEssence: 0,
         eventType: dummyAbility.name,
       },`);
       if (FLAGS.update_db) await this.activeAbilitiesRef.doc(ability.id).set(ability);
