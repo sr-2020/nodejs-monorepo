@@ -258,18 +258,15 @@ app = new Vue({
     },
 
     async writeImplantQr() {
-      const implant = this.allImplants.find((v) => v.id == this.selectedImplant);
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: implant });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedImplant } });
     },
 
     async writePillQr() {
-      const pill = this.allPills.find((v) => v.id == this.selectedPill);
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { ...pill, description: 'Какая-то таблетка' } });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedPill } });
     },
 
     async writeReagentQr() {
-      const reagent = this.allReagents.find((v) => v.id == this.selectedReagent);
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { ...reagent, description: '' } });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedReagent } });
     },
 
     async writeLocusChargeQr() {
