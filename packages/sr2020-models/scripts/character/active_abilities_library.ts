@@ -1324,6 +1324,104 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: copyPasteQr.name,
   },
+
+  {
+    id: 'medcart-light-heal-1',
+    humanReadableName: 'Лечение легких ранений (1)',
+    description: 'Вылечить легкое ранение (1)',
+    // 515
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kHealthyBodyTargeted,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-light-heal-2',
+    humanReadableName: 'Лечение легких ранений (2)',
+    description: 'Вылечить легкое ранение (2)',
+    // 516
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kHealthyBodyTargeted,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-light-heal-3',
+    humanReadableName: 'Лечение легких ранений (3)',
+    description: 'Вылечить легкое ранение (3)',
+    // 517
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kHealthyBodyTargeted,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-heavy-heal-1',
+    humanReadableName: 'Лечение тяжелых ранений (1)',
+    description: 'Вылечить тяжелое ранение (1)',
+    // 518
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-heavy-heal-2',
+    humanReadableName: 'Лечение тяжелых ранений (2)',
+    description: 'Вылечить тяжелое ранение (2)',
+    // 519
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-heavy-heal-3',
+    humanReadableName: 'Лечение тяжелых ранений (3)',
+    description: 'Вылечить тяжелое ранение (3)',
+    // 520
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'medcart-reanimate',
+    humanReadableName: 'Лечение состояния КС',
+    description: 'Вылечить состояние КС',
+    // 521
+    // Активная абилка Медикарта
+    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
 ];
 
 setAllActiveAbilities(
