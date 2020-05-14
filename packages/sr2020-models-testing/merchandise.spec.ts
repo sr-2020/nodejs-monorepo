@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { DroneQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 describe('Merchandise', () => {
   let fixture: TestFixture;
@@ -29,5 +30,21 @@ describe('Merchandise', () => {
         },
       },
     ]);
+  });
+
+  it('Drone creation', async () => {
+    await fixture.saveQrCode();
+
+    const { baseModel } = await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } });
+    const droneData = typedQrData<DroneQrData>(baseModel);
+    expect(baseModel.name).to.equal('Гиппократ');
+    expect(droneData.id).to.equal('hippocrates');
+    expect(droneData.modSlots).not.undefined();
+    expect(droneData.moddingCapacity).not.undefined();
+    expect(droneData.requiredSkill).not.undefined();
+    expect(droneData.sensor).greaterThan(0);
+    expect(droneData.hitpoints).greaterThan(0);
+    expect(droneData.passiveAbilities).lengthOf(1);
+    expect(droneData.activeAbilities).lengthOf(4);
   });
 });

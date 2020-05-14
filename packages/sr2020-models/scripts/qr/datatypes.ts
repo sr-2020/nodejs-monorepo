@@ -34,7 +34,7 @@ export interface BodyStorageQrData {
   };
 }
 
-export interface DroneQrData extends MerchandiseQrData {
+export interface DroneData {
   requiredSkill: string;
   modSlots: number;
   moddingCapacity: number;
@@ -43,6 +43,8 @@ export interface DroneQrData extends MerchandiseQrData {
   activeAbilities: AddedActiveAbility[];
   passiveAbilities: AddedPassiveAbility[];
 }
+
+export type DroneQrData = DroneData & MerchandiseQrData;
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;

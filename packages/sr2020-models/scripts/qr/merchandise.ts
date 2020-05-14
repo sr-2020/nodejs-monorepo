@@ -5,7 +5,10 @@ import { kAllReagents, Reagent } from './reagents_library';
 import { UserVisibleError, EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
 import { consumeFood } from '../character/merchandise';
 import { consumeChemo } from '../character/chemo';
-import { MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { Drone, kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-models/scripts/character/passive_abilities_library';
+import { getAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 
 interface MerchandiseExternalData {
   id: string;
@@ -25,6 +28,7 @@ interface MerchandiseLibraryData {
   name?: string;
   description?: string;
   eventType?: string;
+  data: object;
 }
 
 function getLibraryData(id: string): MerchandiseLibraryData {
@@ -32,20 +36,22 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return {
       type: 'food',
       eventType: consumeFood.name,
+      data: {},
     };
   }
 
   if (id == 'locus-charge') {
-    return { type: 'locus_charge' };
+    return { type: 'locus_charge', data: {} };
   }
 
-  const sameId = (item: Implant | Pill | Reagent) => item.id == id;
+  const sameId = (item: Implant | Pill | Reagent | Drone) => item.id == id;
   const maybeImplant = kAllImplants.find(sameId);
   if (maybeImplant) {
     return {
       type: 'implant',
       name: maybeImplant.name,
       description: maybeImplant.description,
+      data: {},
     };
   }
 
@@ -55,6 +61,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       type: 'pill',
       name: maybePill.name,
       eventType: consumeChemo.name,
+      data: {},
     };
   }
 
@@ -63,6 +70,56 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return {
       type: 'reagent',
       name: maybeReagent.name,
+      data: {},
+    };
+  }
+
+  const maybeDrone = kAllDrones.find(sameId);
+  if (maybeDrone) {
+    const droneData: DroneData = {
+      hitpoints: maybeDrone.hitpoints,
+      modSlots: maybeDrone.modSlots,
+      moddingCapacity: maybeDrone.moddingCapacity,
+      sensor: maybeDrone.sensor,
+      requiredSkill: maybeDrone.requiredSkill,
+      activeAbilities: [],
+      passiveAbilities: [],
+    };
+
+    for (const abilityId of maybeDrone.abilityIds) {
+      const maybePassiveAbility = kAllPassiveAbilities.get(abilityId);
+      if (maybePassiveAbility) {
+        droneData.passiveAbilities.push({
+          id: maybePassiveAbility.id,
+          name: maybePassiveAbility.name,
+          description: maybePassiveAbility.description,
+          modifierIds: [], // We assume that drone passive abilities don't have any modifiers, so modifierIds are empty.
+        });
+        continue;
+      }
+
+      const maybeActiveAbility = getAllActiveAbilities().get(abilityId);
+      if (maybeActiveAbility) {
+        droneData.activeAbilities.push({
+          id: maybeActiveAbility.id,
+          humanReadableName: maybeActiveAbility.humanReadableName,
+          description: maybeActiveAbility.description,
+          cooldownMinutes: maybeActiveAbility.cooldownMinutes,
+          cooldownUntil: 0,
+          target: maybeActiveAbility.target,
+          targetsSignature: maybeActiveAbility.targetsSignature,
+        });
+        continue;
+      }
+
+      throw new UserVisibleError('Описание дрона содержит несуществующую способность');
+    }
+
+    return {
+      type: 'drone',
+      name: maybeDrone.name,
+      description: maybeDrone.description,
+      data: droneData,
     };
   }
 
@@ -89,6 +146,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseE
       dealId: data.dealId ?? '',
       gmDescription: data.gmDescription ?? '',
       lifestyle: data.lifestyle ?? '',
+      ...libraryData.data,
     },
     eventType: libraryData.eventType,
     timestamp: api.model.timestamp,
