@@ -6,7 +6,11 @@ import { Firestore } from '@google-cloud/firestore';
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
-const optionDefinitions: commandLineArgs.OptionDefinition[] = [{ name: 'update_db', type: Boolean, defaultValue: false }];
+const optionDefinitions: commandLineArgs.OptionDefinition[] = [
+  { name: 'update_db', type: Boolean, defaultValue: false },
+  { name: 'row_from', type: Number, defaultValue: 2 },
+  { name: 'row_to', type: Number, defaultValue: 600 },
+];
 const FLAGS = commandLineArgs(optionDefinitions);
 
 const kKindColumn = 0;
@@ -189,10 +193,11 @@ class SpreadsheetProcessor {
     if (!header[kCooldownColumn].startsWith('Кулдаун')) {
       throw new Error('Column column was moved! Exiting.');
     }
-
-    for (let r = 1; r < 600; ++r) {
+    console.log(`[${FLAGS.row_from}, ${FLAGS.row_to})`);
+    for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {
       const row = data[r];
       if (!row) continue;
+      console.log(row);
       const id = row[kIdColumn];
       const kind = row[kKindColumn];
 
