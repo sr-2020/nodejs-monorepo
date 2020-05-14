@@ -1,16 +1,16 @@
 import { QrType, QrCode } from '@sr2020/interface/models/qr-code.model';
-import { kAllImplants } from '../character/implants_library';
-import { kAllPills } from '../character/chemo_library';
-import { kAllReagents } from './reagents_library';
+import { Implant, kAllImplants } from '../character/implants_library';
+import { kAllPills, Pill } from '../character/chemo_library';
+import { kAllReagents, Reagent } from './reagents_library';
 import { UserVisibleError, EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
 import { consumeFood } from '../character/merchandise';
 import { consumeChemo } from '../character/chemo';
 import { MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
-interface Merchandise {
+interface MerchandiseExternalData {
   id: string;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   numberOfUses?: number;
   basePrice?: number;
   rentPrice?: number;
@@ -20,44 +20,66 @@ interface Merchandise {
   additionalData: any;
 }
 
-function merchandiseIdToQrType(id: string): QrType {
+interface MerchandiseLibraryData {
+  type: QrType;
+  name?: string;
+  description?: string;
+  eventType?: string;
+}
+
+function getLibraryData(id: string): MerchandiseLibraryData {
   if (id == 'food') {
-    return 'food';
+    return {
+      type: 'food',
+      eventType: consumeFood.name,
+    };
   }
 
   if (id == 'locus-charge') {
-    return 'locus_charge';
+    return { type: 'locus_charge' };
   }
 
-  if (kAllImplants.find((it) => it.id == id)) return 'implant';
-  if (kAllPills.find((it) => it.id == id)) return 'pill';
-  if (kAllReagents.find((it) => it.id == id)) return 'reagent';
+  const sameId = (item: Implant | Pill | Reagent) => item.id == id;
+  const maybeImplant = kAllImplants.find(sameId);
+  if (maybeImplant) {
+    return {
+      type: 'implant',
+      name: maybeImplant.name,
+      description: maybeImplant.description,
+    };
+  }
+
+  const maybePill = kAllPills.find(sameId);
+  if (maybePill) {
+    return {
+      type: 'pill',
+      name: maybePill.name,
+      eventType: consumeChemo.name,
+    };
+  }
+
+  const maybeReagent = kAllReagents.find(sameId);
+  if (maybeReagent) {
+    return {
+      type: 'reagent',
+      name: maybeReagent.name,
+    };
+  }
 
   throw new UserVisibleError('Неизвестный ID товара');
 }
 
-function merchandiseIdToEventType(id: string) {
-  const qrType = merchandiseIdToQrType(id);
-  if (qrType == 'food') {
-    return consumeFood.name;
-  }
-
-  if (qrType == 'pill') {
-    return consumeChemo.name;
-  }
-
-  return undefined;
-}
-
-export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise, _: Event) {
+export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseExternalData, _: Event) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }
 
+  const libraryData = getLibraryData(data.id);
+
   (api.model as TypedQrCode<MerchandiseQrData>) = {
-    type: merchandiseIdToQrType(data.id),
-    name: data.name,
-    description: data.description,
+    type: libraryData.type,
+    name: libraryData.name ?? data.name ?? '',
+    description: libraryData.description ?? data.description ?? '',
     usesLeft: data.numberOfUses ?? 1,
     data: {
       ...data.additionalData,
@@ -68,7 +90,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: Merchandise,
       gmDescription: data.gmDescription ?? '',
       lifestyle: data.lifestyle ?? '',
     },
-    eventType: merchandiseIdToEventType(data.id),
+    eventType: libraryData.eventType,
     timestamp: api.model.timestamp,
     modifiers: [],
     modelId: api.model.modelId,
