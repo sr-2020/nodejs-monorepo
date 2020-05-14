@@ -11,10 +11,12 @@ app = new Vue({
     allPills: undefined,
     allReagents: undefined,
     allEthicGroups: undefined,
+    allDrones: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
     selectedPill: 'iodomarin',
     selectedReagent: 'virgo',
+    selectedDrone: 'belarus',
     selectedRace: 'meta-norm',
     selectedEthicGroup: 'russian-orthodox-church',
     clinicalDeathTarget: 130,
@@ -68,6 +70,11 @@ app = new Vue({
     {
       const response = await this.$http.get(`https://model-engine.evarun.ru/ethic_groups`);
       this.allEthicGroups = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.evarun.ru/drones`);
+      this.allDrones = response.body;
     }
   },
   methods: {
@@ -268,6 +275,11 @@ app = new Vue({
     async writeReagentQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedReagent } });
     },
+
+    async writeDroneQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedDrone } });
+    },
+
 
     async writeLocusChargeQr() {
       return this.sendQrEvent({
