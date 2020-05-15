@@ -121,7 +121,7 @@ export class Engine<T extends EmptyModel> {
     const modelId = context.baseModel.modelId;
     const api = EffectModelApiFactory(context);
 
-    // First process all functional events, then all normal ones.
+    // First process all functional effects, then all normal ones.
     for (const effectType of ['functional', 'normal']) {
       for (const modifier of this.getEnabledModifiers(context)) {
         const effects = modifier.effects.filter((e) => e.enabled && e.type == effectType);
