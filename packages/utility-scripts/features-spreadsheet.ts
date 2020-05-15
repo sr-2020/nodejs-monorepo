@@ -195,11 +195,9 @@ class SpreadsheetProcessor {
     if (!header[kCooldownColumn].startsWith('Кулдаун')) {
       throw new Error('Column column was moved! Exiting.');
     }
-    console.log(`[${FLAGS.row_from}, ${FLAGS.row_to})`);
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {
       const row = data[r];
       if (!row) continue;
-      console.log(row);
       const id = row[kIdColumn];
       const kind = row[kKindColumn];
 
