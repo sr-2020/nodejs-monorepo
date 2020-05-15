@@ -1,4 +1,4 @@
-import { EventModelApi, UserVisibleError, Event } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
@@ -6,10 +6,11 @@ import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocRevive, autodocHeal } from './death_and_rebirth';
-import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
 import { duration } from 'moment';
 import { putBodyToStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
+import { kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -107,10 +108,7 @@ export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCh
 }
 
 export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const bodyStorage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId!));
   // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
   // TODO: Check sensor
   // TODO: Check skill?
@@ -123,6 +121,34 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   api.model.currentBody = 'drone';
 
-  // TODO: enable drone abilties and disable character ones
-  // TODO: deal with max HP somehow
+  api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
+  api.model.passiveAbilities = api.model.passiveAbilities.concat(drone.passiveAbilities);
+
+  api.addModifier(createDroneModifier(drone));
+}
+
+type InTheDroneModifier = Modifier & { hp: number };
+
+function createDroneModifier(drone: DroneQrData): InTheDroneModifier {
+  return {
+    mID: 'in-the-drone',
+    enabled: true,
+    effects: [
+      {
+        type: 'functional',
+        handler: inTheDrone.name,
+        enabled: true,
+      },
+    ],
+    hp: drone.hitpoints,
+  };
+}
+
+const kDroneAbilityIds = new Set(([] as string[]).concat(...kAllDrones.map((drone) => drone.abilityIds)));
+
+export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
+  api.model.currentBody = 'drone';
+  api.model.maxHp = m.hp;
+  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
+  //  What to do with the passive ones?
 }

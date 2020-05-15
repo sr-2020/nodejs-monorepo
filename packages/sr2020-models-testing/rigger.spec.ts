@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 describe('Rigger abilities', () => {
   let fixture: TestFixture;
@@ -87,6 +88,42 @@ describe('Rigger abilities', () => {
           gap: 150,
         },
       });
+    }
+  });
+
+  it('Entering drone', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ maxHp: 2 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'groundcraft-active' } });
+
+    // Body storage set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
+
+    // Drone set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
+
+    // Enter drone
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' } });
+
+    {
+      // Body is in storage
+      const { baseModel } = await fixture.getQrCode('1');
+      const storage = typedQrData<BodyStorageQrData>(baseModel);
+      expect(storage.body).to.deepEqual({
+        characterId: '0',
+        type: 'physical',
+      });
+    }
+
+    {
+      // Rigger is in drone and has proper abilities and hp
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.maxHp).to.equal(3);
+      expect(workModel.passiveAbilities).lengthOf(1); // Drone info
+      expect(workModel.activeAbilities).lengthOf(4); // Heals 2x2
+      expect(workModel.currentBody).to.equal('drone');
     }
   });
 });
