@@ -37,7 +37,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
-import { enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
+import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 
 export type TargetType = 'scan' | 'show';
 
@@ -1328,12 +1328,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // - закончилось время на включение в дрона
     // - было атаковано мясное тело риггера
     // DroneFeedback1 = 1
-    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: droneEmergencyExit.name,
   },
 
   {
