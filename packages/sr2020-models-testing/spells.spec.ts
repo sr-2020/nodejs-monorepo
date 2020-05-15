@@ -186,10 +186,7 @@ describe('Spells', function() {
     }
 
     {
-      const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'useAbility', data: { id: abilityId, targetCharacterId: '2' } },
-        1,
-      );
+      const { workModel } = await fixture.useAbility({ id: abilityId, targetCharacterId: '2' }, 1);
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(fixture.getCharacterNotifications(2).length).to.equal(1);
       expect(fixture.getCharacterNotifications(2)[0].body).containEql('Хиты полностью восстановлены');

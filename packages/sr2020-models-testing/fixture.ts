@@ -199,6 +199,10 @@ export class TestFixture {
     return this.sendCharacterEvent({ eventType: 'addFeature', data: { id: featureId } }, characterId);
   }
 
+  useAbility(data: unknown, characterId: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
+    return this.sendCharacterEvent({ eventType: 'useAbility', data }, characterId);
+  }
+
   async getCharacter(id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     return (await this.client.get(`/character/model/${id}`).expect(200)).body;
   }

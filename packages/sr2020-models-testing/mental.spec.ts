@@ -17,7 +17,7 @@ describe('Mentalistic events', function() {
     await fixture.saveCharacter({ modelId: '1', charisma: 3, mentalAttackBonus: 100 });
     await fixture.saveCharacter({ modelId: '2', charisma: 0 });
     await fixture.addCharacterFeature('luke-i-am-your-father', 1);
-    const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
+    const attacker = (await fixture.useAbility({ id: 'luke-i-am-your-father' }, 1)).workModel;
 
     await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
@@ -34,7 +34,7 @@ describe('Mentalistic events', function() {
     await fixture.saveCharacter({ modelId: '1', charisma: 3 });
     await fixture.saveCharacter({ modelId: '2', charisma: 0, mentalDefenceBonus: 100 });
     await fixture.addCharacterFeature('luke-i-am-your-father', 1);
-    const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
+    const attacker = (await fixture.useAbility({ id: 'luke-i-am-your-father' }, 1)).workModel;
 
     await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
@@ -51,7 +51,7 @@ describe('Mentalistic events', function() {
     await fixture.saveCharacter({ modelId: '1', charisma: 3 });
     await fixture.saveCharacter({ modelId: '2', charisma: 0 });
     await fixture.addCharacterFeature('luke-i-am-your-father', 1);
-    const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
+    const attacker = (await fixture.useAbility({ id: 'luke-i-am-your-father' }, 1)).workModel;
 
     await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
@@ -66,7 +66,7 @@ describe('Mentalistic events', function() {
     await fixture.saveCharacter({ modelId: '1', charisma: 3 });
     await fixture.saveCharacter({ modelId: '2', charisma: 0 });
     await fixture.addCharacterFeature('luke-i-am-your-father', 1);
-    const attacker = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'luke-i-am-your-father' } }, 1)).workModel;
+    const attacker = (await fixture.useAbility({ id: 'luke-i-am-your-father' }, 1)).workModel;
 
     fixture.advanceTime(duration(1000, 'seconds'));
 
@@ -80,7 +80,7 @@ describe('Mentalistic events', function() {
   it('I do not trust anybody', async () => {
     await fixture.saveCharacter({ mentalDefenceBonus: 3 });
     await fixture.addCharacterFeature('i-dont-trust-anybody');
-    let { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+    let { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
     expect(workModel.mentalDefenceBonus).to.equal(11);
     expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
     fixture.advanceTime(duration(29, 'minutes'));
@@ -97,7 +97,7 @@ describe('Mentalistic events', function() {
 
     fixture.advanceTime(duration(30, 'minutes'));
 
-    workModel = (await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } })).workModel;
+    workModel = (await fixture.useAbility({ id: 'i-dont-trust-anybody' })).workModel;
     expect(workModel.activeAbilities[0].cooldownUntil).to.equal(7200 * 1000);
   });
 
@@ -105,10 +105,7 @@ describe('Mentalistic events', function() {
     await fixture.saveCharacter({ modelId: '1', mentalDefenceBonus: 3 });
     await fixture.saveCharacter({ modelId: '2', mentalDefenceBonus: 2 });
     await fixture.addCharacterFeature('you-dont-trust-anybody', 1);
-    const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'useAbility', data: { id: 'you-dont-trust-anybody', targetCharacterId: '2' } },
-      1,
-    );
+    const { workModel } = await fixture.useAbility({ id: 'you-dont-trust-anybody', targetCharacterId: '2' }, 1);
     expect(workModel.mentalDefenceBonus).to.equal(3);
     expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(10);
     fixture.advanceTime(duration(29, 'minutes'));

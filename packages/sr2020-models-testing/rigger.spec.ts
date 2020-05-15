@@ -106,7 +106,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' } });
+    await fixture.useAbility({ id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' });
 
     {
       // Body is in storage
@@ -128,7 +128,7 @@ describe('Rigger abilities', () => {
     }
 
     // Leave drone
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'drone-logoff', bodyStorageId: '1' } });
+    await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
 
     {
       // Storage is empty
@@ -161,13 +161,13 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' } });
+    await fixture.useAbility({ id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' });
 
     // Wait for long time
     await fixture.advanceTime(duration(2, 'hours'));
 
     // Leave drone
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'drone-logoff', bodyStorageId: '1' } });
+    await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
 
     // Rigger is not in the drone
     const { workModel } = await fixture.getCharacter();

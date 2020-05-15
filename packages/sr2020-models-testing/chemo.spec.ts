@@ -94,7 +94,7 @@ describe('Chemo events', function() {
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
-      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+      const { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
       expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
     }
     {

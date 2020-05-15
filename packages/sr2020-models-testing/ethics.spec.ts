@@ -183,7 +183,7 @@ describe('Ethic events', function() {
 
     // Add to the group
     {
-      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dgroup-add', locusId: '3', targetCharacterId: '2' } }, 1);
+      await fixture.useAbility({ id: 'dgroup-add', locusId: '3', targetCharacterId: '2' }, 1);
       const acolyte = await fixture.getCharacter(2);
       expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
       expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'comcon-ethic-ability' }, { id: 'russian-orthodox-church' }]);
@@ -195,10 +195,7 @@ describe('Ethic events', function() {
 
     // Remove from the group
     {
-      await fixture.sendCharacterEvent(
-        { eventType: 'useAbility', data: { id: 'dgroup-exclude', locusId: '3', targetCharacterId: '2' } },
-        1,
-      );
+      await fixture.useAbility({ id: 'dgroup-exclude', locusId: '3', targetCharacterId: '2' }, 1);
       const acolyte = await fixture.getCharacter(2);
       expect(acolyte.baseModel.ethic.groups).to.be.empty();
       expect(acolyte.baseModel.passiveAbilities).to.be.empty();
@@ -229,7 +226,7 @@ describe('Ethic events', function() {
 
     // Add to the group
     {
-      await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dm-add-guru', locusId: '3', targetCharacterId: '2' } }, 1);
+      await fixture.useAbility({ id: 'dm-add-guru', locusId: '3', targetCharacterId: '2' }, 1);
       const locus = await fixture.getQrCode(3);
       expect(locus.baseModel.usesLeft).to.equal(1);
       expect(locus.baseModel.type).to.equal('locus');
@@ -237,10 +234,7 @@ describe('Ethic events', function() {
 
     // Remove from the group
     {
-      await fixture.sendCharacterEvent(
-        { eventType: 'useAbility', data: { id: 'dm-exclude-inq-2', locusId: '3', targetCharacterId: '2' } },
-        1,
-      );
+      await fixture.useAbility({ id: 'dm-exclude-inq-2', locusId: '3', targetCharacterId: '2' }, 1);
       const locus = await fixture.getQrCode(3);
       expect(locus.baseModel.usesLeft).to.equal(3);
       expect(locus.baseModel.type).to.equal('locus');
@@ -257,7 +251,7 @@ describe('Ethic events', function() {
     await fixture.saveQrCode({ modelId: '5' }); // Charge
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'locus-charge' } }, 5);
 
-    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'dm-inc-counter', locusId: '3', qrCode: '5' } });
+    await fixture.useAbility({ id: 'dm-inc-counter', locusId: '3', qrCode: '5' });
 
     const locus = await fixture.getQrCode(3);
     expect(locus.baseModel.type).equal('locus');
