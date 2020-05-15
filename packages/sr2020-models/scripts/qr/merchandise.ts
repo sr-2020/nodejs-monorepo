@@ -82,6 +82,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       moddingCapacity: maybeDrone.moddingCapacity,
       sensor: maybeDrone.sensor,
       requiredSkill: maybeDrone.requiredSkill,
+      inUse: false,
       activeAbilities: [],
       passiveAbilities: [],
     };

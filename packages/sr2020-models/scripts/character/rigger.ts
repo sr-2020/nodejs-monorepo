@@ -11,6 +11,7 @@ import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/activ
 import { duration } from 'moment';
 import { putBodyToStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
 import { kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';
+import { setDroneInUse } from '@sr2020/sr2020-models/scripts/qr/drones';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -113,6 +114,10 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   }
 
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
+  if (drone.inUse) {
+    throw new UserVisibleError('Этот в настоящий момент уже используется.');
+  }
+
   // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
   // TODO: Check sensor
   // TODO: Check skill?
@@ -122,6 +127,8 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     characterId: api.model.modelId,
     bodyType: api.workModel.currentBody,
   });
+
+  api.sendOutboundEvent(QrCode, data.droneId!, setDroneInUse, { inUse: true });
 
   api.model.currentBody = 'drone';
 

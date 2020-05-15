@@ -42,6 +42,7 @@ export interface DroneData {
   hitpoints: number;
   activeAbilities: AddedActiveAbility[];
   passiveAbilities: AddedPassiveAbility[];
+  inUse: boolean;
 }
 
 export type DroneQrData = DroneData & MerchandiseQrData;
