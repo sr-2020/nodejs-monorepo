@@ -95,7 +95,7 @@ describe('Rigger abilities', () => {
   it('Entering and leaving drone', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 2 });
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'groundcraft-active' } });
+    await fixture.addCharacterFeature('groundcraft-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -150,7 +150,7 @@ describe('Rigger abilities', () => {
   it('Spending too long in drone will wound you', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 4 });
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'groundcraft-active' } });
+    await fixture.addCharacterFeature('groundcraft-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });

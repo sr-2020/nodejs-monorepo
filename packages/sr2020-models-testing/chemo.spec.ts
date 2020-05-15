@@ -92,7 +92,7 @@ describe('Chemo events', function() {
 
   it('Chromium', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'i-dont-trust-anybody' } });
+    await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
       expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
@@ -106,7 +106,7 @@ describe('Chemo events', function() {
   it('Custodium', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.saveLocation();
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'fireball' } });
+    await fixture.addCharacterFeature('fireball');
     {
       const { workModel } = await fixture.sendCharacterEvent({
         eventType: 'castSpell',

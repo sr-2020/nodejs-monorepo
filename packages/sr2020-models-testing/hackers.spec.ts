@@ -29,7 +29,7 @@ describe('Hackers-related events', function() {
     await fixture.saveCharacter({ modelId: '1', resonance: 5 }); // Hacker
     await fixture.saveCharacter({ modelId: '2', magic: 10 }); // Caster
     await fixture.saveLocation(); // Needed by spell
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dumpty-humpty' } }, '2');
+    await fixture.addCharacterFeature('dumpty-humpty', '2');
 
     const castEvent = {
       eventType: 'castSpell',

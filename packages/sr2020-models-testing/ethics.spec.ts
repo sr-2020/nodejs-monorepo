@@ -165,8 +165,8 @@ describe('Ethic events', function() {
 
   it('Add and remove from ethic group', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // Discourse monger
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dgroup-add' } }, 1);
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dgroup-exclude' } }, 1);
+    await fixture.addCharacterFeature('dgroup-add', 1);
+    await fixture.addCharacterFeature('dgroup-exclude', 1);
 
     await fixture.saveCharacter({ modelId: '2' }); // Acolyte
 
@@ -211,8 +211,8 @@ describe('Ethic events', function() {
 
   it('Add and remove from ethic group - Guru + Inquisitor', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // Discourse monger
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dm-add-guru' } }, 1);
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dm-exclude-inq-2' } }, 1);
+    await fixture.addCharacterFeature('dm-add-guru', 1);
+    await fixture.addCharacterFeature('dm-exclude-inq-2', 1);
 
     await fixture.saveCharacter({ modelId: '2' }); // Acolyte
 
@@ -249,7 +249,7 @@ describe('Ethic events', function() {
 
   it('Charge locus', async () => {
     await fixture.saveCharacter(); // Discourse monger
-    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'dm-inc-counter' } });
+    await fixture.addCharacterFeature('dm-inc-counter');
 
     await fixture.saveQrCode({ modelId: '3' }); // Locus
     await fixture.sendQrCodeEvent({ eventType: 'createLocusQr', data: { groupId: 'russian-orthodox-church', numberOfUses: 8 } }, 3);
