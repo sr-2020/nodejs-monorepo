@@ -108,6 +108,10 @@ export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCh
 }
 
 export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Для подключения к дрону необходимо быть в мясном теле.');
+  }
+
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
   // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
   // TODO: Check sensor

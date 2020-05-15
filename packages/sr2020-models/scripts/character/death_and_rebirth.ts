@@ -85,6 +85,10 @@ export function autodocHeal(api: EventModelApi<Sr2020Character>, _data: {}, _: E
 }
 
 export function healthStateTransition(api: EventModelApi<Sr2020Character>, stateTo: HealthState) {
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Только мясное тело может быть ранено, вылечено или воскрешено.');
+  }
+
   const stateFrom = api.model.healthState;
   if (stateFrom == stateTo) return;
 

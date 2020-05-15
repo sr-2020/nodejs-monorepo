@@ -41,6 +41,11 @@ export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: Adde
 }
 
 export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: MentalQrData, event: Event) {
+  if (api.workModel.currentBody != 'physical') {
+    api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: false });
+    api.sendNotification('Успех!', 'Ментальные способности не действуют на ваше тело.');
+  }
+
   if (mentalDefence(api.workModel) >= data.attack) {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: false });
     api.sendNotification('Успех!', 'Вы заблокировали ментальную атаку.');

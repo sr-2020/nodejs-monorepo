@@ -11,6 +11,10 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Ev
 }
 
 export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData, _: Event) {
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Импланты можно устанавливать только в мясное тело');
+  }
+
   const implant = kAllImplants.find((it) => it.id == data.id);
   if (!implant) {
     throw new UserVisibleError(`Импланта ${data.id} не существует`);
@@ -58,6 +62,10 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
 }
 
 export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Импланты можно удалять только из мясного тела');
+  }
+
   const implantIndex = api.model.implants.findIndex((it) => it.id == data.id);
   if (implantIndex == -1) {
     throw new UserVisibleError(`Импланта ${data.id} не установлено`);

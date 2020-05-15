@@ -1,4 +1,4 @@
-import { EffectModelApi, Event, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import {
   increaseBody,
@@ -29,6 +29,10 @@ const kDumpshockModifier: DumpshockModifier = {
 };
 
 export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Цель не находится в мясном теле.');
+  }
+
   if (api.model.healthState != 'biologically_dead') {
     healthStateTransition(api, 'clinically_dead');
   }

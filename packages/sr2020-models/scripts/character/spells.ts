@@ -49,6 +49,10 @@ interface MagicFeedback {
 }
 
 export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+  if (api.workModel.currentBody != 'physical' && api.workModel.currentBody != 'astral') {
+    throw new UserVisibleError('Применять заклинания можно только в физическом или астральном теле.');
+  }
+
   if (data.power <= 0) {
     throw new UserVisibleError('Мощь должна быть положительной!');
   }
