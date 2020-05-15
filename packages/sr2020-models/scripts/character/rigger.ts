@@ -5,13 +5,14 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
-import { autodocRevive, autodocHeal } from './death_and_rebirth';
+import { autodocRevive, autodocHeal, healthStateTransition } from './death_and_rebirth';
 import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
 import { kDroneAbilityIds } from '@sr2020/sr2020-models/scripts/qr/drone_library';
 import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-models/scripts/qr/drones';
+import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-models/scripts/character/util';
 
 const kInDroneModifierId = 'in-the-drone';
 
@@ -125,6 +126,8 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // TODO: Check skill?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
+  // TODO: Set timer to apply feedback if too late.
+
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
     bodyType: api.workModel.currentBody,
@@ -135,7 +138,9 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
   api.model.passiveAbilities = api.model.passiveAbilities.concat(drone.passiveAbilities);
 
-  api.addModifier(createDroneModifier(drone, data.droneId!));
+  const penalty = api.model.passiveAbilities.find((ability) => ability.id == 'arch-rigger-negative-3') ? 1 : 0;
+
+  api.addModifier(createDroneModifier(drone, data.droneId!, penalty));
 }
 
 export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
@@ -158,15 +163,31 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   api.model.activeAbilities = api.model.activeAbilities.filter(isDroneAbility);
   api.model.passiveAbilities = api.model.passiveAbilities.filter(isDroneAbility);
 
-  api.removeModifier(m.mID);
+  if (m.postDroneDamage == 0) {
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', 'Вы вышли из дрона, все в порядке.');
+  } else {
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${m.postDroneDamage} хитов`);
+  }
 
-  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
-  // TODO: Calculate damage and send a notification
+  // Not calling directly as we need to remove modifier and recalculate max HP first.
+  api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage });
+  api.removeModifier(m.mID);
 }
 
-type InTheDroneModifier = Modifier & { hp: number; droneQrId: string };
+export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+  if (data.amount == 0) {
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', 'Вы вышли из дрона, все в порядке.');
+  } else if (data.amount < api.workModel.maxHp) {
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов.`);
+  } else {
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов, что привело к тяжрану.`);
+    healthStateTransition(api, 'wounded');
+  }
+}
 
-function createDroneModifier(drone: DroneQrData, droneQrId: string): InTheDroneModifier {
+type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number };
+
+function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
     mID: kInDroneModifierId,
     enabled: true,
@@ -179,6 +200,7 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string): InTheDroneM
     ],
     hp: drone.hitpoints,
     droneQrId,
+    postDroneDamage,
   };
 }
 
