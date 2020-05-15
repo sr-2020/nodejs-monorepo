@@ -17,7 +17,7 @@ export type MetaRace =
   | 'meta-digital'
   | 'meta-spirit';
 
-export type BodyType = 'physical' | 'astral';
+export type BodyType = 'physical' | 'astral' | 'drone';
 
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
@@ -40,6 +40,8 @@ export interface Targetable {
   pillId: string;
   locusId: string;
   qrCode: string;
+  droneId: string;
+  bodyStorageId: string;
 }
 
 @model()

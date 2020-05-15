@@ -37,6 +37,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
+import { enterDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 
 export type TargetType = 'scan' | 'show';
 
@@ -104,6 +105,19 @@ const kMerchandiseTargeted: TargetSignature = {
   allowedTypes: kMerchandiseQrTypes,
   field: 'qrCode',
 };
+
+const kDroneAndBodyStorageTargeted: TargetSignature[] = [
+  {
+    name: 'Дрон',
+    allowedTypes: ['drone'],
+    field: 'droneId',
+  },
+  {
+    name: 'Телохранилище',
+    allowedTypes: ['body_storage'],
+    field: 'bodyStorageId',
+  },
+];
 
 export interface ActiveAbility {
   id: string;
@@ -1261,6 +1275,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'groundcraft-active',
+    humanReadableName: 'Управление наземным дроном',
+    description: 'Активируй, чтобы включиться в наземного дрона.',
+    // 496
+    // Активирует процесс включения в дрона.
+    // надо отсканировать:
+    // - QR дрона
+    // - QR телохранилища
+    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+    // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
+    target: 'scan',
+    targetsSignature: kDroneAndBodyStorageTargeted,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: enterDrone.name,
   },
 
   {

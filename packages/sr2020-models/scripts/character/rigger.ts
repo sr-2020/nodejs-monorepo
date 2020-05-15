@@ -6,7 +6,10 @@ import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocRevive, autodocHeal } from './death_and_rebirth';
-import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
+import { duration } from 'moment';
+import { putBodyToStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -101,4 +104,25 @@ export function riggerRevive(api: EventModelApi<Sr2020Character>, data: { target
 
 export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocHeal, {});
+}
+
+export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const bodyStorage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId!));
+  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+  // TODO: Check sensor
+  // TODO: Check skill?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
+  api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
+    characterId: api.model.modelId,
+    bodyType: api.workModel.currentBody,
+  });
+
+  api.model.currentBody = 'drone';
+
+  // TODO: enable drone abilties and disable character ones
+  // TODO: deal with max HP somehow
 }
