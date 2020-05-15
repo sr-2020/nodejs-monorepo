@@ -1308,7 +1308,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Риггер выходит из дрона, пропадают абилки дрона, появляются абилки риггера.
     // Статус сообщение при выходе "Вы потеряли  DroneFeedbaсk хитов"
     // где DroneFeedback = DroneFeedback1 + DroneFeedback2 + DroneFeedback3
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: 0,
