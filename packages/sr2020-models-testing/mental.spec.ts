@@ -83,9 +83,9 @@ describe('Mentalistic events', function() {
     let { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
     expect(workModel.mentalDefenceBonus).to.equal(11);
     expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
-    fixture.advanceTime(duration(29, 'minutes'));
+    await fixture.advanceTime(duration(29, 'minutes'));
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(11);
-    fixture.advanceTime(duration(1, 'minute'));
+    await fixture.advanceTime(duration(1, 'minute'));
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(3);
 
     // Check on-cooldown behaviour
@@ -95,7 +95,7 @@ describe('Mentalistic events', function() {
       .expect(400);
     expect(resp.body.error.message).containEql('кулдаун');
 
-    fixture.advanceTime(duration(30, 'minutes'));
+    await fixture.advanceTime(duration(30, 'minutes'));
 
     workModel = (await fixture.useAbility({ id: 'i-dont-trust-anybody' })).workModel;
     expect(workModel.activeAbilities[0].cooldownUntil).to.equal(7200 * 1000);
@@ -108,9 +108,9 @@ describe('Mentalistic events', function() {
     const { workModel } = await fixture.useAbility({ id: 'you-dont-trust-anybody', targetCharacterId: '2' }, 1);
     expect(workModel.mentalDefenceBonus).to.equal(3);
     expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(10);
-    fixture.advanceTime(duration(29, 'minutes'));
+    await fixture.advanceTime(duration(29, 'minutes'));
     expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(10);
-    fixture.advanceTime(duration(1, 'minute'));
+    await fixture.advanceTime(duration(1, 'minute'));
     expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).to.equal(2);
   });
 });

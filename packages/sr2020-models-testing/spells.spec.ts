@@ -127,12 +127,12 @@ describe('Spells', function() {
     }
 
     {
-      fixture.advanceTime(duration(5, 'days'));
+      await fixture.advanceTime(duration(5, 'days'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.magic).to.equal(3);
     }
     {
-      fixture.advanceTime(duration(10, 'days'));
+      await fixture.advanceTime(duration(10, 'days'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.magic).to.equal(10);
     }
@@ -160,7 +160,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
     await fixture.addCharacterFeature('ground-heal', 1);
 
-    fixture.advanceTime(duration(5, 'minutes'));
+    await fixture.advanceTime(duration(5, 'minutes'));
 
     {
       const { workModel } = await fixture.sendCharacterEvent(
@@ -177,7 +177,7 @@ describe('Spells', function() {
     let abilityId: string;
     {
       // Power 2 is 20 minutes = 1200 seconds.
-      fixture.advanceTime(duration(1199, 'seconds'));
+      await fixture.advanceTime(duration(1199, 'seconds'));
       const { workModel } = await fixture.getCharacter(1);
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
@@ -198,7 +198,7 @@ describe('Spells', function() {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('ground-heal');
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } });
-    fixture.advanceTime(duration(20, 'minutes'));
+    await fixture.advanceTime(duration(20, 'minutes'));
     const { workModel } = await fixture.getCharacter();
     expect(workModel.activeAbilities.length).to.equal(0);
   });
@@ -243,7 +243,7 @@ describe('Spells', function() {
     }
 
     {
-      fixture.advanceTime(duration(30, 'minutes'));
+      await fixture.advanceTime(duration(30, 'minutes'));
       const { workModel } = await fixture.getCharacter();
       expect(workModel.maxHp).to.equal(2);
     }
