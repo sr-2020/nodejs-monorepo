@@ -155,8 +155,6 @@ function createDroneModifier(drone: DroneQrData): InTheDroneModifier {
   };
 }
 
-const kDroneAbilityIds = new Set(([] as string[]).concat(...kAllDrones.map((drone) => drone.abilityIds)));
-
 export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;

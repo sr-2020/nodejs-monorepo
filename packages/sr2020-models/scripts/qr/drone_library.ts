@@ -231,3 +231,5 @@ export const kAllDrones: Drone[] = [
     ],
   },
 ];
+
+export const kDroneAbilityIds = new Set(([] as string[]).concat(...kAllDrones.map((drone) => drone.abilityIds)));
