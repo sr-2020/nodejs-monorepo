@@ -1,7 +1,7 @@
 import { Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
-  increaseMaxHp,
+  increaseMaxMeatHp,
   increaseMaxTimeInVr,
   increaseResonanceForControl,
   increaseFadingResistance,
@@ -41,7 +41,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-beta',
@@ -51,7 +51,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-gamma',
@@ -61,7 +61,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-delta',
@@ -71,7 +71,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-bones-bio',
@@ -81,7 +81,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-back-alpha',
@@ -91,7 +91,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 2,
     installDifficulty: 3,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-back-beta',
@@ -101,7 +101,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.5,
     installDifficulty: 4,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-back-gamma',
@@ -111,7 +111,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 1.2,
     installDifficulty: 5,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-back-delta',
@@ -121,7 +121,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 1,
     installDifficulty: 6,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'strong-back-bio',
@@ -131,7 +131,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseMaxHp, { amount: 2 })],
+    modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
     id: 'cyber-hand-alpha',

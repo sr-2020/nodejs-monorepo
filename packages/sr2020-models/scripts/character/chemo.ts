@@ -10,7 +10,7 @@ import {
   increaseResonance,
   multiplyCooldownCoefficient,
   increaseMentalAttackAndProtection,
-  increaseMaxHp,
+  increaseMaxMeatHp,
   increaseAllBaseStats,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
@@ -587,7 +587,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'base',
     message: 'Добавляет +1 максимальных хита на 30 минут',
     durationEffect: {
-      handler: increaseMaxHp,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
       amount: 1,
     },
@@ -597,7 +597,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'uber',
     message: 'Добавляет +4 максимальных хита на 30 минут',
     durationEffect: {
-      handler: increaseMaxHp,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
       amount: 4,
     },
@@ -607,7 +607,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'super',
     message: 'Добавляет +2 максимальных хита на 30 минут',
     durationEffect: {
-      handler: increaseMaxHp,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
       amount: 2,
     },
@@ -617,7 +617,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'crysis',
     message: 'Добавляет +2 максимальных хита на 30 минут Появилась зависимость.',
     durationEffect: {
-      handler: increaseMaxHp,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
       amount: 2,
     },
@@ -906,7 +906,7 @@ function createAddiction(element: keyof Concentrations): Addiction {
     stage: 0,
     effects: [
       { enabled: false, handler: increaseAllBaseStats.name, type: 'normal' },
-      { enabled: false, handler: increaseMaxHp.name, type: 'normal' },
+      { enabled: false, handler: increaseMaxMeatHp.name, type: 'normal' },
     ],
     amount: -1,
   };

@@ -5,7 +5,9 @@ import { clamp } from 'lodash';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 
-export function increaseMaxHp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  if (api.model.currentBody != 'physical') return;
+
   api.model.maxHp += m.amount;
   api.model.maxHp = clamp(api.model.maxHp, 0, 6);
   // Checking for healthState here to prevent infinite loop
