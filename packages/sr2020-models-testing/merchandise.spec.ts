@@ -45,6 +45,6 @@ describe('Merchandise', () => {
     expect(droneData.sensor).greaterThan(0);
     expect(droneData.hitpoints).greaterThan(0);
     expect(droneData.passiveAbilities).lengthOf(1);
-    expect(droneData.activeAbilities).lengthOf(4);
+    expect(droneData.activeAbilities).lengthOf(6);
   });
 });

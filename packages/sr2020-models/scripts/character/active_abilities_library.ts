@@ -37,7 +37,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
-import { enterDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
+import { enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 
 export type TargetType = 'scan' | 'show';
 
@@ -106,17 +106,21 @@ const kMerchandiseTargeted: TargetSignature = {
   field: 'qrCode',
 };
 
+const kBodyStorageTarget: TargetSignature = {
+  name: 'Телохранилище',
+  allowedTypes: ['body_storage'],
+  field: 'bodyStorageId',
+};
+
+const kBodyStorageTargeted = [kBodyStorageTarget];
+
 const kDroneAndBodyStorageTargeted: TargetSignature[] = [
   {
     name: 'Дрон',
     allowedTypes: ['drone'],
     field: 'droneId',
   },
-  {
-    name: 'Телохранилище',
-    allowedTypes: ['body_storage'],
-    field: 'bodyStorageId',
-  },
+  kBodyStorageTarget,
 ];
 
 export interface ActiveAbility {
@@ -1293,6 +1297,43 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 0,
     minimalEssence: 0,
     eventType: enterDrone.name,
+  },
+
+  {
+    id: 'drone-logoff',
+    humanReadableName: 'Отключиться от дрона',
+    description: 'Отключиться от дрона.',
+    // 505
+    // При активации кнопки необходимо выбрать ЯЧЕЙКУ телохранилища, в котором лежит тело ригги.
+    // Риггер выходит из дрона, пропадают абилки дрона, появляются абилки риггера.
+    // Статус сообщение при выходе "Вы потеряли  DroneFeedbaсk хитов"
+    // где DroneFeedback = DroneFeedback1 + DroneFeedback2 + DroneFeedback3
+    // TODO(aeremin): Add proper implementation
+    target: 'scan',
+    targetsSignature: kBodyStorageTargeted,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: exitDrone.name,
+  },
+
+  {
+    id: 'drone-danger',
+    humanReadableName: 'Аварийное отключение',
+    description: 'Дрон поврежден! Необходимо срочно вернуться к телу!',
+    // 506
+    // Эта кнопка символизирует аварийное отключение.
+    // Используется в случае если
+    // - с дрона сняли все хиты.
+    // Кроме того, происходит автоматически если:
+    // - закончилось время на включение в дрона
+    // - было атаковано мясное тело риггера
+    // DroneFeedback1 = 1
+    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
   },
 
   {

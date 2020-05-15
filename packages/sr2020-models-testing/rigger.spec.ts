@@ -91,7 +91,7 @@ describe('Rigger abilities', () => {
     }
   });
 
-  it('Entering drone', async () => {
+  it('Entering and leaving drone', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 2 });
     await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'groundcraft-active' } });
@@ -122,8 +122,27 @@ describe('Rigger abilities', () => {
       const { workModel } = await fixture.getCharacter();
       expect(workModel.maxHp).to.equal(3);
       expect(workModel.passiveAbilities).lengthOf(1); // Drone info
-      expect(workModel.activeAbilities).lengthOf(4); // Heals 2x2
+      expect(workModel.activeAbilities).lengthOf(6); // Heals 2x2
       expect(workModel.currentBody).to.equal('drone');
+    }
+
+    // Leave drone
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'drone-logoff', bodyStorageId: '1' } });
+
+    {
+      // Storage is empty
+      const { baseModel } = await fixture.getQrCode('1');
+      const storage = typedQrData<BodyStorageQrData>(baseModel);
+      expect(storage.body).undefined();
+    }
+
+    {
+      // Rigger is not in the drone
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.maxHp).to.equal(2);
+      expect(workModel.passiveAbilities).lengthOf(0);
+      expect(workModel.activeAbilities).lengthOf(1); // Enter drone
+      expect(workModel.currentBody).to.equal('physical');
     }
   });
 });

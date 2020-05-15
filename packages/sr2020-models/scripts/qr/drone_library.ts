@@ -208,7 +208,15 @@ export const kAllDrones: Drone[] = [
     sensor: 8,
     hitpoints: 3,
     description: 'Медикарт. Легкая броня.',
-    abilityIds: ['drone-medcart', 'medcart-light-heal-1', 'medcart-light-heal-2', 'medcart-heavy-heal-1', 'medcart-heavy-heal-2'],
+    abilityIds: [
+      'drone-medcart',
+      'medcart-light-heal-1',
+      'medcart-light-heal-2',
+      'medcart-heavy-heal-1',
+      'medcart-heavy-heal-2',
+      'drone-logoff',
+      'drone-danger',
+    ],
   },
   {
     id: 'kuzhuget',

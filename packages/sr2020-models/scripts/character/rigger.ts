@@ -6,12 +6,14 @@ import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocRevive, autodocHeal } from './death_and_rebirth';
-import { DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
 import { duration } from 'moment';
-import { putBodyToStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
-import { kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';
-import { setDroneInUse } from '@sr2020/sr2020-models/scripts/qr/drones';
+import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-models/scripts/qr/body_storage';
+import { kDroneAbilityIds } from '@sr2020/sr2020-models/scripts/qr/drone_library';
+import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-models/scripts/qr/drones';
+
+const kInDroneModifierId = 'in-the-drone';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }, _: Event) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
@@ -128,21 +130,45 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     bodyType: api.workModel.currentBody,
   });
 
-  api.sendOutboundEvent(QrCode, data.droneId!, setDroneInUse, { inUse: true });
-
-  api.model.currentBody = 'drone';
+  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDrone, {});
 
   api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
   api.model.passiveAbilities = api.model.passiveAbilities.concat(drone.passiveAbilities);
 
-  api.addModifier(createDroneModifier(drone));
+  api.addModifier(createDroneModifier(drone, data.droneId!));
 }
 
-type InTheDroneModifier = Modifier & { hp: number };
+export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+  if (api.workModel.currentBody != 'drone') {
+    throw new UserVisibleError('Для отключения от дрона необходимо быть подключенным к нему.');
+  }
 
-function createDroneModifier(drone: DroneQrData): InTheDroneModifier {
+  const storage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId!));
+  if (!(storage?.body?.characterId == api.model.modelId)) {
+    throw new UserVisibleError('Данная ячейка телохранилище не содержит ваше тело.');
+  }
+  api.sendOutboundEvent(QrCode, data.bodyStorageId!, removeBodyFromStorage, {});
+
+  const m = findInDroneModifier(api);
+  api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDrone, {
+    activeAbilities: api.workModel.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
+  });
+
+  const isDroneAbility = (ability) => !kDroneAbilityIds.has(ability.id);
+  api.model.activeAbilities = api.model.activeAbilities.filter(isDroneAbility);
+  api.model.passiveAbilities = api.model.passiveAbilities.filter(isDroneAbility);
+
+  api.removeModifier(m.mID);
+
+  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+  // TODO: Calculate damage and send a notification
+}
+
+type InTheDroneModifier = Modifier & { hp: number; droneQrId: string };
+
+function createDroneModifier(drone: DroneQrData, droneQrId: string): InTheDroneModifier {
   return {
-    mID: 'in-the-drone',
+    mID: kInDroneModifierId,
     enabled: true,
     effects: [
       {
@@ -152,7 +178,16 @@ function createDroneModifier(drone: DroneQrData): InTheDroneModifier {
       },
     ],
     hp: drone.hitpoints,
+    droneQrId,
   };
+}
+
+function findInDroneModifier(api: EventModelApi<Sr2020Character>) {
+  const m = api.getModifierById(kInDroneModifierId);
+  if (!m) {
+    throw new UserVisibleError('Для отключения от дрона необходимо быть подключенным к нему.');
+  }
+  return m as InTheDroneModifier;
 }
 
 export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
