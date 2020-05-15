@@ -15,10 +15,10 @@ import {
   addTemporaryModifierEvent,
   removeModifier,
 } from './util';
-import { MAX_POSSIBLE_HP, AURA_LENGTH } from './consts';
+import { AURA_LENGTH } from './consts';
 import Chance = require('chance');
 import { getAllActiveAbilities } from './library_registrator';
-import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance } from './basic_effects';
+import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance, increaseMaxHp } from './basic_effects';
 import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
 import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
@@ -248,20 +248,15 @@ export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { 
   const hpIncrease = data.power;
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
-  const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
+  const m = modifierFromEffect(increaseMaxHp, { amount: hpIncrease });
   addTemporaryModifier(api, m, d);
-}
-
-export function maxHpIncreaseEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.maxHp += m.amount;
-  api.model.maxHp = Math.min(api.model.maxHp, MAX_POSSIBLE_HP);
 }
 
 export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
   const hpIncrease = data.power;
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${d.asMinutes()} минут.`);
-  const m = modifierFromEffect(maxHpIncreaseEffect, { amount: hpIncrease });
+  const m = modifierFromEffect(increaseMaxHp, { amount: hpIncrease });
   addTemporaryModifier(api, m, d);
 }
 
