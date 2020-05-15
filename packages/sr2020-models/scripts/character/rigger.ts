@@ -111,6 +111,8 @@ export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCh
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocHeal, {});
 }
 
+const kDroneTimerIds = ['drone-timer-stage-0', 'drone-timer-stage-1', 'drone-timer-stage-2'];
+
 export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Для подключения к дрону необходимо быть в мясном теле.');
@@ -124,9 +126,9 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
   // TODO: Check sensor
   // TODO: Check skill?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
-  // TODO: Set timer to apply feedback if too late.
+  api.setTimer(kDroneTimerIds[0], timeInDrone, droneTimeout, {});
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
@@ -153,6 +155,8 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
     throw new UserVisibleError('Данная ячейка телохранилище не содержит ваше тело.');
   }
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, removeBodyFromStorage, {});
+
+  for (const timerId of kDroneTimerIds) api.removeTimer(timerId);
 
   const m = findInDroneModifier(api);
   api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDrone, {
@@ -185,7 +189,7 @@ export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data:
   }
 }
 
-type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number };
+type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number; stage: number };
 
 function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
@@ -201,6 +205,7 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDam
     hp: drone.hitpoints,
     droneQrId,
     postDroneDamage,
+    stage: 0,
   };
 }
 
@@ -217,4 +222,45 @@ export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneMo
   api.model.maxHp = m.hp;
   api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
   //  What to do with the passive ones?
+}
+
+export function droneTimeout(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  sendNotificationAndHistoryRecord(
+    api,
+    'Превышено максимальное время пребывания в дроне',
+    'Необходимо срочно вернуться в мясное тело во избежание урона.',
+  );
+
+  droneEmergencyExit(api, data, event);
+}
+
+export function droneWounded(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  sendNotificationAndHistoryRecord(api, 'Дрон критически поврежден', 'Необходимо срочно вернуться в мясное тело во избежание урона.');
+  droneEmergencyExit(api, data, event);
+}
+
+export function bodyInStorageWounded(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  sendNotificationAndHistoryRecord(
+    api,
+    'Мясное тело атаковано',
+    'Кто-то атаковал ваше мясное тело в телохранилище. Необходимо срочно в него вернуться во избежание урона.',
+  );
+  droneEmergencyExit(api, data, event);
+}
+
+export function droneEmergencyExit(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  const m = findInDroneModifier(api);
+  if (m.stage != 0) return; // Emergency exit already triggered
+  m.postDroneDamage += 1;
+
+  api.setTimer(kDroneTimerIds[1], duration(10, 'minutes'), droneReturnTimeoutTick1, {});
+  api.setTimer(kDroneTimerIds[2], duration(30, 'minutes'), droneReturnTimeoutTick2, {});
+}
+
+export function droneReturnTimeoutTick1(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  findInDroneModifier(api).postDroneDamage += 1;
+}
+
+export function droneReturnTimeoutTick2(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+  findInDroneModifier(api).postDroneDamage += 2;
 }

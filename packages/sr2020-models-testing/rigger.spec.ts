@@ -1,6 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { duration } from 'moment';
 
 describe('Rigger abilities', () => {
   let fixture: TestFixture;
@@ -144,5 +145,32 @@ describe('Rigger abilities', () => {
       expect(workModel.activeAbilities).lengthOf(1); // Enter drone
       expect(workModel.currentBody).to.equal('physical');
     }
+  });
+
+  it('Spending too long in drone will wound you', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ maxHp: 4 });
+    await fixture.sendCharacterEvent({ eventType: 'addFeature', data: { id: 'groundcraft-active' } });
+
+    // Body storage set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
+
+    // Drone set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
+
+    // Enter drone
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' } });
+
+    // Wait for long time
+    await fixture.advanceTime(duration(2, 'hours'));
+
+    // Leave drone
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'drone-logoff', bodyStorageId: '1' } });
+
+    // Rigger is not in the drone
+    const { workModel } = await fixture.getCharacter();
+    expect(workModel.healthState).equal('wounded');
   });
 });
