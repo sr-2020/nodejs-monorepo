@@ -28,7 +28,7 @@ import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 */
 
 // Событие jj-immortal-one-start
-function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data, event) {
+function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -53,7 +53,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data, event) {
     name: 'jj-immortal-one',
     currentStage: 0,
     stages: pill.stages,
-    startTime: event.timestamp,
+    startTime: api.model.timestamp,
     enabled: true,
     effects: [],
   };
@@ -61,7 +61,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data, event) {
   modifier = api.addModifier(modifier);
 
   const text = modifier.stages[modifier.currentStage].text;
-  helpers.addChangeRecord(api, text, event.timestamp);
+  helpers.addChangeRecord(api, text, api.model.timestamp);
 
   const timerName = 'jj-immortal-one-' + modifier.mID;
 
@@ -70,7 +70,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data, event) {
 }
 
 // Событие jj-immortal-one-next-stage
-function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data, event) {
+function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
   if (!data.mID) {
     api.error('jjImmortalOneNextStage: no mID');
     return;
@@ -91,7 +91,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data, even
   modifier.currentStage += 1;
 
   const text = modifier.stages[modifier.currentStage].text;
-  helpers.addChangeRecord(api, text, event.timestamp);
+  helpers.addChangeRecord(api, text, api.model.timestamp);
 
   const duration = modifier.stages[modifier.currentStage].duration ?? 1;
   const timerName = 'jj-immortal-one-' + modifier.mID;
@@ -106,7 +106,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data, even
 }
 
 // Событие jj-immortal-two-start
-function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data, event) {
+function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -140,11 +140,11 @@ function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data, event) {
 
   api.removeTimer('jj-immortal-one-' + jjOne.mID);
   api.setTimer('jj-immortal-two-awake', moment.duration(5, 'minutes'), 'jj-immortal-two-awake', data);
-  helpers.addChangeRecord(api, data.pill.stages[0], event.timestamp);
+  helpers.addChangeRecord(api, data.pill.stages[0], api.model.timestamp);
 }
 
 // Событие jj-immortal-two-awake
-function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data, event) {
+function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneAwakeEvent');
 
   if (api.model.profileType != 'human') {
@@ -194,7 +194,7 @@ function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data, event) {
   api.info('jjImmortalTwoAwakeEvent: set cubes');
   helpers.modifyMindCubes(api, api.model.mind, pill.cubes);
 
-  helpers.addChangeRecord(api, pill.stages[1], event.timestamp);
+  helpers.addChangeRecord(api, pill.stages[1], api.model.timestamp);
 }
 
 module.exports = {

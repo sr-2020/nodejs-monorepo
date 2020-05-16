@@ -8,7 +8,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 
-import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import * as moment from 'moment';
 
@@ -51,9 +51,9 @@ import * as moment from 'moment';
  * Функция вызывается событием "get-damage" когда игрок нажимает кнопку снятия хитов
  *  "data": { "hpLost": 1  }
  */
-function getDamageEvent(api: EventModelApi<DeusExModel>, data, event: Event) {
+function getDamageEvent(api: EventModelApi<DeusExModel>, data) {
   if (Number(data.hpLost) && api.model.hp) {
-    medhelpers.addDamage(api, Number(data.hpLost), event.timestamp);
+    medhelpers.addDamage(api, Number(data.hpLost), api.model.timestamp);
   }
 }
 
@@ -61,9 +61,9 @@ function getDamageEvent(api: EventModelApi<DeusExModel>, data, event: Event) {
  * Функция вызывается тестоым событием "restore-damage"
  *  "data": { "hpAdd": 1  }
  */
-function restoreDamageEvent(api: EventModelApi<DeusExModel>, data, event) {
+function restoreDamageEvent(api: EventModelApi<DeusExModel>, data) {
   if (Number(data.hpAdd) && api.model.hp) {
-    medhelpers.restoreDamage(api, Number(data.hpAdd), event.timestamp);
+    medhelpers.restoreDamage(api, Number(data.hpAdd), api.model.timestamp);
   }
 }
 
@@ -159,7 +159,7 @@ function characterDeathEvent(api: EventModelApi<DeusExModel>, event) {
  * Обработчик события kill-random-system
  * Вызывается когда хиты доходят до нуля
  */
-function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
+function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.from && data.from == 'self' && api.model.profileType == 'human') {
     api.info('killRandomSystem: event handler start!');
 
@@ -183,7 +183,7 @@ function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
         helpers.addChangeRecord(
           api,
           `Необратимо повреждена ${consts.medicSystems[sys].label} система! Необходима срочная замена на имплант!`,
-          event.timestamp,
+          api.model.timestamp,
         );
 
         api.info(`killRandomSystem: ${consts.medicSystems[sys].label} ==> dead`);
@@ -199,7 +199,7 @@ function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data, event) {
           }
 
           api.removeModifier(implants[0].mID);
-          helpers.addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, event.timestamp);
+          helpers.addChangeRecord(api, `Необратимо поврежден имплант: ${implants[0].displayName}!`, api.model.timestamp);
 
           api.info(`killRandomSystem: kill system ${implants[0].displayName} ==> destroyed`);
         }
@@ -512,7 +512,7 @@ function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: M
  * Обработчик события recover-systems
  * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-systems
  */
-function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
+function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data) {
   const modifier = api.getModifierById(data.mID);
 
   if (!modifier || !modifier.enabled) {
@@ -534,7 +534,7 @@ function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
       helpers.addChangeRecord(
         api,
         `Ресурсы импланта ${modifier._id} исчерпаны. Необходимо срочное медицинское вмешательство`,
-        event.timestamp,
+        api.model.timestamp,
       );
       return;
     } else {
@@ -574,7 +574,7 @@ function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data, event) {
     api.info(`recoverSystemsEvent: hpRemain: ${data.hpRemain}, maxHP: ${maxHP} ==> damage: ${dmgMod.damage}`);
   }
 
-  helpers.addChangeRecord(api, `Имплант ${modifier._id} провел восстановление организма.`, event.timestamp);
+  helpers.addChangeRecord(api, `Имплант ${modifier._id} провел восстановление организма.`, api.model.timestamp);
 }
 
 module.exports = () => {

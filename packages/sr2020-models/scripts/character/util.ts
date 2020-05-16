@@ -1,5 +1,5 @@
 import { Duration } from 'moment';
-import { Event, Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { MAX_HISTORY_LINES } from './consts';
 import uuid = require('uuid');
 import * as moment from 'moment';
@@ -45,11 +45,7 @@ export function modifierFromEffect(
   };
 }
 
-export function addTemporaryModifierEvent(
-  api: EventModelApi<Sr2020Character>,
-  data: { modifier: Modifier; durationInSeconds: number },
-  event: Event,
-) {
+export function addTemporaryModifierEvent(api: EventModelApi<Sr2020Character>, data: { modifier: Modifier; durationInSeconds: number }) {
   addTemporaryModifier(api, data.modifier, moment.duration(data.durationInSeconds, 'seconds'));
 }
 
@@ -61,7 +57,7 @@ export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Mod
 
 // Implementation detail: we need to have it as an Event handler so we can call it on Timer.
 // Don't call directly from the code, use direct api.removeModifier call instead.
-export function removeModifier(api: EventModelApi<Sr2020Character>, data: { mID: string }, _: Event) {
+export function removeModifier(api: EventModelApi<Sr2020Character>, data: { mID: string }) {
   api.removeModifier(data.mID);
 }
 

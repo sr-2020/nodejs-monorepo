@@ -1,4 +1,4 @@
-import { Condition, Effect, Event, Modifier, EventModelApi, EffectModelApi } from 'interface/src/models/alice-model-engine';
+import { Condition, Effect, Modifier, EventModelApi, EffectModelApi } from 'interface/src/models/alice-model-engine';
 import uuid = require('uuid/v1');
 import * as moment from 'moment';
 import {
@@ -18,22 +18,22 @@ function updateIsAlive(model: OrganismModel) {
   if (getSymptoms(model).has(Symptoms.Death)) model.isAlive = false;
 }
 
-function modifySystemsInstant(api: EventModelApi<OrganismModel>, data: number[], event: Event) {
+function modifySystemsInstant(api: EventModelApi<OrganismModel>, data: number[]) {
   if (!api.model.isAlive) return;
 
-  helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', event.timestamp);
+  helpers.addChangeRecord(api, 'Состояние систем организма изменилось!', api.model.timestamp);
 
   for (const i of organismSystemsIndices(api.model)) {
     if (data[i] != 0) {
       api.model.systems[i].value += data[i];
-      api.model.systems[i].lastModified = event.timestamp;
+      api.model.systems[i].lastModified = api.model.timestamp;
     }
   }
 
   updateIsAlive(api.model);
 }
 
-function modifyNucleotideInstant(api: EventModelApi<OrganismModel>, data: number[], _event: Event) {
+function modifyNucleotideInstant(api: EventModelApi<OrganismModel>, data: number[]) {
   if (!api.model.isAlive) return;
 
   for (const i of organismSystemsIndices(api.model)) {
@@ -56,8 +56,8 @@ interface DiseaseTickData {
   preMutationData?: PreMutationData;
 }
 
-function diseaseTick(api: EventModelApi<OrganismModel>, data: DiseaseTickData, event: Event) {
-  modifySystemsInstant(api, data.systemsModification, event);
+function diseaseTick(api: EventModelApi<OrganismModel>, data: DiseaseTickData) {
+  modifySystemsInstant(api, data.systemsModification);
   const preMutationData = data.preMutationData;
   if (preMutationData) {
     const mutationData: MutationData = {
@@ -79,7 +79,7 @@ interface MutationData {
   newNucleotideValues: Array<number | undefined>;
 }
 
-function mutation(api: EventModelApi<OrganismModel>, data: MutationData, _event: Event) {
+function mutation(api: EventModelApi<OrganismModel>, data: MutationData) {
   if (!api.model.isAlive) return;
 
   for (const i of organismSystemsIndices(api.model)) {
@@ -96,7 +96,7 @@ function mutation(api: EventModelApi<OrganismModel>, data: MutationData, _event:
   updateIsAlive(api.model);
 }
 
-function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChange: number[], event: Event) {
+function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChange: number[]) {
   const totalTicks = Math.max(...totalChange.map((v) => Math.abs(v)));
   for (let i = 0; i < totalTicks; ++i) {
     const adjustment = totalChange.map((v) => {
@@ -109,7 +109,7 @@ function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChan
       if (color != undefined) {
         tickData.preMutationData = {
           mutationColor: color,
-          diseaseStartTimestamp: event.timestamp,
+          diseaseStartTimestamp: api.model.timestamp,
         };
       }
     }
@@ -118,11 +118,11 @@ function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChan
   }
 }
 
-function xenoDisease(api: EventModelApi<OrganismModel>, data: XenoDisease, event: Event) {
+function xenoDisease(api: EventModelApi<OrganismModel>, data: XenoDisease) {
   if (api.model.spaceSuit.on) {
     api.model.spaceSuit.diseases.push(data);
   } else {
-    biologicalSystemsInfluence(api, data.influence, event);
+    biologicalSystemsInfluence(api, data.influence);
   }
 }
 
@@ -130,22 +130,22 @@ interface OnTheShipModifier extends Modifier {
   shipId: number;
 }
 
-function enterShip(api: EventModelApi<OrganismModel>, data: number, event: Event) {
+function enterShip(api: EventModelApi<OrganismModel>, data: number) {
   const counter = api.aquiredDeprecated('counters', `ship_${data}`);
   if (counter?.shield) {
     const shieldValue = Number(counter.shield);
-    spaceSuitTakeOff(api, shieldValue, event);
+    spaceSuitTakeOff(api, shieldValue);
   } else {
     api.error("enterShip: can't find ship shields data", { shipId: data });
   }
 
-  leaveShip(api, null, event);
+  leaveShip(api, null);
   const eff: Effect = { enabled: true, type: 'normal', handler: 'onTheShip' };
   const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
 }
 
-function leaveShip(api: EventModelApi<OrganismModel>, _data: null, _event: Event) {
+function leaveShip(api: EventModelApi<OrganismModel>, _data: null) {
   api.removeModifier('OnTheShip');
 }
 
@@ -164,7 +164,7 @@ export interface SpaceSuitRefillData {
   time: number;
 }
 
-function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefillData, event: Event) {
+function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefillData) {
   const counter = api.aquiredDeprecated('counters', data.uniqueId);
   if (!counter) {
     api.error("spaceSuitRefill: can't aquire space suit refill code", { uniqueId: data.uniqueId });
@@ -182,16 +182,16 @@ function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefil
   counter.usedBy = api.model.modelId;
 
   // If person forgot about disinfecting it first... Well, too bad!
-  spaceSuitTakeOff(api, 0, event);
+  spaceSuitTakeOff(api, 0);
   const oxygenTimeMs = data.time * 60 * 1000;
   api.model.spaceSuit.oxygenCapacity = oxygenTimeMs;
-  api.model.spaceSuit.timestampWhenPutOn = event.timestamp;
+  api.model.spaceSuit.timestampWhenPutOn = api.model.timestamp;
 
   api.setTimer('spacesuit', moment.duration(oxygenTimeMs, 'milliseconds'), 'space-suit-take-off', 0);
   api.model.spaceSuit.on = true;
 }
 
-function spaceSuitTakeOff(api: EventModelApi<OrganismModel>, disinfectionLevel: number, event: Event) {
+function spaceSuitTakeOff(api: EventModelApi<OrganismModel>, disinfectionLevel: number) {
   if (!api.model.spaceSuit.on) return;
 
   api.model.spaceSuit.on = false;
@@ -200,15 +200,15 @@ function spaceSuitTakeOff(api: EventModelApi<OrganismModel>, disinfectionLevel: 
   for (const disease of api.model.spaceSuit.diseases) {
     const diff = disease.power - disinfectionLevel;
     if (diff > Math.random() * 100) {
-      biologicalSystemsInfluence(api, disease.influence, event);
+      biologicalSystemsInfluence(api, disease.influence);
     }
   }
 }
 
-function fullRollback(api: EventModelApi<OrganismModel>, _: any, event: Event) {
+function fullRollback(api: EventModelApi<OrganismModel>, _: any) {
   for (const i of allSystemsIndices()) api.model.systems[i].value = 0;
   api.model.timers = {};
-  helpers.addChangeRecord(api, 'Извините за баги :(', event.timestamp);
+  helpers.addChangeRecord(api, 'Извините за баги :(', api.model.timestamp);
 }
 
 module.exports = () => {

@@ -25,10 +25,10 @@ function useStamm(api: EventModelApi<DeusExModel>, pill) {
   }
 }
 
-function useAid(api: EventModelApi<DeusExModel>, pill, event) {
+function useAid(api: EventModelApi<DeusExModel>, pill) {
   if (api.model.profileType != 'human') return;
 
-  medichelpers.restoreDamage(api, 1, event.timestamp);
+  medichelpers.restoreDamage(api, 1, api.model.timestamp);
   if (api.model.genome && _.get(api.model, ['usedPills', pill.id])) {
     _.set(api.model, ['genome', pill.affectedGenomePos - 1], pill.affectedGenomeVal);
   }
@@ -51,13 +51,13 @@ function useNarco(api: EventModelApi<DeusExModel>, pill) {
   api.sendSelfEvent('take-narco', { id: pill.id, narco: pill });
 }
 
-function useImmortal(api: EventModelApi<DeusExModel>, pill, event) {
+function useImmortal(api: EventModelApi<DeusExModel>, pill) {
   if (api.model.profileType != 'human') return;
   api.model.profileType = 'exhuman-program';
 
   helpers.modifyMindCubes(api, api.model.mind, pill.mindCubePermanent);
 
-  helpers.getAllImplants(api).forEach((implant) => helpers.removeImplant(api, implant, event.timestamp));
+  helpers.getAllImplants(api).forEach((implant) => helpers.removeImplant(api, implant, api.model.timestamp));
   delete api.model.genome;
   delete api.model.systems;
   delete api.model.generation;
@@ -84,7 +84,7 @@ function useGeneric(api: EventModelApi<DeusExModel>, pill) {
   api.sendSelfEvent(pill.eventType, { pill });
 }
 
-function usePill(api: EventModelApi<DeusExModel>, data, event) {
+function usePill(api: EventModelApi<DeusExModel>, data) {
   if (!api.model.isAlive) {
     api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
     return;
@@ -113,10 +113,10 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
 
   if (code._id.startsWith('9c5d9d84-dbf2')) {
     const pillText = code._id.substring(code._id.length - 6);
-    helpers.addChangeRecord(api, `Вы использовали препарат ${pillText}`, event.timestamp);
+    helpers.addChangeRecord(api, `Вы использовали препарат ${pillText}`, api.model.timestamp);
   }
 
-  if (!previousUsage || event.timestamp - previousUsage > PILL_TIMEOUT) {
+  if (!previousUsage || api.model.timestamp - previousUsage > PILL_TIMEOUT) {
     switch (pill.pillType) {
       case 'cure':
         useCure(api, pill);
@@ -125,7 +125,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
         useStamm(api, pill);
         break;
       case 'aid':
-        useAid(api, pill, event);
+        useAid(api, pill);
         break;
       case 'lastChance':
         useLastChance(api, pill);
@@ -134,7 +134,7 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
         useNarco(api, pill);
         break;
       case 'immortal-panam':
-        useImmortal(api, pill, event);
+        useImmortal(api, pill);
         break;
       case 'generic':
         useGeneric(api, pill);
@@ -146,8 +146,8 @@ function usePill(api: EventModelApi<DeusExModel>, data, event) {
     api.info(`Pill of type ${pill.id} already used lately, cooldown not expired.`);
   }
 
-  _.set(api.model, ['usedPills', pill.id], event.timestamp);
-  code.usedAt = event.timestamp;
+  _.set(api.model, ['usedPills', pill.id], api.model.timestamp);
+  code.usedAt = api.model.timestamp;
   code.usedBy = api.model.modelId;
 }
 

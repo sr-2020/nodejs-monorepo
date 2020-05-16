@@ -34,7 +34,7 @@ export class Dispatcher<T extends EmptyModel> implements DispatcherInterface<T> 
     }
 
     const api = EventModelApiFactory(context, event);
-    handler(api, event.data, event);
+    handler(api, event.data);
 
     return context;
   }

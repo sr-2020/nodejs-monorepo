@@ -23,7 +23,7 @@ export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
 
 export type FullTargetedAbilityData = FullActiveAbilityData & { targetCharacterId: string };
 
-export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);
   if (!ability) {
     throw new UserVisibleError('Нельзя использовать способность, которой у вас нет!');
@@ -34,7 +34,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Несуществующая способность!');
   }
 
-  if (ability.cooldownUntil > event.timestamp) {
+  if (ability.cooldownUntil > api.model.timestamp) {
     throw new UserVisibleError('Способность еще на кулдауне!');
   }
 
@@ -49,7 +49,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // This will lead to maybeAbility being undefined. But it's fine: such abilities are one-time-use anyway, so no need to
   // set cooldown.
   if (maybeAbility) {
-    maybeAbility.cooldownUntil = event.timestamp + ability.cooldownMinutes * 60 * 1000 * api.workModel.cooldownCoefficient;
+    maybeAbility.cooldownUntil = api.model.timestamp + ability.cooldownMinutes * 60 * 1000 * api.workModel.cooldownCoefficient;
   }
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
@@ -59,7 +59,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.sendPubSubNotification('ability_used', { ...data, characterId: api.model.modelId, name: ability.humanReadableName });
 }
 
-export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, event: Event) {
+export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
   sendNotificationAndHistoryRecord(
     api,
     'Навык',
@@ -73,16 +73,16 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
     api.removeModifier(mods[0].mID);
   }
 
-  reviveOnTarget(api, data, event);
+  reviveOnTarget(api, data);
 }
 
-export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void, event: Event) {
+export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void) {
   api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
 }
 
 // Adept abilities
 
-export function hammerOfJustice(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function hammerOfJustice(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(10 + 3 * manaLevel, 'minutes');
   const m = modifierFromEffect(hammerOfJusticeEffect, { validUntil: validUntil(api, d) });
@@ -98,7 +98,7 @@ export function hammerOfJusticeEffect(api: EffectModelApi<Sr2020Character>, m: M
   });
 }
 
-export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 1 * manaLevel, 'minutes');
   const m = modifierFromEffect(arrowgantEffect, { validUntil: validUntil(api, d) });
@@ -114,7 +114,7 @@ export function arrowgantEffect(api: EffectModelApi<Sr2020Character>, m: Modifie
   });
 }
 
-export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   const m = modifierFromEffect(trolltonEffect, { validUntil: validUntil(api, d) });
@@ -130,31 +130,31 @@ export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
   });
 }
 
-export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d);
 }
 
-export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const from = api.aquired(QrCode, data.pillId!);
   const to = api.aquired(QrCode, data.qrCode!);
   api.sendOutboundEvent(QrCode, to.modelId, create, from);
 }
 
-export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, {});
 }
 
-export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendNotification('Взлом', 'Вы можете приступить к взлому замка в соответствии с правилами по взлому');
 }
 
-export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, cloudMemoryEnable, {});
 }
 
-export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {}) {
   const d = duration(6, 'hours');
   const m = modifierFromEffect(cloudMemoryEffect, { validUntil: validUntil(api, d) });
   api.sendNotification('Облачная память', 'Получена временная пассивная способность "Облачная память"');
@@ -178,15 +178,15 @@ function getMerchandiseData(api: EventModelApi<Sr2020Character>, data: ActiveAbi
   return typedQrData<MerchandiseQrData>(item);
 }
 
-export function howMuchItCosts(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function howMuchItCosts(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   sendNotificationAndHistoryRecord(api, 'Цена товара', `Базовая цена этого товара составляет ${getMerchandiseData(api, data).basePrice}`);
 }
 
-export function howMuchTheRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function howMuchTheRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   sendNotificationAndHistoryRecord(api, 'Рента', `Рентный платеж за этот товара составляет ${getMerchandiseData(api, data).rentPrice}`);
 }
 
-export function whoNeedsIt(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function whoNeedsIt(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const description = getMerchandiseData(api, data).gmDescription;
   if (description.length > 0) {
     sendNotificationAndHistoryRecord(api, 'Информация', description);
@@ -195,16 +195,16 @@ export function whoNeedsIt(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   }
 }
 
-export function letMePay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function letMePay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   transferRentFromTo(api, getMerchandiseData(api, data).dealId, api.model.modelId);
 }
 
-export function letHimPay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function letHimPay(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
   transferRentFromTo(api, getMerchandiseData(api, data).dealId, data.targetCharacterId);
 }
 
-export function reRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function reRent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   transferRentFromTo(api, getMerchandiseData(api, data).dealId, undefined);
 }
 
@@ -215,11 +215,11 @@ function transferRentFromTo(api: EventModelApi<Sr2020Character>, dealId: string,
   });
 }
 
-export function investigateScoring(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, _: Event) {
+export function investigateScoring(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, temporaryAddMyScoring, {});
 }
 
-export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data: {}) {
   api.sendNotification('Скоринг', 'В течение пяти минут на странице экономики отображаются подробности вашего скоринга');
   addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect), duration(5, 'minutes'));
 }

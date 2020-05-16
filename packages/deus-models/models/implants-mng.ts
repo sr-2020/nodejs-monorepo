@@ -10,11 +10,11 @@ import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-en
  * Добавляет имплант в модель
  * { id: implant-id }
  */
-function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
+function addImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.id) {
     if (!api.model.isAlive) {
       api.error("Can't install implant to deadman. Why are you doing this...");
-      helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, event.timestamp);
+      helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, api.model.timestamp);
       return;
     }
     const loadedImplant = helpers.loadImplant(api, data.id);
@@ -34,7 +34,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
         implant = api.addModifier(implant);
 
         //Добавление сообщения об этом в список изменений в модели
-        helpers.addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, event.timestamp);
+        helpers.addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, api.model.timestamp);
 
         return;
       }
@@ -73,7 +73,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       //Если нашли что-то на удаление - удалить это
       if (implantForRemove) {
         if (!implantForRemove.unremovable) {
-          helpers.removeImplant(api, implantForRemove, event.timestamp);
+          helpers.removeImplant(api, implantForRemove, api.model.timestamp);
         } else {
           api.error(
             `addImplantEvent: implant: ${implantForRemove.id} is unremovable. Can't remove old and install new implant. Stop processing!`,
@@ -101,7 +101,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
       });
 
       //Добавление сообщения об этом в список изменений в модели
-      helpers.addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, event.timestamp);
+      helpers.addChangeRecord(api, `Установлен имплант: ${implant.displayName}`, api.model.timestamp);
 
       //Выполнение мгновенного эффекта установки (изменение кубиков сознания пока)
       instantInstallEffect(api, implant);
@@ -116,12 +116,12 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
  * Удвляет имплант из модели
  * { mID: implant-model-id }
  */
-function removeImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
+function removeImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
 
     if (implant && helpers.isImplant(implant) && !implant.unremovable) {
-      helpers.addChangeRecord(api, `Удален имплант: ${implant.displayName}`, event.timestamp);
+      helpers.addChangeRecord(api, `Удален имплант: ${implant.displayName}`, api.model.timestamp);
       api.removeModifier(data.mID);
     } else {
       api.error(`removeImplantEvent: can't remove implant/modifier: ${data.mID}`);
@@ -176,12 +176,12 @@ function instantInstallEffect(api: EventModelApi<DeusExModel>, implant) {
  * параметр duration задается в секундах, и он опционален.
  * Если задан - имплант отключается на это время
  */
-function disableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
+function disableImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
     if (implant) {
       implant.enabled = false;
-      helpers.addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, event.timestamp);
+      helpers.addChangeRecord(api, `Выключен имплант: ${implant.displayName}`, api.model.timestamp);
       api.info(`Disabled implant:  mID=${implant.mID} ${implant.displayName}`);
 
       if (data.duration && Number.isInteger(data.duration)) {
@@ -196,12 +196,12 @@ function disableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
  * Обработчик события "включить имплант"
  * { mID: implant-model-id }
  */
-function enableImplantEvent(api: EventModelApi<DeusExModel>, data, event) {
+function enableImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
     if (implant) {
       implant.enabled = true;
-      helpers.addChangeRecord(api, `Включен имплант: ${implant.displayName}`, event.timestamp);
+      helpers.addChangeRecord(api, `Включен имплант: ${implant.displayName}`, api.model.timestamp);
       api.info(`Enabled implant:  mID=${implant.mID} ${implant.displayName}`);
     }
   }

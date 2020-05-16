@@ -134,7 +134,7 @@ function getEthicValues(model: Sr2020Character): Map<EthicScale, number> {
   return values;
 }
 
-export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }, event: Event) {
+export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   const trigger = findTrigger(data.id);
   const values = getEthicValues(api.model);
 
@@ -177,7 +177,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
   const gotNewAbility = updatePersonalEthic(api.model, values);
 
   if (valuesShifted) {
-    api.model.ethic.lockedUntil = event.timestamp + ETHIC_COOLDOWN_MS;
+    api.model.ethic.lockedUntil = api.model.timestamp + ETHIC_COOLDOWN_MS;
   }
 
   if (valuesShifted) {
@@ -230,11 +230,11 @@ function getGroup(groupId: string): EthicGroup {
   return group;
 }
 
-export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function discourseGroupAddAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   discourseGroupAddGeneric(api, data, true);
 }
 
-export function discourseGroupAddGuru(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function discourseGroupAddGuru(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   discourseGroupAddGeneric(api, data, false);
 }
 
@@ -249,15 +249,15 @@ export function discourseGroupAddGeneric(api: EventModelApi<Sr2020Character>, da
   if (consumeCharge) api.sendOutboundEvent(QrCode, locus.modelId, consume, { noClear: true });
 }
 
-export function discourseGroupExcludeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function discourseGroupExcludeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   discourseGroupExcludeGeneric(api, data, 0);
 }
 
-export function discourseGroupInquisitor1(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function discourseGroupInquisitor1(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   discourseGroupExcludeGeneric(api, data, 1);
 }
 
-export function discourseGroupInquisitor2(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function discourseGroupInquisitor2(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   discourseGroupExcludeGeneric(api, data, 2);
 }
 
@@ -268,7 +268,7 @@ export function discourseGroupExcludeGeneric(api: EventModelApi<Sr2020Character>
   if (recoveredCharges) api.sendOutboundEvent(QrCode, locus.modelId, unconsume, { amount: recoveredCharges });
 }
 
-export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
+export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: LocusQrData) {
   const group = getGroup(data.groupId);
   api.model.ethic.groups.push(group.id);
   api.model.passiveAbilities.push({
@@ -279,13 +279,13 @@ export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: Loc
   updateGroupEthicAbilities(api.model);
 }
 
-export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: LocusQrData, event: Event) {
+export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: LocusQrData) {
   api.model.ethic.groups = api.model.ethic.groups.filter((it) => it != data.groupId);
   api.model.passiveAbilities = api.model.passiveAbilities.filter((it) => it.id != data.groupId);
   updateGroupEthicAbilities(api.model);
 }
 
-export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {
+export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   getLocus(api, data);
   const charge = api.aquired(QrCode, data.qrCode!);
   if (!(charge && charge.type == 'locus_charge')) {
@@ -301,4 +301,4 @@ export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: Ac
 }
 
 // Intentionally don't do anything, the only purpose here is to set cooldown and add history record (which is done by useAbility).
-export function prophetAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, event: Event) {}
+export function prophetAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}

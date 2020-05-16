@@ -87,10 +87,10 @@ function dieHorribleDeath(api) {
   helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: 'Dementia' });
 }
 
-function takeNarcoEvent(api: EventModelApi<DeusExModel>, data, event) {
-  api.info(`Taking narco effect: ${event.data.id}`);
+function takeNarcoEvent(api: EventModelApi<DeusExModel>, data) {
+  api.info(`Taking narco effect: ${data.id}`);
 
-  const narco = event.data.narco ?? loadNarco(api, event.data.id);
+  const narco = data.narco ?? loadNarco(api, data.id);
 
   api.debug(JSON.stringify(narco));
 
@@ -127,13 +127,13 @@ function takeNarcoEvent(api: EventModelApi<DeusExModel>, data, event) {
   narco.history_record = narco.history_record ?? 'Вы приняли таблетку.';
 
   api.debug('Narco will add history record ' + narco.history_record);
-  helpers.addChangeRecord(api, narco.history_record, event.timestamp);
+  helpers.addChangeRecord(api, narco.history_record, api.model.timestamp);
 }
 
 /**
  * Remove narco modifier by id
  */
-function stopNarcoModifier(api: EventModelApi<DeusExModel>, data, event) {
+function stopNarcoModifier(api: EventModelApi<DeusExModel>, data) {
   api.info(`Removing narco effect ${data.mID}`);
   if (data.mID) {
     const modifier = api.getModifierById(data.mID);

@@ -2,7 +2,7 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import { Event, EventModelApi } from 'interface/src/models/alice-model-engine';
+import { EventModelApi } from 'interface/src/models/alice-model-engine';
 import helpers = require('../helpers/model-helper');
 import { OrganismModel } from 'magellan-models/helpers/basic-types';
 
@@ -20,7 +20,7 @@ interface AddChangeRecordData {
   timestamp?: number;
 }
 
-function addChangeRecord(api: EventModelApi<OrganismModel>, data: AddChangeRecordData, _: Event) {
+function addChangeRecord(api: EventModelApi<OrganismModel>, data: AddChangeRecordData) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }

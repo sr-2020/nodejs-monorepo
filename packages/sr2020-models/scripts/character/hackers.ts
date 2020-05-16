@@ -1,4 +1,4 @@
-import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import {
   increaseBody,
@@ -28,7 +28,7 @@ const kDumpshockModifier: DumpshockModifier = {
   ],
 };
 
-export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}, event: Event) {
+export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Цель не находится в мясном теле.');
   }
@@ -37,19 +37,19 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}, event: 
     healthStateTransition(api, 'clinically_dead');
   }
 
-  adjustDumpshock(api, { amount: 1 }, event);
+  adjustDumpshock(api, { amount: 1 });
 
   sendNotificationAndHistoryRecord(api, 'Дампшок!', 'Вы испытали дампшок! Клиническая смерть.');
   api.sendPubSubNotification('dumpshock', { characterId: api.model.modelId });
 }
 
-export function temporaryAntiDumpshock(api: EventModelApi<Sr2020Character>, data: { durationInMinutes: number }, event: Event) {
-  if (adjustDumpshock(api, { amount: -1 }, event)) {
+export function temporaryAntiDumpshock(api: EventModelApi<Sr2020Character>, data: { durationInMinutes: number }) {
+  if (adjustDumpshock(api, { amount: -1 })) {
     api.setTimer(cuid(), duration(data.durationInMinutes, 'minutes'), adjustDumpshock, { amount: 1 });
   }
 }
 
-export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event): boolean {
+export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amount: number }): boolean {
   const m = api.getModifierById(kDumpshockModifier.mID);
   if (m) {
     if (m.amount + data.amount >= 0) {

@@ -1,12 +1,12 @@
 import { MetaRace, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { duration } from 'moment';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerPeriod = duration(1, 'hour');
 const kEssenceLostPerHungerTick = 50;
 
-export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }, _: Event) {
+export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
   if (api.model.metarace == data.race) return;
   api.model.metarace = data.race;
 
@@ -17,7 +17,7 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
   }
 }
 
-export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}) {
   api.setTimer(kHmhvvHungerTimer, kHmhvvHungerPeriod, hungerTick, {});
   api.model.essenceDetails.gap += Math.min(kEssenceLostPerHungerTick, api.workModel.essence);
   api.sendNotification('Голод HMHVV', 'Вы испытываете нечеловеческий голод');

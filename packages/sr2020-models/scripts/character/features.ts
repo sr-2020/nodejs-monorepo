@@ -1,13 +1,13 @@
 import * as cuid from 'cuid';
 import { Sr2020Character, AddedPassiveAbility, AddedSpell, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { Event, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';
 import { ActiveAbility } from './active_abilities_library';
 import { cloneDeep } from 'lodash';
 import { getAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 
-export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   addFeatureToModel(api.model, data.id);
 }
 
@@ -70,7 +70,7 @@ function addSpell(model: Sr2020Character, spell: Spell) {
   });
 }
 
-export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+export function removeFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   removeFeatureFromModel(api.model, data.id);
 }
 

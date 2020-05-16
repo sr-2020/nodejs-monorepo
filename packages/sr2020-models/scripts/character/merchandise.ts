@@ -1,16 +1,16 @@
-import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllImplants, ImplantSlot } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
 import { reduceEssenceDueToImplantInstall, createGapDueToImplantUninstall } from './essence';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
-export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}) {
   // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
   api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
 }
 
-export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData, _: Event) {
+export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Импланты можно устанавливать только в мясное тело');
   }
@@ -61,7 +61,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
   });
 }
 
-export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }, _: Event) {
+export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Импланты можно удалять только из мясного тела');
   }

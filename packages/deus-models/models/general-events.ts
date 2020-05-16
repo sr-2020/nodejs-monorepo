@@ -7,7 +7,7 @@ import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import Chance = require('chance');
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 const chance = new Chance();
 
 /**
@@ -23,7 +23,7 @@ interface PutConditionData {
   duration?: number;
 }
 
-function putConditionEvent(api: EventModelApi<DeusExModel>, data: PutConditionData, _: Event) {
+function putConditionEvent(api: EventModelApi<DeusExModel>, data: PutConditionData) {
   if (data.text) {
     const cond = helpers.addCondition(api, {
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
@@ -51,7 +51,7 @@ interface RemoveConditionData {
   id?: string;
 }
 
-function removeConditionEvent(api: EventModelApi<DeusExModel>, data: RemoveConditionData, _: Event) {
+function removeConditionEvent(api: EventModelApi<DeusExModel>, data: RemoveConditionData) {
   if (data.id) {
     const i = api.model.conditions.findIndex((c) => c.id == data.id);
 
@@ -73,7 +73,7 @@ interface SendMessageData {
   text?: string;
 }
 
-function sendMessageEvent(api: EventModelApi<DeusExModel>, data: SendMessageData, _: Event) {
+function sendMessageEvent(api: EventModelApi<DeusExModel>, data: SendMessageData) {
   if (data.title && api.model.messages) {
     const message = {
       mID: helpers.uuidv4(),
@@ -100,7 +100,7 @@ interface ChangeMindCubeData {
   operations: string;
 }
 
-function changeMindCubeEvent(api: EventModelApi<DeusExModel>, data: ChangeMindCubeData, _: Event) {
+function changeMindCubeEvent(api: EventModelApi<DeusExModel>, data: ChangeMindCubeData) {
   api.error('=============================');
 
   if (data.operations) {
@@ -118,7 +118,7 @@ interface AddChangeRecordData {
   timestamp?: number;
 }
 
-function addChangeRecord(api: EventModelApi<DeusExModel>, data: AddChangeRecordData, _: Event) {
+function addChangeRecord(api: EventModelApi<DeusExModel>, data: AddChangeRecordData) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }
@@ -138,7 +138,7 @@ interface ChangeModelVariableData {
   value?: any;
 }
 
-function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeModelVariableData, _: Event) {
+function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeModelVariableData) {
   if (data.name && data.value) {
     const restricted = [
       '_id',
@@ -186,12 +186,12 @@ interface ChangeAndroidOwnerData {
   owner?: string;
 }
 
-function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAndroidOwnerData, event: Event) {
+function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAndroidOwnerData) {
   if (data.owner && api.model.profileType == 'robot') {
     api.info(`changeAndroidOwner:  ${api.model.owner} ===> ${data.owner}`);
 
     api.model.owner = data.owner;
-    helpers.addChangeRecord(api, `Изменен владелец андроида. Новый владелец: ${api.model.owner}`, event.timestamp);
+    helpers.addChangeRecord(api, `Изменен владелец андроида. Новый владелец: ${api.model.owner}`, api.model.timestamp);
   }
 }
 
@@ -217,7 +217,7 @@ function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAn
  *      ]
  * }
  */
-function changeMemoryEvent(api: EventModelApi<DeusExModel>, data, event: Event) {
+function changeMemoryEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.remove) {
     data.remove.forEach((mID) => {
       api.info(`changeMemory: remove element with ${mID}`);
@@ -251,7 +251,7 @@ function changeMemoryEvent(api: EventModelApi<DeusExModel>, data, event: Event) 
     });
 
     if (data.add.length) {
-      helpers.addChangeRecord(api, `Вы вспомнили о важных эпизодах в вашей жизни!`, event.timestamp);
+      helpers.addChangeRecord(api, `Вы вспомнили о важных эпизодах в вашей жизни!`, api.model.timestamp);
     }
   }
 }
@@ -267,7 +267,7 @@ interface ChangeInsuranceData {
   Level: number;
 }
 
-function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsuranceData, event: Event) {
+function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsuranceData) {
   if (data.Insurance && data.Level) {
     api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}`);
 
@@ -281,7 +281,7 @@ function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsur
       api.model.insuranceDiplayName = 'Нет';
     }
 
-    helpers.addChangeRecord(api, `Заменена страховка. Новая страховка: ${api.model.insuranceDiplayName}`, event.timestamp);
+    helpers.addChangeRecord(api, `Заменена страховка. Новая страховка: ${api.model.insuranceDiplayName}`, api.model.timestamp);
   }
 }
 

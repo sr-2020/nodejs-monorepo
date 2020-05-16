@@ -2,7 +2,7 @@ import { QrType, QrCode } from '@sr2020/interface/models/qr-code.model';
 import { Implant, kAllImplants } from '../character/implants_library';
 import { kAllPills, Pill } from '../character/chemo_library';
 import { kAllReagents, Reagent } from './reagents_library';
-import { UserVisibleError, EventModelApi, Event } from '@sr2020/interface/models/alice-model-engine';
+import { UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { consumeFood } from '../character/merchandise';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
@@ -127,7 +127,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
   throw new UserVisibleError('Неизвестный ID товара');
 }
 
-export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseExternalData, _: Event) {
+export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseExternalData) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }

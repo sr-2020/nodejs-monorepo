@@ -10,14 +10,14 @@ import { EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-mo
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
-function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data, event) {
+function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data) {
   const implant = api.getModifierById(data.mID);
 
   if (implant) {
     implant.immortalityReady = 'true';
 
     api.info(`serenityImmortalityReady: Serenity "Stage01" implant set to ready state`);
-    helpers.addChangeRecord(api, 'Обучение кибернетической нейронной сети завершено', event.timestamp);
+    helpers.addChangeRecord(api, 'Обучение кибернетической нейронной сети завершено', api.model.timestamp);
   }
 }
 
@@ -39,12 +39,12 @@ function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant)
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
-function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event) {
+function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data) {
   const implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {
     api.info(`serenityImmortalityGo: character not ready (no s_immortal01 implant or no ready flag). Stop processing`);
-    helpers.addChangeRecord(api, 'Модернизация не может быть проведена', event.timestamp);
+    helpers.addChangeRecord(api, 'Модернизация не может быть проведена', api.model.timestamp);
 
     return;
   }
@@ -85,7 +85,7 @@ function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data, event
   api.model.mind.C[7] = 100;
   api.model.mind.D[8] = 100;
 
-  helpers.addChangeRecord(api, 'Модернизация организма завершена', event.timestamp);
+  helpers.addChangeRecord(api, 'Модернизация организма завершена', api.model.timestamp);
 }
 
 module.exports = () => {

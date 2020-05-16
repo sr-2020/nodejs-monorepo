@@ -1,5 +1,5 @@
 import uuid = require('uuid');
-import { Event, Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { reduceManaDensity, recordSpellTrace, shiftSpellTraces, brasiliaEffect } from '../location/events';
@@ -48,7 +48,7 @@ interface MagicFeedback {
   amount: number;
 }
 
-export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   if (api.workModel.currentBody != 'physical' && api.workModel.currentBody != 'astral') {
     throw new UserVisibleError('Применять заклинания можно только в физическом или астральном теле.');
   }
@@ -133,7 +133,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
     reagentFeedbackIncrease - ritualFeedbackReduction,
     canHaveZeroFeedback,
   );
-  saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback), event);
+  saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback));
 
   addHistoryRecord(
     api,
@@ -157,11 +157,11 @@ function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: string, wha
   api.sendNotification('Успех', 'Артефакт зачарован!');
 }
 
-export function increaseResonanceByOne(api: EventModelApi<Sr2020Character>, _data: {}, _event: Event) {
+export function increaseResonanceByOne(api: EventModelApi<Sr2020Character>, _data: {}) {
   api.model.resonance++;
 }
 
-export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string }, _event: Event) {
+export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string }) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'скастовать спелл-заглушку', increaseResonanceSpell.name, 3);
   }
@@ -169,11 +169,11 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
-export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; amount: number }, _: Event) {
+export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; amount: number }) {
   api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: data.amount });
 }
 
-export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: string }, _: Event) {
+export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: string }) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
   }
@@ -181,7 +181,7 @@ export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { l
   api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
-export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string; targetCharacterId?: number }, event: Event) {
+export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string; targetCharacterId?: number }) {
   if (data.qrCode != undefined) {
     return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
   }
@@ -191,7 +191,7 @@ export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCod
     return;
   }
 
-  revive(api, data, event);
+  revive(api, data);
 }
 
 //
@@ -200,7 +200,6 @@ export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCod
 export function lightHealSpell(
   api: EventModelApi<Sr2020Character>,
   data: { targetCharacterId?: number; power: number; location: { id: number; manaLevel: number } },
-  event: Event,
 ) {
   if (data.targetCharacterId != undefined) {
     api.sendNotification('Успех', 'Заклинание совершено');
@@ -210,16 +209,12 @@ export function lightHealSpell(
   }
 }
 
-export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
+export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: number }) {
   const hpRestored = data.power;
   sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
 }
 
-export function groundHealSpell(
-  api: EventModelApi<Sr2020Character>,
-  data: { power: number; location: { id: number; manaLevel: number } },
-  event: Event,
-) {
+export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; location: { id: number; manaLevel: number } }) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(10 * data.power, 'minutes');
   const m = modifierFromEffect(groundHealEffect, {
@@ -243,12 +238,12 @@ export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   });
 }
 
-export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание совершено');
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, liveLongAndProsper, data);
 }
 
-export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { power: number }, event: Event) {
+export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { power: number }) {
   const hpIncrease = data.power;
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
@@ -256,7 +251,7 @@ export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { 
   addTemporaryModifier(api, m, d);
 }
 
-export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const hpIncrease = data.power;
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${d.asMinutes()} минут.`);
@@ -268,7 +263,7 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
 // Offensive spells
 //
 
-export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(8 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 3);
@@ -288,7 +283,7 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 // время каста 2 минуты, у мага на время T появляется пассивная способность “кинуть N молний”.
 // Снаряд выглядит как мягкий шар с длинным (не менее 2м) хвостом, и его попадание обрабатывается согласно правилам по боевке
 // (тяжелое магическое оружие). N=Мощь-2 (но не меньше 1), T=Мощь*10 минут
-export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 2);
   sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${d.asMinutes()} минут`);
@@ -312,7 +307,6 @@ export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
 export function fieldOfDenialSpell(
   api: EventModelApi<Sr2020Character>,
   data: { power: number; location: { id: number; manaLevel: number } },
-  event: Event,
 ) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(40, 'minutes');
@@ -336,20 +330,20 @@ export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 // время каста 2 минуты. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
 // последние 10+Мощь минут - список (название заклинания,  Мощь, Откат, (10+N)% ауры творца, пол и метарасу творца).
 // N=Мощь*5, но не более 40
-export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function trackpointSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = (10 + data.power) * 60;
   const auraPercentage = (10 + Math.min(40, data.power * 5)) * api.workModel.magicStats.auraReadingMultiplier;
-  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString(), event);
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
 }
 
 // время каста 5 минут. После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в
 // последние 60 минут - список (название заклинания,  Мощь, Откат, (20+N)% ауры творца, пол и метарасу творца). N=Мощь*10, но не более 60
-export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const durationInSeconds = 60 * 60;
   const auraPercentage = (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier;
-  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString(), event);
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
 }
 
 function generateAuraSubset(fullAura: string, percentage: number): string {
@@ -363,15 +357,9 @@ function splitAuraByDashes(aura: string): string {
   return aura.substr(0, 4) + '-' + aura.substr(4, 4) + '-' + aura.substr(8, 4) + '-' + aura.substr(12, 4) + '-' + aura.substr(16, 4);
 }
 
-function dumpSpellTraces(
-  api: EventModelApi<Sr2020Character>,
-  durationInSeconds: number,
-  auraPercentage: number,
-  locationId: string,
-  event: Event,
-) {
+function dumpSpellTraces(api: EventModelApi<Sr2020Character>, durationInSeconds: number, auraPercentage: number, locationId: string) {
   const location = api.aquired(Location, locationId);
-  const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= event.timestamp - durationInSeconds * 1000);
+  const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= api.model.timestamp - durationInSeconds * 1000);
   for (const spell of spellTraces) {
     spell.casterAura = splitAuraByDashes(generateAuraSubset(spell.casterAura, auraPercentage));
   }
@@ -381,7 +369,7 @@ function dumpSpellTraces(
 // время каста 5 минут. При активации заклинания в текущей локации у всех заклинаний с датой активации позже,
 // чем (Текущий момент - T1 минут), дата активации в следе сдвигается в прошлое на T2 минут
 // (то есть activation_moment = activation_moment - T2). T1=Мощь*5. T2=Мощь*4.
-export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   api.sendOutboundEvent(Location, data.location.id.toString(), shiftSpellTraces, {
     maxLookupSeconds: data.power * 5 * 60,
@@ -389,7 +377,7 @@ export function tempusFugitSpell(api: EventModelApi<Sr2020Character>, data: Spel
   });
 }
 
-export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   api.sendOutboundEvent(Location, data.location.id.toString(), brasiliaEffect, {
     durationMinutes: 8 * data.power,
@@ -400,7 +388,7 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 // Parameter-adjusting spells
 //
 
-export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = 1 + Math.max(0.1, 0.05 * data.power);
   const m = modifierFromEffect(multiplyAllDiscounts, { amount });
@@ -410,7 +398,7 @@ export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   });
 }
 
-export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = 1 - Math.min(0.9, 0.05 * data.power);
   const m = modifierFromEffect(multiplyAllDiscounts, { amount });
@@ -420,7 +408,7 @@ export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
   });
 }
 
-export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = -Math.max(1, data.power - 1);
   const m = modifierFromEffect(increaseCharisma, { amount });
@@ -430,7 +418,7 @@ export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   });
 }
 
-export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 2);
   const m = modifierFromEffect(increaseCharisma, { amount });
@@ -440,7 +428,7 @@ export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData,
   });
 }
 
-export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(120, 'minutes');
   const amount = 2 * data.power;
   const m = modifierFromEffect(increaseAuraMask, { amount });
@@ -450,7 +438,7 @@ export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: S
   });
 }
 
-export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
   const amount = -Math.max(1, data.power - 1);
   const m = modifierFromEffect(increaseResonance, { amount });
@@ -464,7 +452,7 @@ export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData, 
 // Helper functons
 //
 
-export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}, _: Event) {
+export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}) {
   api.model.spells = [];
 }
 
@@ -496,10 +484,10 @@ function applyAndGetMagicFeedback(
 }
 
 // Magic feedback implementation
-function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number, event: Event) {
+function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number) {
   api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, {
     spellName,
-    timestamp: event.timestamp,
+    timestamp: api.model.timestamp,
     casterAura: generateAuraSubset(api.workModel.magicStats.aura, api.workModel.magicStats.auraMarkMultiplier * 100),
     metarace: api.workModel.metarace,
     power: data.power,
@@ -511,7 +499,7 @@ export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Mod
   api.model.magic -= m.amount;
 }
 
-export function readCharacterAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function readCharacterAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const target = api.aquired(Sr2020Character, data.targetCharacterId!);
   const auraPercentage = 90 * api.workModel.magicStats.auraReadingMultiplier;
   sendNotificationAndHistoryRecord(
@@ -521,7 +509,7 @@ export function readCharacterAuraSpell(api: EventModelApi<Sr2020Character>, data
   );
 }
 
-export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData, event: Event) {
+export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const target = api.aquired(Location, data.location.id.toString());
   const auraPercentage = 100 * api.workModel.magicStats.auraReadingMultiplier;
   sendNotificationAndHistoryRecord(
@@ -531,26 +519,26 @@ export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data:
   );
 }
 
-export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: SpellData, _: Event) {
+export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const durationInMinutes = 10 * data.power;
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, temporaryAntiDumpshock, { durationInMinutes });
 }
 
-export function dummySpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
   api.sendNotification('Спелл еще не реализован :(', 'Приходите завтра. Или послезавтра?');
 }
 
-export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
 }
 
-export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   api.sendNotification('Спелл еще не реализован :(', 'Площадные заклинания не реализованы.');
 }
 
-export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never, _event: Event) {
+export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   api.sendNotification('Спелл еще не реализован :(', 'Заклинания влияющие на уровень маны не реализованы.');
 }

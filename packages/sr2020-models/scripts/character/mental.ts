@@ -1,5 +1,5 @@
 import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { EventModelApi, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import Chance = require('chance');
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
@@ -29,7 +29,7 @@ function mentalDefence(character: Sr2020Character) {
   }
 }
 
-export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility, event: Event) {
+export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
   const code: MentalAbilityData = {
     attack: mentalAttack(api.workModel),
     attackerId: api.model.modelId,
@@ -40,7 +40,7 @@ export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: Adde
   api.sendOutboundEvent(QrCode, api.model.mentalQrId.toString(), writeMentalAbility, code);
 }
 
-export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: MentalQrData, event: Event) {
+export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: MentalQrData) {
   if (api.workModel.currentBody != 'physical') {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: false });
     api.sendNotification('Успех!', 'Ментальные способности не действуют на ваше тело.');
@@ -55,11 +55,11 @@ export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: 
   }
 }
 
-export function scannedConsumedMentalAbility(api: EventModelApi<Sr2020Character>, data: never, event: Event) {
+export function scannedConsumedMentalAbility(api: EventModelApi<Sr2020Character>, data: never) {
   throw new UserVisibleError('Действие этой способности уже закончилось');
 }
 
-export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { success: boolean }, event: Event) {
+export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { success: boolean }) {
   if (data.success) {
     api.sendNotification('Успех!', 'Ваша способность подействовала.');
   } else {
@@ -67,27 +67,23 @@ export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { s
   }
 }
 
-export function increaseTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+export function increaseTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 24 * 60 });
 }
 
-export function reduceTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+export function reduceTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: -8, durationMinutes: 24 * 60 });
 }
 
-export function iDontTrustAnybody(api: EventModelApi<Sr2020Character>, _data: FullActiveAbilityData, _: Event) {
+export function iDontTrustAnybody(api: EventModelApi<Sr2020Character>, _data: FullActiveAbilityData) {
   api.sendSelfEvent(adjustMentalProtectionEvent, { amount: 8, durationMinutes: 30 });
 }
 
-export function youDontTrustAnybody(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+export function youDontTrustAnybody(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 30 });
 }
 
-export function adjustMentalProtectionEvent(
-  api: EventModelApi<Sr2020Character>,
-  data: { amount: number; durationMinutes: number },
-  _: Event,
-) {
+export function adjustMentalProtectionEvent(api: EventModelApi<Sr2020Character>, data: { amount: number; durationMinutes: number }) {
   addTemporaryModifier(
     api,
     modifierFromEffect(increaseMentalProtection, { amount: data.amount }),

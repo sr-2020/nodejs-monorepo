@@ -1,4 +1,4 @@
-import { EventModelApi, Event, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addTemporaryModifier, modifierFromEffect, validUntil, addHistoryRecord, sendNotificationAndHistoryRecord } from './util';
@@ -19,7 +19,7 @@ import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
 interface InstantEffect {
-  handler: (api: EventModelApi<Sr2020Character>, data: { amount: number }, event: Event) => void;
+  handler: (api: EventModelApi<Sr2020Character>, data: { amount: number }) => void;
   amount: number;
 }
 
@@ -706,7 +706,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 ];
 
-export function consumeChemo(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData, _: Event) {
+export function consumeChemo(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Только мясное тело может принимать препараты!');
   }
@@ -729,7 +729,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: Merchand
   api.sendPubSubNotification('pill_consumption', { characterId: api.model.modelId, id: data.id, lifestyle: data.lifestyle });
 }
 
-export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }, _: Event) {
+export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }) {
   let effectsCount = 0;
   let effectMessage = '';
   for (const element of kAllElements) {
@@ -794,12 +794,12 @@ export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: M
   api.model.chemo.concentration[m.element] += m.amount;
 }
 
-export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}) {
   if (api.model.healthState != 'wounded') return;
   healthStateTransition(api, 'healthy');
 }
 
-export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   for (const timerId in api.model.timers ?? {}) {
     const timer = api.model.timers![timerId];
     if (timer.name.startsWith('feedback-recovery-')) {
@@ -857,39 +857,39 @@ export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: Modifie
   });
 }
 
-export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   for (const ability of api.model.activeAbilities) {
     ability.cooldownUntil -= duration(ability.cooldownMinutes, 'minutes').asMilliseconds() * data.amount;
   }
 }
 
-export function cleanAllСhemo(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+export function cleanAllСhemo(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   for (const element of kAllElements.filter((it) => it != 'elba')) {
     const mods = [...api.getModifiersByClass(`${element}-effect`), ...api.getModifiersByClass(`${element}-concentration`)];
     for (const m of mods) api.removeModifier(m.mID);
   }
 }
 
-export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amount: number }, _: Event) {
+export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   const addictionsToCure = kAllElements.filter((element) => element != 'elba' || data.amount == 1);
   for (const element of addictionsToCure) {
     removeAddiction(api, element);
   }
 }
 
-export function uranusRecoverFromClinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+export function uranusRecoverFromClinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}) {
   if (api.workModel.healthState != 'biologically_dead') {
     healthStateTransition(api, 'healthy');
   }
 }
 
-export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, _data: {}) {
   if (api.workModel.healthState == 'wounded') {
     healthStateTransition(api, 'healthy');
   }
 }
 
-export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}, _: Event) {
+export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}) {
   healthStateTransition(api, 'biologically_dead');
 }
 
@@ -943,7 +943,7 @@ function resetAddiction(api: EventModelApi<Sr2020Character>, element: keyof Conc
   }
 }
 
-export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { element: keyof Concentrations }, _: Event) {
+export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { element: keyof Concentrations }) {
   const m = api.getModifierById(`${data.element}-addiction`);
   if (!m) return;
   const addiction = m as Addiction;

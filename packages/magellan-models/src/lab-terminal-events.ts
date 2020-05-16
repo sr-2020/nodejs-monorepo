@@ -1,4 +1,4 @@
-import { Event, EventModelApi } from 'interface/src/models/alice-model-engine';
+import { EventModelApi } from 'interface/src/models/alice-model-engine';
 import * as shuffle from 'shuffle-array';
 import { BiologicalSystems, LabTerminalRefillData, OrganismModel, organismSystemsIndices, MedicModel } from '../helpers/basic-types';
 import { hasMedicViewModel } from '../helpers/view-model-helper';
@@ -71,7 +71,7 @@ const tests: { [testName: string]: (model: OrganismModel) => TestResult } = {
   },
 };
 
-function medicRunLabTest(api: EventModelApi<MedicModel>, data: RunLabTestData, event: Event) {
+function medicRunLabTest(api: EventModelApi<MedicModel>, data: RunLabTestData) {
   if (!hasMedicViewModel(api.model)) {
     api.error('medic-run-lab-test event sent to non-medic account');
     return;
@@ -80,7 +80,7 @@ function medicRunLabTest(api: EventModelApi<MedicModel>, data: RunLabTestData, e
   if (api.model.numTests <= 0) {
     // tslint:disable-next-line:no-shadowed-variable
     const historyEntry = {
-      timestamp: event.timestamp,
+      timestamp: api.model.timestamp,
       patientId: data.model.modelId,
       patientFullName: data.model.firstName + ' ' + data.model.lastName,
       type: 'Ошибка',
@@ -101,7 +101,7 @@ function medicRunLabTest(api: EventModelApi<MedicModel>, data: RunLabTestData, e
   const testResult: TestResult = testFunction(data.model);
 
   const historyEntry = {
-    timestamp: event.timestamp,
+    timestamp: api.model.timestamp,
     patientId: data.model.modelId,
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     type: testResult.type,
@@ -116,14 +116,14 @@ interface AddCommentData {
   model: any;
 }
 
-function medicAddComment(api: EventModelApi<MedicModel>, data: AddCommentData, event: Event) {
+function medicAddComment(api: EventModelApi<MedicModel>, data: AddCommentData) {
   if (!hasMedicViewModel(api.model)) {
     api.error('medic-add-comment event sent to non-medic account');
     return;
   }
 
   const historyEntry = {
-    timestamp: event.timestamp,
+    timestamp: api.model.timestamp,
     patientId: data.model._id,
     patientFullName: data.model.firstName + ' ' + data.model.lastName,
     text: data.text,
@@ -133,7 +133,7 @@ function medicAddComment(api: EventModelApi<MedicModel>, data: AddCommentData, e
   api.model.patientHistory.push(historyEntry);
 }
 
-function labTerminalRefill(api: EventModelApi<MedicModel>, data: LabTerminalRefillData, _: Event) {
+function labTerminalRefill(api: EventModelApi<MedicModel>, data: LabTerminalRefillData) {
   const counter = api.aquiredDeprecated('counters', data.uniqueId);
   if (!counter) {
     api.error("labTerminalRefill: can't aquire lab terminal refill code", { uniqueId: data.uniqueId });

@@ -1,10 +1,10 @@
-import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
 import { BodyStorageQrData, LocusQrData, MentalQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
-export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }, event: Event) {
+export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
     throw new UserVisibleError('QR-код уже использован!');
   }
@@ -13,7 +13,7 @@ export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean },
     if (isMerchandise(api)) {
       makeEmptyBox(api);
     } else {
-      clear(api, event);
+      clear(api);
     }
   }
 }
@@ -25,7 +25,7 @@ export function unconsume(api: EventModelApi<QrCode>, data: { amount?: number })
   api.model.usesLeft += data.amount ?? 1;
 }
 
-export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Event) {
+export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }
@@ -33,7 +33,7 @@ export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>, _: Eve
   api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: undefined };
 }
 
-export function clear(api: EventModelApi<QrCode>, _: Event) {
+export function clear(api: EventModelApi<QrCode>) {
   api.model = {
     modelId: api.model.modelId,
     timestamp: api.model.timestamp,
@@ -64,7 +64,7 @@ export interface MentalAbilityData {
   description: string;
 }
 
-export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbilityData, event: Event) {
+export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbilityData) {
   api.model.usesLeft = 1;
   api.model.type = 'ability';
   api.model.name = 'Способность ' + data.name;
@@ -74,10 +74,10 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbili
   api.model.modifiers = [];
   api.model.timers = {};
 
-  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, event);
+  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, {});
 }
 
-export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
+export function clearMentalAbility(api: EventModelApi<QrCode>, data: {}) {
   (api.model as TypedQrCode<MentalQrData>) = {
     usesLeft: 100,
     description: '',
@@ -92,7 +92,7 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, _: Event) {
   };
 }
 
-export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: string; numberOfUses: number }, _: Event) {
+export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: string; numberOfUses: number }) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }
@@ -120,7 +120,7 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
   };
 }
 
-export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: string }, event: Event) {
+export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: string }) {
   const qrData: BodyStorageQrData = {};
 
   api.model = {
