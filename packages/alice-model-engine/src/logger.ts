@@ -2,7 +2,7 @@ import * as winston from 'winston';
 import { LogLevel, LogSource } from 'interface/src/models/alice-model-engine';
 
 export const logger = winston.createLogger({
-  level: 'info',
+  level: 'warn',
   transports: [new winston.transports.Console()],
 });
 
