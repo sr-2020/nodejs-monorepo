@@ -24,7 +24,7 @@ import {
   iDontTrustAnybody,
   youDontTrustAnybody,
 } from './mental';
-import { reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import { autodocHeal, autodocRevive, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import {
@@ -53,6 +53,30 @@ const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
     allowedTypes: ['HEALTHY_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
+const kMedcartHealthyBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Пациент',
+    allowedTypes: ['HEALTHY_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
+const kMedcartWoundedBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Пациент',
+    allowedTypes: ['WOUNDED_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
+const kMedcartDeadBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Пациент',
+    allowedTypes: ['CLINICALLY_DEAD_BODY'],
     field: 'targetCharacterId',
   },
 ];
@@ -1402,12 +1426,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить легкое ранение (1)',
     // 515
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kHealthyBodyTargeted,
+    targetsSignature: kMedcartHealthyBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocHeal.name,
   },
 
   {
@@ -1416,12 +1439,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить легкое ранение (2)',
     // 516
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kHealthyBodyTargeted,
+    targetsSignature: kMedcartHealthyBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocHeal.name,
   },
 
   {
@@ -1430,12 +1452,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить легкое ранение (3)',
     // 517
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kHealthyBodyTargeted,
+    targetsSignature: kMedcartHealthyBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocHeal.name,
   },
 
   {
@@ -1444,12 +1465,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить тяжелое ранение (1)',
     // 518
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMedcartWoundedBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocRevive.name,
   },
 
   {
@@ -1458,12 +1478,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить тяжелое ранение (2)',
     // 519
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMedcartWoundedBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocRevive.name,
   },
 
   {
@@ -1472,12 +1491,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить тяжелое ранение (3)',
     // 520
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMedcartWoundedBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: autodocRevive.name,
   },
 
   {
@@ -1486,12 +1504,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вылечить состояние КС',
     // 521
     // Активная абилка Медикарта
-    // TODO(https://trello.com/c/MUwUHRoQ/360-реализовать-активные-абилки-медкарта): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kMedcartDeadBodyTargeted,
     cooldownMinutes: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: reviveOnTarget.name,
   },
 ];
 
