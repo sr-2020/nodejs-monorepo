@@ -5,10 +5,11 @@ import {
   ViewModelApiInterface,
   EventModelApi,
   EffectModelApi,
+  Modifier,
 } from 'interface/src/models/alice-model-engine';
 
 export type EventCallback<T extends EmptyModel, U = any> = (api: EventModelApi<T>, data: U, event: Event) => void;
-export type EffectCallback<T extends EmptyModel, U = any> = (api: EffectModelApi<T>, data: U, event: Event) => void;
+export type EffectCallback<T extends EmptyModel> = (api: EffectModelApi<T>, m: Modifier) => void;
 
 export type ViewModelCallback<T extends EmptyModel> = (api: ViewModelApiInterface<T>, model: any) => any;
 
