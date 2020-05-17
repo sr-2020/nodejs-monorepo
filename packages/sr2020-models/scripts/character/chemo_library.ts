@@ -13,7 +13,7 @@ export const kAllPills: Pill[] = [
   { id: 'rainbow', name: 'Радуга', content: { radium: 200, silicon: 100, opium: 100 } },
   { id: 'jack', name: 'Жак', content: { custodium: 200, chromium: 100, magnium: 100 } },
   { id: 'cairi', name: 'Каири', content: { junius: 200, custodium: 100, chromium: 100 } },
-  { id: 'vampire-saliva', name: 'Слюна вампира', content: { vampirium: 200 } },
+  { id: 'vampire-saliva', name: 'Слюна вампира', content: { vampirium: 9000 } },
   { id: 'gelteq-p', name: 'Гельтек-П', content: { teqgel: 100 } },
   { id: 'gelteq-s', name: 'Гельтек-С', content: { teqgel: 50 } },
   { id: 'iodomarin-p', name: 'Йодомарин-П', content: { iodine: 200, junius: 60, custodium: 40 } },
