@@ -15,6 +15,8 @@ import {
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -970,4 +972,11 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
   } else {
     api.error(`Incorrect addiction stage: ${addiction.stage}`);
   }
+}
+
+export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const pill = api.aquired(QrCode, data.pillId!);
+  if (pill.type == 'pill') throw new UserVisibleError('Это не препарат');
+
+  api.sendNotification('Фармацевтика', `Перед вами препарат ${pill.name}`);
 }

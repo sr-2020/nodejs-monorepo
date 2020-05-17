@@ -39,6 +39,7 @@ import {
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
+import { getPillNameAbility } from '@sr2020/sr2020-models/scripts/character/chemo';
 
 export type TargetType = 'scan' | 'show';
 
@@ -1364,7 +1365,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Отсканируй препарати и пойми, что за это',
     // 514
     // При активации аблики игрок сканирует куар-код с препаратом и видит его название
-    // TODO(https://trello.com/c/ac3aDyG0/329-реализовать-абилку-фармацевтика): Add proper implementation
     target: 'scan',
     targetsSignature: [
       {
@@ -1374,8 +1374,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     minimalEssence: 0,
-    eventType: dummyAbility.name,
-    cooldownMinutes: 9000,
+    eventType: getPillNameAbility.name,
+    cooldownMinutes: 0,
   },
 
   {
