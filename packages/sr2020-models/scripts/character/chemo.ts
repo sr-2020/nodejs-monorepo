@@ -1007,7 +1007,7 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
 
 export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const pill = api.aquired(QrCode, data.pillId!);
-  if (pill.type == 'pill') throw new UserVisibleError('Это не препарат');
+  if (pill.type != 'pill') throw new UserVisibleError('Это не препарат');
 
   api.sendNotification('Фармацевтика', `Перед вами препарат ${pill.name}`);
 }
