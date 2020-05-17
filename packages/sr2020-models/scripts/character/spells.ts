@@ -15,8 +15,6 @@ import {
   addTemporaryModifierEvent,
   removeModifier,
 } from './util';
-import { AURA_LENGTH } from './consts';
-import Chance = require('chance');
 import { getAllActiveAbilities } from './library_registrator';
 import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance, increaseMaxMeatHp } from './basic_effects';
 import { duration, Duration } from 'moment';
@@ -24,9 +22,7 @@ import { kAllSpells, Spell } from './spells_library';
 import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-models/scripts/character/hackers';
-const chance = new Chance();
-
-const kUnknowAuraCharacter = '*';
+import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-models/scripts/character/aura_utils';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -344,17 +340,6 @@ export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   const durationInSeconds = 60 * 60;
   const auraPercentage = (20 + Math.min(60, data.power * 10)) * api.workModel.magicStats.auraReadingMultiplier;
   dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
-}
-
-function generateAuraSubset(fullAura: string, percentage: number): string {
-  const symbolsRead = Math.min(AURA_LENGTH, Math.floor((AURA_LENGTH * percentage) / 100));
-  const positions = Array.from(Array(AURA_LENGTH).keys());
-  const picked = chance.pickset(positions, symbolsRead);
-  return positions.map((i) => (picked.includes(i) ? fullAura[i] : kUnknowAuraCharacter)).join('');
-}
-
-function splitAuraByDashes(aura: string): string {
-  return aura.substr(0, 4) + '-' + aura.substr(4, 4) + '-' + aura.substr(8, 4) + '-' + aura.substr(12, 4) + '-' + aura.substr(16, 4);
 }
 
 function dumpSpellTraces(api: EventModelApi<Sr2020Character>, durationInSeconds: number, auraPercentage: number, locationId: string) {
