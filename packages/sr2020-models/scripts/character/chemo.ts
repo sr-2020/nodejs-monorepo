@@ -59,6 +59,26 @@ export const kAllElements: Array<keyof Concentrations> = [
   'vampirium',
 ];
 
+const kElementNames: { [key in keyof Concentrations]: string } = {
+  argon: 'Аргон',
+  barium: 'Барий',
+  chromium: 'Хром',
+  custodium: 'Кустодий',
+  elba: 'Эльба',
+  iconium: 'Иконий',
+  iodine: 'Йод',
+  junius: 'Юний',
+  magnium: 'Магний',
+  moscovium: 'Московий',
+  opium: 'Опий',
+  polonium: 'Полоний',
+  radium: 'Радий',
+  silicon: 'Силикон',
+  teqgel: 'Текгель',
+  uranium: 'Уранус',
+  vampirium: 'Слюна вампира',
+};
+
 export const kAllChemoEffects: ChemoEffect[] = [
   // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Implement teqgel.
   {
@@ -898,6 +918,7 @@ export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}) {
 interface Addiction extends Modifier {
   stage: number;
   amount: -1;
+  element: keyof Concentrations;
 }
 
 function createAddiction(element: keyof Concentrations): Addiction {
@@ -909,9 +930,19 @@ function createAddiction(element: keyof Concentrations): Addiction {
     effects: [
       { enabled: false, handler: increaseAllBaseStats.name, type: 'normal' },
       { enabled: false, handler: increaseMaxMeatHp.name, type: 'normal' },
+      { enabled: true, handler: addAddictionPassiveAbility.name, type: 'normal' },
     ],
     amount: -1,
+    element,
   };
+}
+
+export function addAddictionPassiveAbility(api: EffectModelApi<Sr2020Character>, m: Addiction) {
+  api.model.passiveAbilities.push({
+    id: `${m.element}-addiction-passive-ability`,
+    name: 'Зависимость',
+    description: `от вещества ${kElementNames[m.element]}`,
+  });
 }
 
 function addictionTimerName(element: keyof Concentrations) {
