@@ -8,6 +8,7 @@ import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { addFeatureToModel } from '@sr2020/sr2020-models/scripts/character/features';
+import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-models/scripts/character/aura_utils';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -226,4 +227,29 @@ export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data:
 
 export function addMyScoringEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   addFeatureToModel(api.model, 'mу-scoring');
+}
+
+/**
+ * Silentium est aurum implementation pieces
+ */
+export function changeAuraAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, changeAuraEvent, {});
+}
+
+export function changeAuraEvent(api: EventModelApi<Sr2020Character>, data: {}) {
+  addTemporaryModifier(api, modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(20) }), duration(1, 'hour'));
+}
+
+export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  const mask: string = m.mask;
+  const auraChars: string[] = [];
+  for (let i = 0; i < mask.length; ++i) {
+    if (mask[i] != kUnknowAuraCharacter) {
+      auraChars.push(mask[i]);
+    } else {
+      auraChars.push(api.model.magicStats.aura[i]);
+    }
+  }
+
+  api.model.magicStats.aura = auraChars.join('');
 }

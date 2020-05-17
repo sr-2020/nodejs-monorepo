@@ -2,13 +2,29 @@ import { AURA_LENGTH } from './consts';
 import Chance = require('chance');
 const chance = new Chance();
 
-const kUnknowAuraCharacter = '*';
+export const kUnknowAuraCharacter = '*';
+
+function getAllAuraPositions(): number[] {
+  return Array.from(Array(AURA_LENGTH).keys());
+}
+
+function getRandomAuraPositions(percentage: number): number[] {
+  const symbolsRead = Math.min(AURA_LENGTH, Math.floor((AURA_LENGTH * percentage) / 100));
+  return chance.pickset(getAllAuraPositions(), symbolsRead);
+}
 
 export function generateAuraSubset(fullAura: string, percentage: number): string {
-  const symbolsRead = Math.min(AURA_LENGTH, Math.floor((AURA_LENGTH * percentage) / 100));
-  const positions = Array.from(Array(AURA_LENGTH).keys());
-  const picked = chance.pickset(positions, symbolsRead);
-  return positions.map((i) => (picked.includes(i) ? fullAura[i] : kUnknowAuraCharacter)).join('');
+  const picked = getRandomAuraPositions(percentage);
+  return getAllAuraPositions()
+    .map((i) => (picked.includes(i) ? fullAura[i] : kUnknowAuraCharacter))
+    .join('');
+}
+
+export function generateRandomAuraMask(percentage: number): string {
+  const picked = getRandomAuraPositions(percentage);
+  return getAllAuraPositions()
+    .map((i) => (picked.includes(i) ? chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }) : kUnknowAuraCharacter))
+    .join('');
 }
 
 export function splitAuraByDashes(aura: string): string {

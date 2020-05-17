@@ -16,6 +16,7 @@ import {
   letHimPay,
   reRent,
   investigateScoring,
+  changeAuraAbility,
 } from './active_abilities';
 import {
   useMentalAbility,
@@ -913,7 +914,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Временно частично изменить цели ее ауру. Требуемая эссенция: больше 4',
     // 375
     // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
-    // TODO(https://trello.com/c/qATKkQtq/140-магия-реализовать-способности-связанные-с-аурой-silentium-est-aurum-light-step-dictator-control)
     target: 'scan',
     targetsSignature: [
       {
@@ -924,7 +924,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: 40,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: changeAuraAbility.name,
   },
 
   {

@@ -26,4 +26,32 @@ describe('Active abilities', function() {
     await fixture.advanceTime(duration(31, 'second'));
     expect((await fixture.getCharacter()).workModel.healthState).equal('healthy');
   });
+
+  it('Silentium est aurum', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // Ability user
+    await fixture.saveCharacter({ modelId: '2' }); // Target
+    const startingAura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+
+    await fixture.addCharacterFeature('silentium-est-aurum', '1');
+    await fixture.useAbility({ id: 'silentium-est-aurum', targetCharacterId: '2' }, '1');
+
+    {
+      const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+      expect(aura.length).equal(startingAura.length);
+      let sameCharacters = 0;
+      for (let i = 0; i < aura.length; ++i) {
+        expect(aura[i].match(/[a-z]/));
+        if (aura[i] == startingAura[i]) sameCharacters++;
+      }
+      expect(sameCharacters).greaterThanOrEqual(aura.length * 0.8);
+      expect(sameCharacters).lessThan(aura.length);
+    }
+
+    await fixture.advanceTime(duration(1, 'hour'));
+
+    {
+      const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+      expect(aura).equal(startingAura);
+    }
+  });
 });
