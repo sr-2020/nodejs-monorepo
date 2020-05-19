@@ -28,7 +28,7 @@ describe('Rigger abilities', () => {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'analyzeBody', data: { targetCharacterId: '2' } }, 1);
       expect(workModel.analyzedBody).ok();
-      expect(workModel.analyzedBody?.essence).to.equal(450);
+      expect(workModel.analyzedBody?.essence).to.equal(480);
       expect(workModel.analyzedBody?.implants).to.containDeep([{ id: 'rcc-beta' }]);
     }
 
@@ -60,9 +60,9 @@ describe('Rigger abilities', () => {
         ],
       });
       expect(patientWorkModel).to.containDeep({
-        essence: 450,
+        essence: 480,
         essenceDetails: {
-          used: 150,
+          used: 120,
           gap: 0,
         },
         implants: [
@@ -83,10 +83,10 @@ describe('Rigger abilities', () => {
       expect(workModel.analyzedBody?.implants.length).to.equal(0);
       expect(patientWorkModel.implants.length).to.equal(0);
       expect(patientWorkModel).to.containDeep({
-        essence: 450,
+        essence: 480,
         essenceDetails: {
           used: 0,
-          gap: 150,
+          gap: 120,
         },
       });
     }
