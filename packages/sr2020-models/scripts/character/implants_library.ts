@@ -12,6 +12,16 @@ import {
   increaseMaxTimeInVr,
   increaseResonanceForControl,
 } from './basic_effects';
+import {
+  onBadassNanohiveInstall,
+  onBadassNanohiveRemove,
+  onHorizonNanohiveInstall,
+  onHorizonNanohiveRemove,
+  onKokkoroNanohiveInstall,
+  onKokkoroNanohiveRemove,
+  onKoshcgheiNanohiveInstall,
+  onKoshcgheiNanohiveRemove,
+} from '@sr2020/sr2020-models/scripts/character/nanohives';
 
 export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
 
@@ -965,6 +975,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 0.9,
     installDifficulty: 6,
     modifiers: [],
+    onInstallEvent: onKokkoroNanohiveInstall.name,
+    onRemoveEvent: onKokkoroNanohiveRemove.name,
   },
   {
     id: 'nanohive-koshchej-1',
@@ -976,6 +988,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 0.9,
     installDifficulty: 6,
     modifiers: [],
+    onInstallEvent: onKoshcgheiNanohiveInstall.name,
+    onRemoveEvent: onKoshcgheiNanohiveRemove.name,
   },
   {
     id: 'nanohive-horizon-1',
@@ -987,6 +1001,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 0.9,
     installDifficulty: 6,
     modifiers: [],
+    onInstallEvent: onHorizonNanohiveInstall.name,
+    onRemoveEvent: onHorizonNanohiveRemove.name,
   },
   {
     id: 'nanohive-badass-1',
@@ -998,6 +1014,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 0.9,
     installDifficulty: 6,
     modifiers: [],
+    onInstallEvent: onBadassNanohiveInstall.name,
+    onRemoveEvent: onBadassNanohiveRemove.name,
   },
   {
     id: 'nanohive-kokkoro-2',
@@ -1009,6 +1027,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 1,
     installDifficulty: 3,
     modifiers: [],
+    onInstallEvent: onKokkoroNanohiveInstall.name,
+    onRemoveEvent: onKokkoroNanohiveRemove.name,
   },
   {
     id: 'nanohive-koshchej-2',
@@ -1020,6 +1040,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 1,
     installDifficulty: 3,
     modifiers: [],
+    onInstallEvent: onKoshcgheiNanohiveInstall.name,
+    onRemoveEvent: onKoshcgheiNanohiveRemove.name,
   },
   {
     id: 'nanohive-horizon-2',
@@ -1031,6 +1053,8 @@ export const kAllImplants: Implant[] = [
     essenceCost: 1,
     installDifficulty: 3,
     modifiers: [],
+    onInstallEvent: onHorizonNanohiveInstall.name,
+    onRemoveEvent: onHorizonNanohiveRemove.name,
   },
   {
     id: 'nanohive-badass-2',
@@ -1042,5 +1066,7 @@ export const kAllImplants: Implant[] = [
     essenceCost: 1,
     installDifficulty: 3,
     modifiers: [],
+    onInstallEvent: onBadassNanohiveInstall.name,
+    onRemoveEvent: onBadassNanohiveRemove.name,
   },
 ];
