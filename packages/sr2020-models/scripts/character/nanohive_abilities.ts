@@ -1,0 +1,32 @@
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
+import { addTemporaryPassiveAbility } from '@sr2020/sr2020-models/scripts/character/features';
+import { duration } from 'moment';
+import { addTemporaryModifier, modifierFromEffect } from '@sr2020/sr2020-models/scripts/character/util';
+import { increaseMaxMeatHp } from '@sr2020/sr2020-models/scripts/character/basic_effects';
+
+function reduceEssence(api: EventModelApi<Sr2020Character>) {
+  const price = Math.min(5, api.workModel.essence);
+  api.model.essenceDetails.gap += price;
+}
+
+export function nanohiveArmorAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  reduceEssence(api);
+  addTemporaryPassiveAbility(api, 'stone-skin-effect', duration(15, 'minutes'));
+}
+
+export function nanohiveShooterAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  reduceEssence(api);
+  addTemporaryPassiveAbility(api, 'automatic-weapons-unlock', duration(15, 'minutes'));
+}
+
+export function nanohiveHealhAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  reduceEssence(api);
+  addTemporaryModifier(api, modifierFromEffect(increaseMaxMeatHp, { amount: 2 }), duration(15, 'minutes'));
+}
+
+export function nanohiveBackupAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  reduceEssence(api);
+  // Do nothing intentionally - the player knows what to do
+}

@@ -1883,6 +1883,19 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   {
+    id: 'stone-skin-effect',
+    name: 'Каменная кожа ',
+    description: 'С тебя снимаются хиты, как если бы ты находился в легкой броне.',
+    modifier: [],
+  },
+  {
+    // TODO(aeremin): Merge with automatic-weapons-chemo
+    id: 'automatic-weapons-unlock',
+    name: 'Автоматическое оружие',
+    description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
+    modifier: [],
+  },
+  {
     id: 'hammer-of-justice-effect',
     name: 'Hammer of Justice',
     description: 'Одноручное оружие считается тяжёлым.',

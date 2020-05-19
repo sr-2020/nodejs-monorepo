@@ -1,38 +1,38 @@
 import {
-  oneTimeRevive,
-  dummyAbility,
-  hammerOfJustice,
-  arrowgant,
-  trollton,
-  iWillSurvive,
-  copyPasteQr,
   absoluteDeathAbility,
   alloHomorusAbility,
-  cloudMemoryAbility,
-  howMuchItCosts,
-  whoNeedsIt,
-  howMuchTheRent,
-  letMePay,
-  letHimPay,
-  reRent,
-  investigateScoring,
+  arrowgant,
   changeAuraAbility,
+  cloudMemoryAbility,
+  copyPasteQr,
+  dummyAbility,
+  hammerOfJustice,
+  howMuchItCosts,
+  howMuchTheRent,
+  investigateScoring,
+  iWillSurvive,
+  letHimPay,
+  letMePay,
+  oneTimeRevive,
+  reRent,
+  trollton,
+  whoNeedsIt,
 } from './active_abilities';
 import {
-  useMentalAbility,
+  iDontTrustAnybody,
   increaseTheMentalProtectionAbility,
   reduceTheMentalProtectionAbility,
-  iDontTrustAnybody,
+  useMentalAbility,
   youDontTrustAnybody,
 } from './mental';
 import { autodocHeal, autodocRevive, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import {
-  discourseGroupAddAbility,
-  discourseGroupExcludeAbility,
   chargeLocusAbility,
+  discourseGroupAddAbility,
   discourseGroupAddGuru,
+  discourseGroupExcludeAbility,
   discourseGroupInquisitor1,
   discourseGroupInquisitor2,
   prophetAbility,
@@ -40,6 +40,12 @@ import {
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 import { getPillNameAbility } from '@sr2020/sr2020-models/scripts/character/chemo';
+import {
+  nanohiveArmorAbility,
+  nanohiveBackupAbility,
+  nanohiveHealhAbility,
+  nanohiveShooterAbility,
+} from '@sr2020/sr2020-models/scripts/character/nanohive_abilities';
 
 export type TargetType = 'scan' | 'show';
 
@@ -1509,6 +1515,235 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 60,
     minimalEssence: 0,
     eventType: reviveOnTarget.name,
+  },
+
+  // Nanohive abilities
+  {
+    id: 'kokkoro-armor',
+    humanReadableName: 'Каменная кожа ',
+    description:
+      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
+    // 548
+    // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveArmorAbility.name,
+  },
+
+  {
+    id: 'kokkoro-shooter',
+    humanReadableName: 'Стрелок',
+    description: 'Ты можешь использовать автоматическое оружие 15 минут',
+    // 549
+    // Персонаж может использовать автоматическое оружие 15 минут
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveShooterAbility.name,
+  },
+
+  {
+    id: 'kokkoro-health',
+    humanReadableName: 'Здоровяк ',
+    description: 'Ты получаешь +2 хита на 15 минут',
+    // 550
+    // мясное тело +2 хита на 15 минут
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveHealhAbility.name,
+  },
+
+  {
+    id: 'kokkoro-backup',
+    humanReadableName: 'Бэкап ',
+    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    // 551
+    // появляется текст "ты забыл эпизод"
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveBackupAbility.name,
+  },
+
+  {
+    id: 'koshcghei-armor',
+    humanReadableName: 'Каменная кожа ',
+    description:
+      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
+    // 552
+    // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveArmorAbility.name,
+  },
+
+  {
+    id: 'koshcghei-shooter',
+    humanReadableName: 'Стрелок',
+    description: 'Ты можешь использовать автоматическое оружие 15 минут',
+    // 553
+    // Персонаж может использовать автоматическое оружие 15 минут
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveShooterAbility.name,
+  },
+
+  {
+    id: 'koshcghei-health',
+    humanReadableName: 'Здоровяк ',
+    description: 'Ты получаешь +2 хита на 15 минут',
+    // 554
+    // мясное тело +2 хита на 15 минут
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveHealhAbility.name,
+  },
+
+  {
+    id: 'koshcghei-backup',
+    humanReadableName: 'Бэкап ',
+    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    // 555
+    // появляется текст "ты забыл эпизод"
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveBackupAbility.name,
+  },
+
+  {
+    id: 'horizon-armor',
+    humanReadableName: 'Каменная кожа ',
+    description:
+      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
+    // 556
+    // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveArmorAbility.name,
+  },
+
+  {
+    id: 'horizon-shooter',
+    humanReadableName: 'Стрелок',
+    description: 'Ты можешь использовать автоматическое оружие 15 минут',
+    // 557
+    // Персонаж может использовать автоматическое оружие 15 минут
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveShooterAbility.name,
+  },
+
+  {
+    id: 'horizon-health',
+    humanReadableName: 'Здоровяк ',
+    description: 'Ты получаешь +2 хита на 15 минут',
+    // 558
+    // мясное тело +2 хита на 15 минут
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveHealhAbility.name,
+  },
+
+  {
+    id: 'horizon-backup',
+    humanReadableName: 'Бэкап ',
+    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    // 559
+    // появляется текст "ты забыл эпизод"
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveBackupAbility.name,
+  },
+
+  {
+    id: 'badass-armor',
+    humanReadableName: 'Каменная кожа ',
+    description:
+      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
+    // 560
+    // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveArmorAbility.name,
+  },
+
+  {
+    id: 'badass-shooter',
+    humanReadableName: 'Стрелок',
+    description: 'Ты можешь использовать автоматическое оружие 15 минут',
+    // 561
+    // Персонаж может использовать автоматическое оружие 15 минут
+    // itGapEssense +5
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveShooterAbility.name,
+  },
+
+  {
+    id: 'badass-health',
+    humanReadableName: 'Здоровяк ',
+    description: 'Ты получаешь +2 хита на 15 минут',
+    // 562
+    // мясное тело +2 хита на 15 минут
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveHealhAbility.name,
+  },
+
+  {
+    id: 'badass-backup',
+    humanReadableName: 'Бэкап ',
+    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    // 563
+    // появляется текст "ты забыл эпизод"
+    // itGapEssense +5"
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 15,
+    minimalEssence: 0,
+    eventType: nanohiveBackupAbility.name,
   },
 ];
 
