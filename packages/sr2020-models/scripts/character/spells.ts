@@ -23,6 +23,7 @@ import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-models/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-models/scripts/character/aura_utils';
+import { ModifierWithAmount, TemporaryModifier, TemporaryModifierWithAmount } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -220,7 +221,7 @@ export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { pow
   addTemporaryModifier(api, m, d);
 }
 
-export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier & { validUntil: number }) {
   const ability = getAllActiveAbilities().get('ground-heal-ability')!;
   api.model.activeAbilities.push({
     id: ability.id,
@@ -267,7 +268,7 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   addTemporaryModifier(api, m, d);
 }
 
-export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
   api.model.passiveAbilities.push({
     id: 'fireball-able',
     name: 'Fireball',
@@ -287,7 +288,7 @@ export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: Spell
   addTemporaryModifier(api, m, d);
 }
 
-export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
   api.model.passiveAbilities.push({
     id: 'fast-charge-able',
     name: 'Fast Charge',
@@ -310,7 +311,7 @@ export function fieldOfDenialSpell(
   addTemporaryModifier(api, m, d);
 }
 
-export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     id: 'field-of-denial-able',
     name: 'Field of denial',
@@ -480,7 +481,7 @@ function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, sp
   });
 }
 
-export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magic -= m.amount;
 }
 

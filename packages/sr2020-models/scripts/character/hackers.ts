@@ -10,6 +10,7 @@ import * as cuid from 'cuid';
 import { duration } from 'moment';
 import { healthStateTransition } from '@sr2020/sr2020-models/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-models/scripts/character/util';
+import { ModifierWithAmount } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -52,8 +53,9 @@ export function temporaryAntiDumpshock(api: EventModelApi<Sr2020Character>, data
 export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amount: number }): boolean {
   const m = api.getModifierById(kDumpshockModifier.mID);
   if (m) {
-    if (m.amount + data.amount >= 0) {
-      m.amount += data.amount;
+    const dumpshockModifier = m as ModifierWithAmount;
+    if (dumpshockModifier.amount + data.amount >= 0) {
+      dumpshockModifier.amount += data.amount;
       return true;
     } else {
       return false;

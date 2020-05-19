@@ -17,6 +17,7 @@ import { healthStateTransition } from './death_and_rebirth';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -26,7 +27,7 @@ interface InstantEffect {
 }
 
 interface DurationEffect {
-  handler: (api: EffectModelApi<Sr2020Character>, m: Modifier) => void;
+  handler: (api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount & TemporaryModifier) => void;
   duration: Duration;
   amount: number;
 }
@@ -38,6 +39,8 @@ interface ChemoEffect {
   durationEffect?: DurationEffect;
   message: string;
 }
+
+export type ChemoModifier = ModifierWithAmount & { element: keyof Concentrations };
 
 export const kAllElements: Array<keyof Concentrations> = [
   'iodine',
@@ -742,9 +745,13 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: Merchand
     const modifierClass = `${element}-concentration`;
     const mods = api.getModifiersByClass(modifierClass);
     if (mods.length) {
-      mods[0].amount += amount;
+      (mods[0] as ChemoModifier).amount += amount;
     } else {
-      addTemporaryModifier(api, modifierFromEffect(increaseConcentration, { element, amount }, modifierClass), duration(1, 'hour'));
+      addTemporaryModifier(
+        api,
+        modifierFromEffect(increaseConcentration, { element: element as keyof Concentrations, amount }, modifierClass),
+        duration(1, 'hour'),
+      );
     }
   }
   api.sendSelfEvent(checkConcentrations, { concentrations: pill.content });
@@ -812,7 +819,7 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
   }
 }
 
-export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: ChemoModifier) {
   api.model.chemo.concentration[m.element] += m.amount;
 }
 
@@ -832,7 +839,7 @@ export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, 
   }
 }
 
-export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     name: 'Легкая броня',
     description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
@@ -841,7 +848,7 @@ export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   });
 }
 
-export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     name: 'Берсерк',
     description:
@@ -851,7 +858,7 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier)
   });
 }
 
-export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     name: 'Автоматическое оружие',
     description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
@@ -860,7 +867,7 @@ export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: 
   });
 }
 
-export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     name: 'Тяжелое оружие',
     description: 'Позволяет использовать тяжелое оружие.',
@@ -869,7 +876,7 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modi
   });
 }
 
-export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     name: 'Эйфория',
     description: 'Вы пребываете в состоянии странной эйфории',

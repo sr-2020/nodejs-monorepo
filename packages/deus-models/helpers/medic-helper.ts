@@ -1,5 +1,6 @@
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { DamageModifier } from './catalog_types';
 
 /**
  * Хелперы для медицинских моделей
@@ -10,7 +11,7 @@ const consts = require('./constants');
 
 function addDamage(api: EventModelApi<DeusExModel>, hpLost, timestamp) {
   if (hpLost && api.model.hp && api.model.profileType != 'program' && api.model.profileType != 'exhuman-program') {
-    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID) as DamageModifier | undefined;
 
     if (m) {
       m.damage += hpLost;
@@ -30,7 +31,7 @@ function restoreDamage(api: EventModelApi<DeusExModel>, hpHeal, timestamp) {
   api.info(`removeDamage: ${hpHeal}`);
 
   if (hpHeal && api.model.hp) {
-    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+    const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID) as DamageModifier | undefined;
 
     if (m) {
       const maxHP = calcMaxHP(api);

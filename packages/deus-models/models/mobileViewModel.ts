@@ -1,5 +1,6 @@
 import { Modifier, ViewModelApiInterface, Condition } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel, Message, Change, MemoryEntry } from '@sr2020/interface/models/deus-ex-model';
+import { IllnessModifier } from '../helpers/catalog_types';
 
 interface PageViewModel {
   menuTitle: string;
@@ -141,7 +142,7 @@ function getStartPage(model: DeusExModel) {
     pageInfo.body.items.push(hpRow);
   }
 
-  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
+  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && (e as IllnessModifier).currentStage > 2);
 
   if (illnesses?.length) {
     pageInfo.body.items.push({

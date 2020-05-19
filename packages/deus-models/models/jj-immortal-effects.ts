@@ -4,26 +4,23 @@ import medichelpers = require('../helpers/medic-helper');
 import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
-/*
-  modifier jj-immortal-one: {
-      currentStage: number
-      stages: {
-          duration: number
-          text: string
-      }
-      startTime: timestamp
-  }
+interface JjImmortalOneModifier extends Modifier {
+  currentStage: number;
+  stages: Array<{ duration: number; text: string }>;
+  startTime: number;
+}
 
+interface JjImmortalTwoModifier extends Modifier {
+  stages: string[];
+  cubes: string;
+}
+
+/*
   pill jj-immortal-one: {
       stages: {
           duration: number
           text: string
       }
-  }
-
-  pill jj-immortal-two: {
-      stages: string[]
-      cubes: string
   }
 */
 
@@ -48,7 +45,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
     return;
   }
 
-  let modifier: Modifier = {
+  const modifier: JjImmortalOneModifier = {
     mID: '',
     name: 'jj-immortal-one',
     currentStage: 0,
@@ -58,7 +55,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
     effects: [],
   };
 
-  modifier = api.addModifier(modifier);
+  modifier.mID = api.addModifier(modifier).mID;
 
   const text = modifier.stages[modifier.currentStage].text;
   helpers.addChangeRecord(api, text, api.model.timestamp);
@@ -76,7 +73,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
     return;
   }
 
-  const modifier = api.getModifierById(data.mID);
+  const modifier = api.getModifierById(data.mID) as JjImmortalOneModifier | undefined;
 
   if (!modifier) {
     api.error('jjImmortalOneNextStage: modifier not found');

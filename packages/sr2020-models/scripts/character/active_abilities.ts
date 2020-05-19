@@ -9,6 +9,7 @@ import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { addFeatureToModel } from '@sr2020/sr2020-models/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-models/scripts/character/aura_utils';
+import { TemporaryModifier } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -90,7 +91,7 @@ export function hammerOfJustice(api: EventModelApi<Sr2020Character>, data: Activ
   addTemporaryModifier(api, m, d);
 }
 
-export function hammerOfJusticeEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function hammerOfJusticeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     id: 'hammer-of-justice-effect',
     name: 'Hammer of Justice',
@@ -106,7 +107,7 @@ export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   addTemporaryModifier(api, m, d);
 }
 
-export function arrowgantEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function arrowgantEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     id: 'arrowgant-effect',
     name: 'Arrowgant',
@@ -122,7 +123,7 @@ export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
   addTemporaryModifier(api, m, d);
 }
 
-export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     id: 'trollton-effect',
     name: 'Trollton',
@@ -162,7 +163,7 @@ export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {})
   addTemporaryModifier(api, m, d);
 }
 
-export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
   api.model.passiveAbilities.push({
     id: 'cloud-memory-temporary',
     name: 'Облачная память',
@@ -240,7 +241,7 @@ export function changeAuraEvent(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryModifier(api, modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(20) }), duration(1, 'hour'));
 }
 
-export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifier & { mask: string }) {
   const mask: string = m.mask;
   const auraChars: string[] = [];
   for (let i = 0; i < mask.length; ++i) {

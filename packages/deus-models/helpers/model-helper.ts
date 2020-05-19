@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { MindData } from '../models/medicViewModel';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Implant, Illness } from './catalog_types';
+import { Implant, Illness, ImplantModifier } from './catalog_types';
 import { Effect, Modifier, Condition, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
@@ -14,7 +14,7 @@ const type = require('type-detect');
 const Chance = require('chance');
 const chance = new Chance();
 
-function loadImplant(api: EventModelApi<DeusExModel>, id: string) {
+function loadImplant(api: EventModelApi<DeusExModel>, id: string): Implant | null {
   const implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
 
   if (!implant) {
@@ -81,11 +81,12 @@ function addChangeRecord(api: EventModelApi<DeusExModel>, text: string, timestam
 //Проверка предиката и возвращение данных для работы эффекта
 //Вовращается объект Params (если он есть)
 function checkPredicate(api: EffectModelApi<DeusExModel>, mID: string, effectName: string, multi = false) {
-  const implant = api.getModifierById(mID);
+  const mod = api.getModifierById(mID);
 
   //api.info("checkPredicate: " + JSON.stringify(implant));
 
-  if (implant) {
+  if (mod) {
+    const implant = mod as ImplantModifier;
     let predicates = implant.predicates;
 
     //Если предикатов нет внутри импланта, попробовать загрузить имплант из БД

@@ -1,6 +1,7 @@
 /**
  * Эффекты и события связанные с медициной и хитами
  */
+import { DamageModifier, ImplantModifier } from '../helpers/catalog_types';
 
 const Chance = require('chance');
 
@@ -77,7 +78,7 @@ function hasAnyEffect(api: EventModelApi<DeusExModel>, effectName) {
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
-  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID) as DamageModifier | undefined;
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
   //если такие импланты есть, то тогда хиты списывать не надо
@@ -104,7 +105,7 @@ function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
  * (если нет каких-то имплантов или модификаторов этому препятствующих )
  */
 function regenHpEvent(api: EventModelApi<DeusExModel>, event) {
-  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID) as DamageModifier | undefined;
 
   //Проверить - нет ли на персонаже имплантов, реализующих эффект timed-recover-hp
   //если такие импланты есть, то тогда хиты списывать не надо
@@ -235,7 +236,7 @@ function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data) {
  *
  * Предполагается что никакие другие импланты не вносят корректировки в HP
  */
-function damageEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
+function damageEffect(api: EffectModelApi<DeusExModel>, modifier: DamageModifier) {
   //Если персонаж мертв ничего больше не делаем
   if (!api.model.isAlive) {
     api.model.maxHp = 0;
@@ -456,7 +457,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
  * просто отключит таймер (повреждения в минус уйти не могут)
  */
 function recoverHpEvent(api: EventModelApi<DeusExModel>, event) {
-  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID);
+  const m = api.getModifierById(consts.DAMAGE_MODIFIER_MID) as DamageModifier | undefined;
 
   if (m?.damage && api.model.isAlive) {
     m.damage -= 1;
@@ -513,7 +514,7 @@ function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: M
  * Событие срабатывает по таймеру, который выставляется эффектом timed-recover-systems
  */
 function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data) {
-  const modifier = api.getModifierById(data.mID);
+  const modifier = api.getModifierById(data.mID) as ImplantModifier | undefined;
 
   if (!modifier || !modifier.enabled) {
     api.info(`recoverSystemsEvent: implant removed or disabled. Stop processing`);

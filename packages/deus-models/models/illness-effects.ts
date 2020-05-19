@@ -10,7 +10,7 @@ import clone = require('clone');
 import infection = require('../helpers/infection-illness');
 import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Illness } from 'deus-models/helpers/catalog_types';
+import { Illness, IllnessModifier } from 'deus-models/helpers/catalog_types';
 
 /**
  * Обработчик события start-illness
@@ -64,7 +64,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
  * Эффект "болезни". Название эффекта "illness-effect"
  * Отображает состояние для данного этапа - симптомы.
  */
-function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
+function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: IllnessModifier) {
   if (modifier.class == 'illness') {
     api.info(`illnessEffect: illness: ${modifier.displayName}, stage: ${modifier.currentStage}`);
 
@@ -88,7 +88,7 @@ function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
  */
 function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
   if (data.mID) {
-    const illness = api.getModifierById(data.mID);
+    const illness = api.getModifierById(data.mID) as IllnessModifier | undefined;
     if (illness) {
       //Если это промежуточный этап, просто перевести на следующий и поставить таймер
       if (illness.currentStage < illness.illnessStages.length - 1) {

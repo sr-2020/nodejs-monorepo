@@ -30,14 +30,17 @@ function startTemporaryCubeChange(api: EventModelApi<DeusExModel>, narco) {
   api.debug('Narco will add modifier');
   //Изменение должно быть временным. Накладываем эффект
 
-  const modifier = createNarcoEffectModifier(api, 'change-mind-cube-effect', 'narcoEffects');
-  if (!modifier) {
+  const baseModifier = createNarcoEffectModifier(api, 'change-mind-cube-effect', 'narcoEffects');
+  if (!baseModifier) {
     return;
   }
 
   const duration = narco.duration * 1000;
-  modifier.mindCubeChange = narco.mindCubeTemp;
-  modifier.pushbackDuration = narco.mindCubePushbackEnabled ? duration / 10 : 0;
+  const modifier = {
+    ...baseModifier,
+    mindCubeChange: narco.mindCubeTemp,
+    pushbackDuration: narco.mindCubePushbackEnabled ? duration / 10 : 0,
+  };
 
   //Установка модификатора
   addModifierTemporary(api, modifier, duration + modifier.pushbackDuration);

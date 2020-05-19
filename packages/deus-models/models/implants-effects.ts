@@ -35,7 +35,7 @@ function showCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
+function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier & { conditions: string[] }) {
   api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
   if (modifier.conditions) {
     //Пройти по всем совпадаениям в предикатах и показать все состояния

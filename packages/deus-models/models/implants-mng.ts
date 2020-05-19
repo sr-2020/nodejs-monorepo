@@ -3,14 +3,15 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { ImplantModifier } from '../helpers/catalog_types';
 
 /**
  * Обработчик события
  * Добавляет имплант в модель
  * { id: implant-id }
  */
-function addImplantEvent(api: EventModelApi<DeusExModel>, data) {
+function addImplantEvent(api: EventModelApi<DeusExModel>, data: { id: string }) {
   if (data.id) {
     if (!api.model.isAlive) {
       api.error("Can't install implant to deadman. Why are you doing this...");
@@ -25,13 +26,17 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data) {
     }
     //Убрать предикаты из модели
     delete loadedImplant.predicates;
-    let implant = loadedImplant as Modifier;
+    const implant: ImplantModifier = {
+      ...loadedImplant,
+      mID: '',
+      enabled: true,
+    };
 
     //Импланты (прошивки) для андроидов
     if (api.model.profileType == 'robot') {
       if (implant.class == 'firmware') {
         api.info(`addImplantEvent: Install implant (robot fw): ${implant.displayName}`);
-        implant = api.addModifier(implant);
+        implant.mID = api.addModifier(implant).mID;
 
         //Добавление сообщения об этом в список изменений в модели
         helpers.addChangeRecord(api, `Установлено системное ПО: ${implant.displayName}`, api.model.timestamp);
@@ -83,7 +88,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data) {
       }
 
       //Установка импланта
-      implant = api.addModifier(implant);
+      implant.mID = api.addModifier(implant).mID;
       api.info(`addImplantEvent: installed implant: ${implant.displayName}!`);
 
       //Установка системы на которой стоит имплант в "мертвую"
