@@ -24,6 +24,8 @@ export interface Implant {
   essenceCost: number;
   installDifficulty: number;
   modifiers: Modifier[];
+  onInstallEvent?: string;
+  onRemoveEvent?: string;
 }
 
 export const kReviveModifierId = 'medkit-revive-modifier';

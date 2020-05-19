@@ -1,8 +1,8 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/models/sr2020-character.model';
-import { kAllImplants, ImplantSlot } from './implants_library';
+import { AddedImplant, MetaRace, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { ImplantSlot, kAllImplants } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
-import { reduceEssenceDueToImplantInstall, createGapDueToImplantUninstall } from './essence';
+import { createGapDueToImplantUninstall, reduceEssenceDueToImplantInstall } from './essence';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}) {
@@ -35,6 +35,10 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
 
   reduceEssenceDueToImplantInstall(api, implant);
 
+  if (implant.onInstallEvent) {
+    api.sendSelfEvent(implant.onInstallEvent, {});
+  }
+
   const addedImplant: AddedImplant = {
     id: implant.id,
     name: implant.name,
@@ -66,14 +70,22 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
     throw new UserVisibleError('Импланты можно удалять только из мясного тела');
   }
 
+  const libraryImplant = kAllImplants.find((it) => it.id == data.id);
+  if (!libraryImplant) {
+    throw new UserVisibleError(`Импланта ${data.id} не существует`);
+  }
+
   const implantIndex = api.model.implants.findIndex((it) => it.id == data.id);
   if (implantIndex == -1) {
     throw new UserVisibleError(`Импланта ${data.id} не установлено`);
   }
 
   const implant = api.model.implants[implantIndex];
-
   createGapDueToImplantUninstall(api, implant);
+
+  if (libraryImplant.onRemoveEvent) {
+    api.sendSelfEvent(libraryImplant.onRemoveEvent, {});
+  }
 
   sendNotificationAndHistoryRecord(api, 'Имплант удален', `Удален имплант ${implant.name}`);
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
