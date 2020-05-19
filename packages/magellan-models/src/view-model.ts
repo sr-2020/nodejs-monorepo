@@ -52,22 +52,6 @@ function getStartPage(model: OrganismModel) {
     });
   }
 
-  const illnesses = model.modifiers.filter((e) => e.class == 'illness' && e.currentStage > 2);
-
-  if (illnesses?.length) {
-    pageInfo.body.items.push({
-      text: 'Внимание!',
-      value: 'Больно и плохо, врача!',
-      valueColor: '#ff565c',
-      percent: 100,
-    });
-  } /*if (isHuman)*/ else {
-    pageInfo.body.items.push({
-      text: 'Инфо:',
-      value: 'Проверяй ALICE часто',
-    });
-  }
-
   return pageInfo;
 }
 
