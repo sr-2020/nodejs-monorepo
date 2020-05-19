@@ -79,7 +79,7 @@ export class Timer {
   @rproperty() name: string;
   @rproperty() miliseconds: number;
   @rproperty() eventType: string;
-  data: any;
+  @property({ type: Object }) data: any;
 }
 
 @model()
