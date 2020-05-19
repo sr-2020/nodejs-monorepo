@@ -74,12 +74,13 @@ export interface ModelMetadata {
   scheduledUpdateTimestamp: number;
 }
 
-export type Timer = {
-  name: string;
-  miliseconds: number;
-  eventType: string;
+@model()
+export class Timer {
+  @rproperty() name: string;
+  @rproperty() miliseconds: number;
+  @rproperty() eventType: string;
   data: any;
-};
+}
 
 @model()
 export class Effect {
@@ -217,10 +218,6 @@ export type EngineReplyReady = {
 
 export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog | EngineReplyAquire;
 
-export interface Timers {
-  [name: string]: Timer;
-}
-
 @model()
 export class EmptyModel {
   @rproperty()
@@ -235,9 +232,9 @@ export class EmptyModel {
   @JsonColumn()
   modifiers: Modifier[];
 
-  @property()
+  @property.array(Timer, { required: true })
   @JsonColumn()
-  timers?: Timers;
+  timers: Timer[];
 }
 
 export interface LogApiInterface {

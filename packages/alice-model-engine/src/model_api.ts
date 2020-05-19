@@ -81,7 +81,7 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
   }
 
   public getTimer(name: string) {
-    return (this.context.baseModel.timers ?? {})[name];
+    return this.context.baseModel.timers.find((it) => it.name == name);
   }
 
   public addModifier(modifier: Modifier) {
@@ -117,7 +117,7 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
   }
 
   public removeTimer(name: string) {
-    delete (this.context.baseModel.timers ?? {})[name];
+    this.context.baseModel.timers = this.context.baseModel.timers.filter((it) => it.name != name);
     return this;
   }
 
@@ -201,7 +201,7 @@ class EffectModelApiImpl<T extends EmptyModel> extends LogApi implements EffectM
   }
 
   public getTimer(name: string) {
-    return (this.context.workModel.timers ?? {})[name];
+    return this.context.workModel.timers.find((it) => it.name == name);
   }
 
   public setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData) {
@@ -213,7 +213,7 @@ class EffectModelApiImpl<T extends EmptyModel> extends LogApi implements EffectM
   }
 
   public removeTimer(name: string) {
-    delete (this.context.workModel.timers ?? {})[name];
+    this.context.workModel.timers = this.context.workModel.timers.filter((it) => it.name != name);
     return this;
   }
 

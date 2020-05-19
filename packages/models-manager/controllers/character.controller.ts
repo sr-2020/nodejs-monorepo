@@ -103,7 +103,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       usesLeft: 0,
       timestamp: model.timestamp,
       modifiers: [],
-      timers: {},
+      timers: [],
       data: {},
     };
 

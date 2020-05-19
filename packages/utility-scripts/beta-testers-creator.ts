@@ -54,7 +54,7 @@ async function provideEmptyQr(modelId: string) {
     data: {},
     timestamp: 0,
     modifiers: [],
-    timers: {},
+    timers: [],
   };
 
   await request.put('http://models-manager.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();

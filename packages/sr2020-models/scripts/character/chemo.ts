@@ -822,8 +822,7 @@ export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}) {
 }
 
 export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
-  for (const timerId in api.model.timers ?? {}) {
-    const timer = api.model.timers![timerId];
+  for (const timer of api.model.timers) {
     if (timer.name.startsWith('feedback-recovery-')) {
       timer.miliseconds = Math.max(
         duration(30, 'seconds').asMilliseconds(),

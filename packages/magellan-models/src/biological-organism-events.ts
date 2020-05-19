@@ -207,7 +207,7 @@ function spaceSuitTakeOff(api: EventModelApi<OrganismModel>, disinfectionLevel: 
 
 function fullRollback(api: EventModelApi<OrganismModel>, _: any) {
   for (const i of allSystemsIndices()) api.model.systems[i].value = 0;
-  api.model.timers = {};
+  api.model.timers = [];
   helpers.addChangeRecord(api, 'Извините за баги :(', api.model.timestamp);
 }
 

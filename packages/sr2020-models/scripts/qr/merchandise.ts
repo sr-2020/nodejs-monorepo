@@ -152,6 +152,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseE
     eventType: libraryData.eventType,
     timestamp: api.model.timestamp,
     modifiers: [],
+    timers: [],
     modelId: api.model.modelId,
   };
 }

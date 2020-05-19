@@ -11,9 +11,10 @@ describe('Serenity immortality: ', () => {
     let { baseModel, workingModel } = await process(model, events);
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'serenity-immortality-ready');
-
-    expect(baseModel.timers).to.has.property('_s_immortal01_timer');
     expect(cond).is.not.exist;
+
+    expect(baseModel.timers.length).equals(1);
+    expect(baseModel.timers[0].name).equals('_s_immortal01_timer');
 
     console.log('================Pass 60 minutes ===============');
 

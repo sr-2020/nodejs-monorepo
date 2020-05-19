@@ -126,6 +126,6 @@ export function getExampleModel(id?: string): DeusExModel {
         text: '42',
       },
     ],
-    timers: {},
+    timers: [],
   };
 }

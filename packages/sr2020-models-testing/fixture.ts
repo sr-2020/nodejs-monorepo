@@ -255,7 +255,7 @@ function getDefaultLocation(timestamp: number): Location {
     spellTraces: [],
     timestamp,
     modifiers: [],
-    timers: {},
+    timers: [],
   };
 }
 
@@ -271,6 +271,6 @@ function getDefaultQrCode(timestamp: number): QrCode {
     modelId: '0',
     timestamp,
     modifiers: [],
-    timers: {},
+    timers: [],
   };
 }

@@ -6,7 +6,7 @@ import { Worker } from '../../src/worker';
 
 describe('Worker', () => {
   let worker: Worker;
-  const defaultModel: EmptyModel = { modelId: '0', timestamp: 0, modifiers: [], timers: {} };
+  const defaultModel: EmptyModel = { modelId: '0', timestamp: 0, modifiers: [], timers: [] };
 
   beforeEach(() => {
     const eventHandlers: EventHandler[] = [
@@ -64,7 +64,7 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: (2 + 3) * 2, timers: {} });
+    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
@@ -89,7 +89,7 @@ describe('Worker', () => {
     expect(result.status).to.equals('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: 'AABA', timers: {} });
+    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: 'AABA', timers: [] });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });
 
@@ -118,7 +118,7 @@ describe('Worker', () => {
       ...defaultModel,
       timestamp: timestamp,
       value: 'A',
-      timers: { delayedConcat: expectedTimer },
+      timers: [expectedTimer],
     });
     expect(result.workingModel.timestamp).to.equal(timestamp);
   });

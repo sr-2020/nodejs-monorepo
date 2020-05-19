@@ -103,14 +103,9 @@ export class Context<T extends EmptyModel> {
   }
 
   public setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
-    const timer = {
-      name,
-      miliseconds,
-      eventType,
-      data,
-    };
-    if (!this.baseModel.timers) this.baseModel.timers = {};
-    this.baseModel.timers[timer.name] = timer;
+    // Remove existing timers with this name if any are present
+    this.baseModel.timers = this.baseModel.timers.filter((t) => t.name != name);
+    this.baseModel.timers.push({ name, miliseconds, eventType, data });
     return this;
   }
 
@@ -165,7 +160,7 @@ export class Context<T extends EmptyModel> {
   }
 
   private decreaseTimers(diff: number): void {
-    this.baseModel.timers = _.mapValues(this.baseModel.timers, (t) => {
+    this.baseModel.timers = this.baseModel.timers.map((t) => {
       return {
         name: t.name,
         miliseconds: t.miliseconds - diff,
@@ -183,8 +178,7 @@ export class Context<T extends EmptyModel> {
     const firstEvent = this._events[0];
 
     if (firstTimer && this.timestamp + firstTimer.miliseconds <= firstEvent.timestamp) {
-      // !! is safe as firstTimer != null means that there are timers indeed.
-      delete this.baseModel.timers![firstTimer.name];
+      this.baseModel.timers = this.baseModel.timers.filter((it) => it.name != firstTimer.name);
       return this.timerEvent(firstTimer);
     } else {
       this._events.shift();
@@ -193,15 +187,11 @@ export class Context<T extends EmptyModel> {
   }
 
   private nextTimer(): Timer | null {
-    return _.reduce(
-      this.baseModel.timers,
-      (current: Timer | null, t) => {
-        if (!current) return t;
-        if (current.miliseconds > t.miliseconds) return t;
-        return current;
-      },
-      null,
-    );
+    return this.baseModel.timers.reduce((current: Timer | null, t) => {
+      if (!current) return t;
+      if (current.miliseconds > t.miliseconds) return t;
+      return current;
+    }, null);
   }
 
   private sortEvents() {

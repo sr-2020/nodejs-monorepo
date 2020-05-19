@@ -30,7 +30,7 @@ export function create(api: EventModelApi<QrCode>, data: Partial<QrCode>) {
     throw new UserVisibleError('QR-код уже записан!');
   }
 
-  api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: undefined };
+  api.model = { ...api.model, ...data, timestamp: api.model.timestamp, modelId: api.model.modelId, modifiers: [], timers: [] };
 }
 
 export function clear(api: EventModelApi<QrCode>) {
@@ -43,6 +43,7 @@ export function clear(api: EventModelApi<QrCode>) {
     description: 'Не записанный QR-код. На него можно записать что угодно',
     data: {},
     modifiers: [],
+    timers: [],
   };
 }
 
@@ -72,7 +73,7 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbili
   api.model.eventType = data.eventType;
   api.model.data = data;
   api.model.modifiers = [];
-  api.model.timers = {};
+  api.model.timers = [];
 
   api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, {});
 }
@@ -84,7 +85,7 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, data: {}) {
     modelId: api.model.modelId,
     data: { attack: 0, attackerId: '' },
     modifiers: [],
-    timers: {},
+    timers: [],
     name: '',
     timestamp: api.model.timestamp,
     type: 'ability',
@@ -112,7 +113,7 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
     description: `Относится к группе "${group.name}"`,
     modelId: api.model.modelId,
     modifiers: [],
-    timers: {},
+    timers: [],
     name: 'Локус этической группы',
     timestamp: api.model.timestamp,
     type: 'locus',
@@ -131,6 +132,7 @@ export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: strin
     description: '',
     usesLeft: 1,
     modifiers: [],
+    timers: [],
     data: qrData,
   };
 }

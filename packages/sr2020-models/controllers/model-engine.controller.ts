@@ -207,7 +207,7 @@ export class ModelEngineController implements ModelEngineService {
           effects: [createEssenceSystemEffect()],
         },
       ],
-      timers: {},
+      timers: [],
     };
     initEthic(result);
     return result;

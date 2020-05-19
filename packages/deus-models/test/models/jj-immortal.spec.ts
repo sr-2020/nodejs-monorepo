@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { merge } from 'lodash';
 import { expect } from 'chai';
+
 import { process, findModifier, findChangeRecord } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
@@ -37,7 +38,8 @@ describe('JJ Immortality', () => {
     const jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;
     expect(jjOne.currentStage).to.equals(0);
-    expect(baseModel.timers).to.has.property('jj-immortal-one-' + jjOne.mID);
+    expect(baseModel.timers.length).equals(1);
+    expect(baseModel.timers[0].name).equals('jj-immortal-one-' + jjOne.mID);
     expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
     expect(findChangeRecord(STEP1.stages[1].text, workingModel)).not.to.exist;
 
@@ -90,8 +92,9 @@ describe('JJ Immortality', () => {
 
     const jjOne = findModifier('jj-immortal-one', baseModel);
     expect(jjOne).to.exist;
-    expect(baseModel.timers).not.to.has.property('jj-immortal-one-' + jjOne.mID);
-    expect(baseModel.timers).to.has.property('jj-immortal-two-awake');
+
+    expect(baseModel.timers.length).equals(1);
+    expect(baseModel.timers[0].name).equals('jj-immortal-two-awake');
 
     expect(findChangeRecord(STEP2.stages[0], workingModel)).to.exist;
     expect(findChangeRecord(STEP2.stages[1], workingModel)).not.to.exist;
