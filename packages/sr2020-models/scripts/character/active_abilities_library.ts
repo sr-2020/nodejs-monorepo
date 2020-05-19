@@ -40,12 +40,7 @@ import {
 import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 import { getPillNameAbility } from '@sr2020/sr2020-models/scripts/character/chemo';
-import {
-  nanohiveArmorAbility,
-  nanohiveBackupAbility,
-  nanohiveHealhAbility,
-  nanohiveShooterAbility,
-} from '@sr2020/sr2020-models/scripts/character/nanohive_abilities';
+import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 
 export type TargetType = 'scan' | 'show';
 
