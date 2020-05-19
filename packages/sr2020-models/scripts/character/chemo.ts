@@ -794,7 +794,7 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
           effect.durationEffect.handler,
           {
             amount: effect.durationEffect.amount,
-            durationSeconds: effect.durationEffect.duration.asSeconds(),
+            validUntil: validUntil(api, effect.durationEffect.duration),
           },
           modifierClass,
         ),
@@ -837,7 +837,7 @@ export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
     name: 'Легкая броня',
     description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
     id: 'light-armor-chemo',
-    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+    validUntil: m.validUntil,
   });
 }
 
@@ -847,7 +847,7 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Modifier)
     description:
       'Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран".',
     id: 'berserk-chemo',
-    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+    validUntil: m.validUntil,
   });
 }
 
@@ -856,7 +856,7 @@ export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: 
     name: 'Автоматическое оружие',
     description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
     id: 'automatic-weapons-chemo',
-    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+    validUntil: m.validUntil,
   });
 }
 
@@ -865,7 +865,7 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Modi
     name: 'Тяжелое оружие',
     description: 'Позволяет использовать тяжелое оружие.',
     id: 'heavy-weapons-chemo',
-    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+    validUntil: m.validUntil,
   });
 }
 
@@ -874,7 +874,7 @@ export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: Modifie
     name: 'Эйфория',
     description: 'Вы пребываете в состоянии странной эйфории',
     id: 'vampirium-bite-chemo',
-    validUntil: validUntil(api, duration(m.durationSeconds, 'seconds')),
+    validUntil: m.validUntil,
   });
 }
 

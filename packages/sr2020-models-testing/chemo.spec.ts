@@ -124,6 +124,27 @@ describe('Chemo events', function() {
     }
   });
 
+  it('Iconium', async () => {
+    await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'skrepa' } });
+
+    expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
+      {
+        id: 'heavy-weapons-chemo',
+        validUntil: 15 * 60 * 1000,
+      },
+    ]);
+
+    await fixture.advanceTime(duration(5, 'minutes'));
+
+    expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
+      {
+        id: 'heavy-weapons-chemo',
+        validUntil: 15 * 60 * 1000,
+      },
+    ]);
+  });
+
   it('Opium + Elba', async () => {
     await fixture.saveCharacter();
     {
