@@ -222,7 +222,7 @@ export function investigateScoring(api: EventModelApi<Sr2020Character>, data: Ac
 
 export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data: {}) {
   api.sendNotification('Скоринг', 'В течение пяти минут на странице экономики отображаются подробности вашего скоринга');
-  addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect), duration(5, 'minutes'));
+  addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect, {}), duration(5, 'minutes'));
 }
 
 export function addMyScoringEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {

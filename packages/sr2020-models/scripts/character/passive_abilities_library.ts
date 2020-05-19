@@ -1666,7 +1666,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 521
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     // биовэр. Сложность установки 5
-    modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation)],
+    modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation, {})],
   },
 
   {
