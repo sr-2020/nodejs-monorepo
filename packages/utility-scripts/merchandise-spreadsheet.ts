@@ -13,15 +13,15 @@ interface Implant extends LibraryImplant {
 }
 
 async function run() {
-  // https://docs.google.com/spreadsheets/d/1R_uL3lhJPPoyX_FdUtWd-FibPxpN73HREecEUXS14RA
-  const spreadsheetId = '1R_uL3lhJPPoyX_FdUtWd-FibPxpN73HREecEUXS14RA';
+  // https://docs.google.com/spreadsheets/d/1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc
+  const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
 
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Список имплантов!A1:I900');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Импланты!A1:J900');
   const header = data[0];
   if (
-    header.slice(0, 9).join('  ') !=
-    'ID  название  слот  описание для игрока  эффект  грейд  стоимость эссенс  сложность установки  стоимость'
+    header.slice(0, 10).join('  ') !=
+    'ID  название  Корпорация-производитель  слот  описание для игрока  эффект  грейд  стоимость эссенс  сложность установки  стоимость'
   ) {
     throw new Error('Header has changed! Exiting.');
   }
@@ -40,12 +40,12 @@ async function run() {
         голова: 'head',
         'слот под RCC': 'rcc',
         'слот под коммлинк': 'commlink',
-      }[(row[2] as string).trim()],
-      description: row[3],
-      grade: { альфа: 'alpha', бета: 'beta', гамма: 'gamma', дельта: 'delta', био: 'bio' }[(row[5] as string).trim()],
-      essenceCost: Number(row[6]),
-      installDifficulty: Number(row[7]),
-      cost: Number(row[8]),
+      }[(row[3] as string).trim()],
+      description: row[4],
+      grade: { альфа: 'alpha', бета: 'beta', гамма: 'gamma', дельта: 'delta', био: 'bio' }[(row[6] as string).trim()],
+      essenceCost: Number(row[7]),
+      installDifficulty: Number(row[8]),
+      cost: Number(row[9]),
       modifiers: [],
     };
     implants.push(m);
