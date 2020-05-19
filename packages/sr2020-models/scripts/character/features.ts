@@ -1,11 +1,14 @@
 import * as cuid from 'cuid';
 import { Sr2020Character, AddedPassiveAbility, AddedSpell, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
-import { EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';
 import { ActiveAbility } from './active_abilities_library';
 import { cloneDeep } from 'lodash';
 import { getAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
+import { Duration } from 'moment';
+import { addTemporaryModifier, modifierFromEffect, validUntil } from '@sr2020/sr2020-models/scripts/character/util';
+import { TemporaryModifier } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   addFeatureToModel(api.model, data.id);
@@ -118,4 +121,34 @@ function addModifier(model: Sr2020Character, modifier: Modifier) {
 
 function removeModifier(model: Sr2020Character, id: string) {
   model.modifiers = model.modifiers.filter((it) => it.mID != id);
+}
+
+// Beware: doesn't support abilities with modifiers
+export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, abilityId: string, d: Duration) {
+  const passiveAbility = kAllPassiveAbilities.get(abilityId);
+  if (!passiveAbility) {
+    throw new UserVisibleError(`Неизвестная способность ${abilityId}`);
+  }
+
+  if (passiveAbility.modifier instanceof Modifier || passiveAbility.modifier.length > 0) {
+    throw new UserVisibleError(`Временная способность ${abilityId} содержит модификаторы!`);
+  }
+
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(addTemporaryPassiveAbilityEffect, {
+      validUntil: validUntil(api, d),
+      ability: passiveAbility,
+    }),
+    d,
+  );
+}
+
+export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { ability: PassiveAbility }) {
+  api.model.passiveAbilities.push({
+    id: m.ability.id,
+    name: m.ability.name,
+    description: m.ability.description,
+    validUntil: m.validUntil,
+  });
 }

@@ -1868,6 +1868,38 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Приходите на наш воскресный семинар по приложению и выиграйте футболку в лотерее!',
     modifier: [],
   },
+
+  // Abilities given temporarily by other abilities
+  {
+    id: 'arrowgant-effect',
+    name: 'Arrowgant',
+    description: 'Защита от дистанционных атак (только от нерфов).',
+    modifier: [],
+  },
+  {
+    id: 'trollton-effect',
+    name: 'Trollton',
+    description: 'У вас тяжелая броня.',
+    modifier: [],
+  },
+  {
+    id: 'hammer-of-justice-effect',
+    name: 'Hammer of Justice',
+    description: 'Одноручное оружие считается тяжёлым.',
+    modifier: [],
+  },
+  {
+    id: 'cloud-memory-temporary',
+    name: 'Облачная память',
+    description: 'Вы не забываете события произошедшие с вами непосредственно перед КС',
+    modifier: [],
+  },
+  {
+    id: 'field-of-denial-able',
+    name: 'Field of denial',
+    description: `Попадание в зонтик тяжелым оружием игнорируется.`,
+    modifier: [],
+  },
 ];
 
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {

@@ -23,7 +23,8 @@ import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-models/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-models/scripts/character/aura_utils';
-import { ModifierWithAmount, TemporaryModifier, TemporaryModifierWithAmount } from '@sr2020/sr2020-models/scripts/character/typedefs';
+import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-models/scripts/character/typedefs';
+import { addTemporaryPassiveAbility } from '@sr2020/sr2020-models/scripts/character/features';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -307,17 +308,7 @@ export function fieldOfDenialSpell(
 ) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(40, 'minutes');
-  const m = modifierFromEffect(fieldOfDenialEffect, { validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
-}
-
-export function fieldOfDenialEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    id: 'field-of-denial-able',
-    name: 'Field of denial',
-    description: `Попадание в зонтик тяжелым оружием игнорируется.`,
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'field-of-denial-able', d);
 }
 
 //

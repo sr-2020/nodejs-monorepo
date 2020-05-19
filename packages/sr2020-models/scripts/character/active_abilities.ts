@@ -1,15 +1,14 @@
 import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character, AddedActiveAbility, Targetable } from '@sr2020/interface/models/sr2020-character.model';
-import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect, validUntil } from './util';
+import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
 import { reviveOnTarget, absoluteDeath } from './death_and_rebirth';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
-import { addFeatureToModel } from '@sr2020/sr2020-models/scripts/character/features';
+import { addFeatureToModel, addTemporaryPassiveAbility } from '@sr2020/sr2020-models/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-models/scripts/character/aura_utils';
-import { TemporaryModifier } from '@sr2020/sr2020-models/scripts/character/typedefs';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -87,49 +86,19 @@ export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void) {
 export function hammerOfJustice(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(10 + 3 * manaLevel, 'minutes');
-  const m = modifierFromEffect(hammerOfJusticeEffect, { validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
-}
-
-export function hammerOfJusticeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    id: 'hammer-of-justice-effect',
-    name: 'Hammer of Justice',
-    description: 'Одноручное оружие считается тяжёлым.',
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'hammer-of-justice-effect', d);
 }
 
 export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 1 * manaLevel, 'minutes');
-  const m = modifierFromEffect(arrowgantEffect, { validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
-}
-
-export function arrowgantEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    id: 'arrowgant-effect',
-    name: 'Arrowgant',
-    description: 'Защита от дистанционных атак (только от нерфов).',
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'arrowgant-effect', d);
 }
 
 export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
-  const m = modifierFromEffect(trolltonEffect, { validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
-}
-
-export function trolltonEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    id: 'trollton-effect',
-    name: 'Trollton',
-    description: 'У вас тяжелая броня.',
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'trollton-effect', d);
 }
 
 export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
@@ -158,18 +127,8 @@ export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: Ac
 
 export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {}) {
   const d = duration(6, 'hours');
-  const m = modifierFromEffect(cloudMemoryEffect, { validUntil: validUntil(api, d) });
+  addTemporaryPassiveAbility(api, 'cloud-memory-temporary', d);
   api.sendNotification('Облачная память', 'Получена временная пассивная способность "Облачная память"');
-  addTemporaryModifier(api, m, d);
-}
-
-export function cloudMemoryEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    id: 'cloud-memory-temporary',
-    name: 'Облачная память',
-    description: 'Вы не забываете события произошедшие с вами непосредственно перед КС',
-    validUntil: m.validUntil,
-  });
 }
 
 // Гешефтмахерские способности
