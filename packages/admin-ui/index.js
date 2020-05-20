@@ -33,6 +33,14 @@ app = new Vue({
     locusCharges: 5,
 
     bodyStorageName: '',
+    aiName: '',
+    reanimateCapsule: {
+      essenceGet: 10,
+      essenceAir: 15,
+      cooldown: 20,
+      name: 'Лазарь',
+      description: 'Капсула производства России. Работает по воле Господа.',
+    },
 
     allRaces: [
       { id: 'meta-norm', name: 'Норм' },
@@ -298,6 +306,14 @@ app = new Vue({
 
     async writeBodyStorageToQr() {
       return this.sendQrEvent({ eventType: 'writeBodyStorage', data: { name: this.bodyStorageName } });
+    },
+
+    async writeAiSymbolQr() {
+      return this.sendQrEvent({ eventType: 'writeAiSymbol', data: { ai: this.aiName } });
+    },
+
+    async writeReanimateCapsuleQr() {
+      return this.sendQrEvent({ eventType: 'writeReanimateCapsule', data: this.reanimateCapsule });
     },
   }
 })
