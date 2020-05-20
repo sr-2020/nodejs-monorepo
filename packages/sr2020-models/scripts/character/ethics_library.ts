@@ -1480,7 +1480,7 @@ export const kAllEthicGroups: EthicGroup[] = [
         conditionMax: 4,
       },
     ],
-    abilityIds: ['comcon-ethic-ability'],
+    abilityIds: ['churched'],
   },
 
   {
@@ -1508,7 +1508,7 @@ export const kAllEthicGroups: EthicGroup[] = [
         conditionMax: 1,
       },
     ],
-    abilityIds: [],
+    abilityIds: ['orthodox-exorcism'],
   },
 
   {
@@ -1536,6 +1536,6 @@ export const kAllEthicGroups: EthicGroup[] = [
         conditionMax: 4,
       },
     ],
-    abilityIds: [],
+    abilityIds: ['chain-interrogation'],
   },
 ];

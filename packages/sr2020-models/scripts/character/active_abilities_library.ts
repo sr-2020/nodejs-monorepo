@@ -5,6 +5,7 @@ import {
   changeAuraAbility,
   cloudMemoryAbility,
   copyPasteQr,
+  doNothingAbility,
   dummyAbility,
   hammerOfJustice,
   howMuchItCosts,
@@ -41,6 +42,7 @@ import { setAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/l
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-models/scripts/character/rigger';
 import { getPillNameAbility } from '@sr2020/sr2020-models/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
+import { spiritsRelatedSpell } from '@sr2020/sr2020-models/scripts/character/spells';
 
 export type TargetType = 'scan' | 'show';
 
@@ -822,6 +824,33 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 30,
     minimalEssence: 0,
     eventType: investigateScoring.name,
+  },
+
+  {
+    id: 'chain-interrogation',
+    humanReadableName: 'Конвейерный допрос',
+    description: 'На допросе цель развернуто отвечает на заданный вопрос и теряет один хит.',
+    // 322
+    // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: doNothingAbility.name,
+  },
+
+  {
+    id: 'orthodox-exorcism',
+    humanReadableName: 'Отчитка',
+    description: 'Попытаться изгнать выбранного из присутствующих духа силой православной молитвы',
+    // 324
+    // с вероятностью (-R*5-W+mM*5+mF*10)/100 изгоняет указанного (выбранного из списка) духа, присутствующего в этой локации, в другой пласт реальности  (то есть дух не обнаруживается ни в одной локации полигона, и нацеленные на него по ауре симпатические заклинания не могут найти такую цель и рушатся) на время T. Если дух это персонаж, а не программный объект, то он на это же время лишается всех своих способностей и отправляется в "астральный мертвятник". W это текущая Сопротивляемость духа. R - ранг духа.  mF - максимально возможный в игре уровень способности мага “Дружелюбие духов”. T=Мощь*30 минут. mМ=максимально возможная мощь мага на игре.
+    // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 60,
+    minimalEssence: 0,
+    eventType: spiritsRelatedSpell.name,
   },
 
   {

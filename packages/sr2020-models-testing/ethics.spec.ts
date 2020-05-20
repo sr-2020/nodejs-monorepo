@@ -186,7 +186,7 @@ describe('Ethic events', function() {
       await fixture.useAbility({ id: 'dgroup-add', locusId: '3', targetCharacterId: '2' }, 1);
       const acolyte = await fixture.getCharacter(2);
       expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
-      expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'comcon-ethic-ability' }, { id: 'russian-orthodox-church' }]);
+      expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'churched' }, { id: 'russian-orthodox-church' }]);
 
       const locus = await fixture.getQrCode(3);
       expect(locus.baseModel.usesLeft).to.equal(0);

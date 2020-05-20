@@ -1,7 +1,7 @@
-import { EventModelApi, UserVisibleError, Event, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedActiveAbility, Targetable } from '@sr2020/interface/models/sr2020-character.model';
-import { sendNotificationAndHistoryRecord, addHistoryRecord, addTemporaryModifier, modifierFromEffect } from './util';
-import { reviveOnTarget, absoluteDeath } from './death_and_rebirth';
+import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { AddedActiveAbility, Sr2020Character, Targetable } from '@sr2020/interface/models/sr2020-character.model';
+import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
+import { absoluteDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { create } from '../qr/events';
@@ -213,3 +213,6 @@ export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
 
   api.model.magicStats.aura = auraChars.join('');
 }
+
+// For cases when no IT action is needed
+export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
