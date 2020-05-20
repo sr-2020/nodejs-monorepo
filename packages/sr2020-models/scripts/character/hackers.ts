@@ -46,7 +46,9 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
 
 export function temporaryAntiDumpshock(api: EventModelApi<Sr2020Character>, data: { durationInMinutes: number }) {
   if (adjustDumpshock(api, { amount: -1 })) {
-    api.setTimer(cuid(), duration(data.durationInMinutes, 'minutes'), adjustDumpshock, { amount: 1 });
+    api.setTimer(cuid(), 'Завершение эффекта уменьшения дампшока', duration(data.durationInMinutes, 'minutes'), adjustDumpshock, {
+      amount: 1,
+    });
   }
 }
 

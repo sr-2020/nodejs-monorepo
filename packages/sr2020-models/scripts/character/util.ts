@@ -1,9 +1,9 @@
-import { Duration } from 'moment';
-import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { MAX_HISTORY_LINES } from './consts';
-import uuid = require('uuid');
 import * as moment from 'moment';
+import { Duration } from 'moment';
+import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { MAX_HISTORY_LINES } from './consts';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import uuid = require('uuid');
 
 export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {
   if (api.model.history.length >= MAX_HISTORY_LINES) api.model.history.shift();
@@ -45,14 +45,17 @@ export function modifierFromEffect<T>(
   };
 }
 
-export function addTemporaryModifierEvent(api: EventModelApi<Sr2020Character>, data: { modifier: Modifier; durationInSeconds: number }) {
-  addTemporaryModifier(api, data.modifier, moment.duration(data.durationInSeconds, 'seconds'));
+export function addTemporaryModifierEvent(
+  api: EventModelApi<Sr2020Character>,
+  data: { modifier: Modifier; durationInSeconds: number; effectDescription: string },
+) {
+  addTemporaryModifier(api, data.modifier, moment.duration(data.durationInSeconds, 'seconds'), data.effectDescription);
 }
 
 // Adds 'self-destructing' modifier. If you need some temporary Effect - use it in the composition with modifierFromEffect.
-export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Modifier, duration: Duration) {
+export function addTemporaryModifier(api: EventModelApi<Sr2020Character>, m: Modifier, duration: Duration, effectDescription: string) {
   api.addModifier(m);
-  api.setTimer(uuid.v4(), duration, removeModifier, { mID: m.mID });
+  api.setTimer(uuid.v4(), `Окончание эффекта "${effectDescription}"`, duration, removeModifier, { mID: m.mID });
 }
 
 // Implementation detail: we need to have it as an Event handler so we can call it on Timer.

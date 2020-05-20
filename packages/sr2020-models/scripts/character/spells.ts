@@ -1,25 +1,25 @@
 import uuid = require('uuid');
-import { Modifier, EventModelApi, EffectModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { reduceManaDensity, recordSpellTrace, shiftSpellTraces, brasiliaEffect } from '../location/events';
+import { brasiliaEffect, recordSpellTrace, reduceManaDensity, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { create, consume } from '../qr/events';
+import { consume, create } from '../qr/events';
 import { revive } from './death_and_rebirth';
 import {
-  sendNotificationAndHistoryRecord,
   addHistoryRecord,
   addTemporaryModifier,
-  modifierFromEffect,
-  validUntil,
   addTemporaryModifierEvent,
+  modifierFromEffect,
   removeModifier,
+  sendNotificationAndHistoryRecord,
+  validUntil,
 } from './util';
 import { getAllActiveAbilities } from './library_registrator';
-import { multiplyAllDiscounts, increaseCharisma, increaseAuraMask, increaseResonance, increaseMaxMeatHp } from './basic_effects';
+import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonance, multiplyAllDiscounts } from './basic_effects';
 import { duration, Duration } from 'moment';
 import { kAllSpells, Spell } from './spells_library';
-import { kEmptyContent, kAllReagents } from '../qr/reagents_library';
+import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-models/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-models/scripts/character/aura_utils';
@@ -219,7 +219,7 @@ export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { pow
     name: 'ground-heal-modifier',
     validUntil: validUntil(api, d),
   });
-  addTemporaryModifier(api, m, d);
+  addTemporaryModifier(api, m, d, 'Наличие временной способности Ground Heal');
 }
 
 export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier & { validUntil: number }) {
@@ -246,7 +246,7 @@ export function liveLongAndProsper(api: EventModelApi<Sr2020Character>, data: { 
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты временно увеличены на ${hpIncrease}`);
   const m = modifierFromEffect(increaseMaxMeatHp, { amount: hpIncrease });
-  addTemporaryModifier(api, m, d);
+  addTemporaryModifier(api, m, d, 'Увеличение хитов');
 }
 
 export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
@@ -254,7 +254,7 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
   const d = duration(10 * data.power, 'minutes');
   sendNotificationAndHistoryRecord(api, 'Лечение', `Максимальные и текущие хиты увеличены на ${hpIncrease} на ${d.asMinutes()} минут.`);
   const m = modifierFromEffect(increaseMaxMeatHp, { amount: hpIncrease });
-  addTemporaryModifier(api, m, d);
+  addTemporaryModifier(api, m, d, 'Увеличение хитов');
 }
 
 //
@@ -266,7 +266,7 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   const d = duration(8 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 3);
   const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
+  addTemporaryModifier(api, m, d, 'Возможность использовать огненные шары');
 }
 
 export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
@@ -286,7 +286,7 @@ export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: Spell
   const amount = Math.max(1, data.power - 2);
   sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${d.asMinutes()} минут`);
   const m = modifierFromEffect(fastChargeEffect, { amount, validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d);
+  addTemporaryModifier(api, m, d, 'Возможность использовать молнии');
 }
 
 export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
@@ -372,6 +372,7 @@ export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asMinutes(),
+    effectDescription: 'Увеличение цен всех товаров',
   });
 }
 
@@ -382,6 +383,7 @@ export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
+    effectDescription: 'Уменьшение цен всех товаров',
   });
 }
 
@@ -392,6 +394,7 @@ export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
+    effectDescription: 'Уменьшение харизмы',
   });
 }
 
@@ -402,6 +405,7 @@ export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData)
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
+    effectDescription: 'Увеличение харизмы',
   });
 }
 
@@ -412,6 +416,7 @@ export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: S
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
+    effectDescription: 'Увеличение маски ауры',
   });
 }
 
@@ -422,6 +427,7 @@ export function odusSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
+    effectDescription: 'Уменьшение резонанса',
   });
 }
 
@@ -455,7 +461,7 @@ function applyAndGetMagicFeedback(
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
 
   api.addModifier(m);
-  api.setTimer('feedback-recovery-' + uuid.v4(), feedbackDuration, removeModifier, { mID: m.mID });
+  api.setTimer('feedback-recovery-' + uuid.v4(), 'Окончание магического отката', feedbackDuration, removeModifier, { mID: m.mID });
 
   return { amount: feedbackAmount, feedback, duration: feedbackDuration };
 }

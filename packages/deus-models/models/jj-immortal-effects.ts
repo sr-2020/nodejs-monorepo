@@ -1,8 +1,8 @@
 import * as moment from 'moment';
+import { EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import helpers = require('../helpers/model-helper');
 import medichelpers = require('../helpers/medic-helper');
-import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 
 interface JjImmortalOneModifier extends Modifier {
   currentStage: number;
@@ -63,7 +63,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
   const timerName = 'jj-immortal-one-' + modifier.mID;
 
   api.info(`jjImmortalOneStartEvent: set timer ${timerName}`);
-  api.setTimer(timerName, moment.duration(modifier.stages[0].duration, 'seconds'), 'jj-immortal-one-next-stage', { mID: modifier.mID });
+  api.setTimer(timerName, '', moment.duration(modifier.stages[0].duration, 'seconds'), 'jj-immortal-one-next-stage', { mID: modifier.mID });
 }
 
 // Событие jj-immortal-one-next-stage
@@ -98,7 +98,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
     api.removeModifier(modifier.mID);
   } else {
     api.info(`jjImmortalOneStartEvent: start timer ${timerName}`);
-    api.setTimer(timerName, moment.duration(duration, 'seconds'), 'jj-immortal-one-next-stage', { mID: modifier.mID });
+    api.setTimer(timerName, '', moment.duration(duration, 'seconds'), 'jj-immortal-one-next-stage', { mID: modifier.mID });
   }
 }
 
@@ -136,7 +136,7 @@ function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data) {
   }
 
   api.removeTimer('jj-immortal-one-' + jjOne.mID);
-  api.setTimer('jj-immortal-two-awake', moment.duration(5, 'minutes'), 'jj-immortal-two-awake', data);
+  api.setTimer('jj-immortal-two-awake', '', moment.duration(5, 'minutes'), 'jj-immortal-two-awake', data);
   helpers.addChangeRecord(api, data.pill.stages[0], api.model.timestamp);
 }
 

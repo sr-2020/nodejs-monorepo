@@ -82,7 +82,7 @@ export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbili
   api.model.modifiers = [];
   api.model.timers = [];
 
-  api.setTimer('clear', duration(5, 'minutes'), clearMentalAbility, {});
+  api.setTimer('clear', '', duration(5, 'minutes'), clearMentalAbility, {});
 }
 
 export function clearMentalAbility(api: EventModelApi<QrCode>, data: {}) {

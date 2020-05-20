@@ -1,5 +1,4 @@
-import { Condition, Effect, Modifier, EventModelApi, EffectModelApi } from 'interface/src/models/alice-model-engine';
-import uuid = require('uuid/v1');
+import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from 'interface/src/models/alice-model-engine';
 import * as moment from 'moment';
 import {
   allSystemsIndices,
@@ -10,9 +9,10 @@ import {
   systemCorrespondsToColor,
   XenoDisease,
 } from '../helpers/basic-types';
+import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
+import uuid = require('uuid/v1');
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
-import { getSymptoms, getSymptomValue, Symptoms } from '../helpers/symptoms';
 
 function updateIsAlive(model: OrganismModel) {
   if (getSymptoms(model).has(Symptoms.Death)) model.isAlive = false;
@@ -69,7 +69,7 @@ function diseaseTick(api: EventModelApi<OrganismModel>, data: DiseaseTickData) {
         return api.model.systems[i].nucleotide + getSymptomValue(api.model.systems[i]);
       }),
     };
-    api.setTimer(uuid(), moment.duration(consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'mutation', mutationData);
+    api.setTimer(uuid(), 'Мутация', moment.duration(consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'mutation', mutationData);
   }
 }
 
@@ -114,7 +114,7 @@ function biologicalSystemsInfluence(api: EventModelApi<OrganismModel>, totalChan
       }
     }
 
-    api.setTimer(uuid(), moment.duration(i * consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'disease-tick', tickData);
+    api.setTimer(uuid(), 'Этап болезни', moment.duration(i * consts.MAGELLAN_TICK_MILLISECONDS, 'milliseconds'), 'disease-tick', tickData);
   }
 }
 
@@ -187,7 +187,7 @@ function spaceSuitRefill(api: EventModelApi<OrganismModel>, data: SpaceSuitRefil
   api.model.spaceSuit.oxygenCapacity = oxygenTimeMs;
   api.model.spaceSuit.timestampWhenPutOn = api.model.timestamp;
 
-  api.setTimer('spacesuit', moment.duration(oxygenTimeMs, 'milliseconds'), 'space-suit-take-off', 0);
+  api.setTimer('spacesuit', 'Автоматическое снятие скафандра', moment.duration(oxygenTimeMs, 'milliseconds'), 'space-suit-take-off', 0);
   api.model.spaceSuit.on = true;
 }
 

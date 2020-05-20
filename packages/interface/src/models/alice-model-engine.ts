@@ -2,7 +2,7 @@ export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' |
 export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { Duration } from 'moment';
 import { model, property } from '@loopback/repository';
-import { PushNotification, PubSubNotification } from './push-notification.model';
+import { PubSubNotification, PushNotification } from './push-notification.model';
 import { EventCallback } from '@sr2020/interface/callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
 
@@ -79,6 +79,7 @@ export class Timer {
   @rproperty() name: string;
   @rproperty() miliseconds: number;
   @rproperty() eventType: string;
+  @rproperty() description: string;
   @property({ type: Object }) data: any;
 }
 
@@ -278,7 +279,13 @@ export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(
+    name: string,
+    description: string,
+    duration: Duration,
+    event: EventCallback<T, TEventData> | string,
+    data: TEventData,
+  ): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;
@@ -324,7 +331,13 @@ export interface EffectModelApi<T extends EmptyModel> extends LogApiInterface {
 
   // Schedules delayed event for current character.
   // name should be unique - in other case new timer will override existing one.
-  setTimer<TEventData = any>(name: string, duration: Duration, eventType: EventCallback<T, TEventData> | string, data: TEventData): this;
+  setTimer<TEventData = any>(
+    name: string,
+    description: string,
+    duration: Duration,
+    eventType: EventCallback<T, TEventData> | string,
+    data: TEventData,
+  ): this;
   // Cancels existing timer.
   // NB: timer must exist!
   removeTimer(name: string): this;

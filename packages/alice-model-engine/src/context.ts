@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { AquiredObjects, EmptyModel, Event, PendingAquire, Timer, EventForModelType } from 'interface/src/models/alice-model-engine';
-import { PushNotification, PubSubNotification } from '@sr2020/interface/models';
+import { AquiredObjects, EmptyModel, Event, EventForModelType, PendingAquire, Timer } from 'interface/src/models/alice-model-engine';
+import { PubSubNotification, PushNotification } from '@sr2020/interface/models';
 import { assert } from 'console';
 
 export type FieldName = string | string[];
@@ -102,10 +102,10 @@ export class Context<T extends EmptyModel> {
     return _.get(this._dictionaries, name, undefined);
   }
 
-  public setTimer(name: string, miliseconds: number, eventType: string, data: any): this {
+  public setTimer(name: string, description: string, miliseconds: number, eventType: string, data: any): this {
     // Remove existing timers with this name if any are present
     this.baseModel.timers = this.baseModel.timers.filter((t) => t.name != name);
-    this.baseModel.timers.push({ name, miliseconds, eventType, data });
+    this.baseModel.timers.push({ name, description, miliseconds, eventType, data });
     return this;
   }
 
@@ -162,10 +162,8 @@ export class Context<T extends EmptyModel> {
   private decreaseTimers(diff: number): void {
     this.baseModel.timers = this.baseModel.timers.map((t) => {
       return {
-        name: t.name,
+        ...t,
         miliseconds: t.miliseconds - diff,
-        eventType: t.eventType,
-        data: t.data,
       };
     });
     this.workModel.timers = this.baseModel.timers;

@@ -1,10 +1,10 @@
 import * as moment from 'moment';
-import consts = require('../helpers/constants');
-import helpers = require('../helpers/model-helper');
-import medhelpers = require('../helpers/medic-helper');
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
 import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { ImplantModifier } from '../helpers/catalog_types';
+import consts = require('../helpers/constants');
+import helpers = require('../helpers/model-helper');
+import medhelpers = require('../helpers/medic-helper');
 
 /**
  * Обработчик события
@@ -154,7 +154,7 @@ function installSImmortalStage1(api: EventModelApi<DeusExModel>, implant) {
     api.info(`installSImmortalStage1: set timer ${consts.S_IMMORTAL_TIMER_NAME} for 60 min`);
 
     if (!api.getTimer(consts.S_IMMORTAL_TIMER_NAME)) {
-      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, moment.duration(600, 'seconds'), 'serenity-immortality-ready', { mID: implant.mID });
+      api.setTimer(consts.S_IMMORTAL_TIMER_NAME, '', moment.duration(600, 'seconds'), 'serenity-immortality-ready', { mID: implant.mID });
     }
   }
 }

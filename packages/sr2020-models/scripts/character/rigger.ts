@@ -1,11 +1,11 @@
-import { EventModelApi, UserVisibleError, Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedImplant } from '@sr2020/interface/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { AddedImplant, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
-import { autodocRevive, autodocHeal, healthStateTransition } from './death_and_rebirth';
+import { autodocHeal, autodocRevive, healthStateTransition } from './death_and_rebirth';
 import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-models/scripts/character/active_abilities';
 import { duration } from 'moment';
@@ -123,7 +123,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // TODO: Check skill?
 
   const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
-  api.setTimer(kDroneTimerIds[0], timeInDrone, droneTimeout, {});
+  api.setTimer(kDroneTimerIds[0], 'Аварийный выход из дрона', timeInDrone, droneTimeout, {});
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
@@ -248,8 +248,9 @@ export function droneEmergencyExit(api: EventModelApi<Sr2020Character>, data: {}
   if (m.stage != 0) return; // Emergency exit already triggered
   m.postDroneDamage += 1;
 
-  api.setTimer(kDroneTimerIds[1], duration(10, 'minutes'), droneReturnTimeoutTick1, {});
-  api.setTimer(kDroneTimerIds[2], duration(30, 'minutes'), droneReturnTimeoutTick2, {});
+  const timerDescription = 'Увеличение штрафа за слишком долгое пребывание в дроне после аварийного выхода';
+  api.setTimer(kDroneTimerIds[1], timerDescription, duration(10, 'minutes'), droneReturnTimeoutTick1, {});
+  api.setTimer(kDroneTimerIds[2], timerDescription, duration(30, 'minutes'), droneReturnTimeoutTick2, {});
 }
 
 export function droneReturnTimeoutTick1(api: EventModelApi<Sr2020Character>, data: {}) {

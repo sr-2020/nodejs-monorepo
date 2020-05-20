@@ -104,7 +104,7 @@ export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
 export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
-  addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d);
+  addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d, 'Действие способности I will survive');
 }
 
 export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
@@ -182,7 +182,7 @@ export function investigateScoring(api: EventModelApi<Sr2020Character>, data: Ac
 
 export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data: {}) {
   api.sendNotification('Скоринг', 'В течение пяти минут на странице экономики отображаются подробности вашего скоринга');
-  addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect, {}), duration(5, 'minutes'));
+  addTemporaryModifier(api, modifierFromEffect(addMyScoringEffect, {}), duration(5, 'minutes'), 'Изменение скоринга');
 }
 
 export function addMyScoringEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
@@ -197,7 +197,12 @@ export function changeAuraAbility(api: EventModelApi<Sr2020Character>, data: Act
 }
 
 export function changeAuraEvent(api: EventModelApi<Sr2020Character>, data: {}) {
-  addTemporaryModifier(api, modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(20) }), duration(1, 'hour'));
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(20) }),
+    duration(1, 'hour'),
+    'Изменение ауры',
+  );
 }
 
 export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifier & { mask: string }) {

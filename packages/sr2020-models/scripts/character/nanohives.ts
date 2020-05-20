@@ -71,7 +71,12 @@ export function nanohiveShooterAbility(api: EventModelApi<Sr2020Character>, data
 
 export function nanohiveHealhAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   reduceEssence(api);
-  addTemporaryModifier(api, modifierFromEffect(increaseMaxMeatHp, { amount: 2 }), duration(15, 'minutes'));
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(increaseMaxMeatHp, { amount: 2 }),
+    duration(15, 'minutes'),
+    'Увеличение количества хитов на 2',
+  );
 }
 
 export function nanohiveBackupAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

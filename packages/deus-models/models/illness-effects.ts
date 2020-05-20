@@ -3,14 +3,14 @@
  */
 
 import * as moment from 'moment';
+import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { Illness, IllnessModifier } from 'deus-models/helpers/catalog_types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import clone = require('clone');
 import infection = require('../helpers/infection-illness');
-import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Illness, IllnessModifier } from 'deus-models/helpers/catalog_types';
 
 /**
  * Обработчик события start-illness
@@ -53,7 +53,13 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
 
       api.info(`startIllnessEvent: start timer: ${timerName} to ${illness.illnessStages[0].duration} sec (stage 0)`);
 
-      api.setTimer(timerName, moment.duration(illness.illnessStages[0].duration, 'seconds'), 'illness-next-stage', { mID: illness.mID });
+      api.setTimer(
+        timerName,
+        'Следующая стадия болезни',
+        moment.duration(illness.illnessStages[0].duration, 'seconds'),
+        'illness-next-stage',
+        { mID: illness.mID },
+      );
     } else {
       api.error(`startIllnessEvent: can't load illness: ${data.id}`);
     }
@@ -99,7 +105,9 @@ function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
 
         api.info(`startIllnessEvent: illness ${illness.id}, start stage ${illness.currentStage}, set timer to ${duration} sec`);
 
-        api.setTimer(timerName, moment.duration(duration, 'seconds'), 'illness-next-stage', { mID: illness.mID });
+        api.setTimer(timerName, 'Следующая стадия болезни', moment.duration(duration, 'seconds'), 'illness-next-stage', {
+          mID: illness.mID,
+        });
       } else {
         //Если это последний этап, то убить систему
         const totalTime = Math.round((api.model.timestamp - illness.startTime) / 1000);

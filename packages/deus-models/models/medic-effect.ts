@@ -3,15 +3,15 @@
  */
 import { DamageModifier, ImplantModifier } from '../helpers/catalog_types';
 
+import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import * as moment from 'moment';
+
 const Chance = require('chance');
 
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
-
-import { Modifier, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import * as moment from 'moment';
 
 /**
  * Формат специального модификатора в каждой модели для отображения и хранения ущерба
@@ -93,7 +93,7 @@ function leakHpEvent(api: EventModelApi<DeusExModel>, event) {
     m.damage += 1;
     api.info(`leakHpEvent: damage +1 => ${m.damage}`);
 
-    api.setTimer(consts.HP_LEAK_TIMER, moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'leak-hp', {});
+    api.setTimer(consts.HP_LEAK_TIMER, 'Уменьшение хитов', moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'leak-hp', {});
 
     helpers.addChangeRecord(api, 'Вы потеряли 1 hp', event.timestamp);
   }
@@ -118,7 +118,7 @@ function regenHpEvent(api: EventModelApi<DeusExModel>, event) {
     m.damage -= 1;
     api.info(`regenHpEvent: damage -1 => ${m.damage}`);
 
-    api.setTimer(consts.HP_REGEN_TIMER, moment.duration(consts.HP_REGEN_DELAY, 'milliseconds'), 'regen-hp', {});
+    api.setTimer(consts.HP_REGEN_TIMER, 'Восстановление хитов', moment.duration(consts.HP_REGEN_DELAY, 'milliseconds'), 'regen-hp', {});
 
     helpers.addChangeRecord(api, 'Вы восстановили 1 hp', event.timestamp);
   }
@@ -278,7 +278,7 @@ function damageEffect(api: EffectModelApi<DeusExModel>, modifier: DamageModifier
 
     if (!api.getTimer(consts.DEATH_TIMER)) {
       api.info(`damageEffect: start death timer!`);
-      api.setTimer(consts.DEATH_TIMER, moment.duration(consts.DEATH_DELAY, 'milliseconds'), 'character-death', {});
+      api.setTimer(consts.DEATH_TIMER, 'Смерть', moment.duration(consts.DEATH_DELAY, 'milliseconds'), 'character-death', {});
 
       api.sendSelfEvent('add-change-record', {
         text: `Тяжелое повреждение организма! Требуется немедленная реанимация, возможна смерть в течении 20 минут`,
@@ -327,7 +327,7 @@ function handleDroidsWounded(api: EffectModelApi<DeusExModel>) {
 function startRegenTimerIfRequired(api: EffectModelApi<DeusExModel>) {
   if (!api.getTimer(consts.HP_REGEN_TIMER)) {
     api.info(`damageEffect: damage detected ==> start regen HP timer!`);
-    api.setTimer(consts.HP_REGEN_TIMER, moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'regen-hp', {});
+    api.setTimer(consts.HP_REGEN_TIMER, 'Восстановление хитов', moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'regen-hp', {});
   }
 }
 
@@ -352,7 +352,7 @@ function handleHumansWounded(api: EffectModelApi<DeusExModel>, deadSystems) {
 function startLeakTimerIfRequired(api: EffectModelApi<DeusExModel>) {
   if (!api.getTimer(consts.HP_LEAK_TIMER)) {
     api.info(`damageEffect: damage detected ==> start leak HP timer!`);
-    api.setTimer(consts.HP_LEAK_TIMER, moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'leak-hp', {});
+    api.setTimer(consts.HP_LEAK_TIMER, 'Уменьшение хитов', moment.duration(consts.HP_LEAK_DELAY, 'milliseconds'), 'leak-hp', {});
   }
 }
 
@@ -445,7 +445,7 @@ function timedRecoveryEffect(api: EffectModelApi<DeusExModel>, modifier: Modifie
 
     if (!api.getTimer(timerName)) {
       api.warn(`timedRecoveryEffect: damage detected ==> set HP recovery timer, with name ${timerName} to ${params.recoveryRate}sec!`);
-      api.setTimer(timerName, moment.duration(params.recoveryRate, 'seconds'), 'recover-hp', {});
+      api.setTimer(timerName, 'Восстановление хитов', moment.duration(params.recoveryRate, 'seconds'), 'recover-hp', {});
     }
   }
 }
@@ -502,7 +502,10 @@ function timedRecoverSystemsEffect(api: EffectModelApi<DeusExModel>, modifier: M
       api.info(
         `timedRecoverSystemsEffect: dead systems detected ==> set system recovery timer, with name ${timerName} to ${params.recoveryTime} sec!`,
       );
-      api.setTimer(timerName, moment.duration(params.recoveryTime, 'seconds'), 'recover-systems', { mID: modifier.mID, hpRemain });
+      api.setTimer(timerName, 'Восстановление системы организма', moment.duration(params.recoveryTime, 'seconds'), 'recover-systems', {
+        mID: modifier.mID,
+        hpRemain,
+      });
     } else {
       api.info(`timedRecoverSystemsEffect: dead systems detected ==> timer already activated!`);
     }

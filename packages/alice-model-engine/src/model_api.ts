@@ -1,15 +1,14 @@
 import {
   AquiredObjects,
+  EffectModelApi,
   EmptyModel,
   Event,
+  EventModelApi,
   LogApiInterface,
+  Modifier,
   PreprocessApiInterface,
   ViewModelApiInterface,
-  Modifier,
-  EventModelApi,
-  EffectModelApi,
 } from 'interface/src/models/alice-model-engine';
-import cuid = require('cuid');
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
@@ -17,6 +16,7 @@ import { Context } from './context';
 import Logger from './logger';
 import { EventCallback } from '@sr2020/interface/callbacks';
 import { Duration } from 'moment';
+import cuid = require('cuid');
 
 class LogApi implements LogApiInterface {
   public debug(msg: string, additionalData?: any) {
@@ -108,11 +108,17 @@ class EventModelApiImpl<T extends EmptyModel> extends LogApi implements EventMod
     return this;
   }
 
-  public setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData) {
+  public setTimer<TEventData = any>(
+    name: string,
+    description: string,
+    duration: Duration,
+    event: EventCallback<T, TEventData> | string,
+    data: TEventData,
+  ) {
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.context.setTimer(name, duration.asMilliseconds(), event, data);
+    this.context.setTimer(name, description, duration.asMilliseconds(), event, data);
     return this;
   }
 
@@ -204,11 +210,17 @@ class EffectModelApiImpl<T extends EmptyModel> extends LogApi implements EffectM
     return this.context.workModel.timers.find((it) => it.name == name);
   }
 
-  public setTimer<TEventData = any>(name: string, duration: Duration, event: EventCallback<T, TEventData> | string, data: TEventData) {
+  public setTimer<TEventData = any>(
+    name: string,
+    description: string,
+    duration: Duration,
+    event: EventCallback<T, TEventData> | string,
+    data: TEventData,
+  ) {
     if (typeof event != 'string') {
       event = event.name;
     }
-    this.context.setTimer(name, duration.asMilliseconds(), event, data);
+    this.context.setTimer(name, description, duration.asMilliseconds(), event, data);
     return this;
   }
 

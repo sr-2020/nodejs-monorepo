@@ -1,17 +1,17 @@
-import { EventModelApi, UserVisibleError, EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, Concentrations } from '@sr2020/interface/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { Concentrations, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
-import { addTemporaryModifier, modifierFromEffect, validUntil, addHistoryRecord, sendNotificationAndHistoryRecord } from './util';
+import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord, validUntil } from './util';
 import { duration, Duration } from 'moment';
 import {
-  increaseMentalAttack,
+  increaseAllBaseStats,
   increaseCharisma,
   increaseIntelligence,
+  increaseMaxMeatHp,
+  increaseMentalAttack,
+  increaseMentalAttackAndProtection,
   increaseResonance,
   multiplyCooldownCoefficient,
-  increaseMentalAttackAndProtection,
-  increaseMaxMeatHp,
-  increaseAllBaseStats,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
@@ -41,6 +41,8 @@ interface ChemoEffect {
 }
 
 export type ChemoModifier = ModifierWithAmount & { element: keyof Concentrations };
+
+const kAddictionNextStageTimerDescription = 'Этап наркотической зависимости';
 
 export const kAllElements: Array<keyof Concentrations> = [
   'iodine',
@@ -751,6 +753,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: Merchand
         api,
         modifierFromEffect(increaseConcentration, { element: element as keyof Concentrations, amount }, modifierClass),
         duration(1, 'hour'),
+        'Наличие химоты в организме',
       );
     }
   }
@@ -806,6 +809,7 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
           modifierClass,
         ),
         effect.durationEffect.duration,
+        'Воздействие химоты',
       );
     }
   }
@@ -962,7 +966,7 @@ function hasAddiction(api, element: keyof Concentrations): boolean {
 function addAddiction(api: EventModelApi<Sr2020Character>, element: keyof Concentrations) {
   if (!hasAddiction(api, element)) {
     api.addModifier(createAddiction(element));
-    api.setTimer(addictionTimerName(element), duration(1, 'hour'), advanceAddiction, { element });
+    api.setTimer(addictionTimerName(element), kAddictionNextStageTimerDescription, duration(1, 'hour'), advanceAddiction, { element });
   }
 }
 
@@ -993,15 +997,15 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
       'Зависимость',
       'Тебя крючит, хочется дозу. Садись (при возможности ложись), и пять минут активно ненавидь всех окружающих. Говори им гадости, страдай.',
     );
-    api.setTimer(addictionTimerName(data.element), duration(1, 'hour'), advanceAddiction, data);
+    api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(1, 'hour'), advanceAddiction, data);
   } else if (addiction.stage == 2) {
     sendNotificationAndHistoryRecord(api, 'Зависимость', 'Базовые параметры персонажа уменьшились.');
     addiction.effects[0].enabled = true;
-    api.setTimer(addictionTimerName(data.element), duration(2, 'hour'), advanceAddiction, data);
+    api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(2, 'hour'), advanceAddiction, data);
   } else if (addiction.stage == 3) {
     sendNotificationAndHistoryRecord(api, 'Зависимость', 'Максимальные хиты уменьшились.');
     addiction.effects[1].enabled = true;
-    api.setTimer(addictionTimerName(data.element), duration(4, 'hour'), advanceAddiction, data);
+    api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(4, 'hour'), advanceAddiction, data);
   } else if (addiction.stage == 4) {
     if (api.workModel.healthState != 'biologically_dead') {
       healthStateTransition(api, 'clinically_dead');

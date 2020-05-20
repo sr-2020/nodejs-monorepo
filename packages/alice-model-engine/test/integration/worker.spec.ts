@@ -1,4 +1,4 @@
-import { EngineResultOk, Effect, EmptyModel } from 'interface/src/models/alice-model-engine';
+import { Effect, EmptyModel, EngineResultOk } from 'interface/src/models/alice-model-engine';
 import { expect } from 'chai';
 import 'mocha';
 import { Config, EventHandler } from '../../src/config';
@@ -109,6 +109,7 @@ describe('Worker', () => {
 
     const expectedTimer = {
       name: 'delayedConcat',
+      description: '',
       miliseconds: 2000,
       eventType: 'concat',
       data: { operand: 'value', value: 'B' },

@@ -1,13 +1,14 @@
-import { Sr2020Character, AddedActiveAbility } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedActiveAbility, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import Chance = require('chance');
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
-import { FullTargetedAbilityData, FullActiveAbilityData } from './active_abilities';
+import { FullActiveAbilityData, FullTargetedAbilityData } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
 import { MentalQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import Chance = require('chance');
+
 const chance = new Chance();
 
 // Returns a result of the roll of X dices DY
@@ -88,5 +89,6 @@ export function adjustMentalProtectionEvent(api: EventModelApi<Sr2020Character>,
     api,
     modifierFromEffect(increaseMentalProtection, { amount: data.amount }),
     duration(data.durationMinutes, 'minutes'),
+    'Изменение ментальной защиты',
   );
 }

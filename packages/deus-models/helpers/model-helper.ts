@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { MindData } from '../models/medicViewModel';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Implant, Illness, ImplantModifier } from './catalog_types';
-import { Effect, Modifier, Condition, EventModelApi, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { Illness, Implant, ImplantModifier } from './catalog_types';
+import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 
@@ -298,7 +298,7 @@ function addDelayedEvent(api: EventModelApi<DeusExModel>, duration: number, even
   if (api && duration && eventType && data) {
     const timerName = `${prefix}-${chance.natural({ min: 0, max: 999999 })}`;
 
-    api.setTimer(timerName, moment.duration(duration, 'milliseconds'), eventType, data);
+    api.setTimer(timerName, '', moment.duration(duration, 'milliseconds'), eventType, data);
 
     api.info(`Set timer ${timerName} for event ${eventType} after ${duration} ms`);
   } else {
@@ -438,7 +438,7 @@ function modifyModelDigitProperty(api: EffectModelApi<DeusExModel>, varName: str
 }
 
 function setTimerToKillModifier(api: EventModelApi<DeusExModel>, modifier: Modifier, timestamp: number) {
-  api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, moment.duration(timestamp - 1, 'milliseconds'), 'stop-narco-modifier', {
+  api.setTimer(consts.NARCO_TIME_PREFIX + modifier.mID, '', moment.duration(timestamp - 1, 'milliseconds'), 'stop-narco-modifier', {
     mID: modifier.mID,
   });
 }

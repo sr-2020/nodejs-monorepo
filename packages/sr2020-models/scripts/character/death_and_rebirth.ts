@@ -101,10 +101,16 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
   }
 
   if (stateFrom == 'healthy' && stateTo == 'wounded') {
-    api.setTimer(kClinicalDeathTimerName, kClinicalDeathTimerTime, clinicalDeath, {});
-    api.setTimer(kMedkitReviveTimerName, kMedkitReviveTimerTime, medkitTryToRevive, {});
+    api.setTimer(kClinicalDeathTimerName, 'Клиническая смерть', kClinicalDeathTimerTime, clinicalDeath, {});
+    api.setTimer(kMedkitReviveTimerName, 'Лечение медкитом', kMedkitReviveTimerTime, medkitTryToRevive, {});
     if (hasEnabledIWillSurvive(api)) {
-      api.setTimer(kIWillSurviveReviveTimerName, kIWillSurviveReviveTimerTime, iWillSurviveRevive, {});
+      api.setTimer(
+        kIWillSurviveReviveTimerName,
+        'Лечение способностью I will survive',
+        kIWillSurviveReviveTimerTime,
+        iWillSurviveRevive,
+        {},
+      );
     }
   }
 
@@ -119,7 +125,7 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
 export function medkitTryToRevive(api: EventModelApi<Sr2020Character>, _data: {}) {
   if (!hasEnabledMedkit(api)) return;
   revive(api, {});
-  addTemporaryModifier(api, modifierFromEffect(disableMedkit, {}), duration(4, 'hours'));
+  addTemporaryModifier(api, modifierFromEffect(disableMedkit, {}), duration(4, 'hours'), 'Медкит на кулдауне');
 }
 
 export function disableMedkit(api: EffectModelApi<Sr2020Character>, m: Modifier) {
