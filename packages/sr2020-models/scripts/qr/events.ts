@@ -122,6 +122,10 @@ export function createLocusQr(api: EventModelApi<QrCode>, data: { groupId: strin
 }
 
 export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: string }) {
+  if (api.model.type != 'empty' && api.model.type != 'body_storage') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
   const qrData: BodyStorageQrData = {};
 
   api.model = {
