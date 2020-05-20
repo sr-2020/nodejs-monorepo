@@ -1224,6 +1224,31 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
+    id: 'reanimate',
+    humanReadableName: 'Встань и иди',
+    description: 'Поднять персонажа из состояния клинической смерти',
+    // 474
+    // Переводит чаммера из состояния КС в состояние Здоров
+    // надо отсканировать:
+    // - QR воскрешательной капсулы
+    // - QR ИИ
+    // - QR целевого чаммера
+    // Делается запись в лог использования абилок (кто использовал, какая капсула, какой ИИ, какой символ чаммер)
+    // В зависимости от параметров Капсулы делает вот что:
+    // drain-essense = Снимает с целевого чаммера Эссенс
+    // get-essence = записывает в таблицу Имя ИИ и количество get-essence
+    // air-essense  = записывает в таблици количество Air Essense
+    // reanimate-cooldown = кулдаун в минутах у персонажа, применившего абилку
+    // price-reanimate  = Это коэффициент цены, его надо как-то учесть в экономике (прописать в цену услуги "воскрешение на оборудовании таком-то ???)
+    // TODO(https://trello.com/c/zmEyF3zl/272-абилка-и-лог-использования-абилки-воскрешения): Add proper implementation
+    target: 'scan',
+    targetsSignature: kMedcartDeadBodyTargeted,
+    cooldownMinutes: 5,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
     id: 'implant-active',
     humanReadableName: 'Установка импланта',
     description: 'Для установки импланта используй эту способность. Необходим автодок!',
