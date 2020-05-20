@@ -47,6 +47,18 @@ export interface DroneData {
 
 export type DroneQrData = DroneData & MerchandiseQrData;
 
+// qr.type == 'reanimate_capsule'
+export interface ReanimateCapsuleData {
+  essenceGet: number;
+  essenceAir: number;
+  cooldown: number;
+}
+
+// qr.type == 'ai_symbol'
+export interface AiSymbolData {
+  ai: string;
+}
+
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;
 }
