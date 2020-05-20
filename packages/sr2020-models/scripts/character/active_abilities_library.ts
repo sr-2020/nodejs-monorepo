@@ -25,7 +25,7 @@ import {
   useMentalAbility,
   youDontTrustAnybody,
 } from './mental';
-import { autodocHeal, autodocRevive, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import { autodocHeal, autodocRevive, capsuleReanimate, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/interface/models/qr-code.model';
 import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
 import {
@@ -1240,12 +1240,27 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // air-essense  = записывает в таблици количество Air Essense
     // reanimate-cooldown = кулдаун в минутах у персонажа, применившего абилку
     // price-reanimate  = Это коэффициент цены, его надо как-то учесть в экономике (прописать в цену услуги "воскрешение на оборудовании таком-то ???)
-    // TODO(https://trello.com/c/zmEyF3zl/272-абилка-и-лог-использования-абилки-воскрешения): Add proper implementation
     target: 'scan',
-    targetsSignature: kMedcartDeadBodyTargeted,
+    targetsSignature: [
+      {
+        name: 'Капсула',
+        allowedTypes: ['reanimate_capsule'],
+        field: 'droneId',
+      },
+      {
+        name: 'ИИ',
+        allowedTypes: ['ai_symbol'],
+        field: 'qrCode',
+      },
+      {
+        name: 'Пациент',
+        allowedTypes: ['CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: 5,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: capsuleReanimate.name,
   },
 
   {

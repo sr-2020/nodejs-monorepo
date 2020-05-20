@@ -1,10 +1,12 @@
 import { duration } from 'moment';
-import { Sr2020Character, HealthState } from '@sr2020/interface/models/sr2020-character.model';
-import { EventModelApi, EffectModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { sendNotificationAndHistoryRecord, modifierFromEffect, addTemporaryModifier } from './util';
-import { FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
+import { HealthState, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
+import { ActiveAbilityData, FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
 import { resetAllAddictions } from './chemo';
+import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
@@ -138,4 +140,41 @@ function hasEnabledIWillSurvive(api: EventModelApi<Sr2020Character>): boolean {
 export function iWillSurviveRevive(api: EventModelApi<Sr2020Character>, data: {}) {
   revive(api, {});
   api.removeModifier(kIWillSurviveModifierId);
+}
+
+export function capsuleReanimate(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const capsule = api.aquired(QrCode, data.droneId!);
+  if (!(capsule?.type == 'reanimate_capsule')) {
+    throw new UserVisibleError('Отсканированный QR не является капсулой');
+  }
+
+  const ai = api.aquired(QrCode, data.qrCode!);
+  if (!(ai?.type == 'ai_symbol')) {
+    throw new UserVisibleError('Отсканированный QR не является ИИ');
+  }
+
+  const capsuleData = typedQrData<ReanimateCapsuleData>(capsule);
+  const aiData = typedQrData<AiSymbolData>(ai);
+
+  const thisAbility = api.model.activeAbilities.find((a) => a.id == data.id)!;
+  thisAbility.cooldownUntil += capsuleData.cooldown * 60 * 1000 * api.workModel.cooldownCoefficient;
+
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!.toString(), reviveByCapsule, {
+    essenceCost: capsuleData.essenceGet + capsuleData.essenceAir,
+  });
+
+  api.sendPubSubNotification('reanimates', {
+    medic: api.workModel.modelId,
+    patient: data.targetCharacterId,
+    capsuleName: capsule.name,
+    ...capsuleData,
+    ...aiData,
+  });
+}
+
+export function reviveByCapsule(api: EventModelApi<Sr2020Character>, data: { essenceCost: number }) {
+  const cost = Math.min(api.workModel.essence, data.essenceCost);
+  api.model.essenceDetails.gap += cost;
+
+  revive(api, {});
 }
