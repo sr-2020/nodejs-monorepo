@@ -5,6 +5,7 @@ import * as moment from 'moment';
      yarn --cwd packages/sheets-export build
      gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated
      gcloud functions deploy abilityUsedToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=ability_used --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy reanimatesToSheet  --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=reanimates   --region=europe-west3 --no-allow-unauthenticated
 */
 
 function currentMoscowDateTime() {
@@ -50,5 +51,22 @@ export async function abilityUsedToSheet(event: { data: string }) {
     payload.id,
     payload.name,
     payload.targetCharacterId ?? '',
+  ]);
+}
+
+export async function reanimatesToSheet(event: { data: string }) {
+  const payload: { medic: string; patient: string; capsuleName: string; ai: string; essenceGet: number; essenceAir: number } = JSON.parse(
+    Buffer.from(event.data, 'base64').toString(),
+  );
+  console.log(payload);
+
+  await appendToSpreadsheet('Воскрешения!A1:G1', [
+    currentMoscowDateTime(),
+    payload.medic,
+    payload.patient,
+    payload.capsuleName,
+    payload.ai,
+    payload.essenceAir,
+    payload.essenceGet,
   ]);
 }
