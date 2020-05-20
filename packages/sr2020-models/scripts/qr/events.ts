@@ -1,8 +1,15 @@
-import { UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
-import { BodyStorageQrData, LocusQrData, MentalQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import {
+  AiSymbolData,
+  BodyStorageQrData,
+  LocusQrData,
+  MentalQrData,
+  ReanimateCapsuleData,
+  TypedQrCode,
+} from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -138,5 +145,47 @@ export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: strin
     modifiers: [],
     timers: [],
     data: qrData,
+  };
+}
+
+export function writeReanimateCapsule(api: EventModelApi<QrCode>, data: { name: string; description: string } & ReanimateCapsuleData) {
+  if (api.model.type != 'empty' && api.model.type != 'reanimate_capsule') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  const qrData: ReanimateCapsuleData = {
+    essenceAir: data.essenceAir,
+    essenceGet: data.essenceGet,
+    cooldown: data.cooldown,
+  };
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'reanimate_capsule',
+    name: data.name,
+    description: data.description,
+    usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data: qrData,
+  };
+}
+
+export function writeAiSymbol(api: EventModelApi<QrCode>, data: AiSymbolData) {
+  if (api.model.type != 'empty' && api.model.type != 'ai_symbol') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'ai_symbol',
+    name: 'Символ ИИ',
+    description: '',
+    usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data,
   };
 }
