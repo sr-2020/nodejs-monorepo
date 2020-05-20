@@ -173,6 +173,10 @@ export function capsuleReanimate(api: EventModelApi<Sr2020Character>, data: Acti
 }
 
 export function reviveByCapsule(api: EventModelApi<Sr2020Character>, data: { essenceCost: number }) {
+  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'].includes(api.model.metarace)) {
+    throw new UserVisibleError('Эта способность действует только на  нормов, эльфов, орков, троллей и гномов');
+  }
+
   const cost = Math.min(api.workModel.essence, data.essenceCost);
   api.model.essenceDetails.gap += cost;
 
