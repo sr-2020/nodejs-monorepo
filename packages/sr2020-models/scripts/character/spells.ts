@@ -461,7 +461,9 @@ function applyAndGetMagicFeedback(
   const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
 
   api.addModifier(m);
-  api.setTimer('feedback-recovery-' + uuid.v4(), 'Окончание магического отката', feedbackDuration, removeModifier, { mID: m.mID });
+  api.setTimer('feedback-recovery-' + uuid.v4(), `Окончание магического отката на ${feedbackAmount}`, feedbackDuration, removeModifier, {
+    mID: m.mID,
+  });
 
   return { amount: feedbackAmount, feedback, duration: feedbackDuration };
 }
