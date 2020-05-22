@@ -59,11 +59,13 @@ export class AnyModelController<TModel extends EmptyModel> {
     const models = await getRepository(this.tmodel)
       .createQueryBuilder()
       .getMany();
-    for (const model of models) {
-      await getManager().transaction(async (transactionManager) => {
-        await this.postEvent(Number(model.modelId), event, transactionManager);
-      });
-    }
+    await Promise.all(
+      models.map((model) =>
+        getManager().transaction(async (transactionManager) => {
+          await this.postEvent(Number(model.modelId), event, transactionManager);
+        }),
+      ),
+    );
   }
 
   // We can't call postEvent directly from get(...) because it will call child's this.postEvent(...). And that wouldn't work
