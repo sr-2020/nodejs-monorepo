@@ -31,6 +31,7 @@ app = new Vue({
     qrCodeEncoded: undefined,
 
     locusCharges: 5,
+    foodNumberOfUses: 5,
 
     bodyStorageName: '',
     aiName: '',
@@ -309,11 +310,15 @@ app = new Vue({
     },
 
     async writeAiSymbolQr() {
-      return this.sendQrEvent({ eventType: 'writeAiSymbol', data: { ai: this.aiName } });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { ai: this.aiName } });
     },
 
     async writeReanimateCapsuleQr() {
       return this.sendQrEvent({ eventType: 'writeReanimateCapsule', data: this.reanimateCapsule });
+    },
+
+    async writeFoodQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'food'} });
     },
   }
 })

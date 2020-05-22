@@ -787,6 +787,22 @@
                  </b-card>
               </b-card-group>
             </div>
+
+            <div  class="mt-3">
+                 <b-card no-body v-if="qrModel.type == 'empty'">
+                   <b-card-header>Запись еды на QR</b-card-header>
+                   <b-card-body>
+                    <b-input-group>
+                      <b-form-input type="number" v-model="foodNumberOfUses"></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeFoodQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                   </b-card-body>
+                 </b-card>
+              </b-card-group>
+            </div>
+
             <div class="mt-3">
               <b-card no-body v-if="qrModel.type == 'empty'">
                 <b-card-header>Запись локуса этической группы / универсального заряда на QR</b-card-header>
