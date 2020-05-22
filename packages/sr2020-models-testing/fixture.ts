@@ -2,7 +2,7 @@ import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/te
 import { Config } from '@sr2020/alice-model-engine/config';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
-import { PushNotification, PushResult, PubSubNotification } from '@sr2020/interface/models';
+import { PubSubNotification, PushNotification, PushResult } from '@sr2020/interface/models';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
@@ -250,7 +250,6 @@ export class TestFixture {
 function getDefaultLocation(timestamp: number): Location {
   return {
     aura: 'aaaaabbbbbcccccddddd',
-    manaDensity: 0,
     modelId: '0',
     spellTraces: [],
     timestamp,

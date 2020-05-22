@@ -78,24 +78,6 @@ describe('Spells', function() {
     }
   });
 
-  it('Enchant artifact, give it to another character, activate in another location', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
-    await fixture.saveCharacter({ modelId: '2' });
-    await fixture.saveQrCode();
-    await fixture.saveLocation({ modelId: '1', manaDensity: 500 });
-    await fixture.saveLocation({ modelId: '2', manaDensity: 400 });
-
-    {
-      await fixture.sendCharacterEvent({ eventType: 'densityHalveSpell', data: { qrCode: '0', location: { id: 1, manaLevel: 500 } } }, 1);
-      expect(await fixture.getLocation(1)).containDeep({ workModel: { manaDensity: 500 } });
-    }
-
-    {
-      await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '0', location: { id: 2, manaLevel: 400 } } }, 2);
-      expect(await fixture.getLocation(2)).containDeep({ workModel: { manaDensity: 200 } });
-    }
-  });
-
   it('Heal self', async () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'fullHealSpell', data: {} });

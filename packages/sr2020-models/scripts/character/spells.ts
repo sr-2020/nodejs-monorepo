@@ -2,7 +2,7 @@ import uuid = require('uuid');
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { brasiliaEffect, recordSpellTrace, reduceManaDensity, shiftSpellTraces } from '../location/events';
+import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { consume, create } from '../qr/events';
 import { revive } from './death_and_rebirth';
@@ -165,18 +165,6 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
   }
   api.sendSelfEvent(increaseResonanceByOne, {});
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
-}
-
-export function densityDrainSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; amount: number }) {
-  api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: data.amount });
-}
-
-export function densityHalveSpell(api: EventModelApi<Sr2020Character>, data: { location: { id: number }; qrCode?: string }) {
-  if (data.qrCode != undefined) {
-    return createArtifact(api, data.qrCode, 'поделить плотность маны пополам', densityHalveSpell.name, 3);
-  }
-  const location = api.aquired(Location, data.location.id.toString());
-  api.sendOutboundEvent(Location, data.location.id.toString(), reduceManaDensity, { amount: location.manaDensity / 2 });
 }
 
 export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string; targetCharacterId?: number }) {

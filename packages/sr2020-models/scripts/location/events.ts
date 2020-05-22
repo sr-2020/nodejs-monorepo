@@ -1,24 +1,9 @@
-import { Event, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { Location, SpellTrace } from '@sr2020/interface/models/location.model';
 import * as uuid from 'uuid';
 import { duration } from 'moment';
 
 const MAX_SPELL_TRACES = 100;
-
-export function reduceManaDensity(api: EventModelApi<Location>, data: { amount: number }) {
-  api.model.manaDensity -= data.amount;
-  if (api.model.manaDensity < 0) {
-    api.model.manaDensity = 0;
-  }
-}
-
-export function scheduleEvent(api: EventModelApi<Location>, data: { event: Event; delayInSeconds: number }) {
-  api.setTimer(uuid.v4(), '', duration(data.delayInSeconds, 'seconds'), data.event.eventType, data.event.data);
-}
-
-export function increaseManaDensityDelayed(api: EventModelApi<Location>, data: { amount: number; delayInSeconds: number }) {
-  api.setTimer(uuid.v4(), '', duration(data.delayInSeconds, 'seconds'), reduceManaDensity, { amount: -data.amount });
-}
 
 export function recordSpellTrace(api: EventModelApi<Location>, data: SpellTrace) {
   if (api.model.spellTraces.length > MAX_SPELL_TRACES) api.model.spellTraces.shift();

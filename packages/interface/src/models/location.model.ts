@@ -1,7 +1,7 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, rproperty, JsonColumn } from './alice-model-engine';
-import { BaseModelProcessResponse, BaseModelProcessRequest } from './process-requests-respose';
-import { Entity, Column } from 'typeorm';
+import { EmptyModel, JsonColumn, rproperty } from './alice-model-engine';
+import { BaseModelProcessRequest, BaseModelProcessResponse } from './process-requests-respose';
+import { Column, Entity } from 'typeorm';
 
 @model()
 export class SpellTrace {
@@ -18,10 +18,6 @@ export class SpellTrace {
   name: 'location',
 })
 export class Location extends EmptyModel {
-  @rproperty()
-  @Column()
-  manaDensity: number;
-
   @property.array(SpellTrace, { required: true })
   @JsonColumn()
   spellTraces: SpellTrace[];

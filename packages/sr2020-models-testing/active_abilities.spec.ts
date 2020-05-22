@@ -15,7 +15,7 @@ describe('Active abilities', function() {
 
   it('I will survive recovery', async () => {
     await fixture.saveCharacter({ magic: 10 });
-    await fixture.saveLocation({ manaDensity: 5, modelId: '7' });
+    await fixture.saveLocation({ modelId: '7' });
 
     await fixture.addCharacterFeature('i-will-survive');
 
