@@ -1,9 +1,9 @@
-import { param, put, requestBody, get, post, del } from '@loopback/rest';
+import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { TransactionManager, EntityManager, Transaction } from 'typeorm';
+import { EntityManager, Transaction, TransactionManager } from 'typeorm';
 import { TimeService } from '../services/time.service';
 import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
@@ -93,5 +93,16 @@ export class QrCodeController extends AnyModelController<QrCode> {
     @TransactionManager() manager: EntityManager,
   ): Promise<QrCodeProcessResponse> {
     return super.postEvent(id, event, manager);
+  }
+
+  @post('/qr/broadcast', {
+    responses: {
+      '200': {
+        description: 'Event successfully broadcasted',
+      },
+    },
+  })
+  broadcast(@requestBody() event: EventRequest): Promise<void> {
+    return this.broadcastEvent(event);
   }
 }

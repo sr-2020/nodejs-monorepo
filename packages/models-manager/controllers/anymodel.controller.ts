@@ -1,11 +1,11 @@
 import { EmptyModel, EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService, PushService, processAny } from '@sr2020/interface/services';
+import { ModelEngineService, processAny, PushService } from '@sr2020/interface/services';
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { PubSubService } from '../services/pubsub.service';
 import { Empty, PushResult } from '@sr2020/interface/models';
-import { getRepository, EntityManager } from 'typeorm';
+import { EntityManager, getManager, getRepository } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
@@ -53,6 +53,17 @@ export class AnyModelController<TModel extends EmptyModel> {
 
   postEvent(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
     return this.postEventImpl(id, event, manager);
+  }
+
+  async broadcastEvent(event: EventRequest): Promise<void> {
+    const models = await getRepository(this.tmodel)
+      .createQueryBuilder()
+      .getMany();
+    for (const model of models) {
+      await getManager().transaction(async (transactionManager) => {
+        await this.postEvent(Number(model.modelId), event, transactionManager);
+      });
+    }
   }
 
   // We can't call postEvent directly from get(...) because it will call child's this.postEvent(...). And that wouldn't work

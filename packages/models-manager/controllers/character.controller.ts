@@ -1,10 +1,10 @@
 import { inject } from '@loopback/core';
-import { get, param, post, put, requestBody, del } from '@loopback/rest';
+import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
-import { EntityManager, Transaction, TransactionManager, getManager, getRepository } from 'typeorm';
+import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 import { PubSubService } from '../services/pubsub.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
@@ -174,5 +174,16 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     @TransactionManager() manager?: EntityManager,
   ): Promise<Sr2020CharacterProcessResponse> {
     return super.postEvent(id, event, manager!);
+  }
+
+  @post('/character/broadcast', {
+    responses: {
+      '200': {
+        description: 'Event successfully broadcasted',
+      },
+    },
+  })
+  broadcast(@requestBody() event: EventRequest): Promise<void> {
+    return this.broadcastEvent(event);
   }
 }
