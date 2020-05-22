@@ -224,6 +224,9 @@ describe('Chemo events', function() {
 
     for (let i = 0; i < 10; ++i) {
       await fixture.advanceTime(duration(1, 'hour'));
+      // We are advancing time by 10 hours total here. Need to feed the character to prevent from being wounded
+      await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: {} });
+
       expect((await fixture.getCharacter()).workModel).containDeep({
         maxHp: 2,
         resonance: 3,

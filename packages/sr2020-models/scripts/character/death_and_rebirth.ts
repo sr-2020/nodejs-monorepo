@@ -7,6 +7,7 @@ import { kReviveModifierId } from './implants_library';
 import { resetAllAddictions } from './chemo';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { resetHunger } from '@sr2020/sr2020-models/scripts/character/hunger';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
@@ -116,6 +117,7 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
 
   if (stateFrom == 'biologically_dead' || stateFrom == 'clinically_dead') {
     resetAllAddictions(api);
+    resetHunger(api.model);
   }
 
   api.model.healthState = stateTo;

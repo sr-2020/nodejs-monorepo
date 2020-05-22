@@ -5,11 +5,6 @@ import { sendNotificationAndHistoryRecord } from './util';
 import { createGapDueToImplantUninstall, reduceEssenceDueToImplantInstall } from './essence';
 import { MerchandiseQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 
-export function consumeFood(api: EventModelApi<Sr2020Character>, data: {}) {
-  // TODO(https://trello.com/c/p5b8tVmS/235-голод-нужно-есть-в-x-часов-или-теряешь-хиты-еда-убирает-голод) Implement
-  api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
-}
-
 export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Импланты можно устанавливать только в мясное тело');

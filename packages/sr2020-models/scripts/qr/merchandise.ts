@@ -1,9 +1,9 @@
-import { QrType, QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode, QrType } from '@sr2020/interface/models/qr-code.model';
 import { Implant, kAllImplants } from '../character/implants_library';
 import { kAllPills, Pill } from '../character/chemo_library';
 import { kAllReagents, Reagent } from './reagents_library';
-import { UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { consumeFood } from '../character/merchandise';
+import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { consumeFood } from '../character/hunger';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-models/scripts/qr/datatypes';
 import { Drone, kAllDrones } from '@sr2020/sr2020-models/scripts/qr/drone_library';

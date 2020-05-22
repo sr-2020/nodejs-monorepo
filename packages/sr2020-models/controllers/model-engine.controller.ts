@@ -1,21 +1,23 @@
-import { post, requestBody, HttpErrors, OperationObject } from '@loopback/rest';
-import Chance = require('chance');
-const chance = new Chance();
+import { HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
 import {
   Sr2020Character,
-  Sr2020CharacterProcessResponse,
   Sr2020CharacterProcessRequest,
+  Sr2020CharacterProcessResponse,
 } from '@sr2020/interface/models/sr2020-character.model';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { LocationProcessRequest, Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { QrCodeProcessRequest, QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
+import { Location, LocationProcessRequest, LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 import { Empty } from '@sr2020/interface/models';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
+import { resetHunger } from '@sr2020/sr2020-models/scripts/character/hunger';
+import Chance = require('chance');
+
+const chance = new Chance();
 
 function spec(modelType: string, responseType: any): OperationObject {
   return {
@@ -210,6 +212,7 @@ export class ModelEngineController implements ModelEngineService {
       timers: [],
     };
     initEthic(result);
+    resetHunger(result);
     return result;
   }
 
