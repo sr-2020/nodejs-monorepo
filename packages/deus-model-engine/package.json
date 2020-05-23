@@ -1,13 +1,13 @@
 {
-  "name": "deus-models",
+  "name": "deus-model-engine",
   "version": "0.0.1",
   "description": "Deus Ex Model Server — handlers that process events.",
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
     "test": "mocha",
-    "coverage:test": "nyc --cwd=.. --temp-dir=deus-models/.nyc_output mocha",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/deus-models.coverage.json",
+    "coverage:test": "nyc --cwd=.. --temp-dir=deus-model-engine/.nyc_output mocha",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/deus-model-engine.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
@@ -17,8 +17,8 @@
     "eslint:fix": "npm run eslint -- --fix",
     "prestart": "yarn run build",
     "start": "node -r tsconfig-paths/register .",
-    "docker:build": "docker build -t sr2020/deus-models -f Dockerfile ../..",
-    "docker:push": "docker push sr2020/deus-models"
+    "docker:build": "docker build -t sr2020/deus-model-engine -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/deus-model-engine"
   },
   "repository": {
     "type": "git",

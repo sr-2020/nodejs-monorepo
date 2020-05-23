@@ -33,7 +33,7 @@
       "path": "packages/alice-qr-lib"
     },
     {
-      "path": "packages/deus-models"
+      "path": "packages/deus-model-engine"
     },
     {
       "path": "packages/import-server"

@@ -25,7 +25,7 @@ export class DeusModelsApplication extends BootMixin(ServiceMixin(RepositoryMixi
     this.bind(Engine.bindingKey).to(new Engine(loadModels('./models'), Config.parse(requireDir('./catalogs'))));
 
     this.projectRoot = __dirname + '/../';
-    const dirs = ['deus-models'];
+    const dirs = ['deus-model-engine'];
     // Customize @loopback/boot Booter Conventions here
     const extension = require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {

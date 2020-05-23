@@ -3,7 +3,7 @@
 import helpers = require('../helpers/model-helper');
 import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Narcotic } from 'deus-models/helpers/catalog_types';
+import { Narcotic } from '../helpers/catalog_types';
 
 function loadNarco(api: EventModelApi<DeusExModel>, id) {
   const drug = api.getCatalogObject<Narcotic>('pills', id);

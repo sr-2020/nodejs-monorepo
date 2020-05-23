@@ -20,7 +20,7 @@ steps:
       [
         'build',
         '-f',
-        'packages/deus-models/Dockerfile',
+        'packages/deus-model-engine/Dockerfile',
         '-t',
         'gcr.io/$PROJECT_ID/deus-models',
         '--cache-from',

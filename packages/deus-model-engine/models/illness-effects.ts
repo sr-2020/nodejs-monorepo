@@ -5,7 +5,7 @@
 import * as moment from 'moment';
 import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
-import { Illness, IllnessModifier } from 'deus-models/helpers/catalog_types';
+import { Illness, IllnessModifier } from '../helpers/catalog_types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
