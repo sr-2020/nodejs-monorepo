@@ -1,7 +1,7 @@
 import { expect } from '@loopback/testlab';
-import { getAllActiveAbilities } from '@sr2020/sr2020-models/scripts/character/library_registrator';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-models/scripts/character/passive_abilities_library';
-import { kAllSpells } from '@sr2020/sr2020-models/scripts/character/spells_library';
+import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { kAllSpells } from '@sr2020/sr2020-model-engine/scripts/character/spells_library';
 
 describe('Features library', () => {
   const allValidPrerequisites = new Set<string>([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]);

@@ -12,7 +12,7 @@ import { ModelsManagerApplication } from '@sr2020/models-manager/application';
 import { TimeService } from '@sr2020/models-manager/services/time.service';
 import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@sr2020/models-manager/utils/connection';
-import { ModelEngineController } from '@sr2020/sr2020-models/controllers/model-engine.controller';
+import { ModelEngineController } from '@sr2020/sr2020-model-engine/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
@@ -32,16 +32,16 @@ type DeepPartial<T> = {
 
 // Those are singletones intentionally - so model scripts are only loaded once.
 const characterEngine = new Engine<Sr2020Character>(
-  loadModels('../sr2020-models/scripts/character'),
-  Config.parse(requireDir('../sr2020-models/scripts/character/catalogs')),
+  loadModels('../sr2020-model-engine/scripts/character'),
+  Config.parse(requireDir('../sr2020-model-engine/scripts/character/catalogs')),
 );
 const locationEngine = new Engine<Location>(
-  loadModels('../sr2020-models/scripts/location'),
-  Config.parse(requireDir('../sr2020-models/scripts/location/catalogs')),
+  loadModels('../sr2020-model-engine/scripts/location'),
+  Config.parse(requireDir('../sr2020-model-engine/scripts/location/catalogs')),
 );
 const qrCodeEngine = new Engine<QrCode>(
-  loadModels('../sr2020-models/scripts/qr'),
-  Config.parse(requireDir('../sr2020-models/scripts/qr/catalogs')),
+  loadModels('../sr2020-model-engine/scripts/qr'),
+  Config.parse(requireDir('../sr2020-model-engine/scripts/qr/catalogs')),
 );
 
 class MockTimeService implements TimeService {

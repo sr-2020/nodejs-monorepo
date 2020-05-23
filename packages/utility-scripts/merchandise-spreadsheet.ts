@@ -5,7 +5,7 @@
 
 import * as request from 'request-promise-native';
 
-import { Implant as LibraryImplant } from '@sr2020/sr2020-models/scripts/character/implants_library';
+import { Implant as LibraryImplant } from '@sr2020/sr2020-model-engine/scripts/character/implants_library';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 interface Implant extends LibraryImplant {

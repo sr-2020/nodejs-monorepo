@@ -2,9 +2,9 @@
 // to the spreadsheet and Firestore.
 // Running:
 //   npx ts-node packages/utility-scripts/ethics-spreadsheet.ts
-import { EthicLevel, EthicTrigger, EthicScale, EthicTriggerKind } from '@sr2020/sr2020-models/scripts/character/ethics_library';
-import uuid = require('uuid');
+import { EthicLevel, EthicScale, EthicTrigger, EthicTriggerKind } from '@sr2020/sr2020-model-engine/scripts/character/ethics_library';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
+import uuid = require('uuid');
 
 class SpreadsheetProcessor {
   allCrysises: EthicTrigger[] = [];

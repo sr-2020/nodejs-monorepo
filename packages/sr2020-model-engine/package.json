@@ -1,0 +1,32 @@
+{
+  "name": "sr2020-model-engine",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "mocha --exit",
+    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-model-engine/.nyc_output mocha --exit",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-model-engine.coverage.json",
+    "lint": "yarn run prettier:check && yarn run eslint",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
+    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
+    "prestart": "yarn run build",
+    "start": "node --inspect=0.0.0.0:3001 -r tsconfig-paths/register .",
+    "docker:build": "docker build -t sr2020/model-engine -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/model-engine"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/chance": "^1.0.6"
+  },
+  "dependencies": {
+    "chance": "^1.1.0",
+    "cuid": "^2.1.8",
+    "lodash": "^4.17.15"
+  }
+}

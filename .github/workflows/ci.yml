@@ -64,7 +64,7 @@ jobs:
         with:
           name: sr2020/model-engine
           tags: ${{ github.sha }}
-          dockerfile: packages/sr2020-models/Dockerfile
+          dockerfile: packages/sr2020-model-engine/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_push:

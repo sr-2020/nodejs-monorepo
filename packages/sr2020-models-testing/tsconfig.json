@@ -11,7 +11,7 @@
       "path": "../models-manager"
     },
     {
-      "path": "../sr2020-models"
+      "path": "../sr2020-model-engine"
     }
   ],
   "include": [

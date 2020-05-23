@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-models/scripts/qr/datatypes';
+import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 
 describe('Rigger abilities', () => {
