@@ -17,6 +17,9 @@
       "@sr2020/models-manager/*": [
         "models-manager/*"
       ],
+      "@sr2020/sr2020-models-manager/*": [
+        "sr2020-models-manager/*"
+      ],
       "@sr2020/sr2020-model-engine/*": [
         "sr2020-model-engine/*"
       ]
@@ -52,6 +55,9 @@
     },
     {
       "path": "packages/sr2020-model-engine"
+    },
+    {
+      "path": "packages/sr2020-models-manager"
     },
     {
       "path": "packages/sr2020-testing"

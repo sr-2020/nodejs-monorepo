@@ -51,7 +51,7 @@ jobs:
         with:
           name: sr2020/models-manager
           tags: ${{ github.sha }}
-          dockerfile: packages/models-manager/Dockerfile
+          dockerfile: packages/sr2020-models-manager/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
 

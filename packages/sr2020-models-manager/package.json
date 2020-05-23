@@ -1,25 +1,28 @@
 {
-  "name": "models-manager",
+  "name": "sr2020-models-manager",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
+    "test": "mocha",
+    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-models-manager/.nyc_output mocha",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-models-manager.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
     "prettier:check": "yarn run prettier:cli -l",
     "prettier:fix": "yarn run prettier:cli --write",
     "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
+    "eslint:fix": "npm run eslint -- --fix",
+    "prestart": "yarn run build",
+    "start": "node -r tsconfig-paths/register .",
+    "docker:build": "docker build -t sr2020/models-manager -f Dockerfile ../..",
+    "docker:push": "docker push sr2020/models-manager"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {},
   "dependencies": {
-    "@google-cloud/logging-winston": "^3.0.6",
-    "@google-cloud/pubsub": "^1.6.0",
-    "pg": "^7.12.1",
-    "sql.js": "^1.0.0",
     "typeorm": "^0.2.18"
   }
 }

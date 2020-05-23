@@ -1,8 +1,4 @@
-import { inject, Provider } from '@loopback/core';
-import { Event, EventForModelType, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { Location } from '@sr2020/interface/models/location.model';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { EmptyModel, Event, EventForModelType } from '@sr2020/interface/models/alice-model-engine';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { AquiredModelsStorage } from '../utils/aquired-models-storage';
@@ -61,16 +57,5 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     });
     await aquiredModels.setModel(tmodel, result.baseModel, result.workModel);
     return result;
-  }
-}
-
-export class EventDispatcherServiceProvider implements Provider<EventDispatcherService> {
-  constructor(
-    @inject('services.ModelEngineService')
-    private _modelEngineService: ModelEngineService,
-  ) {}
-
-  value(): EventDispatcherService {
-    return new EventDispatcherServiceImpl(this._modelEngineService, [Sr2020Character, Location, QrCode]);
   }
 }

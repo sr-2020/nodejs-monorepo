@@ -5,11 +5,11 @@ import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
-import { PubSubService } from '../services/pubsub.service';
-import { TimeService } from '../services/time.service';
-import { EventDispatcherService } from '../services/event-dispatcher.service';
-import { ModelAquirerService } from '../services/model-aquirer.service';
-import { AnyModelController } from './anymodel.controller';
+import { ModelAquirerService } from '@sr2020/models-manager/services/model-aquirer.service';
+import { EventDispatcherService } from '@sr2020/models-manager/services/event-dispatcher.service';
+import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { TimeService } from '@sr2020/models-manager/services/time.service';
+import { AnyModelController } from '@sr2020/models-manager/controllers/anymodel.controller';
 
 export class LocationController extends AnyModelController<Location> {
   constructor(

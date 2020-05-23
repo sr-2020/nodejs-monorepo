@@ -4,12 +4,12 @@ import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
-import { TimeService } from '../services/time.service';
-import { PubSubService } from '../services/pubsub.service';
-import { EventDispatcherService } from '../services/event-dispatcher.service';
-import { ModelAquirerService } from '../services/model-aquirer.service';
 import { QrCode, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
-import { AnyModelController } from './anymodel.controller';
+import { ModelAquirerService } from '@sr2020/models-manager/services/model-aquirer.service';
+import { EventDispatcherService } from '@sr2020/models-manager/services/event-dispatcher.service';
+import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { TimeService } from '@sr2020/models-manager/services/time.service';
+import { AnyModelController } from '@sr2020/models-manager/controllers/anymodel.controller';
 
 export class QrCodeController extends AnyModelController<QrCode> {
   constructor(

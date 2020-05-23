@@ -5,12 +5,13 @@ import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
 import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
-import { PubSubService } from '../services/pubsub.service';
-import { EventDispatcherService } from '../services/event-dispatcher.service';
-import { ModelAquirerService } from '../services/model-aquirer.service';
-import { TimeService } from '../services/time.service';
-import { AnyModelController } from './anymodel.controller';
+
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { ModelAquirerService } from '@sr2020/models-manager/services/model-aquirer.service';
+import { EventDispatcherService } from '@sr2020/models-manager/services/event-dispatcher.service';
+import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { TimeService } from '@sr2020/models-manager/services/time.service';
+import { AnyModelController } from '@sr2020/models-manager/controllers/anymodel.controller';
 import moment = require('moment');
 
 export class CharacterController extends AnyModelController<Sr2020Character> {

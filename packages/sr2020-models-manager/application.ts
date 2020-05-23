@@ -1,5 +1,5 @@
 import { BootMixin } from '@loopback/boot';
-import { ApplicationConfig, CoreBindings } from '@loopback/core';
+import { ApplicationConfig } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication, RestBindings } from '@loopback/rest';
@@ -23,7 +23,7 @@ export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryM
     this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
     this.projectRoot = __dirname + '/../';
-    const dirs = ['models-manager', 'interface'];
+    const dirs = ['models-manager', 'sr2020-models-manager', 'interface'];
     // Customize @loopback/boot Booter Conventions here
     const extension = require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {
