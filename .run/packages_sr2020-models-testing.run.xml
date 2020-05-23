@@ -3,7 +3,7 @@
     <node-interpreter>project</node-interpreter>
     <node-options />
     <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
-    <working-directory>$PROJECT_DIR$/packages/sr2020-models-testing</working-directory>
+    <working-directory>$PROJECT_DIR$/packages/sr2020-testing</working-directory>
     <pass-parent-env>true</pass-parent-env>
     <envs>
       <env name="NODE_ENV" value="test" />
@@ -11,7 +11,7 @@
     <ui>bdd</ui>
     <extra-mocha-options>--config=.mocharc-fast.json</extra-mocha-options>
     <test-kind>DIRECTORY</test-kind>
-    <test-directory>$PROJECT_DIR$/packages/sr2020-models-testing</test-directory>
+    <test-directory>$PROJECT_DIR$/packages/sr2020-testing</test-directory>
     <recursive>true</recursive>
     <method v="2">
       <option name="RunConfigurationTask" enabled="true" run_configuration_name="build" run_configuration_type="js.build_tools.npm" />

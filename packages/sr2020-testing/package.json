@@ -1,5 +1,5 @@
 {
-  "name": "sr2020-models-testing",
+  "name": "sr2020-testing",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -7,8 +7,8 @@
     "pretest": "yarn build",
     "test": "cross-env NODE_ENV=test mocha --config=.mocharc-fast.json --exit",
     "test:realdb": "mocha --exit",
-    "coverage:test": "cross-env NODE_ENV=test nyc --cwd=.. --temp-dir=sr2020-models-testing/.nyc_output mocha --exit",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-models-testing.coverage.json",
+    "coverage:test": "cross-env NODE_ENV=test nyc --cwd=.. --temp-dir=sr2020-testing/.nyc_output mocha --exit",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-testing.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

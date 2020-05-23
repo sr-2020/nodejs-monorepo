@@ -54,7 +54,7 @@
       "path": "packages/sr2020-model-engine"
     },
     {
-      "path": "packages/sr2020-models-testing"
+      "path": "packages/sr2020-testing"
     },
     {
       "path": "packages/telegram-bot"
