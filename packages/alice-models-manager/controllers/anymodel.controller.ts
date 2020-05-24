@@ -1,14 +1,16 @@
 import { EmptyModel, EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService, processAny, PushService } from '@sr2020/interface/services';
+import { ModelEngineService, processAny } from '@sr2020/interface/services/model-engine.service';
+import { PushService } from '@sr2020/interface/services/push.service';
 import { TimeService } from '../services/time.service';
 import { EventDispatcherService } from '../services/event-dispatcher.service';
 import { ModelAquirerService } from '../services/model-aquirer.service';
 import { PubSubService } from '../services/pubsub.service';
-import { Empty, PushResult } from '@sr2020/interface/models';
+import { PushResult } from '@sr2020/interface/models/push-result.model';
 import { EntityManager, getManager, getRepository } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
+import { Empty } from '@sr2020/interface/models/empty.model';
 
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(

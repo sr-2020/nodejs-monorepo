@@ -3,7 +3,8 @@ import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/interface/models/sr2020-character.model';
-import { ModelEngineService, PushService } from '@sr2020/interface/services';
+import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { PushService } from '@sr2020/interface/services/push.service';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 
 import { QrCode } from '@sr2020/interface/models/qr-code.model';

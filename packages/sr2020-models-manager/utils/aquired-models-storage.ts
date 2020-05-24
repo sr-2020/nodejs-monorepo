@@ -2,7 +2,7 @@ import { AquiredObjects, EmptyModel } from '@sr2020/interface/models/alice-model
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { Location } from '@sr2020/interface/models/location.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { ModelEngineService, processAny } from '@sr2020/interface/services';
+import { ModelEngineService, processAny } from '@sr2020/interface/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { cloneDeep } from 'lodash';
 import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';

@@ -6,7 +6,7 @@ import { Sr2020Character } from '../models/sr2020-character.model';
 import { Location } from '../models/location.model';
 import { EmptyModel } from '../models/alice-model-engine';
 import { QrCode } from '../models/qr-code.model';
-import { Empty } from '../models';
+import { Empty } from '../models/empty.model';
 
 export interface ModelEngineService {
   processCharacter(req: ModelProcessRequest<Sr2020Character>): Promise<ModelProcessResponse<Sr2020Character>>;

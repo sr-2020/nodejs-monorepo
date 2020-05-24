@@ -1,5 +1,5 @@
 import { AquiredObjects, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 
 export interface AquiredModelsStorage {
   // Returns the maximal timestamp of all models currently present in storage.

@@ -1,7 +1,7 @@
 import { Client, expect } from '@loopback/testlab';
 import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
-import { FirebaseTokenRepository } from '../../repositories';
+import { FirebaseTokenRepository } from '../../repositories/firebase-token.repository';
 
 describe('TokenController', () => {
   let app: PushApplication;

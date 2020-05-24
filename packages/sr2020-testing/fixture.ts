@@ -2,7 +2,8 @@ import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/te
 import { Config } from '@sr2020/alice-model-engine/config';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { loadModels, requireDir } from '@sr2020/alice-model-engine/utils';
-import { PubSubNotification, PushNotification, PushResult } from '@sr2020/interface/models';
+import { PubSubNotification, PushNotification } from '@sr2020/interface/models/push-notification.model';
+import { PushResult } from '@sr2020/interface/models/push-result.model';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/interface/models/location.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';

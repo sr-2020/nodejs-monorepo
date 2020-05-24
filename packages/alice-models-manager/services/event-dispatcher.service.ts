@@ -1,6 +1,6 @@
 import { EmptyModel, Event, EventForModelType } from '@sr2020/interface/models/alice-model-engine';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
-import { ModelEngineService, processAny } from '@sr2020/interface/services';
+import { ModelEngineService, processAny } from '@sr2020/interface/services/model-engine.service';
 import { AquiredModelsStorage } from '../utils/aquired-models-storage';
 
 export interface EventDispatcherService {

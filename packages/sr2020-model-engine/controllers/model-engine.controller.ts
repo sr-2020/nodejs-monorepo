@@ -10,7 +10,7 @@ import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/int
 import { Location, LocationProcessRequest, LocationProcessResponse } from '@sr2020/interface/models/location.model';
 import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
-import { Empty } from '@sr2020/interface/models';
+import { Empty } from '@sr2020/interface/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';

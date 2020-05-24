@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
 import { AquiredObjects, EmptyModel, Event, EventForModelType, PendingAquire, Timer } from 'interface/src/models/alice-model-engine';
-import { PubSubNotification, PushNotification } from '@sr2020/interface/models';
+import { PubSubNotification, PushNotification } from '@sr2020/interface/models/push-notification.model';
 import { assert } from 'console';
 
 export type FieldName = string | string[];

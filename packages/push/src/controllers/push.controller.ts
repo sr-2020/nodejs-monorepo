@@ -1,8 +1,11 @@
 import { repository } from '@loopback/repository';
-import { put, requestBody, param, post } from '@loopback/rest';
-import { FirebaseTokenRepository } from '../repositories';
-import { Empty, FirebaseToken, PushResult, PushNotification } from '@sr2020/interface/models';
-import { FirebaseMessagingService } from '../services';
+import { param, post, put, requestBody } from '@loopback/rest';
+import { FirebaseTokenRepository } from '../repositories/firebase-token.repository';
+import { PushNotification } from '@sr2020/interface/models/push-notification.model';
+import { PushResult } from '@sr2020/interface/models/push-result.model';
+import { Empty } from '@sr2020/interface/models/empty.model';
+import { FirebaseToken } from '@sr2020/interface/models/firebase-token.model';
+import { FirebaseMessagingService } from '../services/firebase-messaging.service';
 import { inject } from '@loopback/core';
 
 export class PushController {

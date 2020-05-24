@@ -1,6 +1,6 @@
 import { inject, Provider } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/interface/services';
+import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';

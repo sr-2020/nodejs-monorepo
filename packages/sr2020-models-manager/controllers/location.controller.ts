@@ -1,6 +1,7 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService, PushService } from '@sr2020/interface/services';
+import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { PushService } from '@sr2020/interface/services/push.service';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
