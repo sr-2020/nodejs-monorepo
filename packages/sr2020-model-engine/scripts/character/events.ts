@@ -1,7 +1,7 @@
-import { Event, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume } from '../qr/events';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 export function scanQr(
   api: EventModelApi<Sr2020Character>,

@@ -22,6 +22,9 @@
       ],
       "@sr2020/sr2020-model-engine/*": [
         "sr2020-model-engine/*"
+      ],
+      "@sr2020/sr2020-common/*": [
+        "sr2020-common/*"
       ]
     }
   },
@@ -52,6 +55,9 @@
     },
     {
       "path": "packages/push"
+    },
+    {
+      "path": "packages/sr2020-common"
     },
     {
       "path": "packages/sr2020-model-engine"

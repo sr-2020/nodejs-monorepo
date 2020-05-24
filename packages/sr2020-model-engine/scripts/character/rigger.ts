@@ -1,7 +1,7 @@
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedImplant, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedImplant, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';

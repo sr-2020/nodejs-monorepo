@@ -1,17 +1,20 @@
 import { EmptyModel, EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService, processAny } from '@sr2020/interface/services/model-engine.service';
+import { ModelEngineService, processAny } from '@sr2020/sr2020-common/services/model-engine.service';
 import { PushService } from '@sr2020/interface/services/push.service';
-import { TimeService } from '../services/time.service';
-import { EventDispatcherService } from '../services/event-dispatcher.service';
-import { ModelAquirerService } from '../services/model-aquirer.service';
-import { PubSubService } from '../services/pubsub.service';
+import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
+import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
+import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 import { PushResult } from '@sr2020/interface/models/push-result.model';
 import { EntityManager, getManager, getRepository } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { Empty } from '@sr2020/interface/models/empty.model';
+import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
 
+// TODO(cleanup) It doesn't actually have any sr2020 specific besides ModelEngineService (which "knows" which specific
+// model types are present). As such it should be moved to alice-models-manager package after figuring out how to deal
+// with ModelEngineService.
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(
     protected tmodel: new () => TModel,

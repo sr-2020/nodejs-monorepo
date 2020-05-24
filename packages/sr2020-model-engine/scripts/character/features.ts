@@ -1,5 +1,5 @@
 import * as cuid from 'cuid';
-import { AddedActiveAbility, AddedPassiveAbility, AddedSpell, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedActiveAbility, AddedPassiveAbility, AddedSpell, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';

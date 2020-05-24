@@ -1,4 +1,4 @@
-import { QrCode, QrType } from '@sr2020/interface/models/qr-code.model';
+import { QrCode, QrType } from '@sr2020/sr2020-common/models/qr-code.model';
 import { Implant, kAllImplants } from '../character/implants_library';
 import { kAllPills, Pill } from '../character/chemo_library';
 import { kAllReagents, Reagent } from './reagents_library';

@@ -1,10 +1,10 @@
 import { isEqual } from 'lodash';
 
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { EthicGroup, EthicScale, EthicTrigger, kAllCrysises, kAllEthicGroups, kEthicAbilities, kEthicLevels } from './ethics_library';
 import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { ActiveAbilityData } from './active_abilities';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume, unconsume } from '../qr/events';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { LocusQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';

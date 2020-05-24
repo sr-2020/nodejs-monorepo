@@ -1,16 +1,16 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
 import { PushService } from '@sr2020/interface/services/push.service';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationProcessResponse } from '@sr2020/interface/models/location.model';
+import { Location, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
 import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
-import { EventDispatcherService } from '@sr2020/alice-models-manager/services/event-dispatcher.service';
 import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
-import { AnyModelController } from '@sr2020/alice-models-manager/controllers/anymodel.controller';
+import { AnyModelController } from '@sr2020/sr2020-models-manager/controllers/anymodel.controller';
+import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
 
 export class LocationController extends AnyModelController<Location> {
   constructor(

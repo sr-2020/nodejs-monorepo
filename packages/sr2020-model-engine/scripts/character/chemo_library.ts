@@ -1,4 +1,4 @@
-import { Concentrations } from '@sr2020/interface/models/sr2020-character.model';
+import { Concentrations } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 export interface Pill {
   id: string;

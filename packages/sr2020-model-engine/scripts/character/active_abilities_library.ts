@@ -27,8 +27,8 @@ import {
   youDontTrustAnybody,
 } from './mental';
 import { autodocHeal, autodocRevive, capsuleReanimate, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
-import { QrType } from '@sr2020/interface/models/qr-code.model';
-import { Targetable } from '@sr2020/interface/models/sr2020-character.model';
+import { QrType } from '@sr2020/sr2020-common/models/qr-code.model';
+import { Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
   discourseGroupAddAbility,

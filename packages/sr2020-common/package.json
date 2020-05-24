@@ -1,5 +1,5 @@
 {
-  "name": "interface",
+  "name": "sr2020-common",
   "scripts": {
     "build": "tsc -b",
     "lint": "yarn run prettier:check && yarn run eslint",

@@ -1,5 +1,5 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
 import {

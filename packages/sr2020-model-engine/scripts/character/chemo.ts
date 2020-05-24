@@ -1,5 +1,5 @@
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Concentrations, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Concentrations, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord, validUntil } from './util';
 import { duration, Duration } from 'moment';
@@ -16,7 +16,7 @@ import {
 import { healthStateTransition } from './death_and_rebirth';
 import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';

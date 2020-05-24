@@ -1,10 +1,10 @@
 import { inject, Provider } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
-import { Location } from '@sr2020/interface/models/location.model';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { Location } from '@sr2020/sr2020-common/models/location.model';
+import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { AquiredModelsStorageTypeOrm } from '../utils/aquired-models-storage';
 import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
 import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
@@ -14,7 +14,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
   constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage> {
-    const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, now);
+    const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, this._modelEngineService, now);
     if (event.data) {
       // Aquire location if event.data has location set.
       if (event.data.location) {
@@ -48,7 +48,7 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         }
       }
     }
-    await result.synchronizeModels(this._modelEngineService);
+    await result.synchronizeModels();
     return result;
   }
 }

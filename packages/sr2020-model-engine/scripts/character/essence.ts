@@ -1,6 +1,6 @@
-import { EffectModelApi, Modifier, Effect, UserVisibleError, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character, AddedImplant, MetaRace } from '@sr2020/interface/models/sr2020-character.model';
-import { increaseMagic, increaseResonance, increaseCharisma } from './basic_effects';
+import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { AddedImplant, MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { increaseCharisma, increaseMagic, increaseResonance } from './basic_effects';
 import { Implant } from './implants_library';
 import { removeImplant } from './merchandise';
 

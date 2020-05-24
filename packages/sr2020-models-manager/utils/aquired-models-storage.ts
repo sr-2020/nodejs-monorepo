@@ -1,8 +1,8 @@
 import { AquiredObjects, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
-import { Location } from '@sr2020/interface/models/location.model';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { ModelEngineService, processAny } from '@sr2020/interface/services/model-engine.service';
+import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Location } from '@sr2020/sr2020-common/models/location.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { ModelEngineService, processAny } from '@sr2020/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { cloneDeep } from 'lodash';
 import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
@@ -13,7 +13,12 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
   private _workModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
 
-  constructor(private _manager: EntityManager, private _pubSubService: PubSubService, public maximalTimestamp: number) {}
+  constructor(
+    private _manager: EntityManager,
+    private _pubSubService: PubSubService,
+    private _modelEngineService: ModelEngineService,
+    public maximalTimestamp: number,
+  ) {}
 
   async lockAndGetBaseModel<TModelEntity extends EmptyModel>(tmodel: new () => TModelEntity, id: number): Promise<TModelEntity> {
     if (this._baseModels[tmodel.name][id] != undefined) {
@@ -35,7 +40,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
     this._workModels[tmodel.name][Number(workModel.modelId)] = workModel;
   }
 
-  async synchronizeModels(modelEngineService: ModelEngineService): Promise<void> {
+  async synchronizeModels(): Promise<void> {
     const updateModel = async (modelType: string, modelId: string) => {
       const req = {
         baseModel: this._baseModels[modelType][modelId],
@@ -45,7 +50,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       };
       const processingResult = await processAny(
         { Location: Location, Sr2020Character: Sr2020Character, QrCode: QrCode }[modelType],
-        modelEngineService,
+        this._modelEngineService,
         req,
       );
       this._baseModels[modelType][modelId] = processingResult.baseModel;

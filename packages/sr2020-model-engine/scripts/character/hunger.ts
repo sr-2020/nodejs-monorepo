@@ -1,5 +1,5 @@
 import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';

@@ -1,9 +1,9 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedActiveAbility, Sr2020Character, Targetable } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedActiveAbility, Sr2020Character, Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';

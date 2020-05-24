@@ -1,5 +1,4 @@
 import { AquiredObjects, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
 
 export interface AquiredModelsStorage {
   // Returns the maximal timestamp of all models currently present in storage.
@@ -21,7 +20,7 @@ export interface AquiredModelsStorage {
   // Chooses earliest possible point of time (i.e. one in the "future" of every model in storage),
   // and calculates the base/work value for each model at this time point.
   // NB: Until this is called, getWorkModels() will return empty dict.
-  synchronizeModels(modelEngineService: ModelEngineService): Promise<void>;
+  synchronizeModels(): Promise<void>;
 
   // Actually writes models to the DB and sends change notifications if needed.
   flush(): Promise<void>;

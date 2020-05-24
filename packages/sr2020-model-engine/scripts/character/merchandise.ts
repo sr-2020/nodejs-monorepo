@@ -1,5 +1,5 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedImplant, MetaRace, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedImplant, MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { ImplantSlot, kAllImplants } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
 import { createGapDueToImplantUninstall, reduceEssenceDueToImplantInstall } from './essence';

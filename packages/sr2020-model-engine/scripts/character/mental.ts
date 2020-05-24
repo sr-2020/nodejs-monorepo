@@ -1,6 +1,6 @@
-import { AddedActiveAbility, Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
+import { AddedActiveAbility, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
 import { FullActiveAbilityData, FullTargetedAbilityData } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect } from './util';

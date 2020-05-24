@@ -1,5 +1,5 @@
 import * as request from 'request-promise-native';
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 // Run with

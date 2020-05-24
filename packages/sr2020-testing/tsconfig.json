@@ -11,6 +11,9 @@
       "path": "../alice-models-manager"
     },
     {
+      "path": "../sr2020-common"
+    },
+    {
       "path": "../sr2020-model-engine"
     },
     {

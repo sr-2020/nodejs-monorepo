@@ -3,13 +3,13 @@ import {
   Sr2020Character,
   Sr2020CharacterProcessRequest,
   Sr2020CharacterProcessResponse,
-} from '@sr2020/interface/models/sr2020-character.model';
+} from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationProcessRequest, LocationProcessResponse } from '@sr2020/interface/models/location.model';
-import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@sr2020/interface/models/qr-code.model';
-import { ModelEngineService } from '@sr2020/interface/services/model-engine.service';
+import { Location, LocationProcessRequest, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
+import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@sr2020/sr2020-common/models/qr-code.model';
+import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';

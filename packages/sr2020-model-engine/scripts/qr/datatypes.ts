@@ -1,5 +1,5 @@
-import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { AddedActiveAbility, AddedPassiveAbility, BodyType } from '@sr2020/interface/models/sr2020-character.model';
+import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { AddedActiveAbility, AddedPassiveAbility, BodyType } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 export interface TypedQrCode<T> extends QrCode {
   data: T;

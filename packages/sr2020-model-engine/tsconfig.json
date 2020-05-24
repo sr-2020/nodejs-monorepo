@@ -5,6 +5,9 @@
       "path": "../interface"
     },
     {
+      "path": "../sr2020-common"
+    },
+    {
       "path": "../alice-model-engine"
     }
   ],
