@@ -4,7 +4,7 @@
 
 import { EventModelApi } from 'interface/src/models/alice-model-engine';
 import helpers = require('../helpers/model-helper');
-import { OrganismModel } from 'magellan-models/helpers/basic-types';
+import { OrganismModel } from 'magellan-model-engine/helpers/basic-types';
 
 /**
  * Обработчик события "add-change-record"

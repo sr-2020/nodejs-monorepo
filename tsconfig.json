@@ -45,7 +45,7 @@
       "path": "packages/interface"
     },
     {
-      "path": "packages/magellan-models"
+      "path": "packages/magellan-model-engine"
     },
     {
       "path": "packages/alice-models-manager"

@@ -5,7 +5,7 @@ import { Worker } from '@sr2020/alice-model-engine/worker';
 
 import { EngineResult, EngineResultOk, Event } from 'interface/src/models/alice-model-engine';
 import * as Winston from 'winston';
-import { OrganismModel } from 'magellan-models/helpers/basic-types';
+import { OrganismModel } from 'magellan-model-engine/helpers/basic-types';
 
 let WORKER_INSTANCE: Worker | null = null;
 
