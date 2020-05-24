@@ -6,9 +6,9 @@ import { Location } from '@sr2020/interface/models/location.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { AquiredModelsStorageTypeOrm } from '../utils/aquired-models-storage';
-import { ModelAquirerService } from '@sr2020/models-manager/services/model-aquirer.service';
-import { AquiredModelsStorage } from '@sr2020/models-manager/utils/aquired-models-storage';
-import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
+import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
+import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 
 class ModelAquirerServiceImpl implements ModelAquirerService {
   constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}

@@ -5,7 +5,7 @@ import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication, RestBindings } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
-import { CustomRejectProvider } from '@sr2020/models-manager/services/reject.service';
+import { CustomRejectProvider } from '@sr2020/alice-models-manager/services/reject.service';
 
 export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
@@ -23,7 +23,7 @@ export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryM
     this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
     this.projectRoot = __dirname + '/../';
-    const dirs = ['models-manager', 'sr2020-models-manager', 'interface'];
+    const dirs = ['alice-models-manager', 'sr2020-models-manager', 'interface'];
     // Customize @loopback/boot Booter Conventions here
     const extension = require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {

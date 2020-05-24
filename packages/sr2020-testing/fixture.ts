@@ -9,15 +9,15 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { Sr2020Character } from '@sr2020/interface/models/sr2020-character.model';
 import { PushService } from '@sr2020/interface/services/push.service';
 import { ModelsManagerApplication } from '@sr2020/sr2020-models-manager/application';
-import { TimeService } from '@sr2020/models-manager/services/time.service';
-import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
+import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@sr2020/sr2020-models-manager/utils/connection';
 import { ModelEngineController } from '@sr2020/sr2020-model-engine/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { Duration } from 'moment';
-import { LoggerService } from '@sr2020/models-manager/services/logger.service';
+import { LoggerService } from '@sr2020/alice-models-manager/services/logger.service';
 import { logger } from '@sr2020/alice-model-engine/logger';
 
 logger.level = 'error';

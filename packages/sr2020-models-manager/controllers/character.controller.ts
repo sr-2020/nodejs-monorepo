@@ -7,11 +7,11 @@ import { ModelEngineService, PushService } from '@sr2020/interface/services';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 
 import { QrCode } from '@sr2020/interface/models/qr-code.model';
-import { ModelAquirerService } from '@sr2020/models-manager/services/model-aquirer.service';
-import { EventDispatcherService } from '@sr2020/models-manager/services/event-dispatcher.service';
-import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
-import { TimeService } from '@sr2020/models-manager/services/time.service';
-import { AnyModelController } from '@sr2020/models-manager/controllers/anymodel.controller';
+import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
+import { EventDispatcherService } from '@sr2020/alice-models-manager/services/event-dispatcher.service';
+import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
+import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
+import { AnyModelController } from '@sr2020/alice-models-manager/controllers/anymodel.controller';
 import moment = require('moment');
 
 export class CharacterController extends AnyModelController<Sr2020Character> {

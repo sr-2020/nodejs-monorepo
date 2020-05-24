@@ -14,8 +14,8 @@
       "@sr2020/alice-model-engine/*": [
         "alice-model-engine/src/*"
       ],
-      "@sr2020/models-manager/*": [
-        "models-manager/*"
+      "@sr2020/alice-models-manager/*": [
+        "alice-models-manager/*"
       ],
       "@sr2020/sr2020-models-manager/*": [
         "sr2020-models-manager/*"
@@ -48,7 +48,7 @@
       "path": "packages/magellan-models"
     },
     {
-      "path": "packages/models-manager"
+      "path": "packages/alice-models-manager"
     },
     {
       "path": "packages/push"

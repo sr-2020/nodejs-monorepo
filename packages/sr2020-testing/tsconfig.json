@@ -8,7 +8,7 @@
       "path": "../alice-model-engine"
     },
     {
-      "path": "../models-manager"
+      "path": "../alice-models-manager"
     },
     {
       "path": "../sr2020-model-engine"

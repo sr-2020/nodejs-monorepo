@@ -1,8 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "references": [
-    {"path": "../interface"},
-    {"path": "../models-manager"}
+    {
+      "path": "../interface"
+    },
+    {
+      "path": "../alice-models-manager"
+    }
   ],
-  "include": ["**/*", "**/*.json"]
+  "include": [
+    "**/*",
+    "**/*.json"
+  ]
 }

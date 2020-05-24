@@ -5,9 +5,9 @@ import { QrCode } from '@sr2020/interface/models/qr-code.model';
 import { ModelEngineService, processAny } from '@sr2020/interface/services';
 import { EntityManager } from 'typeorm';
 import { cloneDeep } from 'lodash';
-import { AquiredModelsStorage } from '@sr2020/models-manager/utils/aquired-models-storage';
-import { getAndLockModel } from '@sr2020/models-manager/utils/db-utils';
-import { PubSubService } from '@sr2020/models-manager/services/pubsub.service';
+import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
+import { getAndLockModel } from '@sr2020/alice-models-manager/utils/db-utils';
+import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 
 export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
