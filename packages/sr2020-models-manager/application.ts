@@ -23,7 +23,7 @@ export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryM
     this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
     this.projectRoot = __dirname + '/../';
-    const dirs = ['alice-models-manager', 'sr2020-models-manager', 'interface'];
+    const dirs = ['alice-models-manager', 'sr2020-models-manager', 'sr2020-common', 'interface'];
     // Customize @loopback/boot Booter Conventions here
     const extension = require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {
