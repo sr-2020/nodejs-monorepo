@@ -41,7 +41,7 @@ describe('Merchandise', () => {
     expect(droneData.id).to.equal('hippocrates');
     expect(droneData.modSlots).not.undefined();
     expect(droneData.moddingCapacity).not.undefined();
-    expect(droneData.requiredSkill).not.undefined();
+    expect(droneData.type).not.undefined();
     expect(droneData.sensor).greaterThan(0);
     expect(droneData.hitpoints).greaterThan(0);
     expect(droneData.passiveAbilities).lengthOf(1);

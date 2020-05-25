@@ -9,11 +9,11 @@ async function run() {
   const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
 
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны!B6:L28');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны!B7:L28');
   const header = data[0];
   if (
     header.slice(0, 11).join('  ') !=
-    'ID  название  Скилл  Тип дрона  Корпорация  Слоты  Разгон  Сенсор  хиты  Описание для игрока  Выдать абилки при входе в дрон'
+    'ID  название  Класс дрона  Тип дрона  Корпорация  Слоты  Разгон  Sensor-Drone  хиты  Описание для игрока  Выдать абилки при входе в дрон'
   ) {
     throw new Error('Header has changed! Exiting.');
   }
@@ -26,7 +26,7 @@ async function run() {
     drones.push({
       id: row[0],
       name: row[1],
-      requiredSkill: row[2],
+      type: row[2],
       modSlots: Number(row[5]),
       moddingCapacity: Number(row[6]),
       sensor: Number(row[7]),

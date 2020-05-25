@@ -1,8 +1,10 @@
+export type DroneType = 'groundcraft' | 'aircraft' | 'medicraft';
+
 export interface Drone {
   id: string;
   name: string;
   description: string;
-  requiredSkill: string;
+  type: DroneType;
   modSlots: number;
   moddingCapacity: number;
   sensor: number;
@@ -14,7 +16,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'belarus',
     name: 'Беларусь',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 4,
@@ -25,7 +27,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'trici',
     name: 'Трици',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 5,
@@ -36,7 +38,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'heemeyer',
     name: 'Химейер',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 7,
@@ -47,7 +49,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'grom',
     name: 'Гром',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 7,
@@ -58,7 +60,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'cat',
     name: 'Кэт',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 8,
@@ -69,7 +71,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'bfg',
     name: 'БФГ',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 11,
@@ -80,7 +82,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'drednaught',
     name: 'Дредноут',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 11,
@@ -91,7 +93,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'marchal',
     name: 'Маршал',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 14,
@@ -102,7 +104,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'pecheneg',
     name: 'Печенег',
-    requiredSkill: 'Ground craft',
+    type: 'groundcraft',
     modSlots: 2,
     moddingCapacity: 3,
     sensor: 14,
@@ -113,7 +115,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'beetle',
     name: 'Жук',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 2,
@@ -124,7 +126,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'wasp',
     name: 'Оса',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 5,
@@ -135,7 +137,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'huxley',
     name: 'Хаксли',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 8,
@@ -146,19 +148,18 @@ export const kAllDrones: Drone[] = [
   {
     id: 'scorge',
     name: 'Скордж',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 8,
     hitpoints: 1,
-    description:
-      'Бадабум! Нет брони. Иммунитет ко всему холодному оружию и легкому огнестрельному.\nПри активации необходимо громко закричать "ВЗРЫВ".  Наносит 3 хита урона всем персонажам в радиусе 2 метров от дрона. Броня (даже тяжелая) НЕ спасает. После использования необходимо порвать QR код дрона, дрон уничтожен.',
+    description: 'Бадабум! Нет брони. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
     abilityIds: ['drone-kabuum'],
   },
   {
     id: 'wise-eagle-owl',
     name: 'Мудрый филин',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 12,
@@ -169,7 +170,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'falcon',
     name: 'Ясный сокол',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 14,
@@ -180,7 +181,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'white-eagle',
     name: 'Белый орел',
-    requiredSkill: 'Air Craft',
+    type: 'aircraft',
     modSlots: 2,
     moddingCapacity: 3,
     sensor: 14,
@@ -191,7 +192,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'medicart',
     name: 'Медикарт',
-    requiredSkill: 'Medic craft',
+    type: 'medicraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 4,
@@ -202,26 +203,18 @@ export const kAllDrones: Drone[] = [
   {
     id: 'hippocrates',
     name: 'Гиппократ',
-    requiredSkill: 'Medic craft',
+    type: 'medicraft',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 8,
     hitpoints: 3,
     description: 'Медикарт. Легкая броня.',
-    abilityIds: [
-      'drone-medcart',
-      'medcart-light-heal-1',
-      'medcart-light-heal-2',
-      'medcart-heavy-heal-1',
-      'medcart-heavy-heal-2',
-      'drone-logoff',
-      'drone-danger',
-    ],
+    abilityIds: ['drone-medcart', 'medcart-light-heal-1', 'medcart-light-heal-2', 'medcart-heavy-heal-1', 'medcart-heavy-heal-2'],
   },
   {
     id: 'kuzhuget',
     name: 'Кужугет',
-    requiredSkill: 'Medic craft',
+    type: 'medicraft',
     modSlots: 2,
     moddingCapacity: 3,
     sensor: 12,
@@ -240,4 +233,6 @@ export const kAllDrones: Drone[] = [
   },
 ];
 
-export const kDroneAbilityIds = new Set(([] as string[]).concat(...kAllDrones.map((drone) => drone.abilityIds)));
+export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff'];
+
+export const kDroneAbilityIds = new Set(kCommonDroneAbilityIds.concat(...kAllDrones.map((drone) => drone.abilityIds)));

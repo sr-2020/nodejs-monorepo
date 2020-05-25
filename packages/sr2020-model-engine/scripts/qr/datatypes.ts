@@ -1,5 +1,6 @@
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { AddedActiveAbility, AddedPassiveAbility, BodyType } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { DroneType } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 
 export interface TypedQrCode<T> extends QrCode {
   data: T;
@@ -35,7 +36,7 @@ export interface BodyStorageQrData {
 }
 
 export interface DroneData {
-  requiredSkill: string;
+  type: DroneType;
   modSlots: number;
   moddingCapacity: number;
   sensor: number;

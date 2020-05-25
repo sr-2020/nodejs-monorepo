@@ -6,7 +6,7 @@ import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-
 import { consumeFood } from '../character/hunger';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { Drone, kAllDrones } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { Drone, kAllDrones, kCommonDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 
@@ -81,13 +81,13 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       modSlots: maybeDrone.modSlots,
       moddingCapacity: maybeDrone.moddingCapacity,
       sensor: maybeDrone.sensor,
-      requiredSkill: maybeDrone.requiredSkill,
+      type: maybeDrone.type,
       inUse: false,
       activeAbilities: [],
       passiveAbilities: [],
     };
 
-    for (const abilityId of maybeDrone.abilityIds) {
+    for (const abilityId of maybeDrone.abilityIds.concat(kCommonDroneAbilityIds)) {
       const maybePassiveAbility = kAllPassiveAbilities.get(abilityId);
       if (maybePassiveAbility) {
         droneData.passiveAbilities.push({
