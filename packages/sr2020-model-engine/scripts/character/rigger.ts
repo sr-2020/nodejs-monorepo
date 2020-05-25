@@ -118,9 +118,12 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Этот в настоящий момент уже используется.');
   }
 
+  if (!data.id.startsWith(drone.type)) {
+    throw new UserVisibleError('Этот навык не подходит к дрону данного класса.');
+  }
+
   // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
   // TODO: Check sensor
-  // TODO: Check skill?
 
   const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
   api.setTimer(kDroneTimerIds[0], 'Аварийный выход из дрона', timeInDrone, droneTimeout, {});

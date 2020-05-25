@@ -95,7 +95,7 @@ describe('Rigger abilities', () => {
   it('Entering and leaving drone', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 2 });
-    await fixture.addCharacterFeature('groundcraft-active');
+    await fixture.addCharacterFeature('medicraft-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -106,7 +106,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.useAbility({ id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
 
     {
       // Body is in storage
@@ -150,7 +150,7 @@ describe('Rigger abilities', () => {
   it('Spending too long in drone will wound you', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 4 });
-    await fixture.addCharacterFeature('groundcraft-active');
+    await fixture.addCharacterFeature('medicraft-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -161,7 +161,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.useAbility({ id: 'groundcraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
 
     // Wait for long time
     await fixture.advanceTime(duration(2, 'hours'));
