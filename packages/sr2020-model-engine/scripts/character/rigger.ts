@@ -10,7 +10,7 @@ import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-engine/scripts/qr/body_storage';
-import { kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { DroneType, kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 
@@ -108,6 +108,13 @@ export function riggerHeal(api: EventModelApi<Sr2020Character>, data: { targetCh
 
 const kDroneTimerIds = ['drone-timer-stage-0', 'drone-timer-stage-1', 'drone-timer-stage-2'];
 
+function droneCraft(model: Sr2020Character, droneType: DroneType): number {
+  if (droneType == 'aircraft') return model.drones.aircraftBonus;
+  if (droneType == 'groundcraft') return model.drones.groundcraftBonus;
+  if (droneType == 'medicraft') return model.drones.medicraftBonus;
+  return 0;
+}
+
 export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Для подключения к дрону необходимо быть в мясном теле.');
@@ -122,10 +129,21 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Этот навык не подходит к дрону данного класса.');
   }
 
-  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
-  // TODO: Check sensor
+  if (api.workModel.drones.maxDifficulty < -100) {
+    throw new UserVisibleError('Невозможно управлять дроном не имея RCC.');
+  }
 
-  const timeInDrone = duration(10, 'minutes'); // TODO: Use proper formula
+  if (api.workModel.drones.maxDifficulty < drone.sensor) {
+    throw new UserVisibleError('Ваш RCC не позволяет управлять данным дроном.');
+  }
+
+  if (api.workModel.intelligence + droneCraft(api.workModel, drone.type) < drone.sensor) {
+    throw new UserVisibleError('Ваши навыки недостаточны для управления данным дроном.');
+  }
+
+  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+  // TODO: Use proper formula
+  const timeInDrone = duration(10, 'minutes');
   api.setTimer(kDroneTimerIds[0], 'Аварийный выход из дрона', timeInDrone, droneTimeout, {});
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {

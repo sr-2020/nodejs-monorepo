@@ -94,7 +94,7 @@ describe('Rigger abilities', () => {
 
   it('Entering and leaving drone', async () => {
     // Rigger set up
-    await fixture.saveCharacter({ maxHp: 2 });
+    await fixture.saveCharacter({ maxHp: 2, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
     await fixture.addCharacterFeature('medicraft-active');
 
     // Body storage set up
@@ -149,7 +149,7 @@ describe('Rigger abilities', () => {
 
   it('Spending too long in drone will wound you', async () => {
     // Rigger set up
-    await fixture.saveCharacter({ maxHp: 4 });
+    await fixture.saveCharacter({ maxHp: 4, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
     await fixture.addCharacterFeature('medicraft-active');
 
     // Body storage set up
