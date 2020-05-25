@@ -272,10 +272,22 @@ export function increaseMaxDroneDifficulty(api: EffectModelApi<Sr2020Character>,
   api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
 }
 
-export function increaseDroneCrafts(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+export function increaseAircraftBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.aircraftBonus += m.amount;
-  api.model.drones.groundcraftBonus += m.amount;
+}
+
+export function increaseMedicraftBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.medicraftBonus += m.amount;
+}
+
+export function increaseGroundcraftBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.drones.groundcraftBonus += m.amount;
+}
+
+export function increaseDroneCrafts(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  increaseAircraftBonus(api, m);
+  increaseMedicraftBonus(api, m);
+  increaseGroundcraftBonus(api, m);
 }
 
 export function increaseMaxTimeInDrone(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -290,6 +302,18 @@ export function increasePostDroneRecoveryTime(api: EffectModelApi<Sr2020Characte
 
 export function increaseImplantDifficultyBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.rigging.implantDifficultyBonus += m.amount;
+}
+
+export function increaseImplantsBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.rigging.implantsBonus += m.amount;
+}
+
+export function increaseTuningBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.rigging.tuningBonus += m.amount;
+}
+
+export function increaseRepomanBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.rigging.repomanBonus += m.amount;
 }
 
 export function allowBiowareInstallation(api: EffectModelApi<Sr2020Character>, _: Modifier) {

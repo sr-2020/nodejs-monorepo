@@ -3,6 +3,7 @@ import { modifierFromEffect } from './util';
 import {
   allowBiowareInstallation,
   increaseAdminHostNumber,
+  increaseAircraftBonus,
   increaseAuraMarkMultiplier,
   increaseAuraReadingMultiplier,
   increaseBackdoors,
@@ -15,19 +16,26 @@ import {
   increaseConversionFirewall,
   increaseConversionSleaze,
   increaseFadingResistance,
+  increaseGroundcraftBonus,
   increaseHostEntrySpeed,
   increaseImplantDifficultyBonus,
+  increaseImplantsBonus,
   increaseMagic,
   increaseMagicFeedbackReduction,
   increaseMagicRecoverySpeed,
   increaseMaxTimeAtHost,
+  increaseMaxTimeInDrone,
   increaseMaxTimeInVr,
+  increaseMedicraftBonus,
   increaseMentalProtection,
+  increasePostDroneRecoveryTime,
+  increaseRepomanBonus,
   increaseResonance,
   increaseSpiritResistanceMultiplier,
   increaseSpriteCount,
   increaseSpriteLevel,
   increaseStockGainPercentage,
+  increaseTuningBonus,
   increaseVarianceResistance,
   increaseСhemoCrysisThreshold,
   multiplyAllDiscounts,
@@ -1641,32 +1649,48 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
-    id: 'implant-1',
-    name: 'хирургия 1 (базовый)',
-    description: 'Ты можешь ставить более сложные импланты.',
-    // 476
-    // can-do-implant = 4 (или +2)
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }),
+    id: 'medicraft-1',
+    name: 'Медицинские дроны 1',
+    description: 'Улучшает управление медикартом.',
+    // 515
+    // drones.medicraftBonus +2
+    // drones.maxTimeInside +20
+    // drones.recoveryTime -20
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 2 }),
+    ],
   },
 
   {
-    id: 'implant-2',
-    name: 'хирургия 2 (эксперт)',
-    description: 'Ты можешь ставить самые сложные импланты.',
-    // 477
-    // can-do-implant = 6 (или +2)
-    prerequisites: ['implant-1'],
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }),
+    id: 'medicraft-2',
+    name: 'Медицинские дроны 2',
+    description: 'Улучшает управление сложными медикартами.',
+    // 516
+    // drones.medicraftBonus +4
+    // drones.maxTimeInside +10
+    // drones.recoveryTime -10
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
+    ],
   },
 
   {
-    id: 'implant-3',
-    name: 'хирургия 3 (мастер)',
-    description: 'Ты можешь ставить любые импланты, включая биовэр.',
-    // 478
-    // can-do-implant = 10 (или +4)
-    prerequisites: ['implant-2'],
-    modifier: modifierFromEffect(increaseImplantDifficultyBonus, { amount: 4 }),
+    id: 'medicraft-3',
+    name: 'Медицинские дроны 3',
+    description: 'Улучшает управление самыми сложными медикартами.',
+    // 517
+    // drones.medicraftBonus +4
+    // drones.maxTimeInside +10
+    // drones.recoveryTime -10
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
+    ],
   },
 
   {
@@ -1680,67 +1704,177 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
+    id: 'implant-1',
+    name: 'Биоинженерия 1',
+    description: 'Ты можешь ставить простые импланты.',
+    // 521
+    // rigging.implantsBonus+2
+    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
+  },
+
+  {
+    id: 'implant-2',
+    name: 'Биоинженерия 2',
+    description: 'Ты можешь ставить сложные импланты.',
+    // 522
+    // rigging.implantsBonus+2
+    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
+  },
+
+  {
+    id: 'implant-3',
+    name: 'Биоинженерия 3',
+    description: 'Ты можешь ставить самые сложные импланты, включая биовэр.',
+    // 523
+    // rigging.implantsBonus+4
+    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 4 })],
+  },
+
+  {
     id: 'tuning-1',
-    name: 'Тюнинг 1 (базовый)',
+    name: 'Тюнинг 1',
     description: 'Ты можешь ставить простые моды.',
-    // 480
-    // can-do-tuning = 4 (или +2)
-    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
-    modifier: [],
+    // 525
+    // rigging.tuningBonus +2
+    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
 
   {
     id: 'tuning-2',
-    name: 'Тюнинг 2 (эксперт)',
+    name: 'Тюнинг 2',
     description: 'Ты можешь ставить сложные моды.',
-    // 481
-    // can-do-tuning = 6 (или +2)
-    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
-    prerequisites: ['tuning-1'],
-    modifier: [],
+    // 526
+    // rigging.tuningBonus +2
+    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
 
   {
     id: 'tuning-3',
-    name: 'Тюнинг 3 (мастер)',
+    name: 'Тюнинг 3',
     description: 'Ты можешь ставить самые сложные моды.',
-    // 482
-    // can-do-tuning = 10 (или +4)
-    // TODO(https://trello.com/c/peyNPmuE/328-реализовать-абилки-тюнинг-мастерскую-для-ремонта-и-апгрейда-дронов): Implement and add modifier here
-    prerequisites: ['tuning-2'],
-    modifier: [],
+    // 527
+    // rigging.tuningBonus +4
+    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
 
   {
     id: 'repoman-1',
-    name: 'Рипомен 1 (базовый)',
-    description: 'Ты можешь снимать сложные импланты  моды.',
-    // 484
-    // can-do-repo = 4 (или +2)
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
-    modifier: [],
+    name: 'Было ваше - стало наше 1',
+    description: 'Ты можешь снимать простые импланты  моды.',
+    // 529
+    // rigging.repomanBonus +4
+    modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
 
   {
     id: 'repoman-2',
-    name: 'Рипомен 2 (эксперт)',
-    description: 'Ты можешь снимать самые сложные импланты  моды.',
-    // 485
-    // can-do-repo = 6 (или +2)
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
-    prerequisites: ['repoman-1'],
-    modifier: [],
+    name: 'Было ваше - стало наше 2',
+    description: 'Ты можешь снимать сложные импланты  моды.',
+    // 530
+    // rigging.repomanBonus +4
+    modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
 
   {
     id: 'repoman-3',
-    name: 'Рипомен 3 (мастер)',
-    description: 'Ты можешь снимать самые сложные импланты  моды, даже модифицированные. ',
-    // 486
-    // can-do-repo = 12 (или +6)
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement and add modifier here
-    prerequisites: ['repoman-2'],
-    modifier: [],
+    name: 'Было ваше - стало наше 3',
+    description: 'Ты можешь снимать самые сложные импланты  моды. ',
+    // 531
+    // rigging.repomanBonus +4
+    modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
+  },
+
+  {
+    id: 'aircraft-1',
+    name: 'Воздушные дроны 1',
+    description: 'Улучшает управление воздушными дронами.',
+    // 537
+    // drones.aircraftBonus =  +2
+    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
+  },
+
+  {
+    id: 'aircraft-2',
+    name: 'Воздушные дроны 2',
+    description: 'Улучшает управление сложными воздушными дронами.',
+    // 538
+    // drones.aircraftBonus = +4
+    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
+  },
+
+  {
+    id: 'aircraft-3',
+    name: 'Воздушные дроны 3',
+    description: 'Улучшает управление самыми сложными воздушными дронами.',
+    // 539
+    // drones.aircraftBonus = +4
+    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
+  },
+
+  {
+    id: 'groundcraft-1',
+    name: 'Наземные дроны-1',
+    description: 'Улучшает управление наземными дронами.',
+    // 541
+    // drones.groundcraftBonus = +2
+    modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 2 })],
+  },
+
+  {
+    id: 'groundcraft-2',
+    name: 'Наземные дроны-2',
+    description: 'Улучшает управление сложными наземными дронами.',
+    // 542
+    // drones.groundcraftBonus = +4
+    modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
+  },
+
+  {
+    id: 'groundcraft-3',
+    name: 'Наземные дроны-3',
+    description: 'Улучшает управление самыми сложными наземными дронами.',
+    // 543
+    // drones.groundcraftBonus = +4
+    modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
+  },
+
+  {
+    id: 'drone-sync-1',
+    name: 'Синхронизация 1',
+    description: 'Увеличивает время в дроне и сокращает перерыв между включениями.',
+    // 544
+    // drones.maxTimeInside  +10
+    // drones.recoveryTime= -10
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+    ],
+  },
+
+  {
+    id: 'drone-sync-2',
+    name: 'Синхронизация 2',
+    description: 'Сильнее увеличивает время в дроне и сокращает перерыв между включениями.',
+    // 545
+    // drones.maxTimeInside +20
+    // drones.recoveryTime -20
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+    ],
+  },
+
+  {
+    id: 'drone-sync-3',
+    name: 'Синхронизация 3',
+    description: 'Намного сильнее увеличивает время пребывания в дроне и сокращает перерыв между включениями.',
+    // 546
+    // drones.maxTimeInside  +20
+    // drones.recoveryTime-20
+    modifier: [
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+    ],
   },
 
   {
