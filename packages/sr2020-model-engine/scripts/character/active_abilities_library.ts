@@ -1377,10 +1377,46 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
+    id: 'medicraft-active',
+    humanReadableName: 'Управление медицинским дроном',
+    description: 'Активируй, чтобы включиться в дрона-медикарт.',
+    // 514
+    // Активирует процесс включения в дрона.
+    // надо отсканировать:
+    // - QR дрона
+    // - QR телохранилища
+    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+    // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
+    target: 'scan',
+    targetsSignature: kDroneAndBodyStorageTargeted,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: enterDrone.name,
+  },
+
+  {
     id: 'groundcraft-active',
     humanReadableName: 'Управление наземным дроном',
     description: 'Активируй, чтобы включиться в наземного дрона.',
     // 496
+    // Активирует процесс включения в дрона.
+    // надо отсканировать:
+    // - QR дрона
+    // - QR телохранилища
+    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
+    // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
+    target: 'scan',
+    targetsSignature: kDroneAndBodyStorageTargeted,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: enterDrone.name,
+  },
+
+  {
+    id: 'aircraft-active',
+    humanReadableName: 'Управление воздушным дроном',
+    description: 'Активируй, чтобы включиться в воздушного дрона.',
+    // 536
     // Активирует процесс включения в дрона.
     // надо отсканировать:
     // - QR дрона
