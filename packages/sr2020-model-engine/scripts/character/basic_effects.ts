@@ -272,6 +272,12 @@ export function increaseMaxDroneDifficulty(api: EffectModelApi<Sr2020Character>,
   api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
 }
 
+export function increaseDroneCrafts(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.drones.aircraftBonus += m.amount;
+  api.model.drones.groundcraftBonus += m.amount;
+  api.model.drones.medicraftBonus += m.amount;
+}
+
 export function increaseMaxTimeInDrone(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.maxTimeInside += m.amount;
   api.model.drones.maxTimeInside = clamp(api.model.drones.maxTimeInside, 6, 120);
