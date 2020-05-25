@@ -188,7 +188,7 @@ class SpreadsheetProcessor {
       throw new Error('Player description column was moved! Exiting.');
     }
 
-    if (!header[kMasterDescriptionColumn].startsWith('Описание МАСТЕРСКОЕ')) {
+    if (!header[kMasterDescriptionColumn].startsWith('Описание мастерское')) {
       throw new Error('Master description column was moved! Exiting.');
     }
 
