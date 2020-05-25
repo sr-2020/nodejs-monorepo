@@ -141,10 +141,12 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Ваши навыки недостаточны для управления данным дроном.');
   }
 
-  // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
-  // TODO: Use proper formula
-  const timeInDrone = duration(10, 'minutes');
+  const timeInDrone = duration(7 * api.workModel.body + api.workModel.drones.maxTimeInside, 'minutes');
   api.setTimer(kDroneTimerIds[0], 'Аварийный выход из дрона', timeInDrone, droneTimeout, {});
+
+  const thisAbility = api.model.activeAbilities.find((a) => a.id == data.id)!;
+  const cooldown = duration(Math.max(0, api.workModel.drones.recoveryTime - 5 * api.workModel.body), 'minutes');
+  thisAbility.cooldownUntil += cooldown.asMilliseconds() * api.workModel.cooldownCoefficient;
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,

@@ -94,7 +94,7 @@ describe('Rigger abilities', () => {
 
   it('Entering and leaving drone', async () => {
     // Rigger set up
-    await fixture.saveCharacter({ maxHp: 2, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
     await fixture.addCharacterFeature('medicraft-active');
 
     // Body storage set up
@@ -143,6 +143,9 @@ describe('Rigger abilities', () => {
       expect(workModel.maxHp).to.equal(2);
       expect(workModel.passiveAbilities).lengthOf(0);
       expect(workModel.activeAbilities).lengthOf(1); // Enter drone
+      expect(workModel.activeAbilities[0].cooldownUntil).equal(
+        duration(/* default recovery time */ 50 - /* body */ 3 * 5, 'minutes').asMilliseconds(),
+      );
       expect(workModel.currentBody).to.equal('physical');
     }
   });

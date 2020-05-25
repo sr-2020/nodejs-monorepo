@@ -1385,7 +1385,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // надо отсканировать:
     // - QR дрона
     // - QR телохранилища
-    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
     // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
     target: 'scan',
     targetsSignature: kDroneAndBodyStorageTargeted,
@@ -1403,7 +1402,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // надо отсканировать:
     // - QR дрона
     // - QR телохранилища
-    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
     // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
     target: 'scan',
     targetsSignature: kDroneAndBodyStorageTargeted,
@@ -1421,7 +1419,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // надо отсканировать:
     // - QR дрона
     // - QR телохранилища
-    // TODO(https://trello.com/c/HgKga3aT/338-тела-дроны-создать-сущность-дроны-их-можно-покупать-в-магазине-носить-с-собой-на-куар-коде-и-в-них-можно-включаться)
     // Реальный кулдаун: time-after-drone - 5* body но не меньше чем 0
     target: 'scan',
     targetsSignature: kDroneAndBodyStorageTargeted,
