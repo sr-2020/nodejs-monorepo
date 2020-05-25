@@ -157,10 +157,16 @@ export class ModelEngineController implements ModelEngineService {
         maxDifficulty: -1000,
         maxTimeInside: 60,
         recoveryTime: 50,
+        medicraftBonus: 2,
+        aircraftBonus: 2,
+        groundcraftBonus: 2,
       },
       rigging: {
         implantDifficultyBonus: 0,
         canWorkWithBioware: false,
+        implantsBonus: 2,
+        repomanBonus: 2,
+        tuningBonus: 2,
       },
       billing: {
         anonymous: false,

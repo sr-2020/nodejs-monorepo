@@ -442,6 +442,18 @@ export class Drones {
   @rproperty()
   @Column({ default: 50 })
   recoveryTime: number;
+
+  @rproperty()
+  @Column({ default: 2 })
+  medicraftBonus: number;
+
+  @rproperty()
+  @Column({ default: 2 })
+  aircraftBonus: number;
+
+  @rproperty()
+  @Column({ default: 2 })
+  groundcraftBonus: number;
 }
 
 @model()
@@ -453,6 +465,18 @@ export class Rigging {
   @rproperty()
   @Column({ default: false })
   canWorkWithBioware: boolean;
+
+  @rproperty()
+  @Column({ default: 2 })
+  implantsBonus: number;
+
+  @rproperty()
+  @Column({ default: 2 })
+  tuningBonus: number;
+
+  @rproperty()
+  @Column({ default: 2 })
+  repomanBonus: number;
 }
 
 @model()
