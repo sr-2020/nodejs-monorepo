@@ -17,13 +17,17 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
     api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
     if (api.model.metarace == 'meta-hmhvv1') {
       addFeatureToModel(api.model, 'blood-thirst');
+      addFeatureToModel(api.model, 'vampire-feast');
     } else {
       addFeatureToModel(api.model, 'meat-hunger');
+      addFeatureToModel(api.model, 'ghoul-feast');
     }
   } else {
     api.removeModifier(kHmhvvHungerTimer);
     removeFeatureFromModel(api.model, 'meat-hunger');
     removeFeatureFromModel(api.model, 'blood-thirst');
+    removeFeatureFromModel(api.model, 'vampire-feast');
+    removeFeatureFromModel(api.model, 'ghoul-feast');
   }
 }
 
