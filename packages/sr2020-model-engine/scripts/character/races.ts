@@ -9,25 +9,29 @@ const kHmhvvHungerPeriod = duration(1, 'hour');
 const kEssenceLostPerHungerTickVampires = 100;
 const kEssenceLostPerHungerTickGhouls = 20;
 
+const kRaceFeatures: { [race in MetaRace]: string[] } = {
+  'meta-norm': [],
+  'meta-dwarf': [],
+  'meta-elf': [],
+  'meta-ork': [],
+  'meta-troll': [],
+  'meta-hmhvv1': ['blood-thirst', 'vampire-feast'],
+  'meta-hmhvv3': ['meat-hunger', 'ghoul-feast'],
+  'meta-spirit': [],
+  'meta-digital': [],
+};
+
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
   if (api.model.metarace == data.race) return;
+
+  for (const id of kRaceFeatures[api.model.metarace]) removeFeatureFromModel(api.model, id);
   api.model.metarace = data.race;
+  for (const id of kRaceFeatures[api.model.metarace]) addFeatureToModel(api.model, id);
 
   if (api.model.metarace == 'meta-hmhvv1' || api.model.metarace == 'meta-hmhvv3') {
     api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
-    if (api.model.metarace == 'meta-hmhvv1') {
-      addFeatureToModel(api.model, 'blood-thirst');
-      addFeatureToModel(api.model, 'vampire-feast');
-    } else {
-      addFeatureToModel(api.model, 'meat-hunger');
-      addFeatureToModel(api.model, 'ghoul-feast');
-    }
   } else {
     api.removeModifier(kHmhvvHungerTimer);
-    removeFeatureFromModel(api.model, 'meat-hunger');
-    removeFeatureFromModel(api.model, 'blood-thirst');
-    removeFeatureFromModel(api.model, 'vampire-feast');
-    removeFeatureFromModel(api.model, 'ghoul-feast');
   }
 }
 
