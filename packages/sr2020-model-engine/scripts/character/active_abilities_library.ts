@@ -1842,6 +1842,42 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveBackupAbility.name,
   },
+
+  {
+    id: 'ghoul-feast',
+    humanReadableName: 'Питание гулей',
+    description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 1.',
+    // 605
+    // Вампир сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
+    // Эссенс гуля увеличивается на  min (100, itEssense жертвы)
+    // Эссенс персонажа уменьшается на min ( 100, itEssense жертвы). Укушенный персонаж переходит в состояние КС
+    // itGapEssense Жертвы = itGapEssense + [min ( 100, itEssense жертвы)]
+    // itGapEssense гуля = itGapEssense -кусь гуля
+    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+
+  {
+    id: 'vampire-feast',
+    humanReadableName: 'Питание вампиров',
+    description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 2.',
+    // 606
+    // Вампир сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
+    // Эссенс вампира увеличивается на  min (200, itEssense жертвы)
+    // Эссенс персонажа уменьшается на min ( 200, itEssense жертвы). Укушенный персонаж переходит в состояние КС
+    // itGapEssense Жертвы = itGapEssense + [min ( 200, itEssense жертвы)]
+    // itGapEssense вампира= itGapEssense - кусьВампира
+    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
 ];
 
 setAllActiveAbilities(

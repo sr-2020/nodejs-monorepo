@@ -2007,6 +2007,30 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
+    id: 'meat-hunger',
+    name: 'Голод гулей',
+    description: 'Твой эссенс уменьшается  на 0,2 каждый час',
+    // 609
+    // Эссенс персонажа уменьшается на 0,2 каждый час
+    // Essense_Loss
+    //  itGapEssense = увеличивается 20 каждый час
+    //
+    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv)
+    modifier: [],
+  },
+
+  {
+    id: 'blood-thirst',
+    name: 'Жажда вампиров',
+    description: 'Твой эссенс уменьшается на 1 каждый час',
+    // 610
+    // Эссенс персонажа уменьшается на 1 каждый час
+    //  itGapEssense = увеличивается 100 каждый час
+    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv)
+    modifier: [],
+  },
+
+  {
     id: 'comcon-ethic-ability',
     name: 'Вы достигли!',
     description: 'Приходите на наш воскресный семинар по приложению и выиграйте футболку в лотерее!',
