@@ -2015,7 +2015,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Essense_Loss
     //  itGapEssense = увеличивается 20 каждый час
     //
-    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv)
     modifier: [],
   },
 
@@ -2026,7 +2025,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 610
     // Эссенс персонажа уменьшается на 1 каждый час
     //  itGapEssense = увеличивается 100 каждый час
-    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv)
     modifier: [],
   },
 

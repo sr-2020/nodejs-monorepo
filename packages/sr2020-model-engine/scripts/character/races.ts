@@ -5,7 +5,8 @@ import { duration } from 'moment';
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerTimerDescription = 'Голод HMHVV';
 const kHmhvvHungerPeriod = duration(1, 'hour');
-const kEssenceLostPerHungerTick = 50;
+const kEssenceLostPerHungerTickVampires = 100;
+const kEssenceLostPerHungerTickGhouls = 20;
 
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
   if (api.model.metarace == data.race) return;
@@ -20,6 +21,7 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
 
 export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}) {
   api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
-  api.model.essenceDetails.gap += Math.min(kEssenceLostPerHungerTick, api.workModel.essence);
+  const essenceLoss = api.model.metarace == 'meta-hmhvv1' ? kEssenceLostPerHungerTickVampires : kEssenceLostPerHungerTickGhouls;
+  api.model.essenceDetails.gap += Math.min(essenceLoss, api.workModel.essence);
   api.sendNotification('Голод HMHVV', 'Вы испытываете нечеловеческий голод');
 }
