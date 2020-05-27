@@ -185,12 +185,6 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   api.model.activeAbilities = api.model.activeAbilities.filter(isDroneAbility);
   api.model.passiveAbilities = api.model.passiveAbilities.filter(isDroneAbility);
 
-  if (m.postDroneDamage == 0) {
-    sendNotificationAndHistoryRecord(api, 'Выход из дрона', 'Вы вышли из дрона, все в порядке.');
-  } else {
-    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${m.postDroneDamage} хитов`);
-  }
-
   // Not calling directly as we need to remove modifier and recalculate max HP first.
   api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage });
   api.removeModifier(m.mID);
