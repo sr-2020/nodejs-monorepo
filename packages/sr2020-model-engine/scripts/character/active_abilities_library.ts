@@ -1465,7 +1465,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'pill-name',
     humanReadableName: 'Фармацевтика',
-    description: 'Отсканируй препарати и пойми, что за это',
+    description: 'Отсканируй препарат и пойми, что это за препарат',
     // 514
     // При активации аблики игрок сканирует куар-код с препаратом и видит его название
     target: 'scan',
