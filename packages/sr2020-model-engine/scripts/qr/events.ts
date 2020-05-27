@@ -59,8 +59,13 @@ function isMerchandise(api: EventModelApi<QrCode>) {
 }
 
 function makeEmptyBox(api: EventModelApi<QrCode>) {
+  // Hack to hide pill name
+  if (api.model.type == 'pill') {
+    api.model.name = 'Коробка от препарата';
+  } else {
+    api.model.name = 'Коробка от ' + api.model.name;
+  }
   api.model.type = 'box';
-  api.model.name = 'Коробка от ' + api.model.name;
   api.model.description = 'Пустая коробка от товара. Нужна для операций с рентными платежами по товару.';
 }
 
