@@ -77,7 +77,7 @@ function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScal
     const libraryGroup = kAllEthicGroups.find((it) => it.id == groupId)!;
     let fitsGroup = true;
     for (const condition of libraryGroup.ethicStyle) {
-      const v = ethicValues[condition.scale];
+      const v = ethicValues.get(condition.scale)!;
       if (v < condition.conditionMin || v > condition.conditionMax) fitsGroup = false;
     }
     if (fitsGroup) newGroupEthicAbilities.push(...libraryGroup.abilityIds);

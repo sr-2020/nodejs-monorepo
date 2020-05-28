@@ -193,6 +193,15 @@ describe('Ethic events', function() {
       expect(locus.baseModel.type).to.equal('locus');
     }
 
+    // Change ethic values - loses ability
+    {
+      await fixture.sendCharacterEvent({ eventType: 'ethicSet', data: { violence: 0, control: 0, individualism: 3, mind: 0 } }, 2);
+      const acolyte = await fixture.getCharacter(2);
+      expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
+      expect(acolyte.baseModel.passiveAbilities).not.to.containDeep([{ id: 'churched' }]);
+      expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'russian-orthodox-church' }]);
+    }
+
     // Remove from the group
     {
       await fixture.useAbility({ id: 'dgroup-exclude', locusId: '3', targetCharacterId: '2' }, 1);
