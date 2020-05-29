@@ -959,20 +959,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   },
 
   {
-    id: 'blood-feast',
-    humanReadableName: 'Blood Feast',
-    description: 'Извлечение доз крови из жертв, у которых сканируются qr-коды мясных тел',
-    // 455
-    // - время действия 5 минут, кулдаун 30 минут. За время активации можно сосканировать Qr-код мясных тел до 3 уникальных целей (добровольно или в тяжране) - это приведет к созданию соответствующего количества чипов “кровь”.  Если цель не была в тяжране, то она там оказывается.
-    // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-заклинания-и-абилки-связанные-с-чипами-крови-blood-feast-bathory-charger-sense-of-essence)
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 30,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-
-  {
     id: 'hammer-of-justice',
     humanReadableName: 'Hammer of Justice',
     description: 'Активируемый статус "тяжелое" для одноручного оружия.  Требуемая эссенция: больше 3',
