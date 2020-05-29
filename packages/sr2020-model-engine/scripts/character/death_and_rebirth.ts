@@ -53,10 +53,11 @@ export function revive(api: EventModelApi<Sr2020Character>, _data: {}) {
 }
 
 export function reviveAbsoluteOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
-  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'].includes(api.model.metarace)) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId);
+  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'].includes(target.metarace)) {
     throw new UserVisibleError('Эта способность действует только на  нормов, эльфов, орков, троллей и гномов');
   }
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), reviveAbsolute, {});
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, reviveAbsolute, {});
 }
 
 export function reviveAbsolute(api: EventModelApi<Sr2020Character>, _data: {}) {
