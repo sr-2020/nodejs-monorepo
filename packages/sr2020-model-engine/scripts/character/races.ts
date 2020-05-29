@@ -2,6 +2,7 @@ import { MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-c
 import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { essenceReset } from '@sr2020/sr2020-model-engine/scripts/character/essence';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerTimerDescription = 'Голод HMHVV';
@@ -30,7 +31,9 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
 
   if (api.model.metarace == 'meta-hmhvv1' || api.model.metarace == 'meta-hmhvv3') {
     api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
+    api.model.essenceDetails = { max: 1000, gap: 700, used: 0 };
   } else {
+    essenceReset(api, {});
     api.removeModifier(kHmhvvHungerTimer);
   }
 }
