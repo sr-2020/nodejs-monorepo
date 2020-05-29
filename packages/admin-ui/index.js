@@ -320,5 +320,13 @@ app = new Vue({
     async writeFoodQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'food'} });
     },
+
+    async writeMeatQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'cow-meat'} });
+    },
+
+    async writeBloodQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'cow-blood'} });
+    },
   }
 })
