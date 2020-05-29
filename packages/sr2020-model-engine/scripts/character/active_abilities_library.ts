@@ -43,7 +43,7 @@ import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-model-
 import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
-import { ghoulBite, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
+import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
 
 export type TargetType = 'scan' | 'show';
 
@@ -103,17 +103,21 @@ const kAstralBodyTargeted: TargetSignature[] = [
   },
 ];
 
+const kPhysicalBodyTargeted: TargetSignature[] = [
+  {
+    name: 'Персонаж',
+    allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY', 'ABSOLUTELY_DEAD_BODY'],
+    field: 'targetCharacterId',
+  },
+];
+
 const kLocusAndPhysicalBody: TargetSignature[] = [
   {
     name: 'Локус',
     allowedTypes: ['locus'],
     field: 'locusId',
   },
-  {
-    name: 'Персонаж',
-    allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY', 'ABSOLUTELY_DEAD_BODY'],
-    field: 'targetCharacterId',
-  },
+  ...kPhysicalBodyTargeted,
 ];
 
 const kNoTarget: TargetSignature[] = [];
@@ -1828,6 +1832,23 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 15,
     minimalEssence: 0,
     eventType: nanohiveBackupAbility.name,
+  },
+
+  {
+    id: 'gm-respawn-hmhvv',
+    humanReadableName: 'Воскрешение HMHVV',
+    description: 'Воскрешение HMHVV',
+    // 601
+    // Эта абилка нужна как мастерская.
+    // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
+    // Эссенс становится равен 0,8
+    // itEssense пересчитывается
+    // itGapEssence=920
+    target: 'scan',
+    targetsSignature: kPhysicalBodyTargeted,
+    cooldownMinutes: 0,
+    minimalEssence: 0,
+    eventType: gmRespawnHmhvv.name,
   },
 
   {

@@ -1,7 +1,7 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { healthStateTransition, reviveAbsolute } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 
 export function vampireBite(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const victim = api.aquired(Sr2020Character, data.targetCharacterId!);
@@ -23,4 +23,16 @@ export function bittenEvent(api: EventModelApi<Sr2020Character>, data: { essence
   }
   api.model.essenceDetails.gap += data.essenceLoss;
   healthStateTransition(api, 'clinically_dead');
+}
+
+export function gmRespawnHmhvv(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, hmhvvRespawnEvent, {});
+}
+
+export function hmhvvRespawnEvent(api: EventModelApi<Sr2020Character>, data: {}) {
+  if (api.workModel.metarace != 'meta-hmhvv1' && api.workModel.metarace != 'meta-hmhvv3') {
+    throw new UserVisibleError('Это работает только на HMHVV');
+  }
+  reviveAbsolute(api, {});
+  api.model.essenceDetails.gap = 920;
 }
