@@ -51,8 +51,8 @@ describe('HMHVV abilities', function() {
     // Bite!
     await fixture.useAbility({ id: 'ghoul-feast', targetCharacterId: '2' }, '1');
 
-    let vampire = (await fixture.getCharacter('1')).workModel;
-    expect(vampire.essence).equal(400);
+    let ghoul = (await fixture.getCharacter('1')).workModel;
+    expect(ghoul.essence).equal(400);
 
     const victim = (await fixture.getCharacter('2')).workModel;
     expect(victim.essence).equal(200);
@@ -62,7 +62,7 @@ describe('HMHVV abilities', function() {
     await fixture.saveQrCode({ modelId: '3' });
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cow-meat' } }, 3);
     await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '3' } }, '1');
-    vampire = (await fixture.getCharacter('1')).workModel;
-    expect(vampire.essence).equal(500);
+    ghoul = (await fixture.getCharacter('1')).workModel;
+    expect(ghoul.essence).equal(500);
   });
 });
