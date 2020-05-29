@@ -43,6 +43,7 @@ import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-model-
 import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
+import { ghoulBite, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
 
 export type TargetType = 'scan' | 'show';
 
@@ -1841,10 +1842,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // itGapEssense гуля = itGapEssense -кусь гуля
     // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: ghoulBite.name,
   },
 
   {
@@ -1859,10 +1860,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // itGapEssense вампира= itGapEssense - кусьВампира
     // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: vampireBite.name,
   },
 ];
 
