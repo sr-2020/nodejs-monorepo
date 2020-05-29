@@ -1,4 +1,4 @@
-import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
@@ -26,8 +26,16 @@ export function resetHunger(model: Sr2020Character) {
 }
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
-  resetHunger(api.model);
-  api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
+  if (data.id == 'food') {
+    resetHunger(api.model);
+    api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
+  } else if (data.id == 'cow-meat') {
+    if (api.workModel.metarace != 'meta-hmhvv3') throw new UserVisibleError('Вы не можете употреблять такую еду');
+    api.model.essenceDetails.gap = Math.max(0, api.model.essenceDetails.gap - 100);
+  } else if (data.id == 'cow-blood') {
+    if (api.workModel.metarace != 'meta-hmhvv1') throw new UserVisibleError('Вы не можете употреблять такую еду');
+    api.model.essenceDetails.gap = Math.max(0, api.model.essenceDetails.gap - 100);
+  }
 }
 
 export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {

@@ -32,7 +32,7 @@ interface MerchandiseLibraryData {
 }
 
 function getLibraryData(id: string): MerchandiseLibraryData {
-  if (id == 'food') {
+  if (['food', 'cow-meat', 'cow-blood'].includes(id)) {
     return {
       type: 'food',
       eventType: consumeFood.name,
