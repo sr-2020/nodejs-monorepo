@@ -38,7 +38,7 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
     api.model.essenceDetails = { max: 1000, gap: 700, used: 0 };
   } else {
     essenceReset(api, {});
-    api.removeModifier(kHmhvvHungerTimer);
+    api.removeTimer(kHmhvvHungerTimer);
   }
 }
 
