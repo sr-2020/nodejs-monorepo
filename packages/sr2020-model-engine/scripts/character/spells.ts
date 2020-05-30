@@ -17,8 +17,8 @@ import {
 } from './util';
 import { getAllActiveAbilities } from './library_registrator';
 import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonance, multiplyAllDiscounts } from './basic_effects';
-import { duration, Duration } from 'moment';
-import { kAllSpells, Spell } from './spells_library';
+import { duration } from 'moment';
+import { kAllSpells } from './spells_library';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
@@ -42,7 +42,7 @@ interface SpellData {
 
 interface MagicFeedback {
   feedback: number;
-  duration: Duration;
+  duration: number;
   amount: number;
 }
 
@@ -65,8 +65,6 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     throw new UserVisibleError('Несуществующий спелл!');
   }
 
-  let ritualPowerBonus = 0;
-  let ritualFeedbackReduction = 0;
   let totalParticipans = 0;
 
   if (data.ritualMembersIds?.length) {
@@ -79,15 +77,10 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
       const participant = api.aquired(Sr2020Character, participantId);
       totalParticipans += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
     }
-
-    const ritualBonus = Math.floor(Math.sqrt(totalParticipans));
-    ritualPowerBonus = ritualBonus;
-    if (api.workModel.passiveAbilities.some((a) => a.id == 'orthodox-ritual-magic')) {
-      ritualFeedbackReduction = ritualBonus;
-    }
   }
 
-  data.power += ritualPowerBonus;
+  data.power += Math.ceil(Math.sqrt(totalParticipans));
+
   api.sendSelfEvent(librarySpell.eventType, data);
   // Reagents
   const totalContent = kEmptyContent;
@@ -104,42 +97,46 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     api.sendOutboundEvent(QrCode, id, consume, {});
   }
 
-  let reagentFeedbackIncrease = 0;
-  const powerMultiplier = Math.ceil(data.power / 2);
+  const sphereToReagent = {
+    healing: totalContent.pisces,
+    fighting: totalContent.sagittarius,
+    protection: totalContent.leo,
+    aura: totalContent.libra,
+    astral: totalContent.aquarius,
+    stats: totalContent.scorpio,
+  };
 
-  if (librarySpell.sphere == 'healing' && totalContent.pisces < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
-  if (librarySpell.sphere == 'fighting' && totalContent.sagittarius < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
-  if (librarySpell.sphere == 'protection' && totalContent.leo < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
-  if (librarySpell.sphere == 'aura' && totalContent.libra < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
-  if (librarySpell.sphere == 'astral' && totalContent.aquarius < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
-  if (librarySpell.sphere == 'stats' && totalContent.scorpio < 3 * powerMultiplier) reagentFeedbackIncrease += 3;
+  const metaraceToReagent = {
+    'meta-elf': totalContent.virgo,
+    'meta-troll': totalContent.taurus,
+    'meta-ork': totalContent.aries,
+    'meta-dwarf': totalContent.cancer,
+    'meta-norm': totalContent.gemini,
+    'meta-hmhvv1': totalContent.capricorn,
+    'meta-hmhvv3': totalContent.capricorn,
+  };
 
-  if (api.workModel.metarace == 'meta-elf' && totalContent.virgo < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
-  if (api.workModel.metarace == 'meta-troll' && totalContent.taurus < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
-  if (api.workModel.metarace == 'meta-ork' && totalContent.aries < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
-  if (api.workModel.metarace == 'meta-dwarf' && totalContent.cancer < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
-  if (api.workModel.metarace == 'meta-norm' && totalContent.gemini < 2 * powerMultiplier) reagentFeedbackIncrease += 2;
-  if ((api.workModel.metarace == 'meta-hmhvv1' || api.workModel.metarace == 'meta-hmhvv3') && totalContent.capricorn < 2 * powerMultiplier)
-    reagentFeedbackIncrease += 2;
+  const feedback = calculateMagicFeedback({
+    power: data.power,
+    sphereReagents: sphereToReagent[librarySpell.sphere],
+    metaTypeReagents: metaraceToReagent[api.workModel.metarace],
+    inAstral: api.workModel.currentBody == 'astral',
+    ritualParticipants: totalParticipans,
+    bloodRitualParticipants: 0,
+    manaLevel: data.location.manaLevel,
+    ophiuchusUsed: totalContent.ophiuchus > 0,
+    feedbackAmountMultiplier: api.workModel.magicStats.feedbackReduction,
+    feedbackDurationMultiplier: api.workModel.magicStats.recoverySpeed,
+  });
 
-  const canHaveZeroFeedback = totalParticipans >= 300 || totalContent.ophiuchus >= powerMultiplier;
-
-  const feedback = applyAndGetMagicFeedback(
-    api,
-    data,
-    librarySpell,
-    reagentFeedbackIncrease - ritualFeedbackReduction,
-    canHaveZeroFeedback,
-  );
+  applyMagicFeedback(api, feedback);
   saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback));
 
   addHistoryRecord(
     api,
     'Заклинание',
     spell.humanReadableName,
-    `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${
-      feedback.amount
-    } на ${feedback.duration.asMinutes()} минут.`,
+    `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${feedback.amount} на ${feedback.duration} минут.`,
   );
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
@@ -427,33 +424,55 @@ export function forgetAllSpells(api: EventModelApi<Sr2020Character>, data: {}) {
   api.model.spells = [];
 }
 
-function applyAndGetMagicFeedback(
-  api: EventModelApi<Sr2020Character>,
-  data: { power: number; location: { manaLevel: number } },
-  spell: Spell,
-  adjustment: number,
-  canHaveZeroFeedback: boolean,
-): MagicFeedback {
-  // TODO(aeremin) Fix use of api.model.magicFeedbackReduction
-  const feedback = Math.max(
-    0,
-    (5 * data.power + adjustment) * (api.workModel.currentBody == 'astral' ? 0.25 : 1) * (data.location.manaLevel < 4 ? 1.5 : 1),
-  );
-
-  const feedbackDuration = duration(
-    Math.max(1, Math.ceil(Math.pow(2, Math.min(14, feedback)) / api.workModel.magicStats.recoverySpeed)),
-    'minutes',
-  );
-  const feedbackAmount = Math.max(Math.ceil(Math.sqrt(feedback) * api.workModel.magicStats.feedbackReduction), canHaveZeroFeedback ? 0 : 1);
-
-  const m = modifierFromEffect(magicFeedbackEffect, { amount: feedbackAmount });
-
+function applyMagicFeedback(api: EventModelApi<Sr2020Character>, feedback: MagicFeedback) {
+  const m = modifierFromEffect(magicFeedbackEffect, { amount: feedback.amount });
   api.addModifier(m);
-  api.setTimer('feedback-recovery-' + uuid.v4(), `Окончание магического отката на ${feedbackAmount}`, feedbackDuration, removeModifier, {
-    mID: m.mID,
-  });
+  api.setTimer(
+    'feedback-recovery-' + uuid.v4(),
+    `Окончание магического отката на ${feedback.amount}`,
+    duration(feedback.duration, 'minutes'),
+    removeModifier,
+    {
+      mID: m.mID,
+    },
+  );
+}
 
-  return { amount: feedbackAmount, feedback, duration: feedbackDuration };
+// Everything that can affect feedback
+interface FeedbackInputs {
+  power: number;
+  sphereReagents: number;
+  metaTypeReagents: number;
+  ritualParticipants: number;
+  bloodRitualParticipants: number;
+  manaLevel: number;
+  inAstral: boolean;
+  feedbackAmountMultiplier: number;
+  feedbackDurationMultiplier: number;
+  ophiuchusUsed: boolean;
+}
+
+export function calculateMagicFeedback(inputs: FeedbackInputs): MagicFeedback {
+  let feedback = Math.log(10 * inputs.power);
+  if (inputs.sphereReagents < Math.max(3, 1.5 * inputs.power)) feedback *= 1.5;
+  if (inputs.metaTypeReagents < Math.max(2, inputs.power)) feedback *= 1.5;
+  if (inputs.ritualParticipants > 0) feedback /= 2 + inputs.ritualParticipants;
+  if (inputs.bloodRitualParticipants > 0) feedback /= 6 + inputs.bloodRitualParticipants;
+  if (inputs.manaLevel >= 4) feedback *= 1.2;
+  if (inputs.inAstral) feedback /= 5;
+  feedback = Math.round(feedback * 100) / 100;
+
+  let amount = feedback * 1.8;
+  amount *= inputs.feedbackAmountMultiplier;
+  if (!inputs.ophiuchusUsed) amount += 1;
+  amount = Math.round(amount);
+
+  let feedbackDuration = feedback * 10;
+  feedbackDuration *= inputs.feedbackDurationMultiplier;
+  feedbackDuration += 1;
+  feedbackDuration = Math.round(feedbackDuration);
+
+  return { amount, feedback, duration: feedbackDuration };
 }
 
 // Magic feedback implementation
