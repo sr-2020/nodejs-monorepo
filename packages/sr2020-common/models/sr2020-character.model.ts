@@ -331,11 +331,11 @@ export class Chemo {
 export class MagicStats {
   @rproperty()
   @Column({ default: 1 })
-  feedbackReduction: number;
+  feedbackMultiplier: number;
 
   @rproperty()
   @Column({ default: 1.0 })
-  recoverySpeed: number;
+  recoverySpeedMultiplier: number;
 
   @rproperty()
   @Column({ default: 1.0 })

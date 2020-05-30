@@ -47,9 +47,8 @@ export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: ModifierW
   api.model.magic = clamp(api.model.magic, 0, 9000);
 }
 
-export function increaseMagicFeedbackReduction(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.magicStats.feedbackReduction += m.amount;
-  api.model.magicStats.feedbackReduction = clamp(api.model.magicStats.feedbackReduction, -9000, 9000);
+export function multiplyMagicFeedbackMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.feedbackMultiplier *= m.amount;
 }
 
 export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -152,10 +151,8 @@ export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: Mod
   api.model.maxTimeInVr = clamp(api.model.maxTimeInVr, 30, 9000);
 }
 
-export function increaseMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.magicStats.recoverySpeed += m.amount;
-  // As this is a coefficient - we use 1/3 and 5/3 instead of 1 and 5 from the sheet.
-  api.model.magicStats.recoverySpeed = clamp(api.model.magicStats.recoverySpeed, 1.0 / 3.0, 5.0 / 3.0);
+export function muliplyMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.recoverySpeedMultiplier *= m.amount;
 }
 
 export function increaseSpiritResistanceMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {

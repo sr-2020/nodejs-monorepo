@@ -125,8 +125,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     bloodRitualParticipants: 0,
     manaLevel: data.location.manaLevel,
     ophiuchusUsed: totalContent.ophiuchus > 0,
-    feedbackAmountMultiplier: api.workModel.magicStats.feedbackReduction,
-    feedbackDurationMultiplier: api.workModel.magicStats.recoverySpeed,
+    feedbackAmountMultiplier: api.workModel.magicStats.feedbackMultiplier,
+    feedbackDurationMultiplier: 1.0 / api.workModel.magicStats.recoverySpeedMultiplier,
   });
 
   applyMagicFeedback(api, feedback);

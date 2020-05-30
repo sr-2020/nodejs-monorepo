@@ -21,8 +21,6 @@ import {
   increaseImplantDifficultyBonus,
   increaseImplantsBonus,
   increaseMagic,
-  increaseMagicFeedbackReduction,
-  increaseMagicRecoverySpeed,
   increaseMaxTimeAtHost,
   increaseMaxTimeInDrone,
   increaseMaxTimeInVr,
@@ -38,6 +36,7 @@ import {
   increaseTuningBonus,
   increaseVarianceResistance,
   increaseСhemoCrysisThreshold,
+  muliplyMagicRecoverySpeed,
   multiplyAllDiscounts,
   multiplyCorpDiscountAres,
   multiplyCorpDiscountAztechnology,
@@ -53,6 +52,7 @@ import {
   multiplyCorpDiscountWuxing,
   multiplyDiscountWeaponsArmor,
   multiplyDiscourseMongerCooldowns,
+  multiplyMagicFeedbackMultiplier,
   setTransactionAnonymous,
 } from './basic_effects';
 
@@ -1411,7 +1411,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     // 355
     // Перманентно уменьшает Откат после кастования заклинания на 1
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: 1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
   },
 
   {
@@ -1421,7 +1421,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 356
     // Перманентно уменьшает Откат после кастования заклинания на 1
     prerequisites: ['magic-feedback-resistance-1'],
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: 1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
   },
 
   {
@@ -1431,7 +1431,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 357
     // Перманентно уменьшает Откат после кастования заклинания на 1
     prerequisites: ['magic-feedback-resistance-2'],
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: 1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
   },
 
   {
@@ -1440,7 +1440,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     // 358
     // Перманентно увеличивает Откат после кастования заклинания на 1
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: -1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
   },
 
   {
@@ -1450,7 +1450,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 359
     // Перманентно увеличивает Откат после кастования заклинания на 1
     prerequisites: ['magic-feedback-unresistance-1'],
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: -1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
   },
 
   {
@@ -1460,7 +1460,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 360
     // Перманентно увеличивает Откат после кастования заклинания на 1
     prerequisites: ['magic-feedback-unresistance-2'],
-    modifier: modifierFromEffect(increaseMagicFeedbackReduction, { amount: -1 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
   },
 
   {
@@ -1469,7 +1469,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Магия возвращается к тебе быстрее',
     // 361
     // Перманентно ускоряет восстановление Магии на 20%
-    modifier: modifierFromEffect(increaseMagicRecoverySpeed, { amount: 0.2 }),
+    modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
 
   {
@@ -1479,7 +1479,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 362
     // Перманентно ускоряет восстановление Магии еще на 20%
     prerequisites: ['magic-recovery-1'],
-    modifier: modifierFromEffect(increaseMagicRecoverySpeed, { amount: 0.2 }),
+    modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
 
   {
@@ -1489,7 +1489,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 363
     // Перманентно ускоряет восстановление Магии еще на 20%
     prerequisites: ['magic-recovery-2'],
-    modifier: modifierFromEffect(increaseMagicRecoverySpeed, { amount: 0.2 }),
+    modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
 
   {

@@ -118,8 +118,8 @@ export class ModelEngineController implements ModelEngineService {
       matrixHp: 1,
       maxTimeInVr: 30,
       magicStats: {
-        feedbackReduction: 1,
-        recoverySpeed: 1,
+        feedbackMultiplier: 1,
+        recoverySpeedMultiplier: 1,
         spiritResistanceMultiplier: 1,
         auraReadingMultiplier: 1,
         auraMarkMultiplier: 1,
