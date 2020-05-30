@@ -6,7 +6,7 @@ import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/sc
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 
 const kHungerTimerName = 'normal-hunger';
-const kHungerTimerDuration = duration(6, 'hours');
+const kHungerTimerDuration = duration(6, 'hours').asMilliseconds();
 const kHungerTimerStage1Description = 'Голодный обморок';
 const kHungerTimerStage2Description = 'Смерть от голода';
 
@@ -19,7 +19,7 @@ export function resetHunger(model: Sr2020Character) {
   model.timers.push({
     name: kHungerTimerName,
     description: kHungerTimerStage1Description,
-    miliseconds: kHungerTimerDuration.asMilliseconds(),
+    miliseconds: getHungerTimerDuration(model).asMilliseconds(),
     eventType: hungerStage1.name,
     data: {},
   });
@@ -39,7 +39,7 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: Merchandi
 }
 
 export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {
-  api.setTimer(kHungerTimerName, kHungerTimerStage2Description, kHungerTimerDuration, hungerStage2, {});
+  api.setTimer(kHungerTimerName, kHungerTimerStage2Description, getHungerTimerDuration(api.workModel), hungerStage2, {});
   if (api.workModel.healthState != 'healthy') return;
   sendNotificationAndHistoryRecord(api, 'Голод', 'Вы потеряли сознание от голода. Тяжелое ранение.');
   healthStateTransition(api, 'wounded');
@@ -49,4 +49,8 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
   if (api.workModel.healthState == 'biologically_dead' || api.workModel.healthState == 'clinically_dead') return;
   sendNotificationAndHistoryRecord(api, 'Голод', 'Клиническая смерть от голода.');
   healthStateTransition(api, 'clinically_dead');
+}
+
+function getHungerTimerDuration(model: Sr2020Character) {
+  return duration(kHungerTimerDuration * (model.metarace == 'meta-troll' ? 0.5 : 1), 'milliseconds');
 }
