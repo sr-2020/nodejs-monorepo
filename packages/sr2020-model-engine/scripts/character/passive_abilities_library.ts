@@ -8,6 +8,7 @@ import {
   increaseAuraReadingMultiplier,
   increaseBackdoors,
   increaseBackdoorTtl,
+  increaseBody,
   increaseCharisma,
   increaseCompilationFadingResistance,
   increaseControlRequests,
@@ -20,6 +21,7 @@ import {
   increaseHostEntrySpeed,
   increaseImplantDifficultyBonus,
   increaseImplantsBonus,
+  increaseIntelligence,
   increaseMagic,
   increaseMaxTimeAtHost,
   increaseMaxTimeInDrone,
@@ -1646,6 +1648,41 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     prerequisites: ['mobile-auto-doc-2'],
     modifier: [],
+  },
+
+  {
+    id: 'arch-rigger-negative-1',
+    name: 'Проблемы риггера - 1',
+    description: 'У тебя проблемы, ригга.',
+    // 506
+    // Intelligence -1
+    // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
+    // prerequisites: ['arch-rigger'],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 })],
+  },
+
+  {
+    id: 'arch-rigger-negative-2',
+    name: 'Проблемы риггера - 2',
+    description: 'У тебя серьезные проблемы, ригга.',
+    // 507
+    // Intelligence -1
+    // Body -1
+    //
+    prerequisites: ['arch-rigger-negative-1'],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 }), modifierFromEffect(increaseBody, { amount: -1 })],
+  },
+
+  {
+    id: 'arch-rigger-negative-3',
+    name: 'Проблемы риггера - 3',
+    description: 'У тебя очень серьезные проблемы, ригга.',
+    // 508
+    // Intelligence -2
+    // Body-2
+    // DroneFeedback3 = 1
+    prerequisites: ['arch-rigger-negative-2'],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: -2 }), modifierFromEffect(increaseBody, { amount: -2 })],
   },
 
   {
