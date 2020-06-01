@@ -100,10 +100,11 @@ export class LocationController extends AnyModelController<Location> {
     responses: {
       '200': {
         description: 'Event successfully broadcasted',
+        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
       },
     },
   })
-  broadcast(@requestBody() event: EventRequest): Promise<void> {
+  broadcast(@requestBody() event: EventRequest): Promise<Empty> {
     return this.broadcastEvent(event);
   }
 }
