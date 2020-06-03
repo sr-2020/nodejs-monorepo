@@ -458,12 +458,12 @@ export function calculateMagicFeedback(inputs: FeedbackInputs): MagicFeedback {
   if (inputs.metaTypeReagents < Math.max(2, inputs.power)) feedback *= 1.5;
   if (inputs.ritualParticipants > 0) feedback /= 2 + inputs.ritualParticipants;
   if (inputs.bloodRitualParticipants > 0) feedback /= 6 + inputs.bloodRitualParticipants;
+  feedback *= inputs.feedbackAmountMultiplier;
   if (inputs.manaLevel >= 4) feedback *= 1.2;
   if (inputs.inAstral) feedback /= 5;
   feedback = Math.round(feedback * 100) / 100;
 
   let amount = feedback * 1.8;
-  amount *= inputs.feedbackAmountMultiplier;
   if (!inputs.ophiuchusUsed) amount += 1;
   amount = Math.round(amount);
 
