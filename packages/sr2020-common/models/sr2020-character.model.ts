@@ -667,6 +667,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
   history: HistoryRecord[];
+
+  @rproperty()
+  @Column({ default: false })
+  paused: boolean; // Disables all actions - using abilities, etc.
 }
 
 @model()

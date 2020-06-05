@@ -207,6 +207,7 @@ export class ModelEngineController implements ModelEngineService {
         state: [],
         lockedUntil: 0,
       },
+      paused: false,
       history: [],
       modifiers: [
         {
