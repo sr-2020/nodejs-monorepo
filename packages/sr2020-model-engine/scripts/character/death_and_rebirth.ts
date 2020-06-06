@@ -122,7 +122,7 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
   }
 
   api.model.healthState = stateTo;
-  api.sendPubSubNotification('health_state', { characterId: Number(api.model.modelId), stateFrom, stateTo });
+  api.sendPubSubNotification('health_state', { characterId: Number(api.model.modelId), characterName: api.model.name, stateFrom, stateTo });
 }
 
 export function medkitTryToRevive(api: EventModelApi<Sr2020Character>, _data: {}) {
