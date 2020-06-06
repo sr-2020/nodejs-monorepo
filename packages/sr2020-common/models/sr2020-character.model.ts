@@ -541,6 +541,10 @@ export class Ethic {
 })
 export class Sr2020Character extends EmptyModel {
   @rproperty()
+  @Column({ default: '' })
+  name: string;
+
+  @rproperty()
   @Column({ type: 'text', default: 'physical' })
   currentBody: BodyType;
 
@@ -686,4 +690,10 @@ export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
 
   @rproperty()
   workModel: Sr2020Character;
+}
+
+@model()
+export class CharacterCreationRequest {
+  @property({ required: false })
+  name?: string;
 }

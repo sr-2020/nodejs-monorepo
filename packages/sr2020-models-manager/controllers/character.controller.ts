@@ -2,7 +2,11 @@ import { inject } from '@loopback/core';
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
-import { Sr2020Character, Sr2020CharacterProcessResponse } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import {
+  CharacterCreationRequest,
+  Sr2020Character,
+  Sr2020CharacterProcessResponse,
+} from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
 import { PushService } from '@sr2020/interface/services/push.service';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
@@ -89,10 +93,13 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   })
   async setDefault(
     @param.path.number('id') id: number,
-    @requestBody() req: Empty,
+    @requestBody() req: CharacterCreationRequest,
     @param.query.boolean('noAbilities') noAbilities: boolean,
   ): Promise<Empty> {
-    const model = await this.modelEngineService.defaultCharacter(req);
+    const model = await this.modelEngineService.defaultCharacter(new Empty());
+    if (req.name) {
+      model.name = req.name;
+    }
     model.modelId = id.toString();
     model.mentalQrId = id + 10000;
 

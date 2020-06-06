@@ -83,6 +83,7 @@ export class ModelEngineController implements ModelEngineService {
 
     const result: Sr2020Character = {
       modelId: '',
+      name: 'Вася Пупкин',
       metarace: 'meta-norm',
       currentBody: 'physical',
       maxHp: 3,
