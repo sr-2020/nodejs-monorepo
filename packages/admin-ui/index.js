@@ -43,6 +43,11 @@ app = new Vue({
       description: 'Капсула производства России. Работает по воле Господа.',
     },
 
+    nightPauseData: {
+      postponeDurationHours: 8,
+      pauseDurationHours: 6,
+    },
+
     allRaces: [
       { id: 'meta-norm', name: 'Норм' },
       { id: 'meta-elf', name: 'Эльф' },
@@ -95,6 +100,10 @@ app = new Vue({
       return `${this.baseUrl()}/character/model/${id}`;
     },
 
+    broadcastCharacterUrl() {
+      return `${this.baseUrl()}/character/broadcast`;
+    },
+
     qrUrl(id) {
       return `${this.baseUrl()}/qr/model/${id}`;
     },
@@ -117,6 +126,21 @@ app = new Vue({
         const response = await this.$http.post(this.characterUrl(this.characterModel.modelId), event);
         console.debug(`Received response: ${JSON.stringify(response.body)}`);
         this.setCharacterModel(response.body.workModel);
+        this.showSuccessToast(successMessage || 'Успех!');
+      } catch (e) {
+        if (e.body && e.body.error && e.body.error.message) {
+          this.showFailureToast(e.body.error.message)
+        } else {
+          this.showFailureToast('Неизвестная ошибка сервера :(');
+        }
+      }
+    },
+
+    async broadcastCharacterEvent(event, successMessage) {
+      try {
+        console.log(`Sending a global character event: ${JSON.stringify(event)}`);
+        const response = await this.$http.post(this.broadcastCharacterUrl(), event);
+        console.debug(`Received response: ${JSON.stringify(response.body)}`);
         this.showSuccessToast(successMessage || 'Успех!');
       } catch (e) {
         if (e.body && e.body.error && e.body.error.message) {
@@ -330,5 +354,13 @@ app = new Vue({
     async writeBloodQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'cow-blood'} });
     },
+
+    async pauseGame() {
+      this.$bvToast.toast('Это долгая операция, пожалуйста, подождите...', {
+        autoHideDelay: 40000,
+        variant: 'info',
+      });
+      return this.broadcastCharacterEvent( { eventType: 'pauseAndPostpone', data: this.nightPauseData }, 'Игра поставлена на паузу!');
+    }
   }
 })
