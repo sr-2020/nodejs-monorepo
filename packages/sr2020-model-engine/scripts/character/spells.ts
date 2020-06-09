@@ -1,4 +1,5 @@
 import uuid = require('uuid');
+import { cloneDeep } from 'lodash';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/sr2020-common/models/location.model';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
@@ -83,7 +84,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
 
   api.sendSelfEvent(librarySpell.eventType, data);
   // Reagents
-  const totalContent = kEmptyContent;
+  const totalContent = cloneDeep(kEmptyContent);
   for (const id of new Set(data.reagentIds)) {
     const reagentReference = api.aquired(QrCode, id);
     if (reagentReference?.type != 'reagent') throw new UserVisibleError('Использование не-реагента в качестве реагента!');

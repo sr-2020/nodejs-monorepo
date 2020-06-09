@@ -467,6 +467,18 @@ describe('Spells', function() {
     }
   });
 
+  it('Fireball', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('fireball');
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 3 },
+      });
+      expect(workModel.magic).equal(-5);
+    }
+  });
+
   describe('Magic feedback calculation', function() {
     it('Example 13', () => {
       const feedback = calculateMagicFeedback({
