@@ -8,7 +8,7 @@
 
 Для разработки/сборки необходимы следующие глобальные зависимости:
 
-- [Node.JS](https://nodejs.org). Версия 10.
+- [Node.JS](https://nodejs.org). Версия 12.
 - [yarn](https://yarnpkg.com/en/). Менеджер зависимостей (как `npm`, но с бонусами).
 - [lerna](https://github.com/lerna/lerna). Утилита, упрощающая работу с nodejs-монорепозиториями. Установка: `yarn global add lerna`.
 - [Visual Studio Code](https://code.visualstudio.com/) с установленными плагинами
