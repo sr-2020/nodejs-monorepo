@@ -14,6 +14,7 @@ export interface ModelEngineService {
   processQr(req: ModelProcessRequest<QrCode>): Promise<ModelProcessResponse<QrCode>>;
 
   defaultCharacter(req: Empty): Promise<Sr2020Character>;
+  defaultLocation(req: Empty): Promise<Location>;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {

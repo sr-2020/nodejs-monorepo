@@ -41,3 +41,6 @@ export class LocationProcessResponse extends BaseModelProcessResponse {
   @rproperty()
   workModel: Location;
 }
+
+@model()
+export class LocationCreationRequest {}

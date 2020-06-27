@@ -172,7 +172,13 @@ export class TestFixture {
   }
 
   async saveLocation(model: DeepPartial<Location> = {}) {
-    await this._connection.getRepository(Location).save({ ...getDefaultLocation(this._timeService.timestamp()), ...model });
+    const id = model.modelId ?? 0;
+    await this.client
+      .put(`/location/default/${id}`)
+      .send({})
+      .expect(200);
+    const location = await this._connection.getRepository(Location).findOneOrFail(id);
+    await this._connection.getRepository(Location).save({ ...location, ...model });
   }
 
   async saveQrCode(model: DeepPartial<QrCode> = {}) {
@@ -246,17 +252,6 @@ export class TestFixture {
     this._pubSubService.reset();
     this._timeService.reset();
   }
-}
-
-function getDefaultLocation(timestamp: number): Location {
-  return {
-    aura: 'aaaaabbbbbcccccddddd',
-    modelId: '0',
-    spellTraces: [],
-    timestamp,
-    modifiers: [],
-    timers: [],
-  };
 }
 
 function getDefaultQrCode(timestamp: number): QrCode {

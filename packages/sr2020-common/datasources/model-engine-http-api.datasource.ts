@@ -55,6 +55,16 @@ const config = {
         defaultCharacter: ['req'],
       },
     },
+    {
+      template: {
+        method: 'POST',
+        url: `${baseURL}/location/default`,
+        body: '{req}',
+      },
+      functions: {
+        defaultLocation: ['req'],
+      },
+    },
   ],
 };
 

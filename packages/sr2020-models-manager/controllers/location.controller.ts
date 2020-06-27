@@ -4,8 +4,8 @@ import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.
 import { PushService } from '@sr2020/interface/services/push.service';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
-import { EntityManager, Transaction, TransactionManager } from 'typeorm';
+import { Location, LocationCreationRequest, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
+import { EntityManager, getManager, Transaction, TransactionManager } from 'typeorm';
 import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
 import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
@@ -39,6 +39,26 @@ export class LocationController extends AnyModelController<Location> {
   })
   async replaceById(@requestBody() model: Location): Promise<Empty> {
     return super.replaceById(model);
+  }
+
+  @put('/location/default/{id}', {
+    summary: 'Inits default location model',
+    description: 'Creates and saves default location model. Some field can be randomly populated, other will have default "empty" state.',
+    responses: {
+      content: {
+        'application/json': { schema: { 'x-ts-type': Empty } },
+      },
+    },
+  })
+  async setDefault(@param.path.number('id') id: number, @requestBody() req: LocationCreationRequest): Promise<Empty> {
+    const model = await this.modelEngineService.defaultLocation(new Empty());
+    model.modelId = id.toString();
+
+    await getManager().transaction(async (manager) => {
+      await manager.getRepository(Location).save(model);
+    });
+
+    return new Empty();
   }
 
   @del('/location/model/{id}', {

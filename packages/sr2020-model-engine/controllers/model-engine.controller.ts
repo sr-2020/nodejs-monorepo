@@ -224,6 +224,33 @@ export class ModelEngineController implements ModelEngineService {
     return result;
   }
 
+  @post('/location/default', {
+    summary: 'Returns default location object.',
+    description: 'Returns default location object. Some field can be randomly populated, other will have default "empty" state.',
+    responses: {
+      '200': {
+        content: {
+          'application/json': { schema: { 'x-ts-type': Location } },
+        },
+      },
+    },
+  })
+  async defaultLocation(@requestBody() _: Empty): Promise<Location> {
+    const auraChars: string[] = [];
+    for (let i = 0; i < AURA_LENGTH; ++i) auraChars.push(chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }));
+    const aura = auraChars.join('');
+
+    const result: Location = {
+      modelId: '',
+      timestamp: 0,
+      aura,
+      spellTraces: [],
+      modifiers: [],
+      timers: [],
+    };
+    return result;
+  }
+
   async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {
     events.forEach((event) => {
       if (event.timestamp < baseModel.timestamp)
