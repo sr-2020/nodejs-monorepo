@@ -456,7 +456,7 @@ export class Drones {
   groundcraftBonus: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 0 })
   feedbackModifier: number;
 }
 
@@ -569,11 +569,11 @@ export class Sr2020Character extends EmptyModel {
   body: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 2 })
   strength: number;
 
   @rproperty()
-  @Column()
+  @Column({ default: 2 })
   depth: number;
 
   @rproperty()
