@@ -297,6 +297,10 @@ export function increasePostDroneRecoveryTime(api: EffectModelApi<Sr2020Characte
   api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
 }
 
+export function increaseDroneFeedback(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.drones.feedbackModifier += m.amount;
+}
+
 export function increaseImplantDifficultyBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.rigging.implantDifficultyBonus += m.amount;
 }

@@ -158,8 +158,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
   api.model.passiveAbilities = api.model.passiveAbilities.concat(drone.passiveAbilities);
 
-  const penalty = api.model.passiveAbilities.find((ability) => ability.id == 'arch-rigger-negative-3') ? 1 : 0;
-
+  const penalty = api.workModel.drones.feedbackModifier;
   api.addModifier(createDroneModifier(drone, data.droneId!, penalty));
 }
 
@@ -191,7 +190,7 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
 }
 
 export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
-  if (data.amount == 0) {
+  if (data.amount <= 0) {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', 'Вы вышли из дрона, все в порядке.');
   } else if (data.amount < api.workModel.maxHp) {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов.`);

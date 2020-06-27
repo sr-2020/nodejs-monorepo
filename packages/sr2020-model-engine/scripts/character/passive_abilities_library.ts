@@ -16,6 +16,7 @@ import {
   increaseConversionDataprocessing,
   increaseConversionFirewall,
   increaseConversionSleaze,
+  increaseDroneFeedback,
   increaseFadingResistance,
   increaseGroundcraftBonus,
   increaseHostEntrySpeed,
@@ -1680,9 +1681,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 508
     // Intelligence -2
     // Body-2
-    // DroneFeedback3 = 1
+    // DroneFeedback3 + 1
     prerequisites: ['arch-rigger-negative-2'],
-    modifier: [modifierFromEffect(increaseIntelligence, { amount: -2 }), modifierFromEffect(increaseBody, { amount: -2 })],
+    modifier: [
+      modifierFromEffect(increaseIntelligence, { amount: -2 }),
+      modifierFromEffect(increaseBody, { amount: -2 }),
+      modifierFromEffect(increaseDroneFeedback, { amount: 1 }),
+    ],
   },
 
   {
