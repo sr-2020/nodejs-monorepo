@@ -12,6 +12,7 @@ interface User {
 
 const gatewayAddress = 'https://gateway.evarun.ru/api/v1/';
 const kQrsToRecreate = 1000;
+const kLocationsToRecreate = 100;
 
 interface LoginResponse {
   id: number;
@@ -33,6 +34,9 @@ async function provideCharacter(login: LoginResponse) {
     .put(`https://models-manager.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true })
     .promise();
 }
+
+async function provideLocation(id: number) {
+  await request.put(`https://models-manager.evarun.ru/location/default/${id}`, { json: {}, resolveWithFullResponse: true }).promise();
 }
 
 async function provideBilling(login: LoginResponse) {
@@ -83,6 +87,10 @@ async function main() {
 
   for (let i = 1; i < kQrsToRecreate; ++i) {
     await provideEmptyQr(i.toString());
+  }
+
+  for (let i = 1; i < kLocationsToRecreate; ++i) {
+    await provideLocation(i);
   }
 }
 
