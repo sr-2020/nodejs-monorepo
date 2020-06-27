@@ -10,7 +10,7 @@ interface User {
   name: string;
 }
 
-const gatewayAddress = 'http://gateway.evarun.ru/api/v1/';
+const gatewayAddress = 'https://gateway.evarun.ru/api/v1/';
 const kQrsToRecreate = 1000;
 
 interface LoginResponse {
@@ -29,11 +29,14 @@ async function loginOrRegister(email: string, name: string, password: string): P
 }
 
 async function provideCharacter(login: LoginResponse) {
-  await request.put(`http://models-manager.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true }).promise();
+  await request
+    .put(`https://models-manager.evarun.ru/character/default/${login.id}`, { json: {}, resolveWithFullResponse: true })
+    .promise();
+}
 }
 
 async function provideBilling(login: LoginResponse) {
-  await request.get(`http://billing.evarun.ru/api/Billing/admin/createphysicalwallet?character=${login.id}&balance=1000`).promise();
+  await request.get(`https://billing.evarun.ru/api/Billing/admin/createphysicalwallet?character=${login.id}&balance=1000`).promise();
 }
 
 async function providePlayer(user: User) {
@@ -57,7 +60,7 @@ async function provideEmptyQr(modelId: string) {
     timers: [],
   };
 
-  await request.put('http://models-manager.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();
+  await request.put('https://models-manager.evarun.ru/qr/model', { json: qrData, resolveWithFullResponse: true }).promise();
 }
 
 async function main() {
