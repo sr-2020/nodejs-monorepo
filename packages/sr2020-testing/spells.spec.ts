@@ -369,9 +369,8 @@ describe('Spells', function() {
     expect(workModel.magicStats.maxPowerBonus).to.equal(1);
     expect(workModel.magicStats.feedbackMultiplier).to.equal(1.0 / 7.0);
 
-    // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-кровавую-ритуальную-магию-bathory-charger) Implement and enable
-    // expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
-    // expect((await fixture.getCharacter('2')).workModel.essence).equal(500);
+    expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
+    expect((await fixture.getCharacter('2')).workModel.essence).equal(500);
   });
 
   it('Blood ritual requires wounded victims', async () => {

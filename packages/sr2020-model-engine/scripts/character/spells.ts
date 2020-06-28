@@ -6,7 +6,7 @@ import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.m
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume, create } from '../qr/events';
-import { revive } from './death_and_rebirth';
+import { healthStateTransition, revive } from './death_and_rebirth';
 import {
   addHistoryRecord,
   addTemporaryModifier,
@@ -72,7 +72,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     throw new UserVisibleError('Несуществующий спелл!');
   }
 
-  const ritualStats = getRitualStats(api, data);
+  const ritualStats = getRitualStatsAndAffectVictims(api, data);
   addTemporaryBonusesDueToRitual(api, ritualStats);
   data.power += Math.ceil(Math.sqrt(ritualStats.participants));
 
@@ -470,7 +470,7 @@ export function calculateMagicFeedback(inputs: FeedbackInputs): MagicFeedback {
   return { amount, feedback, duration: feedbackDuration };
 }
 
-export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellData): RitualStats {
+export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Character>, data: SpellData): RitualStats {
   let participants = 0;
 
   if (data.ritualMembersIds?.length) {
@@ -500,6 +500,8 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
       if (victim.healthState != 'wounded') {
         throw new UserVisibleError('Все жертвы ритуала должны быть в тяжране!');
       }
+
+      api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, {});
     }
     victims = ritualVictimIds.size;
   }
@@ -508,6 +510,11 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
     participants,
     victims,
   };
+}
+
+export function affectRitualVictim(api: EventModelApi<Sr2020Character>, data: {}) {
+  healthStateTransition(api, 'clinically_dead');
+  api.model.essenceDetails.gap += Math.min(100, api.workModel.essence);
 }
 
 export function addTemporaryBonusesDueToRitual(api: EventModelApi<Sr2020Character>, ritualStats: RitualStats) {
