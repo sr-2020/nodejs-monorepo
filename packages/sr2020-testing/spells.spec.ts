@@ -365,6 +365,9 @@ describe('Spells', function() {
       1,
     );
     expect(workModel.magic).to.equal(2);
+    expect(workModel.passiveAbilities.length).to.equal(3);
+    expect(workModel.magicStats.maxPowerBonus).to.equal(1);
+    expect(workModel.magicStats.feedbackMultiplier).to.equal(1.0 / 7.0);
 
     // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-кровавую-ритуальную-магию-bathory-charger) Implement and enable
     // expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');

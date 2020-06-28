@@ -73,6 +73,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
   }
 
   const ritualStats = getRitualStats(api, data);
+  addTemporaryBonusesDueToRitual(api, ritualStats);
   data.power += Math.ceil(Math.sqrt(ritualStats.participants));
 
   api.sendSelfEvent(librarySpell.eventType, data);
@@ -507,6 +508,38 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
     participants,
     victims,
   };
+}
+
+export function addTemporaryBonusesDueToRitual(api: EventModelApi<Sr2020Character>, ritualStats: RitualStats) {
+  if (ritualStats.victims == 0) return;
+
+  const d = duration(5 * ritualStats.victims, 'minutes');
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(bloodRitualEffect, { validUntil: validUntil(api, d), amount: ritualStats.victims }),
+    d,
+    'Бонус от кровавого ритуала',
+  );
+}
+
+export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
+  const powerBonus = Math.floor(Math.sqrt(m.amount));
+  api.model.passiveAbilities.push({
+    name: 'Магия в крови',
+    description: `Увеличивает максимальную доступную Мощь на ${powerBonus}`,
+    id: 'magic-in-the-blood',
+    validUntil: m.validUntil,
+  });
+  api.model.magicStats.maxPowerBonus += powerBonus;
+
+  const feedbackDivider = 1.0 / (6 + m.amount);
+  api.model.passiveAbilities.push({
+    name: 'Кровавый прилив',
+    description: `Увеличивает сопротивление откату`,
+    id: 'bloody-tide',
+    validUntil: m.validUntil,
+  });
+  api.model.magicStats.feedbackMultiplier *= feedbackDivider;
 }
 
 // Magic feedback implementation
