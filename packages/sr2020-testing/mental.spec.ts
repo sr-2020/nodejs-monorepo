@@ -55,11 +55,14 @@ describe('Mentalistic events', function() {
 
     await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
 
-    const resp = await fixture.client
-      .post(`/character/model/2`)
-      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } })
-      .expect(400);
-    expect(resp.body.error.message).containEql('пустышка');
+    const message = await fixture.sendCharacterEventExpectingError(
+      {
+        eventType: 'scanQr',
+        data: { qrCode: attacker.mentalQrId.toString() },
+      },
+      '2',
+    );
+    expect(message).containEql('пустышка');
   });
 
   it('Use mental ability too late', async () => {
@@ -70,11 +73,14 @@ describe('Mentalistic events', function() {
 
     fixture.advanceTime(duration(1000, 'seconds'));
 
-    const resp = await fixture.client
-      .post(`/character/model/2`)
-      .send({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } })
-      .expect(400);
-    expect(resp.body.error.message).containEql('уже закончилось');
+    const message = await fixture.sendCharacterEventExpectingError(
+      {
+        eventType: 'scanQr',
+        data: { qrCode: attacker.mentalQrId.toString() },
+      },
+      '2',
+    );
+    expect(message).containEql('уже закончилось');
   });
 
   it('I do not trust anybody', async () => {
@@ -89,11 +95,8 @@ describe('Mentalistic events', function() {
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).to.equal(3);
 
     // Check on-cooldown behaviour
-    const resp = await fixture.client
-      .post(`/character/model/0`)
-      .send({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } })
-      .expect(400);
-    expect(resp.body.error.message).containEql('кулдаун');
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
+    expect(message).containEql('кулдаун');
 
     await fixture.advanceTime(duration(30, 'minutes'));
 

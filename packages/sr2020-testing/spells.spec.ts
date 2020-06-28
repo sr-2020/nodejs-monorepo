@@ -55,10 +55,8 @@ describe('Spells', function() {
     await fixture.saveCharacter();
     await fixture.saveQrCode({ type: 'food' });
 
-    await fixture.client
-      .post(`/character/model/0`)
-      .send({ eventType: 'increaseResonanceSpell', data: { qrCode: '0' } })
-      .expect(400);
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'increaseResonanceSpell', data: { qrCode: '0' } });
+    expect(message).containEql('уже записан');
     expect(fixture.getCharacterNotifications()).to.be.empty();
 
     expect(await fixture.getQrCode()).containDeep({ workModel: { type: 'food' } });

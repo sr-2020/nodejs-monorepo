@@ -44,10 +44,8 @@ describe('Race changes', () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } });
     await fixture.advanceTime(duration(6, 'hours'));
-    const resp = await fixture.client
-      .post(`/character/model/0`)
-      .send({ eventType: 'useAbility', data: { id: 'vampire-feast' } })
-      .expect(400);
-    expect(resp.body.error.message).containEql('Недостаточно эссенции');
+
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'vampire-feast' } });
+    expect(message).containEql('Недостаточно эссенции');
   });
 });

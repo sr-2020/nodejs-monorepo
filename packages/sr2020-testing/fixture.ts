@@ -202,6 +202,15 @@ export class TestFixture {
     return resp.body;
   }
 
+  async sendCharacterEventExpectingError(event: EventRequest, id: number | string = 0): Promise<string | undefined> {
+    this._pushService.reset();
+    const resp = await this.client
+      .post(`/character/model/${id}`)
+      .send(event)
+      .expect(400);
+    return resp?.body?.error?.message;
+  }
+
   addCharacterFeature(featureId: string, characterId: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     return this.sendCharacterEvent({ eventType: 'addFeature', data: { id: featureId } }, characterId);
   }
