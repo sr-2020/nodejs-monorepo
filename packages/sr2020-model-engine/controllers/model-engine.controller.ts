@@ -128,6 +128,7 @@ export class ModelEngineController implements ModelEngineService {
         auraMarkMultiplier: 1,
         auraMask: 0,
         aura,
+        maxPowerBonus: 0,
       },
       healthState: 'healthy',
       cooldownCoefficient: 1.0,

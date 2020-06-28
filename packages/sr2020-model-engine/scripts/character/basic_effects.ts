@@ -51,6 +51,9 @@ export function multiplyMagicFeedbackMultiplier(api: EffectModelApi<Sr2020Charac
   api.model.magicStats.feedbackMultiplier *= m.amount;
 }
 
+export function increaseMaxMagicPower(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.maxPowerBonus += m.amount;
+}
 export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.resonance += m.amount;
   api.model.resonance = clamp(api.model.resonance, 0, 9000);

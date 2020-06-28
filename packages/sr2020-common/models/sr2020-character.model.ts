@@ -356,6 +356,10 @@ export class MagicStats {
   @rproperty()
   @Column()
   aura: string;
+
+  @rproperty()
+  @Column({ default: 0 })
+  maxPowerBonus: number;
 }
 
 @model()
