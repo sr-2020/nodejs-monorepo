@@ -2,6 +2,7 @@ import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
 import { calculateMagicFeedback } from '@sr2020/sr2020-model-engine/scripts/character/spells';
+import { HealthState } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 describe('Spells', function() {
   // eslint-disable-next-line no-invalid-this
@@ -368,6 +369,22 @@ describe('Spells', function() {
     // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-кровавую-ритуальную-магию-bathory-charger) Implement and enable
     // expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
     // expect((await fixture.getCharacter('2')).workModel.essence).equal(500);
+  });
+
+  it('Blood ritual requires wounded victims', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
+    await fixture.addCharacterFeature('bathory-charger', 1);
+    await fixture.addCharacterFeature('ground-heal', 1);
+
+    const states: HealthState[] = ['healthy', 'clinically_dead', 'biologically_dead'];
+    for (const healthState of states) {
+      await fixture.saveCharacter({ modelId: '2', healthState });
+      const message = await fixture.sendCharacterEventExpectingError(
+        { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+        1,
+      );
+      expect(message).containEql('должны быть в тяжране');
+    }
   });
 
   it('Tempus Fugit', async () => {

@@ -480,6 +480,9 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
     const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
     for (const participantId of ritualParticipantIds) {
       const participant = api.aquired(Sr2020Character, participantId);
+      if (participant.healthState != 'wounded' && participant.healthState != 'healthy') {
+        throw new UserVisibleError('Участники ритуала должны быть живы!');
+      }
       participants += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
     }
   }
@@ -491,6 +494,12 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
     }
 
     const ritualVictimIds = new Set<string>([...data.ritualVictimIds]);
+    for (const victimId of ritualVictimIds) {
+      const victim = api.aquired(Sr2020Character, victimId);
+      if (victim.healthState != 'wounded') {
+        throw new UserVisibleError('Все жертвы ритуала должны быть в тяжране!');
+      }
+    }
     victims = ritualVictimIds.size;
   }
 
