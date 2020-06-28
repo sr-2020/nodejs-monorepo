@@ -34,18 +34,16 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
         await result.lockAndGetBaseModel(Sr2020Character, characterId);
       }
 
+      const orEmpty = (a: number[] | undefined) => a ?? [];
+
       // Aquire reagents if event.data has reagentIds set.
-      if (event.data.reagentIds) {
-        for (const reagentId of event.data.reagentIds) {
-          await result.lockAndGetBaseModel(QrCode, reagentId);
-        }
+      for (const reagentId of orEmpty(event.data.reagentIds)) {
+        await result.lockAndGetBaseModel(QrCode, reagentId);
       }
 
-      // Aquire ritual participants if event.data has ritualMembersIds set.
-      if (event.data.ritualMembersIds) {
-        for (const id of event.data?.ritualMembersIds) {
-          await result.lockAndGetBaseModel(Sr2020Character, Number(id));
-        }
+      // Aquire ritual participants and victimes if event.data has ritualMembersIds set.
+      for (const id of [...orEmpty(event.data.ritualMembersIds), ...orEmpty(event.data.ritualVictimsId)]) {
+        await result.lockAndGetBaseModel(Sr2020Character, Number(id));
       }
     }
     await result.synchronizeModels();

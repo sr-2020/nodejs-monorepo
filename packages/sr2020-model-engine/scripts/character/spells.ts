@@ -37,6 +37,7 @@ interface SpellData {
   };
   reagentIds: string[]; // Identifiers of reagents/blood QRs
   ritualMembersIds?: string[]; // Identifiers of other ritual participants
+  ritualVictimsId?: string[]; // Blood ritual victims
   focusId?: string; // Identifier of focus QR
   targetCharacterId?: string; // Identifier of target character
 }
@@ -45,6 +46,11 @@ interface MagicFeedback {
   feedback: number;
   duration: number;
   amount: number;
+}
+
+interface RitualStats {
+  participants: number;
+  victims: number;
 }
 
 export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
@@ -66,21 +72,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     throw new UserVisibleError('Несуществующий спелл!');
   }
 
-  let totalParticipans = 0;
-
-  if (data.ritualMembersIds?.length) {
-    if (!api.workModel.passiveAbilities.some((a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic')) {
-      throw new UserVisibleError('Нет навыков разрешающих проводить ритуалы!');
-    }
-
-    const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
-    for (const participantId of ritualParticipantIds) {
-      const participant = api.aquired(Sr2020Character, participantId);
-      totalParticipans += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
-    }
-  }
-
-  data.power += Math.ceil(Math.sqrt(totalParticipans));
+  const ritualStats = getRitualStats(api, data);
+  data.power += Math.ceil(Math.sqrt(ritualStats.participants));
 
   api.sendSelfEvent(librarySpell.eventType, data);
   // Reagents
@@ -122,8 +115,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     sphereReagents: sphereToReagent[librarySpell.sphere],
     metaTypeReagents: metaraceToReagent[api.workModel.metarace],
     inAstral: api.workModel.currentBody == 'astral',
-    ritualParticipants: totalParticipans,
-    bloodRitualParticipants: 0,
+    ritualParticipants: ritualStats.participants,
+    bloodRitualParticipants: ritualStats.victims,
     manaLevel: data.location.manaLevel,
     ophiuchusUsed: totalContent.ophiuchus > 0,
     feedbackAmountMultiplier: api.workModel.magicStats.feedbackMultiplier,
@@ -474,6 +467,37 @@ export function calculateMagicFeedback(inputs: FeedbackInputs): MagicFeedback {
   feedbackDuration = Math.round(feedbackDuration);
 
   return { amount, feedback, duration: feedbackDuration };
+}
+
+export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellData): RitualStats {
+  let participants = 0;
+
+  if (data.ritualMembersIds?.length) {
+    if (!api.workModel.passiveAbilities.some((a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic')) {
+      throw new UserVisibleError('Нет навыков разрешающих проводить ритуалы!');
+    }
+
+    const ritualParticipantIds = new Set<string>([...data.ritualMembersIds]);
+    for (const participantId of ritualParticipantIds) {
+      const participant = api.aquired(Sr2020Character, participantId);
+      participants += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
+    }
+  }
+
+  let victims = 0;
+  if (data.ritualVictimsId?.length) {
+    if (!api.workModel.passiveAbilities.some((a) => a.id == 'bathory-charger')) {
+      throw new UserVisibleError('Нет навыков разрешающих проводить кровавые ритуалы!');
+    }
+
+    const ritualVictimIds = new Set<string>([...data.ritualVictimsId]);
+    victims = ritualVictimIds.size;
+  }
+
+  return {
+    participants,
+    victims,
+  };
 }
 
 // Magic feedback implementation
