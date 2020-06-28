@@ -354,6 +354,24 @@ describe('Spells', function() {
     expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 6 * 1000); // power was 4, but ritual participants add +2
   });
 
+  it('Blood ritual', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
+    await fixture.addCharacterFeature('bathory-charger', 1);
+    await fixture.addCharacterFeature('ground-heal', 1);
+
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
+
+    const { workModel } = await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+      1,
+    );
+    expect(workModel.magic).to.equal(2);
+
+    // TODO(https://trello.com/c/bzPOYhyP/171-реализовать-кровавую-ритуальную-магию-bathory-charger) Implement and enable
+    // expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
+    // expect((await fixture.getCharacter('2')).workModel.essence).equal(500);
+  });
+
   it('Tempus Fugit', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('ground-heal', 1);
