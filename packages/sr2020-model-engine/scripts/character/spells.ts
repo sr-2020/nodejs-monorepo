@@ -37,7 +37,7 @@ interface SpellData {
   };
   reagentIds: string[]; // Identifiers of reagents/blood QRs
   ritualMembersIds?: string[]; // Identifiers of other ritual participants
-  ritualVictimsId?: string[]; // Blood ritual victims
+  ritualVictimIds?: string[]; // Blood ritual victims
   focusId?: string; // Identifier of focus QR
   targetCharacterId?: string; // Identifier of target character
 }
@@ -485,12 +485,12 @@ export function getRitualStats(api: EventModelApi<Sr2020Character>, data: SpellD
   }
 
   let victims = 0;
-  if (data.ritualVictimsId?.length) {
+  if (data.ritualVictimIds?.length) {
     if (!api.workModel.passiveAbilities.some((a) => a.id == 'bathory-charger')) {
       throw new UserVisibleError('Нет навыков разрешающих проводить кровавые ритуалы!');
     }
 
-    const ritualVictimIds = new Set<string>([...data.ritualVictimsId]);
+    const ritualVictimIds = new Set<string>([...data.ritualVictimIds]);
     victims = ritualVictimIds.size;
   }
 
