@@ -580,7 +580,7 @@ export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data:
   const auraPercentage = 100 * api.workModel.magicStats.auraReadingMultiplier;
   sendNotificationAndHistoryRecord(
     api,
-    `Результат чтения ауры локации #${data.location.id}`,
+    'Результат чтения ауры локации',
     splitAuraByDashes(generateAuraSubset(target.aura, auraPercentage)),
   );
 }
