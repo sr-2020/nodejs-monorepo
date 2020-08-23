@@ -115,7 +115,7 @@ export class DictionariesController {
     },
   })
   reagents(): { id: string; name: string }[] {
-    return kAllReagents.map((p) => ({ id: p.id, name: p.name }));
+    return kAllReagents;
   }
 
   @get('/drones', {
