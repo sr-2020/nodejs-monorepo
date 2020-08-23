@@ -41,6 +41,13 @@
                     Персонаж {{ characterModel.name }} (model ID = {{ characterModel.modelId }}), состояние на
                     {{ new Date(characterModel.timestamp).toLocaleString("ru-RU") }}
                   </caption>
+                  <b-button block v-b-toggle.character_qr variant="info">
+                    QR-код персонажа
+                  </b-button>
+                  <b-collapse id="character_qr">
+                    <qrcode v-if="characterQrCodeEncoded" :value="characterQrCodeEncoded" :options="{ width: 300 }"></qrcode>
+                  </b-collapse>
+
                   <b-tbody>
                     <b-tr>
                       <b-th>Метараса</b-th>

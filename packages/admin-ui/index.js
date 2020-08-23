@@ -28,6 +28,7 @@ app = new Vue({
     mind: 0,
     ethicOptions: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
 
+    characterQrCodeEncoded: undefined,
     qrCodeEncoded: undefined,
 
     locusCharges: 5,
@@ -125,7 +126,7 @@ app = new Vue({
         console.log(`Sending a character event: ${JSON.stringify(event)}`);
         const response = await this.$http.post(this.characterUrl(this.characterModel.modelId), event);
         console.debug(`Received response: ${JSON.stringify(response.body)}`);
-        this.setCharacterModel(response.body.workModel);
+        await this.setCharacterModel(response.body.workModel);
         this.showSuccessToast(successMessage || 'Успех!');
       } catch (e) {
         if (e.body && e.body.error && e.body.error.message) {
@@ -170,7 +171,7 @@ app = new Vue({
     async chooseCharacter() {
       try {
         const response = await this.$http.get(this.characterUrl(this.desiredCharacterId));
-        this.setCharacterModel(response.body.workModel);
+        await this.setCharacterModel(response.body.workModel);
         this.showSuccessToast('Персонаж загружен');
       } catch (e) {
         this.showFailureToast(e.status == 404 ? 'Персонаж не найден' : `Неожиданная ошибка сервера: ${e.statusText}`);
@@ -187,7 +188,18 @@ app = new Vue({
       }
     },
 
-    setCharacterModel(model) {
+    getQrType(model) {
+      if (model.currentBody == 'astral') return 9;
+      if (model.currentBody == 'drone') return 10;
+      if (model.currentBody == 'physical') {
+        if (model.healthState == 'healthy') return 5;
+        if (model.healthState == 'wounded') return 6;
+        if (model.healthState == 'clinically_dead') return 7;
+        if (model.healthState == 'biologically_dead') return 8;
+      }
+    },
+
+    async setCharacterModel(model) {
       model.passiveAbilities.forEach((f) => delete f.modifierIds);
       model.implants.forEach((f) => delete f.modifierIds);
       this.characterModel = model;
@@ -195,6 +207,9 @@ app = new Vue({
       this.control = model.ethic.state.find((s) => s.scale == 'control').value;
       this.individualism = model.ethic.state.find((s) => s.scale == 'individualism').value;
       this.mind = model.ethic.state.find((s) => s.scale == 'mind').value;
+      const timestamp = Math.round(new Date().getTime() / 1000) + 3600;
+      const response = await this.$http.get(`https://qr.aerem.in/encode?type=${this.getQrType(model)}&kind=0&validUntil=${timestamp}&payload=${model.modelId}`);
+      this.characterQrCodeEncoded = response.body.content;
     },
 
     async setQrModel(model) {
