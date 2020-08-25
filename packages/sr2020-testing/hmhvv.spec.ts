@@ -30,6 +30,7 @@ describe('HMHVV abilities', function() {
     const victim = (await fixture.getCharacter('2')).workModel;
     expect(victim.essence).equal(0);
     expect(victim.healthState).equal('clinically_dead');
+    expect(victim.chemo.concentration.vampirium).greaterThanOrEqual(1000);
 
     // A bit of cow blood now
     await fixture.saveQrCode({ modelId: '3' });
@@ -57,6 +58,7 @@ describe('HMHVV abilities', function() {
     const victim = (await fixture.getCharacter('2')).workModel;
     expect(victim.essence).equal(200);
     expect(victim.healthState).equal('clinically_dead');
+    expect(victim.chemo.concentration.vampirium).equal(0);
 
     // A bit of cow blood now
     await fixture.saveQrCode({ modelId: '3' });

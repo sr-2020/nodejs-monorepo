@@ -2,6 +2,7 @@ import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { healthStateTransition, reviveAbsolute } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { consumeChemo } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
 
 export function vampireBite(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const victim = api.aquired(Sr2020Character, data.targetCharacterId!);
@@ -21,6 +22,11 @@ export function bittenEvent(api: EventModelApi<Sr2020Character>, data: { essence
   if (api.workModel.healthState == 'clinically_dead' || api.workModel.healthState == 'biologically_dead') {
     throw new UserVisibleError('Нельзя кусать мертвого персонажа.');
   }
+
+  if (data.vampiric) {
+    consumeChemo(api, { id: 'vampire-saliva' });
+  }
+
   api.model.essenceDetails.gap += data.essenceLoss;
   healthStateTransition(api, 'clinically_dead');
 }

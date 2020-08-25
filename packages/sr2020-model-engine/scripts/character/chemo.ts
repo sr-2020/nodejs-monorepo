@@ -14,7 +14,6 @@ import {
   multiplyCooldownCoefficient,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
-import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
@@ -733,7 +732,12 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 ];
 
-export function consumeChemo(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
+export interface ChemoData {
+  id: string;
+  lifestyle?: string;
+}
+
+export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Только мясное тело может принимать препараты!');
   }
@@ -758,7 +762,13 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: Merchand
     }
   }
   api.sendSelfEvent(checkConcentrations, { concentrations: pill.content });
-  api.sendPubSubNotification('pill_consumption', { characterId: api.model.modelId, id: data.id, lifestyle: data.lifestyle });
+  if (data.lifestyle) {
+    api.sendPubSubNotification('pill_consumption', {
+      characterId: api.model.modelId,
+      id: data.id,
+      lifestyle: data.lifestyle,
+    });
+  }
 }
 
 export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }) {
