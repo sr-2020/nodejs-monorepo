@@ -39,12 +39,14 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Способность еще на кулдауне!');
   }
 
-  const minEssenceToUse = Math.max(
-    libraryAbility.minimalEssence,
-    api.workModel.metarace == 'meta-hmhvv1' || api.workModel.metarace == 'meta-hmhvv3' ? 1 : 0,
-  );
-  if (100 * minEssenceToUse > api.workModel.essence) {
-    throw new UserVisibleError('Недостаточно эссенции для применения данной способности!');
+  if (data.id != 'ghoul-feast' && data.id != 'vampire-feast') {
+    const minEssenceToUse = Math.max(
+      libraryAbility.minimalEssence,
+      api.workModel.metarace == 'meta-hmhvv1' || api.workModel.metarace == 'meta-hmhvv3' ? 1 : 0,
+    );
+    if (100 * minEssenceToUse > api.workModel.essence) {
+      throw new UserVisibleError('Недостаточно эссенции для применения данной способности!');
+    }
   }
 
   // Second `find` as we must change the value in (base) model, not in workModel.

@@ -43,9 +43,19 @@ describe('Race changes', () => {
   it('Hungry HMHHV can not use abilities', async () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } });
+    await fixture.addCharacterFeature('enter-vr');
     await fixture.advanceTime(duration(6, 'hours'));
 
-    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'vampire-feast' } });
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'enter-vr' } });
     expect(message).containEql('Недостаточно эссенции');
+  });
+
+  it('Hungry HMHHV can feed', async () => {
+    await fixture.saveCharacter();
+    await fixture.saveCharacter({ modelId: '5' }); // victim
+    await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } });
+    await fixture.advanceTime(duration(6, 'hours'));
+
+    await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'vampire-feast', targetCharacterId: '5' } });
   });
 });
