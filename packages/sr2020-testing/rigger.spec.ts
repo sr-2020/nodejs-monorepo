@@ -176,4 +176,33 @@ describe('Rigger abilities', () => {
     const { workModel } = await fixture.getCharacter();
     expect(workModel.healthState).equal('wounded');
   });
+
+  it('Spending way too long in drone and hunger', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ maxHp: 6, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.addCharacterFeature('medicraft-active');
+
+    // Body storage set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
+
+    // Drone set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
+
+    // Enter drone
+    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+
+    // Wait for long time
+    await fixture.advanceTime(duration(10, 'hours'));
+
+    await fixture.getCharacter();
+
+    // Leave drone
+    await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
+
+    // Rigger is not in the drone
+    const { workModel } = await fixture.getCharacter();
+    expect(workModel.healthState).equal('wounded');
+  });
 });

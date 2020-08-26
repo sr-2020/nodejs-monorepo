@@ -276,3 +276,7 @@ export function droneReturnTimeoutTick1(api: EventModelApi<Sr2020Character>, dat
 export function droneReturnTimeoutTick2(api: EventModelApi<Sr2020Character>, data: {}) {
   findInDroneModifier(api).postDroneDamage += 2;
 }
+
+export function hungerWhileInDone(api: EventModelApi<Sr2020Character>, data: {}) {
+  findInDroneModifier(api).postDroneDamage += 10;
+}

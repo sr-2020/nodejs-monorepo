@@ -4,6 +4,7 @@ import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/dataty
 import { duration } from 'moment';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { hungerWhileInDone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
 
 const kHungerTimerName = 'normal-hunger';
 const kHungerTimerDuration = duration(6, 'hours').asMilliseconds();
@@ -41,14 +42,41 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: Merchandi
 export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {
   api.setTimer(kHungerTimerName, kHungerTimerStage2Description, getHungerTimerDuration(api.workModel), hungerStage2, {});
   if (api.workModel.healthState != 'healthy') return;
-  sendNotificationAndHistoryRecord(api, 'Голод', 'Вы потеряли сознание от голода. Тяжелое ранение.');
-  healthStateTransition(api, 'wounded');
+  switch (api.workModel.currentBody) {
+    case 'physical': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы потеряли сознание от голода. Тяжелое ранение.');
+      healthStateTransition(api, 'wounded');
+      break;
+    }
+    case 'drone': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из дрона вы упадете в тяжран.');
+      hungerWhileInDone(api, {});
+      break;
+    }
+    case 'astral': {
+      // TODO(aeremin): Handle this (similar to drone case?)
+    }
+  }
 }
 
 export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
   if (api.workModel.healthState == 'biologically_dead' || api.workModel.healthState == 'clinically_dead') return;
-  sendNotificationAndHistoryRecord(api, 'Голод', 'Клиническая смерть от голода.');
-  healthStateTransition(api, 'clinically_dead');
+
+  switch (api.workModel.currentBody) {
+    case 'physical': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Клиническая смерть от голода.');
+      healthStateTransition(api, 'clinically_dead');
+      break;
+    }
+    case 'drone': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из дрона вы упадете в тяжран.');
+      hungerWhileInDone(api, {});
+      break;
+    }
+    case 'astral': {
+      // TODO(aeremin): Handle this (similar to drone case?)
+    }
+  }
 }
 
 function getHungerTimerDuration(model: Sr2020Character) {
