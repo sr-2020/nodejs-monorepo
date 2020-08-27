@@ -225,7 +225,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Надо чаще питаться. Большому телу - нужен большой сойбургер!',
     // 52
     // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 

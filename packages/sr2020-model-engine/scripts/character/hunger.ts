@@ -80,5 +80,6 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
 }
 
 function getHungerTimerDuration(model: Sr2020Character) {
-  return duration(kHungerTimerDuration * (model.metarace == 'meta-troll' ? 0.5 : 1), 'milliseconds');
+  const eatsMoreOften = !!model.passiveAbilities.find((ability) => ability.id == 'feed-tamagochi');
+  return duration(kHungerTimerDuration * (eatsMoreOften ? 0.5 : 1), 'milliseconds');
 }
