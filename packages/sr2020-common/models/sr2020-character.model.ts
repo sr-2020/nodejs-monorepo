@@ -626,6 +626,10 @@ export class Sr2020Character extends EmptyModel {
   cooldownCoefficient: number;
 
   @rproperty()
+  @Column({ default: 2 })
+  implantsBodySlots: number;
+
+  @rproperty()
   @Column((type) => MagicStats, { prefix: 'magic' })
   magicStats: MagicStats;
 

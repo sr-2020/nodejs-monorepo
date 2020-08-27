@@ -344,3 +344,8 @@ export function multiplyDiscourseMongerCooldowns(api: EffectModelApi<Sr2020Chara
 export function setTransactionAnonymous(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.billing.anonymous = true;
 }
+
+export function increaseImplantsSlots(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.implantsBodySlots += m.amount;
+  api.model.implantsBodySlots = clamp(api.model.implantsBodySlots, 0, 10);
+}

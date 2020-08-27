@@ -15,7 +15,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     throw new UserVisibleError(`Импланта ${data.id} не существует`);
   }
 
-  if (api.model.implants.filter((it) => it.slot == implant.slot).length >= maxImplantsPerSlot(implant.slot)) {
+  if (api.model.implants.filter((it) => it.slot == implant.slot).length >= maxImplantsPerSlot(api.workModel, implant.slot)) {
     throw new UserVisibleError(`Все слоты нужного типа заняты, сначала удалите имплант из одного из них.`);
   }
 
@@ -87,7 +87,8 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
   api.model.implants.splice(implantIndex, 1);
 }
 
-function maxImplantsPerSlot(slot: ImplantSlot) {
+function maxImplantsPerSlot(model: Sr2020Character, slot: ImplantSlot) {
   if (slot == 'rcc') return 1;
+  if (slot == 'body') return model.implantsBodySlots;
   return 2;
 }

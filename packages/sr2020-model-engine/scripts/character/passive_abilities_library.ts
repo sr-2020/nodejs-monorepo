@@ -23,6 +23,7 @@ import {
   increaseHostEntrySpeed,
   increaseImplantDifficultyBonus,
   increaseImplantsBonus,
+  increaseImplantsSlots,
   increaseIntelligence,
   increaseMagic,
   increaseMaxMeatHp,
@@ -159,8 +160,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 42
     // у обычных метарасов 6 слотов.
     // у гномов 5 (-1 слот в Теле)
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseImplantsSlots, { amount: -1 })],
   },
 
   {
@@ -207,8 +207,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 50
     // у обычных метарасов 6 слотов.
     // у троллей 7 (+7 слот в Теле)
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseImplantsSlots, { amount: 1 })],
   },
 
   {
