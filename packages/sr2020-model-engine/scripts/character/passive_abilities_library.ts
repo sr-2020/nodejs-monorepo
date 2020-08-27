@@ -8,6 +8,7 @@ import {
   increaseAuraReadingMultiplier,
   increaseBackdoors,
   increaseBackdoorTtl,
+  increaseBiofeedbackResistance,
   increaseBody,
   increaseCharisma,
   increaseCompilationFadingResistance,
@@ -24,6 +25,7 @@ import {
   increaseImplantsBonus,
   increaseIntelligence,
   increaseMagic,
+  increaseMaxMeatHp,
   increaseMaxTimeAtHost,
   increaseMaxTimeInDrone,
   increaseMaxTimeInVr,
@@ -38,7 +40,10 @@ import {
   increaseStockGainPercentage,
   increaseTuningBonus,
   increaseVarianceResistance,
+  increaseСhemoBaseEffectThreshold,
   increaseСhemoCrysisThreshold,
+  increaseСhemoSuperEffectThreshold,
+  increaseСhemoUberEffectThreshold,
   muliplyMagicRecoverySpeed,
   multiplyAllDiscounts,
   multiplyCorpDiscountAres,
@@ -77,7 +82,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // hacking.fadingResistance +1
     // hacking.enterCooldownReduced 15
     // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
   },
 
   {
@@ -89,8 +94,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // chemo.uberEffectThreshold -30
     // chemo.superEffectThreshold -20
     // chemo.crysisThreshold -60
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: -40 }),
+      modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: -30 }),
+      modifierFromEffect(increaseСhemoSuperEffectThreshold, { amount: -20 }),
+      modifierFromEffect(increaseСhemoCrysisThreshold, { amount: -60 }),
+    ],
   },
 
   {
@@ -99,7 +108,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг прекрасен, эльфийское долголетие всегда в цене! Особая скидка на все покупки!',
     // 36
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -109,8 +117,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Сложнее получить передозировку препарата.',
     // 38
     // chemo.crysisThreshold +40
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 })],
   },
 
   {
@@ -130,8 +137,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 40
     // hacking.fadingResistance +1
     // hacking.biofeedbackResistance +1
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseFadingResistance, { amount: 1 }),
+      modifierFromEffect(increaseBiofeedbackResistance, { amount: 1 }),
+    ],
   },
 
   {
@@ -140,8 +149,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает урон при выходе из поврежденного дрона.',
     // 41
     // drones.droneFeedback -1
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseDroneFeedback, { amount: -1 })],
   },
 
   {
@@ -161,8 +169,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя дополнительный хит в мясном теле. ',
     // 44
     // maxHp +1
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxMeatHp, { amount: 1 })],
   },
 
   {
@@ -181,7 +188,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь орка коротка. Ваши покупки будут дороже, чем у других метарас.',
     // 46
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -191,7 +197,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
     // 49
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -212,7 +217,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Биологическая сила! Можно использовать оружие, требующее одной киберруки.',
     // 51
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -232,7 +236,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь тролля очень коротка. Ваши покупки будут заметно дороже, чем у других метарас.',
     // 53
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -244,7 +247,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Эссенс персонажа уменьшается на 0,2 каждый час
     // Essense_Loss
     //  itGapEssense = увеличивается 20 каждый час
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -255,7 +257,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 610
     // Эссенс персонажа уменьшается на 1 каждый час
     //  itGapEssense = увеличивается 100 каждый час
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -265,7 +266,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 76
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -275,7 +275,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 77
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -286,7 +285,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Если тролль покидает свою дискурс-группу - он переживает ужасный излом идентичности. Вырази это максимально понятным для окружающих способом, желательно с причинением тяжких телесных повреждений.  ',
     // 78
     // `
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
@@ -296,7 +294,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Этическая особенность Эльфов',
     // 79
     //
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 

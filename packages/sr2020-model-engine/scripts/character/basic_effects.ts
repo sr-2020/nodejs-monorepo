@@ -183,6 +183,11 @@ export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Char
   api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
 }
 
+export function increaseСhemoUberEffectThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.chemo.uberEffectThreshold += m.amount;
+  api.model.chemo.uberEffectThreshold = clamp(api.model.chemo.uberEffectThreshold, 0, 9000);
+}
+
 export function increaseСhemoSuperEffectThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.superEffectThreshold += m.amount;
   api.model.chemo.superEffectThreshold = clamp(api.model.chemo.superEffectThreshold, 0, 9000);
