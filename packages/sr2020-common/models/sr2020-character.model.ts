@@ -14,7 +14,8 @@ export type MetaRace =
   | 'meta-troll'
   | 'meta-hmhvv1'
   | 'meta-hmhvv3'
-  | 'meta-digital'
+  | 'meta-ai'
+  | 'meta-eghost'
   | 'meta-spirit';
 
 export type BodyType = 'physical' | 'astral' | 'drone';

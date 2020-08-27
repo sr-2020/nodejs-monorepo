@@ -13,7 +13,7 @@ export function createEssenceSystemEffect(): Effect {
 }
 
 export function systemEssenceEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  const racesWithoutEssence: MetaRace[] = ['meta-digital', 'meta-spirit'];
+  const racesWithoutEssence: MetaRace[] = ['meta-ai', 'meta-eghost', 'meta-spirit'];
   if (racesWithoutEssence.includes(api.model.metarace)) {
     api.model.essence = 0;
   } else {
