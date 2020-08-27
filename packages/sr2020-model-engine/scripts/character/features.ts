@@ -34,7 +34,7 @@ export function addFeatureToModel(model: Sr2020Character, featureId: string) {
   }
 
   // TODO: Support other kinds of features (e.g. archetypes).
-  throw Error('No such feature in the features library');
+  throw Error(`Feature ${featureId} not found in the features library`);
 }
 
 function addPassiveAbility(model: Sr2020Character, ability: PassiveAbility) {
