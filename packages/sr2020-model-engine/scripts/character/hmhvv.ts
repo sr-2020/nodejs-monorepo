@@ -1,5 +1,5 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { healthStateTransition, reviveAbsolute } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { consumeChemo } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
@@ -21,6 +21,15 @@ export function ghoulBite(api: EventModelApi<Sr2020Character>, data: ActiveAbili
 export function bittenEvent(api: EventModelApi<Sr2020Character>, data: { essenceLoss: number; vampiric: boolean }) {
   if (api.workModel.healthState == 'clinically_dead' || api.workModel.healthState == 'biologically_dead') {
     throw new UserVisibleError('Нельзя кусать мертвого персонажа.');
+  }
+
+  if (api.workModel.currentBody != 'physical') {
+    throw new UserVisibleError('Можно кусать только персонажей в мясном теле.');
+  }
+
+  const allowedRaces: MetaRace[] = ['meta-elf', 'meta-ork', 'meta-dwarf', 'meta-norm', 'meta-troll'];
+  if (!allowedRaces.includes(api.workModel.metarace)) {
+    throw new UserVisibleError('Можно кусать только персонажей метарас эльф, орк, гном, норм, тролль.');
   }
 
   if (data.vampiric) {

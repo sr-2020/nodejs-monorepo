@@ -1864,7 +1864,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Эссенс персонажа уменьшается на min ( 100, itEssense жертвы). Укушенный персонаж переходит в состояние КС
     // itGapEssense Жертвы = itGapEssense + [min ( 100, itEssense жертвы)]
     // itGapEssense гуля = itGapEssense -кусь гуля
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Add proper implementation
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,
@@ -1885,7 +1884,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     // Эссенс персонажа уменьшается на min ( 200, itEssense жертвы). Укушенный персонаж переходит в состояние КС
     // itGapEssense Жертвы = itGapEssense + [min ( 200, itEssense жертвы)]
     // itGapEssense вампира= itGapEssense - кусьВампира
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Add proper implementation
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,
