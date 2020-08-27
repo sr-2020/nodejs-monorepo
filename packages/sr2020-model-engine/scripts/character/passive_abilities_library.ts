@@ -301,7 +301,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь использовать кибернетические импланты. Биотех - можно.',
     // 60
     // в типах имплантах есть разделение, надо посмотреть как оно там сделано
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     modifier: [],
   },
 
