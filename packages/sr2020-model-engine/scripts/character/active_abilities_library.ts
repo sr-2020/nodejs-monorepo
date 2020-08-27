@@ -1855,13 +1855,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ghoul-feast',
     humanReadableName: 'Питание гулей',
     description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 1.',
-    // 605
-    // Вампир сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
+    // 56
+    // Гуль сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
+    //
+    // может иметь целью только персонажей метарас эльф, орк, гном, норм, тролль, находящихся в базовом мясном теле при применении абилки.
+    //
     // Эссенс гуля увеличивается на  min (100, itEssense жертвы)
     // Эссенс персонажа уменьшается на min ( 100, itEssense жертвы). Укушенный персонаж переходит в состояние КС
     // itGapEssense Жертвы = itGapEssense + [min ( 100, itEssense жертвы)]
     // itGapEssense гуля = itGapEssense -кусь гуля
-    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Add proper implementation
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,
@@ -1873,13 +1876,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'vampire-feast',
     humanReadableName: 'Питание вампиров',
     description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 2.',
-    // 606
+    // 64
     // Вампир сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
+    // При применении абилки вампиром жертва  получает инъекцию вещества vampirium (слюна вампира).
+    // может иметь целью только персонажей метарас эльф, орк, гном, норм, тролль, находящихся в базовом мясном теле при применении абилки.
+    //
     // Эссенс вампира увеличивается на  min (200, itEssense жертвы)
     // Эссенс персонажа уменьшается на min ( 200, itEssense жертвы). Укушенный персонаж переходит в состояние КС
     // itGapEssense Жертвы = itGapEssense + [min ( 200, itEssense жертвы)]
     // itGapEssense вампира= itGapEssense - кусьВампира
-    // TODO(https://trello.com/c/W9pUu327/282-эссенс-изменение-параметра-для-hmhvv): Add proper implementation
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Add proper implementation
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 0,

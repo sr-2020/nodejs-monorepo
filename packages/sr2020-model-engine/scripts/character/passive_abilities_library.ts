@@ -70,6 +70,237 @@ export interface PassiveAbility {
 // Not exported by design, use kAllPassiveAbilities instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
+    id: 'feel-matrix',
+    name: 'Чувствительность к Матрице',
+    description: 'Ты чувствуешь матрицу. Устойчивость к фейдингу техноманта, у декера уменьшается время между входами на хоcт.',
+    // 33
+    // hacking.fadingResistance +1
+    // hacking.enterCooldownReduced 15
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'chem-weak',
+    name: 'Чувствительность к препаратам',
+    description: 'Для воздействия препарата достаточно уменьшенной дозы. Аккуратно!',
+    // 34
+    // chemo.baseEffectThreshold -40
+    // chemo.uberEffectThreshold -30
+    // chemo.superEffectThreshold -20
+    // chemo.crysisThreshold -60
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'elven-prices',
+    name: 'Прекрасные цены',
+    description: 'Ваш скоринг прекрасен, эльфийское долголетие всегда в цене! Особая скидка на все покупки!',
+    // 36
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'chem-resist',
+    name: 'Устойчивость к препаратам.',
+    description: 'Сложнее получить передозировку препарата.',
+    // 38
+    // chemo.crysisThreshold +40
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'magic-feedback-resist',
+    name: 'Устойчивость к Откату магов',
+    description: 'Понижает Откат магов',
+    // 39
+    // magicStats.feedbackMultiplier *0.9
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'matrix-feedback-resist',
+    name: 'Устойчивость к Матрице',
+    description: 'Снижает фейдинг техномантов и улучшает устойчивость к биофидбеку у декеров.',
+    // 40
+    // hacking.fadingResistance +1
+    // hacking.biofeedbackResistance +1
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'good-rigga',
+    name: 'Устойчивость при подключению к дронам.',
+    description: 'Снижает урон при выходе из поврежденного дрона.',
+    // 41
+    // drones.droneFeedback -1
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'dont-touch-my-hole',
+    name: 'Коротышка',
+    description: 'Неотчуждаемый слот для бороды!',
+    // 42
+    // у обычных метарасов 6 слотов.
+    // у гномов 5 (-1 слот в Теле)
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'extra-hp',
+    name: 'Плюс хит',
+    description: 'У тебя дополнительный хит в мясном теле. ',
+    // 44
+    // maxHp +1
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'spirit-feed',
+    name: 'Знакомец духов',
+    description: 'Снижает Сопротивление духов этому магу.',
+    // 45
+    // magicStats.spiritResistanceMultiplier *0.8
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'orkish-prices',
+    name: 'Так себе цены.',
+    description: 'Ваш скоринг очень плох, жизнь орка коротка. Ваши покупки будут дороже, чем у других метарас.',
+    // 46
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'skin-armor',
+    name: 'Кожный панцирь',
+    description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
+    // 49
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'this-my-glory-hole',
+    name: 'Верзила',
+    description: 'У троллей есть дополнительный слот для имплантов',
+    // 50
+    // у обычных метарасов 6 слотов.
+    // у троллей 7 (+7 слот в Теле)
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'strong-arm',
+    name: 'Сильная рука',
+    description: 'Биологическая сила! Можно использовать оружие, требующее одной киберруки.',
+    // 51
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'feed-tamagochi',
+    name: 'Голодный как тролль!',
+    description: 'Надо чаще питаться. Большому телу - нужен большой сойбургер!',
+    // 52
+    // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'trollish-prices',
+    name: 'Ужасные цены.',
+    description: 'Ваш скоринг очень плох, жизнь тролля очень коротка. Ваши покупки будут заметно дороже, чем у других метарас.',
+    // 53
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'meat-hunger',
+    name: 'Голод гулей',
+    description: 'Твой эссенс уменьшается  на 0,2 каждый час',
+    // 55
+    // Эссенс персонажа уменьшается на 0,2 каждый час
+    // Essense_Loss
+    //  itGapEssense = увеличивается 20 каждый час
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'blood-thirst',
+    name: 'Жажда вампиров',
+    description: 'Твой эссенс уменьшается на 1 каждый час',
+    // 610
+    // Эссенс персонажа уменьшается на 1 каждый час
+    //  itGapEssense = увеличивается 100 каждый час
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'spirit-attuned',
+    name: 'Сильный призыватель духов',
+    description: '',
+    // 76
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'orkish-ethics',
+    name: 'Твердость кодекса',
+    description: '',
+    // 77
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'trollish-ethics',
+    name: '',
+    description:
+      'Если тролль покидает свою дискурс-группу - он переживает ужасный излом идентичности. Вырази это максимально понятным для окружающих способом, желательно с причинением тяжких телесных повреждений.  ',
+    // 78
+    // `
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'elven-ethics',
+    name: 'Гибкость кодекса',
+    description: 'Этическая особенность Эльфов',
+    // 79
+    //
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
     id: 'incriminating-evidence',
     name: 'Собрать компромат',
     description:
@@ -2059,28 +2290,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Медикарт. Легкая броня.',
     // 514
     // Описание способностей дрона Медкарт
-    modifier: [],
-  },
-
-  {
-    id: 'meat-hunger',
-    name: 'Голод гулей',
-    description: 'Твой эссенс уменьшается  на 0,2 каждый час',
-    // 609
-    // Эссенс персонажа уменьшается на 0,2 каждый час
-    // Essense_Loss
-    //  itGapEssense = увеличивается 20 каждый час
-    //
-    modifier: [],
-  },
-
-  {
-    id: 'blood-thirst',
-    name: 'Жажда вампиров',
-    description: 'Твой эссенс уменьшается на 1 каждый час',
-    // 610
-    // Эссенс персонажа уменьшается на 1 каждый час
-    //  itGapEssense = увеличивается 100 каждый час
     modifier: [],
   },
 
