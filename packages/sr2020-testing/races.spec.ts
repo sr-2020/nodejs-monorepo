@@ -1,6 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
+import { MetaRace } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 describe('Race changes', () => {
   let fixture: TestFixture;
@@ -38,6 +39,27 @@ describe('Race changes', () => {
     expect(workModel.passiveAbilities).containDeep([{ id: 'meat-hunger' }]);
     expect(workModel.activeAbilities).lengthOf(1);
     expect(workModel.activeAbilities).containDeep([{ id: 'ghoul-feast' }]);
+  });
+
+  it('Can switch to any race', async () => {
+    // Not a meta-norm so first switch is not a no-op
+    await fixture.saveCharacter({ metarace: 'meta-spirit' });
+    const allRaces: MetaRace[] = [
+      'meta-norm',
+      'meta-elf',
+      'meta-dwarf',
+      'meta-ork',
+      'meta-troll',
+      'meta-hmhvv1',
+      'meta-hmhvv3',
+      'meta-ai',
+      'meta-eghost',
+      'meta-spirit',
+    ];
+    for (const race of allRaces) {
+      await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race } });
+      // No checks, just make sure that can change to that race
+    }
   });
 
   it('Hungry HMHHV can not use abilities', async () => {
