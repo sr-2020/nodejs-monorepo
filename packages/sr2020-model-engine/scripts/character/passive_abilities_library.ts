@@ -261,6 +261,69 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
 
   {
+    id: 'starvation',
+    name: 'Алчность',
+    description: 'При Эссенс персонажа <1 ты не можешь активировать абилки ',
+    // 57
+    // Если itEssense <1, то у персонажа блокируется активация всех активных абилок кроме абилок ghoul-feast и vampire-feast. Проверка проводится при каждом пересчете itEssense.
+    modifier: [],
+  },
+
+  {
+    id: 'chem-resist-heavy',
+    name: 'Резистивность к препаратам.',
+    description: 'Для правильного воздействия препарата нужны увеличенные дозы. Аккуратно!',
+    // 58
+    // chemo.baseEffectThreshold +30
+    // chemo.uberEffectThreshold +80
+    // chemo.superEffectThreshold +80
+    // chemo.crysisThreshold +40
+    modifier: [
+      modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: 30 }),
+      modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: 80 }),
+      modifierFromEffect(increaseСhemoSuperEffectThreshold, { amount: 80 }),
+      modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 }),
+    ],
+  },
+
+  {
+    id: 'astral-vision',
+    name: 'Астральное зрение',
+    description: 'Ты можешь видеть существ, находящихся в Астрале и говорить с ними.',
+    // 59
+    //
+    modifier: [],
+  },
+
+  {
+    id: 'chrome-blockade',
+    name: 'Отторжение хрома',
+    description: 'Ты не можешь использовать кибернетические импланты. Биотех - можно.',
+    // 60
+    // в типах имплантах есть разделение, надо посмотреть как оно там сделано
+    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    modifier: [],
+  },
+
+  {
+    id: 'tech-blockade',
+    name: 'Отторжение дронов и Резонанса',
+    description: 'Ты не можешь изучать навыки Риггера Пилота и Хакера Техноманта ',
+    // 61
+    // вписано в требования архетипов
+    modifier: [],
+  },
+
+  {
+    id: 'magic-blockade',
+    name: 'Отторжение Магии',
+    description: 'Ты не можешь изучать навыки Мага',
+    // 66
+    // вписано в требования архетипов
+    modifier: [],
+  },
+
+  {
     id: 'spirit-attuned',
     name: 'Сильный призыватель духов',
     description: '',
