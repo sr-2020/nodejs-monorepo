@@ -14,11 +14,11 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
 const FLAGS = commandLineArgs(optionDefinitions);
 
 const kKindColumn = 0;
-const kIdColumn = 5;
-const kNameColumn = 6;
-const kPlayerDescriptionColumn = 12;
-const kMasterDescriptionColumn = 13;
-const kCooldownColumn = 16;
+const kIdColumn = 4;
+const kNameColumn = 5;
+const kPlayerDescriptionColumn = 11;
+const kMasterDescriptionColumn = 12;
+const kCooldownColumn = 15;
 
 interface PassiveAbility {
   id: string;
