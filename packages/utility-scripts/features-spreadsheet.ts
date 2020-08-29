@@ -122,6 +122,7 @@ class SpreadsheetProcessor {
         // ${ability.originalLine}
         // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
         // TODO(aeremin): Implement and add modifier here
+        prerequisites: [],
         modifier: [],
       },`);
       if (FLAGS.update_db) await this.passiveAbilitiesRef.doc(ability.id).set(ability);
