@@ -69,7 +69,7 @@ export interface PassiveAbility {
   id: string;
   name: string;
   description: string;
-  prerequisites?: string[];
+  prerequisites: string[];
   modifier: Modifier | Modifier[];
 }
 
@@ -83,6 +83,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // hacking.fadingResistance +1
     // hacking.enterCooldownReduced 15
     // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
   },
 
@@ -95,6 +96,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // chemo.uberEffectThreshold -30
     // chemo.superEffectThreshold -20
     // chemo.crysisThreshold -60
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: -40 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: -30 }),
@@ -109,6 +111,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг прекрасен, эльфийское долголетие всегда в цене! Особая скидка на все покупки!',
     // 36
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -118,6 +121,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Сложнее получить передозировку препарата.',
     // 38
     // chemo.crysisThreshold +40
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 })],
   },
 
@@ -128,6 +132,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 39
     // magicStats.feedbackMultiplier *0.9
     // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    prerequisites: [],
     modifier: [],
   },
 
@@ -138,6 +143,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 40
     // hacking.fadingResistance +1
     // hacking.biofeedbackResistance +1
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseFadingResistance, { amount: 1 }),
       modifierFromEffect(increaseBiofeedbackResistance, { amount: 1 }),
@@ -150,6 +156,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает урон при выходе из поврежденного дрона.',
     // 41
     // drones.droneFeedback -1
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseDroneFeedback, { amount: -1 })],
   },
 
@@ -160,6 +167,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 42
     // у обычных метарасов 6 слотов.
     // у гномов 5 (-1 слот в Теле)
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: -1 })],
   },
 
@@ -169,6 +177,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя дополнительный хит в мясном теле. ',
     // 44
     // maxHp +1
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseMaxMeatHp, { amount: 1 })],
   },
 
@@ -179,6 +188,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 45
     // magicStats.spiritResistanceMultiplier *0.8
     // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
+    prerequisites: [],
     modifier: [],
   },
 
@@ -188,6 +198,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь орка коротка. Ваши покупки будут дороже, чем у других метарас.',
     // 46
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -197,6 +208,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
     // 49
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -207,6 +219,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 50
     // у обычных метарасов 6 слотов.
     // у троллей 7 (+7 слот в Теле)
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: 1 })],
   },
 
@@ -216,6 +229,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Биологическая сила! Можно использовать оружие, требующее одной киберруки.',
     // 51
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -225,6 +239,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Надо чаще питаться. Большому телу - нужен большой сойбургер!',
     // 52
     // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -234,6 +249,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь тролля очень коротка. Ваши покупки будут заметно дороже, чем у других метарас.',
     // 53
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -245,6 +261,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Эссенс персонажа уменьшается на 0,2 каждый час
     // Essense_Loss
     //  itGapEssense = увеличивается 20 каждый час
+    prerequisites: [],
     modifier: [],
   },
 
@@ -255,6 +272,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 610
     // Эссенс персонажа уменьшается на 1 каждый час
     //  itGapEssense = увеличивается 100 каждый час
+    prerequisites: [],
     modifier: [],
   },
 
@@ -264,6 +282,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При Эссенс персонажа <1 ты не можешь активировать абилки ',
     // 57
     // Если itEssense <1, то у персонажа блокируется активация всех активных абилок кроме абилок ghoul-feast и vampire-feast. Проверка проводится при каждом пересчете itEssense.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -276,6 +295,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // chemo.uberEffectThreshold +80
     // chemo.superEffectThreshold +80
     // chemo.crysisThreshold +40
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: 30 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: 80 }),
@@ -290,6 +310,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь видеть существ, находящихся в Астрале и говорить с ними.',
     // 59
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -299,6 +320,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь использовать кибернетические импланты. Биотех - можно.',
     // 60
     // в типах имплантах есть разделение, надо посмотреть как оно там сделано
+    prerequisites: [],
     modifier: [],
   },
 
@@ -308,6 +330,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь изучать навыки Риггера Пилота и Хакера Техноманта ',
     // 61
     // вписано в требования архетипов
+    prerequisites: [],
     modifier: [],
   },
 
@@ -317,6 +340,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь изучать навыки Мага',
     // 66
     // вписано в требования архетипов
+    prerequisites: [],
     modifier: [],
   },
 
@@ -326,6 +350,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 76
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -335,6 +360,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 77
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -345,6 +371,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Если тролль покидает свою дискурс-группу - он переживает ужасный излом идентичности. Вырази это максимально понятным для окружающих способом, желательно с причинением тяжких телесных повреждений.  ',
     // 78
     // `
+    prerequisites: [],
     modifier: [],
   },
 
@@ -354,6 +381,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Этическая особенность Эльфов',
     // 79
     //
+    prerequisites: [],
     modifier: [],
   },
 
@@ -364,6 +392,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Напиши большую статью об интересующем тебя человеке или организации. Добейся, чтобы эта статья вошла в топ-20 понравившихся материалов. Получи от МГ компромат на этого человека или организацию. Степень подробности информации зависит от положения статьи в рейтинге топ-20. Вы не можете собирать компромат в течении 12 часов после получения прошлых итогов компромата.',
     // 43
     // САБЖ, как в описании. Выдаем какую-то прикольную сюжетную инфу
+    prerequisites: [],
     modifier: [],
   },
 
@@ -374,6 +403,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Чтобы с вами ни происходило, в каком бы вы ни были состоянии, как бы вас ни заколдовали, если вы живы - вы можете пользоваться телеграммом для передачи игровых сообщений. В мире игре этого не видно, по вам нельзя понять, что вы что-то пишете, отнять телефон и так далее.',
     // 44
     // САБЖ, как в описании.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -384,6 +414,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Если вас каким-либо образом все-таки убили, вы можете написать сообщение с описанием подробностей вашей смерти, как все это происходило, что вы об этом думаете, оставить последние пожелания для подписчиков и опубликовать это в вашем телеграмм-канале. Вы можете описывать что происходило с вашим телом и вокруг него. ',
     // 45
     // САБЖ, как в описании.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -394,6 +425,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Раз в 12 часов вы можете получить ответ от мастеров на любой вопрос, подразумевающий ответ "да или нет" или подробный ответ на вопрос, касающийся бэка игры и событий, произошедших в мире игры до ее начала. Кто-то из ваших читателей скинул вам эту инфу в личку. Данную информацию нельзя использовать как доказательства в суде - ведь остальные могут сомневаться в том, что анонимус знает все. Но вы не сомневаетесь в этом. ',
     // 46
     // САБЖ, как в описании.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -404,6 +436,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Раз в 12 часов вы можете назвать мастерам некую личность или организацию и защитить ее от использования способности "собрать компромат" на 12 часов.',
     // 47
     // САБЖ, как в описании.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -414,6 +447,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 108
     // для проект-менеджера  с 1 слотом
     // У игрока просто отображается текст пассивной абилки
+    prerequisites: [],
     modifier: [],
   },
 
@@ -434,6 +468,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 66
     // возможность пользоваться модами 1 уровня
+    prerequisites: [],
     modifier: [],
   },
 
@@ -473,6 +508,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'linklock <target>',
     // 101
     // Захват цели в линк лок
+    prerequisites: [],
     modifier: [],
   },
 
@@ -492,6 +528,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 103
     // позволяет читать данные из геоапи
+    prerequisites: [],
     modifier: [],
   },
 
@@ -521,6 +558,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 106
     // позволяет читать данные из эконом апи
+    prerequisites: [],
     modifier: [],
   },
 
@@ -550,6 +588,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 109
     // преодолевает анонимизацию фиксира
+    prerequisites: [],
     modifier: [],
   },
 
@@ -559,6 +598,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 110
     // позволяет читать данные из реестров
+    prerequisites: [],
     modifier: [],
   },
 
@@ -588,6 +628,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 113
     // позволяет читать данные из реестров
+    prerequisites: [],
     modifier: [],
   },
 
@@ -617,6 +658,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'useapi read',
     // 116
     // работа с прочими контролями -1
+    prerequisites: [],
     modifier: [],
   },
 
@@ -646,6 +688,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'reactivate <target>',
     // 119
     // Позволяет реактивировать вырубленный IC
+    prerequisites: [],
     modifier: [],
   },
 
@@ -655,6 +698,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 120
     // Позволяет пережить одну атаку черного льда
+    prerequisites: [],
     modifier: [],
   },
 
@@ -665,6 +709,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 122
     // Еще 3 хоста, на защиту которых ты можешь подписаться
     // [+3] Хакер_число_админ_хостов
+    prerequisites: [],
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
 
@@ -674,6 +719,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 123
     // Ты можешь создавать объединять декеров в команду (имунки френдли файр)
+    prerequisites: [],
     modifier: [],
   },
 
@@ -683,6 +729,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 124
     // Разобрался со всеми примудростями квантовой компрессии. Позволяет экономить 10% памяти кибердеки при записи софта в деку
+    prerequisites: [],
     modifier: [],
   },
 
@@ -692,6 +739,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 125
     // Позволяет реактивировать вырубленый IC
+    prerequisites: [],
     modifier: [],
   },
 
@@ -701,6 +749,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 126
     // Вэрианс на 10% быстрее падает
+    prerequisites: [],
     modifier: modifierFromEffect(increaseVarianceResistance, { amount: 10 }),
   },
 
@@ -710,6 +759,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 127
     // Фейдинг на 10% меньше
+    prerequisites: [],
     modifier: modifierFromEffect(increaseFadingResistance, { amount: 10 }),
   },
 
@@ -719,6 +769,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 130
     // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
+    prerequisites: [],
     modifier: modifierFromEffect(increaseBackdoors, { amount: 3 }),
   },
 
@@ -728,6 +779,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 131
     // Бэкдоры дохнут медленнее
+    prerequisites: [],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 20 }),
   },
 
@@ -737,6 +789,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 132
     // Бэкдоры дохнут ну еще медленнее.
+    prerequisites: [],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
 
@@ -746,6 +799,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 134
     // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
 
@@ -755,6 +809,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 135
     // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
 
@@ -764,6 +819,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 136
     // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 }),
   },
 
@@ -773,6 +829,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 138
     // Пассивка нормов, увеличивает время в виаре\основании.
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 30 }),
   },
 
@@ -782,6 +839,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 139
     // Резонанс +1
+    prerequisites: [],
     modifier: modifierFromEffect(increaseResonance, { amount: 1 }),
   },
 
@@ -831,6 +889,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 146
     // Еще один связанный спрайт
+    prerequisites: [],
     modifier: modifierFromEffect(increaseSpriteCount, { amount: 1 }),
   },
 
@@ -840,6 +899,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 147
     // Еще один запрос к контролю
+    prerequisites: [],
     modifier: modifierFromEffect(increaseControlRequests, { amount: 1 }),
   },
 
@@ -849,6 +909,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 148
     // Меньше лаг данных контроля (по умолчанию данные контроля  старее чем 30 минут от момента запроса)
+    prerequisites: [],
     modifier: [],
   },
 
@@ -859,6 +920,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 149
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
+    prerequisites: [],
     modifier: [],
   },
 
@@ -869,6 +931,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 150
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
+    prerequisites: [],
     modifier: [],
   },
 
@@ -879,6 +942,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 151
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
+    prerequisites: [],
     modifier: [],
   },
 
@@ -888,6 +952,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 163
     // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -897,6 +962,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     // 164
     // Позволяет игнорировать атаку активного агента хоста. (PvE игротеха)
+    prerequisites: [],
     modifier: [],
   },
 
@@ -908,6 +974,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // борьба с чужим софтом (если повезет - то и со спрайтами)
     //
     // IT: команда в Кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -922,6 +989,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // -- persistent (если есть абилка persistent deploy)
     //
     // IT: команда в Кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -933,6 +1001,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // очистка хоста от чужой дряни / пользы
     //
     // IT: команда в Кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -945,6 +1014,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
     //
     // IT: Команда в Кривда-Матрице, основного IT нет
+    prerequisites: [],
     modifier: [],
   },
 
@@ -956,6 +1026,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // мини-корова декеров, закрытая этикой
     //
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -966,6 +1037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
     // 197
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -975,6 +1047,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
     // 198
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -984,6 +1057,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
     // 199
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -993,6 +1067,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
     // 200
     // IT: буду запрашивать сам факт наличия фичи
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1003,6 +1078,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 201
     // IT:
     // [+5] Декер_макс_время_на_хосте
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
 
@@ -1034,6 +1110,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
     // 204
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1044,6 +1121,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
     // 205
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1054,6 +1132,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 206
     // IT:
     // [+5] Декер_скорость_входа_на_хост
+    prerequisites: [],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
   },
 
@@ -1085,6 +1164,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет попытаться сбежать из линклока. \n\nЗависит от соотношения значений  вашего Sleaze и Attack цели',
     // 209
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1096,6 +1176,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Firewall
     // IT:
     // [+2] Декер_конверсия_Firewall
+    prerequisites: [],
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
 
@@ -1129,6 +1210,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Attack
     // IT:
     // [+2] Декер_конверсия_Attack
+    prerequisites: [],
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
 
@@ -1162,6 +1244,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Sleaze
     // IT:
     // [+2] Декер_конверсия_Sleaze
+    prerequisites: [],
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
 
@@ -1195,6 +1278,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка конверсии Intellect в Dataprocessing
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
+    prerequisites: [],
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
 
@@ -1227,6 +1311,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     // 222
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1237,6 +1322,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Выводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
     // 223
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1246,6 +1332,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Отображает якорь PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
     // 224
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1256,6 +1343,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Находясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
     // 225
     // IT: команда в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1266,6 +1354,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Разблокирует ключи команды steal\n\n--enterprize: работа с кошельками юр лиц\n--comment: позволяет ввести текст "основания перевода", вместо билиберды по умолчанию',
     // 226
     // IT: ключ команды в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1275,6 +1364,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Разблокирует ключи команды steal\n\n--SIN: переводит сумму на другой SIN',
     // 227
     // IT: ключ команды в кривда-матрице
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1286,6 +1376,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 228
     // IT:
     // [+5] Хакер_число_админ_хостов
+    prerequisites: [],
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
 
@@ -1298,6 +1389,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+20] Техномант_Устойчивость_Фейдингу_Компиляция
+    prerequisites: [],
     modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 20 }),
   },
 
@@ -1310,6 +1402,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+30] Техномант_Устойчивость_Фейдингу_Компиляция
+    prerequisites: [],
     modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 30 }),
   },
 
@@ -1321,6 +1414,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     //
     // IT:
     // [+1] Техномант_Уровень_Спрайтов
+    prerequisites: [],
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
 
@@ -1354,6 +1448,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Перманентное увеличение Харизмы персонажа - 1',
     // 278
     // Увеличивает Харизму персонажа менталиста с 3 до 4
+    prerequisites: [],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
 
@@ -1404,6 +1499,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 297
     // при прохождении данжа ГМ выносит из данжа + 10% от базовой стоимости лута
     // Покажи игротеху абилку - получи больше лута на 10%
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1413,6 +1509,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'отображается  текущий коэф. скоринга данного персонажа',
     // 297
     // У гм на экране экономики отображаются  его текущие множители скоринга.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1422,6 +1519,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 2% от всех своих рентных платежей.',
     // 298
     // После списания рентных платежей гм получает кэшбек в размере 2% от списанной суммы. Начисляется после каждого списания рентных платежей.
+    prerequisites: [],
     modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 2 }),
   },
 
@@ -1451,6 +1549,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'гм производит анонимный перевод между двумя персонажами. ',
     // 310
     // анонимизация перевода - не показываем это в логах никому кроме фиксера, его контрагента и мастеров
+    prerequisites: [],
     modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
 
@@ -1460,6 +1559,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 20%',
     // 324
     // Все кулдауны способностей дискурсмонгера снижены на 20%
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.8 }),
   },
 
@@ -1469,6 +1569,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 40%',
     // 325
     // Все кулдауны способностей дискурсмонгера снижены на 40%
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.6 / 0.8 }),
   },
 
@@ -1478,6 +1579,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 60%',
     // 326
     // Все кулдауны способностей дискурсмонгера снижены на 60%
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.4 / 0.6 }),
   },
 
@@ -1487,6 +1589,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Предъявите этот экран игроку. Он обязан показать вам свой этикпрофиль.',
     // 327
     // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1497,6 +1600,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'После исповеди или участия в богослужении вы можете нажать "Готово" на любом Поступке личной этики, не выполняя его требований',
     // 323
     // Абилка-сертификат
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1507,6 +1611,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 301
     // Множитель 0,9 на стоимость товара при покупке любого товара  данным персонажем
     //
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }),
   },
 
@@ -1537,6 +1642,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 334
     // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
     // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
   },
 
@@ -1546,6 +1652,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Ares Macrotechnolgy',
     // 538
     // множитель 0,9 на  все товары с параметром Corporation = Ares Macrotechnolgy
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountAres, { amount: 0.9 }),
   },
 
@@ -1555,6 +1662,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Aztechnology (ORO)',
     // 539
     // множитель 0,9 на  все товары с параметром Corporation =Aztechnology (ORO)
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountAztechnology, { amount: 0.9 }),
   },
 
@@ -1564,6 +1672,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Saeder-Krupp',
     // 540
     // множитель 0,9 на  все товары с параметром Corporation =Saeder-Krupp
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountSaederKrupp, { amount: 0.9 }),
   },
 
@@ -1573,6 +1682,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Spinrad Global (JRJ INT)',
     // 541
     // множитель 0,9 на  все товары с параметром Corporation =.Spinrad Global (JRJ INT)
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountSpinradGlobal, { amount: 0.9 }),
   },
 
@@ -1582,6 +1692,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации NeoNet1 (TransLatviaSeledir)',
     // 542
     // множитель 0,9 на  все товары с параметром Corporation =NeoNet1 (TransLatviaSeledir)
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountNeonet1, { amount: 0.9 }),
   },
 
@@ -1591,6 +1702,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации EVO',
     // 543
     // множитель 0,9 на  все товары с параметром Corporation =EVO
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountEvo, { amount: 0.9 }),
   },
 
@@ -1600,6 +1712,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Horizon',
     // 544
     // множитель 0,9 на  все товары с параметром Corporation =Horizon
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountHorizon, { amount: 0.9 }),
   },
 
@@ -1609,6 +1722,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Wuxing',
     // 545
     // множитель 0,9 на  все товары с параметром Corporation =Wuxing
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountWuxing, { amount: 0.9 }),
   },
 
@@ -1618,6 +1732,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Россия',
     // 546
     // множитель 0,9 на  все товары с параметром Corporation =Россия
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountRussia, { amount: 0.9 }),
   },
 
@@ -1627,6 +1742,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Renraku',
     // 547
     // множитель 0,9 на  все товары с параметром Corporation =Renraku
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountRenraku, { amount: 0.9 }),
   },
 
@@ -1636,6 +1752,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Mutsuhama',
     // 548
     // множитель 0,9 на  все товары с параметром Corporation =Mutsuhama
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountMutsuhama, { amount: 0.9 }),
   },
 
@@ -1645,6 +1762,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Shiavase',
     // 549
     // множитель 0,9 на  все товары с параметром Corporation =Shiavase
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyCorpDiscountShiavase, { amount: 0.9 }),
   },
 
@@ -1654,6 +1772,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Подвластная тебе Мощь увеличивается',
     // 350
     // Перманентно увеличивает характеристику Магия на 1
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
 
@@ -1702,6 +1821,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     // 355
     // Перманентно уменьшает Откат после кастования заклинания на 1
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
   },
 
@@ -1731,6 +1851,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     // 358
     // Перманентно увеличивает Откат после кастования заклинания на 1
+    prerequisites: [],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
   },
 
@@ -1760,6 +1881,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Магия возвращается к тебе быстрее',
     // 361
     // Перманентно ускоряет восстановление Магии на 20%
+    prerequisites: [],
     modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
 
@@ -1789,6 +1911,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // 367
     // Коэффициент Сопротивления Духов у мага перманентно становится меньше на 0.2
+    prerequisites: [],
     modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: -0.2 }),
   },
 
@@ -1818,6 +1941,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // 370
     // Коэффициент Сопротивления Духов у мага перманентно становится больше на 0.3
+    prerequisites: [],
     modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: 0.2 }),
   },
 
@@ -1847,6 +1971,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'След твоих заклинаний содержит меньше ауры',
     // 390
     // В астральном следе заклинаний обладателя абилки остается только 60% ауры. То есть Коэффициент Отчетливости Астральных Следов у него равен 0.6
+    prerequisites: [],
     modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
 
@@ -1861,6 +1986,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 2) временному (на T минут) появлению пассивной способности "Кровавый Прилив", добавляющей в КоэффициентСопротивленияОткату множитель K=1/(6+N).
     // T = N*5 минут.
     // Жертва теряет 1ед Эссенса и переходит в КС и в этом состоянии для повторного использования в другом таком же ритуале непригодна.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1870,6 +1996,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При чтении астральных следов извлекается больше ауры',
     // 391
     // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает на 20% ауры больше. То есть его Коэффициент чтения астральных следов равен 1.2
+    prerequisites: [],
     modifier: modifierFromEffect(increaseAuraReadingMultiplier, { amount: 0.2 }),
   },
 
@@ -1879,6 +2006,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'В ритуальном хоре твой голос неоценим',
     // 412
     // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 3х человек.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1888,6 +2016,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи',
     // 368
     // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу доступную Мощь на √N.
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1897,6 +2026,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     // 369
     // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов увеличивают доступную магу Мощь, А ТАКЖЕ снижают DMX на1 на √N
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1907,6 +2037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 474
     // более лучшая химота в продаже
     // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1928,6 +2059,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 481
     // Допуск: мобильный автодок
     // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
+    prerequisites: [],
     modifier: [],
   },
 
@@ -1961,6 +2093,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Intelligence -1
     // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
     // prerequisites: ['arch-rigger'],
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 })],
   },
 
@@ -2000,6 +2133,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // drones.medicraftBonus +2
     // drones.maxTimeInside +20
     // drones.recoveryTime -20
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2015,6 +2149,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // drones.medicraftBonus +4
     // drones.maxTimeInside +10
     // drones.recoveryTime -10
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -2030,6 +2165,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // drones.medicraftBonus +4
     // drones.maxTimeInside +10
     // drones.recoveryTime -10
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -2044,6 +2180,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 521
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     // биовэр. Сложность установки 5
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation, {})],
   },
 
@@ -2053,6 +2190,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые импланты.',
     // 521
     // rigging.implantsBonus+2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
 
@@ -2062,6 +2200,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить сложные импланты.',
     // 522
     // rigging.implantsBonus+2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
 
@@ -2071,6 +2210,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить самые сложные импланты, включая биовэр.',
     // 523
     // rigging.implantsBonus+4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 4 })],
   },
 
@@ -2080,6 +2220,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые моды.',
     // 525
     // rigging.tuningBonus +2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
 
@@ -2089,6 +2230,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить сложные моды.',
     // 526
     // rigging.tuningBonus +2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
 
@@ -2098,6 +2240,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить самые сложные моды.',
     // 527
     // rigging.tuningBonus +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
 
@@ -2107,6 +2250,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь снимать простые импланты  моды.',
     // 529
     // rigging.repomanBonus +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
 
@@ -2116,6 +2260,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь снимать сложные импланты  моды.',
     // 530
     // rigging.repomanBonus +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
 
@@ -2125,6 +2270,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь снимать самые сложные импланты  моды. ',
     // 531
     // rigging.repomanBonus +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
 
@@ -2134,6 +2280,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление воздушными дронами.',
     // 537
     // drones.aircraftBonus =  +2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
   },
 
@@ -2143,6 +2290,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление сложными воздушными дронами.',
     // 538
     // drones.aircraftBonus = +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
 
@@ -2152,6 +2300,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление самыми сложными воздушными дронами.',
     // 539
     // drones.aircraftBonus = +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
 
@@ -2161,6 +2310,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление наземными дронами.',
     // 541
     // drones.groundcraftBonus = +2
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 2 })],
   },
 
@@ -2170,6 +2320,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление сложными наземными дронами.',
     // 542
     // drones.groundcraftBonus = +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
 
@@ -2179,6 +2330,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление самыми сложными наземными дронами.',
     // 543
     // drones.groundcraftBonus = +4
+    prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
 
@@ -2189,6 +2341,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 544
     // drones.maxTimeInside  +10
     // drones.recoveryTime= -10
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -2202,6 +2355,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 545
     // drones.maxTimeInside +20
     // drones.recoveryTime -20
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2215,6 +2369,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 546
     // drones.maxTimeInside  +20
     // drones.recoveryTime-20
+    prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2228,6 +2383,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 48
     // Повышает защиту от ментальных заклинаний
     // Модификатор: МентальнаяЗащита +3
+    prerequisites: [],
     modifier: modifierFromEffect(increaseMentalProtection, { amount: 3 }),
   },
 
@@ -2238,6 +2394,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 516
     // повышает порог кризисной ситуации при употреблении химоты
     // Модификатор: ХимотаКризис +10
+    prerequisites: [],
     modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 10 }),
   },
 
@@ -2248,6 +2405,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // 517
     // Отбивает с шансом 50% попытку вырезать у тебя имплант.
     // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2257,6 +2415,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты восстанавливаешь все хиты за 45 минут',
     // 518
     // Ускоряет респавн хитов после легкого ранения (45 минут все хиты)
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2266,6 +2425,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты восстанавливаешь все хиты за 30 минут',
     // 519
     // Ускоряет респавн хитов после легкого ранения (30 минут все хиты)
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2275,6 +2435,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'разрешает использовать гранаты',
     // 533
     // разрешает игроку использовать гранаты
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2284,6 +2445,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Щит. Тяжелая броня.',
     // 507
     // Описание способностей дрона Бульдозер
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2293,6 +2455,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Пушка. Легкая броня.',
     // 508
     // Описание способностей дрона Турель
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2302,6 +2465,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Пулемет. Тяжелая броня.',
     // 509
     // Описание способностей дрона Экзоскелет
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2311,6 +2475,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Видеокамера. Нет брони. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
     // 510
     // Описание способностей дрона Коптер
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2320,6 +2485,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Проектор голограмм. Нет брони. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
     // 511
     // Описание способностей дрона Коптер-Проектор
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2329,6 +2495,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Бадабум! Нет брони. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
     // 512
     // Описание способностей дрона Коптер-Камикадзе
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2338,6 +2505,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Может перевозить 3 персонажей. Легкая броня. Иммунитет к холодному оружию.',
     // 513
     // Описание способностей дрона Вертолет
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2347,6 +2515,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Медикарт. Легкая броня.',
     // 514
     // Описание способностей дрона Медкарт
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2354,6 +2523,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'comcon-ethic-ability',
     name: 'Вы достигли!',
     description: 'Приходите на наш воскресный семинар по приложению и выиграйте футболку в лотерее!',
+    prerequisites: [],
     modifier: [],
   },
 
@@ -2362,18 +2532,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arrowgant-effect',
     name: 'Arrowgant',
     description: 'Защита от дистанционных атак (только от нерфов).',
+    prerequisites: [],
     modifier: [],
   },
   {
     id: 'trollton-effect',
     name: 'Trollton',
     description: 'У вас тяжелая броня.',
+    prerequisites: [],
     modifier: [],
   },
   {
     id: 'stone-skin-effect',
     name: 'Каменная кожа ',
     description: 'С тебя снимаются хиты, как если бы ты находился в легкой броне.',
+    prerequisites: [],
     modifier: [],
   },
   {
@@ -2381,24 +2554,28 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'automatic-weapons-unlock',
     name: 'Автоматическое оружие',
     description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
+    prerequisites: [],
     modifier: [],
   },
   {
     id: 'hammer-of-justice-effect',
     name: 'Hammer of Justice',
     description: 'Одноручное оружие считается тяжёлым.',
+    prerequisites: [],
     modifier: [],
   },
   {
     id: 'cloud-memory-temporary',
     name: 'Облачная память',
     description: 'Вы не забываете события произошедшие с вами непосредственно перед КС',
+    prerequisites: [],
     modifier: [],
   },
   {
     id: 'field-of-denial-able',
     name: 'Field of denial',
     description: `Попадание в зонтик тяжелым оружием игнорируется.`,
+    prerequisites: [],
     modifier: [],
   },
 ];
