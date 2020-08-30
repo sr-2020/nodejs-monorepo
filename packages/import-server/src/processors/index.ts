@@ -14,7 +14,12 @@ const mapper: MapperInterface = new importedMapper();
 
 const processor = new Processor(mapper);
 
-processor.run().then((total: number) => {
-  console.log('=== processed ' + total + ' models');
-  console.log('=== Done');
-});
+processor.run().then(
+  (total: number) => {
+    console.log('=== processed ' + total + ' models');
+    console.log('=== Done');
+  },
+  () => {
+    console.log('=== Error');
+  },
+);

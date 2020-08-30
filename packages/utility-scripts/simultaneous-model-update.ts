@@ -29,4 +29,7 @@ async function main() {
   console.log(numberOfConditions(result));
 }
 
-main().then(() => {});
+main().then(
+  () => {},
+  () => {},
+);

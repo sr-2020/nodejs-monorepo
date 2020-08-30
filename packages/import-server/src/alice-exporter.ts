@@ -7,8 +7,7 @@ import { config } from './config';
 import { saveObject } from './helpers';
 import { AliceAccount } from './interfaces/alice-account';
 import { DeusModel } from './interfaces/deus-model';
-import { JoinCharacterDetail } from './join-importer';
-import { JoinMetadata } from './join-importer';
+import { JoinCharacterDetail, JoinMetadata } from './join-importer';
 
 export interface NameParts {
   firstName: string;
@@ -114,7 +113,7 @@ export class AliceExporter {
     };
 
     const events = await this.eventsCon.find(selector);
-    this.eventsCon.bulkDocs(events.docs.map((x) => ({ ...x, _deleted: true })));
+    await this.eventsCon.bulkDocs(events.docs.map((x) => ({ ...x, _deleted: true })));
   }
 
   private createModel() {

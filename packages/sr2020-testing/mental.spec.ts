@@ -71,7 +71,7 @@ describe('Mentalistic events', function () {
     await fixture.addCharacterFeature('luke-i-am-your-father', 1);
     const attacker = (await fixture.useAbility({ id: 'luke-i-am-your-father' }, 1)).workModel;
 
-    fixture.advanceTime(duration(1000, 'seconds'));
+    await fixture.advanceTime(duration(1000, 'seconds'));
 
     const message = await fixture.sendCharacterEventExpectingError(
       {

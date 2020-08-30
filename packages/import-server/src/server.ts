@@ -5,8 +5,6 @@ import * as PouchDB from 'pouchdb';
 import * as pouchDBFind from 'pouchdb-find';
 import { Observable } from 'rxjs/Rx';
 import * as winston from 'winston';
-const Elasticsearch = require('winston-elasticsearch'); // tslint:disable-line
-
 import { AliceExporter } from './alice-exporter';
 import { processCliParams } from './cli-params';
 import { config } from './config';
@@ -17,6 +15,8 @@ import { EconProvider } from './providers/econ-provider';
 import { Provider } from './providers/interface';
 import { ImportStats } from './stats';
 import { TempDbWriter } from './tempdb-writer';
+
+const Elasticsearch = require('winston-elasticsearch'); // tslint:disable-line
 
 PouchDB.plugin(pouchDBFind);
 
@@ -58,10 +58,16 @@ if (params.export || params.import || params.id || params.test || params.list ||
 
   importAndCreate(_id, params.import === true, params.export === true, params.list === true, false, params.refresh === true, since)
     .catch(() => process.exit(1))
-    .then(() => {
-      winston.info('Finished!');
-      process.exit(0);
-    });
+    .then(
+      () => {
+        winston.info('Finished!');
+        process.exit(0);
+      },
+      () => {
+        winston.info('Error!');
+        process.exit(1);
+      },
+    );
 } else if (params.server) {
   winston.info(`Start HTTP-server on port: ${config.port} and run import loop`);
 
@@ -364,10 +370,14 @@ async function importAndCreate(
         },
         () => {
           if (updateStats) {
-            workData.cacheWriter.saveLastStats(new ImportRunStats(moment.utc()));
+            workData.cacheWriter.saveLastStats(new ImportRunStats(moment.utc())).then(
+              () => {
+                winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
+                resolve();
+              },
+              () => reject(),
+            );
           }
-          winston.info(`Import sequence completed. Imported ${workData.importCouter} models!`);
-          resolve();
         },
       );
   });
