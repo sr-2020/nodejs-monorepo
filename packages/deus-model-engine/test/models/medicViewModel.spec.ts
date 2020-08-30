@@ -6,13 +6,13 @@ import { getRefreshEvent } from '../fixtures/events';
 describe('Meidc and Mind ViewModel Generation', () => {
   let result: any = null;
 
-  before(async function() {
+  before(async function () {
     const model = getExampleModel('1234');
     const events = getRefreshEvent(model.modelId);
     result = (await process(model, [events])).viewModels.medic_viewmodel;
   });
 
-  it('Creation and _id, login, generation', async function() {
+  it('Creation and _id, login, generation', async function () {
     console.log(JSON.stringify(result));
     // eslint-disable-next-line no-unused-expressions
     expect(result).is.not.null;
@@ -22,21 +22,21 @@ describe('Meidc and Mind ViewModel Generation', () => {
     expect(result).has.nested.property('generation', 'W');
   });
 
-  it('genome', async function() {
+  it('genome', async function () {
     //genome
     expect(result).has.nested.property('genome');
     expect(result.genome).is.a('array');
     expect(result.genome[10]).is.equal(2);
   });
 
-  it('medical systems', async function() {
+  it('medical systems', async function () {
     expect(result).has.nested.property('systems');
     expect(result.systems).is.a('array');
     expect(result.systems.length).is.equal(6);
     expect(result.systems[3]).is.equal(1);
   });
 
-  it('memory', async function() {
+  it('memory', async function () {
     //api.model.memory
     expect(result).has.nested.property('memory');
     expect(result.memory).is.a('array');
@@ -44,7 +44,7 @@ describe('Meidc and Mind ViewModel Generation', () => {
     expect(result.memory[1].url).is.equal('http://link-to-local-server.local/url2');
   });
 
-  it('mind', async function() {
+  it('mind', async function () {
     //api.model.mind
     expect(result).has.nested.property('mind');
     expect(result.mind).is.a('object');
@@ -56,7 +56,7 @@ describe('Meidc and Mind ViewModel Generation', () => {
     expect(result.mind.F[3]).is.equal(56);
   });
 
-  it('base-model mind', async function() {
+  it('base-model mind', async function () {
     //api.model.mind
     expect(result).has.nested.property('mindBase');
     expect(result.mindBase).is.a('object');

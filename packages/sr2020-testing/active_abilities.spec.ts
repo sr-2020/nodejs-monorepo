@@ -2,7 +2,7 @@ import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
 
-describe('Active abilities', function() {
+describe('Active abilities', function () {
   let fixture: TestFixture;
 
   beforeEach('setupApplication', async () => {

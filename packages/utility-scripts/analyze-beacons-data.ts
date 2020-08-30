@@ -22,10 +22,7 @@ async function main() {
     const now = Timestamp.now();
     const to = new Timestamp(now.seconds - 3600 * i, now.nanoseconds);
     const from = new Timestamp(to.seconds - 3600, to.nanoseconds);
-    const latestDocs = await allDocs
-      .where('timestamp', '>=', from)
-      .where('timestamp', '<=', to)
-      .get();
+    const latestDocs = await allDocs.where('timestamp', '>=', from).where('timestamp', '<=', to).get();
 
     const wakeups = latestDocs.docs
       .map((d) => d.data() as { total_beacons: number; timestamp: Timestamp })
@@ -40,8 +37,9 @@ async function main() {
     console.log(
       `In the interval ${formatTimestamp(from)}-${formatTimestamp(
         to,
-      )} there were ${totalWakeups} wakeups total, from them ${wakeupsWithBeacons} were with beacon(s). Max delay = ${maxDiff /
-        60} minutes`,
+      )} there were ${totalWakeups} wakeups total, from them ${wakeupsWithBeacons} were with beacon(s). Max delay = ${
+        maxDiff / 60
+      } minutes`,
     );
   }
 }

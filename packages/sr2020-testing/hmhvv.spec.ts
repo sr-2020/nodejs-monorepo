@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 
-describe('HMHVV abilities', function() {
+describe('HMHVV abilities', function () {
   let fixture: TestFixture;
 
   beforeEach(async () => {

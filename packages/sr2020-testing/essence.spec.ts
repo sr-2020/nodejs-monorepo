@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 
-describe('Essence', function() {
+describe('Essence', function () {
   let fixture: TestFixture;
 
   beforeEach(async () => {

@@ -5,7 +5,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Serenity immortality: ', () => {
-  it('Install first stage implant', async function() {
+  it('Install first stage implant', async function () {
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 's_immortal01' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);
@@ -25,7 +25,7 @@ describe('Serenity immortality: ', () => {
     expect(cond).is.exist;
   });
 
-  it('Run modernization', async function() {
+  it('Run modernization', async function () {
     //Подготовить к модернизации
     const model = getExampleModel();
     let events = getEvents(
@@ -80,7 +80,7 @@ describe('Serenity immortality: ', () => {
     expect(baseModel.mind.D[8]).is.eqls(100);
   });
 
-  it('Install first stage implant and try install another', async function() {
+  it('Install first stage implant and try install another', async function () {
     const model = getExampleModel();
     const events = getEvents(
       model.modelId,

@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 
-describe('General character events', function() {
+describe('General character events', function () {
   // eslint-disable-next-line no-invalid-this
   this.timeout(15000);
   let fixture: TestFixture;

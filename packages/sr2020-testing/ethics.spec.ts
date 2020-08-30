@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 
-describe('Ethic events', function() {
+describe('Ethic events', function () {
   let fixture: TestFixture;
 
   beforeEach(async () => {

@@ -28,7 +28,7 @@ global.TEST_EXTERNAL_OBJECTS = merge(global.TEST_EXTERNAL_OBJECTS, {
 });
 
 describe('JJ Immortality', () => {
-  it('Use step one pill', async function() {
+  it('Use step one pill', async function () {
     const model = getExampleModel();
     model.changes = [];
     let events = getEvents(model.modelId, [{ eventType: 'jj-immortal-one-start', data: { pill: STEP1 } }]);
@@ -74,7 +74,7 @@ describe('JJ Immortality', () => {
     expect(findChangeRecord(STEP1.stages[3].text, workingModel)).to.exist;
   });
 
-  it('Use step 2 pill', async function() {
+  it('Use step 2 pill', async function () {
     const model = getExampleModel();
     model.changes = [];
     const timestamp = Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10;
@@ -106,7 +106,7 @@ describe('JJ Immortality', () => {
     expect(findChangeRecord(STEP2.stages[1], workingModel)).to.exist;
   });
 
-  it('Usable with pill', async function() {
+  it('Usable with pill', async function () {
     const model = getExampleModel();
     model.changes = [];
     const events = getEvents(model.modelId, [{ eventType: 'usePill', data: { id: 'jj-immortality' } }], Date.now(), true);

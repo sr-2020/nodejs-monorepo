@@ -163,20 +163,14 @@ export class TestFixture {
 
   async saveCharacter(model: DeepPartial<Sr2020Character> = {}) {
     const id = model.modelId ?? 0;
-    await this.client
-      .put(`/character/default/${id}?noAbilities=true`)
-      .send({})
-      .expect(200);
+    await this.client.put(`/character/default/${id}?noAbilities=true`).send({}).expect(200);
     const character = await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
     await this._connection.getRepository(Sr2020Character).save({ ...character, ...model });
   }
 
   async saveLocation(model: DeepPartial<Location> = {}) {
     const id = model.modelId ?? 0;
-    await this.client
-      .put(`/location/default/${id}`)
-      .send({})
-      .expect(200);
+    await this.client.put(`/location/default/${id}`).send({}).expect(200);
     const location = await this._connection.getRepository(Location).findOneOrFail(id);
     await this._connection.getRepository(Location).save({ ...location, ...model });
   }
@@ -195,19 +189,13 @@ export class TestFixture {
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     this._pushService.reset();
-    const resp = await this.client
-      .post(`/character/model/${id}`)
-      .send(event)
-      .expect(200);
+    const resp = await this.client.post(`/character/model/${id}`).send(event).expect(200);
     return resp.body;
   }
 
   async sendCharacterEventExpectingError(event: EventRequest, id: number | string = 0): Promise<string | undefined> {
     this._pushService.reset();
-    const resp = await this.client
-      .post(`/character/model/${id}`)
-      .send(event)
-      .expect(400);
+    const resp = await this.client.post(`/character/model/${id}`).send(event).expect(400);
     return resp?.body?.error?.message;
   }
 
@@ -225,10 +213,7 @@ export class TestFixture {
 
   async sendLocationEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Location>> {
     this._pushService.reset();
-    const resp = await this.client
-      .post(`/location/model/${id}`)
-      .send(event)
-      .expect(200);
+    const resp = await this.client.post(`/location/model/${id}`).send(event).expect(200);
     return resp.body;
   }
 
@@ -238,10 +223,7 @@ export class TestFixture {
 
   async sendQrCodeEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<QrCode>> {
     this._pushService.reset();
-    const resp = await this.client
-      .post(`/qr/model/${id}`)
-      .send(event)
-      .expect(200);
+    const resp = await this.client.post(`/qr/model/${id}`).send(event).expect(200);
     return resp.body;
   }
 

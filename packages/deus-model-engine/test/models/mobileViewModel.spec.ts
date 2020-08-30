@@ -299,7 +299,7 @@ function getProgramViewModel() {
 }
 
 describe('mobileViewModel', () => {
-  it("_view doesn't produce null or undefined fields", async function() {
+  it("_view doesn't produce null or undefined fields", async function () {
     const model = getExampleModel();
     const viewModel = await getViewModel(model);
     expect(viewModel).to.be.deep.equal(JSON.parse(JSON.stringify(viewModel)));
@@ -309,7 +309,7 @@ describe('mobileViewModel', () => {
     //console.log(JSON.stringify(viewModel, null, 4));
   });
 
-  it('_view for robot is not so complicated', async function() {
+  it('_view for robot is not so complicated', async function () {
     const model = getExampleModel('1000');
     model.model = 'Sex-droid';
     model.profileType = 'robot';
@@ -319,7 +319,7 @@ describe('mobileViewModel', () => {
     expect(viewModel).to.be.deep.equal(getRobotViewModel());
   });
 
-  it('_view for programs is really dumb', async function() {
+  it('_view for programs is really dumb', async function () {
     const model = getExampleModel('1000');
 
     model.profileType = 'program';
@@ -329,7 +329,7 @@ describe('mobileViewModel', () => {
     expect(viewModel).to.be.deep.equal(getProgramViewModel());
   });
 
-  it('Start Illness and check illness life path', async function() {
+  it('Start Illness and check illness life path', async function () {
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'start-illness', data: { id: 'arthritis' } }], model.timestamp + 100);
     let { baseModel, workingModel } = await process(model, events);

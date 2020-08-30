@@ -8,7 +8,7 @@ import { getEvents, getRefreshEvent } from '../fixtures/events';
 import * as fs from 'async-file';
 
 function expectNarcoIgnoredForProfileType(profileType: string) {
-  it(`Narco ignored for ${profileType}`, async function() {
+  it(`Narco ignored for ${profileType}`, async function () {
     const model = getExampleModel();
     model.profileType = profileType;
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
@@ -20,7 +20,7 @@ function expectNarcoIgnoredForProfileType(profileType: string) {
 }
 
 describe('Narco effects: ', () => {
-  it('Change mind cube', async function() {
+  it('Change mind cube', async function () {
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
     const { baseModel, workingModel } = await process(model, events);
@@ -42,7 +42,7 @@ describe('Narco effects: ', () => {
   expectNarcoIgnoredForProfileType('exhuman-program');
   expectNarcoIgnoredForProfileType('exhuman-robot');
 
-  it('Change mind cube back', async function() {
+  it('Change mind cube back', async function () {
     const model = getExampleModel();
 
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
@@ -56,7 +56,7 @@ describe('Narco effects: ', () => {
     expect(modifiers.length).is.equal(0);
   });
 
-  it('Mind cube pushback', async function() {
+  it('Mind cube pushback', async function () {
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco_with_pushback' } }], model.timestamp);
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
@@ -69,7 +69,7 @@ describe('Narco effects: ', () => {
     expect(modifiers.length).is.equal(1);
   });
 
-  it('Narco with condition', async function() {
+  it('Narco with condition', async function () {
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     const { workingModel } = await process(model, events);
@@ -77,7 +77,7 @@ describe('Narco effects: ', () => {
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(1);
   });
 
-  it('Narco with condition ends', async function() {
+  it('Narco with condition ends', async function () {
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
@@ -86,7 +86,7 @@ describe('Narco effects: ', () => {
     expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(0);
   });
 
-  it('Narco with history record', async function() {
+  it('Narco with history record', async function () {
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     const { workingModel } = await process(model, events);
@@ -96,7 +96,7 @@ describe('Narco effects: ', () => {
     ).is.equal(1);
   });
 
-  it('All narcos parsed', async function() {
+  it('All narcos parsed', async function () {
     const all_narcos = JSON.parse(await fs.readTextFile('catalogs/narco.json')).pills;
     const conditions = JSON.parse(await fs.readTextFile('catalogs/conditions.json')).conditions;
 
@@ -113,7 +113,7 @@ describe('Narco effects: ', () => {
     });
   });
 
-  it('Narco ascend', async function() {
+  it('Narco ascend', async function () {
     const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
@@ -131,7 +131,7 @@ describe('Narco effects: ', () => {
     expect(baseModel.genome[12 - 1]).is.equal(4);
   });
 
-  it('Narco ascend failed', async function() {
+  it('Narco ascend failed', async function () {
     const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
@@ -146,7 +146,7 @@ describe('Narco effects: ', () => {
     expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(0);
   });
 
-  it('Narco ascend no immediate lllness', async function() {
+  it('Narco ascend no immediate lllness', async function () {
     const model = getExampleModel();
 
     model.genome[2 - 1] = 0;
@@ -169,7 +169,7 @@ describe('Narco effects: ', () => {
     expect(illness.length).is.equal(0);
   });
 
-  it('Narco ascend failed and leads to death', async function() {
+  it('Narco ascend failed and leads to death', async function () {
     const model = getExampleModel();
 
     model.genome[2 - 1] = 0;

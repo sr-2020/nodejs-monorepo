@@ -55,13 +55,8 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     },
   })
   async updateAll(@param.query.number('older_than_seconds') olderThanSeconds: number = 0): Promise<{ count: number }> {
-    const ts = moment()
-      .subtract(olderThanSeconds, 'seconds')
-      .valueOf();
-    const characters = await getRepository(Sr2020Character)
-      .createQueryBuilder()
-      .where('timestamp < :ts', { ts })
-      .getMany();
+    const ts = moment().subtract(olderThanSeconds, 'seconds').valueOf();
+    const characters = await getRepository(Sr2020Character).createQueryBuilder().where('timestamp < :ts', { ts }).getMany();
     for (const character of characters) {
       await getManager().transaction(async (transactionManager) => {
         await this.get(Number(character.modelId), transactionManager);

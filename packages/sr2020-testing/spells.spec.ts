@@ -4,7 +4,7 @@ import { duration } from 'moment';
 import { calculateMagicFeedback } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { HealthState } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
-describe('Spells', function() {
+describe('Spells', function () {
   // eslint-disable-next-line no-invalid-this
   this.timeout(15000);
   let fixture: TestFixture;
@@ -514,7 +514,7 @@ describe('Spells', function() {
     }
   });
 
-  describe('Magic feedback calculation', function() {
+  describe('Magic feedback calculation', function () {
     it('Example 13', () => {
       const feedback = calculateMagicFeedback({
         power: 3,

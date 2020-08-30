@@ -2,7 +2,7 @@ import { TestFixture } from './fixture';
 import { duration } from 'moment';
 import { expect } from '@loopback/testlab';
 
-describe('Hunger-related events', function() {
+describe('Hunger-related events', function () {
   let fixture: TestFixture;
 
   beforeEach(async () => {

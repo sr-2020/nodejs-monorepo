@@ -7,7 +7,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('General events: ', () => {
-  it('Add temporary condition', async function() {
+  it('Add temporary condition', async function () {
     const eventData = {
       text: 'Test1',
       details: 'Test 1 details',
@@ -59,7 +59,7 @@ describe('General events: ', () => {
     expect(cond2).to.not.exist;
   });
 
-  it('Send message', async function() {
+  it('Send message', async function () {
     const msgData = {
       title: 'Test Message',
       text: 'Test Message details',
@@ -76,7 +76,7 @@ describe('General events: ', () => {
     ///printModel(baseModel);
   });
 
-  it('Change variable', async function() {
+  it('Change variable', async function () {
     const model = getExampleModel();
     const events = getEvents(
       model.modelId,
@@ -92,7 +92,7 @@ describe('General events: ', () => {
     expect(baseModel.login).is.equal('john.smith');
   });
 
-  it('Change mind cube', async function() {
+  it('Change mind cube', async function () {
     const eventData = {
       operations: 'A2+20, B4-5, F1=27',
     };
@@ -105,7 +105,7 @@ describe('General events: ', () => {
     expect(baseModel.mind.F[1]).is.equal(27);
   });
 
-  it('Change android owner', async function() {
+  it('Change android owner', async function () {
     const model = getExampleModel();
 
     model.profileType = 'robot';
@@ -123,7 +123,7 @@ describe('General events: ', () => {
     //printModel(baseModel);
   });
 
-  it('Change memory', async function() {
+  it('Change memory', async function () {
     const model = getExampleModel();
 
     const data1 = {
@@ -165,7 +165,7 @@ describe('General events: ', () => {
     expect(msg4.text).is.equal('Текст Обновленное воспоминание №2');
   });
 
-  it('Change insurance', async function() {
+  it('Change insurance', async function () {
     const model = getExampleModel();
 
     const events = getEvents(

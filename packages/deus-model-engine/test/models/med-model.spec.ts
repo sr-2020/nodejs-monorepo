@@ -5,7 +5,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Medicine: ', () => {
-  it('Compute HP', async function() {
+  it('Compute HP', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     const events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
@@ -25,7 +25,7 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[0]).is.equal(0);
   });
 
-  it('Reduce HP event', async function() {
+  it('Reduce HP event', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
@@ -39,7 +39,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(3);
   });
 
-  it('Reduce HP event for program ignored', async function() {
+  it('Reduce HP event for program ignored', async function () {
     const model = getExampleModel();
 
     model.profileType = 'program';
@@ -50,7 +50,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(4);
   });
 
-  it('Reduce HP event for exhuman-program ignored', async function() {
+  it('Reduce HP event for exhuman-program ignored', async function () {
     const model = getExampleModel();
 
     model.profileType = 'exhuman-program';
@@ -61,7 +61,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(4);
   });
 
-  it('Reduce HP event and heal +5', async function() {
+  it('Reduce HP event and heal +5', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
@@ -78,7 +78,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(5);
   });
 
-  it('Reduce HP below 0', async function() {
+  it('Reduce HP below 0', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     model.maxHp = 2;
@@ -98,7 +98,7 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[1]).is.equal(0);
   });
 
-  it('Reduce HP below 0 and disable implant', async function() {
+  it('Reduce HP below 0 and disable implant', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     model.maxHp = 2;
@@ -136,7 +136,7 @@ describe('Medicine: ', () => {
     expect(cond2).to.exist;
   });
 
-  it('Reduce HP below 0 and get +4 HP pill', async function() {
+  it('Reduce HP below 0 and get +4 HP pill', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], 1500825797, true);
@@ -164,7 +164,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(0);
   });
 
-  it('Reduce HP below 0, install another implant and enable existed', async function() {
+  it('Reduce HP below 0, install another implant and enable existed', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     //model.hp = 1;
@@ -211,7 +211,7 @@ describe('Medicine: ', () => {
     //console.log(JSON.stringify(workingModel, null, 4));
   });
 
-  it('Reduce HP and bleeding (hp leak)', async function() {
+  it('Reduce HP and bleeding (hp leak)', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);
@@ -254,7 +254,7 @@ describe('Medicine: ', () => {
     console.log(JSON.stringify(baseModel.timers, null, 4));
   });
 
-  it('Reduce HP and no bleeding  for non-humans', async function() {
+  it('Reduce HP and no bleeding  for non-humans', async function () {
     const model = getExampleModel();
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
@@ -282,7 +282,7 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[1]).is.equal(1);
   });
 
-  it('Reduce HP and no system death for non-humans', async function() {
+  it('Reduce HP and no system death for non-humans', async function () {
     const model = getExampleModel();
     model.profileType = 'magical-elf'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
@@ -300,7 +300,7 @@ describe('Medicine: ', () => {
     expect(baseModel.systems[1]).is.equal(1);
   });
 
-  it('Reduce HP and regen  for robots', async function() {
+  it('Reduce HP and regen  for robots', async function () {
     const model = getExampleModel();
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
@@ -318,7 +318,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(4);
   });
 
-  it('Reduce HP and regen for robots from zero', async function() {
+  it('Reduce HP and regen for robots from zero', async function () {
     const model = getExampleModel();
     model.profileType = 'robot'; //To ensure that "leaking" is specfic to humans (and to not trigger android-specific logic)
 
@@ -336,7 +336,7 @@ describe('Medicine: ', () => {
     expect(workingModel.hp).is.equal(4);
   });
 
-  it('Reduce HP and death and resurect', async function() {
+  it('Reduce HP and death and resurect', async function () {
     const eventData = { id: 's_orphey' };
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: eventData }], model.timestamp + 100, true);

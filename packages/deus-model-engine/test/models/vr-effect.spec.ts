@@ -7,7 +7,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents } from '../fixtures/events';
 
 describe('VR events: ', () => {
-  it('Enter VR', async function() {
+  it('Enter VR', async function () {
     const model = getExampleModel();
     const enterTimestamp = model.timestamp + 100;
     const events = getEvents(model.modelId, [{ eventType: 'enterVR', data: {} }], enterTimestamp);
@@ -17,7 +17,7 @@ describe('VR events: ', () => {
     expect(baseModel.lastVREnterTimestamp).is.equal(enterTimestamp);
   });
 
-  it('Enter & Exit VR', async function() {
+  it('Enter & Exit VR', async function () {
     const model = getExampleModel();
     const enterTimestamp = model.timestamp + 100;
     let events = getEvents(model.modelId, [{ eventType: 'enterVR', data: {} }], enterTimestamp);

@@ -3,7 +3,7 @@ import helpers = require('../../helpers/model-helper');
 import { expect } from 'chai';
 
 describe('Helpers: ', () => {
-  it('Predicates check', function() {
+  it('Predicates check', function () {
     expect(helpers.checkValue('3', '>1')).to.true;
     expect(helpers.checkValue('1', '<2')).to.true;
     expect(helpers.checkValue('9', '9')).to.true;

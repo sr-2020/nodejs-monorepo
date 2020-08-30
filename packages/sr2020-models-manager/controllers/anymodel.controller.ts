@@ -61,9 +61,7 @@ export class AnyModelController<TModel extends EmptyModel> {
   }
 
   async broadcastEvent(event: EventRequest): Promise<Empty> {
-    const models = await getRepository(this.tmodel)
-      .createQueryBuilder()
-      .getMany();
+    const models = await getRepository(this.tmodel).createQueryBuilder().getMany();
     for (const model of models) {
       await getManager().transaction(async (transactionManager) => {
         await this.postEvent(Number(model.modelId), event, transactionManager);

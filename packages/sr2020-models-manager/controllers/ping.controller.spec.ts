@@ -2,7 +2,7 @@ import { Client, expect } from '@loopback/testlab';
 import { ModelsManagerApplication } from '../application';
 import { setupApplication } from '../test-helper';
 
-describe('PingController', function() {
+describe('PingController', function () {
   // For some reason this test is quite slow to start
   // eslint-disable-next-line no-invalid-this
   this.timeout(25000);

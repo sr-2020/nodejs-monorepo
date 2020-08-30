@@ -9,9 +9,7 @@ import * as moment from 'moment';
 */
 
 function currentMoscowDateTime() {
-  return moment(new Date())
-    .utcOffset('+0300')
-    .format('DD.MM HH:mm:ss');
+  return moment(new Date()).utcOffset('+0300').format('DD.MM HH:mm:ss');
 }
 
 async function appendToSpreadsheet(range: string, row: any[]) {

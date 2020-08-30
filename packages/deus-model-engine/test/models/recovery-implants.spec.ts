@@ -4,7 +4,7 @@ import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
 describe('Recovery Implants: ', () => {
-  it.skip('Reduce HP && auto-recover HP', async function() {
+  it.skip('Reduce HP && auto-recover HP', async function () {
     const model = getExampleModel();
     model.hp = 3;
     model.maxHp = 3;
@@ -37,7 +37,7 @@ describe('Recovery Implants: ', () => {
     expect(workingModel.hp).is.equal(3);
   });
 
-  it('Reduce HP and implant - restore from zero', async function() {
+  it('Reduce HP and implant - restore from zero', async function () {
     const model = getExampleModel();
     let events = getEvents(model.modelId, [{ eventType: 'add-implant', data: { id: 'jj_meditation' } }], model.timestamp + 100, true);
 
