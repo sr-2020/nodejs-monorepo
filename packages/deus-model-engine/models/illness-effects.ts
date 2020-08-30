@@ -110,11 +110,13 @@ function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
         });
       } else {
         //Если это последний этап, то убить систему
-        const totalTime = Math.round((api.model.timestamp - illness.startTime) / 1000);
-        api.info(
-          `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
-        );
-        api.model.systems[medhelpers.getSystemID(illness.system)] = 0;
+        if (api.model.systems) {
+          const totalTime = Math.round((api.model.timestamp - illness.startTime) / 1000);
+          api.info(
+            `startIllnessEvent: illness ${illness.id}, final stage ${illness.currentStage}, total time: ${totalTime} sec, kill system ${illness.system}!`,
+          );
+          api.model.systems[medhelpers.getSystemID(illness.system)] = 0;
+        }
       }
     }
   }

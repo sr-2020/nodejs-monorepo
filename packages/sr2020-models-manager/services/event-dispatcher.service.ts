@@ -39,13 +39,13 @@ export class EventDispatcherServiceImpl implements EventDispatcherService {
     event: EventForModelType,
     aquiredModels: AquiredModelsStorage,
   ): Promise<ModelProcessResponse<EmptyModel>> {
-    const modelType = this._knownModelTypes.find((t) => t.name == event.modelType);
-    if (!modelType) {
+    const { modelType, ...eventWithoutModelType } = event;
+    const modelTypeCtor = this._knownModelTypes.find((t) => t.name == modelType);
+    if (!modelTypeCtor) {
       throw new Error('Unsupported modelType: ' + event.modelType);
     }
 
-    delete event.modelType;
-    const result = await this.dispatchEvent(modelType, event, aquiredModels);
+    const result = await this.dispatchEvent(modelTypeCtor, eventWithoutModelType, aquiredModels);
     return result;
   }
 

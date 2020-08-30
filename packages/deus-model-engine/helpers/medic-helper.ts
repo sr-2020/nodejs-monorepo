@@ -84,7 +84,7 @@ function setMedSystem(api: EventModelApi<DeusExModel>, system, value) {
  * Если у персонажа нет систем - возвращает пустой массив
  */
 function getDeadSystems(api) {
-  const ret: any = [];
+  const ret: number[] = [];
 
   if (api.model.systems) {
     api.model.systems.forEach((sys, i) => {

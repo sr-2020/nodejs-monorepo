@@ -71,8 +71,9 @@ async function run() {
   console.log(
     `export const kAllImplants: Implant[] = ${JSON.stringify(
       implants.map((x) => {
-        delete x.cost;
-        return x;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { cost, ...implant } = x;
+        return implant;
       }),
     )};`,
   );

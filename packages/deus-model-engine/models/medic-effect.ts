@@ -161,6 +161,7 @@ function characterDeathEvent(api: EventModelApi<DeusExModel>, event) {
  * Вызывается когда хиты доходят до нуля
  */
 function killRandomSystemEvent(api: EventModelApi<DeusExModel>, data) {
+  if (!api.model.systems) return;
   if (data.from && data.from == 'self' && api.model.profileType == 'human') {
     api.info('killRandomSystem: event handler start!');
 
@@ -554,10 +555,10 @@ function recoverSystemsEvent(api: EventModelApi<DeusExModel>, data) {
     //Найти все отключенные системы организма, для которых нет имплантов и "починить их"
     const deadSystems = medhelpers.getDeadSystems(api);
 
-    deadSystems.forEach((si) => {
+    for (const si of deadSystems) {
       api.info(`recoverSystemsEvent: Recovering system ${consts.medicSystems[si].name}`);
       api.model.systems[si] = 1;
-    });
+    }
   }
 
   //Включить все импланты

@@ -1,4 +1,4 @@
-import { EmptyModel, Event, rproperty, Condition } from '@sr2020/interface/models/alice-model-engine';
+import { Condition, EmptyModel, Event, rproperty } from '@sr2020/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
@@ -61,7 +61,7 @@ export class DeusExModel extends EmptyModel {
   mail: string;
 
   @rproperty()
-  generation: string;
+  generation?: string;
 
   @rproperty()
   profileType: string;
@@ -139,10 +139,10 @@ export class DeusExModel extends EmptyModel {
   mind: any;
 
   @property.array(Number, { required: true })
-  genome: number[];
+  genome?: number[];
 
   @property.array(Number, { required: true })
-  systems: number[];
+  systems?: number[];
 
   @rproperty()
   password: string;

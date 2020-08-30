@@ -6,7 +6,7 @@ function randomId() {
     .padStart(4, '0');
 }
 
-export function getExampleModel(id?: string): DeusExModel {
+export function getExampleModel(id?: string): DeusExModel & { genome: number[] } {
   return {
     modelId: id ?? randomId(),
     memory: [

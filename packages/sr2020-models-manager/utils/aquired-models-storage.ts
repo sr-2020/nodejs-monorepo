@@ -76,7 +76,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       }
       {
         const locationWork: Location = cloneDeep(this._workModels['Location'][m]);
-        delete locationWork.timers;
+        locationWork.timers = [];
         locationWork.modifiers = [];
         dbWritePromises.push(this._pubSubService.publish('location_update', locationWork));
       }
@@ -89,7 +89,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       {
         const characterWork: Sr2020Character = cloneDeep(this._workModels['Sr2020Character'][m]);
         characterWork.history = [];
-        delete characterWork.timers;
+        characterWork.timers = [];
         characterWork.modifiers = [];
         dbWritePromises.push(this._pubSubService.publish('character_update', characterWork));
       }
@@ -101,7 +101,7 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       }
       {
         const qrWork: QrCode = cloneDeep(this._workModels['QrCode'][m]);
-        delete qrWork.timers;
+        qrWork.timers = [];
         qrWork.modifiers = [];
         dbWritePromises.push(this._pubSubService.publish('qr_update', qrWork));
       }
