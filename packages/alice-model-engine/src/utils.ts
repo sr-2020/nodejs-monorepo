@@ -1,5 +1,5 @@
 import glob = require('glob');
-import { merge as _merge, clone, assign } from 'lodash';
+import { assign, clone, merge as _merge } from 'lodash';
 import * as Path from 'path';
 import Logger from './logger';
 import { ModelCallbacks } from '@sr2020/interface/callbacks';
@@ -36,9 +36,9 @@ export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T>
 
     // TODO(aeremin) Separate event and effect callbacks.
     for (const fname in src) {
-      if (m.eventCallbacks && m.eventCallbacks[fname] && m.eventCallbacks[fname] != src[fname])
+      if (m.eventCallbacks?.[fname] && m.eventCallbacks[fname] != src[fname])
         throw new Error(`Event callback with the name ${fname} was already defined!`);
-      if (m.effectCallbacks && m.effectCallbacks[fname] && m.effectCallbacks[fname] != src[fname])
+      if (m.effectCallbacks?.[fname] && m.effectCallbacks[fname] != src[fname])
         throw new Error(`Effect callback with the name ${fname} was already defined!`);
     }
     m.eventCallbacks = assign(m.eventCallbacks, src);

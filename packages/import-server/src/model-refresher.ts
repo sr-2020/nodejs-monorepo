@@ -1,11 +1,11 @@
 import { now } from 'moment';
 import * as PouchDB from 'pouchdb';
 import * as PouchDBUpsert from 'pouchdb-upsert';
-PouchDB.plugin(PouchDBUpsert);
-
 import { ModelMetadata } from 'interface/src/models/alice-model-engine';
 import { config } from './config';
 import { JoinCharacterDetail } from './join-importer';
+
+PouchDB.plugin(PouchDBUpsert);
 
 export class ModelRefresher {
   private metadataCon: PouchDB.Database<ModelMetadata>;
@@ -27,7 +27,7 @@ export class ModelRefresher {
 
     let scheduledUpdateTimestamp = now();
 
-    if (char.model && char.model.timestamp) {
+    if (char.model?.timestamp) {
       scheduledUpdateTimestamp = char.model.timestamp + 1000;
     }
 

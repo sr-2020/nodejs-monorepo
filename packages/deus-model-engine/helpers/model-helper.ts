@@ -128,7 +128,7 @@ function isMindCubeMatch(api: EffectModelApi<DeusExModel>, variable: string, con
 
     //console.log(`isMindCubeMatch: ${cube}${index} ? ${condition} => ${api.model.mind[cube][index]}`);
 
-    if (api.model.mind && api.model.mind[cube]) {
+    if (api.model.mind?.[cube]) {
       if (checkValue(api.model.mind[cube][index], condition)) {
         return true;
       }
