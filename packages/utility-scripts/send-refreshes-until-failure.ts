@@ -29,4 +29,5 @@ async function refresh() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 setInterval(refresh, 2000);

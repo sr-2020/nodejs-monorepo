@@ -27,6 +27,7 @@ const m: TelegramBot.InlineKeyboardMarkup = {
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN as string, { polling: true });
 
 // Matches "/echo [whatever]"
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/^\/echo (.+)/, async (msg, _match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
@@ -38,6 +39,7 @@ bot.onText(/^\/echo (.+)/, async (msg, _match) => {
 });
 
 // Matches "/echo [whatever]"
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/^\/qr (.+)/, async (msg, match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
@@ -58,6 +60,7 @@ bot.on('message', (msg) => {
   console.log(`Received message: ${JSON.stringify(msg)}`);
 });
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.on('callback_query', async (query) => {
   console.log(`Received message: ${JSON.stringify(query)}`);
   currentValue = currentValue + Number(query.data);
