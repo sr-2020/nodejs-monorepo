@@ -8,6 +8,5 @@ module.exports = {
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/return-await": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
   }
 };
