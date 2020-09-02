@@ -5,6 +5,7 @@
 import { Firestore } from '@google-cloud/firestore';
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
+import { PassiveAbility, rewritePassiveAbilities } from './reparser';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
@@ -19,14 +20,6 @@ const kNameColumn = 5;
 const kPlayerDescriptionColumn = 11;
 const kMasterDescriptionColumn = 12;
 const kCooldownColumn = 15;
-
-interface PassiveAbility {
-  id: string;
-  name: string;
-  description: string;
-  originalLine: number;
-  gmDescription: string;
-}
 
 interface ActiveAbility {
   id: string;
@@ -48,7 +41,6 @@ interface Spell {
 const db = new Firestore();
 
 class SpreadsheetProcessor {
-  passiveAbilitiesRef = db.collection('passive_abilities');
   activeAbilitiesRef = db.collection('active_abilities');
   spellsRef = db.collection('spells');
   passiveAbilities: PassiveAbility[] = [];
@@ -63,14 +55,7 @@ class SpreadsheetProcessor {
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       originalLine: line + 1,
     };
-    const existingDoc = await this.passiveAbilitiesRef.doc(id).get();
-    if (
-      existingDoc.data()?.name != ability.name ||
-      existingDoc.data()?.description != ability.description ||
-      existingDoc.data()?.gmDescription != ability.gmDescription
-    ) {
-      this.passiveAbilities.push(ability);
-    }
+    this.passiveAbilities.push(ability);
   }
 
   async processActiveAbility(line: number, id: string, row: any[]) {
@@ -113,20 +98,7 @@ class SpreadsheetProcessor {
 
   async printAndSavePassiveAbilities() {
     console.log('//*************************** Passive abilities ***************************//');
-    for (const ability of this.passiveAbilities) {
-      console.log(`
-      {
-        id: '${ability.id}',
-        name: '${ability.name}',
-        description: '${ability.description.replace(/\n/g, '\\n')}',
-        // ${ability.originalLine}
-        // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
-        // TODO(aeremin): Implement and add modifier here
-        prerequisites: [],
-        modifier: [],
-      },`);
-      if (FLAGS.update_db) await this.passiveAbilitiesRef.doc(ability.id).set(ability);
-    }
+    rewritePassiveAbilities(this.passiveAbilities);
   }
 
   async printAndSaveActiveAbilities() {
