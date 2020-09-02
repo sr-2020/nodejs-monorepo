@@ -2125,7 +2125,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'astro-boy',
     name: 'Астробой',
     description: 'В астральной боёвке 2 меча и 1 щит',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "Астрал: 2 меча, 1 щит"
     prerequisites: [],
     modifier: [],
@@ -2134,7 +2133,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'astro-fighter',
     name: 'Астробоевик',
     description: 'В астральной боёвке 4 меча и 3 щита',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "Астрал: 4 меча, 3 щита"
     prerequisites: [],
     modifier: [],
@@ -2143,7 +2141,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'astro-boogie',
     name: 'Астробугай',
     description: 'В астральной боёвке 6 мечей и 5 щитов',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "Астрал: 6 мечей, 5 щитов"
     prerequisites: [],
     modifier: [],
@@ -2152,16 +2149,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'kudesnik',
     name: 'Кудесник',
     description: 'Ты очень хорошо сопротивляешься Откату',
-    // TODO(aeremin): Implement and add modifier here
     // КоэффициентСопротивленияОткату умножается на 0.5
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.5 })],
   },
   {
     id: 'magic-shield',
     name: 'Magic Shield',
     description: 'Доступен "магический щит" (прозрачный зонтик, защищает от любого легкого оружия). Не требует активации',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак лёгким оружием - холодным и дистанционным"
     prerequisites: [],
     modifier: [],
@@ -2170,7 +2165,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'pencil',
     name: 'PENCIL',
     description: 'Одно оружие в руках считается тяжёлым',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "какое-то одно оружие в руках считается тяжелым" (необходима его маркировка красной лентой)
     prerequisites: [],
     modifier: [],
@@ -2179,7 +2173,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'stone-skin-result',
     name: 'Stone skin',
     description: 'Имеющаяся броня считается тяжёлой',
-    // TODO(aeremin): Implement and add modifier here
     // Абилка ничего не делает, просто показывает текст "броня считается тяжелым" (необходима её маркировка красной лентой)
     prerequisites: [],
     modifier: [],
@@ -2218,7 +2211,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'in-drone',
     name: 'Статус: Подключен к дрону',
     description: 'Статус: Подключен к дрону',
-    // TODO(aeremin): Implement and add modifier here
     // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
     // Кроме того, это обязательный пререквизит для всех дроновских абилок
     prerequisites: [],
