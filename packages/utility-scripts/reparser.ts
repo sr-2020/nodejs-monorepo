@@ -38,6 +38,12 @@ function getName(node: ts.VariableDeclaration | ts.ObjectLiteralElementLike): st
   }
 }
 
+function addComment(node: ts.Node, comment: string) {
+  for (const line of comment.split('\n')) {
+    ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, ` ${line}`, true);
+  }
+}
+
 export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
   const file = readSourceFileWithoutComments();
 
@@ -59,15 +65,8 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
             ],
             true,
           );
-          ts.addSyntheticLeadingComment(
-            prereqsAssignment,
-            ts.SyntaxKind.SingleLineCommentTrivia,
-            ` TODO(aeremin): Implement and add modifier here`,
-            true,
-          );
-          for (const line of ability.gmDescription.split('\n')) {
-            ts.addSyntheticLeadingComment(prereqsAssignment, ts.SyntaxKind.SingleLineCommentTrivia, ` ${line}`, true);
-          }
+          addComment(prereqsAssignment, 'TODO(aeremin): Implement and add modifier here');
+          addComment(prereqsAssignment, ability.gmDescription);
           elements.push(element);
         }
         return ts.createArrayLiteral(elements);
@@ -93,9 +92,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
             return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
           }
           if (propertyName == 'prerequisites') {
-            for (const line of currentAbility.gmDescription.split('\n')) {
-              ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, ` ${line}`, true);
-            }
+            addComment(node, currentAbility.gmDescription);
             return node;
           }
         }
