@@ -9,7 +9,7 @@ import { getDataFromSpreadsheet } from './spreadsheet_helper';
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
   { name: 'row_from', type: Number, defaultValue: 2 },
-  { name: 'row_to', type: Number, defaultValue: 600 },
+  { name: 'row_to', type: Number, defaultValue: 800 },
 ];
 const FLAGS = commandLineArgs(optionDefinitions);
 
@@ -170,7 +170,7 @@ class SpreadsheetProcessor {
   async run() {
     // https://docs.google.com/spreadsheets/d/1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A
     const spreadsheetId = '1G-GrHGf-iNp9YDOiPe97EkgY4g7FZbu_YfWO5TS_Q6A';
-    const data = await getDataFromSpreadsheet(spreadsheetId, 'Фичи!A1:AE700');
+    const data = await getDataFromSpreadsheet(spreadsheetId, 'Фичи!A1:AE800');
 
     const header = data[0];
     if (!header[kKindColumn].startsWith('Сущность')) {
