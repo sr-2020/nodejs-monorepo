@@ -2121,6 +2121,109 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  {
+    id: 'astro-boy',
+    name: 'Астробой',
+    description: 'В астральной боёвке 2 меча и 1 щит',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "Астрал: 2 меча, 1 щит"
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'astro-fighter',
+    name: 'Астробоевик',
+    description: 'В астральной боёвке 4 меча и 3 щита',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "Астрал: 4 меча, 3 щита"
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'astro-boogie',
+    name: 'Астробугай',
+    description: 'В астральной боёвке 6 мечей и 5 щитов',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "Астрал: 6 мечей, 5 щитов"
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'kudesnik',
+    name: 'Кудесник',
+    description: 'Ты очень хорошо сопротивляешься Откату',
+    // TODO(aeremin): Implement and add modifier here
+    // КоэффициентСопротивленияОткату умножается на 0.5
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'magic-shield',
+    name: 'Magic Shield',
+    description: 'Доступен "магический щит" (прозрачный зонтик, защищает от любого легкого оружия). Не требует активации',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак лёгким оружием - холодным и дистанционным"
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'pencil',
+    name: 'PENCIL',
+    description: 'Одно оружие в руках считается тяжёлым',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "какое-то одно оружие в руках считается тяжелым" (необходима его маркировка красной лентой)
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'stone-skin-result',
+    name: 'Stone skin',
+    description: 'Имеющаяся броня считается тяжёлой',
+    // TODO(aeremin): Implement and add modifier here
+    // Абилка ничего не делает, просто показывает текст "броня считается тяжелым" (необходима её маркировка красной лентой)
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'auto-doc-1',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок.И ставить простые импланты',
+    // TODO(aeremin): Implement and add modifier here
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран. Сложность установки 1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'auto-doc-2',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок. И ставить продвинутые импланты',
+    // TODO(aeremin): Implement and add modifier here
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран. Сложность установки 2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'auto-doc-3',
+    name: 'хирургия',
+    description: 'Ты можешь использовать автодок. И ставить высокотехнологичные импланты',
+    // TODO(aeremin): Implement and add modifier here
+    // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
+    //  хром и лечить тяжран сложность установки 3
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'in-drone',
+    name: 'Статус: Подключен к дрону',
+    description: 'Статус: Подключен к дрону',
+    // TODO(aeremin): Implement and add modifier here
+    // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
+    // Кроме того, это обязательный пререквизит для всех дроновских абилок
+    prerequisites: [],
+    modifier: [],
+  },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
   const result = new Map<string, PassiveAbility>();

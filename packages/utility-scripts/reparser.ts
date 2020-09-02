@@ -44,6 +44,35 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
   const transformer = (context: ts.TransformationContext) => (rootNode: ts.SourceFile): ts.SourceFile => {
     let currentAbility: PassiveAbility | undefined = undefined;
     const abilityVisit = (node: ts.Node): ts.Node => {
+      if (ts.isArrayLiteralExpression(node)) {
+        const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
+        const elements: ts.Expression[] = [...existingAbilities.elements];
+        for (const ability of abilities) {
+          const prereqsAssignment = ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([]));
+          const element = ts.createObjectLiteral(
+            [
+              ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
+              ts.createPropertyAssignment(ts.createIdentifier('name'), ts.createStringLiteral(ability.name)),
+              ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+              prereqsAssignment,
+              ts.createPropertyAssignment(ts.createIdentifier('modifier'), ts.createArrayLiteral([])),
+            ],
+            true,
+          );
+          ts.addSyntheticLeadingComment(
+            prereqsAssignment,
+            ts.SyntaxKind.SingleLineCommentTrivia,
+            ` TODO(aeremin): Implement and add modifier here`,
+            true,
+          );
+          for (const line of ability.gmDescription.split('\n')) {
+            ts.addSyntheticLeadingComment(prereqsAssignment, ts.SyntaxKind.SingleLineCommentTrivia, ` ${line}`, true);
+          }
+          elements.push(element);
+        }
+        return ts.createArrayLiteral(elements);
+      }
+
       if (ts.isPropertyAssignment(node)) {
         const propertyName = (node.name as ts.Identifier).text;
         if (propertyName == 'id') {
@@ -51,6 +80,8 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
           currentAbility = abilities.find((it) => it.id == currentAbilityId);
           if (!currentAbility) {
             console.log(`No data for ${currentAbilityId} in the spreadsheet`);
+          } else {
+            abilities = abilities.filter((it) => it.id != currentAbilityId);
           }
         }
 
@@ -68,13 +99,17 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
             return node;
           }
         }
+        if (propertyName == 'modifier' || propertyName == 'prerequisites') {
+          return node;
+        }
       }
       return ts.visitEachChild(node, abilityVisit, context);
     };
 
     const topLevelVisit = (node: ts.Node): ts.Node => {
       if (ts.isVariableDeclaration(node) && getName(node) == 'kAllPassiveAbilitiesList') {
-        return ts.visitEachChild(node, abilityVisit, context);
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        return result;
       } else {
         return ts.visitEachChild(node, topLevelVisit, context);
       }
