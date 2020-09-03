@@ -6,7 +6,7 @@ import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.m
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume, create } from '../qr/events';
-import { healthStateTransition, revive } from './death_and_rebirth';
+import { healthStateTransition } from './death_and_rebirth';
 import {
   addHistoryRecord,
   addTemporaryModifier,
@@ -158,39 +158,9 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
   api.sendNotification('Скастован спелл', 'Ура! Вы скастовали спелл-заглушку');
 }
 
-export function fullHealSpell(api: EventModelApi<Sr2020Character>, data: { qrCode?: string; targetCharacterId?: number }) {
-  if (data.qrCode != undefined) {
-    return createArtifact(api, data.qrCode, 'восстановить все хиты', fullHealSpell.name);
-  }
-
-  if (data.targetCharacterId != undefined) {
-    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), fullHealSpell, {});
-    return;
-  }
-
-  revive(api, data);
-}
-
 //
 // Healing spells
 //
-export function lightHealSpell(
-  api: EventModelApi<Sr2020Character>,
-  data: { targetCharacterId?: number; power: number; location: { id: number; manaLevel: number } },
-) {
-  if (data.targetCharacterId != undefined) {
-    api.sendNotification('Успех', 'Заклинание совершено');
-    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId.toString(), lightHeal, data);
-  } else {
-    api.sendSelfEvent(lightHeal, data);
-  }
-}
-
-export function lightHeal(api: EventModelApi<Sr2020Character>, data: { power: number }) {
-  const hpRestored = data.power;
-  sendNotificationAndHistoryRecord(api, 'Лечение', `Восстановлено хитов: ${hpRestored}`);
-}
-
 export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; location: { id: number; manaLevel: number } }) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(10 * data.power, 'minutes');
