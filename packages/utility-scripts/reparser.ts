@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
+import * as prettier from 'prettier';
 
 export interface PassiveAbility {
   id: string;
@@ -43,9 +44,17 @@ function writeSourceFile(file: ts.SourceFile, filename: string) {
     removeComments: false,
     newLine: ts.NewLineKind.CarriageReturnLineFeed,
   });
-  fs.writeFileSync(filename, unescape(printer.printFile(file).replace(/\\u/g, '%u')), {
-    encoding: 'utf8',
-  });
+
+  fs.writeFileSync(
+    filename,
+    prettier.format(unescape(printer.printFile(file).replace(/\\u/g, '%u')), {
+      ...prettier.resolveConfig.sync(filename),
+      parser: 'typescript',
+    }),
+    {
+      encoding: 'utf8',
+    },
+  );
 }
 
 function getName(node: ts.VariableDeclaration | ts.ObjectLiteralElementLike): string {
