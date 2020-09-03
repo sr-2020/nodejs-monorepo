@@ -592,13 +592,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
   {
-    id: 'commander',
-    name: 'Командир',
-    description: '',
-    prerequisites: [],
-    modifier: [],
-  },
-  {
     id: 'compressor',
     name: 'Компрессор',
     description: '',
@@ -681,13 +674,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
     prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 }),
-  },
-  {
-    id: 'i-am-so-normal',
-    name: 'А у меня и так все нормально.',
-    description: '',
-    prerequisites: [],
-    modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 30 }),
   },
   {
     id: 'resonance-1',
