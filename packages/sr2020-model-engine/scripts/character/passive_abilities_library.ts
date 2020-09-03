@@ -2115,13 +2115,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   {
-    id: 'field-of-denial-able',
-    name: 'Field of denial',
-    description: `Попадание в зонтик тяжелым оружием игнорируется.`,
-    prerequisites: [],
-    modifier: [],
-  },
-  {
     id: 'astro-boy',
     name: 'Астробой',
     description: 'В астральной боёвке 2 меча и 1 щит',

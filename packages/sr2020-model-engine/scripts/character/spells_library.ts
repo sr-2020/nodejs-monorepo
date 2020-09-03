@@ -6,7 +6,6 @@ import {
   dummySpell,
   dumptyHumptySpell,
   fastChargeSpell,
-  fieldOfDenialSpell,
   fireballSpell,
   frogSkinSpell,
   fullHealSpell,
@@ -59,13 +58,6 @@ const kAllSpellsList: Spell[] = [
     description: 'Восстанавливает текущие хиты.',
     sphere: 'healing',
     eventType: lightHealSpell.name,
-  },
-  {
-    id: 'field-of-denial',
-    humanReadableName: 'Field of denial',
-    description: 'Дает частичную защиту от тяжелого оружия',
-    sphere: 'healing',
-    eventType: fieldOfDenialSpell.name,
   },
   {
     id: 'keep-yourself',

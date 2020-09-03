@@ -25,7 +25,6 @@ import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scri
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -281,15 +280,6 @@ export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Tempor
 //
 // Defensive spells
 //
-
-export function fieldOfDenialSpell(
-  api: EventModelApi<Sr2020Character>,
-  data: { power: number; location: { id: number; manaLevel: number } },
-) {
-  api.sendNotification('Успех', 'Заклинание успешно применено');
-  const d = duration(40, 'minutes');
-  addTemporaryPassiveAbility(api, 'field-of-denial-able', d);
-}
 
 //
 // Investigation spells
