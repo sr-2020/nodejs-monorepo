@@ -15,8 +15,12 @@ export function resetHungerEvent(api: EventModelApi<Sr2020Character>, data: {}) 
   resetHunger(api.model);
 }
 
-export function resetHunger(model: Sr2020Character) {
+export function removeHunger(model: Sr2020Character) {
   model.timers = model.timers.filter((timer) => timer.name != kHungerTimerName);
+}
+
+export function resetHunger(model: Sr2020Character) {
+  removeHunger(model);
   model.timers.push({
     name: kHungerTimerName,
     description: kHungerTimerStage1Description,
