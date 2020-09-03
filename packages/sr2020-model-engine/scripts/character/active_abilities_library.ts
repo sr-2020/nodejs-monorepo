@@ -4,7 +4,6 @@ import {
   arrowgant,
   changeAuraAbility,
   cloudMemoryAbility,
-  copyPasteQr,
   doNothingAbility,
   dummyAbility,
   hammerOfJustice,
@@ -1302,27 +1301,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: reviveAbsoluteOnTarget.name,
     cooldownMinutes: 0,
-  },
-  {
-    id: 'test-only-copy-qr',
-    humanReadableName: 'Скопировать таблетку или имплант на QR-пустышку',
-    description: 'ТОЛЬКО ДЛЯ ТЕСТИРОВАНИЯ',
-    target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Откуда',
-        allowedTypes: ['pill', 'implant'],
-        field: 'pillId',
-      },
-      {
-        name: 'Куда',
-        allowedTypes: ['empty'],
-        field: 'qrCode',
-      },
-    ],
-    cooldownMinutes: 0,
-    minimalEssence: 0,
-    eventType: copyPasteQr.name,
   },
   {
     id: 'medcart-light-heal-1',

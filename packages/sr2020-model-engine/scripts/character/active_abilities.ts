@@ -4,7 +4,6 @@ import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotific
 import { absoluteDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
-import { create } from '../qr/events';
 import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { addFeatureToModel, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
@@ -111,12 +110,6 @@ export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAb
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
   addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d, 'Действие способности I will survive');
-}
-
-export function copyPasteQr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  const from = api.aquired(QrCode, data.pillId!);
-  const to = api.aquired(QrCode, data.qrCode!);
-  api.sendOutboundEvent(QrCode, to.modelId, create, from);
 }
 
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
