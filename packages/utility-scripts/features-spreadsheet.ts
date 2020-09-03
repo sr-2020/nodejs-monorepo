@@ -33,7 +33,6 @@ class SpreadsheetProcessor {
       name: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
-      originalLine: line + 1,
     };
     this.passiveAbilities.push(ability);
   }
@@ -45,7 +44,6 @@ class SpreadsheetProcessor {
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       cooldown: row[kCooldownColumn] ?? 9000,
-      originalLine: line + 1,
     };
     this.activeAbilities.push(ability);
   }
@@ -66,7 +64,6 @@ class SpreadsheetProcessor {
       humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
-      originalLine: line + 1,
       sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
     };
     this.spells.push(spell);

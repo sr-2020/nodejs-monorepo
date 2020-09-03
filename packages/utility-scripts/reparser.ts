@@ -5,7 +5,6 @@ export interface PassiveAbility {
   id: string;
   name: string;
   description: string;
-  originalLine: number;
   gmDescription: string;
 }
 
@@ -13,7 +12,6 @@ export interface ActiveAbility {
   id: string;
   humanReadableName: string;
   description: string;
-  originalLine: number;
   gmDescription: string;
   cooldown: number;
 }
@@ -23,7 +21,6 @@ export interface Spell {
   humanReadableName: string;
   description: string;
   sphere: string;
-  originalLine: number;
   gmDescription: string;
 }
 
