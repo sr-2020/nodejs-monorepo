@@ -2,10 +2,10 @@
 // to the spreadsheet and Firestore.
 // Running:
 //   npx ts-node packages/utility-scripts/features-spreadsheet.ts
-import { Firestore } from '@google-cloud/firestore';
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities } from './reparser';
+import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities, rewriteSpells, Spell } from './reparser';
+import { SpellSphere } from '@sr2020/sr2020-model-engine/scripts/character/spells_library';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
@@ -20,19 +20,9 @@ const kNameColumn = 5;
 const kPlayerDescriptionColumn = 11;
 const kMasterDescriptionColumn = 12;
 const kCooldownColumn = 15;
-
-interface Spell {
-  id: string;
-  humanReadableName: string;
-  description: string;
-  originalLine: number;
-  gmDescription: string;
-}
-
-const db = new Firestore();
+const kSpellSphereColumn = 17;
 
 class SpreadsheetProcessor {
-  spellsRef = db.collection('spells');
   passiveAbilities: PassiveAbility[] = [];
   activeAbilities: ActiveAbility[] = [];
   spells: Spell[] = [];
@@ -60,6 +50,16 @@ class SpreadsheetProcessor {
     this.activeAbilities.push(ability);
   }
 
+  spellSphereToEnum(sphere: string): SpellSphere {
+    if (sphere == 'Защита') return 'protection';
+    if (sphere == 'Лечение') return 'healing';
+    if (sphere == 'Боевая') return 'fighting';
+    if (sphere == 'Анализ астрала') return 'astral';
+    if (sphere == 'Анализ ауры') return 'aura';
+    if (sphere == 'Влияние на характеристики') return 'stats';
+    throw new Error(`Unsupported spell sphere: ${sphere}`);
+  }
+
   async processSpell(line: number, id: string, row: any[]) {
     const spell: Spell = {
       id,
@@ -67,15 +67,9 @@ class SpreadsheetProcessor {
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       originalLine: line + 1,
+      sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
     };
-    const existingDoc = await this.spellsRef.doc(id).get();
-    if (
-      existingDoc.data()?.humanReadableName != spell.humanReadableName ||
-      existingDoc.data()?.description != spell.description ||
-      existingDoc.data()?.gmDescription != spell.gmDescription
-    ) {
-      this.spells.push(spell);
-    }
+    this.spells.push(spell);
   }
 
   async printAndSavePassiveAbilities() {
@@ -90,19 +84,7 @@ class SpreadsheetProcessor {
 
   async printAndSaveSpells() {
     console.log('//********************************* Spells ********************************//');
-    for (const spell of this.spells) {
-      console.log(`
-      {
-        id: '${spell.id}',
-        humanReadableName: '${spell.humanReadableName}',
-        description: '${spell.description.replace(/\n/g, '\\n')}',
-        // ${spell.originalLine}
-        // ${spell.gmDescription.replace(/\n/g, '\n          // ')}
-        // TODO(aeremin): Add proper implementation
-        eventType: dummySpell.name,
-      },`);
-      if (FLAGS.update_db) await this.spellsRef.doc(spell.id).set(spell);
-    }
+    rewriteSpells(this.spells);
   }
 
   async run() {
@@ -132,7 +114,11 @@ class SpreadsheetProcessor {
     }
 
     if (!header[kCooldownColumn].startsWith('Кулдаун')) {
-      throw new Error('Column column was moved! Exiting.');
+      throw new Error('Cooldown column was moved! Exiting.');
+    }
+
+    if (!header[kSpellSphereColumn].startsWith('Сфера спелла')) {
+      throw new Error('Spell sphere column was moved! Exiting.');
     }
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {
       const row = data[r];

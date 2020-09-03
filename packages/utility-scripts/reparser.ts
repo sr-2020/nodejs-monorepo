@@ -18,8 +18,18 @@ export interface ActiveAbility {
   cooldown: number;
 }
 
+export interface Spell {
+  id: string;
+  humanReadableName: string;
+  description: string;
+  sphere: string;
+  originalLine: number;
+  gmDescription: string;
+}
+
 const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
 const ACTIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/active_abilities_library.ts';
+const SPELLS_FILENAME = './packages/sr2020-model-engine/scripts/character/spells_library.ts';
 
 function readSourceFileWithoutComments(filename: string): ts.SourceFile {
   // Black magic fuckery to remove comments corresponding to gamemaster descriptions, but keep TODOs.
@@ -213,4 +223,82 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
   };
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);
+}
+
+export function rewriteSpells(abilities: Spell[]) {
+  const file = readSourceFileWithoutComments(SPELLS_FILENAME);
+
+  const transformer = (context: ts.TransformationContext) => (rootNode: ts.SourceFile): ts.SourceFile => {
+    let currentAbility: Spell | undefined = undefined;
+    const abilityVisit = (node: ts.Node): ts.Node => {
+      if (ts.isArrayLiteralExpression(node)) {
+        const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
+        const elements: ts.Expression[] = [...existingAbilities.elements];
+        for (const ability of abilities) {
+          const sphereAssignment = ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere));
+          const element = ts.createObjectLiteral(
+            [
+              ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
+              ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
+              ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+              sphereAssignment,
+              ts.createPropertyAssignment(
+                ts.createIdentifier('eventType'),
+                ts.createPropertyAccess(ts.createIdentifier('dummySpell'), ts.createIdentifier('name')),
+              ),
+              ts.createPropertyAssignment(ts.createIdentifier('hasTarget'), ts.createFalse()),
+            ],
+            true,
+          );
+          addComment(sphereAssignment, 'TODO(aeremin): Add proper implementation');
+          addComment(sphereAssignment, ability.gmDescription);
+          elements.push(element);
+        }
+        return ts.createArrayLiteral(elements);
+      }
+
+      if (ts.isPropertyAssignment(node)) {
+        const propertyName = (node.name as ts.Identifier).text;
+        if (propertyName == 'id') {
+          const currentAbilityId = (node.initializer as ts.StringLiteral).text;
+          currentAbility = abilities.find((it) => it.id == currentAbilityId);
+          if (!currentAbility) {
+            console.log(`No data for ${currentAbilityId} in the spreadsheet`);
+          } else {
+            abilities = abilities.filter((it) => it.id != currentAbilityId);
+          }
+        }
+
+        if (currentAbility) {
+          if (propertyName == 'humanReadableName') {
+            return ts.createPropertyAssignment('humanReadableName', ts.createStringLiteral(currentAbility.humanReadableName));
+          }
+          if (propertyName == 'description') {
+            return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
+          }
+          if (propertyName == 'sphere') {
+            addComment(node, currentAbility.gmDescription);
+            return node;
+          }
+        }
+        if (propertyName == 'eventType' || propertyName == 'hasTarget') {
+          return node;
+        }
+      }
+      return ts.visitEachChild(node, abilityVisit, context);
+    };
+
+    const topLevelVisit = (node: ts.Node): ts.Node => {
+      if (ts.isVariableDeclaration(node) && getName(node) == 'kAllSpellsList') {
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        return result;
+      } else {
+        return ts.visitEachChild(node, topLevelVisit, context);
+      }
+    };
+
+    return ts.visitNode(rootNode, topLevelVisit);
+  };
+
+  writeSourceFile(ts.transform(file, [transformer]).transformed[0], SPELLS_FILENAME);
 }
