@@ -5,7 +5,7 @@
 import { Firestore } from '@google-cloud/firestore';
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-import { PassiveAbility, rewritePassiveAbilities } from './reparser';
+import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities } from './reparser';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
@@ -21,15 +21,6 @@ const kPlayerDescriptionColumn = 11;
 const kMasterDescriptionColumn = 12;
 const kCooldownColumn = 15;
 
-interface ActiveAbility {
-  id: string;
-  humanReadableName: string;
-  description: string;
-  originalLine: number;
-  gmDescription: string;
-  cooldown: number;
-}
-
 interface Spell {
   id: string;
   humanReadableName: string;
@@ -41,7 +32,6 @@ interface Spell {
 const db = new Firestore();
 
 class SpreadsheetProcessor {
-  activeAbilitiesRef = db.collection('active_abilities');
   spellsRef = db.collection('spells');
   passiveAbilities: PassiveAbility[] = [];
   activeAbilities: ActiveAbility[] = [];
@@ -67,15 +57,7 @@ class SpreadsheetProcessor {
       cooldown: row[kCooldownColumn] ?? 9000,
       originalLine: line + 1,
     };
-    const existingDoc = await this.activeAbilitiesRef.doc(id).get();
-    if (
-      existingDoc.data()?.humanReadableName != ability.humanReadableName ||
-      existingDoc.data()?.description != ability.description ||
-      existingDoc.data()?.gmDescription != ability.gmDescription ||
-      existingDoc.data()?.cooldown != ability.cooldown
-    ) {
-      this.activeAbilities.push(ability);
-    }
+    this.activeAbilities.push(ability);
   }
 
   async processSpell(line: number, id: string, row: any[]) {
@@ -103,23 +85,7 @@ class SpreadsheetProcessor {
 
   async printAndSaveActiveAbilities() {
     console.log('//*************************** Active abilities ***************************//');
-    for (const ability of this.activeAbilities) {
-      console.log(`
-      {
-        id: '${ability.id}',
-        humanReadableName: '${ability.humanReadableName}',
-        description: '${ability.description.replace(/\n/g, '\\n')}',
-        // ${ability.originalLine}
-        // ${ability.gmDescription.replace(/\n/g, '\n          // ')}
-        // TODO(aeremin): Add proper implementation
-        target: 'scan',
-        targetsSignature: kNoTarget,
-        cooldownMinutes: ${ability.cooldown},
-        minimalEssence: 0,
-        eventType: dummyAbility.name,
-      },`);
-      if (FLAGS.update_db) await this.activeAbilitiesRef.doc(ability.id).set(ability);
-    }
+    rewriteActiveAbilities(this.activeAbilities);
   }
 
   async printAndSaveSpells() {

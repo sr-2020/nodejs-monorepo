@@ -9,23 +9,33 @@ export interface PassiveAbility {
   gmDescription: string;
 }
 
-const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
+export interface ActiveAbility {
+  id: string;
+  humanReadableName: string;
+  description: string;
+  originalLine: number;
+  gmDescription: string;
+  cooldown: number;
+}
 
-function readSourceFileWithoutComments(): ts.SourceFile {
+const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
+const ACTIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/active_abilities_library.ts';
+
+function readSourceFileWithoutComments(filename: string): ts.SourceFile {
   // Black magic fuckery to remove comments corresponding to gamemaster descriptions, but keep TODOs.
   const contents = fs
-    .readFileSync(PASSIVE_ABILITIES_FILENAME, 'utf8')
+    .readFileSync(filename, 'utf8')
     .replace(/ {4}\/\/ TODO\(/gm, '    %% TODO(')
     .replace(/ {4}\/\/.*$\r?\n/gm, '')
     .replace(/ {4}%%/gm, '    //');
   return ts.createSourceFile('input.ts', contents, ts.ScriptTarget.Latest, true);
 }
 
-function writeSourceFile(file: ts.SourceFile) {
+function writeSourceFile(file: ts.SourceFile, filename: string) {
   const printer = ts.createPrinter({
     removeComments: false,
   });
-  fs.writeFileSync(PASSIVE_ABILITIES_FILENAME, unescape(printer.printFile(file).replace(/\\u/g, '%u')), {
+  fs.writeFileSync(filename, unescape(printer.printFile(file).replace(/\\u/g, '%u')), {
     encoding: 'utf8',
   });
 }
@@ -45,7 +55,7 @@ function addComment(node: ts.Node, comment: string) {
 }
 
 export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
-  const file = readSourceFileWithoutComments();
+  const file = readSourceFileWithoutComments(PASSIVE_ABILITIES_FILENAME);
 
   const transformer = (context: ts.TransformationContext) => (rootNode: ts.SourceFile): ts.SourceFile => {
     let currentAbility: PassiveAbility | undefined = undefined;
@@ -114,6 +124,93 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
 
     return ts.visitNode(rootNode, topLevelVisit);
   };
+  writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
+}
 
-  writeSourceFile(ts.transform(file, [transformer]).transformed[0]);
+export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
+  const file = readSourceFileWithoutComments(ACTIVE_ABILITIES_FILENAME);
+
+  const transformer = (context: ts.TransformationContext) => (rootNode: ts.SourceFile): ts.SourceFile => {
+    let currentAbility: ActiveAbility | undefined = undefined;
+    const abilityVisit = (node: ts.Node): ts.Node => {
+      if (ts.isArrayLiteralExpression(node)) {
+        const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
+        const elements: ts.Expression[] = [...existingAbilities.elements];
+        for (const ability of abilities) {
+          const targetAssignment = ts.createPropertyAssignment(ts.createIdentifier('target'), ts.createStringLiteral('scan'));
+          const element = ts.createObjectLiteral(
+            [
+              ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
+              ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
+              ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+              targetAssignment,
+              ts.createPropertyAssignment(ts.createIdentifier('targetsSignature'), ts.createIdentifier('kNoTarget')),
+              ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), ts.createNumericLiteral(ability.cooldown)),
+              ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(0)),
+              ts.createPropertyAssignment(
+                ts.createIdentifier('eventType'),
+                ts.createPropertyAccess(ts.createIdentifier('dummyAbility'), ts.createIdentifier('name')),
+              ),
+            ],
+            true,
+          );
+
+          addComment(targetAssignment, 'TODO(aeremin): Add proper implementation');
+          addComment(targetAssignment, ability.gmDescription);
+          elements.push(element);
+        }
+        return ts.createArrayLiteral(elements);
+      }
+
+      if (ts.isPropertyAssignment(node)) {
+        const propertyName = (node.name as ts.Identifier).text;
+        if (propertyName == 'id') {
+          const currentAbilityId = (node.initializer as ts.StringLiteral).text;
+          currentAbility = abilities.find((it) => it.id == currentAbilityId);
+          if (!currentAbility) {
+            console.log(`No data for ${currentAbilityId} in the spreadsheet`);
+          } else {
+            abilities = abilities.filter((it) => it.id != currentAbilityId);
+          }
+        }
+
+        if (currentAbility) {
+          if (propertyName == 'humanReadableName') {
+            return ts.createPropertyAssignment('humanReadableName', ts.createStringLiteral(currentAbility.humanReadableName));
+          }
+          if (propertyName == 'description') {
+            return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
+          }
+          if (propertyName == 'target') {
+            addComment(node, currentAbility.gmDescription);
+            return node;
+          }
+        }
+        if (
+          propertyName == 'target' ||
+          propertyName == 'targetsSignature' ||
+          propertyName == 'prerequisites' ||
+          propertyName == 'minimalEssence' ||
+          propertyName == 'eventType' ||
+          propertyName == 'cooldownMinutes'
+        ) {
+          return node;
+        }
+      }
+      return ts.visitEachChild(node, abilityVisit, context);
+    };
+
+    const topLevelVisit = (node: ts.Node): ts.Node => {
+      if (ts.isVariableDeclaration(node) && getName(node) == 'kAllActiveAbilitiesList') {
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        return result;
+      } else {
+        return ts.visitEachChild(node, topLevelVisit, context);
+      }
+    };
+
+    return ts.visitNode(rootNode, topLevelVisit);
+  };
+
+  writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);
 }
