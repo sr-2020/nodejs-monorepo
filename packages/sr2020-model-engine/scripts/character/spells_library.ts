@@ -23,7 +23,6 @@ import {
   trackBallSpell,
   trackpointSpell,
 } from './spells';
-
 export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
 export interface Spell {
   id: string;

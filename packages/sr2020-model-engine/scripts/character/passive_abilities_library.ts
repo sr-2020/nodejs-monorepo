@@ -64,7 +64,6 @@ import {
   multiplyMagicFeedbackMultiplier,
   setTransactionAnonymous,
 } from './basic_effects';
-
 export interface PassiveAbility {
   id: string;
   name: string;
@@ -1049,7 +1048,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
     prerequisites: ['miner-1'],
-    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionDataprocessing, {
+      amount: 2,
+    }),
   },
   {
     id: 'miner-3',
@@ -1058,7 +1059,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+2] Декер_конверсия_Dataprocessing
     prerequisites: ['miner-2'],
-    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionDataprocessing, {
+      amount: 2,
+    }),
   },
   {
     id: 'burn',
@@ -1131,7 +1134,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+20] Техномант_Устойчивость_Фейдингу_Компиляция
     prerequisites: [],
-    modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 20 }),
+    modifier: modifierFromEffect(increaseCompilationFadingResistance, {
+      amount: 20,
+    }),
   },
   {
     id: 'native-compile',
@@ -1142,7 +1147,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     // IT:
     // [+30] Техномант_Устойчивость_Фейдингу_Компиляция
     prerequisites: [],
-    modifier: modifierFromEffect(increaseCompilationFadingResistance, { amount: 30 }),
+    modifier: modifierFromEffect(increaseCompilationFadingResistance, {
+      amount: 30,
+    }),
   },
   {
     id: 'sprites-1',
@@ -1245,7 +1252,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 5% от всех своих рентных платежей.',
     // После списания рентных платежей гм получает кэшбек в размере 5% от списанной суммы. Начисляется после каждого списания рентных платежей.
     prerequisites: ['igra-na-birge-1'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 5 - 2 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, {
+      amount: 5 - 2,
+    }),
   },
   {
     id: 'igra-na-birge-3',
@@ -1253,7 +1262,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
     // После списания рентных платежей гм получает кэшбек в размере 13% от списанной суммы. Начисляется после каждого списания рентных платежей.
     prerequisites: ['igra-na-birge-2'],
-    modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 13 - 5 }),
+    modifier: modifierFromEffect(increaseStockGainPercentage, {
+      amount: 13 - 5,
+    }),
   },
   {
     id: 'anonymous-transaction',
@@ -1269,7 +1280,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 20%',
     // Все кулдауны способностей дискурсмонгера снижены на 20%
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.8 }),
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
+      amount: 0.8,
+    }),
   },
   {
     id: 'dm-fanatic-2',
@@ -1277,7 +1290,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 40%',
     // Все кулдауны способностей дискурсмонгера снижены на 40%
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.6 / 0.8 }),
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
+      amount: 0.6 / 0.8,
+    }),
   },
   {
     id: 'dm-fanatic-3',
@@ -1285,7 +1300,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 60%',
     // Все кулдауны способностей дискурсмонгера снижены на 60%
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, { amount: 0.4 / 0.6 }),
+    modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
+      amount: 0.4 / 0.6,
+    }),
   },
   {
     id: 'dm-soul-expert',
@@ -1352,7 +1369,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Aztechnology (ORO)',
     // множитель 0,9 на  все товары с параметром Corporation =Aztechnology (ORO)
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyCorpDiscountAztechnology, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyCorpDiscountAztechnology, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'discount-saeder-krupp',
@@ -1360,7 +1379,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Saeder-Krupp',
     // множитель 0,9 на  все товары с параметром Corporation =Saeder-Krupp
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyCorpDiscountSaederKrupp, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyCorpDiscountSaederKrupp, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'discount-spinradglobal',
@@ -1368,7 +1389,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Spinrad Global (JRJ INT)',
     // множитель 0,9 на  все товары с параметром Corporation =.Spinrad Global (JRJ INT)
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyCorpDiscountSpinradGlobal, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyCorpDiscountSpinradGlobal, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'discount-neonet1',
@@ -1424,7 +1447,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'скидка 10% на товары корпорации Mutsuhama',
     // множитель 0,9 на  все товары с параметром Corporation =Mutsuhama
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyCorpDiscountMutsuhama, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyCorpDiscountMutsuhama, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'discount-shiavase',
@@ -1480,7 +1505,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. То есть от базового получается 1*0.9=0.9)
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'magic-feedback-resistance-2',
@@ -1488,7 +1515,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. С учетом необходимого СопрОткату1 коэффициентСопротивленияОткату = 1*0.9*0.9=0.81)
     prerequisites: ['magic-feedback-resistance-1'],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'magic-feedback-resistance-3',
@@ -1496,7 +1525,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. С учетом необходимых СопрОткату1-2 коэффициентСопротивленияОткату = 1*0.9*0.9*0.9=0.729)
     prerequisites: ['magic-feedback-resistance-2'],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.9 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'magic-feedback-unresistance-1',
@@ -1504,7 +1535,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. То есть от базового получается 1*1.2=1.2)
     prerequisites: [],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 1.2,
+    }),
   },
   {
     id: 'magic-feedback-unresistance-2',
@@ -1512,7 +1545,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. С учетом необходимого Откатошный1 коэффициентСопротивленияОткату = 1*1.2*1.2=1.44)
     prerequisites: ['magic-feedback-unresistance-1'],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 1.2,
+    }),
   },
   {
     id: 'magic-feedback-unresistance-3',
@@ -1520,7 +1555,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. С учетом необходимых Откатошный1-2 коэффициентСопротивленияОткату = 1*1.2*1.2*1.2=1.728)
     prerequisites: ['magic-feedback-unresistance-2'],
-    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 1.2 }),
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 1.2,
+    }),
   },
   {
     id: 'magic-recovery-1',
@@ -1552,7 +1589,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: [],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: -0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: -0.2,
+    }),
   },
   {
     id: 'spirit-friend-2',
@@ -1560,7 +1599,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: ['spirit-friend-1', 'magic-feedback-unresistance-1'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: -0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: -0.2,
+    }),
   },
   {
     id: 'spirit-friend-3',
@@ -1568,7 +1609,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: ['spirit-friend-2'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: -0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: -0.2,
+    }),
   },
   {
     id: 'spirit-enemy-1',
@@ -1576,7 +1619,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: [],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: 0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: 0.2,
+    }),
   },
   {
     id: 'spirit-enemy-2',
@@ -1584,7 +1629,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: ['spirit-enemy-1'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: 0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: 0.2,
+    }),
   },
   {
     id: 'spirit-enemy-3',
@@ -1592,7 +1639,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: ['spirit-enemy-2'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, { amount: 0.2 }),
+    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
+      amount: 0.2,
+    }),
   },
   {
     id: 'light-step',
@@ -1621,7 +1670,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При чтении астральных следов извлекается больше ауры',
     // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает значение ауры на 20% больше. Например, если заклинание было скастовано с такой Мощью, что должно было извлечь 10 символов, то с этой абилкой будет извлечено 12. То есть Коэффициент чтения астральных следов у этого мага равен 1.2.
     prerequisites: [],
-    modifier: modifierFromEffect(increaseAuraReadingMultiplier, { amount: 0.2 }),
+    modifier: modifierFromEffect(increaseAuraReadingMultiplier, {
+      amount: 0.2,
+    }),
   },
   {
     id: 'agnus-dei',
