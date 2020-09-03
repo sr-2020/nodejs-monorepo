@@ -44,6 +44,7 @@ function readSourceFileWithoutComments(filename: string): ts.SourceFile {
 function writeSourceFile(file: ts.SourceFile, filename: string) {
   const printer = ts.createPrinter({
     removeComments: false,
+    newLine: ts.NewLineKind.CarriageReturnLineFeed,
   });
   fs.writeFileSync(filename, unescape(printer.printFile(file).replace(/\\u/g, '%u')), {
     encoding: 'utf8',
