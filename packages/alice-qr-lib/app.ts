@@ -4,7 +4,7 @@ import * as http from 'http';
 
 import * as bodyparser from 'body-parser';
 import { decode, encode } from './qr';
-import { QrType, QrData } from './qr.types';
+import { QrData, QrType } from './qr.types';
 
 function QrDataFromQuery(query: any): QrData {
   if (/^[0-9]*$/.test(query.type)) {
@@ -29,7 +29,7 @@ class App {
 
     this.app.get('/decode', (req, res) => {
       try {
-        const decoded: any = decode(req.query.content);
+        const decoded = decode(req.query.content as string);
         res.send(decoded);
       } catch (e) {
         console.warn('exception in /decode: ', e);
@@ -39,9 +39,9 @@ class App {
 
     this.app.get('/encode_bill', (req, res) => {
       try {
-        const receiver: string = req.query.receiver;
-        const amount: string = req.query.amount;
-        const comment: string = req.query.comment;
+        const receiver = req.query.receiver as string;
+        const amount = req.query.amount as string;
+        const comment = req.query.comment as string;
         const content = encode({ type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: [receiver, amount, comment].join(',') });
         res.redirect(
           // tslint:disable-next-line:max-line-length
