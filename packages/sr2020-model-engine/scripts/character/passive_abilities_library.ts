@@ -35,7 +35,6 @@ import {
   increasePostDroneRecoveryTime,
   increaseRepomanBonus,
   increaseResonance,
-  increaseSpiritResistanceMultiplier,
   increaseSpriteCount,
   increaseSpriteLevel,
   increaseStockGainPercentage,
@@ -62,8 +61,10 @@ import {
   multiplyDiscountWeaponsArmor,
   multiplyDiscourseMongerCooldowns,
   multiplyMagicFeedbackMultiplier,
+  multiplySpiritResistanceMultiplier,
   setTransactionAnonymous,
 } from './basic_effects';
+
 export interface PassiveAbility {
   id: string;
   name: string;
@@ -165,10 +166,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'spirit-feed',
     name: 'Знакомец духов',
     description: 'Снижает Сопротивление духов этому магу.',
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     // magicStats.spiritResistanceMultiplier *0.8
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(multiplySpiritResistanceMultiplier, { amount: 0.8 })],
   },
   {
     id: 'orkish-prices',
@@ -1589,8 +1589,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: [],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: -0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 0.8,
     }),
   },
   {
@@ -1599,8 +1599,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: ['spirit-friend-1', 'magic-feedback-unresistance-1'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: -0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 0.8,
     }),
   },
   {
@@ -1609,8 +1609,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
     prerequisites: ['spirit-friend-2'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: -0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 0.8,
     }),
   },
   {
@@ -1619,8 +1619,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: [],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: 0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 1.3,
     }),
   },
   {
@@ -1629,8 +1629,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: ['spirit-enemy-1'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: 0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 1.3,
     }),
   },
   {
@@ -1639,8 +1639,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
     prerequisites: ['spirit-enemy-2'],
-    modifier: modifierFromEffect(increaseSpiritResistanceMultiplier, {
-      amount: 0.2,
+    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
+      amount: 1.3,
     }),
   },
   {

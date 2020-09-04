@@ -158,8 +158,8 @@ export function muliplyMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, 
   api.model.magicStats.recoverySpeedMultiplier *= m.amount;
 }
 
-export function increaseSpiritResistanceMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.magicStats.spiritResistanceMultiplier += m.amount;
+export function multiplySpiritResistanceMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.spiritResistanceMultiplier *= m.amount;
   api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
 }
 
