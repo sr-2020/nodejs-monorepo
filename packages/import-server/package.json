@@ -44,7 +44,6 @@
     "google-auth-library": "^0.10.0",
     "googleapis": "^33.0.0",
     "lodash": "^4.17.10",
-    "moment": "^2.18.1",
     "pouchdb": "^7.1.1",
     "pouchdb-find": "^6.3.4",
     "pouchdb-upsert": "^2.2.0",
