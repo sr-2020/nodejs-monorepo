@@ -27,7 +27,7 @@ export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetC
 }
 
 export function disconnectFromBody(api: EventModelApi<Sr2020Character>, data: {}) {
-  api.model.analyzedBody = undefined;
+  api.model.analyzedBody = null;
 }
 
 function checkIfCanWorkWithImplant(rigger: Sr2020Character, implant: AddedImplant | Implant) {

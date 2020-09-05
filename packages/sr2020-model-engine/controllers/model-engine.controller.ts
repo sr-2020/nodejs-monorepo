@@ -203,6 +203,7 @@ export class ModelEngineController implements ModelEngineService {
         available: 0,
         spent: 0,
       },
+      analyzedBody: null,
       spells: [],
       activeAbilities: [],
       passiveAbilities: [],
