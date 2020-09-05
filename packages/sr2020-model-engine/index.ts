@@ -18,7 +18,7 @@ export async function main(options: ApplicationConfig = {}) {
 
 const config = {
   rest: {
-    port: +(process.env.PORT ?? 3001),
+    port: +(process.env.PORT ?? 3000),
     host: process.env.HOST,
     openApiSpec: {
       // useful when used with OASGraph to locate your application
