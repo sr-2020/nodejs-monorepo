@@ -120,10 +120,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'magic-feedback-resist',
     name: 'Устойчивость к Откату магов',
     description: 'Понижает Откат магов',
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     // magicStats.feedbackMultiplier *0.9
     prerequisites: [],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 0.9,
+    }),
   },
   {
     id: 'matrix-feedback-resist',
