@@ -32,7 +32,7 @@
     "@loopback/rest": "^6.2.0",
     "@loopback/rest-explorer": "^2.0.1",
     "@loopback/service-proxy": "^2.0.1",
-    "@types/dotenv": "^6.1.1",
+    "@types/dotenv": "^8.2.0",
     "@types/nock": "^10.0.3",
     "@types/winston": "^2.4.4",
     "dotenv": "^8.0.0",

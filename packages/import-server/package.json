@@ -38,7 +38,6 @@
     "@types/winston": "^2.3.3",
     "command-line-args": "^4.0.6",
     "command-line-usage": "^4.0.0",
-    "dotenv": "^6.0.0",
     "express": "^4.15.3",
     "google-auth-library": "^6.0.6",
     "googleapis": "^59.0.0",
