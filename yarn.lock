@@ -1937,20 +1937,10 @@
     "@types/node" "*"
     "@types/request" "*"
 
-"@types/node@*", "@types/node@>= 8":
+"@types/node@*", "@types/node@>= 8", "@types/node@^14.6.4":
   version "14.6.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.6.4.tgz#a145cc0bb14ef9c4777361b7bbafa5cf8e3acb5a"
   integrity sha512-Wk7nG1JSaMfMpoMJDKUsWYugliB2Vy55pdjLpmLixeyMi7HizW2I/9QoxsPCkXl3dO+ZOVqPumKaDUv5zJu2uQ==
-
-"@types/node@7.0.12":
-  version "7.0.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.12.tgz#ae5f67a19c15f752148004db07cbbb372e69efc9"
-  integrity sha1-rl9noZwV91IUgATbB8u7Ny5p78k=
-
-"@types/node@^10.11.2":
-  version "10.17.29"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.29.tgz#263b7013f9f4afa53585b199f9a4255d9613b178"
-  integrity sha512-zLo9rjUeQ5+QVhOufDwrb3XKyso31fJBJnk9wUUQIBDExF/O4LryvpOfozfUaxgqifTnlt7FyqsAPXUq5yFZSA==
 
 "@types/node@^10.17.28":
   version "10.17.28"
@@ -1966,16 +1956,6 @@
   version "13.13.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.2.tgz#160d82623610db590a64e8ca81784e11117e5a54"
   integrity sha512-LB2R1Oyhpg8gu4SON/mfforE525+Hi/M1ineICEDftqNVTyFg1aRIeGuTvXAoWHc4nbrFncWtJgMmoyRvuGh7A==
-
-"@types/node@^8.0.4":
-  version "8.10.63"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.63.tgz#f86775d576bc07a2992da244f41c23d3ba66d402"
-  integrity sha512-g+nSkeHFDd2WOQChfmy9SAXLywT47WZBrGS/NC5ym5PJ8c8RC6l4pbGaUW/X0+eZJnXw6/AVNEouXWhV4iz72Q==
-
-"@types/node@^9.6.1":
-  version "9.6.58"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.58.tgz#cb568ffde093c29949dce776dfc250df76b7a995"
-  integrity sha512-I5B2ZIvr5G5qW6VUZgMk284p/41/U5x3Lqyz3Hz9va3bmxgV7p5CBnDPGv/lGFgGDP4415pqZXLsa4cKA3BHAg==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"

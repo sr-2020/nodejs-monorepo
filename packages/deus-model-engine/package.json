@@ -32,7 +32,6 @@
   "homepage": "https://github.com/sth-larp/deus-models#readme",
   "devDependencies": {
     "@types/chai": "^4.0.1",
-    "@types/node": "^8.0.4",
     "chai": "^4.0.2"
   },
   "dependencies": {
