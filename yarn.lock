@@ -1949,13 +1949,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/meow@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@types/meow/-/meow-4.0.1.tgz#cb80b9f0b8695df7ac15f0165585bcd2d0a6d94f"
-  integrity sha512-Lg2Nk9rRoQCMdqn12R6nt5J+/e18uUZmCHN4wnO39WNEzSqIIQmHEbzfjIdbGg0uxOddQaxh2oXiHdSRe2+Erw==
-  dependencies:
-    "@types/minimist-options" "*"
-
 "@types/mime@*":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"
@@ -1966,14 +1959,7 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/minimist-options@*":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/minimist-options/-/minimist-options-3.0.0.tgz#0dabe91d07e21c9b3fe9614ca862aab202566eb5"
-  integrity sha512-FYeTlkAANOr9KR0mQL7X+v7MT7Nb/aWdNNHNKzJ8sPctpS2Ei8ucgMbvQRbLRjaYZH2OVN5AGDGGcHV5x8lSgQ==
-  dependencies:
-    "@types/minimist" "*"
-
-"@types/minimist@*", "@types/minimist@^1.2.0":
+"@types/minimist@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.0.tgz#69a23a3ad29caf0097f06eda59b361ee2f0639f6"
   integrity sha1-aaI6OtKcrwCX8G7aWbNh7i8GOfY=
@@ -13262,8 +13248,3 @@ yn@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==
-
-yn@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/yn/-/yn-2.0.0.tgz#e5adabc8acf408f6385fc76495684c88e6af689a"
-  integrity sha1-5a2ryKz0CPY4X8dklWhMiOavaJo=

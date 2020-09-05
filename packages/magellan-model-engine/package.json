@@ -41,7 +41,6 @@
     "shuffle-array": "^1.0.1",
     "source-map-support": "^0.4.15",
     "type-detect": "^4.0.8",
-    "uuid": "^3.2.1",
-    "yn": "^2.0.0"
+    "uuid": "^3.2.1"
   }
 }
