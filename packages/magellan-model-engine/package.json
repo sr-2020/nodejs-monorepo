@@ -22,8 +22,7 @@
   "devDependencies": {
     "@types/chai": "^4.0.1",
     "@types/node": "^8.0.4",
-    "chai": "^4.0.2",
-    "chokidar-cli": "^1.2.0"
+    "chai": "^4.0.2"
   },
   "dependencies": {
     "@types/chance": "^1.0.0",
