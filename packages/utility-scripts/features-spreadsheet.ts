@@ -123,7 +123,7 @@ class SpreadsheetProcessor {
       const id = row[kIdColumn];
       const kind = row[kKindColumn];
 
-      if (kind == 'Пассивная абилка') {
+      if (kind == 'Пассивная абилка' || kind == 'Аспект') {
         if (!id) throw new Error(`Entity in the line ${r + 1} has no ID`);
         await this.processPassiveAbility(r, id, row);
       }
