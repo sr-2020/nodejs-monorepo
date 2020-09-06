@@ -64,7 +64,6 @@ import {
   multiplySpiritResistanceMultiplier,
   setTransactionAnonymous,
 } from './basic_effects';
-
 export interface PassiveAbility {
   id: string;
   name: string;
@@ -2244,6 +2243,412 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Статус: Подключен к дрону',
     // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
     // Кроме того, это обязательный пререквизит для всех дроновских абилок
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-norm',
+    name: 'Норм',
+    description: 'Ты норм. Самый обычный Sapiens, как и миллионы других.',
+    // TODO(aeremin): Implement and add modifier here
+    // feel-matrix
+    // chem-weak
+    // base-body-meat
+    // current-body-meat
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-elf',
+    name: 'Эльф',
+    description: 'Ты эльф. У тебя прекрасные ушки, чувство стиля и ты точно знаешь, что ты лучше всех остальных видов металюдей.',
+    // TODO(aeremin): Implement and add modifier here
+    // elven-prices
+    // base-body-meat
+    // current-body-meat
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-dwarf',
+    name: 'Гном',
+    description:
+      'Ты гном. У тебя есть борода, чувство гордости и ты считаешь большинство остальных металюдей - длинномерками. Кстати, я уже говорил про бороду? ',
+    // TODO(aeremin): Implement and add modifier here
+    // chem-resist
+    // magic-feedback-resist
+    // matrix-feedback-resist
+    // good-rigga
+    // dont-touch-my-hole
+    // base-body-meat
+    // current-body-meat
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-ork',
+    name: 'Орк',
+    description: 'Ты орк. У тебя восхитительные клыки и крепкие кулаки.',
+    // TODO(aeremin): Implement and add modifier here
+    // extra-hp
+    // spirit-feed
+    // base-body-meat
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-troll',
+    name: 'Тролль',
+    description: 'Ты тролль. У тебя есть клыки, рога, толстая шкура и возможность смотреть на остальных металюдей сверху вниз. ',
+    // TODO(aeremin): Implement and add modifier here
+    // extra-hp
+    // magic-feedback-resist
+    // matrix-feedback-resist
+    // good-rigga
+    // base-body-meat
+    // current-body-meat
+    //
+    // skin-armor
+    // this-my-glory-hole
+    // strong-arm
+    // feed-tamagochi
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-ghoul',
+    name: 'HMHVV, тип 3. Гуль',
+    description: 'Ты пережил заражение HMHVV вирусом типа 3 и стал Гулем. Ты ешь мясо металюдей. Вкусно, как курочка!',
+    // TODO(aeremin): Implement and add modifier here
+    // strong-arm
+    //
+    // meat-hunger
+    // ghoul-feast
+    // starvation
+    // chem-resist-heavy
+    // astral-vision
+    // chrome-blockade
+    // tech-blockade
+    // base-body-hmhvv
+    // current-body-hmhvv
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-vampire',
+    name: 'HMHVV, тип 1. Вампир',
+    description:
+      'Ты пережил заражение HMHVV вирусом типа 1. Ты уверен, что ты теперь сверх-мета-человек. Иногда хочется кушать и тебе нужны другие металюди - в качестве обеда. ',
+    // TODO(aeremin): Implement and add modifier here
+    // strong-arm
+    // starvation
+    // chem-resist-heavy
+    // chrome-blockade
+    // tech-blockade
+    // base-body-hmhvv
+    // current-body-hmhvv
+    //
+    // blood-thirst
+    // vampire-feast
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-ai',
+    name: 'Проекция ИИ',
+    description: 'Ты часть проекции Искусственного Интеллекта. Твое тело сгусток программ и кода, живущий в Матрице. ',
+    // TODO(aeremin): Implement and add modifier here
+    // magic-blockade
+    // base-body-digital
+    // current-body-digital
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-eghost',
+    name: 'Электронный призрак',
+    description: 'Ты цифровой разум. Твое тело сгусток программ и кода, живущий в Матрице. ',
+    // TODO(aeremin): Implement and add modifier here
+    // magic-blockade
+    // base-body-digital
+    // current-body-digital
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'meta-spirit',
+    name: 'Дух',
+    description: 'Ты магическое создание, живущее в астральном мире.',
+    // TODO(aeremin): Implement and add modifier here
+    // tech-blockade
+    // base-body-astral
+    // current-body-astral
+    // can-do-fleshpoint
+    // can-be-exorcized
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-rigger',
+    name: 'Архетип: Риггер',
+    description: 'Риггер, повелитель дронов, химии и хрома.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-rigger-medic',
+    name: 'Аспект: Риггер Медик',
+    description: 'Медик. Ты знаешь всё про химию и полевую медицину.',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-rigger-engineer',
+    name: 'Аспект: Риггер Инженер',
+    description: 'Инженер. Ставишь импланты, моды, снимаешь моды. ',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-rigger-pilot',
+    name: 'Аспект: Риггер Пилот',
+    description: 'Пилот. Умеешь управлять дронами.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-rigger-boost',
+    name: 'Опытный Риггер',
+    description: 'Очень опытный риггер.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body  +2
+    // Intelligence +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-samurai',
+    name: 'Архетип: Самурай',
+    description: 'Самурай. Практикуешь искусство Воина и враги трепещут при звуках твоего имени.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-samurai-gunner',
+    name: 'Аспект: Самурай Стрелок',
+    description: 'Стрелок. Огнестрельное оружие - твой путь.',
+    // TODO(aeremin): Implement and add modifier here
+    // Strength +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-samurai-fighter',
+    name: 'Аспект: Самурай Громила',
+    description: 'Громила. Холодное оружие и несокрушимая броня - твой путь.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-samurai-assasin',
+    name: 'Аспект: Самурай Ассасин',
+    description: 'Ассасин. Уловки и хитрости - твой путь.',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-samurai-boost',
+    name: 'Опытный Самурай',
+    description: 'Очень опытный самурай.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body  +2
+    // Strength +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman',
+    name: 'Архетип: Хакер',
+    description: 'Хакер, владыка Матрицы!',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-decker',
+    name: 'Аспект: Хакер Декер',
+    description: 'Чаммер, ты смог! ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-technomancer',
+    name: 'Аспект: Хакер Техномант',
+    description: 'Чаммер, ты смог! Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны',
+    // TODO(aeremin): Implement and add modifier here
+    //
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-cyberadept',
+    name: 'Аспект: Техномант Киберадепт',
+    description: 'Техномант боец. ',
+    // TODO(aeremin): Implement and add modifier here
+    // resonance +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-technoshaman',
+    name: 'Аспект: Техномант Техношаман',
+    description: 'Техномант, специалист по Комплексным формам.',
+    // TODO(aeremin): Implement and add modifier here
+    // resonance +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-decker-boost',
+    name: 'Опытный Декер',
+    description: 'Очень опытный хакер декер.',
+    // TODO(aeremin): Implement and add modifier here
+    // Intelligence +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-hackerman-technomancer-boost',
+    name: 'Опытный Техномант',
+    description: 'Очень опытный хакер техномант.',
+    // TODO(aeremin): Implement and add modifier here
+    // resonance +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-mage',
+    name: 'Архетип: Маг',
+    description: 'Маг, повелитель заклинаний!',
+    // TODO(aeremin): Implement and add modifier here
+    // magic  +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-mage-adeptus',
+    name: 'Аспект: Маг Адепт',
+    description: 'Маг адепт. Твои способности выходят за грань доступного метачеловеку, но заклинания ограничены.',
+    // TODO(aeremin): Implement and add modifier here
+    // Body +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-mage-spellcaster',
+    name: 'Аспект: Маг Заклинатель',
+    description: 'Маг заклинатель. Снимаю, порчу, колдую.',
+    // TODO(aeremin): Implement and add modifier here
+    // magic  +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-mage-summoner',
+    name: 'Аспект: Маг Призыватель',
+    description: 'Маг призыватель. Духи и зачарования.',
+    // TODO(aeremin): Implement and add modifier here
+    // magic  +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-mage-boost',
+    name: 'Опытный Маг',
+    description: 'Очень опытный маг.',
+    // TODO(aeremin): Implement and add modifier here
+    // Magic +2
+    // body +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-face',
+    name: 'Архетип: Фейс',
+    description: 'Фейс, эксперт по переговорам.',
+    // TODO(aeremin): Implement and add modifier here
+    // charisma +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-face-mentalist',
+    name: 'Аспект: Фейс Менталист',
+    description: 'Менталист. Очень, очень убедителен. И это не просто так.',
+    // TODO(aeremin): Implement and add modifier here
+    // charisma +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-face-discursmonger',
+    name: 'Аспект: Фейс Дискурсмонгер',
+    description: 'Дискурсмонгер. Идеи, концепции и убеждения, твоя работа.',
+    // TODO(aeremin): Implement and add modifier here
+    // charisma +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-face-geshaftmacher',
+    name: 'Аспект: Фейс Гешефтмахер',
+    description: 'Гешефтмахер. Контракты и нюйены интересуют тебя.',
+    // TODO(aeremin): Implement and add modifier here
+    // charisma +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-face-boost',
+    name: 'Опытный Фейс',
+    description: 'Очень опытный фейс',
+    // TODO(aeremin): Implement and add modifier here
+    // charisma +2
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-ai',
+    name: 'Архетип: Искусственный интеллект',
+    description: 'Искусственный интеллект. ',
+    // TODO(aeremin): Implement and add modifier here
+    // depth +1
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'arch-ai-matrix',
+    name: 'Аспект: ИИ Матрица',
+    description: 'ИИ, специализирующийся на работе с Матрицей',
+    // TODO(aeremin): Implement and add modifier here
+    // depth +1
     prerequisites: [],
     modifier: [],
   },

@@ -12,11 +12,12 @@ const kEssenceLostPerHungerTickVampires = 100;
 const kEssenceLostPerHungerTickGhouls = 20;
 
 const kRaceFeatures: { [race in MetaRace]: string[] } = {
-  'meta-norm': ['feel-matrix', 'chem-weak'],
-  'meta-dwarf': ['chem-resist', 'magic-feedback-resist', 'matrix-feedback-resist', 'good-rigga', 'dont-touch-my-hole'],
-  'meta-elf': ['elven-prices'],
-  'meta-ork': ['extra-hp', 'spirit-feed'],
+  'meta-norm': ['meta-norm', 'feel-matrix', 'chem-weak'],
+  'meta-dwarf': ['meta-dwarf', 'chem-resist', 'magic-feedback-resist', 'matrix-feedback-resist', 'good-rigga', 'dont-touch-my-hole'],
+  'meta-elf': ['meta-elf', 'elven-prices'],
+  'meta-ork': ['meta-ork', 'extra-hp', 'spirit-feed'],
   'meta-troll': [
+    'meta-troll',
     'extra-hp',
     'magic-feedback-resist',
     'matrix-feedback-resist',
@@ -26,8 +27,18 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
     'strong-arm',
     'feed-tamagochi',
   ],
-  'meta-vampire': ['strong-arm', 'starvation', 'chem-resist-heavy', 'chrome-blockade', 'tech-blockade', 'blood-thirst', 'vampire-feast'],
+  'meta-vampire': [
+    'meta-vampire',
+    'strong-arm',
+    'starvation',
+    'chem-resist-heavy',
+    'chrome-blockade',
+    'tech-blockade',
+    'blood-thirst',
+    'vampire-feast',
+  ],
   'meta-ghoul': [
+    'meta-ghoul',
     'strong-arm',
     'meat-hunger',
     'ghoul-feast',
@@ -37,9 +48,9 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
     'chrome-blockade',
     'tech-blockade',
   ],
-  'meta-spirit': ['tech-blockade'],
-  'meta-ai': ['magic-blockade'],
-  'meta-eghost': ['magic-blockade'],
+  'meta-spirit': ['meta-spirit', 'tech-blockade'],
+  'meta-ai': ['meta-ai', 'magic-blockade'],
+  'meta-eghost': ['meta-eghost', 'magic-blockade'],
 };
 
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
