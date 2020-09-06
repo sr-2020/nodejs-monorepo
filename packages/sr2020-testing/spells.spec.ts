@@ -94,7 +94,6 @@ describe('Spells', function () {
       expect(workModel.activeAbilities.length).to.equal(1);
       expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
-      expect(workModel.magic).to.equal(-3);
     }
 
     let abilityId: string;
@@ -140,7 +139,6 @@ describe('Spells', function () {
       );
       expect(fixture.getCharacterNotifications(1).length).to.equal(1);
       expect(workModel.history.length).to.equal(1); // Spell casted
-      expect(workModel.magic).to.equal(-6);
     }
 
     {
@@ -195,11 +193,10 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '3', magic: 5 });
     await fixture.addCharacterFeature('trackpoint', 3);
 
-    const { workModel, tableResponse } = await fixture.sendCharacterEvent(
+    const { tableResponse } = await fixture.sendCharacterEvent(
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 5 } },
       3,
     );
-    expect(workModel.magic).to.equal(-12);
     expect(tableResponse.length).to.equal(2);
     expect(tableResponse).containDeep([
       {
@@ -237,11 +234,10 @@ describe('Spells', function () {
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
 
     // power 8 + auraReadingMultiplier 2.0 gives us 100% read
-    const { workModel, tableResponse } = await fixture.sendCharacterEvent(
+    const { tableResponse } = await fixture.sendCharacterEvent(
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
       2,
     );
-    expect(workModel.magic).to.equal(-9);
     expect(tableResponse.length).to.equal(1);
     expect(tableResponse).containDeep([
       {
@@ -305,7 +301,6 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
-    expect(workModel.magic).to.equal(2);
     expect(workModel.passiveAbilities.length).to.equal(3);
     expect(workModel.magicStats.maxPowerBonus).to.equal(1);
     expect(workModel.magicStats.feedbackMultiplier).to.equal(1.0 / 7.0);
@@ -431,11 +426,10 @@ describe('Spells', function () {
     }
 
     await fixture.addCharacterFeature('fireball');
-    const { workModel } = await fixture.sendCharacterEvent({
+    await fixture.sendCharacterEvent({
       eventType: 'castSpell',
       data: { id: 'fireball', location: { id: 0, manaLevel: 5 }, power: 3, reagentIds },
     });
-    expect(workModel.magic).equal(2);
 
     for (const modelId of reagentIds) {
       const qr = await fixture.getQrCode(modelId);
@@ -446,13 +440,10 @@ describe('Spells', function () {
   it('Fireball', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('fireball');
-    {
-      const { workModel } = await fixture.sendCharacterEvent({
-        eventType: 'castSpell',
-        data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 3 },
-      });
-      expect(workModel.magic).equal(-5);
-    }
+    await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 3 },
+    });
   });
 
   describe('Magic feedback calculation', function () {
@@ -470,7 +461,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 18, duration: 93 });
+      expect(feedback).containDeep({ amount: 4, duration: 93 });
     });
 
     it('Example 14', () => {
@@ -487,7 +478,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 4, duration: 16 });
+      expect(feedback).containDeep({ amount: 1, duration: 16 });
     });
 
     it('Example 19', () => {
@@ -504,7 +495,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 12, duration: 65 });
+      expect(feedback).containDeep({ amount: 3, duration: 65 });
     });
 
     it('Example 20', () => {
@@ -521,7 +512,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 12, duration: 65 });
+      expect(feedback).containDeep({ amount: 3, duration: 65 });
     });
 
     it('Example 34', () => {
@@ -539,6 +530,23 @@ describe('Spells', function () {
       });
 
       expect(feedback).containDeep({ amount: 0, duration: 4 });
+    });
+
+    it('Example 38', () => {
+      const feedback = calculateMagicFeedback({
+        power: 1,
+        sphereReagents: 0,
+        metaTypeReagents: 0,
+        ritualParticipants: 0,
+        bloodRitualParticipants: 4,
+        manaLevel: 1,
+        inAstral: false,
+        ophiuchusUsed: true,
+        feedbackDurationMultiplier: 1,
+        feedbackAmountMultiplier: 1,
+      });
+
+      expect(feedback).containDeep({ amount: 0, duration: 6 });
     });
   });
 });

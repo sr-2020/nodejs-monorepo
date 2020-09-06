@@ -107,13 +107,11 @@ describe('Chemo events', function () {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.saveLocation();
     await fixture.addCharacterFeature('fireball');
-    {
-      const { workModel } = await fixture.sendCharacterEvent({
-        eventType: 'castSpell',
-        data: { id: 'fireball', power: 1, location: { manaLevel: 10, id: 0 } },
-      });
-      expect(workModel.magic).to.equal(-2);
-    }
+
+    await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'fireball', power: 1, location: { manaLevel: 10, id: 0 } },
+    });
 
     await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'jack-p' } });
     await fixture.advanceTime(duration(62, 'minutes'));
