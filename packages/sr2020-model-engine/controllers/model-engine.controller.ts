@@ -14,8 +14,8 @@ import { Empty } from '@sr2020/interface/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
-import { resetHunger } from '@sr2020/sr2020-model-engine/scripts/character/hunger';
 import Chance = require('chance');
+import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
 
 const chance = new Chance();
 
@@ -226,7 +226,7 @@ export class ModelEngineController implements ModelEngineService {
       timers: [],
     };
     initEthic(result);
-    resetHunger(result);
+    setRaceForModel(result, 'meta-norm');
     return result;
   }
 

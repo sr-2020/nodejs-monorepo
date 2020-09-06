@@ -301,7 +301,8 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
-    expect(workModel.passiveAbilities.length).to.equal(3);
+    expect(workModel.passiveAbilities).to.containDeep([{ id: 'magic-in-the-blood' }]);
+    expect(workModel.passiveAbilities).to.containDeep([{ id: 'bloody-tide' }]);
     expect(workModel.magicStats.maxPowerBonus).to.equal(1);
     expect(workModel.magicStats.feedbackMultiplier).to.equal(1.0 / 7.0);
 

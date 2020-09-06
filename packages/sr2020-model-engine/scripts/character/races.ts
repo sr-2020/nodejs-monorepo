@@ -2,7 +2,6 @@ import { MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-c
 import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
 import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { essenceReset } from '@sr2020/sr2020-model-engine/scripts/character/essence';
 import { removeHunger, resetHunger } from '@sr2020/sr2020-model-engine/scripts/character/hunger';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
@@ -53,24 +52,41 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
   'meta-eghost': ['meta-eghost', 'magic-blockade'],
 };
 
-export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
-  if (api.model.metarace == data.race) return;
+export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
+  for (const id of kRaceFeatures[model.metarace]) removeFeatureFromModel(model, id);
+  model.metarace = race;
+  for (const id of kRaceFeatures[model.metarace]) addFeatureToModel(model, id);
 
-  for (const id of kRaceFeatures[api.model.metarace]) removeFeatureFromModel(api.model, id);
-  api.model.metarace = data.race;
-  for (const id of kRaceFeatures[api.model.metarace]) addFeatureToModel(api.model, id);
-
-  if (api.model.metarace == 'meta-vampire' || api.model.metarace == 'meta-ghoul') {
+  if (model.metarace == 'meta-vampire' || model.metarace == 'meta-ghoul') {
     // HMHVV don't have "normal" hunger.
-    removeHunger(api.model);
-    api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
-    api.model.essenceDetails = { max: 1000, gap: 700, used: 0 };
+    removeHunger(model);
+    resetHmhvvHunger(model);
+    model.essenceDetails = { max: 1000, gap: 700, used: 0 };
   } else {
     // Reset hunger to set proper hunger timer depending on troll/not troll.
-    resetHunger(api.model);
-    essenceReset(api, {});
-    api.removeTimer(kHmhvvHungerTimer);
+    resetHunger(model);
+    removeHmhvvHunger(model);
   }
+}
+
+export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
+  if (api.model.metarace == data.race) return;
+  setRaceForModel(api.model, data.race);
+}
+
+export function removeHmhvvHunger(model: Sr2020Character) {
+  model.timers = model.timers.filter((timer) => timer.name != kHmhvvHungerTimer);
+}
+
+export function resetHmhvvHunger(model: Sr2020Character) {
+  removeHmhvvHunger(model);
+  model.timers.push({
+    name: kHmhvvHungerTimer,
+    description: kHmhvvHungerTimerDescription,
+    miliseconds: kHmhvvHungerPeriod.asMilliseconds(),
+    eventType: hungerTick.name,
+    data: {},
+  });
 }
 
 export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}) {

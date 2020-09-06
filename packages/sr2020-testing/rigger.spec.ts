@@ -122,7 +122,7 @@ describe('Rigger abilities', () => {
       // Rigger is in drone and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
       expect(workModel.maxHp).to.equal(3);
-      expect(workModel.passiveAbilities).lengthOf(1); // Drone info
+      expect(workModel.passiveAbilities).to.containDeep([{ id: 'drone-medcart' }]);
       expect(workModel.activeAbilities).lengthOf(6); // Heals 2x2
       expect(workModel.currentBody).to.equal('drone');
     }
@@ -141,7 +141,7 @@ describe('Rigger abilities', () => {
       // Rigger is not in the drone
       const { workModel } = await fixture.getCharacter();
       expect(workModel.maxHp).to.equal(2);
-      expect(workModel.passiveAbilities).lengthOf(0);
+      expect(workModel.passiveAbilities).not.to.containDeep([{ id: 'drone-medcart' }]);
       expect(workModel.activeAbilities).lengthOf(1); // Enter drone
       expect(workModel.activeAbilities[0].cooldownUntil).equal(
         duration(/* default recovery time */ 120 - /* body */ 3 * 5, 'minutes').asMilliseconds(),
