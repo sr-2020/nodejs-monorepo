@@ -26,15 +26,15 @@ describe('Race changes', () => {
     expect(workModel.passiveAbilities).lengthOf(1);
     expect(workModel.activeAbilities).lengthOf(0);
 
-    ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } }));
-    expect(workModel.metarace).equal('meta-hmhvv1');
+    ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } }));
+    expect(workModel.metarace).equal('meta-vampire');
     expect(workModel.passiveAbilities).lengthOf(6);
     expect(workModel.passiveAbilities).containDeep([{ id: 'blood-thirst' }]);
     expect(workModel.activeAbilities).lengthOf(1);
     expect(workModel.activeAbilities).containDeep([{ id: 'vampire-feast' }]);
 
-    ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv3' } }));
-    expect(workModel.metarace).equal('meta-hmhvv3');
+    ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-ghoul' } }));
+    expect(workModel.metarace).equal('meta-ghoul');
     expect(workModel.passiveAbilities).lengthOf(7);
     expect(workModel.passiveAbilities).containDeep([{ id: 'meat-hunger' }]);
     expect(workModel.activeAbilities).lengthOf(1);
@@ -50,8 +50,8 @@ describe('Race changes', () => {
       'meta-dwarf',
       'meta-ork',
       'meta-troll',
-      'meta-hmhvv1',
-      'meta-hmhvv3',
+      'meta-vampire',
+      'meta-ghoul',
       'meta-ai',
       'meta-eghost',
       'meta-spirit',
@@ -64,7 +64,7 @@ describe('Race changes', () => {
 
   it('Hungry HMHHV can not use abilities', async () => {
     await fixture.saveCharacter();
-    await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } });
+    await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } });
     await fixture.addCharacterFeature('enter-vr');
     await fixture.advanceTime(duration(6, 'hours'));
 
@@ -75,7 +75,7 @@ describe('Race changes', () => {
   it('Hungry HMHHV can feed', async () => {
     await fixture.saveCharacter();
     await fixture.saveCharacter({ modelId: '5' }); // victim
-    await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } });
+    await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } });
     await fixture.advanceTime(duration(6, 'hours'));
 
     await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'vampire-feast', targetCharacterId: '5' } });

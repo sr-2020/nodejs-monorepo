@@ -35,10 +35,10 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: Merchandi
     resetHunger(api.model);
     api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
   } else if (data.id == 'cow-meat') {
-    if (api.workModel.metarace != 'meta-hmhvv3') throw new UserVisibleError('Вы не можете употреблять такую еду');
+    if (api.workModel.metarace != 'meta-ghoul') throw new UserVisibleError('Вы не можете употреблять такую еду');
     api.model.essenceDetails.gap = Math.max(0, api.model.essenceDetails.gap - 100);
   } else if (data.id == 'cow-blood') {
-    if (api.workModel.metarace != 'meta-hmhvv1') throw new UserVisibleError('Вы не можете употреблять такую еду');
+    if (api.workModel.metarace != 'meta-vampire') throw new UserVisibleError('Вы не можете употреблять такую еду');
     api.model.essenceDetails.gap = Math.max(0, api.model.essenceDetails.gap - 100);
   }
 }

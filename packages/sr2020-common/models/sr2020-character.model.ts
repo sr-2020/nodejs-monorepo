@@ -12,8 +12,8 @@ export type MetaRace =
   | 'meta-dwarf'
   | 'meta-ork'
   | 'meta-troll'
-  | 'meta-hmhvv1'
-  | 'meta-hmhvv3'
+  | 'meta-vampire'
+  | 'meta-ghoul'
   | 'meta-ai'
   | 'meta-eghost'
   | 'meta-spirit';

@@ -45,7 +45,7 @@ export function gmRespawnHmhvv(api: EventModelApi<Sr2020Character>, data: Active
 }
 
 export function hmhvvRespawnEvent(api: EventModelApi<Sr2020Character>, data: {}) {
-  if (api.workModel.metarace != 'meta-hmhvv1' && api.workModel.metarace != 'meta-hmhvv3') {
+  if (api.workModel.metarace != 'meta-vampire' && api.workModel.metarace != 'meta-ghoul') {
     throw new UserVisibleError('Это работает только на HMHVV');
   }
   reviveAbsolute(api, {});

@@ -26,8 +26,8 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
     'strong-arm',
     'feed-tamagochi',
   ],
-  'meta-hmhvv1': ['strong-arm', 'starvation', 'chem-resist-heavy', 'chrome-blockade', 'tech-blockade', 'blood-thirst', 'vampire-feast'],
-  'meta-hmhvv3': [
+  'meta-vampire': ['strong-arm', 'starvation', 'chem-resist-heavy', 'chrome-blockade', 'tech-blockade', 'blood-thirst', 'vampire-feast'],
+  'meta-ghoul': [
     'strong-arm',
     'meat-hunger',
     'ghoul-feast',
@@ -49,7 +49,7 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
   api.model.metarace = data.race;
   for (const id of kRaceFeatures[api.model.metarace]) addFeatureToModel(api.model, id);
 
-  if (api.model.metarace == 'meta-hmhvv1' || api.model.metarace == 'meta-hmhvv3') {
+  if (api.model.metarace == 'meta-vampire' || api.model.metarace == 'meta-ghoul') {
     // HMHVV don't have "normal" hunger.
     removeHunger(api.model);
     api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
@@ -64,7 +64,7 @@ export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaR
 
 export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}) {
   api.setTimer(kHmhvvHungerTimer, kHmhvvHungerTimerDescription, kHmhvvHungerPeriod, hungerTick, {});
-  const essenceLoss = api.model.metarace == 'meta-hmhvv1' ? kEssenceLostPerHungerTickVampires : kEssenceLostPerHungerTickGhouls;
+  const essenceLoss = api.model.metarace == 'meta-vampire' ? kEssenceLostPerHungerTickVampires : kEssenceLostPerHungerTickGhouls;
   api.model.essenceDetails.gap += Math.min(essenceLoss, api.workModel.essence);
   api.sendNotification('Голод HMHVV', 'Вы испытываете нечеловеческий голод');
 }

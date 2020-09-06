@@ -21,7 +21,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
 
   const supportedRaces: MetaRace[] = ['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'];
   if (implant.grade == 'bio') {
-    supportedRaces.push('meta-hmhvv1', 'meta-hmhvv3');
+    supportedRaces.push('meta-vampire', 'meta-ghoul');
   }
 
   if (!supportedRaces.includes(api.model.metarace)) {

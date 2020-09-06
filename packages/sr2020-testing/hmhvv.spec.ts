@@ -15,7 +15,7 @@ describe('HMHVV abilities', function () {
   it('Vampire', async () => {
     // Vampire
     await fixture.saveCharacter({ modelId: '1' });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv1' } }, '1');
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } }, '1');
     expect(workModel.essence).equal(300);
 
     // Victim
@@ -43,7 +43,7 @@ describe('HMHVV abilities', function () {
   it('Ghoul', async () => {
     // Ghoul
     await fixture.saveCharacter({ modelId: '1' });
-    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-hmhvv3' } }, '1');
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-ghoul' } }, '1');
     expect(workModel.essence).equal(300);
 
     // Victim

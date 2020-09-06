@@ -55,8 +55,8 @@ app = new Vue({
       { id: 'meta-dwarf', name: 'Дварф' },
       { id: 'meta-ork', name: 'Орк' },
       { id: 'meta-troll', name: 'Тролль' },
-      { id: 'meta-hmhvv1', name: 'Вампир' },
-      { id: 'meta-hmhvv3', name: 'Гуль' },
+      { id: 'meta-vampire', name: 'Вампир' },
+      { id: 'meta-ghoul', name: 'Гуль' },
       { id: 'meta-digital', name: 'Цифровой' },
       { id: 'meta-spirit', name: 'Дух' },
     ]

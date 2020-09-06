@@ -106,8 +106,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     'meta-ork': totalContent.aries,
     'meta-dwarf': totalContent.cancer,
     'meta-norm': totalContent.gemini,
-    'meta-hmhvv1': totalContent.capricorn,
-    'meta-hmhvv3': totalContent.capricorn,
+    'meta-vampire': totalContent.capricorn,
+    'meta-ghoul': totalContent.capricorn,
   };
 
   const feedback = calculateMagicFeedback({
