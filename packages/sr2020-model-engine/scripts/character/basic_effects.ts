@@ -42,6 +42,16 @@ export function increaseBody(api: EffectModelApi<Sr2020Character>, m: ModifierWi
   api.model.body = clamp(api.model.body, 0, 6);
 }
 
+export function increaseStrength(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.strength += m.amount;
+  api.model.strength = clamp(api.model.strength, 0, 6);
+}
+
+export function increaseDepth(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.depth += m.amount;
+  api.model.depth = clamp(api.model.depth, 0, 6);
+}
+
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magic += m.amount;
   api.model.magic = clamp(api.model.magic, 0, 9000);
