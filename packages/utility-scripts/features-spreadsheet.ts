@@ -21,11 +21,22 @@ const kPlayerDescriptionColumn = 11;
 const kMasterDescriptionColumn = 12;
 const kCooldownColumn = 15;
 const kSpellSphereColumn = 17;
+const kKarmaCostColumn = 10;
 
 class SpreadsheetProcessor {
   passiveAbilities: PassiveAbility[] = [];
   activeAbilities: ActiveAbility[] = [];
   spells: Spell[] = [];
+
+  parseKarmaCost(id: string, input: string | undefined): number {
+    if (!input) return 0;
+    const result = Number(input);
+    if (isNaN(result)) {
+      console.log(`Unexpected karma cost for ${id}: ${input}`);
+      return 0;
+    }
+    return result;
+  }
 
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
@@ -33,6 +44,7 @@ class SpreadsheetProcessor {
       name: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
+      karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
     };
     this.passiveAbilities.push(ability);
   }
@@ -44,6 +56,7 @@ class SpreadsheetProcessor {
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       cooldown: row[kCooldownColumn] ?? 9000,
+      karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
     };
     this.activeAbilities.push(ability);
   }
@@ -65,6 +78,7 @@ class SpreadsheetProcessor {
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
+      karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
     };
     this.spells.push(spell);
   }
@@ -117,6 +131,11 @@ class SpreadsheetProcessor {
     if (!header[kSpellSphereColumn].startsWith('Сфера спелла')) {
       throw new Error('Spell sphere column was moved! Exiting.');
     }
+
+    if (!header[kKarmaCostColumn].startsWith('Цена в карме')) {
+      throw new Error('Karma cost column was moved! Exiting.');
+    }
+
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {
       const row = data[r];
       if (!row) continue;

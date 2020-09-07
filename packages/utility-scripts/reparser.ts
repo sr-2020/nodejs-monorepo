@@ -7,6 +7,7 @@ export interface PassiveAbility {
   name: string;
   description: string;
   gmDescription: string;
+  karmaCost: number;
 }
 
 export interface ActiveAbility {
@@ -15,6 +16,7 @@ export interface ActiveAbility {
   description: string;
   gmDescription: string;
   cooldown: number;
+  karmaCost: number;
 }
 
 export interface Spell {
@@ -23,6 +25,7 @@ export interface Spell {
   description: string;
   sphere: string;
   gmDescription: string;
+  karmaCost: number;
 }
 
 const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
@@ -87,6 +90,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
               ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
               ts.createPropertyAssignment(ts.createIdentifier('name'), ts.createStringLiteral(ability.name)),
               ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+              ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
               prereqsAssignment,
               ts.createPropertyAssignment(ts.createIdentifier('modifier'), ts.createArrayLiteral([])),
             ],
@@ -121,6 +125,9 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
           if (propertyName == 'prerequisites') {
             addComment(node, currentAbility.gmDescription);
             return node;
+          }
+          if (propertyName == 'karmaCost') {
+            return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
           }
         }
         if (propertyName == 'modifier' || propertyName == 'prerequisites') {
@@ -163,6 +170,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
               targetAssignment,
               ts.createPropertyAssignment(ts.createIdentifier('targetsSignature'), ts.createIdentifier('kNoTarget')),
               ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), ts.createNumericLiteral(ability.cooldown)),
+              ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
               ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(0)),
               ts.createPropertyAssignment(
                 ts.createIdentifier('eventType'),
@@ -201,6 +209,9 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
           if (propertyName == 'target') {
             addComment(node, currentAbility.gmDescription);
             return node;
+          }
+          if (propertyName == 'karmaCost') {
+            return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
           }
         }
         if (
@@ -248,6 +259,7 @@ export function rewriteSpells(abilities: Spell[]) {
               ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
               ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
               ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+              ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
               sphereAssignment,
               ts.createPropertyAssignment(
                 ts.createIdentifier('eventType'),
@@ -286,6 +298,9 @@ export function rewriteSpells(abilities: Spell[]) {
           if (propertyName == 'sphere') {
             addComment(node, currentAbility.gmDescription);
             return node;
+          }
+          if (propertyName == 'karmaCost') {
+            return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
           }
         }
         if (propertyName == 'eventType' || propertyName == 'hasTarget') {
