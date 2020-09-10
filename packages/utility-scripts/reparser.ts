@@ -36,9 +36,9 @@ function readSourceFileWithoutComments(filename: string): ts.SourceFile {
   // Black magic fuckery to remove comments corresponding to gamemaster descriptions, but keep TODOs.
   const contents = fs
     .readFileSync(filename, 'utf8')
-    .replace(/ {4}\/\/ TODO\(/gm, '    %% TODO(')
+    .replace(/ {2}\/\/ TODO\(/gm, '  %% TODO(')
     .replace(/ {4}\/\/.*$\r?\n/gm, '')
-    .replace(/ {4}%%/gm, '    //');
+    .replace(/ {2}%%/gm, '  //');
   return ts.createSourceFile('input.ts', contents, ts.ScriptTarget.Latest, true);
 }
 

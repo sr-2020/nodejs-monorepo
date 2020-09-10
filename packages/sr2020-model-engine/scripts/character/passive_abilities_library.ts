@@ -76,11 +76,11 @@ export interface PassiveAbility {
 }
 // Not exported by design, use kAllPassiveAbilities instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
+  // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
   {
     id: 'feel-matrix',
     name: 'Чувствительность к Матрице',
     description: 'Ты чувствуешь матрицу. Устойчивость к фейдингу техноманта, у декера уменьшается время между входами на хоcт.',
-    // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
     karmaCost: 0,
     // hacking.fadingResistance +1
     // hacking.enterCooldownReduced 15
@@ -819,31 +819,31 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   {
     id: 'longer-party-vr-stays-1',
     name: 'Бой часов раздастся вскоре 1',
     description: 'Не нравится мне название :(',
-    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     karmaCost: 0,
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   {
     id: 'longer-party-vr-stays-2',
     name: 'Бой часов раздастся вскоре 2',
     description: '',
-    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     karmaCost: 0,
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   {
     id: 'longer-party-vr-stays-3',
     name: 'Бой часов раздастся вскоре 3',
     description: '',
-    // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
     karmaCost: 0,
     // Добавляет время пребывания в Основании партии ( + Х секунд)
     prerequisites: [],
@@ -1886,61 +1886,61 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
   {
     id: 'more-chemo-to-sell-1',
     name: 'апгрейд аптеки 1',
     description: 'Ассортимент твоей аптеки расширился.',
-    // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
     karmaCost: 0,
     // более лучшая химота в продаже
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
   {
     id: 'more-chemo-to-sell-2',
     name: 'апгрейд аптеки 2',
     description: 'Ассортимент твоей аптеки расширился ещё больше.',
-    // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
     karmaCost: 0,
     // Аптека умеет юзать прототипы (с лимитом на штуки)
     prerequisites: ['more-chemo-to-sell-1'],
     modifier: [],
   },
+  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
   {
     id: 'mobile-auto-doc-1',
     name: 'Мобильный автодок',
     description: 'Ты можешь использовать мобильный автодок.',
-    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     karmaCost: 0,
     // Допуск: мобильный автодок
     prerequisites: [],
     modifier: [],
   },
+  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
   {
     id: 'mobile-auto-doc-2',
     name: 'апгрейд мобильного автодока 1',
     description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
-    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     karmaCost: 0,
     // находясь в альтернативном теле "медикарт" игрок получает активную абилку "Полевое лечение тяжрана". Кулдаун абилки 60 минут
     prerequisites: ['mobile-auto-doc-1'],
     modifier: [],
   },
+  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
   {
     id: 'mobile-auto-doc-3',
     name: 'апгрейд мобильного автодока 2',
     description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
-    // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
     karmaCost: 0,
     // находясь в альтернативном теле "медикарт" игрок получает три  активных абилки "полевое  лечение тяжрана". Кулдаун абилки 60 минут
     prerequisites: ['mobile-auto-doc-2'],
     modifier: [],
   },
+  // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
   {
     id: 'arch-rigger-negative-1',
     name: 'Проблемы риггера - 1',
     description: 'У тебя проблемы, ригга.',
-    // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
     karmaCost: 0,
     // Intelligence -1
     prerequisites: [],
@@ -2221,11 +2221,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 10 }),
   },
+  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
   {
     id: 'thats-my-chrome',
     name: 'это мой хром!',
     description: 'Импланты, установленные у тебя сложнее вырезать рипоменам.',
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
     karmaCost: 0,
     // Отбивает с шансом 50% попытку вырезать у тебя имплант.
     prerequisites: [],
@@ -2363,8 +2363,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // TODO(aeremin): Merge with automatic-weapons-chemo
   {
-    // TODO(aeremin): Merge with automatic-weapons-chemo
     id: 'automatic-weapons-unlock',
     name: 'Автоматическое оружие',
     description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
@@ -2451,33 +2451,33 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
   {
     id: 'auto-doc-1',
     name: 'хирургия',
     description: 'Ты можешь использовать автодок.И ставить простые импланты',
-    // TODO(aeremin): Implement and add modifier here
     karmaCost: 0,
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     //  хром и лечить тяжран. Сложность установки 1
     prerequisites: [],
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
   {
     id: 'auto-doc-2',
     name: 'хирургия',
     description: 'Ты можешь использовать автодок. И ставить продвинутые импланты',
-    // TODO(aeremin): Implement and add modifier here
     karmaCost: 0,
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     //  хром и лечить тяжран. Сложность установки 2
     prerequisites: [],
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
   {
     id: 'auto-doc-3',
     name: 'хирургия',
     description: 'Ты можешь использовать автодок. И ставить высокотехнологичные импланты',
-    // TODO(aeremin): Implement and add modifier here
     karmaCost: 0,
     // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
     //  хром и лечить тяжран сложность установки 3
@@ -2623,11 +2623,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
   {
     id: 'meta-spirit',
     name: 'Дух',
     description: 'Ты магическое создание, живущее в астральном мире.',
-    // TODO(aeremin): Implement and add modifier here
     karmaCost: 0,
     // tech-blockade
     // base-body-astral

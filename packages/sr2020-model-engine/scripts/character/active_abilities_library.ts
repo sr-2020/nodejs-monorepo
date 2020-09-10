@@ -170,11 +170,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: oneTimeRevive.name,
   },
+  // TODO(https://trello.com/c/ihi8Ffmu/320-реализовать-абилку-грабеж): Add proper implementation
   {
     id: 'mugger',
     humanReadableName: 'Грабеж',
     description: '',
-    // TODO(https://trello.com/c/ihi8Ffmu/320-реализовать-абилку-грабеж): Add proper implementation
     //  Самурай находит тушку в тяжране, применяет эту абилку, сканирует QR тушки. Со счета тушки переводится самураю 10% нуйен остатка счета тушки. Тушка автоматически переходит в КС. Перевод создается без обоснования. В поле назначение - "добровольное пожертвование".
     target: 'scan',
     targetsSignature: [
@@ -207,11 +207,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: absoluteDeathAbility.name,
   },
+  // TODO(https://trello.com/c/RgKWvnBk/322-реализовать-добивание-тела-из-тяжрана-в-кс): Add proper implementation
   {
     id: 'finish-him',
     humanReadableName: 'добивание тела из тяжрана в КС',
     description: '',
-    // TODO(https://trello.com/c/RgKWvnBk/322-реализовать-добивание-тела-из-тяжрана-в-кс): Add proper implementation
     //
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -220,11 +220,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Add proper implementation
   {
     id: 'enter-vr',
     humanReadableName: 'зайти в Виар',
     description: '',
-    // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Add proper implementation
     // дает возможность персонажу зайти в Виар на 2 часа (или сколько-то), кулдаун есть.  Увеличение длительности виара ИЛИ уменьшение кулдауна - спец абилки.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -233,11 +233,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
   {
     id: 'merge-shaman',
     humanReadableName: 'Merge (техношаман)',
     description: 'Устанавливает спрайт в ноду Хоста Основания',
-    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     // Устанавливает спрайт в ноду.
     // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
     //
@@ -249,11 +249,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
   {
     id: 'merge-cyberadept',
     humanReadableName: 'Merge (техношаман)',
     description: 'Устанавливает спрайт в ноду Хоста Основания',
-    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     // Устанавливает спрайт в ноду.
     // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
     //
@@ -265,12 +265,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
   {
     id: 'awareness',
     humanReadableName: 'Насторожиться',
     description:
       'Ты можешь внимательно присмотреться к спрайтам в комнате. И какие-то из них явно не местные! Подозрительно...\n\nОбнаруживает вмерженные (то есть установленные другими хакерами) спрайты в этой ноде',
-    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     // Способ поиска чужих спрайтов (например - бэкдоров) в этой ноде хоста Основания.
     //
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
@@ -281,12 +281,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
   {
     id: 'exterminatus',
     humanReadableName: 'Экстерминатус',
     description:
       'Ты можешь сконцентрироваться и разрушительный импульс, который уничтожит часть (зависит от Резонанса) спрайтов, вмерженных в эту Ноду\n',
-    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     // Способ уничтожения чужих спрайтов. У нас нет таргетинга, поэтому удаляем рандомых спрайтов, число которых зависит от Резонанса
     //
     // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
@@ -297,12 +297,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
   {
     id: 'looking-for-trouble',
     humanReadableName: 'ГдеСрач?!',
     description:
       'Ты теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\n\nАктивируется перед входом в Основание (на стойке)\nВыдает список хостов, на которых есть техноманты и уровень группы. Чем сильнее твой Резонанс, тем меньше шансов у них остаться незамеченными',
-    // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
     // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
     //
     // IT: вызов Кривдиного REST, отобразить текст
@@ -313,12 +313,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/EFwxEY3c/324-реализовать-абилку-вождь): Add proper implementation
   {
     id: 'chieftain',
     humanReadableName: 'Вождь',
     description:
       'Это самый ценный из даров. Дар подарить Дар другому. Ты можешь разбудить в Госте Основания его суть, его природу, дав ему возможность по-настоящему почувстовать Матрицу. Цель пробудится и сможет стать техномантом',
-    // TODO(https://trello.com/c/EFwxEY3c/324-реализовать-абилку-вождь): Add proper implementation
     // Ритуал инициации техноманта.
     //
     // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
@@ -782,11 +782,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: doNothingAbility.name,
   },
+  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   {
     id: 'orthodox-exorcism',
     humanReadableName: 'Отчитка',
     description: 'Благословением Божиим ваша способность Exorcizamus срабатывает с кратно увеличенной вероятностью.',
-    // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
     // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -795,11 +795,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: spiritsRelatedSpell.name,
   },
+  // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
   {
     id: 'pray-s',
     humanReadableName: 'Pray my lame',
     description: 'Помогает нужному духу обрести силы для воплощения',
-    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 5 минут
     target: 'scan',
     targetsSignature: kAstralBodyTargeted,
@@ -808,11 +808,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
   {
     id: 'pray-m',
     humanReadableName: 'Pray my name',
     description: 'Сильно помогает нужному духу обрести силы для воплощения',
-    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 10 минут
     target: 'scan',
     targetsSignature: kAstralBodyTargeted,
@@ -822,11 +822,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
   {
     id: 'pray-xl',
     humanReadableName: 'Pray my fame',
     description: 'Как боженька помогает нужному духу обрести силы для воплощения',
-    // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
     // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 30 минут
     target: 'scan',
     targetsSignature: kAstralBodyTargeted,
@@ -836,11 +836,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
   {
     id: 'astral-body-1',
     humanReadableName: 'Астральное тельце',
     description: 'Ненадолго перейти в астральное тело, слабо готовое к астральному бою',
-    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     // Время действия 15 минут, кулдаун 45 минут После активации маг переключается в астральное тело. У него 2 хита и абилка "Астробой"
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -849,11 +849,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
   {
     id: 'astral-body-2',
     humanReadableName: 'Астральное тело',
     description: 'Перейти в астральное тело, готовое к астральному бою',
-    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     // Время действия 45 минут, кулдаун 55 минут После активации маг переключается в астральное тело. У него 5 хитов и абилка "Астробоевик"
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -862,11 +862,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
   {
     id: 'astral-body-3',
     humanReadableName: 'Корпус А',
     description: 'На долгий срок перейти в астральное тело, отлично готовое к астральному бою.',
-    // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
     // Время действия 120 минут, кулдаун 125 минут После активации маг переключается в астральное тело. У него 12 хитов и абилка "Астробугай"
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -959,11 +959,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 5,
     eventType: reviveOnTarget.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'fresh-new-day',
     humanReadableName: 'Fresh new day ',
     description: 'Перезарядка артефакта. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 40 минут. Позволяет восстановить активированный (то есть потраченный) артефакт с любым заклинанием - в такое же состояние, какое они имели до активации.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -972,11 +972,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-enlarge-pencil',
     humanReadableName: 'Crate of the art: Enlarge Your Pencil',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Enlarge Your Pencil. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Enlarge Your Pencil - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -985,11 +985,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-stone-skin',
     humanReadableName: 'Crate of the art: Stone skin',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Stone skin. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Stone skin - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -998,11 +998,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-tempus-fugit',
     humanReadableName: 'Crate of the art: Tempus Fugit',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Tempus Fugit. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tempus Fugit - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1011,11 +1011,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-beacon',
     humanReadableName: 'Crate of the art: Beacon',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Beacon. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Beacon - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1024,11 +1024,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-run-spirit-run',
     humanReadableName: 'Crate of the art: Run, spirit, run',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Run, spirit, run. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Run, spirit, run - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1037,11 +1037,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-input-stream',
     humanReadableName: 'Crate of the art: InputStream',
     description: 'Ты можешь создавать артефакты, содержащие заклинание InputStream. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание InputStream - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1050,11 +1050,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-output-stream',
     humanReadableName: 'Crate of the art: OutputStream',
     description: 'Ты можешь создавать артефакты, содержащие заклинание OutputStream. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание OutputStream - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1063,11 +1063,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-mosquito-tree',
     humanReadableName: 'Crate of the art: Mosquito Tree',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Mosquito Tree. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Mosquito Tree - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1076,11 +1076,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-feed-the-cat',
     humanReadableName: 'Crate of the art: Feed the cat',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Feed the cat. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Feed the cat - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1089,11 +1089,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-tame-the-dog',
     humanReadableName: 'Crate of the art: Tame the dog',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Tame the dog. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Tame the dog - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1102,11 +1102,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
   {
     id: 'artifact-exorcizamus',
     humanReadableName: 'Crate of the art: Exorcizamus',
     description: 'Ты можешь создавать артефакты, содержащие заклинание Exorcizamus. Требуемая эссенция: больше 4',
-    // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
     // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Exorcizamus - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1127,11 +1127,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 2,
     eventType: alloHomorusAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'medcart-healing',
     humanReadableName: 'Полевое лечение тяжрана',
     description: '',
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
@@ -1139,11 +1139,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'autodoc-healing',
     humanReadableName: 'Лечение тяжрана',
     description: '',
-    // TODO(aeremin): Add proper implementation
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
@@ -1190,11 +1190,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: capsuleReanimate.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'implant-active',
     humanReadableName: 'Установка импланта',
     description: 'Для установки импланта используй эту способность. Необходим автодок!',
-    // TODO(aeremin): Add proper implementation
     // Активирует процесс установки импланта.
     // надо отсканировать:
     // - QR автодока
@@ -1208,11 +1208,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/lbmO5n8E/337-дроны-модификация-дронов-реализовать-возможность-установки-и-снятия-модов-в-дроны): Add proper implementation
   {
     id: 'tuning-active',
     humanReadableName: 'Установка мода в дрон\\кибердеку',
     description: 'Для установки мода в дрон\\кибердеку используй эту способность.Необходима мастерская!',
-    // TODO(https://trello.com/c/lbmO5n8E/337-дроны-модификация-дронов-реализовать-возможность-установки-и-снятия-модов-в-дроны): Add proper implementation
     // Активирует процесс установки мода.
     // надо отсканировать:
     // - QR Мастерской
@@ -1227,11 +1227,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   {
     id: 'repoman-active',
     humanReadableName: 'Рипомен',
     description: 'Активируй, чтобы снять имплант\\мод. Выберется самый слабый.',
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
     // Активирует процесс снятия импланта\мода.
     // надо отсканировать
     // QR чаммера \ дрона \ кибердеки
@@ -1246,11 +1246,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   {
     id: 'repoman-black',
     humanReadableName: 'Черный рипомен',
     description: 'Активируй, чтобы снять имплант\\мод. Выберется самый сильный.',
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
     // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ). Смотрим параметр rigging.repomanBonus + Int ,  Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр rigging.repomanBonus. Если несколько одинаково дорогих - любой. Если rigging.repomanBonus не хватило - ничего не происходит.
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1259,11 +1259,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   {
     id: 'repoman-medic',
     humanReadableName: 'Рипомен хирург',
     description: 'Ты умеешь использовать автодок и выбирать сам, какой имплант хочешь снять.',
-    // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
     // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще auto-doc-bonus.
     // Вырезанный имплант записывается на QR чип
     target: 'scan',
@@ -1739,11 +1739,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: vampireBite.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'meta-werewolf',
     humanReadableName: 'Оборотень',
     description: 'Нажми, чтобы принять форму зверя - не более чем на 60 минут.',
-    // TODO(aeremin): Add proper implementation
     // выдает абилку Форма зверя (?)
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1752,11 +1752,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'rd-reset-essence',
     humanReadableName: 'РД Полное восстановление Эссенс',
     description: 'РД Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
-    // TODO(aeremin): Add proper implementation
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  пересчитывается itEssense
     // itUsedEssense = 0
@@ -1769,11 +1769,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
     description: 'На допросе цель развернуто отвечает на заданный вопрос и теряет один хит.',
-    // TODO(aeremin): Add proper implementation
     // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1782,12 +1782,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'take-no-harm',
     humanReadableName: 'Take no harm',
     description:
       'Раскрыть "магический щит" (прозрачный зонтик, защищает от любого легкого оружия), требуется активация способности перед использованием. После активации действует 5 минут',
-    // TODO(aeremin): Add proper implementation
     // При активации на 5 минут выдаёт способность Magic Shield
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1796,11 +1796,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'pencil-large',
     humanReadableName: 'Pencil, large!',
     description: 'Получить силу - одно оружие в руках будет считаться тяжёлым. После активации действует 5 минут.',
-    // TODO(aeremin): Add proper implementation
     // При активации на 5 минут выдаёт способность PENCIL
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1809,11 +1809,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'skin-stone',
     humanReadableName: 'Skin, Stone!',
     description: 'Поднять щиты - имеющаяся броня будет считаться тяжёлой. После активации действует 5 минут.',
-    // TODO(aeremin): Add proper implementation
     // При активации на 5 минут выдаёт способность Stone Skin
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1822,11 +1822,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'tincasm',
     humanReadableName: 'Think as a master',
     description: 'Последнее китайское предупреждение уже было.',
-    // TODO(aeremin): Add proper implementation
     // После активации абилки у мага появляется на 10 минут пассивная абилка с текстом "С <такого-то времени> по <такое-то время + 10 мин> все персонажи, присутствующие в реале рядом с магом (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), оказываются в тяжране, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам".
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1835,11 +1835,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'gm-increase-essence',
     humanReadableName: 'Эссенс "+1"',
     description: 'Увеличить Эссенс персонажа +1',
-    // TODO(aeremin): Add proper implementation
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  его  базовый показатель Эссенса увеличивается на +1.
     //  itMaxEssense = itMaxEssense + 100.
@@ -1850,11 +1850,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'gm-decrease-essence',
     humanReadableName: 'Эссенс "-1"',
     description: 'Уменьшить Эссенс на -1',
-    // TODO(aeremin): Add proper implementation
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  его  базовый показатель Эссенса уменьшается на -1
     //  itMaxEssense = itMaxEssense - 100
@@ -1865,11 +1865,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'gm-reset-essence',
     humanReadableName: 'Полное восстановление Эссенс',
     description: 'Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
-    // TODO(aeremin): Add proper implementation
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  меняются показатели:
     // itUsedEssense = 0
@@ -1882,11 +1882,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'gm-respawn-digital',
     humanReadableName: 'Воскрешение цифровой',
     description: 'Воскрешение Цифровой',
-    // TODO(aeremin): Add proper implementation
     // Эта абилка нужна как мастерская.
     // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
     target: 'scan',
@@ -1896,11 +1896,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   {
     id: 'gm-increase-magic',
     humanReadableName: 'Увеличение магии "+1"',
     description: 'Увеличение магии +1',
-    // TODO(aeremin): Add proper implementation
     // Увеличение нехуеватости Магии "+1".
     target: 'scan',
     targetsSignature: kNoTarget,
