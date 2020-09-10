@@ -37,7 +37,7 @@ function readSourceFileWithoutComments(filename: string): ts.SourceFile {
   const contents = fs
     .readFileSync(filename, 'utf8')
     .replace(/ {2}\/\/ TODO\(/gm, '  %% TODO(')
-    .replace(/ {4}\/\/.*$\r?\n/gm, '')
+    .replace(/ {2}\/\/.*$\r?\n/gm, '')
     .replace(/ {2}%%/gm, '  //');
   return ts.createSourceFile('input.ts', contents, ts.ScriptTarget.Latest, true);
 }
@@ -84,23 +84,28 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
         const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
         const elements: ts.Expression[] = [...existingAbilities.elements];
         for (const ability of abilities) {
-          const prereqsAssignment = ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([]));
           const element = ts.createObjectLiteral(
             [
               ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
               ts.createPropertyAssignment(ts.createIdentifier('name'), ts.createStringLiteral(ability.name)),
               ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
               ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
-              prereqsAssignment,
+              ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([])),
               ts.createPropertyAssignment(ts.createIdentifier('modifier'), ts.createArrayLiteral([])),
             ],
             true,
           );
-          addComment(prereqsAssignment, 'TODO(aeremin): Implement and add modifier here');
-          addComment(prereqsAssignment, ability.gmDescription);
+          addComment(element, 'TODO(aeremin): Implement and add modifier here');
+          addComment(element, ability.gmDescription);
           elements.push(element);
         }
         return ts.createArrayLiteral(elements);
+      }
+
+      if (ts.isObjectLiteralExpression(node)) {
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        if (currentAbility) addComment(result, currentAbility.gmDescription);
+        return result;
       }
 
       if (ts.isPropertyAssignment(node)) {
@@ -122,15 +127,11 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
           if (propertyName == 'description') {
             return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
           }
-          if (propertyName == 'prerequisites') {
-            addComment(node, currentAbility.gmDescription);
-            return node;
-          }
           if (propertyName == 'karmaCost') {
             return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
           }
         }
-        if (propertyName == 'modifier' || propertyName == 'prerequisites') {
+        if (propertyName == 'modifier' || propertyName == 'prerequisites' || propertyName == 'prerequisites') {
           return node;
         }
       }
@@ -161,13 +162,12 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
         const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
         const elements: ts.Expression[] = [...existingAbilities.elements];
         for (const ability of abilities) {
-          const targetAssignment = ts.createPropertyAssignment(ts.createIdentifier('target'), ts.createStringLiteral('scan'));
           const element = ts.createObjectLiteral(
             [
               ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
               ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
               ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
-              targetAssignment,
+              ts.createPropertyAssignment(ts.createIdentifier('target'), ts.createStringLiteral('scan')),
               ts.createPropertyAssignment(ts.createIdentifier('targetsSignature'), ts.createIdentifier('kNoTarget')),
               ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), ts.createNumericLiteral(ability.cooldown)),
               ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
@@ -180,11 +180,17 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
             true,
           );
 
-          addComment(targetAssignment, 'TODO(aeremin): Add proper implementation');
-          addComment(targetAssignment, ability.gmDescription);
+          addComment(element, 'TODO(aeremin): Add proper implementation');
+          addComment(element, ability.gmDescription);
           elements.push(element);
         }
         return ts.createArrayLiteral(elements);
+      }
+
+      if (ts.isObjectLiteralExpression(node)) {
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        if (currentAbility) addComment(result, currentAbility.gmDescription);
+        return result;
       }
 
       if (ts.isPropertyAssignment(node)) {
@@ -205,10 +211,6 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
           }
           if (propertyName == 'description') {
             return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
-          }
-          if (propertyName == 'target') {
-            addComment(node, currentAbility.gmDescription);
-            return node;
           }
           if (propertyName == 'karmaCost') {
             return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
@@ -253,14 +255,13 @@ export function rewriteSpells(abilities: Spell[]) {
         const existingAbilities = ts.visitEachChild(node, abilityVisit, context);
         const elements: ts.Expression[] = [...existingAbilities.elements];
         for (const ability of abilities) {
-          const sphereAssignment = ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere));
           const element = ts.createObjectLiteral(
             [
               ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
               ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
               ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
               ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
-              sphereAssignment,
+              ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere)),
               ts.createPropertyAssignment(
                 ts.createIdentifier('eventType'),
                 ts.createPropertyAccess(ts.createIdentifier('dummySpell'), ts.createIdentifier('name')),
@@ -269,11 +270,17 @@ export function rewriteSpells(abilities: Spell[]) {
             ],
             true,
           );
-          addComment(sphereAssignment, 'TODO(aeremin): Add proper implementation');
-          addComment(sphereAssignment, ability.gmDescription);
+          addComment(element, 'TODO(aeremin): Add proper implementation');
+          addComment(element, ability.gmDescription);
           elements.push(element);
         }
         return ts.createArrayLiteral(elements);
+      }
+
+      if (ts.isObjectLiteralExpression(node)) {
+        const result = ts.visitEachChild(node, abilityVisit, context);
+        if (currentAbility) addComment(result, currentAbility.gmDescription);
+        return result;
       }
 
       if (ts.isPropertyAssignment(node)) {
@@ -295,15 +302,11 @@ export function rewriteSpells(abilities: Spell[]) {
           if (propertyName == 'description') {
             return ts.createPropertyAssignment('description', ts.createStringLiteral(currentAbility.description));
           }
-          if (propertyName == 'sphere') {
-            addComment(node, currentAbility.gmDescription);
-            return node;
-          }
           if (propertyName == 'karmaCost') {
             return ts.createPropertyAssignment('karmaCost', ts.createNumericLiteral(currentAbility.karmaCost));
           }
         }
-        if (propertyName == 'eventType' || propertyName == 'hasTarget') {
+        if (propertyName == 'eventType' || propertyName == 'hasTarget' || propertyName == 'sphere') {
           return node;
         }
       }
