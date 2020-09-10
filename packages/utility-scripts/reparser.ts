@@ -119,9 +119,7 @@ function createTransformer<T extends AnyAbility>(
         if (currentAbility && spreadsheetProperties.includes(propertyName)) {
           return ts.createPropertyAssignment(propertyName, abilityPropertyToLiteral(currentAbility, propertyName));
         }
-        if (!spreadsheetProperties.includes(propertyName)) {
-          return node;
-        }
+        return node;
       }
       return ts.visitEachChild(node, abilityVisit, context);
     };
