@@ -107,6 +107,14 @@ export class AddedPassiveAbility {
   @property.array(String) modifierIds?: string[];
 }
 
+export interface Feature {
+  id: string;
+  humanReadableName: string;
+  description: string;
+  karmaCost: number;
+  prerequisites?: string[];
+}
+
 // Ethic trigger contained in the model object (as opposed to EthicTrigger which is configuration/dictionary kind).
 @model()
 export class AddedEthicTrigger {

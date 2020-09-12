@@ -5,7 +5,7 @@ import { ModelProcessRequest, ModelProcessResponse } from '@sr2020/interface/mod
 import { EmptyModel } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { QrCode } from '../models/qr-code.model';
-import { Sr2020Character } from '../models/sr2020-character.model';
+import { Feature, Sr2020Character } from '../models/sr2020-character.model';
 import { Location } from '../models/location.model';
 
 export interface ModelEngineService {
@@ -16,7 +16,7 @@ export interface ModelEngineService {
   defaultCharacter(req: Empty): Promise<Sr2020Character>;
   defaultLocation(req: Empty): Promise<Location>;
 
-  availableFeatures(req: Sr2020Character): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]>;
+  availableFeatures(req: Sr2020Character): Promise<Feature[]>;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {

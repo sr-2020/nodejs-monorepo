@@ -27,7 +27,7 @@ import {
 } from './mental';
 import { autodocHeal, autodocRevive, capsuleReanimate, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/sr2020-common/models/qr-code.model';
-import { TargetSignature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Feature, TargetSignature } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
   discourseGroupAddAbility,
@@ -132,15 +132,10 @@ const kDroneAndBodyStorageTargeted: TargetSignature[] = [
   },
   kBodyStorageTarget,
 ];
-export interface ActiveAbility {
-  id: string;
-  humanReadableName: string;
-  description: string;
+export interface ActiveAbility extends Feature {
   target: TargetType;
   targetsSignature: TargetSignature[];
   cooldownMinutes: number;
-  karmaCost: number;
-  prerequisites?: string[];
   minimalEssence: number; // in 0-6 range, not 0-600.
   eventType: string;
 }

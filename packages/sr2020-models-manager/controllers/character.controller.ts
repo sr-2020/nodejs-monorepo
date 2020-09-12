@@ -4,6 +4,7 @@ import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import {
   CharacterCreationRequest,
+  Feature,
   Sr2020Character,
   Sr2020CharacterProcessResponse,
 } from '@sr2020/sr2020-common/models/sr2020-character.model';
@@ -215,9 +216,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
-  async availableFeatures(
-    @param.path.number('id') id: number,
-  ): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]> {
+  async availableFeatures(@param.path.number('id') id: number): Promise<Feature[]> {
     const model = await getRepository(Sr2020Character).findOneOrFail(id);
     return this.modelEngineService.availableFeatures(model);
   }

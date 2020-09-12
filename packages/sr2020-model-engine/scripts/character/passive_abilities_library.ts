@@ -66,12 +66,8 @@ import {
   multiplySpiritResistanceMultiplier,
   setTransactionAnonymous,
 } from './basic_effects';
-export interface PassiveAbility {
-  id: string;
-  humanReadableName: string;
-  description: string;
-  karmaCost: number;
-  prerequisites: string[];
+import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];
 }
 // Not exported by design, use kAllPassiveAbilities instead.

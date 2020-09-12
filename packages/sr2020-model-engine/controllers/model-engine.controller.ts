@@ -1,5 +1,6 @@
 import { get, HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
 import {
+  Feature,
   Sr2020Character,
   Sr2020CharacterProcessRequest,
   Sr2020CharacterProcessResponse,
@@ -254,9 +255,7 @@ export class ModelEngineController implements ModelEngineService {
       },
     },
   })
-  async availableFeatures(
-    @requestBody() req: Sr2020Character,
-  ): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]> {
+  async availableFeatures(@requestBody() req: Sr2020Character): Promise<Feature[]> {
     return getAllAvailableFeatures(req);
   }
 
