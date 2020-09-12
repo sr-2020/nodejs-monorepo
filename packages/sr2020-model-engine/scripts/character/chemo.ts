@@ -10,6 +10,7 @@ import {
   increaseMaxMeatHp,
   increaseMentalAttack,
   increaseMentalAttackAndProtection,
+  increaseMentalProtection,
   increaseResonance,
   multiplyCooldownCoefficient,
 } from './basic_effects';
@@ -693,41 +694,41 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'vampirium',
     level: 'base',
-    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
     durationEffect: {
-      handler: vampiriumEffect,
-      duration: duration(10, 'minutes'),
-      amount: 0,
+      handler: increaseMentalProtection,
+      duration: duration(60, 'minutes'),
+      amount: 15,
     },
   },
   {
     element: 'vampirium',
     level: 'uber',
-    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
     durationEffect: {
-      handler: vampiriumEffect,
-      duration: duration(10, 'minutes'),
-      amount: 0,
+      handler: increaseMentalProtection,
+      duration: duration(60, 'minutes'),
+      amount: 15,
     },
   },
   {
     element: 'vampirium',
     level: 'super',
-    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
     durationEffect: {
-      handler: vampiriumEffect,
-      duration: duration(10, 'minutes'),
-      amount: 0,
+      handler: increaseMentalProtection,
+      duration: duration(60, 'minutes'),
+      amount: 15,
     },
   },
   {
     element: 'vampirium',
     level: 'crysis',
-    message: 'Персонаж 10 минут пребывает в эйфории. Появилась зависимость.',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
     durationEffect: {
-      handler: vampiriumEffect,
-      duration: duration(10, 'minutes'),
-      amount: 0,
+      handler: increaseMentalProtection,
+      duration: duration(60, 'minutes'),
+      amount: 15,
     },
   },
 ];
@@ -886,15 +887,6 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Temp
     name: 'Тяжелое оружие',
     description: 'Позволяет использовать тяжелое оружие.',
     id: 'heavy-weapons-chemo',
-    validUntil: m.validUntil,
-  });
-}
-
-export function vampiriumEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  api.model.passiveAbilities.push({
-    name: 'Эйфория',
-    description: 'Вы пребываете в состоянии странной эйфории',
-    id: 'vampirium-bite-chemo',
     validUntil: m.validUntil,
   });
 }
