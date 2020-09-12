@@ -115,6 +115,17 @@ export interface Feature {
   prerequisites?: string[];
 }
 
+export const kFeatureDescriptor = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    humanReadableName: { type: 'string' },
+    description: { type: 'string' },
+    karmaCost: { type: 'number' },
+    prerequisites: { type: 'array', items: { type: 'string' } },
+  },
+};
+
 // Ethic trigger contained in the model object (as opposed to EthicTrigger which is configuration/dictionary kind).
 @model()
 export class AddedEthicTrigger {

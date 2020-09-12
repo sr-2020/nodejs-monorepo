@@ -5,6 +5,7 @@ import { Empty } from '@sr2020/interface/models/empty.model';
 import {
   CharacterCreationRequest,
   Feature,
+  kFeatureDescriptor,
   Sr2020Character,
   Sr2020CharacterProcessResponse,
 } from '@sr2020/sr2020-common/models/sr2020-character.model';
@@ -201,15 +202,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
           'application/json': {
             schema: {
               type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  humanReadableName: { type: 'string' },
-                  description: { type: 'string' },
-                  karmaCost: { type: 'number' },
-                },
-              },
+              items: kFeatureDescriptor,
             },
           },
         },

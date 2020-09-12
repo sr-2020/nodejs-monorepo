@@ -1,6 +1,7 @@
 import { get, HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
 import {
   Feature,
+  kFeatureDescriptor,
   Sr2020Character,
   Sr2020CharacterProcessRequest,
   Sr2020CharacterProcessResponse,
@@ -240,15 +241,7 @@ export class ModelEngineController implements ModelEngineService {
           'application/json': {
             schema: {
               type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  humanReadableName: { type: 'string' },
-                  description: { type: 'string' },
-                  karmaCost: { type: 'number' },
-                },
-              },
+              items: kFeatureDescriptor,
             },
           },
         },
