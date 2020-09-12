@@ -153,3 +153,31 @@ export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Chara
     validUntil: m.validUntil,
   });
 }
+
+type Feature = PassiveAbility | ActiveAbility | Spell;
+type AddedFeature = AddedPassiveAbility | AddedActiveAbility | AddedSpell;
+
+function getFeatureIdsInModel(model: Sr2020Character): string[] {
+  const getId = (f: AddedFeature) => f.id;
+  return [...model.passiveAbilities.map(getId), ...model.activeAbilities.map(getId), ...model.spells.map(getId)];
+}
+
+function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
+  const modelFeatureIds = getFeatureIdsInModel(model);
+  return (f.prerequisites ?? []).every((prerequisiteId) => modelFeatureIds.includes(prerequisiteId));
+}
+
+export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
+  const result: Feature[] = [];
+  for (const [, feature] of getAllActiveAbilities()) {
+    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+  }
+  for (const [, feature] of kAllPassiveAbilities) {
+    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+  }
+  for (const [, feature] of kAllSpells) {
+    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+  }
+  // TODO(https://trello.com/c/GJmKFGCF/406-скидки-за-комбо-метатип-архетип) Implement discounts.
+  return result;
+}
