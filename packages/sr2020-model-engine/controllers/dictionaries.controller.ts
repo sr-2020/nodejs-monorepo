@@ -1,12 +1,11 @@
 import { get } from '@loopback/rest';
-import { kAllPassiveAbilities } from '../scripts/character/passive_abilities_library';
-import { kAllSpells } from '../scripts/character/spells_library';
-import { getAllActiveAbilities } from '../scripts/character/library_registrator';
 import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
 import { kAllEthicGroups } from '../scripts/character/ethics_library';
 import { kAllDrones } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { Feature, kFeatureDescriptor } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 export class DictionariesController {
   @get('/features', {
@@ -17,22 +16,15 @@ export class DictionariesController {
           'application/json': {
             schema: {
               type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  humanReadableName: { type: 'string' },
-                  description: { type: 'string' },
-                },
-              },
+              items: kFeatureDescriptor,
             },
           },
         },
       },
     },
   })
-  features(): { id: string; humanReadableName: string; description: string }[] {
-    return [...kAllPassiveAbilities.values(), ...getAllActiveAbilities().values(), ...kAllSpells.values()];
+  features(): Feature[] {
+    return getAllFeatures();
   }
 
   @get('/implants', {

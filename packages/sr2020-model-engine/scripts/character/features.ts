@@ -177,8 +177,7 @@ function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
   return (f.prerequisites ?? []).every((prerequisiteId) => modelFeatureIds.includes(prerequisiteId));
 }
 
-export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
-  const result: Feature[] = [];
+export function getAllFeatures(): Feature[] {
   const extractFeatureFields = (f: Feature): Feature => ({
     id: f.id,
     humanReadableName: f.humanReadableName,
@@ -186,15 +185,10 @@ export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
     prerequisites: f.prerequisites,
     karmaCost: f.karmaCost,
   });
-  for (const [, feature] of getAllActiveAbilities()) {
-    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
-  }
-  for (const [, feature] of kAllPassiveAbilities) {
-    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
-  }
-  for (const [, feature] of kAllSpells) {
-    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
-  }
+  return [...getAllActiveAbilities().values(), ...kAllPassiveAbilities.values(), ...kAllSpells.values()].map(extractFeatureFields);
+}
+
+export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
   // TODO(https://trello.com/c/GJmKFGCF/406-скидки-за-комбо-метатип-архетип) Implement discounts.
-  return result;
+  return getAllFeatures().filter((f: Feature) => satisfiesPrerequisites(model, f));
 }
