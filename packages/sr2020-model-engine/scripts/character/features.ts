@@ -179,14 +179,21 @@ function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
 
 export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
   const result: Feature[] = [];
+  const extractFeatureFields = (f: Feature): Feature => ({
+    id: f.id,
+    humanReadableName: f.humanReadableName,
+    description: f.description,
+    prerequisites: f.prerequisites,
+    karmaCost: f.karmaCost,
+  });
   for (const [, feature] of getAllActiveAbilities()) {
-    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
   }
   for (const [, feature] of kAllPassiveAbilities) {
-    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
   }
   for (const [, feature] of kAllSpells) {
-    if (satisfiesPrerequisites(model, feature)) result.push(feature);
+    if (satisfiesPrerequisites(model, feature)) result.push(extractFeatureFields(feature));
   }
   // TODO(https://trello.com/c/GJmKFGCF/406-скидки-за-комбо-метатип-архетип) Implement discounts.
   return result;
