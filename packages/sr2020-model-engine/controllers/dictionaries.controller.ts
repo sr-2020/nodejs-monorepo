@@ -32,7 +32,11 @@ export class DictionariesController {
     },
   })
   features(): { id: string; name: string; description: string }[] {
-    const pasiveAbilities = [...kAllPassiveAbilities.values()].map((f) => ({ id: f.id, name: f.name, description: f.description }));
+    const pasiveAbilities = [...kAllPassiveAbilities.values()].map((f) => ({
+      id: f.id,
+      name: f.humanReadableName,
+      description: f.description,
+    }));
     const activeAbilities = [...getAllActiveAbilities().values()].map((f) => ({
       id: f.id,
       name: f.humanReadableName,

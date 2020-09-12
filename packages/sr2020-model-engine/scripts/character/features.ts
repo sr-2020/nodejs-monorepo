@@ -44,7 +44,12 @@ function addPassiveAbility(model: Sr2020Character, ability: PassiveAbility) {
   const modifiersToAdd = Array.isArray(ability.modifier) ? ability.modifier : [ability.modifier];
   const modifierIds: string[] = [];
   for (const m of modifiersToAdd) modifierIds.push(addModifier(model, m).mID);
-  const addedAbility: AddedPassiveAbility = { id: ability.id, name: ability.name, description: ability.description, modifierIds };
+  const addedAbility: AddedPassiveAbility = {
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: ability.description,
+    modifierIds,
+  };
   model.passiveAbilities.push(addedAbility);
 }
 
@@ -141,14 +146,14 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
       ability: passiveAbility,
     }),
     d,
-    `Добавление временной способности ${passiveAbility.name}`,
+    `Добавление временной способности ${passiveAbility.humanReadableName}`,
   );
 }
 
 export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { ability: PassiveAbility }) {
   api.model.passiveAbilities.push({
     id: m.ability.id,
-    name: m.ability.name,
+    name: m.ability.humanReadableName,
     description: m.ability.description,
     validUntil: m.validUntil,
   });
