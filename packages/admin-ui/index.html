@@ -540,7 +540,7 @@
                   <b-card-body>
                     <b-input-group>
                       <b-form-select v-model="selectedFeature">
-                        <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.name }} </option>
+                        <option v-for="feature in allFeatures" :value="feature.id"> {{ feature.humanReadableName }} </option>
                       </b-form-select>
                       <b-form-input v-model="selectedFeature"></b-form-input>
                       <b-input-group-append>

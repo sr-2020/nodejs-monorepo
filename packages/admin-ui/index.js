@@ -66,8 +66,8 @@ app = new Vue({
       const response = await this.$http.get(`https://model-engine.evarun.ru/features`);
       this.allFeatures = response.body;
       this.allFeatures.sort((f1, f2) => {
-        if (f1.name > f2.name) return 1;
-        if (f1.name < f2.name) return -1;
+        if (f1.humanReadableName > f2.humanReadableName) return 1;
+        if (f1.humanReadableName < f2.humanReadableName) return -1;
         return 0;
       });
     }

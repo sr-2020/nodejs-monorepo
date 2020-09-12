@@ -21,7 +21,7 @@ export class DictionariesController {
                 type: 'object',
                 properties: {
                   id: { type: 'string' },
-                  name: { type: 'string' },
+                  humanReadableName: { type: 'string' },
                   description: { type: 'string' },
                 },
               },
@@ -31,19 +31,8 @@ export class DictionariesController {
       },
     },
   })
-  features(): { id: string; name: string; description: string }[] {
-    const pasiveAbilities = [...kAllPassiveAbilities.values()].map((f) => ({
-      id: f.id,
-      name: f.humanReadableName,
-      description: f.description,
-    }));
-    const activeAbilities = [...getAllActiveAbilities().values()].map((f) => ({
-      id: f.id,
-      name: f.humanReadableName,
-      description: f.description,
-    }));
-    const spells = [...kAllSpells.values()].map((f) => ({ id: f.id, name: f.humanReadableName, description: f.description }));
-    return [...spells, ...pasiveAbilities, ...activeAbilities];
+  features(): { id: string; humanReadableName: string; description: string }[] {
+    return [...kAllPassiveAbilities.values(), ...getAllActiveAbilities().values(), ...kAllSpells.values()];
   }
 
   @get('/implants', {
