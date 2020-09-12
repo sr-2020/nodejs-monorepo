@@ -112,7 +112,7 @@ export interface Feature {
   humanReadableName: string;
   description: string;
   karmaCost: number;
-  prerequisites?: string[];
+  prerequisites: string[];
 }
 
 export const kFeatureDescriptor = {

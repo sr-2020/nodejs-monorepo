@@ -18,7 +18,7 @@ describe('Features library', () => {
 
   it('Passive abilities prerequisites are valid', () => {
     for (const [, feature] of kAllPassiveAbilities) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(allValidPrerequisites.has(prereq)).to.be.true();
       }
     }
@@ -26,7 +26,7 @@ describe('Features library', () => {
 
   it('Passive ability does not require itself', () => {
     for (const [id, feature] of kAllPassiveAbilities) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(prereq).not.equal(id);
       }
     }
@@ -34,14 +34,14 @@ describe('Features library', () => {
 
   it('Passive ability prerequisites are not duplicated', () => {
     for (const [, feature] of kAllPassiveAbilities) {
-      const prereqs = feature.prerequisites ?? [];
+      const prereqs = feature.prerequisites;
       expect(new Set<string>(prereqs).size).to.equal(prereqs.length);
     }
   });
 
   it('Active abilities prerequisites are valid', () => {
     for (const [, feature] of getAllActiveAbilities()) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(allValidPrerequisites.has(prereq)).to.be.true();
       }
     }
@@ -49,7 +49,7 @@ describe('Features library', () => {
 
   it('Active ability does not require itself', () => {
     for (const [id, feature] of getAllActiveAbilities()) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(prereq).not.equal(id);
       }
     }
@@ -57,14 +57,14 @@ describe('Features library', () => {
 
   it('Active ability prerequisites are not duplicated', () => {
     for (const [, feature] of getAllActiveAbilities()) {
-      const prereqs = feature.prerequisites ?? [];
+      const prereqs = feature.prerequisites;
       expect(new Set<string>(prereqs).size).to.equal(prereqs.length);
     }
   });
 
   it('Spells prerequisites are valid', () => {
     for (const [, feature] of kAllSpells) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(allValidPrerequisites.has(prereq)).to.be.true();
       }
     }
@@ -72,7 +72,7 @@ describe('Features library', () => {
 
   it('Spell does not require itself', () => {
     for (const [id, feature] of kAllSpells) {
-      for (const prereq of feature.prerequisites ?? []) {
+      for (const prereq of feature.prerequisites) {
         expect(prereq).not.equal(id);
       }
     }
@@ -80,7 +80,7 @@ describe('Features library', () => {
 
   it('Spells prerequisites are not duplicated', () => {
     for (const [, feature] of kAllSpells) {
-      const prereqs = feature.prerequisites ?? [];
+      const prereqs = feature.prerequisites;
       expect(new Set<string>(prereqs).size).to.equal(prereqs.length);
     }
   });

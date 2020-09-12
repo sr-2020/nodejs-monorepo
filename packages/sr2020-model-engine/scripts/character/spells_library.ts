@@ -24,9 +24,9 @@ import {
   trackpointSpell,
 } from './spells';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
 export interface Spell extends Feature {
-  prerequisites?: string[];
   sphere: SpellSphere;
   eventType: string;
   hasTarget?: boolean;
@@ -37,6 +37,7 @@ const kAllSpellsList: Spell[] = [
     id: 'dummy-spell',
     humanReadableName: 'Заглушка',
     description: 'Спелл-заглушка.',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: increaseResonanceSpell.name,
@@ -46,6 +47,7 @@ const kAllSpellsList: Spell[] = [
     id: 'keep-yourself',
     humanReadableName: 'Keep yourself',
     description: 'Увеличение своих хитов. Чем больше Мощь, тем больше хитов и дольше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
     eventType: keepYourselfSpell.name,
@@ -55,6 +57,7 @@ const kAllSpellsList: Spell[] = [
     id: 'ground-heal',
     humanReadableName: 'Ground Heal',
     description: 'Поднять цель из тяжрана. Восстановить хиты до максимума. Чем больше Мощь, тем на большее время запасено заклинание',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'healing',
     eventType: groundHealSpell.name,
@@ -64,6 +67,7 @@ const kAllSpellsList: Spell[] = [
     id: 'live-long-and-prosper',
     humanReadableName: 'Live long and prosper',
     description: 'Увеличить кому-то количество хитов. Чем больше Мощь, тем больше хитов и дольше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
     eventType: liveLongAndProsperSpell.name,
@@ -74,6 +78,7 @@ const kAllSpellsList: Spell[] = [
     id: 'fast-charge',
     humanReadableName: 'Fast charge',
     description: 'Зарядиться на время молниями. Чем больше Мощь, тем больше снарядов и срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: fastChargeSpell.name,
@@ -83,6 +88,7 @@ const kAllSpellsList: Spell[] = [
     id: 'fireball',
     humanReadableName: 'Fireball',
     description: 'Зарядиться на время файерболами. Чем больше Мощь, тем больше снарядов и срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: fireballSpell.name,
@@ -94,6 +100,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Tease lesser mind',
     description:
       'Временно выдаёт способность "раскрыть магический щит" (прозрачный зонтик, защищает от любого легкого оружия), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
     eventType: dummySpell.name,
@@ -105,6 +112,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Enlarge Your Pencil',
     description:
       'Временно выдаёт другому существу способность "Pencil, large!" (одно оружие в руках будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: dummySpell.name,
@@ -115,6 +123,7 @@ const kAllSpellsList: Spell[] = [
     id: 'stone-skin',
     humanReadableName: 'Skin stoner',
     description: 'Временно выдаёт магу способность "Skin, Stone!". Чем больше Мощь, тем дольше сроки хранения',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
     eventType: dummySpell.name,
@@ -126,6 +135,7 @@ const kAllSpellsList: Spell[] = [
     id: 'avalanche',
     humanReadableName: 'Avalanche',
     description: 'Один раз снять со всех в реале в этой локации хиты. Чем больше Мощь, тем больше снимется',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: dummyAreaSpell.name,
@@ -138,6 +148,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Birds',
     description:
       'Каждую минуту, пока не пройдет заклинание, снимать со всех в реале в этой локации по 1 хиту. Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: dummyAreaSpell.name,
@@ -150,6 +161,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Cacophony',
     description:
       'Каждую минуту, пока не пройдет заклинание, снимать со всех в астрале в этой локации по хиту. Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: dummyAreaSpell.name,
@@ -161,6 +173,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Healton',
     description:
       'Каждые 3 минуты, пока не пройдет заклинание, все в реале в этой локации восстанавливают хиты до максимума. Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'healing',
     eventType: dummyAreaSpell.name,
@@ -171,6 +184,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Trackpoint',
     description:
       'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние несколько минут.  Чем больше Мощь, тем точнее будут данные об аурах заклинателей',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: trackpointSpell.name,
@@ -181,6 +195,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Trackball',
     description:
       'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последний час. Чем больше Мощь, тем точнее будут данные об аурах заклинателей',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: trackBallSpell.name,
@@ -193,6 +208,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Tempus Fugit',
     description:
       'Единоразово сдвинуть в текущей локации следы всех заклинаний за последние несколько минут на несколько минут в прошлое. Чем больше Мощь, тем больше следов захватит заклинание и тем дальше сдвинет',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: tempusFugitSpell.name,
@@ -203,6 +219,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Brasilia',
     description:
       'Пока не кончится заклинание, все следы всех заклинаний в этой локации, попадающих в интервал "последние 10 минут", будут каждую минуту сдвигаться в прошлое на 5 минут. Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: brasiliaSpell.name,
@@ -216,6 +233,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Eh bien',
     description:
       'Получить информацию о тех, кто был в этой локации в интервале, содержащем указанный момент времени. Чем больше Мощь, тем больше интервал',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: dummySpell.name,
@@ -227,6 +245,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Beacon',
     description:
       'Пока не кончится заклинание, в эту локацию будут созываться духи из соседних (слабые духи проще). Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: spiritsRelatedSpell.name,
@@ -238,6 +257,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Run, spirit, run',
     description:
       'Пока не кончится заклинание, из этой локации будут распугиваться духи (слабые духи проще). Чем больше Мощь, тем больше срок',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: spiritsRelatedSpell.name,
@@ -249,6 +269,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'InputStream',
     description:
       'Пока не кончится заклинание, мана из соседних локаций будет призываться в эту  (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: dummyManaControlSpell.name,
@@ -260,6 +281,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'OutputStream',
     description:
       'Пока не кончится заклинание, мана из этой локации будет изгоняться в соседние (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: dummyManaControlSpell.name,
@@ -270,6 +292,7 @@ const kAllSpellsList: Spell[] = [
     id: 'mosquito-tree',
     humanReadableName: 'Mosquito Tree',
     description: 'Создать генератор духов, при активации надо сосканировать qr-код человека. Чем больше Мощь, тем сильнее духи',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'astral',
     eventType: spiritsRelatedSpell.name,
@@ -281,6 +304,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Tweet-tweet little bird',
     description:
       'Установить контакт с выбранным из присутствующих духом. Узнать часть его ауры. Послать ему сообщение. Получить от него сообщение',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: spiritsRelatedSpell.name,
@@ -291,6 +315,7 @@ const kAllSpellsList: Spell[] = [
     id: 'feed-the-cat',
     humanReadableName: 'Feed the cat',
     description: 'На время понизить Сопротивляемость указанного духа. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: spiritsRelatedSpell.name,
@@ -301,6 +326,7 @@ const kAllSpellsList: Spell[] = [
     id: 'tame-the-dog',
     humanReadableName: 'Tame the dog',
     description: 'понизить Сопротивляемость духа по отношению к себе',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: spiritsRelatedSpell.name,
@@ -311,6 +337,7 @@ const kAllSpellsList: Spell[] = [
     id: 'whip-the-horse',
     humanReadableName: 'Whip the horse',
     description: 'Повысить Сопротивляемость указанного духа. Чем больше Мощь, тем больше эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: spiritsRelatedSpell.name,
@@ -324,6 +351,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Spirit Suit',
     description:
       'На некоторое время получить возможность попытаться поймать духа, что позволит на протяжении определенного периода переключиться в его тело. Существует штраф за неудачу. Чем больше Мощь, тем больше вероятность поимки и все сроки.',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: spiritsRelatedSpell.name,
@@ -334,6 +362,7 @@ const kAllSpellsList: Spell[] = [
     id: 'exorcizamus',
     humanReadableName: 'Exorcizamus',
     description: 'Попытаться изгнать выбранного из присутствующих духа',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: spiritsRelatedSpell.name,
@@ -343,6 +372,7 @@ const kAllSpellsList: Spell[] = [
     id: 'mene',
     humanReadableName: 'Mene',
     description: 'Узнать часть ауры не сопротивляющегося человека',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     hasTarget: true,
@@ -354,6 +384,7 @@ const kAllSpellsList: Spell[] = [
     id: 'tekel',
     humanReadableName: 'Tekel',
     description: 'Узнать часть ауры одного из присутствующих духов',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: spiritsRelatedSpell.name,
@@ -363,6 +394,7 @@ const kAllSpellsList: Spell[] = [
     id: 'fares',
     humanReadableName: 'Fares',
     description: 'Узнать часть ауры локации',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: readLocationAuraSpell.name,
@@ -374,6 +406,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Panopticon',
     description:
       'Узнать часть ауры всех присутствующих в этой локации в реале и в астрале людей. Чем больше Мощь, тем больший фрагмент аур удастся прочитать',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: dummyAreaSpell.name,
@@ -383,6 +416,7 @@ const kAllSpellsList: Spell[] = [
     id: 'nothing-special',
     humanReadableName: 'Nothing special',
     description: 'Временно усилить цели маску ауры. Чем больше Мощь, тем больше защита',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'aura',
     eventType: nothingSpecialSpell.name,
@@ -394,6 +428,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Odus',
     description:
       'Временно понизить Резонанс цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: odusSpell.name,
@@ -405,6 +440,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Frog skin',
     description:
       'Временно понизить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: frogSkinSpell.name,
@@ -416,6 +452,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Charm',
     description:
       'Временно повысить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: charmSpell.name,
@@ -427,6 +464,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Shtopping',
     description:
       'Временно повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: shtoppingSpell.name,
@@ -438,6 +476,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Tax free',
     description:
       'Временно понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: taxFreeSpell.name,
@@ -449,6 +488,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Dumpty-Humpty',
     description:
       'Временно понизить штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'stats',
     eventType: dumptyHumptySpell.name,
@@ -461,6 +501,7 @@ const kAllSpellsList: Spell[] = [
     humanReadableName: 'Enlarge My Pencil',
     description:
       'Временно выдаёт магу способность "Pencil, large!" (одно оружие в руках будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
     eventType: dummySpell.name,
@@ -472,6 +513,7 @@ const kAllSpellsList: Spell[] = [
     id: 'scum-stoner',
     humanReadableName: 'Scum stoner',
     description: 'Временно выдаёт другому существу способность "Skin, Stone!". Чем больше Мощь, тем дольше сроки хранения',
+    prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
     eventType: dummySpell.name,

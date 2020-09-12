@@ -174,7 +174,7 @@ function getFeatureIdsInModel(model: Sr2020Character): string[] {
 
 function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
   const modelFeatureIds = getFeatureIdsInModel(model);
-  return (f.prerequisites ?? []).every((prerequisiteId) => modelFeatureIds.includes(prerequisiteId));
+  return f.prerequisites.every((prerequisiteId) => modelFeatureIds.includes(prerequisiteId));
 }
 
 export function getAllFeatures(): Feature[] {
