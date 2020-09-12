@@ -65,6 +65,16 @@ const config = {
         defaultLocation: ['req'],
       },
     },
+    {
+      template: {
+        method: 'GET',
+        url: `${baseURL}/character/available_features`,
+        body: '{req}',
+      },
+      functions: {
+        availableFeatures: ['req'],
+      },
+    },
   ],
 };
 

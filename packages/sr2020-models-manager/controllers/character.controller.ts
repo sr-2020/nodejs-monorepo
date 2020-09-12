@@ -191,4 +191,34 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   broadcast(@requestBody() event: EventRequest): Promise<Empty> {
     return this.broadcastEvent(event);
   }
+
+  @get('/character/available_features/{id}', {
+    summary: `Returns the list of features provided character can buy for karma`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  humanReadableName: { type: 'string' },
+                  description: { type: 'string' },
+                  karmaCost: { type: 'number' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async availableFeatures(
+    @param.path.number('id') id: number,
+  ): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]> {
+    const model = await getRepository(Sr2020Character).findOneOrFail(id);
+    return this.modelEngineService.availableFeatures(model);
+  }
 }

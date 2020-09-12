@@ -15,6 +15,8 @@ export interface ModelEngineService {
 
   defaultCharacter(req: Empty): Promise<Sr2020Character>;
   defaultLocation(req: Empty): Promise<Location>;
+
+  availableFeatures(req: Sr2020Character): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]>;
 }
 
 export class ModelEngineServiceProvider implements Provider<ModelEngineService> {

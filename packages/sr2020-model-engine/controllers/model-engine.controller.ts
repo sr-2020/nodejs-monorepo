@@ -1,4 +1,4 @@
-import { HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
+import { get, HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
 import {
   Sr2020Character,
   Sr2020CharacterProcessRequest,
@@ -16,6 +16,7 @@ import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
 import Chance = require('chance');
 import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
+import { getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 const chance = new Chance();
 
@@ -228,6 +229,35 @@ export class ModelEngineController implements ModelEngineService {
     initEthic(result);
     setRaceForModel(result, 'meta-norm');
     return result;
+  }
+
+  @get('/character/available_features', {
+    summary: `Returns the list of features provided character can buy for karma`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  humanReadableName: { type: 'string' },
+                  description: { type: 'string' },
+                  karmaCost: { type: 'number' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async availableFeatures(
+    @requestBody() req: Sr2020Character,
+  ): Promise<{ id: string; humanReadableName: string; description: string; karmaCost: number }[]> {
+    return getAllAvailableFeatures(req);
   }
 
   @post('/location/default', {
