@@ -736,4 +736,7 @@ export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
 export class CharacterCreationRequest {
   @property({ required: false })
   name?: string;
+
+  @property({ required: false, type: 'string' })
+  metarace?: MetaRace;
 }

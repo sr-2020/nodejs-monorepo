@@ -1,5 +1,6 @@
 import { get, HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
 import {
+  CharacterCreationRequest,
   Feature,
   kFeatureDescriptor,
   Sr2020Character,
@@ -16,9 +17,9 @@ import { Empty } from '@sr2020/interface/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
-import Chance = require('chance');
 import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
 import { getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import Chance = require('chance');
 
 const chance = new Chance();
 
@@ -79,14 +80,14 @@ export class ModelEngineController implements ModelEngineService {
       },
     },
   })
-  async defaultCharacter(@requestBody() _: Empty): Promise<Sr2020Character> {
+  async defaultCharacter(@requestBody() req: CharacterCreationRequest): Promise<Sr2020Character> {
     const auraChars: string[] = [];
     for (let i = 0; i < AURA_LENGTH; ++i) auraChars.push(chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }));
     const aura = auraChars.join('');
 
     const result: Sr2020Character = {
       modelId: '',
-      name: 'Вася Пупкин',
+      name: req.name ?? 'Вася Пупкин',
       metarace: 'meta-norm',
       currentBody: 'physical',
       maxHp: 2,
@@ -229,7 +230,7 @@ export class ModelEngineController implements ModelEngineService {
       timers: [],
     };
     initEthic(result);
-    setRaceForModel(result, 'meta-norm');
+    setRaceForModel(result, req.metarace ?? 'meta-norm');
     return result;
   }
 

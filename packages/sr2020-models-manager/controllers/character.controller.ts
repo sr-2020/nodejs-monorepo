@@ -93,10 +93,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     @requestBody() req: CharacterCreationRequest,
     @param.query.boolean('noAbilities') noAbilities: boolean,
   ): Promise<Empty> {
-    const model = await this.modelEngineService.defaultCharacter(new Empty());
-    if (req.name) {
-      model.name = req.name;
-    }
+    const model = await this.modelEngineService.defaultCharacter(req);
     model.modelId = id.toString();
     model.mentalQrId = id + 10000;
 
