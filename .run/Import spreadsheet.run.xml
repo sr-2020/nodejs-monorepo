@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Import spreadsheet" type="NodeJSConfigurationType" node-parameters="--require ts-node/register" path-to-js-file="packages/utility-scripts/features-spreadsheet.ts" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>
