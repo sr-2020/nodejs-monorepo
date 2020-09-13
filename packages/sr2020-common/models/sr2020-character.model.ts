@@ -739,4 +739,7 @@ export class CharacterCreationRequest {
 
   @property({ required: false, type: 'string' })
   metarace?: MetaRace;
+
+  @property.array(String, { required: false })
+  features?: string[];
 }
