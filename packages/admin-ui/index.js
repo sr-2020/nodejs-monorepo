@@ -301,7 +301,7 @@ app = new Vue({
 
     async resetCharacter() {
       try {
-        const response = await this.$http.put(this.characterUrl(this.characterModel.modelId).replace('/model/', '/default/') + '?noAbilities=true', {
+        const response = await this.$http.put(this.characterUrl(this.characterModel.modelId).replace('/model/', '/default/'), {
           name: this.characterModel.name,
         });
         await this.sendCharacterEvent({ eventType: '_', data: {} }, 'Персонаж пересоздан!');

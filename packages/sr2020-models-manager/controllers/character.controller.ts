@@ -88,11 +88,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       },
     },
   })
-  async setDefault(
-    @param.path.number('id') id: number,
-    @requestBody() req: CharacterCreationRequest,
-    @param.query.boolean('noAbilities') noAbilities: boolean,
-  ): Promise<Empty> {
+  async setDefault(@param.path.number('id') id: number, @requestBody() req: CharacterCreationRequest): Promise<Empty> {
     const model = await this.modelEngineService.defaultCharacter(req);
     model.modelId = id.toString();
     model.mentalQrId = id + 10000;
@@ -114,12 +110,6 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
       await manager.getRepository(Sr2020Character).save(model);
       await manager.getRepository(QrCode).save(code);
     });
-
-    if (!noAbilities) {
-      for (const f of ['ask-anon', 'ground-heal', 'fireball']) {
-        await this.postEvent(id, { eventType: 'addFeature', data: { id: f } }, undefined);
-      }
-    }
 
     return new Empty();
   }

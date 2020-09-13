@@ -163,7 +163,7 @@ export class TestFixture {
 
   async saveCharacter(model: DeepPartial<Sr2020Character> = {}) {
     const id = model.modelId ?? 0;
-    await this.client.put(`/character/default/${id}?noAbilities=true`).send({}).expect(200);
+    await this.client.put(`/character/default/${id}`).send({}).expect(200);
     const character = await this._connection.getRepository(Sr2020Character).findOneOrFail(id);
     await this._connection.getRepository(Sr2020Character).save({ ...character, ...model });
   }
