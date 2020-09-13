@@ -326,6 +326,19 @@ describe('Spells', function () {
     }
   });
 
+  it('Blood ritual requires victims with essence > 100', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
+    await fixture.addCharacterFeature('bathory-charger', 1);
+    await fixture.addCharacterFeature('ground-heal', 1);
+
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded', essenceDetails: { max: 600, used: 501 } });
+    const message = await fixture.sendCharacterEventExpectingError(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+      1,
+    );
+    expect(message).containEql('хотя бы 1 эссенс');
+  });
+
   it('Tempus Fugit', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('ground-heal', 1);

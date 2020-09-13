@@ -445,6 +445,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
       if (participant.healthState != 'wounded' && participant.healthState != 'healthy') {
         throw new UserVisibleError('Участники ритуала должны быть живы!');
       }
+
       participants += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
     }
   }
@@ -460,6 +461,10 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
       const victim = api.aquired(Sr2020Character, victimId);
       if (victim.healthState != 'wounded') {
         throw new UserVisibleError('Все жертвы ритуала должны быть в тяжране!');
+      }
+
+      if (victim.essence < 100) {
+        throw new UserVisibleError('Все жертвы ритуала должны иметь хотя бы 1 эссенс!');
       }
 
       api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, {});
