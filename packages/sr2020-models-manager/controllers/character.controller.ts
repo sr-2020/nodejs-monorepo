@@ -90,6 +90,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   })
   async setDefault(@param.path.number('id') id: number, @requestBody() req: CharacterCreationRequest): Promise<Empty> {
     const model = await this.modelEngineService.defaultCharacter(req);
+    model.timestamp = this.timeService.timestamp();
     model.modelId = id.toString();
     model.mentalQrId = id + 10000;
 
