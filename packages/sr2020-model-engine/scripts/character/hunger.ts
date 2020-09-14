@@ -40,7 +40,10 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: Merchandi
   } else if (data.id == 'cow-blood') {
     if (api.workModel.metarace != 'meta-vampire') throw new UserVisibleError('Вы не можете употреблять такую еду');
     api.model.essenceDetails.gap = Math.max(0, api.model.essenceDetails.gap - 100);
+  } else {
+    throw new UserVisibleError('Неподдерживаемая еда!');
   }
+  sendNotificationAndHistoryRecord(api, 'Питание', 'Вы поели и утолили голод.');
 }
 
 export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {

@@ -32,7 +32,7 @@ describe('Hunger-related events', function () {
   it('Eating regularly keeps you healthy', async () => {
     await fixture.saveCharacter();
     for (let i = 0; i < 24; ++i) {
-      await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: {} });
+      await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: { id: 'food' } });
       expect((await fixture.getCharacter()).workModel.healthState).equal('healthy');
     }
   });
