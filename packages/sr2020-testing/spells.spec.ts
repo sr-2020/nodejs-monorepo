@@ -332,11 +332,13 @@ describe('Spells', function () {
     await fixture.addCharacterFeature('ground-heal', 1);
 
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded', essenceDetails: { max: 600, used: 501 } });
-    const message = await fixture.sendCharacterEventExpectingError(
+    await fixture.sendCharacterEvent(
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
-    expect(message).containEql('хотя бы 1 эссенс');
+
+    expect((await fixture.getCharacter('2')).workModel.healthState).equal('wounded');
+    expect((await fixture.getCharacter('2')).workModel.essence).equal(99);
   });
 
   it('Tempus Fugit', async () => {

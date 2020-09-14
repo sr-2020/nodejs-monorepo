@@ -50,6 +50,7 @@ interface MagicFeedback {
 interface RitualStats {
   participants: number;
   victims: number;
+  notes: string;
 }
 
 export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
@@ -130,7 +131,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     api,
     'Заклинание',
     spell.humanReadableName,
-    `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${feedback.amount} на ${feedback.duration} минут.`,
+    `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${feedback.amount} на ${feedback.duration} минут. ` +
+      ritualStats.notes,
   );
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
@@ -451,6 +453,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
   }
 
   let victims = 0;
+  let victimWithInsufficientEssence = 0;
   if (data.ritualVictimIds?.length) {
     if (!api.workModel.passiveAbilities.some((a) => a.id == 'bathory-charger')) {
       throw new UserVisibleError('Нет навыков разрешающих проводить кровавые ритуалы!');
@@ -464,17 +467,23 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
       }
 
       if (victim.essence < 100) {
-        throw new UserVisibleError('Все жертвы ритуала должны иметь хотя бы 1 эссенс!');
+        ++victimWithInsufficientEssence;
+        continue;
       }
 
+      ++victims;
       api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, {});
     }
-    victims = ritualVictimIds.size;
   }
-
+  // жертв, у которых не хватает эссенса для использования в ритуале: N
+  const notes =
+    victimWithInsufficientEssence > 0
+      ? `Жертв, у которых не хватает эссенса для использования в ритуале: ${victimWithInsufficientEssence}`
+      : '';
   return {
     participants,
     victims,
+    notes,
   };
 }
 
