@@ -97,6 +97,10 @@
                       <b-th>Максимальное время в VR</b-th>
                       <b-td>{{ characterModel.maxTimeInVr }}</b-td>
                     </b-tr>
+                    <b-tr>
+                      <b-th>Количество слотов под импланты в теле</b-th>
+                      <b-td> {{ characterModel.implantsBodySlots }}</b-td>
+                    </b-tr>
                   </b-tbody>
                 </b-table-simple>
                 <b-button block href="#" v-b-toggle.magic variant="info">
@@ -385,6 +389,10 @@
                 <b-collapse id="drones">
                   <b-table-simple small>
                     <b-tbody>
+                      <b-tr>
+                        <b-th>Модификатор урона при выходе</b-th>
+                        <b-td>{{ characterModel.drones.feedbackModifier }}</b-td>
+                      </b-tr>
                       <b-tr>
                         <b-th>Максимальная сложность дрона</b-th>
                         <b-td>{{ characterModel.drones.maxDifficulty }}</b-td>
