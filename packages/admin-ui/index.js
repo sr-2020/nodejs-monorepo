@@ -49,6 +49,7 @@ app = new Vue({
       pauseDurationHours: 6,
     },
 
+    // TODO(aeremin) Receive from dictionary controller
     allRaces: [
       { id: 'meta-norm', name: 'Норм' },
       { id: 'meta-elf', name: 'Эльф' },
@@ -58,7 +59,8 @@ app = new Vue({
       { id: 'meta-vampire', name: 'Вампир' },
       { id: 'meta-ghoul', name: 'Гуль' },
       { id: 'meta-digital', name: 'Цифровой' },
-      { id: 'meta-spirit', name: 'Дух' },
+      { id: 'meta-eghost', name: 'E-Ghost' },
+      { id: 'meta-ai', name: 'AI' },
     ]
   },
   async created() {
