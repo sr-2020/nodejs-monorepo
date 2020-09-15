@@ -58,7 +58,6 @@ app = new Vue({
       { id: 'meta-troll', name: 'Тролль' },
       { id: 'meta-vampire', name: 'Вампир' },
       { id: 'meta-ghoul', name: 'Гуль' },
-      { id: 'meta-digital', name: 'Цифровой' },
       { id: 'meta-eghost', name: 'E-Ghost' },
       { id: 'meta-ai', name: 'AI' },
     ]
