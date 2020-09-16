@@ -52,12 +52,17 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
   'meta-eghost': ['meta-eghost', 'magic-blockade'],
 };
 
+export function isHmhvv(model: Sr2020Character) {
+  const hmhvvRaces: MetaRace[] = ['meta-vampire', 'meta-ghoul'];
+  return hmhvvRaces.includes(model.metarace);
+}
+
 export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
   for (const id of kRaceFeatures[model.metarace]) removeFeatureFromModel(model, id);
   model.metarace = race;
   for (const id of kRaceFeatures[model.metarace]) addFeatureToModel(model, id);
 
-  if (model.metarace == 'meta-vampire' || model.metarace == 'meta-ghoul') {
+  if (isHmhvv(model)) {
     // HMHVV don't have "normal" hunger.
     removeHunger(model);
     resetHmhvvHunger(model);

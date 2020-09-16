@@ -5,15 +5,12 @@ import { duration } from 'moment';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { hungerWhileInDone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
+import { isHmhvv } from '@sr2020/sr2020-model-engine/scripts/character/races';
 
 const kHungerTimerName = 'normal-hunger';
 const kHungerTimerDuration = duration(6, 'hours').asMilliseconds();
 const kHungerTimerStage1Description = 'Голодный обморок';
 const kHungerTimerStage2Description = 'Смерть от голода';
-
-export function resetHungerEvent(api: EventModelApi<Sr2020Character>, data: {}) {
-  resetHunger(api.model);
-}
 
 export function removeHunger(model: Sr2020Character) {
   model.timers = model.timers.filter((timer) => timer.name != kHungerTimerName);
@@ -32,6 +29,7 @@ export function resetHunger(model: Sr2020Character) {
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
   if (data.id == 'food') {
+    if (isHmhvv(api.model)) throw new UserVisibleError('Вы не можете употреблять такую еду');
     resetHunger(api.model);
     api.sendPubSubNotification('food_consumption', { ...data, characterId: Number(api.model.modelId) });
   } else if (data.id == 'cow-meat') {

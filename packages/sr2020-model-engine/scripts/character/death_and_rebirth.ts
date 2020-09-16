@@ -8,6 +8,7 @@ import { resetAllAddictions } from './chemo';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { resetHunger } from '@sr2020/sr2020-model-engine/scripts/character/hunger';
+import { isHmhvv } from '@sr2020/sr2020-model-engine/scripts/character/races';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
@@ -118,7 +119,9 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
 
   if (stateFrom == 'biologically_dead' || stateFrom == 'clinically_dead') {
     resetAllAddictions(api);
-    resetHunger(api.model);
+    if (!isHmhvv(api.model)) {
+      resetHunger(api.model);
+    }
   }
 
   api.model.healthState = stateTo;
