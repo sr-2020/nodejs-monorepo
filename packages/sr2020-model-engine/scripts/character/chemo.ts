@@ -268,7 +268,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'custodium',
     level: 'uber',
-    message: 'Ускоряет восстановление Магии',
+    message: 'Очень сильно ускоряет восстановление Магии',
     instantEffect: {
       handler: reduceCurrentMagicFeedback,
       amount: 3,
@@ -278,7 +278,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'custodium',
     level: 'super',
-    message: 'Ускоряет восстановление Магии',
+    message: 'Сильно ускоряет восстановление Магии',
     instantEffect: {
       handler: reduceCurrentMagicFeedback,
       amount: 2,
@@ -288,7 +288,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'custodium',
     level: 'crysis',
-    message: 'Ускоряет восстановление Магии',
+    message: 'Сильно ускоряет восстановление Магии. Появилась зависимость.',
     instantEffect: {
       handler: reduceCurrentMagicFeedback,
       amount: 2,
