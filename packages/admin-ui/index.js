@@ -357,7 +357,7 @@ app = new Vue({
     },
 
     async writeAiSymbolQr() {
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { ai: this.aiName } });
+      return this.sendQrEvent({ eventType: 'writeAiSymbol', data: { ai: this.aiName } });
     },
 
     async writeReanimateCapsuleQr() {
