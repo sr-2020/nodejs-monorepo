@@ -2491,8 +2491,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // feel-matrix
   // chem-weak
-  // base-body-meat
-  // current-body-meat
   {
     id: 'meta-norm',
     humanReadableName: 'Норм',
@@ -2502,8 +2500,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // elven-prices
-  // base-body-meat
-  // current-body-meat
   {
     id: 'meta-elf',
     humanReadableName: 'Эльф',
@@ -2517,8 +2513,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // matrix-feedback-resist
   // good-rigga
   // dont-touch-my-hole
-  // base-body-meat
-  // current-body-meat
   {
     id: 'meta-dwarf',
     humanReadableName: 'Гном',
@@ -2530,7 +2524,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // extra-hp
   // spirit-feed
-  // base-body-meat
   {
     id: 'meta-ork',
     humanReadableName: 'Орк',
@@ -2543,8 +2536,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // magic-feedback-resist
   // matrix-feedback-resist
   // good-rigga
-  // base-body-meat
-  // current-body-meat
   //
   // skin-armor
   // this-my-glory-hole
@@ -2567,8 +2558,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // astral-vision
   // chrome-blockade
   // tech-blockade
-  // base-body-hmhvv
-  // current-body-hmhvv
   {
     id: 'meta-ghoul',
     humanReadableName: 'HMHVV, тип 3. Гуль',
@@ -2582,8 +2571,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // chem-resist-heavy
   // chrome-blockade
   // tech-blockade
-  // base-body-hmhvv
-  // current-body-hmhvv
   //
   // blood-thirst
   // vampire-feast
@@ -2597,8 +2584,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // magic-blockade
-  // base-body-digital
-  // current-body-digital
   {
     id: 'meta-ai',
     humanReadableName: 'Проекция ИИ',
@@ -2618,12 +2603,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // tech-blockade
   // base-body-astral
   // current-body-astral
-  // can-do-fleshpoint
   // can-be-exorcized
+  // fleshpoint
   {
     id: 'meta-spirit',
     humanReadableName: 'Дух',
@@ -2895,6 +2879,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
+  },
+  //
+  {
+    id: 'can-be-exorcized',
+    humanReadableName: 'Бойся экзорцистов!',
+    description: 'Экзорцист может изгнать тебя с ближнего астрала на темные и глубокие астральные планы. И, возможно, надолго.',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
   },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {

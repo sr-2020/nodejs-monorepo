@@ -43,6 +43,7 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
+
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -2009,6 +2010,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 0,
     prerequisites: [],
     karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(https://trello.com/c/EqKhMPbH/373-реализовать-абилку-fleshpoint)
+  // Время действия 120 минут, кулдаун 20 минут. Эктоплазменное тело имеет 3 хита, 0 эссенции и все абилки, которые были у духа (кроме Материализации).
+  // Current body меняется на Ecto
+  // Добавляется абилка Disfleshment / Развоплощение
+  //
+  // по идее, надо добавить какой-то счетчик, чтобы если спирит сам не нажал кнопку Disfleshment, чтобы его выкидывало. Или накладывало какой-то жесткий штраф. Например: (время в эктоплазменном теле - 120), если >0 -  то умножаем на десять и прибавляем к кулдауну абилки при следующем нажатии
+  {
+    id: 'fleshpoint',
+    humanReadableName: 'Fleshpoint',
+    description: 'Дух из астрального тела на время переходит в реал - в магически создаваемое эктоплазменное тело.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    prerequisites: [],
+    karmaCost: 16,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
