@@ -4,7 +4,7 @@ import * as prettier from 'prettier';
 
 export interface PassiveAbility {
   id: string;
-  name: string;
+  humanReadableName: string;
   description: string;
   gmDescription: string;
   karmaCost: number;
@@ -147,7 +147,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
       const element = ts.createObjectLiteral(
         [
           ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
-          ts.createPropertyAssignment(ts.createIdentifier('name'), ts.createStringLiteral(ability.name)),
+          ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
           ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([])),
@@ -160,7 +160,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
     },
     (ability, propertyName) => {
       if (propertyName == 'name') {
-        return ts.createStringLiteral(ability.name);
+        return ts.createStringLiteral(ability.humanReadableName);
       }
       if (propertyName == 'description') {
         return ts.createStringLiteral(ability.description);

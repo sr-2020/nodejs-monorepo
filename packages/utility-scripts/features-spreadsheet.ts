@@ -41,7 +41,7 @@ class SpreadsheetProcessor {
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
       id,
-      name: row[kNameColumn],
+      humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
