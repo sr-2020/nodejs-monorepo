@@ -190,6 +190,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
           ts.createPropertyAssignment(ts.createIdentifier('target'), ts.createStringLiteral('scan')),
           ts.createPropertyAssignment(ts.createIdentifier('targetsSignature'), ts.createIdentifier('kNoTarget')),
           ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), ts.createNumericLiteral(ability.cooldown)),
+          ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([])),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(0)),
           ts.createPropertyAssignment(
@@ -232,6 +233,7 @@ export function rewriteSpells(abilities: Spell[]) {
           ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
           ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
           ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+          ts.createPropertyAssignment(ts.createIdentifier('prerequisites'), ts.createArrayLiteral([])),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere)),
           ts.createPropertyAssignment(
