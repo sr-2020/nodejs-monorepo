@@ -51,54 +51,67 @@
                   <b-tbody>
                     <b-tr>
                       <b-th>Метараса</b-th>
+                      <b-td>metarace</b-td>
                       <b-td> {{ characterModel.metarace }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Состояние физического тела</b-th>
+                      <b-td>healthState</b-td>
                       <b-td> {{ characterModel.healthState }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Максимальные хиты</b-th>
+                      <b-td>maxHp</b-td>
                       <b-td> {{ characterModel.maxHp }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Магия</b-th>
+                      <b-td>magic</b-td>
                       <b-td>{{ characterModel.magic }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Body</b-th>
+                      <b-td>body</b-td>
                       <b-td>{{ characterModel.body }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Интеллект</b-th>
+                      <b-td>intelligence</b-td>
                       <b-td>{{ characterModel.intelligence }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Резонанс</b-th>
+                      <b-td>resonance</b-td>
                       <b-td>{{ characterModel.resonance }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Харизма</b-th>
+                      <b-td>charisma</b-td>
                       <b-td>{{ characterModel.charisma }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Бонус к ментальной атаке</b-th>
+                      <b-td>mentalAttackBonus</b-td>
                       <b-td>{{ characterModel.mentalAttackBonus }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Бонус к ментальной защите</b-th>
+                      <b-td>mentalDefenceBonus</b-td>
                       <b-td>{{ characterModel.mentalDefenceBonus }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Матричное состояние</b-th>
+                      <b-td>matrixHp</b-td>
                       <b-td> {{ characterModel.matrixHp }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Максимальное время в VR</b-th>
+                      <b-td>maxTimeInVr</b-td>
                       <b-td>{{ characterModel.maxTimeInVr }}</b-td>
                     </b-tr>
                     <b-tr>
                       <b-th>Количество слотов под импланты в теле</b-th>
+                      <b-td>implantsBodySlots</b-td>
                       <b-td> {{ characterModel.implantsBodySlots }}</b-td>
                     </b-tr>
                   </b-tbody>
@@ -111,30 +124,37 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Коэффициент отката</b-th>
+                        <b-td>magicStats.feedbackMultiplier</b-td>
                         <b-td> {{ characterModel.magicStats.feedbackMultiplier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент восстановления Магии</b-th>
+                        <b-td>magicStats.recoverySpeedMultiplier</b-td>
                         <b-td>{{ characterModel.magicStats.recoverySpeedMultiplier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент Сопротивления Духов</b-th>
+                        <b-td>magicStats.spiritResistanceMultiplier</b-td>
                         <b-td>{{ characterModel.magicStats.spiritResistanceMultiplier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент Чтения Астральных Следов</b-th>
+                        <b-td>magicStats.auraReadingMultiplier</b-td>
                         <b-td>{{ characterModel.magicStats.auraReadingMultiplier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент Отчетливости Астральных Следов</b-th>
+                        <b-td>magicStats.auraMarkMultiplier</b-td>
                         <b-td>{{ characterModel.magicStats.auraMarkMultiplier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Аура</b-th>
+                        <b-td>magicStats.aura</b-td>
                         <b-td>{{ characterModel.magicStats.aura }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Маска ауры</b-th>
+                        <b-td>magicStats.auraMask</b-td>
                         <b-td>{{ characterModel.magicStats.auraMask }}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -148,70 +168,87 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Бонус к резонансу для контроля</b-th>
+                        <b-td>hacking.resonanceForControlBonus</b-td>
                         <b-td>{{ characterModel.hacking.resonanceForControlBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Максимальное время на хосте</b-th>
+                        <b-td>hacking.maxTimeAtHost</b-td>
                         <b-td>{{ characterModel.hacking.maxTimeAtHost }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Скорость входа на хост</b-th>
+                        <b-td>hacking.hostEntrySpeed</b-td>
                         <b-td>{{ characterModel.hacking.hostEntrySpeed }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Конверсия атаки</b-th>
+                        <b-td>hacking.conversionAttack</b-td>
                         <b-td>{{ characterModel.hacking.conversionAttack }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Конверсия файрвола</b-th>
+                        <b-td>hacking.conversionFirewall</b-td>
                         <b-td>{{ characterModel.hacking.conversionFirewall }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Конверсия слизи</b-th>
+                        <b-td>hacking.conversionSleaze</b-td>
                         <b-td>{{ characterModel.hacking.conversionSleaze }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Конверсия датапроцессинга</b-th>
+                        <b-td>hacking.conversionDataprocessing</b-td>
                         <b-td>{{ characterModel.hacking.conversionDataprocessing }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Число администрируемых хостов</b-th>
+                        <b-td>hacking.adminHostNumber</b-td>
                         <b-td>{{ characterModel.hacking.adminHostNumber }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Уровень спрайтов</b-th>
+                        <b-td>hacking.spriteLevel</b-td>
                         <b-td>{{ characterModel.hacking.spriteLevel }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Дополнительные спрайты</b-th>
+                        <b-td>hacking.additionalSprites</b-td>
                         <b-td>{{ characterModel.hacking.additionalSprites }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Дополнительные бекдоры</b-th>
+                        <b-td>hacking.additionalBackdoors</b-td>
                         <b-td>{{ characterModel.hacking.additionalBackdoors }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Время жизни бекдоров</b-th>
+                        <b-td>hacking.backdoorTtl</b-td>
                         <b-td>{{ characterModel.hacking.backdoorTtl }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Дополнительные запросы к контролю</b-th>
+                        <b-td>hacking.additionalRequests</b-td>
                         <b-td>{{ characterModel.hacking.additionalRequests }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Сопротивление фейдингу</b-th>
+                        <b-td>hacking.fadingResistance</b-td>
                         <b-td>{{ characterModel.hacking.fadingResistance }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Сопротивление фейдингу для компиляции</b-th>
+                        <b-td>hacking.compilationFadingResistance</b-td>
                         <b-td>{{ characterModel.hacking.compilationFadingResistance }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Сопротивление биофидбеку</b-th>
+                        <b-td>hacking.biofeedbackResistance</b-td>
                         <b-td>{{ characterModel.hacking.biofeedbackResistance }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Сопротивление вэриансу</b-th>
+                        <b-td>hacking.varianceResistance</b-td>
                         <b-td>{{ characterModel.hacking.varianceResistance }}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -225,66 +262,82 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Безусловный доход в процентах от оборота</b-th>
+                        <b-td>billing.stockGainPercentage</b-td>
                         <b-td>{{ characterModel.billing.stockGainPercentage }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Переводы анонимны</b-th>
+                        <b-td>billing.anonymous</b-td>
                         <b-td>{{ characterModel.billing.anonymous }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на оружие и броню</b-th>
+                        <b-td>discounts.weaponsArmor</b-td>
                         <b-td>{{ characterModel.discounts.weaponsArmor }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на все</b-th>
+                        <b-td>discounts.everything</b-td>
                         <b-td>{{ characterModel.discounts.everything }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары ares</b-th>
+                        <b-td>discounts.ares</b-td>
                         <b-td>{{ characterModel.discounts.ares }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары aztechnology</b-th>
+                        <b-td>discounts.aztechnology</b-td>
                         <b-td>{{ characterModel.discounts.aztechnology }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары saederKrupp</b-th>
+                        <b-td>discounts.saederKrupp</b-td>
                         <b-td>{{ characterModel.discounts.saederKrupp }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары spinradGlobal</b-th>
+                        <b-td>discounts.spinradGlobal</b-td>
                         <b-td>{{ characterModel.discounts.spinradGlobal }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары neonet1</b-th>
+                        <b-td>discounts.neonet1</b-td>
                         <b-td>{{ characterModel.discounts.neonet1 }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары evo</b-th>
+                        <b-td>discounts.evo</b-td>
                         <b-td>{{ characterModel.discounts.evo }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары horizon</b-th>
+                        <b-td>discounts.horizon</b-td>
                         <b-td>{{ characterModel.discounts.horizon }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары wuxing</b-th>
+                        <b-td>discounts.wuxing</b-td>
                         <b-td>{{ characterModel.discounts.wuxing }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары russia</b-th>
+                        <b-td>discounts.russia</b-td>
                         <b-td>{{ characterModel.discounts.russia }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары renraku</b-th>
+                        <b-td>discounts.renraku</b-td>
                         <b-td>{{ characterModel.discounts.renraku }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары mutsuhama</b-th>
+                        <b-td>discounts.mutsuhama</b-td>
                         <b-td>{{ characterModel.discounts.mutsuhama }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Коэффициент цены на товары shiavase</b-th>
+                        <b-td>discounts.shiavase</b-td>
                         <b-td>{{ characterModel.discounts.shiavase }}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -298,86 +351,107 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Химота Базовый Эффект</b-th>
+                        <b-td>chemo.baseEffectThreshold</b-td>
                         <b-td>{{ characterModel.chemo.baseEffectThreshold }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Химота Убер Эффект</b-th>
+                        <b-td>chemo.uberEffectThreshold</b-td>
                         <b-td>{{ characterModel.chemo.uberEffectThreshold }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Химота Супер Эффект</b-th>
+                        <b-td>chemo.superEffectThreshold</b-td>
                         <b-td>{{ characterModel.chemo.superEffectThreshold }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Химота Кризис</b-th>
+                        <b-td>chemo.crysisThreshold</b-td>
                         <b-td>{{ characterModel.chemo.crysisThreshold }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Текгель</b-th>
+                        <b-td>chemo.concentration.teqgel</b-td>
                         <b-td>{{ characterModel.chemo.concentration.teqgel}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Йод</b-th>
+                        <b-td>chemo.concentration.iodine</b-td>
                         <b-td>{{ characterModel.chemo.concentration.iodine}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Аргон</b-th>
+                        <b-td>chemo.concentration.argon</b-td>
                         <b-td>{{ characterModel.chemo.concentration.argon}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Радий</b-th>
+                        <b-td>chemo.concentration.radium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.radium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Юний</b-th>
+                        <b-td>chemo.concentration.junius</b-td>
                         <b-td>{{ characterModel.chemo.concentration.junius}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Кустодий</b-th>
+                        <b-td>chemo.concentration.custodium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.custodium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Полоний</b-th>
+                        <b-td>chemo.concentration.polonium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.polonium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Силикон</b-th>
+                        <b-td>chemo.concentration.silicon</b-td>
                         <b-td>{{ characterModel.chemo.concentration.silicon}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Магний</b-th>
+                        <b-td>chemo.concentration.magnium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.magnium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Хром</b-th>
+                        <b-td>chemo.concentration.chromium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.chromium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Опий</b-th>
+                        <b-td>chemo.concentration.opium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.opium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Эльба</b-th>
+                        <b-td>chemo.concentration.elba</b-td>
                         <b-td>{{ characterModel.chemo.concentration.elba}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Барий</b-th>
+                        <b-td>chemo.concentration.barium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.barium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Уранус</b-th>
+                        <b-td>chemo.concentration.uranium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.uranium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Московий</b-th>
+                        <b-td>chemo.concentration.moscovium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.moscovium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Иконий</b-th>
+                        <b-td>chemo.concentration.iconium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.iconium}}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Слюна вампира</b-th>
+                        <b-td>chemo.concentration.vampirium</b-td>
                         <b-td>{{ characterModel.chemo.concentration.vampirium}}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -391,46 +465,57 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Модификатор урона при выходе</b-th>
+                        <b-td>drones.feedbackModifier</b-td>
                         <b-td>{{ characterModel.drones.feedbackModifier }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Максимальная сложность дрона</b-th>
+                        <b-td>drones.maxDifficulty</b-td>
                         <b-td>{{ characterModel.drones.maxDifficulty }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Максимальное время в дроне</b-th>
+                        <b-td>drones.maxTimeInside</b-td>
                         <b-td>{{ characterModel.drones.maxTimeInside }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Время восстановления после</b-th>
+                        <b-td>drones.recoveryTime</b-td>
                         <b-td>{{ characterModel.drones.recoveryTime }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Навык управления медицинскими дронами</b-th>
+                        <b-td>drones.medicraftBonus</b-td>
                         <b-td>{{ characterModel.drones.medicraftBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Навык управления летающими дронами</b-th>
+                        <b-td>drones.aircraftBonus</b-td>
                         <b-td>{{ characterModel.drones.aircraftBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Навык управления наземными дронами</b-th>
+                        <b-td>drones.groundcraftBonus</b-td>
                         <b-td>{{ characterModel.drones.groundcraftBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Может работать с биоваром</b-th>
+                        <b-td>rigging.canWorkWithBioware</b-td>
                         <b-td>{{ characterModel.rigging.canWorkWithBioware }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Способность ставить импланты</b-th>
+                        <b-td>rigging.implantsBonus</b-td>
                         <b-td>{{ characterModel.rigging.implantsBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Способность ставить моды</b-th>
+                        <b-td>rigging.tuningBonus</b-td>
                         <b-td>{{ characterModel.rigging.tuningBonus }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Способность рипомена</b-th>
+                        <b-td>rigging.repomanBonus</b-td>
                         <b-td>{{ characterModel.rigging.repomanBonus }}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -445,18 +530,22 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Итоговый эссенс</b-th>
+                        <b-td>essence</b-td>
                         <b-td>{{ characterModel.essence }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Максимальный эссенс</b-th>
+                        <b-td>essenceDetails.max</b-td>
                         <b-td>{{ characterModel.essenceDetails.max }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Занято имплантами</b-th>
+                        <b-td>essenceDetails.used</b-td>
                         <b-td>{{ characterModel.essenceDetails.used }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Дыра эссенса</b-th>
+                        <b-td>essenceDetails.gap</b-td>
                         <b-td>{{ characterModel.essenceDetails.gap }}</b-td>
                       </b-tr>
                     </b-tbody>
@@ -471,10 +560,12 @@
                     <b-tbody>
                       <b-tr>
                         <b-th>Доступно</b-th>
+                        <b-td>karma.available</b-td>
                         <b-td>{{ characterModel.karma.available }}</b-td>
                       </b-tr>
                       <b-tr>
                         <b-th>Потрачено</b-th>
+                        <b-td>karma.spent</b-td>
                         <b-td>{{ characterModel.karma.spent }}</b-td>
                       </b-tr>
                     </b-tbody>
