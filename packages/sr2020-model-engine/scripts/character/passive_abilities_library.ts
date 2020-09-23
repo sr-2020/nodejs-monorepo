@@ -2817,14 +2817,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [modifierFromEffect(increaseMagic, { amount: 2 }), modifierFromEffect(increaseBody, { amount: 2 })],
   },
-  // charisma +2
+  // charisma +1
   {
     id: 'arch-face',
     humanReadableName: 'Архетип: Фейс',
     description: 'Фейс, эксперт по переговорам.',
     karmaCost: 100,
     prerequisites: [],
-    modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
   // charisma +1
   {
@@ -2886,6 +2886,33 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Бойся экзорцистов!',
     description: 'Экзорцист может изгнать тебя с ближнего астрала на темные и глубокие астральные планы. И, возможно, надолго.',
     karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // можно использовать автомат
+  {
+    id: 'guns-1',
+    humanReadableName: 'дальнобойное оружие: винтовки',
+    description: 'персонаж может использовать винтовки',
+    karmaCost: 20,
+    prerequisites: [],
+    modifier: [],
+  },
+  // можно использовать снайперскую винтовку
+  {
+    id: 'guns-2',
+    humanReadableName: 'дальнобойное оружие: автоматы',
+    description: 'персонаж может использовать автоматы',
+    karmaCost: 40,
+    prerequisites: [],
+    modifier: [],
+  },
+  // можно использовать пулемёт
+  {
+    id: 'guns-3',
+    humanReadableName: 'дальнобойное оружие: пулеметы',
+    description: 'персонаж может использовать пулемёты',
+    karmaCost: 60,
     prerequisites: [],
     modifier: [],
   },
