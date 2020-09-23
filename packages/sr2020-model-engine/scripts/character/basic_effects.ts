@@ -29,27 +29,32 @@ export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: Mo
 
 export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.charisma += m.amount;
-  api.model.charisma = clamp(api.model.charisma, 0, 10);
+  api.model.charisma = clamp(api.model.charisma, 0, 8);
 }
 
 export function increaseIntelligence(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.intelligence += m.amount;
-  api.model.intelligence = clamp(api.model.intelligence, 0, 6);
+  api.model.intelligence = clamp(api.model.intelligence, 0, 8);
 }
 
 export function increaseBody(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.body += m.amount;
-  api.model.body = clamp(api.model.body, 0, 6);
+  api.model.body = clamp(api.model.body, 0, 8);
 }
 
 export function increaseStrength(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.strength += m.amount;
-  api.model.strength = clamp(api.model.strength, 0, 6);
+  api.model.strength = clamp(api.model.strength, 0, 8);
 }
 
 export function increaseDepth(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.depth += m.amount;
-  api.model.depth = clamp(api.model.depth, 0, 6);
+  api.model.depth = clamp(api.model.depth, 0, 8);
+}
+
+export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.resonance += m.amount;
+  api.model.resonance = clamp(api.model.resonance, 0, 8);
 }
 
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -63,10 +68,6 @@ export function multiplyMagicFeedbackMultiplier(api: EffectModelApi<Sr2020Charac
 
 export function increaseMaxMagicPower(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magicStats.maxPowerBonus += m.amount;
-}
-export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.resonance += m.amount;
-  api.model.resonance = clamp(api.model.resonance, 0, 9000);
 }
 
 export function increaseResonanceForControl(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
