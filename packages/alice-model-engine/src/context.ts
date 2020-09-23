@@ -133,7 +133,7 @@ export class Context<T extends EmptyModel> {
   }
 
   public sendPubSubNotification(topic: string, body: any) {
-    this._pubsubNotifications.push({ topic, body });
+    this._pubsubNotifications.push({ topic, body: { ...body, timestamp: this.timestamp } });
   }
 
   public setTableResponse(table: any) {
