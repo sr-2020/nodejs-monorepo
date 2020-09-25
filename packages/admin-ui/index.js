@@ -343,13 +343,13 @@ app = new Vue({
         data: {
           id: 'locus-charge',
           name: '', description: 'Позволяет зарядить любой локус при наличии соответствующей способности ',
-          numberOfUses: this.locusCharges
+          numberOfUses: Number(this.locusCharges)
         }
       });
     },
 
     async writeLocusQr() {
-      return this.sendQrEvent({ eventType: 'createLocusQr', data: { groupId: this.selectedEthicGroup, numberOfUses: this.locusCharges } });
+      return this.sendQrEvent({ eventType: 'createLocusQr', data: { groupId: this.selectedEthicGroup, numberOfUses: Number(this.locusCharges) } });
     },
 
     async writeBodyStorageToQr() {
@@ -361,19 +361,25 @@ app = new Vue({
     },
 
     async writeReanimateCapsuleQr() {
-      return this.sendQrEvent({ eventType: 'writeReanimateCapsule', data: this.reanimateCapsule });
+      return this.sendQrEvent({ eventType: 'writeReanimateCapsule', data: {
+            essenceGet: Number(this.reanimateCapsule.essenceGet),
+            essenceAir: Number(this.reanimateCapsule.essenceAir),
+            cooldown: Number(this.reanimateCapsule.cooldown),
+            name: this.reanimateCapsule.name,
+            description: this.reanimateCapsule.description,
+        }});
     },
 
     async writeFoodQr() {
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'food'} });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: Number(this.foodNumberOfUses), id: 'food'} });
     },
 
     async writeMeatQr() {
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'cow-meat'} });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: Number(this.foodNumberOfUses), id: 'cow-meat'} });
     },
 
     async writeBloodQr() {
-      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: this.foodNumberOfUses, id: 'cow-blood'} });
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: Number(this.foodNumberOfUses), id: 'cow-blood'} });
     },
 
     async pauseGame() {
@@ -381,7 +387,10 @@ app = new Vue({
         autoHideDelay: 40000,
         variant: 'info',
       });
-      return this.broadcastCharacterEvent( { eventType: 'pauseAndPostpone', data: this.nightPauseData }, 'Игра поставлена на паузу!');
+      return this.broadcastCharacterEvent( { eventType: 'pauseAndPostpone', data: {
+          postponeDurationHours: Number(this.nightPauseData.postponeDurationHours),
+          pauseDurationHours: Number(this.nightPauseData.pauseDurationHours),
+        } }, 'Игра поставлена на паузу!');
     }
   }
 })
