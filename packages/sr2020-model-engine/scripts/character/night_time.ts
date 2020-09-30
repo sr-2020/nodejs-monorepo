@@ -9,6 +9,11 @@ export function pauseAndPostpone(api: EventModelApi<Sr2020Character>, data: { pa
   }
 
   addTemporaryModifier(api, modifierFromEffect(setPaused, {}), duration(data.pauseDurationHours, 'hours'), 'Ночная пауза');
+
+  api.sendNotification(
+    'Перерыв на ночь',
+    `Активирован режим ночной паузы. Никакие активные действия недоступны в течение ${data.pauseDurationHours} часов. Все таймеры сдвинуты на ${data.postponeDurationHours} часов вперед.`,
+  );
 }
 
 export function setPaused(api: EffectModelApi<Sr2020Character>, m: Modifier) {
