@@ -23,8 +23,8 @@ import {
   trackBallSpell,
   trackpointSpell,
 } from './spells';
-import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
-export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
+import { Feature, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export interface Spell extends Feature {
   sphere: SpellSphere;
   eventType: string;

@@ -81,6 +81,7 @@ function addSpell(model: Sr2020Character, spell: Spell) {
     description: spell.description,
     humanReadableName: spell.humanReadableName,
     hasTarget: spell.hasTarget ?? false,
+    sphere: spell.sphere,
   });
 }
 

@@ -20,6 +20,8 @@ export type MetaRace =
 
 export type BodyType = 'physical' | 'astral' | 'drone';
 
+export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
+
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
 @model()
 export class AddedSpell {
@@ -34,6 +36,10 @@ export class AddedSpell {
   @rproperty() description: string;
 
   @rproperty() hasTarget: boolean;
+
+  // TODO(aeremin) Reset all characters and make required
+  @property({ required: false, type: 'string' })
+  sphere?: SpellSphere;
 }
 
 export interface Targetable {
