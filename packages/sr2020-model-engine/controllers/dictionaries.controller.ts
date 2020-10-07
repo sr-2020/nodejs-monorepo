@@ -6,6 +6,7 @@ import { kAllEthicGroups } from '../scripts/character/ethics_library';
 import { kAllDrones } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { Feature, kFeatureDescriptor } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -127,6 +128,31 @@ export class DictionariesController {
   })
   drones(): { id: string; name: string; description: string }[] {
     return kAllDrones.map((p) => ({ id: p.id, name: p.name, description: p.description }));
+  }
+
+  @get('/focuses', {
+    summary: `Returns the list of implemented magic focuses`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  focuses(): { id: string; name: string }[] {
+    return kAllFocuses.map((p) => ({ id: p.id, name: p.name }));
   }
 
   @get('/ethic_groups', {
