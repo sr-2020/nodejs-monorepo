@@ -146,8 +146,8 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseE
 
   (api.model as TypedQrCode<MerchandiseQrData>) = {
     type: libraryData.type,
-    name: libraryData.name ?? data.name ?? '',
-    description: libraryData.description ?? data.description ?? '',
+    name: data.name ?? libraryData.name ?? '',
+    description: data.description ?? libraryData.description ?? '',
     usesLeft: data.numberOfUses ?? 1,
     data: {
       ...data.additionalData,
