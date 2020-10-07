@@ -1,5 +1,5 @@
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
-import { AddedActiveAbility, AddedPassiveAbility, BodyType } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { AddedActiveAbility, AddedPassiveAbility, BodyType, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { DroneType } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 
 export interface TypedQrCode<T> extends QrCode {
@@ -59,6 +59,16 @@ export interface ReanimateCapsuleData {
 export interface AiSymbolData {
   ai: string;
 }
+
+export interface MagicFocusData {
+  id: string;
+  name: string;
+  amount: number;
+  sphere: SpellSphere;
+}
+
+// qr.type == 'focus'
+export type MagicFocusQrData = MagicFocusData & MagicFocusData;
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;

@@ -31,7 +31,8 @@ export type QrType =
   | 'cyberdeck_mod'
   | 'foundation_node'
   | 'reanimate_capsule'
-  | 'ai_symbol';
+  | 'ai_symbol'
+  | 'focus'; // Magic focus
 
 @model()
 @Entity({

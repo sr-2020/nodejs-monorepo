@@ -1,13 +1,6 @@
-import { SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { MagicFocusData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 
-export interface MagicFocus {
-  id: string;
-  name: string;
-  amount: number;
-  sphere: SpellSphere;
-}
-
-export const kAllFocuses: MagicFocus[] = [
+export const kAllFocuses: MagicFocusData[] = [
   { name: 'Экстракт Аспарагуса - фокус сферы лечения', id: 'asparagus', amount: +1, sphere: 'healing' },
   { name: 'Трон молний - фокус сферы боевых заклинаний', id: 'lightning-throne', amount: +1, sphere: 'fighting' },
   { name: 'Чахар-айна - фокус сферы защиты', id: 'chahar-aina', amount: +1, sphere: 'protection' },
