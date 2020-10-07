@@ -12,6 +12,7 @@ app = new Vue({
     allReagents: undefined,
     allEthicGroups: undefined,
     allDrones: undefined,
+    allFocuses: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
     selectedPill: 'iodomarin',
@@ -19,6 +20,7 @@ app = new Vue({
     selectedDrone: 'belarus',
     selectedRace: 'meta-norm',
     selectedEthicGroup: 'russian-orthodox-church',
+    selectedFocus: 'asparagus',
     clinicalDeathTarget: 130,
     qrCodeId: 1,
 
@@ -96,6 +98,11 @@ app = new Vue({
     {
       const response = await this.$http.get(`https://model-engine.evarun.ru/drones`);
       this.allDrones = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.evarun.ru/focuses`);
+      this.allFocuses = response.body;
     }
   },
   methods: {
@@ -380,6 +387,10 @@ app = new Vue({
 
     async writeBloodQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { numberOfUses: Number(this.foodNumberOfUses), id: 'cow-blood'} });
+    },
+
+    async writeFocusQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedFocus } });
     },
 
     async pauseGame() {
