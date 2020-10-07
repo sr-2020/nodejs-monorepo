@@ -1,6 +1,8 @@
 import { MagicFocusData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 
-export const kAllFocuses: MagicFocusData[] = [
+export type MagicFocus = MagicFocusData & { id: string; name: string };
+
+export const kAllFocuses: MagicFocus[] = [
   { name: 'Экстракт Аспарагуса - фокус сферы лечения', id: 'asparagus', amount: +1, sphere: 'healing' },
   { name: 'Трон молний - фокус сферы боевых заклинаний', id: 'lightning-throne', amount: +1, sphere: 'fighting' },
   { name: 'Чахар-айна - фокус сферы защиты', id: 'chahar-aina', amount: +1, sphere: 'protection' },

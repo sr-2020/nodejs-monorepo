@@ -1,14 +1,15 @@
 import { QrCode, QrType } from '@sr2020/sr2020-common/models/qr-code.model';
-import { Implant, kAllImplants } from '../character/implants_library';
-import { kAllPills, Pill } from '../character/chemo_library';
-import { kAllReagents, Reagent } from './reagents_library';
+import { kAllImplants } from '../character/implants_library';
+import { kAllPills } from '../character/chemo_library';
+import { kAllReagents } from './reagents_library';
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { consumeFood } from '../character/hunger';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { Drone, kAllDrones, kCommonDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { kAllDrones, kCommonDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
 
 interface MerchandiseExternalData {
   id: string;
@@ -44,7 +45,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return { type: 'locus_charge', data: {} };
   }
 
-  const sameId = (item: Implant | Pill | Reagent | Drone) => item.id == id;
+  const sameId = (item: { id: string }) => item.id == id;
   const maybeImplant = kAllImplants.find(sameId);
   if (maybeImplant) {
     return {
@@ -121,6 +122,15 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       name: maybeDrone.name,
       description: maybeDrone.description,
       data: droneData,
+    };
+  }
+
+  const maybeFocus = kAllFocuses.find(sameId);
+  if (maybeFocus) {
+    return {
+      type: 'focus',
+      name: maybeFocus.name,
+      data: maybeFocus,
     };
   }
 

@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { DroneQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { DroneQrData, MagicFocusQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 
 describe('Merchandise', () => {
   let fixture: TestFixture;
@@ -46,5 +46,16 @@ describe('Merchandise', () => {
     expect(droneData.hitpoints).greaterThan(0);
     expect(droneData.passiveAbilities).lengthOf(1);
     expect(droneData.activeAbilities).lengthOf(6);
+  });
+
+  it('Focus creation', async () => {
+    await fixture.saveQrCode();
+
+    const { baseModel } = await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'first-warmth' } });
+    const focusData = typedQrData<MagicFocusQrData>(baseModel);
+    expect(baseModel.name).to.equal('Первое тепло - фокус сферы лечения');
+    expect(focusData.id).to.equal('first-warmth');
+    expect(focusData.sphere).to.equal('healing');
+    expect(focusData.amount).to.equal(3);
   });
 });

@@ -61,14 +61,12 @@ export interface AiSymbolData {
 }
 
 export interface MagicFocusData {
-  id: string;
-  name: string;
   amount: number;
   sphere: SpellSphere;
 }
 
 // qr.type == 'focus'
-export type MagicFocusQrData = MagicFocusData & MagicFocusData;
+export type MagicFocusQrData = MagicFocusData & MerchandiseQrData;
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;
