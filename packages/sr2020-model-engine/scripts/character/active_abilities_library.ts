@@ -113,6 +113,8 @@ const kMerchandiseQrTypes: QrType[] = [
   'drone_mod',
   'cyberdeck',
   'cyberdeck_mod',
+  'reagent',
+  'focus',
 ];
 const kMerchandiseTargeted: TargetSignature = {
   name: 'Товар',
