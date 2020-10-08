@@ -37,9 +37,8 @@ export class AddedSpell {
 
   @rproperty() hasTarget: boolean;
 
-  // TODO(aeremin) Reset all characters and make required
-  @property({ required: false, type: 'string' })
-  sphere?: SpellSphere;
+  @property({ required: true, type: 'string' })
+  sphere: SpellSphere;
 }
 
 export interface Targetable {
