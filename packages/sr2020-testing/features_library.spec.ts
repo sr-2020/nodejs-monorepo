@@ -24,7 +24,7 @@ describe('Features library', () => {
   it('Passive abilities prerequisites are valid', () => {
     for (const [, feature] of kAllPassiveAbilities) {
       for (const prereq of feature.prerequisites) {
-        expect(allValidPrerequisites.has(prereq)).to.be.true();
+        expect([...allValidPrerequisites]).to.containEql(prereq);
       }
     }
   });
@@ -47,7 +47,7 @@ describe('Features library', () => {
   it('Active abilities prerequisites are valid', () => {
     for (const [, feature] of getAllActiveAbilities()) {
       for (const prereq of feature.prerequisites) {
-        expect(allValidPrerequisites.has(prereq)).to.be.true();
+        expect([...allValidPrerequisites]).to.containEql(prereq);
       }
     }
   });
@@ -70,7 +70,7 @@ describe('Features library', () => {
   it('Spells prerequisites are valid', () => {
     for (const [, feature] of kAllSpells) {
       for (const prereq of feature.prerequisites) {
-        expect(allValidPrerequisites.has(prereq)).to.be.true();
+        expect([...allValidPrerequisites]).to.containEql(prereq);
       }
     }
   });
