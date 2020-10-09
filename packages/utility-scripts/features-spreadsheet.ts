@@ -15,8 +15,9 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
 const FLAGS = commandLineArgs(optionDefinitions);
 
 const kKindColumn = 0;
-const kIdColumn = 5;
 const kNameColumn = 4;
+const kIdColumn = 5;
+const kPrerequisitesColumn = 6;
 const kPlayerDescriptionColumn = 12;
 const kMasterDescriptionColumn = 13;
 const kCooldownColumn = 16;
@@ -38,6 +39,11 @@ class SpreadsheetProcessor {
     return result;
   }
 
+  parsePrerequisites(id: string, input: string | undefined): string[] {
+    if (!input || input.trim() == 'null') return [];
+    return input.split('\n').map((s) => s.trim());
+  }
+
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
       id,
@@ -45,6 +51,7 @@ class SpreadsheetProcessor {
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
+      prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
     };
     this.passiveAbilities.push(ability);
   }
@@ -57,6 +64,7 @@ class SpreadsheetProcessor {
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       cooldown: row[kCooldownColumn] ?? 9000,
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
+      prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
     };
     this.activeAbilities.push(ability);
   }
@@ -79,6 +87,7 @@ class SpreadsheetProcessor {
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
+      prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
     };
     this.spells.push(spell);
   }
@@ -110,6 +119,10 @@ class SpreadsheetProcessor {
 
     if (header[kIdColumn] != 'Feature_ID') {
       throw new Error('Id column was moved! Exiting.');
+    }
+
+    if (header[kPrerequisitesColumn] != 'Prerequisites') {
+      throw new Error('Prerequisites column was moved! Exiting.');
     }
 
     if (header[kNameColumn] != 'Название') {
