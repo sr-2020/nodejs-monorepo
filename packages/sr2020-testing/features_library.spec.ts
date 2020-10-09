@@ -4,7 +4,12 @@ import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/charac
 import { kAllSpells } from '@sr2020/sr2020-model-engine/scripts/character/spells_library';
 
 describe('Features library', () => {
-  const allValidPrerequisites = new Set<string>([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]);
+  function addNo(ids: string[]): string[] {
+    return [...ids, ...ids.map((id) => `НЕТ ${id}`)];
+  }
+  const allValidPrerequisites = new Set<string>(
+    addNo([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]),
+  );
 
   it('Not empty', () => {
     expect(kAllPassiveAbilities).not.empty();
@@ -13,7 +18,7 @@ describe('Features library', () => {
   });
 
   it('No id duplication between different kinds of features', () => {
-    expect(allValidPrerequisites.size).to.equal(kAllPassiveAbilities.size + getAllActiveAbilities().size + kAllSpells.size);
+    expect(allValidPrerequisites.size).to.equal(2 * (kAllPassiveAbilities.size + getAllActiveAbilities().size + kAllSpells.size));
   });
 
   it('Passive abilities prerequisites are valid', () => {
