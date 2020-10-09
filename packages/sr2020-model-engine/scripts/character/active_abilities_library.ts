@@ -43,7 +43,6 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
-
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -163,7 +162,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: oneTimeRevive.name,
   },
   // TODO(https://trello.com/c/ihi8Ffmu/320-реализовать-абилку-грабеж): Add proper implementation
-  //  Самурай находит тушку в тяжране, применяет эту абилку, сканирует QR тушки. Со счета тушки переводится самураю 10% нуйен остатка счета тушки. Тушка автоматически переходит в КС. Перевод создается без обоснования. В поле назначение - "добровольное пожертвование".
   {
     id: 'mugger',
     humanReadableName: 'Грабеж',
@@ -202,16 +200,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: absoluteDeathAbility.name,
   },
   // TODO(https://trello.com/c/RgKWvnBk/322-реализовать-добивание-тела-из-тяжрана-в-кс): Add proper implementation
-  //
+  // У абилки есть два эффекта:
+  // 1) если применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
+  // 2) если применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
   {
     id: 'finish-him',
     humanReadableName: 'добивание тела из тяжрана в КС',
-    description: '',
+    description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 120,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -336,12 +336,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'oblivion',
     humanReadableName: 'Забвение',
     description:
-      '1) Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (снят хотя бы 1 хиты). \n2) Ты забыл события последней сцены. Это работает только если тебе не был нанесён урон (снят хотя бы 1 хит). Если тебе был нанесён урон, ты говоришь об этом менталисту.',
+      'Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (снят хотя бы 1 хит). ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 8,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -354,20 +354,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: ['oblivion'],
-    karmaCost: 16,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
-  // Целевой персонаж не забывает события перед КС, срок действия - 6 часов. Для менталиста эта абилка  активная, кулдаун 4 часа. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
+  // Целевой персонаж не забывает события перед КС, срок действия - 6 часов. Для менталиста эта абилка  активная. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
   {
     id: 'cloud-memory',
     humanReadableName: 'Облачная память ',
-    description: 'Персонаж не забывает события перед КС',
+    description: 'Следующие 6 часов целевой персонаж не забывает события перед КС',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: 240,
     prerequisites: [],
-    karmaCost: 16,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: cloudMemoryAbility.name,
   },
@@ -375,25 +375,26 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'tell-me-truth',
     humanReadableName: 'Скажи как есть.',
-    description: 'Целевой персонаж честно отвечает на 3 вопроса. \nТы честно отвечаешь на ',
+    description: 'Целевой персонаж честно отвечает на 3 вопроса. \nТы честно отвечаешь на 3 вопроса',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 4,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
-  // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 10 минут должна воспроизводить этот признак, если врет.
+  // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 15 минут должна воспроизводить этот признак, если врет.
   {
     id: 'lie-to-me',
     humanReadableName: 'Лай ту ми',
-    description: 'Целевой персонаж не может скрыть свою ложь.',
+    description:
+      'Целевой персонаж не может скрыть свою ложь. Ты говоришь маркер цели (например щелканье пальцами). Если она лжет, то выполняет это маркер. Эффект длится 15 минут',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 4,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -407,7 +408,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: [],
-    karmaCost: 4,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -421,12 +422,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: [],
-    karmaCost: 16,
+    karmaCost: 70,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
   // Цель боится и убегает как можно дальше от менталиста. Через 10 минут эффект проходит.
-  // 2. У цели заблокирована активация всех активных абилок на 10 минут
+  // 2. У цели заблокирована активация всех активных абилок на 10 минут (надпись "Вы очень боитесь и не можете сосредоточиться")
+  // БЫло бы круто сделать пуш об окончании действия эффекта.
   {
     id: 'fly-you-fool',
     humanReadableName: 'Беги отсюда',
@@ -436,61 +438,63 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 8,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
-  // Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит)
+  // Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит).
+  //
   {
     id: 'paralysis-1',
     humanReadableName: 'Оцепенение',
-    description:
-      'Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит). Не может пользоваться активными абилками.',
+    description: 'Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит). ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: [],
-    karmaCost: 2,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
   // Цель не может двигаться 10 минут.
+  // У цели заблокирована активация всех активных абилок. Надпись: Не получается, вы парализованы.
   {
     id: 'paralysis-2',
     humanReadableName: 'Паралич движения',
-    description: 'Цель не может двигаться 10 минут.',
+    description: 'Цель не может двигаться 10 минут.\nНе может пользоваться активными абилками.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-1'],
-    karmaCost: 4,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
   // Цель не может двигаться и говорить 10 минут.
+  // У цели заблокирована активация всех активных абилок. Надпись: Не получается, вы парализованы.
   {
     id: 'paralysis-3',
     humanReadableName: 'Паралич полный',
-    description: 'Цель не может двигаться и произносить звуки 10 минут.',
+    description: 'Цель не может двигаться и произносить звуки 10 минут.\nНе может пользоваться активными абилками.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['paralysis-2'],
-    karmaCost: 8,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
   // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
   {
     id: 'scorn-him',
-    humanReadableName: 'Птибурдюков, тебя я презираю',
+    humanReadableName: 'Презрение',
     description:
       'Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям ) ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 10,
     prerequisites: [],
-    karmaCost: 4,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -498,12 +502,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'kill-him',
     humanReadableName: 'Агрессия',
-    description: 'Цель активно пытается убить персонажа, на которого указывает менталист.',
+    description:
+      'Цель активно пытается убить персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
     prerequisites: [],
-    karmaCost: 16,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -613,12 +618,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'really-need-it',
     humanReadableName: 'Очень надо.',
-    description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. (Прописать, что нельзя подарить дрон, например)',
+    description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 8,
+    karmaCost: 70,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -626,42 +631,41 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'billioner-walk',
     humanReadableName: 'Прогулка миллионера',
-    description: 'Цель переводит на счет менталиста некоторую часть денег со своего счета.',
+    description: 'Цель переводит на счет менталиста половину денег со своего счета.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 4,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
   // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
   {
     id: 'increase-the-mental-protection',
-    humanReadableName: '',
+    humanReadableName: 'увеличение м. защиты другого персонажа',
     description: 'на 24 часа увеличивает сопротивляемость целевого персонажа ментальному воздействию. ',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
     prerequisites: [],
-    karmaCost: 16,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: increaseTheMentalProtectionAbility.name,
   },
   // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
   {
     id: 'reduce-the-mental-protection',
-    humanReadableName: '',
+    humanReadableName: 'уменьшение м. защиты другого персонажа',
     description: 'на 12 часов  уменьшает сопротивляемость целевого персонажа ментальному воздействию. ',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 180,
     prerequisites: [],
-    karmaCost: 16,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: reduceTheMentalProtectionAbility.name,
   },
-  // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
   {
     id: 'i-dont-trust-anybody',
     humanReadableName: 'Я никому не верю',
@@ -678,12 +682,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'you-dont-trust-anybody',
     humanReadableName: 'Ты никому не веришь',
-    description: 'Временно увеличивает сопротивляемость персонажа ментальному воздействию.',
+    description: 'Временно на 30 минут увеличивает сопротивляемость другого персонажа ментальному воздействию.',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 2,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: youDontTrustAnybody.name,
   },
@@ -726,7 +730,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 0,
     prerequisites: [],
-    karmaCost: 10,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: howMuchTheRent.name,
   },
@@ -742,7 +746,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: 30,
     prerequisites: [],
-    karmaCost: 20,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: letMePay.name,
   },
@@ -808,7 +812,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 999,
     minimalEssence: 0,
     eventType: doNothingAbility.name,
   },
@@ -822,7 +826,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 999,
     minimalEssence: 0,
     eventType: spiritsRelatedSpell.name,
   },
@@ -1219,6 +1223,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // air-essense  = записывает в таблици количество Air Essense
   // reanimate-cooldown = кулдаун в минутах у персонажа, применившего абилку
   // price-reanimate  = Это коэффициент цены, его надо как-то учесть в экономике (прописать в цену услуги "воскрешение на оборудовании таком-то ???)
+  //
+  // Зависимости, которые были у персонажа до КС сохраняются. После воскрешения таймер зависимостей переходит в состояние ноль.
   {
     id: 'reanimate',
     humanReadableName: 'Встань и иди',
@@ -1276,7 +1282,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // особый экран НЕ показывается, все проверки проходят в бэкнде, выдается только результат "получилось \ не получилось"
   {
     id: 'tuning-active',
-    humanReadableName: 'Установка мода в дрон\\кибердеку',
+    humanReadableName: 'Тюнинг: установка мода в дрон\\кибердеку',
     description: 'Для установки мода в дрон\\кибердеку используй эту способность.Необходима мастерская!',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1363,7 +1369,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kDroneAndBodyStorageTargeted,
     cooldownMinutes: 0,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: enterDrone.name,
   },
@@ -1379,7 +1385,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kDroneAndBodyStorageTargeted,
     cooldownMinutes: 0,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: enterDrone.name,
   },
@@ -1418,11 +1424,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: droneEmergencyExit.name,
   },
-  // При активации аблики игрок сканирует куар-код с препаратом и видит его название
+  // При активации аблики игрок сканирует куар-код с препаратом, видит его название и самый крупный компонент.
+  // формат:
+  // название препарата - основное вещество - дозировка в мг
+  // Таблица препаратов сейчас составлена так, что самый крупный всегда в левой колонке записан.
+  // второй и далее компоненты НЕ показываем, только первый!
   {
     id: 'pill-name',
-    humanReadableName: 'фармацевтика',
-    description: 'Отсканируй препарат и пойми, что это за препарат',
+    humanReadableName: 'Фармацевтика (что за таблетка?)',
+    description: 'Позволяет узнать название препарата и его основной компонент.',
     target: 'scan',
     targetsSignature: [
       {
@@ -1432,13 +1442,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: getPillNameAbility.name,
     cooldownMinutes: 0,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
+  //
+  // Зависимости, которые были у персонажа до КС сохраняются. После воскрешения таймер зависимостей переходит в состояние ноль
   {
     id: 'gm-respawn-normal',
     humanReadableName: 'Воскрешение общее',
@@ -1781,6 +1793,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Эссенс становится равен 0,8
   // itEssense пересчитывается
   // itGapEssence=920
+  //
+  // Зависимости, которые были у персонажа до КС сохраняются. После воскрешения таймер зависимостей переходит в состояние ноль
   {
     id: 'gm-respawn-hmhvv',
     humanReadableName: 'Воскрешение HMHVV',
@@ -1875,7 +1889,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     prerequisites: [],
-    karmaCost: 0,
+    karmaCost: 999,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -1989,6 +2003,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
+  //
+  // Зависимости, которые были у персонажа до КС сохраняются. После воскрешения таймер зависимостей переходит в состояние ноль
   {
     id: 'gm-respawn-digital',
     humanReadableName: 'Воскрешение цифровой',
@@ -2030,6 +2046,40 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 20,
     prerequisites: [],
     karmaCost: 16,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перецислены все вещества, которые находятся в чаммере в формате
+  // имя_чаммера
+  // Название вещества - количество в мг.
+  // Указываем только вещества с содержанием более чем  ( 230 - Интеллект * 10)  милиграмм
+  {
+    id: 'whats-in-the-body-1',
+    humanReadableName: 'Диагностика (что в чаммере)',
+    description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 9000,
+    prerequisites: [],
+    karmaCost: 50,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Показывает текстовое сообщение ( в лог?) формата
+  // имя_чаммера
+  // название препарата  - время приема
+  // за последние 4 часа
+  {
+    id: 'Biomonitor-scan',
+    humanReadableName: 'Сканер биомонитора',
+    description: 'Ты можешь увидеть список препаратов, которые пациент принимал за последние 4 часа.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 9000,
+    prerequisites: [],
+    karmaCost: 60,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },

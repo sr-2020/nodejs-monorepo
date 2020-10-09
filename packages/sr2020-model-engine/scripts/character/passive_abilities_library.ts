@@ -911,6 +911,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // ЭТИКА
   // мини-корова декеров, закрытая этикой
   //
   // IT: команда в кривда-матрице
@@ -1305,48 +1306,48 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['sprites-2'],
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
-  // Увеличивает Харизму персонажа менталиста с 3 до 4
+  // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-1',
     humanReadableName: 'Повышение Харизмы от 3 до 4 ',
     description: 'Перманентное увеличение Харизмы персонажа - 1',
-    karmaCost: 16,
+    karmaCost: 80,
     prerequisites: [],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
-  // Увеличивает Харизму персонажа менталиста с 4 до 5
+  // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-2',
     humanReadableName: 'Повышение Харизмы от 4 до 5',
     description: 'Перманентное увеличение Харизмы персонажа - 2',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: ['increase-the-charisma-1'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
-  // Увеличивает Харизму персонажа менталиста с 5 до 6
+  // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-3',
     humanReadableName: 'Повышение Харизмы от 5 до 6 ',
     description: 'Перманентное увеличение Харизмы персонажа - 3',
-    karmaCost: 0,
+    karmaCost: 100,
     prerequisites: ['increase-the-charisma-2'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
-  // Увеличивает Харизму персонажа менталиста с 6 до 7
+  // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-4',
     humanReadableName: 'Повышение Харизмы от 6 до 7',
     description: 'Перманентное увеличение Харизмы персонажа - 4',
-    karmaCost: 0,
+    karmaCost: 100,
     prerequisites: ['increase-the-charisma-3'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
-  // Увеличивает Харизму персонажа менталиста с 7 до 8
+  // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-5',
     humanReadableName: 'Повышение Харизмы от 7 до 8',
     description: 'Перманентное увеличение Харизмы персонажа - 5',
-    karmaCost: 0,
+    karmaCost: 100,
     prerequisites: ['increase-the-charisma-4'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
@@ -1356,7 +1357,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'look-its-shekel',
     humanReadableName: 'Опа, шекель!',
     description: 'При получении лута после прохождения данжа покажи данную абилку игротеху. Ты получаешь +10% от лута твоей команды.',
-    karmaCost: 10,
+    karmaCost: 30,
     prerequisites: [],
     modifier: [],
   },
@@ -1365,7 +1366,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'mу-scoring',
     humanReadableName: 'Мой скоринг',
     description: 'отображается  текущий коэф. скоринга данного персонажа',
-    karmaCost: 10,
+    karmaCost: 20,
     prerequisites: [],
     modifier: [],
   },
@@ -1394,7 +1395,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'igra-na-birge-3',
     humanReadableName: 'Игра на бирже',
     description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
-    karmaCost: 80,
+    karmaCost: 60,
     prerequisites: ['igra-na-birge-2'],
     modifier: modifierFromEffect(increaseStockGainPercentage, {
       amount: 13 - 5,
@@ -1457,7 +1458,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Воцерковленный',
     description:
       'После исповеди или участия в богослужении вы можете нажать "Готово" на любом Поступке личной этики, не выполняя его требований',
-    karmaCost: 0,
+    karmaCost: 999,
     prerequisites: [],
     modifier: [],
   },
@@ -1476,7 +1477,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'discount-all-2',
     humanReadableName: 'Скидосы - 20%',
     description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара',
-    karmaCost: 40,
+    karmaCost: 30,
     prerequisites: ['discount-all-1'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }),
   },
@@ -1485,7 +1486,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'discount-all-3',
     humanReadableName: 'Скидосы - 30%',
     description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара ',
-    karmaCost: 80,
+    karmaCost: 50,
     prerequisites: ['discount-all-2'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }),
   },
@@ -2109,7 +2110,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'aircraft-1',
     humanReadableName: 'Воздушные дроны 1',
     description: 'Улучшает управление воздушными дронами.',
-    karmaCost: 0,
+    karmaCost: 40,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
   },
@@ -2118,7 +2119,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'aircraft-2',
     humanReadableName: 'Воздушные дроны 2',
     description: 'Улучшает управление сложными воздушными дронами.',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
@@ -2127,7 +2128,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'aircraft-3',
     humanReadableName: 'Воздушные дроны 3',
     description: 'Улучшает управление самыми сложными воздушными дронами.',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
@@ -2136,7 +2137,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-1',
     humanReadableName: 'Наземные дроны-1',
     description: 'Улучшает управление наземными дронами.',
-    karmaCost: 0,
+    karmaCost: 40,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 2 })],
   },
@@ -2145,7 +2146,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-2',
     humanReadableName: 'Наземные дроны-2',
     description: 'Улучшает управление сложными наземными дронами.',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
@@ -2154,7 +2155,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-3',
     humanReadableName: 'Наземные дроны-3',
     description: 'Улучшает управление самыми сложными наземными дронами.',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
@@ -2164,7 +2165,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'drone-sync-1',
     humanReadableName: 'Синхронизация 1',
     description: 'Увеличивает время в дроне и сокращает перерыв между включениями.',
-    karmaCost: 0,
+    karmaCost: 70,
     prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
@@ -2177,7 +2178,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'drone-sync-2',
     humanReadableName: 'Синхронизация 2',
     description: 'Сильнее увеличивает время в дроне и сокращает перерыв между включениями.',
-    karmaCost: 0,
+    karmaCost: 70,
     prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
@@ -2190,7 +2191,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'drone-sync-3',
     humanReadableName: 'Синхронизация 3',
     description: 'Намного сильнее увеличивает время пребывания в дроне и сокращает перерыв между включениями.',
-    karmaCost: 0,
+    karmaCost: 70,
     prerequisites: [],
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
@@ -2203,7 +2204,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'mental-resistance',
     humanReadableName: 'резист менталке',
     description: 'Немного повышает защиту от ментальных воздействий.',
-    karmaCost: 4,
+    karmaCost: 0,
     prerequisites: [],
     modifier: modifierFromEffect(increaseMentalProtection, { amount: 3 }),
   },
@@ -2620,7 +2621,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-rigger',
     humanReadableName: 'Архетип: Риггер',
-    description: 'Риггер, повелитель дронов, химии и хрома.',
+    description: 'Риггер, повелитель дронов, хрома и химоты.',
     karmaCost: 100,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
@@ -2629,7 +2630,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-rigger-medic',
     humanReadableName: 'Аспект: Риггер Медик',
-    description: 'Медик. Ты знаешь всё про химию и полевую медицину.',
+    description: 'Медик. Ты знаешь всё про полевую медицину и импланты.',
     karmaCost: 60,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
@@ -2638,7 +2639,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-rigger-engineer',
     humanReadableName: 'Аспект: Риггер Инженер',
-    description: 'Инженер. Ставишь импланты, моды, снимаешь моды. ',
+    description: 'Инженер. Химия, дроны, кибердеки и их модификация.',
     karmaCost: 60,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
@@ -2721,7 +2722,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-hackerman-decker',
     humanReadableName: 'Аспект: Хакер Декер',
-    description: 'Чаммер, ты смог! ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
+    description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
     karmaCost: 60,
     prerequisites: [],
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
@@ -2730,7 +2731,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-hackerman-technomancer',
     humanReadableName: 'Аспект: Хакер Техномант',
-    description: 'Чаммер, ты смог! Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны',
+    description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
@@ -2889,21 +2890,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // можно использовать автомат
+  // можно использовать винтовки
   {
     id: 'guns-1',
     humanReadableName: 'дальнобойное оружие: винтовки',
     description: 'персонаж может использовать винтовки',
-    karmaCost: 20,
+    karmaCost: 60,
     prerequisites: [],
     modifier: [],
   },
-  // можно использовать снайперскую винтовку
+  // можно использовать автомат
   {
     id: 'guns-2',
     humanReadableName: 'дальнобойное оружие: автоматы',
     description: 'персонаж может использовать автоматы',
-    karmaCost: 40,
+    karmaCost: 60,
     prerequisites: [],
     modifier: [],
   },
@@ -2913,6 +2914,279 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'дальнобойное оружие: пулеметы',
     description: 'персонаж может использовать пулемёты',
     karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // усложняет вырезание имплантов рипоменами
+  {
+    id: 'armor-1',
+    humanReadableName: 'броня: подкожная броня',
+    description: 'Слой подкожной брони самурая сильно мешает рипоменам удалять имеющиеся импланты',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // можно носить легкую броню
+  {
+    id: 'armor-2',
+    humanReadableName: 'броня: легкая броня',
+    description: 'Постоянные тренировки ловкости и силы привели к тому, что тебя не стесняет легкая броня',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // можно носить тяжелую броню
+  {
+    id: 'armor-3',
+    humanReadableName: 'броня: тяжелая броня',
+    description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // усложняет вырезание имплантов рипоменами
+  {
+    id: 'constitution-1',
+    humanReadableName: 'Здоровеньки булы: родство с имплантами',
+    description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // хиты в легком ранении восстанавливаются за 20 минут
+  {
+    id: 'constitution-2',
+    humanReadableName: 'Здоровеньки булы: регенерация',
+    description:
+      'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Если самурай находится в состоянии "тяжелое ранение" и не добит в течение 3 минут, он способен встать из тяжрана и продолжать бой еще 30 минут
+  {
+    id: 'constitution-3',
+    humanReadableName: 'Здоровеньки булы: всплеск адреналина',
+    description:
+      'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет пользоваться дубинками
+  {
+    id: "clubs'n'swords-1",
+    humanReadableName: 'холодное оружие: дубинки',
+    description:
+      'Самурай обучен пользоваться дубинками, возможно сказывается опыт работы в силовых структурах, возможно уличная жизнь и привычка махать бейсбольной битой',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет пользоваться мечами и топорами
+  {
+    id: "clubs'n'swords-2",
+    humanReadableName: 'холодное оружие: мечи и топоры',
+    description:
+      'Самурай владеет техниками использования мечей и топоров. Изучение восточных боевых искуств или увлечение северной мифологией и викингами',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет пользоваться двуручным оружием: мечи, тпоры, дубины
+  {
+    id: "clubs'n'swords-3",
+    humanReadableName: 'холодное оружие: двуручное оружие',
+    description:
+      'Самурай достаточно силен, что бы управится с двуручным оружием. Фламбер давно не появлялся на улицах городов, но, что мешает попробовать',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // усложняет вырезание имплантов рипоменами
+  {
+    id: 'combat-armor-1',
+    humanReadableName: 'броня: подкожная броня',
+    description: 'Слой подкожной брони самурая сильно мешает рипоменам удалять имеющиеся импланты',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // можно носить легкую броню
+  {
+    id: 'combat-armor-2',
+    humanReadableName: 'броня: легкая броня',
+    description: 'Постоянные тренировки ловкости и силы привели к тому, что тебя не стесняет легкая броня',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // можно носить тяжелую броню
+  {
+    id: 'combat-armor-3',
+    humanReadableName: 'броня: тяжелая броня',
+    description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
+    karmaCost: 70,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // усложняет вырезание имплантов рипоменами
+  {
+    id: 'hardened-1',
+    humanReadableName: 'Крепкий и надежный: родство с имплантами',
+    description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // сопротивляемость проблемам от воздействия медицинских препаратов
+  {
+    id: 'hardened-2',
+    humanReadableName: 'Крепкий и надежный: сопротивляемость химии',
+    description:
+      'Генетическая мутация или магическая аномалия позволяет самураю проще переносить воздействие наркотических и медицинских препаратов',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // сопротивляемость ментальным воздействиям
+  {
+    id: 'hardened-3',
+    humanReadableName: 'Крепкий и надежный: железная воля',
+    description: 'Натренированная воля, а может особенность строения мозга осложняет применение ментальных воздействий на самурая',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет использовать автоматы и дубинки
+  {
+    id: 'tools-of-trade-1',
+    humanReadableName: 'Оружие ассасина: дубинки, автоматы',
+    description:
+      'Скорее громила, чем скрытный убийца, самурай привык пользоваться простейшим оружием ближнего боя и скорострельным оружием дальнего боя',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет использовать мечи, топоры и винтовки
+  {
+    id: 'tools-of-trade-2',
+    humanReadableName: 'Оружие ассасина: мечи, топоры, винтовки',
+    description:
+      'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется со снайперскими винтовками',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет использовать оружие в двух руках (два автомата, автомат+меч и тд)
+  {
+    id: 'tools-of-trade-3',
+    humanReadableName: 'Оружие ассасина: оружие в каждой руке',
+    description:
+      'Тренируя ловкость и координацию самурай изучает технику владения оружием обеими руками, что позволяет одновременно использовать и огнестрельное и холодное оружие, или оружие одного типа в двух руках',
+    karmaCost: 60,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // сокращает перерыв между добиваниями в КС до 3 минут
+  {
+    id: 'executioner-1',
+    humanReadableName: 'Палач: быстрое добивание',
+    description:
+      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценниться среди самураев-ассасинов. Настоящий профи может убить нескольких человек в считанные минуты',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет оглушать персонажей, в том числе в небоевой обстановке
+  {
+    id: 'executioner-2',
+    humanReadableName: 'Палач: оглушение',
+    description:
+      'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нок-аут, отличительная черта любого самурая-ассасина, но требует большой практики',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет провести допрос тяжело раненного персонажа. Допрашиваемый персонаж обязан честно и полно ответить на три вопроса
+  {
+    id: 'executioner-3',
+    humanReadableName: 'Палач: допрос',
+    description: 'Порой, что бы добраться до истинной цели, приходится спросить дорогу. Ассасины мастера допросов',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет снять чип (разрушить по игре) с оружия противника
+  {
+    id: 'marauder-1',
+    humanReadableName: 'Мародер: разоружение',
+    description:
+      'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет при добивании в КС получить часть денег добитого (10%)
+  {
+    id: 'marauder-2',
+    humanReadableName: 'Мародер: грабеж',
+    description:
+      'Говорят, что нет чести среди воров. И ведь правильно говорят. Если противник уже мертв, значит ему деньги уже не понадобятся.',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет снять чип (разрушить по игре) с брони противника
+  {
+    id: 'marauder-3',
+    humanReadableName: 'Мародер: разоблачение',
+    description: 'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // добавляем в список вещества с содержанием ( 130 - Интеллект * 10)  мг и больше
+  {
+    id: 'whats-in-the-body-2',
+    humanReadableName: 'Что в чаммере - усиление',
+    description: 'Ты видишь более тонкие составы в теле пациента.',
+    karmaCost: 80,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // показываем в списке вещества с содержанием ( 90 - Интеллект * 10)   мг и больше
+  {
+    id: 'whats-in-the-body-3',
+    humanReadableName: 'Что в чаммере - еще усиление',
+    description: 'Ты видишь самые тонкие составы в теле пациента.',
+    karmaCost: 80,
     prerequisites: [],
     modifier: [],
   },
