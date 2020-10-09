@@ -15,13 +15,13 @@ const optionDefinitions: commandLineArgs.OptionDefinition[] = [
 const FLAGS = commandLineArgs(optionDefinitions);
 
 const kKindColumn = 0;
-const kIdColumn = 4;
-const kNameColumn = 5;
-const kPlayerDescriptionColumn = 11;
-const kMasterDescriptionColumn = 12;
-const kCooldownColumn = 15;
-const kSpellSphereColumn = 17;
-const kKarmaCostColumn = 10;
+const kIdColumn = 5;
+const kNameColumn = 4;
+const kPlayerDescriptionColumn = 12;
+const kMasterDescriptionColumn = 13;
+const kCooldownColumn = 16;
+const kSpellSphereColumn = 18;
+const kKarmaCostColumn = 9;
 
 class SpreadsheetProcessor {
   passiveAbilities: PassiveAbility[] = [];
@@ -108,7 +108,7 @@ class SpreadsheetProcessor {
       throw new Error('Kind column was moved! Exiting.');
     }
 
-    if (header[kIdColumn] != 'ID (техническое ID)') {
+    if (header[kIdColumn] != 'Feature_ID') {
       throw new Error('Id column was moved! Exiting.');
     }
 
@@ -132,7 +132,7 @@ class SpreadsheetProcessor {
       throw new Error('Spell sphere column was moved! Exiting.');
     }
 
-    if (!header[kKarmaCostColumn].startsWith('Цена в карме')) {
+    if (!header[kKarmaCostColumn].startsWith('Karma')) {
       throw new Error('Karma cost column was moved! Exiting.');
     }
 
