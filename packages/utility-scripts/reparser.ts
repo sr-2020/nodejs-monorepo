@@ -175,7 +175,6 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
         return ts.createNumericLiteral(ability.karmaCost);
       }
       if (propertyName == 'prerequisites') {
-        console.log('???');
         return ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id)));
       }
       throw new Error(`Unexpected property name: ${propertyName}`);
