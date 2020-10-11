@@ -192,6 +192,7 @@ export function addTemporaryActiveAbilityEffect(api: EffectModelApi<Sr2020Charac
     targetsSignature: m.ability.targetsSignature,
     cooldownMinutes: m.ability.cooldownMinutes,
     cooldownUntil: 0,
+    validUntil: m.validUntil,
   });
 }
 
