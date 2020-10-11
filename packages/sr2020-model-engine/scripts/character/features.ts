@@ -157,12 +157,41 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
   );
 }
 
+export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, abilityId: string, d: Duration) {
+  const activeAbility = getAllActiveAbilities().get(abilityId);
+  if (!activeAbility) {
+    throw new UserVisibleError(`Неизвестная способность ${abilityId}`);
+  }
+
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(addTemporaryActiveAbilityEffect, {
+      validUntil: validUntil(api, d),
+      ability: activeAbility,
+    }),
+    d,
+    `Добавление временной способности ${activeAbility.humanReadableName}`,
+  );
+}
+
 export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { ability: PassiveAbility }) {
   api.model.passiveAbilities.push({
     id: m.ability.id,
     name: m.ability.humanReadableName,
     description: m.ability.description,
     validUntil: m.validUntil,
+  });
+}
+
+export function addTemporaryActiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { ability: ActiveAbility }) {
+  api.model.activeAbilities.push({
+    id: m.ability.id,
+    humanReadableName: m.ability.humanReadableName,
+    description: m.ability.description,
+    target: m.ability.target,
+    targetsSignature: m.ability.targetsSignature,
+    cooldownMinutes: m.ability.cooldownMinutes,
+    cooldownUntil: 0,
   });
 }
 

@@ -218,5 +218,17 @@ export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   api.model.magicStats.aura = auraChars.join('');
 }
 
+export function takeNoHarmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'magic-shield', duration(5, 'minutes'));
+}
+
+export function pencilLargeAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'pencil', duration(5, 'minutes'));
+}
+
+export function skinStoneAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'stone-skin-result', duration(5, 'minutes'));
+}
+
 // For cases when no IT action is needed
 export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}

@@ -25,6 +25,7 @@ import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scri
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
+import { addTemporaryActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -582,4 +583,20 @@ export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never)
 export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   api.sendNotification('Спелл еще не реализован :(', 'Заклинания влияющие на уровень маны не реализованы.');
+}
+
+export function teaseLesserMindSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryActiveAbility(api, 'take-no-harm', duration(10 * data.power, 'minutes'));
+}
+
+export function enlargeMyPencilSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryActiveAbility(api, 'pencil-large', duration(20 * data.power, 'minutes'));
+}
+
+export function enlargeYourPencilSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, enlargeMyPencilSpell, data);
+}
+
+export function stoneSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryActiveAbility(api, 'skin-stone', duration(20 * data.power, 'minutes'));
 }

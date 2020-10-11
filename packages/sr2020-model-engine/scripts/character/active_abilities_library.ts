@@ -14,7 +14,10 @@ import {
   letHimPay,
   letMePay,
   oneTimeRevive,
+  pencilLargeAbility,
   reRent,
+  skinStoneAbility,
+  takeNoHarmAbility,
   trollton,
   whoNeedsIt,
 } from './active_abilities';
@@ -1893,7 +1896,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // При активации на 5 минут выдаёт способность Magic Shield
   {
     id: 'take-no-harm',
@@ -1906,9 +1908,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: [],
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: takeNoHarmAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // При активации на 5 минут выдаёт способность PENCIL
   {
     id: 'pencil-large',
@@ -1920,9 +1921,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: [],
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: pencilLargeAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // При активации на 5 минут выдаёт способность Stone Skin
   {
     id: 'skin-stone',
@@ -1934,7 +1934,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: [],
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: skinStoneAbility.name,
   },
   // TODO(aeremin): Add proper implementation
   // После активации абилки у мага появляется на 10 минут пассивная абилка с текстом "С <такого-то времени> по <такое-то время + 10 мин> все персонажи, присутствующие в реале рядом с магом (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), оказываются в тяжране, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам".

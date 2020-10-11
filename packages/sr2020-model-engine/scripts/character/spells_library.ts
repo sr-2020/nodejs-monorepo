@@ -5,6 +5,8 @@ import {
   dummyManaControlSpell,
   dummySpell,
   dumptyHumptySpell,
+  enlargeMyPencilSpell,
+  enlargeYourPencilSpell,
   fastChargeSpell,
   fireballSpell,
   frogSkinSpell,
@@ -18,7 +20,9 @@ import {
   readLocationAuraSpell,
   shtoppingSpell,
   spiritsRelatedSpell,
+  stoneSkinSpell,
   taxFreeSpell,
+  teaseLesserMindSpell,
   tempusFugitSpell,
   trackBallSpell,
   trackpointSpell,
@@ -92,7 +96,6 @@ const kAllSpellsList: Spell[] = [
     sphere: 'fighting',
     eventType: fireballSpell.name,
   },
-  // TODO(https://trello.com/c/QrN1vtXh/159-реализовать-заклинания-про-тяжелую-броню-и-тяжелое-оружие-enlarge-your-pencil-и-stone-skin)
   // у мага на время T1=Мощь*10 минут появляется активируемая способность Take no harm.
   {
     id: 'tease-lesser-mind',
@@ -102,9 +105,8 @@ const kAllSpellsList: Spell[] = [
     prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
-    eventType: dummySpell.name,
+    eventType: teaseLesserMindSpell.name,
   },
-  // TODO(https://trello.com/c/QrN1vtXh/159-реализовать-заклинания-про-тяжелую-броню-и-тяжелое-оружие-enlarge-your-pencil-и-stone-skin)
   // У цели заклинания на T1=Мощь*20 минут появляется активируемая способность Pencil, Large!
   {
     id: 'enlarge-your-pencil',
@@ -114,9 +116,9 @@ const kAllSpellsList: Spell[] = [
     prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
-    eventType: dummySpell.name,
+    hasTarget: true,
+    eventType: enlargeYourPencilSpell.name,
   },
-  // TODO(https://trello.com/c/QrN1vtXh/159-реализовать-заклинания-про-тяжелую-броню-и-тяжелое-оружие-enlarge-your-pencil-и-stone-skin)
   // У мага на T1=Мощь*20 минут появляется активируемая способность Skin, Stone!
   {
     id: 'stone-skin',
@@ -125,7 +127,7 @@ const kAllSpellsList: Spell[] = [
     prerequisites: [],
     karmaCost: 0,
     sphere: 'protection',
-    eventType: dummySpell.name,
+    eventType: stoneSkinSpell.name,
   },
   // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   // У мага появляется на 3 минуты пассивная абилка с текстом "В <такое-то время> у всех персонажей, присутствующих в реале в текущей локации (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет) и взаимодействующих с магом (слышащих/видящих/нападающих на него), хиты снижаются на N". N=Мощь/2 (округленное вверх). <такое-то время> - момент активации заклинания.
@@ -493,7 +495,6 @@ const kAllSpellsList: Spell[] = [
     eventType: dumptyHumptySpell.name,
     hasTarget: true,
   },
-  // TODO(aeremin): Add proper implementation
   // У мага на T1=Мощь*20 минут появляется активируемая способность Pencil, Large!
   {
     id: 'enlarge-my-pencil',
@@ -503,7 +504,7 @@ const kAllSpellsList: Spell[] = [
     prerequisites: [],
     karmaCost: 0,
     sphere: 'fighting',
-    eventType: dummySpell.name,
+    eventType: enlargeMyPencilSpell.name,
     hasTarget: false,
   },
   // TODO(aeremin): Add proper implementation
