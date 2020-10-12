@@ -5,7 +5,7 @@ import { kAllSpells } from '@sr2020/sr2020-model-engine/scripts/character/spells
 
 describe('Features library', () => {
   function addNo(ids: string[]): string[] {
-    return [...ids, ...ids.map((id) => `НЕТ ${id}`)];
+    return [...ids, ...ids.map((id) => `!${id}`)];
   }
   const allValidPrerequisites = new Set<string>(
     addNo([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]),

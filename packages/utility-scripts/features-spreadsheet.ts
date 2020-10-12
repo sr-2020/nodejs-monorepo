@@ -41,7 +41,10 @@ class SpreadsheetProcessor {
 
   parsePrerequisites(id: string, input: string | undefined): string[] {
     if (!input || input.trim() == 'null') return [];
-    return input.split('\n').map((s) => s.trim());
+    return input
+      .split('\n')
+      .map((s) => s.trim())
+      .map((s) => s.replace('НЕТ ', '!'));
   }
 
   async processPassiveAbility(line: number, id: string, row: any[]) {

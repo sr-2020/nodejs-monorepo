@@ -2650,7 +2650,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Аспект: Риггер Пилот',
     description: 'Пилот. Умеешь управлять дронами.',
     karmaCost: 60,
-    prerequisites: ['arch-rigger', 'НЕТ tech-blockade'],
+    prerequisites: ['arch-rigger', '!tech-blockade'],
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Body  +2
@@ -2733,7 +2733,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Аспект: Хакер Техномант',
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman', 'НЕТ arch-mage', 'НЕТ tech-blockade'],
+    prerequisites: ['arch-hackerman', '!arch-mage', '!tech-blockade'],
     modifier: [],
   },
   // resonance +1
@@ -2778,7 +2778,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Архетип: Маг',
     description: 'Маг, повелитель заклинаний!',
     karmaCost: 100,
-    prerequisites: ['НЕТ arch-hackerman-technomancer', 'НЕТ magic-blockade'],
+    prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
   // Body +1
