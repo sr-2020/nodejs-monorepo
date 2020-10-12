@@ -420,7 +420,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'luke-i-am-your-father',
     humanReadableName: 'Выполнить любую просьбу',
     description:
-      'Люк. Я твой отец. Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.',
+      'Люк. Я твой отец. Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут. ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
@@ -506,12 +506,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'kill-him',
     humanReadableName: 'Агрессия',
     description:
-      'Цель активно пытается убить персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается',
+      'Цель активно пытается убить персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается. Пока цель жива - твоя жертва пытается её убить.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
     prerequisites: ['arch-face-mentalist'],
-    karmaCost: 80,
+    karmaCost: 60,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
@@ -621,7 +621,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'really-need-it',
     humanReadableName: 'Очень надо.',
-    description: 'Цель дарит менталисту 1 игровой предмет по выбору менталиста. ',
+    description:
+      'Цель дарит менталисту 1 игровой предмет по выбору менталиста. Предмет должен быть отчуждаем (например, нельзя попросить подарить установленный имплант)',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
@@ -643,7 +644,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
-  // Добавляет +8 к ментальной защите целевого персонажа  на 24 часа
+  // Добавляет +8 к ментальной защите целевого персонажа  на 12 часа
   {
     id: 'increase-the-mental-protection',
     humanReadableName: 'увеличение м. защиты другого персонажа',
@@ -656,7 +657,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: increaseTheMentalProtectionAbility.name,
   },
-  // Добавляет -8 к ментальной защите целевого персонажа на 12 часов
+  // Добавляет -8 к ментальной защите целевого персонажа на 6 часов
   {
     id: 'reduce-the-mental-protection',
     humanReadableName: 'уменьшение м. защиты другого персонажа',
@@ -669,6 +670,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: reduceTheMentalProtectionAbility.name,
   },
+  // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
   {
     id: 'i-dont-trust-anybody',
     humanReadableName: 'Я никому не верю',
@@ -676,8 +678,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 60,
-    prerequisites: [],
-    karmaCost: 2,
+    prerequisites: ['arch-face-mentalist', 'you-dont-trust-anybody'],
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: iDontTrustAnybody.name,
   },
