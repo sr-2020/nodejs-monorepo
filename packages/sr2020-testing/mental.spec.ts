@@ -41,8 +41,8 @@ describe('Mentalistic events', function () {
     expect(fixture.getCharacterNotifications(1)).to.deepEqual([{ title: 'Провал!', body: 'Цель защитилась от вашего воздействия.' }]);
     expect(fixture.getCharacterNotifications(2)).to.deepEqual([
       {
-        title: 'Успех!',
-        body: 'Вы заблокировали ментальную атаку.',
+        title: 'Головная боль',
+        body: 'У вас болит голова, но, наверное, это скоро пройдет.',
       },
     ]);
   });

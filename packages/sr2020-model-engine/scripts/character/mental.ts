@@ -45,7 +45,7 @@ export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: 
 
   if (mentalDefence(api.workModel) >= data.attack) {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: false });
-    api.sendNotification('Успех!', 'Вы заблокировали ментальную атаку.');
+    api.sendNotification('Головная боль', 'У вас болит голова, но, наверное, это скоро пройдет.');
   } else {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: true });
     api.sendNotification('Провал!', 'Ментальная атака подействовала, выполняйте написанное.');
