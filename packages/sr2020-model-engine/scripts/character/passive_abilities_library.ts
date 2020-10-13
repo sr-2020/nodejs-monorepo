@@ -872,6 +872,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Сканирует ноду и выводит список обнаруженных в ней агентов\n\nУспешность определяется по Sleaze',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: [],
   },
   // установка дряни / пользы в чужой хост
@@ -886,6 +887,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Устанавливает агента (софт) в Ноду Хоста\n--name:<имя>\n\n\nУспешность определяется по Sleaze',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: [],
   },
   // очистка хоста от чужой дряни / пользы
@@ -897,6 +899,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Удаляет агента с Ноды\n\nУспешность определяется по Sleaze',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
   // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
@@ -931,6 +934,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -940,6 +944,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -949,6 +954,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'команда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: [],
   },
   // IT: буду запрашивать сам факт наличия фичи
@@ -958,6 +964,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: [],
   },
   // IT:
@@ -968,6 +975,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на 5 минут',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-guru', level: 1 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
   // IT:
@@ -978,6 +986,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на10 минут',
     karmaCost: 4,
     prerequisites: ['stubbornness-1'],
+    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT:
@@ -988,6 +997,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на 10 минут',
     karmaCost: 4,
     prerequisites: ['stubbornness-2'],
+    pack: { id: 'hack-deck-guru', level: 3 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
@@ -997,6 +1007,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1007,6 +1018,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
     karmaCost: 2,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT:
@@ -1017,6 +1029,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает время входа на хост на 2 минуты',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
   },
   // IT:
@@ -1027,6 +1040,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на 3 минут',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
   // IT:
@@ -1037,6 +1051,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на 5 минут',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
@@ -1046,6 +1061,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет попытаться сбежать из линклока. \n\nЗависит от соотношения значений  вашего Sleaze и Attack цели',
     karmaCost: 8,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // Абилка конверсии Intellect в Firewall
@@ -1057,6 +1073,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Firewall',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
   // IT:
@@ -1067,6 +1084,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Firewall',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
   // IT:
@@ -1077,6 +1095,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Firewall',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
   // Абилка конверсии Intellect в Attack
@@ -1088,6 +1107,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Attack',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
   // IT:
@@ -1098,6 +1118,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Attack',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
   // IT:
@@ -1108,6 +1129,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Attack',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
   // Абилка конверсии Intellect в Sleaze
@@ -1119,6 +1141,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Sleaze',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
   // IT:
@@ -1129,6 +1152,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Sleaze',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
   // IT:
@@ -1139,6 +1163,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Sleaze',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 3 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
   // Абилка конверсии Intellect в Dataprocessing
@@ -1150,6 +1175,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-miner', level: 1 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
   // IT:
@@ -1160,6 +1186,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, {
       amount: 2,
     }),
@@ -1172,6 +1199,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-miner', level: 3 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, {
       amount: 2,
     }),
@@ -1184,6 +1212,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Позволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     karmaCost: 8,
     prerequisites: [],
+    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1194,6 +1223,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Выводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
     karmaCost: 8,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1203,6 +1233,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Отображает якорь PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
     karmaCost: 8,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1213,6 +1244,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Находясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
     karmaCost: 8,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
@@ -1223,6 +1255,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Разблокирует ключи команды steal\n\n--enterprize: работа с кошельками юр лиц\n--comment: позволяет ввести текст "основания перевода", вместо билиберды по умолчанию',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
@@ -1232,6 +1265,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Разблокирует ключи команды steal\n\n--SIN: переводит сумму на другой SIN',
     karmaCost: 4,
     prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT:
@@ -1243,6 +1277,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Русское название для слэнга "qouterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\n\nКоличество защищаемых хостов +5',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
   // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
@@ -1255,6 +1290,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Тебе проще компилировать спрайты',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 20,
     }),
@@ -1269,6 +1305,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Тебе намного проще компилировать спрайты',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 30,
     }),
@@ -1282,6 +1319,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь компилировать спрайты 1 уровня',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 1 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
   //
@@ -1293,6 +1331,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь компилировать спрайты 2 уровня',
     karmaCost: 8,
     prerequisites: ['sprites-1'],
+    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
   //
@@ -1304,6 +1343,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь компилировать спрайты 3 уровня',
     karmaCost: 8,
     prerequisites: ['sprites-2'],
+    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -1359,6 +1399,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При получении лута после прохождения данжа покажи данную абилку игротеху. Ты получаешь +10% от лута твоей команды.',
     karmaCost: 30,
     prerequisites: ['arch-face-geshaftmacher'],
+    pack: { id: 'face-geshaftmacher-trader', level: 1 },
     modifier: [],
   },
   // У гм на экране экономики отображаются  его текущие множители скоринга.
@@ -1368,6 +1409,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'отображается  текущий коэф. скоринга данного персонажа',
     karmaCost: 20,
     prerequisites: ['arch-face-geshaftmacher'],
+    pack: { id: 'face-geshaftmacher-torgovez', level: 1 },
     modifier: [],
   },
   // После списания рентных платежей гм получает кэшбек в размере 2% от списанной суммы. Начисляется после каждого списания рентных платежей.
@@ -1377,6 +1419,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 2% от всех своих рентных платежей.',
     karmaCost: 10,
     prerequisites: ['arch-face-geshaftmacher'],
+    pack: { id: 'face-geshaftmacher-trader', level: 1 },
     modifier: modifierFromEffect(increaseStockGainPercentage, { amount: 2 }),
   },
   // После списания рентных платежей гм получает кэшбек в размере 5% от списанной суммы. Начисляется после каждого списания рентных платежей.
@@ -1386,6 +1429,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 5% от всех своих рентных платежей.',
     karmaCost: 40,
     prerequisites: ['arch-face-geshaftmacher', 'igra-na-birge-1'],
+    pack: { id: 'face-geshaftmacher-trader', level: 2 },
     modifier: modifierFromEffect(increaseStockGainPercentage, {
       amount: 5 - 2,
     }),
@@ -1397,6 +1441,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
     karmaCost: 60,
     prerequisites: ['arch-face-geshaftmacher', 'igra-na-birge-2'],
+    pack: { id: 'face-geshaftmacher-trader', level: 3 },
     modifier: modifierFromEffect(increaseStockGainPercentage, {
       amount: 13 - 5,
     }),
@@ -1470,6 +1515,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара ',
     karmaCost: 10,
     prerequisites: ['arch-face-geshaftmacher'],
+    pack: { id: 'face-geshaftmacher-trader', level: 1 },
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }),
   },
   // Множитель 0,8 при покупке любого товара  данным персонажем
@@ -1479,6 +1525,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара',
     karmaCost: 30,
     prerequisites: ['arch-face-geshaftmacher', 'discount-all-1'],
+    pack: { id: 'face-geshaftmacher-trader', level: 2 },
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }),
   },
   // Множитель 0,7 при покупке любого товара  данным персонажем
@@ -1488,6 +1535,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара ',
     karmaCost: 50,
     prerequisites: ['arch-face-geshaftmacher', 'discount-all-2'],
+    pack: { id: 'face-geshaftmacher-trader', level: 3 },
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }),
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
@@ -1941,6 +1989,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
+    pack: { id: 'arch-rigger-badfate', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 })],
   },
   // Intelligence -1
@@ -1952,6 +2001,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя серьезные проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger-negative-1'],
+    pack: { id: 'arch-rigger-badfate', level: 2 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 }), modifierFromEffect(increaseBody, { amount: -1 })],
   },
   // Intelligence -2
@@ -1963,6 +2013,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя очень серьезные проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger-negative-2'],
+    pack: { id: 'arch-rigger-badfate', level: 3 },
     modifier: [
       modifierFromEffect(increaseIntelligence, { amount: -2 }),
       modifierFromEffect(increaseBody, { amount: -2 }),
@@ -2058,6 +2109,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые моды.',
     karmaCost: 0,
     prerequisites: ['tuning-active', 'arch-rigger-engineer'],
+    pack: { id: 'rigger-eng-mech', level: 1 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
   // rigging.tuningBonus +2
@@ -2067,6 +2119,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить сложные моды.',
     karmaCost: 0,
     prerequisites: ['tuning-1', 'arch-rigger-engineer'],
+    pack: { id: 'rigger-eng-mech', level: 2 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
   // rigging.tuningBonus +4
@@ -2076,6 +2129,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить самые сложные моды.',
     karmaCost: 0,
     prerequisites: ['tuning-2', 'arch-rigger-engineer'],
+    pack: { id: 'rigger-eng-mech', level: 3 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
   // rigging.repomanBonus +4
@@ -2112,6 +2166,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление воздушными дронами.',
     karmaCost: 40,
     prerequisites: ['aircraft-active', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-air', level: 1 },
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
   },
   // drones.aircraftBonus = +4
@@ -2121,6 +2176,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление сложными воздушными дронами.',
     karmaCost: 80,
     prerequisites: ['aircraft-1', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-air', level: 2 },
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
   // drones.aircraftBonus = +4
@@ -2130,6 +2186,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление самыми сложными воздушными дронами.',
     karmaCost: 80,
     prerequisites: ['aircraft-2', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-air', level: 3 },
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
   // drones.groundcraftBonus = +2
@@ -2139,6 +2196,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление наземными дронами.',
     karmaCost: 40,
     prerequisites: ['groundcraft-active', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-ground', level: 1 },
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 2 })],
   },
   // drones.groundcraftBonus = +4
@@ -2148,6 +2206,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление сложными наземными дронами.',
     karmaCost: 80,
     prerequisites: ['groundcraft-1', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-ground', level: 2 },
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
   // drones.groundcraftBonus = +4
@@ -2157,6 +2216,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление самыми сложными наземными дронами.',
     karmaCost: 80,
     prerequisites: ['groundcraft-2', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-ground', level: 3 },
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
   // drones.maxTimeInside  +10
@@ -2167,6 +2227,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Увеличивает время в дроне и сокращает перерыв между включениями.',
     karmaCost: 70,
     prerequisites: ['arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-sync', level: 1 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -2180,6 +2241,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Сильнее увеличивает время в дроне и сокращает перерыв между включениями.',
     karmaCost: 70,
     prerequisites: ['drone-sync-1', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-sync', level: 2 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2193,6 +2255,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Намного сильнее увеличивает время пребывания в дроне и сокращает перерыв между включениями.',
     karmaCost: 70,
     prerequisites: ['drone-sync-2', 'arch-rigger-pilot'],
+    pack: { id: 'rigger-pilot-sync', level: 3 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2498,6 +2561,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты норм. Самый обычный Sapiens, как и миллионы других.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [],
   },
   // elven-prices
@@ -2507,6 +2571,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты эльф. У тебя прекрасные ушки, чувство стиля и ты точно знаешь, что ты лучше всех остальных видов металюдей.',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-elf', level: 1 },
     modifier: [],
   },
   // chem-resist
@@ -2521,6 +2586,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты гном. У тебя есть борода, чувство гордости и ты считаешь большинство остальных металюдей - длинномерками. Кстати, я уже говорил про бороду? ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [],
   },
   // extra-hp
@@ -2531,6 +2597,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты орк. У тебя восхитительные клыки и крепкие кулаки.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
   // extra-hp
@@ -2548,6 +2615,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тролль. У тебя есть клыки, рога, толстая шкура и возможность смотреть на остальных металюдей сверху вниз. ',
     karmaCost: 40,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // strong-arm
@@ -2565,6 +2633,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты пережил заражение HMHVV вирусом типа 3 и стал Гулем. Ты ешь мясо металюдей. Вкусно, как курочка!',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-Ghoul', level: 1 },
     modifier: [],
   },
   // strong-arm
@@ -2582,6 +2651,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты пережил заражение HMHVV вирусом типа 1. Ты уверен, что ты теперь сверх-мета-человек. Иногда хочется кушать и тебе нужны другие металюди - в качестве обеда. ',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-Vampire', level: 1 },
     modifier: [],
   },
   // magic-blockade
@@ -2591,6 +2661,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты часть проекции Искусственного Интеллекта. Твое тело сгусток программ и кода, живущий в Матрице. ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-AI', level: 1 },
     modifier: [],
   },
   // magic-blockade
@@ -2602,6 +2673,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты цифровой разум. Твое тело сгусток программ и кода, живущий в Матрице. ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-eGhost', level: 1 },
     modifier: [],
   },
   // tech-blockade
@@ -2615,6 +2687,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты магическое создание, живущее в астральном мире.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // Body +1
@@ -2624,6 +2697,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Риггер, повелитель дронов, хрома и химоты.',
     karmaCost: 100,
     prerequisites: [],
+    pack: { id: 'gen-arch-rigger', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Intelligence +1
@@ -2633,6 +2707,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Медик. Ты знаешь всё про полевую медицину и импланты.',
     karmaCost: 60,
     prerequisites: ['arch-rigger'],
+    pack: { id: 'gen-arch-rigger-medic', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // Intelligence +1
@@ -2642,6 +2717,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инженер. Химия, дроны, кибердеки и их модификация.',
     karmaCost: 60,
     prerequisites: ['arch-rigger'],
+    pack: { id: 'gen-arch-rigger-engineer', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // Body +1
@@ -2651,6 +2727,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Пилот. Умеешь управлять дронами.',
     karmaCost: 60,
     prerequisites: ['arch-rigger', '!tech-blockade'],
+    pack: { id: 'gen-arch-rigger-pilot', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Body  +2
@@ -2661,6 +2738,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный риггер.',
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
+    pack: { id: 'gen-arch-rigger-boost', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseIntelligence, { amount: 2 })],
   },
   // Body +1
@@ -2670,6 +2748,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Самурай. Практикуешь искусство Воина и враги трепещут при звуках твоего имени.',
     karmaCost: 100,
     prerequisites: [],
+    pack: { id: 'gen-arch-samurai', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Strength +1
@@ -2679,6 +2758,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Стрелок. Огнестрельное оружие - твой путь.',
     karmaCost: 60,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'gen-arch-samurai-gunner', level: 1 },
     modifier: [modifierFromEffect(increaseStrength, { amount: 1 })],
   },
   // Body +1
@@ -2688,6 +2768,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Громила. Холодное оружие и несокрушимая броня - твой путь.',
     karmaCost: 60,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'gen-arch-samurai-fighter', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Intelligence +1
@@ -2697,6 +2778,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ассасин. Уловки и хитрости - твой путь.',
     karmaCost: 60,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'gen-arch-samurai-assasin', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // Body  +2
@@ -2707,6 +2789,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный самурай.',
     karmaCost: 0,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'gen-arch-samurai-boost', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseStrength, { amount: 2 })],
   },
   // Intelligence +1
@@ -2716,6 +2799,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Хакер, владыка Матрицы!',
     karmaCost: 100,
     prerequisites: [],
+    pack: { id: 'gen-arch-hackerman', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // Intelligence +1
@@ -2725,6 +2809,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
     karmaCost: 60,
     prerequisites: ['arch-hackerman'],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   //
@@ -2734,6 +2819,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     karmaCost: 0,
     prerequisites: ['arch-hackerman', '!arch-mage', '!tech-blockade'],
+    pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [],
   },
   // resonance +1
@@ -2743,6 +2829,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Техномант боец. ',
     karmaCost: 60,
     prerequisites: ['arch-hackerman-technomancer'],
+    pack: { id: 'gen-arch-hackerman-cyberadept', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // resonance +1
@@ -2752,6 +2839,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Техномант, специалист по Комплексным формам.',
     karmaCost: 60,
     prerequisites: ['arch-hackerman-technomancer'],
+    pack: { id: 'gen-arch-hackerman-technoshaman', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // Intelligence +2
@@ -2761,6 +2849,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный хакер декер.',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker-boost', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 2 })],
   },
   // resonance +2
@@ -2770,6 +2859,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный хакер техномант.',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
+    pack: { id: 'gen-arch-hackerman-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   // magic  +1
@@ -2779,6 +2869,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг, повелитель заклинаний!',
     karmaCost: 100,
     prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
+    pack: { id: 'gen-arch-mage', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
   // Body +1
@@ -2788,6 +2879,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг адепт. Твои способности выходят за грань доступного метачеловеку, но заклинания ограничены.',
     karmaCost: 60,
     prerequisites: ['arch-mage'],
+    pack: { id: 'gen-arch-mage-adeptus', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // magic  +1
@@ -2797,6 +2889,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг заклинатель. Снимаю, порчу, колдую.',
     karmaCost: 60,
     prerequisites: ['arch-mage'],
+    pack: { id: 'gen-arch-mage-spellcaster', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
   // magic  +1
@@ -2806,6 +2899,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг призыватель. Духи и зачарования.',
     karmaCost: 60,
     prerequisites: ['arch-mage'],
+    pack: { id: 'gen-arch-mage-summoner', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
   // Magic +2
@@ -2816,6 +2910,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный маг.',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
+    pack: { id: 'gen-arch-mage-boost', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 2 }), modifierFromEffect(increaseBody, { amount: 2 })],
   },
   // charisma +1
@@ -2825,6 +2920,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Фейс, эксперт по переговорам.',
     karmaCost: 100,
     prerequisites: [],
+    pack: { id: 'gen-arch-face', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
   // charisma +1
@@ -2834,6 +2930,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Менталист. Очень, очень убедителен. И это не просто так.',
     karmaCost: 60,
     prerequisites: ['arch-face'],
+    pack: { id: 'gen-arch-face-mentalist', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
   // charisma +1
@@ -2843,6 +2940,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Дискурсмонгер. Идеи, концепции и убеждения, твоя работа.',
     karmaCost: 60,
     prerequisites: ['arch-face'],
+    pack: { id: 'gen-arch-face-discursmonger', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
   // charisma +1
@@ -2852,6 +2950,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Гешефтмахер. Контракты и нюйены интересуют тебя.',
     karmaCost: 60,
     prerequisites: ['arch-face'],
+    pack: { id: 'gen-arch-face-geshaftmacher', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
   // charisma +2
@@ -2861,6 +2960,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный фейс',
     karmaCost: 0,
     prerequisites: ['arch-face'],
+    pack: { id: 'gen-arch-face-boost', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
   // depth +1
@@ -2870,6 +2970,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Искусственный интеллект. ',
     karmaCost: 100,
     prerequisites: ['meta-ai'],
+    pack: { id: 'gen-arch-ai', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   // depth +1
@@ -2879,6 +2980,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ИИ, специализирующийся на работе с Матрицей',
     karmaCost: 60,
     prerequisites: ['arch-ai'],
+    pack: { id: 'gen-arch-ai-matrix', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   //
@@ -2897,6 +2999,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'персонаж может использовать винтовки',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner'],
+    pack: { id: 'sam-gun-guns', level: 1 },
     modifier: [],
   },
   // можно использовать автомат
@@ -2906,6 +3009,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'персонаж может использовать автоматы',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'guns-1'],
+    pack: { id: 'sam-gun-guns', level: 2 },
     modifier: [],
   },
   // можно использовать пулемёт
@@ -2915,6 +3019,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'персонаж может использовать пулемёты',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'guns-2'],
+    pack: { id: 'sam-gun-guns', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2925,6 +3030,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Слой подкожной брони самурая сильно мешает рипоменам удалять имеющиеся импланты',
     karmaCost: 70,
     prerequisites: ['arch-samurai-gunner'],
+    pack: { id: 'sam-gun-armor', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2935,6 +3041,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Постоянные тренировки ловкости и силы привели к тому, что тебя не стесняет легкая броня',
     karmaCost: 70,
     prerequisites: ['arch-samurai-gunner', 'armor-1'],
+    pack: { id: 'sam-gun-armor', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2945,6 +3052,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
     karmaCost: 70,
     prerequisites: ['arch-samurai-gunner', 'armor-2'],
+    pack: { id: 'sam-gun-armor', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2955,6 +3063,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner'],
+    pack: { id: 'sam-gun-constitution', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2966,6 +3075,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-1'],
+    pack: { id: 'sam-gun-constitution', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2977,6 +3087,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-2'],
+    pack: { id: 'sam-gun-constitution', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2988,6 +3099,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Самурай обучен пользоваться дубинками, возможно сказывается опыт работы в силовых структурах, возможно уличная жизнь и привычка махать бейсбольной битой',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter'],
+    pack: { id: 'sam-fight-swords', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -2999,6 +3111,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Самурай владеет техниками использования мечей и топоров. Изучение восточных боевых искуств или увлечение северной мифологией и викингами',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', "clubs'n'swords-1"],
+    pack: { id: 'sam-fight-swords', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3010,6 +3123,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Самурай достаточно силен, что бы управится с двуручным оружием. Фламбер давно не появлялся на улицах городов, но, что мешает попробовать',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', "clubs'n'swords-2"],
+    pack: { id: 'sam-fight-swords', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3020,9 +3134,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Слой подкожной брони самурая сильно мешает рипоменам удалять имеющиеся импланты',
     karmaCost: 70,
     prerequisites: ['arch-samurai-fighter'],
+    pack: { id: 'sam-fight-armor', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // можно носить легкую броню
   {
     id: 'combat-armor-2',
@@ -3030,6 +3144,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Постоянные тренировки ловкости и силы привели к тому, что тебя не стесняет легкая броня',
     karmaCost: 70,
     prerequisites: ['arch-samurai-fighter', 'combat-armor-1'],
+    pack: { id: 'sam-fight-armor', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3040,6 +3155,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
     karmaCost: 70,
     prerequisites: ['arch-samurai-fighter', 'combat-armor-2'],
+    pack: { id: 'sam-fight-armor', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3050,6 +3166,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter'],
+    pack: { id: 'sam-fight-harden', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3061,6 +3178,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Генетическая мутация или магическая аномалия позволяет самураю проще переносить воздействие наркотических и медицинских препаратов',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', 'hardened-1'],
+    pack: { id: 'sam-fight-harden', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3071,6 +3189,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Натренированная воля, а может особенность строения мозга осложняет применение ментальных воздействий на самурая',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', 'hardened-2'],
+    pack: { id: 'sam-fight-harden', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3082,6 +3201,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Скорее громила, чем скрытный убийца, самурай привык пользоваться простейшим оружием ближнего боя и скорострельным оружием дальнего боя',
     karmaCost: 60,
     prerequisites: ['arch-samurai-assasin'],
+    pack: { id: 'sam-assa-tools', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3093,6 +3213,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется со снайперскими винтовками',
     karmaCost: 60,
     prerequisites: ['arch-samurai-assasin', 'tools-of-trade-1'],
+    pack: { id: 'sam-assa-tools', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3104,6 +3225,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Тренируя ловкость и координацию самурай изучает технику владения оружием обеими руками, что позволяет одновременно использовать и огнестрельное и холодное оружие, или оружие одного типа в двух руках',
     karmaCost: 60,
     prerequisites: ['arch-samurai-assasin', 'tools-of-trade-2'],
+    pack: { id: 'sam-assa-tools', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3115,6 +3237,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценниться среди самураев-ассасинов. Настоящий профи может убить нескольких человек в считанные минуты',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin'],
+    pack: { id: 'sam-assa-execut', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3126,6 +3249,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нок-аут, отличительная черта любого самурая-ассасина, но требует большой практики',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'executioner-1'],
+    pack: { id: 'sam-assa-execut', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3136,6 +3260,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Порой, что бы добраться до истинной цели, приходится спросить дорогу. Ассасины мастера допросов',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'executioner-2'],
+    pack: { id: 'sam-assa-execut', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3147,6 +3272,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin'],
+    pack: { id: 'sam-assa-maraud', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3158,6 +3284,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Говорят, что нет чести среди воров. И ведь правильно говорят. Если противник уже мертв, значит ему деньги уже не понадобятся.',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-1'],
+    pack: { id: 'sam-assa-maraud', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3168,6 +3295,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-2'],
+    pack: { id: 'sam-assa-maraud', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3178,6 +3306,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты видишь более тонкие составы в теле пациента.',
     karmaCost: 80,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-1'],
+    pack: { id: 'rigger-eng-chem', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3188,6 +3317,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты видишь самые тонкие составы в теле пациента.',
     karmaCost: 80,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-2'],
+    pack: { id: 'rigger-eng-chem', level: 3 },
     modifier: [],
   },
 ];
