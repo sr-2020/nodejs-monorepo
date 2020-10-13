@@ -1,6 +1,6 @@
 import uuid = require('uuid');
 import { cloneDeep } from 'lodash';
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/sr2020-common/models/location.model';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
@@ -16,7 +16,6 @@ import {
   sendNotificationAndHistoryRecord,
   validUntil,
 } from './util';
-import { getAllActiveAbilities } from './library_registrator';
 import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonance, multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
 import { kAllSpells } from './spells_library';
@@ -167,25 +166,7 @@ export function increaseResonanceSpell(api: EventModelApi<Sr2020Character>, data
 export function groundHealSpell(api: EventModelApi<Sr2020Character>, data: { power: number; location: { id: number; manaLevel: number } }) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(10 * data.power, 'minutes');
-  const m = modifierFromEffect(groundHealEffect, {
-    name: 'ground-heal-modifier',
-    validUntil: validUntil(api, d),
-  });
-  addTemporaryModifier(api, m, d, 'Наличие временной способности Ground Heal');
-}
-
-export function groundHealEffect(api: EffectModelApi<Sr2020Character>, m: Modifier & { validUntil: number }) {
-  const ability = getAllActiveAbilities().get('ground-heal-ability')!;
-  api.model.activeAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: ability.description,
-    target: ability.target,
-    targetsSignature: ability.targetsSignature,
-    cooldownMinutes: ability.cooldownMinutes,
-    cooldownUntil: 0,
-    validUntil: m.validUntil,
-  });
+  addTemporaryActiveAbility(api, 'ground-heal-ability', d);
 }
 
 export function liveLongAndProsperSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {

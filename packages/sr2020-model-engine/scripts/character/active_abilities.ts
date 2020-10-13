@@ -56,6 +56,12 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // set cooldown.
   if (maybeAbility) {
     maybeAbility.cooldownUntil = api.model.timestamp + ability.cooldownMinutes * 60 * 1000 * api.workModel.cooldownCoefficient;
+  } else {
+    const mods = api.getModifiersByName(`add-active-ability-${ability.id}`);
+    if (mods.length) {
+      // We remove the first one as it's the "oldest" one.
+      api.removeModifier(mods[0].mID);
+    }
   }
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
@@ -72,12 +78,6 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
     'Применен Ground Heal',
     'Вы применили навык полученный благодаря заклинанию Ground Heal. Заклинание перестало действовать',
   );
-
-  const mods = api.getModifiersByName('ground-heal-modifier');
-  if (mods.length) {
-    // We remove the first one as it's the "oldest" one.
-    api.removeModifier(mods[0].mID);
-  }
 
   reviveOnTarget(api, data);
 }

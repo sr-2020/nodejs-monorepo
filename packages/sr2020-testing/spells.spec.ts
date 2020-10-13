@@ -462,6 +462,24 @@ describe('Spells', function () {
     });
   });
 
+  it('Stone skin', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('stone-skin');
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'stone-skin', location: { id: 0, manaLevel: 0 }, power: 1 },
+      });
+      expect(workModel.activeAbilities).to.containDeep([{ id: 'skin-stone' }]);
+    }
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'skin-stone' } });
+      expect(workModel.passiveAbilities).to.containDeep([{ id: 'stone-skin-result' }]);
+      expect(workModel.activeAbilities).not.to.containDeep([{ id: 'skin-stone' }]);
+    }
+  });
+
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
       const feedback = calculateMagicFeedback({

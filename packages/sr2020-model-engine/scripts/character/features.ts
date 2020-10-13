@@ -157,6 +157,7 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
   );
 }
 
+// Beware: only supports one-time use abilities (i.e. ability will disappear after first use).
 export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, abilityId: string, d: Duration) {
   const activeAbility = getAllActiveAbilities().get(abilityId);
   if (!activeAbility) {
@@ -168,6 +169,7 @@ export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, a
     modifierFromEffect(addTemporaryActiveAbilityEffect, {
       validUntil: validUntil(api, d),
       ability: activeAbility,
+      name: `add-active-ability-${abilityId}`,
     }),
     d,
     `Добавление временной способности ${activeAbility.humanReadableName}`,
