@@ -5,6 +5,7 @@ import * as moment from 'moment';
      yarn --cwd packages/sheets-export build
      gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated
      gcloud functions deploy abilityUsedToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=ability_used --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy spellCastToSheet   --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=spell_cast   --region=europe-west3 --no-allow-unauthenticated
      gcloud functions deploy reanimatesToSheet  --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=reanimates   --region=europe-west3 --no-allow-unauthenticated
 */
 
@@ -48,6 +49,32 @@ export async function abilityUsedToSheet(event: { data: string }) {
     payload.characterId,
     payload.id,
     payload.name,
+    payload.targetCharacterId ?? '',
+  ]);
+}
+
+export async function spellCastToSheet(event: { data: string }) {
+  const payload: {
+    id: string;
+    name: string;
+    characterId: string;
+    location: { id: string };
+    power: number;
+    ritualMembersIds: string[];
+    ritualVictimIds: string[];
+    targetCharacterId?: string;
+  } = JSON.parse(Buffer.from(event.data, 'base64').toString());
+  console.log(payload);
+
+  await appendToSpreadsheet('Касты спеллов!A1:I1', [
+    currentMoscowDateTime(),
+    payload.location.id,
+    payload.characterId,
+    payload.id,
+    payload.name,
+    payload.power,
+    payload.ritualMembersIds.length,
+    payload.ritualVictimIds.length,
     payload.targetCharacterId ?? '',
   ]);
 }

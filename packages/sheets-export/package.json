@@ -16,6 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@google-cloud/pubsub": "^2.5.0",
-    "googleapis": "^59.0.0"
+    "googleapis": "^59.0.0",
+    "moment": "^2.24.0"
   }
 }
