@@ -23,11 +23,7 @@ function mentalAttack(character: Sr2020Character) {
 }
 
 function mentalDefence(character: Sr2020Character) {
-  if (character.charisma == 0) {
-    return xByDy(2, 8) + character.mentalDefenceBonus;
-  } else {
-    return character.charisma + xByDy(character.charisma, 8) + character.mentalDefenceBonus;
-  }
+  return 3 + xByDy(character.charisma, 8) + character.mentalDefenceBonus;
 }
 
 export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
