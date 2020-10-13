@@ -5,7 +5,7 @@
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities, rewriteSpells, Spell } from './reparser';
-import { SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { PackInfo, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
@@ -18,6 +18,8 @@ const kKindColumn = 0;
 const kNameColumn = 4;
 const kIdColumn = 5;
 const kPrerequisitesColumn = 6;
+const kPackIdColumn = 7;
+const kPackLevelColumn = 8;
 const kPlayerDescriptionColumn = 12;
 const kMasterDescriptionColumn = 13;
 const kCooldownColumn = 16;
@@ -47,6 +49,30 @@ class SpreadsheetProcessor {
       .map((s) => s.replace('НЕТ ', '!'));
   }
 
+  parsePack(id: string, input1: string | undefined, input2: string | undefined): PackInfo | undefined {
+    if (input1?.includes('\n') || input2?.includes('\n')) {
+      console.error(`Unexpected new line in packet info for ${id}`);
+    }
+
+    if (!input1 && !input2) {
+      return undefined;
+    }
+
+    if (input1 == 'null' && (input2 == 'null' || !input2)) {
+      return undefined;
+    }
+
+    if (input1 && input2) {
+      return {
+        id: input1,
+        level: Number(input2),
+      };
+    }
+
+    console.error(`Feature ${id} has partial pack data`);
+    return undefined;
+  }
+
   async processPassiveAbility(line: number, id: string, row: any[]) {
     const ability: PassiveAbility = {
       id,
@@ -55,6 +81,7 @@ class SpreadsheetProcessor {
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
+      pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
     };
     this.passiveAbilities.push(ability);
   }
@@ -68,6 +95,7 @@ class SpreadsheetProcessor {
       cooldown: row[kCooldownColumn] ?? 9000,
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
+      pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
     };
     this.activeAbilities.push(ability);
   }
@@ -91,6 +119,7 @@ class SpreadsheetProcessor {
       sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
+      pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
     };
     this.spells.push(spell);
   }
@@ -126,6 +155,14 @@ class SpreadsheetProcessor {
 
     if (header[kPrerequisitesColumn] != 'Prerequisites') {
       throw new Error('Prerequisites column was moved! Exiting.');
+    }
+
+    if (header[kPackIdColumn] != 'Pack_ID') {
+      throw new Error('Pack_ID column was moved! Exiting.');
+    }
+
+    if (header[kPackLevelColumn] != 'Stars') {
+      throw new Error('Stars column was moved! Exiting.');
     }
 
     if (header[kNameColumn] != 'Название') {

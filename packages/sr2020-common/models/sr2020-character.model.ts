@@ -112,12 +112,18 @@ export class AddedPassiveAbility {
   @property.array(String) modifierIds?: string[];
 }
 
+export interface PackInfo {
+  id: string;
+  level: number;
+}
+
 export interface Feature {
   id: string;
   humanReadableName: string;
   description: string;
   karmaCost: number;
   prerequisites: string[];
+  pack?: PackInfo;
 }
 
 export const kFeatureDescriptor = {

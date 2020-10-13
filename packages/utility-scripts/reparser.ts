@@ -1,6 +1,7 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as prettier from 'prettier';
+import { PackInfo } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 export interface PassiveAbility {
   id: string;
@@ -9,6 +10,7 @@ export interface PassiveAbility {
   gmDescription: string;
   karmaCost: number;
   prerequisites: string[];
+  pack?: PackInfo;
 }
 
 export interface ActiveAbility {
@@ -19,6 +21,7 @@ export interface ActiveAbility {
   cooldown: number;
   karmaCost: number;
   prerequisites: string[];
+  pack?: PackInfo;
 }
 
 export interface Spell {
@@ -29,6 +32,7 @@ export interface Spell {
   gmDescription: string;
   karmaCost: number;
   prerequisites: string[];
+  pack?: PackInfo;
 }
 
 const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
@@ -102,7 +106,27 @@ function createTransformer<T extends AnyAbility>(
       }
 
       if (ts.isObjectLiteralExpression(node)) {
-        const result = ts.visitEachChild(node, abilityVisit, context);
+        let result = ts.visitEachChild(node, abilityVisit, context);
+        const hasPack = result.properties.some((it) => (it.name as ts.StringLiteral).text == 'pack');
+        if (!hasPack && currentAbility?.pack) {
+          const properties: ts.ObjectLiteralElementLike[] = [];
+          for (const p of result.properties) {
+            properties.push(p);
+            if ((p.name as ts.StringLiteral).text == 'prerequisites') {
+              properties.push(ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(currentAbility.pack)));
+            }
+          }
+          result = ts.createObjectLiteral(properties);
+        }
+
+        if (hasPack && !currentAbility?.pack) {
+          const properties: ts.ObjectLiteralElementLike[] = [];
+          for (const p of result.properties) {
+            if ((p.name as ts.StringLiteral).text != 'pack') properties.push(p);
+          }
+          result = ts.createObjectLiteral(properties);
+        }
+
         if (currentAbility) addComment(result, currentAbility.gmDescription);
         return result;
       }
@@ -139,6 +163,14 @@ function createTransformer<T extends AnyAbility>(
     return ts.visitNode(rootNode, topLevelVisit);
   };
 }
+function createPackLiteral(packInfo?: PackInfo) {
+  return packInfo
+    ? ts.createObjectLiteral([
+        ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(packInfo.id)),
+        ts.createPropertyAssignment(ts.createIdentifier('level'), ts.createNumericLiteral(packInfo.level)),
+      ])
+    : ts.createNull();
+}
 
 export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
   const file = readSourceFileWithoutComments(PASSIVE_ABILITIES_FILENAME);
@@ -157,6 +189,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
             ts.createIdentifier('prerequisites'),
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
           ),
+          ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(ability.pack)),
           ts.createPropertyAssignment(ts.createIdentifier('modifier'), ts.createArrayLiteral([])),
         ],
         true,
@@ -177,9 +210,12 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
       if (propertyName == 'prerequisites') {
         return ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id)));
       }
+      if (propertyName == 'pack') {
+        return createPackLiteral(ability.pack);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['name', 'description', 'karmaCost', 'prerequisites'],
+    ['name', 'description', 'karmaCost', 'prerequisites', 'pack'],
   );
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
 }
@@ -203,6 +239,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
             ts.createIdentifier('prerequisites'),
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
           ),
+          ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(ability.pack)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(0)),
           ts.createPropertyAssignment(
@@ -228,9 +265,12 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
       if (propertyName == 'prerequisites') {
         return ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id)));
       }
+      if (propertyName == 'pack') {
+        return createPackLiteral(ability.pack);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'prerequisites'],
+    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack'],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);
@@ -252,6 +292,7 @@ export function rewriteSpells(abilities: Spell[]) {
             ts.createIdentifier('prerequisites'),
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
           ),
+          ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(ability.pack)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere)),
           ts.createPropertyAssignment(
@@ -281,9 +322,12 @@ export function rewriteSpells(abilities: Spell[]) {
       if (propertyName == 'prerequisites') {
         return ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id)));
       }
+      if (propertyName == 'pack') {
+        return createPackLiteral(ability.pack);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'sphere', 'prerequisites'],
+    ['humanReadableName', 'description', 'karmaCost', 'sphere', 'prerequisites', 'pack'],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], SPELLS_FILENAME);
