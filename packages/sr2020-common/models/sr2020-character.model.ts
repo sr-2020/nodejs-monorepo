@@ -134,6 +134,13 @@ export const kFeatureDescriptor = {
     description: { type: 'string' },
     karmaCost: { type: 'number' },
     prerequisites: { type: 'array', items: { type: 'string' } },
+    pack: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        level: { type: 'number' },
+      },
+    },
   },
 };
 

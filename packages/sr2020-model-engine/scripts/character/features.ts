@@ -215,6 +215,7 @@ export function getAllFeatures(): Feature[] {
     description: f.description,
     prerequisites: f.prerequisites,
     karmaCost: f.karmaCost,
+    pack: f.pack,
   });
   return [...getAllActiveAbilities().values(), ...kAllPassiveAbilities.values(), ...kAllSpells.values()].map(extractFeatureFields);
 }
