@@ -214,6 +214,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     prerequisites: [],
+    pack: { id: 'chummer-zero', level: 1 },
     karmaCost: 120,
     minimalEssence: 0,
     eventType: dummyAbility.name,
@@ -228,6 +229,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     prerequisites: [],
+    pack: { id: 'chummer-zero', level: 1 },
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
@@ -436,9 +438,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: useMentalAbility.name,
   },
-  // Цель боится и убегает как можно дальше от менталиста. Через 10 минут эффект проходит.
-  // 2. У цели заблокирована активация всех активных абилок на 10 минут (надпись "Вы очень боитесь и не можете сосредоточиться")
-  // БЫло бы круто сделать пуш об окончании действия эффекта.
+  // цели выдается текстовое сообщение с эффектом
+  // (вы боитесь, убегаете, не можете.... )
+  // У цели заблокирована активация всех активных абилок на 10 минут (надпись "Вы очень боитесь и не можете сосредоточиться")
+  // Было бы круто сделать пуш об окончании действия эффекта.
   {
     id: 'fly-you-fool',
     humanReadableName: 'Беги отсюда',
@@ -522,8 +525,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: 360,
-    prerequisites: ['arch-face-mentalist'],
-    pack: { id: 'face-mentalist-talker\nscorn-him', level: 3 },
+    prerequisites: ['arch-face-mentalist', 'scorn-him'],
+    pack: { id: 'face-mentalist-talker', level: 3 },
     karmaCost: 60,
     minimalEssence: 0,
     eventType: useMentalAbility.name,
