@@ -12,6 +12,9 @@
     },
     {
       "path": "../sr2020-common"
+    },
+    {
+      "path": "../alice-qr-lib"
     }
   ]
 }

@@ -2121,6 +2121,11 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.1.0.tgz#5f96562c1075ee715a5b138f0b7f591c1f40f6b8"
   integrity sha512-hiYA88aHiEIgDmeKlsyVsuQdcFn3Z2VuFd/Xm/HCnGnPD8UFU5BM128uzzRVVGEzKDKYUrRsRH9S2o+NUy/3IA==
 
+"@types/qrcode-svg@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/qrcode-svg/-/qrcode-svg-1.1.0.tgz#5bfc87fa35f071a3e16ec072973e57b4f1ca7172"
+  integrity sha512-n96d8G6zph3dN9rYRJvWZ5SBwg3NrzXEYdHhCEAS6kiKfr5EzZy628ywzxtsAS//siNT2tXmG1E24tgURFRQ4Q==
+
 "@types/qrcode@^1.3.0":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/qrcode/-/qrcode-1.3.5.tgz#9c97cc2875f03e2b16a0d89856fc48414e380c38"
@@ -9859,6 +9864,11 @@ q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
+
+qrcode-svg@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/qrcode-svg/-/qrcode-svg-1.1.0.tgz#2087549843dc5d0a3f8e8aa046cd9bcf23708cc3"
+  integrity sha512-XyQCIXux1zEIA3NPb0AeR8UMYvXZzWEhgdBgBjH9gO7M48H9uoHzviNz8pXw3UzrAcxRRRn9gxHewAVK7bn9qw==
 
 qrcode@^1.3.0:
   version "1.4.4"

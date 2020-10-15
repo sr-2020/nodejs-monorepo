@@ -18,10 +18,12 @@
   "dependencies": {
     "@google-cloud/firestore": "^4.2.0",
     "@types/command-line-args": "^4.0.0",
+    "@types/qrcode-svg": "^1.1.0",
     "@types/request": "0.0.45",
     "@types/request-promise": "^4.1.35",
     "command-line-args": "^4.0.6",
     "googleapis": "^59.0.0",
+    "qrcode-svg": "^1.1.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "uuid": "^7.0.1"
