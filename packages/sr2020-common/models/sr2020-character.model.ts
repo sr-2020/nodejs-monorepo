@@ -560,6 +560,14 @@ export class Karma {
   @rproperty()
   @Column({ default: 0 })
   spent: number;
+
+  @rproperty()
+  @Column({ default: 0 })
+  spentOnPassives: number;
+
+  @rproperty()
+  @Column({ default: 100 })
+  cycleLimit: number;
 }
 
 @model()

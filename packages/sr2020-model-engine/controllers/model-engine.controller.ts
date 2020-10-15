@@ -206,6 +206,8 @@ export class ModelEngineController implements ModelEngineService {
       karma: {
         available: 0,
         spent: 0,
+        spentOnPassives: 0,
+        cycleLimit: 100,
       },
       analyzedBody: null,
       spells: [],
