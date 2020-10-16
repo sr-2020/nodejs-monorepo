@@ -41,7 +41,7 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
-    await fixture.sendCharacterEvent({ eventType: 'resetKarmaCycleLimit', data: {} });
+    await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
 
     expect(baseModel.karma).to.containDeep({
@@ -55,7 +55,7 @@ describe('Karma events', function () {
 
     for (let i = 0; i < 10; ++i) {
       await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 80 } });
-      await fixture.sendCharacterEvent({ eventType: 'resetKarmaCycleLimit', data: {} });
+      await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     }
 
     expect((await fixture.getCharacter()).baseModel.karma).to.containDeep({
