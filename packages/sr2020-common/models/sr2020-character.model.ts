@@ -768,4 +768,7 @@ export class CharacterCreationRequest {
 
   @property.array(String, { required: false })
   features?: string[];
+
+  @property({ required: false })
+  karma?: number;
 }
