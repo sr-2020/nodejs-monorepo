@@ -35,6 +35,7 @@ app = new Vue({
 
     locusCharges: 5,
     foodNumberOfUses: 5,
+    karmaAmount: 10,
 
     bodyStorageName: '',
     aiName: '',
@@ -391,6 +392,10 @@ app = new Vue({
 
     async writeFocusQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedFocus } });
+    },
+
+    async writeKarmaSourceQr() {
+      return this.sendQrEvent({ eventType: 'writeKarmaSource', data: { amount: this.karmaAmount } });
     },
 
     async pauseGame() {
