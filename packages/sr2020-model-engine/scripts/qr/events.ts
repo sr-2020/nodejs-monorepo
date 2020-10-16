@@ -10,6 +10,7 @@ import {
   ReanimateCapsuleData,
   TypedQrCode,
 } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { earnKarma } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -189,6 +190,25 @@ export function writeAiSymbol(api: EventModelApi<QrCode>, data: AiSymbolData) {
     name: 'Символ ИИ',
     description: '',
     usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data,
+  };
+}
+
+export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: number }) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'event',
+    eventType: earnKarma.name,
+    name: 'Карма',
+    description: `Отсканируй, чтоб получить ${data.amount} кармы.`,
+    usesLeft: 999999,
     modifiers: [],
     timers: [],
     data,

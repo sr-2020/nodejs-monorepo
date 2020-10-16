@@ -25,6 +25,23 @@ describe('Karma events', function () {
     });
   });
 
+  it('Can earn karma from QR', async () => {
+    await fixture.saveCharacter();
+
+    await fixture.saveQrCode();
+    await fixture.sendQrCodeEvent({ eventType: 'writeKarmaSource', data: { amount: 40 } });
+
+    const { baseModel } = await fixture.sendCharacterEvent({
+      eventType: 'scanQr',
+      data: { qrCode: '0' },
+    });
+
+    expect(baseModel.karma).to.containDeep({
+      available: 40,
+      cycleLimit: 60,
+    });
+  });
+
   it('Can not earn more karma than cycle cap', async () => {
     await fixture.saveCharacter();
 
