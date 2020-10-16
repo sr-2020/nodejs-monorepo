@@ -19,7 +19,7 @@ import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
 import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
 import { addFeatureToModel, getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kMaxKarmaOnCreation, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { addKarmaGivingTimer, kMaxKarmaOnCreation, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import Chance = require('chance');
 
 const chance = new Chance();
@@ -234,6 +234,7 @@ export class ModelEngineController implements ModelEngineService {
     };
     initEthic(result);
     setRaceForModel(result, req.metarace ?? 'meta-norm');
+    addKarmaGivingTimer(result);
     (req.features ?? []).forEach((f) => addFeatureToModel(result, f));
 
     return result;
