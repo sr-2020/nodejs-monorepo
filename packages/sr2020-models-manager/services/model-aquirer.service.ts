@@ -35,7 +35,6 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
       }
 
       const orEmpty = (a: number[] | undefined) => a ?? [];
-      console.log(JSON.stringify(event.data));
 
       // Aquire reagents if event.data has reagentIds set.
       for (const reagentId of orEmpty(event.data.reagentIds)) {
