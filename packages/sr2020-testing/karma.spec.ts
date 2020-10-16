@@ -42,6 +42,30 @@ describe('Karma events', function () {
     });
   });
 
+  it('Using abilities gives karma', async () => {
+    await fixture.saveCharacter();
+    await fixture.saveLocation({ modelId: '7' });
+    await fixture.addCharacterFeature('trollton');
+    const { baseModel } = await fixture.sendCharacterEvent({
+      eventType: 'useAbility',
+      data: { id: 'trollton', location: { id: '7', manaLevel: 0 } },
+    });
+
+    expect(baseModel.karma.available).to.equal(1.6);
+  });
+
+  it('Casting spells gives karma', async () => {
+    await fixture.saveCharacter();
+    await fixture.saveLocation({ modelId: '7' });
+    await fixture.addCharacterFeature('ground-heal');
+    const { baseModel } = await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'ground-heal', power: 1, location: { id: '7', manaLevel: 0 } },
+    });
+
+    expect(baseModel.karma.available).to.equal(0); // All spells cost 0 at the moment.
+  });
+
   it('Can not earn more karma than cycle cap', async () => {
     await fixture.saveCharacter();
 

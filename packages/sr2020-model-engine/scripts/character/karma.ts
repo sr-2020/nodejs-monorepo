@@ -4,6 +4,8 @@ import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.m
 export const kMaxKarmaOnCreation = 20;
 export const kMaxKarmaPerGame = 500;
 export const kMaxKarmaPerCycle = 100;
+export const kKarmaActiveAbilityCoefficient = 0.1;
+export const kKarmaSpellCoefficient = 0.1;
 
 export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   const amountEarned = Math.min(data.amount, api.workModel.karma.cycleLimit);

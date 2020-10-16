@@ -25,6 +25,7 @@ import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/char
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { earnKarma, kKarmaSpellCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 
 interface SpellData {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -134,6 +135,8 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     `Заклинание ${spell.humanReadableName} успешно скастовано. Откат: снижение магии на ${feedback.amount} на ${feedback.duration} минут. ` +
       ritualStats.notes,
   );
+
+  earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost });
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }

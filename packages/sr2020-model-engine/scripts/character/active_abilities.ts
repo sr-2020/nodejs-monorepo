@@ -8,6 +8,7 @@ import { getAllActiveAbilities } from './library_registrator';
 import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { addFeatureToModel, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
+import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
@@ -65,6 +66,8 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   }
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
+
+  earnKarma(api, { amount: kKarmaActiveAbilityCoefficient * libraryAbility.karmaCost });
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 
