@@ -200,13 +200,14 @@ export function addTemporaryActiveAbilityEffect(api: EffectModelApi<Sr2020Charac
 
 type AddedFeature = AddedPassiveAbility | AddedActiveAbility | AddedSpell;
 
-function getFeatureIdsInModel(model: Sr2020Character): string[] {
+export function getFeatureIdsInModel(model: Sr2020Character): string[] {
   const getId = (f: AddedFeature) => f.id;
   return [...model.passiveAbilities.map(getId), ...model.activeAbilities.map(getId), ...model.spells.map(getId)];
 }
 
 export function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
   const modelFeatureIds = getFeatureIdsInModel(model);
+  if (modelFeatureIds.includes(f.id)) return false;
   return f.prerequisites.every((prerequisiteId) => {
     if (prerequisiteId.startsWith('!')) {
       return !modelFeatureIds.includes(prerequisiteId.replace('!', ''));

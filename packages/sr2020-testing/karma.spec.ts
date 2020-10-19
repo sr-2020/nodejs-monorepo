@@ -121,6 +121,13 @@ describe('Karma events', function () {
     expect(message).to.containEql('Недостаточно кармы');
   });
 
+  it('Can not buy feature if already have it', async () => {
+    await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    await fixture.addCharacterFeature('arch-rigger');
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
+    expect(message).to.containEql('уже есть');
+  });
+
   it('Can not buy feature if no such feature', async () => {
     await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const message = await fixture.sendCharacterEventExpectingError({

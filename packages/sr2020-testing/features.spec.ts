@@ -119,5 +119,11 @@ describe('Features-related events', function () {
         false,
       );
     });
+
+    it('False if feature already present', async () => {
+      await fixture.saveCharacter();
+      await fixture.addCharacterFeature('arch-rigger');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('arch-rigger')!)).to.equal(false);
+    });
   });
 });
