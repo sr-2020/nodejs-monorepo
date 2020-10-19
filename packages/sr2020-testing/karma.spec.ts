@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 describe('Karma events', function () {
   let fixture: TestFixture;
@@ -102,5 +103,39 @@ describe('Karma events', function () {
     expect((await fixture.getCharacter()).baseModel.karma).to.containDeep({
       available: 500,
     });
+  });
+
+  it('Can buy feature for karma', async () => {
+    await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
+    const riggerFeature = getAllFeatures().find((f) => f.id == 'arch-rigger')!;
+    expect(workModel.karma.available).to.equal(1000 - riggerFeature.karmaCost);
+    expect(workModel.karma.spent).to.equal(riggerFeature.karmaCost);
+    expect(workModel.karma.spentOnPassives).to.equal(riggerFeature.karmaCost);
+    expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
+  });
+
+  it('Can not buy feature if not enough karma', async () => {
+    await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
+    expect(message).to.containEql('Недостаточно кармы');
+  });
+
+  it('Can not buy feature if no such feature', async () => {
+    await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    const message = await fixture.sendCharacterEventExpectingError({
+      eventType: 'buyFeatureForKarma',
+      data: { id: 'super-awesome-feature' },
+    });
+    expect(message).to.containEql('не существует');
+  });
+
+  it('Can not buy feature if prerequisites not satisfied', async () => {
+    await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    const message = await fixture.sendCharacterEventExpectingError({
+      eventType: 'buyFeatureForKarma',
+      data: { id: 'arch-rigger-pilot' },
+    });
+    expect(message).to.containEql('Не удовлетворены пререквизиты');
   });
 });
