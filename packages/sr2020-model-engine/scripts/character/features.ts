@@ -205,9 +205,15 @@ function getFeatureIdsInModel(model: Sr2020Character): string[] {
   return [...model.passiveAbilities.map(getId), ...model.activeAbilities.map(getId), ...model.spells.map(getId)];
 }
 
-function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
+export function satisfiesPrerequisites(model: Sr2020Character, f: Feature): boolean {
   const modelFeatureIds = getFeatureIdsInModel(model);
-  return f.prerequisites.every((prerequisiteId) => modelFeatureIds.includes(prerequisiteId));
+  return f.prerequisites.every((prerequisiteId) => {
+    if (prerequisiteId.startsWith('!')) {
+      return !modelFeatureIds.includes(prerequisiteId.replace('!', ''));
+    } else {
+      return modelFeatureIds.includes(prerequisiteId);
+    }
+  });
 }
 
 export function getAllFeatures(): Feature[] {

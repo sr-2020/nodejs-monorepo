@@ -1,5 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
+import { satisfiesPrerequisites } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 
 describe('Features-related events', function () {
   let fixture: TestFixture;
@@ -75,5 +77,47 @@ describe('Features-related events', function () {
     expect(c.workModel).containDeep({ magic: 3 });
     expect(c.workModel.passiveAbilities).to.containDeep([{ id: 'magic-3' }]);
     expect(c.workModel.passiveAbilities).length(totalPassives);
+  });
+
+  describe('satisfiesPrerequisites', () => {
+    it('True if no prerequisites', async () => {
+      await fixture.saveCharacter();
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('grenades-usage')!)).to.equal(true);
+    });
+
+    it('True if prerequisites are satisfied', async () => {
+      await fixture.saveCharacter();
+      await fixture.addCharacterFeature('arch-samurai-assasin');
+      await fixture.addCharacterFeature('marauder-1');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('marauder-2')!)).to.equal(true);
+    });
+
+    it('False if prerequisites are not satisfied', async () => {
+      await fixture.saveCharacter();
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('marauder-2')!)).to.equal(false);
+    });
+
+    it('False if prerequisites are only partially satisfied', async () => {
+      await fixture.saveCharacter();
+      await fixture.addCharacterFeature('arch-samurai-assasin');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('marauder-2')!)).to.equal(false);
+    });
+
+    it('True if negative prerequisite is satisfied', async () => {
+      await fixture.saveCharacter();
+      await fixture.addCharacterFeature('arch-rigger');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('arch-rigger-pilot')!)).to.equal(
+        true,
+      );
+    });
+
+    it('False if negative prerequisite is not satisfied', async () => {
+      await fixture.saveCharacter();
+      await fixture.addCharacterFeature('arch-rigger');
+      await fixture.addCharacterFeature('tech-blockade');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('arch-rigger-pilot')!)).to.equal(
+        false,
+      );
+    });
   });
 });
