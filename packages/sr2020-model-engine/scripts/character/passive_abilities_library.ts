@@ -1409,7 +1409,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'отображается  текущий коэф. скоринга данного персонажа',
     karmaCost: 20,
     prerequisites: ['arch-face-geshaftmacher'],
-    pack: { id: 'face-geshaftmacher-torgovez', level: 1 },
+    pack: { id: 'face-geshaftmacher-banker', level: 1 },
     modifier: [],
   },
   // После списания рентных платежей гм получает кэшбек в размере 2% от списанной суммы. Начисляется после каждого списания рентных платежей.
@@ -2633,7 +2633,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты пережил заражение HMHVV вирусом типа 3 и стал Гулем. Ты ешь мясо металюдей. Вкусно, как курочка!',
     karmaCost: 20,
     prerequisites: [],
-    pack: { id: 'gen-meta-Ghoul', level: 1 },
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // strong-arm
@@ -2651,7 +2651,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты пережил заражение HMHVV вирусом типа 1. Ты уверен, что ты теперь сверх-мета-человек. Иногда хочется кушать и тебе нужны другие металюди - в качестве обеда. ',
     karmaCost: 20,
     prerequisites: [],
-    pack: { id: 'gen-meta-Vampire', level: 1 },
+    pack: { id: 'gen-meta-vampire', level: 1 },
     modifier: [],
   },
   // magic-blockade
@@ -2673,7 +2673,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты цифровой разум. Твое тело сгусток программ и кода, живущий в Матрице. ',
     karmaCost: 0,
     prerequisites: [],
-    pack: { id: 'gen-meta-eGhost', level: 1 },
+    pack: { id: 'gen-meta-eghost', level: 1 },
     modifier: [],
   },
   // tech-blockade
