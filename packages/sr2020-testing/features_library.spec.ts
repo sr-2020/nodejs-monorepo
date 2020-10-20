@@ -7,9 +7,8 @@ describe('Features library', () => {
   function addNo(ids: string[]): string[] {
     return [...ids, ...ids.map((id) => `!${id}`)];
   }
-  const allValidPrerequisites = new Set<string>(
-    addNo([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]),
-  );
+  const allIds = new Set([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]);
+  const allValidPrerequisites = new Set(addNo([...allIds]));
 
   it('Not empty', () => {
     expect(kAllPassiveAbilities).not.empty();
@@ -18,7 +17,13 @@ describe('Features library', () => {
   });
 
   it('No id duplication between different kinds of features', () => {
-    expect(allValidPrerequisites.size).to.equal(2 * (kAllPassiveAbilities.size + getAllActiveAbilities().size + kAllSpells.size));
+    expect(allIds.size).to.equal(kAllPassiveAbilities.size + getAllActiveAbilities().size + kAllSpells.size);
+  });
+
+  it('All ids use correct format', () => {
+    for (const id of allIds) {
+      expect(id).to.match(/^[a-z0-9-']+$/);
+    }
   });
 
   it('Passive abilities prerequisites are valid', () => {

@@ -2106,7 +2106,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // название препарата  - время приема
   // за последние 4 часа
   {
-    id: 'Biomonitor-scan',
+    id: 'biomonitor-scan',
     humanReadableName: 'Сканер биомонитора',
     description: 'Ты можешь увидеть список препаратов, которые пациент принимал за последние 4 часа.',
     target: 'scan',

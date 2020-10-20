@@ -1404,7 +1404,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // У гм на экране экономики отображаются  его текущие множители скоринга.
   {
-    id: 'mу-scoring',
+    id: 'my-scoring',
     humanReadableName: 'Мой скоринг',
     description: 'отображается  текущий коэф. скоринга данного персонажа',
     karmaCost: 20,

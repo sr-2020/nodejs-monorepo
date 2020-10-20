@@ -188,7 +188,7 @@ export function temporaryAddMyScoring(api: EventModelApi<Sr2020Character>, data:
 }
 
 export function addMyScoringEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  addFeatureToModel(api.model, 'mу-scoring');
+  addFeatureToModel(api.model, 'my-scoring');
 }
 
 /**
