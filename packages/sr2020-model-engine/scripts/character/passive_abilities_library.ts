@@ -81,6 +81,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты чувствуешь матрицу. Устойчивость к фейдингу техноманта, у декера уменьшается время между входами на хоcт.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
   },
   // chemo.baseEffectThreshold -40
@@ -93,6 +94,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Для воздействия препарата достаточно уменьшенной дозы. Аккуратно!',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: -40 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: -30 }),
@@ -107,6 +109,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг прекрасен, эльфийское долголетие всегда в цене! Особая скидка на все покупки!',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-elf', level: 1 },
     modifier: [],
   },
   // chemo.crysisThreshold +40
@@ -116,6 +119,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Сложнее получить передозировку препарата.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 })],
   },
   // magicStats.feedbackMultiplier *0.9
@@ -125,6 +129,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Понижает Откат магов',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 0.9,
     }),
@@ -137,6 +142,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает фейдинг техномантов и улучшает устойчивость к биофидбеку у декеров.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [
       modifierFromEffect(increaseFadingResistance, { amount: 1 }),
       modifierFromEffect(increaseBiofeedbackResistance, { amount: 1 }),
@@ -149,6 +155,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает урон при выходе из поврежденного дрона.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseDroneFeedback, { amount: -1 })],
   },
   // у обычных метарасов 6 слотов.
@@ -159,6 +166,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Неотчуждаемый слот для бороды!',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: -1 })],
   },
   // maxHp +1
@@ -168,6 +176,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя дополнительный хит в мясном теле. ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [modifierFromEffect(increaseMaxMeatHp, { amount: 1 })],
   },
   // magicStats.spiritResistanceMultiplier *0.8
@@ -177,6 +186,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает Сопротивление духов этому магу.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [modifierFromEffect(multiplySpiritResistanceMultiplier, { amount: 0.8 })],
   },
   //
@@ -186,6 +196,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь орка коротка. Ваши покупки будут дороже, чем у других метарас.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
   //
@@ -195,6 +206,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // у обычных метарасов 6 слотов.
@@ -205,6 +217,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У троллей есть дополнительный слот для имплантов',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: 1 })],
   },
   //
@@ -214,6 +227,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Биологическая сила! Можно использовать оружие, требующее одной киберруки.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
@@ -223,6 +237,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Надо чаще питаться. Большому телу - нужен большой сойбургер!',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   //
@@ -232,6 +247,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ваш скоринг очень плох, жизнь тролля очень коротка. Ваши покупки будут заметно дороже, чем у других метарас.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // Эссенс персонажа уменьшается на 0,2 каждый час
@@ -243,6 +259,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твой эссенс уменьшается  на 0,2 каждый час',
     karmaCost: 0,
     prerequisites: ['meta-ghoul'],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // Эссенс персонажа уменьшается на 1 каждый час
@@ -253,6 +270,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твой эссенс уменьшается на 1 каждый час',
     karmaCost: 0,
     prerequisites: ['meta-vampire'],
+    pack: { id: 'gen-meta-vampire', level: 1 },
     modifier: [],
   },
   // Если itEssense <1, то у персонажа блокируется активация всех активных абилок кроме абилок ghoul-feast и vampire-feast. Проверка проводится при каждом пересчете itEssense.
@@ -262,6 +280,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'При Эссенс персонажа <1 ты не можешь активировать абилки ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // chemo.baseEffectThreshold +30
@@ -274,6 +293,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Для правильного воздействия препарата нужны увеличенные дозы. Аккуратно!',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: 30 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: 80 }),
@@ -288,6 +308,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь видеть существ, находящихся в Астрале и говорить с ними.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // в типах имплантах есть разделение, надо посмотреть как оно там сделано
@@ -297,6 +318,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь использовать кибернетические импланты. Биотех - можно.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // вписано в требования архетипов
@@ -306,6 +328,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь изучать навыки Риггера Пилота и Хакера Техноманта ',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // вписано в требования архетипов
@@ -315,6 +338,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты не можешь изучать навыки Мага',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-AI', level: 1 },
     modifier: [],
   },
   //
@@ -2990,6 +3014,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Экзорцист может изгнать тебя с ближнего астрала на темные и глубокие астральные планы. И, возможно, надолго.',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // можно использовать винтовки
