@@ -42,6 +42,10 @@ export class DictionariesController {
                   id: { type: 'string' },
                   name: { type: 'string' },
                   description: { type: 'string' },
+                  slot: { type: 'string' },
+                  grade: { type: 'string' },
+                  essenceCost: { type: 'number' },
+                  installDifficulty: { type: 'number' },
                 },
               },
             },
@@ -50,8 +54,12 @@ export class DictionariesController {
       },
     },
   })
-  implants(): { id: string; name: string; description: string }[] {
-    return kAllImplants.map((it) => ({ id: it.id, name: it.name, description: it.description }));
+  implants() {
+    return kAllImplants.map((it) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { modifiers, onInstallEvent, onRemoveEvent, ...rest } = it;
+      return rest;
+    });
   }
 
   @get('/pills', {
