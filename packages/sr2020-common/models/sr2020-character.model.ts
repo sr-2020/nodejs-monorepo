@@ -135,6 +135,7 @@ export const kFeatureDescriptor = {
     id: { type: 'string' },
     humanReadableName: { type: 'string' },
     description: { type: 'string' },
+    availability: { type: 'string' },
     karmaCost: { type: 'number' },
     prerequisites: { type: 'array', items: { type: 'string' } },
     pack: {
