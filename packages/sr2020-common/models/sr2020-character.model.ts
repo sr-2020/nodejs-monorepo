@@ -117,6 +117,8 @@ export interface PackInfo {
   level: number;
 }
 
+export type FeatureAvailability = 'open' | 'closed' | 'master';
+
 export interface Feature {
   id: string;
   humanReadableName: string;
@@ -124,6 +126,7 @@ export interface Feature {
   karmaCost: number;
   prerequisites: string[];
   pack?: PackInfo;
+  availability: FeatureAvailability;
 }
 
 export const kFeatureDescriptor = {

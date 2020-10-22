@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as prettier from 'prettier';
-import { PackInfo } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { FeatureAvailability, PackInfo } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 export interface PassiveAbility {
   id: string;
@@ -11,6 +11,7 @@ export interface PassiveAbility {
   karmaCost: number;
   prerequisites: string[];
   pack?: PackInfo;
+  availability: FeatureAvailability;
 }
 
 export interface ActiveAbility {
@@ -22,6 +23,7 @@ export interface ActiveAbility {
   karmaCost: number;
   prerequisites: string[];
   pack?: PackInfo;
+  availability: FeatureAvailability;
 }
 
 export interface Spell {
@@ -33,6 +35,7 @@ export interface Spell {
   karmaCost: number;
   prerequisites: string[];
   pack?: PackInfo;
+  availability: FeatureAvailability;
 }
 
 const PASSIVE_ABILITIES_FILENAME = './packages/sr2020-model-engine/scripts/character/passive_abilities_library.ts';
@@ -184,6 +187,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
           ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(ability.id)),
           ts.createPropertyAssignment(ts.createIdentifier('humanReadableName'), ts.createStringLiteral(ability.humanReadableName)),
           ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
+          ts.createPropertyAssignment(ts.createIdentifier('availability'), ts.createStringLiteral(ability.availability)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(
             ts.createIdentifier('prerequisites'),
@@ -213,9 +217,12 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
       if (propertyName == 'pack') {
         return createPackLiteral(ability.pack);
       }
+      if (propertyName == 'availability') {
+        return ts.createStringLiteral(ability.availability);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['name', 'description', 'karmaCost', 'prerequisites', 'pack'],
+    ['name', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability'],
   );
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
 }
@@ -240,6 +247,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
           ),
           ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(ability.pack)),
+          ts.createPropertyAssignment(ts.createIdentifier('availability'), ts.createStringLiteral(ability.availability)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(0)),
           ts.createPropertyAssignment(
@@ -268,9 +276,12 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
       if (propertyName == 'pack') {
         return createPackLiteral(ability.pack);
       }
+      if (propertyName == 'availability') {
+        return ts.createStringLiteral(ability.availability);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack'],
+    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability'],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);
@@ -293,6 +304,7 @@ export function rewriteSpells(abilities: Spell[]) {
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
           ),
           ts.createPropertyAssignment(ts.createIdentifier('pack'), createPackLiteral(ability.pack)),
+          ts.createPropertyAssignment(ts.createIdentifier('availability'), ts.createStringLiteral(ability.availability)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('sphere'), ts.createStringLiteral(ability.sphere)),
           ts.createPropertyAssignment(
@@ -325,9 +337,12 @@ export function rewriteSpells(abilities: Spell[]) {
       if (propertyName == 'pack') {
         return createPackLiteral(ability.pack);
       }
+      if (propertyName == 'availability') {
+        return ts.createStringLiteral(ability.availability);
+      }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'sphere', 'prerequisites', 'pack'],
+    ['humanReadableName', 'description', 'karmaCost', 'sphere', 'prerequisites', 'pack', 'availability'],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], SPELLS_FILENAME);

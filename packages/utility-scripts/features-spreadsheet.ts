@@ -5,7 +5,7 @@
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities, rewriteSpells, Spell } from './reparser';
-import { PackInfo, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { FeatureAvailability, PackInfo, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
@@ -25,6 +25,7 @@ const kMasterDescriptionColumn = 13;
 const kCooldownColumn = 16;
 const kSpellSphereColumn = 18;
 const kKarmaCostColumn = 9;
+const kAvailabilityColumn = 10;
 
 class SpreadsheetProcessor {
   passiveAbilities: PassiveAbility[] = [];
@@ -37,6 +38,21 @@ class SpreadsheetProcessor {
     if (isNaN(result)) {
       console.log(`Unexpected karma cost for ${id}: ${input}`);
       return 0;
+    }
+    return result;
+  }
+
+  parseAvailability(id: string, input: string | undefined): FeatureAvailability {
+    if (!input) return 'master';
+    input = input.toLowerCase();
+    const result: FeatureAvailability | undefined = {
+      открытая: 'open',
+      закрытая: 'closed',
+      мастерская: 'master',
+    }[input];
+    if (!result) {
+      console.error(`Unexpected availability value for ${id}: ${input}`);
+      return 'master';
     }
     return result;
   }
@@ -82,6 +98,7 @@ class SpreadsheetProcessor {
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
+      availability: this.parseAvailability(id, row[kAvailabilityColumn]),
     };
     this.passiveAbilities.push(ability);
   }
@@ -96,6 +113,7 @@ class SpreadsheetProcessor {
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
+      availability: this.parseAvailability(id, row[kAvailabilityColumn]),
     };
     this.activeAbilities.push(ability);
   }
@@ -120,6 +138,7 @@ class SpreadsheetProcessor {
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
+      availability: this.parseAvailability(id, row[kAvailabilityColumn]),
     };
     this.spells.push(spell);
   }
@@ -187,6 +206,10 @@ class SpreadsheetProcessor {
 
     if (!header[kKarmaCostColumn].startsWith('Karma')) {
       throw new Error('Karma cost column was moved! Exiting.');
+    }
+
+    if (!header[kAvailabilityColumn].startsWith('Доступность')) {
+      throw new Error('Availability column was moved! Exiting.');
     }
 
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {

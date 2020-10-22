@@ -223,6 +223,7 @@ export function getAllFeatures(): Feature[] {
     humanReadableName: f.humanReadableName,
     description: f.description,
     prerequisites: f.prerequisites,
+    availability: f.availability,
     karmaCost: f.karmaCost,
     pack: f.pack,
   });
