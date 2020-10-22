@@ -2013,7 +2013,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
-    pack: { id: 'arch-rigger-badfate', level: 1 },
+    pack: { id: 'rigger-badfate', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 })],
   },
   // Intelligence -1
@@ -2025,7 +2025,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя серьезные проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger-negative-1'],
-    pack: { id: 'arch-rigger-badfate', level: 2 },
+    pack: { id: 'rigger-badfate', level: 2 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 }), modifierFromEffect(increaseBody, { amount: -1 })],
   },
   // Intelligence -2
@@ -2037,7 +2037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У тебя очень серьезные проблемы, ригга.',
     karmaCost: 0,
     prerequisites: ['arch-rigger-negative-2'],
-    pack: { id: 'arch-rigger-badfate', level: 3 },
+    pack: { id: 'rigger-badfate', level: 3 },
     modifier: [
       modifierFromEffect(increaseIntelligence, { amount: -2 }),
       modifierFromEffect(increaseBody, { amount: -2 }),
@@ -3259,7 +3259,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'executioner-1',
     humanReadableName: 'Палач: быстрое добивание',
     description:
-      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценниться среди самураев-ассасинов. Настоящий профи может убить нескольких человек в считанные минуты',
+      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценится среди самураев-ассасинов. Настоящий профи может убить нескольких человек в считанные минуты',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin'],
     pack: { id: 'sam-assa-execut', level: 1 },
