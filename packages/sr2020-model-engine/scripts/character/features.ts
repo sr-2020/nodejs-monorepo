@@ -230,7 +230,10 @@ export function getAllFeatures(): Feature[] {
   return [...getAllActiveAbilities().values(), ...kAllPassiveAbilities.values(), ...kAllSpells.values()].map(extractFeatureFields);
 }
 
+// Returns all features with 'open' availability and satisfied prerequisites for a given character.
 export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
   // TODO(https://trello.com/c/GJmKFGCF/406-скидки-за-комбо-метатип-архетип) Implement discounts.
-  return getAllFeatures().filter((f: Feature) => satisfiesPrerequisites(model, f));
+  return getAllFeatures()
+    .filter((f: Feature) => f.availability == 'open')
+    .filter((f: Feature) => satisfiesPrerequisites(model, f));
 }
