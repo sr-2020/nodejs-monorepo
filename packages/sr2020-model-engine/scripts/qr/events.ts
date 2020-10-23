@@ -10,7 +10,8 @@ import {
   ReanimateCapsuleData,
   TypedQrCode,
 } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { earnKarma } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { buyFeatureForKarma, earnKarma } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -208,6 +209,30 @@ export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: num
     eventType: earnKarma.name,
     name: 'Карма',
     description: `Отсканируй, чтоб получить ${data.amount} кармы.`,
+    usesLeft: 999999,
+    modifiers: [],
+    timers: [],
+    data,
+  };
+}
+
+export function writeBuyableFeature(api: EventModelApi<QrCode>, data: { id: string }) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  const feature = getAllFeatures().find((f) => f.id == data.id);
+  if (!feature) {
+    throw new UserVisibleError(`Фича с идентификатором ${data.id} не найдена!`);
+  }
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'feature_to_buy',
+    eventType: buyFeatureForKarma.name,
+    name: `Способность ${feature.humanReadableName}`,
+    description: `Базовая цена (без учета скидки): ${feature.karmaCost} кармы.`,
     usesLeft: 999999,
     modifiers: [],
     timers: [],

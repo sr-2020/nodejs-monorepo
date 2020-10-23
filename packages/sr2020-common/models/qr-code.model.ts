@@ -17,6 +17,7 @@ export type QrType =
   | 'implant' // Implant bought in the shop or cut from the body.
   | 'food' // Food item
   | 'ability' // Used for mental abilities - ability which affects the person who scanned it.
+  | 'feature_to_buy' // Closed ability to be bought for karma.
   | 'artifact' // Enchanted item.
   | 'event' // Event which affects the person who scanned it.
   | 'reagent' // Magical reagent

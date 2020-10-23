@@ -115,6 +115,19 @@ describe('Karma events', function () {
     expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
   });
 
+  it('Can buy feature for karma from QR', async () => {
+    await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    await fixture.saveQrCode();
+    await fixture.sendQrCodeEvent({ eventType: 'writeBuyableFeature', data: { id: 'arch-rigger' } });
+
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '0' } });
+    const riggerFeature = getAllFeatures().find((f) => f.id == 'arch-rigger')!;
+    expect(workModel.karma.available).to.equal(1000 - riggerFeature.karmaCost);
+    expect(workModel.karma.spent).to.equal(riggerFeature.karmaCost);
+    expect(workModel.karma.spentOnPassives).to.equal(riggerFeature.karmaCost);
+    expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
+  });
+
   it('Can not buy feature if not enough karma', async () => {
     await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
