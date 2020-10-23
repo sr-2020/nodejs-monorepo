@@ -398,6 +398,10 @@ app = new Vue({
       return this.sendQrEvent({ eventType: 'writeKarmaSource', data: { amount: this.karmaAmount } });
     },
 
+    async writeBuyableFeature() {
+      return this.sendQrEvent({ eventType: 'writeBuyableFeature', data: { id: this.selectedFeature } });
+    },
+
     async pauseGame() {
       this.$bvToast.toast('Это долгая операция, пожалуйста, подождите...', {
         autoHideDelay: 40000,
