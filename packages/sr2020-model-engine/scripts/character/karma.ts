@@ -5,6 +5,7 @@ import {
   addFeature,
   getAllFeatures,
   getFeatureIdsInModel,
+  getFeatureKarmaCost,
   satisfiesPrerequisites,
 } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
@@ -56,8 +57,7 @@ export function buyFeatureForKarma(api: EventModelApi<Sr2020Character>, data: { 
 
   if (!satisfiesPrerequisites(api.workModel, feature)) throw new UserVisibleError('Не удовлетворены пререквизиты для данной способности');
 
-  // TODO(aeremin) Calculate discount
-  const karmaCost = feature.karmaCost;
+  const karmaCost = getFeatureKarmaCost(api.workModel, feature);
   if (api.workModel.karma.available < karmaCost) throw new UserVisibleError('Недостаточно кармы для покупки способности');
 
   addFeature(api, data);

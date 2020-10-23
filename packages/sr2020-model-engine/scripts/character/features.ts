@@ -4,6 +4,7 @@ import {
   AddedPassiveAbility,
   AddedSpell,
   Feature,
+  MetaRace,
   Sr2020Character,
 } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
@@ -232,8 +233,103 @@ export function getAllFeatures(): Feature[] {
 
 // Returns all features with 'open' availability and satisfied prerequisites for a given character.
 export function getAllAvailableFeatures(model: Sr2020Character): Feature[] {
-  // TODO(https://trello.com/c/GJmKFGCF/406-скидки-за-комбо-метатип-архетип) Implement discounts.
   return getAllFeatures()
     .filter((f: Feature) => f.availability == 'open')
-    .filter((f: Feature) => satisfiesPrerequisites(model, f));
+    .filter((f: Feature) => satisfiesPrerequisites(model, f))
+    .map((f: Feature) => ({ ...f, karmaCost: getFeatureKarmaCost(model, f) }));
 }
+
+export function getFeatureKarmaCost(model: Sr2020Character, feature: Feature) {
+  const discount = kAllKarmaDiscounts
+    .filter((it) => it.metarace == model.metarace)
+    .find((it) => feature.prerequisites.includes(it.archetype));
+
+  if (discount) {
+    return (feature.karmaCost * (100 - discount.discount)) / 100;
+  } else {
+    return feature.karmaCost;
+  }
+}
+
+interface KarmaDiscount {
+  archetype: string;
+  metarace: MetaRace;
+  discount: number;
+}
+
+export const kAllKarmaDiscounts: KarmaDiscount[] = [
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-norm', discount: 10 },
+  { archetype: 'arch-hackerman-cyberadept', metarace: 'meta-norm', discount: 10 },
+  { archetype: 'arch-rigger-medic', metarace: 'meta-norm', discount: 10 },
+  { archetype: 'arch-samurai-gunner', metarace: 'meta-norm', discount: 5 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-norm', discount: 5 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-norm', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-norm', discount: 5 },
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-dwarf', discount: 5 },
+  { archetype: 'arch-rigger-pilot', metarace: 'meta-dwarf', discount: 10 },
+  { archetype: 'arch-rigger-engineer', metarace: 'meta-dwarf', discount: 10 },
+  { archetype: 'arch-samurai-fighter', metarace: 'meta-dwarf', discount: 5 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-dwarf', discount: 5 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-dwarf', discount: 5 },
+  { archetype: 'arch-face-geshaftmacher', metarace: 'meta-dwarf', discount: 10 },
+  { archetype: 'arch-hackerman-technoshaman', metarace: 'meta-elf', discount: 10 },
+  { archetype: 'arch-samurai-assasin', metarace: 'meta-elf', discount: 5 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-elf', discount: 5 },
+  { archetype: 'arch-mage-adeptus', metarace: 'meta-elf', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-elf', discount: 10 },
+  { archetype: 'arch-face-geshaftmacher', metarace: 'meta-elf', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-elf', discount: 5 },
+  { archetype: 'arch-hackerman-technoshaman', metarace: 'meta-ork', discount: 5 },
+  { archetype: 'arch-rigger-pilot', metarace: 'meta-ork', discount: 5 },
+  { archetype: 'arch-rigger-engineer', metarace: 'meta-ork', discount: 5 },
+  { archetype: 'arch-samurai-gunner', metarace: 'meta-ork', discount: 10 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-ork', discount: 10 },
+  { archetype: 'arch-mage-adeptus', metarace: 'meta-ork', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-ork', discount: 10 },
+  { archetype: 'arch-hackerman-cyberadept', metarace: 'meta-troll', discount: 5 },
+  { archetype: 'arch-hackerman-technoshaman', metarace: 'meta-troll', discount: 5 },
+  { archetype: 'arch-rigger-engineer', metarace: 'meta-troll', discount: 5 },
+  { archetype: 'arch-rigger-medic', metarace: 'meta-troll', discount: 5 },
+  { archetype: 'arch-samurai-fighter', metarace: 'meta-troll', discount: 10 },
+  { archetype: 'arch-samurai-assasin', metarace: 'meta-troll', discount: 10 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-troll', discount: 10 },
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-hackerman-cyberadept', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-hackerman-technoshaman', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-rigger-pilot', metarace: 'meta-eghost', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-face-geshaftmacher', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-eghost', discount: 5 },
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-hackerman-cyberadept', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-hackerman-technoshaman', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-rigger-pilot', metarace: 'meta-ai', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-face-geshaftmacher', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-ai', discount: 5 },
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-samurai-gunner', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-samurai-fighter', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-samurai-assasin', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-mage-adeptus', metarace: 'meta-vampire', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-vampire', discount: 5 },
+  { archetype: 'arch-hackerman-decker', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-samurai-gunner', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-samurai-fighter', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-samurai-assasin', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-mage-adeptus', metarace: 'meta-ghoul', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-ghoul', discount: 5 },
+  { archetype: 'arch-samurai-assasin', metarace: 'meta-spirit', discount: 5 },
+  { archetype: 'arch-mage-spellcaster', metarace: 'meta-spirit', discount: 10 },
+  { archetype: 'arch-mage-summoner', metarace: 'meta-spirit', discount: 10 },
+  { archetype: 'arch-mage-adeptus', metarace: 'meta-spirit', discount: 10 },
+  { archetype: 'arch-face-mentalist', metarace: 'meta-spirit', discount: 5 },
+  { archetype: 'arch-face-geshaftmacher', metarace: 'meta-spirit', discount: 5 },
+  { archetype: 'arch-face-discursmonger', metarace: 'meta-spirit', discount: 5 },
+];

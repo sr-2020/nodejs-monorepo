@@ -115,6 +115,17 @@ describe('Karma events', function () {
     expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
   });
 
+  it('Can get feature discount', async () => {
+    await fixture.saveCharacter({ metarace: 'meta-dwarf', karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    await fixture.addCharacterFeature('arch-rigger-engineer');
+    const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'implant-1' } });
+    const feature = getAllFeatures().find((f) => f.id == 'implant-1')!;
+    expect(workModel.karma.available).to.equal(1000 - 0.9 * feature.karmaCost);
+    expect(workModel.karma.spent).to.equal(0.9 * feature.karmaCost);
+    expect(workModel.karma.spentOnPassives).to.equal(0.9 * feature.karmaCost);
+    expect(workModel.passiveAbilities).to.containDeep([{ id: 'implant-1' }]);
+  });
+
   it('Can buy feature for karma from QR', async () => {
     await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     await fixture.saveQrCode();
