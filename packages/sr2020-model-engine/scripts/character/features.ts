@@ -15,6 +15,7 @@ import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/chara
 import { Duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
+import { HttpErrors } from '@loopback/rest';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   addFeatureToModel(api.model, data.id);
@@ -39,8 +40,7 @@ export function addFeatureToModel(model: Sr2020Character, featureId: string) {
     return;
   }
 
-  // TODO: Support other kinds of features (e.g. archetypes).
-  throw Error(`Feature ${featureId} not found in the features library`);
+  throw new HttpErrors.BadRequest(`Feature ${featureId} not found in the features library`);
 }
 
 function addPassiveAbility(model: Sr2020Character, ability: PassiveAbility) {
