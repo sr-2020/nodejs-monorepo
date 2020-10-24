@@ -6,6 +6,7 @@ import {
   cloudMemoryAbility,
   doNothingAbility,
   dummyAbility,
+  finishHimAbility,
   hammerOfJustice,
   howMuchItCosts,
   howMuchTheRent,
@@ -46,6 +47,7 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
+
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -205,7 +207,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: absoluteDeathAbility.name,
   },
-  // TODO(https://trello.com/c/RgKWvnBk/322-реализовать-добивание-тела-из-тяжрана-в-кс): Add proper implementation
   // У абилки есть два эффекта:
   // 1) если применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
   // 2) если применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
@@ -214,14 +215,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'добивание тела из тяжрана в КС',
     description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 9000,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        allowedTypes: ['WOUNDED_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
+    cooldownMinutes: 30,
     prerequisites: [],
     pack: { id: 'chummer-zero', level: 1 },
     availability: 'master',
     karmaCost: 120,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: finishHimAbility.name,
   },
   // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Add proper implementation
   // дает возможность персонажу зайти в Виар на 2 часа (или сколько-то), кулдаун есть.  Увеличение длительности виара ИЛИ уменьшение кулдауна - спец абилки.

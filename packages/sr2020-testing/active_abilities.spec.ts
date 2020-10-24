@@ -54,4 +54,31 @@ describe('Active abilities', function () {
       expect(aura).equal(startingAura);
     }
   });
+
+  it('Finish him on body', async () => {
+    await fixture.saveLocation();
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.addCharacterFeature('finish-him', '1');
+
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
+
+    await fixture.useAbility({ id: 'finish-him', location: { id: '0', manaLevel: 5 }, targetCharacterId: '2' }, '1');
+
+    expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
+  });
+
+  it('Finish him does not work on healthy', async () => {
+    await fixture.saveLocation();
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.addCharacterFeature('finish-him', '1');
+
+    await fixture.saveCharacter({ modelId: '2', healthState: 'healthy' });
+
+    await fixture.sendCharacterEventExpectingError(
+      { eventType: 'useAbility', data: { id: 'finish-him', location: { id: '0', manaLevel: 5 }, targetCharacterId: '2' } },
+      '1',
+    );
+
+    expect((await fixture.getCharacter('2')).workModel.healthState).equal('healthy');
+  });
 });

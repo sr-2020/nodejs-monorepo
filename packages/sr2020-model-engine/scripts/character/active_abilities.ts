@@ -1,7 +1,7 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { AddedActiveAbility, Sr2020Character, Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
-import { absoluteDeath, reviveOnTarget } from './death_and_rebirth';
+import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
@@ -117,6 +117,12 @@ export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAb
 
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, {});
+}
+
+export function finishHimAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+  if (target.healthState != 'wounded') throw new UserVisibleError('Жертва не находится в тяжране.');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!.toString(), clinicalDeath, {});
 }
 
 export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
