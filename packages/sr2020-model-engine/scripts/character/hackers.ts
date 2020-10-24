@@ -35,7 +35,7 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
   }
 
   if (api.model.healthState != 'biologically_dead') {
-    healthStateTransition(api, 'clinically_dead');
+    healthStateTransition(api, 'clinically_dead', undefined);
   }
 
   adjustDumpshock(api, { amount: 1 });

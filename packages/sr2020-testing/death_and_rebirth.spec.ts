@@ -21,7 +21,7 @@ describe('Death & Rebirth', function () {
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
     await fixture.advanceTime(duration(30, 'minutes'));
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'clinically_dead' } });
-    await fixture.sendCharacterEvent({ eventType: 'revive' });
+    await fixture.sendCharacterEvent({ eventType: 'revive', data: {} });
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
   });
 
@@ -30,7 +30,7 @@ describe('Death & Rebirth', function () {
     await fixture.sendCharacterEvent({ eventType: 'wound' });
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'wounded' } });
     await fixture.advanceTime(duration(15, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'revive' });
+    await fixture.sendCharacterEvent({ eventType: 'revive', data: {} });
     await fixture.advanceTime(duration(15, 'minutes'));
     expect(await fixture.getCharacter()).containDeep({ workModel: { healthState: 'healthy' } });
   });

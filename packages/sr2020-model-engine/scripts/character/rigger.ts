@@ -102,8 +102,8 @@ export function riggerUninstallImplant(
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);
 }
 
-export function riggerRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocRevive, {});
+export function riggerRevive(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string } & LocationMixin) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, autodocRevive, data);
   // Not calling analyzeBody directly as we need for autodocRevive event above propagate first
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);
 }
@@ -191,18 +191,18 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   api.model.passiveAbilities = api.model.passiveAbilities.filter(isDroneAbility);
 
   // Not calling directly as we need to remove modifier and recalculate max HP first.
-  api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage });
+  api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage, location: data.location });
   api.removeModifier(m.mID);
 }
 
-export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
+export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data: { amount: number } & LocationMixin) {
   if (data.amount <= 0) {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', 'Вы вышли из дрона, все в порядке.');
   } else if (data.amount < api.workModel.maxHp) {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов.`);
   } else {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов, что привело к тяжрану.`);
-    healthStateTransition(api, 'wounded');
+    healthStateTransition(api, 'wounded', data.location);
   }
 }
 

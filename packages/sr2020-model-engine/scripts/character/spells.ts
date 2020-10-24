@@ -2,7 +2,7 @@ import uuid = require('uuid');
 import { cloneDeep } from 'lodash';
 import { EffectModelApi, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/sr2020-common/models/location.model';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume, create } from '../qr/events';
@@ -27,20 +27,15 @@ import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-
 import { addTemporaryActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 
-interface SpellData {
+type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id
   power: number; // Magic power
-  location: {
-    // Current location
-    id: number;
-    manaLevel: number;
-  };
   reagentIds: string[]; // Identifiers of reagents/blood QRs
   ritualMembersIds?: string[]; // Identifiers of other ritual participants
   ritualVictimIds?: string[]; // Blood ritual victims
   focusId?: string; // Identifier of focus QR
   targetCharacterId?: string; // Identifier of target character
-}
+};
 
 interface MagicFeedback {
   feedback: number;
@@ -457,7 +452,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
       }
 
       ++victims;
-      api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, {});
+      api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, data);
     }
   }
   // жертв, у которых не хватает эссенса для использования в ритуале: N
@@ -472,8 +467,8 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
   };
 }
 
-export function affectRitualVictim(api: EventModelApi<Sr2020Character>, data: {}) {
-  healthStateTransition(api, 'clinically_dead');
+export function affectRitualVictim(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
+  healthStateTransition(api, 'clinically_dead', data.location);
   api.model.essenceDetails.gap += Math.min(100, api.workModel.essence);
 }
 

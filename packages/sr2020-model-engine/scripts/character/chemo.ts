@@ -22,7 +22,7 @@ import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engi
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
 interface InstantEffect {
-  handler: (api: EventModelApi<Sr2020Character>, data: { amount: number }) => void;
+  handler: (api: EventModelApi<Sr2020Character>, data: { amount: number } & LocationMixin) => void;
   amount: number;
 }
 
@@ -762,7 +762,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
       );
     }
   }
-  api.sendSelfEvent(checkConcentrations, { concentrations: pill.content });
+  api.sendSelfEvent(checkConcentrations, { concentrations: pill.content, location: data.location });
   if (data.lifestyle) {
     api.sendPubSubNotification('pill_consumption', {
       characterId: api.model.modelId,
@@ -773,7 +773,10 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
   }
 }
 
-export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: { concentrations: Partial<Concentrations> }) {
+export function checkConcentrations(
+  api: EventModelApi<Sr2020Character>,
+  data: { concentrations: Partial<Concentrations> } & LocationMixin,
+) {
   let effectsCount = 0;
   let effectMessage = '';
   for (const element of kAllElements) {
@@ -803,7 +806,7 @@ export function checkConcentrations(api: EventModelApi<Sr2020Character>, data: {
     effectMessage = effect.message;
 
     if (effect.instantEffect) {
-      api.sendSelfEvent(effect.instantEffect.handler, { amount: effect.instantEffect.amount });
+      api.sendSelfEvent(effect.instantEffect.handler, { amount: effect.instantEffect.amount, location: data.location });
     }
 
     if (effect.durationEffect) {
@@ -839,9 +842,9 @@ export function increaseConcentration(api: EffectModelApi<Sr2020Character>, m: C
   api.model.chemo.concentration[m.element] += m.amount;
 }
 
-export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, _data: {}) {
+export function reviveTo1Hp(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.model.healthState != 'wounded') return;
-  healthStateTransition(api, 'healthy');
+  healthStateTransition(api, 'healthy', data.location);
 }
 
 export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
@@ -912,20 +915,20 @@ export function cleanAddictions(api: EventModelApi<Sr2020Character>, data: { amo
   }
 }
 
-export function uranusRecoverFromClinicalDeath(api: EventModelApi<Sr2020Character>, _data: {}) {
+export function uranusRecoverFromClinicalDeath(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.workModel.healthState != 'biologically_dead') {
-    healthStateTransition(api, 'healthy');
+    healthStateTransition(api, 'healthy', data.location);
   }
 }
 
-export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, _data: {}) {
+export function uranusRecoverFromWounded(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.workModel.healthState == 'wounded') {
-    healthStateTransition(api, 'healthy');
+    healthStateTransition(api, 'healthy', data.location);
   }
 }
 
-export function uranusKill(api: EventModelApi<Sr2020Character>, _data: {}) {
-  healthStateTransition(api, 'biologically_dead');
+export function uranusKill(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
+  healthStateTransition(api, 'biologically_dead', data.location);
 }
 
 interface Addiction extends Modifier {
@@ -1011,7 +1014,7 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
     api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(4, 'hour'), advanceAddiction, data);
   } else if (addiction.stage == 4) {
     if (api.workModel.healthState != 'biologically_dead') {
-      healthStateTransition(api, 'clinically_dead');
+      healthStateTransition(api, 'clinically_dead', undefined);
     }
   } else {
     api.error(`Incorrect addiction stage: ${addiction.stage}`);

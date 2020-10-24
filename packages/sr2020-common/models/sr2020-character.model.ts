@@ -50,11 +50,13 @@ export interface Targetable {
   bodyStorageId: string;
 }
 
+export interface LocationData {
+  id: number;
+  manaLevel: number;
+}
+
 export interface LocationMixin {
-  location: {
-    id: number;
-    manaLevel: number;
-  };
+  location: LocationData;
 }
 
 @model()

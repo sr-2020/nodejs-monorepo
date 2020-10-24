@@ -50,7 +50,7 @@ export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {
   switch (api.workModel.currentBody) {
     case 'physical': {
       sendNotificationAndHistoryRecord(api, 'Голод', 'Вы потеряли сознание от голода. Тяжелое ранение.');
-      healthStateTransition(api, 'wounded');
+      healthStateTransition(api, 'wounded', undefined);
       break;
     }
     case 'drone': {
@@ -70,7 +70,7 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
   switch (api.workModel.currentBody) {
     case 'physical': {
       sendNotificationAndHistoryRecord(api, 'Голод', 'Клиническая смерть от голода.');
-      healthStateTransition(api, 'clinically_dead');
+      healthStateTransition(api, 'clinically_dead', undefined);
       break;
     }
     case 'drone': {

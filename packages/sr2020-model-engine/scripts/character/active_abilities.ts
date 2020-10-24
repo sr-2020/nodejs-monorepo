@@ -113,13 +113,13 @@ export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAb
 }
 
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, {});
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, data);
 }
 
 export function finishHimAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const target = api.aquired(Sr2020Character, data.targetCharacterId!);
   if (target.healthState != 'wounded') throw new UserVisibleError('Жертва не находится в тяжране.');
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!.toString(), clinicalDeath, {});
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!.toString(), clinicalDeath, { location: data.location });
 }
 
 export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

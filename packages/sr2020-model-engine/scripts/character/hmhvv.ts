@@ -45,17 +45,17 @@ export function bittenEvent(api: EventModelApi<Sr2020Character>, data: { essence
   }
 
   api.model.essenceDetails.gap += data.essenceLoss;
-  healthStateTransition(api, 'clinically_dead');
+  healthStateTransition(api, 'clinically_dead', data.location);
 }
 
 export function gmRespawnHmhvv(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, hmhvvRespawnEvent, {});
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, hmhvvRespawnEvent, data);
 }
 
-export function hmhvvRespawnEvent(api: EventModelApi<Sr2020Character>, data: {}) {
+export function hmhvvRespawnEvent(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.workModel.metarace != 'meta-vampire' && api.workModel.metarace != 'meta-ghoul') {
     throw new UserVisibleError('Это работает только на HMHVV');
   }
-  reviveAbsolute(api, {});
+  reviveAbsolute(api, data);
   api.model.essenceDetails.gap = 920;
 }
