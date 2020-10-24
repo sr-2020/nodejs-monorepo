@@ -67,6 +67,7 @@ import {
   setTransactionAnonymous,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];
 }
@@ -3308,7 +3309,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
-  // можно использовать винтовки
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'guns-1',
     humanReadableName: 'дальнобойное оружие: винтовки',
@@ -3319,7 +3320,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-guns', level: 1 },
     modifier: [],
   },
-  // можно использовать автомат
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'guns-2',
     humanReadableName: 'дальнобойное оружие: автоматы',
@@ -3330,7 +3331,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-guns', level: 2 },
     modifier: [],
   },
-  // можно использовать пулемёт
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'guns-3',
     humanReadableName: 'дальнобойное оружие: пулеметы',
@@ -3354,7 +3355,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // можно носить легкую броню
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'armor-2',
     humanReadableName: 'броня: легкая броня',
@@ -3366,7 +3367,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // можно носить тяжелую броню
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'armor-3',
     humanReadableName: 'броня: тяжелая броня',
@@ -3735,6 +3736,40 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: -20,
     prerequisites: ['arch-mage-negative-2'],
     pack: { id: 'mage-badfate', level: 3 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'dividends-1',
+    humanReadableName: 'Дивиденды *',
+    description:
+      'Дивиденды гарантируют вашему персонажу регулярный пассивный доход на игре, без регистрации и СМС. Shut up and take my nuyens! Да, этого точно хватит чтобы поесть и оплатить некоторые развлечения.',
+    availability: 'master',
+    karmaCost: 70,
+    prerequisites: [],
+    pack: { id: 'dividends', level: 1 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'dividends-2',
+    humanReadableName: 'Дивиденды **',
+    description: 'Больше пассивного дохода!',
+    availability: 'master',
+    karmaCost: 70,
+    prerequisites: ['dividends-1'],
+    pack: { id: 'dividends', level: 2 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'dividends-3',
+    humanReadableName: 'Дивиденды ***',
+    description: 'Еще больше пассивного дохода, ты сумел вырваться из крысиных бегов, чаммер!',
+    availability: 'master',
+    karmaCost: 70,
+    prerequisites: ['dividends-2'],
+    pack: { id: 'dividends', level: 3 },
     modifier: [],
   },
 ];

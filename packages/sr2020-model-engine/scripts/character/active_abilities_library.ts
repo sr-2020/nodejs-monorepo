@@ -2005,7 +2005,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: vampireBite.name,
   },
   // TODO(aeremin): Add proper implementation
-  // выдает абилку Форма зверя (?)
+  // выдает абилку Форма зверя - выдает игроку текст на экране
   {
     id: 'meta-werewolf',
     humanReadableName: 'Оборотень',
