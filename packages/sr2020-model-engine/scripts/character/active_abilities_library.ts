@@ -47,7 +47,6 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
-
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -896,7 +895,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 60,
     prerequisites: [],
     availability: 'master',
-    karmaCost: 999,
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: doNothingAbility.name,
   },
@@ -911,7 +910,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 60,
     prerequisites: [],
     availability: 'master',
-    karmaCost: 999,
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: spiritsRelatedSpell.name,
   },
@@ -1472,8 +1471,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kDroneAndBodyStorageTargeted,
     cooldownMinutes: 0,
     prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-combat', level: 1 },
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: enterDrone.name,
   },
@@ -2049,7 +2049,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 9000,
     prerequisites: [],
     availability: 'master',
-    karmaCost: 999,
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },

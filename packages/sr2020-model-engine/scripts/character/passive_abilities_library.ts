@@ -1668,7 +1668,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'После исповеди или участия в богослужении вы можете нажать "Готово" на любом Поступке личной этики, не выполняя его требований',
     availability: 'master',
-    karmaCost: 999,
+    karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
@@ -2167,8 +2167,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Мобильный автодок',
     description: 'Ты можешь использовать мобильный автодок.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 20,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-combat', level: 1 },
     modifier: [],
   },
   // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
@@ -2178,8 +2179,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'апгрейд мобильного автодока 1',
     description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 35,
+    prerequisites: ['mobile-auto-doc-1'],
+    pack: { id: 'rigger-medic-combat', level: 2 },
     modifier: [],
   },
   // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
@@ -2189,8 +2191,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'апгрейд мобильного автодока 2',
     description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 35,
+    prerequisites: ['mobile-auto-doc-2'],
+    pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [],
   },
   // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
@@ -2200,7 +2203,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Проблемы риггера - 1',
     description: 'У тебя проблемы, ригга.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: -20,
     prerequisites: ['arch-rigger'],
     pack: { id: 'rigger-badfate', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 })],
@@ -2213,7 +2216,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Проблемы риггера - 2',
     description: 'У тебя серьезные проблемы, ригга.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: -20,
     prerequisites: ['arch-rigger-negative-1'],
     pack: { id: 'rigger-badfate', level: 2 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 }), modifierFromEffect(increaseBody, { amount: -1 })],
@@ -2226,7 +2229,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Проблемы риггера - 3',
     description: 'У тебя очень серьезные проблемы, ригга.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: -20,
     prerequisites: ['arch-rigger-negative-2'],
     pack: { id: 'rigger-badfate', level: 3 },
     modifier: [
@@ -2243,8 +2246,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицинские дроны 1',
     description: 'Улучшает управление медикартом.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['medicraft-active'],
+    pack: { id: 'rigger-medic-combat', level: 1 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
@@ -2259,8 +2263,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицинские дроны 2',
     description: 'Улучшает управление сложными медикартами.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 35,
     prerequisites: ['medicraft-1'],
+    pack: { id: 'rigger-medic-combat', level: 2 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -2275,8 +2280,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицинские дроны 3',
     description: 'Улучшает управление самыми сложными медикартами.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 35,
     prerequisites: ['medicraft-2'],
+    pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
@@ -3415,7 +3421,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: "clubs'n'swords-1",
     humanReadableName: 'холодное оружие: дубинки',
     description:
-      'Самурай обучен пользоваться дубинками, возможно сказывается опыт работы в силовых структурах, возможно уличная жизнь и привычка махать бейсбольной битой',
+      'Самурай обучен пользоваться дубинками, возможно сказывается опыт работы в силовых структурах, возможно, уличная жизнь и привычка махать бейсбольной битой',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter'],
@@ -3441,7 +3447,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: "clubs'n'swords-3",
     humanReadableName: 'холодное оружие: двуручное оружие',
     description:
-      'Самурай достаточно силен, что бы управится с двуручным оружием. Фламбер давно не появлялся на улицах городов, но, что мешает попробовать',
+      'Самурай достаточно силен, что бы управиться с двуручным оружием. Фламбер давно не появлялся на улицах городов, но, что мешает попробовать',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', "clubs'n'swords-2"],
@@ -3657,6 +3663,78 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 80,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-2'],
     pack: { id: 'rigger-eng-chem', level: 3 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // ментальная защита снижена на 3
+  {
+    id: 'arch-face-negative-1',
+    humanReadableName: 'проблемы фейса-1',
+    description: 'У тебя проблемы, фейс.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-face'],
+    pack: { id: 'face-badfate', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // эссенс снижен на 1
+  {
+    id: 'arch-face-negative-2',
+    humanReadableName: 'проблемы фейса-2',
+    description: 'У тебя серьезные проблемы, фейс.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-face-negative-1'],
+    pack: { id: 'face-badfate', level: 2 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Харизма уменьшена на 1
+  {
+    id: 'arch-face-negative-3',
+    humanReadableName: 'проблемы фейса-3',
+    description: 'У тебя очень серьезные проблемы, фейс.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-face-negative-2'],
+    pack: { id: 'face-badfate', level: 3 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-mage-negative-1',
+    humanReadableName: 'проблемы мага - 1 ',
+    description: 'У тебя проблемы, маг.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-mage'],
+    pack: { id: 'mage-badfate', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-mage-negative-2',
+    humanReadableName: 'проблемы мага - 2',
+    description: 'У тебя серьезные проблемы, маг.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-mage-negative-1'],
+    pack: { id: 'mage-badfate', level: 2 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-mage-negative-3',
+    humanReadableName: 'проблемы мага - 3',
+    description: 'У тебя очень серьезные проблемы, маг.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-mage-negative-2'],
+    pack: { id: 'mage-badfate', level: 3 },
     modifier: [],
   },
 ];
