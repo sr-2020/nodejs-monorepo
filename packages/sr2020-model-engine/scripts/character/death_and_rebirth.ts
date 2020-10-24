@@ -179,6 +179,7 @@ export function capsuleReanimate(api: EventModelApi<Sr2020Character>, data: Acti
     medic: api.workModel.modelId,
     patient: data.targetCharacterId,
     capsuleName: capsule.name,
+    location: data.location,
     ...capsuleData,
     ...aiData,
   });

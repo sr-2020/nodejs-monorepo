@@ -1,5 +1,5 @@
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Concentrations, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Concentrations, LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord, validUntil } from './util';
 import { duration, Duration } from 'moment';
@@ -733,10 +733,10 @@ export const kAllChemoEffects: ChemoEffect[] = [
   },
 ];
 
-export interface ChemoData {
+export type ChemoData = LocationMixin & {
   id: string;
   lifestyle?: string;
-}
+};
 
 export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoData) {
   if (api.workModel.currentBody != 'physical') {
@@ -768,6 +768,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
       characterId: api.model.modelId,
       id: data.id,
       lifestyle: data.lifestyle,
+      location: data.location,
     });
   }
 }

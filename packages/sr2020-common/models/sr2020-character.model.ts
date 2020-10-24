@@ -50,6 +50,13 @@ export interface Targetable {
   bodyStorageId: string;
 }
 
+export interface LocationMixin {
+  location: {
+    id: number;
+    manaLevel: number;
+  };
+}
+
 @model()
 export class TargetSignature {
   // Human-readable name to e.g. show on button

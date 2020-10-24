@@ -1,5 +1,5 @@
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedImplant, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { AddedImplant, LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
@@ -41,7 +41,10 @@ function checkIfCanWorkWithImplant(rigger: Sr2020Character, implant: AddedImplan
 }
 
 // Tries to install implant from the QR code.
-export function riggerInstallImplant(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string; qrCode: string }) {
+export function riggerInstallImplant(
+  api: EventModelApi<Sr2020Character>,
+  data: { targetCharacterId: string; qrCode: string } & LocationMixin,
+) {
   const qr = api.aquired(QrCode, data.qrCode);
   if (qr.type != 'implant') {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
@@ -55,7 +58,10 @@ export function riggerInstallImplant(api: EventModelApi<Sr2020Character>, data: 
   checkIfCanWorkWithImplant(api.workModel, implant);
 
   api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, typedQrData<MerchandiseQrData>(qr));
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, {
+    ...typedQrData<MerchandiseQrData>(qr),
+    location: data.location,
+  });
 
   // Not calling analyzeBody directly as we need for install event above propagate first
   api.sendOutboundEvent(Sr2020Character, api.model.modelId, analyzeBody, data);

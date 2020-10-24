@@ -1,5 +1,5 @@
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
@@ -27,7 +27,7 @@ export function resetHunger(model: Sr2020Character) {
   });
 }
 
-export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData) {
+export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
   if (data.id == 'food') {
     if (isHmhvv(api.model)) throw new UserVisibleError('Вы не можете употреблять такую еду');
     resetHunger(api.model);

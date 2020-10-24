@@ -1,5 +1,5 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedActiveAbility, Sr2020Character, Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { AddedActiveAbility, LocationMixin, Sr2020Character, Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
@@ -12,13 +12,10 @@ import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 
-export type ActiveAbilityData = Partial<Targetable> & {
-  id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
-  location: {
-    id: number;
-    manaLevel: number;
+export type ActiveAbilityData = Partial<Targetable> &
+  LocationMixin & {
+    id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
   };
-};
 
 export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
 
