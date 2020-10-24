@@ -60,15 +60,6 @@ export class Context<T extends EmptyModel> {
     this._aquired = aquired ?? {};
   }
 
-  get events() {
-    return this._events;
-  }
-
-  set events(value: Event[]) {
-    this._events = cloneDeep(value);
-    this.sortEvents();
-  }
-
   get timestamp() {
     assert(this.baseModel.timestamp == this.workModel.timestamp);
     return this.baseModel.timestamp;
