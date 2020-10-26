@@ -531,7 +531,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'linklock <target>',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: [],
   },
   // Автоматический захват цели в линклок при появлении
@@ -541,70 +542,70 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'autolock <target>',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['link-lock'],
+    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
-  // позволяет читать данные из геоапи
+  // позволяет читать данные из геоноды
   {
     id: 'geo-pro-1',
     humanReadableName: 'геоспец 1',
-    description: 'useapi read',
+    description: 'возможность использовать useapi read на геоноде',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
-  // позволяет читать данные из геоапи - лучше. Позволяет изменять данные
+  // позволяет лучше читать данные из геоноды.
   {
     id: 'geo-pro-2',
     humanReadableName: 'геоспец 2',
-    description: 'useapi read',
+    description: 'возможность использовать расширенную useapi read на геоноде',
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['geo-pro-1'],
     modifier: [],
   },
-  // позволяет читать данные из геоапи - лучше. Позволяет изменять данные лучше
+  // позволяет больше и еще лучше читать данные из геоноды.
   {
     id: 'geo-pro-3',
     humanReadableName: 'геоспец 3',
-    description: 'useapi read/update',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на геоноде',
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['geo-pro-2'],
     modifier: [],
   },
-  // позволяет читать данные из эконом апи
+  // позволяет читать данные из экономноды
   {
     id: 'economics-pro-1',
     humanReadableName: 'эконом 1',
-    description: 'useapi read',
+    description: 'возможность использовать useapi read на экономноде',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
-  // позволяет читать данные из эконом- лучше. Позволяет немного воровать
+  // позволяет лучше читать данные из экономноды.
   {
     id: 'economics-pro-2',
     humanReadableName: 'эконом 2',
-    description: 'useapi read',
+    description: 'возможность использовать расширенную useapi read на экономноде.',
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['economics-pro-1'],
     modifier: [],
   },
-  // позволяет читать данные из эконом- лучше. Позволяет немного воровать. Работа с магазин/корпа
+  // позволяет больше и еще лучше читать данные из экономноды.
   {
     id: 'economics-pro-3',
     humanReadableName: 'эконом 3',
-    description: 'useapi read/update',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на экономноде',
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['economics-pro-2'],
     modifier: [],
   },
-  // преодолевает анонимизацию фиксира
   {
     id: 'economics-symbiosis',
     humanReadableName: 'Эконом-симбиоз',
@@ -614,94 +615,34 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // позволяет читать данные из реестров
-  {
-    id: 'rus-registry-1',
-    humanReadableName: 'россестр 1',
-    description: 'useapi read',
-    availability: 'open',
-    karmaCost: 2,
-    prerequisites: [],
-    modifier: [],
-  },
-  // позволяет читать данные из реестров - лучше. Позволяет изменять данные
-  {
-    id: 'rus-registry-2',
-    humanReadableName: 'россестр 2',
-    description: 'useapi read',
-    availability: 'open',
-    karmaCost: 4,
-    prerequisites: ['rus-registry-1'],
-    modifier: [],
-  },
-  // позволяет читать данные из реестров - лучше. Позволяет изменять данные лучше
-  {
-    id: 'rus-registry-3',
-    humanReadableName: 'россестр 3',
-    description: 'useapi read/update',
-    availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['rus-registry-2'],
-    modifier: [],
-  },
-  // позволяет читать данные из реестров
+  // позволяет читать данные из биомонитора и rcc
   {
     id: 'meds-and-chrome-1',
     humanReadableName: 'Медицина и Хром 1',
-    description: 'useapi read',
+    description: 'возможность использовать useapi read на биомониторе и rcc',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
-  // позволяет читать данные из реестров - лучше. Позволяет изменять данные
+  // позволяет лучше читать данные из биомонитора и rcc.
   {
     id: 'meds-and-chrome-2',
     humanReadableName: 'Медицина и Хром 2',
-    description: 'useapi read',
+    description: 'возможность использовать расширенную useapi read на биомониторе и rcc',
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['meds-and-chrome-1'],
     modifier: [],
   },
-  // позволяет читать данные из реестров - лучше. Позволяет изменять данные лучше
+  // позволяет больше и еще лучше читать данные из биомонитора и rcc.
   {
     id: 'meds-and-chrome-3',
     humanReadableName: 'Медицина и Хром 3',
-    description: 'useapi read/update',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на биомониторе и rcc',
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['meds-and-chrome-2'],
-    modifier: [],
-  },
-  // работа с прочими контролями -1
-  {
-    id: 'other-control-1',
-    humanReadableName: 'прочий контроль 1',
-    description: 'useapi read',
-    availability: 'open',
-    karmaCost: 2,
-    prerequisites: [],
-    modifier: [],
-  },
-  // работа с прочими контролями -2
-  {
-    id: 'other-control-2',
-    humanReadableName: 'прочий контроль 2',
-    description: 'useapi read',
-    availability: 'open',
-    karmaCost: 4,
-    prerequisites: ['other-control-1'],
-    modifier: [],
-  },
-  // работа с прочими контролями -3
-  {
-    id: 'other-control-3',
-    humanReadableName: 'прочий контроль 3',
-    description: 'useapi read/update',
-    availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['other-control-2'],
     modifier: [],
   },
   // Позволяет реактивировать вырубленный IC
@@ -719,7 +660,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'huge-lucker',
     humanReadableName: 'Конский лак ',
     description: '',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 8,
     prerequisites: [],
     modifier: [],
@@ -808,7 +749,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
-  // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
   {
     id: 'longer-vr-stays-1',
     humanReadableName: 'Мужчина, продлевать будете? ',
@@ -818,7 +758,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
-  // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
   {
     id: 'longer-vr-stays-2',
     humanReadableName: 'Мужчина, продлевать будете?  v2',
@@ -828,7 +767,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
-  // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
   {
     id: 'unlimited-vr-stays',
     humanReadableName: 'Виар. А я вообще тут живу.',
@@ -981,7 +919,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: [],
-    pack: { id: 'hack-deck-breacher', level: 1 },
+    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // установка дряни / пользы в чужой хост
@@ -997,7 +935,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: [],
-    pack: { id: 'hack-deck-breacher', level: 1 },
+    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // очистка хоста от чужой дряни / пользы
@@ -1010,7 +948,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: [],
-    pack: { id: 'hack-deck-breacher', level: 2 },
+    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
@@ -1044,7 +982,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'hop',
     humanReadableName: 'hop',
     description:
-      'Перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
+      'Мгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
     availability: 'open',
     karmaCost: 4,
     prerequisites: [],
@@ -1363,7 +1301,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: [],
-    pack: { id: 'hack-deck-sly', level: 2 },
+    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1853,7 +1791,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Подвластная тебе Мощь увеличивается',
     availability: 'master',
     karmaCost: 1,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
   // Перманентно увеличивает характеристику Магия на 1
@@ -1903,7 +1841,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты легче выносишь Откат',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 0.9,
     }),
@@ -1939,7 +1877,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты тяжелее выносишь Откат',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 1.2,
     }),
@@ -1975,7 +1913,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Магия возвращается к тебе быстрее',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-mage-summoner'],
     modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
   // Перманентно ускоряет восстановление Магии на 20%. Поскольку уже был взят Воспрянь и пой 1, то КоэффициентВосстановленияМагии станет 1*1.2*1.2=1.44
@@ -2005,7 +1943,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты понимаешь настроения духов',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-mage-summoner'],
     modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
       amount: 0.8,
     }),
@@ -2041,7 +1979,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
       amount: 1.3,
     }),
@@ -2075,9 +2013,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'light-step',
     humanReadableName: 'Light Step ',
     description: 'След твоих заклинаний содержит меньше ауры',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-mage-summoner'],
     modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
   // Позволяет просканировать во время каста qr-коды мясных тел в состоянии тяжран (не годятся здоров/КС/АС) и с Эссенсом>=1ед для эффекта "кровавый ритуал":  Использование (сканирование) N этих кодов приводит к:
@@ -2090,9 +2028,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Bathory Charger',
     description:
       'Использование металюдей для увеличения Мощи и снижения Отката заклинаний на некоторое время. Чем больше жертв использовано, тем больше эффект',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-mage-summoner'],
     modifier: [],
   },
   // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает значение ауры на 20% больше. Например, если заклинание было скастовано с такой Мощью, что должно было извлечь 10 символов, то с этой абилкой будет извлечено 12. То есть Коэффициент чтения астральных следов у этого мага равен 1.2.
@@ -2100,9 +2038,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'dictator-control',
     humanReadableName: 'Dictator Control',
     description: 'При чтении астральных следов извлекается больше ауры',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: modifierFromEffect(increaseAuraReadingMultiplier, {
       amount: 0.2,
     }),
@@ -2112,9 +2050,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'agnus-dei',
     humanReadableName: 'Agnus dei ',
     description: 'В ритуальном хоре твой голос неоценим.',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['arch-mage-adeptus'],
     modifier: [],
   },
   // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
@@ -2122,9 +2060,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'ritual-magic',
     humanReadableName: 'Ритуальная магия',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: [],
   },
   // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
@@ -2134,9 +2072,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'orthodox-ritual-magic',
     humanReadableName: 'Православная ритуальная магия',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 1,
-    prerequisites: [],
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: [],
   },
   // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
@@ -2712,24 +2650,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Абилка ничего не делает, просто показывает текст "Астрал: 2 меча, 1 щит"
-  {
-    id: 'astro-boy',
-    humanReadableName: 'Астробой',
-    description: 'В астральной боёвке 2 меча и 1 щит',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
   // Абилка ничего не делает, просто показывает текст "Астрал: 4 меча, 3 щита"
   {
     id: 'astro-fighter',
     humanReadableName: 'Астробоевик',
     description: 'В астральной боёвке 4 меча и 3 щита',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['astro-boy-summ'],
     modifier: [],
   },
   // Абилка ничего не делает, просто показывает текст "Астрал: 6 мечей, 5 щитов"
@@ -2737,9 +2665,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'astro-boogie',
     humanReadableName: 'Астробугай',
     description: 'В астральной боёвке 6 мечей и 5 щитов',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 4,
+    prerequisites: ['astro-fighter'],
     modifier: [],
   },
   // КоэффициентСопротивленияОткату умножается на 0.5
@@ -2748,8 +2676,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Кудесник',
     description: 'Ты очень хорошо сопротивляешься Откату',
     availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 4,
+    prerequisites: ['arch-mage-spellcaster'],
     modifier: [modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.5 })],
   },
   // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак лёгким оружием - холодным и дистанционным"
@@ -2757,8 +2685,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'magic-shield',
     humanReadableName: 'Magic Shield',
     description: 'Доступен "магический щит" (прозрачный зонтик, защищает от любого легкого оружия). Не требует активации',
-    availability: 'master',
-    karmaCost: 0,
+    availability: 'open',
+    karmaCost: 2,
     prerequisites: [],
     modifier: [],
   },
@@ -2768,7 +2696,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'PENCIL',
     description: 'Одно оружие в руках считается тяжёлым',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 2,
     prerequisites: [],
     modifier: [],
   },
@@ -2778,7 +2706,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Stone skin',
     description: 'Имеющаяся броня считается тяжёлой',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 2,
     prerequisites: [],
     modifier: [],
   },
@@ -3770,6 +3698,69 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 70,
     prerequisites: ['dividends-2'],
     pack: { id: 'dividends', level: 3 },
+    modifier: [],
+  },
+  // IT: команда в кривда-матрице
+  {
+    id: 'hophop',
+    humanReadableName: 'hophop',
+    description:
+      'Мгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)\n\nвместе с партией!',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: [],
+    pack: { id: 'hack-deck-sly', level: 3 },
+    modifier: [],
+  },
+  // Перманентно увеличивает характеристику Магия на 1
+  {
+    id: 'magic-1-summ',
+    humanReadableName: 'Магия 1-П!',
+    description: 'Подвластная тебе Мощь увеличивается',
+    availability: 'master',
+    karmaCost: 1,
+    prerequisites: ['arch-mage-summoner'],
+    modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
+  },
+  // Перманентно увеличивает характеристику Магия на 1
+  {
+    id: 'magic-2-summ',
+    humanReadableName: 'Магия 2-П!',
+    description: 'Подвластная тебе Мощь увеличивается',
+    availability: 'master',
+    karmaCost: 2,
+    prerequisites: ['magic-1-summ'],
+    modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
+  },
+  // Абилка ничего не делает, просто показывает текст "Астрал: 2 меча, 1 щит"
+  {
+    id: 'astro-boy-cast',
+    humanReadableName: 'Астробой-З',
+    description: 'В астральной боёвке 2 меча и 1 щит',
+    availability: 'open',
+    karmaCost: 1,
+    prerequisites: ['arch-mage-spellcaster'],
+    modifier: [],
+  },
+  // Абилка ничего не делает, просто показывает текст "Астрал: 2 меча, 1 щит"
+  {
+    id: 'astro-boy-summ',
+    humanReadableName: 'Астробой-П!',
+    description: 'В астральной боёвке 2 меча и 1 щит',
+    availability: 'open',
+    karmaCost: 1,
+    prerequisites: ['arch-mage-summoner'],
+    modifier: [],
+  },
+  // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума
+  {
+    id: 'healtouch',
+    humanReadableName: 'Healtouch',
+    description:
+      'Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
     modifier: [],
   },
 ];

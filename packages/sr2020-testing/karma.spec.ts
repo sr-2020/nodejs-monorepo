@@ -64,7 +64,7 @@ describe('Karma events', function () {
       data: { id: 'ground-heal', power: 1, location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).to.equal(0); // All spells cost 0 at the moment.
+    expect(baseModel.karma.available).to.equal(0.2);
   });
 
   it('Can not earn more karma than cycle cap', async () => {
