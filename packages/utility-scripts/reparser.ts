@@ -172,7 +172,7 @@ function createPackLiteral(packInfo?: PackInfo) {
         ts.createPropertyAssignment(ts.createIdentifier('id'), ts.createStringLiteral(packInfo.id)),
         ts.createPropertyAssignment(ts.createIdentifier('level'), ts.createNumericLiteral(packInfo.level)),
       ])
-    : ts.createNull();
+    : ts.createIdentifier('undefined');
 }
 
 export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
