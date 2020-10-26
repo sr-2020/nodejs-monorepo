@@ -65,11 +65,11 @@ export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { s
 }
 
 export function increaseTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 24 * 60 });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: 8, durationMinutes: 12 * 60 });
 }
 
 export function reduceTheMentalProtectionAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: -8, durationMinutes: 24 * 60 });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, adjustMentalProtectionEvent, { amount: -8, durationMinutes: 6 * 60 });
 }
 
 export function iDontTrustAnybody(api: EventModelApi<Sr2020Character>, _data: FullActiveAbilityData) {
