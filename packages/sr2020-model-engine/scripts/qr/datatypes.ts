@@ -15,6 +15,7 @@ export interface LocusQrData {
 export interface MentalQrData {
   attackerId: string;
   attack: number;
+  textOnDefenceFailure: string;
 }
 
 // qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod'

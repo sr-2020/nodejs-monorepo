@@ -23,10 +23,23 @@ import {
   whoNeedsIt,
 } from './active_abilities';
 import {
+  billionerWalkAbility,
+  danilaINeedHelpAbility,
+  flyYouFoolAbility,
+  fullOblivionAbility,
   iDontTrustAnybody,
   increaseTheMentalProtectionAbility,
+  killHimAbility,
+  lieToMeAbility,
+  lukeIAmYourFatherAbility,
+  oblivionAbility,
+  paralysis1Ability,
+  paralysis2Ability,
+  paralysis3Ability,
+  reallyNeedItAbility,
   reduceTheMentalProtectionAbility,
-  useMentalAbility,
+  scornHimAbility,
+  tellMeTheTruthAbility,
   youDontTrustAnybody,
 } from './mental';
 import { autodocHeal, autodocRevive, capsuleReanimate, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
@@ -349,7 +362,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: oblivionAbility.name,
   },
   // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
   {
@@ -364,7 +377,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: fullOblivionAbility.name,
   },
   // Целевой персонаж не забывает события перед КС, срок действия - 6 часов. Для менталиста эта абилка  активная. У целевого персонажа в приложеньке где-то отображается, что он теперь не забывает события перед КС.
   {
@@ -394,7 +407,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: tellMeTheTruthAbility.name,
   },
   // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 15 минут должна воспроизводить этот признак, если врет.
   {
@@ -410,7 +423,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: lieToMeAbility.name,
   },
   // Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.
   {
@@ -426,7 +439,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: danilaINeedHelpAbility.name,
   },
   // Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.
   {
@@ -442,7 +455,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: lukeIAmYourFatherAbility.name,
   },
   // цели выдается текстовое сообщение с эффектом
   // (вы боитесь, убегаете, не можете.... )
@@ -461,7 +474,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: flyYouFoolAbility.name,
   },
   // Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит).
   //
@@ -477,7 +490,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: paralysis1Ability.name,
   },
   // Цель не может двигаться 10 минут.
   // У цели заблокирована активация всех активных абилок. Надпись: Не получается, вы парализованы.
@@ -493,7 +506,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: paralysis2Ability.name,
   },
   // Цель не может двигаться и говорить 10 минут.
   // У цели заблокирована активация всех активных абилок. Надпись: Не получается, вы парализованы.
@@ -509,7 +522,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: paralysis3Ability.name,
   },
   // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
   {
@@ -525,7 +538,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: scornHimAbility.name,
   },
   // Цель активно пытается убить персонажа, на которого указывает менталист.
   {
@@ -541,7 +554,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: killHimAbility.name,
   },
   // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает. Дает карму владельцу абилки.
   {
@@ -666,7 +679,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: reallyNeedItAbility.name,
   },
   // Убеждает жертву перевести со своего на счет менталиста 50%
   {
@@ -681,7 +694,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
-    eventType: useMentalAbility.name,
+    eventType: billionerWalkAbility.name,
   },
   // Добавляет +8 к ментальной защите целевого персонажа  на 12 часов
   {

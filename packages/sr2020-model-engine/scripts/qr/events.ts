@@ -80,12 +80,18 @@ export interface MentalAbilityData {
 }
 
 export function writeMentalAbility(api: EventModelApi<QrCode>, data: MentalAbilityData) {
+  const qrData: MentalQrData = {
+    attack: data.attack,
+    attackerId: data.attackerId,
+    textOnDefenceFailure: data.description,
+  };
+
   api.model.usesLeft = 1;
   api.model.type = 'ability';
   api.model.name = 'Способность ' + data.name;
   api.model.description = data.description;
   api.model.eventType = data.eventType;
-  api.model.data = data;
+  api.model.data = qrData;
   api.model.modifiers = [];
   api.model.timers = [];
 
@@ -97,7 +103,7 @@ export function clearMentalAbility(api: EventModelApi<QrCode>, data: {}) {
     usesLeft: 100,
     description: '',
     modelId: api.model.modelId,
-    data: { attack: 0, attackerId: '' },
+    data: { attack: 0, attackerId: '', textOnDefenceFailure: '' },
     modifiers: [],
     timers: [],
     name: '',

@@ -3,7 +3,7 @@ import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
 import { FullActiveAbilityData, FullTargetedAbilityData } from './active_abilities';
-import { addTemporaryModifier, modifierFromEffect } from './util';
+import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
 import { MentalQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
@@ -26,12 +26,83 @@ function mentalDefence(character: Sr2020Character) {
   return 3 + xByDy(character.charisma, 8) + character.mentalDefenceBonus;
 }
 
-export function useMentalAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+export function paralysis1Ability(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты не можешь двигаться 10 минут или пока тебе не нанесён физический урон (-1хит).');
+}
+
+export function paralysis2Ability(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты не можешь двигаться 10 минут. Не можешь пользоваться активными абилками.');
+}
+
+export function paralysis3Ability(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты не можешь двигаться и произносить звуки 10 минут. Не можешь пользоваться активными абилками.');
+}
+
+export function flyYouFoolAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(
+    api,
+    'Ты очень боишься и стараешься убежать как можно дальше от менталиста. Ты не можешь пользоваться своими способностями в течении 10 минут. Через 10 минут эффект проходит.',
+  );
+}
+
+export function scornHimAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(
+    api,
+    'Ты стараешься сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )',
+  );
+}
+
+export function killHimAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(
+    api,
+    'Ты активно стараешься убить персонажа, на которого указывает менталист. Выбираешь наиболее быстрый способ, не задумываясь о последствиях.  Если цель убита - эффект воздействия прекращается. Пока цель жива - ты стараешься её убить.',
+  );
+}
+
+export function billionerWalkAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты переводишь на счет менталиста половину денег со своего счета.');
+}
+
+export function danilaINeedHelpAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты оказываешь услугу, даже если это грозит тебе средними проблемами (потеря дохода за 1 экономический цикл).');
+}
+
+export function reallyNeedItAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(
+    api,
+    'Ты даришь менталисту 1 игровой предмет по выбору менталиста.  Предмет должен быть отчуждаем (например, нельзя попросить подарить установленный имплант)',
+  );
+}
+
+export function lukeIAmYourFatherAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты выполняешь любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.');
+}
+
+export function tellMeTheTruthAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты честно отвечаешь на 3 вопроса.');
+}
+
+export function lieToMeAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Тебе говорят маркер. Если в течение следующих 15 минут ты лжешь - ты выполняешь этот маркер.');
+}
+
+export function oblivionAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(
+    api,
+    'Ты забыл события последней сцены. Это работает только если тебе не был нанесён урон в течение сцены (снят хотя бы 1 хит). Если тебе был нанесён урон, ты говоришь об этом менталисту',
+  );
+}
+
+export function fullOblivionAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
+  useMentalAbility(api, 'Ты забываешь события последней сцены, даже если тебе был нанесён физический урон.');
+}
+
+function useMentalAbility(api: EventModelApi<Sr2020Character>, description: string) {
   const code: MentalAbilityData = {
     attack: mentalAttack(api.workModel),
     attackerId: api.model.modelId,
-    name: data.humanReadableName,
-    description: data.description,
+    name: 'Способность менталиста',
+    description,
     eventType: scannedMentalAbility.name,
   };
   api.sendOutboundEvent(QrCode, api.model.mentalQrId.toString(), writeMentalAbility, code);
@@ -48,7 +119,7 @@ export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: 
     api.sendNotification('Головная боль', 'У вас болит голова, но, наверное, это скоро пройдет.');
   } else {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: true });
-    api.sendNotification('Провал!', 'Ментальная атака подействовала, выполняйте написанное.');
+    sendNotificationAndHistoryRecord(api, 'Ментальное воздействие', data.textOnDefenceFailure);
   }
 }
 

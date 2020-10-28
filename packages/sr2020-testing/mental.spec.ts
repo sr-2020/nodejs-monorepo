@@ -24,8 +24,8 @@ describe('Mentalistic events', function () {
     expect(fixture.getCharacterNotifications(1)).to.deepEqual([{ title: 'Успех!', body: 'Ваша способность подействовала.' }]);
     expect(fixture.getCharacterNotifications(2)).to.deepEqual([
       {
-        title: 'Провал!',
-        body: 'Ментальная атака подействовала, выполняйте написанное.',
+        title: 'Ментальное воздействие',
+        body: 'Ты выполняешь любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.',
       },
     ]);
   });
