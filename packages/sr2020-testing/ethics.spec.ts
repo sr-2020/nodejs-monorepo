@@ -261,7 +261,7 @@ describe('Ethic events', function () {
     await fixture.saveQrCode({ modelId: '5' }); // Charge
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'locus-charge' } }, 5);
 
-    await fixture.useAbility({ id: 'dm-inc-counter', locusId: '3', qrCode: '5' });
+    await fixture.useAbility({ id: 'dm-inc-counter', locusId: '3', qrCodeId: '5' });
 
     const locus = await fixture.getQrCode(3);
     expect(locus.baseModel.type).equal('locus');

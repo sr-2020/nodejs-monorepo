@@ -287,7 +287,7 @@ export function discourseGroupRemove(api: EventModelApi<Sr2020Character>, data: 
 
 export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   getLocus(api, data);
-  const charge = api.aquired(QrCode, data.qrCode!);
+  const charge = api.aquired(QrCode, data.qrCodeId!);
   if (!(charge && charge.type == 'locus_charge')) {
     throw new UserVisibleError('Отсканированный предмет не является валидным зарядом локуса');
   }
@@ -296,7 +296,7 @@ export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: Ac
     throw new UserVisibleError('Нет зарядов');
   }
 
-  api.sendOutboundEvent(QrCode, data.qrCode!, consume, {});
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, {});
   api.sendOutboundEvent(QrCode, data.locusId!, unconsume, {});
 }
 

@@ -139,8 +139,8 @@ export function cloudMemoryEnable(api: EventModelApi<Sr2020Character>, data: {})
 // Гешефтмахерские способности
 
 function getMerchandiseData(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData): MerchandiseQrData {
-  if (!data.qrCode) throw new UserVisibleError('Нет данных о QR-коде');
-  const item = api.aquired(QrCode, data.qrCode);
+  if (!data.qrCodeId) throw new UserVisibleError('Нет данных о QR-коде');
+  const item = api.aquired(QrCode, data.qrCodeId);
   return typedQrData<MerchandiseQrData>(item);
 }
 

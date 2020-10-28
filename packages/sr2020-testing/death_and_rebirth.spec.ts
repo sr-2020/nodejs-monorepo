@@ -98,7 +98,7 @@ describe('Death & Rebirth', function () {
     );
 
     // Reanimate!
-    await fixture.useAbility({ id: 'reanimate', droneId: '3', qrCode: '4', targetCharacterId: '2' }, '1');
+    await fixture.useAbility({ id: 'reanimate', droneId: '3', qrCodeId: '4', targetCharacterId: '2' }, '1');
 
     {
       // Check patient state

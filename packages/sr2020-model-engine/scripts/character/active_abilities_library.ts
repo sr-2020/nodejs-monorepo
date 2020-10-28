@@ -47,6 +47,7 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
+
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -122,7 +123,7 @@ const kMerchandiseQrTypes: QrType[] = [
 const kMerchandiseTargeted: TargetSignature = {
   name: 'Товар',
   allowedTypes: kMerchandiseQrTypes,
-  field: 'qrCode',
+  field: 'qrCodeId',
 };
 const kBodyStorageTarget: TargetSignature = {
   name: 'Телохранилище',
@@ -604,7 +605,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       {
         name: 'Заряд',
         allowedTypes: ['locus_charge'],
-        field: 'qrCode',
+        field: 'qrCodeId',
       },
     ],
     cooldownMinutes: 0,
@@ -1349,7 +1350,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       {
         name: 'ИИ',
         allowedTypes: ['ai_symbol'],
-        field: 'qrCode',
+        field: 'qrCodeId',
       },
       {
         name: 'Пациент',

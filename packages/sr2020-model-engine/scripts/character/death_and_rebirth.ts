@@ -166,7 +166,7 @@ export function capsuleReanimate(api: EventModelApi<Sr2020Character>, data: Acti
     throw new UserVisibleError('Отсканированный QR не является капсулой');
   }
 
-  const ai = api.aquired(QrCode, data.qrCode!);
+  const ai = api.aquired(QrCode, data.qrCodeId!);
   if (!(ai?.type == 'ai_symbol')) {
     throw new UserVisibleError('Отсканированный QR не является ИИ');
   }
