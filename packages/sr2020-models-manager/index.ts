@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 import { getDbConnectionOptions } from './utils/connection';
 
+console.log('Starting sr2020-models-manager');
+
 export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
 
