@@ -16,6 +16,7 @@ export interface MentalQrData {
   attackerId: string;
   attack: number;
   textOnDefenceFailure: string;
+  disablesAbilities: boolean;
 }
 
 // qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod'

@@ -30,6 +30,20 @@ describe('Mentalistic events', function () {
     ]);
   });
 
+  it('Use mental ability - attacker success - disables active abilities', async () => {
+    await fixture.saveCharacter({ modelId: '1', charisma: 3, mentalAttackBonus: 100 });
+    await fixture.addCharacterFeature('fly-you-fool', 1);
+
+    await fixture.saveCharacter({ modelId: '2', charisma: 0 });
+    await fixture.addCharacterFeature('kokkoro-backup', 2);
+
+    const attacker = (await fixture.useAbility({ id: 'fly-you-fool' }, 1)).workModel;
+    await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: attacker.mentalQrId.toString() } }, 2);
+
+    const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'kokkoro-backup' } }, '2');
+    expect(message).to.containEql('Сейчас вы не можете пользоваться активными способностями!');
+  });
+
   it('Use mental ability - attacker fail', async () => {
     await fixture.saveCharacter({ modelId: '1', charisma: 3 });
     await fixture.saveCharacter({ modelId: '2', charisma: 0, mentalDefenceBonus: 100 });

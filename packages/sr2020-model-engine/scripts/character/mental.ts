@@ -2,7 +2,7 @@ import { AddedActiveAbility, Sr2020Character } from '@sr2020/sr2020-common/model
 import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
-import { FullActiveAbilityData, FullTargetedAbilityData } from './active_abilities';
+import { FullActiveAbilityData, FullTargetedAbilityData, kActiveAbilitiesDisabledTimer } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
@@ -42,6 +42,7 @@ export function flyYouFoolAbility(api: EventModelApi<Sr2020Character>, data: Add
   useMentalAbility(
     api,
     'Ты очень боишься и стараешься убежать как можно дальше от менталиста. Ты не можешь пользоваться своими способностями в течении 10 минут. Через 10 минут эффект проходит.',
+    true,
   );
 }
 
@@ -97,13 +98,14 @@ export function fullOblivionAbility(api: EventModelApi<Sr2020Character>, data: A
   useMentalAbility(api, 'Ты забываешь события последней сцены, даже если тебе был нанесён физический урон.');
 }
 
-function useMentalAbility(api: EventModelApi<Sr2020Character>, description: string) {
+function useMentalAbility(api: EventModelApi<Sr2020Character>, description: string, disablesAbilities: boolean = false) {
   const code: MentalAbilityData = {
     attack: mentalAttack(api.workModel),
     attackerId: api.model.modelId,
     name: 'Способность менталиста',
     description,
     eventType: scannedMentalAbility.name,
+    disablesAbilities,
   };
   api.sendOutboundEvent(QrCode, api.model.mentalQrId.toString(), writeMentalAbility, code);
 }
@@ -120,6 +122,9 @@ export function scannedMentalAbility(api: EventModelApi<Sr2020Character>, data: 
   } else {
     api.sendOutboundEvent(Sr2020Character, data.attackerId, yourAbilityResult, { success: true });
     sendNotificationAndHistoryRecord(api, 'Ментальное воздействие', data.textOnDefenceFailure);
+    if (data.disablesAbilities) {
+      api.setTimer(kActiveAbilitiesDisabledTimer, 'Снова можно пользоваться активными способностями', duration(10, 'minutes'), '_', {});
+    }
   }
 }
 

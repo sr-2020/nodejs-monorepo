@@ -11,6 +11,7 @@ import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-mod
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
+export const kActiveAbilitiesDisabledTimer = 'no-active-abilities-timer';
 
 export type ActiveAbilityData = Partial<Targetable> &
   LocationMixin & {
@@ -34,6 +35,10 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   if (ability.cooldownUntil > api.model.timestamp) {
     throw new UserVisibleError('Способность еще на кулдауне!');
+  }
+
+  if (api.getTimer(kActiveAbilitiesDisabledTimer)) {
+    throw new UserVisibleError('Сейчас вы не можете пользоваться активными способностями!');
   }
 
   if (data.id != 'ghoul-feast' && data.id != 'vampire-feast') {
