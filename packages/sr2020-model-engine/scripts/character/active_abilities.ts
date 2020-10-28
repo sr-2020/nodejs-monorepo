@@ -68,7 +68,39 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 
-  api.sendPubSubNotification('ability_used', { ...data, characterId: api.model.modelId, name: ability.humanReadableName });
+  api.sendPubSubNotification('ability_used', {
+    ...data,
+    ...injectedTargetsData(api, data),
+    characterId: api.model.modelId,
+    name: ability.humanReadableName,
+  });
+}
+
+function removeInternalFields(entity: Sr2020Character | QrCode) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { timestamp, modifiers, timers, ...rest } = entity;
+  return rest;
+}
+
+function getQrTarget(api: EventModelApi<Sr2020Character>, id: string | undefined) {
+  if (!id) return undefined;
+  return removeInternalFields(api.aquired(QrCode, id));
+}
+
+function getCharacterTarget(api: EventModelApi<Sr2020Character>, id: string | undefined) {
+  if (!id) return undefined;
+  return removeInternalFields(api.aquired(Sr2020Character, id));
+}
+
+function injectedTargetsData(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  return {
+    targetCharacter: getCharacterTarget(api, data.targetCharacterId),
+    qrCode: getQrTarget(api, data.qrCodeId),
+    pill: getQrTarget(api, data.pillId),
+    locus: getQrTarget(api, data.locusId),
+    drone: getQrTarget(api, data.droneId),
+    bodyStorage: getQrTarget(api, data.bodyStorageId),
+  };
 }
 
 export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
