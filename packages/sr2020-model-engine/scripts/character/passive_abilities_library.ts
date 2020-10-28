@@ -484,7 +484,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // возможность пользоваться модами 1 уровня
   {
     id: 'deck-mods-1',
     humanReadableName: 'уровень 1',
@@ -494,7 +493,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // возможность пользоваться модами 2 уровня
   {
     id: 'deck-mods-2',
     humanReadableName: 'уровень 2',
@@ -504,7 +502,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // возможность пользоваться модами 3 уровня
   {
     id: 'deck-mods-3',
     humanReadableName: 'уровень 3',
@@ -514,7 +511,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // возможность пользоваться модами 4 уровня
   {
     id: 'deck-mods-4',
     humanReadableName: 'уровень 4',
@@ -528,10 +524,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'link-lock',
     humanReadableName: 'linklock',
-    description: 'linklock <target>',
+    description: 'новая команда linklock [target]\nхакер, захваченный в линклок не может перемещаться некоторое время',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: ['arch-hackerman-decker'],
+    prerequisites: ['fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: [],
   },
@@ -539,7 +535,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'auto-link-lock',
     humanReadableName: 'autolinklock',
-    description: 'autolock <target>',
+    description:
+      'новая команда: autolock [target]\nона автоматически попытается захватить в линклок цель (то есть без ручного ввода команды)',
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['link-lock'],
@@ -554,6 +551,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-geo', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из геоноды.
@@ -564,6 +562,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['geo-pro-1'],
+    pack: { id: 'arch-hack-decker-geo', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из геоноды.
@@ -574,6 +573,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['geo-pro-2'],
+    pack: { id: 'arch-hack-decker-geo', level: 3 },
     modifier: [],
   },
   // позволяет читать данные из экономноды
@@ -584,6 +584,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-econ', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из экономноды.
@@ -594,6 +595,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['economics-pro-1'],
+    pack: { id: 'arch-hack-decker-econ', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из экономноды.
@@ -604,6 +606,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['economics-pro-2'],
+    pack: { id: 'arch-hack-decker-econ', level: 3 },
     modifier: [],
   },
   {
@@ -623,6 +626,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-med', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из биомонитора и rcc.
@@ -633,6 +637,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['meds-and-chrome-1'],
+    pack: { id: 'arch-hack-decker-med', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из биомонитора и rcc.
@@ -643,16 +648,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['meds-and-chrome-2'],
+    pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
   },
   // Позволяет реактивировать вырубленный IC
   {
     id: 'reactivate',
     humanReadableName: 'reactivate',
-    description: 'reactivate <target>',
+    description: 'новая команда: reactivate <target>\nвключает назад вырубленный Лед',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['breacher-2'],
+    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
   // Позволяет пережить одну атаку черного льда
@@ -669,20 +676,22 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'admin',
     humanReadableName: 'Админ',
-    description: '',
+    description: 'Еще 3 хоста, на защиту которых ты можешь подписаться',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['stubbornness-1'],
+    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
   // Разобрался со всеми примудростями квантовой компрессии. Позволяет экономить 10% памяти кибердеки при записи софта в деку
   {
     id: 'compressor',
     humanReadableName: 'Компрессор',
-    description: '',
+    description: 'Значительно экономит память деки, позволяя размесить в ней больше софта',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['stubbornness-1'],
+    pack: { id: 'hack-deck-guru', level: 1 },
     modifier: [],
   },
   // Позволяет реактивировать вырубленый IC
@@ -889,7 +898,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
   {
     id: 'gunslinger',
     humanReadableName: 'Самый быстрый пистолет на Западе',
@@ -899,7 +907,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Позволяет игнорировать атаку активного агента хоста. (PvE игротеха)
   {
     id: 'not-the-droids',
     humanReadableName: 'Мы не те дроиды которых вы ищете',
@@ -915,10 +922,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'scan',
     humanReadableName: 'scan',
-    description: 'Сканирует ноду и выводит список обнаруженных в ней агентов\n\nУспешность определяется по Sleaze',
+    description: 'новая команда: scan\nСканирует ноду и выводит список обнаруженных в ней агентов\n\nУспешность определяется по Sleaze',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['sly-1'],
     pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
@@ -931,10 +938,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'deploy',
     humanReadableName: 'deploy',
-    description: 'Устанавливает агента (софт) в Ноду Хоста\n--name:<имя>\n\n\nУспешность определяется по Sleaze',
+    description: 'новая команда: deploy\nУстанавливает агента (софт) в Ноду Хоста\n--name:<имя>\n\n\nУспешность определяется по Sleaze',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['sly-1'],
     pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
@@ -944,10 +951,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'uninstall',
     humanReadableName: 'uninstall',
-    description: 'Удаляет агента с Ноды\n\nУспешность определяется по Sleaze',
+    description: 'новая команда: uninstall\nУдаляет агента с Ноды\n\nУспешность определяется по Sleaze',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
@@ -958,10 +965,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'feelmatrix',
     humanReadableName: 'feelmatrix',
     description:
-      'Ты теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\n\nАктивируется перед входом в на Хост\nВыдает список хостов, на которых есть другие декеры и примерный уровень группы. Чем сильнее твой Sleaze, тем больше таких хостов ты найдешь',
+      'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\n\nАктивируется перед входом в на Хост\nВыдает список хостов, на которых есть другие декеры и примерный уровень группы. Чем сильнее твой Sleaze, тем больше таких хостов ты найдешь',
     availability: 'closed',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
   // ЭТИКА
@@ -971,10 +978,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'bypass',
     humanReadableName: 'bypass',
-    description: 'Гениально! Этот IC просто не заметил тебя!\n\nПозволяет проходить мимо IC.\n\nУспешность определяется по Sleaze',
-    availability: 'master',
+    description:
+      'новая команда: unistall\nГениально! Этот IC просто не заметил тебя!\nПозволяет проходить мимо IC.\n\nУспешность определяется по Sleaze',
+    availability: 'closed',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['sly-2'],
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -982,10 +990,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'hop',
     humanReadableName: 'hop',
     description:
-      'Мгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
+      'новая команда: hop\nМгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
@@ -993,10 +1001,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'quell',
     humanReadableName: 'quell',
-    description: 'команда применяется в бою с IC. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
+    description:
+      'новая команда: quell <target>\nкоманда применяется в бою с льдом. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['breacher-2'],
     pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
@@ -1004,10 +1013,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'getdump',
     humanReadableName: 'getdump',
-    description: 'команда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
+    description: 'новая команда: getdump\nкоманда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['breacher-1'],
     pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: [],
   },
@@ -1018,7 +1027,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['breacher-2'],
     pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: [],
   },
@@ -1030,7 +1039,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на 5 минут',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-guru', level: 1 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
@@ -1062,10 +1071,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'persistent-deploy',
     humanReadableName: 'Persistent deploy',
-    description: 'Позволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
+    description:
+      'новый ключ:install --persistent\nПозволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['sly-1'],
     pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
@@ -1074,10 +1084,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'shadow-deploy',
     humanReadableName: 'Shadow deploy',
     description:
-      'Позволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
+      'новый ключ:install --shadow\nПозволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: [],
+    prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
@@ -1089,7 +1099,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает время входа на хост на 2 минуты',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
   },
@@ -1098,10 +1108,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'quick-to-enter-2',
     humanReadableName: 'Очень шустрый',
-    description: 'Продлевает максимальное время нахождения на хосте на еще на 3 минут',
+    description: 'Снижает время входа на хост на еще на 2 минуты',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['quick-to-enter-1', 'fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
@@ -1110,10 +1120,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'quick-to-enter-3',
     humanReadableName: 'Супер шустрый',
-    description: 'Продлевает максимальное время нахождения на хосте на еще на 5 минут',
+    description: '.. и еще снижает время входа на хост на 1 минуту',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['quick-to-enter-2', 'fencer-3'],
     pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
   },
@@ -1121,10 +1131,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'flee',
     humanReadableName: 'flee',
-    description: 'Позволяет попытаться сбежать из линклока. \n\nЗависит от соотношения значений  вашего Sleaze и Attack цели',
+    description:
+      'новая команда:flee\nПозволяет попытаться сбежать из линклока. \n\nЗависит от соотношения значений  вашего Sleaze и Attack цели',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
@@ -1136,8 +1147,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Хороший Бричер',
     description: 'Улучшает конверсию Intellect в Firewall',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 4,
+    prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
@@ -1149,7 +1160,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Firewall',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['breacher-1'],
     pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
@@ -1160,8 +1171,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Легендарный Бричер',
     description: 'Улучшает конверсию Intellect в Firewall',
     availability: 'open',
-    karmaCost: 4,
-    prerequisites: [],
+    karmaCost: 8,
+    prerequisites: ['breacher-2'],
     pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
   },
@@ -1173,8 +1184,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Хороший Фенсер',
     description: 'Улучшает конверсию Intellect в Attack',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
@@ -1186,7 +1197,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Attack',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
@@ -1198,7 +1209,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Attack',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
   },
@@ -1211,7 +1222,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Sleaze',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-sly', level: 1 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
@@ -1223,7 +1234,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Sleaze',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['sly-1'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
@@ -1234,8 +1245,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Легендарный Слай',
     description: 'Улучшает конверсию Intellect в Sleaze',
     availability: 'open',
-    karmaCost: 4,
-    prerequisites: [],
+    karmaCost: 8,
+    prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 3 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
   },
@@ -1248,7 +1259,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-miner', level: 1 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
   },
@@ -1260,7 +1271,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['miner-1'],
     pack: { id: 'hack-deck-miner', level: 2 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, {
       amount: 2,
@@ -1273,8 +1284,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Легендарный Майнер',
     description: 'Улучшает конверсию Intellect в Dataprocessing',
     availability: 'open',
-    karmaCost: 4,
-    prerequisites: [],
+    karmaCost: 8,
+    prerequisites: ['miner-2'],
     pack: { id: 'hack-deck-miner', level: 3 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, {
       amount: 2,
@@ -1285,10 +1296,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'burn',
     humanReadableName: 'burn',
     description:
-      'Позволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
+      'новая команда: burn\nПозволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
@@ -1297,14 +1308,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arpscan',
     humanReadableName: 'arpscan',
     description:
-      'Выводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
+      'новая команда:feelmatrix\nВыводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['stubbornness-2'],
     pack: { id: 'hack-deck-guru', level: 2 },
     modifier: [],
   },
-  // IT: команда в кривда-матрице
   {
     id: 'trace',
     humanReadableName: 'trace',
@@ -1312,7 +1322,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: [],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -1320,11 +1329,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'steal',
     humanReadableName: 'steal',
     description:
-      'Находясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
+      'новая команда: steal\n\nНаходясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
-    pack: { id: 'hack-deck-sly', level: 1 },
+    prerequisites: ['miner-1'],
+    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
@@ -1332,22 +1341,22 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'steal-pro',
     humanReadableName: 'Фрод профи',
     description:
-      'Разблокирует ключи команды steal\n\n--enterprize: работа с кошельками юр лиц\n--comment: позволяет ввести текст "основания перевода", вместо билиберды по умолчанию',
+      'Новый ключ: steal --enterprize:\nработа с кошельками юр лиц\nНовый ключ: steal --comment\nпозволяет ввести текст "основания перевода", вместо билиберды по умолчанию\n\nувеличивает сумму кражи',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
-    pack: { id: 'hack-deck-sly', level: 2 },
+    prerequisites: ['steal'],
+    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
   {
     id: 'steal-expert',
     humanReadableName: 'Фрод эксперт',
-    description: 'Разблокирует ключи команды steal\n\n--SIN: переводит сумму на другой SIN',
+    description: 'Новый ключ: steal --SIN:\n\n--SIN: переводит сумму на другой SIN\n\nдополнительно увеличивает сумму кражи',
     availability: 'open',
-    karmaCost: 4,
-    prerequisites: [],
-    pack: { id: 'hack-deck-sly', level: 2 },
+    karmaCost: 8,
+    prerequisites: ['steal-pro'],
+    pack: { id: 'hack-deck-miner', level: 3 },
     modifier: [],
   },
   // IT:
@@ -1356,17 +1365,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'quarter-god',
     humanReadableName: 'Четвертак',
     description:
-      'Русское название для слэнга "qouterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\n\nКоличество защищаемых хостов +5',
+      'Русское название для слэнга "qouterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\n\nЕще 5 хостов, на защиту которых ты можешь подписаться',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: { id: 'hack-deck-guru', level: 2 },
+    karmaCost: 8,
+    prerequisites: ['stubbornness-2'],
+    pack: { id: 'hack-deck-guru', level: 3 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
-  // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
-  //
-  // IT:
-  // [+20] Техномант_Устойчивость_Фейдингу_Компиляция
   {
     id: 'deep-compile',
     humanReadableName: 'Глубокая компиляция',
@@ -1374,15 +1379,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
-    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 20,
     }),
   },
-  // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
-  //
-  // IT:
-  // [+30] Техномант_Устойчивость_Фейдингу_Компиляция
   {
     id: 'native-compile',
     humanReadableName: 'Нативная компиляция',
@@ -1390,14 +1390,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
-    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 30,
     }),
   },
-  //
-  // IT:
-  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-1',
     humanReadableName: 'Спрайты-1',
@@ -1405,12 +1401,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
-    pack: { id: 'hack-shaman-breacher', level: 1 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
-  //
-  // IT:
-  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-2',
     humanReadableName: 'Спрайты-2',
@@ -1418,12 +1410,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sprites-1'],
-    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
-  //
-  // IT:
-  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-3',
     humanReadableName: 'Спрайты-3',
@@ -1431,7 +1419,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sprites-2'],
-    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -3705,10 +3692,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'hophop',
     humanReadableName: 'hophop',
     description:
-      'Мгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)\n\nвместе с партией!',
+      'новая команда: hop\nМгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)\n\nвместе с партией!',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['sly-3'],
     pack: { id: 'hack-deck-sly', level: 3 },
     modifier: [],
   },
@@ -3761,6 +3748,73 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  //
+  {
+    id: 'hack-deck-commander',
+    humanReadableName: 'Командир',
+    description:
+      'Ты можешь создавать объединять декеров в команду.\nДекеры, входящие в команду перемещаются за лидером и не атакуют друг-друга френдли файером',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['fencer-2'],
+    pack: { id: 'hack-deck-fencer', level: 2 },
+    modifier: [],
+  },
+  //
+  {
+    id: 'hack-deck-general',
+    humanReadableName: 'Комбат',
+    description: 'Твоя команда стала лучше. например, теперь вход на хост происходит по лучшему времени в группе.',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['hack-deck-commander', 'fencer-3'],
+    pack: { id: 'hack-deck-fencer', level: 3 },
+    modifier: [],
+  },
+  // IT: команда в кривда-матрице
+  {
+    id: 'hack-deck-deanon',
+    humanReadableName: 'deanon',
+    description: 'новая команда: deanon\nОтображает якорь PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['fencer-2'],
+    pack: { id: 'hack-deck-fencer', level: 2 },
+    modifier: [],
+  },
+  // поражает противника по живым хитам, а не по матричным
+  {
+    id: 'hack-deck-harm',
+    humanReadableName: 'harm',
+    description: 'новая команда: harm\nПоражает хакера биофидбеком. грязная штука.',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['fencer-2'],
+    pack: { id: 'hack-deck-fencer', level: 2 },
+    modifier: [],
+  },
+  // убивает пораженного чамера. Абсолютная смерть
+  {
+    id: 'hack-deck-kill',
+    humanReadableName: 'kill',
+    description: 'новая команда: kill\nУбивает поражаенного хакера. Да, наглухо',
+    availability: 'closed',
+    karmaCost: 12,
+    prerequisites: ['fencer-3', 'hack-deck-harm'],
+    pack: undefined,
+    modifier: [],
+  },
+  //
+  {
+    id: 'useapi',
+    humanReadableName: '',
+    description: 'новая команда: useapi\n\nБазовая команда для работы со специальным нодам',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['miner-1'],
+    pack: { id: 'hack-deck-miner', level: 1 },
     modifier: [],
   },
 ];

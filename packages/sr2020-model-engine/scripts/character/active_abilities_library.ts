@@ -47,7 +47,6 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
-
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -247,10 +246,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  // Устанавливает спрайт в ноду.
-  // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
-  //
-  // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
   {
     id: 'merge-shaman',
     humanReadableName: 'Merge (техношаман)',
@@ -265,10 +260,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  // Устанавливает спрайт в ноду.
-  // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
-  //
-  // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
   {
     id: 'merge-cyberadept',
     humanReadableName: 'Merge (техношаман)',
@@ -283,9 +274,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  // Способ поиска чужих спрайтов (например - бэкдоров) в этой ноде хоста Основания.
-  //
-  // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
   {
     id: 'awareness',
     humanReadableName: 'Насторожиться',
@@ -301,9 +289,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  // Способ уничтожения чужих спрайтов. У нас нет таргетинга, поэтому удаляем рандомых спрайтов, число которых зависит от Резонанса
-  //
-  // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
   {
     id: 'exterminatus',
     humanReadableName: 'Экстерминатус',
@@ -319,9 +304,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
-  //
-  // IT: вызов Кривдиного REST, отобразить текст
   {
     id: 'looking-for-trouble',
     humanReadableName: 'ГдеСрач?!',
@@ -337,9 +319,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/EFwxEY3c/324-реализовать-абилку-вождь): Add proper implementation
-  // Ритуал инициации техноманта.
-  //
-  // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
   {
     id: 'chieftain',
     humanReadableName: 'Вождь',
@@ -2257,7 +2236,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Сама абилка ничего не делает, но посылает PubSub ability_used
   {
     id: 'jack-in',
-    humanReadableName: 'встегнуться',
+    humanReadableName: 'Jack-in',
     description: 'Джекнуться (jack-out) в кибердеку. \nОтсканируй QR код своей деки',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2273,8 +2252,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Сама абилка ничего не делает, но посылает PubSub ability_used. ничего страшного если ее будут жамкать пока не заджеканы. если есть какой-то простой способ дизейблить- я его не знаю
   {
     id: 'jack-out',
-    humanReadableName: 'выстегнуться',
-    description: 'Отсоединиться от деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если еще соединен с терминалом',
+    humanReadableName: 'Jack-out',
+    description: 'Выстегруться из деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если еще соединен с терминалом',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
@@ -2310,6 +2289,22 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 1,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Сама абилка ничего не делает, но посылает PubSub ability_used
+  {
+    id: 'activate-soft',
+    humanReadableName: 'Активация софта',
+    description: 'Отсоединиться от деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если еще соединен с терминалом',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 0,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
+    availability: 'master',
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
