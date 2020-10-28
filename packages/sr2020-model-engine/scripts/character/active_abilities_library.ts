@@ -2298,21 +2298,26 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Сама абилка ничего не делает, но посылает PubSub ability_used
   {
     id: 'activate-soft',
     humanReadableName: 'Активация софта',
     description: 'Отсоединиться от деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если еще соединен с терминалом',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Софт',
+        field: 'qrCodeId',
+        allowedTypes: ['software'],
+      },
+    ],
     cooldownMinutes: 0,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
 ];
 setAllActiveAbilities(

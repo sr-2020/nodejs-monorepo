@@ -30,6 +30,7 @@ export type QrType =
   | 'sprite'
   | 'cyberdeck'
   | 'cyberdeck_mod'
+  | 'software'
   | 'foundation_node'
   | 'reanimate_capsule'
   | 'ai_symbol'
