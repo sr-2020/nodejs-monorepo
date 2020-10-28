@@ -482,6 +482,10 @@ export class Hacking {
   @rproperty()
   @Column({ default: 0 })
   backdoorTtl: number;
+
+  @rproperty()
+  @Column({ default: false })
+  jackedIn: boolean;
 }
 
 @model()

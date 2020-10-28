@@ -1,4 +1,4 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import {
   increaseBody,
@@ -11,6 +11,7 @@ import { duration } from 'moment';
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
+import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -79,4 +80,25 @@ export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: Dumpsho
     name: 'Пережитый дамп-шок',
     description: `Ты пережил дамп-шок. Тебя преследует постоянная головная боль. Эффект x ${m.amount}`,
   });
+}
+
+export function createJackedInEffect(): Effect {
+  return {
+    enabled: true,
+    type: 'normal',
+    handler: jackedInEffect.name,
+  };
+}
+
+export function jackedInEffect(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  const abilityToRemove = api.model.hacking.jackedIn ? 'jack-in' : 'jack-out';
+  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => ability.id != abilityToRemove);
+}
+
+export function jackInAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.model.hacking.jackedIn = true;
+}
+
+export function jackOutAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.model.hacking.jackedIn = false;
 }

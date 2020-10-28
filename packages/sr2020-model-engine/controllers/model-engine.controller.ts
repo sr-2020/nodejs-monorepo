@@ -20,6 +20,7 @@ import { AURA_LENGTH } from '../scripts/character/consts';
 import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
 import { addFeatureToModel, getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { addKarmaGivingTimer, kMaxKarmaOnCreation, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { createJackedInEffect } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
 import Chance = require('chance');
 
 const chance = new Chance();
@@ -122,6 +123,7 @@ export class ModelEngineController implements ModelEngineService {
         compilationFadingResistance: 0,
         resonanceForControlBonus: 0,
         varianceResistance: 0,
+        jackedIn: false,
       },
       matrixHp: 1,
       maxTimeInVr: 60,
@@ -227,7 +229,7 @@ export class ModelEngineController implements ModelEngineService {
         {
           mID: '_system',
           enabled: true,
-          effects: [createEssenceSystemEffect()],
+          effects: [createEssenceSystemEffect(), createJackedInEffect()],
         },
       ],
       timers: [],

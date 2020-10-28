@@ -47,6 +47,8 @@ import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/characte
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
+import { jackInAbility, jackOutAbility } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
+
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -2232,23 +2234,27 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Сама абилка ничего не делает, но посылает PubSub ability_used
   {
     id: 'jack-in',
     humanReadableName: 'Jack-in',
     description: 'Джекнуться (jack-out) в кибердеку. \nОтсканируй QR код своей деки',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Кибердека',
+        field: 'qrCodeId',
+        allowedTypes: ['cyberdeck'],
+      },
+    ],
     cooldownMinutes: 30,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: jackInAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Сама абилка ничего не делает, но посылает PubSub ability_used. ничего страшного если ее будут жамкать пока не заджеканы. если есть какой-то простой способ дизейблить- я его не знаю
   {
     id: 'jack-out',
@@ -2262,7 +2268,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: jackOutAbility.name,
   },
   // Время действия 15 минут, кулдаун 45 минут После активации маг переключается в астральное тело. У него 2 хита и абилка "Астробой"
   {
