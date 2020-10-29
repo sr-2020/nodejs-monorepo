@@ -61,7 +61,6 @@ import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nano
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
-
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {

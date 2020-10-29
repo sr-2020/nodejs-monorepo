@@ -67,7 +67,6 @@ import {
   setTransactionAnonymous,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
-
 export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];
 }
@@ -3803,7 +3802,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 12,
     prerequisites: ['fencer-3', 'hack-deck-harm'],
-    pack: undefined,
     modifier: [],
   },
   //
