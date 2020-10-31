@@ -571,19 +571,19 @@ export class EssenceDetails {
 @model()
 export class Karma {
   @rproperty()
-  @Column({ default: 0, type: 'decimal' })
+  @Column({ default: 0, type: 'real' })
   available: number;
 
   @rproperty()
-  @Column({ default: 0, type: 'decimal' })
+  @Column({ default: 0, type: 'real' })
   spent: number;
 
   @rproperty()
-  @Column({ default: 0, type: 'decimal' })
+  @Column({ default: 0, type: 'real' })
   spentOnPassives: number;
 
   @rproperty()
-  @Column({ default: 0, type: 'decimal' })
+  @Column({ default: 0, type: 'real' })
   cycleLimit: number;
 }
 
