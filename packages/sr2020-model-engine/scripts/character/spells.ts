@@ -131,7 +131,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
       ritualStats.notes,
   );
 
-  earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost });
+  earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost, notify: false });
 
   api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
 }

@@ -220,7 +220,7 @@ export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: num
     usesLeft: 999999,
     modifiers: [],
     timers: [],
-    data,
+    data: { ...data, notify: true },
   };
 }
 

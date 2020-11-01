@@ -20,9 +20,18 @@ export const kPassiveAbilityCoefficient = 0.01;
 const kKarmaForPassivesTimerName = 'give-karma-for-passives';
 const kKarmaForPassivesTimerPeriod = duration(1, 'hour');
 
-export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
+export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: number; notify: boolean }) {
   const amountEarned = Math.min(data.amount, api.workModel.karma.cycleLimit);
-  if (amountEarned <= 0) return;
+  if (amountEarned <= 0) {
+    if (data.notify) {
+      sendNotificationAndHistoryRecord(api, 'Карма не начислена', 'Достигнут лимит кармы в цикл/на игру, поэтому карма не была начислена.');
+    }
+    return;
+  }
+
+  if (data.notify) {
+    sendNotificationAndHistoryRecord(api, `Начисление кармы: ${amountEarned}`, '');
+  }
 
   api.model.karma.available += amountEarned;
   api.model.karma.cycleLimit -= amountEarned;
@@ -45,7 +54,7 @@ export function addKarmaGivingTimer(model: Sr2020Character) {
 }
 
 export function giveKarmaForPassiveAbilities(api: EventModelApi<Sr2020Character>, data: {}) {
-  earnKarma(api, { amount: kPassiveAbilityCoefficient * api.model.karma.spentOnPassives });
+  earnKarma(api, { amount: kPassiveAbilityCoefficient * api.model.karma.spentOnPassives, notify: true });
   addKarmaGivingTimer(api.model);
 }
 

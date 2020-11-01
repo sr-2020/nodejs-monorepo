@@ -69,7 +69,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
 
-  earnKarma(api, { amount: kKarmaActiveAbilityCoefficient * libraryAbility.karmaCost });
+  earnKarma(api, { amount: kKarmaActiveAbilityCoefficient * libraryAbility.karmaCost, notify: false });
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 
