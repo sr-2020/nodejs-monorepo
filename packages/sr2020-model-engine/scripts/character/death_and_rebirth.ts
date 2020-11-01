@@ -50,7 +50,7 @@ export function reviveOnTarget(api: EventModelApi<Sr2020Character>, data: FullTa
 export function revive(api: EventModelApi<Sr2020Character>, data: { location?: LocationData }) {
   if (api.model.healthState == 'biologically_dead') return;
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
-  healthStateTransition(api, 'healthy', data.location);
+  healthStateTransition(api, 'healthy', data?.location);
 }
 
 export function reviveAbsoluteOnTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
@@ -61,9 +61,13 @@ export function reviveAbsoluteOnTarget(api: EventModelApi<Sr2020Character>, data
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, reviveAbsolute, data);
 }
 
-export function reviveAbsolute(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
+export function debugReviveAbsolute(api: EventModelApi<Sr2020Character>, data?: { location?: LocationData }) {
+  reviveAbsolute(api, data);
+}
+
+export function reviveAbsolute(api: EventModelApi<Sr2020Character>, data?: { location?: LocationData }) {
   sendNotificationAndHistoryRecord(api, 'Лечение', 'Хиты полностью восстановлены', 'Вы полностью здоровы. Ура!');
-  healthStateTransition(api, 'healthy', data.location);
+  healthStateTransition(api, 'healthy', data?.location);
 }
 
 export function absoluteDeath(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
