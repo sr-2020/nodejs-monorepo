@@ -246,7 +246,7 @@ app = new Vue({
     },
 
     async revive() {
-      return this.sendCharacterEvent({ eventType: 'revive' });
+      return this.sendCharacterEvent({ eventType: 'debugReviveAbsolute' });
     },
 
     async clinicalDeathOnTarget() {
