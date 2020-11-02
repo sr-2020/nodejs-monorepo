@@ -2456,6 +2456,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'cloud-memory-temporary',
     humanReadableName: 'Облачная память',
