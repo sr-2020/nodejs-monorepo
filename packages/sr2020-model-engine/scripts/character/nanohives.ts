@@ -61,7 +61,7 @@ function onNanohiveRemove(api: EventModelApi<Sr2020Character>, aiId: AiId) {
 
 export function nanohiveArmorAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   reduceEssence(api);
-  addTemporaryPassiveAbility(api, 'stone-skin-effect', duration(15, 'minutes'));
+  addTemporaryPassiveAbility(api, 'granite-skin-effect', duration(15, 'minutes'));
 }
 
 export function nanohiveShooterAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

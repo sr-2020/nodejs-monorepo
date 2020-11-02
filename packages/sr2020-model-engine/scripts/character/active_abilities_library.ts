@@ -924,7 +924,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 4,
     eventType: arrowgant.name,
   },
-  // - время действия 5+N минут, кулдаун 30 минут. Дает тяжелую броню. N=умвл*2 минут
+  // - время действия 5+N минут, кулдаун 30 минут. Дает абилку trollton-effect. N=умвл*2 минут
   {
     id: 'trollton',
     humanReadableName: 'Trollton',
@@ -1542,7 +1542,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: reviveOnTarget.name,
   },
-  // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+  // появляется абилка granite-skin-effect на 15 минут
   // itGapEssense +5
   {
     id: 'kokkoro-armor',
@@ -1603,7 +1603,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveBackupAbility.name,
   },
-  // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+  // появляется абилка granite-skin-effect на 15 минут
   // itGapEssense +5
   {
     id: 'koshcghei-armor',
@@ -1664,7 +1664,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveBackupAbility.name,
   },
-  // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+  // появляется абилка granite-skin-effect на 15 минут
   // itGapEssense +5
   {
     id: 'horizon-armor',
@@ -1725,7 +1725,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveBackupAbility.name,
   },
-  // появляется текст "С тебя снимаются хиты, как если бы ты находился в легкой броне"
+  // появляется абилка granite-skin-effect на 15 минут
   // itGapEssense +5
   {
     id: 'badass-armor',

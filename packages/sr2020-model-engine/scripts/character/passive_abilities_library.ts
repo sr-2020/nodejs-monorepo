@@ -2420,6 +2420,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'trollton-effect',
     humanReadableName: 'Trollton',
@@ -2429,9 +2430,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
-    id: 'stone-skin-effect',
-    humanReadableName: 'Каменная кожа ',
+    id: 'granite-skin-effect',
+    humanReadableName: 'Гранитная кожа',
     description: 'С тебя снимаются хиты, как если бы ты находился в легкой броне.',
     availability: 'master',
     karmaCost: 0,
