@@ -2451,6 +2451,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'hammer-of-justice-effect',
     humanReadableName: 'Hammer of Justice',

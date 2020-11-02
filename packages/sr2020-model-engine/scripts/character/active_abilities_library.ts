@@ -896,7 +896,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: changeAuraAbility.name,
   },
-  // - время действия 10+N минут, кулдаун 5 минут. Одноручное оружие считается тяжёлым. N=умвл*3 минут
+  // - время действия 10+N минут, кулдаун 5 минут. Дает на время действия абилку hammer-of-justice-effect. N=умвл*3 минут
   {
     id: 'hammer-of-justice',
     humanReadableName: 'Hammer of Justice',
