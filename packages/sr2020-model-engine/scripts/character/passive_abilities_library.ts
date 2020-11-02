@@ -3778,6 +3778,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // Эффект химоты
+  {
+    id: 'berserk-effect',
+    humanReadableName: 'Берсерк',
+    description:
+      'Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран".',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     pack: undefined,
     modifier: [],
   },

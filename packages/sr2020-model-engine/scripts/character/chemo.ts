@@ -870,11 +870,11 @@ export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Tempor
 }
 
 export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
+  const ability = kAllPassiveAbilities.get('berserk-effect')!;
   api.model.passiveAbilities.push({
-    name: 'Берсерк',
-    description:
-      'Если у тебя сняли все хиты - издай дикий боевой крик и можешь продолжать сражаться. У тебя два хита. После их снятия нажми кнопку "тяжран".',
-    id: 'berserk-chemo',
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: ability.description,
     validUntil: m.validUntil,
   });
 }
