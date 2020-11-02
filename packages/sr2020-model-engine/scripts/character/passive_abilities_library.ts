@@ -67,6 +67,7 @@ import {
   setTransactionAnonymous,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];
 }
@@ -3754,6 +3755,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'heavy-weapons-unlock',
     humanReadableName: 'Тяжелое оружие',
     description: 'Позволяет использовать тяжелое оружие.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'fireball-able',
+    humanReadableName: 'Fireball',
+    description: 'Можете кинуть {{ amount }} огненных шаров.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],

@@ -21,6 +21,7 @@ import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/r
 import { addFeatureToModel, getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { addKarmaGivingTimer, kMaxKarmaOnCreation, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { createJackedInEffect } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
+import { templateSettings } from 'lodash';
 import Chance = require('chance');
 
 const chance = new Chance();
@@ -54,7 +55,10 @@ export class ModelEngineController implements ModelEngineService {
     @inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
     @inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,
     @inject(Engine.bindingKey + '.QrCode') private _qrCodeEngine: Engine<QrCode>,
-  ) {}
+  ) {
+    // Needed to allow {{ variableName }} substitutions in ability descriptions.
+    templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+  }
 
   @post('/character/process', spec('character', Sr2020CharacterProcessResponse))
   async processCharacter(@requestBody() req: Sr2020CharacterProcessRequest): Promise<Sr2020CharacterProcessResponse> {

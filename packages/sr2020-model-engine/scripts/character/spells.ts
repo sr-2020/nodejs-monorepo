@@ -1,5 +1,5 @@
 import uuid = require('uuid');
-import { cloneDeep } from 'lodash';
+import { cloneDeep, template } from 'lodash';
 import { EffectModelApi, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
 import { Location } from '@sr2020/sr2020-common/models/location.model';
 import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
@@ -26,6 +26,7 @@ import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engi
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 
 type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -201,10 +202,11 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 }
 
 export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
+  const ability = kAllPassiveAbilities.get('fireball-able')!;
   api.model.passiveAbilities.push({
-    id: 'fireball-able',
-    name: 'Fireball',
-    description: `Можете кинуть ${m.amount} огненных шаров.`,
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: template(ability.description)({ amount: m.amount }),
     validUntil: m.validUntil,
   });
 }

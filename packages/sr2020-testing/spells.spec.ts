@@ -456,10 +456,17 @@ describe('Spells', function () {
   it('Fireball', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('fireball');
-    await fixture.sendCharacterEvent({
+    const { workModel } = await fixture.sendCharacterEvent({
       eventType: 'castSpell',
-      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 3 },
+      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 5 },
     });
+    expect(workModel.passiveAbilities).containDeep([
+      {
+        id: 'fireball-able',
+        name: 'Fireball',
+        description: `Можете кинуть 2 огненных шаров.`,
+      },
+    ]);
   });
 
   it('Stone skin', async () => {
