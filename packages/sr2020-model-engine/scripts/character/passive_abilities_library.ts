@@ -2432,7 +2432,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  //
+  // Эффект *-armor абилок
   {
     id: 'granite-skin-effect',
     humanReadableName: 'Гранитная кожа',
@@ -2442,7 +2442,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  //
+  // Эффект *-shooter абилок и химоты
   {
     id: 'automatic-weapons-unlock',
     humanReadableName: 'Автоматическое оружие',
@@ -3750,7 +3750,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
   },
-  //
+  // Эффект химоты
   {
     id: 'heavy-weapons-unlock',
     humanReadableName: 'Тяжелое оружие',
@@ -3760,10 +3760,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'fireball-able',
     humanReadableName: 'Fireball',
     description: 'Можете кинуть {{ amount }} огненных шаров.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Эффект химоты
+  {
+    id: 'light-armor-effect',
+    humanReadableName: 'Легкая броня',
+    description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],

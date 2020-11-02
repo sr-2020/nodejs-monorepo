@@ -860,10 +860,11 @@ export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, 
 }
 
 export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
+  const ability = kAllPassiveAbilities.get('light-armor-effect')!;
   api.model.passiveAbilities.push({
-    name: 'Легкая броня',
-    description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
-    id: 'light-armor-chemo',
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: ability.description,
     validUntil: m.validUntil,
   });
 }
