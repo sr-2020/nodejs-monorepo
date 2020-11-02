@@ -56,7 +56,7 @@ const kAllSpellsList: Spell[] = [
     sphere: 'protection',
     eventType: keepYourselfSpell.name,
   },
-  // у мага появляется на время T/на одно использование (что раньше закончится) способность перевести одну цель из состояние "тяжран" в состояние "текущие хиты равны максимальным". T=Мощь*10 минут
+  // у мага появляется на время T/на одно использование (что раньше закончится) способность ground-heal-ability. T=Мощь*10 минут
   {
     id: 'ground-heal',
     humanReadableName: 'Ground Heal',

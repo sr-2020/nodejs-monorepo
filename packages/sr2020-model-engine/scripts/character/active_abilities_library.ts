@@ -161,6 +161,7 @@ export interface ActiveAbility extends Feature {
 }
 // Not exported by design, use kAllActiveAbilities instead.
 export const kAllActiveAbilitiesList: ActiveAbility[] = [
+  //
   {
     id: 'ground-heal-ability',
     humanReadableName: 'Ground Heal',
