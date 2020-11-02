@@ -2441,7 +2441,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Merge with automatic-weapons-chemo
   //
   {
     id: 'automatic-weapons-unlock',
@@ -3748,6 +3747,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 8,
     prerequisites: ['arch-hack-decker-med-2'],
     pack: { id: 'arch-hack-decker-med', level: 3 },
+    modifier: [],
+  },
+  //
+  {
+    id: 'heavy-weapons-unlock',
+    humanReadableName: 'Тяжелое оружие',
+    description: 'Позволяет использовать тяжелое оружие.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];

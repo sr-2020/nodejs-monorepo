@@ -128,7 +128,7 @@ describe('Chemo events', function () {
 
     expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
       {
-        id: 'heavy-weapons-chemo',
+        id: 'heavy-weapons-unlock',
         validUntil: 15 * 60 * 1000,
       },
     ]);
@@ -137,7 +137,7 @@ describe('Chemo events', function () {
 
     expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
       {
-        id: 'heavy-weapons-chemo',
+        id: 'heavy-weapons-unlock',
         validUntil: 15 * 60 * 1000,
       },
     ]);

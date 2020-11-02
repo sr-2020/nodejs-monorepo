@@ -18,6 +18,7 @@ import { healthStateTransition } from './death_and_rebirth';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -878,19 +879,21 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Temporary
 }
 
 export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
+  const ability = kAllPassiveAbilities.get('automatic-weapons-unlock')!;
   api.model.passiveAbilities.push({
-    name: 'Автоматическое оружие',
-    description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
-    id: 'automatic-weapons-chemo',
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: ability.description,
     validUntil: m.validUntil,
   });
 }
 
 export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
+  const ability = kAllPassiveAbilities.get('heavy-weapons-unlock')!;
   api.model.passiveAbilities.push({
-    name: 'Тяжелое оружие',
-    description: 'Позволяет использовать тяжелое оружие.',
-    id: 'heavy-weapons-chemo',
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: ability.description,
     validUntil: m.validUntil,
   });
 }
