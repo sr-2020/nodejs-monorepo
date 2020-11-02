@@ -2401,6 +2401,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  //
   {
     id: 'comcon-ethic-ability',
     humanReadableName: 'Вы достигли!',
