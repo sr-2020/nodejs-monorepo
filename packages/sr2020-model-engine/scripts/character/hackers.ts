@@ -12,6 +12,8 @@ import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/chara
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { template } from 'lodash';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -75,10 +77,11 @@ export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: Dumpsho
   increaseCharisma(api, { ...m, amount: -m.amount });
   increaseBody(api, { ...m, amount: -m.amount });
   increaseIntelligence(api, { ...m, amount: -m.amount });
+  const ability = kAllPassiveAbilities.get('dump-shock-survivor')!;
   api.model.passiveAbilities.push({
-    id: 'dump-shock-survivor',
-    name: 'Пережитый дамп-шок',
-    description: `Ты пережил дамп-шок. Тебя преследует постоянная головная боль. Эффект x ${m.amount}`,
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: template(ability.description)({ amount: m.amount }),
   });
 }
 

@@ -3789,6 +3789,24 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // Негативка за пережитый дамп-шок, эффект перманентный пока не излечат,
+  // кумулятивен. Присваивается с помощью API
+  //
+  // IT:
+  // [Клиническая смерть]
+  // [-1] Резонанс
+  // [-1] Тело
+  // [-1] Харизма
+  // [-1] Интеллект
+  {
+    id: 'dump-shock-survivor',
+    humanReadableName: 'Пережитый дамп-шок',
+    description: 'Ты пережил дамп-шок. Тебя преследует постоянная головная боль. Эффект x {{ amount }}',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     pack: undefined,
     modifier: [],
   },
