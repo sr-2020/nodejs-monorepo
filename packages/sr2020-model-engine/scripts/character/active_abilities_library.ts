@@ -1315,6 +1315,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // Для мчс
+  //
   // Переводит чаммера из состояния КС в состояние Здоров
   // надо отсканировать:
   // - QR воскрешательной капсулы
@@ -1693,7 +1695,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // itGapEssense +5
   {
     id: 'kokkoro-armor',
-    humanReadableName: 'Каменная кожа ',
+    humanReadableName: 'Гранитная кожа',
     description:
       'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
     target: 'scan',
@@ -1754,7 +1756,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // itGapEssense +5
   {
     id: 'koshcghei-armor',
-    humanReadableName: 'Каменная кожа ',
+    humanReadableName: 'Гранитная кожа',
     description:
       'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
     target: 'scan',
@@ -1815,7 +1817,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // itGapEssense +5
   {
     id: 'horizon-armor',
-    humanReadableName: 'Каменная кожа ',
+    humanReadableName: 'Гранитная кожа',
     description:
       'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
     target: 'scan',
@@ -1876,7 +1878,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // itGapEssense +5
   {
     id: 'badass-armor',
-    humanReadableName: 'Каменная кожа ',
+    humanReadableName: 'Гранитная кожа',
     description:
       'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
     target: 'scan',

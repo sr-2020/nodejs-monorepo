@@ -67,6 +67,7 @@ import {
   setTransactionAnonymous,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];
 }
@@ -542,7 +543,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
-  // позволяет читать данные из геоноды
   {
     id: 'geo-pro-1',
     humanReadableName: 'геоспец 1',
@@ -550,10 +550,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-geo', level: 1 },
     modifier: [],
   },
-  // позволяет лучше читать данные из геоноды.
   {
     id: 'geo-pro-2',
     humanReadableName: 'геоспец 2',
@@ -561,10 +559,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['geo-pro-1'],
-    pack: { id: 'arch-hack-decker-geo', level: 2 },
     modifier: [],
   },
-  // позволяет больше и еще лучше читать данные из геоноды.
   {
     id: 'geo-pro-3',
     humanReadableName: 'геоспец 3',
@@ -572,10 +568,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['geo-pro-2'],
-    pack: { id: 'arch-hack-decker-geo', level: 3 },
     modifier: [],
   },
-  // позволяет читать данные из экономноды
   {
     id: 'economics-pro-1',
     humanReadableName: 'эконом 1',
@@ -583,10 +577,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-econ', level: 1 },
     modifier: [],
   },
-  // позволяет лучше читать данные из экономноды.
   {
     id: 'economics-pro-2',
     humanReadableName: 'эконом 2',
@@ -594,10 +586,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['economics-pro-1'],
-    pack: { id: 'arch-hack-decker-econ', level: 2 },
     modifier: [],
   },
-  // позволяет больше и еще лучше читать данные из экономноды.
   {
     id: 'economics-pro-3',
     humanReadableName: 'эконом 3',
@@ -605,7 +595,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['economics-pro-2'],
-    pack: { id: 'arch-hack-decker-econ', level: 3 },
     modifier: [],
   },
   {
@@ -617,7 +606,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // позволяет читать данные из биомонитора и rcc
   {
     id: 'meds-and-chrome-1',
     humanReadableName: 'Медицина и Хром 1',
@@ -625,10 +613,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-med', level: 1 },
     modifier: [],
   },
-  // позволяет лучше читать данные из биомонитора и rcc.
   {
     id: 'meds-and-chrome-2',
     humanReadableName: 'Медицина и Хром 2',
@@ -636,10 +622,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['meds-and-chrome-1'],
-    pack: { id: 'arch-hack-decker-med', level: 2 },
     modifier: [],
   },
-  // позволяет больше и еще лучше читать данные из биомонитора и rcc.
   {
     id: 'meds-and-chrome-3',
     humanReadableName: 'Медицина и Хром 3',
@@ -647,7 +631,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['meds-and-chrome-2'],
-    pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
   },
   // Позволяет реактивировать вырубленный IC
@@ -3813,6 +3796,105 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 2,
     prerequisites: ['miner-1'],
     pack: { id: 'hack-deck-miner', level: 1 },
+    modifier: [],
+  },
+  // позволяет читать данные из геоноды
+  {
+    id: 'arch-hack-decker-geo-1',
+    humanReadableName: 'геоспец 1',
+    description: 'возможность использовать useapi read на геоноде',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-geo', level: 1 },
+    modifier: [],
+  },
+  // позволяет лучше читать данные из геоноды.
+  {
+    id: 'arch-hack-decker-geo-2',
+    humanReadableName: 'геоспец 2',
+    description: 'возможность использовать расширенную useapi read на геоноде',
+    availability: 'open',
+    karmaCost: 4,
+    prerequisites: ['arch-hack-decker-geo-1'],
+    pack: { id: 'arch-hack-decker-geo', level: 2 },
+    modifier: [],
+  },
+  // позволяет больше и еще лучше читать данные из геоноды.
+  {
+    id: 'arch-hack-decker-geo-3',
+    humanReadableName: 'геоспец 3',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на геоноде',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['arch-hack-decker-geo-2'],
+    pack: { id: 'arch-hack-decker-geo', level: 3 },
+    modifier: [],
+  },
+  // позволяет читать данные из экономноды
+  {
+    id: 'arch-hack-decker-econ-1',
+    humanReadableName: 'эконом 1',
+    description: 'возможность использовать useapi read на экономноде',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-econ', level: 1 },
+    modifier: [],
+  },
+  // позволяет лучше читать данные из экономноды.
+  {
+    id: 'arch-hack-decker-econ-2',
+    humanReadableName: 'эконом 2',
+    description: 'возможность использовать расширенную useapi read на экономноде.',
+    availability: 'open',
+    karmaCost: 4,
+    prerequisites: ['arch-hack-decker-econ-1'],
+    pack: { id: 'arch-hack-decker-econ', level: 2 },
+    modifier: [],
+  },
+  // позволяет больше и еще лучше читать данные из экономноды.
+  {
+    id: 'arch-hack-decker-econ-3',
+    humanReadableName: 'эконом 3',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на экономноде',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['arch-hack-decker-econ-2'],
+    pack: { id: 'arch-hack-decker-econ', level: 3 },
+    modifier: [],
+  },
+  // позволяет читать данные из биомонитора и rcc
+  {
+    id: 'arch-hack-decker-med-1',
+    humanReadableName: 'Медицина и Хром 1',
+    description: 'возможность использовать useapi read на биомониторе и rcc',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'arch-hack-decker-med', level: 1 },
+    modifier: [],
+  },
+  // позволяет лучше читать данные из биомонитора и rcc.
+  {
+    id: 'arch-hack-decker-med-2',
+    humanReadableName: 'Медицина и Хром 2',
+    description: 'возможность использовать расширенную useapi read на биомониторе и rcc',
+    availability: 'open',
+    karmaCost: 4,
+    prerequisites: ['arch-hack-decker-med-1'],
+    pack: { id: 'arch-hack-decker-med', level: 2 },
+    modifier: [],
+  },
+  // позволяет больше и еще лучше читать данные из биомонитора и rcc.
+  {
+    id: 'arch-hack-decker-med-3',
+    humanReadableName: 'Медицина и Хром 3',
+    description: 'возможность использовать расширенную и улучшкеную useapi read на биомониторе и rcc',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['arch-hack-decker-med-2'],
+    pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
   },
 ];
