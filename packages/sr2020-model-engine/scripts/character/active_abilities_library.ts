@@ -910,7 +910,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 3,
     eventType: hammerOfJustice.name,
   },
-  // - время действия 5+N минут, кулдаун 15 минут. Дает защиту от дистанционных атак (только от нерфов). N=умвл*1 минут
+  // - время действия 5+N минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время. N=умвл*1 минут
   {
     id: 'arrowgant',
     humanReadableName: 'Arrowgant',

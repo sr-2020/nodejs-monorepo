@@ -2410,6 +2410,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'arrowgant-effect',
     humanReadableName: 'Arrowgant',
