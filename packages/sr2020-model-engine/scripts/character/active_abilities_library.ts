@@ -180,26 +180,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: oneTimeRevive.name,
   },
-  // TODO(https://trello.com/c/ihi8Ffmu/320-реализовать-абилку-грабеж): Add proper implementation
-  {
-    id: 'mugger',
-    humanReadableName: 'Грабеж',
-    description: '',
-    target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Жертва',
-        allowedTypes: ['WOUNDED_BODY'],
-        field: 'targetCharacterId',
-      },
-    ],
-    cooldownMinutes: 9000,
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
   // добивание до АС (из тяжрана или КС)
   {
     id: 'absolutely-finish-him',
@@ -256,94 +236,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     pack: { id: 'chummer-zero', level: 1 },
     availability: 'master',
     karmaCost: 0,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  {
-    id: 'merge-shaman',
-    humanReadableName: 'Merge (техношаман)',
-    description: 'Устанавливает спрайт в ноду Хоста Основания',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 30,
-    prerequisites: ['arch-hackerman-technoshaman'],
-    availability: 'open',
-    karmaCost: 0,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  {
-    id: 'merge-cyberadept',
-    humanReadableName: 'Merge (техношаман)',
-    description: 'Устанавливает спрайт в ноду Хоста Основания',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 30,
-    prerequisites: ['arch-hackerman-cyberadept'],
-    availability: 'open',
-    karmaCost: 6,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  {
-    id: 'awareness',
-    humanReadableName: 'Насторожиться',
-    description:
-      'Ты можешь внимательно присмотреться к спрайтам в комнате. И какие-то из них явно не местные! Подозрительно...\n\nОбнаруживает вмерженные (то есть установленные другими хакерами) спрайты в этой ноде',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 15,
-    prerequisites: ['arch-hackerman-cyberadept'],
-    availability: 'open',
-    karmaCost: 2,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  {
-    id: 'exterminatus',
-    humanReadableName: 'Экстерминатус',
-    description:
-      'Ты можешь сконцентрироваться и разрушительный импульс, который уничтожит часть (зависит от Резонанса) спрайтов, вмерженных в эту Ноду\n',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 15,
-    prerequisites: ['arch-hackerman-cyberadept'],
-    availability: 'open',
-    karmaCost: 2,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/e8Y6SinJ/199-реализовать-активные-абилки-влияющие-на-матрицу)
-  {
-    id: 'looking-for-trouble',
-    humanReadableName: 'ГдеСрач?!',
-    description:
-      'Ты теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\n\nАктивируется перед входом в Основание (на стойке)\nВыдает список хостов, на которых есть техноманты и уровень группы. Чем сильнее твой Резонанс, тем меньше шансов у них остаться незамеченными',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 15,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 8,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/EFwxEY3c/324-реализовать-абилку-вождь): Add proper implementation
-  {
-    id: 'chieftain',
-    humanReadableName: 'Вождь',
-    description:
-      'Это самый ценный из даров. Дар подарить Дар другому. Ты можешь разбудить в Госте Основания его суть, его природу, дав ему возможность по-настоящему почувстовать Матрицу. Цель пробудится и сможет стать техномантом',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 16 * 60,
-    prerequisites: ['arch-hackerman-technomancer'],
-    availability: 'closed',
-    karmaCost: 16,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -954,20 +846,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
-  {
-    id: 'astral-body-1',
-    humanReadableName: 'Астральное тельце',
-    description: 'Ненадолго перейти в астральное тело, слабо готовое к астральному бою',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 45,
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 1,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
   // Время действия 45 минут, кулдаун 55 минут После активации маг переключается в астральное тело. У него 5 хитов и абилка "Астробоевик"
   {
     id: 'astral-body-2',
@@ -1286,34 +1164,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 4,
     minimalEssence: 2,
     eventType: alloHomorusAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  {
-    id: 'medcart-healing',
-    humanReadableName: 'Полевое лечение тяжрана',
-    description: '',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 9000,
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  {
-    id: 'autodoc-healing',
-    humanReadableName: 'Лечение тяжрана',
-    description: '',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 9000,
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
   },
   // Для мчс
   //
