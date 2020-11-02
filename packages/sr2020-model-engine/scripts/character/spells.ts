@@ -489,19 +489,22 @@ export function addTemporaryBonusesDueToRitual(api: EventModelApi<Sr2020Characte
 
 export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
   const powerBonus = Math.floor(Math.sqrt(m.amount));
+
+  const magicInTheBloodAbility = kAllPassiveAbilities.get('magic-in-the-blood')!;
   api.model.passiveAbilities.push({
-    name: 'Магия в крови',
-    description: `Увеличивает максимальную доступную Мощь на ${powerBonus}`,
-    id: 'magic-in-the-blood',
+    id: magicInTheBloodAbility.id,
+    name: magicInTheBloodAbility.humanReadableName,
+    description: template(magicInTheBloodAbility.description)({ amount: powerBonus }),
     validUntil: m.validUntil,
   });
   api.model.magicStats.maxPowerBonus += powerBonus;
 
   const feedbackDivider = 1.0 / (6 + m.amount);
+  const bloodyTideAbility = kAllPassiveAbilities.get('bloody-tide')!;
   api.model.passiveAbilities.push({
-    name: 'Кровавый прилив',
-    description: `Увеличивает сопротивление откату`,
-    id: 'bloody-tide',
+    id: bloodyTideAbility.id,
+    name: bloodyTideAbility.humanReadableName,
+    description: bloodyTideAbility.description,
     validUntil: m.validUntil,
   });
   api.model.magicStats.feedbackMultiplier *= feedbackDivider;

@@ -1835,7 +1835,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
   // Позволяет просканировать во время каста qr-коды мясных тел в состоянии тяжран (не годятся здоров/КС/АС) и с Эссенсом>=1ед для эффекта "кровавый ритуал":  Использование (сканирование) N этих кодов приводит к:
-  //  1) временному (на T минут) появлению пассивной абилки "Магия в крови", дающей бонус к максимально доступной Мощи в размере √N
+  //  1) временному (на T минут) появлению пассивной абилки "Магия в крови" (amount = √N)
   // 2) временному (на T минут) появлению пассивной способности "Кровавый Прилив", добавляющей в КоэффициентСопротивленияОткату множитель K=1/(6+N).
   // T = N*5 минут.
   // Жертва теряет 1ед Эссенса и переходит в КС и в этом состоянии для повторного использования в другом таком же ритуале непригодна.
@@ -3814,6 +3814,27 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'fast-charge-able',
     humanReadableName: 'Fast Charge',
     description: 'Можете кинуть {{ amount }} молний.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  //
+  {
+    id: 'bloody-tide',
+    humanReadableName: 'Кровавый прилив',
+    description: 'Увеличивает сопротивление откату',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  //
+  {
+    id: 'magic-in-the-blood',
+    humanReadableName: 'Магия в крови',
+    description: 'Увеличивает максимальную доступную Мощь на {{ amount }}',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
