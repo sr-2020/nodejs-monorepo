@@ -2441,6 +2441,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Merge with automatic-weapons-chemo
+  //
   {
     id: 'automatic-weapons-unlock',
     humanReadableName: 'Автоматическое оружие',

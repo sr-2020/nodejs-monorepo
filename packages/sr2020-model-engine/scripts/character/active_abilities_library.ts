@@ -1558,7 +1558,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveArmorAbility.name,
   },
-  // Персонаж может использовать автоматическое оружие 15 минут
+  // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
     id: 'kokkoro-shooter',
@@ -1619,7 +1619,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveArmorAbility.name,
   },
-  // Персонаж может использовать автоматическое оружие 15 минут
+  // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
     id: 'koshcghei-shooter',
@@ -1680,7 +1680,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveArmorAbility.name,
   },
-  // Персонаж может использовать автоматическое оружие 15 минут
+  // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
     id: 'horizon-shooter',
@@ -1741,7 +1741,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: nanohiveArmorAbility.name,
   },
-  // Персонаж может использовать автоматическое оружие 15 минут
+  // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
     id: 'badass-shooter',
