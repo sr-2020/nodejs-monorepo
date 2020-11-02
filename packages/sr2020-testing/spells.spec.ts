@@ -469,6 +469,22 @@ describe('Spells', function () {
     ]);
   });
 
+  it('Fast Charge', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('fast-charge');
+    const { workModel } = await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 5 },
+    });
+    expect(workModel.passiveAbilities).containDeep([
+      {
+        id: 'fast-charge-able',
+        name: 'Fast Charge',
+        description: `Можете кинуть 3 молний.`,
+      },
+    ]);
+  });
+
   it('Stone skin', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('stone-skin');

@@ -3807,6 +3807,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  //
+  {
+    id: 'fast-charge-able',
+    humanReadableName: 'Fast Charge',
+    description: 'Можете кинуть {{ amount }} молний.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     pack: undefined,
     modifier: [],
   },

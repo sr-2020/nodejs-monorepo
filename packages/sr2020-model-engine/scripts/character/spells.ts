@@ -223,10 +223,11 @@ export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: Spell
 }
 
 export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
+  const ability = kAllPassiveAbilities.get('fast-charge-able')!;
   api.model.passiveAbilities.push({
-    id: 'fast-charge-able',
-    name: 'Fast Charge',
-    description: `Можете кинуть ${m.amount} молний.`,
+    id: ability.id,
+    name: ability.humanReadableName,
+    description: template(ability.description)({ amount: m.amount }),
     validUntil: m.validUntil,
   });
 }
