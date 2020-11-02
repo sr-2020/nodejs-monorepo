@@ -21,6 +21,7 @@ const kKarmaForPassivesTimerName = 'give-karma-for-passives';
 const kKarmaForPassivesTimerPeriod = duration(1, 'hour');
 
 export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: number; notify: boolean }) {
+  if (data.amount <= 0) return;
   const amountEarned = Math.min(data.amount, api.workModel.karma.cycleLimit);
   if (amountEarned <= 0) {
     if (data.notify) {
