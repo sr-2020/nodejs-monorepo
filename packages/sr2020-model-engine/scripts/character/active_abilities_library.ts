@@ -19,6 +19,7 @@ import {
   reRent,
   skinStoneAbility,
   takeNoHarmAbility,
+  tincasmAbility,
   trollton,
   whoNeedsIt,
 } from './active_abilities';
@@ -1943,7 +1944,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: skinStoneAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // После активации абилки у мага появляется на 10 минут пассивная абилка tincasm-able.
   {
     id: 'tincasm',
@@ -1956,7 +1956,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 2,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: tincasmAbility.name,
   },
   // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.

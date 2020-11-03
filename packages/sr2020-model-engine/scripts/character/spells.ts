@@ -563,3 +563,17 @@ export function enlargeYourPencilSpell(api: EventModelApi<Sr2020Character>, data
 export function stoneSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   addTemporaryActiveAbility(api, 'skin-stone', duration(20 * data.power, 'minutes'));
 }
+
+// Location-attack spells
+
+export function avalancheSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'avalance-able', duration(3, 'minutes'), { amount: Math.ceil(data.power / 2) });
+}
+
+export function birdsSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'birds-able', duration(3 * data.power, 'minutes'), { amount: 3 * data.power });
+}
+
+export function cacophonySpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'cacophony-able', duration(5 * data.power, 'minutes'), { amount: 5 * data.power });
+}

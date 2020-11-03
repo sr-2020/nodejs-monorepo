@@ -3807,7 +3807,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'avalanche-able',
@@ -3820,7 +3819,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'birds-able',
@@ -3833,7 +3831,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'cacophony-able',
@@ -3846,7 +3843,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'tincasm-able',

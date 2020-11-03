@@ -1,5 +1,7 @@
 import {
+  avalancheSpell,
   brasiliaSpell,
+  cacophonySpell,
   charmSpell,
   dummyAreaSpell,
   dummyManaControlSpell,
@@ -28,6 +30,7 @@ import {
   trackpointSpell,
 } from './spells';
 import { Feature, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+
 export interface Spell extends Feature {
   sphere: SpellSphere;
   eventType: string;
@@ -137,7 +140,6 @@ const kAllSpellsList: Spell[] = [
     sphere: 'protection',
     eventType: stoneSkinSpell.name,
   },
-  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   // У мага появляется на 3 минуты пассивная абилка avalance-able. amount=Мощь/2 (округленное вверх). Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
     id: 'avalanche',
@@ -147,9 +149,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'closed',
     karmaCost: 2,
     sphere: 'fighting',
-    eventType: dummyAreaSpell.name,
+    eventType: avalancheSpell.name,
   },
-  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   // На время=amount минут у мага появляется пассивная абилка birds-able. amount=Мощь*3. <Такое-то время> - момент активации заклинания.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают. Для подтверждения может показать текст.
   {
@@ -163,7 +164,6 @@ const kAllSpellsList: Spell[] = [
     sphere: 'fighting',
     eventType: dummyAreaSpell.name,
   },
-  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   // На время T минут у мага появляется пассивная абилка cacophony-able. amount=Мощь*5. <Такое-то время> - момент активации заклинания.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают.
   {
@@ -175,7 +175,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'closed',
     karmaCost: 2,
     sphere: 'fighting',
-    eventType: dummyAreaSpell.name,
+    eventType: cacophonySpell.name,
   },
   // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
   // После активации заклинания у мага на T минут появляется пассивная абилка Healtouch. T=Мощь*20.

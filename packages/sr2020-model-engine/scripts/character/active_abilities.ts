@@ -273,5 +273,9 @@ export function skinStoneAbility(api: EventModelApi<Sr2020Character>, data: Acti
   addTemporaryPassiveAbility(api, 'stone-skin-result', duration(5, 'minutes'));
 }
 
+export function tincasmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'tincasm-able', duration(10, 'minutes'));
+}
+
 // For cases when no IT action is needed
 export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
