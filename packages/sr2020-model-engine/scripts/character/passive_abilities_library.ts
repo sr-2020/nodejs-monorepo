@@ -2266,8 +2266,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'резист менталке',
     description: 'Немного повышает защиту от ментальных воздействий.',
     availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 60,
+    prerequisites: ['arch-samurai-fighter', 'chemo-resistance'],
+    pack: { id: 'sam-fight-harden', level: 3 },
     modifier: modifierFromEffect(increaseMentalProtection, { amount: 3 }),
   },
   // повышает порог кризисной ситуации при употреблении химоты
@@ -2277,8 +2278,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'сопротивляемость химоте',
     description: 'Дает устойчивость к негативным эффектам при употреблении препаратов.',
     availability: 'open',
-    karmaCost: 4,
-    prerequisites: [],
+    karmaCost: 60,
+    prerequisites: ['arch-samurai-fighter', 'hardened-1'],
+    pack: { id: 'sam-fight-harden', level: 2 },
     modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 10 }),
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
@@ -2287,7 +2289,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'thats-my-chrome',
     humanReadableName: 'это мой хром!',
     description: 'Импланты, установленные у тебя сложнее вырезать рипоменам.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
@@ -2297,9 +2299,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'faster-regen-1',
     humanReadableName: 'Здоровеньки булы 1',
     description: 'Ты восстанавливаешь все хиты за 45 минут',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 40,
+    prerequisites: ['arch-samurai'],
     modifier: [],
   },
   // Ускоряет респавн хитов после легкого ранения (30 минут все хиты)
@@ -2307,9 +2309,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'faster-regen-2',
     humanReadableName: 'Здоровеньки булы 2',
     description: 'Ты восстанавливаешь все хиты за 30 минут',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['faster-regen-1'],
+    availability: 'closed',
+    karmaCost: 40,
+    prerequisites: ['faster-regen-1', 'arch-samurai'],
     modifier: [],
   },
   // разрешает игроку использовать гранаты
@@ -2317,9 +2319,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'grenades-usage',
     humanReadableName: 'гранаты',
     description: 'разрешает использовать гранаты',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 60,
+    prerequisites: ['arch-samurai', 'arch-samurai-gunner'],
     modifier: [],
   },
   // Описание способностей дрона Бульдозер
@@ -3093,7 +3095,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами
+  // усложняет вырезание имплантов рипоменами. С вероятностью неудачи 50%
   {
     id: 'armor-1',
     humanReadableName: 'броня: подкожная броня',
@@ -3104,7 +3106,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-armor', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // показывает игроку текст абилки, больше ничего
   {
     id: 'armor-2',
@@ -3116,7 +3117,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-armor', level: 2 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // показывает игроку текст абилки, больше ничего
   {
     id: 'armor-3',
@@ -3129,7 +3129,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами
+  // усложняет вырезание имплантов рипоменами, с вероятностью неудачи 40%
   {
     id: 'constitution-1',
     humanReadableName: 'Здоровеньки булы: родство с имплантами',
@@ -3140,13 +3140,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-constitution', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
+  // показывает игроку текст абилки, больше ничего
   // хиты в легком ранении восстанавливаются за 20 минут
   {
     id: 'constitution-2',
     humanReadableName: 'Здоровеньки булы: регенерация',
     description:
-      'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования',
+      'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования. \r\nХиты в легком ранении восстанавливаются за 20 минут\r\n',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-1'],
@@ -3154,20 +3154,19 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Если самурай находится в состоянии "тяжелое ранение" и не добит в течение 3 минут, он способен встать из тяжрана и продолжать бой еще 30 минут
+  // Если самурай находится в состоянии "тяжелое ранение" и не добит в течение 3 минут, персонаж встает из тяжрана в здоров. Через 30 минут после восстановления переходит в состояние КС.
   {
     id: 'constitution-3',
     humanReadableName: 'Здоровеньки булы: всплеск адреналина',
     description:
-      'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью',
+      'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью. Если в тяжране не провели добивание за 3 минуты - сам встает из тяжрана. Через 30 минут падает в КС',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-2'],
     pack: { id: 'sam-gun-constitution', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Позволяет пользоваться дубинками
+  // показывает игроку текст абилки, больше ничего
   {
     id: "clubs'n'swords-1",
     humanReadableName: 'холодное оружие: дубинки',
@@ -3179,8 +3178,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-swords', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Позволяет пользоваться мечами и топорами
+  // показывает игроку текст абилки, больше ничего
   {
     id: "clubs'n'swords-2",
     humanReadableName: 'холодное оружие: мечи и топоры',
@@ -3192,8 +3190,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-swords', level: 2 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Позволяет пользоваться двуручным оружием: мечи, тпоры, дубины
+  // показывает игроку текст абилки, больше ничего
   {
     id: "clubs'n'swords-3",
     humanReadableName: 'холодное оружие: двуручное оружие',
@@ -3206,7 +3203,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами
+  // усложняет вырезание имплантов рипоменами,  с вероятностью неудачи 50%
   {
     id: 'combat-armor-1',
     humanReadableName: 'броня: подкожная броня',
@@ -3217,7 +3214,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-armor', level: 1 },
     modifier: [],
   },
-  // можно носить легкую броню
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'combat-armor-2',
     humanReadableName: 'броня: легкая броня',
@@ -3228,8 +3225,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-armor', level: 2 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // можно носить тяжелую броню
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'combat-armor-3',
     humanReadableName: 'броня: тяжелая броня',
@@ -3241,7 +3237,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами
+  // усложняет вырезание имплантов рипоменами,  с вероятностью неудачи 40%
   {
     id: 'hardened-1',
     humanReadableName: 'Крепкий и надежный: родство с имплантами',
@@ -3252,33 +3248,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-harden', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // сопротивляемость проблемам от воздействия медицинских препаратов
-  {
-    id: 'hardened-2',
-    humanReadableName: 'Крепкий и надежный: сопротивляемость химии',
-    description:
-      'Генетическая мутация или магическая аномалия позволяет самураю проще переносить воздействие наркотических и медицинских препаратов',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai-fighter', 'hardened-1'],
-    pack: { id: 'sam-fight-harden', level: 2 },
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // сопротивляемость ментальным воздействиям
-  {
-    id: 'hardened-3',
-    humanReadableName: 'Крепкий и надежный: железная воля',
-    description: 'Натренированная воля, а может особенность строения мозга осложняет применение ментальных воздействий на самурая',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai-fighter', 'hardened-2'],
-    pack: { id: 'sam-fight-harden', level: 3 },
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // позволяет использовать автоматы и дубинки
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'tools-of-trade-1',
     humanReadableName: 'Оружие ассасина: дубинки, автоматы',
@@ -3290,8 +3260,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-assa-tools', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // позволяет использовать мечи, топоры и винтовки
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'tools-of-trade-2',
     humanReadableName: 'Оружие ассасина: мечи, топоры, винтовки',
@@ -3303,8 +3272,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-assa-tools', level: 2 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // позволяет использовать оружие в двух руках (два автомата, автомат+меч и тд)
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'tools-of-trade-3',
     humanReadableName: 'Оружие ассасина: оружие в каждой руке',
@@ -3317,7 +3285,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // сокращает перерыв между добиваниями в КС до 3 минут
+  // уменьшает кул finish-him
   {
     id: 'executioner-1',
     humanReadableName: 'Палач: быстрое добивание',
@@ -3335,7 +3303,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'executioner-2',
     humanReadableName: 'Палач: оглушение',
     description:
-      'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нок-аут, отличительная черта любого самурая-ассасина, но требует большой практики',
+      'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нокаут, отличительная черта любого самурая-ассасина, но требует большой практики',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'executioner-1'],
@@ -3385,7 +3353,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'marauder-3',
     humanReadableName: 'Мародер: разоблачение',
-    description: 'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню',
+    description: 'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять ',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-2'],
@@ -3827,7 +3795,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   //
@@ -3835,6 +3802,57 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'magic-in-the-blood',
     humanReadableName: 'Магия в крови',
     description: 'Увеличивает максимальную доступную Мощь на {{ amount }}',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'avalanche-able',
+    humanReadableName: 'Avalanche',
+    description:
+      'У всех персонажей, присутствовавших на конец каста заклинания в реале в текущей локации (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет) и взаимодействующих с магом (слышащих/видящих/нападающих на него), хиты снижаются на {{ amount }}',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'birds-able',
+    humanReadableName: 'Birds',
+    description:
+      'Каждые 60 секунд в течение {{ amount }} минут у всех присутствующих в реале  (мясо/экто/дрон -  кроме самого мага и тех, кого он вслух укажет) в этой локации текущие хиты уменьшаются на 1 на срок 30 минут. Если хиты уменьшились таким образом до нуля, то персонаж оказывается в тяжране',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'cacophony-able',
+    humanReadableName: 'Cacophony',
+    description:
+      'Каждые 60 секунд в течение {{ amount }} минут у всех присутствующих в астрале (кроме самого мага и тех, кого он вслух укажет) в этой локации текущие хиты астрального тела (ат) уменьшаются на 1, этот штраф действует 30 минут. Если хиты (ат) уменьшились таким образом до нуля, то персонажа с базовым мясным телом выбрасывает из астрала, а у базового астрального случается астральный нокаут (в соответствии с правилами по астральной боевке)',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'tincasm-able',
+    humanReadableName: 'Think as a master',
+    description:
+      'В течение 10 минут после активации заклинания все персонажи, присутствующие в реале в поле зрения мага (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), переходят в тяжран, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],

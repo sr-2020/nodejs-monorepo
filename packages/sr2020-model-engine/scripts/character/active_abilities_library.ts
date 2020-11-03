@@ -186,7 +186,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'absolutely-finish-him',
     humanReadableName: 'абсолютная смерть',
-    description: '',
+    description: 'Ты можешь добивать персонажа в Абсолютную смерть',
     target: 'scan',
     targetsSignature: [
       {
@@ -1944,7 +1944,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: skinStoneAbility.name,
   },
   // TODO(aeremin): Add proper implementation
-  // После активации абилки у мага появляется на 10 минут пассивная абилка с текстом "В течение 10 минут после активации заклинания все персонажи, присутствующие в реале в поле зрения мага (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), переходят в тяжран, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам".
+  // После активации абилки у мага появляется на 10 минут пассивная абилка tincasm-able.
   {
     id: 'tincasm',
     humanReadableName: 'Think as a master',

@@ -82,7 +82,7 @@ describe('Features-related events', function () {
   describe('satisfiesPrerequisites', () => {
     it('True if no prerequisites', async () => {
       await fixture.saveCharacter();
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('grenades-usage')!)).to.equal(true);
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, kAllPassiveAbilities.get('arch-face')!)).to.equal(true);
     });
 
     it('True if prerequisites are satisfied', async () => {
