@@ -863,7 +863,7 @@ export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: Tempor
   const ability = kAllPassiveAbilities.get('light-armor-effect')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: ability.description,
     validUntil: m.validUntil,
   });
@@ -873,7 +873,7 @@ export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: Temporary
   const ability = kAllPassiveAbilities.get('berserk-effect')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: ability.description,
     validUntil: m.validUntil,
   });
@@ -883,7 +883,7 @@ export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: 
   const ability = kAllPassiveAbilities.get('automatic-weapons-unlock')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: ability.description,
     validUntil: m.validUntil,
   });
@@ -893,7 +893,7 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Temp
   const ability = kAllPassiveAbilities.get('heavy-weapons-unlock')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: ability.description,
     validUntil: m.validUntil,
   });
@@ -960,7 +960,7 @@ function createAddiction(element: keyof Concentrations): Addiction {
 export function addAddictionPassiveAbility(api: EffectModelApi<Sr2020Character>, m: Addiction) {
   api.model.passiveAbilities.push({
     id: `${m.element}-addiction-passive-ability`,
-    name: 'Зависимость',
+    humanReadableName: 'Зависимость',
     description: `от вещества ${kElementNames[m.element]}`,
   });
 }

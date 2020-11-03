@@ -205,7 +205,7 @@ export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: Temporar
   const ability = kAllPassiveAbilities.get('fireball-able')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: template(ability.description)({ amount: m.amount }),
     validUntil: m.validUntil,
   });
@@ -226,7 +226,7 @@ export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: Tempor
   const ability = kAllPassiveAbilities.get('fast-charge-able')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: template(ability.description)({ amount: m.amount }),
     validUntil: m.validUntil,
   });
@@ -493,7 +493,7 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
   const magicInTheBloodAbility = kAllPassiveAbilities.get('magic-in-the-blood')!;
   api.model.passiveAbilities.push({
     id: magicInTheBloodAbility.id,
-    name: magicInTheBloodAbility.humanReadableName,
+    humanReadableName: magicInTheBloodAbility.humanReadableName,
     description: template(magicInTheBloodAbility.description)({ amount: powerBonus }),
     validUntil: m.validUntil,
   });
@@ -503,7 +503,7 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
   const bloodyTideAbility = kAllPassiveAbilities.get('bloody-tide')!;
   api.model.passiveAbilities.push({
     id: bloodyTideAbility.id,
-    name: bloodyTideAbility.humanReadableName,
+    humanReadableName: bloodyTideAbility.humanReadableName,
     description: bloodyTideAbility.description,
     validUntil: m.validUntil,
   });
