@@ -151,7 +151,7 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
     api,
     modifierFromEffect(addTemporaryPassiveAbilityEffect, {
       validUntil: validUntil(api, d),
-      ability: passiveAbility,
+      abilityId,
     }),
     d,
     `Добавление временной способности ${passiveAbility.humanReadableName}`,
@@ -177,11 +177,12 @@ export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, a
   );
 }
 
-export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { ability: PassiveAbility }) {
+export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { abilityId: string }) {
+  const passiveAbility = kAllPassiveAbilities.get(m.abilityId)!;
   api.model.passiveAbilities.push({
-    id: m.ability.id,
-    humanReadableName: m.ability.humanReadableName,
-    description: m.ability.description,
+    id: passiveAbility.id,
+    humanReadableName: passiveAbility.humanReadableName,
+    description: passiveAbility.description,
     validUntil: m.validUntil,
   });
 }
