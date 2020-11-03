@@ -137,7 +137,12 @@ function removeModifier(model: Sr2020Character, id: string) {
 }
 
 // Beware: doesn't support abilities with modifiers
-export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, abilityId: string, d: Duration) {
+export function addTemporaryPassiveAbility(
+  api: EventModelApi<Sr2020Character>,
+  abilityId: string,
+  d: Duration,
+  effectDescription: string | undefined = undefined,
+) {
   const passiveAbility = kAllPassiveAbilities.get(abilityId);
   if (!passiveAbility) {
     throw new UserVisibleError(`Неизвестная способность ${abilityId}`);
@@ -147,6 +152,10 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
     throw new UserVisibleError(`Временная способность ${abilityId} содержит модификаторы!`);
   }
 
+  if (!effectDescription) {
+    effectDescription = `Добавление временной способности ${passiveAbility.humanReadableName}`;
+  }
+
   addTemporaryModifier(
     api,
     modifierFromEffect(addTemporaryPassiveAbilityEffect, {
@@ -154,15 +163,24 @@ export function addTemporaryPassiveAbility(api: EventModelApi<Sr2020Character>, 
       abilityId,
     }),
     d,
-    `Добавление временной способности ${passiveAbility.humanReadableName}`,
+    effectDescription,
   );
 }
 
 // Beware: only supports one-time use abilities (i.e. ability will disappear after first use).
-export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, abilityId: string, d: Duration) {
+export function addTemporaryActiveAbility(
+  api: EventModelApi<Sr2020Character>,
+  abilityId: string,
+  d: Duration,
+  effectDescription: string | undefined = undefined,
+) {
   const activeAbility = getAllActiveAbilities().get(abilityId);
   if (!activeAbility) {
     throw new UserVisibleError(`Неизвестная способность ${abilityId}`);
+  }
+
+  if (!effectDescription) {
+    effectDescription = `Добавление временной способности ${activeAbility.humanReadableName}`;
   }
 
   addTemporaryModifier(
@@ -173,7 +191,7 @@ export function addTemporaryActiveAbility(api: EventModelApi<Sr2020Character>, a
       name: `add-active-ability-${abilityId}`,
     }),
     d,
-    `Добавление временной способности ${activeAbility.humanReadableName}`,
+    effectDescription,
   );
 }
 
