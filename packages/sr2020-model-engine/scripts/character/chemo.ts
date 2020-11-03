@@ -18,7 +18,7 @@ import { healthStateTransition } from './death_and_rebirth';
 import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { addTemporaryPassiveAbilityEffect } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -860,43 +860,19 @@ export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, 
 }
 
 export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  const ability = kAllPassiveAbilities.get('light-armor-effect')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: ability.description,
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'light-armor-effect' });
 }
 
 export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  const ability = kAllPassiveAbilities.get('berserk-effect')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: ability.description,
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'berserk-effect' });
 }
 
 export function automaticWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  const ability = kAllPassiveAbilities.get('automatic-weapons-unlock')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: ability.description,
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'automatic-weapons-unlock' });
 }
 
 export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  const ability = kAllPassiveAbilities.get('heavy-weapons-unlock')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: ability.description,
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'heavy-weapons-unlock' });
 }
 
 export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
