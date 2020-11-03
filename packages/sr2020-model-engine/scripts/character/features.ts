@@ -11,7 +11,7 @@ import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr20
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';
 import { ActiveAbility } from './active_abilities_library';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, template } from 'lodash';
 import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 import { Duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from '@sr2020/sr2020-model-engine/scripts/character/util';
@@ -141,6 +141,7 @@ export function addTemporaryPassiveAbility(
   api: EventModelApi<Sr2020Character>,
   abilityId: string,
   d: Duration,
+  descriptionSubstitutions: object = {},
   effectDescription: string | undefined = undefined,
 ) {
   const passiveAbility = kAllPassiveAbilities.get(abilityId);
@@ -161,6 +162,7 @@ export function addTemporaryPassiveAbility(
     modifierFromEffect(addTemporaryPassiveAbilityEffect, {
       validUntil: validUntil(api, d),
       abilityId,
+      descriptionSubstitutions,
     }),
     d,
     effectDescription,
@@ -195,12 +197,15 @@ export function addTemporaryActiveAbility(
   );
 }
 
-export function addTemporaryPassiveAbilityEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier & { abilityId: string }) {
+export function addTemporaryPassiveAbilityEffect(
+  api: EffectModelApi<Sr2020Character>,
+  m: TemporaryModifier & { abilityId: string; descriptionSubstitutions?: object },
+) {
   const passiveAbility = kAllPassiveAbilities.get(m.abilityId)!;
   api.model.passiveAbilities.push({
     id: passiveAbility.id,
     humanReadableName: passiveAbility.humanReadableName,
-    description: passiveAbility.description,
+    description: m.descriptionSubstitutions ? template(passiveAbility.description)(m.descriptionSubstitutions) : passiveAbility.description,
     validUntil: m.validUntil,
   });
 }

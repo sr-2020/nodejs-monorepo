@@ -24,7 +24,7 @@ import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scri
 import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { addTemporaryActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 
@@ -197,18 +197,7 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
   api.sendNotification('Успех', 'Заклинание успешно применено');
   const d = duration(8 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 3);
-  const m = modifierFromEffect(fireballEffect, { amount, validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d, 'Возможность использовать огненные шары');
-}
-
-export function fireballEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
-  const ability = kAllPassiveAbilities.get('fireball-able')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: template(ability.description)({ amount: m.amount }),
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'fireball-able', d, { amount }, 'Возможность использовать огненные шары');
 }
 
 // время каста 2 минуты, у мага на время T появляется пассивная способность “кинуть N молний”.
@@ -218,18 +207,7 @@ export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: Spell
   const d = duration(10 * data.power, 'minutes');
   const amount = Math.max(1, data.power - 2);
   sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${d.asMinutes()} минут`);
-  const m = modifierFromEffect(fastChargeEffect, { amount, validUntil: validUntil(api, d) });
-  addTemporaryModifier(api, m, d, 'Возможность использовать молнии');
-}
-
-export function fastChargeEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
-  const ability = kAllPassiveAbilities.get('fast-charge-able')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: template(ability.description)({ amount: m.amount }),
-    validUntil: m.validUntil,
-  });
+  addTemporaryPassiveAbility(api, 'fast-charge-able', d, { amount }, 'Возможность использовать молнии');
 }
 
 //
