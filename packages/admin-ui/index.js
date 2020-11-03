@@ -411,6 +411,14 @@ app = new Vue({
           postponeDurationHours: Number(this.nightPauseData.postponeDurationHours),
           pauseDurationHours: Number(this.nightPauseData.pauseDurationHours),
         } }, 'Игра поставлена на паузу!');
+    },
+
+    async newLargeCycle() {
+      this.$bvToast.toast('Это долгая операция, пожалуйста, подождите...', {
+        autoHideDelay: 40000,
+        variant: 'info',
+      });
+      return this.broadcastCharacterEvent( { eventType: 'newLargeCycle', data: {} }, 'Цикл начат!');
     }
   }
 })
