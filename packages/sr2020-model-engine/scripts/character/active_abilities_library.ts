@@ -199,13 +199,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 240,
     prerequisites: [],
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 100,
     minimalEssence: 0,
     eventType: absoluteDeathAbility.name,
   },
-  // У абилки есть два эффекта:
-  // 1) если применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
-  // 2) если применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
+  // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
+  //
   {
     id: 'finish-him',
     humanReadableName: 'добивание тела из тяжрана в КС',
@@ -222,7 +221,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: [],
     pack: { id: 'chummer-zero', level: 1 },
     availability: 'master',
-    karmaCost: 120,
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: finishHimAbility.name,
   },
@@ -2184,6 +2183,22 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     eventType: doNothingAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
+  {
+    id: 'finish-his-body',
+    humanReadableName: '',
+    description: 'Добей это тело!  *работает только на тело, находящееся в телохранилище',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 30,
+    prerequisites: [],
+    pack: { id: 'null', level: 1 },
+    availability: 'master',
+    karmaCost: 120,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
   },
 ];
 setAllActiveAbilities(

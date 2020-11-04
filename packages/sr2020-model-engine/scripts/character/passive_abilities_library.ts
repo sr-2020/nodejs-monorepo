@@ -2272,7 +2272,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(increaseMentalProtection, { amount: 3 }),
   },
   // повышает порог кризисной ситуации при употреблении химоты
-  // Модификатор: ХимотаКризис +10
+  // Модификатор: ХимотаКризис порог +10
   {
     id: 'chemo-resistance',
     humanReadableName: 'сопротивляемость химоте',
@@ -3065,7 +3065,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'guns-1',
     humanReadableName: 'дальнобойное оружие: винтовки',
-    description: 'персонаж может использовать винтовки',
+    description: 'ты можешь использовать винтовки',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner'],
@@ -3076,7 +3076,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'guns-2',
     humanReadableName: 'дальнобойное оружие: автоматы',
-    description: 'персонаж может использовать автоматы',
+    description: 'ты можешь использовать автоматы',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'guns-1'],
@@ -3087,7 +3087,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'guns-3',
     humanReadableName: 'дальнобойное оружие: пулеметы',
-    description: 'персонаж может использовать пулемёты',
+    description: 'ты можешь использовать пулемёты',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'guns-2'],
@@ -3285,7 +3285,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // уменьшает кул finish-him
+  // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
+  //
   {
     id: 'executioner-1',
     humanReadableName: 'Палач: быстрое добивание',
@@ -3298,12 +3299,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // позволяет оглушать персонажей, в том числе в небоевой обстановке
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'executioner-2',
     humanReadableName: 'Палач: оглушение',
     description:
-      'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нокаут, отличительная черта любого самурая-ассасина, но требует большой практики',
+      'Понимание анатомии метачеловека, знание куда стоит ударить, что бы отправить противника в нокаут, отличительная черта любого самурая-ассасина, но требует большой практики. Ты можешь оглушить другого персонажа в небоевой обстанаовке.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'executioner-1'],
@@ -3311,7 +3312,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Позволяет провести допрос тяжело раненного персонажа. Допрашиваемый персонаж обязан честно и полно ответить на три вопроса
+  // показывает игроку текст абилки, больше ничего
   {
     id: 'executioner-3',
     humanReadableName: 'Палач: допрос',
@@ -3323,7 +3324,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Позволяет снять чип (разрушить по игре) с оружия противника
+  // Позволяет снять чип (разрушить по игре) с оружия противника. показывает игроку текст абилки.
   {
     id: 'marauder-1',
     humanReadableName: 'Мародер: разоружение',
@@ -3336,7 +3337,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Позволяет при добивании в КС получить часть денег добитого (10%)
+  // Сканирует тело, находящееся  в КС.
+  // Со счета жертвы на счет самурая переводится 10% средств.
   {
     id: 'marauder-2',
     humanReadableName: 'Мародер: грабеж',
@@ -3349,11 +3351,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Позволяет снять чип (разрушить по игре) с брони противника
+  // Позволяет снять и порвать чип (разрушить по игре) с брони противника. показывает игроку текст абилки.
   {
     id: 'marauder-3',
     humanReadableName: 'Мародер: разоблачение',
-    description: 'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять ',
+    description:
+      'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять с противника и порвать (разрушить по игре) чип брони. ',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-2'],
@@ -3816,7 +3819,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   //
@@ -3828,7 +3830,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   //
@@ -3840,7 +3841,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   //
@@ -3852,7 +3852,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
 ];
