@@ -273,7 +273,7 @@ export function discourseGroupAdd(api: EventModelApi<Sr2020Character>, data: Loc
   api.model.ethic.groups.push(group.id);
   api.model.passiveAbilities.push({
     id: data.groupId,
-    humanReadableName: 'Член этической группы',
+    name: 'Член этической группы',
     description: group.name,
   });
   updateGroupEthicAbilities(api.model);

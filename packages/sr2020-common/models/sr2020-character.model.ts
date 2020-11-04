@@ -106,7 +106,7 @@ export class AddedPassiveAbility {
   @rproperty() id: string;
 
   // Short-ish human-readable name to be shown in the UI.
-  @rproperty() humanReadableName: string;
+  @rproperty() name: string;
 
   // Full description. Can be multiline.
   @rproperty() description: string;

@@ -471,7 +471,7 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
   const magicInTheBloodAbility = kAllPassiveAbilities.get('magic-in-the-blood')!;
   api.model.passiveAbilities.push({
     id: magicInTheBloodAbility.id,
-    humanReadableName: magicInTheBloodAbility.humanReadableName,
+    name: magicInTheBloodAbility.humanReadableName,
     description: template(magicInTheBloodAbility.description)({ amount: powerBonus }),
     validUntil: m.validUntil,
   });
@@ -481,7 +481,7 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
   const bloodyTideAbility = kAllPassiveAbilities.get('bloody-tide')!;
   api.model.passiveAbilities.push({
     id: bloodyTideAbility.id,
-    humanReadableName: bloodyTideAbility.humanReadableName,
+    name: bloodyTideAbility.humanReadableName,
     description: bloodyTideAbility.description,
     validUntil: m.validUntil,
   });

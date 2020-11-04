@@ -80,7 +80,7 @@ export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: Dumpsho
   const ability = kAllPassiveAbilities.get('dump-shock-survivor')!;
   api.model.passiveAbilities.push({
     id: ability.id,
-    humanReadableName: ability.humanReadableName,
+    name: ability.humanReadableName,
     description: template(ability.description)({ amount: m.amount }),
   });
 }

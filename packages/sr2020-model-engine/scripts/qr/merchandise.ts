@@ -93,7 +93,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       if (maybePassiveAbility) {
         droneData.passiveAbilities.push({
           id: maybePassiveAbility.id,
-          humanReadableName: maybePassiveAbility.humanReadableName,
+          name: maybePassiveAbility.humanReadableName,
           description: maybePassiveAbility.description,
           modifierIds: [], // We assume that drone passive abilities don't have any modifiers, so modifierIds are empty.
         });
