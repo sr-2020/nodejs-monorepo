@@ -1,5 +1,6 @@
 import {
   avalancheSpell,
+  birdsSpell,
   brasiliaSpell,
   cacophonySpell,
   charmSpell,
@@ -162,7 +163,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'closed',
     karmaCost: 2,
     sphere: 'fighting',
-    eventType: dummyAreaSpell.name,
+    eventType: birdsSpell.name,
   },
   // На время T минут у мага появляется пассивная абилка cacophony-able. amount=Мощь*5. <Такое-то время> - момент активации заклинания.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают.

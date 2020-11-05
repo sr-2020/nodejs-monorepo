@@ -567,7 +567,7 @@ export function stoneSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellD
 // Location-attack spells
 
 export function avalancheSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
-  addTemporaryPassiveAbility(api, 'avalance-able', duration(3, 'minutes'), { amount: Math.ceil(data.power / 2) });
+  addTemporaryPassiveAbility(api, 'avalanche-able', duration(3, 'minutes'), { amount: Math.ceil(data.power / 2) });
 }
 
 export function birdsSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
