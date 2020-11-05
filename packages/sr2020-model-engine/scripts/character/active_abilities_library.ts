@@ -43,7 +43,7 @@ import {
   tellMeTheTruthAbility,
   youDontTrustAnybody,
 } from './mental';
-import { autodocHeal, autodocRevive, capsuleReanimate, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@sr2020/sr2020-common/models/qr-code.model';
 import { Feature, TargetSignature } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import {
@@ -1457,7 +1457,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocHeal.name,
+    eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
   {
@@ -1471,7 +1471,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocHeal.name,
+    eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
   {
@@ -1485,7 +1485,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocHeal.name,
+    eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
   {
@@ -1499,7 +1499,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocRevive.name,
+    eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
   {
@@ -1513,7 +1513,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocRevive.name,
+    eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
   {
@@ -1527,7 +1527,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: autodocRevive.name,
+    eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
   {

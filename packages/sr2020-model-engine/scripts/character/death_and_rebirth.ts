@@ -78,6 +78,16 @@ export function absoluteDeath(api: EventModelApi<Sr2020Character>, data: Locatio
   healthStateTransition(api, 'biologically_dead', data.location);
 }
 
+export function medcartReviveAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, autodocRevive, data);
+  api.sendNotification('Успех', 'Пациент вылечен');
+}
+
+export function medcartHealAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, autodocHeal, {});
+  api.sendNotification('Успех', 'Пациент вылечен');
+}
+
 export function autodocRevive(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.model.healthState != 'wounded') {
     throw new UserVisibleError('Пациент не находится в состоянии тяжелого ранения');
