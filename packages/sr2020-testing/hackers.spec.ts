@@ -105,5 +105,20 @@ describe('Hackers-related events', function () {
 
     // Activate soft
     await fixture.useAbility({ id: 'activate-soft', qrCodeId: '0' });
+
+    expect(fixture.getPubSubNotifications()).containDeep([
+      {
+        topic: 'ability_used',
+        body: {
+          id: 'activate-soft',
+          qrCode: {
+            type: 'software',
+            data: {
+              id: 'soft-spambomb',
+            },
+          },
+        },
+      },
+    ]);
   });
 });
