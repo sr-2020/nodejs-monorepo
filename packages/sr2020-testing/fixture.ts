@@ -189,12 +189,14 @@ export class TestFixture {
 
   async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     this._pushService.reset();
+    this._pubSubService.reset();
     const resp = await this.client.post(`/character/model/${id}`).send(event).expect(200);
     return resp.body;
   }
 
   async sendCharacterEventExpectingError(event: EventRequest, id: number | string = 0): Promise<string | undefined> {
     this._pushService.reset();
+    this._pubSubService.reset();
     const resp = await this.client.post(`/character/model/${id}`).send(event).expect(400);
     return resp?.body?.error?.message;
   }
