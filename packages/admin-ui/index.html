@@ -975,6 +975,21 @@
                     </b-input-group>
                    </b-card-body>
                  </b-card>
+
+                 <b-card no-body v-if="qrModel.type == 'empty'">
+                   <b-card-header>Запись софта на QR</b-card-header>
+                   <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedSoftware">
+                        <option v-for="software in allSoftware" :value="software.id"> {{ software.name }} ( {{ software.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeSoftwareQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                   </b-card-body>
+                 </b-card>
               </b-card-group>
             </div>
 
