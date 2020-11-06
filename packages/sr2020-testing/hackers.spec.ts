@@ -66,5 +66,21 @@ describe('Hackers-related events', function () {
 
     // Jack in to the deck
     await fixture.useAbility({ id: 'jack-in', qrCodeId: '0' });
+
+    expect(fixture.getPubSubNotifications()).containDeep([
+      {
+        topic: 'ability_used',
+        body: {
+          id: 'jack-in',
+          qrCode: {
+            type: 'cyberdeck',
+            data: {
+              id: 'cyberdeck-chariot',
+              modSlots: 4,
+            },
+          },
+        },
+      },
+    ]);
   });
 });
