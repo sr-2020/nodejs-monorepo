@@ -141,6 +141,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return {
       type: 'cyberdeck',
       name: maybeCyberDeck.name,
+      description: maybeCyberDeck.description,
       data: maybeCyberDeck,
     };
   }
@@ -150,6 +151,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return {
       type: 'software',
       name: maybeSoftware.name,
+      description: maybeSoftware.description,
       data: maybeSoftware,
     };
   }
