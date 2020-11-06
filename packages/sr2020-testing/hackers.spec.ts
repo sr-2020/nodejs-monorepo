@@ -93,4 +93,17 @@ describe('Hackers-related events', function () {
       },
     ]);
   });
+
+  it('Activating software', async () => {
+    // Hacker set up
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('activate-soft');
+
+    // Soft set up
+    await fixture.saveQrCode();
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'soft-spambomb' } }, '0');
+
+    // Activate soft
+    await fixture.useAbility({ id: 'activate-soft', qrCodeId: '0' });
+  });
 });

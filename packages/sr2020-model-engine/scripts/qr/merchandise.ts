@@ -11,6 +11,7 @@ import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/charac
 import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
 import { kALlCyberDecks } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
+import { kAllSoftware } from '@sr2020/sr2020-model-engine/scripts/qr/software_library';
 
 interface MerchandiseExternalData {
   id: string;
@@ -141,6 +142,15 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       type: 'cyberdeck',
       name: maybeCyberDeck.name,
       data: maybeCyberDeck,
+    };
+  }
+
+  const maybeSoftware = kAllSoftware.find(sameId);
+  if (maybeSoftware) {
+    return {
+      type: 'software',
+      name: maybeSoftware.name,
+      data: maybeSoftware,
     };
   }
 
