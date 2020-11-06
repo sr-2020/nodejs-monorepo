@@ -107,7 +107,7 @@ export class ModelEngineController implements ModelEngineService {
       mentalAttackBonus: 0,
       mentalDefenceBonus: 0,
       mentalQrId: 0,
-      magic: 2,
+      magic: 1,
       resonance: 1,
       hacking: {
         maxTimeAtHost: 15,
