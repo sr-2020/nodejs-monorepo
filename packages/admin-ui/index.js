@@ -12,12 +12,14 @@ app = new Vue({
     allReagents: undefined,
     allEthicGroups: undefined,
     allDrones: undefined,
+    allCyberDecks: undefined,
     allFocuses: undefined,
     selectedFeature: 'magic-1',
     selectedImplant: 'rcc-alpha',
     selectedPill: 'iodomarin',
     selectedReagent: 'virgo',
     selectedDrone: 'belarus',
+    selectedCyberDeck: 'cyberdeck-microtronic',
     selectedRace: 'meta-norm',
     selectedEthicGroup: 'russian-orthodox-church',
     selectedFocus: 'asparagus',
@@ -99,6 +101,11 @@ app = new Vue({
     {
       const response = await this.$http.get(`https://model-engine.evarun.ru/drones`);
       this.allDrones = response.body;
+    }
+
+    {
+      const response = await this.$http.get(`https://model-engine.evarun.ru/cyberdecks`);
+      this.allCyberDecks = response.body;
     }
 
     {
@@ -392,6 +399,10 @@ app = new Vue({
 
     async writeFocusQr() {
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedFocus } });
+    },
+
+    async writeCyberdeckQr() {
+      return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedCyberDeck } });
     },
 
     async writeKarmaSourceQr() {

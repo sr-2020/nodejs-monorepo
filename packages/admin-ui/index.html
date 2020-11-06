@@ -961,6 +961,25 @@
                    </b-card-body>
                  </b-card>
 
+                 <b-card no-body v-if="qrModel.type == 'empty'">
+                   <b-card-header>Запись кибердеки на QR</b-card-header>
+                   <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedCyberDeck">
+                        <option v-for="cyberdeck in allCyberDecks" :value="cyberdeck.id"> {{ cyberdeck.name }} ( {{ cyberdeck.id }} )
+                        </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeCyberdeckQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                   </b-card-body>
+                 </b-card>
+              </b-card-group>
+            </div>
+
+            <div  class="mt-3">
+              <b-card-group deck>
                 <b-card no-body>
                   <b-card-header>Запись фичи на QR</b-card-header>
                   <b-card-body>
@@ -975,6 +994,20 @@
                     </b-input-group>
                   </b-card-body>
                 </b-card>
+
+                 <b-card no-body v-if="qrModel.type == 'empty'">
+                   <b-card-header>Запись еды на QR</b-card-header>
+                   <b-card-body>
+                    <b-input-group>
+                      <b-form-input type="number" v-model="foodNumberOfUses"></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeFoodQr">Еда</b-button>
+                        <b-button variant="success" v-on:click="writeMeatQr">Мясо</b-button>
+                        <b-button variant="success" v-on:click="writeBloodQr">Кровь</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                   </b-card-body>
+                 </b-card>
               </b-card-group>
             </div>
 
@@ -994,21 +1027,6 @@
                     </b-input-group>
                    </b-card-body>
                  </b-card>
-
-                 <b-card no-body v-if="qrModel.type == 'empty'">
-                   <b-card-header>Запись еды на QR</b-card-header>
-                   <b-card-body>
-                    <b-input-group>
-                      <b-form-input type="number" v-model="foodNumberOfUses"></b-form-input>
-                      <b-input-group-append>
-                        <b-button variant="success" v-on:click="writeFoodQr">Еда</b-button>
-                        <b-button variant="success" v-on:click="writeMeatQr">Мясо</b-button>
-                        <b-button variant="success" v-on:click="writeBloodQr">Кровь</b-button>
-                      </b-input-group-append>
-                    </b-input-group>
-                   </b-card-body>
-                 </b-card>
-              </b-card-group>
             </div>
 
             <div class="mt-3">
