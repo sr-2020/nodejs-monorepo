@@ -7,6 +7,7 @@ import { kAllDrones } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library
 import { Feature, kFeatureDescriptor } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
+import { kALlCyberDecks } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
 
 export class DictionariesController {
   @get('/features', {
@@ -136,6 +137,32 @@ export class DictionariesController {
   })
   drones(): { id: string; name: string; description: string }[] {
     return kAllDrones.map((p) => ({ id: p.id, name: p.name, description: p.description }));
+  }
+
+  @get('/cyberdecks', {
+    summary: `Returns the list of implemented cyberdecks`,
+    responses: {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  cyberdecks(): { id: string; name: string; description: string }[] {
+    return kALlCyberDecks.map((p) => ({ id: p.id, name: p.name, description: p.description }));
   }
 
   @get('/focuses', {
