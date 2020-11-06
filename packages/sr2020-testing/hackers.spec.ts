@@ -53,4 +53,18 @@ describe('Hackers-related events', function () {
     await fixture.advanceTime(duration(10, 'minutes'));
     expect((await fixture.getCharacter('1')).workModel.resonance).to.equal(4); // Only temporary :(
   });
+
+  it('Activating cyberdeck', async () => {
+    // Hacker set up
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('jack-in');
+    await fixture.addCharacterFeature('jack-out');
+
+    // Cyberdeck set up
+    await fixture.saveQrCode();
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyberdeck-chariot' } }, '0');
+
+    // Jack in to the deck
+    await fixture.useAbility({ id: 'jack-in', qrCodeId: '0' });
+  });
 });

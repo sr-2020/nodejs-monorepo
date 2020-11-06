@@ -10,6 +10,7 @@ import { kAllDrones, kCommonDroneAbilityIds } from '@sr2020/sr2020-model-engine/
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
+import { kALlCyberDecks } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
 
 interface MerchandiseExternalData {
   id: string;
@@ -131,6 +132,15 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       type: 'focus',
       name: maybeFocus.name,
       data: maybeFocus,
+    };
+  }
+
+  const maybeCyberDeck = kALlCyberDecks.find(sameId);
+  if (maybeCyberDeck) {
+    return {
+      type: 'cyberdeck',
+      name: maybeCyberDeck.name,
+      data: maybeCyberDeck,
     };
   }
 
