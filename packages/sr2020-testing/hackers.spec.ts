@@ -82,5 +82,15 @@ describe('Hackers-related events', function () {
         },
       },
     ]);
+
+    await fixture.useAbility({ id: 'jack-out' });
+    expect(fixture.getPubSubNotifications()).containDeep([
+      {
+        topic: 'ability_used',
+        body: {
+          id: 'jack-out',
+        },
+      },
+    ]);
   });
 });
