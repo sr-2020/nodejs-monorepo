@@ -463,7 +463,7 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).containDeep([
       {
         id: 'fireball-able',
-        name: 'Fireball',
+        humanReadableName: 'Fireball',
         description: `Можете кинуть 2 огненных шаров.`,
       },
     ]);
@@ -479,7 +479,7 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).containDeep([
       {
         id: 'fast-charge-able',
-        name: 'Fast Charge',
+        humanReadableName: 'Fast Charge',
         description: `Можете кинуть 3 молний.`,
       },
     ]);

@@ -936,7 +936,7 @@ function createAddiction(element: keyof Concentrations): Addiction {
 export function addAddictionPassiveAbility(api: EffectModelApi<Sr2020Character>, m: Addiction) {
   api.model.passiveAbilities.push({
     id: `${m.element}-addiction-passive-ability`,
-    name: 'Зависимость',
+    humanReadableName: 'Зависимость',
     description: `от вещества ${kElementNames[m.element]}`,
   });
 }

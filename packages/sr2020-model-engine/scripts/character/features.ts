@@ -53,7 +53,7 @@ function addPassiveAbility(model: Sr2020Character, ability: PassiveAbility) {
   for (const m of modifiersToAdd) modifierIds.push(addModifier(model, m).mID);
   const addedAbility: AddedPassiveAbility = {
     id: ability.id,
-    name: ability.humanReadableName,
+    humanReadableName: ability.humanReadableName,
     description: ability.description,
     modifierIds,
   };
@@ -204,7 +204,7 @@ export function addTemporaryPassiveAbilityEffect(
   const passiveAbility = kAllPassiveAbilities.get(m.abilityId)!;
   api.model.passiveAbilities.push({
     id: passiveAbility.id,
-    name: passiveAbility.humanReadableName,
+    humanReadableName: passiveAbility.humanReadableName,
     description: m.descriptionSubstitutions ? template(passiveAbility.description)(m.descriptionSubstitutions) : passiveAbility.description,
     validUntil: m.validUntil,
   });
