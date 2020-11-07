@@ -3875,7 +3875,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Когда ЭТОТ персонаж применяет препараты на СЕБЯ ИЛИ ДРУГОГО персонажа, с 30% вероятностью - эффект срабатывает, а препарат не расходуется после использования.
+  // Работает только для препаратов, которые входят в список:
+  // iodomarin  iodomarin-p apollo  apollo-p military-combo   military-supercombo  preper  preper-p yurgen yurgen-p
+  {
+    id: 'good-pills',
+    humanReadableName: 'Используй аптечку правильно!',
+    description:
+      'При применении препаратов, восстанавливающих хиты и боевых коктейлей, с вероятностью 30% препарат даст нужный эффект, но не израсходуется.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-combat', level: 2 },
     modifier: [],
   },
 ];
