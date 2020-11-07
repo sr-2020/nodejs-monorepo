@@ -2550,7 +2550,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые импланты',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-rigger-medic', 'rigger-medic-bio'],
+    prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-bio', level: 1 },
     modifier: [],
   },
@@ -3861,17 +3861,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Think as a master',
     description:
       'В течение 10 минут после активации заклинания все персонажи, присутствующие в реале в поле зрения мага (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), переходят в тяжран, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
-  // 80-140-200
-  {
-    id: 'rigger-medic-bio',
-    humanReadableName: 'Биоинженер',
-    description:
-      'Умеет ставить импланты (альфа-бета-гамма, био). Нужен автодок.\n * ставит простые киберимпланты\n ** умеет ставить сложные киберимпланты\n *** умеет ставить самые сложные киберимпланты',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
