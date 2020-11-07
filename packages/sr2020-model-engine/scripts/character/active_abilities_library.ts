@@ -1222,11 +1222,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'implant-active',
     humanReadableName: 'Установка импланта',
-    description: 'Для установки импланта используй эту способность. Необходим автодок!',
+    description: 'Ты можешь использовать автодок для лечения и ставить импланты!',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
     prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-bio', level: 1 },
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
@@ -1250,7 +1251,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: ['arch-rigger-engineer'],
     pack: { id: 'rigger-eng-mech', level: 1 },
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -1270,13 +1271,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
     prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-repo', level: 1 },
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
-  // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ). Смотрим параметр rigging.repomanBonus + Int ,  Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр rigging.repomanBonus. Если несколько одинаково дорогих - любой. Если rigging.repomanBonus не хватило - ничего не происходит.
+  // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ).
+  // Смотрим параметр rigging.repomanBonus + Int ,
+  // Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр rigging.repomanBonus. Если несколько одинаково дорогих - любой. Если rigging.repomanBonus не хватило - ничего не происходит.
   {
     id: 'repoman-black',
     humanReadableName: 'Черный рипомен',
@@ -1284,9 +1288,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
-    prerequisites: ['arch-rigger-medic'],
-    availability: 'closed',
-    karmaCost: 0,
+    prerequisites: ['arch-rigger-medic', 'repoman-active', 'repoman-3'],
+    availability: 'open',
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -1296,13 +1300,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'repoman-medic',
     humanReadableName: 'Рипомен хирург',
-    description: 'Ты умеешь использовать автодок и выбирать сам, какой имплант хочешь снять.',
+    description: 'Ты научился использовать автодок для снятия имплантов.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
-    prerequisites: ['arch-rigger-medic', 'repoman-active', 'implant-active'],
-    availability: 'closed',
-    karmaCost: 0,
+    prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
+    availability: 'open',
+    karmaCost: 60,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -1320,7 +1324,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-combat', level: 1 },
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 50,
     minimalEssence: 0,
     eventType: enterDrone.name,
   },
@@ -2063,10 +2067,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
-  // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перецислены все вещества, которые находятся в чаммере в формате
+  // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перечислены все вещества, которые находятся в чаммере в формате
   // имя_чаммера
   // Название вещества - количество в мг.
-  // Указываем только вещества с содержанием более чем  ( 230 - Интеллект * 10)  милиграмм
+  // Указываем только вещества с содержанием более чем  ( 280 - Интеллект * 10)  милиграмм
   {
     id: 'whats-in-the-body-1',
     humanReadableName: 'Диагностика (что в чаммере)',
@@ -2197,6 +2201,25 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     pack: { id: 'null', level: 1 },
     availability: 'master',
     karmaCost: 120,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Когда ЭТОТ персонаж применяет препараты на СЕБЯ ИЛИ ДРУГОГО персонажа, с 30% вероятностью - эффект срабатывает, а препарат не расходуется после использования.
+  // Работает только для препаратов, которые входят в список:
+  // iodomarin  iodomarin-p apollo  apollo-p military-combo   military-supercombo  preper  preper-p yurgen yurgen-p
+  {
+    id: 'good-pills',
+    humanReadableName: 'Используй аптечку правильно!',
+    description:
+      'При применении препаратов, восстанавливающих хиты и боевых коктейлей, с вероятностью 30% препарат даст нужный эффект, но не израсходуется.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 9000,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-combat', level: 2 },
+    availability: 'open',
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },

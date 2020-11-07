@@ -1916,11 +1916,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
-  // Допуск: мобильный автодок
+  // Допуск: медикарт
   {
     id: 'mobile-auto-doc-1',
     humanReadableName: 'Мобильный автодок',
-    description: 'Ты можешь использовать мобильный автодок.',
+    description: 'Ты можешь использовать медикарт.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-rigger-medic'],
@@ -2002,7 +2002,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление медикартом.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['medicraft-active'],
+    prerequisites: ['arch-rigger-medic', 'medicraft-active'],
     pack: { id: 'rigger-medic-combat', level: 1 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
@@ -2016,10 +2016,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'medicraft-2',
     humanReadableName: 'Медицинские дроны 2',
-    description: 'Улучшает управление сложными медикартами.',
+    description: 'Позволяет управление сложными медикартами.',
     availability: 'open',
-    karmaCost: 35,
-    prerequisites: ['medicraft-1'],
+    karmaCost: 40,
+    prerequisites: ['arch-rigger-medic', 'medicraft-1'],
     pack: { id: 'rigger-medic-combat', level: 2 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
@@ -2027,16 +2027,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
-  // drones.medicraftBonus +4
+  // drones.medicraftBonus +8
   // drones.maxTimeInside +10
   // drones.recoveryTime -10
+  // drones.aircraftBonus = +4
+  // drones.groundcraftBonus = +4
   {
     id: 'medicraft-3',
     humanReadableName: 'Медицинские дроны 3',
-    description: 'Улучшает управление самыми сложными медикартами.',
+    description: 'Позволяет управление самыми сложными медикартами и немного улучшает навык для всех остальных типов дронов.',
     availability: 'open',
-    karmaCost: 35,
-    prerequisites: ['medicraft-2'],
+    karmaCost: 70,
+    prerequisites: ['arch-rigger-medic', 'medicraft-2'],
     pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
@@ -2044,15 +2046,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
-  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  // биовэр. Сложность установки 5
+  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами грейда
+  // биовэр.
+  // rigging.implantsBonus+4
   {
     id: 'auto-doc-neuro',
     humanReadableName: 'нейрохирургия\n',
     description: 'Ты можешь использовать автодок для работы с биовэром',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'auto-doc-3'],
     modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation, {})],
   },
   // rigging.implantsBonus+2
@@ -2091,7 +2094,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Тюнинг 1',
     description: 'Ты можешь ставить простые моды.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: ['tuning-active', 'arch-rigger-engineer'],
     pack: { id: 'rigger-eng-mech', level: 1 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
@@ -2102,7 +2105,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Тюнинг 2',
     description: 'Ты можешь ставить сложные моды.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 40,
     prerequisites: ['tuning-1', 'arch-rigger-engineer'],
     pack: { id: 'rigger-eng-mech', level: 2 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
@@ -2113,39 +2116,42 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Тюнинг 3',
     description: 'Ты можешь ставить самые сложные моды.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 80,
     prerequisites: ['tuning-2', 'arch-rigger-engineer'],
     pack: { id: 'rigger-eng-mech', level: 3 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +4
+  // rigging.repomanBonus +2
   {
     id: 'repoman-1',
     humanReadableName: 'Было ваше - стало наше 1',
-    description: 'Ты можешь снимать простые импланты \\ моды.',
+    description: 'Ты можешь снимать простые импланты.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['repoman-active', 'arch-rigger-medic'],
+    karmaCost: 20,
+    prerequisites: ['arch-rigger-medic', 'repoman-active'],
+    pack: { id: 'rigger-medic-repo', level: 1 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +4
+  // rigging.repomanBonus +2
   {
     id: 'repoman-2',
     humanReadableName: 'Было ваше - стало наше 2',
-    description: 'Ты можешь снимать сложные импланты \\ моды.',
+    description: 'Ты можешь снимать сложные импланты.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['repoman-1', 'arch-rigger-medic'],
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'repoman-1'],
+    pack: { id: 'rigger-medic-repo', level: 2 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +4
+  // rigging.repomanBonus +2
   {
     id: 'repoman-3',
     humanReadableName: 'Было ваше - стало наше 3',
-    description: 'Ты можешь снимать самые сложные импланты \\ моды. ',
+    description: 'Ты можешь снимать самые сложные импланты.',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['repoman-2', 'arch-rigger-medic'],
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'repoman-2'],
+    pack: { id: 'rigger-medic-repo', level: 3 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
   // drones.aircraftBonus =  +2
@@ -2536,38 +2542,44 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // TODO(aeremin): Implement and add modifier here
   // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  хром и лечить тяжран. Сложность установки 1
+  //  грейда альфа и бета и лечить тяжран.
+  // rigging.implantsBonus+2
   {
     id: 'auto-doc-1',
     humanReadableName: 'хирургия',
-    description: 'Ты можешь использовать автодок.И ставить простые импланты',
+    description: 'Ты можешь ставить простые импланты',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 20,
+    prerequisites: ['arch-rigger-medic', 'rigger-medic-bio'],
+    pack: { id: 'rigger-medic-bio', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  хром и лечить тяжран. Сложность установки 2
+  //  грейда гамма и лечить тяжран.
+  // rigging.implantsBonus+2
   {
     id: 'auto-doc-2',
     humanReadableName: 'хирургия',
-    description: 'Ты можешь использовать автодок. И ставить продвинутые импланты',
+    description: 'Ты можешь ставить сложные импланты',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'auto-doc-1'],
+    pack: { id: 'rigger-medic-bio', level: 2 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  хром и лечить тяжран сложность установки 3
+  //  грейда дельта и лечить тяжран
+  // rigging.implantsBonus+2
   {
     id: 'auto-doc-3',
     humanReadableName: 'хирургия',
-    description: 'Ты можешь использовать автодок. И ставить высокотехнологичные импланты',
+    description: 'Ты можешь ставить высокотехнологичные импланты',
     availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'auto-doc-2'],
+    pack: { id: 'rigger-medic-bio', level: 3 },
     modifier: [],
   },
   // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
@@ -3364,7 +3376,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // добавляем в список вещества с содержанием ( 130 - Интеллект * 10)  мг и больше
+  // добавляем в список вещества с содержанием ( 230 - Интеллект * 10)  мг и больше
   {
     id: 'whats-in-the-body-2',
     humanReadableName: 'Что в чаммере - усиление',
@@ -3376,7 +3388,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // показываем в списке вещества с содержанием ( 90 - Интеллект * 10)   мг и больше
+  // показываем в списке вещества с содержанием ( 130 - Интеллект * 10)   мг и больше
   {
     id: 'whats-in-the-body-3',
     humanReadableName: 'Что в чаммере - еще усиление',
@@ -3852,6 +3864,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // 80-140-200
+  {
+    id: 'rigger-medic-bio',
+    humanReadableName: 'Биоинженер',
+    description:
+      'Умеет ставить импланты (альфа-бета-гамма, био). Нужен автодок.\n * ставит простые киберимпланты\n ** умеет ставить сложные киберимпланты\n *** умеет ставить самые сложные киберимпланты',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];
