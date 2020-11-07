@@ -6,7 +6,12 @@ import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models
 import { ActiveAbilityData } from './active_abilities';
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume, unconsume } from '../qr/events';
-import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import {
+  addFeatureToModel,
+  getAllFeatures,
+  removeFeatureFromModel,
+  satisfiesPrerequisites,
+} from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { LocusQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 
 const MAX_ETHIC_VALUE = 4;
@@ -72,7 +77,7 @@ function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScal
     ? []
     : kEthicAbilities.filter((it) => ethicValues.get(it.scale) == it.value).map((it) => it.abilityId);
 
-  const newGroupEthicAbilities: string[] = [];
+  let newGroupEthicAbilities: string[] = [];
   for (const groupId of model.ethic.groups) {
     const libraryGroup = kAllEthicGroups.find((it) => it.id == groupId)!;
     let fitsGroup = true;
@@ -82,6 +87,10 @@ function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScal
     }
     if (fitsGroup) newGroupEthicAbilities.push(...libraryGroup.abilityIds);
   }
+
+  newGroupEthicAbilities = newGroupEthicAbilities.filter((abilityId) =>
+    satisfiesPrerequisites(model, getAllFeatures().find((f) => f.id == abilityId)!),
+  );
 
   const newEthicAbilities = new Set([...newPersonalEthicAbilities, ...newGroupEthicAbilities]);
 
