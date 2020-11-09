@@ -2037,7 +2037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицинские дроны 3',
     description: 'Позволяет управление самыми сложными медикартами и немного улучшает навык для всех остальных типов дронов.',
     availability: 'open',
-    karmaCost: 70,
+    karmaCost: 40,
     prerequisites: ['arch-rigger-medic', 'medicraft-2'],
     pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [
@@ -2143,7 +2143,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'rigger-medic-repo', level: 2 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +2
+  // rigging.repomanBonus +4
   {
     id: 'repoman-3',
     humanReadableName: 'Было ваше - стало наше 3',
@@ -3867,7 +3867,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Когда ЭТОТ персонаж применяет препараты на СЕБЯ ИЛИ ДРУГОГО персонажа, с 30% вероятностью - эффект срабатывает, а препарат не расходуется после использования.
+  // При применении абилки  use-pills-on-others ИЛИ употребления  таблетки  самостоятельно
+  // с 30% вероятностью - эффект срабатывает, а препарат не расходуется после использования.
   // Работает только для препаратов, которые входят в список:
   // iodomarin  iodomarin-p apollo  apollo-p military-combo   military-supercombo  preper  preper-p yurgen yurgen-p
   {
@@ -3878,7 +3879,41 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-rigger-medic'],
-    pack: { id: 'rigger-medic-combat', level: 2 },
+    pack: { id: 'rigger-medic-combat', level: 3 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'troubles-common-1',
+    humanReadableName: 'Общие проблемы *',
+    description:
+      'У персонажа есть тяжелый груз мрачного прошлого. Открытый контракт на его голову; ворованное имущество; наркотическая зависимость, долг перед кем-то (не денежный), поддельный SIN;  ...',
+    availability: 'master',
+    karmaCost: -10,
+    prerequisites: [],
+    pack: { id: 'troubles-common', level: 1 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'troubles-common-2',
+    humanReadableName: 'Общие проблемы **',
+    description: 'Еще более тяжелый и мрачный груз.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['troubles-common-1'],
+    pack: { id: 'troubles-common', level: 2 },
+    modifier: [],
+  },
+  // Отображает текст на экране персонажа
+  {
+    id: 'troubles-common-3',
+    humanReadableName: 'Общие проблемы **',
+    description: 'Совсем тяжелый и мрачный груз.',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['troubles-common-2'],
+    pack: { id: 'troubles-common', level: 3 },
     modifier: [],
   },
 ];

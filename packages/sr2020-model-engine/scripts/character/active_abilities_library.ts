@@ -1262,7 +1262,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // QR пустышки, куда запишется трофей
   // Выбираем самый слабый мод по параметру Сложности.
   // Если несколько одинаково слабых - любой.
-  // Если параметра rigging.repomanBonus + Int - не хватило - снятия не происходит.
+  // Если параметр rigging.repomanBonus + Int ниже или равен сложности установки имплант - снятия не происходит.
   {
     id: 'repoman-active',
     humanReadableName: 'Рипомен',
@@ -1280,7 +1280,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ).
   // Смотрим параметр rigging.repomanBonus + Int ,
-  // Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр rigging.repomanBonus. Если несколько одинаково дорогих - любой. Если rigging.repomanBonus не хватило - ничего не происходит.
+  // Выбираем самый дорогой мод по параметру Сложности, но не больше чем параметр rigging.repomanBonus+int. Если несколько одинаково дорогих - любой. Если rigging.repomanBonus+int не хватило - ничего не происходит.
   {
     id: 'repoman-black',
     humanReadableName: 'Черный рипомен',
@@ -2201,6 +2201,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     pack: { id: 'null', level: 1 },
     availability: 'master',
     karmaCost: 120,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Применяет препарат на другого персонажа
+  // цель 1: куар препарата
+  // цель2: куар цели (куар мясного тела, показаный добровольно или куар тела в жижране)
+  {
+    id: 'use-pills-on-others',
+    humanReadableName: 'Вколоть препарат',
+    description: 'Активируй, чтобы применить препарат на другого персонажа',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 9000,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-combat', level: 2 },
+    availability: 'open',
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
