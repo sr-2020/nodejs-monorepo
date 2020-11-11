@@ -3916,6 +3916,30 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'troubles-common', level: 3 },
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'black-matter',
+    humanReadableName: 'Black matter',
+    description: 'У духа в эктоплазменном теле 6 хитов.',
+    availability: 'closed',
+    karmaCost: 2,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'grey-matter',
+    humanReadableName: 'Grey matter',
+    description: 'У духа в эктоплазменном теле 4 хита',
+    availability: 'closed',
+    karmaCost: 2,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
   const result = new Map<string, PassiveAbility>();

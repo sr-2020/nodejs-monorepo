@@ -2222,6 +2222,38 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
+  // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код нужного духа, сканирует ячейку в телохранилище. После этого его мясное тело как бы лежит в телохранилище, а сам игрок действует в эктоплазменном теле - согласно описанию эктоплазменного тела в документе https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju
+  {
+    id: 'own-spirit',
+    humanReadableName: 'Own spirit',
+    description: 'Влезть в духа',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 30,
+    prerequisites: ['arch-mage-summoner'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 2,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле. Мясному телу игрока на 20 минут выдаётся абилка SitRip
+  {
+    id: 'dispirit',
+    humanReadableName: 'Dispirit',
+    description: 'Вылезти из духа',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: 20,
+    prerequisites: ['arch-mage-summoner'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
 ];
 setAllActiveAbilities(
   (() => {
