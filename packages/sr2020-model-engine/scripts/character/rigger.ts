@@ -239,6 +239,11 @@ export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneMo
   api.model.maxHp = m.hp;
   api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
   //  What to do with the passive ones?
+
+  api.model.screens.billing = false;
+  api.model.screens.spellbook = false;
+  api.model.screens.implants = false;
+  api.model.screens.ethics = false;
 }
 
 export function droneTimeout(api: EventModelApi<Sr2020Character>, data: {}) {
