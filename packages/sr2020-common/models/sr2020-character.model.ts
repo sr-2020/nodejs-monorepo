@@ -588,6 +588,45 @@ export class Karma {
 }
 
 @model()
+export class Screens {
+  @rproperty()
+  @Column({ default: true })
+  billing: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  spellbook: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  activeAbilities: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  passiveAbilities: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  karma: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  implants: boolean;
+
+  @rproperty()
+  @Column({ default: false })
+  autodoc: boolean;
+
+  @rproperty()
+  @Column({ default: false })
+  ethics: boolean;
+
+  @rproperty()
+  @Column({ default: false })
+  location: boolean;
+}
+
+@model()
 export class Ethic {
   @property.array(String, { required: true })
   @JsonColumn()
@@ -715,6 +754,10 @@ export class Sr2020Character extends EmptyModel {
   @Column((type) => Discounts, { prefix: 'discounts' })
   discounts: Discounts;
 
+  @rproperty()
+  @Column((type) => Screens, { prefix: 'screens' })
+  screens: Screens;
+
   @property.array(AddedSpell, { required: true })
   @JsonColumn()
   spells: AddedSpell[];
@@ -754,10 +797,6 @@ export class Sr2020Character extends EmptyModel {
   @property.array(HistoryRecord, { required: true })
   @JsonColumn()
   history: HistoryRecord[];
-
-  @rproperty()
-  @Column({ default: false })
-  paused: boolean; // Disables all actions - using abilities, etc.
 }
 
 @model()

@@ -216,6 +216,17 @@ export class ModelEngineController implements ModelEngineService {
         spentOnPassives: 0,
         cycleLimit: kMaxKarmaPerCycle,
       },
+      screens: {
+        billing: true,
+        spellbook: true,
+        activeAbilities: true,
+        passiveAbilities: true,
+        karma: true,
+        implants: true,
+        autodoc: false,
+        ethics: false,
+        location: false,
+      },
       analyzedBody: null,
       spells: [],
       activeAbilities: [],
@@ -227,7 +238,6 @@ export class ModelEngineController implements ModelEngineService {
         state: [],
         lockedUntil: 0,
       },
-      paused: false,
       history: [],
       modifiers: [
         {

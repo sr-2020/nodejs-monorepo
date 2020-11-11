@@ -17,5 +17,9 @@ export function pauseAndPostpone(api: EventModelApi<Sr2020Character>, data: { pa
 }
 
 export function setPaused(api: EffectModelApi<Sr2020Character>, m: Modifier) {
-  api.model.paused = true;
+  api.model.screens.billing = false;
+  api.model.screens.spellbook = false;
+  api.model.screens.activeAbilities = false;
+  api.model.screens.karma = false;
+  api.model.screens.ethics = false;
 }
