@@ -22,4 +22,6 @@ export function setPaused(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.screens.activeAbilities = false;
   api.model.screens.karma = false;
   api.model.screens.ethics = false;
+  api.model.screens.wound = false;
+  api.model.screens.scanQr = false;
 }

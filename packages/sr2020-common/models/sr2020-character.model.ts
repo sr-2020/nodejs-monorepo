@@ -624,6 +624,14 @@ export class Screens {
   @rproperty()
   @Column({ default: false })
   location: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  wound: boolean;
+
+  @rproperty()
+  @Column({ default: true })
+  scanQr: boolean;
 }
 
 @model()

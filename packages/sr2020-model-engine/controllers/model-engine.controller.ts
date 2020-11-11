@@ -226,6 +226,8 @@ export class ModelEngineController implements ModelEngineService {
         autodoc: false,
         ethics: false,
         location: false,
+        wound: true,
+        scanQr: true,
       },
       analyzedBody: null,
       spells: [],
