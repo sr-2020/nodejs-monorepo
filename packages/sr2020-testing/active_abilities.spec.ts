@@ -81,4 +81,56 @@ describe('Active abilities', function () {
 
     expect((await fixture.getCharacter('2')).workModel.healthState).equal('healthy');
   });
+
+  it('Repoman', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // victim
+    await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // repoman
+    await fixture.addCharacterFeature('repoman-active', '2');
+    await fixture.saveQrCode({ modelId: '3' }); // implant
+    await fixture.saveQrCode({ modelId: '4' }); // implant
+    await fixture.saveQrCode({ modelId: '5' }); // container
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-alpha' } }, 3);
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-beta' } }, 4);
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, 2);
+    await fixture.useAbility({ id: 'repoman-active', targetCharacterId: '1', qrCodeId: '5' }, '2');
+
+    const containerQr = await fixture.getQrCode('5');
+    expect(containerQr.workModel).containDeep({
+      usesLeft: 1,
+      type: 'implant',
+      data: {
+        id: 'cyber-hand-beta',
+      },
+    });
+
+    const victim = await fixture.getCharacter('1');
+    expect(victim.workModel.implants).not.containDeep([{ id: 'cyber-hand-beta' }]);
+  });
+
+  it('Black repoman', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // victim
+    await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // repoman
+    await fixture.addCharacterFeature('repoman-black', '2');
+    await fixture.saveQrCode({ modelId: '3' }); // implant
+    await fixture.saveQrCode({ modelId: '4' }); // implant
+    await fixture.saveQrCode({ modelId: '5' }); // container
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-alpha' } }, 3);
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-beta' } }, 4);
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, 2);
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, 2);
+    await fixture.useAbility({ id: 'repoman-black', targetCharacterId: '1', qrCodeId: '5' }, '2');
+
+    const containerQr = await fixture.getQrCode('5');
+    expect(containerQr.workModel).containDeep({
+      usesLeft: 1,
+      type: 'implant',
+      data: {
+        id: 'cyber-hand-alpha',
+      },
+    });
+
+    const victim = await fixture.getCharacter('1');
+    expect(victim.workModel.implants).not.containDeep([{ id: 'cyber-hand-alpha' }]);
+  });
 });

@@ -16,6 +16,8 @@ import {
   letMePay,
   oneTimeRevive,
   pencilLargeAbility,
+  repomanAbility,
+  repomanBlackAbility,
   reRent,
   skinStoneAbility,
   takeNoHarmAbility,
@@ -154,6 +156,12 @@ const kDroneAndBodyStorageTargeted: TargetSignature[] = [
   },
   kBodyStorageTarget,
 ];
+const kEmptyQrTarget: TargetSignature = {
+  name: 'Контейнер',
+  allowedTypes: ['empty'],
+  field: 'qrCodeId',
+};
+const kBodyAndContainerTargeted: TargetSignature[] = [...kPhysicalBodyTargeted, kEmptyQrTarget];
 export interface ActiveAbility extends Feature {
   target: TargetType;
   targetsSignature: TargetSignature[];
@@ -1255,7 +1263,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   // Активирует процесс снятия импланта\мода.
   // надо отсканировать
   // QR чаммера \ дрона \ кибердеки
@@ -1268,14 +1275,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Рипомен',
     description: 'Активируй, чтобы снять имплант\\мод. Выберется самый слабый.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyAndContainerTargeted,
     cooldownMinutes: 20,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-repo', level: 1 },
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: repomanAbility.name,
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   // Активирует процесс снятия импланта\мода (надо отсканировать QR пустышки, куда запишется трофей и QR чаммера \ дрона \ кибердеки ).
@@ -1286,13 +1293,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Черный рипомен',
     description: 'Активируй, чтобы снять имплант\\мод. Выберется самый сильный.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyAndContainerTargeted,
     cooldownMinutes: 20,
     prerequisites: ['arch-rigger-medic', 'repoman-active', 'repoman-3'],
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: repomanBlackAbility.name,
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
   // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще auto-doc-bonus.

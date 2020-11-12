@@ -9,6 +9,8 @@ import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scri
 import { addFeatureToModel, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { removeImplant } from '@sr2020/sr2020-model-engine/scripts/character/merchandise';
+import { createMerchandise } from '@sr2020/sr2020-model-engine/scripts/qr/merchandise';
 
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 export const kActiveAbilitiesDisabledTimer = 'no-active-abilities-timer';
@@ -275,6 +277,43 @@ export function skinStoneAbility(api: EventModelApi<Sr2020Character>, data: Acti
 
 export function tincasmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'tincasm-able', duration(10, 'minutes'));
+}
+
+enum ImplantToExtract {
+  kSimplest,
+  kMostComplex,
+}
+
+export function repomanAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  repomanGeneric(api, data, ImplantToExtract.kSimplest);
+}
+
+export function repomanBlackAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  repomanGeneric(api, data, ImplantToExtract.kMostComplex);
+}
+
+export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, chooseStrategy: ImplantToExtract) {
+  const maxDifficulty = api.workModel.rigging.repomanBonus + api.workModel.intelligence;
+  const victim = api.aquired(Sr2020Character, data.targetCharacterId!);
+  const potentialImplants = victim.implants.filter((implant) => implant.installDifficulty <= maxDifficulty);
+  if (potentialImplants.length == 0) throw new UserVisibleError('Импланты жертвы слишком сложны, вы не можете их вырезать.');
+  const implant = potentialImplants.sort((i1, i2) => {
+    const diff = i1.installDifficulty - i2.installDifficulty;
+    return chooseStrategy == ImplantToExtract.kMostComplex ? diff : -diff;
+  })[0];
+
+  api.sendOutboundEvent(Sr2020Character, victim.modelId, removeImplant, { id: implant.id });
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, createMerchandise, {
+    id: implant.id,
+    name: implant.name,
+    description: implant.description,
+    basePrice: implant.basePrice,
+    rentPrice: implant.rentPrice,
+    gmDescription: implant.gmDescription,
+    dealId: implant.dealId,
+    lifestyle: implant.lifestyle,
+    additionalData: {},
+  });
 }
 
 // For cases when no IT action is needed
