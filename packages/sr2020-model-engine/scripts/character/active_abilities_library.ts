@@ -1256,7 +1256,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
-    prerequisites: ['arch-rigger-engineer'],
+    prerequisites: ['arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 1 },
     availability: 'open',
     karmaCost: 60,
@@ -1302,7 +1302,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: repomanBlackAbility.name,
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
-  // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще auto-doc-bonus.
+  // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще int bonus от автодока.
   // Вырезанный имплант записывается на QR чип
   {
     id: 'repoman-medic',

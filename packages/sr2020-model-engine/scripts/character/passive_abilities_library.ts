@@ -557,7 +557,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // Вэрианс на 10% быстрее падает
@@ -567,7 +567,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseVarianceResistance, { amount: 10 }),
   },
   // Фейдинг на 10% меньше
@@ -577,7 +577,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'master',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseFadingResistance, { amount: 10 }),
   },
   // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
@@ -587,7 +587,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoors, { amount: 3 }),
   },
   // Бэкдоры дохнут медленнее
@@ -599,7 +599,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 20 }),
   },
   // "Бэкдоры дохнут еще медленнее
@@ -611,7 +611,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 4,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
   {
@@ -698,7 +698,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseSpriteCount, { amount: 1 }),
   },
   // Еще один запрос к контролю
@@ -708,7 +708,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseControlRequests, { amount: 1 }),
   },
   // Меньше лаг данных контроля (по умолчанию данные контроля  старее чем 30 минут от момента запроса)
@@ -718,7 +718,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
@@ -729,7 +729,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Не нравится мне название :(',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
@@ -740,7 +740,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
@@ -751,7 +751,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // борьба с чужим софтом (если повезет - то и со спрайтами)
@@ -1201,6 +1201,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-deck-guru', level: 3 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
+  // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
+  //
+  // IT:
+  // [+20] Техномант_Устойчивость_Фейдингу_Компиляция
   {
     id: 'deep-compile',
     humanReadableName: 'Глубокая компиляция',
@@ -1208,10 +1212,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 20,
     }),
   },
+  // Комулятивно добавляет устойчивость к фейдингу при компиляции спрайтов
+  //
+  // IT:
+  // [+30] Техномант_Устойчивость_Фейдингу_Компиляция
   {
     id: 'native-compile',
     humanReadableName: 'Нативная компиляция',
@@ -1219,10 +1228,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 30,
     }),
   },
+  //
+  // IT:
+  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-1',
     humanReadableName: 'Спрайты-1',
@@ -1230,8 +1243,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-breacher', level: 1 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
+  //
+  // IT:
+  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-2',
     humanReadableName: 'Спрайты-2',
@@ -1239,8 +1256,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sprites-1'],
+    pack: { id: 'hack-shaman-breacher', level: 2 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
+  //
+  // IT:
+  // [+1] Техномант_Уровень_Спрайтов
   {
     id: 'sprites-3',
     humanReadableName: 'Спрайты-3',
@@ -1248,6 +1269,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sprites-2'],
+    pack: { id: 'hack-shaman-breacher', level: 3 },
     modifier: modifierFromEffect(increaseSpriteLevel, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -1923,7 +1945,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь использовать медикарт.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-rigger-medic'],
+    prerequisites: ['arch-rigger-medic', 'master-of-the-universe'],
     pack: { id: 'rigger-medic-combat', level: 1 },
     modifier: [],
   },
@@ -1935,7 +1957,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
     availability: 'open',
     karmaCost: 35,
-    prerequisites: ['mobile-auto-doc-1'],
+    prerequisites: ['mobile-auto-doc-1', 'master-of-the-universe'],
     pack: { id: 'rigger-medic-combat', level: 2 },
     modifier: [],
   },
@@ -1947,7 +1969,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
     availability: 'open',
     karmaCost: 35,
-    prerequisites: ['mobile-auto-doc-2'],
+    prerequisites: ['mobile-auto-doc-2', 'master-of-the-universe'],
     pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [],
   },
@@ -2065,7 +2087,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые импланты.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-rigger-engineer'],
+    prerequisites: ['arch-rigger-engineer', 'master-of-the-universe'],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // rigging.implantsBonus+2
@@ -2075,7 +2097,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить сложные импланты.',
     availability: 'open',
     karmaCost: 80,
-    prerequisites: ['implant-1'],
+    prerequisites: ['implant-1', 'master-of-the-universe'],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // rigging.implantsBonus+4
@@ -2085,7 +2107,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить самые сложные импланты, включая биовэр.',
     availability: 'open',
     karmaCost: 80,
-    prerequisites: ['implant-2'],
+    prerequisites: ['implant-2', 'master-of-the-universe'],
     modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 4 })],
   },
   // rigging.tuningBonus +2
@@ -2095,7 +2117,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить простые моды.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['tuning-active', 'arch-rigger-engineer'],
+    prerequisites: ['tuning-active', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 1 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
@@ -2106,7 +2128,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить сложные моды.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['tuning-1', 'arch-rigger-engineer'],
+    prerequisites: ['tuning-1', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 2 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
   },
@@ -2117,7 +2139,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь ставить самые сложные моды.',
     availability: 'open',
     karmaCost: 80,
-    prerequisites: ['tuning-2', 'arch-rigger-engineer'],
+    prerequisites: ['tuning-2', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 3 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
@@ -3107,7 +3129,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами. С вероятностью неудачи 50%
+  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active. С вероятностью неудачи 50%
   {
     id: 'armor-1',
     humanReadableName: 'броня: подкожная броня',
@@ -3141,7 +3163,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами, с вероятностью неудачи 40%
+  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active, с вероятностью неудачи 40%
   {
     id: 'constitution-1',
     humanReadableName: 'Здоровеньки булы: родство с имплантами',
@@ -3215,7 +3237,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами,  с вероятностью неудачи 50%
+  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 50%
   {
     id: 'combat-armor-1',
     humanReadableName: 'броня: подкожная броня',
@@ -3249,7 +3271,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // усложняет вырезание имплантов рипоменами,  с вероятностью неудачи 40%
+  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 40%
   {
     id: 'hardened-1',
     humanReadableName: 'Крепкий и надежный: родство с имплантами',
@@ -3789,7 +3811,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты пережил дамп-шок. Тебя преследует постоянная головная боль. Эффект x {{ amount }}',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   //
@@ -3916,7 +3938,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'troubles-common', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'black-matter',
@@ -3925,7 +3946,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 2,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3947,6 +3967,70 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // int+1
+  {
+    id: 'auto-doc-bonus-1',
+    humanReadableName: 'бонус автодок 1',
+    description: 'ты лучше работаешь с имплантами в автодоке',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['in-drone'],
+    modifier: [],
+  },
+  // int+3
+  {
+    id: 'auto-doc-bonus-3',
+    humanReadableName: 'бонус автодок 2',
+    description: 'ты ещё лучше работаешь с имплантами в автодоке',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['in-drone'],
+    modifier: [],
+  },
+  // int +5
+  {
+    id: 'auto-doc-bonus-5',
+    humanReadableName: 'бонус автодок 3',
+    description: 'ты отлично работаешь с имплантами в автодоке',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['in-drone'],
+    modifier: [],
+  },
+  // доступен экран автодока
+  {
+    id: 'auto-doc-screen',
+    humanReadableName: 'экран автодока',
+    description: 'можешь проводить операции через экран автодока',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['in-drone'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
+  {
+    id: 'gunslinger',
+    humanReadableName: 'Самый быстрый пистолет на Западе',
+    description: '',
+    availability: 'open',
+    karmaCost: 16,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Позволяет игнорировать атаку активного агента хоста. (PvE игротеха)
+  {
+    id: 'not-the-droids',
+    humanReadableName: 'Мы не те дроиды которых вы ищете',
+    description: '',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
     modifier: [],
   },
 ];
