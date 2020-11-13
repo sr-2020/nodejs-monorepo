@@ -3937,7 +3937,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 2,
     prerequisites: [],
-    pack: undefined,
+    modifier: [],
+  },
+  // Эту абилку НАДО ставить пререквезитом ко всему непонятному, что мы хотим спрятать от игроков
+  {
+    id: 'master-of-the-universe',
+    humanReadableName: 'Я мастер!',
+    description: 'Я мастер и вижу все закрытые, непонятные и непротестированные абилки',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     modifier: [],
   },
 ];

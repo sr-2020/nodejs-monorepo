@@ -229,7 +229,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: [],
     pack: { id: 'chummer-zero', level: 1 },
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 120,
     minimalEssence: 0,
     eventType: finishHimAbility.name,
   },
@@ -242,8 +242,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
-    prerequisites: [],
-    pack: { id: 'chummer-zero', level: 1 },
+    prerequisites: ['master-of-the-universe'],
+    pack: { id: 'null', level: 0 },
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -2229,7 +2229,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код нужного духа, сканирует ячейку в телохранилище. После этого его мясное тело как бы лежит в телохранилище, а сам игрок действует в эктоплазменном теле - согласно описанию эктоплазменного тела в документе https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju
   {
     id: 'own-spirit',
@@ -2239,14 +2238,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 30,
     prerequisites: ['arch-mage-summoner'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 2,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле. Мясному телу игрока на 20 минут выдаётся абилка SitRip
+  // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле.
   {
     id: 'dispirit',
     humanReadableName: 'Dispirit',
@@ -2255,7 +2252,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 20,
     prerequisites: ['arch-mage-summoner'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
