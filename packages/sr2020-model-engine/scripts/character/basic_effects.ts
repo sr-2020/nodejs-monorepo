@@ -360,3 +360,7 @@ export function increaseImplantsSlots(api: EffectModelApi<Sr2020Character>, m: M
   api.model.implantsBodySlots += m.amount;
   api.model.implantsBodySlots = clamp(api.model.implantsBodySlots, 0, 10);
 }
+
+export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.screens.autodoc = true;
+}

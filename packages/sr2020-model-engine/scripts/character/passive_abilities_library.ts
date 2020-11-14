@@ -65,6 +65,7 @@ import {
   multiplyMagicFeedbackMultiplier,
   multiplySpiritResistanceMultiplier,
   setTransactionAnonymous,
+  unlockAutodockScreen,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
 
@@ -3977,7 +3978,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // int+3
   {
@@ -3987,7 +3988,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: 3 })],
   },
   // int +5
   {
@@ -3997,7 +3998,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: 5 })],
   },
   // доступен экран автодока
   {
@@ -4007,7 +4008,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
-    modifier: [],
+    modifier: [modifierFromEffect(unlockAutodockScreen, {})],
   },
   // TODO(aeremin): Implement and add modifier here
   // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
