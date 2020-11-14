@@ -9,7 +9,7 @@ async function run() {
   const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
 
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны!B7:L28');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны!B7:L31');
   const header = data[0];
   if (
     header.slice(0, 11).join('  ') !=
@@ -19,7 +19,7 @@ async function run() {
   }
 
   const drones: Drone[] = [];
-  for (let r = 1; r < 22; ++r) {
+  for (let r = 1; r < 25; ++r) {
     const row = data[r];
     if (!row?.[0]) continue;
 

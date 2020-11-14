@@ -2,6 +2,8 @@ import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
+import { kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 describe('Rigger abilities', () => {
   let fixture: TestFixture;
@@ -12,6 +14,12 @@ describe('Rigger abilities', () => {
 
   afterEach(async () => {
     await fixture.destroy();
+  });
+
+  it('Drone abilities are valid', () => {
+    for (const id of kDroneAbilityIds) {
+      expect(getAllFeatures()).containDeep([{ id }]);
+    }
   });
 
   it('Connect and disconnect to body', async () => {

@@ -231,8 +231,40 @@ export const kAllDrones: Drone[] = [
       'medcart-reanimate',
     ],
   },
+  {
+    id: 'tool-autodoc-1',
+    name: 'Пирогов',
+    type: 'medicraft',
+    modSlots: 0,
+    moddingCapacity: 0,
+    sensor: 4,
+    hitpoints: 6,
+    description: 'auto-doc-bonus-1',
+    abilityIds: ['auto-doc-screen', 'auto-doc-bonus-1'],
+  },
+  {
+    id: 'tool-autodoc-2',
+    name: 'Авиценна',
+    type: 'medicraft',
+    modSlots: 0,
+    moddingCapacity: 0,
+    sensor: 8,
+    hitpoints: 6,
+    description: 'Автодок для сложных имплантов.',
+    abilityIds: ['auto-doc-screen', 'auto-doc-bonus-3'],
+  },
+  {
+    id: 'tool-autodoc-3',
+    name: 'Асклепий',
+    type: 'medicraft',
+    modSlots: 0,
+    moddingCapacity: 0,
+    sensor: 12,
+    hitpoints: 6,
+    description: 'Автодок для самых сложных имплантов.',
+    abilityIds: ['auto-doc-screen', 'auto-doc-bonus-5'],
+  },
 ];
-
 export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff'];
 
 export const kDroneAbilityIds = new Set(kCommonDroneAbilityIds.concat(...kAllDrones.map((drone) => drone.abilityIds)));
