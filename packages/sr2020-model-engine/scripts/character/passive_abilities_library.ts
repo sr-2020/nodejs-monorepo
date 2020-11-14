@@ -4010,7 +4010,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [modifierFromEffect(unlockAutodockScreen, {})],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Вне зависимости от уровня резонанса всегда имеет наивысшую инициативу в красной комнате. Если техномантов с такой абилкой несколько - то по уровню резонанса.
   {
     id: 'gunslinger',
@@ -4019,10 +4018,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 16,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Позволяет игнорировать атаку активного агента хоста. (PvE игротеха)
   {
     id: 'not-the-droids',
@@ -4031,6 +4028,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще int bonus от автодока.
+  // Вырезанный имплант записывается на QR чип
+  {
+    id: 'repoman-medic',
+    humanReadableName: 'Рипомен хирург',
+    description: 'Ты научился использовать автодок для снятия имплантов.',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
     pack: undefined,
     modifier: [],
   },

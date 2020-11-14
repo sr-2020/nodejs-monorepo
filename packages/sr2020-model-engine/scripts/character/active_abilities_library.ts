@@ -1301,22 +1301,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: repomanBlackAbility.name,
   },
-  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
-  // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще int bonus от автодока.
-  // Вырезанный имплант записывается на QR чип
-  {
-    id: 'repoman-medic',
-    humanReadableName: 'Рипомен хирург',
-    description: 'Ты научился использовать автодок для снятия имплантов.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: 20,
-    prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
-    availability: 'open',
-    karmaCost: 60,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
   // Активирует процесс включения в дрона.
   // надо отсканировать:
   // - QR дрона
