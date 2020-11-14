@@ -1,7 +1,20 @@
+/*const routes = [
+  { path: '/foo', component: Foo },
+  { path: '/bar', component: Bar }
+]*/
+
+// 3. Create the router instance and pass the `routes` option
+// You can pass in additional options here, but let's
+// keep it simple for now.
+const router = new VueRouter({})
+
 Vue.component(VueQrcode.name, VueQrcode);
 app = new Vue({
+  router,
   el: '#app',
   data: {
+    currentTab: 0,
+
     desiredCharacterId: 10198,
     desiredQrCodeId: 1,
     characterModel: undefined,
@@ -71,6 +84,18 @@ app = new Vue({
   },
   async created() {
     {
+      console.log(this.$route.query);
+      if (this.$route.query.character) {
+        this.desiredCharacterId = this.$route.query.character;
+        currentTab = 0;
+      }
+
+      if (this.$route.query.qr) {
+        this.desiredQrCodeId = this.$route.query.qr;
+        currentTab = 1;
+      }
+
+
       const response = await this.$http.get(`https://model-engine.evarun.ru/features`);
       this.allFeatures = response.body;
       this.allFeatures.sort((f1, f2) => {
