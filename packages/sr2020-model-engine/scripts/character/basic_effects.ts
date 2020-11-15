@@ -364,3 +364,7 @@ export function increaseImplantsSlots(api: EffectModelApi<Sr2020Character>, m: M
 export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.screens.autodoc = true;
 }
+
+export function unlockAutodockImplantRemoval(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.screens.autodocImplantRemoval = true;
+}

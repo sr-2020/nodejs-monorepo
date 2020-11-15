@@ -224,6 +224,7 @@ export class ModelEngineController implements ModelEngineService {
         karma: true,
         implants: true,
         autodoc: false,
+        autodocImplantRemoval: false,
         ethics: false,
         location: false,
         wound: true,

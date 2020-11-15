@@ -619,6 +619,10 @@ export class Screens {
 
   @rproperty()
   @Column({ default: false })
+  autodocImplantRemoval: boolean;
+
+  @rproperty()
+  @Column({ default: false })
   ethics: boolean;
 
   @rproperty()

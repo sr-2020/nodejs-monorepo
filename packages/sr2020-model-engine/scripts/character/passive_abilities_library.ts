@@ -65,6 +65,7 @@ import {
   multiplyMagicFeedbackMultiplier,
   multiplySpiritResistanceMultiplier,
   setTransactionAnonymous,
+  unlockAutodockImplantRemoval,
   unlockAutodockScreen,
 } from './basic_effects';
 import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
@@ -4030,7 +4031,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Здесь идет включение а Автодок, показывается экран Автодока и к сумме (rigging.repomanBonus + Int ) добавляется еще int bonus от автодока.
   // Вырезанный имплант записывается на QR чип
   {
@@ -4041,7 +4041,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
     pack: undefined,
-    modifier: [],
+    modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
   },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
