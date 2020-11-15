@@ -316,5 +316,14 @@ export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: Active
   });
 }
 
+export function biomonitorScanAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+
+  const latestLogs = target.chemoConsumptionRecords.filter(
+    (record) => record.timestamp >= api.model.timestamp - duration(4, 'hours').asMilliseconds(),
+  );
+  api.setTableResponse(latestLogs.map((record) => ({ timestamp: record.timestamp, spellName: record.chemoName })));
+}
+
 // For cases when no IT action is needed
 export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}

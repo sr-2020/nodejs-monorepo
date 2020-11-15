@@ -2,6 +2,7 @@ import {
   absoluteDeathAbility,
   alloHomorusAbility,
   arrowgant,
+  biomonitorScanAbility,
   changeAuraAbility,
   cloudMemoryAbility,
   doNothingAbility,
@@ -2076,7 +2077,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Показывает текстовое сообщение ( в лог?) формата
   // имя_чаммера
   // название препарата  - время приема
@@ -2086,13 +2086,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Сканер биомонитора',
     description: 'Ты можешь увидеть список препаратов, которые пациент принимал за последние 4 часа.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: 9000,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-2'],
     availability: 'closed',
     karmaCost: 60,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: biomonitorScanAbility.name,
   },
   // Сама абилка ничего не делает, но посылает PubSub ability_used
   {
