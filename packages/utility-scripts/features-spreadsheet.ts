@@ -43,8 +43,10 @@ class SpreadsheetProcessor {
   }
 
   parseCooldown(id: string, input: string | undefined): number {
-    if (!input) return 9000;
-    if (!/^\d+$/.test(input)) return 9000;
+    if (!input || !/^\d+$/.test(input)) {
+      console.error(`Ability ${id} cooldown is non-numeric, setting to 9000.`);
+      return 9000;
+    }
     return Number(input);
   }
 
