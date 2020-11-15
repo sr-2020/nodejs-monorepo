@@ -276,12 +276,15 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
       if (propertyName == 'pack') {
         return createPackLiteral(ability.pack);
       }
+      if (propertyName == 'cooldownMinutes') {
+        return ts.createNumericLiteral(ability.cooldown);
+      }
       if (propertyName == 'availability') {
         return ts.createStringLiteral(ability.availability);
       }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability'],
+    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability', 'cooldownMinutes'],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);

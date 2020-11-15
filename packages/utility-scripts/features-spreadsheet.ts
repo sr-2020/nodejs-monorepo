@@ -42,6 +42,12 @@ class SpreadsheetProcessor {
     return result;
   }
 
+  parseCooldown(id: string, input: string | undefined): number {
+    if (!input) return 9000;
+    if (!/^\d+$/.test(input)) return 9000;
+    return Number(input);
+  }
+
   parseAvailability(id: string, input: string | undefined): FeatureAvailability {
     if (!input) return 'master';
     input = input.toLowerCase();
@@ -109,7 +115,7 @@ class SpreadsheetProcessor {
       humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
-      cooldown: row[kCooldownColumn] ?? 9000,
+      cooldown: this.parseCooldown(id, row[kCooldownColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
