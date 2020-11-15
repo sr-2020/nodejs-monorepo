@@ -129,7 +129,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
   if (drone.inUse) {
-    throw new UserVisibleError('Этот в настоящий момент уже используется.');
+    throw new UserVisibleError('Этот дрон в настоящий момент уже используется.');
   }
 
   if (!data.id.startsWith(drone.type)) {
