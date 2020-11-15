@@ -296,7 +296,10 @@ export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: Active
   const maxDifficulty = api.workModel.rigging.repomanBonus + api.workModel.intelligence;
   const victim = api.aquired(Sr2020Character, data.targetCharacterId!);
   const potentialImplants = victim.implants.filter((implant) => implant.installDifficulty <= maxDifficulty);
-  if (potentialImplants.length == 0) throw new UserVisibleError('Импланты жертвы слишком сложны, вы не можете их вырезать.');
+  if (potentialImplants.length == 0) {
+    api.sendNotification('Неудача', 'Импланты жертвы слишком сложны, вы не можете их вырезать.');
+    return;
+  }
   const implant = potentialImplants.sort((i1, i2) => {
     const diff = i1.installDifficulty - i2.installDifficulty;
     return chooseStrategy == ImplantToExtract.kMostComplex ? diff : -diff;
