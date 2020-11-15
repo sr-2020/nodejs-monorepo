@@ -213,4 +213,28 @@ describe('Rigger abilities', () => {
     const { workModel } = await fixture.getCharacter();
     expect(workModel.healthState).equal('wounded');
   });
+
+  it('Being in autodoc unlocks autodoc screen', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.addCharacterFeature('medicraft-active');
+
+    // Body storage set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
+
+    // Drone set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '2');
+
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.false();
+
+    // Enter drone
+    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.true();
+
+    // Leave drone
+    await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.false();
+  });
 });

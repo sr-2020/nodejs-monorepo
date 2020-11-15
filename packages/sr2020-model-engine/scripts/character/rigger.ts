@@ -13,6 +13,7 @@ import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-en
 import { DroneType, kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
+import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
 const kInDroneModifierId = 'in-the-drone';
 
@@ -162,7 +163,9 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.sendOutboundEvent(QrCode, data.droneId!, startUsingDrone, {});
 
   api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
-  api.model.passiveAbilities = api.model.passiveAbilities.concat(drone.passiveAbilities);
+  for (const passiveAbility of drone.passiveAbilities) {
+    addFeatureToModel(api.model, passiveAbility.id);
+  }
 
   const penalty = api.workModel.drones.feedbackModifier;
   api.addModifier(createDroneModifier(drone, data.droneId!, penalty));
@@ -186,9 +189,9 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
     activeAbilities: api.workModel.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
   });
 
-  const isDroneAbility = (ability) => !kDroneAbilityIds.has(ability.id);
-  api.model.activeAbilities = api.model.activeAbilities.filter(isDroneAbility);
-  api.model.passiveAbilities = api.model.passiveAbilities.filter(isDroneAbility);
+  for (const abilityId of kDroneAbilityIds) {
+    removeFeatureFromModel(api.model, abilityId);
+  }
 
   // Not calling directly as we need to remove modifier and recalculate max HP first.
   api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage, location: data.location });
