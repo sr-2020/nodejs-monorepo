@@ -242,6 +242,7 @@ export class ModelEngineController implements ModelEngineService {
         lockedUntil: 0,
       },
       history: [],
+      chemoConsumptionRecords: [],
       modifiers: [
         {
           mID: '_system',

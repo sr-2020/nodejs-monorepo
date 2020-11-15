@@ -216,6 +216,12 @@ export class HistoryRecord {
 }
 
 @model()
+export class ChemoConsumptionRecord {
+  @rproperty() timestamp: number;
+  @rproperty() chemoName: string;
+}
+
+@model()
 export class AnalyzedBody {
   @rproperty() healthState: HealthState;
   @rproperty() essence: number;
@@ -789,6 +795,10 @@ export class Sr2020Character extends EmptyModel {
   @property.array(AddedImplant, { required: true })
   @JsonColumn()
   implants: AddedImplant[];
+
+  @property.array(ChemoConsumptionRecord, { required: true })
+  @JsonColumn()
+  chemoConsumptionRecords: ChemoConsumptionRecord[];
 
   @property({ required: false, jsonSchema: { nullable: true } })
   @JsonNullableColumn()

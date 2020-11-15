@@ -772,6 +772,8 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
       location: data.location,
     });
   }
+
+  api.model.chemoConsumptionRecords.push({ timestamp: api.model.timestamp, chemoName: pill.name });
 }
 
 export function checkConcentrations(
