@@ -9,7 +9,7 @@ import { FeatureAvailability, PackInfo, SpellSphere } from '@sr2020/sr2020-commo
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },
-  { name: 'row_from', type: Number, defaultValue: 2 },
+  { name: 'row_from', type: Number, defaultValue: 3 },
   { name: 'row_to', type: Number, defaultValue: 800 },
 ];
 const FLAGS = commandLineArgs(optionDefinitions);
@@ -20,12 +20,12 @@ const kIdColumn = 5;
 const kPrerequisitesColumn = 6;
 const kPackIdColumn = 7;
 const kPackLevelColumn = 8;
-const kPlayerDescriptionColumn = 12;
-const kMasterDescriptionColumn = 13;
-const kCooldownColumn = 16;
-const kSpellSphereColumn = 18;
+const kPlayerDescriptionColumn = 14;
+const kMasterDescriptionColumn = 15;
+const kCooldownColumn = 10;
+const kSpellSphereColumn = 19;
 const kKarmaCostColumn = 9;
-const kAvailabilityColumn = 10;
+const kAvailabilityColumn = 13;
 
 class SpreadsheetProcessor {
   passiveAbilities: PassiveAbility[] = [];
@@ -43,7 +43,7 @@ class SpreadsheetProcessor {
   }
 
   parseCooldown(id: string, input: string | undefined): number {
-    if (!input || !/^\d+$/.test(input)) {
+    if (!input || !/^[\d\.]+$/.test(input)) {
       console.error(`Ability ${id} cooldown is non-numeric, setting to 9000.`);
       return 9000;
     }
@@ -172,7 +172,7 @@ class SpreadsheetProcessor {
     const data = await getDataFromSpreadsheet(spreadsheetId, 'Фичи!A1:AE800');
 
     const header = data[0];
-    if (!header[kKindColumn].startsWith('Сущность')) {
+    if (!header[kKindColumn].startsWith('Entity')) {
       throw new Error('Kind column was moved! Exiting.');
     }
 
@@ -192,23 +192,23 @@ class SpreadsheetProcessor {
       throw new Error('Stars column was moved! Exiting.');
     }
 
-    if (header[kNameColumn] != 'Название') {
+    if (header[kNameColumn] != 'Feature_Name') {
       throw new Error('Name column was moved! Exiting.');
     }
 
-    if (!header[kPlayerDescriptionColumn].startsWith('Описание игроцкое')) {
+    if (!header[kPlayerDescriptionColumn].startsWith('Game_description')) {
       throw new Error('Player description column was moved! Exiting.');
     }
 
-    if (!header[kMasterDescriptionColumn].startsWith('Описание мастерское')) {
+    if (!header[kMasterDescriptionColumn].startsWith('Master_description')) {
       throw new Error('Master description column was moved! Exiting.');
     }
 
-    if (!header[kCooldownColumn].startsWith('Кулдаун')) {
+    if (!header[kCooldownColumn].startsWith('Cooldown_min')) {
       throw new Error('Cooldown column was moved! Exiting.');
     }
 
-    if (!header[kSpellSphereColumn].startsWith('Сфера спелла')) {
+    if (!header[kSpellSphereColumn].startsWith('Spell_sphere')) {
       throw new Error('Spell sphere column was moved! Exiting.');
     }
 
@@ -216,7 +216,7 @@ class SpreadsheetProcessor {
       throw new Error('Karma cost column was moved! Exiting.');
     }
 
-    if (!header[kAvailabilityColumn].startsWith('Доступность')) {
+    if (!header[kAvailabilityColumn].startsWith('Availability')) {
       throw new Error('Availability column was moved! Exiting.');
     }
 
