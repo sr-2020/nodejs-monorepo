@@ -95,11 +95,11 @@ describe('Chemo events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
-      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 1000);
+      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(540000000);
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
-      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(3600 * 700);
+      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(378000000);
     }
   });
 

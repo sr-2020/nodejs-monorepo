@@ -152,7 +152,7 @@ describe('Rigger abilities', () => {
       expect(workModel.passiveAbilities).not.to.containDeep([{ id: 'drone-medcart' }]);
       expect(workModel.activeAbilities).lengthOf(1); // Enter drone
       expect(workModel.activeAbilities[0].cooldownUntil).equal(
-        duration(/* default recovery time */ 120 - /* body */ 3 * 5, 'minutes').asMilliseconds(),
+        duration(/* default recovery time */ 9120 - /* body */ 3 * 5, 'minutes').asMilliseconds(),
       );
       expect(workModel.currentBody).to.equal('physical');
     }
