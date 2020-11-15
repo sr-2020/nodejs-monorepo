@@ -111,7 +111,7 @@ describe('Death & Rebirth', function () {
     {
       // Check medic state
       const { workModel } = await fixture.getCharacter('1');
-      expect(workModel.activeAbilities).containDeep([{ id: 'reanimate', cooldownUntil: 543300000 }]);
+      expect(workModel.activeAbilities).containDeep([{ id: 'reanimate', cooldownUntil: 3900 * 1000 }]);
     }
 
     {

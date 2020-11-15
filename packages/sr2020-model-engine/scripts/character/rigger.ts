@@ -153,7 +153,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   const thisAbility = api.model.activeAbilities.find((a) => a.id == data.id)!;
   const cooldown = duration(Math.max(0, api.workModel.drones.recoveryTime - 5 * api.workModel.body), 'minutes');
-  thisAbility.cooldownUntil += cooldown.asMilliseconds() * api.workModel.cooldownCoefficient;
+  thisAbility.cooldownUntil = cooldown.asMilliseconds() * api.workModel.cooldownCoefficient;
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
