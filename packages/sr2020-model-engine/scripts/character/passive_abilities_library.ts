@@ -4037,7 +4037,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
-    pack: undefined,
     modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
   },
 ];
