@@ -144,6 +144,7 @@ export class ModelEngineController implements ModelEngineService {
       healthState: 'healthy',
       cooldownCoefficient: 1.0,
       implantsBodySlots: 2,
+      implantsRemovalResistance: 0,
       chemo: {
         baseEffectThreshold: 200,
         uberEffectThreshold: 250,

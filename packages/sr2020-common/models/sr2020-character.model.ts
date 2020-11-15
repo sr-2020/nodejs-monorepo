@@ -749,6 +749,10 @@ export class Sr2020Character extends EmptyModel {
   implantsBodySlots: number;
 
   @rproperty()
+  @Column({ default: 0 })
+  implantsRemovalResistance: number; // 0 - 100, measured in percents.
+
+  @rproperty()
   @Column((type) => MagicStats, { prefix: 'magic' })
   magicStats: MagicStats;
 

@@ -11,7 +11,9 @@ import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-mod
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { removeImplant } from '@sr2020/sr2020-model-engine/scripts/character/merchandise';
 import { createMerchandise } from '@sr2020/sr2020-model-engine/scripts/qr/merchandise';
+import Chance = require('chance');
 
+const chance = new Chance();
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 export const kActiveAbilitiesDisabledTimer = 'no-active-abilities-timer';
 
@@ -295,6 +297,11 @@ export function repomanBlackAbility(api: EventModelApi<Sr2020Character>, data: A
 export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData, chooseStrategy: ImplantToExtract) {
   const maxDifficulty = api.workModel.rigging.repomanBonus + api.workModel.intelligence;
   const victim = api.aquired(Sr2020Character, data.targetCharacterId!);
+  if (chance.natural({ min: 1, max: 100 }) <= victim.implantsRemovalResistance) {
+    api.sendNotification('Неудача', 'Организм жертвы сопротивляется вырезанию импланта.');
+    return;
+  }
+
   const potentialImplants = victim.implants.filter((implant) => implant.installDifficulty <= maxDifficulty);
   if (potentialImplants.length == 0) {
     api.sendNotification('Неудача', 'Импланты жертвы слишком сложны, вы не можете их вырезать.');

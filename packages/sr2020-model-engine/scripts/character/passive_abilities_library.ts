@@ -64,6 +64,7 @@ import {
   multiplyDiscourseMongerCooldowns,
   multiplyMagicFeedbackMultiplier,
   multiplySpiritResistanceMultiplier,
+  setImplantsRemovalResistance,
   setTransactionAnonymous,
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
@@ -3130,7 +3131,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-guns', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active. С вероятностью неудачи 50%
   {
     id: 'armor-1',
@@ -3140,7 +3140,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 70,
     prerequisites: ['arch-samurai-gunner'],
     pack: { id: 'sam-gun-armor', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 50 })],
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -3164,7 +3164,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-gun-armor', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active, с вероятностью неудачи 40%
   {
     id: 'constitution-1',
@@ -3174,7 +3173,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner'],
     pack: { id: 'sam-gun-constitution', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 40 })],
   },
   // показывает игроку текст абилки, больше ничего
   // хиты в легком ранении восстанавливаются за 20 минут
@@ -3238,7 +3237,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-swords', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 50%
   {
     id: 'combat-armor-1',
@@ -3248,7 +3246,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 70,
     prerequisites: ['arch-samurai-fighter'],
     pack: { id: 'sam-fight-armor', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 50 })],
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -3272,7 +3270,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-fight-armor', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 40%
   {
     id: 'hardened-1',
@@ -3282,7 +3279,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter'],
     pack: { id: 'sam-fight-harden', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 40 })],
   },
   // показывает игроку текст абилки, больше ничего
   {

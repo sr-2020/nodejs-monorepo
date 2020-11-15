@@ -368,3 +368,7 @@ export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Mo
 export function unlockAutodockImplantRemoval(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.screens.autodocImplantRemoval = true;
 }
+
+export function setImplantsRemovalResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.implantsRemovalResistance = Math.max(api.model.implantsRemovalResistance, m.amount);
+}
