@@ -242,7 +242,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: '',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: 0.1,
+    cooldownMinutes: 1,
     prerequisites: ['master-of-the-universe'],
     pack: { id: 'null', level: 0 },
     availability: 'master',

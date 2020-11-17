@@ -1278,51 +1278,51 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-1',
-    humanReadableName: 'Повышение Харизмы от 3 до 4 ',
+    humanReadableName: 'Увеличение харизмы 1',
     description: 'Перманентное увеличение Харизмы персонажа - 1',
     availability: 'closed',
     karmaCost: 80,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: ['arch-face'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-2',
-    humanReadableName: 'Повышение Харизмы от 4 до 5',
+    humanReadableName: 'Увеличение харизмы 2',
     description: 'Перманентное увеличение Харизмы персонажа - 2',
     availability: 'closed',
     karmaCost: 80,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: ['arch-face', 'increase-the-charisma-1'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-3',
-    humanReadableName: 'Повышение Харизмы от 5 до 6 ',
+    humanReadableName: 'Увеличение харизмы 3',
     description: 'Перманентное увеличение Харизмы персонажа - 3',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: ['arch-face', 'increase-the-charisma-2'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-4',
-    humanReadableName: 'Повышение Харизмы от 6 до 7',
+    humanReadableName: 'Увеличение харизмы 4',
     description: 'Перманентное увеличение Харизмы персонажа - 4',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: ['arch-face', 'increase-the-charisma-3'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
   {
     id: 'increase-the-charisma-5',
-    humanReadableName: 'Повышение Харизмы от 7 до 8',
+    humanReadableName: 'Увеличение харизмы 5',
     description: 'Перманентное увеличение Харизмы персонажа - 5',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: ['arch-face', 'increase-the-charisma-4'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // при прохождении данжа ГМ выносит из данжа + 10% от базовой стоимости лута
@@ -1402,7 +1402,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 20%',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-face-discursmonger'],
+    prerequisites: ['arch-face-discursmonger', 'master-of-the-universe'],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
       amount: 0.8,
     }),
@@ -1414,7 +1414,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 40%',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-face-discursmonger'],
+    prerequisites: ['arch-face-discursmonger', 'master-of-the-universe'],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
       amount: 0.6 / 0.8,
     }),
@@ -1426,7 +1426,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Все кулдауны способностей дискурсмонгера снижены на 60%',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-face-discursmonger'],
+    prerequisites: ['arch-face-discursmonger', 'master-of-the-universe'],
     modifier: modifierFromEffect(multiplyDiscourseMongerCooldowns, {
       amount: 0.4 / 0.6,
     }),
@@ -2076,7 +2076,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // rigging.implantsBonus+4
   {
     id: 'auto-doc-neuro',
-    humanReadableName: 'нейрохирургия\n',
+    humanReadableName: 'нейрохирургия',
     description: 'Ты можешь использовать автодок для работы с биовэром',
     availability: 'open',
     karmaCost: 60,
@@ -2294,7 +2294,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Модификатор: МентальнаяЗащита +3
   {
     id: 'mental-resistance',
-    humanReadableName: 'резист менталке',
+    humanReadableName: 'Контроль разума',
     description: 'Немного повышает защиту от ментальных воздействий.',
     availability: 'closed',
     karmaCost: 60,
@@ -2571,7 +2571,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // rigging.implantsBonus+2
   {
     id: 'auto-doc-1',
-    humanReadableName: 'хирургия',
+    humanReadableName: 'хирургия 1',
     description: 'Ты можешь ставить простые импланты',
     availability: 'open',
     karmaCost: 20,
@@ -2585,7 +2585,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // rigging.implantsBonus+2
   {
     id: 'auto-doc-2',
-    humanReadableName: 'хирургия',
+    humanReadableName: 'хирургия 2',
     description: 'Ты можешь ставить сложные импланты',
     availability: 'open',
     karmaCost: 60,
@@ -2599,7 +2599,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // rigging.implantsBonus+2
   {
     id: 'auto-doc-3',
-    humanReadableName: 'хирургия',
+    humanReadableName: 'хирургия 3',
     description: 'Ты можешь ставить высокотехнологичные импланты',
     availability: 'open',
     karmaCost: 60,
@@ -2906,7 +2906,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman', '!arch-mage', '!tech-blockade'],
+    prerequisites: ['arch-hackerman', '!arch-mage', '!tech-blockade', 'master-of-the-universe'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [],
   },
@@ -2917,7 +2917,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Техномант боец. ',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-hackerman-technomancer'],
+    prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
     pack: { id: 'gen-arch-hackerman-cyberadept', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2928,7 +2928,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Техномант, специалист по Комплексным формам.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-hackerman-technomancer'],
+    prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
     pack: { id: 'gen-arch-hackerman-technoshaman', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2950,7 +2950,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный хакер техномант.',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman-technomancer'],
+    prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
     pack: { id: 'gen-arch-hackerman-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
@@ -3039,7 +3039,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Дискурсмонгер. Идеи, концепции и убеждения, твоя работа.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'master-of-the-universe'],
     pack: { id: 'gen-arch-face-discursmonger', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
@@ -3072,7 +3072,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Искусственный интеллект. ',
     availability: 'master',
     karmaCost: 100,
-    prerequisites: ['meta-ai'],
+    prerequisites: ['meta-ai', 'master-of-the-universe'],
     pack: { id: 'gen-arch-ai', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
@@ -3083,7 +3083,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'ИИ, специализирующийся на работе с Матрицей',
     availability: 'master',
     karmaCost: 60,
-    prerequisites: ['arch-ai'],
+    prerequisites: ['arch-ai', 'master-of-the-universe'],
     pack: { id: 'gen-arch-ai-matrix', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
@@ -3167,7 +3167,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active, с вероятностью неудачи 40%
   {
     id: 'constitution-1',
-    humanReadableName: 'Здоровеньки булы: родство с имплантами',
+    humanReadableName: ' родство с имплантами',
     description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
     availability: 'open',
     karmaCost: 60,
@@ -3179,7 +3179,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // хиты в легком ранении восстанавливаются за 20 минут
   {
     id: 'constitution-2',
-    humanReadableName: 'Здоровеньки булы: регенерация',
+    humanReadableName: 'регенерация',
     description:
       'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования. \r\nХиты в легком ранении восстанавливаются за 20 минут\r\n',
     availability: 'open',
@@ -3192,7 +3192,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Если самурай находится в состоянии "тяжелое ранение" и не добит в течение 3 минут, персонаж встает из тяжрана в здоров. Через 30 минут после восстановления переходит в состояние КС.
   {
     id: 'constitution-3',
-    humanReadableName: 'Здоровеньки булы: всплеск адреналина',
+    humanReadableName: 'всплеск адреналина',
     description:
       'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью. Если в тяжране не провели добивание за 3 минуты - сам встает из тяжрана. Через 30 минут падает в КС',
     availability: 'open',
@@ -3647,7 +3647,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'useapi',
-    humanReadableName: '',
+    humanReadableName: 'useapi',
     description: 'новая команда: useapi\n\nБазовая команда для работы со специальным нодам',
     availability: 'open',
     karmaCost: 2,
@@ -3929,7 +3929,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Отображает текст на экране персонажа
   {
     id: 'troubles-common-3',
-    humanReadableName: 'Общие проблемы **',
+    humanReadableName: 'Общие проблемы ***',
     description: 'Совсем тяжелый и мрачный груз.',
     availability: 'master',
     karmaCost: -20,
