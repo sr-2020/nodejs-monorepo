@@ -25,6 +25,7 @@ export type QrType =
   | 'locus_charge' // Charge for the locus
   | 'box' // Empty box of some merchandise
   | 'body_storage'
+  | 'spirit' // Not the spirit body! This is the spirit you can "enter"
   | 'drone' // Not the drone body! This is drone you can jack in
   | 'drone_mod'
   | 'sprite'
