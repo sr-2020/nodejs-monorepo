@@ -18,7 +18,7 @@ export type MetaRace =
   | 'meta-eghost'
   | 'meta-spirit';
 
-export type BodyType = 'physical' | 'astral' | 'drone';
+export type BodyType = 'physical' | 'astral' | 'drone' | 'ectoplasm';
 
 export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
 
