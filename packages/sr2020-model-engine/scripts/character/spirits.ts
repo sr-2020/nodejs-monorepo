@@ -9,7 +9,7 @@ import { removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/char
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { kSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
-import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
+import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
 
 const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2'];
 const kInSpiritModifierId = 'in-the-spirit';
@@ -33,7 +33,7 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbi
     bodyType: api.workModel.currentBody,
   });
 
-  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDrone, {});
+  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDroneOrSpirit, {});
 
   //api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
   //for (const passiveAbility of spirit.passiveAbilities) {
@@ -45,7 +45,7 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbi
 
 export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   if (api.workModel.currentBody != 'ectoplasm') {
-    throw new UserVisibleError('Для отключения от дрона необходимо быть подключенным к нему.');
+    throw new UserVisibleError('Для выхода из духа необходимо быть подключенным к нему.');
   }
 
   const storage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId!));
@@ -57,7 +57,7 @@ export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   for (const timerId of kSpiritTimerIds) api.removeTimer(timerId);
 
   const m = findInSpiritModifier(api);
-  api.sendOutboundEvent(QrCode, m.spiritQrId, stopUsingDrone, {
+  api.sendOutboundEvent(QrCode, m.spiritQrId, stopUsingDroneOrSpirit, {
     activeAbilities: api.workModel.activeAbilities.filter((ability) => kSpiritAbilityIds.has(ability.id)),
   });
 

@@ -11,7 +11,7 @@ import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-engine/scripts/qr/body_storage';
 import { DroneType, kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
-import { startUsingDrone, stopUsingDrone } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
+import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
 
@@ -160,7 +160,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     bodyType: api.workModel.currentBody,
   });
 
-  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDrone, {});
+  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDroneOrSpirit, {});
 
   api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
   for (const passiveAbility of drone.passiveAbilities) {
@@ -185,7 +185,7 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   for (const timerId of kDroneTimerIds) api.removeTimer(timerId);
 
   const m = findInDroneModifier(api);
-  api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDrone, {
+  api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDroneOrSpirit, {
     activeAbilities: api.workModel.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
   });
 

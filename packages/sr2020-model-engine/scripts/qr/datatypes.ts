@@ -76,7 +76,7 @@ export type MagicFocusQrData = MagicFocusData & MerchandiseQrData;
 export type CyberDeckQrData = CyberDeck & MerchandiseQrData;
 
 // qr.type == 'spirit'
-export type SpiritQrData = Spirit & { inUse: boolean };
+export type SpiritQrData = Spirit & { inUse: boolean; activeAbilities: AddedActiveAbility[] };
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;
