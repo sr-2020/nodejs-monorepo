@@ -202,7 +202,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
       return element;
     },
     (ability, propertyName) => {
-      if (propertyName == 'name') {
+      if (propertyName == 'humanReadableName') {
         return ts.createStringLiteral(ability.humanReadableName);
       }
       if (propertyName == 'description') {
@@ -222,7 +222,7 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
       }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['name', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability'],
+    ['humanReadableName', 'description', 'karmaCost', 'prerequisites', 'pack', 'availability'],
   );
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
 }
