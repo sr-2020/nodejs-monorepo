@@ -84,7 +84,7 @@ jobs:
     needs: [test, lint, build]
     steps:
       - uses: actions/checkout@v1
-      - uses: actions-hub/gcloud@272.0.0
+      - uses: actions-hub/gcloud@318.0.0
         env:
           PROJECT_ID: imposing-elixir-249711
           APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
