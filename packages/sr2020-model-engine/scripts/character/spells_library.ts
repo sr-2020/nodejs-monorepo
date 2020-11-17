@@ -4,8 +4,8 @@ import {
   brasiliaSpell,
   cacophonySpell,
   charmSpell,
+  doNothingSpell,
   dummyAreaSpell,
-  dummyManaControlSpell,
   dummySpell,
   dumptyHumptySpell,
   enlargeMyPencilSpell,
@@ -292,7 +292,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 2,
     sphere: 'astral',
-    eventType: dummyManaControlSpell.name,
+    eventType: doNothingSpell.name,
   },
   // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   // В течение Мощь*3 минут каждые 60с будет сделана попытка (с вероятностью Мощь*20. Значение больше 100% учитывать как 100%) выгнать 1 уровень плотности маны в случайную соседнюю локацию (там понизится, тут повысится).
@@ -305,7 +305,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 2,
     sphere: 'astral',
-    eventType: dummyManaControlSpell.name,
+    eventType: doNothingSpell.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   // В течение 60*24*2 минут доступно неограниченное число активаций. При активации необходимо сосканировать qr-код мясного тела цели, цель теряет один текущий хит, и если цель подходит под случайным образом выбранный на стадии каста метатип (норм/эльф/гном/орк/тролль) - то в этой локации создается дух (хиты: floor(Мощь/2)+1, способности: Arrowgant, Stand up and fight для Мощи < 5, иначе дополнительно Trollton)

@@ -543,11 +543,6 @@ export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never)
   api.sendNotification('Спелл еще не реализован :(', 'Площадные заклинания не реализованы.');
 }
 
-export function dummyManaControlSpell(api: EventModelApi<Sr2020Character>, data: never) {
-  // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
-  api.sendNotification('Спелл еще не реализован :(', 'Заклинания влияющие на уровень маны не реализованы.');
-}
-
 export function teaseLesserMindSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   addTemporaryActiveAbility(api, 'take-no-harm', duration(10 * data.power, 'minutes'));
 }
@@ -577,3 +572,6 @@ export function birdsSpell(api: EventModelApi<Sr2020Character>, data: SpellData)
 export function cacophonySpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   addTemporaryPassiveAbility(api, 'cacophony-able', duration(5 * data.power, 'minutes'), { amount: 5 * data.power });
 }
+
+// For cases when no IT action is needed
+export function doNothingSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {}
