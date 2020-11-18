@@ -94,7 +94,7 @@ function createSpiritModifier(spirit: SpiritQrData, spiritQrId: string): InTheSp
         enabled: true,
       },
     ],
-    hp: 2,
+    hp: spirit.hitpoints,
     spiritQrId,
     postSpiritDamage: 0,
     stage: 0,

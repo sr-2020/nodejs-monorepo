@@ -10,6 +10,7 @@ export type QrType =
   | 'CLINICALLY_DEAD_BODY'
   | 'ABSOLUTELY_DEAD_BODY'
   | 'ASTRAL_BODY'
+  | 'ECTOPLASM_BODY'
   | 'ROBOT_BODY'
   // Ones in snake_case are rewritable ones stored in the database
   | 'empty' // Empty QR, can be written.

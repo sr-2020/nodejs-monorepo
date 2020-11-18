@@ -77,6 +77,7 @@ export type CyberDeckQrData = CyberDeck & MerchandiseQrData;
 // qr.type == 'spirit'
 export interface SpiritQrData {
   inUse: boolean;
+  hitpoints: number;
   activeAbilities: AddedActiveAbility[];
   passiveAbilities: AddedPassiveAbility[];
 }

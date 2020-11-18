@@ -8,10 +8,14 @@ import {
   LocusQrData,
   MentalQrData,
   ReanimateCapsuleData,
+  SpiritQrData,
   TypedQrCode,
 } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 import { buyFeatureForKarma, earnKarma } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllSpirits, kCommonSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -245,5 +249,63 @@ export function writeBuyableFeature(api: EventModelApi<QrCode>, data: { id: stri
     modifiers: [],
     timers: [],
     data,
+  };
+}
+
+export function writeSpirit(api: EventModelApi<QrCode>, data: { id: string }) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  const maybeSpirit = kAllSpirits.find((s) => s.id == data.id);
+  if (!maybeSpirit) {
+    throw new UserVisibleError(`Духа ${data.id} не существует.`);
+  }
+  const qrData: SpiritQrData = {
+    hitpoints: 3,
+    inUse: false,
+    activeAbilities: [],
+    passiveAbilities: [],
+  };
+
+  for (const abilityId of maybeSpirit.abilityIds.concat(kCommonSpiritAbilityIds)) {
+    const maybePassiveAbility = kAllPassiveAbilities.get(abilityId);
+    if (maybePassiveAbility) {
+      qrData.passiveAbilities.push({
+        id: maybePassiveAbility.id,
+        humanReadableName: maybePassiveAbility.humanReadableName,
+        description: maybePassiveAbility.description,
+        modifierIds: [],
+      });
+      continue;
+    }
+
+    const maybeActiveAbility = getAllActiveAbilities().get(abilityId);
+    if (maybeActiveAbility) {
+      qrData.activeAbilities.push({
+        id: maybeActiveAbility.id,
+        humanReadableName: maybeActiveAbility.humanReadableName,
+        description: maybeActiveAbility.description,
+        cooldownMinutes: maybeActiveAbility.cooldownMinutes,
+        cooldownUntil: 0,
+        target: maybeActiveAbility.target,
+        targetsSignature: maybeActiveAbility.targetsSignature,
+      });
+      continue;
+    }
+
+    throw new UserVisibleError('Описание духа содержит несуществующую способность');
+  }
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'spirit',
+    name: 'Дух',
+    description: '',
+    usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data: qrData,
   };
 }
