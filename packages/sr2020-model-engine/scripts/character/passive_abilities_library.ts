@@ -4039,6 +4039,54 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
     modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
   },
+  // TODO(aeremin): Implement and add modifier here
+  // Это сводная абилка для свойств духа типа1
+  {
+    id: 'totoro',
+    humanReadableName: 'Totoro',
+    description: 'Ты неуязвим для снарядов. Можешь лечить мясным телам хиты до их максимума прикосновением в течение 5с',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Это сводная абилка для свойств духа типа2
+  {
+    id: 'firestarter',
+    humanReadableName: 'Firestarter',
+    description: 'Можешь кинуть в одном бою до 5 файерболов',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Это сводная абилка для свойств духа типа3
+  {
+    id: 'riotment',
+    humanReadableName: 'Riotment',
+    description: 'Неуязвим для снарядов. Можешь кинуть в бою 1 файербол. Оружие в руках считается тяжёлым',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // делает доступной кнопку установки импланта на экране автодока
+  {
+    id: 'implant-active',
+    humanReadableName: 'Установка импланта',
+    description: 'Ты можешь использовать автодок для лечения и ставить импланты!',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-bio', level: 1 },
+    modifier: [],
+  },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
   const result = new Map<string, PassiveAbility>();
