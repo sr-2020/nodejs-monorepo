@@ -65,6 +65,7 @@ import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nano
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
+import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@sr2020/sr2020-model-engine/scripts/character/spirits';
 
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
@@ -153,6 +154,14 @@ const kDroneAndBodyStorageTargeted: TargetSignature[] = [
   {
     name: 'Дрон',
     allowedTypes: ['drone'],
+    field: 'droneId',
+  },
+  kBodyStorageTarget,
+];
+const kSpiritAndBodyStorageTargeted: TargetSignature[] = [
+  {
+    name: 'Дух',
+    allowedTypes: ['spirit'],
     field: 'droneId',
   },
   kBodyStorageTarget,
@@ -2199,13 +2208,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Own spirit',
     description: 'Влезть в духа',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kSpiritAndBodyStorageTargeted,
     cooldownMinutes: 30,
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 2,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: enterSpirit.name,
   },
   // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле.
   {
@@ -2213,13 +2222,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Dispirit',
     description: 'Вылезти из духа',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: 20,
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: exitSpirit.name,
   },
   // Эта кнопка символизирует разрушение оболочки духа
   // Используется в случае если
@@ -2238,7 +2247,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: spiritEmergencyExit.name,
   },
 ];
 setAllActiveAbilities(
