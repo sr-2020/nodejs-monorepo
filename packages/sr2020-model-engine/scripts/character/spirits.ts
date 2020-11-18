@@ -5,7 +5,7 @@ import { BodyStorageQrData, SpiritQrData, typedQrData } from '@sr2020/sr2020-mod
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-engine/scripts/qr/body_storage';
-import { removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { kSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
@@ -35,10 +35,10 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbi
 
   api.sendOutboundEvent(QrCode, data.droneId!, startUsingDroneOrSpirit, {});
 
-  //api.model.activeAbilities = api.model.activeAbilities.concat(drone.activeAbilities);
-  //for (const passiveAbility of spirit.passiveAbilities) {
-  //  addFeatureToModel(api.model, passiveAbility.id);
-  //}
+  api.model.activeAbilities = api.model.activeAbilities.concat(spirit.activeAbilities);
+  for (const passiveAbility of spirit.passiveAbilities) {
+    addFeatureToModel(api.model, passiveAbility.id);
+  }
 
   api.addModifier(createSpiritModifier(spirit, data.droneId!));
 }

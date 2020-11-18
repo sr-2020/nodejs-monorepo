@@ -2,7 +2,6 @@ import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { AddedActiveAbility, AddedPassiveAbility, BodyType, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
 import { DroneType } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
 import { CyberDeck } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
-import { Spirit } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
 
 export interface TypedQrCode<T> extends QrCode {
   data: T;
@@ -76,7 +75,11 @@ export type MagicFocusQrData = MagicFocusData & MerchandiseQrData;
 export type CyberDeckQrData = CyberDeck & MerchandiseQrData;
 
 // qr.type == 'spirit'
-export type SpiritQrData = Spirit & { inUse: boolean; activeAbilities: AddedActiveAbility[] };
+export interface SpiritQrData {
+  inUse: boolean;
+  activeAbilities: AddedActiveAbility[];
+  passiveAbilities: AddedPassiveAbility[];
+}
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;
