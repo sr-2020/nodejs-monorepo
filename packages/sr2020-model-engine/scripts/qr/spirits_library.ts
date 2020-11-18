@@ -5,15 +5,15 @@ export interface Spirit {
 
 export const kAllSpirits: Spirit[] = [
   {
-    id: 'spirity-type-1',
+    id: 'spirit-type-1',
     abilityIds: ['grey-matter', 'totoro'],
   },
   {
-    id: 'spirity-type-2',
+    id: 'spirit-type-2',
     abilityIds: ['firestarter'],
   },
   {
-    id: 'spirity-type-3',
+    id: 'spirit-type-3',
     abilityIds: ['riotment'],
   },
 ];
