@@ -20,4 +20,4 @@ export const kAllSpirits: Spirit[] = [
 
 export const kCommonSpiritAbilityIds = ['dispirit', 'spirit-danger'];
 
-export const kSpiritAbilityIds = new Set(kCommonSpiritAbilityIds.concat(...kAllSpirits.map((drone) => drone.abilityIds)));
+export const kSpiritAbilityIds = new Set(kCommonSpiritAbilityIds.concat(...kAllSpirits.map((spirit) => spirit.abilityIds)));
