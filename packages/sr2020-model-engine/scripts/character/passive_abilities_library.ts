@@ -27,6 +27,7 @@ import {
   increaseImplantsSlots,
   increaseIntelligence,
   increaseMagic,
+  increaseMaxEctoplasmHp,
   increaseMaxMeatHp,
   increaseMaxTimeAtHost,
   increaseMaxTimeInDrone,
@@ -3947,7 +3948,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'grey-matter',
@@ -3956,7 +3956,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 2,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxEctoplasmHp, { amount: 1 })],
   },
   // Эту абилку НАДО ставить пререквезитом ко всему непонятному, что мы хотим спрятать от игроков
   {

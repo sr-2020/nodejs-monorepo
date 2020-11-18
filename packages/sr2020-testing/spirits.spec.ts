@@ -50,7 +50,7 @@ describe('Spirits-related abilities', () => {
     {
       // Mage is in spirit and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(3);
+      expect(workModel.maxHp).to.equal(4);
       expect(workModel.activeAbilities).to.containDeep([{ id: 'dispirit' }]);
       expect(workModel.currentBody).to.equal('ectoplasm');
     }

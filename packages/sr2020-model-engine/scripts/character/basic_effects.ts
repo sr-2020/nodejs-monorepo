@@ -19,6 +19,13 @@ export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: Modif
   }
 }
 
+export function increaseMaxEctoplasmHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  if (api.model.currentBody != 'ectoplasm') return;
+
+  api.model.maxHp += m.amount;
+  api.model.maxHp = clamp(api.model.maxHp, 0, 6);
+}
+
 export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   increaseResonance(api, m);
   increaseIntelligence(api, m);
