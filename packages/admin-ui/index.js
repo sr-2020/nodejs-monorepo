@@ -25,6 +25,7 @@ app = new Vue({
     allReagents: undefined,
     allEthicGroups: undefined,
     allDrones: undefined,
+    allSpirits: ['spirit-type-1', 'spirit-type-2', 'spirit-type-3'],
     allCyberDecks: undefined,
     allSoftware: undefined,
     allFocuses: undefined,
@@ -33,6 +34,7 @@ app = new Vue({
     selectedPill: 'iodomarin',
     selectedReagent: 'virgo',
     selectedDrone: 'belarus',
+    selectedSpirit: 'spirit-type-1',
     selectedCyberDeck: 'cyberdeck-microtronic',
     selectedSoftware: 'soft-spambomb',
     selectedRace: 'meta-norm',
@@ -383,6 +385,9 @@ app = new Vue({
       return this.sendQrEvent({ eventType: 'createMerchandise', data: { id: this.selectedDrone } });
     },
 
+    async writeSpiritQr() {
+      return this.sendQrEvent({ eventType: 'writeSpirit', data: { id: this.selectedSpirit } });
+    },
 
     async writeLocusChargeQr() {
       return this.sendQrEvent({

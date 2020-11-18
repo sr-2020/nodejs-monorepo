@@ -1001,6 +1001,26 @@
 
             <div  class="mt-3">
               <b-card-group deck>
+
+                 <b-card no-body v-if="qrModel.type == 'empty'">
+                   <b-card-header>Запись духа на QR</b-card-header>
+                   <b-card-body>
+                    <b-input-group>
+                      <b-form-select v-model="selectedSpirit">
+                        <option v-for="spirit in allSpirits" :value="spirit"> {{ spirit }} </option>
+                      </b-form-select>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="writeSpiritQr">Записать</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                   </b-card-body>
+                 </b-card>
+
+              </b-card-group>
+            </div>
+
+            <div  class="mt-3">
+              <b-card-group deck>
                 <b-card no-body v-if="qrModel.type == 'empty'">
                   <b-card-header>Запись фичи на QR</b-card-header>
                   <b-card-body>
