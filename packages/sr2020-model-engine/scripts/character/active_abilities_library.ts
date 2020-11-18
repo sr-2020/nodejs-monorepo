@@ -2221,7 +2221,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта кнопка символизирует разрушение оболочки духа
   // Используется в случае если
   // - с духа сняли все хиты.
@@ -2236,7 +2235,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,

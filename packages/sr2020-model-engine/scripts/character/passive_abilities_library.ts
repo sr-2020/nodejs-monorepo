@@ -4039,7 +4039,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
     modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Это сводная абилка для свойств духа типа1
   {
     id: 'totoro',
@@ -4048,10 +4047,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Это сводная абилка для свойств духа типа2
   {
     id: 'firestarter',
@@ -4060,10 +4057,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Это сводная абилка для свойств духа типа3
   {
     id: 'riotment',
@@ -4072,7 +4067,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
