@@ -119,6 +119,7 @@ export function inTheSpirit(api: EffectModelApi<Sr2020Character>, m: InTheSpirit
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
+  api.model.screens.karma = false;
 }
 
 export function spiritTimeout(api: EventModelApi<Sr2020Character>, data: {}) {
