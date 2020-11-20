@@ -2,6 +2,33 @@ import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { consume } from '../qr/events';
 import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { ChemoData } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import Chance = require('chance');
+
+const chance = new Chance();
+
+export function shouldBeConsumed(qrCode: QrCode, character: Sr2020Character) {
+  if (qrCode.type != 'pill') return true;
+  const data = typedQrData<ChemoData>(qrCode);
+  const supportedPills = [
+    'iodomarin',
+    'iodomarin-p',
+    'apollo',
+    'apollo-p',
+    'military-combo',
+    'military-supercombo',
+    'preper',
+    'preper-p',
+    'yurgen',
+    'yurgen-p',
+  ];
+
+  if (!supportedPills.some((id) => id == data.id)) return true;
+  if (!character.passiveAbilities.some((ability) => ability.id == 'good-pills')) return true;
+
+  return chance.natural({ min: 1, max: 100 }) > 30;
+}
 
 export function scanQr(
   api: EventModelApi<Sr2020Character>,
@@ -17,5 +44,8 @@ export function scanQr(
   } else {
     api.sendSelfEvent(qr.eventType, { ...qr.data, location: data.location });
   }
-  api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
+
+  if (shouldBeConsumed(qr, api.workModel)) {
+    api.sendOutboundEvent(QrCode, data.qrCode, consume, {});
+  }
 }

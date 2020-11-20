@@ -2,6 +2,7 @@ import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
 import { kAllChemoEffects, kAllElements } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { shouldBeConsumed } from '@sr2020/sr2020-model-engine/scripts/character/scan_qr';
 
 describe('Chemo events', function () {
   let fixture: TestFixture;
@@ -235,5 +236,23 @@ describe('Chemo events', function () {
         healthState: 'healthy',
       });
     }
+  });
+
+  it('Good pills ability', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('good-pills');
+
+    await fixture.saveQrCode(); // Charge
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'iodomarin-p' } });
+
+    const character = (await fixture.getCharacter()).workModel;
+    const qr = (await fixture.getQrCode()).workModel;
+    let used = 0;
+    for (let i = 0; i < 100; ++i) {
+      if (shouldBeConsumed(qr, character)) ++used;
+    }
+
+    expect(used).to.be.lessThanOrEqual(80);
+    expect(used).to.be.greaterThanOrEqual(60);
   });
 });

@@ -3896,7 +3896,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // При применении абилки  use-pills-on-others ИЛИ употребления  таблетки  самостоятельно
   // с 30% вероятностью - эффект срабатывает, а препарат не расходуется после использования.
   // Работает только для препаратов, которые входят в список:
