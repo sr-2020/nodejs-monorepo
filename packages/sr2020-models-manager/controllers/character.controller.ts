@@ -19,6 +19,7 @@ import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.serv
 import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
 import { AnyModelController } from '@sr2020/sr2020-models-manager/controllers/anymodel.controller';
 import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
+import { LoggerService } from '@sr2020/alice-models-manager/services/logger.service';
 import moment = require('moment');
 
 export class CharacterController extends AnyModelController<Sr2020Character> {
@@ -35,8 +36,19 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     protected pushService: PushService,
     @inject('services.PubSubService')
     protected pubSubService: PubSubService,
+    @inject('services.LoggerService')
+    protected logger: LoggerService,
   ) {
-    super(Sr2020Character, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
+    super(
+      Sr2020Character,
+      modelEngineService,
+      timeService,
+      eventDispatcherService,
+      modelAquirerService,
+      pushService,
+      pubSubService,
+      logger,
+    );
   }
 
   @get('/character/update_all', {

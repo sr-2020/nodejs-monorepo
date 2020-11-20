@@ -11,6 +11,7 @@ import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
 import { Empty } from '@sr2020/interface/models/empty.model';
 import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
+import { LoggerService } from '@sr2020/alice-models-manager/services/logger.service';
 
 // TODO(cleanup) It doesn't actually have any sr2020 specific besides ModelEngineService (which "knows" which specific
 // model types are present). As such it should be moved to alice-models-manager package after figuring out how to deal
@@ -24,6 +25,7 @@ export class AnyModelController<TModel extends EmptyModel> {
     protected modelAquirerService: ModelAquirerService,
     protected pushService: PushService,
     protected pubSubService: PubSubService,
+    protected logger: LoggerService,
   ) {}
 
   async replaceById(model: TModel): Promise<Empty> {
@@ -74,6 +76,10 @@ export class AnyModelController<TModel extends EmptyModel> {
   // because of @Transaction decorator on this method - basically it will be applied twice (on initial child's get(...) call, and then
   // on child's postEvent(...) call.
   async postEventImpl(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
+    if (!event.eventType.startsWith('_')) {
+      this.logger.info(`Processing event ${JSON.stringify(event)} for ${this.tmodel.name} with id ${id}`);
+    }
+
     const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
     const results = await this.eventDispatcherService.dispatchEventsRecursively(
       [

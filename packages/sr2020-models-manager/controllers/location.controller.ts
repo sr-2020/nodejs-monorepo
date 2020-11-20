@@ -11,6 +11,7 @@ import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.serv
 import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
 import { AnyModelController } from '@sr2020/sr2020-models-manager/controllers/anymodel.controller';
 import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
+import { LoggerService } from '@sr2020/alice-models-manager/services/logger.service';
 
 export class LocationController extends AnyModelController<Location> {
   constructor(
@@ -26,8 +27,10 @@ export class LocationController extends AnyModelController<Location> {
     protected pushService: PushService,
     @inject('services.PubSubService')
     protected pubSubService: PubSubService,
+    @inject('services.LoggerService')
+    protected logger: LoggerService,
   ) {
-    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService);
+    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService, logger);
   }
 
   @put('/location/model', {
