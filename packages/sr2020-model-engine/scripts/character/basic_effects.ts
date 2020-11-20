@@ -379,3 +379,7 @@ export function unlockAutodockImplantRemoval(api: EffectModelApi<Sr2020Character
 export function setImplantsRemovalResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.implantsRemovalResistance = Math.max(api.model.implantsRemovalResistance, m.amount);
 }
+
+export function decreaseChemoSensitivity(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.chemo.sensitivity -= m.amount;
+}

@@ -1014,3 +1014,17 @@ export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: Ac
 export function usePillsOnOthersAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   scanQr(api, { qrCode: data.qrCodeId!, targetCharacterId: data.targetCharacterId!, location: data.location });
 }
+
+export function whatsInTheBodyAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const threshold = api.workModel.chemo.sensitivity - 10 * api.workModel.intelligence;
+  const patient = api.aquired(Sr2020Character, data.targetCharacterId!);
+
+  const results: { timestamp: number; spellName: string }[] = [];
+  for (const element of kAllElements) {
+    if (patient.chemo.concentration[element] >= threshold) {
+      results.push({ timestamp: 0, spellName: `${kElementNames[element]}: ${patient.chemo.concentration[element]}` });
+    }
+  }
+
+  api.setTableResponse(results);
+}

@@ -150,6 +150,7 @@ export class ModelEngineController implements ModelEngineService {
         uberEffectThreshold: 250,
         superEffectThreshold: 300,
         crysisThreshold: 400,
+        sensitivity: 280,
         concentration: {
           argon: 0,
           barium: 0,

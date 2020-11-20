@@ -60,7 +60,7 @@ import {
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
-import { getPillNameAbility, usePillsOnOthersAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
@@ -2051,7 +2051,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перечислены все вещества, которые находятся в чаммере в формате
   // имя_чаммера
   // Название вещества - количество в мг.
@@ -2061,14 +2060,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Диагностика (что в чаммере)',
     description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: 15,
     prerequisites: ['arch-rigger-engineer'],
     pack: { id: 'rigger-eng-chem', level: 1 },
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: whatsInTheBodyAbility.name,
   },
   // Показывает текстовое сообщение ( в лог?) формата
   // имя_чаммера

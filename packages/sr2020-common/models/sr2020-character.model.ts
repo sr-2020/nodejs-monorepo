@@ -380,6 +380,10 @@ export class Chemo {
   crysisThreshold: number;
 
   @rproperty()
+  @Column({ default: 280 })
+  sensitivity: number; // which concentration can detect when using whats-in-the-body
+
+  @rproperty()
   @Column((type) => Concentrations, { prefix: 'concentration' })
   concentration: Concentrations;
 }

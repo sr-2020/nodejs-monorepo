@@ -2,6 +2,7 @@ import { Modifier } from '@sr2020/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
   allowBiowareInstallation,
+  decreaseChemoSensitivity,
   increaseAdminHostNumber,
   increaseAircraftBonus,
   increaseAuraMarkMultiplier,
@@ -3404,7 +3405,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-assa-maraud', level: 3 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // добавляем в список вещества с содержанием ( 230 - Интеллект * 10)  мг и больше
   {
     id: 'whats-in-the-body-2',
@@ -3414,9 +3414,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 80,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-1'],
     pack: { id: 'rigger-eng-chem', level: 2 },
-    modifier: [],
+    modifier: [modifierFromEffect(decreaseChemoSensitivity, { amount: 50 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // показываем в списке вещества с содержанием ( 130 - Интеллект * 10)   мг и больше
   {
     id: 'whats-in-the-body-3',
@@ -3426,7 +3425,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 80,
     prerequisites: ['arch-rigger-engineer', 'whats-in-the-body-2'],
     pack: { id: 'rigger-eng-chem', level: 3 },
-    modifier: [],
+    modifier: [modifierFromEffect(decreaseChemoSensitivity, { amount: 100 })],
   },
   // TODO(aeremin): Implement and add modifier here
   // ментальная защита снижена на 3
