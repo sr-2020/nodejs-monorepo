@@ -12,7 +12,7 @@ export interface LoggerService {
 class WinstonLogger implements LoggerService {
   static loggingWinston = new LoggingWinston();
   static logger = winston.createLogger({
-    level: 'warn',
+    level: 'info',
     transports: [
       new winston.transports.Console(),
       // Add Stackdriver Logging
