@@ -19,6 +19,7 @@ import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character
 import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryPassiveAbilityEffect } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { scanQr } from '@sr2020/sr2020-model-engine/scripts/character/scan_qr';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -1008,4 +1009,8 @@ export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: Ac
   if (pill.type != 'pill') throw new UserVisibleError('Это не препарат');
 
   api.sendNotification('Фармацевтика', `Перед вами препарат ${pill.name}`);
+}
+
+export function usePillsOnOthersAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  scanQr(api, { qrCode: data.qrCodeId!, targetCharacterId: data.targetCharacterId!, location: data.location });
 }

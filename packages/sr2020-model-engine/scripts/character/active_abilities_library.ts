@@ -60,7 +60,7 @@ import {
 } from './ethics';
 import { setAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
 import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
-import { getPillNameAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { getPillNameAbility, usePillsOnOthersAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
@@ -148,6 +148,11 @@ const kBodyStorageTarget: TargetSignature = {
   name: 'Телохранилище',
   allowedTypes: ['body_storage'],
   field: 'bodyStorageId',
+};
+const kPillTarget: TargetSignature = {
+  name: 'Препарат',
+  allowedTypes: ['pill'],
+  field: 'pillId',
 };
 const kBodyStorageTargeted = [kBodyStorageTarget];
 const kDroneAndBodyStorageTargeted: TargetSignature[] = [
@@ -1397,13 +1402,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Фармацевтика (что за таблетка?)',
     description: 'Позволяет узнать название препарата и его основной компонент.',
     target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Препарат',
-        allowedTypes: ['pill'],
-        field: 'pillId',
-      },
-    ],
+    targetsSignature: [kPillTarget],
     prerequisites: ['arch-rigger-engineer'],
     pack: { id: 'rigger-eng-chem', level: 1 },
     availability: 'open',
@@ -2190,7 +2189,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Применяет препарат на другого персонажа
   // цель 1: куар препарата
   // цель2: куар цели (куар мясного тела, показаный добровольно или куар тела в жижране)
@@ -2199,14 +2197,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Вколоть препарат',
     description: 'Активируй, чтобы применить препарат на другого персонажа',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
     cooldownMinutes: 2,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-combat', level: 2 },
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: usePillsOnOthersAbility.name,
   },
   // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код нужного духа, сканирует ячейку в телохранилище. После этого его мясное тело как бы лежит в телохранилище, а сам игрок действует в эктоплазменном теле - согласно описанию эктоплазменного тела в документе https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju
   {
