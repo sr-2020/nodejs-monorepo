@@ -24,7 +24,6 @@ import {
   increaseGroundcraftBonus,
   increaseHostEntrySpeed,
   increaseImplantDifficultyBonus,
-  increaseImplantsBonus,
   increaseImplantsSlots,
   increaseIntelligence,
   increaseMagic,
@@ -1927,65 +1926,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
     modifier: [],
   },
-  // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
-  // более лучшая химота в продаже
-  {
-    id: 'more-chemo-to-sell-1',
-    humanReadableName: 'апгрейд аптеки 1',
-    description: 'Ассортимент твоей аптеки расширился.',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
-  // TODO(https://trello.com/c/W8G2ZocH/109-описать-подробнее-механику-апгрейдов-аптеки): Implement and add modifier here
-  // Аптека умеет юзать прототипы (с лимитом на штуки)
-  {
-    id: 'more-chemo-to-sell-2',
-    humanReadableName: 'апгрейд аптеки 2',
-    description: 'Ассортимент твоей аптеки расширился ещё больше.',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
-  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
-  // Допуск: медикарт
-  {
-    id: 'mobile-auto-doc-1',
-    humanReadableName: 'Мобильный автодок',
-    description: 'Ты можешь использовать медикарт.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-rigger-medic', 'master-of-the-universe'],
-    pack: { id: 'rigger-medic-combat', level: 1 },
-    modifier: [],
-  },
-  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
-  // находясь в альтернативном теле "медикарт" игрок получает активную абилку "Полевое лечение тяжрана". Кулдаун абилки 60 минут
-  {
-    id: 'mobile-auto-doc-2',
-    humanReadableName: 'апгрейд мобильного автодока 1',
-    description: 'Ты можешь лечить тяжёлое  ранение мобильный автодоком.',
-    availability: 'open',
-    karmaCost: 35,
-    prerequisites: ['mobile-auto-doc-1', 'master-of-the-universe'],
-    pack: { id: 'rigger-medic-combat', level: 2 },
-    modifier: [],
-  },
-  // TODO(https://trello.com/c/XDq4EE9R/327-реализовать-мобильный-автодок): Implement and add modifier here
-  // находясь в альтернативном теле "медикарт" игрок получает три  активных абилки "полевое  лечение тяжрана". Кулдаун абилки 60 минут
-  {
-    id: 'mobile-auto-doc-3',
-    humanReadableName: 'апгрейд мобильного автодока 2',
-    description: 'Ты можешь лечить тяжёлое ранение мобильный автодоком чаще.',
-    availability: 'open',
-    karmaCost: 35,
-    prerequisites: ['mobile-auto-doc-2', 'master-of-the-universe'],
-    pack: { id: 'rigger-medic-combat', level: 3 },
-    modifier: [],
-  },
-  // TODO(https://trello.com/c/D3K8TZPl/351-реализовать-архетипы) Enable prerequisite when it's implemented
   // Intelligence -1
   {
     id: 'arch-rigger-negative-1',
@@ -2091,36 +2031,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-3'],
     modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation, {})],
-  },
-  // rigging.implantsBonus+2
-  {
-    id: 'implant-1',
-    humanReadableName: 'Биоинженерия 1',
-    description: 'Ты можешь ставить простые импланты.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-rigger-engineer', 'master-of-the-universe'],
-    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
-  },
-  // rigging.implantsBonus+2
-  {
-    id: 'implant-2',
-    humanReadableName: 'Биоинженерия 2',
-    description: 'Ты можешь ставить сложные импланты.',
-    availability: 'open',
-    karmaCost: 80,
-    prerequisites: ['implant-1', 'master-of-the-universe'],
-    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
-  },
-  // rigging.implantsBonus+4
-  {
-    id: 'implant-3',
-    humanReadableName: 'Биоинженерия 3',
-    description: 'Ты можешь ставить самые сложные импланты, включая биовэр.',
-    availability: 'open',
-    karmaCost: 80,
-    prerequisites: ['implant-2', 'master-of-the-universe'],
-    modifier: [modifierFromEffect(increaseImplantsBonus, { amount: 4 })],
   },
   // rigging.tuningBonus +2
   {
