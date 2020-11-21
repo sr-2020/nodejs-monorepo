@@ -8,9 +8,9 @@ async function run() {
   // https://docs.google.com/spreadsheets/d/1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc
   const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Софт!B8:F50');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Софт!B8:H50');
   const header = data[0];
-  if (header.join('  ') != 'ID  название  описание для игрока  Корпорация производитель  память') {
+  if (header.join('  ') != 'ID  название  описание для игрока  Корпорация производитель  память  kind  charges') {
     console.log(header.join('  '));
     throw new Error('Header has changed! Exiting.');
   }
@@ -25,6 +25,8 @@ async function run() {
       name: row[1],
       description: row[2],
       ram: Number(row[4]),
+      kind: row[5],
+      charges: Number(row[6]),
     });
   }
 
