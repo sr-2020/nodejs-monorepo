@@ -629,6 +629,14 @@ export class Screens {
 
   @rproperty()
   @Column({ default: false })
+  autodocWoundHeal: boolean;
+
+  @rproperty()
+  @Column({ default: false })
+  autodocImplantInstall: boolean;
+
+  @rproperty()
+  @Column({ default: false })
   autodocImplantRemoval: boolean;
 
   @rproperty()
