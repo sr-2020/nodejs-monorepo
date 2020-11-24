@@ -67,6 +67,7 @@ import {
   multiplySpiritResistanceMultiplier,
   setImplantsRemovalResistance,
   setTransactionAnonymous,
+  unlockAutodockImplantInstall,
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
 } from './basic_effects';
@@ -3995,7 +3996,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // делает доступной кнопку установки импланта на экране автодока
   {
     id: 'implant-install',
@@ -4005,7 +4005,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-bio', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(unlockAutodockImplantInstall, {})],
   },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {

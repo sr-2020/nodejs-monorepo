@@ -372,6 +372,10 @@ export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Mo
   api.model.screens.autodoc = true;
 }
 
+export function unlockAutodockImplantInstall(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.screens.autodocImplantInstall = true;
+}
+
 export function unlockAutodockImplantRemoval(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.screens.autodocImplantRemoval = true;
 }
