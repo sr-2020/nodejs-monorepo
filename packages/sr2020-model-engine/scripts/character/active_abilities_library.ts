@@ -1306,7 +1306,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - QR дрона
   // - QR телохранилища
   {
-    id: 'medicraft-active',
+    id: 'medicart-active',
     humanReadableName: 'Управление медицинским дроном',
     description: 'Активируй, чтобы включиться в дрона-медикарт.',
     target: 'scan',
@@ -1314,6 +1314,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: 40,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-combat', level: 1 },
+    availability: 'open',
+    karmaCost: 50,
+    minimalEssence: 0,
+    eventType: enterDrone.name,
+  },
+  // Активирует процесс включения в автодок.
+  // надо отсканировать:
+  // - QR дрона
+  // - QR телохранилища
+  {
+    id: 'autodoc-active',
+    humanReadableName: 'Управление автодоком',
+    description: 'Активируй, чтобы подключиться к Автодоку.',
+    target: 'scan',
+    targetsSignature: kDroneAndBodyStorageTargeted,
+    cooldownMinutes: 40,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-bio', level: 1 },
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,

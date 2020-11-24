@@ -1976,7 +1976,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает управление медикартом.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-rigger-medic', 'medicraft-active'],
+    prerequisites: ['arch-rigger-medic', 'medicart-active'],
     pack: { id: 'rigger-medic-combat', level: 1 },
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
@@ -3985,19 +3985,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // делает доступной кнопку установки импланта на экране автодока
-  {
-    id: 'implant-active',
-    humanReadableName: 'Установка импланта',
-    description: 'Ты можешь использовать автодок для лечения и ставить импланты!',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-rigger-medic'],
-    pack: { id: 'rigger-medic-bio', level: 1 },
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
   // нужна сугобо в матрице для проверки доступености дебажных команд
   {
     id: 'god-mode',
@@ -4006,7 +3993,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['master-of-the-universe'],
-    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // делает доступной кнопку установки импланта на экране автодока
+  {
+    id: 'implant-install',
+    humanReadableName: 'Установка импланта',
+    description: 'Ты можешь использовать автодок для лечения и ставить импланты!',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['arch-rigger-medic'],
+    pack: { id: 'rigger-medic-bio', level: 1 },
     modifier: [],
   },
 ];

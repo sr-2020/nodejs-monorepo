@@ -103,7 +103,7 @@ describe('Rigger abilities', () => {
   it('Entering and leaving drone', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
-    await fixture.addCharacterFeature('medicraft-active');
+    await fixture.addCharacterFeature('medicart-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -114,7 +114,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'medicart-active', bodyStorageId: '1', droneId: '2' });
 
     {
       // Body is in storage
@@ -161,7 +161,7 @@ describe('Rigger abilities', () => {
   it('Spending too long in drone will wound you', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 4, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
-    await fixture.addCharacterFeature('medicraft-active');
+    await fixture.addCharacterFeature('medicart-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -172,7 +172,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'medicart-active', bodyStorageId: '1', droneId: '2' });
 
     // Wait for long time
     await fixture.advanceTime(duration(2, 'hours'));
@@ -188,7 +188,7 @@ describe('Rigger abilities', () => {
   it('Spending way too long in drone and hunger', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 6, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
-    await fixture.addCharacterFeature('medicraft-active');
+    await fixture.addCharacterFeature('medicart-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -199,7 +199,7 @@ describe('Rigger abilities', () => {
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
 
     // Enter drone
-    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'medicart-active', bodyStorageId: '1', droneId: '2' });
 
     // Wait for long time
     await fixture.advanceTime(duration(10, 'hours'));
@@ -217,7 +217,7 @@ describe('Rigger abilities', () => {
   it('Being in autodoc unlocks autodoc screen', async () => {
     // Rigger set up
     await fixture.saveCharacter({ drones: { maxDifficulty: 10, medicraftBonus: 10 } });
-    await fixture.addCharacterFeature('medicraft-active');
+    await fixture.addCharacterFeature('autodoc-active');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -230,7 +230,7 @@ describe('Rigger abilities', () => {
     expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.false();
 
     // Enter drone
-    await fixture.useAbility({ id: 'medicraft-active', bodyStorageId: '1', droneId: '2' });
+    await fixture.useAbility({ id: 'autodoc-active', bodyStorageId: '1', droneId: '2' });
     expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.true();
 
     // Leave drone

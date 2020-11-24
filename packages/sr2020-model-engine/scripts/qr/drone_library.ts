@@ -1,4 +1,4 @@
-export type DroneType = 'groundcraft' | 'aircraft' | 'medicraft';
+export type DroneType = 'groundcraft' | 'aircraft' | 'medicart' | 'autodoc';
 
 export interface Drone {
   id: string;
@@ -192,7 +192,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'medicart',
     name: 'Медикарт',
-    type: 'medicraft',
+    type: 'medicart',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 4,
@@ -203,7 +203,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'hippocrates',
     name: 'Гиппократ',
-    type: 'medicraft',
+    type: 'medicart',
     modSlots: 1,
     moddingCapacity: 2,
     sensor: 8,
@@ -214,7 +214,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'kuzhuget',
     name: 'Кужугет',
-    type: 'medicraft',
+    type: 'medicart',
     modSlots: 2,
     moddingCapacity: 3,
     sensor: 12,
@@ -234,7 +234,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'tool-autodoc-1',
     name: 'Пирогов',
-    type: 'medicraft',
+    type: 'autodoc',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 4,
@@ -245,7 +245,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'tool-autodoc-2',
     name: 'Авиценна',
-    type: 'medicraft',
+    type: 'autodoc',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 8,
@@ -256,7 +256,7 @@ export const kAllDrones: Drone[] = [
   {
     id: 'tool-autodoc-3',
     name: 'Асклепий',
-    type: 'medicraft',
+    type: 'autodoc',
     modSlots: 0,
     moddingCapacity: 0,
     sensor: 12,
