@@ -101,6 +101,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     },
   })
   async setDefault(@param.path.number('id') id: number, @requestBody() req: CharacterCreationRequest): Promise<Empty> {
+    this.logger.info(`Initializing character ${id} with following data: ${JSON.stringify(req)}`);
     const model = await this.modelEngineService.defaultCharacter(req);
     model.timestamp = this.timeService.timestamp();
     model.modelId = id.toString();
