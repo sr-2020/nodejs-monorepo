@@ -129,7 +129,6 @@ const kAllSpellsList: Spell[] = [
     description:
       'Временно выдаёт другому существу способность "Pencil, large!" (одно оружие в руках будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
     prerequisites: ['arch-mage-summoner'],
-    pack: { id: 'mage-summon-spirit', level: 2 },
     availability: 'open',
     karmaCost: 40,
     sphere: 'fighting',
@@ -299,7 +298,7 @@ const kAllSpellsList: Spell[] = [
     description:
       'Пока не кончится заклинание, мана из соседних локаций будет призываться в эту  (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
     prerequisites: ['arch-mage-spellcaster'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 40,
     sphere: 'astral',
     eventType: doNothingSpell.name,
@@ -312,7 +311,7 @@ const kAllSpellsList: Spell[] = [
     description:
       'Пока не кончится заклинание, мана из этой локации будет изгоняться в соседние (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
     prerequisites: ['arch-mage-spellcaster'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 40,
     sphere: 'astral',
     eventType: doNothingSpell.name,

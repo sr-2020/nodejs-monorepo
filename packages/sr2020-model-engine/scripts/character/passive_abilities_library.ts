@@ -1138,7 +1138,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'burn',
     humanReadableName: 'burn',
     description:
-      'новая команда: burn\nПозволяет наносить урон кибердеке противника, повреждать его моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
+      'новая команда: burn\nПозволяет наносить урон кибердеке противника, повреждать ее моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['fencer-2'],
@@ -3281,7 +3281,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-1',
     humanReadableName: 'Мародер: разоружение',
     description:
-      'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие',
+      'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие. Работает раз в час. Кулдаун 60 минут.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin'],
@@ -3295,7 +3295,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-2',
     humanReadableName: 'Мародер: грабеж',
     description:
-      'Говорят, что нет чести среди воров. И ведь правильно говорят. Если противник уже мертв, значит ему деньги уже не понадобятся.',
+      'Говорят, что нет чести среди воров. И ведь правильно говорят. Если противник уже мертв, значит ему деньги уже не понадобятся. Работает раз в час. Кулдаун 60 минут.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-1'],
@@ -3308,7 +3308,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-3',
     humanReadableName: 'Мародер: разоблачение',
     description:
-      'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять с противника и порвать (разрушить по игре) чип брони. ',
+      'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять с противника и порвать (разрушить по игре) чип брони. Работает раз в час. Кулдаун 60 минут.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-2'],
@@ -3995,6 +3995,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-bio', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // нужна сугобо в матрице для проверки доступености дебажных команд
+  {
+    id: 'god-mode',
+    humanReadableName: 'god mode',
+    description: 'GOD mode',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
     modifier: [],
   },
 ];
