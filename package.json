@@ -37,7 +37,6 @@
     "dotenv": "^8.0.0",
     "loopback-connector-postgresql": "^5.1.0",
     "loopback-connector-rest": "^3.6.0",
-    "loopback-connector-sqlite3": "^3.0.0",
     "moment": "^2.24.0",
     "tsconfig-paths": "^3.8.0",
     "typeorm": "^0.2.18",
