@@ -19,7 +19,7 @@ import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
 import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
 import { addFeatureToModel, getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { addKarmaGivingTimer, kMaxKarmaOnCreation, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
+import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { createJackedInEffect } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
 import { templateSettings } from 'lodash';
 import Chance = require('chance');
@@ -213,7 +213,7 @@ export class ModelEngineController implements ModelEngineService {
         used: 0,
       },
       karma: {
-        available: Math.min(req.karma ?? 0, kMaxKarmaOnCreation),
+        available: req.karma ?? 0,
         spent: 0,
         spentOnPassives: 0,
         cycleLimit: kMaxKarmaPerCycle,

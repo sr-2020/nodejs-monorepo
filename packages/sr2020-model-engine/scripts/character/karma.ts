@@ -11,7 +11,6 @@ import {
 import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
 
-export const kMaxKarmaOnCreation = 20;
 export const kMaxKarmaPerGame = 500;
 export const kMaxKarmaPerCycle = 100;
 export const kKarmaActiveAbilityCoefficient = 0.1;
