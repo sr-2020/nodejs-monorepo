@@ -619,31 +619,34 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
+  // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
   {
     id: 'longer-vr-stays-1',
     humanReadableName: 'Мужчина, продлевать будете? ',
     description: '',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
+  // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
   {
     id: 'longer-vr-stays-2',
     humanReadableName: 'Мужчина, продлевать будете?  v2',
     description: '',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
+  // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
   {
     id: 'unlimited-vr-stays',
     humanReadableName: 'Виар. А я вообще тут живу.',
     description: '',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 }),
   },
   // Резонанс +1
@@ -918,7 +921,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'новый ключ:install --persistent\nПозволяет применять ключ --persistant команды deploy\n\nключ позволяет агенту переживать обновлие хоста',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: ['sly-1'],
+    prerequisites: ['sly-1', 'deploy'],
     pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
@@ -930,7 +933,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'новый ключ:install --shadow\nПозволяет применять ключ --shadow команды deploy\n\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
     availability: 'open',
     karmaCost: 2,
-    prerequisites: ['sly-2'],
+    prerequisites: ['sly-2', 'deploy'],
     pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
@@ -4006,6 +4009,418 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-bio', level: 1 },
     modifier: [modifierFromEffect(unlockAutodockImplantInstall, {})],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет не учитывать при подсчете параметров группы в ОСновании
+  {
+    id: 'ghost',
+    humanReadableName: 'ПРизрак',
+    description: '',
+    availability: 'closed',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Дамаг 1 хит
+  {
+    id: 'hammer-strike',
+    humanReadableName: 'Хаммер страйк',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Дамаг 2 хита
+  {
+    id: 'hammer-fall',
+    humanReadableName: 'Хаммер фолл',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Восстановление 1 хит
+  {
+    id: 'weak-healer',
+    humanReadableName: 'Знахарь',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Восстановление 2 хита
+  {
+    id: 'healer',
+    humanReadableName: 'Лекарь',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Восстановление 3 хита
+  {
+    id: 'great-healer',
+    humanReadableName: 'Исцелитель',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // выкинуть из Основания, надо поговорить
+  {
+    id: 'i-am-power',
+    humanReadableName: 'Власть здесь я',
+    description: '',
+    availability: 'master',
+    karmaCost: 16,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // "Власть здесь я!" на меня не работает
+  {
+    id: 'arch-hackerman-technomancer-anarchy',
+    humanReadableName: 'Анархия!',
+    description: '',
+    availability: 'closed',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Дает возможность сверстать спрайт. Действует только на стойке. Действует только в матричном теле.
+  {
+    id: 'arch-hackerman-technomancer-compile',
+    humanReadableName: 'Компиляция',
+    description: '',
+    availability: 'open',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Теперь ты можешь применять абилки менталиста в Матрице
+  {
+    id: 'nothing-1',
+    humanReadableName: 'Менталист Матрицы',
+    description: '',
+    availability: 'closed',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Машинист: Теперь ты можешь применять абилки риггера
+  {
+    id: 'nothing-2',
+    humanReadableName: 'Живой RCC',
+    description: '',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Твоя кибердека это ты (параметры декерства конвертируются из Resonance+Body/Intellect/Charisma)
+  {
+    id: 'nothing-3',
+    humanReadableName: 'Живая персона',
+    description: '',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // позволяет получать раз в 15 (?) минут инфу (например сины) о проходящих мимо столба
+  // или о юриках вокруг (например) - бэкдоры в них
+  {
+    id: 'interceptor',
+    humanReadableName: 'Интерцептор',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'pole-1',
+    humanReadableName: '',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'pole-2',
+    humanReadableName: '',
+    description: '',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // маленькая вводная в джойне.
+  // Пяток известных пар SIN - Host, один бэкдор. Контакт на продажу CVE.
+  //
+  // ИТ: не нужно. Только текст, только в джойне.
+  {
+    id: 'i-am-a-noobie',
+    humanReadableName: 'Стартер: новичок',
+    description: 'Ты уже в профессии, чаммер. Ты начал свой путь и уже не полный нуб.',
+    availability: 'master',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Средняя вводная в джойне.
+  // Несколько известных пар SIN - Host,
+  // пару бэкдоров. Один из хостов - умеренно ценный.
+  // Подсказка по IC. Контакт в чате джекпоинта, покупающий лут, CVE
+  //
+  // ИТ: не нужно. Только текст, только в джойне.
+  {
+    id: 'i-am-a-profy',
+    humanReadableName: 'Стартер: профессонал',
+    description: 'Твое имя уже известно. Некоторым. Ты много чего повидал и никто не посмеет назвать тебя нубом',
+    availability: 'master',
+    karmaCost: 4,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Большая вводная в джойне.
+  // Пачка известных пар SIN - Host,
+  // несколько бэкдоров. Несколько изветных хостов, пара-тройка - умеренно ценные. Один - хост одного из облаков контроля.
+  // Пара CVE/подсказок по Основанию. Контакты в чате джекпоинта, покупающий лут, CVE, дающий задания и прочее. Хорошая цена на лут.
+  //
+  // ИТ: не нужно. Только текст, только в джойне.
+  {
+    id: 'i-am-a-legend',
+    humanReadableName: 'Стартер: легенда',
+    description:
+      'Хорошо или плохо, но ты легенда Иркутского грида. Когда кто-то в мире спросит про Иркутск, вспомнят твое имя. В том числе.\n\nАльтернатива: Стартер: падаван.\nТвой учитель был легендой Иркутска и не только. Яркой звездой. Которая теперь догорает на безымянном урановом руднике, после того как спалился. Но его короша тебя запомнили и помогли как смогли.',
+    availability: 'master',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Контр-вводная и цена за голову от одной из корп.
+  //
+  // ИТ: не нужно, вводная в джойне
+  {
+    id: 'bless-from-behind',
+    humanReadableName: 'Привет из прошлого',
+    description: 'Прошлое не умирает. Никогда. Однажды, ты пересек дорогу тем, кому не стоило. И они помнят про это',
+    availability: 'master',
+    karmaCost: -4,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Контр-вводная и большая цена за голову от одной из корп.
+  // Им слит SIN.
+  //
+  // ИТ: не нужно, вводная в джойне
+  {
+    id: 'shit-from-behind',
+    humanReadableName: 'П@#$ц из прошлого',
+    description: 'Прошлое не умирает. Никогда. Ты лихо подставился. И тебе это ТОЧНО не простят',
+    availability: 'master',
+    karmaCost: -8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Нам не нужна очередь в данж в среду, этой абилкой мы ее сократим
+  // ИТ: все техноманты стартуют с большим КД на вход в Основание. Эта абилка - одноразовый модификатор к таймеру на вход
+  {
+    id: 'jumpstart',
+    humanReadableName: 'Jumpstart',
+    description:
+      'Чаммер, ты везунчик. Ты как раз успел хорошо отдохнуть и набраться сил перед началом замеса в Иркутске! Ты можешь войти в основание в среду!',
+    availability: 'master',
+    karmaCost: 4,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Устанавливает спрайт в ноду.
+  // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
+  //
+  // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
+  {
+    id: 'merge-shaman',
+    humanReadableName: 'Merge (техношаман)',
+    description: 'Устанавливает спрайт в ноду Хоста Основания',
+    availability: 'open',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-technoshaman'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Устанавливает спрайт в ноду.
+  // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
+  //
+  // IT: Сканирует комнату данжа, сканирует спрайта, вызов REST Матрицы
+  {
+    id: 'merge-cyberadept',
+    humanReadableName: 'Merge (техношаман)',
+    description: 'Устанавливает спрайт в ноду Хоста Основания',
+    availability: 'open',
+    karmaCost: 6,
+    prerequisites: ['arch-hackerman-cyberadept'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Способ поиска чужих спрайтов (например - бэкдоров) в этой ноде хоста Основания.
+  //
+  // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
+  {
+    id: 'awareness',
+    humanReadableName: 'Насторожиться',
+    description:
+      'Ты можешь внимательно присмотреться к спрайтам в комнате. И какие-то из них явно не местные! Подозрительно...\n\nОбнаруживает вмерженные (то есть установленные другими хакерами) спрайты в этой ноде',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-cyberadept'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Способ уничтожения чужих спрайтов. У нас нет таргетинга, поэтому удаляем рандомых спрайтов, число которых зависит от Резонанса
+  //
+  // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
+  {
+    id: 'exterminatus',
+    humanReadableName: 'Экстерминатус',
+    description:
+      'Ты можешь сконцентрироваться и разрушительный импульс, который уничтожит часть (зависит от Резонанса) спрайтов, вмерженных в эту Ноду\n',
+    availability: 'open',
+    karmaCost: 2,
+    prerequisites: ['arch-hackerman-cyberadept'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
+  //
+  // IT: вызов Кривдиного REST, отобразить текст
+  {
+    id: 'looking-for-trouble',
+    humanReadableName: 'ГдеСрач?!',
+    description:
+      'Ты теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\n\nАктивируется перед входом в Основание (на стойке)\nВыдает список хостов, на которых есть техноманты и уровень группы. Чем сильнее твой Резонанс, тем меньше шансов у них остаться незамеченными',
+    availability: 'closed',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Ритуал инициации техноманта.
+  //
+  // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
+  {
+    id: 'chieftain',
+    humanReadableName: 'Вождь',
+    description:
+      'Это самый ценный из даров. Дар подарить Дар другому. Ты можешь разбудить в Госте Основания его суть, его природу, дав ему возможность по-настоящему почувстовать Матрицу. Цель пробудится и сможет стать техномантом',
+    availability: 'closed',
+    karmaCost: 16,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Хотим ли мы? Думаю да. Под субботу,
+  //
+  // файрбол в VR с конскми КД и прекастом
+  //
+  // IT: прекаст - активная абилка на [минут], QR: матричное тело: дает цели абилку пережитый дамп шок
+  {
+    id: 'punch',
+    humanReadableName: 'Punch',
+    description:
+      'Безопасная матрица, говорили они...\n\nЦель, пораженная "файрболом" в VR выбивается из матрицы, получая дамп-шок\n\nОБЯЗАТЕЛЬНО отсканируй QR код жертвы',
+    availability: 'closed',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-cyberadept'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // техническая абилка для получения бонуса в карму (преквизиит "пережитый дампшок" Кривда желающим поставит руками)
+  //
+  // IT:
+  // [КлиническаяСмерть = 0]  (отменяет эффект взятого дамп шока на тело)
+  // нет (кроме отрицательной кармы, т.е. бонуса)
+  {
+    id: 'once-i-have-survived',
+    humanReadableName: 'Однажды я выжил...',
+    description: 'В прошлом ты перенес дамп-шок.',
+    availability: 'master',
+    karmaCost: -4,
+    prerequisites: ['dump-shock-survivor'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Ритуал инициации техноманта.
+  //
+  // IT: текст на телефоне
+  {
+    id: 'saveload',
+    humanReadableName: 'Save/Load',
+    description:
+      'Этот пэттерн настолько силен, что он не мог не воплотиться в Матрице.\nНаходясь на обычной ноде (не в красной комнате), позволяет  поднять руку и сказать слово "Сохраняюсь". И позже, в этой же комнате, сказать "Загружаюсь". Да, 100% загрузки не получится, и потраченных ресурсов не вернуть.. но бывает очень полезно!',
+    availability: 'open',
+    karmaCost: 8,
+    prerequisites: ['arch-hackerman-technoshaman'],
+    pack: { id: 'hack-shaman-channeler', level: 1 },
+    modifier: [],
   },
 ];
 export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
