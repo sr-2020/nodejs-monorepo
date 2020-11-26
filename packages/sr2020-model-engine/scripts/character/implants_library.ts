@@ -67,7 +67,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, иммунитет к Легкому холодному и легкому дистанционному оружию. Можешь надевать лёгкую и тяжёлую броню',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -77,7 +77,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, иммунитет к Легкому холодному и легкому дистанционному оружию. Можешь надевать лёгкую и тяжёлую броню',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -87,7 +87,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, иммунитет к Легкому холодному и легкому дистанционному оружию. Можешь надевать лёгкую и тяжёлую броню',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -97,7 +97,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, иммунитет к Легкому холодному и легкому дистанционному оружию. Можешь надевать лёгкую и тяжёлую броню',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -117,7 +117,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, снижение урона от тяжелого оружия. Можешь пользоваться лёгкой бронёй',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -127,7 +127,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, снижение урона от тяжелого оружия. Можешь пользоваться лёгкой бронёй',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -137,7 +137,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, снижение урона от тяжелого оружия. Можешь пользоваться лёгкой бронёй',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -147,7 +147,7 @@ export const kAllImplants: Implant[] = [
     description: 'Имплант +2 хита, снижение урона от тяжелого оружия. Можешь пользоваться лёгкой бронёй',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMaxMeatHp, { amount: 2 })],
   },
   {
@@ -167,7 +167,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет использовать автоматическое оружие',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [],
   },
   {
@@ -177,7 +177,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет использовать автоматическое оружие',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [],
   },
   {
@@ -187,7 +187,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет использовать автоматическое оружие',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
   },
   {
@@ -197,7 +197,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет использовать автоматическое оружие',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [],
   },
   {
@@ -219,7 +219,7 @@ export const kAllImplants: Implant[] = [
       'Твой мозг нужен тебе для настоящих дел. Тупую работу - надо можно сплавить тупой железяке. Пусть вкалывает!\nЭто небольшой квантовый процессор, подключенный напрямую к мозгу.\n\nВ среде техномантов иметь такой имплант - стыдно.\n\n[+2] Резонанс (только для целей работы с контролем)\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
@@ -230,7 +230,7 @@ export const kAllImplants: Implant[] = [
       'Твой мозг нужен тебе для настоящих дел. Тупую работу - надо можно сплавить тупой железяке. Пусть вкалывает!\nЭто небольшой квантовый процессор, подключенный напрямую к мозгу.\n\nВ среде техномантов иметь такой имплант - стыдно.\n\n[+2] Резонанс (только для целей работы с контролем)\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
@@ -241,7 +241,7 @@ export const kAllImplants: Implant[] = [
       'Твой мозг нужен тебе для настоящих дел. Тупую работу - надо можно сплавить тупой железяке. Пусть вкалывает!\nЭто небольшой квантовый процессор, подключенный напрямую к мозгу.\n\nВ среде техномантов иметь такой имплант - стыдно.\n\n[+2] Резонанс (только для целей работы с контролем)\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
@@ -252,7 +252,7 @@ export const kAllImplants: Implant[] = [
       'Твой мозг нужен тебе для настоящих дел. Тупую работу - надо можно сплавить тупой железяке. Пусть вкалывает!\nЭто небольшой квантовый процессор, подключенный напрямую к мозгу.\n\nВ среде техномантов иметь такой имплант - стыдно.\n\n[+2] Резонанс (только для целей работы с контролем)\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseResonanceForControl, { amount: 2 })],
   },
   {
@@ -272,7 +272,7 @@ export const kAllImplants: Implant[] = [
     description: 'Хитроумный имплант, который следит за состоянием мозга при работе в Основании. Повышает устойчивость к фейдингу на 50.',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 50 })],
   },
   {
@@ -282,7 +282,7 @@ export const kAllImplants: Implant[] = [
     description: 'Хитроумный имплант, который следит за состоянием мозга при работе в Основании. Повышает устойчивость к фейдингу на 50.',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 50 })],
   },
   {
@@ -292,7 +292,7 @@ export const kAllImplants: Implant[] = [
     description: 'Хитроумный имплант, который следит за состоянием мозга при работе в Основании. Повышает устойчивость к фейдингу на 50.',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 50 })],
   },
   {
@@ -302,7 +302,7 @@ export const kAllImplants: Implant[] = [
     description: 'Хитроумный имплант, который следит за состоянием мозга при работе в Основании. Повышает устойчивость к фейдингу на 50.',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseFadingResistance, { amount: 50 })],
   },
   {
@@ -324,7 +324,7 @@ export const kAllImplants: Implant[] = [
       'Собственных сил никогда не бывает много, и подстраховаться всегда не грех. Этот несложный имплант образует дублирующий канал для данных матрицы, что повышает матричное состояние на 1',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -335,7 +335,7 @@ export const kAllImplants: Implant[] = [
       'Собственных сил никогда не бывает много, и подстраховаться всегда не грех. Этот несложный имплант образует дублирующий канал для данных матрицы, что повышает матричное состояние на 1',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -346,7 +346,7 @@ export const kAllImplants: Implant[] = [
       'Собственных сил никогда не бывает много, и подстраховаться всегда не грех. Этот несложный имплант образует дублирующий канал для данных матрицы, что повышает матричное состояние на 1',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -357,7 +357,7 @@ export const kAllImplants: Implant[] = [
       'Собственных сил никогда не бывает много, и подстраховаться всегда не грех. Этот несложный имплант образует дублирующий канал для данных матрицы, что повышает матричное состояние на 1',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -379,7 +379,7 @@ export const kAllImplants: Implant[] = [
       'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейд-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность в хот-симе Матрицы, ценой значительной потери остроты ощущений.\n\n[+10%] устойчивость к биофидбеку',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
@@ -390,7 +390,7 @@ export const kAllImplants: Implant[] = [
       'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейд-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность в хот-симе Матрицы, ценой значительной потери остроты ощущений.\n\n[+10%] устойчивость к биофидбеку',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
@@ -401,7 +401,7 @@ export const kAllImplants: Implant[] = [
       'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейд-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность в хот-симе Матрицы, ценой значительной потери остроты ощущений.\n\n[+10%] устойчивость к биофидбеку',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
@@ -412,7 +412,7 @@ export const kAllImplants: Implant[] = [
       'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейд-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность в хот-симе Матрицы, ценой значительной потери остроты ощущений.\n\n[+10%] устойчивость к биофидбеку',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 })],
   },
   {
@@ -432,7 +432,7 @@ export const kAllImplants: Implant[] = [
     description: 'Персонаж не забывает события перед КС',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [],
   },
   {
@@ -442,7 +442,7 @@ export const kAllImplants: Implant[] = [
     description: 'Персонаж не забывает события перед КС',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [],
   },
   {
@@ -452,7 +452,7 @@ export const kAllImplants: Implant[] = [
     description: 'Персонаж не забывает события перед КС',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
   },
   {
@@ -462,7 +462,7 @@ export const kAllImplants: Implant[] = [
     description: 'Персонаж не забывает события перед КС',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [],
   },
   {
@@ -482,7 +482,7 @@ export const kAllImplants: Implant[] = [
     description: 'Улучшает навыки управления дронами',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 2 })],
   },
   {
@@ -492,7 +492,7 @@ export const kAllImplants: Implant[] = [
     description: 'Улучшает навыки управления дронами',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 2 })],
   },
   {
@@ -502,7 +502,7 @@ export const kAllImplants: Implant[] = [
     description: 'Улучшает навыки управления дронами',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 2 })],
   },
   {
@@ -512,7 +512,7 @@ export const kAllImplants: Implant[] = [
     description: 'Улучшает навыки управления дронами',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 2 })],
   },
   {
@@ -532,7 +532,7 @@ export const kAllImplants: Implant[] = [
     description: 'Сильно улучшает навыки управления дронами',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 4 })],
   },
   {
@@ -542,7 +542,7 @@ export const kAllImplants: Implant[] = [
     description: 'Сильно улучшает навыки управления дронами',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 4 })],
   },
   {
@@ -552,7 +552,7 @@ export const kAllImplants: Implant[] = [
     description: 'Сильно улучшает навыки управления дронами',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 4 })],
   },
   {
@@ -562,7 +562,7 @@ export const kAllImplants: Implant[] = [
     description: 'Сильно улучшает навыки управления дронами',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 4 })],
   },
   {
@@ -582,7 +582,7 @@ export const kAllImplants: Implant[] = [
     description: 'Очень сильно улучшает навыки управления дронами',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 8 })],
   },
   {
@@ -592,7 +592,7 @@ export const kAllImplants: Implant[] = [
     description: 'Очень сильно улучшает навыки управления дронами',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 8 })],
   },
   {
@@ -602,7 +602,7 @@ export const kAllImplants: Implant[] = [
     description: 'Очень сильно улучшает навыки управления дронами',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 8 })],
   },
   {
@@ -612,7 +612,7 @@ export const kAllImplants: Implant[] = [
     description: 'Очень сильно улучшает навыки управления дронами',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseDroneCrafts, { amount: 8 })],
   },
   {
@@ -634,7 +634,7 @@ export const kAllImplants: Implant[] = [
       'Выводит из состояния "тяжран" хозяина импланта через 10 минут после получения статуса, если он не был снят раньше другими способами. CD импланта 4 часа. ',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [createReviveModifier()],
   },
   {
@@ -645,7 +645,7 @@ export const kAllImplants: Implant[] = [
       'Выводит из состояния "тяжран" хозяина импланта через 10 минут после получения статуса, если он не был снят раньше другими способами. CD импланта 4 часа. ',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [createReviveModifier()],
   },
   {
@@ -656,7 +656,7 @@ export const kAllImplants: Implant[] = [
       'Выводит из состояния "тяжран" хозяина импланта через 10 минут после получения статуса, если он не был снят раньше другими способами. CD импланта 4 часа. ',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [createReviveModifier()],
   },
   {
@@ -667,7 +667,7 @@ export const kAllImplants: Implant[] = [
       'Выводит из состояния "тяжран" хозяина импланта через 10 минут после получения статуса, если он не был снят раньше другими способами. CD импланта 4 часа. ',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [createReviveModifier()],
   },
   {
@@ -687,7 +687,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет подключаться к дронам Сенсор 10',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1010 })],
   },
   {
@@ -697,7 +697,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет подключаться к дронам Сенсор 14',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1014 })],
   },
   {
@@ -707,7 +707,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет подключаться к дронам Сенсор 18',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1018 })],
   },
   {
@@ -717,7 +717,7 @@ export const kAllImplants: Implant[] = [
     description: 'позволяет подключаться к дронам Сенсор 18',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMaxDroneDifficulty, { amount: 1018 })],
   },
   {
@@ -737,7 +737,7 @@ export const kAllImplants: Implant[] = [
     description: 'добавляет +1 к параметру body',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
@@ -757,7 +757,7 @@ export const kAllImplants: Implant[] = [
     description: 'добавляет +1 к параметру body',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
@@ -767,7 +767,7 @@ export const kAllImplants: Implant[] = [
     description: 'добавляет +1 к параметру body',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   {
@@ -787,7 +787,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 к параметру int\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
@@ -797,7 +797,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 к параметру int\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
@@ -807,7 +807,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 к параметру int\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
@@ -817,7 +817,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 к параметру int\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   {
@@ -837,7 +837,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 матричное состояние\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -847,7 +847,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 матричное состояние\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -857,7 +857,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 матричное состояние\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -867,7 +867,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 матричное состояние\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
@@ -887,7 +887,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в VR + 60 минут',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
@@ -897,7 +897,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в VR + 60 минут',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
@@ -907,7 +907,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в VR + 60 минут',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
@@ -917,7 +917,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в VR + 60 минут',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMaxTimeInVr, { amount: 60 })],
   },
   {
@@ -937,7 +937,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в дроне + 15 минут\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
@@ -947,7 +947,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в дроне + 15 минут\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
@@ -957,7 +957,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в дроне + 15 минут\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
@@ -967,7 +967,7 @@ export const kAllImplants: Implant[] = [
     description: 'макс время в дроне + 15 минут\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 })],
   },
   {
@@ -987,7 +987,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсия датапроцессинг\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [],
   },
   {
@@ -997,7 +997,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсия датапроцессинг\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
   },
   {
@@ -1007,7 +1007,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсия датапроцессинг\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
   },
   {
@@ -1017,7 +1017,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсия датапроцессинг\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
   },
   {
@@ -1037,7 +1037,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии sleaze\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
   },
   {
@@ -1047,7 +1047,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии sleaze\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
   },
   {
@@ -1057,7 +1057,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии sleaze\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
   },
   {
@@ -1067,7 +1067,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии sleaze\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
   },
   {
@@ -1087,7 +1087,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии attack',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
   },
   {
@@ -1097,7 +1097,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии attack',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
   },
   {
@@ -1107,7 +1107,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии attack',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
   },
   {
@@ -1117,7 +1117,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии attack',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
   },
   {
@@ -1137,7 +1137,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии firewall\n',
     grade: 'beta',
     essenceCost: 1.2,
-    installDifficulty: 4,
+    installDifficulty: 5,
     modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
   },
   {
@@ -1147,7 +1147,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии firewall\n',
     grade: 'gamma',
     essenceCost: 0.9,
-    installDifficulty: 5,
+    installDifficulty: 7,
     modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
   },
   {
@@ -1157,7 +1157,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии firewall\n',
     grade: 'delta',
     essenceCost: 0.6,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
   },
   {
@@ -1167,7 +1167,7 @@ export const kAllImplants: Implant[] = [
     description: 'Добавляет +1 конверсии firewall\n',
     grade: 'bio',
     essenceCost: 0.3,
-    installDifficulty: 7,
+    installDifficulty: 14,
     modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
   },
   {
@@ -1178,7 +1178,7 @@ export const kAllImplants: Implant[] = [
       '- У тебя появилась активная аблика "каменная кожа". Нажав на кнопку ты получаешь эффект лёгкой брони на 15 минут\n- У тебя появилась активная абилка "Стрелок". Нажав кнопку ты можешь использовать автоматическое оружие 15 минут\n- У тебя появилась активная абилка "Здоровяк". Нажав кнопку, ты получаешь +2 хита на 15 минут\n- У тебя появилась активная абилка "Бэкап". Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     grade: 'delta',
     essenceCost: 0.9,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
     onInstallEvent: onKokkoroNanohiveInstall.name,
     onRemoveEvent: onKokkoroNanohiveRemove.name,
@@ -1191,7 +1191,7 @@ export const kAllImplants: Implant[] = [
       '- У тебя появилась активная аблика "каменная кожа". Нажав на кнопку ты получаешь эффект лёгкой брони на 15 минут\n- У тебя появилась активная абилка "Стрелок". Нажав кнопку ты можешь использовать автоматическое оружие 15 минут\n- У тебя появилась активная абилка "Здоровяк". Нажав кнопку, ты получаешь +2 хита на 15 минут\n- У тебя появилась активная абилка "Бэкап". Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     grade: 'delta',
     essenceCost: 0.9,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
     onInstallEvent: onKoshcgheiNanohiveInstall.name,
     onRemoveEvent: onKoshcgheiNanohiveRemove.name,
@@ -1204,7 +1204,7 @@ export const kAllImplants: Implant[] = [
       '- У тебя появилась активная аблика "каменная кожа". Нажав на кнопку ты получаешь эффект лёгкой брони на 15 минут\n- У тебя появилась активная абилка "Стрелок". Нажав кнопку ты можешь использовать автоматическое оружие 15 минут\n- У тебя появилась активная абилка "Здоровяк". Нажав кнопку, ты получаешь +2 хита на 15 минут\n- У тебя появилась активная абилка "Бэкап". Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     grade: 'delta',
     essenceCost: 0.9,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
     onInstallEvent: onHorizonNanohiveInstall.name,
     onRemoveEvent: onHorizonNanohiveRemove.name,
@@ -1217,7 +1217,7 @@ export const kAllImplants: Implant[] = [
       '- У тебя появилась активная аблика "каменная кожа". Нажав на кнопку ты получаешь эффект лёгкой брони на 15 минут\n- У тебя появилась активная абилка "Стрелок". Нажав кнопку ты можешь использовать автоматическое оружие 15 минут\n- У тебя появилась активная абилка "Здоровяк". Нажав кнопку, ты получаешь +2 хита на 15 минут\n- У тебя появилась активная абилка "Бэкап". Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     grade: 'delta',
     essenceCost: 0.9,
-    installDifficulty: 6,
+    installDifficulty: 10,
     modifiers: [],
     onInstallEvent: onBadassNanohiveInstall.name,
     onRemoveEvent: onBadassNanohiveRemove.name,
