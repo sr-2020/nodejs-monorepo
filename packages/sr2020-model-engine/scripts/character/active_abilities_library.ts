@@ -2272,6 +2272,29 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: spiritEmergencyExit.name,
   },
+  // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
+  //
+  {
+    id: 'executioner-1',
+    humanReadableName: 'Палач: быстрое добивание',
+    description:
+      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценится среди самураев-ассасинов. Настоящий профи может добить нескольких человек в считанные минуты.',
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        allowedTypes: ['WOUNDED_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
+    cooldownMinutes: 2,
+    prerequisites: ['arch-samurai-assasin'],
+    pack: { id: 'sam-assa-execut', level: 1 },
+    availability: 'open',
+    karmaCost: 80,
+    minimalEssence: 0,
+    eventType: finishHimAbility.name,
+  },
 ];
 setAllActiveAbilities(
   (() => {
