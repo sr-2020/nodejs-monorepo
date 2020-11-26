@@ -176,6 +176,7 @@ export class ModelEngineController implements ModelEngineService {
         maxTimeInside: 0,
         recoveryTime: 120,
         medicraftBonus: 2,
+        autodocBonus: 2,
         aircraftBonus: 2,
         groundcraftBonus: 2,
         feedbackModifier: 0,

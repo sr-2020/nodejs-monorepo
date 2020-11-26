@@ -303,6 +303,10 @@ export function increaseMedicraftBonus(api: EffectModelApi<Sr2020Character>, m: 
   api.model.drones.medicraftBonus += m.amount;
 }
 
+export function increaseAutodocBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.drones.autodocBonus += m.amount;
+}
+
 export function increaseGroundcraftBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.groundcraftBonus += m.amount;
 }

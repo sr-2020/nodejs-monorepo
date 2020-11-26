@@ -7,6 +7,7 @@ import {
   increaseAircraftBonus,
   increaseAuraMarkMultiplier,
   increaseAuraReadingMultiplier,
+  increaseAutodocBonus,
   increaseBackdoors,
   increaseBackdoorTtl,
   increaseBiofeedbackResistance,
@@ -24,6 +25,7 @@ import {
   increaseGroundcraftBonus,
   increaseHostEntrySpeed,
   increaseImplantDifficultyBonus,
+  increaseImplantsBonus,
   increaseImplantsSlots,
   increaseIntelligence,
   increaseMagic,
@@ -2486,7 +2488,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // rigging.implantsBonus +2
   // drones.autodocBonus +2
   {
@@ -2497,9 +2498,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-rigger-medic'],
     pack: { id: 'rigger-medic-bio', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // rigging.implantsBonus +2
   // drones.autodocBonus +2
   {
@@ -2510,9 +2510,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-1'],
     pack: { id: 'rigger-medic-bio', level: 2 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // rigging.implantsBonus +2
   // drones.autodocBonus +2
   {
@@ -2523,7 +2522,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-2'],
     pack: { id: 'rigger-medic-bio', level: 3 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
   // Кроме того, это обязательный пререквизит для всех дроновских абилок

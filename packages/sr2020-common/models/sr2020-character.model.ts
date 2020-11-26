@@ -518,6 +518,10 @@ export class Drones {
 
   @rproperty()
   @Column({ default: 2 })
+  autodocBonus: number;
+
+  @rproperty()
+  @Column({ default: 2 })
   aircraftBonus: number;
 
   @rproperty()
