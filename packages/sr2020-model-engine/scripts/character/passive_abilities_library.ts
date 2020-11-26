@@ -1144,9 +1144,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'новая команда: burn\nПозволяет наносить урон кибердеке противника, повреждать ее моды\n\nУрон зависит от соотношения значений вашей Attack и Firewall цели',
     availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
+    karmaCost: 0,
+    prerequisites: ['fencer-2', 'master-of-the-universe'],
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -2024,9 +2023,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
-  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами грейда
-  // биовэр.
-  // rigging.implantsBonus+4
+  // rigging.implantsBonus +4
+  // drones.autodocBonus +4
   {
     id: 'auto-doc-neuro',
     humanReadableName: 'нейрохирургия',
@@ -2041,7 +2039,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'tuning-1',
     humanReadableName: 'Тюнинг 1',
     description: 'Ты можешь ставить простые моды.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 20,
     prerequisites: ['tuning-active', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 1 },
@@ -2052,7 +2050,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'tuning-2',
     humanReadableName: 'Тюнинг 2',
     description: 'Ты можешь ставить сложные моды.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 40,
     prerequisites: ['tuning-1', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 2 },
@@ -2063,7 +2061,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'tuning-3',
     humanReadableName: 'Тюнинг 3',
     description: 'Ты можешь ставить самые сложные моды.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 80,
     prerequisites: ['tuning-2', 'arch-rigger-engineer', 'master-of-the-universe'],
     pack: { id: 'rigger-eng-mech', level: 3 },
@@ -2118,7 +2116,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'aircraft-2',
     humanReadableName: 'Воздушные дроны 2',
     description: 'Улучшает управление сложными воздушными дронами.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 80,
     prerequisites: ['aircraft-1', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-air', level: 2 },
@@ -2129,7 +2127,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'aircraft-3',
     humanReadableName: 'Воздушные дроны 3',
     description: 'Улучшает управление самыми сложными воздушными дронами.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 80,
     prerequisites: ['aircraft-2', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-air', level: 3 },
@@ -2140,7 +2138,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-1',
     humanReadableName: 'Наземные дроны-1',
     description: 'Улучшает управление наземными дронами.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 40,
     prerequisites: ['groundcraft-active', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-ground', level: 1 },
@@ -2151,7 +2149,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-2',
     humanReadableName: 'Наземные дроны-2',
     description: 'Улучшает управление сложными наземными дронами.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 80,
     prerequisites: ['groundcraft-1', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-ground', level: 2 },
@@ -2162,14 +2160,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'groundcraft-3',
     humanReadableName: 'Наземные дроны-3',
     description: 'Улучшает управление самыми сложными наземными дронами.',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 80,
     prerequisites: ['groundcraft-2', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-ground', level: 3 },
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
-  // drones.maxTimeInside  +10
-  // drones.recoveryTime= -10
+  // drones.maxTimeInside  +20
+  // drones.recoveryTime= -20
   {
     id: 'drone-sync-1',
     humanReadableName: 'Синхронизация 1',
@@ -2489,9 +2487,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  грейда альфа и бета и лечить тяжран.
-  // rigging.implantsBonus+2
+  // rigging.implantsBonus +2
+  // drones.autodocBonus +2
   {
     id: 'auto-doc-1',
     humanReadableName: 'хирургия 1',
@@ -2503,9 +2500,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  грейда гамма и лечить тяжран.
-  // rigging.implantsBonus+2
+  // rigging.implantsBonus +2
+  // drones.autodocBonus +2
   {
     id: 'auto-doc-2',
     humanReadableName: 'хирургия 2',
@@ -2517,9 +2513,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Находясь в альтернативном теле "автодок" риггер может делать манипуляции с имплантами
-  //  грейда дельта и лечить тяжран
-  // rigging.implantsBonus+2
+  // rigging.implantsBonus +2
+  // drones.autodocBonus +2
   {
     id: 'auto-doc-3',
     humanReadableName: 'хирургия 3',
@@ -3081,7 +3076,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'armor-3',
     humanReadableName: 'броня: тяжелая броня',
     description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 70,
     prerequisites: ['arch-samurai-gunner', 'armor-2'],
     pack: { id: 'sam-gun-armor', level: 3 },
@@ -3104,7 +3099,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'constitution-2',
     humanReadableName: 'регенерация',
     description:
-      'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования. \r\nХиты в легком ранении восстанавливаются за 20 минут\r\n',
+      'Благодаря врожденным мутациям или магической анамалии самруай может восстанавливаться от ран без использования дополнительного оборудования. Любое количество хиты в легком ранении восстанавливаются за 20 минут (обычно за 60).',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-1'],
@@ -3117,7 +3112,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'constitution-3',
     humanReadableName: 'всплеск адреналина',
     description:
-      'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью. Если в тяжране не провели добивание за 3 минуты - сам встает из тяжрана. Через 30 минут падает в КС',
+      'В критическом состоянии организм самурая выдает резкий выброс адреналина в кровь, что позволяет бойцу продолжить бой даже со смертельным ранением. Чаще всего все равно заканчивается смертью. Если в тяжране не провели добивание за 3 минуты - сам встает из тяжрана. Через 30 минут падает в КС (уронить себя в тяжран, маркироваться хайратником, уйти в мертвятник)',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-gunner', 'constitution-2'],
@@ -3154,7 +3149,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'холодное оружие: двуручное оружие',
     description:
       'Самурай достаточно силен, что бы управиться с двуручным оружием. Фламбер давно не появлялся на улицах городов, но, что мешает попробовать',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', "clubs'n'swords-2"],
     pack: { id: 'sam-fight-swords', level: 3 },
@@ -3187,7 +3182,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'combat-armor-3',
     humanReadableName: 'броня: тяжелая броня',
     description: 'Продолжая тренировки ты пришел к тому, что теперь и в тяжелой броне чувствуешь себя отлично',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 70,
     prerequisites: ['arch-samurai-fighter', 'combat-armor-2'],
     pack: { id: 'sam-fight-armor', level: 3 },
@@ -3220,8 +3215,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'tools-of-trade-2',
     humanReadableName: 'Оружие ассасина: мечи, топоры, винтовки',
-    description:
-      'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется со снайперскими винтовками',
+    description: 'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется с винтовками',
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai-assasin', 'tools-of-trade-1'],
@@ -3272,7 +3266,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'executioner-3',
     humanReadableName: 'Палач: допрос',
-    description: 'Порой, что бы добраться до истинной цели, приходится спросить дорогу. Ассасины мастера допросов',
+    description:
+      'Порой, что бы добраться до истинной цели, приходится спросить дорогу. Ассасины мастера допросов. Позволяет провести допрос тяжело раненного персонажа. Допрашиваемый персонаж обязан честно и полно ответить на три вопроса.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'executioner-2'],
@@ -3285,7 +3280,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-1',
     humanReadableName: 'Мародер: разоружение',
     description:
-      'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие. Работает раз в час. Кулдаун 60 минут.',
+      'Не всегда стоит убивать каждого, кто встает на твоем пути, порой достаточно убедиться, что он не сможет выстрелить тебе в спину, уничтожив его оружие. Ты можешь это делать один раз в час. ',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin'],
@@ -3299,7 +3294,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-2',
     humanReadableName: 'Мародер: грабеж',
     description:
-      'Говорят, что нет чести среди воров. И ведь правильно говорят. Если противник уже мертв, значит ему деньги уже не понадобятся. Работает раз в час. Кулдаун 60 минут.',
+      'Говорят, что нет чести среди воров. И ведь правильно говорят. Ты можешь показать эту способность своему противнику и он обязан тебе перевести 20% своих имеющихся денег. Это действие нельзя прерывать. Ты можешь это делать один раз в час. ',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-1'],
@@ -3312,7 +3307,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'marauder-3',
     humanReadableName: 'Мародер: разоблачение',
     description:
-      'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять с противника и порвать (разрушить по игре) чип брони. Работает раз в час. Кулдаун 60 минут.',
+      'Броня защищает тело, и если иначе до него не добраться, значит надо разрушить броню. Ты можешь снять с противника и порвать (разрушить по игре) чип брони. Ты можешь это делать один раз в час. ',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-samurai-assasin', 'marauder-2'],
@@ -3538,7 +3533,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hack-deck-deanon',
     humanReadableName: 'deanon',
-    description: 'новая команда: deanon\nОтображает якорь PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
+    description: 'новая команда: deanon\nОтображает адрес PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['fencer-2'],
@@ -3820,7 +3815,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'При применении препаратов, восстанавливающих хиты и боевых коктейлей, с вероятностью 30% препарат даст нужный эффект, но не израсходуется.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-rigger-medic'],
+    prerequisites: ['arch-rigger-medic', 'use-pills-on-others'],
     pack: { id: 'rigger-medic-combat', level: 3 },
     modifier: [],
   },
@@ -3954,7 +3949,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'repoman-medic',
     humanReadableName: 'Рипомен хирург',
     description: 'Ты научился использовать автодок для снятия имплантов.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-2', 'repoman-2'],
     modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
@@ -4010,7 +4005,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'rigger-medic-bio', level: 1 },
     modifier: [modifierFromEffect(unlockAutodockImplantInstall, {})],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет не учитывать при подсчете параметров группы в ОСновании
   {
     id: 'ghost',
@@ -4019,10 +4013,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Дамаг 1 хит
   {
     id: 'hammer-strike',
@@ -4031,10 +4023,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Дамаг 2 хита
   {
     id: 'hammer-fall',
@@ -4043,10 +4033,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Восстановление 1 хит
   {
     id: 'weak-healer',
@@ -4055,10 +4043,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Восстановление 2 хита
   {
     id: 'healer',
@@ -4067,10 +4053,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Восстановление 3 хита
   {
     id: 'great-healer',
@@ -4079,10 +4063,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // выкинуть из Основания, надо поговорить
   {
     id: 'i-am-power',
@@ -4091,10 +4073,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 16,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // "Власть здесь я!" на меня не работает
   {
     id: 'arch-hackerman-technomancer-anarchy',
@@ -4103,10 +4083,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Дает возможность сверстать спрайт. Действует только на стойке. Действует только в матричном теле.
   {
     id: 'arch-hackerman-technomancer-compile',
@@ -4115,10 +4093,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Теперь ты можешь применять абилки менталиста в Матрице
   {
     id: 'nothing-1',
@@ -4127,10 +4103,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Машинист: Теперь ты можешь применять абилки риггера
   {
     id: 'nothing-2',
@@ -4139,10 +4113,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Твоя кибердека это ты (параметры декерства конвертируются из Resonance+Body/Intellect/Charisma)
   {
     id: 'nothing-3',
@@ -4151,10 +4123,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет получать раз в 15 (?) минут инфу (например сины) о проходящих мимо столба
   // или о юриках вокруг (например) - бэкдоры в них
   {
@@ -4164,10 +4134,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'pole-1',
@@ -4176,10 +4144,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'pole-2',
@@ -4188,10 +4154,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // маленькая вводная в джойне.
   // Пяток известных пар SIN - Host, один бэкдор. Контакт на продажу CVE.
   //
@@ -4203,10 +4167,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Средняя вводная в джойне.
   // Несколько известных пар SIN - Host,
   // пару бэкдоров. Один из хостов - умеренно ценный.
@@ -4220,10 +4182,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 4,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Большая вводная в джойне.
   // Пачка известных пар SIN - Host,
   // несколько бэкдоров. Несколько изветных хостов, пара-тройка - умеренно ценные. Один - хост одного из облаков контроля.
@@ -4238,10 +4198,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Контр-вводная и цена за голову от одной из корп.
   //
   // ИТ: не нужно, вводная в джойне
@@ -4252,10 +4210,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -4,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Контр-вводная и большая цена за голову от одной из корп.
   // Им слит SIN.
   //
@@ -4267,10 +4223,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Нам не нужна очередь в данж в среду, этой абилкой мы ее сократим
   // ИТ: все техноманты стартуют с большим КД на вход в Основание. Эта абилка - одноразовый модификатор к таймеру на вход
   {
@@ -4281,10 +4235,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 4,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Устанавливает спрайт в ноду.
   // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
   //
@@ -4296,10 +4248,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technoshaman'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Устанавливает спрайт в ноду.
   // Самый простой вариант - это бэкдор, то есть обеспечивает временную возможность работы с Контролем этого хоста из-вне матрицы. Крутота бэкдора зависит от крутоты спрайта.
   //
@@ -4311,10 +4261,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 6,
     prerequisites: ['arch-hackerman-cyberadept'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Способ поиска чужих спрайтов (например - бэкдоров) в этой ноде хоста Основания.
   //
   // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
@@ -4326,10 +4274,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-cyberadept'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Способ уничтожения чужих спрайтов. У нас нет таргетинга, поэтому удаляем рандомых спрайтов, число которых зависит от Резонанса
   //
   // IT: Сканирует комнату данжа, вызов REST Матрицы Кривды, отобразить текст
@@ -4341,10 +4287,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 2,
     prerequisites: ['arch-hackerman-cyberadept'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
   //
   // IT: вызов Кривдиного REST, отобразить текст
@@ -4356,10 +4300,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Ритуал инициации техноманта.
   //
   // IT: Цель: [+1] к характеристике МожетСтатьТехномантом
@@ -4371,10 +4313,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 16,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Хотим ли мы? Думаю да. Под субботу,
   //
   // файрбол в VR с конскми КД и прекастом
@@ -4388,10 +4328,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 8,
     prerequisites: ['arch-hackerman-cyberadept'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // техническая абилка для получения бонуса в карму (преквизиит "пережитый дампшок" Кривда желающим поставит руками)
   //
   // IT:
@@ -4404,7 +4342,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -4,
     prerequisites: ['dump-shock-survivor'],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4420,6 +4357,118 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 8,
     prerequisites: ['arch-hackerman-technoshaman'],
     pack: { id: 'hack-shaman-channeler', level: 1 },
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'stunning',
+    humanReadableName: 'оглушение',
+    description:
+      'ты можешь оглушать. нужно подойти к цели сзади и нанести слабый удар по плечу ты можешь оглушать рукоятью холодного оружия или нерфа и произнести маркер “оглушен”.\nРаботает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'stunning-resist',
+    humanReadableName: 'иммунитет к оглушению',
+    description: 'иммунитет к оглушению. покажи эту способность, если тебя пытаются оглушить. Работает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'rummage',
+    humanReadableName: 'обыск',
+    description:
+      'Тот, кого обыскивают, показывает проводящему обыск все свои игровые предметы, не встроенные в тело. Показывать надо все, на чем есть qr-код. Также он показывает игровые документы, письма, записки не в электронном виде, обыскивающий может их прочесть и сфотографировать. Телефон показывать не надо.\nРаботает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'rowing',
+    humanReadableName: 'грабеж',
+    description:
+      'Человек, которого вы прямо сейчас обыскиваете, может быть ограблен. Для этого обыскивающий показывает обыскиваемому свое приложение, где отображена способность “грабеж”.\nПри грабеже вы можете забрать у жертвы любые предметы, которые она показала вам при обыске, Телефон и доступ в сеть заблокировать обыском нельзя.\nОружие (оружие, броня и т.п, все, на чем чип “оружие допущено”) при обыске забрать нельзя.\nРаботает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: ['rummage'],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'binding',
+    humanReadableName: 'связывание',
+    description:
+      'Ты можешь связать человека. Человек, который не сопротивляется, или оглушен, или тяжело ранен, может быть связан. Для моделирования связывания человеку надевают на кисти рук две веревочные петли (чисто символические, на самом деле ничего связывать не надо).\nЭти петли запрещено прятать, по человеку всегда должно быть понятно, что он связан.\nРаботает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'quiet-break-n',
+    humanReadableName: 'Тихий взлом',
+    description:
+      'Тихий взлом замков. Вы можете, постояв 1 минуту у любой закрытой двери держась рукой за бумажку замка, открыть дверь и войти внутрь.\nРаботает раз в час.',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'loud-break-in',
+    humanReadableName: 'Громкий взлом',
+    description:
+      'Громкий взлом замков.  можете, в течении 5 минут громко изображая попытки выбить замок, открыть дверь и войти внутрь. Попытки должны быть громкими и заметными окружающим.\nРаботает раз в час',
+    availability: 'closed',
+    karmaCost: 10,
+    prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Надо взорвать пакет на 3-4 варианта
+  {
+    id: 'troubles-samurai-1',
+    humanReadableName: 'Проблемы самурая *',
+    description: 'легкие проблемы самурая  на начало игры',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['arch-samurai'],
+    pack: { id: 'sam-badfate', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Надо взорвать пакет на 3-4 варианта
+  {
+    id: 'troubles-samurai-2',
+    humanReadableName: 'Проблемы самурая **',
+    description: 'средние проблемы самурая на начало игры',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['troubles-samurai-1'],
+    pack: { id: 'sam-badfate', level: 2 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Надо взорвать пакет на 3-4 варианта
+  {
+    id: 'troubles-samurai-3',
+    humanReadableName: 'Проблемы самурая ***',
+    description: 'Совсем много проблем самурая на начало игры',
+    availability: 'master',
+    karmaCost: -20,
+    prerequisites: ['troubles-samurai-2'],
+    pack: { id: 'sam-badfate', level: 3 },
     modifier: [],
   },
 ];
