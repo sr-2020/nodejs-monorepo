@@ -182,7 +182,6 @@ export class ModelEngineController implements ModelEngineService {
         feedbackModifier: 0,
       },
       rigging: {
-        implantDifficultyBonus: 0,
         canWorkWithBioware: false,
         implantsBonus: 2,
         repomanBonus: 2,

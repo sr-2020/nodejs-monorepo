@@ -331,10 +331,6 @@ export function increaseDroneFeedback(api: EffectModelApi<Sr2020Character>, m: M
   api.model.drones.feedbackModifier += m.amount;
 }
 
-export function increaseImplantDifficultyBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.rigging.implantDifficultyBonus += m.amount;
-}
-
 export function increaseImplantsBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.rigging.implantsBonus += m.amount;
 }

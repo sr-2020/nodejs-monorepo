@@ -24,7 +24,6 @@ import {
   increaseFadingResistance,
   increaseGroundcraftBonus,
   increaseHostEntrySpeed,
-  increaseImplantDifficultyBonus,
   increaseImplantsBonus,
   increaseImplantsSlots,
   increaseIntelligence,
@@ -2034,7 +2033,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'auto-doc-3'],
-    modifier: [modifierFromEffect(increaseImplantDifficultyBonus, { amount: 2 }), modifierFromEffect(allowBiowareInstallation, {})],
+    modifier: [
+      modifierFromEffect(increaseAutodocBonus, { amount: 4 }),
+      modifierFromEffect(increaseImplantsBonus, { amount: 4 }),
+      modifierFromEffect(allowBiowareInstallation, {}),
+    ],
   },
   // rigging.tuningBonus +2
   {

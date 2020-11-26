@@ -36,7 +36,7 @@ function checkIfCanWorkWithImplant(rigger: Sr2020Character, implant: AddedImplan
     throw new UserVisibleError('Вы не умеете работать с биоваром');
   }
 
-  if (rigger.intelligence + rigger.rigging.implantDifficultyBonus < implant.installDifficulty) {
+  if (rigger.intelligence + rigger.rigging.implantsBonus < implant.installDifficulty) {
     throw new UserVisibleError('Вы не умеете работать с настолько сложными имплантами');
   }
 }

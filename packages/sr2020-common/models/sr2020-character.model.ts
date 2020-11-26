@@ -536,10 +536,6 @@ export class Drones {
 @model()
 export class Rigging {
   @rproperty()
-  @Column({ default: 0 })
-  implantDifficultyBonus: number;
-
-  @rproperty()
   @Column({ default: false })
   canWorkWithBioware: boolean;
 
