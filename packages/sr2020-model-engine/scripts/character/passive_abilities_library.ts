@@ -2182,8 +2182,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-sync', level: 1 },
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
     ],
   },
   // drones.maxTimeInside +20
