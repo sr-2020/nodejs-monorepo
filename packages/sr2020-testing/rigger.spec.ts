@@ -216,7 +216,7 @@ describe('Rigger abilities', () => {
 
   it('Being in autodoc unlocks autodoc screen', async () => {
     // Rigger set up
-    await fixture.saveCharacter({ drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.saveCharacter({ drones: { maxDifficulty: 10, autodocBonus: 10 } });
     await fixture.addCharacterFeature('autodoc-active');
 
     // Body storage set up

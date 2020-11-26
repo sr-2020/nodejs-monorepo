@@ -118,7 +118,8 @@ const kDroneTimerIds = ['drone-timer-stage-0', 'drone-timer-stage-1', 'drone-tim
 function droneCraft(model: Sr2020Character, droneType: DroneType): number {
   if (droneType == 'aircraft') return model.drones.aircraftBonus;
   if (droneType == 'groundcraft') return model.drones.groundcraftBonus;
-  if (droneType == 'medicart' || droneType == 'autodoc') return model.drones.medicraftBonus;
+  if (droneType == 'medicart') return model.drones.medicraftBonus;
+  if (droneType == 'autodoc') return model.drones.autodocBonus;
   return 0;
 }
 
