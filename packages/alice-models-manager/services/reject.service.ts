@@ -11,17 +11,15 @@ import { RejectProvider } from '@loopback/rest';
 export class CustomRejectProvider extends RejectProvider {
   constructor(@inject('services.LoggerService') private logger: LoggerService) {
     super((err, statusCode, request) => {
-      this.logger.info(`Returning non-OK http status: ${err.message}, status = ${statusCode}`, { err, request });
+      this.logger.warning(`Returning non-OK http status: ${err.message}, status = ${statusCode}`, { err, request });
     });
   }
 
   action({ request, response }: HandlerContext, error: Error) {
-    this.logger.info(`(error as HttpError).statusCode = ${(error as HttpError).statusCode}`);
     if ((error as HttpError).statusCode) {
       try {
         error = <HttpError>JSON.parse(error.message).error ?? error;
       } catch (e) {
-        this.logger.info(`Error when trying to re-parse error message = ${e}`);
         // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
       }
       const httpError = error as HttpError;
@@ -31,7 +29,7 @@ export class CustomRejectProvider extends RejectProvider {
       } else if (httpError.statusCode == 404) {
         // Typically still caused by a user doing something weird, no need to alert,
         // but it's nice to have an error in logs.
-        this.logger.warning(error.message, error);
+        this.logger.error(error.message, error);
       } else if (httpError.statusCode == 422) {
         this.logger.error(error.message, error);
       } else {
