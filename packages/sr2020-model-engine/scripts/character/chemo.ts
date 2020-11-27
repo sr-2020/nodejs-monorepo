@@ -20,6 +20,7 @@ import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryPassiveAbilityEffect } from '@sr2020/sr2020-model-engine/scripts/character/features';
 import { scanQr } from '@sr2020/sr2020-model-engine/scripts/character/scan_qr';
+import { typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -1007,8 +1008,22 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
 export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const pill = api.aquired(QrCode, data.pillId!);
   if (pill.type != 'pill') throw new UserVisibleError('Это не препарат');
+  const pillData = typedQrData<ChemoData>(pill);
+  const libraryPill = kAllPills.find((it) => it.id == pillData.id);
+  if (!libraryPill) {
+    throw new UserVisibleError('Такого препарата не существует');
+  }
 
-  api.sendNotification('Фармацевтика', `Перед вами препарат ${pill.name}`);
+  let maxAmount = 0;
+  let mainIngredient = '';
+  for (const element in libraryPill.content) {
+    if (libraryPill.content[element] > maxAmount) {
+      maxAmount = libraryPill.content[element];
+      mainIngredient = kElementNames[element];
+    }
+  }
+
+  api.sendNotification('Фармацевтика', `Перед вами препарат ${pill.name}, его основной ингредиент - ${mainIngredient}`);
 }
 
 export function usePillsOnOthersAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
