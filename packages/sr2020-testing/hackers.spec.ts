@@ -13,7 +13,7 @@ describe('Hackers-related events', function () {
     await fixture.destroy();
   });
 
-  it('Dump shock reduces resonance', async () => {
+  it.skip('Dump shock reduces resonance', async () => {
     await fixture.saveCharacter({ resonance: 5 });
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} });
@@ -25,7 +25,7 @@ describe('Hackers-related events', function () {
     }
   });
 
-  it('Dump shock versus dumpty humpty', async () => {
+  it.skip('Dump shock versus dumpty humpty', async () => {
     await fixture.saveCharacter({ modelId: '1', resonance: 5 }); // Hacker
     await fixture.saveCharacter({ modelId: '2', magic: 10 }); // Caster
     await fixture.saveLocation(); // Needed by spell

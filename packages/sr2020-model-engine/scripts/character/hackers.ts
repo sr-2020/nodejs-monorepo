@@ -33,6 +33,8 @@ const kDumpshockModifier: DumpshockModifier = {
 };
 
 export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
+  return;
+
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Цель не находится в мясном теле.');
   }
