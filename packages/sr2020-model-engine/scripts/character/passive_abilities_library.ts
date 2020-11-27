@@ -2010,7 +2010,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // drones.recoveryTime -10
   // drones.aircraftBonus = +4
   // drones.groundcraftBonus = +4
-  // drones.autodocBonus = +2
+  // drones.autodocBonus +2
+  //
   {
     id: 'medicraft-3',
     humanReadableName: 'Медицинские дроны 3',
@@ -2022,7 +2023,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
-      //    modifierFromEffect(increaseGroundcraftBonus, { amount: 4 }),
       modifierFromEffect(increaseAircraftBonus, { amount: 4 }),
       modifierFromEffect(increaseAutodocBonus, { amount: 2 }),
       modifierFromEffect(increaseMedicraftBonus, { amount: 8 }),
@@ -2236,7 +2236,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Модификатор: ХимотаКризис порог +40
   {
     id: 'chemo-resistance',
-    humanReadableName: 'сопротивляемость химоте',
+    humanReadableName: 'Сопротивляемость химоте',
     description: 'Дает устойчивость к негативным эффектам при употреблении препаратов.',
     availability: 'open',
     karmaCost: 60,
