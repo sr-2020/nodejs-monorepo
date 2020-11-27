@@ -699,6 +699,18 @@
                     </b-input-group>
                   </b-card-body>
                 </b-card>
+
+                <b-card no-body>
+                  <b-card-header>Начисление кармы</b-card-header>
+                  <b-card-body>
+                    <b-input-group>
+                      <b-form-input type="number" v-model="karmaAmount"></b-form-input>
+                      <b-input-group-append>
+                        <b-button variant="success" v-on:click="earnKarma">Начислить</b-button>
+                      </b-input-group-append>
+                    </b-input-group>
+                  </b-card-body>
+                </b-card>
             </div>
             <div class="mt-3">
               <b-card-group deck>

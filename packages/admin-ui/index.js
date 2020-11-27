@@ -349,6 +349,10 @@ app = new Vue({
       return this.sendCharacterEvent({ eventType: 'dumpshock', data: { } });
     },
 
+    async earnKarma() {
+      return this.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: this.karmaAmount, notify: true } });
+    },
+
     async resetCharacter() {
       try {
         const response = await this.$http.put(this.characterUrl(this.characterModel.modelId).replace('/model/', '/default/'), {
