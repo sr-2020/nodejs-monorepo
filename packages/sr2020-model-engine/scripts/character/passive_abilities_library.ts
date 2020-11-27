@@ -2010,6 +2010,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // drones.recoveryTime -10
   // drones.aircraftBonus = +4
   // drones.groundcraftBonus = +4
+  // drones.autodocBonus = +2
   {
     id: 'medicraft-3',
     humanReadableName: 'Медицинские дроны 3',
@@ -2021,7 +2022,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
-      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
+  //    modifierFromEffect(increaseGroundcraftBonus, { amount: 4 }),
+      modifierFromEffect(increaseAircraftBonus, { amount: 4 }),
+      modifierFromEffect(increaseAutodocBonus, { amount: 2 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 8 }),
     ],
   },
   // rigging.implantsBonus +4
@@ -2072,7 +2076,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'rigger-eng-mech', level: 3 },
     modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +2
+  // rigging.repomanBonus +4
   {
     id: 'repoman-1',
     humanReadableName: 'Было ваше - стало наше 1',
@@ -2083,7 +2087,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'rigger-medic-repo', level: 1 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +2
+  // rigging.repomanBonus +4
   {
     id: 'repoman-2',
     humanReadableName: 'Было ваше - стало наше 2',
@@ -2094,7 +2098,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'rigger-medic-repo', level: 2 },
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
   },
-  // rigging.repomanBonus +4
+  // rigging.repomanBonus +2
   {
     id: 'repoman-3',
     humanReadableName: 'Было ваше - стало наше 3',
@@ -2103,7 +2107,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger-medic', 'repoman-2'],
     pack: { id: 'rigger-medic-repo', level: 3 },
-    modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 4 })],
+    modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 2 })],
   },
   // drones.aircraftBonus =  +2
   {
@@ -2186,8 +2190,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
     ],
   },
-  // drones.maxTimeInside +20
-  // drones.recoveryTime -20
+  // drones.maxTimeInside +10
+  // drones.recoveryTime -10
   {
     id: 'drone-sync-2',
     humanReadableName: 'Синхронизация 2',
@@ -2197,12 +2201,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['drone-sync-1', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-sync', level: 2 },
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
     ],
   },
-  // drones.maxTimeInside  +20
-  // drones.recoveryTime-20
+  // drones.maxTimeInside  +10
+  // drones.recoveryTime-10
   {
     id: 'drone-sync-3',
     humanReadableName: 'Синхронизация 3',
@@ -2212,8 +2216,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['drone-sync-2', 'arch-rigger-pilot'],
     pack: { id: 'rigger-pilot-sync', level: 3 },
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
     ],
   },
   // Повышает защиту от ментальных заклинаний
@@ -2229,7 +2233,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(increaseMentalProtection, { amount: 3 }),
   },
   // повышает порог кризисной ситуации при употреблении химоты
-  // Модификатор: ХимотаКризис порог +10
+  // Модификатор: ХимотаКризис порог +40
   {
     id: 'chemo-resistance',
     humanReadableName: 'сопротивляемость химоте',
@@ -2238,7 +2242,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-samurai-fighter', 'hardened-1'],
     pack: { id: 'sam-fight-harden', level: 2 },
-    modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 10 }),
+    modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 }),
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
   // Отбивает с шансом 50% попытку вырезать у тебя имплант.
