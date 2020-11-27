@@ -22,7 +22,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).to.containDeep({
       available: 30,
-      cycleLimit: 70,
+      cycleLimit: 270,
     });
   });
 
@@ -39,7 +39,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).to.containDeep({
       available: 40,
-      cycleLimit: 60,
+      cycleLimit: 260,
     });
   });
 
@@ -71,10 +71,10 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
-    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
+    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
 
     expect(baseModel.karma).to.containDeep({
-      available: 100,
+      available: 300,
       cycleLimit: 0,
     });
   });
@@ -84,10 +84,10 @@ describe('Karma events', function () {
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
     await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
-    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
+    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
 
     expect(baseModel.karma).to.containDeep({
-      available: 110,
+      available: 310,
       cycleLimit: 45,
     });
   });
@@ -96,12 +96,12 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     for (let i = 0; i < 10; ++i) {
-      await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 80 } });
+      await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 90 } });
       await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     }
 
     expect((await fixture.getCharacter()).baseModel.karma).to.containDeep({
-      available: 500,
+      available: 800,
     });
   });
 
