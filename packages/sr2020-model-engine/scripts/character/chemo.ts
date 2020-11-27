@@ -1012,7 +1012,7 @@ export function getPillNameAbility(api: EventModelApi<Sr2020Character>, data: Ac
 }
 
 export function usePillsOnOthersAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  scanQr(api, { qrCode: data.qrCodeId!, targetCharacterId: data.targetCharacterId!, location: data.location });
+  scanQr(api, { qrCode: data.pillId!, targetCharacterId: data.targetCharacterId!, location: data.location });
 }
 
 export function whatsInTheBodyAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
