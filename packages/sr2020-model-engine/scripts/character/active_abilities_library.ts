@@ -1,5 +1,6 @@
 import {
   absoluteDeathAbility,
+  activateSoft,
   alloHomorusAbility,
   arrowgant,
   biomonitorScanAbility,
@@ -2188,7 +2189,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: doNothingAbility.name,
+    eventType: activateSoft.name,
   },
   // TODO(aeremin): Add proper implementation
   // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"

@@ -11,6 +11,7 @@ import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-mod
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
 import { removeImplant } from '@sr2020/sr2020-model-engine/scripts/character/merchandise';
 import { createMerchandise } from '@sr2020/sr2020-model-engine/scripts/qr/merchandise';
+import { consume } from '@sr2020/sr2020-model-engine/scripts/qr/events';
 import Chance = require('chance');
 
 const chance = new Chance();
@@ -333,6 +334,10 @@ export function biomonitorScanAbility(api: EventModelApi<Sr2020Character>, data:
     (record) => record.timestamp >= api.model.timestamp - duration(4, 'hours').asMilliseconds(),
   );
   api.setTableResponse(latestLogs.map((record) => ({ timestamp: record.timestamp, spellName: record.chemoName })));
+}
+
+export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, { noClear: false });
 }
 
 // For cases when no IT action is needed
