@@ -2022,7 +2022,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
-  //    modifierFromEffect(increaseGroundcraftBonus, { amount: 4 }),
+      //    modifierFromEffect(increaseGroundcraftBonus, { amount: 4 }),
       modifierFromEffect(increaseAircraftBonus, { amount: 4 }),
       modifierFromEffect(increaseAutodocBonus, { amount: 2 }),
       modifierFromEffect(increaseMedicraftBonus, { amount: 8 }),
