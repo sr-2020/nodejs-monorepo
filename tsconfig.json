@@ -42,9 +42,6 @@
       "path": "packages/deus-model-engine"
     },
     {
-      "path": "packages/import-server"
-    },
-    {
       "path": "packages/interface"
     },
     {

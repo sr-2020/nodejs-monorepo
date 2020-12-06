@@ -21,11 +21,13 @@
     "@types/qrcode-svg": "^1.1.0",
     "@types/request": "0.0.45",
     "@types/request-promise": "^4.1.35",
+    "@types/request-promise-native": "^1.0.17",
     "command-line-args": "^4.0.6",
     "googleapis": "^59.0.0",
     "qrcode-svg": "^1.1.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "request-promise-native": "^1.0.9",
     "uuid": "^7.0.1"
   },
   "devDependencies": {
