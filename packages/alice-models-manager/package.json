@@ -19,7 +19,6 @@
     "@google-cloud/logging-winston": "^4.0.0",
     "@google-cloud/pubsub": "^2.5.0",
     "pg": "^8.4.2",
-    "sql.js": "^1.0.0",
-    "typeorm": "^0.2.18"
+    "sql.js": "^1.0.0"
   }
 }

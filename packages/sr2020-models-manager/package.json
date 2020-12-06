@@ -22,7 +22,5 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {},
-  "dependencies": {
-    "typeorm": "^0.2.18"
-  }
+  "dependencies": {}
 }
