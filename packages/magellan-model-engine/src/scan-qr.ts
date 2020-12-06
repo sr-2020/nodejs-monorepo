@@ -1,5 +1,5 @@
-import { Event, PreprocessApiInterface, EventModelApi } from 'interface/src/models/alice-model-engine';
-import { LabTerminalRefillData, QrType, ScanQRData, XenoDisease, OrganismModel } from '../helpers/basic-types';
+import { Event, EventModelApi, PreprocessApiInterface } from 'interface/models/alice-model-engine';
+import { LabTerminalRefillData, OrganismModel, QrType, ScanQRData, XenoDisease } from '../helpers/basic-types';
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {
   const [uniqueId, numTests] = payload.split(',');

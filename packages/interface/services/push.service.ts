@@ -1,8 +1,8 @@
 import { getService } from '@loopback/service-proxy';
 import { inject, Provider } from '@loopback/core';
 import { PushHttpApiDataSource } from '../datasources/push-http-api.datasource';
-import { PushNotification } from '@sr2020/interface/models/push-notification.model';
-import { PushResult } from '@sr2020/interface/models/push-result.model';
+import { PushNotification } from '../models/push-notification.model';
+import { PushResult } from '../models/push-result.model';
 
 export interface PushService {
   send(recipient: number, notification: PushNotification): Promise<PushResult>;

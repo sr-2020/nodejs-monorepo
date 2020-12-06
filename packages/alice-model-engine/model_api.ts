@@ -8,7 +8,7 @@ import {
   Modifier,
   PreprocessApiInterface,
   ViewModelApiInterface,
-} from 'interface/src/models/alice-model-engine';
+} from '@sr2020/interface/models/alice-model-engine';
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 

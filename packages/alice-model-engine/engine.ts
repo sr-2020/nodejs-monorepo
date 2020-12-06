@@ -1,4 +1,4 @@
-import { reduce, cloneDeep } from 'lodash';
+import { cloneDeep, reduce } from 'lodash';
 import { inspect } from 'util';
 
 import {
@@ -9,14 +9,14 @@ import {
   Modifier,
   PendingAquire,
   UserVisibleError,
-} from 'interface/src/models/alice-model-engine';
+} from '@sr2020/interface/models/alice-model-engine';
 
 import * as config from './config';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
-import { PreprocessApiFactory, ViewModelApiFactory, EffectModelApiFactory } from './model_api';
-import { ModelCallbacks, ViewModelCallback, EffectCallback } from '@sr2020/interface/callbacks';
+import { EffectModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
+import { EffectCallback, ModelCallbacks, ViewModelCallback } from '@sr2020/interface/callbacks';
 
 export class Engine<T extends EmptyModel> {
   public static readonly bindingKey = 'ModelEngine';

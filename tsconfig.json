@@ -9,10 +9,10 @@
     "baseUrl": "./packages",
     "paths": {
       "@sr2020/interface/*": [
-        "interface/src/*"
+        "interface/*"
       ],
       "@sr2020/alice-model-engine/*": [
-        "alice-model-engine/src/*"
+        "alice-model-engine/*"
       ],
       "@sr2020/alice-models-manager/*": [
         "alice-models-manager/*"

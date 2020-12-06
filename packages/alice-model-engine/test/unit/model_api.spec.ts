@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
-import { Context } from '../../src/context';
-import { EventModelApiFactory } from '../../src/model_api';
+import { Context } from '../../context';
+import { EventModelApiFactory } from '../../model_api';
 
 describe('ModelApi', () => {
   it('getCatalogObject', () => {

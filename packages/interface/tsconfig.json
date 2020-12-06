@@ -2,5 +2,5 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.json",
   "references": [],
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": ["**/*", "**/*.json"]
 }

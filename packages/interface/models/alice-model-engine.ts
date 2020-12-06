@@ -3,7 +3,7 @@ export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 import { Duration } from 'moment';
 import { model, property } from '@loopback/repository';
 import { PubSubNotification, PushNotification } from './push-notification.model';
-import { EventCallback } from '@sr2020/interface/callbacks';
+import { EventCallback } from '../callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
 
 class JsonToTextTransformer implements ValueTransformer {

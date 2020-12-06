@@ -11,7 +11,7 @@ export class PushApplication extends BootMixin(ServiceMixin(RepositoryMixin(Rest
     super(options);
 
     // Set up default home page
-    this.static('/', path.join(__dirname, '../public'));
+    this.static('/', path.join(__dirname, 'public'));
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
@@ -19,7 +19,7 @@ export class PushApplication extends BootMixin(ServiceMixin(RepositoryMixin(Rest
     });
     this.component(RestExplorerComponent);
 
-    this.projectRoot = __dirname + '/../../';
+    this.projectRoot = __dirname + '/../';
     const dirs = ['push', 'interface'];
     // Customize @loopback/boot Booter Conventions here
     const extension = require.extensions['.ts'] ? 'ts' : 'js';

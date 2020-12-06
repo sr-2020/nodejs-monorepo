@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
-import { Event } from 'interface/src/models/alice-model-engine';
+import { Event } from 'interface/models/alice-model-engine';
 import { expect } from 'chai';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
-import consts = require('../../helpers/constants');
 import { getEvents, getNoOpEvent } from '../helpers/events';
 import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 import { process } from '../helpers/util';
+import consts = require('../../helpers/constants');
 
 interface Global {
   TEST_EXTERNAL_OBJECTS: any;

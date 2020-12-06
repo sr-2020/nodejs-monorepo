@@ -1,8 +1,8 @@
-import { Effect, EmptyModel, EngineResultOk } from 'interface/src/models/alice-model-engine';
+import { Effect, EmptyModel, EngineResultOk } from 'interface/models/alice-model-engine';
 import { expect } from 'chai';
 import 'mocha';
-import { Config, EventHandler } from '../../src/config';
-import { Worker } from '../../src/worker';
+import { Config, EventHandler } from '../../config';
+import { Worker } from '../../worker';
 
 describe('Worker', () => {
   let worker: Worker;

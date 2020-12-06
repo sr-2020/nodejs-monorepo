@@ -1,4 +1,4 @@
-import { Condition, EmptyModel, rproperty } from 'interface/src/models/alice-model-engine';
+import { Condition, EmptyModel, rproperty } from 'interface/models/alice-model-engine';
 import { model } from '@loopback/repository';
 
 export enum BiologicalSystems {

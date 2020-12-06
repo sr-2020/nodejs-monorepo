@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { AquiredObjects, EngineResult, Event, EmptyModel, PendingAquire } from 'interface/src/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, EngineResult, Event, PendingAquire } from '@sr2020/interface/models/alice-model-engine';
 
 import * as config from './config';
 import Logger from './logger';
