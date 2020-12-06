@@ -44,6 +44,7 @@ jobs:
       - run: yarn build
   docker_models_manager:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
@@ -57,6 +58,7 @@ jobs:
 
   docker_model_engine:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
@@ -69,6 +71,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_push:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
       - name: Build & push to dockerhub
@@ -82,6 +85,7 @@ jobs:
   deploy_admin_ui:
     runs-on: ubuntu-latest
     needs: [test, lint, build]
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
       - uses: actions-hub/gcloud@318.0.0
@@ -95,6 +99,7 @@ jobs:
   deploy_gke:
     runs-on: ubuntu-latest
     needs: [test, lint, build, docker_models_manager, docker_model_engine, docker_push]
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
