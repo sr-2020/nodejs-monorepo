@@ -1,5 +1,5 @@
 import { ViewModelApiInterface } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '../deus-ex-model';
 
 /**
  *  В ViewModel для медиков и психологов должны входить:

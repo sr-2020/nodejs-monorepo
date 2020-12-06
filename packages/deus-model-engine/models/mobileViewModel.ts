@@ -1,5 +1,5 @@
 import { Condition, Modifier, ViewModelApiInterface } from '@sr2020/interface/models/alice-model-engine';
-import { Change, DeusExModel, MemoryEntry, Message } from '@sr2020/interface/models/deus-ex-model';
+import { Change, DeusExModel, MemoryEntry, Message } from '../deus-ex-model';
 import { IllnessModifier } from '../helpers/catalog_types';
 
 interface PageViewModel {

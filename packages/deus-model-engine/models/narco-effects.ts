@@ -1,8 +1,8 @@
 ///  Narco effects
 
 import helpers = require('../helpers/model-helper');
-import { Modifier, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '../deus-ex-model';
 import { Narcotic } from '../helpers/catalog_types';
 
 function loadNarco(api: EventModelApi<DeusExModel>, id) {

@@ -4,7 +4,7 @@
 
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { DeusExModel } from '../deus-ex-model';
 import { EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
 
 /**

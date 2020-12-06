@@ -2,8 +2,8 @@ import _ = require('lodash');
 import medichelpers = require('../helpers/medic-helper');
 import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
-import { Modifier, PreprocessApiInterface, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EventModelApi, Modifier, PreprocessApiInterface } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '../deus-ex-model';
 import { Narcotic } from '../helpers/catalog_types';
 
 const PILL_TIMEOUT = 2 * 60 * 60 * 1000;

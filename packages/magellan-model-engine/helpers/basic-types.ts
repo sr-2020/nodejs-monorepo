@@ -1,5 +1,5 @@
-import { EmptyModel, Condition } from 'interface/src/models/alice-model-engine';
-import { Change } from 'interface/src/models/deus-ex-model';
+import { Condition, EmptyModel, rproperty } from 'interface/src/models/alice-model-engine';
+import { model } from '@loopback/repository';
 
 export enum BiologicalSystems {
   Nervous,
@@ -41,10 +41,10 @@ export function systemCorrespondsToColor(color: SystemColor, system: BiologicalS
   return (biologicalSystemsColors.get(system) as SystemColor[]).includes(color);
 }
 
-export function colorOfChange(model: OrganismModel, change: number[]): SystemColor | undefined {
+export function colorOfChange(organismModel: OrganismModel, change: number[]): SystemColor | undefined {
   const systemsAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>();
-  const systemsNotAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>(organismSystemsIndices(model));
-  organismSystemsIndices(model).forEach((i) => {
+  const systemsNotAffected: Set<BiologicalSystems> = new Set<BiologicalSystems>(organismSystemsIndices(organismModel));
+  organismSystemsIndices(organismModel).forEach((i) => {
     if (change[i] != 0) {
       systemsAffected.add(i);
       systemsNotAffected.delete(i);
@@ -75,9 +75,10 @@ export function allSystemsIndices(): number[] {
   return result;
 }
 
-export function organismSystemsIndices(model: OrganismModel): number[] {
+export function organismSystemsIndices(organismModel: OrganismModel): number[] {
   return allSystemsIndices().filter(
-    (i) => model.systems[i].present && model.systems[i].nucleotide != null && model.systems[i].nucleotide != undefined,
+    (i) =>
+      organismModel.systems[i].present && organismModel.systems[i].nucleotide != null && organismModel.systems[i].nucleotide != undefined,
   );
 }
 
@@ -98,6 +99,18 @@ export interface System {
   value: number;
   nucleotide: number;
   lastModified: number;
+}
+
+@model()
+export class Change {
+  @rproperty()
+  mID: string;
+
+  @rproperty()
+  text: string;
+
+  @rproperty()
+  timestamp: number;
 }
 
 export interface OrganismModel extends EmptyModel {

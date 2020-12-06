@@ -1,5 +1,5 @@
-import { post, requestBody, HttpErrors } from '@loopback/rest';
-import { DeusExModel, DeusExProcessModelRequest, DeusExProcessModelResponse } from '@sr2020/interface/models/deus-ex-model';
+import { HttpErrors, post, requestBody } from '@loopback/rest';
+import { DeusExModel, DeusExProcessModelRequest, DeusExProcessModelResponse } from '../deus-ex-model';
 import { Engine } from '@sr2020/alice-model-engine/engine';
 import { inject } from '@loopback/core';
 import { AquiredObjects } from '@sr2020/interface/models/alice-model-engine';

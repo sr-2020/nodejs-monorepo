@@ -3,8 +3,8 @@
  */
 
 import helpers = require('../helpers/model-helper');
-import { Modifier, EffectModelApi } from '@sr2020/interface/models/alice-model-engine';
-import { DeusExModel } from '@sr2020/interface/models/deus-ex-model';
+import { EffectModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { DeusExModel } from '../deus-ex-model';
 
 /**
  * Эффект показывающий состояние пока работает импланта.
