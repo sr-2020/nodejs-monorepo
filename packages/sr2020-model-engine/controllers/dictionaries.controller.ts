@@ -3,12 +3,12 @@ import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
 import { kAllEthicGroups } from '../scripts/character/ethics_library';
-import { kAllDrones } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
-import { Feature, kFeatureDescriptor } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
-import { kALlCyberDecks } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
-import { kAllSoftware } from '@sr2020/sr2020-model-engine/scripts/qr/software_library';
+import { kAllDrones } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { Feature, kFeatureDescriptor } from '@alice/sr2020-common/models/sr2020-character.model';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { kAllFocuses } from '@alice/sr2020-model-engine/scripts/qr/focus_library';
+import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
+import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
 
 export class DictionariesController {
   @get('/features', {

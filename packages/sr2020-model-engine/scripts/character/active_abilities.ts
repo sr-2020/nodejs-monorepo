@@ -1,17 +1,17 @@
-import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedActiveAbility, LocationMixin, Sr2020Character, Targetable } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { AddedActiveAbility, LocationMixin, Sr2020Character, Targetable } from '@alice/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
-import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { addFeatureToModel, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { generateRandomAuraMask, kUnknowAuraCharacter } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
-import { earnKarma, kKarmaActiveAbilityCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
-import { removeImplant } from '@sr2020/sr2020-model-engine/scripts/character/merchandise';
-import { createMerchandise } from '@sr2020/sr2020-model-engine/scripts/qr/merchandise';
-import { consume } from '@sr2020/sr2020-model-engine/scripts/qr/events';
+import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { addFeatureToModel, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
+import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
+import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
+import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merchandise';
+import { createMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
+import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 import Chance = require('chance');
 
 const chance = new Chance();

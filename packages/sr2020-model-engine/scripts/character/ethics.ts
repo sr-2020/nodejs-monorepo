@@ -1,18 +1,18 @@
 import { isEqual } from 'lodash';
 
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EthicGroup, EthicScale, EthicTrigger, kAllCrysises, kAllEthicGroups, kEthicAbilities, kEthicLevels } from './ethics_library';
-import { Event, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { Event, EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { ActiveAbilityData } from './active_abilities';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume, unconsume } from '../qr/events';
 import {
   addFeatureToModel,
   getAllFeatures,
   removeFeatureFromModel,
   satisfiesPrerequisites,
-} from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { LocusQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+} from '@alice/sr2020-model-engine/scripts/character/features';
+import { LocusQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 const MAX_ETHIC_VALUE = 4;
 const ETHIC_COOLDOWN_MS = 30 * 1000;

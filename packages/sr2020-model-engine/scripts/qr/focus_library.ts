@@ -1,4 +1,4 @@
-import { MagicFocusData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { MagicFocusData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 export type MagicFocus = MagicFocusData & { id: string; name: string };
 

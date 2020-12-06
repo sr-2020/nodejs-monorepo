@@ -1,9 +1,9 @@
 import { getService } from '@loopback/service-proxy';
 import { inject, Provider } from '@loopback/core';
 import { ModelEngineHttpApiDataSource } from '../datasources/model-engine-http-api.datasource';
-import { ModelProcessRequest, ModelProcessResponse } from '@sr2020/interface/models/process-requests-respose';
-import { EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { Empty } from '@sr2020/interface/models/empty.model';
+import { ModelProcessRequest, ModelProcessResponse } from '@alice/interface/models/process-requests-respose';
+import { EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { Empty } from '@alice/interface/models/empty.model';
 import { QrCode } from '../models/qr-code.model';
 import { CharacterCreationRequest, Feature, Sr2020Character } from '../models/sr2020-character.model';
 import { Location } from '../models/location.model';

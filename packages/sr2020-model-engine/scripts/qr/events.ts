@@ -1,5 +1,5 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
 import {
@@ -10,12 +10,12 @@ import {
   ReanimateCapsuleData,
   SpiritQrData,
   TypedQrCode,
-} from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { buyFeatureForKarma, earnKarma } from '@sr2020/sr2020-model-engine/scripts/character/karma';
-import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
-import { kAllSpirits, kCommonSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
+} from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { buyFeatureForKarma, earnKarma } from '@alice/sr2020-model-engine/scripts/character/karma';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllSpirits, kCommonSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {

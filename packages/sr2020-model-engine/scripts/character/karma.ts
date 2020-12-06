@@ -1,5 +1,5 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { duration } from 'moment';
 import {
   addFeature,
@@ -7,9 +7,9 @@ import {
   getFeatureIdsInModel,
   getFeatureKarmaCost,
   satisfiesPrerequisites,
-} from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
+} from '@alice/sr2020-model-engine/scripts/character/features';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 
 export const kMaxKarmaPerGame = 800;
 export const kMaxKarmaPerCycle = 300;

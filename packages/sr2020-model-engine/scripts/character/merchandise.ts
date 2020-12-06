@@ -1,9 +1,9 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedImplant, LocationMixin, MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { AddedImplant, LocationMixin, MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { ImplantSlot, kAllImplants } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
 import { createGapDueToImplantUninstall, reduceEssenceDueToImplantInstall } from './essence';
-import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
   if (api.workModel.currentBody != 'physical') {

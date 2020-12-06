@@ -1,9 +1,9 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume } from '../qr/events';
-import { LocationData, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { ChemoData } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { LocationData, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { ChemoData } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import Chance = require('chance');
 
 const chance = new Chance();

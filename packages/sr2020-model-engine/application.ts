@@ -5,8 +5,8 @@ import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
-import { Engine } from '@sr2020/alice-model-engine/engine';
-import { loadModels } from '@sr2020/alice-model-engine/utils';
+import { Engine } from '@alice/alice-model-engine/engine';
+import { loadModels } from '@alice/alice-model-engine/utils';
 
 export class SR2020ModelsApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {

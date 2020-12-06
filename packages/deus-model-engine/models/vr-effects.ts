@@ -4,7 +4,7 @@
 
 import helpers = require('../helpers/model-helper');
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 
 /**
  * Обработчик события "enterVR" (вход в VR)

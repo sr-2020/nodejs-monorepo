@@ -1,7 +1,7 @@
 import * as Path from 'path';
-import { Config } from '@sr2020/alice-model-engine/config';
-import { requireDir } from '@sr2020/alice-model-engine/utils';
-import { Worker } from '@sr2020/alice-model-engine/worker';
+import { Config } from '@alice/alice-model-engine/config';
+import { requireDir } from '@alice/alice-model-engine/utils';
+import { Worker } from '@alice/alice-model-engine/worker';
 
 import { EngineResult, EngineResultOk, Event } from 'interface/models/alice-model-engine';
 import * as Winston from 'winston';

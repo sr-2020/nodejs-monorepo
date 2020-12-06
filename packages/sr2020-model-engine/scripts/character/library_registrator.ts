@@ -3,7 +3,7 @@
 // ability by id. This file is a poor man's inversion of control container which allow to depend on *_library.ts files
 // indirectly.
 
-import { ActiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities_library';
+import { ActiveAbility } from '@alice/sr2020-model-engine/scripts/character/active_abilities_library';
 
 let allActiveAbilities = new Map<string, ActiveAbility>();
 

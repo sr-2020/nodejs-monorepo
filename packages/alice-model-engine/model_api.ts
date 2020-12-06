@@ -8,13 +8,13 @@ import {
   Modifier,
   PreprocessApiInterface,
   ViewModelApiInterface,
-} from '@sr2020/interface/models/alice-model-engine';
+} from '@alice/interface/models/alice-model-engine';
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
 import { Context } from './context';
 import Logger from './logger';
-import { EventCallback } from '@sr2020/interface/callbacks';
+import { EventCallback } from '@alice/interface/callbacks';
 import { Duration } from 'moment';
 import cuid = require('cuid');
 

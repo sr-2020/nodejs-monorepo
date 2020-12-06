@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { ImplantModifier } from '../helpers/catalog_types';
 import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');

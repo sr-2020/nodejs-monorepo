@@ -1,5 +1,5 @@
 import * as winston from 'winston';
-import { LogLevel, LogSource } from '@sr2020/interface/models/alice-model-engine';
+import { LogLevel, LogSource } from '@alice/interface/models/alice-model-engine';
 
 export const logger = winston.createLogger({
   level: 'warn',

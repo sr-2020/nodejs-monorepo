@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from '@sr2020/interface/models/alice-model-engine';
+import { ViewModelApiInterface } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 
 /**

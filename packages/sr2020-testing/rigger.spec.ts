@@ -1,9 +1,9 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
-import { kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
-import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 
 describe('Rigger abilities', () => {
   let fixture: TestFixture;

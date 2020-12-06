@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 
 describe('Karma events', function () {
   let fixture: TestFixture;

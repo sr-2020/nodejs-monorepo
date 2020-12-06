@@ -30,7 +30,7 @@ import {
   trackBallSpell,
   trackpointSpell,
 } from './spells';
-import { Feature, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Feature, SpellSphere } from '@alice/sr2020-common/models/sr2020-character.model';
 
 export interface Spell extends Feature {
   sphere: SpellSphere;

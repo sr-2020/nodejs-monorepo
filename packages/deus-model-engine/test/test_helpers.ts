@@ -1,10 +1,10 @@
 import * as Path from 'path';
-import { Worker } from '@sr2020/alice-model-engine/worker';
-import { Config } from '@sr2020/alice-model-engine/config';
-import { requireDir } from '@sr2020/alice-model-engine/utils';
+import { Worker } from '@alice/alice-model-engine/worker';
+import { Config } from '@alice/alice-model-engine/config';
+import { requireDir } from '@alice/alice-model-engine/utils';
 import * as Winston from 'winston';
 
-import { EmptyModel, EngineResult, EngineResultOk, Event } from '@sr2020/interface/models/alice-model-engine';
+import { EmptyModel, EngineResult, EngineResultOk, Event } from '@alice/interface/models/alice-model-engine';
 
 let WORKER_INSTANCE: Worker | null = null;
 

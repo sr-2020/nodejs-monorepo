@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as prettier from 'prettier';
-import { FeatureAvailability, PackInfo } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { FeatureAvailability, PackInfo } from '@alice/sr2020-common/models/sr2020-character.model';
 
 export interface PassiveAbility {
   id: string;

@@ -6,16 +6,16 @@ import {
   Feature,
   MetaRace,
   Sr2020Character,
-} from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+} from '@alice/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
 import { kAllSpells, Spell } from './spells_library';
 import { ActiveAbility } from './active_abilities_library';
 import { cloneDeep, template } from 'lodash';
-import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { Duration } from 'moment';
-import { addTemporaryModifier, modifierFromEffect, validUntil } from '@sr2020/sr2020-model-engine/scripts/character/util';
-import { TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
+import { addTemporaryModifier, modifierFromEffect, validUntil } from '@alice/sr2020-model-engine/scripts/character/util';
+import { TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { HttpErrors } from '@loopback/rest';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {

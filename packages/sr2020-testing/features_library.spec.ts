@@ -1,7 +1,7 @@
 import { expect } from '@loopback/testlab';
-import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { kAllSpells } from '@sr2020/sr2020-model-engine/scripts/character/spells_library';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { kAllSpells } from '@alice/sr2020-model-engine/scripts/character/spells_library';
 
 describe('Features library', () => {
   function addNo(ids: string[]): string[] {

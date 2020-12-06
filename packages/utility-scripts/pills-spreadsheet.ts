@@ -2,7 +2,7 @@
 // to the spreadsheet and Firestore.
 // Running:
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/pills-spreadsheet.ts
-import { Pill } from '@sr2020/sr2020-model-engine/scripts/character/chemo_library';
+import { Pill } from '@alice/sr2020-model-engine/scripts/character/chemo_library';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 
 interface Component {

@@ -1,10 +1,10 @@
 import uuid = require('uuid');
 import { cloneDeep, template } from 'lodash';
-import { EffectModelApi, EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Location } from '@sr2020/sr2020-common/models/location.model';
-import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Location } from '@alice/sr2020-common/models/location.model';
+import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume, create } from '../qr/events';
 import { healthStateTransition } from './death_and_rebirth';
 import {
@@ -20,13 +20,13 @@ import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonanc
 import { duration } from 'moment';
 import { kAllSpells } from './spells_library';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
-import { MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { temporaryAntiDumpshock } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
-import { generateAuraSubset, splitAuraByDashes } from '@sr2020/sr2020-model-engine/scripts/character/aura_utils';
-import { ModifierWithAmount, TemporaryModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { earnKarma, kKarmaSpellCoefficient } from '@sr2020/sr2020-model-engine/scripts/character/karma';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { temporaryAntiDumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
+import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
+import { ModifierWithAmount, TemporaryModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
+import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
+import { earnKarma, kKarmaSpellCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
 
 type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id

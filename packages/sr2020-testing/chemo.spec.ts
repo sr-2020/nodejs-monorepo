@@ -1,8 +1,8 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
-import { kAllChemoEffects, kAllElements } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
-import { shouldBeConsumed } from '@sr2020/sr2020-model-engine/scripts/character/scan_qr';
+import { kAllChemoEffects, kAllElements } from '@alice/sr2020-model-engine/scripts/character/chemo';
+import { shouldBeConsumed } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
 
 describe('Chemo events', function () {
   let fixture: TestFixture;

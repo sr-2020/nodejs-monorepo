@@ -1,17 +1,17 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
-import { Empty } from '@sr2020/interface/models/empty.model';
-import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
-import { PushService } from '@sr2020/interface/services/push.service';
+import { Empty } from '@alice/interface/models/empty.model';
+import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import { PushService } from '@alice/interface/services/push.service';
 import { inject } from '@loopback/core';
-import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationCreationRequest, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
+import { EventRequest } from '@alice/interface/models/alice-model-engine';
+import { Location, LocationCreationRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { EntityManager, getManager, Transaction, TransactionManager } from 'typeorm';
-import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
-import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
-import { TimeService } from '@sr2020/alice-models-manager/services/time.service';
-import { AnyModelController } from '@sr2020/sr2020-models-manager/controllers/anymodel.controller';
-import { EventDispatcherService } from '@sr2020/sr2020-models-manager/services/event-dispatcher.service';
-import { LoggerService } from '@sr2020/alice-models-manager/services/logger.service';
+import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
+import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
+import { TimeService } from '@alice/alice-models-manager/services/time.service';
+import { AnyModelController } from '@alice/sr2020-models-manager/controllers/anymodel.controller';
+import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
+import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 
 export class LocationController extends AnyModelController<Location> {
   constructor(

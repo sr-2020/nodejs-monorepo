@@ -1,4 +1,4 @@
-import { Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Modifier } from '@alice/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
   increaseBiofeedbackResistance,
@@ -26,7 +26,7 @@ import {
   onKokkoroNanohiveRemove,
   onKoshcgheiNanohiveInstall,
   onKoshcgheiNanohiveRemove,
-} from '@sr2020/sr2020-model-engine/scripts/character/nanohives';
+} from '@alice/sr2020-model-engine/scripts/character/nanohives';
 
 export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
 

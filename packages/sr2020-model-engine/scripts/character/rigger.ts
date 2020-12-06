@@ -1,19 +1,19 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { AddedImplant, LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { AddedImplant, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocHeal, autodocRevive, healthStateTransition } from './death_and_rebirth';
-import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
+import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
 import { duration } from 'moment';
-import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-engine/scripts/qr/body_storage';
-import { DroneType, kDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
-import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
-import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
-import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
+import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
+import { DroneType, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 
 const kInDroneModifierId = 'in-the-drone';
 

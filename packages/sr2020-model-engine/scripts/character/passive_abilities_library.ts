@@ -1,4 +1,4 @@
-import { Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Modifier } from '@alice/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
   allowBiowareInstallation,
@@ -72,7 +72,7 @@ import {
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
 } from './basic_effects';
-import { Feature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
 
 export interface PassiveAbility extends Feature {
   modifier: Modifier | Modifier[];

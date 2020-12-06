@@ -3,7 +3,7 @@
 
 import * as QRCode from 'qrcode-svg';
 import { encode } from 'alice-qr-lib/qr';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import * as request from 'request-promise-native';
 
 async function run() {

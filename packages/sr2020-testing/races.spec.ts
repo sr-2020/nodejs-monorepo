@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
-import { MetaRace } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { MetaRace } from '@alice/sr2020-common/models/sr2020-character.model';
 
 describe('Race changes', () => {
   let fixture: TestFixture;

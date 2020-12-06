@@ -1,8 +1,8 @@
-import { MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { duration } from 'moment';
-import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { removeHunger, resetHunger } from '@sr2020/sr2020-model-engine/scripts/character/hunger';
+import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
+import { removeHunger, resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerTimerDescription = 'Голод HMHVV';

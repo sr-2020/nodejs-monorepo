@@ -1,4 +1,4 @@
-import { Condition, EmptyModel, Event, rproperty } from '@sr2020/interface/models/alice-model-engine';
+import { Condition, EmptyModel, Event, rproperty } from '@alice/interface/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
