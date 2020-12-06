@@ -69,9 +69,6 @@
       "path": "packages/sr2020-testing"
     },
     {
-      "path": "packages/telegram-bot"
-    },
-    {
       "path": "packages/sheets-export"
     }
   ]
