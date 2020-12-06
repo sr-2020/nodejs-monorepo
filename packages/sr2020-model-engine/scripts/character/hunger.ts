@@ -1,11 +1,11 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { MerchandiseQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
-import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
-import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { hungerWhileInDone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
-import { isHmhvv } from '@sr2020/sr2020-model-engine/scripts/character/races';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/races';
 
 const kHungerTimerName = 'normal-hunger';
 const kHungerTimerDuration = duration(6, 'hours').asMilliseconds();

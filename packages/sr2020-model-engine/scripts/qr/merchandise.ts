@@ -1,17 +1,17 @@
-import { QrCode, QrType } from '@sr2020/sr2020-common/models/qr-code.model';
+import { QrCode, QrType } from '@alice/sr2020-common/models/qr-code.model';
 import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { kAllReagents } from './reagents_library';
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { consumeFood } from '../character/hunger';
 import { consumeChemo } from '../character/chemo';
-import { DroneData, MerchandiseQrData, TypedQrCode } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { kAllDrones, kCommonDroneAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { getAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
-import { kAllFocuses } from '@sr2020/sr2020-model-engine/scripts/qr/focus_library';
-import { kALlCyberDecks } from '@sr2020/sr2020-model-engine/scripts/qr/cyberdeck_library';
-import { kAllSoftware } from '@sr2020/sr2020-model-engine/scripts/qr/software_library';
+import { DroneData, MerchandiseQrData, TypedQrCode } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { kAllDrones, kCommonDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { kAllFocuses } from '@alice/sr2020-model-engine/scripts/qr/focus_library';
+import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
+import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
 
 interface MerchandiseExternalData {
   id: string;

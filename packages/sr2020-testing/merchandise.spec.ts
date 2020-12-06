@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { DroneQrData, MagicFocusQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { DroneQrData, MagicFocusQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 describe('Merchandise', () => {
   let fixture: TestFixture;

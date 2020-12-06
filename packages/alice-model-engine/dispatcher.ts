@@ -2,8 +2,8 @@ import { Context } from './context';
 import Logger from './logger';
 import { EventModelApiFactory } from './model_api';
 
-import { EmptyModel, Event } from '@sr2020/interface/models/alice-model-engine';
-import { EventCallback } from '@sr2020/interface/callbacks';
+import { EmptyModel, Event } from '@alice/interface/models/alice-model-engine';
+import { EventCallback } from '@alice/interface/callbacks';
 
 export type CallbacksList<T extends EmptyModel> = EventCallback<T> | null | Array<EventCallback<T> | null>;
 

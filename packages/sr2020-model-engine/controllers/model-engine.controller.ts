@@ -6,21 +6,21 @@ import {
   Sr2020Character,
   Sr2020CharacterProcessRequest,
   Sr2020CharacterProcessResponse,
-} from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { Engine } from '@sr2020/alice-model-engine/engine';
+} from '@alice/sr2020-common/models/sr2020-character.model';
+import { Engine } from '@alice/alice-model-engine/engine';
 import { inject } from '@loopback/core';
-import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Location, LocationProcessRequest, LocationProcessResponse } from '@sr2020/sr2020-common/models/location.model';
-import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@sr2020/sr2020-common/models/qr-code.model';
-import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
-import { Empty } from '@sr2020/interface/models/empty.model';
+import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Location, LocationProcessRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
+import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
+import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import { Empty } from '@alice/interface/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';
-import { setRaceForModel } from '@sr2020/sr2020-model-engine/scripts/character/races';
-import { addFeatureToModel, getAllAvailableFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@sr2020/sr2020-model-engine/scripts/character/karma';
-import { createJackedInEffect } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
+import { setRaceForModel } from '@alice/sr2020-model-engine/scripts/character/races';
+import { addFeatureToModel, getAllAvailableFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@alice/sr2020-model-engine/scripts/character/karma';
+import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { templateSettings } from 'lodash';
 import Chance = require('chance');
 

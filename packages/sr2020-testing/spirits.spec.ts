@@ -1,8 +1,8 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { getAllFeatures } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
-import { BodyStorageQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { kSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 describe('Spirits-related abilities', () => {
   let fixture: TestFixture;

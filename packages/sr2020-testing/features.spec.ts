@@ -1,7 +1,7 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
-import { satisfiesPrerequisites } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { satisfiesPrerequisites } from '@alice/sr2020-model-engine/scripts/character/features';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
 
 describe('Features-related events', function () {
   let fixture: TestFixture;

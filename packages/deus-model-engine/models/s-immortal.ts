@@ -2,7 +2,7 @@ import consts = require('../helpers/constants');
 import helpers = require('../helpers/model-helper');
 import medhelpers = require('../helpers/medic-helper');
 import { DeusExModel } from '../deus-ex-model';
-import { EffectModelApi, EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi } from '@alice/interface/models/alice-model-engine';
 
 /**
  * Обработчик события "serenity-immortality-ready"

@@ -1,7 +1,7 @@
-import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { duration } from 'moment';
-import { addTemporaryModifier, modifierFromEffect } from '@sr2020/sr2020-model-engine/scripts/character/util';
+import { addTemporaryModifier, modifierFromEffect } from '@alice/sr2020-model-engine/scripts/character/util';
 
 export function pauseAndPostpone(api: EventModelApi<Sr2020Character>, data: { pauseDurationHours: number; postponeDurationHours: number }) {
   for (const timer of api.model.timers) {

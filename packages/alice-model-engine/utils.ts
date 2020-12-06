@@ -2,8 +2,8 @@ import glob = require('glob');
 import { assign, clone, merge as _merge } from 'lodash';
 import * as Path from 'path';
 import Logger from './logger';
-import { ModelCallbacks } from '@sr2020/interface/callbacks';
-import { EmptyModel } from '@sr2020/interface/models/alice-model-engine';
+import { ModelCallbacks } from '@alice/interface/callbacks';
+import { EmptyModel } from '@alice/interface/models/alice-model-engine';
 
 export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T> {
   return requireDir(dir, (m: ModelCallbacks<T>, src: any) => {

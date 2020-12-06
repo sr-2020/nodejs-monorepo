@@ -2,7 +2,7 @@
 // to the spreadsheet and Firestore.
 // Running:
 //   npx ts-node packages/utility-scripts/ethics-spreadsheet.ts
-import { EthicLevel, EthicScale, EthicTrigger, EthicTriggerKind } from '@sr2020/sr2020-model-engine/scripts/character/ethics_library';
+import { EthicLevel, EthicScale, EthicTrigger, EthicTriggerKind } from '@alice/sr2020-model-engine/scripts/character/ethics_library';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 import uuid = require('uuid');
 

@@ -1,4 +1,4 @@
-import { Event } from '@sr2020/interface/models/alice-model-engine';
+import { Event } from '@alice/interface/models/alice-model-engine';
 
 const REFRESH_EVENT_TYPE = '_RefreshModel';
 

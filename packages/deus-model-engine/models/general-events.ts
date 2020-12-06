@@ -7,7 +7,7 @@ import helpers = require('../helpers/model-helper');
 import consts = require('../helpers/constants');
 import Chance = require('chance');
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@sr2020/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 
 const chance = new Chance();
 

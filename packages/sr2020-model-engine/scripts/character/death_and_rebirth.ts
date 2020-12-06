@@ -1,14 +1,14 @@
 import { duration } from 'moment';
-import { HealthState, LocationData, LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
+import { HealthState, LocationData, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { ActiveAbilityData, FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
 import { kReviveModifierId } from './implants_library';
 import { resetAllAddictions } from './chemo';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
-import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { resetHunger } from '@sr2020/sr2020-model-engine/scripts/character/hunger';
-import { isHmhvv } from '@sr2020/sr2020-model-engine/scripts/character/races';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
+import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger';
+import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/races';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');

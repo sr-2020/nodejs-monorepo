@@ -1,15 +1,15 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { BodyStorageQrData, SpiritQrData, typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { BodyStorageQrData, SpiritQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { duration } from 'moment';
-import { putBodyToStorage, removeBodyFromStorage } from '@sr2020/sr2020-model-engine/scripts/qr/body_storage';
-import { addFeatureToModel, removeFeatureFromModel } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
-import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { kSpiritAbilityIds } from '@sr2020/sr2020-model-engine/scripts/qr/spirits_library';
-import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@sr2020/sr2020-model-engine/scripts/qr/drones';
+import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
+import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { kSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
 
 const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2'];
 const kInSpiritModifierId = 'in-the-spirit';

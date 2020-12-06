@@ -1,18 +1,18 @@
-import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   increaseBody,
   increaseCharisma,
   increaseIntelligence,
   increaseResonance,
-} from '@sr2020/sr2020-model-engine/scripts/character/basic_effects';
+} from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 import * as cuid from 'cuid';
 import { duration } from 'moment';
-import { healthStateTransition } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { sendNotificationAndHistoryRecord } from '@sr2020/sr2020-model-engine/scripts/character/util';
-import { ModifierWithAmount } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { kAllPassiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { template } from 'lodash';
 
 interface DumpshockModifier extends Modifier {

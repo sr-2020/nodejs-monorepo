@@ -2,7 +2,7 @@ import * as moment from 'moment';
 import { MindData } from '../models/medicViewModel';
 import { DeusExModel } from '../deus-ex-model';
 import { Illness, Implant, ImplantModifier } from './catalog_types';
-import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { cloneDeep } from 'lodash';
 import cuid = require('cuid');
 

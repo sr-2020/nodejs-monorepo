@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { Duration } from 'moment';
-import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { MAX_HISTORY_LINES } from './consts';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import uuid = require('uuid');
 
 export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {

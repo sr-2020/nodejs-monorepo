@@ -1,4 +1,4 @@
-import { Effect, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { Effect, Modifier } from '@alice/interface/models/alice-model-engine';
 
 export interface Predicate {
   variable: string;

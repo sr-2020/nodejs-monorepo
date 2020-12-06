@@ -5,7 +5,7 @@
 import * as commandLineArgs from 'command-line-args';
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
 import { ActiveAbility, PassiveAbility, rewriteActiveAbilities, rewritePassiveAbilities, rewriteSpells, Spell } from './reparser';
-import { FeatureAvailability, PackInfo, SpellSphere } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { FeatureAvailability, PackInfo, SpellSphere } from '@alice/sr2020-common/models/sr2020-character.model';
 
 const optionDefinitions: commandLineArgs.OptionDefinition[] = [
   { name: 'update_db', type: Boolean, defaultValue: false },

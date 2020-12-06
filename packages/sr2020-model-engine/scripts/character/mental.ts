@@ -1,12 +1,12 @@
-import { AddedActiveAbility, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { AddedActiveAbility, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
 import { FullActiveAbilityData, FullTargetedAbilityData, kActiveAbilitiesDisabledTimer } from './active_abilities';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
-import { MentalQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { MentalQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import Chance = require('chance');
 
 const chance = new Chance();

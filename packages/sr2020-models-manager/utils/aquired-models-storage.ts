@@ -1,13 +1,13 @@
-import { AquiredObjects, EmptyModel } from '@sr2020/interface/models/alice-model-engine';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { Location } from '@sr2020/sr2020-common/models/location.model';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
-import { ModelEngineService, processAny } from '@sr2020/sr2020-common/services/model-engine.service';
+import { AquiredObjects, EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { Location } from '@alice/sr2020-common/models/location.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
+import { ModelEngineService, processAny } from '@alice/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { cloneDeep } from 'lodash';
-import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
-import { getAndLockModel } from '@sr2020/alice-models-manager/utils/db-utils';
-import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
+import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
+import { getAndLockModel } from '@alice/alice-models-manager/utils/db-utils';
+import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 
 export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Sr2020Character: {}, QrCode: {} };

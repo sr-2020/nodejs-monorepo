@@ -1,8 +1,8 @@
 import { TestFixture } from './fixture';
 import { expect } from '@loopback/testlab';
 import { duration } from 'moment';
-import { calculateMagicFeedback } from '@sr2020/sr2020-model-engine/scripts/character/spells';
-import { HealthState } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { calculateMagicFeedback } from '@alice/sr2020-model-engine/scripts/character/spells';
+import { HealthState } from '@alice/sr2020-common/models/sr2020-character.model';
 
 describe('Spells', function () {
   // eslint-disable-next-line no-invalid-this

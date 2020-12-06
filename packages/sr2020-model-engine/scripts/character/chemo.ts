@@ -1,5 +1,5 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { Concentrations, LocationMixin, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Concentrations, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord, validUntil } from './util';
 import { duration, Duration } from 'moment';
@@ -15,12 +15,12 @@ import {
   multiplyCooldownCoefficient,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
-import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
-import { ModifierWithAmount, TemporaryModifier } from '@sr2020/sr2020-model-engine/scripts/character/typedefs';
-import { addTemporaryPassiveAbilityEffect } from '@sr2020/sr2020-model-engine/scripts/character/features';
-import { scanQr } from '@sr2020/sr2020-model-engine/scripts/character/scan_qr';
-import { typedQrData } from '@sr2020/sr2020-model-engine/scripts/qr/datatypes';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
+import { ModifierWithAmount, TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
+import { addTemporaryPassiveAbilityEffect } from '@alice/sr2020-model-engine/scripts/character/features';
+import { scanQr } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
+import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 

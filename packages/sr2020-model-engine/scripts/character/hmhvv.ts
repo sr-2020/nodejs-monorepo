@@ -1,8 +1,8 @@
-import { EventModelApi, UserVisibleError } from '@sr2020/interface/models/alice-model-engine';
-import { LocationMixin, MetaRace, Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { ActiveAbilityData } from '@sr2020/sr2020-model-engine/scripts/character/active_abilities';
-import { healthStateTransition, reviveAbsolute } from '@sr2020/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { consumeChemo } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { LocationMixin, MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { healthStateTransition, reviveAbsolute } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { consumeChemo } from '@alice/sr2020-model-engine/scripts/character/chemo';
 
 export function vampireBite(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const victim = api.aquired(Sr2020Character, data.targetCharacterId!);

@@ -3,7 +3,7 @@
  */
 
 import * as moment from 'moment';
-import { EffectModelApi, EventModelApi, Modifier } from '@sr2020/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { Illness, IllnessModifier } from '../helpers/catalog_types';
 import consts = require('../helpers/constants');

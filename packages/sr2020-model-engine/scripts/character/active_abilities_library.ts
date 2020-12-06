@@ -48,8 +48,8 @@ import {
   youDontTrustAnybody,
 } from './mental';
 import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
-import { QrType } from '@sr2020/sr2020-common/models/qr-code.model';
-import { Feature, TargetSignature } from '@sr2020/sr2020-common/models/sr2020-character.model';
+import { QrType } from '@alice/sr2020-common/models/qr-code.model';
+import { Feature, TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
   discourseGroupAddAbility,
@@ -59,14 +59,14 @@ import {
   discourseGroupInquisitor2,
   prophetAbility,
 } from './ethics';
-import { setAllActiveAbilities } from '@sr2020/sr2020-model-engine/scripts/character/library_registrator';
-import { droneEmergencyExit, enterDrone, exitDrone } from '@sr2020/sr2020-model-engine/scripts/character/rigger';
-import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@sr2020/sr2020-model-engine/scripts/character/chemo';
+import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { droneEmergencyExit, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
-import { spiritsRelatedSpell } from '@sr2020/sr2020-model-engine/scripts/character/spells';
-import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@sr2020/sr2020-model-engine/scripts/character/hmhvv';
-import { jackInAbility, jackOutAbility } from '@sr2020/sr2020-model-engine/scripts/character/hackers';
-import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@sr2020/sr2020-model-engine/scripts/character/spirits';
+import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
+import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
+import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
+import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [

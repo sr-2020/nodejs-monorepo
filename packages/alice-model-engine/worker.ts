@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
 import { inspect } from 'util';
 
-import { AquiredObjects, EmptyModel, EngineResult, Event, PendingAquire } from '@sr2020/interface/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, EngineResult, Event, PendingAquire } from '@alice/interface/models/alice-model-engine';
 
 import * as config from './config';
 import Logger from './logger';
 import { loadModels } from './utils';
 import { Engine } from './engine';
-import { ModelCallbacks } from '@sr2020/interface/callbacks';
+import { ModelCallbacks } from '@alice/interface/callbacks';
 
 // eslint-disable-next-line no-var
 declare var TEST_EXTERNAL_OBJECTS: any;

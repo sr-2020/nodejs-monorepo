@@ -1,5 +1,5 @@
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-import { Software } from '@sr2020/sr2020-model-engine/scripts/qr/software_library';
+import { Software } from '@alice/sr2020-model-engine/scripts/qr/software_library';
 
 // Running:
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/software-spreadsheet.ts

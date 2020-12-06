@@ -1,14 +1,14 @@
 import { inject, Provider } from '@loopback/core';
-import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
-import { ModelEngineService } from '@sr2020/sr2020-common/services/model-engine.service';
+import { EventRequest } from '@alice/interface/models/alice-model-engine';
+import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
-import { Location } from '@sr2020/sr2020-common/models/location.model';
-import { Sr2020Character } from '@sr2020/sr2020-common/models/sr2020-character.model';
-import { QrCode } from '@sr2020/sr2020-common/models/qr-code.model';
+import { Location } from '@alice/sr2020-common/models/location.model';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { AquiredModelsStorageTypeOrm } from '../utils/aquired-models-storage';
-import { ModelAquirerService } from '@sr2020/alice-models-manager/services/model-aquirer.service';
-import { AquiredModelsStorage } from '@sr2020/alice-models-manager/utils/aquired-models-storage';
-import { PubSubService } from '@sr2020/alice-models-manager/services/pubsub.service';
+import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
+import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
+import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 
 class ModelAquirerServiceImpl implements ModelAquirerService {
   constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}

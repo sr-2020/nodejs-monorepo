@@ -1,4 +1,4 @@
-import { EventRequest } from '@sr2020/interface/models/alice-model-engine';
+import { EventRequest } from '@alice/interface/models/alice-model-engine';
 import { EntityManager } from 'typeorm';
 import { AquiredModelsStorage } from '../utils/aquired-models-storage';
 

@@ -8,24 +8,9 @@
     "esModuleInterop": false,
     "baseUrl": "./packages",
     "paths": {
-      "@sr2020/interface/*": [
-        "interface/*"
+      "@alice/*": [
+        "*"
       ],
-      "@sr2020/alice-model-engine/*": [
-        "alice-model-engine/*"
-      ],
-      "@sr2020/alice-models-manager/*": [
-        "alice-models-manager/*"
-      ],
-      "@sr2020/sr2020-models-manager/*": [
-        "sr2020-models-manager/*"
-      ],
-      "@sr2020/sr2020-model-engine/*": [
-        "sr2020-model-engine/*"
-      ],
-      "@sr2020/sr2020-common/*": [
-        "sr2020-common/*"
-      ]
     }
   },
   "references": [

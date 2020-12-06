@@ -1,5 +1,5 @@
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-import { Drone } from '@sr2020/sr2020-model-engine/scripts/qr/drone_library';
+import { Drone } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 
 // Running:
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/drones-spreadsheet.ts
