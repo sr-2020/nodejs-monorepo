@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { decode, encode } from './qr';
-import { QrType, QrData } from './qr.types';
+import { LegacyQrType, QrData } from './qr.types';
 
 describe('QR content encoding/decode', () => {
   it('Throws format error if too short', () => {
@@ -36,12 +36,12 @@ describe('QR content encoding/decode', () => {
 
   it('Can decode example content', () => {
     const decoded = decode('d810Aw1ybkhZHello');
-    expect(decoded).to.deep.equal({ type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello' });
+    expect(decoded).to.deep.equal({ type: LegacyQrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello' });
   });
 
   it('Can decode example content 2', () => {
     const decoded = decode('5472BwAA8VNl123,1267,abc');
-    expect(decoded).to.deep.equal({ type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' });
+    expect(decoded).to.deep.equal({ type: LegacyQrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' });
   });
 
   it('Can decode example content 3', () => {
@@ -55,17 +55,17 @@ describe('QR content encoding/decode', () => {
   });
 
   it('Can encode example content', () => {
-    const encoded = encode({ type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello' });
+    const encoded = encode({ type: LegacyQrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Hello' });
     expect(encoded).to.equal('d810Aw1ybkhZHello');
   });
 
   it('Can encode example content 2', () => {
-    const data: QrData = { type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' };
+    const data: QrData = { type: LegacyQrType.Bill, kind: 0, validUntil: 1700000000, payload: '123,1267,abc' };
     expect(encode(data)).to.deep.equal('5472BwAA8VNl123,1267,abc');
   });
 
   it('Can encode and decode example content with cyrillic characters', () => {
-    const data: QrData = { type: QrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Рыба' };
+    const data: QrData = { type: LegacyQrType.InstantEffect, kind: 13, validUntil: 1497919090, payload: 'Рыба' };
     expect(decode(encode(data))).to.deep.equal(data);
   });
 });

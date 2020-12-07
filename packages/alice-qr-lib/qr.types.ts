@@ -1,4 +1,4 @@
-export enum QrType {
+export enum LegacyQrType {
   Unknown = 0,
 
   Pill = 1,
@@ -24,7 +24,7 @@ export enum QrType {
 }
 
 export interface QrData {
-  type: QrType;
+  type: LegacyQrType;
   kind: number;
   validUntil: number;
   payload: string;

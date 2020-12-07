@@ -4,13 +4,13 @@ import * as http from 'http';
 
 import * as bodyparser from 'body-parser';
 import { decode, encode } from './qr';
-import { QrData, QrType } from './qr.types';
+import { LegacyQrType, QrData } from './qr.types';
 
 function QrDataFromQuery(query: any): QrData {
   if (/^[0-9]*$/.test(query.type)) {
     query.type = Number(query.type);
   } else {
-    query.type = QrType[query.type];
+    query.type = LegacyQrType[query.type];
   }
   return query;
 }
@@ -42,7 +42,12 @@ class App {
         const receiver = req.query.receiver as string;
         const amount = req.query.amount as string;
         const comment = req.query.comment as string;
-        const content = encode({ type: QrType.Bill, kind: 0, validUntil: 1700000000, payload: [receiver, amount, comment].join(',') });
+        const content = encode({
+          type: LegacyQrType.Bill,
+          kind: 0,
+          validUntil: 1700000000,
+          payload: [receiver, amount, comment].join(','),
+        });
         res.redirect(
           // tslint:disable-next-line:max-line-length
           `http://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data=${content}&qzone=10&margin=1&size=300x300&ecc=L`,
