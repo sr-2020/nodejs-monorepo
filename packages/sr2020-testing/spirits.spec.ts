@@ -7,7 +7,7 @@ import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scrip
 describe('Spirits-related abilities', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

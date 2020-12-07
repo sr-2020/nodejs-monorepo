@@ -8,7 +8,7 @@ import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/fea
 describe('Rigger abilities', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

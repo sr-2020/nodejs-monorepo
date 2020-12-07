@@ -23,7 +23,7 @@ describe('QR content encoding/decode', () => {
 
   it('Invalid symbols in signature lead to format error', () => {
     const content = 'X2c2EQ1ybkhZHello'; // Symbol X is not hex symbol
-    expect(() => decode(content)).to.throw('Format Error');
+    expect(() => decode(content)).to.throw('Attempt to access memory outside buffer bounds');
   });
 
   it('Invalid symbols in header lead to exception', () => {

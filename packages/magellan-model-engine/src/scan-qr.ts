@@ -1,4 +1,4 @@
-import { Event, EventModelApi, PreprocessApiInterface } from 'interface/models/alice-model-engine';
+import { Event, EventModelApi, PreprocessApiInterface } from '@alice/interface/models/alice-model-engine';
 import { LabTerminalRefillData, OrganismModel, QrType, ScanQRData, XenoDisease } from '../helpers/basic-types';
 
 function parseLabTerminalRefillData(payload: string): LabTerminalRefillData {

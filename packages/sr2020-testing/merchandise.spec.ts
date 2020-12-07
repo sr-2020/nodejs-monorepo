@@ -5,7 +5,7 @@ import { DroneQrData, MagicFocusQrData, typedQrData } from '@alice/sr2020-model-
 describe('Merchandise', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

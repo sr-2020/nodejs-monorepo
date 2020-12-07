@@ -6,7 +6,7 @@ import { getRefreshEvent } from '../fixtures/events';
 describe('Meidc and Mind ViewModel Generation', () => {
   let result: any = null;
 
-  before(async function () {
+  beforeEach(async function () {
     const model = getExampleModel('1234');
     const events = getRefreshEvent(model.modelId);
     result = (await process(model, [events])).viewModels.medic_viewmodel;

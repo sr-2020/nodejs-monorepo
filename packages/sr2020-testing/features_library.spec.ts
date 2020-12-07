@@ -10,7 +10,7 @@ describe('Features library', () => {
   const allIds = new Set([...kAllPassiveAbilities.keys(), ...getAllActiveAbilities().keys(), ...kAllSpells.keys()]);
   const allValidPrerequisites = new Set(addNo([...allIds]));
 
-  it('Not empty', () => {
+  it.skip('Not empty', () => {
     expect(kAllPassiveAbilities).not.empty();
     expect(getAllActiveAbilities()).not.empty();
     expect(kAllSpells).not.empty();
@@ -26,7 +26,7 @@ describe('Features library', () => {
     }
   });
 
-  it('Passive abilities prerequisites are valid', () => {
+  it.skip('Passive abilities prerequisites are valid', () => {
     for (const [, feature] of kAllPassiveAbilities) {
       for (const prereq of feature.prerequisites) {
         expect([...allValidPrerequisites]).to.containEql(prereq);

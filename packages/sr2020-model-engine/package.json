@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "mocha --exit",
-    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-model-engine/.nyc_output mocha --exit",
+    "test": "jest",
+    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-model-engine/.nyc_output jest",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-model-engine.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",

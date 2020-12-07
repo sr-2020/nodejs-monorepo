@@ -8,7 +8,7 @@ describe('TokenController', () => {
   let client: Client;
   let repo: FirebaseTokenRepository;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     ({ app, client } = await setupApplication());
     repo = await app.getRepository(FirebaseTokenRepository);
   });

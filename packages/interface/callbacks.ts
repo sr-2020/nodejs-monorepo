@@ -6,7 +6,7 @@ import {
   Modifier,
   PreprocessApiInterface,
   ViewModelApiInterface,
-} from 'interface/models/alice-model-engine';
+} from '@alice/interface/models/alice-model-engine';
 
 export type EventCallback<T extends EmptyModel, U = any> = (api: EventModelApi<T>, data: U) => void;
 export type EffectCallback<T extends EmptyModel> = (api: EffectModelApi<T>, m: Modifier) => void;

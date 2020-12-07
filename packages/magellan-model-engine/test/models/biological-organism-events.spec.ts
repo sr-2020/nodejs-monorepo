@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import { Event } from 'interface/models/alice-model-engine';
+import { Event } from '@alice/interface/models/alice-model-engine';
 import { expect } from 'chai';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';

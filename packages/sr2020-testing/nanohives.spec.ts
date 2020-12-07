@@ -4,7 +4,7 @@ import { expect } from '@loopback/testlab';
 describe('Nanohives', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

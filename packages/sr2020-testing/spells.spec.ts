@@ -5,11 +5,9 @@ import { calculateMagicFeedback } from '@alice/sr2020-model-engine/scripts/chara
 import { HealthState } from '@alice/sr2020-common/models/sr2020-character.model';
 
 describe('Spells', function () {
-  // eslint-disable-next-line no-invalid-this
-  this.timeout(15000);
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
     await fixture.saveLocation();
   });

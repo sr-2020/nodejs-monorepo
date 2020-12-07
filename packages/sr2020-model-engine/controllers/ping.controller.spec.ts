@@ -4,7 +4,7 @@ import { getApplication } from '../testing/test-helper';
 describe('PingController', () => {
   let client: Client;
 
-  before('setupApplication', async () => {
+  beforeEach(async () => {
     client = (await getApplication()).client;
   });
 

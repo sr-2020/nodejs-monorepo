@@ -5,7 +5,7 @@ import { duration } from 'moment';
 describe('Active abilities', function () {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

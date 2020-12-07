@@ -6,7 +6,7 @@ import { MetaRace } from '@alice/sr2020-common/models/sr2020-character.model';
 describe('Race changes', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 

@@ -1,4 +1,4 @@
-import { Condition, EffectModelApi, EventModelApi } from 'interface/models/alice-model-engine';
+import { Condition, EffectModelApi, EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { OrganismModel } from './basic-types';
 import { cloneDeep } from 'lodash';
 import consts = require('./constants');

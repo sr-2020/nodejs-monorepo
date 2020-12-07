@@ -6,11 +6,11 @@ describe('PingController', () => {
   let app: PushApplication;
   let client: Client;
 
-  before('setupApplication', async () => {
+  beforeEach(async () => {
     ({ app, client } = await setupApplication());
   });
 
-  after(async () => {
+  afterEach(async () => {
     await app.stop();
   });
 

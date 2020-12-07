@@ -12,8 +12,8 @@
     "build": "tsc",
     "start": "yarn run build && forever start ./dist/main.js",
     "stop": "forever stop ./dist/main.js",
-    "test": "mocha",
-    "coverage:test": "nyc --cwd=.. --temp-dir=alice-qr-lib/.nyc_output mocha",
+    "test": "jest",
+    "coverage:test": "nyc --cwd=.. --temp-dir=alice-qr-lib/.nyc_output jest",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-qr-lib.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
@@ -41,8 +41,5 @@
     "request-promise": "^4.2.1",
     "typescript-map": "0.0.3"
   },
-  "devDependencies": {
-    "@types/chai": "^4.0.0",
-    "chai": "^4.0.2"
-  }
+  "devDependencies": {}
 }

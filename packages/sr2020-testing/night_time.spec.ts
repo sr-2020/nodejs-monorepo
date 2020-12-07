@@ -5,7 +5,7 @@ import { expect } from '@loopback/testlab';
 describe('Night time', () => {
   let fixture: TestFixture;
 
-  beforeEach('setupApplication', async () => {
+  beforeEach(async () => {
     fixture = await TestFixture.create();
   });
 
