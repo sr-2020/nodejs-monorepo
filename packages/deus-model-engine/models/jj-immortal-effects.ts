@@ -10,11 +10,6 @@ interface JjImmortalOneModifier extends Modifier {
   startTime: number;
 }
 
-interface JjImmortalTwoModifier extends Modifier {
-  stages: string[];
-  cubes: string;
-}
-
 /*
   pill jj-immortal-one: {
       stages: {
