@@ -1,5 +1,3 @@
 module.exports = {
-  projects: [
-    '<rootDir>/packages/interface',
-  ],
+  projects: ['<rootDir>/packages/interface', '<rootDir>/packages/push'],
 };

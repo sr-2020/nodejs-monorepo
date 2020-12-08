@@ -5,7 +5,7 @@ import { PushNotification } from '@alice/interface/models/push-notification.mode
 import { PushResult } from '@alice/interface/models/push-result.model';
 import { Empty } from '@alice/interface/models/empty.model';
 import { FirebaseToken } from '@alice/interface/models/firebase-token.model';
-import { FirebaseMessagingService } from '../services/firebase-messaging.service';
+import { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
 import { inject } from '@loopback/core';
 
 export class PushController {

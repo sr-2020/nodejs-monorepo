@@ -1,6 +1,16 @@
 import { inject } from '@loopback/core';
 import { juggler } from '@loopback/repository';
-import * as config from './postgre-sql.datasource.json';
+
+const config = {
+  name: 'PostgreSQL',
+  connector: 'postgresql',
+  url: '',
+  host: '???',
+  port: 5432,
+  user: 'root',
+  password: '???',
+  database: 'push',
+};
 
 export class PostgreSqlDataSource extends juggler.DataSource {
   static dataSourceName = 'PostgreSQL';

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "projects": {
-    "common": {
+    "interface": {
       "root": "packages/interface",
       "sourceRoot": "packages/interface",
       "projectType": "library",
@@ -12,11 +12,54 @@
           "options": {
             "lintFilePatterns": ["packages/interface/**/*.ts"]
           }
+        }
+      }
+    },
+    "push": {
+      "root": "packages/push",
+      "sourceRoot": "packages/push",
+      "projectType": "application",
+      "prefix": "push",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/packages/push",
+            "main": "packages/push/index.ts",
+            "tsConfig": "packages/push/tsconfig.app.json",
+            "assets": ["packages/push/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "packages/push/environments/environment.ts",
+                  "with": "packages/push/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "push:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/push/**/*.ts"]
+          }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "packages/interface/jest.config.js",
+            "jestConfig": "packages/push/jest.config.ts",
             "passWithNoTests": true
           }
         }

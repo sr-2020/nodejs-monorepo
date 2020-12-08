@@ -1,6 +1,37 @@
 import { inject } from '@loopback/core';
 import { juggler } from '@loopback/repository';
-import * as config from './firebase-http-api.datasource.json';
+
+const config = {
+  name: 'FirebaseHttpApi',
+  connector: 'rest',
+  baseURL: 'https://fcm.googleapis.com/fcm/send',
+  options: {
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: 'key=<...>',
+    },
+  },
+  crud: false,
+  operations: [
+    {
+      template: {
+        method: 'POST',
+        url: 'https://fcm.googleapis.com/fcm/send',
+        body: {
+          to: '{recipient}',
+          notification: {
+            body: '{body}',
+            title: '{title}',
+          },
+        },
+      },
+      functions: {
+        send: ['recipient', 'title', 'body'],
+      },
+    },
+  ],
+};
 
 // See https://firebase.google.com/docs/cloud-messaging/http-server-ref
 // for more examples of payloads that can be send via push notification.

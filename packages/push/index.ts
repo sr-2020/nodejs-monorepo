@@ -6,7 +6,6 @@ export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
 
   const app = new PushApplication(options);
-  await app.boot();
   await app.start();
   await app.migrateSchema({ existingSchema: 'alter' });
 

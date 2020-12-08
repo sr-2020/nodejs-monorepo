@@ -1,17 +1,22 @@
-import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
 import { RestApplication } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
+import { PingController } from '@alice/push/controllers/ping.controller';
+import { PushController } from '@alice/push/controllers/push.controller';
+import { FirebaseMessagingServiceProvider } from '@alice/push/services/firebase-messaging.service';
+import { FirebaseTokenRepository } from '@alice/push/repositories/firebase-token.repository';
+import { PostgreSqlDataSource } from '@alice/push/datasources/postgre-sql.datasource';
+import { FirebaseHttpApiDataSource } from '@alice/push/datasources/firebase-http-api.datasource';
 
-export class PushApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
+export class PushApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
     // Set up default home page
-    this.static('/', path.join(__dirname, 'public'));
+    this.static('/', path.join(__dirname, 'assets'));
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
@@ -19,27 +24,11 @@ export class PushApplication extends BootMixin(ServiceMixin(RepositoryMixin(Rest
     });
     this.component(RestExplorerComponent);
 
-    this.projectRoot = __dirname + '/../';
-    const dirs = ['push', 'interface'];
-    // Customize @loopback/boot Booter Conventions here
-    const extension = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
-    this.bootOptions = {
-      controllers: {
-        dirs,
-        extensions: [`.controller.${extension}`],
-      },
-      datasources: {
-        dirs,
-        extensions: [`.datasource.${extension}`],
-      },
-      repositories: {
-        dirs,
-        extensions: [`.repository.${extension}`],
-      },
-      services: {
-        dirs,
-        extensions: [`.service.${extension}`],
-      },
-    };
+    this.bind('controllers.PingController').toClass(PingController);
+    this.bind('controllers.PushController').toClass(PushController);
+    this.bind('services.FirebaseMessagingService').toProvider(FirebaseMessagingServiceProvider);
+    this.bind('repositories.FirebaseTokenRepository').toClass(FirebaseTokenRepository);
+    this.bind('datasources.PostgreSQL').toClass(PostgreSqlDataSource);
+    this.bind('datasources.FirebaseHttpApi').toClass(FirebaseHttpApiDataSource);
   }
 }

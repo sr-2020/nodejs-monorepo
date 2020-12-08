@@ -1,5 +1,5 @@
 import { PushApplication } from '../../application';
-import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
+import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
 import { juggler } from '@loopback/repository';
 
 export async function setupApplication(): Promise<AppWithClient> {
@@ -14,8 +14,6 @@ export async function setupApplication(): Promise<AppWithClient> {
   const app = new PushApplication({
     rest: restConfig,
   });
-
-  await app.boot();
 
   const sqlite = new juggler.DataSource({
     connector: 'sqlite3',

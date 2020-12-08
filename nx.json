@@ -25,6 +25,9 @@
   "projects": {
     "interface": {
       "tags": []
+    },
+    "push": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -1,6 +1,13 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "../../tsconfig.json",
-  "references": [{"path": "../interface/"}],
-  "include": ["**/*", "**/*.json"]
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }
