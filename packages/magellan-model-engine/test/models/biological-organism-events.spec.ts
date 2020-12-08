@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
+import 'jest-extended';
 import { Event } from '@alice/interface/models/alice-model-engine';
-import { expect } from 'chai';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
 import { getEvents, getNoOpEvent } from '../helpers/events';
@@ -44,12 +44,12 @@ describe('General Magellan events: ', () => {
     const events = [getNoOpEvent(model.modelId, model.timestamp + 610 * 1000)];
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.timestamp).to.equal(610 * 1000);
-    expect(workingModel.timestamp).to.equal(610 * 1000);
+    expect(baseModel.timestamp).toBe(610 * 1000);
+    expect(workingModel.timestamp).toBe(610 * 1000);
 
     model.timestamp = 610 * 1000;
 
-    expect(baseModel).to.deep.equal(model);
+    expect(baseModel).toEqual(model);
   });
 
   it('Modify nucleotide instant', async () => {
@@ -59,8 +59,8 @@ describe('General Magellan events: ', () => {
 
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
-    expect(workingModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
+    expect(baseModel.systems).toEqual(makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
+    expect(workingModel.systems).toEqual(makeSystems([0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [2, 2, 2, 4, 7, 6, 0]));
   });
 
   it('Modify systems instant', async () => {
@@ -70,8 +70,8 @@ describe('General Magellan events: ', () => {
 
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.systems).to.deep.equal(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
-    expect(workingModel.systems).to.deep.equal(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
+    expect(baseModel.systems).toEqual(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
+    expect(workingModel.systems).toEqual(makeSystems([1, 1, 5, 1, 23, 4, 0], [100, 100, 100, 100, 100, 100, 0]));
   });
 
   it('Can kill by modify-systems-instant', async () => {
@@ -81,8 +81,8 @@ describe('General Magellan events: ', () => {
 
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.isAlive).to.be.false;
-    expect(workingModel.isAlive).to.be.false;
+    expect(baseModel.isAlive).toBe(false);
+    expect(workingModel.isAlive).toBe(false);
   });
 
   it('No modification if is not alive', async () => {
@@ -93,8 +93,8 @@ describe('General Magellan events: ', () => {
 
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.systems).to.deep.equal(makeSystems([3, -1, 0, 0, 2, 0, 0]));
-    expect(workingModel.systems).to.deep.equal(makeSystems([3, -1, 0, 0, 2, 0, 0]));
+    expect(baseModel.systems).toEqual(makeSystems([3, -1, 0, 0, 2, 0, 0]));
+    expect(workingModel.systems).toEqual(makeSystems([3, -1, 0, 0, 2, 0, 0]));
   });
 
   it('Use pill', async () => {
@@ -104,21 +104,21 @@ describe('General Magellan events: ', () => {
     let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [1, 2, -2, -3, 0, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
   });
 
   it('Use pill via QR', async () => {
@@ -135,21 +135,21 @@ describe('General Magellan events: ', () => {
     let events = getEvents(model.modelId, [{ eventType: 'scanQR', data }], 100);
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 1, -1, -1, 0, 0, 0], [100, 100, 100, 100, 0, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -2, 0, 0, 0], [100, 100 + p, 100 + p, 100 + p, 0, 0, 0]));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([1, 2, -2, -3, 0, 0, 0], [100, 100 + p, 100 + p, 100 + 2 * p, 0, 0, 0]));
   });
 
   it('Use blue mutation pill', async () => {
@@ -159,17 +159,17 @@ describe('General Magellan events: ', () => {
     let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 1, 0, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([0, 1, -1, 0, 1, 0, 0], [0, 100, 100, 0, 100, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([0, 1, -1, 0, 1, 0, 0], [0, 100, 100, 0, 100, 0, 0]));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0]));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0], [0, 2, -2, 0, 1, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0], [0, 2, -2, 0, 1, 0, 0]));
   });
 
   it('Use blue/orange mutation pill on plant', async () => {
@@ -186,19 +186,17 @@ describe('General Magellan events: ', () => {
     let events = getEvents(model.modelId, [{ eventType: 'biological-systems-influence', data: [0, 2, -2, 0, 2, 1, 0] }], 100);
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(disableSystems(makeSystems([0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 100, 0, 0])));
+    expect(model.systems).toEqual(disableSystems(makeSystems([0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 100, 0, 0])));
 
     const p = consts.MAGELLAN_TICK_MILLISECONDS;
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0])));
+    expect(model.systems).toEqual(disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0])));
 
     events = [getNoOpEvent(model.modelId, model.timestamp + p)];
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(
-      disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0], [0, 0, 0, 0, 2, 0, 0])),
-    );
+    expect(model.systems).toEqual(disableSystems(makeSystems([0, 0, 0, 0, 2, 0, 0], [0, 0, 0, 0, 100 + p, 0, 0], [0, 0, 0, 0, 2, 0, 0])));
   });
 
   it('Use blue mutation pill and introduce compatible change', async () => {
@@ -229,7 +227,7 @@ describe('General Magellan events: ', () => {
     ];
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0], [0, 2, -2, 0, 1, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([0, 2, -2, 0, 1, 0, 0], [0, 100 + p, 100 + p, 0, 100, 0, 0], [0, 2, -2, 0, 1, 0, 0]));
   });
 
   it('Use blue mutation pill and introduce incompatible change', async () => {
@@ -260,7 +258,7 @@ describe('General Magellan events: ', () => {
     ];
 
     model = (await process(model, events)).baseModel;
-    expect(model.systems).to.deep.equal(makeSystems([0, 2, -2, 0, 1, 0, 0], [300, 100 + p, 100 + p, 0, 100, 0, 0]));
+    expect(model.systems).toEqual(makeSystems([0, 2, -2, 0, 1, 0, 0], [300, 100 + p, 100 + p, 0, 100, 0, 0]));
   });
 
   it('Enter and leave ship', async () => {
@@ -271,24 +269,23 @@ describe('General Magellan events: ', () => {
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
-    expect(cond).is.exist;
-    expect(cond.text).to.contain('17');
-    expect(workingModel.location).to.equal('ship_17');
+    expect(cond).toBeDefined();
+    expect(cond.text).toEqual('Вы находитесь на корабле номер 17');
+    expect(workingModel.location).toBe('ship_17');
 
     events = getEvents(baseModel.modelId, [{ eventType: 'enter-ship', data: 22 }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
-    expect(cond).is.exist;
-    expect(cond.text).to.contain('22');
-    expect(cond.text).not.to.contain('17');
-    expect(workingModel.location).to.equal('ship_22');
+    expect(cond).toBeDefined();
+    expect(cond.text).toEqual('Вы находитесь на корабле номер 22');
+    expect(workingModel.location).toBe('ship_22');
 
     events = getEvents(baseModel.modelId, [{ eventType: 'leave-ship', data: {} }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(workingModel.conditions).to.be.empty;
-    expect(workingModel.location).not.exist;
+    expect(workingModel.conditions).toHaveLength(0);
+    expect(workingModel.location).toBeFalsy();
   });
 
   it('Enter and leave ship QR', async () => {
@@ -299,15 +296,15 @@ describe('General Magellan events: ', () => {
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'on-the-ship');
-    expect(cond).is.exist;
-    expect(cond.text).to.contain('17');
-    expect(workingModel.location).to.equal('ship_17');
+    expect(cond).toBeDefined();
+    expect(cond.text).toEqual('Вы находитесь на корабле номер 17');
+    expect(workingModel.location).toBe('ship_17');
 
     events = getEvents(baseModel.modelId, [{ eventType: 'scanQR', data: { type: 6, kind: 0, validUntil: 0, payload: '' } }]);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(workingModel.conditions).to.be.empty;
-    expect(workingModel.location).not.exist;
+    expect(workingModel.conditions).toHaveLength(0);
+    expect(workingModel.location).toBeFalsy();
   });
 
   describe('Space suit actions', () => {
@@ -322,8 +319,8 @@ describe('General Magellan events: ', () => {
         100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
-      expect(baseModel.spaceSuit).to.deep.include({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
-      expect(workingModel.spaceSuit).to.deep.include({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
+      expect(baseModel.spaceSuit).toMatchObject({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
+      expect(workingModel.spaceSuit).toMatchObject({ on: true, oxygenCapacity: 600000, timestampWhenPutOn: 100 });
 
       events = getEvents(
         baseModel.modelId,
@@ -331,15 +328,15 @@ describe('General Magellan events: ', () => {
         200,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
-      expect(baseModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
-      expect(workingModel.systems).to.deep.equal(makeSystems([0, 0, 0, 0, 0, 0, 0]));
+      expect(baseModel.systems).toEqual(makeSystems([0, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).toEqual(makeSystems([0, 0, 0, 0, 0, 0, 0]));
 
       ({ baseModel, workingModel } = await process(baseModel, getEvents(baseModel.modelId, [], 600000 + 100)));
-      expect(baseModel.spaceSuit).to.deep.include({ on: false });
-      expect(workingModel.spaceSuit).to.deep.include({ on: false });
+      expect(baseModel.spaceSuit).toMatchObject({ on: false });
+      expect(workingModel.spaceSuit).toMatchObject({ on: false });
 
-      expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
-      expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
+      expect(baseModel.systems).toEqual(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).toEqual(makeSystems([1, 0, 0, 0, 0, 0, 0], [600000 + 100, 0, 0, 0, 0, 0, 0]));
     });
 
     it('Manual takeoff by entering ship', async () => {
@@ -366,16 +363,16 @@ describe('General Magellan events: ', () => {
       // eslint-disable-next-line prefer-const
       ({ baseModel, workingModel } = await process(baseModel, events));
 
-      expect(baseModel.spaceSuit.on).to.be.false;
-      expect(workingModel.spaceSuit.on).to.be.false;
+      expect(baseModel.spaceSuit.on).toBe(false);
+      expect(workingModel.spaceSuit.on).toBe(false);
 
-      expect(baseModel.systems[0].value).to.eq(0);
-      expect(baseModel.systems[1].value).to.eq(1);
-      expect(baseModel.systems[2].value).to.approximately(65, 15);
+      expect(baseModel.systems[0].value).toBe(0);
+      expect(baseModel.systems[1].value).toBe(1);
+      expect(baseModel.systems[2].value).toBeWithin(65 - 15, 65 + 15);
 
-      expect(workingModel.systems[0].value).to.eq(0);
-      expect(workingModel.systems[1].value).to.eq(1);
-      expect(workingModel.systems[2].value).to.approximately(65, 15);
+      expect(workingModel.systems[0].value).toBe(0);
+      expect(workingModel.systems[1].value).toBe(1);
+      expect(baseModel.systems[2].value).toBeWithin(65 - 15, 65 + 15);
     });
 
     it('Weak xenodisease without suit', async () => {
@@ -390,8 +387,8 @@ describe('General Magellan events: ', () => {
       );
       // eslint-disable-next-line prefer-const
       ({ baseModel, workingModel } = await process(baseModel, events));
-      expect(baseModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
-      expect(workingModel.systems).to.deep.equal(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
+      expect(baseModel.systems).toEqual(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
+      expect(workingModel.systems).toEqual(makeSystems([1, 0, 0, 0, 0, 0, 0], [200, 0, 0, 0, 0, 0, 0]));
     });
 
     it('Can not use same space suit second time', async () => {
@@ -404,8 +401,8 @@ describe('General Magellan events: ', () => {
         100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
-      expect(baseModel.spaceSuit.on).to.be.true;
-      expect(workingModel.spaceSuit.on).to.be.true;
+      expect(baseModel.spaceSuit.on).toBe(true);
+      expect(workingModel.spaceSuit.on).toBe(true);
 
       events = getEvents(
         baseModel.modelId,
@@ -413,8 +410,8 @@ describe('General Magellan events: ', () => {
         60000 + 100,
       );
       ({ baseModel, workingModel } = await process(baseModel, events));
-      expect(baseModel.spaceSuit.on).to.be.false;
-      expect(workingModel.spaceSuit.on).to.be.false;
+      expect(baseModel.spaceSuit.on).toBe(false);
+      expect(workingModel.spaceSuit.on).toBe(false);
     });
   });
 });

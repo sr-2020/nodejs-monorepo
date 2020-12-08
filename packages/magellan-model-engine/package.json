@@ -6,6 +6,9 @@
   "scripts": {
     "deps": "yarn install",
     "build": "tsc -b",
+    "test": "jest",
+    "coverage:test": "nyc --cwd=.. --temp-dir=magellan-model-engine/.nyc_output jest",
+    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/magellan-model-engine.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
@@ -25,7 +28,6 @@
     "@types/type-detect": "^4.0.1",
     "@types/uuid": "^3.4.3",
     "async-file": "^2.0.2",
-    "chai": "^4.2.0",
     "chance": "^1.0.10",
     "clone": "^1.0.4",
     "fs.realpath": "^1.0.0",

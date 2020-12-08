@@ -5,4 +5,5 @@ module.exports = {
     '^@alice/(.*)$': '<rootDir>/../$1',
   },
   testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
+  setupFilesAfterEnv: ['jest-extended'],
 };

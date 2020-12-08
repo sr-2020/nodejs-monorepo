@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions */
-import { expect } from 'chai';
 import {
   allSystemsIndices,
   BiologicalSystems,
@@ -14,19 +13,19 @@ import { getExampleBiologicalOrganismModel } from '../helpers/example-models';
 describe('Magellan helpers', () => {
   it('systemIndices', () => {
     const indices = allSystemsIndices();
-    expect(indices).to.deep.equal([0, 1, 2, 3, 4, 5, 6]);
+    expect(indices).toEqual([0, 1, 2, 3, 4, 5, 6]);
   });
 
   it('Has name for all systems', () => {
     for (const i of allSystemsIndices()) {
-      expect(biologicalSystemsNames.get(i)).to.exist;
+      expect(biologicalSystemsNames.get(i)).toBeDefined();
     }
   });
 
   it('Has colors for all systems', () => {
     for (const i of allSystemsIndices()) {
-      expect(biologicalSystemsColors.get(i)).to.exist;
-      expect(biologicalSystemsColors.get(i)).to.have.length.greaterThan(0);
+      expect(biologicalSystemsColors.get(i)).toBeDefined();
+      expect(biologicalSystemsColors.get(i)!.length).toBeGreaterThan(0);
     }
   });
 
@@ -43,7 +42,7 @@ describe('Magellan helpers', () => {
       }
     }
 
-    expect(c).to.deep.equal(
+    expect(c).toEqual(
       new Map<SystemColor, number>([
         [SystemColor.Blue, 3],
         [SystemColor.Orange, 3],
@@ -53,34 +52,34 @@ describe('Magellan helpers', () => {
   });
 
   it('systemCorrespondsToColor', () => {
-    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Cardiovascular)).to.be.true;
-    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Reproductive)).to.be.true;
-    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Nervous)).to.be.false;
+    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Cardiovascular)).toBe(true);
+    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Reproductive)).toBe(true);
+    expect(systemCorrespondsToColor(SystemColor.Blue, BiologicalSystems.Nervous)).toBe(false);
   });
 
   describe('colorOfChange', () => {
     const allSystemsModel = getExampleBiologicalOrganismModel();
 
     it('No change', () => {
-      expect(colorOfChange(allSystemsModel, [0, 0, 0, 0, 0, 0, 0])).to.not.exist;
+      expect(colorOfChange(allSystemsModel, [0, 0, 0, 0, 0, 0, 0])).toBeFalsy();
     });
 
     it('Same color - all ', () => {
-      expect(colorOfChange(allSystemsModel, [0, 1, 0, -1, 0, 0, 2])).to.equal(SystemColor.Green);
-      expect(colorOfChange(allSystemsModel, [0, 1, -1, 0, 1, 0, 0])).to.equal(SystemColor.Blue);
-      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 4, 0])).to.equal(SystemColor.Orange);
+      expect(colorOfChange(allSystemsModel, [0, 1, 0, -1, 0, 0, 2])).toBe(SystemColor.Green);
+      expect(colorOfChange(allSystemsModel, [0, 1, -1, 0, 1, 0, 0])).toBe(SystemColor.Blue);
+      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 4, 0])).toBe(SystemColor.Orange);
     });
 
     it('Same color - but not all', () => {
-      expect(colorOfChange(allSystemsModel, [0, 1, 0, 0, 0, 0, 2])).to.not.exist;
-      expect(colorOfChange(allSystemsModel, [0, 0, -1, 0, 1, 0, 0])).to.not.exist;
-      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 0, 0])).to.not.exist;
+      expect(colorOfChange(allSystemsModel, [0, 1, 0, 0, 0, 0, 2])).toBeFalsy();
+      expect(colorOfChange(allSystemsModel, [0, 0, -1, 0, 1, 0, 0])).toBeFalsy();
+      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 0, 0])).toBeFalsy();
     });
 
     it('Mixed colors', () => {
-      expect(colorOfChange(allSystemsModel, [1, 1, 0, -1, 0, 0, 2])).to.not.exist;
-      expect(colorOfChange(allSystemsModel, [0, 1, -1, 1, 1, 0, 0])).to.not.exist;
-      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 4, 1])).to.not.exist;
+      expect(colorOfChange(allSystemsModel, [1, 1, 0, -1, 0, 0, 2])).toBeFalsy();
+      expect(colorOfChange(allSystemsModel, [0, 1, -1, 1, 1, 0, 0])).toBeFalsy();
+      expect(colorOfChange(allSystemsModel, [1, 0, 0, 0, -10, 4, 1])).toBeFalsy();
     });
   });
 });
