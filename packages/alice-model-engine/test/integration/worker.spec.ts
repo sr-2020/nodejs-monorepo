@@ -1,5 +1,4 @@
 import { Effect, EmptyModel, EngineResultOk } from '@alice/interface/models/alice-model-engine';
-import { expect } from 'chai';
 
 import { Config, EventHandler } from '../../config';
 import { Worker } from '../../worker';
@@ -61,11 +60,11 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
-    expect(result.workingModel.timestamp).to.equal(timestamp);
+    expect(result.baseModel).toEqual({ ...defaultModel, timestamp: timestamp, value: (2 + 3) * 2, timers: [] });
+    expect(result.workingModel.timestamp).toBe(timestamp);
   });
 
   it('Should process some timers', async () => {
@@ -86,11 +85,11 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
-    expect(result.baseModel).to.deep.equal({ ...defaultModel, timestamp: timestamp, value: 'AABA', timers: [] });
-    expect(result.workingModel.timestamp).to.equal(timestamp);
+    expect(result.baseModel).toEqual({ ...defaultModel, timestamp: timestamp, value: 'AABA', timers: [] });
+    expect(result.workingModel.timestamp).toBe(timestamp);
   });
 
   it('Should leave unprocessed timers intact', async () => {
@@ -104,7 +103,7 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
     const expectedTimer = {
@@ -115,13 +114,13 @@ describe('Worker', () => {
       data: { operand: 'value', value: 'B' },
     };
 
-    expect(result.baseModel).to.deep.equal({
+    expect(result.baseModel).toEqual({
       ...defaultModel,
       timestamp: timestamp,
       value: 'A',
       timers: [expectedTimer],
     });
-    expect(result.workingModel.timestamp).to.equal(timestamp);
+    expect(result.workingModel.timestamp).toBe(timestamp);
   });
 
   it('Should produce view model', async () => {
@@ -132,15 +131,15 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
     const { viewModels } = result;
 
     // eslint-disable-next-line no-unused-expressions
-    expect(viewModels).to.exist;
-    expect(viewModels).to.has.property('default');
-    expect(viewModels.default).to.deep.equal({ value: 0 });
+    expect(viewModels).toBeDefined();
+    expect(viewModels).toHaveProperty('default');
+    expect(viewModels.default).toEqual({ value: 0 });
   });
 
   it('Should return outbound events', async () => {
@@ -154,11 +153,11 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
-    expect(result.outboundEvents).length(1);
-    expect(result.outboundEvents[0]).to.deep.include({
+    expect(result.outboundEvents).toHaveLength(1);
+    expect(result.outboundEvents[0]).toMatchObject({
       modelType: 'Recipient',
       modelId: '0001',
       eventType: 'message',
@@ -195,11 +194,11 @@ describe('Worker', () => {
 
     let result = await worker.process(context, events);
 
-    expect(result.status).to.equals('ok');
+    expect(result.status).toBe('ok');
     result = result as EngineResultOk;
 
     const { workingModel } = result;
 
-    expect(workingModel.value).to.equals('AA');
+    expect(workingModel.value).toBe('AA');
   });
 });

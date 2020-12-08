@@ -25,7 +25,6 @@
     "@types/glob": "^5.0.35",
     "@types/lodash": "^4.14.106",
     "@types/systemjs": "^0.20.6",
-    "chai": "^4.2.0",
     "cuid": "^2.1.0",
     "glob": "^7.1.1",
     "lodash": "^4.17.5"
