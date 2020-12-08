@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import 'mocha';
+
 import { decode, encode } from './qr';
 import { LegacyQrType, QrData } from './qr.types';
 

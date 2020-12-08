@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import 'mocha';
 import { Context } from '../../context';
 import { EventModelApiFactory } from '../../model_api';
 

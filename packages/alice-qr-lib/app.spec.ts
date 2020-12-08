@@ -1,7 +1,6 @@
 import * as rp from 'request-promise';
 
 import { expect } from 'chai';
-import 'mocha';
 
 import App from './app';
 
