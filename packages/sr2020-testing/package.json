@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "jest",
-    "test:realdb": "cross-env NODE_ENV=prod jest",
+    "test": "jest --forceExit",
+    "test:realdb": "cross-env NODE_ENV=prod jest --forceExit",
     "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-testing/.nyc_output mocha --exit",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-testing.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
