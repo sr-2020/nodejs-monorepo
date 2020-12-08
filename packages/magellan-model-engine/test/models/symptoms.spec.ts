@@ -10,7 +10,6 @@ describe('Symptoms helper', () => {
   it('Symtoms table have correct number of elements', () => {
     for (const indice of allSystemsIndices()) {
       const symptoms = systemToSymptoms.get(indice);
-      // eslint-disable-next-line no-unused-expressions
       expect(symptoms).toBeDefined();
       expect(symptoms).toHaveLength(7 + 7);
     }
@@ -39,7 +38,7 @@ describe('Symptoms helper', () => {
       makeSystem(3, -4),
     ];
     expect(getSymptoms(model)).toEqual(
-      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling, Symptoms.NailsDarkening])
+      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling, Symptoms.NailsDarkening]),
     );
   });
 
@@ -55,7 +54,7 @@ describe('Symptoms helper', () => {
       makeSystem(1, -4),
     ];
     expect(getSymptoms(model)).toEqual(
-      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling])
+      new Set<Symptoms>([Symptoms.Faint, Symptoms.PainPushRightAbdomen, Symptoms.FingertipsTingling]),
     );
   });
 
@@ -70,7 +69,9 @@ describe('Symptoms helper', () => {
       makeSystem(-5, -4),
       makeSystem(1, -4),
     ];
-    expect(getSymptoms(model)).toEqual(new Set<Symptoms>([Symptoms.Death]));
+    expect(getSymptoms(model)).toEqual(
+      new Set<Symptoms>([Symptoms.Death]),
+    );
   });
 
   it('getSymptoms - death-', () => {
@@ -84,6 +85,8 @@ describe('Symptoms helper', () => {
       makeSystem(-5, -4),
       makeSystem(1, -4),
     ];
-    expect(getSymptoms(model)).toEqual(new Set<Symptoms>([Symptoms.Death]));
+    expect(getSymptoms(model)).toEqual(
+      new Set<Symptoms>([Symptoms.Death]),
+    );
   });
 });

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Тесты наркотиков
 
 import { process } from '../test_helpers';

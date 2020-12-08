@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Тесты для событий VR
 
 import { process } from '../test_helpers';

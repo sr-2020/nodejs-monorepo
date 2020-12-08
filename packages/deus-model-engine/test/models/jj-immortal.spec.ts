@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-expressions */
 import { merge } from 'lodash';
 
-import { process, findModifier, findChangeRecord } from '../test_helpers';
+import { findChangeRecord, findModifier, process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 

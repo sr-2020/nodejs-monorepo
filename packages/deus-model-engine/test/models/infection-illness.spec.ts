@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { getPotentialSystemsIds, getTotalChance, whatSystemShouldBeInfected } from '../../helpers/infection-illness';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';

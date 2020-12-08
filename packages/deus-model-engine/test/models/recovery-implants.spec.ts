@@ -48,7 +48,6 @@ describe('Recovery Implants: ', () => {
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     expect(workingModel.hp).toBe(0);
-    // eslint-disable-next-line no-unused-expressions
     expect(baseModel.isAlive).toBe(true);
 
     console.log('TEST:====================== wait 21 minutes! =================================');
@@ -79,7 +78,6 @@ describe('Recovery Implants: ', () => {
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 40 * 60 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    // eslint-disable-next-line no-unused-expressions
     expect(workingModel.isAlive).toBe(false);
   });
 });

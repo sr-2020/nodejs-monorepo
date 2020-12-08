@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Тесты для событий общего назначения (для хакеров и т.д.)
 
 import { process } from '../test_helpers';

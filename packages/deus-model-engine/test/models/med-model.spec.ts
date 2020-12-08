@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Тесты для моделей управления имплантами
 
 import { process } from '../test_helpers';

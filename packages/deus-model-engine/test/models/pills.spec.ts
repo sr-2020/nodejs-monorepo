@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-expressions */
-import { merge } from 'lodash';
+import { find, merge } from 'lodash';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents } from '../fixtures/events';
-import { find } from 'lodash';
 
 interface Global {
   TEST_EXTERNAL_OBJECTS: any;

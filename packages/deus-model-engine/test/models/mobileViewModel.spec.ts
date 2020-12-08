@@ -1,4 +1,4 @@
-import { process, printModel } from '../test_helpers';
+import { printModel, process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
@@ -336,11 +336,9 @@ describe('mobileViewModel', () => {
     printModel(workingModel.conditions);
 
     const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
-    // eslint-disable-next-line no-unused-expressions
     expect(illness).toBeDefined();
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
-    // eslint-disable-next-line no-unused-expressions
     expect(cond).toBeDefined();
 
     console.log('================= Stage 0 duration ============================');

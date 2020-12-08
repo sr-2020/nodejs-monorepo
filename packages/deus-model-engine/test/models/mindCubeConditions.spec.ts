@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Тесты для показа состояний в зависимости от знаений кубиков сознания
 
 import { process } from '../test_helpers';

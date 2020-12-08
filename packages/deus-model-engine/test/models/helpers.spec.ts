@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import helpers = require('../../helpers/model-helper');
 
 describe('Helpers: ', () => {

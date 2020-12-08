@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import 'jest-extended';
 import { Event } from '@alice/interface/models/alice-model-engine';
 import { merge } from 'lodash';
