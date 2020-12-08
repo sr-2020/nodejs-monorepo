@@ -16,7 +16,7 @@ export class BigIntTransformer implements ValueTransformer {
   from = (v: string) => Number(v);
 }
 
-export function JsonColumn(): Function {
+export function JsonColumn() {
   if (process.env.NODE_ENV == 'test') {
     return Column({ type: 'text', transformer: new JsonToTextTransformer() });
   } else {
@@ -24,7 +24,7 @@ export function JsonColumn(): Function {
   }
 }
 
-export function JsonNullableColumn(): Function {
+export function JsonNullableColumn() {
   if (process.env.NODE_ENV == 'test') {
     return Column({ type: 'text', transformer: new JsonToTextTransformer(), nullable: true });
   } else {
@@ -32,7 +32,7 @@ export function JsonNullableColumn(): Function {
   }
 }
 
-export function rproperty(): Function {
+export function rproperty() {
   return property({ required: true });
 }
 
