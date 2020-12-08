@@ -1,5 +1,4 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
 
 describe('Nanohives', () => {
   let fixture: TestFixture;
@@ -15,8 +14,8 @@ describe('Nanohives', () => {
   it('Nanohive install gives abilities', async () => {
     await fixture.saveCharacter();
     let { workModel } = await fixture.sendCharacterEvent({ eventType: 'installImplant', data: { id: 'nanohive-badass-1' } });
-    expect(workModel.activeAbilities).lengthOf(4);
+    expect(workModel.activeAbilities).toHaveLength(4);
     ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'removeImplant', data: { id: 'nanohive-badass-1' } }));
-    expect(workModel.activeAbilities).lengthOf(0);
+    expect(workModel.activeAbilities).toHaveLength(0);
   });
 });

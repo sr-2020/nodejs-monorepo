@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 import { kSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
@@ -17,7 +17,7 @@ describe('Spirits-related abilities', () => {
 
   it('Spirit abilities are valid', () => {
     for (const id of kSpiritAbilityIds) {
-      expect(getAllFeatures()).containDeep([{ id }]);
+      expect(getAllFeatures()).toContainEqual(expect.objectContaining({ id }));
     }
   });
 
@@ -41,7 +41,7 @@ describe('Spirits-related abilities', () => {
       // Body is in storage
       const { baseModel } = await fixture.getQrCode('1');
       const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).to.deepEqual({
+      expect(storage.body).toEqual({
         characterId: '0',
         type: 'physical',
       });
@@ -50,9 +50,9 @@ describe('Spirits-related abilities', () => {
     {
       // Mage is in spirit and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(4);
-      expect(workModel.activeAbilities).to.containDeep([{ id: 'dispirit' }]);
-      expect(workModel.currentBody).to.equal('ectoplasm');
+      expect(workModel.maxHp).toBe(4);
+      expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'dispirit' }));
+      expect(workModel.currentBody).toBe('ectoplasm');
     }
 
     // Leave spirit
@@ -62,16 +62,16 @@ describe('Spirits-related abilities', () => {
       // Storage is empty
       const { baseModel } = await fixture.getQrCode('1');
       const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).undefined();
+      expect(storage.body).toBeUndefined();
     }
 
     {
       // Mage is not in the spirit
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(2);
-      expect(workModel.passiveAbilities).not.to.containDeep([{ id: 'dispirit' }]);
-      expect(workModel.activeAbilities).lengthOf(1); // Enter spirit
-      expect(workModel.currentBody).to.equal('physical');
+      expect(workModel.maxHp).toBe(2);
+      expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'dispirit' }));
+      expect(workModel.activeAbilities).toHaveLength(1); // Enter spirit
+      expect(workModel.currentBody).toBe('physical');
     }
   });
 });

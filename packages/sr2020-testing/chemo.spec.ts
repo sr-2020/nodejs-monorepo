@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { duration } from 'moment';
 import { kAllChemoEffects, kAllElements } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { shouldBeConsumed } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
@@ -19,14 +19,14 @@ describe('Chemo events', function () {
     for (const element of kAllElements) {
       for (const level of ['base', 'super', 'uber', 'crysis']) {
         const entry = kAllChemoEffects.find((it) => it.level == level && it.element == element);
-        expect(entry).not.undefined();
+        expect(entry).toBeDefined();
       }
     }
   });
 
   it('All elements are present', () => {
     for (const effect of kAllChemoEffects) {
-      expect(kAllElements.includes(effect.element)).to.be.true();
+      expect(kAllElements.includes(effect.element)).toBe(true);
     }
   });
 
@@ -34,14 +34,14 @@ describe('Chemo events', function () {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'iodomarin' } });
-      expect(workModel.chemo.concentration).to.containDeep({ argon: 0, iodine: 200, junius: 100, custodium: 100 });
+      expect(workModel.chemo.concentration).toMatchObject({ argon: 0, iodine: 200, junius: 100, custodium: 100 });
     }
 
     await fixture.advanceTime(duration(30, 'minutes'));
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'argo' } });
-      expect(workModel.chemo.concentration).to.containDeep({ argon: 200, iodine: 300, junius: 200, custodium: 100 });
+      expect(workModel.chemo.concentration).toMatchObject({ argon: 200, iodine: 300, junius: 200, custodium: 100 });
     }
 
     await fixture.advanceTime(duration(30, 'minutes'));
@@ -50,7 +50,7 @@ describe('Chemo events', function () {
       // It was just 30 minutes from the last iodine, junius and custodium intake, but 1h from the first - so they will be removed.
       // But argon must stay.
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.chemo.concentration).to.containDeep({ argon: 200, iodine: 0, junius: 0, custodium: 0 });
+      expect(workModel.chemo.concentration).toMatchObject({ argon: 200, iodine: 0, junius: 0, custodium: 0 });
     }
 
     await fixture.advanceTime(duration(30, 'minutes'));
@@ -58,7 +58,7 @@ describe('Chemo events', function () {
     {
       // Now argon also goes away.
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.chemo.concentration).to.containDeep({ argon: 0, iodine: 0, junius: 0, custodium: 0 });
+      expect(workModel.chemo.concentration).toMatchObject({ argon: 0, iodine: 0, junius: 0, custodium: 0 });
     }
   });
 
@@ -66,28 +66,28 @@ describe('Chemo events', function () {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
-      expect(workModel.mentalAttackBonus).to.equal(3);
+      expect(workModel.mentalAttackBonus).toBe(3);
     }
 
     await fixture.advanceTime(duration(15, 'minutes'));
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam' } });
-      expect(workModel.mentalAttackBonus).to.equal(5);
+      expect(workModel.mentalAttackBonus).toBe(5);
     }
 
     await fixture.advanceTime(duration(15, 'minutes'));
 
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.mentalAttackBonus).to.equal(5);
+      expect(workModel.mentalAttackBonus).toBe(5);
     }
 
     await fixture.advanceTime(duration(15, 'minutes'));
 
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.mentalAttackBonus).to.equal(0);
+      expect(workModel.mentalAttackBonus).toBe(0);
     }
   });
 
@@ -96,11 +96,11 @@ describe('Chemo events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
-      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(40 * 60 * 1000);
+      expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 1000);
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
-      expect(workModel.activeAbilities[0].cooldownUntil).to.equal(40 * 60 * 700);
+      expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 700);
     }
   });
 
@@ -119,7 +119,7 @@ describe('Chemo events', function () {
 
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.magic).to.equal(10);
+      expect(workModel.magic).toBe(10);
     }
   });
 
@@ -127,35 +127,35 @@ describe('Chemo events', function () {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'skrepa' } });
 
-    expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
-      {
+    expect((await fixture.getCharacter()).workModel.passiveAbilities).toContainEqual(
+      expect.objectContaining({
         id: 'heavy-weapons-unlock',
         validUntil: 15 * 60 * 1000,
-      },
-    ]);
+      }),
+    );
 
     await fixture.advanceTime(duration(5, 'minutes'));
 
-    expect((await fixture.getCharacter()).workModel.passiveAbilities).containDeep([
-      {
+    expect((await fixture.getCharacter()).workModel.passiveAbilities).toContainEqual(
+      expect.objectContaining({
         id: 'heavy-weapons-unlock',
         validUntil: 15 * 60 * 1000,
-      },
-    ]);
+      }),
+    );
   });
 
   it('Opium + Elba', async () => {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
-      expect(workModel.mentalAttackBonus).to.equal(3);
-      expect(workModel.chemo.concentration).to.containDeep({ opium: 200, polonium: 100, argon: 80 });
+      expect(workModel.mentalAttackBonus).toBe(3);
+      expect(workModel.chemo.concentration).toMatchObject({ opium: 200, polonium: 100, argon: 80 });
     }
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'activated-coal' } });
-      expect(workModel.mentalAttackBonus).to.equal(0);
-      expect(workModel.chemo.concentration).to.containDeep({ opium: 0, polonium: 0, argon: 0, elba: 200, iconium: 0, moscovium: 0 });
+      expect(workModel.mentalAttackBonus).toBe(0);
+      expect(workModel.chemo.concentration).toMatchObject({ opium: 0, polonium: 0, argon: 0, elba: 200, iconium: 0, moscovium: 0 });
     }
   });
 
@@ -166,7 +166,7 @@ describe('Chemo events', function () {
 
     await fixture.advanceTime(duration(2, 'hours'));
 
-    expect((await fixture.getCharacter()).workModel).containDeep({
+    expect((await fixture.getCharacter()).workModel).toMatchObject({
       maxHp: 2,
       resonance: 2,
       body: 1,
@@ -178,7 +178,7 @@ describe('Chemo events', function () {
 
     await fixture.advanceTime(duration(2, 'hours'));
 
-    expect((await fixture.getCharacter()).workModel).containDeep({
+    expect((await fixture.getCharacter()).workModel).toMatchObject({
       maxHp: 1,
       resonance: 2,
       body: 1,
@@ -190,7 +190,7 @@ describe('Chemo events', function () {
 
     await fixture.advanceTime(duration(4, 'hours'));
 
-    expect((await fixture.getCharacter()).workModel).containDeep({
+    expect((await fixture.getCharacter()).workModel).toMatchObject({
       maxHp: 1,
       resonance: 2,
       body: 1,
@@ -208,7 +208,7 @@ describe('Chemo events', function () {
 
     await fixture.advanceTime(duration(4, 'hours'));
 
-    expect((await fixture.getCharacter()).workModel).containDeep({
+    expect((await fixture.getCharacter()).workModel).toMatchObject({
       maxHp: 0,
       healthState: 'clinically_dead',
     });
@@ -226,7 +226,7 @@ describe('Chemo events', function () {
       // We are advancing time by 10 hours total here. Need to feed the character to prevent from being wounded
       await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: { id: 'food' } });
 
-      expect((await fixture.getCharacter()).workModel).containDeep({
+      expect((await fixture.getCharacter()).workModel).toMatchObject({
         maxHp: 2,
         resonance: 3,
         body: 2,
@@ -252,7 +252,7 @@ describe('Chemo events', function () {
       if (shouldBeConsumed(qr, character)) ++used;
     }
 
-    expect(used).to.be.lessThanOrEqual(80);
-    expect(used).to.be.greaterThanOrEqual(60);
+    expect(used).toBeLessThanOrEqual(80);
+    expect(used).toBeGreaterThanOrEqual(60);
   });
 });

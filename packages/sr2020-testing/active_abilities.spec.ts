@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { duration } from 'moment';
 
 describe('Active abilities', function () {
@@ -22,9 +22,9 @@ describe('Active abilities', function () {
     await fixture.useAbility({ id: 'i-will-survive', location: { id: 7, manaLevel: 5 } });
     await fixture.sendCharacterEvent({ eventType: 'wound', data: {} });
 
-    expect((await fixture.getCharacter()).workModel.healthState).equal('wounded');
+    expect((await fixture.getCharacter()).workModel.healthState).toBe('wounded');
     await fixture.advanceTime(duration(31, 'second'));
-    expect((await fixture.getCharacter()).workModel.healthState).equal('healthy');
+    expect((await fixture.getCharacter()).workModel.healthState).toBe('healthy');
   });
 
   it('Silentium est aurum', async () => {
@@ -37,21 +37,21 @@ describe('Active abilities', function () {
 
     {
       const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
-      expect(aura.length).equal(startingAura.length);
+      expect(aura.length).toBe(startingAura.length);
       let sameCharacters = 0;
       for (let i = 0; i < aura.length; ++i) {
         expect(aura[i].match(/[a-z]/));
         if (aura[i] == startingAura[i]) sameCharacters++;
       }
-      expect(sameCharacters).greaterThanOrEqual(aura.length * 0.8);
-      expect(sameCharacters).lessThan(aura.length);
+      expect(sameCharacters).toBeGreaterThanOrEqual(aura.length * 0.8);
+      expect(sameCharacters).toBeLessThan(aura.length);
     }
 
     await fixture.advanceTime(duration(1, 'hour'));
 
     {
       const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
-      expect(aura).equal(startingAura);
+      expect(aura).toBe(startingAura);
     }
   });
 
@@ -64,7 +64,7 @@ describe('Active abilities', function () {
 
     await fixture.useAbility({ id: 'finish-him', location: { id: '0', manaLevel: 5 }, targetCharacterId: '2' }, '1');
 
-    expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('clinically_dead');
   });
 
   it('Finish him does not work on healthy', async () => {
@@ -79,7 +79,7 @@ describe('Active abilities', function () {
       '1',
     );
 
-    expect((await fixture.getCharacter('2')).workModel.healthState).equal('healthy');
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('healthy');
   });
 
   it('Repoman', async () => {
@@ -96,7 +96,7 @@ describe('Active abilities', function () {
     await fixture.useAbility({ id: 'repoman-active', targetCharacterId: '1', qrCodeId: '5' }, '2');
 
     const containerQr = await fixture.getQrCode('5');
-    expect(containerQr.workModel).containDeep({
+    expect(containerQr.workModel).toMatchObject({
       usesLeft: 1,
       type: 'implant',
       data: {
@@ -105,7 +105,7 @@ describe('Active abilities', function () {
     });
 
     const victim = await fixture.getCharacter('1');
-    expect(victim.workModel.implants).not.containDeep([{ id: 'cyber-hand-beta' }]);
+    expect(victim.workModel.implants).not.toContain(expect.objectContaining({ id: 'cyber-hand-beta' }));
   });
 
   it('Black repoman', async () => {
@@ -122,7 +122,7 @@ describe('Active abilities', function () {
     await fixture.useAbility({ id: 'repoman-black', targetCharacterId: '1', qrCodeId: '5' }, '2');
 
     const containerQr = await fixture.getQrCode('5');
-    expect(containerQr.workModel).containDeep({
+    expect(containerQr.workModel).toMatchObject({
       usesLeft: 1,
       type: 'implant',
       data: {
@@ -131,6 +131,6 @@ describe('Active abilities', function () {
     });
 
     const victim = await fixture.getCharacter('1');
-    expect(victim.workModel.implants).not.containDeep([{ id: 'cyber-hand-alpha' }]);
+    expect(victim.workModel.implants).not.toContain(expect.objectContaining({ id: 'cyber-hand-alpha' }));
   });
 });

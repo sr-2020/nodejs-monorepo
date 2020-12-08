@@ -1,5 +1,4 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
 
 describe('Fixture', function () {
   let fixture: TestFixture;
@@ -19,14 +18,14 @@ describe('Fixture', function () {
   it('Save and get location partial', async () => {
     await fixture.saveLocation({ aura: 'aaa' });
     const { workModel } = await fixture.getLocation();
-    expect(workModel).to.containDeep({ aura: 'aaa' });
+    expect(workModel).toMatchObject({ aura: 'aaa' });
   });
 
   it('Send character event', async () => {
     await fixture.saveCharacter({ resonance: 12 });
     await fixture.sendCharacterEvent({ eventType: 'increase-resonance-spell', data: {} });
-    expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 13 } });
-    expect(fixture.getCharacterNotifications().length).to.equal(1);
+    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 13 } });
+    expect(fixture.getCharacterNotifications().length).toBe(1);
   });
 
   it('Consume QR code', async () => {
@@ -35,7 +34,7 @@ describe('Fixture', function () {
       eventType: 'consume',
       data: { id: '0' },
     });
-    expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
+    expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 4, type: 'event' } });
   });
 
   it('Completely consume QR code', async () => {
@@ -44,7 +43,7 @@ describe('Fixture', function () {
       eventType: 'consume',
       data: {},
     });
-    expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 0, type: 'empty' } });
+    expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 0, type: 'empty' } });
   });
 
   it('QR codes with events', async () => {
@@ -54,7 +53,7 @@ describe('Fixture', function () {
       eventType: 'scan-qr',
       data: { qrCode: '0' },
     });
-    expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 4, type: 'event' } });
-    expect(await fixture.getCharacter()).containDeep({ workModel: { resonance: 11 } });
+    expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 4, type: 'event' } });
+    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 11 } });
   });
 });

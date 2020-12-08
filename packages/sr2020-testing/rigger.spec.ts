@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 import { kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
@@ -18,7 +18,7 @@ describe('Rigger abilities', () => {
 
   it('Drone abilities are valid', () => {
     for (const id of kDroneAbilityIds) {
-      expect(getAllFeatures()).containDeep([{ id }]);
+      expect(getAllFeatures()).toContainEqual(expect.objectContaining({ id }));
     }
   });
 
@@ -30,19 +30,19 @@ describe('Rigger abilities', () => {
 
     {
       const { workModel } = await fixture.getCharacter(1);
-      expect(workModel.analyzedBody).not.ok();
+      expect(workModel.analyzedBody).toBeFalsy();
     }
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'analyzeBody', data: { targetCharacterId: '2' } }, 1);
-      expect(workModel.analyzedBody).ok();
-      expect(workModel.analyzedBody?.essence).to.equal(480);
-      expect(workModel.analyzedBody?.implants).to.containDeep([{ id: 'rcc-beta' }]);
+      expect(workModel.analyzedBody).toBeTruthy();
+      expect(workModel.analyzedBody?.essence).toBe(480);
+      expect(workModel.analyzedBody?.implants).toContainEqual(expect.objectContaining({ id: 'rcc-beta' }));
     }
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'disconnectFromBody', data: {} }, 1);
-      expect(workModel.analyzedBody).not.ok();
+      expect(workModel.analyzedBody).toBeFalsy();
     }
   });
 
@@ -59,15 +59,15 @@ describe('Rigger abilities', () => {
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
       const qrWorkModel = (await fixture.getQrCode(3)).workModel;
-      expect(qrWorkModel.type).to.equal('box');
-      expect(workModel.analyzedBody).to.containDeep({
+      expect(qrWorkModel.type).toBe('box');
+      expect(workModel.analyzedBody).toMatchObject({
         implants: [
           {
             id: 'rcc-beta',
           },
         ],
       });
-      expect(patientWorkModel).to.containDeep({
+      expect(patientWorkModel).toMatchObject({
         essence: 480,
         essenceDetails: {
           used: 120,
@@ -87,10 +87,10 @@ describe('Rigger abilities', () => {
       );
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
       const qrWorkModel = (await fixture.getQrCode(4)).workModel;
-      expect(qrWorkModel).to.containDeep({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta', basePrice: 10 } });
-      expect(workModel.analyzedBody?.implants.length).to.equal(0);
-      expect(patientWorkModel.implants.length).to.equal(0);
-      expect(patientWorkModel).to.containDeep({
+      expect(qrWorkModel).toMatchObject({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta', basePrice: 10 } });
+      expect(workModel.analyzedBody?.implants.length).toBe(0);
+      expect(patientWorkModel.implants.length).toBe(0);
+      expect(patientWorkModel).toMatchObject({
         essence: 480,
         essenceDetails: {
           used: 0,
@@ -120,7 +120,7 @@ describe('Rigger abilities', () => {
       // Body is in storage
       const { baseModel } = await fixture.getQrCode('1');
       const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).to.deepEqual({
+      expect(storage.body).toEqual({
         characterId: '0',
         type: 'physical',
       });
@@ -129,10 +129,10 @@ describe('Rigger abilities', () => {
     {
       // Rigger is in drone and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(3);
-      expect(workModel.passiveAbilities).to.containDeep([{ id: 'drone-medcart' }]);
-      expect(workModel.activeAbilities).lengthOf(6); // Heals 2x2
-      expect(workModel.currentBody).to.equal('drone');
+      expect(workModel.maxHp).toBe(3);
+      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
+      expect(workModel.activeAbilities).toHaveLength(6); // Heals 2x2
+      expect(workModel.currentBody).toBe('drone');
     }
 
     // Leave drone
@@ -142,19 +142,19 @@ describe('Rigger abilities', () => {
       // Storage is empty
       const { baseModel } = await fixture.getQrCode('1');
       const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).undefined();
+      expect(storage.body).toBeUndefined();
     }
 
     {
       // Rigger is not in the drone
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(2);
-      expect(workModel.passiveAbilities).not.to.containDeep([{ id: 'drone-medcart' }]);
-      expect(workModel.activeAbilities).lengthOf(1); // Enter drone
-      expect(workModel.activeAbilities[0].cooldownUntil).equal(
+      expect(workModel.maxHp).toBe(2);
+      expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
+      expect(workModel.activeAbilities).toHaveLength(1); // Enter drone
+      expect(workModel.activeAbilities[0].cooldownUntil).toBe(
         duration(/* default recovery time */ 120 - /* body */ 3 * 5, 'minutes').asMilliseconds(),
       );
-      expect(workModel.currentBody).to.equal('physical');
+      expect(workModel.currentBody).toBe('physical');
     }
   });
 
@@ -182,7 +182,7 @@ describe('Rigger abilities', () => {
 
     // Rigger is not in the drone
     const { workModel } = await fixture.getCharacter();
-    expect(workModel.healthState).equal('wounded');
+    expect(workModel.healthState).toBe('wounded');
   });
 
   it('Spending way too long in drone and hunger', async () => {
@@ -211,7 +211,7 @@ describe('Rigger abilities', () => {
 
     // Rigger is not in the drone
     const { workModel } = await fixture.getCharacter();
-    expect(workModel.healthState).equal('wounded');
+    expect(workModel.healthState).toBe('wounded');
   });
 
   it('Being in autodoc unlocks autodoc screen', async () => {
@@ -227,14 +227,14 @@ describe('Rigger abilities', () => {
     await fixture.saveQrCode({ modelId: '2' });
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '2');
 
-    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.false();
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).toBe(false);
 
     // Enter drone
     await fixture.useAbility({ id: 'autodoc-active', bodyStorageId: '1', droneId: '2' });
-    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.true();
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).toBe(true);
 
     // Leave drone
     await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
-    expect((await fixture.getCharacter()).workModel.screens.autodoc).to.be.false();
+    expect((await fixture.getCharacter()).workModel.screens.autodoc).toBe(false);
   });
 });

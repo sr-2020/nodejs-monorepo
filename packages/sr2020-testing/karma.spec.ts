@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 
 describe('Karma events', function () {
@@ -20,7 +20,7 @@ describe('Karma events', function () {
       data: { amount: 30 },
     });
 
-    expect(baseModel.karma).to.containDeep({
+    expect(baseModel.karma).toMatchObject({
       available: 30,
       cycleLimit: 270,
     });
@@ -37,7 +37,7 @@ describe('Karma events', function () {
       data: { qrCode: '0' },
     });
 
-    expect(baseModel.karma).to.containDeep({
+    expect(baseModel.karma).toMatchObject({
       available: 40,
       cycleLimit: 260,
     });
@@ -52,7 +52,7 @@ describe('Karma events', function () {
       data: { id: 'trollton', location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).to.equal(5);
+    expect(baseModel.karma.available).toBe(5);
   });
 
   it('Casting spells gives karma', async () => {
@@ -64,7 +64,7 @@ describe('Karma events', function () {
       data: { id: 'ground-heal', power: 1, location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).to.equal(4);
+    expect(baseModel.karma.available).toBe(4);
   });
 
   it('Can not earn more karma than cycle cap', async () => {
@@ -73,7 +73,7 @@ describe('Karma events', function () {
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
     const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
 
-    expect(baseModel.karma).to.containDeep({
+    expect(baseModel.karma).toMatchObject({
       available: 300,
       cycleLimit: 0,
     });
@@ -86,7 +86,7 @@ describe('Karma events', function () {
     await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
 
-    expect(baseModel.karma).to.containDeep({
+    expect(baseModel.karma).toMatchObject({
       available: 310,
       cycleLimit: 45,
     });
@@ -100,7 +100,7 @@ describe('Karma events', function () {
       await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     }
 
-    expect((await fixture.getCharacter()).baseModel.karma).to.containDeep({
+    expect((await fixture.getCharacter()).baseModel.karma).toMatchObject({
       available: 800,
     });
   });
@@ -109,10 +109,10 @@ describe('Karma events', function () {
     await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
     const riggerFeature = getAllFeatures().find((f) => f.id == 'arch-rigger')!;
-    expect(workModel.karma.available).to.equal(1000 - riggerFeature.karmaCost);
-    expect(workModel.karma.spent).to.equal(riggerFeature.karmaCost);
-    expect(workModel.karma.spentOnPassives).to.equal(riggerFeature.karmaCost);
-    expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
+    expect(workModel.karma.available).toBe(1000 - riggerFeature.karmaCost);
+    expect(workModel.karma.spent).toBe(riggerFeature.karmaCost);
+    expect(workModel.karma.spentOnPassives).toBe(riggerFeature.karmaCost);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'arch-rigger' }));
   });
 
   it('Can get feature discount', async () => {
@@ -120,10 +120,10 @@ describe('Karma events', function () {
     await fixture.addCharacterFeature('arch-rigger-medic');
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'auto-doc-1' } });
     const feature = getAllFeatures().find((f) => f.id == 'auto-doc-1')!;
-    expect(workModel.karma.available).to.equal(1000 - 0.9 * feature.karmaCost);
-    expect(workModel.karma.spent).to.equal(0.9 * feature.karmaCost);
-    expect(workModel.karma.spentOnPassives).to.equal(0.9 * feature.karmaCost);
-    expect(workModel.passiveAbilities).to.containDeep([{ id: 'auto-doc-1' }]);
+    expect(workModel.karma.available).toBe(1000 - 0.9 * feature.karmaCost);
+    expect(workModel.karma.spent).toBe(0.9 * feature.karmaCost);
+    expect(workModel.karma.spentOnPassives).toBe(0.9 * feature.karmaCost);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'auto-doc-1' }));
   });
 
   it('Can buy feature for karma from QR', async () => {
@@ -133,23 +133,23 @@ describe('Karma events', function () {
 
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '0' } });
     const riggerFeature = getAllFeatures().find((f) => f.id == 'arch-rigger')!;
-    expect(workModel.karma.available).to.equal(1000 - riggerFeature.karmaCost);
-    expect(workModel.karma.spent).to.equal(riggerFeature.karmaCost);
-    expect(workModel.karma.spentOnPassives).to.equal(riggerFeature.karmaCost);
-    expect(workModel.passiveAbilities).to.containDeep([{ id: 'arch-rigger' }]);
+    expect(workModel.karma.available).toBe(1000 - riggerFeature.karmaCost);
+    expect(workModel.karma.spent).toBe(riggerFeature.karmaCost);
+    expect(workModel.karma.spentOnPassives).toBe(riggerFeature.karmaCost);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'arch-rigger' }));
   });
 
   it('Can not buy feature if not enough karma', async () => {
     await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
-    expect(message).to.containEql('Недостаточно кармы');
+    expect(message).toContain('Недостаточно кармы');
   });
 
   it('Can not buy feature if already have it', async () => {
     await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     await fixture.addCharacterFeature('arch-rigger');
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'buyFeatureForKarma', data: { id: 'arch-rigger' } });
-    expect(message).to.containEql('уже есть');
+    expect(message).toContain('уже есть');
   });
 
   it('Can not buy feature if no such feature', async () => {
@@ -158,7 +158,7 @@ describe('Karma events', function () {
       eventType: 'buyFeatureForKarma',
       data: { id: 'super-awesome-feature' },
     });
-    expect(message).to.containEql('не существует');
+    expect(message).toContain('не существует');
   });
 
   it('Can not buy feature if prerequisites not satisfied', async () => {
@@ -167,6 +167,6 @@ describe('Karma events', function () {
       eventType: 'buyFeatureForKarma',
       data: { id: 'arch-rigger-pilot' },
     });
-    expect(message).to.containEql('Не удовлетворены пререквизиты');
+    expect(message).toContain('Не удовлетворены пререквизиты');
   });
 });

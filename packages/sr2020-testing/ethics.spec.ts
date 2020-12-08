@@ -1,5 +1,4 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
 
 describe('Ethic events', function () {
   let fixture: TestFixture;
@@ -18,7 +17,7 @@ describe('Ethic events', function () {
       eventType: 'ethicTrigger',
       data: { id: '30df06cb-5d9e-11ea-b518-e5c6714f0b78' },
     });
-    expect(baseModel).containDeep({
+    expect(baseModel).toMatchObject({
       ethic: {
         state: [
           { scale: 'violence', value: 1 },
@@ -36,7 +35,7 @@ describe('Ethic events', function () {
       eventType: 'ethicTrigger',
       data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
     });
-    expect(baseModel).containDeep({
+    expect(baseModel).toMatchObject({
       ethic: {
         state: [
           { scale: 'violence', value: -1 },
@@ -56,7 +55,7 @@ describe('Ethic events', function () {
         eventType: 'ethicTrigger',
         data: { id: '30df06ca-5d9e-11ea-b518-e5c6714f0b78' },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: 0 },
@@ -64,9 +63,14 @@ describe('Ethic events', function () {
             { scale: 'individualism', value: 0 },
             { scale: 'mind', value: 0 },
           ],
-          trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
         },
       });
+      expect(baseModel.ethic.trigger).toContainEqual(
+        expect.objectContaining({
+          id: '3104de44-5d9e-11ea-b518-e5c6714f0b78',
+          kind: 'crysis',
+        }),
+      );
     }
     {
       // Do an action, shift to another level, but crysis stays with you
@@ -74,7 +78,7 @@ describe('Ethic events', function () {
         eventType: 'ethicTrigger',
         data: { id: '30df06cc-5d9e-11ea-b518-e5c6714f0b78' },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: -1 },
@@ -82,9 +86,14 @@ describe('Ethic events', function () {
             { scale: 'individualism', value: 0 },
             { scale: 'mind', value: 0 },
           ],
-          trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }],
         },
       });
+      expect(baseModel.ethic.trigger).toContainEqual(
+        expect.objectContaining({
+          id: '3104de44-5d9e-11ea-b518-e5c6714f0b78',
+          kind: 'crysis',
+        }),
+      );
     }
     {
       // Resolve it crysis, it changes stats and goes away
@@ -92,7 +101,7 @@ describe('Ethic events', function () {
         eventType: 'ethicTrigger',
         data: { id: '3104de44-5d9e-11ea-b518-e5c6714f0b78' },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: -1 },
@@ -102,9 +111,12 @@ describe('Ethic events', function () {
           ],
         },
       });
-      expect(baseModel).not.containDeep({
-        ethic: { trigger: [{ id: '3104de44-5d9e-11ea-b518-e5c6714f0b78', kind: 'crysis' }] },
-      });
+      expect(baseModel.ethic.trigger).not.toContainEqual(
+        expect.objectContaining({
+          id: '3104de44-5d9e-11ea-b518-e5c6714f0b78',
+          kind: 'crysis',
+        }),
+      );
     }
   });
 
@@ -116,7 +128,7 @@ describe('Ethic events', function () {
         eventType: 'ethicSet',
         data: { violence: 3, control: -3, individualism: 2, mind: -3 },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: 3 },
@@ -133,7 +145,7 @@ describe('Ethic events', function () {
         eventType: 'ethicTrigger',
         data: { id: '30df070e-5d9e-11ea-b518-e5c6714f0b78' },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: 3 },
@@ -150,7 +162,7 @@ describe('Ethic events', function () {
         eventType: 'ethicTrigger',
         data: { id: '30df06d4-5d9e-11ea-b518-e5c6714f0b78' },
       });
-      expect(baseModel).containDeep({
+      expect(baseModel).toMatchObject({
         ethic: {
           state: [
             { scale: 'violence', value: 4 },
@@ -177,42 +189,43 @@ describe('Ethic events', function () {
         { eventType: 'createLocusQr', data: { groupId: 'russian-orthodox-church', numberOfUses: 1 } },
         3,
       );
-      expect(baseModel.usesLeft).to.equal(1);
-      expect(baseModel.type).to.equal('locus');
+      expect(baseModel.usesLeft).toBe(1);
+      expect(baseModel.type).toBe('locus');
     }
 
     // Add to the group
     {
       await fixture.useAbility({ id: 'dgroup-add', locusId: '3', targetCharacterId: '2' }, 1);
       const acolyte = await fixture.getCharacter(2);
-      expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
-      expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'churched' }, { id: 'russian-orthodox-church' }]);
+      expect(acolyte.baseModel.ethic.groups).toEqual(['russian-orthodox-church']);
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'churched' }));
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'russian-orthodox-church' }));
 
       const locus = await fixture.getQrCode(3);
-      expect(locus.baseModel.usesLeft).to.equal(0);
-      expect(locus.baseModel.type).to.equal('locus');
+      expect(locus.baseModel.usesLeft).toBe(0);
+      expect(locus.baseModel.type).toBe('locus');
     }
 
     // Change ethic values - loses ability
     {
       await fixture.sendCharacterEvent({ eventType: 'ethicSet', data: { violence: 0, control: 0, individualism: 3, mind: 0 } }, 2);
       const acolyte = await fixture.getCharacter(2);
-      expect(acolyte.baseModel.ethic.groups).to.deepEqual(['russian-orthodox-church']);
-      expect(acolyte.baseModel.passiveAbilities).not.to.containDeep([{ id: 'churched' }]);
-      expect(acolyte.baseModel.passiveAbilities).to.containDeep([{ id: 'russian-orthodox-church' }]);
+      expect(acolyte.baseModel.ethic.groups).toEqual(['russian-orthodox-church']);
+      expect(acolyte.baseModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'churched' }));
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'russian-orthodox-church' }));
     }
 
     // Remove from the group
     {
       await fixture.useAbility({ id: 'dgroup-exclude', locusId: '3', targetCharacterId: '2' }, 1);
       const acolyte = await fixture.getCharacter(2);
-      expect(acolyte.baseModel.ethic.groups).to.be.empty();
-      expect(acolyte.baseModel.passiveAbilities).not.to.containDeep([{ id: 'churched' }]);
-      expect(acolyte.baseModel.passiveAbilities).not.to.containDeep([{ id: 'russian-orthodox-church' }]);
+      expect(acolyte.baseModel.ethic.groups).toHaveLength(0);
+      expect(acolyte.baseModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'churched' }));
+      expect(acolyte.baseModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'russian-orthodox-church' }));
 
       const locus = await fixture.getQrCode(3);
-      expect(locus.baseModel.usesLeft).to.equal(0);
-      expect(locus.baseModel.type).to.equal('locus');
+      expect(locus.baseModel.usesLeft).toBe(0);
+      expect(locus.baseModel.type).toBe('locus');
     }
   });
 
@@ -230,24 +243,24 @@ describe('Ethic events', function () {
         { eventType: 'createLocusQr', data: { groupId: 'russian-orthodox-church', numberOfUses: 1 } },
         3,
       );
-      expect(baseModel.usesLeft).to.equal(1);
-      expect(baseModel.type).to.equal('locus');
+      expect(baseModel.usesLeft).toBe(1);
+      expect(baseModel.type).toBe('locus');
     }
 
     // Add to the group
     {
       await fixture.useAbility({ id: 'dm-add-guru', locusId: '3', targetCharacterId: '2' }, 1);
       const locus = await fixture.getQrCode(3);
-      expect(locus.baseModel.usesLeft).to.equal(1);
-      expect(locus.baseModel.type).to.equal('locus');
+      expect(locus.baseModel.usesLeft).toBe(1);
+      expect(locus.baseModel.type).toBe('locus');
     }
 
     // Remove from the group
     {
       await fixture.useAbility({ id: 'dm-exclude-inq-2', locusId: '3', targetCharacterId: '2' }, 1);
       const locus = await fixture.getQrCode(3);
-      expect(locus.baseModel.usesLeft).to.equal(3);
-      expect(locus.baseModel.type).to.equal('locus');
+      expect(locus.baseModel.usesLeft).toBe(3);
+      expect(locus.baseModel.type).toBe('locus');
     }
   });
 
@@ -264,11 +277,11 @@ describe('Ethic events', function () {
     await fixture.useAbility({ id: 'dm-inc-counter', locusId: '3', qrCodeId: '5' });
 
     const locus = await fixture.getQrCode(3);
-    expect(locus.baseModel.type).equal('locus');
-    expect(locus.baseModel.usesLeft).equal(9);
+    expect(locus.baseModel.type).toBe('locus');
+    expect(locus.baseModel.usesLeft).toBe(9);
 
     const emptyCharge = await fixture.getQrCode(5);
-    expect(emptyCharge.baseModel.type).equal('box');
-    expect(emptyCharge.baseModel.usesLeft).equal(0);
+    expect(emptyCharge.baseModel.type).toBe('box');
+    expect(emptyCharge.baseModel.usesLeft).toBe(0);
   });
 });

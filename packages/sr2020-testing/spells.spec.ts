@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { duration } from 'moment';
 import { calculateMagicFeedback } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { HealthState } from '@alice/sr2020-common/models/sr2020-character.model';
@@ -20,34 +20,34 @@ describe('Spells', function () {
     await fixture.saveCharacter();
     {
       const { workModel } = await fixture.addCharacterFeature('ground-heal');
-      expect(workModel).containDeep({ spells: [{ id: 'ground-heal' }] });
+      expect(workModel).toMatchObject({ spells: [{ id: 'ground-heal' }] });
     }
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { id: 'ground-heal' } });
-      expect(workModel.spells).to.be.empty();
+      expect(workModel.spells).toHaveLength(0);
     }
   });
 
   it('Forget unlearned spell', async () => {
     await fixture.saveCharacter();
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'removeFeature', data: { spellName: 'ground-heal' } });
-    expect(workModel.spells).to.be.empty();
+    expect(workModel.spells).toHaveLength(0);
   });
 
   it('Forget all spells', async () => {
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('ground-heal');
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'forgetAllSpells', data: {} });
-    expect(workModel.spells).to.be.empty();
+    expect(workModel.spells).toHaveLength(0);
   });
 
   it('Cast dummy spell', async () => {
     await fixture.saveCharacter({ resonance: 12 });
     await fixture.addCharacterFeature('ground-heal');
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: {} });
-    expect(workModel).containDeep({ resonance: 13 });
-    expect(fixture.getCharacterNotifications().length).to.equal(1);
+    expect(workModel).toMatchObject({ resonance: 13 });
+    expect(fixture.getCharacterNotifications().length).toBe(1);
   });
 
   it("Can't enchant already enchanted", async () => {
@@ -55,10 +55,10 @@ describe('Spells', function () {
     await fixture.saveQrCode({ type: 'food' });
 
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'increaseResonanceSpell', data: { qrCode: '0' } });
-    expect(message).containEql('уже записан');
-    expect(fixture.getCharacterNotifications()).to.be.empty();
+    expect(message).toContain('уже записан');
+    expect(fixture.getCharacterNotifications()).toHaveLength(0);
 
-    expect(await fixture.getQrCode()).containDeep({ workModel: { type: 'food' } });
+    expect(await fixture.getQrCode()).toMatchObject({ workModel: { type: 'food' } });
   });
 
   it('Enchant artifact and activate it later', async () => {
@@ -66,13 +66,13 @@ describe('Spells', function () {
     await fixture.saveQrCode();
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: { qrCode: 0 } });
-      expect(workModel).containDeep({ resonance: 0 });
-      expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 3 } });
+      expect(workModel).toMatchObject({ resonance: 0 });
+      expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 3 } });
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '0' } });
-      expect(workModel).containDeep({ resonance: 1 });
-      expect(await fixture.getQrCode()).containDeep({ workModel: { usesLeft: 2 } });
+      expect(workModel).toMatchObject({ resonance: 1 });
+      expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 2 } });
     }
   });
 
@@ -88,10 +88,10 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } },
         1,
       );
-      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-      expect(workModel.activeAbilities.length).to.equal(1);
-      expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
-      expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(workModel.activeAbilities.length).toBe(1);
+      expect(workModel.activeAbilities[0].humanReadableName).toBe('Ground Heal');
+      expect(workModel.activeAbilities[0].validUntil).toBe(1500 * 1000);
     }
 
     let abilityId: string;
@@ -99,18 +99,18 @@ describe('Spells', function () {
       // Power 2 is 20 minutes = 1200 seconds.
       await fixture.advanceTime(duration(1199, 'seconds'));
       const { workModel } = await fixture.getCharacter(1);
-      expect(workModel.activeAbilities.length).to.equal(1);
-      expect(workModel.activeAbilities[0].humanReadableName).to.equal('Ground Heal');
-      expect(workModel.activeAbilities[0].validUntil).to.equal(1500 * 1000);
+      expect(workModel.activeAbilities.length).toBe(1);
+      expect(workModel.activeAbilities[0].humanReadableName).toBe('Ground Heal');
+      expect(workModel.activeAbilities[0].validUntil).toBe(1500 * 1000);
       abilityId = workModel.activeAbilities[0].id;
     }
 
     {
       const { workModel } = await fixture.useAbility({ id: abilityId, targetCharacterId: '2' }, 1);
-      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(2).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(2)[0].body).containEql('Хиты полностью восстановлены');
-      expect(workModel.activeAbilities.length).to.equal(0);
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(fixture.getCharacterNotifications(2).length).toBe(1);
+      expect(fixture.getCharacterNotifications(2)[0].body).toContain('Хиты полностью восстановлены');
+      expect(workModel.activeAbilities.length).toBe(0);
     }
   });
 
@@ -120,7 +120,7 @@ describe('Spells', function () {
     await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } });
     await fixture.advanceTime(duration(20, 'minutes'));
     const { workModel } = await fixture.getCharacter();
-    expect(workModel.activeAbilities.length).to.equal(0);
+    expect(workModel.activeAbilities.length).toBe(0);
   });
 
   it('Live long and prosper', async () => {
@@ -135,16 +135,16 @@ describe('Spells', function () {
         },
         1,
       );
-      expect(fixture.getCharacterNotifications(1).length).to.equal(1);
-      expect(workModel.history.length).to.equal(1); // Spell casted
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(workModel.history.length).toBe(1); // Spell casted
     }
 
     {
-      expect(fixture.getCharacterNotifications(2).length).to.equal(1);
-      expect(fixture.getCharacterNotifications(2)[0].body).containEql('увеличены на 4');
+      expect(fixture.getCharacterNotifications(2).length).toBe(1);
+      expect(fixture.getCharacterNotifications(2)[0].body).toContain('увеличены на 4');
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.history.length).to.equal(1); // Hp restored
-      expect(workModel.maxHp).to.equal(6); // Not 7 as global maximum is 6
+      expect(workModel.history.length).toBe(1); // Hp restored
+      expect(workModel.maxHp).toBe(6); // Not 7 as global maximum is 6
     }
   });
 
@@ -156,15 +156,15 @@ describe('Spells', function () {
         eventType: 'castSpell',
         data: { id: 'keep-yourself', location: { id: 0, manaLevel: 0 }, power: 3 },
       });
-      expect(fixture.getCharacterNotifications().length).to.equal(1);
-      expect(fixture.getCharacterNotifications()[0].body).containEql('на 3 на 30 минут');
-      expect(workModel.maxHp).to.equal(5);
+      expect(fixture.getCharacterNotifications().length).toBe(1);
+      expect(fixture.getCharacterNotifications()[0].body).toContain('на 3 на 30 минут');
+      expect(workModel.maxHp).toBe(5);
     }
 
     {
       await fixture.advanceTime(duration(30, 'minutes'));
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).to.equal(2);
+      expect(workModel.maxHp).toBe(2);
     }
   });
 
@@ -195,28 +195,30 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 5 } },
       3,
     );
-    expect(tableResponse.length).to.equal(2);
-    expect(tableResponse).containDeep([
-      {
+    expect(tableResponse.length).toBe(2);
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
         magicFeedback: 8,
-      },
-      {
+      }),
+    );
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
         spellName: 'Ground Heal',
         timestamp: 1020000,
         power: 6,
         magicFeedback: 9,
-      },
-    ]);
+      }),
+    );
 
     for (const entry of tableResponse) {
       const aura: string = entry.casterAura;
-      expect(aura).match(
+      expect(aura).toMatch(
         /[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]/,
       );
-      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(7);
+      expect((aura.match(/[a-z]/g) ?? []).length).toBe(7);
     }
   });
 
@@ -236,22 +238,22 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
       2,
     );
-    expect(tableResponse.length).to.equal(1);
-    expect(tableResponse).containDeep([
-      {
+    expect(tableResponse.length).toBe(1);
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
         spellName: 'Fireball',
         timestamp: 120000,
         power: 4,
         magicFeedback: 8,
-      },
-    ]);
+      }),
+    );
 
     for (const entry of tableResponse) {
       const aura: string = entry.casterAura;
-      expect(aura).match(
+      expect(aura).toMatch(
         /[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]-[a-z*][a-z*][a-z*][a-z*]/,
       );
-      expect((aura.match(/[a-z]/g) ?? []).length).to.equal(12);
+      expect((aura.match(/[a-z]/g) ?? []).length).toBe(12);
     }
   });
 
@@ -267,8 +269,8 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
-    expect(workModel.activeAbilities.length).to.equal(1);
-    expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 6 * 1000); // power was 4, but 2 ritual participants add +2
+    expect(workModel.activeAbilities.length).toBe(1);
+    expect(workModel.activeAbilities[0].validUntil).toBe(600 * 6 * 1000); // power was 4, but 2 ritual participants add +2
   });
 
   it('Ritual with agnus dei', async () => {
@@ -284,8 +286,8 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
-    expect(workModel.activeAbilities.length).to.equal(1);
-    expect(workModel.activeAbilities[0].validUntil).to.equal(600 * 6 * 1000); // power was 4, but ritual participants add +2
+    expect(workModel.activeAbilities.length).toBe(1);
+    expect(workModel.activeAbilities[0].validUntil).toBe(600 * 6 * 1000); // power was 4, but ritual participants add +2
   });
 
   it('Blood ritual', async () => {
@@ -299,13 +301,13 @@ describe('Spells', function () {
       { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
-    expect(workModel.passiveAbilities).to.containDeep([{ id: 'magic-in-the-blood' }]);
-    expect(workModel.passiveAbilities).to.containDeep([{ id: 'bloody-tide' }]);
-    expect(workModel.magicStats.maxPowerBonus).to.equal(1);
-    expect(workModel.magicStats.feedbackMultiplier).to.equal(1.0 / 7.0);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'magic-in-the-blood' }));
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
+    expect(workModel.magicStats.maxPowerBonus).toBe(1);
+    expect(workModel.magicStats.feedbackMultiplier).toBe(1.0 / 7.0);
 
-    expect((await fixture.getCharacter('2')).workModel.healthState).equal('clinically_dead');
-    expect((await fixture.getCharacter('2')).workModel.essence).equal(500);
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('clinically_dead');
+    expect((await fixture.getCharacter('2')).workModel.essence).toBe(500);
   });
 
   it('Blood ritual requires wounded victims', async () => {
@@ -320,7 +322,7 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
         1,
       );
-      expect(message).containEql('должны быть в тяжране');
+      expect(message).toContain('должны быть в тяжране');
     }
   });
 
@@ -335,8 +337,8 @@ describe('Spells', function () {
       1,
     );
 
-    expect((await fixture.getCharacter('2')).workModel.healthState).equal('wounded');
-    expect((await fixture.getCharacter('2')).workModel.essence).equal(99);
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('wounded');
+    expect((await fixture.getCharacter('2')).workModel.essence).toBe(99);
   });
 
   it('Tempus Fugit', async () => {
@@ -361,20 +363,24 @@ describe('Spells', function () {
     );
 
     const { workModel } = await fixture.getLocation();
-    expect(workModel.spellTraces).containDeep([
-      {
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: 600000,
         spellName: 'Fireball',
-      },
-      {
+      }),
+    );
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: (1300 - 480) * 1000,
         spellName: 'Ground Heal',
-      },
-      {
+      }),
+    );
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: (1600 - 480) * 1000,
         spellName: 'Tempus Fugit',
-      },
-    ]);
+      }),
+    );
   });
 
   it('Brasilia', async () => {
@@ -397,20 +403,24 @@ describe('Spells', function () {
     await fixture.advanceTime(duration(60, 'seconds'));
 
     const { workModel } = await fixture.getLocation();
-    expect(workModel.spellTraces).containDeep([
-      {
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: -100000,
         spellName: 'Ground Heal',
-      },
-      {
+      }),
+    );
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: 200000,
         spellName: 'Fireball',
-      },
-      {
+      }),
+    );
+    expect(workModel.spellTraces).toContainEqual(
+      expect.objectContaining({
         timestamp: 200000,
         spellName: 'Brasilia',
-      },
-    ]);
+      }),
+    );
   });
 
   it('Frog skin', async () => {
@@ -422,12 +432,12 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'frog-skin', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
         1,
       );
-      expect(workModel.charisma).equal(5);
+      expect(workModel.charisma).toBe(5);
     }
 
     {
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.charisma).equal(2);
+      expect(workModel.charisma).toBe(2);
     }
   });
 
@@ -447,7 +457,7 @@ describe('Spells', function () {
 
     for (const modelId of reagentIds) {
       const qr = await fixture.getQrCode(modelId);
-      expect(qr.workModel.type).equal('box');
+      expect(qr.workModel.type).toBe('box');
     }
   });
 
@@ -458,13 +468,13 @@ describe('Spells', function () {
       eventType: 'castSpell',
       data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 5 },
     });
-    expect(workModel.passiveAbilities).containDeep([
-      {
+    expect(workModel.passiveAbilities).toContainEqual(
+      expect.objectContaining({
         id: 'fireball-able',
         humanReadableName: 'Fireball',
         description: `Можете кинуть 2 огненных шаров.`,
-      },
-    ]);
+      }),
+    );
   });
 
   it('Fast Charge', async () => {
@@ -474,13 +484,13 @@ describe('Spells', function () {
       eventType: 'castSpell',
       data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 5 },
     });
-    expect(workModel.passiveAbilities).containDeep([
-      {
+    expect(workModel.passiveAbilities).toContainEqual(
+      expect.objectContaining({
         id: 'fast-charge-able',
         humanReadableName: 'Fast Charge',
         description: `Можете кинуть 3 молний.`,
-      },
-    ]);
+      }),
+    );
   });
 
   it('Stone skin', async () => {
@@ -491,13 +501,13 @@ describe('Spells', function () {
         eventType: 'castSpell',
         data: { id: 'stone-skin', location: { id: 0, manaLevel: 0 }, power: 1 },
       });
-      expect(workModel.activeAbilities).to.containDeep([{ id: 'skin-stone' }]);
+      expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'skin-stone' }));
     }
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'skin-stone' } });
-      expect(workModel.passiveAbilities).to.containDeep([{ id: 'stone-skin-result' }]);
-      expect(workModel.activeAbilities).not.to.containDeep([{ id: 'skin-stone' }]);
+      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'stone-skin-result' }));
+      expect(workModel.activeAbilities).not.toContainEqual(expect.objectContaining({ id: 'skin-stone' }));
     }
   });
 
@@ -516,7 +526,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 4, duration: 93 });
+      expect(feedback).toMatchObject({ amount: 4, duration: 93 });
     });
 
     it('Example 14', () => {
@@ -533,7 +543,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 1, duration: 16 });
+      expect(feedback).toMatchObject({ amount: 1, duration: 16 });
     });
 
     it('Example 19', () => {
@@ -550,7 +560,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 3, duration: 65 });
+      expect(feedback).toMatchObject({ amount: 3, duration: 65 });
     });
 
     it('Example 20', () => {
@@ -567,7 +577,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 3, duration: 65 });
+      expect(feedback).toMatchObject({ amount: 3, duration: 65 });
     });
 
     it('Example 34', () => {
@@ -584,7 +594,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 0, duration: 4 });
+      expect(feedback).toMatchObject({ amount: 0, duration: 4 });
     });
 
     it('Example 38', () => {
@@ -601,7 +611,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).containDeep({ amount: 0, duration: 6 });
+      expect(feedback).toMatchObject({ amount: 0, duration: 6 });
     });
   });
 });

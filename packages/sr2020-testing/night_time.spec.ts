@@ -1,6 +1,5 @@
 import { TestFixture } from './fixture';
 import { duration } from 'moment';
-import { expect } from '@loopback/testlab';
 
 describe('Night time', () => {
   let fixture: TestFixture;
@@ -19,19 +18,19 @@ describe('Night time', () => {
     await fixture.advanceTime(duration(6, 'hours'));
     let { workModel } = await fixture.getCharacter();
     // No hunger effect due to timer shift
-    expect(workModel.screens.activeAbilities).to.be.false();
-    expect(workModel.healthState).equal('healthy');
+    expect(workModel.screens.activeAbilities).toBe(false);
+    expect(workModel.healthState).toBe('healthy');
 
     await fixture.advanceTime(duration(1, 'hours'));
     ({ workModel } = await fixture.getCharacter());
     // Still no hunger effect due to timer shift
-    expect(workModel.screens.activeAbilities).to.be.true();
-    expect(workModel.healthState).equal('healthy');
+    expect(workModel.screens.activeAbilities).toBe(true);
+    expect(workModel.healthState).toBe('healthy');
 
     await fixture.advanceTime(duration(7, 'hours'));
     ({ workModel } = await fixture.getCharacter());
     // Hunger finally activates
-    expect(workModel.screens.activeAbilities).to.be.true();
-    expect(workModel.healthState).equal('wounded');
+    expect(workModel.screens.activeAbilities).toBe(true);
+    expect(workModel.healthState).toBe('wounded');
   });
 });

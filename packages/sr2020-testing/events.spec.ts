@@ -1,5 +1,4 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
 
 describe('General character events', function () {
   let fixture: TestFixture;
@@ -16,6 +15,6 @@ describe('General character events', function () {
     await fixture.saveCharacter();
     await fixture.saveQrCode();
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'scanQr', data: { qrCode: '0' } });
-    expect(message).to.equal('Этот QR-код - пустышка, его нельзя использовать');
+    expect(message).toBe('Этот QR-код - пустышка, его нельзя использовать');
   });
 });

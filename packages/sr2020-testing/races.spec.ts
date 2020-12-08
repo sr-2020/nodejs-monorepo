@@ -1,5 +1,5 @@
 import { TestFixture } from './fixture';
-import { expect } from '@loopback/testlab';
+
 import { duration } from 'moment';
 import { MetaRace } from '@alice/sr2020-common/models/sr2020-character.model';
 
@@ -17,28 +17,28 @@ describe('Race changes', () => {
   it('Races give proper abilities', async () => {
     await fixture.saveCharacter({ metarace: 'meta-spirit' });
     let { workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-norm' } });
-    expect(workModel.metarace).equal('meta-norm');
-    expect(workModel.passiveAbilities).lengthOf(3);
-    expect(workModel.activeAbilities).lengthOf(0);
+    expect(workModel.metarace).toBe('meta-norm');
+    expect(workModel.passiveAbilities).toHaveLength(3);
+    expect(workModel.activeAbilities).toHaveLength(0);
 
     ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-elf' } }));
-    expect(workModel.metarace).equal('meta-elf');
-    expect(workModel.passiveAbilities).lengthOf(2);
-    expect(workModel.activeAbilities).lengthOf(0);
+    expect(workModel.metarace).toBe('meta-elf');
+    expect(workModel.passiveAbilities).toHaveLength(2);
+    expect(workModel.activeAbilities).toHaveLength(0);
 
     ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } }));
-    expect(workModel.metarace).equal('meta-vampire');
-    expect(workModel.passiveAbilities).lengthOf(7);
-    expect(workModel.passiveAbilities).containDeep([{ id: 'blood-thirst' }]);
-    expect(workModel.activeAbilities).lengthOf(1);
-    expect(workModel.activeAbilities).containDeep([{ id: 'vampire-feast' }]);
+    expect(workModel.metarace).toBe('meta-vampire');
+    expect(workModel.passiveAbilities).toHaveLength(7);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'blood-thirst' }));
+    expect(workModel.activeAbilities).toHaveLength(1);
+    expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'vampire-feast' }));
 
     ({ workModel } = await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-ghoul' } }));
-    expect(workModel.metarace).equal('meta-ghoul');
-    expect(workModel.passiveAbilities).lengthOf(8);
-    expect(workModel.passiveAbilities).containDeep([{ id: 'meat-hunger' }]);
-    expect(workModel.activeAbilities).lengthOf(1);
-    expect(workModel.activeAbilities).containDeep([{ id: 'ghoul-feast' }]);
+    expect(workModel.metarace).toBe('meta-ghoul');
+    expect(workModel.passiveAbilities).toHaveLength(8);
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'meat-hunger' }));
+    expect(workModel.activeAbilities).toHaveLength(1);
+    expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'ghoul-feast' }));
   });
 
   it('Can switch to any race', async () => {
@@ -69,7 +69,7 @@ describe('Race changes', () => {
     await fixture.advanceTime(duration(6, 'hours'));
 
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'enter-vr' } });
-    expect(message).containEql('Недостаточно эссенции');
+    expect(message).toContain('Недостаточно эссенции');
   });
 
   it('Hungry HMHHV can feed', async () => {
