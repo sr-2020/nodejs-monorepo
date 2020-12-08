@@ -30,6 +30,19 @@ jobs:
           node-version: '12.x'
       - uses: bahmutov/npm-install@v1.1.0
       - run: yarn build
+  nx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - uses: bahmutov/npm-install@v1.1.0
+      - uses: mansagroup/nrwl-nx-action@v1.0.1
+        with:
+          targets: lint,build,test
+          all: true
+          affected: false
   docker_models_manager:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
