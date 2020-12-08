@@ -28,7 +28,7 @@ export class SR2020ModelsApplication extends BootMixin(ServiceMixin(RepositoryMi
     this.projectRoot = __dirname + '/../';
     const dirs = ['sr2020-model-engine'];
     // Customize @loopback/boot Booter Conventions here
-    const extension = require.extensions['.ts'] ? 'ts' : 'js';
+    const extension = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {
       controllers: {
         dirs,

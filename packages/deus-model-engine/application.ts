@@ -27,7 +27,7 @@ export class DeusModelsApplication extends BootMixin(ServiceMixin(RepositoryMixi
     this.projectRoot = __dirname + '/../';
     const dirs = ['deus-model-engine'];
     // Customize @loopback/boot Booter Conventions here
-    const extension = require.extensions['.ts'] ? 'ts' : 'js';
+    const extension = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
     this.bootOptions = {
       controllers: {
         dirs,
