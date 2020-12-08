@@ -64,6 +64,27 @@
           }
         }
       }
+    },
+    "alice-model-engine": {
+      "root": "packages/alice-model-engine",
+      "sourceRoot": "packages/alice-model-engine",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/alice-model-engine/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/alice-model-engine/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
