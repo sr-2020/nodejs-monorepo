@@ -1,4 +1,4 @@
-import { Client, expect } from '@loopback/testlab';
+import { Client } from '@loopback/testlab';
 import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
 import { FirebaseTokenRepository } from '../../repositories/firebase-token.repository';
@@ -27,8 +27,8 @@ describe('TokenController', () => {
       .expect(200);
 
     const allEntries = await repo.find();
-    expect(allEntries.length).to.equal(1);
-    expect(allEntries[0]).to.containEql({
+    expect(allEntries.length).toEqual(1);
+    expect(allEntries[0]).toEqual({
       id: 13,
       token: 'foo',
     });
@@ -46,8 +46,8 @@ describe('TokenController', () => {
       .expect(200);
 
     const allEntries = await repo.find();
-    expect(allEntries.length).to.equal(1);
-    expect(allEntries[0]).to.containEql({
+    expect(allEntries.length).toEqual(1);
+    expect(allEntries[0]).toEqual({
       id: 10,
       token: 'bar',
     });
