@@ -1,5 +1,0 @@
-{
-  "spec": "**/*.spec.js",
-  "require": ["source-map-support/register", "tsconfig-paths/register"],
-  "timeout": 100000
-}
