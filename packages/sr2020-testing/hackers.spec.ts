@@ -54,7 +54,7 @@ describe('Hackers-related events', function () {
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(4); // Only temporary :(
   });
 
-  it.skip('Activating cyberdeck', async () => {
+  it('Activating cyberdeck', async () => {
     // Hacker set up
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('jack-in');
@@ -71,14 +71,18 @@ describe('Hackers-related events', function () {
       expect.objectContaining({
         topic: 'ability_used',
         body: {
+          characterId: '0',
           id: 'jack-in',
-          qrCode: {
-            type: 'cyberdeck',
-            data: {
+          name: 'Jack-in',
+          qrCode: expect.objectContaining({
+            data: expect.objectContaining({
               id: 'cyberdeck-chariot',
               modSlots: 4,
-            },
-          },
+            }),
+            type: 'cyberdeck',
+          }),
+          qrCodeId: '0',
+          timestamp: 0,
         },
       }),
     );
@@ -87,9 +91,9 @@ describe('Hackers-related events', function () {
     expect(fixture.getPubSubNotifications()).toContainEqual(
       expect.objectContaining({
         topic: 'ability_used',
-        body: {
+        body: expect.objectContaining({
           id: 'jack-out',
-        },
+        }),
       }),
     );
   });
@@ -109,37 +113,16 @@ describe('Hackers-related events', function () {
     expect(fixture.getPubSubNotifications()).toContainEqual({
       topic: 'ability_used',
       body: {
-        bodyStorage: undefined,
         characterId: '0',
-        drone: undefined,
         id: 'activate-soft',
-        locus: undefined,
         name: 'Активация софта',
-        pill: undefined,
-        qrCode: {
-          data: {
-            basePrice: 0,
-            charges: 1,
-            dealId: '',
-            description: 'ненадолго замедляет противника, блокируя его исходящий канал',
-            gmDescription: '',
+        qrCode: expect.objectContaining({
+          data: expect.objectContaining({
             id: 'soft-spambomb',
-            kind: 'mine',
-            lifestyle: '',
-            name: 'спам бомба',
-            ram: 2,
-            rentPrice: 0,
-          },
-          description: 'ненадолго замедляет противника, блокируя его исходящий канал',
-          eventType: '_',
-          modelId: '0',
-
-          name: 'спам бомба',
+          }),
           type: 'software',
-          usesLeft: 1,
-        },
+        }),
         qrCodeId: '0',
-        targetCharacter: undefined,
         timestamp: 0,
       },
     });

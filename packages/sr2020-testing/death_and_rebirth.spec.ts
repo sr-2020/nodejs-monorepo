@@ -67,7 +67,7 @@ describe('Death & Rebirth', function () {
     expect(await fixture.getCharacter()).toMatchObject({ workModel: { healthState: 'healthy' } });
   });
 
-  it.skip('Reanimation by capsule', async () => {
+  it('Reanimation by capsule', async () => {
     // Medic
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('reanimate', '1');
@@ -117,14 +117,14 @@ describe('Death & Rebirth', function () {
       expect(fixture.getPubSubNotifications()).toContainEqual(
         expect.objectContaining({
           topic: 'reanimates',
-          body: {
+          body: expect.objectContaining({
             medic: '1',
             patient: '2',
             capsuleName: 'Reviver',
             essenceGet: 10,
             essenceAir: 30,
             ai: 'Alie',
-          },
+          }),
         }),
       );
     }

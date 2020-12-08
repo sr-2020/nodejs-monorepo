@@ -1,6 +1,8 @@
 import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { kAllSpells } from '@alice/sr2020-model-engine/scripts/character/spells_library';
+// Imported for side effect of populating getAllActiveAbilities().
+import '@alice/sr2020-model-engine/scripts/character/active_abilities_library';
 
 describe('Features library', () => {
   function addNo(ids: string[]): string[] {
@@ -25,10 +27,10 @@ describe('Features library', () => {
     }
   });
 
-  it.skip('Passive abilities prerequisites are valid', () => {
+  it('Passive abilities prerequisites are valid', () => {
     for (const [, feature] of kAllPassiveAbilities) {
       for (const prereq of feature.prerequisites) {
-        expect([...allValidPrerequisites]).toContainEqual(prereq);
+        expect([...allValidPrerequisites]).toContain(prereq);
       }
     }
   });

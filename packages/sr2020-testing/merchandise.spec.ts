@@ -13,7 +13,7 @@ describe('Merchandise', () => {
     await fixture.destroy();
   });
 
-  it.skip('Food creation and consumption', async () => {
+  it('Food creation and consumption', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.saveQrCode({ modelId: '3' });
 
@@ -23,11 +23,11 @@ describe('Merchandise', () => {
     expect(fixture.getPubSubNotifications()).toContainEqual(
       expect.objectContaining({
         topic: 'food_consumption',
-        body: {
+        body: expect.objectContaining({
           characterId: 1,
           scoring: 0.5,
           id: 'food',
-        },
+        }),
       }),
     );
   });

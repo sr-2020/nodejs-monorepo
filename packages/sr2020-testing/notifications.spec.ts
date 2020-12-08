@@ -11,7 +11,7 @@ describe('Notifications', () => {
     await fixture.destroy();
   });
 
-  it.skip('Get notification on refresh', async () => {
+  it('Get notification on refresh', async () => {
     await fixture.saveCharacter();
     expect(fixture.getPubSubNotifications().length).toBe(0);
 
@@ -21,9 +21,9 @@ describe('Notifications', () => {
     expect(fixture.getPubSubNotifications()).toContainEqual(
       expect.objectContaining({
         topic: 'character_update',
-        body: {
+        body: expect.objectContaining({
           modelId: '0',
-        },
+        }),
       }),
     );
   });
