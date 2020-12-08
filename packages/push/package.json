@@ -35,7 +35,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@loopback/testlab": "3.2.4",
     "loopback-connector-sqlite3": "^3.0.0",
     "sqlite3": "^5.0.0"
   },
