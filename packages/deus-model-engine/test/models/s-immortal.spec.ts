@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-expressions */
-import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
@@ -11,10 +10,10 @@ describe('Serenity immortality: ', () => {
     let { baseModel, workingModel } = await process(model, events);
 
     let cond = workingModel.conditions.find((c: any) => c.id == 'serenity-immortality-ready');
-    expect(cond).is.not.exist;
+    expect(cond).toBeFalsy();
 
-    expect(baseModel.timers.length).equals(1);
-    expect(baseModel.timers[0].name).equals('_s_immortal01_timer');
+    expect(baseModel.timers.length).toBe(1);
+    expect(baseModel.timers[0].name).toBe('_s_immortal01_timer');
 
     console.log('================Pass 60 minutes ===============');
 
@@ -22,7 +21,7 @@ describe('Serenity immortality: ', () => {
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     cond = workingModel.conditions.find((c: any) => c.id == 'serenity-immortality-ready');
-    expect(cond).is.exist;
+    expect(cond).toBeDefined();
   });
 
   it('Run modernization', async function () {
@@ -56,8 +55,8 @@ describe('Serenity immortality: ', () => {
 
     let ill = baseModel.modifiers.find((m: any) => m.class == 'illness');
 
-    expect(ill).is.exist;
-    expect(workingModel.hp).is.equal(3);
+    expect(ill).toBeDefined();
+    expect(workingModel.hp).toBe(3);
 
     console.log('============ Start modernization ===============');
 
@@ -65,19 +64,19 @@ describe('Serenity immortality: ', () => {
     events = getEvents(model.modelId, [{ eventType: 'serenity-immortality-go', data: {} }], baseModel.timestamp + 100);
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(baseModel.profileType).is.equal('ex-human-robot');
-    expect(workingModel.hp).is.equal(4);
+    expect(baseModel.profileType).toBe('ex-human-robot');
+    expect(workingModel.hp).toBe(4);
 
     ill = baseModel.modifiers.find((m: any) => m.class == 'illness');
-    expect(ill).is.not.exist;
+    expect(ill).toBeFalsy();
 
-    expect(ill).is.not.exist;
+    expect(ill).toBeFalsy();
 
-    expect(baseModel.systems).is.not.exist;
-    expect(baseModel.generation).is.not.exist;
+    expect(baseModel.systems).toBeFalsy();
+    expect(baseModel.generation).toBeFalsy();
 
-    expect(baseModel.mind.C[7]).is.eqls(100);
-    expect(baseModel.mind.D[8]).is.eqls(100);
+    expect(baseModel.mind.C[7]).toEqual(100);
+    expect(baseModel.mind.D[8]).toEqual(100);
   });
 
   it('Install first stage implant and try install another', async function () {
@@ -97,8 +96,8 @@ describe('Serenity immortality: ', () => {
     const imp2 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle');
     const imp3 = baseModel.modifiers.find((m: any) => m.id == 'lab_maninthemiddle2');
 
-    expect(imp).is.exist;
-    expect(imp2).is.exist;
-    expect(imp3).is.not.exist;
+    expect(imp).toBeDefined();
+    expect(imp2).toBeDefined();
+    expect(imp3).toBeFalsy();
   });
 });

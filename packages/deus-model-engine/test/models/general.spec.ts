@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 //Тесты для событий общего назначения (для хакеров и т.д.)
 
-import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
@@ -35,8 +34,8 @@ describe('General events: ', () => {
     let cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     let cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
 
-    expect(cond1).to.exist;
-    expect(cond2).to.exist;
+    expect(cond1).toBeDefined();
+    expect(cond2).toBeDefined();
 
     //Проверить через 600 секунд
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 610 * 1000)];
@@ -45,8 +44,8 @@ describe('General events: ', () => {
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
 
-    expect(cond1).to.exist;
-    expect(cond2).to.not.exist;
+    expect(cond1).toBeDefined();
+    expect(cond2).toBeFalsy();
 
     //Проверить через 2 часа секунд
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 7200 * 1000)];
@@ -55,8 +54,8 @@ describe('General events: ', () => {
     cond1 = baseModel.conditions.find((c: any) => c.text == 'Test1');
     cond2 = baseModel.conditions.find((c: any) => c.text == 'Test2');
 
-    expect(cond1).to.not.exist;
-    expect(cond2).to.not.exist;
+    expect(cond1).toBeFalsy();
+    expect(cond2).toBeFalsy();
   });
 
   it('Send message', async function () {
@@ -71,7 +70,7 @@ describe('General events: ', () => {
 
     const msg = baseModel.messages.find((c: any) => c.title == 'Test Message');
 
-    expect(msg).to.exist;
+    expect(msg).toBeDefined();
 
     ///printModel(baseModel);
   });
@@ -88,8 +87,8 @@ describe('General events: ', () => {
     );
     const { baseModel } = await process(model, events);
 
-    expect(baseModel.sweethome).is.equal('new_location');
-    expect(baseModel.login).is.equal('john.smith');
+    expect(baseModel.sweethome).toBe('new_location');
+    expect(baseModel.login).toBe('john.smith');
   });
 
   it('Change mind cube', async function () {
@@ -100,9 +99,9 @@ describe('General events: ', () => {
     const events = getEvents(model.modelId, [{ eventType: 'change-mind-cube', data: eventData }], model.timestamp + 100);
     const { baseModel } = await process(model, events);
 
-    expect(baseModel.mind.A[2]).is.equal(76);
-    expect(baseModel.mind.B[4]).is.equal(50);
-    expect(baseModel.mind.F[1]).is.equal(27);
+    expect(baseModel.mind.A[2]).toBe(76);
+    expect(baseModel.mind.B[4]).toBe(50);
+    expect(baseModel.mind.F[1]).toBe(27);
   });
 
   it('Change android owner', async function () {
@@ -118,7 +117,7 @@ describe('General events: ', () => {
     );
     const { baseModel } = await process(model, events);
 
-    expect(baseModel.owner).is.equal('vasya.pupkin');
+    expect(baseModel.owner).toBe('vasya.pupkin');
 
     //printModel(baseModel);
   });
@@ -158,11 +157,11 @@ describe('General events: ', () => {
     const msg3 = baseModel.memory.find((c: any) => c.title == 'Новое воспоминание 2');
     const msg4 = baseModel.memory.find((c: any) => c.title == 'Обновленное воспоминание №2');
 
-    expect(msg1).is.not.exist;
-    expect(msg2).is.exist;
-    expect(msg3).is.exist;
-    expect(msg4).is.exist;
-    expect(msg4.text).is.equal('Текст Обновленное воспоминание №2');
+    expect(msg1).toBeFalsy();
+    expect(msg2).toBeDefined();
+    expect(msg3).toBeDefined();
+    expect(msg4).toBeDefined();
+    expect(msg4.text).toBe('Текст Обновленное воспоминание №2');
   });
 
   it('Change insurance', async function () {
@@ -175,9 +174,9 @@ describe('General events: ', () => {
     );
     const { baseModel } = await process(model, events);
 
-    expect(baseModel.insurance).is.equal('JJ');
-    expect(baseModel.insuranceLevel).is.equal(2);
-    expect(baseModel.insuranceDiplayName).is.equal('Johnson & Johnson, L: 2');
+    expect(baseModel.insurance).toBe('JJ');
+    expect(baseModel.insuranceLevel).toBe(2);
+    expect(baseModel.insuranceDiplayName).toBe('Johnson & Johnson, L: 2');
 
     //printModel(baseModel);
   });

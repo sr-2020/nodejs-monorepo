@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import { getTotalChance, getPotentialSystemsIds, whatSystemShouldBeInfected } from '../../helpers/infection-illness';
-import { expect } from 'chai';
+import { getPotentialSystemsIds, getTotalChance, whatSystemShouldBeInfected } from '../../helpers/infection-illness';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 import { process } from '../test_helpers';
@@ -10,14 +9,14 @@ describe('Infecton: ', () => {
     const model = getExampleModel();
     const count = getPotentialSystemsIds(model).length;
 
-    expect(count).is.equal(2);
+    expect(count).toBe(2);
   });
 
   it('Calculate total chance for W', async () => {
     const model = getExampleModel();
     const chance = getTotalChance(model);
 
-    expect(chance).is.closeTo(0.0396, 0.00001);
+    expect(chance).toBeCloseTo(0.0396, 8);
   });
 
   it('What systems should be infected', async () => {
@@ -30,7 +29,7 @@ describe('Infecton: ', () => {
     model.genome[4] = 1;
     model.genome[5] = 1;
     const system = whatSystemShouldBeInfected(model);
-    expect(system).is.equal(4);
+    expect(system).toBe(4);
   });
 
   it('Roll for infection', async () => {
@@ -52,7 +51,7 @@ describe('Infecton: ', () => {
 
     ({ baseModel } = await process(baseModel, events));
 
-    expect(baseModel.isAlive).is.false;
+    expect(baseModel.isAlive).toBe(false);
   });
 
   it('Roll for infection for exhuman program', async () => {
@@ -70,6 +69,6 @@ describe('Infecton: ', () => {
 
     ({ baseModel } = await process(baseModel, events));
 
-    expect(baseModel.isAlive).is.true;
+    expect(baseModel.isAlive).toBe(true);
   });
 });

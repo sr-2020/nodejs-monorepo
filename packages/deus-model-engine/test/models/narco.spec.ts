@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 //Тесты наркотиков
 
-import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
@@ -15,7 +14,7 @@ function expectNarcoIgnoredForProfileType(profileType: string) {
     const { workingModel } = await process(model, events);
 
     const modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
-    expect(modifiers.length).is.equal(0);
+    expect(modifiers.length).toBe(0);
   });
 }
 
@@ -25,16 +24,16 @@ describe('Narco effects: ', () => {
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'altnarco' } }], model.timestamp);
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.mind.F[3]).is.equal(62);
-    expect(workingModel.mind.E[1]).is.equal(100);
-    expect(baseModel.mind.E[1]).is.equal(57);
+    expect(baseModel.mind.F[3]).toBe(62);
+    expect(workingModel.mind.E[1]).toBe(100);
+    expect(baseModel.mind.E[1]).toBe(57);
 
     const modifiers = workingModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
-    expect(modifiers.length).is.equal(1);
+    expect(modifiers.length).toBe(1);
 
     const conditions = workingModel.conditions.filter((e: any) => e.id == 'mcube-condition-F3-1');
 
-    expect(conditions.length).is.equal(1);
+    expect(conditions.length).toBe(1);
   });
 
   expectNarcoIgnoredForProfileType('robot');
@@ -49,11 +48,11 @@ describe('Narco effects: ', () => {
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1101));
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.mind.F[3]).is.equal(62); //permanent change is here
-    expect(workingModel.mind.E[1]).is.equal(57); //temporary change rolled back
+    expect(baseModel.mind.F[3]).toBe(62); //permanent change is here
+    expect(workingModel.mind.E[1]).toBe(57); //temporary change rolled back
 
     const modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
-    expect(modifiers.length).is.equal(0);
+    expect(modifiers.length).toBe(0);
   });
 
   it('Mind cube pushback', async function () {
@@ -62,11 +61,11 @@ describe('Narco effects: ', () => {
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(baseModel.mind.F[2]).is.equal(47); //permanent change is here
-    expect(workingModel.mind.E[1]).is.equal(0); //temporary change is pushed back
+    expect(baseModel.mind.F[2]).toBe(47); //permanent change is here
+    expect(workingModel.mind.E[1]).toBe(0); //temporary change is pushed back
 
     const modifiers = baseModel.modifiers.filter((e: any) => e.id == 'narcoEffects');
-    expect(modifiers.length).is.equal(1);
+    expect(modifiers.length).toBe(1);
   });
 
   it('Narco with condition', async function () {
@@ -74,7 +73,7 @@ describe('Narco effects: ', () => {
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'cometa' } }], model.timestamp);
     const { workingModel } = await process(model, events);
 
-    expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(1);
+    expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).toBe(1);
   });
 
   it('Narco with condition ends', async function () {
@@ -83,7 +82,7 @@ describe('Narco effects: ', () => {
     events.push(getRefreshEvent(model.modelId, model.timestamp + 18000 * 1001));
     const { workingModel } = await process(model, events);
 
-    expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).is.equal(0);
+    expect(workingModel.conditions.filter((e: any) => e.id == 'euphoria-condition').length).toBe(0);
   });
 
   it('Narco with history record', async function () {
@@ -93,7 +92,7 @@ describe('Narco effects: ', () => {
 
     expect(
       workingModel.changes.filter((e: any) => e.text == 'Таблетка начала действовать. Надень браслет и следуй указаниям дилера.').length,
-    ).is.equal(1);
+    ).toBe(1);
   });
 
   it('All narcos parsed', async function () {
@@ -104,11 +103,11 @@ describe('Narco effects: ', () => {
       if (narco.conditions) {
         narco.conditions.forEach((condition: string) => {
           const conditionObj = conditions.filter((c: any) => c.id == condition);
-          expect(conditionObj.length).is.equal(1);
+          expect(conditionObj.length).toBe(1);
         });
 
-        expect(narco.id).is.exist;
-        expect(narco.duration).is.exist;
+        expect(narco.id).toBeDefined();
+        expect(narco.duration).toBeDefined();
       }
     });
   });
@@ -124,11 +123,11 @@ describe('Narco effects: ', () => {
     const events = getEvents(model.modelId, [{ eventType: 'take-narco', data: { id: 'ascend-apostle-pill' } }], model.timestamp, true);
     const { baseModel, workingModel } = await process(model, events);
 
-    expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(1);
+    expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).toBe(1);
 
-    expect(baseModel.genome[7 - 1]).is.equal(4);
-    expect(baseModel.genome[10 - 1]).is.equal(4);
-    expect(baseModel.genome[12 - 1]).is.equal(4);
+    expect(baseModel.genome[7 - 1]).toBe(4);
+    expect(baseModel.genome[10 - 1]).toBe(4);
+    expect(baseModel.genome[12 - 1]).toBe(4);
   });
 
   it('Narco ascend failed', async function () {
@@ -143,7 +142,7 @@ describe('Narco effects: ', () => {
 
     const { workingModel } = await process(model, events);
 
-    expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).is.equal(0);
+    expect(workingModel.conditions.filter((e: any) => e.id == 'ascend-condition').length).toBe(0);
   });
 
   it('Narco ascend no immediate lllness', async function () {
@@ -166,7 +165,7 @@ describe('Narco effects: ', () => {
 
     const illness = workingModel.modifiers.filter((m: any) => m.id == 'ankylosingspondylitis');
 
-    expect(illness.length).is.equal(0);
+    expect(illness.length).toBe(0);
   });
 
   it('Narco ascend failed and leads to death', async function () {
@@ -186,6 +185,6 @@ describe('Narco effects: ', () => {
 
     baseModel = result.baseModel;
 
-    expect(baseModel.isAlive).is.false;
+    expect(baseModel.isAlive).toBe(false);
   });
 });

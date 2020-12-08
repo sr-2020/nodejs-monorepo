@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { process, printModel } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
@@ -302,9 +301,9 @@ describe('mobileViewModel', () => {
   it("_view doesn't produce null or undefined fields", async function () {
     const model = getExampleModel();
     const viewModel = await getViewModel(model);
-    expect(viewModel).to.be.deep.equal(JSON.parse(JSON.stringify(viewModel)));
-    expect(viewModel).to.have.property('modelId');
-    expect(viewModel).to.have.property('timestamp');
+    expect(viewModel).toEqual(JSON.parse(JSON.stringify(viewModel)));
+    expect(viewModel).toHaveProperty('modelId');
+    expect(viewModel).toHaveProperty('timestamp');
 
     //console.log(JSON.stringify(viewModel, null, 4));
   });
@@ -316,7 +315,7 @@ describe('mobileViewModel', () => {
     model.owner = 'ничей';
     model.creator = 'Господь Бог';
     const viewModel = await getViewModel(model);
-    expect(viewModel).to.be.deep.equal(getRobotViewModel());
+    expect(viewModel).toEqual(getRobotViewModel());
   });
 
   it('_view for programs is really dumb', async function () {
@@ -326,7 +325,7 @@ describe('mobileViewModel', () => {
     model.owner = 'ничей';
     model.creator = 'Господь Бог';
     const viewModel = await getViewModel(model);
-    expect(viewModel).to.be.deep.equal(getProgramViewModel());
+    expect(viewModel).toEqual(getProgramViewModel());
   });
 
   it('Start Illness and check illness life path', async function () {
@@ -338,11 +337,11 @@ describe('mobileViewModel', () => {
 
     const illness = baseModel.modifiers.find((m: any) => m.id == 'arthritis');
     // eslint-disable-next-line no-unused-expressions
-    expect(illness).is.exist;
+    expect(illness).toBeDefined();
 
     const cond = workingModel.conditions.find((c: any) => c.id == 'arthritis-0');
     // eslint-disable-next-line no-unused-expressions
-    expect(cond).is.exist;
+    expect(cond).toBeDefined();
 
     console.log('================= Stage 0 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 7210 * 1000)];
@@ -350,7 +349,7 @@ describe('mobileViewModel', () => {
 
     let viewModel = await getViewModel(model);
     let body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 1 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 5410 * 1000)];
@@ -358,7 +357,7 @@ describe('mobileViewModel', () => {
 
     viewModel = await getViewModel(model);
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 2 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 3610 * 1000)];
@@ -366,7 +365,7 @@ describe('mobileViewModel', () => {
 
     viewModel = await getViewModel(model);
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 3 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 2710 * 1000)];
@@ -374,7 +373,7 @@ describe('mobileViewModel', () => {
 
     viewModel = await getViewModel(model);
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 4 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 1810 * 1000)];
@@ -382,7 +381,7 @@ describe('mobileViewModel', () => {
 
     viewModel = await getViewModel(model);
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 5 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 910 * 1000)];
@@ -390,13 +389,13 @@ describe('mobileViewModel', () => {
 
     viewModel = await getViewModel(model);
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
 
     console.log('================= Stage 6 duration ============================');
     events = [getRefreshEvent(model.modelId, baseModel.timestamp + 610 * 1000)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     body = viewModel.pages.find((e: any) => e.viewId == 'page:general').body;
-    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).is.equal(0);
+    expect(body.items.filter((e: any) => e.text == 'Внимание!').length).toBe(0);
   });
 });

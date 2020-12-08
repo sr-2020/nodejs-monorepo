@@ -36,7 +36,6 @@
     "@types/clone": "^0.1.30",
     "@types/lodash": "^4.14.106",
     "async-file": "^2.0.2",
-    "chai": "^4.2.0",
     "chance": "^1.0.10",
     "clone": "^1.0.4",
     "fs.realpath": "^1.0.0",

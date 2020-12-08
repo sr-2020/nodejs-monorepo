@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 //Тесты для показа состояний в зависимости от знаений кубиков сознания
 
-import { expect } from 'chai';
 import { process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getRefreshEvent } from '../fixtures/events';
@@ -18,12 +17,12 @@ describe('Mind Cubes conditions tests: ', () => {
 
     let cond1 = workingModel.conditions.find((c: any) => c.id == 'mcube-condition-A0-2');
 
-    expect(cond1).to.exist;
-    expect(cond1).to.exist;
+    expect(cond1).toBeDefined();
+    expect(cond1).toBeDefined();
 
     cond1 = baseModel.conditions.find((c: any) => c.id == 'mcube-condition-A0-2');
 
-    expect(cond1).to.not.exist;
-    expect(cond1).to.not.exist;
+    expect(cond1).toBeFalsy();
+    expect(cond1).toBeFalsy();
   });
 });

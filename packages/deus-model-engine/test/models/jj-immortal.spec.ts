@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import { merge } from 'lodash';
-import { expect } from 'chai';
 
 import { process, findModifier, findChangeRecord } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
@@ -36,28 +35,28 @@ describe('JJ Immortality', () => {
     let { baseModel, workingModel } = await process(model, events);
 
     const jjOne = findModifier('jj-immortal-one', baseModel);
-    expect(jjOne).to.exist;
-    expect(jjOne.currentStage).to.equals(0);
-    expect(baseModel.timers.length).equals(1);
-    expect(baseModel.timers[0].name).equals('jj-immortal-one-' + jjOne.mID);
-    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).not.to.exist;
+    expect(jjOne).toBeDefined();
+    expect(jjOne.currentStage).toBe(0);
+    expect(baseModel.timers.length).toBe(1);
+    expect(baseModel.timers[0].name).toBe('jj-immortal-one-' + jjOne.mID);
+    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).not.toBeDefined();
 
     events = [getRefreshEvent(model.modelId, Date.now() + STEP1.stages[0].duration * 1000 + 10)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(findModifier('jj-immortal-one', baseModel)).to.has.property('currentStage', 1);
-    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).not.to.exist;
+    expect(findModifier('jj-immortal-one', baseModel)).toHaveProperty('currentStage', 1);
+    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).not.toBeDefined();
 
     events = [getRefreshEvent(model.modelId, Date.now() + STEP1.stages[0].duration * 1000 + STEP1.stages[1].duration * 1000 + 10)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(findModifier('jj-immortal-one', baseModel)).to.has.property('currentStage', 2);
-    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).to.exist;
+    expect(findModifier('jj-immortal-one', baseModel)).toHaveProperty('currentStage', 2);
+    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).toBeDefined();
 
     events = [
       getRefreshEvent(
@@ -67,11 +66,11 @@ describe('JJ Immortality', () => {
     ];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(findModifier('jj-immortal-one', baseModel)).not.to.exist;
-    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).to.exist;
-    expect(findChangeRecord(STEP1.stages[3].text, workingModel)).to.exist;
+    expect(findModifier('jj-immortal-one', baseModel)).not.toBeDefined();
+    expect(findChangeRecord(STEP1.stages[0].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[1].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[2].text, workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP1.stages[3].text, workingModel)).toBeDefined();
   });
 
   it('Use step 2 pill', async function () {
@@ -91,19 +90,19 @@ describe('JJ Immortality', () => {
     ({ baseModel, workingModel } = await process(baseModel, events));
 
     const jjOne = findModifier('jj-immortal-one', baseModel);
-    expect(jjOne).to.exist;
+    expect(jjOne).toBeDefined();
 
-    expect(baseModel.timers.length).equals(1);
-    expect(baseModel.timers[0].name).equals('jj-immortal-two-awake');
+    expect(baseModel.timers.length).toBe(1);
+    expect(baseModel.timers[0].name).toBe('jj-immortal-two-awake');
 
-    expect(findChangeRecord(STEP2.stages[0], workingModel)).to.exist;
-    expect(findChangeRecord(STEP2.stages[1], workingModel)).not.to.exist;
+    expect(findChangeRecord(STEP2.stages[0], workingModel)).toBeDefined();
+    expect(findChangeRecord(STEP2.stages[1], workingModel)).not.toBeDefined();
 
     events = [getRefreshEvent(model.modelId, timestamp + 5 * 60 * 1000 + 200)];
     ({ baseModel, workingModel } = await process(baseModel, events));
 
-    expect(findModifier('jj-immortal-one', baseModel)).not.to.exist;
-    expect(findChangeRecord(STEP2.stages[1], workingModel)).to.exist;
+    expect(findModifier('jj-immortal-one', baseModel)).not.toBeDefined();
+    expect(findChangeRecord(STEP2.stages[1], workingModel)).toBeDefined();
   });
 
   it('Usable with pill', async function () {
@@ -114,7 +113,7 @@ describe('JJ Immortality', () => {
     const { baseModel } = await process(model, events);
 
     const jjOne = findModifier('jj-immortal-one', baseModel);
-    expect(jjOne).to.exist;
-    expect(jjOne.currentStage).to.equals(0);
+    expect(jjOne).toBeDefined();
+    expect(jjOne.currentStage).toBe(0);
   });
 });
