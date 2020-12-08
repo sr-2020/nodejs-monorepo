@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "test": "cross-env NODE_ENV=test jest",
-    "test:realdb": "jest",
-    "coverage:test": "cross-env NODE_ENV=test nyc --cwd=.. --temp-dir=sr2020-testing/.nyc_output mocha --exit",
+    "test": "jest",
+    "test:realdb": "cross-env NODE_ENV=prod jest",
+    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-testing/.nyc_output mocha --exit",
     "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-testing.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
