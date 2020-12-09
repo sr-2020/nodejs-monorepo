@@ -8,10 +8,12 @@ function randomId() {
 }
 
 export function getExampleBiologicalOrganismModel(): OrganismModel {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return clone(require('../../data_samples/model.json'));
 }
 
 export function getExampleLabTerminalModel() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require('../../data_samples/medic-model.json');
 }
 

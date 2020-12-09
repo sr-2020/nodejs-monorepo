@@ -5,5 +5,6 @@ module.exports = {
     '<rootDir>/packages/alice-model-engine',
     '<rootDir>/packages/alice-models-manager',
     '<rootDir>/packages/deus-model-engine',
+    '<rootDir>/packages/magellan-model-engine',
   ],
 };

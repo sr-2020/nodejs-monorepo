@@ -37,6 +37,9 @@
     },
     "deus-model-engine": {
       "tags": []
+    },
+    "magellan-model-engine": {
+      "tags": []
     }
   },
   "workspaceLayout": {

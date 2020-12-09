@@ -148,6 +148,26 @@
           }
         }
       }
+    },
+    "magellan-model-engine": {
+      "root": "packages/magellan-model-engine",
+      "sourceRoot": "packages/magellan-model-engine",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/magellan-model-engine/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/magellan-model-engine/jest.config.ts"
+          }
+        }
+      }
     }
   },
   "cli": {
