@@ -2606,21 +2606,6 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@loopback/boot@^2.0.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@loopback/boot/-/boot-2.5.1.tgz#b93fb02ce4d7d229c23d3200508c76397c1ec33b"
-  integrity sha512-TAOU4Mz1wcoVynx1jLHQhFg8NltBqvoZ8Rb6PE1qdcYtI6zsETQprKbr3P+F+cXivj8xv4mLDBd30lFmgvC+0Q==
-  dependencies:
-    "@loopback/core" "^2.9.5"
-    "@loopback/model-api-builder" "^2.1.13"
-    "@loopback/repository" "^2.11.2"
-    "@loopback/service-proxy" "^2.3.8"
-    "@types/debug" "^4.1.5"
-    "@types/glob" "^7.1.3"
-    debug "^4.1.1"
-    glob "^7.1.6"
-    tslib "^2.0.1"
-
 "@loopback/build@^6.2.2":
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/@loopback/build/-/build-6.2.2.tgz#62f6fc842a64fd78e657c29d187c2f72605b4c89"
@@ -2718,13 +2703,6 @@
     reflect-metadata "^0.1.13"
     tslib "^2.0.1"
 
-"@loopback/model-api-builder@^2.1.13":
-  version "2.1.13"
-  resolved "https://registry.yarnpkg.com/@loopback/model-api-builder/-/model-api-builder-2.1.13.tgz#2f6a12c370bccb8a52a664e034bd85cfa58f37c0"
-  integrity sha512-p2ucT3GOWOTaU/vqpXvyCU0eIVedGqlRyzejgHapXge8Z7P2tp8Jb+UndvaM3wMsEdOR7yjxMOBDbOGNtogAhA==
-  dependencies:
-    tslib "^2.0.1"
-
 "@loopback/openapi-v3@^3.1.0", "@loopback/openapi-v3@^3.4.9":
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/@loopback/openapi-v3/-/openapi-v3-3.4.9.tgz#7c85edea98934c40a8a701f925d5ae19c14499bf"
@@ -2810,7 +2788,7 @@
     type-is "^1.6.18"
     validator "^13.1.1"
 
-"@loopback/service-proxy@^2.0.1", "@loopback/service-proxy@^2.3.8":
+"@loopback/service-proxy@^2.0.1":
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/@loopback/service-proxy/-/service-proxy-2.3.8.tgz#e4bb28db43ff70f1507bf1550c1f7d3806d9e792"
   integrity sha512-WRErlDsmDSC+4wb+2J0u8hdNKoYxX6jXNzhSvZ2DPp7oubZPC8LeKcjMr1nNWkdT9vEbJYmoQP4kUC6LCDFfnQ==
@@ -3933,7 +3911,7 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/glob@^7.1.1", "@types/glob@^7.1.3":
+"@types/glob@^7.1.1":
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.3.tgz#e6ba80f36b7daad2c685acd9266382e68985c183"
   integrity sha512-SEYeGAIQIQX8NN6LDKprLjbrd5dARM5EXsd8GI/A5l0apYI1fGMWgPHSe4ZKL4eozlAyI+doUE9XbYS4xCkQ1w==
