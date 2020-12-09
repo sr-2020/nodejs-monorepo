@@ -95,8 +95,8 @@ describe('Narco effects: ', () => {
   });
 
   it('All narcos parsed', async function () {
-    const all_narcos = JSON.parse(await fs.readTextFile('catalogs/narco.json')).pills;
-    const conditions = JSON.parse(await fs.readTextFile('catalogs/conditions.json')).conditions;
+    const all_narcos = JSON.parse(await fs.readTextFile(__dirname + '/../../catalogs/narco.json')).pills;
+    const conditions = JSON.parse(await fs.readTextFile(__dirname + '/../../catalogs/conditions.json')).conditions;
 
     all_narcos.forEach((narco: any) => {
       if (narco.conditions) {

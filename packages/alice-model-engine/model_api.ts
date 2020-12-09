@@ -16,7 +16,7 @@ import { Context } from './context';
 import Logger from './logger';
 import { EventCallback } from '@alice/interface/callbacks';
 import { Duration } from 'moment';
-import cuid = require('cuid');
+import * as cuid from 'cuid';
 
 class LogApi implements LogApiInterface {
   public debug(msg: string, additionalData?: any) {

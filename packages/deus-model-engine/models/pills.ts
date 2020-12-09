@@ -1,7 +1,7 @@
-import _ = require('lodash');
-import medichelpers = require('../helpers/medic-helper');
-import helpers = require('../helpers/model-helper');
-import consts = require('../helpers/constants');
+import * as _ from 'lodash';
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
+import { default as medichelpers } from '../helpers/medic-helper';
 import { EventModelApi, Modifier, PreprocessApiInterface } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { Narcotic } from '../helpers/catalog_types';
@@ -84,7 +84,7 @@ function useGeneric(api: EventModelApi<DeusExModel>, pill) {
   api.sendSelfEvent(pill.eventType, { pill });
 }
 
-function usePill(api: EventModelApi<DeusExModel>, data) {
+export function usePill(api: EventModelApi<DeusExModel>, data) {
   if (!api.model.isAlive) {
     api.error(`usePill: Dead can't use pills or anything at all, to be honest.`);
     return;
@@ -157,7 +157,6 @@ function aquirePills(api: PreprocessApiInterface<any>, events) {
   events.filter((event) => event.eventType == 'usePill').forEach((event) => api.aquire('pills', event.data.id));
 }
 
-module.exports = {
-  _preprocess: aquirePills,
-  usePill,
-};
+export function _preprocess(api: PreprocessApiInterface<any>, events) {
+  return aquirePills(api, events);
+}

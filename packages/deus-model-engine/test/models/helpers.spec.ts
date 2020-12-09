@@ -1,4 +1,4 @@
-import helpers = require('../../helpers/model-helper');
+import { default as helpers } from '../../helpers/model-helper';
 
 describe('Helpers: ', () => {
   it('Predicates check', function () {

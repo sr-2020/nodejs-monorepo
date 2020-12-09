@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
-import helpers = require('../helpers/model-helper');
-import medichelpers = require('../helpers/medic-helper');
+import { default as helpers } from '../helpers/model-helper';
+import { default as medichelpers } from '../helpers/medic-helper';
 
 interface JjImmortalOneModifier extends Modifier {
   currentStage: number;
@@ -20,7 +20,7 @@ interface JjImmortalOneModifier extends Modifier {
 */
 
 // Событие jj-immortal-one-start
-function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
+export function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -62,7 +62,7 @@ function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
 }
 
 // Событие jj-immortal-one-next-stage
-function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
+export function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
   if (!data.mID) {
     api.error('jjImmortalOneNextStage: no mID');
     return;
@@ -98,7 +98,7 @@ function jjImmortalOneNextStageEvent(api: EventModelApi<DeusExModel>, data) {
 }
 
 // Событие jj-immortal-two-start
-function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data) {
+export function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneStartEvent');
 
   if (api.model.profileType != 'human') {
@@ -136,7 +136,7 @@ function jjImmortalTwoStartEvent(api: EventModelApi<DeusExModel>, data) {
 }
 
 // Событие jj-immortal-two-awake
-function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data) {
+export function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data) {
   api.info('jjImmortalOneAwakeEvent');
 
   if (api.model.profileType != 'human') {
@@ -188,10 +188,3 @@ function jjImmortalTwoAwakeEvent(api: EventModelApi<DeusExModel>, data) {
 
   helpers.addChangeRecord(api, pill.stages[1], api.model.timestamp);
 }
-
-module.exports = {
-  jjImmortalOneStartEvent,
-  jjImmortalOneNextStageEvent,
-  jjImmortalTwoStartEvent,
-  jjImmortalTwoAwakeEvent,
-};

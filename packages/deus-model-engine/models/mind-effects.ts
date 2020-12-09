@@ -2,8 +2,8 @@
  * Эффекты, воздействующие на мозг
  */
 
-import helpers = require('../helpers/model-helper');
-import consts = require('../helpers/constants');
+import { default as helpers } from '../helpers/model-helper';
+import { default as consts } from '../helpers/constants';
 import { DeusExModel } from '../deus-ex-model';
 import { EffectModelApi } from '@alice/interface/models/alice-model-engine';
 
@@ -11,7 +11,7 @@ import { EffectModelApi } from '@alice/interface/models/alice-model-engine';
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)
  * Аналогичен changeMindCubeEvent
  */
-function changeMindCubesEffect(api: EffectModelApi<DeusExModel>, modifier) {
+export function changeMindCubesEffect(api: EffectModelApi<DeusExModel>, modifier) {
   api.debug('changeMindCubesEffect: start, change: ' + JSON.stringify(modifier));
   const changeCommand = modifier.mindCubeChange;
 
@@ -27,9 +27,3 @@ function changeMindCubesEffect(api: EffectModelApi<DeusExModel>, modifier) {
     }
   }
 }
-
-module.exports = () => {
-  return {
-    changeMindCubesEffect,
-  };
-};

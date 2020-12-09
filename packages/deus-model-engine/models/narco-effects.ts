@@ -1,6 +1,6 @@
 ///  Narco effects
 
-import helpers = require('../helpers/model-helper');
+import { default as helpers } from '../helpers/model-helper';
 import { EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { Narcotic } from '../helpers/catalog_types';
@@ -90,7 +90,7 @@ function dieHorribleDeath(api) {
   helpers.addDelayedEvent(api, deathAwaitTimeMs, 'start-illness', { id: 'Dementia' });
 }
 
-function takeNarcoEvent(api: EventModelApi<DeusExModel>, data) {
+export function takeNarcoEvent(api: EventModelApi<DeusExModel>, data) {
   api.info(`Taking narco effect: ${data.id}`);
 
   const narco = data.narco ?? loadNarco(api, data.id);
@@ -136,7 +136,7 @@ function takeNarcoEvent(api: EventModelApi<DeusExModel>, data) {
 /**
  * Remove narco modifier by id
  */
-function stopNarcoModifier(api: EventModelApi<DeusExModel>, data) {
+export function stopNarcoModifier(api: EventModelApi<DeusExModel>, data) {
   api.info(`Removing narco effect ${data.mID}`);
   if (data.mID) {
     const modifier = api.getModifierById(data.mID);
@@ -145,10 +145,3 @@ function stopNarcoModifier(api: EventModelApi<DeusExModel>, data) {
     }
   }
 }
-
-module.exports = () => {
-  return {
-    takeNarcoEvent,
-    stopNarcoModifier,
-  };
-};

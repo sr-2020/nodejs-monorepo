@@ -5,7 +5,7 @@ import { AquiredObjects, EmptyModel, EngineResult, Event, PendingAquire } from '
 
 import * as config from './config';
 import Logger from './logger';
-import { loadModels } from './utils';
+import { FolderLoader, loadModels } from './utils';
 import { Engine } from './engine';
 import { ModelCallbacks } from '@alice/interface/callbacks';
 
@@ -15,8 +15,8 @@ declare var TEST_EXTERNAL_OBJECTS: any;
 export class Worker {
   private _engine: Engine<EmptyModel>;
 
-  public static load(dir: string): Worker {
-    const m = loadModels(dir);
+  public static load(loader: FolderLoader): Worker {
+    const m = loadModels(loader);
     Logger.debug('engine', 'Loaded model', { model: inspect(m, false, null) });
     return new Worker(m);
   }

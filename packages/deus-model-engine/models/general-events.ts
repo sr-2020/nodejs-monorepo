@@ -2,10 +2,9 @@
  * Универсальные события для хакерства и т.д.
  */
 
-import type = require('type-detect');
-import helpers = require('../helpers/model-helper');
-import consts = require('../helpers/constants');
-import Chance = require('chance');
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
+import * as Chance from 'chance';
 import { DeusExModel } from '../deus-ex-model';
 import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 
@@ -24,7 +23,7 @@ interface PutConditionData {
   duration?: number;
 }
 
-function putConditionEvent(api: EventModelApi<DeusExModel>, data: PutConditionData) {
+export function putConditionEvent(api: EventModelApi<DeusExModel>, data: PutConditionData) {
   if (data.text) {
     const cond = helpers.addCondition(api, {
       id: `putCondition-${chance.natural({ min: 0, max: 999999 })}`,
@@ -52,7 +51,7 @@ interface RemoveConditionData {
   id?: string;
 }
 
-function removeConditionEvent(api: EventModelApi<DeusExModel>, data: RemoveConditionData) {
+export function removeConditionEvent(api: EventModelApi<DeusExModel>, data: RemoveConditionData) {
   if (data.id) {
     const i = api.model.conditions.findIndex((c) => c.id == data.id);
 
@@ -74,7 +73,7 @@ interface SendMessageData {
   text?: string;
 }
 
-function sendMessageEvent(api: EventModelApi<DeusExModel>, data: SendMessageData) {
+export function sendMessageEvent(api: EventModelApi<DeusExModel>, data: SendMessageData) {
   if (data.title && api.model.messages) {
     const message = {
       mID: helpers.uuidv4(),
@@ -101,7 +100,7 @@ interface ChangeMindCubeData {
   operations: string;
 }
 
-function changeMindCubeEvent(api: EventModelApi<DeusExModel>, data: ChangeMindCubeData) {
+export function changeMindCubeEvent(api: EventModelApi<DeusExModel>, data: ChangeMindCubeData) {
   api.error('=============================');
 
   if (data.operations) {
@@ -119,7 +118,7 @@ interface AddChangeRecordData {
   timestamp?: number;
 }
 
-function addChangeRecord(api: EventModelApi<DeusExModel>, data: AddChangeRecordData) {
+export function addChangeRecord(api: EventModelApi<DeusExModel>, data: AddChangeRecordData) {
   if (data.text && data.timestamp) {
     helpers.addChangeRecord(api, data.text, data.timestamp);
   }
@@ -139,7 +138,7 @@ interface ChangeModelVariableData {
   value?: any;
 }
 
-function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeModelVariableData) {
+export function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeModelVariableData) {
   if (data.name && data.value) {
     const restricted = [
       '_id',
@@ -164,15 +163,9 @@ function changeModelVariableEvent(api: EventModelApi<DeusExModel>, data: ChangeM
     }
 
     if (api.model[data.name]) {
-      const t = type(api.model[data.name]);
-
-      if (t == 'number' || t == 'string' || t == 'null' || t == 'undefined') {
-        const oldValue = api.model[data.name];
-
-        api.model[data.name] = data.value;
-
-        api.info(`changeModelVariable:  ${data.name}:  ${oldValue} ==> ${api.model[data.name]}`);
-      }
+      const oldValue = api.model[data.name];
+      api.model[data.name] = data.value;
+      api.info(`changeModelVariable:  ${data.name}:  ${oldValue} ==> ${api.model[data.name]}`);
     }
   }
 }
@@ -187,7 +180,7 @@ interface ChangeAndroidOwnerData {
   owner?: string;
 }
 
-function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAndroidOwnerData) {
+export function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAndroidOwnerData) {
   if (data.owner && api.model.profileType == 'robot') {
     api.info(`changeAndroidOwner:  ${api.model.owner} ===> ${data.owner}`);
 
@@ -218,7 +211,7 @@ function changeAndroidOwnerEvent(api: EventModelApi<DeusExModel>, data: ChangeAn
  *      ]
  * }
  */
-function changeMemoryEvent(api: EventModelApi<DeusExModel>, data) {
+export function changeMemoryEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.remove) {
     data.remove.forEach((mID) => {
       api.info(`changeMemory: remove element with ${mID}`);
@@ -268,7 +261,7 @@ interface ChangeInsuranceData {
   Level: number;
 }
 
-function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsuranceData) {
+export function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsuranceData) {
   if (data.Insurance && data.Level) {
     api.info(`changeInsurance: new insurance ${data.Insurance}, level: ${data.Level}`);
 
@@ -285,17 +278,3 @@ function changeInsuranceEvent(api: EventModelApi<DeusExModel>, data: ChangeInsur
     helpers.addChangeRecord(api, `Заменена страховка. Новая страховка: ${api.model.insuranceDiplayName}`, api.model.timestamp);
   }
 }
-
-module.exports = () => {
-  return {
-    putConditionEvent,
-    removeConditionEvent,
-    sendMessageEvent,
-    changeModelVariableEvent,
-    changeAndroidOwnerEvent,
-    changeMemoryEvent,
-    changeMindCubeEvent,
-    changeInsuranceEvent,
-    addChangeRecord,
-  };
-};

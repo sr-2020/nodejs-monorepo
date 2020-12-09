@@ -1,4 +1,4 @@
-import { Request, RestBindings, get, ResponseObject } from '@loopback/rest';
+import { get, Request, ResponseObject, RestBindings } from '@loopback/rest';
 import { inject } from '@loopback/context';
 
 /**
@@ -39,7 +39,7 @@ export class PingController {
       '200': PING_RESPONSE,
     },
   })
-  ping(): object {
+  ping() {
     // Reply with a greeting, the current time, the url, and request headers
     return {
       greeting: 'Hello from LoopBack',

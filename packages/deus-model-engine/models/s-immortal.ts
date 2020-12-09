@@ -1,6 +1,6 @@
-import consts = require('../helpers/constants');
-import helpers = require('../helpers/model-helper');
-import medhelpers = require('../helpers/medic-helper');
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
+import { default as medhelpers } from '../helpers/medic-helper';
 import { DeusExModel } from '../deus-ex-model';
 import { EffectModelApi, EventModelApi } from '@alice/interface/models/alice-model-engine';
 
@@ -10,7 +10,7 @@ import { EffectModelApi, EventModelApi } from '@alice/interface/models/alice-mod
  * Вызывается по таймеру через час после установки импланта s_immortal01
  * Ставит флаг "immortalityReady" в импланте (а по этому флагу показывается сообщение о готовности)
  */
-function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data) {
+export function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data) {
   const implant = api.getModifierById(data.mID);
 
   if (implant) {
@@ -25,7 +25,7 @@ function serenityImmortalityReadyEvent(api: EventModelApi<DeusExModel>, data) {
  * Эффект serenity_immortality_s01
  * Показывает состояние готовности, когда immortalityReady == "true"
  */
-function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant) {
+export function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant) {
   api.debug(`serenityImmortalityS01Effect: start stage 01 visibility effect`);
 
   if (implant && implant.id == consts.S_IMMORTAL_NAME_01 && implant.immortalityReady) {
@@ -39,7 +39,7 @@ function serenityImmortalityS01Effect(api: EffectModelApi<DeusExModel>, implant)
  * Событие вызывается по "таблетке" и выполняет конвертацию в Serenety-style бессмертного
  * Выполняется только при наличии импланта s_immortal01 с установленным флагом immortalityReady
  */
-function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data) {
+export function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data) {
   const implant = api.model.modifiers.find((m) => m.id == consts.S_IMMORTAL_NAME_01);
 
   if (!implant || !implant.immortalityReady) {
@@ -87,11 +87,3 @@ function serenityImmortalityGoEvent(api: EventModelApi<DeusExModel>, data) {
 
   helpers.addChangeRecord(api, 'Модернизация организма завершена', api.model.timestamp);
 }
-
-module.exports = () => {
-  return {
-    serenityImmortalityReadyEvent,
-    serenityImmortalityS01Effect,
-    serenityImmortalityGoEvent,
-  };
-};

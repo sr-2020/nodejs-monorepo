@@ -5,9 +5,8 @@ import { DamageModifier } from './catalog_types';
 /**
  * Хелперы для медицинских моделей
  */
-
-const helpers = require('./model-helper');
-const consts = require('./constants');
+import { default as helpers } from './model-helper';
+import { default as consts } from './constants';
 
 function addDamage(api: EventModelApi<DeusExModel>, hpLost, timestamp) {
   if (hpLost && api.model.hp && api.model.profileType != 'program' && api.model.profileType != 'exhuman-program') {
@@ -150,7 +149,7 @@ function removeIllness(api: EventModelApi<DeusExModel>, mID) {
   }
 }
 
-export = {
+export default {
   addDamage,
   restoreDamage,
   calcMaxHP,

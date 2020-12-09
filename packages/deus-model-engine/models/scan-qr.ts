@@ -1,7 +1,7 @@
 import { Event, EventModelApi, PreprocessApiInterface } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 
-function scanQR(api: EventModelApi<DeusExModel>, data: any) {
+export function scanQR(api: EventModelApi<DeusExModel>, data: any) {
   api.info(`scanQR: event handler. Data: ${JSON.stringify(data)}`);
   switch (data.type) {
     case 1:
@@ -17,7 +17,6 @@ function aquirePills(api: PreprocessApiInterface<any>, events: Event[]) {
   events.filter((event) => event.eventType == 'scanQR' && event.data.type == 1).forEach((event) => api.aquire('pills', event.data.payload));
 }
 
-module.exports = {
-  _preprocess: aquirePills,
-  scanQR,
-};
+export function _preprocess(api: PreprocessApiInterface<any>, events: Event[]) {
+  return aquirePills(api, events);
+}

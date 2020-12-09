@@ -40,7 +40,7 @@ const InsuranceDisplay = {
   SuperVip: 'SuperVIP',
 };
 
-export = {
+export default {
   DAMAGE_MODIFIER_MID,
   medicSystems,
   MAX_CHANGES_LINES,

@@ -1,6 +1,6 @@
-import consts = require('../helpers/constants');
-import _ = require('lodash');
-import helpers = require('../helpers/model-helper');
+import * as _ from 'lodash';
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
 
 const systemCount = consts.medicSystems.length;
 

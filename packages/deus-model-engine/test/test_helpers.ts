@@ -1,7 +1,7 @@
 import * as Path from 'path';
 import { Worker } from '@alice/alice-model-engine/worker';
 import { Config } from '@alice/alice-model-engine/config';
-import { requireDir } from '@alice/alice-model-engine/utils';
+import { requireDir, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import * as Winston from 'winston';
 
 import { EmptyModel, EngineResult, EngineResultOk, Event } from '@alice/interface/models/alice-model-engine';
@@ -16,8 +16,8 @@ export function getWorker() {
   const catalogsPath = Path.resolve(__dirname, '../catalogs');
   const modelsPath = Path.resolve(__dirname, '../models');
 
-  const config = Config.parse(requireDir(catalogsPath));
-  return (WORKER_INSTANCE = Worker.load(modelsPath).configure(config));
+  const config = Config.parse(requireDir(new TestFolderLoader(catalogsPath)));
+  return (WORKER_INSTANCE = Worker.load(new TestFolderLoader(modelsPath)).configure(config));
 }
 
 export function process_(model: EmptyModel, events: Event[]): Promise<EngineResult> {

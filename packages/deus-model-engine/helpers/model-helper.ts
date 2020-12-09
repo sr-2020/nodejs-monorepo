@@ -4,15 +4,15 @@ import { DeusExModel } from '../deus-ex-model';
 import { Illness, Implant, ImplantModifier } from './catalog_types';
 import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { cloneDeep } from 'lodash';
-import cuid = require('cuid');
+import * as cuid from 'cuid';
+import * as Chance from 'chance';
+import { default as consts } from '../helpers/constants';
+
+const chance = new Chance();
 
 /**
  * Хелперы для разных моделей
  */
-const consts = require('./constants');
-const type = require('type-detect');
-const Chance = require('chance');
-const chance = new Chance();
 
 function loadImplant(api: EventModelApi<DeusExModel>, id: string): Implant | null {
   const implant = api.getCatalogObject<Implant>('implants', id.toLowerCase());
@@ -151,7 +151,7 @@ function checkValue(value: string, condition: string) {
   }
 
   let parts: RegExpMatchArray | null = null;
-  if ((parts = condition.match(/^(\d+)\-(\d+)$/i))) {
+  if ((parts = condition.match(/^(\d+)-(\d+)$/i))) {
     l = Number.parseInt(parts[1]);
     h = Number.parseInt(parts[2]);
   }
@@ -205,7 +205,7 @@ function modifyMindCubes(api: EffectModelApi<DeusExModel>, mind: MindData, chang
   changeText.split(',').forEach((exp) => {
     api.debug(`MMC:  Part: ${exp}`);
 
-    const exParts = exp.match(/([A-G])(\d)([\+\-\=])(\d+)/i);
+    const exParts = exp.match(/([A-G])(\d)([+\-=])(\d+)/i);
     if (exParts) {
       const cube = exParts[1];
       const index = Number(exParts[2]);
@@ -361,7 +361,7 @@ function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: str
       .replace(/\s/gi, '')
       .split(',')
       .forEach((op) => {
-        const parts = op.match(/^([\w\d]+)([\+\-\=])(\d+)$|^([\w\d]+)\=\"(.*)\"$/i);
+        const parts = op.match(/^([\w\d]+)([+\-=])(\d+)$|^([\w\d]+)="(.*)"$/i);
 
         if (parts) {
           let result = false;
@@ -376,7 +376,7 @@ function modifyModelProperties(api: EffectModelApi<DeusExModel>, operations: str
             const varName = parts[1] ?? parts[4];
             api.info(`modifyModelProperties:  ${varName} ==> ${api.model[varName]}`);
           } else {
-            api.error(`modifyModelProperties: can't execute operation \"${op}\"`);
+            api.error(`modifyModelProperties: can't execute operation "${op}"`);
           }
         }
       });
@@ -393,12 +393,6 @@ function modifyModelStringProperty(api: EffectModelApi<DeusExModel>, varName, va
     return false;
   }
 
-  const t = type(api.model[varName]);
-
-  if (t != 'string' && t != 'null' && t != 'undefined') {
-    return false;
-  }
-
   api.model[varName] = value;
 
   return true;
@@ -411,12 +405,6 @@ function modifyModelDigitProperty(api: EffectModelApi<DeusExModel>, varName: str
 
   // eslint-disable-next-line no-prototype-builtins
   if (!api.model.hasOwnProperty(varName)) {
-    return false;
-  }
-
-  const t = type(api.model[varName]);
-
-  if (t != 'number') {
     return false;
   }
 
@@ -530,7 +518,7 @@ function addCondition(api: EffectModelApi<DeusExModel>, condition: Condition): C
   return c;
 }
 
-export = {
+export default {
   loadImplant,
   addChangeRecord,
   uuidv4,

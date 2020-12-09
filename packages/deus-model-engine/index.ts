@@ -6,7 +6,6 @@ export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
 
   const app = new DeusModelsApplication(options);
-  await app.boot();
   await app.start();
 
   const url = app.restServer.url;

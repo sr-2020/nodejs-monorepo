@@ -1,4 +1,3 @@
-import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
@@ -6,15 +5,17 @@ import { RestApplication } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
 import { Engine } from '@alice/alice-model-engine/engine';
-import { loadModels, requireDir } from '@alice/alice-model-engine/utils';
+import { loadModels, requireDir, TestFolderLoader, WebpackFolderLoader } from '@alice/alice-model-engine/utils';
 import { Config } from '@alice/alice-model-engine/config';
+import { PingController } from '@alice/deus-model-engine/controllers/ping.controller';
+import { ModelEngineController } from '@alice/deus-model-engine/controllers/model-engine.controller';
 
-export class DeusModelsApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
+export class DeusModelsApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
     // Set up default home page
-    this.static('/', path.join(__dirname, 'static'));
+    this.static('/', path.join(__dirname, 'assets'));
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
@@ -22,29 +23,14 @@ export class DeusModelsApplication extends BootMixin(ServiceMixin(RepositoryMixi
     });
     this.component(RestExplorerComponent);
 
-    this.bind(Engine.bindingKey).to(new Engine(loadModels('./models'), Config.parse(requireDir('./catalogs'))));
+    const isTest = process.env.NODE_ENV == 'test';
+    const modelsLoader = isTest ? new TestFolderLoader('./models') : new WebpackFolderLoader(require.context('./models', true, /.*\.ts/));
+    const catalogsLoader = isTest
+      ? new TestFolderLoader('./catalogs')
+      : new WebpackFolderLoader(require.context('./catalogs', true, /.*\.json/));
 
-    this.projectRoot = __dirname + '/../';
-    const dirs = ['deus-model-engine'];
-    // Customize @loopback/boot Booter Conventions here
-    const extension = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
-    this.bootOptions = {
-      controllers: {
-        dirs,
-        extensions: [`.controller.${extension}`],
-      },
-      datasources: {
-        dirs,
-        extensions: [`.datasource.${extension}`],
-      },
-      repositories: {
-        dirs,
-        extensions: [`.repository.${extension}`],
-      },
-      services: {
-        dirs,
-        extensions: [`.service.${extension}`],
-      },
-    };
+    this.bind(Engine.bindingKey).to(new Engine(loadModels(modelsLoader), Config.parse(requireDir(catalogsLoader))));
+    this.bind('controllers.PingController').toClass(PingController);
+    this.bind('controllers.PushController').toClass(ModelEngineController);
   }
 }

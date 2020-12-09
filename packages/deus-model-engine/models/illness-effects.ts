@@ -6,18 +6,18 @@ import * as moment from 'moment';
 import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { Illness, IllnessModifier } from '../helpers/catalog_types';
-import consts = require('../helpers/constants');
-import helpers = require('../helpers/model-helper');
-import medhelpers = require('../helpers/medic-helper');
-import clone = require('clone');
-import infection = require('../helpers/infection-illness');
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
+import { default as medhelpers } from '../helpers/medic-helper';
+import { whatSystemShouldBeInfected } from '../helpers/infection-illness';
+import * as clone from 'clone';
 
 /**
  * Обработчик события start-illness
  * Добавляет в модель болезнь (таким образом запуская ее)
  * { id: ilness-id }
  */
-function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
+export function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
   if (data.id && api.model.profileType == 'human') {
     api.info(`startIllnessEvent: try to start illness: ${data.id}`);
 
@@ -70,7 +70,7 @@ function startIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
  * Эффект "болезни". Название эффекта "illness-effect"
  * Отображает состояние для данного этапа - симптомы.
  */
-function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: IllnessModifier) {
+export function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: IllnessModifier) {
   if (modifier.class == 'illness') {
     api.info(`illnessEffect: illness: ${modifier.displayName}, stage: ${modifier.currentStage}`);
 
@@ -92,7 +92,7 @@ function illnessEffect(api: EffectModelApi<DeusExModel>, modifier: IllnessModifi
  * Если это был последний этап, то убивает систему для которой болезнь (и не ставит таймер)
  * Модификатор болезни остается до тех пор, пока не будет установлен имплант на эту систему
  */
-function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
+export function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
   if (data.mID) {
     const illness = api.getModifierById(data.mID) as IllnessModifier | undefined;
     if (illness) {
@@ -130,7 +130,7 @@ function illnessNextStageEvent(api: EventModelApi<DeusExModel>, data: any) {
  * 1. Находит все болезни для данной системы
  * 2. Берет текущее значение таймера для каждой из болезни и увеличивает его значение на delay миллисекунд
  */
-function delayIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
+export function delayIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
   if (data.system && data.delay) {
     //console.log(JSON.stringify(api.model.modifiers, null, 4));
     api.model.modifiers
@@ -184,10 +184,10 @@ const illneses = [
   'tuberculosis',
 ];
 
-function rollIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
+export function rollIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
   api.debug('Start rolling for infection');
   if (api.model.profileType == 'human') {
-    const systemId = infection.whatSystemShouldBeInfected(api.model);
+    const systemId = whatSystemShouldBeInfected(api.model);
 
     if (systemId && systemId > -1) {
       const systemName = consts.medicSystems[systemId].name;
@@ -211,13 +211,3 @@ function rollIllnessEvent(api: EventModelApi<DeusExModel>, data: any) {
     }
   }
 }
-
-module.exports = () => {
-  return {
-    startIllnessEvent,
-    illnessEffect,
-    illnessNextStageEvent,
-    delayIllnessEvent,
-    rollIllnessEvent,
-  };
-};

@@ -2,16 +2,16 @@ import * as moment from 'moment';
 import { DeusExModel } from '../deus-ex-model';
 import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { ImplantModifier } from '../helpers/catalog_types';
-import consts = require('../helpers/constants');
-import helpers = require('../helpers/model-helper');
-import medhelpers = require('../helpers/medic-helper');
+import { default as consts } from '../helpers/constants';
+import { default as helpers } from '../helpers/model-helper';
+import { default as medhelpers } from '../helpers/medic-helper';
 
 /**
  * Обработчик события
  * Добавляет имплант в модель
  * { id: implant-id }
  */
-function addImplantEvent(api: EventModelApi<DeusExModel>, data: { id: string }) {
+export function addImplantEvent(api: EventModelApi<DeusExModel>, data: { id: string }) {
   if (data.id) {
     if (!api.model.isAlive) {
       api.error("Can't install implant to deadman. Why are you doing this...");
@@ -121,7 +121,7 @@ function addImplantEvent(api: EventModelApi<DeusExModel>, data: { id: string }) 
  * Удвляет имплант из модели
  * { mID: implant-model-id }
  */
-function removeImplantEvent(api: EventModelApi<DeusExModel>, data) {
+export function removeImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
 
@@ -181,7 +181,7 @@ function instantInstallEffect(api: EventModelApi<DeusExModel>, implant) {
  * параметр duration задается в секундах, и он опционален.
  * Если задан - имплант отключается на это время
  */
-function disableImplantEvent(api: EventModelApi<DeusExModel>, data) {
+export function disableImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
     if (implant) {
@@ -201,7 +201,7 @@ function disableImplantEvent(api: EventModelApi<DeusExModel>, data) {
  * Обработчик события "включить имплант"
  * { mID: implant-model-id }
  */
-function enableImplantEvent(api: EventModelApi<DeusExModel>, data) {
+export function enableImplantEvent(api: EventModelApi<DeusExModel>, data) {
   if (data.mID) {
     const implant = api.getModifierById(data.mID);
     if (implant) {
@@ -211,12 +211,3 @@ function enableImplantEvent(api: EventModelApi<DeusExModel>, data) {
     }
   }
 }
-
-module.exports = () => {
-  return {
-    addImplantEvent,
-    removeImplantEvent,
-    disableImplantEvent,
-    enableImplantEvent,
-  };
-};

@@ -2,7 +2,7 @@
  * Универсальные события связанные с VR
  */
 
-import helpers = require('../helpers/model-helper');
+import { default as helpers } from '../helpers/model-helper';
 import { DeusExModel } from '../deus-ex-model';
 import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 
@@ -13,7 +13,7 @@ import { EventModelApi } from '@alice/interface/models/alice-model-engine';
  * (время события - время входа)
  *
  */
-function enterVREvent(api: EventModelApi<DeusExModel>, data) {
+export function enterVREvent(api: EventModelApi<DeusExModel>, data) {
   if (!api.model.isAlive) {
     api.error("Dead can't enter VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, api.model.timestamp);
@@ -30,7 +30,7 @@ function enterVREvent(api: EventModelApi<DeusExModel>, data) {
  * И увеличивает счетчик суммарного нахождения в VR для персонажа
  * (время события - время выхода)
  */
-function exitVREvent(api: EventModelApi<DeusExModel>, data) {
+export function exitVREvent(api: EventModelApi<DeusExModel>, data) {
   if (!api.model.isAlive) {
     api.error("Dead can't exit VR. Or any other location.");
     helpers.addChangeRecord(api, `Операция невозможна для мертвого.`, api.model.timestamp);
@@ -59,10 +59,3 @@ function exitVREvent(api: EventModelApi<DeusExModel>, data) {
     api.error(`При обработке выхода из VR время входа ${api.model.lastVREnterTimestamp}; сейчас ${api.model.timestamp}`);
   }
 }
-
-module.exports = () => {
-  return {
-    enterVREvent,
-    exitVREvent,
-  };
-};

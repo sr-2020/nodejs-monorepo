@@ -2,7 +2,7 @@
  * Эффекты работы имплантов
  */
 
-import helpers = require('../helpers/model-helper');
+import { default as helpers } from '../helpers/model-helper';
 import { EffectModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 
@@ -17,7 +17,7 @@ import { DeusExModel } from '../deus-ex-model';
  * }
  */
 
-function showCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
+export function showCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   //Получить СПИСОК предикатов для показа (может быть несколько состояний)
   const params = helpers.checkPredicate(api, modifier.mID, 'show-condition', true);
   api.info('showCondition: start, predicate: ' + JSON.stringify(params));
@@ -35,7 +35,7 @@ function showCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
  * modifier.conditions = ["cond-id"]
  */
 
-function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier & { conditions: string[] }) {
+export function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifier & { conditions: string[] }) {
   api.debug('Show always condition ' + JSON.stringify(modifier.conditions));
   if (modifier.conditions) {
     //Пройти по всем совпадаениям в предикатах и показать все состояния
@@ -57,7 +57,7 @@ function showAlwaysCondition(api: EffectModelApi<DeusExModel>, modifier: Modifie
  *  propertyName1+X,propertyName2-Y,propertyName3=Z
  *
  */
-function changeProperties(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
+export function changeProperties(api: EffectModelApi<DeusExModel>, modifier: Modifier) {
   const params = helpers.checkPredicate(api, modifier.mID, 'change-properties');
   api.info('changeProperties: start, predicate: ' + JSON.stringify(params));
 
@@ -65,11 +65,3 @@ function changeProperties(api: EffectModelApi<DeusExModel>, modifier: Modifier) 
     helpers.modifyModelProperties(api, params.operations);
   }
 }
-
-module.exports = () => {
-  return {
-    showCondition,
-    changeProperties,
-    showAlwaysCondition,
-  };
-};

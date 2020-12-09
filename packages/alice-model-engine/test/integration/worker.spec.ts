@@ -2,6 +2,7 @@ import { Effect, EmptyModel, EngineResultOk } from '@alice/interface/models/alic
 
 import { Config, EventHandler } from '../../config';
 import { Worker } from '../../worker';
+import { TestFolderLoader } from '@alice/alice-model-engine/utils';
 
 describe('Worker', () => {
   let worker: Worker;
@@ -44,7 +45,7 @@ describe('Worker', () => {
       events: eventHandlers,
     });
 
-    worker = Worker.load(`${__dirname}/../test-models/trivial`).configure(config);
+    worker = Worker.load(new TestFolderLoader(`${__dirname}/../test-models/trivial`)).configure(config);
   });
 
   it('Should process some models', async () => {

@@ -1,12 +1,15 @@
-import glob = require('glob');
+import * as glob from 'glob';
 import { assign, clone, merge as _merge } from 'lodash';
-import * as Path from 'path';
-import Logger from './logger';
 import { ModelCallbacks } from '@alice/interface/callbacks';
 import { EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { logger } from '@alice/alice-model-engine/logger';
 
-export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T> {
-  return requireDir(dir, (m: ModelCallbacks<T>, src: any) => {
+export interface FolderLoader {
+  iterate(): Iterable<{ filename: string; module: unknown }>;
+}
+
+export function loadModels<T extends EmptyModel>(loader: FolderLoader): ModelCallbacks<T> {
+  return requireDir(loader, (m: ModelCallbacks<T>, src: any) => {
     m = clone(m);
     src = clone(src);
 
@@ -48,32 +51,46 @@ export function loadModels<T extends EmptyModel>(dir: string): ModelCallbacks<T>
   });
 }
 
-export function requireDir(dir: string, merge = _merge): any {
-  const scriptsExt = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
-  // First filter is a bit of hack. When run under ts-node, require.extensions will include '.ts'.
-  // In the same time, we don't want to 'require' .d.ts files. Unfortunately, *.ts mask _will_ discover them.
-  const files = glob
-    .sync(`${dir}/**/*+(${scriptsExt}|*.json)`)
-    .filter((f) => !f.endsWith('.d.ts'))
-    .filter((f) => !f.endsWith(`.spec${scriptsExt}`));
+export class WebpackFolderLoader implements FolderLoader {
+  constructor(private context: __WebpackModuleApi.RequireContext) {}
 
-  return files.reduce((m, f) => {
-    let src;
-    try {
-      Logger.info('engine', `Loading model from file ${f}`);
-      src = require(f);
-    } catch (e) {
-      Logger.info('engine', `Haven't managed to load models from ${f}, trying file ${Path.join(process.cwd(), f)}`);
-      src = require(Path.join(process.cwd(), f));
+  *iterate() {
+    for (const filename of this.context.keys()) {
+      yield { filename, module: this.context(filename) };
     }
+  }
+}
 
+export class TestFolderLoader implements FolderLoader {
+  constructor(private dir: string) {}
+
+  *iterate() {
+    const scriptsExt = 'ts';
+    // First filter is a bit of hack. When run under ts-node, require.extensions will include '.ts'.
+    // In the same time, we don't want to 'require' .d.ts files. Unfortunately, *.ts mask _will_ discover them.
+    const files = glob
+      .sync(`${this.dir}/**/*+(${scriptsExt}|*.json)`)
+      .filter((f) => !f.endsWith('.d.ts'))
+      .filter((f) => !f.endsWith(`.spec${scriptsExt}`));
+    for (const filename of files) {
+      yield { filename, module: require(filename) };
+    }
+  }
+}
+
+export function requireDir(loader: FolderLoader, merge = _merge): any {
+  let result = {};
+  // eslint-disable-next-line prefer-const
+  for (let { filename, module } of loader.iterate()) {
     // This is to support
     // module.exports = () => {...}
     // kind of exporting.
-    if (typeof src == 'function') {
-      src = src();
+    if (typeof module == 'function') {
+      logger.error(`Wrong export mode is used by ${filename}!`);
+      module = module();
     }
-
-    return merge(m, src);
-  }, {});
+    logger.warn(`Loading file ${filename}`);
+    result = merge(result, module);
+  }
+  return result;
 }

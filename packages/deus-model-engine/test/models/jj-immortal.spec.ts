@@ -4,6 +4,7 @@ import { findChangeRecord, findModifier, process } from '../test_helpers';
 import { getExampleModel } from '../fixtures/models';
 import { getEvents, getRefreshEvent } from '../fixtures/events';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { pills } = require('../../catalogs/narco.json');
 
 const STEP1 = pills.find((p: any) => p.id == 'jj-immortal-one');

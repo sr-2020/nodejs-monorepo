@@ -469,15 +469,11 @@ function getViewModel(model: DeusExModel) {
   };
 }
 
-module.exports = () => {
-  return {
-    _view(api: ViewModelApiInterface<any>, model) {
-      try {
-        return getViewModel(model);
-      } catch (err) {
-        // The app would display error message when ViewModel is incorrect
-        return {};
-      }
-    },
-  };
-};
+export function _view(api: ViewModelApiInterface<any>, model) {
+  try {
+    return getViewModel(model);
+  } catch (err) {
+    // The app would display error message when ViewModel is incorrect
+    return {};
+  }
+}

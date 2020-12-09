@@ -34,6 +34,9 @@
     },
     "alice-models-manager": {
       "tags": []
+    },
+    "deus-model-engine": {
+      "tags": []
     }
   },
   "workspaceLayout": {

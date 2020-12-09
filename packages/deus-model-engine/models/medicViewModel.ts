@@ -26,7 +26,7 @@ import { DeusExModel } from '../deus-ex-model';
 export interface MindData {
   [index: string]: number[];
 }
-function getViewModel(api: ViewModelApiInterface<DeusExModel>, _) {
+export function view_medic_viewmodel(api: ViewModelApiInterface<DeusExModel>, _) {
   const props = ['modelId', 'login', 'mail', 'profileType', 'firstName', 'lastName', 'hp', 'maxHp', 'sex', 'generation'];
   const ret: any = {};
 
@@ -82,11 +82,3 @@ function getViewModel(api: ViewModelApiInterface<DeusExModel>, _) {
 
   return ret;
 }
-
-module.exports = () => {
-  return {
-    view_medic_viewmodel(api: ViewModelApiInterface<any>, model: DeusExModel) {
-      return getViewModel(api, model);
-    },
-  };
-};
