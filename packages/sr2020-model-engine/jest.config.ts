@@ -1,8 +1,14 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  moduleNameMapper: {
-    '^@alice/(.*)$': '<rootDir>/../$1',
+  displayName: 'sr2020-model-engine',
+  preset: '../../jest.preset.js',
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.spec.json',
+    },
   },
-  testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
+  transform: {
+    '^.+\\.[tj]s$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'js', 'html'],
+  coverageDirectory: '../../coverage/packages/sr2020-model-engine',
 };

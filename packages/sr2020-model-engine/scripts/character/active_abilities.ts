@@ -12,7 +12,7 @@ import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-e
 import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merchandise';
 import { createMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
 import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
-import Chance = require('chance');
+import * as Chance from 'chance';
 
 const chance = new Chance();
 export const kIWillSurviveModifierId = 'i-will-survive-modifier';

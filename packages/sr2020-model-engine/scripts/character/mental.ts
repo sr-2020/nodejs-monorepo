@@ -7,7 +7,7 @@ import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRec
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
 import { MentalQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import Chance = require('chance');
+import * as Chance from 'chance';
 
 const chance = new Chance();
 

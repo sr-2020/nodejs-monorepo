@@ -46,6 +46,9 @@
     },
     "sr2020-models-manager": {
       "tags": []
+    },
+    "sr2020-model-engine": {
+      "tags": []
     }
   },
   "workspaceLayout": {

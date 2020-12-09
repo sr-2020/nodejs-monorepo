@@ -190,7 +190,7 @@ export function addTemporaryActiveAbility(
     modifierFromEffect(addTemporaryActiveAbilityEffect, {
       validUntil: validUntil(api, d),
       ability: activeAbility,
-      name: `add-active-ability-${abilityId}`,
+      // name: `add-active-ability-${abilityId}`,
     }),
     d,
     effectDescription,

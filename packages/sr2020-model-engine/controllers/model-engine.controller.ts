@@ -22,7 +22,7 @@ import { addFeatureToModel, getAllAvailableFeatures } from '@alice/sr2020-model-
 import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { templateSettings } from 'lodash';
-import Chance = require('chance');
+import * as Chance from 'chance';
 
 const chance = new Chance();
 

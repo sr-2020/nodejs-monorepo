@@ -3,7 +3,7 @@ import { Duration } from 'moment';
 import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
 import { MAX_HISTORY_LINES } from './consts';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import uuid = require('uuid');
+import * as uuid from 'uuid';
 
 export function addHistoryRecord(api: EventModelApi<Sr2020Character>, title: string, shortText = '', longText = '') {
   if (api.model.history.length >= MAX_HISTORY_LINES) api.model.history.shift();

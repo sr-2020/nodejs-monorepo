@@ -1,5 +1,5 @@
 import { SR2020ModelsApplication } from '../application';
-import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
+import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
 
 let gAppWithClient: AppWithClient | null = null;
 
@@ -20,7 +20,6 @@ async function setupApplication(): Promise<AppWithClient> {
     rest: restConfig,
   });
 
-  await app.boot();
   await app.start();
 
   const client = createRestAppClient(app);

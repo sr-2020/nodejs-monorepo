@@ -1,5 +1,6 @@
 import { AURA_LENGTH } from './consts';
-import Chance = require('chance');
+import * as Chance from 'chance';
+
 const chance = new Chance();
 
 export const kUnknowAuraCharacter = '*';

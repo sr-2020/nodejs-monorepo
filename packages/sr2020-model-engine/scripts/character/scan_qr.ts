@@ -4,7 +4,7 @@ import { consume } from '../qr/events';
 import { LocationData, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { ChemoData } from '@alice/sr2020-model-engine/scripts/character/chemo';
-import Chance = require('chance');
+import * as Chance from 'chance';
 
 const chance = new Chance();
 

@@ -1,18 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
   "references": [
     {
-      "path": "../interface"
+      "path": "./tsconfig.app.json"
     },
     {
-      "path": "../sr2020-common"
-    },
-    {
-      "path": "../alice-model-engine"
+      "path": "./tsconfig.spec.json"
     }
-  ],
-  "include": [
-    "**/*",
-    "**/*.json"
   ]
 }
