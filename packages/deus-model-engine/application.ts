@@ -31,6 +31,6 @@ export class DeusModelsApplication extends ServiceMixin(RepositoryMixin(RestAppl
 
     this.bind(Engine.bindingKey).to(new Engine(loadModels(modelsLoader), Config.parse(requireDir(catalogsLoader))));
     this.bind('controllers.PingController').toClass(PingController);
-    this.bind('controllers.PushController').toClass(ModelEngineController);
+    this.bind('controllers.ModelEngineController').toClass(ModelEngineController);
   }
 }
