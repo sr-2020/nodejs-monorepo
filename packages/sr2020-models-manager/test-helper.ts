@@ -1,5 +1,5 @@
 import { ModelsManagerApplication } from './application';
-import { createRestAppClient, givenHttpServerConfig, Client } from '@loopback/testlab';
+import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
 
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({});
@@ -8,7 +8,6 @@ export async function setupApplication(): Promise<AppWithClient> {
     rest: restConfig,
   });
 
-  await app.boot();
   await app.start();
 
   const client = createRestAppClient(app);

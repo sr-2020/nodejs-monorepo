@@ -20,7 +20,7 @@ import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { AnyModelController } from '@alice/sr2020-models-manager/controllers/anymodel.controller';
 import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
-import moment = require('moment');
+import * as moment from 'moment';
 
 export class CharacterController extends AnyModelController<Sr2020Character> {
   constructor(

@@ -43,6 +43,9 @@
     },
     "sr2020-common": {
       "tags": []
+    },
+    "sr2020-models-manager": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -182,6 +182,55 @@
           }
         }
       }
+    },
+    "sr2020-models-manager": {
+      "root": "packages/sr2020-models-manager",
+      "sourceRoot": "packages/sr2020-models-manager",
+      "projectType": "application",
+      "prefix": "sr2020-models-manager",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/packages/sr2020-models-manager",
+            "main": "packages/sr2020-models-manager/index.ts",
+            "tsConfig": "packages/sr2020-models-manager/tsconfig.app.json",
+            "assets": ["packages/sr2020-models-manager/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "packages/sr2020-models-manager/environments/environment.ts",
+                  "with": "packages/sr2020-models-manager/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "sr2020-models-manager:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/sr2020-models-manager/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/sr2020-models-manager/jest.config.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

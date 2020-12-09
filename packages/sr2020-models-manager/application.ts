@@ -1,4 +1,3 @@
-import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RepositoryMixin } from '@loopback/repository';
@@ -6,13 +5,26 @@ import { RestApplication, RestBindings } from '@loopback/rest';
 import { ServiceMixin } from '@loopback/service-proxy';
 import * as path from 'path';
 import { CustomRejectProvider } from '@alice/alice-models-manager/services/reject.service';
+import { CharacterController } from '@alice/sr2020-models-manager/controllers/character.controller';
+import { LocationController } from '@alice/sr2020-models-manager/controllers/location.controller';
+import { QrCodeController } from '@alice/sr2020-models-manager/controllers/qr-code.controller';
+import { PingController } from '@alice/sr2020-models-manager/controllers/ping.controller';
+import { TimeServiceProvider } from '@alice/alice-models-manager/services/time.service';
+import { ModelAquirerServiceProvider } from '@alice/sr2020-models-manager/services/model-aquirer.service';
+import { LoggerServiceProvider } from '@alice/alice-models-manager/services/logger.service';
+import { EventDispatcherServiceProvider } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
+import { ModelEngineServiceProvider } from '@alice/sr2020-common/services/model-engine.service';
+import { PushServiceProvider } from '@alice/interface/services/push.service';
+import { PubSubServiceProvider } from '@alice/alice-models-manager/services/pubsub.service';
+import { ModelEngineHttpApiDataSource } from '@alice/sr2020-common/datasources/model-engine-http-api.datasource';
+import { PushHttpApiDataSource } from '@alice/interface/datasources/push-http-api.datasource';
 
-export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryMixin(RestApplication))) {
+export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
     // Set up default home page
-    this.static('/', path.join(__dirname, 'static'));
+    this.static('/', path.join(__dirname, 'assets'));
 
     // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
@@ -22,27 +34,21 @@ export class ModelsManagerApplication extends BootMixin(ServiceMixin(RepositoryM
 
     this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
-    this.projectRoot = __dirname + '/../';
-    const dirs = ['alice-models-manager', 'sr2020-models-manager', 'sr2020-common', 'interface'];
-    // Customize @loopback/boot Booter Conventions here
-    const extension = process.env.NODE_ENV == 'test' || require.extensions['.ts'] ? 'ts' : 'js';
-    this.bootOptions = {
-      controllers: {
-        dirs,
-        extensions: [`.controller.${extension}`],
-      },
-      datasources: {
-        dirs,
-        extensions: [`.datasource.${extension}`],
-      },
-      repositories: {
-        dirs,
-        extensions: [`.repository.${extension}`],
-      },
-      services: {
-        dirs,
-        extensions: [`.service.${extension}`],
-      },
-    };
+    // const dirs = ['alice-models-manager', 'sr2020-models-manager', 'sr2020-common', 'interface'];
+    this.bind('controllers.PingController').toClass(PingController);
+    this.bind('controllers.CharacterController').toClass(CharacterController);
+    this.bind('controllers.LocationController').toClass(LocationController);
+    this.bind('controllers.QrCodeController').toClass(QrCodeController);
+
+    this.bind('datasources.ModelEngineHttpApi').toClass(ModelEngineHttpApiDataSource);
+    this.bind('datasources.PushHttpApi').toClass(PushHttpApiDataSource);
+
+    this.bind('services.TimeService').toProvider(TimeServiceProvider);
+    this.bind('services.ModelAquirerService').toProvider(ModelAquirerServiceProvider);
+    this.bind('services.LoggerService').toProvider(LoggerServiceProvider);
+    this.bind('services.EventDispatcherService').toProvider(EventDispatcherServiceProvider);
+    this.bind('services.ModelEngineService').toProvider(ModelEngineServiceProvider);
+    this.bind('services.PushService').toProvider(PushServiceProvider);
+    this.bind('services.PubSubService').toProvider(PubSubServiceProvider);
   }
 }

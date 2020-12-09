@@ -13,7 +13,6 @@ export async function main(options: ApplicationConfig = {}) {
 
   await createConnection(getDbConnectionOptions());
 
-  await app.boot();
   await app.start();
 
   const url = app.restServer.url;
