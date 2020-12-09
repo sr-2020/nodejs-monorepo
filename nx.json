@@ -49,6 +49,9 @@
     },
     "sr2020-model-engine": {
       "tags": []
+    },
+    "sr2020-testing": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -281,6 +281,26 @@
           }
         }
       }
+    },
+    "sr2020-testing": {
+      "root": "packages/sr2020-testing",
+      "sourceRoot": "packages/sr2020-testing",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/sr2020-testing/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/sr2020-testing/jest.config.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

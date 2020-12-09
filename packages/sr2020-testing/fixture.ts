@@ -1,7 +1,6 @@
 import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
-import { Config } from '@alice/alice-model-engine/config';
 import { Engine } from '@alice/alice-model-engine/engine';
-import { loadModels, requireDir } from '@alice/alice-model-engine/utils';
+import { loadModels, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import { PubSubNotification, PushNotification } from '@alice/interface/models/push-notification.model';
 import { PushResult } from '@alice/interface/models/push-result.model';
 import { EventRequest } from '@alice/interface/models/alice-model-engine';
@@ -32,18 +31,9 @@ type DeepPartial<T> = {
 };
 
 // Those are singletones intentionally - so model scripts are only loaded once.
-const characterEngine = new Engine<Sr2020Character>(
-  loadModels('../sr2020-model-engine/scripts/character'),
-  Config.parse(requireDir('../sr2020-model-engine/scripts/character/catalogs')),
-);
-const locationEngine = new Engine<Location>(
-  loadModels('../sr2020-model-engine/scripts/location'),
-  Config.parse(requireDir('../sr2020-model-engine/scripts/location/catalogs')),
-);
-const qrCodeEngine = new Engine<QrCode>(
-  loadModels('../sr2020-model-engine/scripts/qr'),
-  Config.parse(requireDir('../sr2020-model-engine/scripts/qr/catalogs')),
-);
+const characterEngine = new Engine<Sr2020Character>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/character')));
+const locationEngine = new Engine<Location>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/location')));
+const qrCodeEngine = new Engine<QrCode>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/qr')));
 
 class MockTimeService implements TimeService {
   private _timestamp = 0;
@@ -101,10 +91,18 @@ class MockPubSubService implements PubSubService {
 }
 
 class NoOpLoggerService implements LoggerService {
-  debug(msg: string, meta?: any): void {}
-  info(msg: string, meta?: any): void {}
-  warning(msg: string, meta?: any): void {}
-  error(msg: string, meta?: any): void {}
+  debug(msg: string, meta?: any): void {
+    console.log(msg);
+  }
+  info(msg: string, meta?: any): void {
+    console.log(msg);
+  }
+  warning(msg: string, meta?: any): void {
+    console.log(msg);
+  }
+  error(msg: string, meta?: any): void {
+    console.log(msg);
+  }
 }
 
 export class TestFixture {
@@ -127,8 +125,6 @@ export class TestFixture {
     const app = new ModelsManagerApplication({
       rest: restConfig,
     });
-
-    await app.boot();
 
     app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine, qrCodeEngine));
 

@@ -1,27 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
   "references": [
     {
-      "path": "../interface"
+      "path": "./tsconfig.lib.json"
     },
     {
-      "path": "../alice-model-engine"
-    },
-    {
-      "path": "../alice-models-manager"
-    },
-    {
-      "path": "../sr2020-common"
-    },
-    {
-      "path": "../sr2020-model-engine"
-    },
-    {
-      "path": "../sr2020-models-manager"
+      "path": "./tsconfig.spec.json"
     }
-  ],
-  "include": [
-    "**/*",
-    "**/*.json"
   ]
 }

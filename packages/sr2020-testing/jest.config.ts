@@ -1,9 +1,15 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  moduleNameMapper: {
-    '^@alice/(.*)$': '<rootDir>/../$1',
+  displayName: 'sr2020-testing',
+  preset: '../../jest.preset.js',
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.spec.json',
+    },
   },
+  transform: {
+    '^.+\\.[tj]sx?$': 'ts-jest',
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  coverageDirectory: '../../coverage/packages/sr2020-testing',
   setupFilesAfterEnv: ['./set-jest-timeout.ts'],
-  testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
 };
