@@ -40,6 +40,9 @@
     },
     "magellan-model-engine": {
       "tags": []
+    },
+    "sr2020-common": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -168,6 +168,20 @@
           }
         }
       }
+    },
+    "sr2020-common": {
+      "root": "packages/sr2020-common",
+      "sourceRoot": "packages/sr2020-common/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/sr2020-common/**/*.ts"]
+          }
+        }
+      }
     }
   },
   "cli": {

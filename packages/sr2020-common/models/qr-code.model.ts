@@ -66,7 +66,7 @@ export class QrCode extends EmptyModel {
 
   @property()
   @JsonColumn()
-  data: {};
+  data: unknown;
 }
 
 @model()

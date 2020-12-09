@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/packages/alice-models-manager',
     '<rootDir>/packages/deus-model-engine',
     '<rootDir>/packages/magellan-model-engine',
+    '<rootDir>/packages/sr2020-common',
   ],
 };
