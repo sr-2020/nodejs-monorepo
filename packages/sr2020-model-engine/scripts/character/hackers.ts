@@ -11,9 +11,9 @@ import { duration } from 'moment';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
-import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 import { template } from 'lodash';
+import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -79,7 +79,7 @@ export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: Dumpsho
   increaseCharisma(api, { ...m, amount: -m.amount });
   increaseBody(api, { ...m, amount: -m.amount });
   increaseIntelligence(api, { ...m, amount: -m.amount });
-  const ability = kAllPassiveAbilities.get('dump-shock-survivor')!;
+  const ability = getAllPassiveAbilities().get('dump-shock-survivor')!;
   api.model.passiveAbilities.push({
     id: ability.id,
     humanReadableName: ability.humanReadableName,

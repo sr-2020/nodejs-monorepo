@@ -1,6 +1,6 @@
 import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 import { addFeature, addTemporaryPassiveAbility, removeFeature } from '@alice/sr2020-model-engine/scripts/character/features';
 import { duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect } from '@alice/sr2020-model-engine/scripts/character/util';

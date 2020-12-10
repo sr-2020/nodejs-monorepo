@@ -7,7 +7,7 @@ import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocHeal, autodocRevive, healthStateTransition } from './death_and_rebirth';
 import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
 import { DroneType, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';

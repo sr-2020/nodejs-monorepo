@@ -1,31 +1,11 @@
 import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { duration } from 'moment';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
-import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/races';
-
-const kHungerTimerName = 'normal-hunger';
-const kHungerTimerDuration = duration(6, 'hours').asMilliseconds();
-const kHungerTimerStage1Description = 'Голодный обморок';
-const kHungerTimerStage2Description = 'Смерть от голода';
-
-export function removeHunger(model: Sr2020Character) {
-  model.timers = model.timers.filter((timer) => timer.name != kHungerTimerName);
-}
-
-export function resetHunger(model: Sr2020Character) {
-  removeHunger(model);
-  model.timers.push({
-    name: kHungerTimerName,
-    description: kHungerTimerStage1Description,
-    miliseconds: getHungerTimerDuration(model).asMilliseconds(),
-    eventType: hungerStage1.name,
-    data: {},
-  });
-}
+import { getHungerTimerDuration, isHmhvv, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import { kHungerTimerName, kHungerTimerStage2Description } from '@alice/sr2020-model-engine/scripts/character/consts';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
   if (data.id == 'food') {
@@ -82,9 +62,4 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
       // TODO(aeremin): Handle this (similar to drone case?)
     }
   }
-}
-
-function getHungerTimerDuration(model: Sr2020Character) {
-  const eatsMoreOften = !!model.passiveAbilities.find((ability) => ability.id == 'feed-tamagochi');
-  return duration(kHungerTimerDuration * (eatsMoreOften ? 0.5 : 1), 'milliseconds');
 }

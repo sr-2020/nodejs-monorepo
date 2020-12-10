@@ -8,11 +8,13 @@ import {
   Sr2020Character,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
-import { kAllPassiveAbilities, PassiveAbility } from './passive_abilities_library';
-import { kAllSpells, Spell } from './spells_library';
-import { ActiveAbility } from './active_abilities_library';
+import { ActiveAbility, PassiveAbility, Spell } from './common_definitions';
 import { cloneDeep, template } from 'lodash';
-import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import {
+  getAllActiveAbilities,
+  getAllPassiveAbilities,
+  getAllSpells,
+} from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { Duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from '@alice/sr2020-model-engine/scripts/character/util';
 import { TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
@@ -23,7 +25,7 @@ export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: stri
 }
 
 export function addFeatureToModel(model: Sr2020Character, featureId: string) {
-  const passiveAbility = kAllPassiveAbilities.get(featureId);
+  const passiveAbility = getAllPassiveAbilities().get(featureId);
   if (passiveAbility) {
     addPassiveAbility(model, passiveAbility);
     return;
@@ -35,7 +37,7 @@ export function addFeatureToModel(model: Sr2020Character, featureId: string) {
     return;
   }
 
-  const spell = kAllSpells.get(featureId);
+  const spell = getAllSpells().get(featureId);
   if (spell) {
     addSpell(model, spell);
     return;
@@ -144,7 +146,7 @@ export function addTemporaryPassiveAbility(
   descriptionSubstitutions: object = {},
   effectDescription: string | undefined = undefined,
 ) {
-  const passiveAbility = kAllPassiveAbilities.get(abilityId);
+  const passiveAbility = getAllPassiveAbilities().get(abilityId);
   if (!passiveAbility) {
     throw new UserVisibleError(`Неизвестная способность ${abilityId}`);
   }
@@ -185,23 +187,19 @@ export function addTemporaryActiveAbility(
     effectDescription = `Добавление временной способности ${activeAbility.humanReadableName}`;
   }
 
-  addTemporaryModifier(
-    api,
-    modifierFromEffect(addTemporaryActiveAbilityEffect, {
-      validUntil: validUntil(api, d),
-      ability: activeAbility,
-      // name: `add-active-ability-${abilityId}`,
-    }),
-    d,
-    effectDescription,
-  );
+  const m = modifierFromEffect(addTemporaryActiveAbilityEffect, {
+    validUntil: validUntil(api, d),
+    ability: activeAbility,
+  });
+  m.name = `add-active-ability-${abilityId}`;
+  addTemporaryModifier(api, m, d, effectDescription);
 }
 
 export function addTemporaryPassiveAbilityEffect(
   api: EffectModelApi<Sr2020Character>,
   m: TemporaryModifier & { abilityId: string; descriptionSubstitutions?: object },
 ) {
-  const passiveAbility = kAllPassiveAbilities.get(m.abilityId)!;
+  const passiveAbility = getAllPassiveAbilities().get(m.abilityId)!;
   api.model.passiveAbilities.push({
     id: passiveAbility.id,
     humanReadableName: passiveAbility.humanReadableName,
@@ -252,7 +250,7 @@ export function getAllFeatures(): Feature[] {
     karmaCost: f.karmaCost,
     pack: f.pack,
   });
-  return [...getAllActiveAbilities().values(), ...kAllPassiveAbilities.values(), ...kAllSpells.values()].map(extractFeatureFields);
+  return [...getAllActiveAbilities().values(), ...getAllPassiveAbilities().values(), ...getAllSpells().values()].map(extractFeatureFields);
 }
 
 // Returns all features with 'open' availability and satisfied prerequisites for a given character.

@@ -8,8 +8,8 @@ import {
   getFeatureKarmaCost,
   satisfiesPrerequisites,
 } from '@alice/sr2020-model-engine/scripts/character/features';
-import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 export const kMaxKarmaPerGame = 800;
 export const kMaxKarmaPerCycle = 300;
@@ -73,7 +73,7 @@ export function buyFeatureForKarma(api: EventModelApi<Sr2020Character>, data: { 
 
   api.model.karma.available -= karmaCost;
   api.model.karma.spent += karmaCost;
-  if (kAllPassiveAbilities.has(feature.id)) api.model.karma.spentOnPassives += karmaCost;
+  if (getAllPassiveAbilities().has(feature.id)) api.model.karma.spentOnPassives += karmaCost;
 
   sendNotificationAndHistoryRecord(
     api,

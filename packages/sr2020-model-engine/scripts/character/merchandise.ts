@@ -1,8 +1,7 @@
 import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { AddedImplant, LocationMixin, MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { ImplantSlot, kAllImplants } from './implants_library';
+import { Implant, ImplantSlot, kAllImplants } from './implants_library';
 import { sendNotificationAndHistoryRecord } from './util';
-import { createGapDueToImplantUninstall, reduceEssenceDueToImplantInstall } from './essence';
 import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
@@ -92,4 +91,20 @@ function maxImplantsPerSlot(model: Sr2020Character, slot: ImplantSlot) {
   if (slot == 'rcc') return 1;
   if (slot == 'body') return model.implantsBodySlots;
   return 2;
+}
+
+function reduceEssenceDueToImplantInstall(api: EventModelApi<Sr2020Character>, implant: Implant) {
+  const cost = Math.floor(100 * implant.essenceCost);
+  if (cost > api.workModel.essence + api.workModel.essenceDetails.gap - 100) {
+    throw new UserVisibleError('Невозможно установить имплант в данное тело');
+  }
+
+  api.model.essenceDetails.used += cost;
+  api.model.essenceDetails.gap -= Math.min(api.model.essenceDetails.gap, cost);
+}
+
+function createGapDueToImplantUninstall(api: EventModelApi<Sr2020Character>, implant: AddedImplant) {
+  const cost = Math.floor(100 * implant.essenceCost);
+  api.model.essenceDetails.used -= cost;
+  api.model.essenceDetails.gap += cost;
 }

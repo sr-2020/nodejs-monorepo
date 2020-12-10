@@ -2,13 +2,12 @@ import { duration } from 'moment';
 import { HealthState, LocationData, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
-import { ActiveAbilityData, FullTargetedAbilityData, kIWillSurviveModifierId } from './active_abilities';
+import { ActiveAbilityData, FullTargetedAbilityData } from './common_definitions';
 import { kReviveModifierId } from './implants_library';
-import { resetAllAddictions } from './chemo';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger';
-import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/races';
+import { isHmhvv, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import { kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
@@ -132,7 +131,7 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
   }
 
   if (stateFrom == 'biologically_dead' || stateFrom == 'clinically_dead') {
-    resetAllAddictions(api);
+    api.sendSelfEvent('resetAllAddictions', {});
     if (!isHmhvv(api.model)) {
       resetHunger(api.model);
     }

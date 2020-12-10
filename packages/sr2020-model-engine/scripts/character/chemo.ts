@@ -15,7 +15,7 @@ import {
   multiplyCooldownCoefficient,
 } from './basic_effects';
 import { healthStateTransition } from './death_and_rebirth';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/active_abilities';
+import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { ModifierWithAmount, TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryPassiveAbilityEffect } from '@alice/sr2020-model-engine/scripts/character/features';

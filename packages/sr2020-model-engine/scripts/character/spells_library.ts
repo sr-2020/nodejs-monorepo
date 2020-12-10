@@ -30,13 +30,9 @@ import {
   trackBallSpell,
   trackpointSpell,
 } from './spells';
-import { Feature, SpellSphere } from '@alice/sr2020-common/models/sr2020-character.model';
+import { Spell } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
-export interface Spell extends Feature {
-  sphere: SpellSphere;
-  eventType: string;
-  hasTarget?: boolean;
-}
 // Not exported by design, use kAllSpells instead.
 const kAllSpellsList: Spell[] = [
   {
@@ -577,11 +573,13 @@ const kAllSpellsList: Spell[] = [
     hasTarget: false,
   },
 ];
-export const kAllSpells: Map<string, Spell> = (() => {
-  const result = new Map<string, Spell>();
-  kAllSpellsList.forEach((f) => {
-    if (result.has(f.id)) throw new Error('Non-unique passive ability id: ' + f.id);
-    result.set(f.id, f);
-  });
-  return result;
-})();
+setAllSpells(
+  (() => {
+    const result = new Map<string, Spell>();
+    kAllSpellsList.forEach((f) => {
+      if (result.has(f.id)) throw new Error('Non-unique spell id: ' + f.id);
+      result.set(f.id, f);
+    });
+    return result;
+  })(),
+);

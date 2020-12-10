@@ -49,7 +49,7 @@ import {
 } from './mental';
 import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
 import { QrType } from '@alice/sr2020-common/models/qr-code.model';
-import { Feature, TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
+import { TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
   discourseGroupAddAbility,
@@ -67,6 +67,7 @@ import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/characte
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
+import { ActiveAbility } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 
 export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
@@ -178,13 +179,7 @@ const kEmptyQrTarget: TargetSignature = {
   field: 'qrCodeId',
 };
 const kBodyAndContainerTargeted: TargetSignature[] = [...kPhysicalBodyTargeted, kEmptyQrTarget];
-export interface ActiveAbility extends Feature {
-  target: TargetType;
-  targetsSignature: TargetSignature[];
-  cooldownMinutes: number;
-  minimalEssence: number; // in 0-6 range, not 0-600.
-  eventType: string;
-}
+
 // Not exported by design, use kAllActiveAbilities instead.
 export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //

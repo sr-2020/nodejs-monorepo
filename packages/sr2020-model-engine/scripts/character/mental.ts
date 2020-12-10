@@ -2,12 +2,13 @@ import { AddedActiveAbility, Sr2020Character } from '@alice/sr2020-common/models
 import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
-import { FullActiveAbilityData, FullTargetedAbilityData, kActiveAbilitiesDisabledTimer } from './active_abilities';
+import { FullActiveAbilityData, FullTargetedAbilityData } from './common_definitions';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';
 import { MentalQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import * as Chance from 'chance';
+import { kActiveAbilitiesDisabledTimer } from '@alice/sr2020-model-engine/scripts/character/consts';
 
 const chance = new Chance();
 

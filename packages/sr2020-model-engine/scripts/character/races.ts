@@ -2,7 +2,7 @@ import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-ch
 import { EventModelApi } from '@alice/interface/models/alice-model-engine';
 import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
-import { removeHunger, resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger';
+import { isHmhvv, removeHunger, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerTimerDescription = 'Голод HMHVV';
@@ -51,11 +51,6 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
   'meta-ai': ['meta-ai', 'magic-blockade'],
   'meta-eghost': ['meta-eghost', 'magic-blockade'],
 };
-
-export function isHmhvv(model: Sr2020Character) {
-  const hmhvvRaces: MetaRace[] = ['meta-vampire', 'meta-ghoul'];
-  return hmhvvRaces.includes(model.metarace);
-}
 
 export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
   for (const id of kRaceFeatures[model.metarace]) removeFeatureFromModel(model, id);

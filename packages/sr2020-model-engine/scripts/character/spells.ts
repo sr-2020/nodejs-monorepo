@@ -18,7 +18,6 @@ import {
 } from './util';
 import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonance, multiplyAllDiscounts } from './basic_effects';
 import { duration } from 'moment';
-import { kAllSpells } from './spells_library';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { temporaryAntiDumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
@@ -26,7 +25,7 @@ import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engin
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
-import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import { getAllPassiveAbilities, getAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -64,7 +63,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
     throw new UserVisibleError('Нельзя скастовать спелл, которого у вас нет!');
   }
 
-  const librarySpell = kAllSpells.get(data.id);
+  const librarySpell = getAllSpells().get(data.id);
   if (!librarySpell) {
     throw new UserVisibleError('Несуществующий спелл!');
   }
@@ -468,7 +467,7 @@ export function addTemporaryBonusesDueToRitual(api: EventModelApi<Sr2020Characte
 export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifierWithAmount) {
   const powerBonus = Math.floor(Math.sqrt(m.amount));
 
-  const magicInTheBloodAbility = kAllPassiveAbilities.get('magic-in-the-blood')!;
+  const magicInTheBloodAbility = getAllPassiveAbilities().get('magic-in-the-blood')!;
   api.model.passiveAbilities.push({
     id: magicInTheBloodAbility.id,
     humanReadableName: magicInTheBloodAbility.humanReadableName,
@@ -478,7 +477,7 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
   api.model.magicStats.maxPowerBonus += powerBonus;
 
   const feedbackDivider = 1.0 / (6 + m.amount);
-  const bloodyTideAbility = kAllPassiveAbilities.get('bloody-tide')!;
+  const bloodyTideAbility = getAllPassiveAbilities().get('bloody-tide')!;
   api.model.passiveAbilities.push({
     id: bloodyTideAbility.id,
     humanReadableName: bloodyTideAbility.humanReadableName,

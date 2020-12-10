@@ -1,4 +1,3 @@
-import { Modifier } from '@alice/interface/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
   allowBiowareInstallation,
@@ -72,12 +71,10 @@ import {
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
 } from './basic_effects';
-import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
+import { PassiveAbility } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
-export interface PassiveAbility extends Feature {
-  modifier: Modifier | Modifier[];
-}
-// Not exported by design, use kAllPassiveAbilities instead.
+// Not exported by design, use getAllPassiveAbilities() instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
   // hacking.fadingResistance +1
@@ -4519,11 +4516,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
 ];
-export const kAllPassiveAbilities: Map<string, PassiveAbility> = (() => {
-  const result = new Map<string, PassiveAbility>();
-  kAllPassiveAbilitiesList.forEach((f) => {
-    if (result.has(f.id)) throw new Error('Non-unique passive ability id: ' + f.id);
-    result.set(f.id, f);
-  });
-  return result;
-})();
+setAllPassiveAbilities(
+  (() => {
+    const result = new Map<string, PassiveAbility>();
+    kAllPassiveAbilitiesList.forEach((f) => {
+      if (result.has(f.id)) throw new Error('Non-unique passive ability id: ' + f.id);
+      result.set(f.id, f);
+    });
+    return result;
+  })(),
+);

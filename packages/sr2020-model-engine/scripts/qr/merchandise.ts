@@ -3,12 +3,10 @@ import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { kAllReagents } from './reagents_library';
 import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
-import { consumeFood } from '../character/hunger';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { kAllDrones, kCommonDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
-import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllFocuses } from '@alice/sr2020-model-engine/scripts/qr/focus_library';
 import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
 import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
@@ -38,7 +36,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
   if (['food', 'cow-meat', 'cow-blood'].includes(id)) {
     return {
       type: 'food',
-      eventType: consumeFood.name,
+      eventType: 'consumeFood',
       data: {},
     };
   }
@@ -91,7 +89,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     };
 
     for (const abilityId of maybeDrone.abilityIds.concat(kCommonDroneAbilityIds)) {
-      const maybePassiveAbility = kAllPassiveAbilities.get(abilityId);
+      const maybePassiveAbility = getAllPassiveAbilities().get(abilityId);
       if (maybePassiveAbility) {
         droneData.passiveAbilities.push({
           id: maybePassiveAbility.id,

@@ -1,5 +1,5 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
-import { AddedActiveAbility, LocationMixin, Sr2020Character, Targetable } from '@alice/sr2020-common/models/sr2020-character.model';
+import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
@@ -13,19 +13,10 @@ import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merc
 import { createMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
 import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 import * as Chance from 'chance';
+import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
+import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 
 const chance = new Chance();
-export const kIWillSurviveModifierId = 'i-will-survive-modifier';
-export const kActiveAbilitiesDisabledTimer = 'no-active-abilities-timer';
-
-export type ActiveAbilityData = Partial<Targetable> &
-  LocationMixin & {
-    id: string; // corresponds to ActiveAbility.id and AddedActiveAbility.id
-  };
-
-export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
-
-export type FullTargetedAbilityData = FullActiveAbilityData & { targetCharacterId: string };
 
 export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);

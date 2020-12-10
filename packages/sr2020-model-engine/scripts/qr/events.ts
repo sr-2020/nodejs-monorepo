@@ -13,8 +13,7 @@ import {
 } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { buyFeatureForKarma, earnKarma } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
-import { kAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
-import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllSpirits, kCommonSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
@@ -269,7 +268,7 @@ export function writeSpirit(api: EventModelApi<QrCode>, data: { id: string }) {
   };
 
   for (const abilityId of maybeSpirit.abilityIds.concat(kCommonSpiritAbilityIds)) {
-    const maybePassiveAbility = kAllPassiveAbilities.get(abilityId);
+    const maybePassiveAbility = getAllPassiveAbilities().get(abilityId);
     if (maybePassiveAbility) {
       qrData.passiveAbilities.push({
         id: maybePassiveAbility.id,
