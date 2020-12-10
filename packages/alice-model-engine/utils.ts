@@ -35,7 +35,6 @@ export function loadModels<T extends EmptyModel>(loader: FolderLoader): ModelCal
         continue;
       }
 
-      console.log(`Loading function ${fname}`);
       // TODO(aeremin) Separate event and effect callbacks.
       if (m.eventCallbacks?.[fname] && m.eventCallbacks[fname] != src[fname])
         throw new Error(`Event callback with the name ${fname} was already defined!`);

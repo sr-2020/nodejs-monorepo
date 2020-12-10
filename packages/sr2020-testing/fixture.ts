@@ -91,18 +91,10 @@ class MockPubSubService implements PubSubService {
 }
 
 class NoOpLoggerService implements LoggerService {
-  debug(msg: string, meta?: any): void {
-    console.log(msg);
-  }
-  info(msg: string, meta?: any): void {
-    console.log(msg);
-  }
-  warning(msg: string, meta?: any): void {
-    console.log(msg);
-  }
-  error(msg: string, meta?: any): void {
-    console.log(msg);
-  }
+  debug(msg: string, meta?: any): void {}
+  info(msg: string, meta?: any): void {}
+  warning(msg: string, meta?: any): void {}
+  error(msg: string, meta?: any): void {}
 }
 
 export class TestFixture {
