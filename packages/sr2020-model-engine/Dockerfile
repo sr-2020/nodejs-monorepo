@@ -24,9 +24,9 @@ COPY --chown=node packages/alice-model-engine/. ./packages/alice-model-engine
 COPY --chown=node packages/sr2020-common/. ./packages/sr2020-common
 COPY --chown=node packages/sr2020-model-engine/. ./packages/sr2020-model-engine
 
-RUN yarn --cwd packages/sr2020-model-engine run build
+RUN npx nx build sr2020-model-engine
 
 # Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0
 
-CMD [ "yarn", "--cwd", "packages/sr2020-model-engine/", "start" ]
+CMD [ "node", "/home/node/app/dist/packages/sr2020-model-engine/main.js" ]

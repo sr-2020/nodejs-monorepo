@@ -20,10 +20,10 @@ RUN yarn
 COPY --chown=node packages/push/. ./packages/push
 COPY --chown=node packages/interface/. ./packages/interface
 
-RUN yarn --cwd packages/push run build
+RUN npx nx build push
 
 # Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0
 
-CMD [ "yarn", "--cwd", "packages/push/", "start" ]
+CMD [ "node", "/home/node/app/dist/packages/push/main.js" ]
 

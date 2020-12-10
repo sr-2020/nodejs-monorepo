@@ -7,10 +7,13 @@
     "loopback"
   ],
   "scripts": {
-    "build": "tsc -b",
+    "nx": "nx",
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx workspace-lint && nx lint",
     "clean": "find . -type f ( -name *.js -or -name *.map -or -name *.d.ts -or -name *.tsbuildinfo ) -not -path '*node_modules*' -print -delete",
     "build:watch": "tsc -b --watch",
-    "test": "lerna run test --concurrency=1 --stream",
     "coverage:coveralls": "nyc report --reporter=text-lcov | npx coveralls",
     "coverage:codecov": "npx codecov .nyc_output/",
     "presubmit": "lerna run lint && yarn build && lerna run test"
