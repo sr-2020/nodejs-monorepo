@@ -5,8 +5,6 @@
   "scripts": {
     "build": "tsc -b",
     "test": "jest",
-    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-models-manager/.nyc_output jest",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-models-manager.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

@@ -13,8 +13,6 @@
     "start": "yarn run build && forever start ./dist/main.js",
     "stop": "forever stop ./dist/main.js",
     "test": "jest",
-    "coverage:test": "nyc --cwd=.. --temp-dir=alice-qr-lib/.nyc_output jest",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-qr-lib.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

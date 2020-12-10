@@ -6,8 +6,6 @@
   "scripts": {
     "build": "tsc -b",
     "test": "jest",
-    "coverage:test": "nyc --cwd=.. --temp-dir=deus-model-engine/.nyc_output jest",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/deus-model-engine.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

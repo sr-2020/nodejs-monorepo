@@ -6,8 +6,6 @@
     "build": "tsc -b",
     "test": "jest --config jest.config.ts --forceExit",
     "test:realdb": "cross-env NODE_ENV=prod jest --forceExit",
-    "coverage:test": "nyc --cwd=.. --temp-dir=sr2020-testing/.nyc_output mocha --exit",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/sr2020-testing.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",

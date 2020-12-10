@@ -23,8 +23,6 @@
     "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "test": "jest",
-    "coverage:test": "nyc --cwd=.. --temp-dir=push/.nyc_output jest",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/push.coverage.json",
     "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
     "docker:push": "docker push sr2020/push",
     "start": "node -r tsconfig-paths/register ."

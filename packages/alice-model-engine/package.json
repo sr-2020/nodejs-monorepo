@@ -7,8 +7,6 @@
     "deps": "yarn install",
     "build": "tsc -b",
     "test": "jest",
-    "coverage:test": "nyc --cwd=.. --temp-dir=alice-model-engine/.nyc_output jest",
-    "coverage:merge": "nyc merge .nyc_output ../../.nyc_output/alice-model-engine.coverage.json",
     "lint": "yarn run prettier:check && yarn run eslint",
     "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
     "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
