@@ -16,7 +16,6 @@ jobs:
           targets: lint,build,test
           all: true
           affected: false
-      - run: cd packages/sr2020-testing && yarn test
   docker_models_manager:
     runs-on: ubuntu-latest
     steps:

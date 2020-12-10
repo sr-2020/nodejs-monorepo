@@ -19,6 +19,7 @@ import { ModelProcessResponse } from '@alice/interface/models/process-requests-r
 import { Duration } from 'moment';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { logger } from '@alice/alice-model-engine/logger';
+import * as Path from 'path';
 
 logger.level = 'error';
 
@@ -31,9 +32,13 @@ type DeepPartial<T> = {
 };
 
 // Those are singletones intentionally - so model scripts are only loaded once.
-const characterEngine = new Engine<Sr2020Character>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/character')));
-const locationEngine = new Engine<Location>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/location')));
-const qrCodeEngine = new Engine<QrCode>(loadModels(new TestFolderLoader('../sr2020-model-engine/scripts/qr')));
+const characterEngine = new Engine<Sr2020Character>(
+  loadModels(new TestFolderLoader(Path.resolve(__dirname, '../sr2020-model-engine/scripts/character'))),
+);
+const locationEngine = new Engine<Location>(
+  loadModels(new TestFolderLoader(Path.resolve(__dirname, '../sr2020-model-engine/scripts/location'))),
+);
+const qrCodeEngine = new Engine<QrCode>(loadModels(new TestFolderLoader(Path.resolve(__dirname, '../sr2020-model-engine/scripts/qr'))));
 
 class MockTimeService implements TimeService {
   private _timestamp = 0;

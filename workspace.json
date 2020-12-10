@@ -293,6 +293,12 @@
           "options": {
             "lintFilePatterns": ["packages/sr2020-testing/**/*.ts"]
           }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/sr2020-testing/jest.config.ts"
+          }
         }
       }
     }
