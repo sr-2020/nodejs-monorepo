@@ -11,7 +11,6 @@ export interface FolderLoader {
 export function loadModels<T extends EmptyModel>(loader: FolderLoader): ModelCallbacks<T> {
   return requireDir(loader, (m: ModelCallbacks<T>, src: any) => {
     m = clone(m);
-    src = clone(src);
 
     if (!m.viewModelCallbacks) m.viewModelCallbacks = {};
     if (!m.preprocessCallbacks) m.preprocessCallbacks = [];
@@ -29,21 +28,21 @@ export function loadModels<T extends EmptyModel>(loader: FolderLoader): ModelCal
     for (const fname in src) {
       if (fname.startsWith('view_')) {
         m.viewModelCallbacks[fname.substr('view_'.length)] = src[fname];
-        delete src[fname];
+        continue;
       }
 
       if (typeof src[fname] != 'function') {
-        delete src[fname];
+        continue;
       }
-    }
 
-    // TODO(aeremin) Separate event and effect callbacks.
-    for (const fname in src) {
+      console.log(`Loading function ${fname}`);
+      // TODO(aeremin) Separate event and effect callbacks.
       if (m.eventCallbacks?.[fname] && m.eventCallbacks[fname] != src[fname])
         throw new Error(`Event callback with the name ${fname} was already defined!`);
       if (m.effectCallbacks?.[fname] && m.effectCallbacks[fname] != src[fname])
         throw new Error(`Effect callback with the name ${fname} was already defined!`);
     }
+
     m.eventCallbacks = assign(m.eventCallbacks, src);
     m.effectCallbacks = assign(m.effectCallbacks, src);
 
