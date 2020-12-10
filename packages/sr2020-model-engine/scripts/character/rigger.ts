@@ -20,7 +20,7 @@ const kInDroneModifierId = 'in-the-drone';
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }) {
   const patient = api.aquired(Sr2020Character, data.targetCharacterId);
 
-  api.model.analyzedBody = {
+  (api.model.analyzedBody as any) = {
     essence: patient.essence,
     healthState: patient.healthState,
     implants: patient.implants,

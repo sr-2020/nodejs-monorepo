@@ -816,9 +816,9 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   chemoConsumptionRecords: ChemoConsumptionRecord[];
 
-  @property({ required: false, jsonSchema: { nullable: true } })
+  @property({ type: 'null' })
   @JsonNullableColumn()
-  analyzedBody: AnalyzedBody | null;
+  analyzedBody: null;
 
   @rproperty()
   @Column((type) => Rigging, { prefix: 'rigging' })

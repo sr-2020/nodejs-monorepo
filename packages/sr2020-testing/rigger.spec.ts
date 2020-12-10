@@ -4,6 +4,7 @@ import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scrip
 import { duration } from 'moment';
 import { kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { AnalyzedBody } from '@alice/sr2020-common/models/sr2020-character.model';
 
 describe('Rigger abilities', () => {
   let fixture: TestFixture;
@@ -36,8 +37,8 @@ describe('Rigger abilities', () => {
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'analyzeBody', data: { targetCharacterId: '2' } }, 1);
       expect(workModel.analyzedBody).toBeTruthy();
-      expect(workModel.analyzedBody?.essence).toBe(480);
-      expect(workModel.analyzedBody?.implants).toContainEqual(expect.objectContaining({ id: 'rcc-beta' }));
+      expect((workModel.analyzedBody as AnalyzedBody).essence).toBe(480);
+      expect((workModel.analyzedBody as AnalyzedBody).implants).toContainEqual(expect.objectContaining({ id: 'rcc-beta' }));
     }
 
     {
@@ -88,7 +89,7 @@ describe('Rigger abilities', () => {
       const patientWorkModel = (await fixture.getCharacter(1)).workModel;
       const qrWorkModel = (await fixture.getQrCode(4)).workModel;
       expect(qrWorkModel).toMatchObject({ type: 'implant', usesLeft: 1, data: { id: 'rcc-beta', basePrice: 10 } });
-      expect(workModel.analyzedBody?.implants.length).toBe(0);
+      expect((workModel.analyzedBody as AnalyzedBody).implants.length).toBe(0);
       expect(patientWorkModel.implants.length).toBe(0);
       expect(patientWorkModel).toMatchObject({
         essence: 480,
