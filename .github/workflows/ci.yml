@@ -14,8 +14,7 @@ jobs:
       - uses: mansagroup/nrwl-nx-action@v1.0.1
         with:
           targets: lint,build,test
-          all: true
-          affected: false
+          affected: true
   docker_models_manager:
     runs-on: ubuntu-latest
     steps:
