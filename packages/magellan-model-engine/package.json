@@ -2,21 +2,6 @@
   "name": "magellan-model-engine",
   "version": "0.0.1",
   "description": "Models for Magellan 2018 LARP.",
-  "main": "index.js",
-  "scripts": {
-    "deps": "yarn install",
-    "build": "tsc -b",
-    "test": "jest",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
-  },
-  "author": "",
-  "license": "Apache-2.0",
   "devDependencies": {},
   "dependencies": {
     "@types/chance": "^1.0.0",
@@ -29,10 +14,8 @@
     "chance": "^1.0.10",
     "clone": "^1.0.4",
     "fs.realpath": "^1.0.0",
-    "inflight": "^1.0.6",
     "lodash": "^4.17.4",
     "shuffle-array": "^1.0.1",
-    "source-map-support": "^0.4.15",
     "type-detect": "^4.0.8",
     "uuid": "^3.2.1"
   }

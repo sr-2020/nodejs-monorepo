@@ -1,24 +1,5 @@
 {
   "name": "sr2020-models-manager",
-  "version": "0.0.1",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc -b",
-    "test": "jest",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix",
-    "prestart": "yarn run build",
-    "start": "node -r tsconfig-paths/register .",
-    "docker:build": "docker build -t sr2020/models-manager -f Dockerfile ../..",
-    "docker:push": "docker push sr2020/models-manager"
-  },
-  "author": "",
-  "license": "Apache-2.0",
   "devDependencies": {},
   "dependencies": {}
 }

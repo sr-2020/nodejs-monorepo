@@ -1,24 +1,10 @@
 {
   "name": "alice-models-manager",
   "version": "0.0.1",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc -b",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
-  },
-  "author": "",
-  "license": "Apache-2.0",
   "devDependencies": {},
   "dependencies": {
     "@google-cloud/logging-winston": "^4.0.0",
     "@google-cloud/pubsub": "^2.5.0",
-    "pg": "^8.4.2",
-    "sql.js": "^1.0.0"
+    "pg": "^8.4.2"
   }
 }

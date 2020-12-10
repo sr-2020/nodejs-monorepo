@@ -1,15 +1,3 @@
 {
-  "name": "sr2020-common",
-  "scripts": {
-    "build": "tsc -b",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
-  },
-  "author": "",
-  "license": "Apache-2.0"
+  "name": "sr2020-common"
 }

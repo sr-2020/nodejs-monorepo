@@ -2,36 +2,6 @@
   "name": "push",
   "version": "1.0.0",
   "description": "push",
-  "keywords": [
-    "loopback-application",
-    "loopback"
-  ],
-  "main": "index.js",
-  "engines": {
-    "node": ">=8.9"
-  },
-  "scripts": {
-    "build:apidocs": "lb-apidocs",
-    "build": "tsc -b",
-    "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist && rm -f *.tsbuildinfo",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix",
-    "test": "jest",
-    "docker:build": "docker build -t sr2020/push -f Dockerfile ../..",
-    "docker:push": "docker push sr2020/push",
-    "start": "node -r tsconfig-paths/register ."
-  },
-  "repository": {
-    "type": "git"
-  },
-  "author": "",
-  "license": "Apache-2.0",
   "dependencies": {
     "loopback-connector-sqlite3": "^3.0.0",
     "sqlite3": "^5.0.0"
