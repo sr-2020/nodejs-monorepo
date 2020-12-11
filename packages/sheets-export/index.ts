@@ -2,11 +2,11 @@ import { google } from 'googleapis';
 import * as moment from 'moment';
 
 /* Can be deployed by
-     yarn --cwd packages/sheets-export build
-     gcloud functions deploy healthStateToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated
-     gcloud functions deploy abilityUsedToSheet --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=ability_used --region=europe-west3 --no-allow-unauthenticated
-     gcloud functions deploy spellCastToSheet   --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=spell_cast   --region=europe-west3 --no-allow-unauthenticated
-     gcloud functions deploy reanimatesToSheet  --source=packages/sheets-export --runtime=nodejs10 --trigger-topic=reanimates   --region=europe-west3 --no-allow-unauthenticated
+     nx build sheets-export
+     gcloud functions deploy healthStateToSheet --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=health_state --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy abilityUsedToSheet --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=ability_used --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy spellCastToSheet   --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=spell_cast   --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy reanimatesToSheet  --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=reanimates   --region=europe-west3 --no-allow-unauthenticated
 */
 
 function currentMoscowDateTime() {

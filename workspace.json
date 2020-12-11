@@ -351,6 +351,30 @@
           }
         }
       }
+    },
+    "sheets-export": {
+      "root": "packages/sheets-export",
+      "sourceRoot": "packages/sheets-export",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/sheets-export/**/*.ts"]
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/sheets-export",
+            "tsConfig": "packages/sheets-export/tsconfig.lib.json",
+            "packageJson": "packages/sheets-export/package.json",
+            "main": "packages/sheets-export/index.ts",
+            "assets": []
+          }
+        }
+      }
     }
   },
   "cli": {
