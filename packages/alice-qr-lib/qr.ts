@@ -1,5 +1,5 @@
 import * as md5 from 'md5';
-import { QrData } from './qr.types';
+import { QrData } from '@alice/alice-qr-lib/qr.dto';
 
 export class FormatError implements Error {
   public name = 'FormatError';

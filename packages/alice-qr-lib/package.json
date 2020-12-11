@@ -2,27 +2,6 @@
   "name": "alice-qr-lib",
   "version": "1.0.0",
   "description": "Utilities for QR code content generation and parsing",
-  "main": "lib/",
-  "typings": "lib/qr",
-  "files": [
-    "lib/"
-  ],
-  "scripts": {
-    "deps": "yarn install",
-    "build": "tsc",
-    "start": "yarn run build && forever start ./dist/main.js",
-    "stop": "forever stop ./dist/main.js",
-    "test": "jest",
-    "lint": "yarn run prettier:check && yarn run eslint",
-    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
-    "prettier:cli": "prettier --ignore-path=../../.prettierignore  \"**/*.ts\"",
-    "prettier:check": "yarn run prettier:cli -l",
-    "prettier:fix": "yarn run prettier:cli --write",
-    "eslint": "lb-eslint -c ../../.eslintrc.js --ignore-path=../../.eslintignore --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
-  },
-  "author": "",
-  "license": "Apache-2.0",
   "dependencies": {
     "@types/basic-auth": "^1.1.1",
     "@types/body-parser": "^1.16.3",

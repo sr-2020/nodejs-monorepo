@@ -1,5 +1,6 @@
 import { decode, encode } from './qr';
-import { LegacyQrType, QrData } from './qr.types';
+import { LegacyQrType } from './qr.types';
+import { QrData } from '@alice/alice-qr-lib/qr.dto';
 
 describe('QR content encoding/decode', () => {
   it('Throws format error if too short', () => {

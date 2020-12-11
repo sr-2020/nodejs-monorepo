@@ -22,10 +22,3 @@ export enum LegacyQrType {
 
   Passport = 100,
 }
-
-export interface QrData {
-  type: LegacyQrType;
-  kind: number;
-  validUntil: number;
-  payload: string;
-}

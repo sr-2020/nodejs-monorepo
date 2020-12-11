@@ -301,6 +301,56 @@
           }
         }
       }
+    },
+    "alice-qr-lib": {
+      "root": "packages/alice-qr-lib",
+      "sourceRoot": "packages/alice-qr-lib",
+      "projectType": "application",
+      "prefix": "alice-qr-lib",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/packages/alice-qr-lib",
+            "main": "packages/alice-qr-lib/main.ts",
+            "tsConfig": "packages/alice-qr-lib/tsconfig.app.json",
+            "assets": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "packages/alice-qr-lib/environments/environment.ts",
+                  "with": "packages/alice-qr-lib/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "alice-qr-lib:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/alice-qr-lib/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/alice-qr-lib/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -52,6 +52,9 @@
     },
     "sr2020-testing": {
       "tags": []
+    },
+    "alice-qr-lib": {
+      "tags": []
     }
   },
   "workspaceLayout": {
