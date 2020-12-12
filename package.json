@@ -44,7 +44,6 @@
     "class-validator": "^0.12.2",
     "document-register-element": "1.13.1",
     "dotenv": "^8.0.0",
-    "loopback-connector-postgresql": "^5.1.0",
     "loopback-connector-rest": "^3.6.0",
     "moment": "^2.24.0",
     "react": "17.0.1",

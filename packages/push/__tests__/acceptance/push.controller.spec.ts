@@ -1,25 +1,17 @@
 import { Client } from '@loopback/testlab';
 import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
-import { Connection, createConnection, getRepository, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
-import { getDbConnectionOptions } from '@alice/push/connection';
 
 describe('TokenController', () => {
   let app: PushApplication;
   let client: Client;
-  let connection: Connection;
   let repo: Repository<FirebaseToken>;
-
-  beforeAll(async () => {
-    const prodConnectionOptions = getDbConnectionOptions();
-    connection = await createConnection({ type: 'sqljs', entities: prodConnectionOptions.entities, synchronize: true });
-  });
 
   beforeEach(async () => {
     ({ app, client } = await setupApplication());
-
-    repo = connection.getRepository(FirebaseToken);
+    repo = getRepository(FirebaseToken);
   });
 
   afterEach(async () => {

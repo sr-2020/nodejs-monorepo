@@ -2,9 +2,6 @@
   "name": "push",
   "version": "1.0.0",
   "description": "push",
-  "dependencies": {
-    "loopback-connector-sqlite3": "^3.0.0",
-    "sqlite3": "^5.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {}
 }

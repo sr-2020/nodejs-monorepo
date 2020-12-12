@@ -1,32 +1,22 @@
 import { PushApplication } from '../../application';
 import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
-import { juggler } from '@loopback/repository';
+import { getDbConnectionOptions } from '@alice/push/connection';
+import { createConnection } from 'typeorm';
+
+let connectionCreated = false;
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({
-    // Customize the server configuration here.
-    // Empty values (undefined, '') will be ignored by the helper.
-    //
-    // host: process.env.HOST,
-    // port: +process.env.PORT,
-  });
+  const restConfig = givenHttpServerConfig({});
 
   const app = new PushApplication({
     rest: restConfig,
   });
 
-  const sqlite = new juggler.DataSource({
-    connector: 'sqlite3',
-    file: ':memory:',
-  });
-  await sqlite.execute(`
-    CREATE TABLE firebase_tokens (
-      id int(11) NOT NULL,
-      token varchar(200) DEFAULT NULL,
-      PRIMARY KEY ('id')
-    );
-  `);
-  app.bind('datasources.PostgreSQL').to(sqlite);
+  if (!connectionCreated) {
+    const prodConnectionOptions = getDbConnectionOptions();
+    await createConnection({ type: 'sqljs', entities: prodConnectionOptions.entities, synchronize: true });
+    connectionCreated = true;
+  }
 
   await app.start();
 
