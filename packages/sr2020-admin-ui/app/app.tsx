@@ -4,7 +4,8 @@ import './app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Link, Route } from 'react-router-dom';
-import { Alert } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import { CharacterPage } from '@alice/sr2020-admin-ui/app/character-page';
 
 export function App() {
   /*
@@ -14,10 +15,9 @@ export function App() {
    */
   return (
     <div className="app">
-      <header className="flex">SR2020 Админка</header>
-      <main>
-        <Alert variant={'info'}> Test </Alert>
-      </main>
+      <Container>
+        <CharacterPage id="51614" />
+      </Container>
 
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
