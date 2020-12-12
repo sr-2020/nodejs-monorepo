@@ -2,6 +2,8 @@
   "name": "push",
   "version": "1.0.0",
   "description": "push",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^8.4.2"
+  },
   "devDependencies": {}
 }
