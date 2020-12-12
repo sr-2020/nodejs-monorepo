@@ -8,13 +8,13 @@ import {
   Modifier,
   PreprocessApiInterface,
   ViewModelApiInterface,
-} from '@alice/interface/models/alice-model-engine';
+} from '@alice/alice-common/models/alice-model-engine';
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
 import { Context } from './context';
 import Logger from './logger';
-import { EventCallback } from '@alice/interface/callbacks';
+import { EventCallback } from '@alice/alice-common/callbacks';
 import { Duration } from 'moment';
 import * as cuid from 'cuid';
 

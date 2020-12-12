@@ -4,7 +4,7 @@ import { Config } from '@alice/alice-model-engine/config';
 import { requireDir, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import * as Winston from 'winston';
 
-import { EmptyModel, EngineResult, EngineResultOk, Event } from '@alice/interface/models/alice-model-engine';
+import { EmptyModel, EngineResult, EngineResultOk, Event } from '@alice/alice-common/models/alice-model-engine';
 
 let WORKER_INSTANCE: Worker | null = null;
 

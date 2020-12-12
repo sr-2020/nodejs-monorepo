@@ -1,4 +1,4 @@
-import { Condition, ViewModelApiInterface } from '@alice/interface/models/alice-model-engine';
+import { Condition, ViewModelApiInterface } from '@alice/alice-common/models/alice-model-engine';
 import { Change, OrganismModel } from '../helpers/basic-types';
 import { getSymptoms, symptomToRussian } from '../helpers/symptoms';
 import { hasMedicViewModel, hasMobileViewModel } from '../helpers/view-model-helper';

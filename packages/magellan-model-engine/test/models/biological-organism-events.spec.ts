@@ -1,5 +1,5 @@
 import 'jest-extended';
-import { Event } from '@alice/interface/models/alice-model-engine';
+import { Event } from '@alice/alice-common/models/alice-model-engine';
 import { merge } from 'lodash';
 import { allSystemsIndices, OrganismModel, ScanQRData, System } from '../../helpers/basic-types';
 import { getEvents, getNoOpEvent } from '../helpers/events';

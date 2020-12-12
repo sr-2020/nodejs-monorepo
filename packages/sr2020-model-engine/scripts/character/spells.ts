@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import { cloneDeep, template } from 'lodash';
-import { EffectModelApi, EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Location } from '@alice/sr2020-common/models/location.model';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';

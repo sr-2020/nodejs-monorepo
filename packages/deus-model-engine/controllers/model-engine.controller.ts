@@ -2,7 +2,7 @@ import { HttpErrors, post, requestBody } from '@loopback/rest';
 import { DeusExModel, DeusExProcessModelRequest, DeusExProcessModelResponse } from '../deus-ex-model';
 import { Engine } from '@alice/alice-model-engine/engine';
 import { inject } from '@loopback/core';
-import { AquiredObjects } from '@alice/interface/models/alice-model-engine';
+import { AquiredObjects } from '@alice/alice-common/models/alice-model-engine';
 
 export class ModelEngineController {
   constructor(@inject(Engine.bindingKey) private _engine: Engine<DeusExModel>) {}

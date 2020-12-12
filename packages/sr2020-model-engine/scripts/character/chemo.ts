@@ -1,4 +1,4 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Concentrations, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { kAllPills } from './chemo_library';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord, validUntil } from './util';

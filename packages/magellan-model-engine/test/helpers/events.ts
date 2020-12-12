@@ -1,4 +1,4 @@
-import { Event } from '@alice/interface/models/alice-model-engine';
+import { Event } from '@alice/alice-common/models/alice-model-engine';
 
 export function getEvent(characterId: string, eventType: string, data: any, timestamp = Date.now()): Event {
   return {

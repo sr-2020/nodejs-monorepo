@@ -3,7 +3,7 @@ import { Config } from '@alice/alice-model-engine/config';
 import { requireDir, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import { Worker } from '@alice/alice-model-engine/worker';
 
-import { EngineResult, EngineResultOk, Event } from '@alice/interface/models/alice-model-engine';
+import { EngineResult, EngineResultOk, Event } from '@alice/alice-common/models/alice-model-engine';
 import * as Winston from 'winston';
 import { OrganismModel } from 'magellan-model-engine/helpers/basic-types';
 

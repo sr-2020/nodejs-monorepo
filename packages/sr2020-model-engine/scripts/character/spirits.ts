@@ -1,4 +1,4 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 import { BodyStorageQrData, SpiritQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';

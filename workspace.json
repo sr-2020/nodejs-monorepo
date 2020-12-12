@@ -1,16 +1,16 @@
 {
   "version": 1,
   "projects": {
-    "interface": {
-      "root": "packages/interface",
-      "sourceRoot": "packages/interface",
+    "alice-common": {
+      "root": "packages/alice-common",
+      "sourceRoot": "packages/alice-common",
       "projectType": "library",
       "schematics": {},
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["packages/interface/**/*.ts"]
+            "lintFilePatterns": ["packages/alice-common/**/*.ts"]
           }
         }
       }
@@ -380,7 +380,7 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "interface",
+  "defaultProject": "sr2020-testing",
   "schematics": {
     "@nrwl/react": {
       "application": {

@@ -1,7 +1,7 @@
 import { getService } from '@loopback/service-proxy';
 import { inject, Provider } from '@loopback/core';
 import { FirebaseHttpApiDataSource } from '../datasources/firebase-http-api.datasource';
-import { PushResult } from '@alice/interface/models/push-result.model';
+import { PushResult } from '@alice/alice-common/models/push-result.model';
 
 export interface FirebaseMessagingService {
   send(recipient: string, title: string, body: string): Promise<PushResult>;

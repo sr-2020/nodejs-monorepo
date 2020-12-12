@@ -1,5 +1,5 @@
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { DamageModifier } from './catalog_types';
 
 /**

@@ -1,5 +1,5 @@
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 import { isHmhvv, removeHunger, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';

@@ -13,16 +13,16 @@ COPY --chown=node *.json ./
 COPY --chown=node yarn.lock ./
 
 COPY --chown=node packages/push/*.json ./packages/push/
-COPY --chown=node packages/interface/*.json ./packages/interface/
+COPY --chown=node packages/alice-common/*.json ./packages/alice-common/
 
 RUN yarn
 
 COPY --chown=node packages/push/. ./packages/push
-COPY --chown=node packages/interface/. ./packages/interface
+COPY --chown=node packages/alice-common/. ./packages/alice-common
 
 RUN npx nx build push
 
-# Bind to all network interfaces so that it can be mapped to the host OS
+# Bind to all network alice-commons so that it can be mapped to the host OS
 ENV HOST=0.0.0.0
 
 CMD [ "node", "/home/node/app/dist/packages/push/main.js" ]

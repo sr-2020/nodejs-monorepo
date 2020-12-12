@@ -6,7 +6,7 @@ import { default as consts } from '../helpers/constants';
 import { default as helpers } from '../helpers/model-helper';
 import * as Chance from 'chance';
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 
 const chance = new Chance();
 

@@ -1,4 +1,4 @@
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { resetKarmaCycleLimit } from '@alice/sr2020-model-engine/scripts/character/karma';
 

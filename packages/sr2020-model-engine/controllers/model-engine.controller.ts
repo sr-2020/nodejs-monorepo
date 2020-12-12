@@ -9,11 +9,11 @@ import {
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Engine } from '@alice/alice-model-engine/engine';
 import { inject } from '@loopback/core';
-import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Location, LocationProcessRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
 import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
-import { Empty } from '@alice/interface/models/empty.model';
+import { Empty } from '@alice/alice-common/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
 import { AURA_LENGTH } from '../scripts/character/consts';

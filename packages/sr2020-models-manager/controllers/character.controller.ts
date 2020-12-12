@@ -1,7 +1,7 @@
 import { inject } from '@loopback/core';
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
-import { EventRequest } from '@alice/interface/models/alice-model-engine';
-import { Empty } from '@alice/interface/models/empty.model';
+import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
+import { Empty } from '@alice/alice-common/models/empty.model';
 import {
   CharacterCreationRequest,
   Feature,
@@ -10,7 +10,7 @@ import {
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
-import { PushService } from '@alice/interface/services/push.service';
+import { PushService } from '@alice/alice-common/services/push.service';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';

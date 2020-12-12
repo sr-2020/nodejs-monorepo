@@ -1,4 +1,4 @@
-import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { AddedImplant, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Implant, kAllImplants } from './implants_library';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';

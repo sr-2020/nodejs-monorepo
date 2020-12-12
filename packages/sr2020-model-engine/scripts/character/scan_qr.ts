@@ -1,4 +1,4 @@
-import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume } from '../qr/events';
 import { LocationData, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';

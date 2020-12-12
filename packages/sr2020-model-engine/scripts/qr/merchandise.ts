@@ -2,7 +2,7 @@ import { QrCode, QrType } from '@alice/sr2020-common/models/qr-code.model';
 import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { kAllReagents } from './reagents_library';
-import { EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { consumeChemo } from '../character/chemo';
 import { DroneData, MerchandiseQrData, TypedQrCode } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { kAllDrones, kCommonDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';

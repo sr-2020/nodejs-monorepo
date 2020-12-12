@@ -23,7 +23,7 @@
     }
   },
   "projects": {
-    "interface": {
+    "alice-common": {
       "tags": []
     },
     "push": {

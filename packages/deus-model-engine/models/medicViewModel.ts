@@ -1,4 +1,4 @@
-import { ViewModelApiInterface } from '@alice/interface/models/alice-model-engine';
+import { ViewModelApiInterface } from '@alice/alice-common/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 
 /**

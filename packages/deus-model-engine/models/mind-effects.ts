@@ -5,7 +5,7 @@
 import { default as helpers } from '../helpers/model-helper';
 import { default as consts } from '../helpers/constants';
 import { DeusExModel } from '../deus-ex-model';
-import { EffectModelApi } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi } from '@alice/alice-common/models/alice-model-engine';
 
 /**
  * Универсальный эффект "изменение кубиков сознания " (change-mind-cube-effect)

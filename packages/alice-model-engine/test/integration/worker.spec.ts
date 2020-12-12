@@ -1,4 +1,4 @@
-import { Effect, EmptyModel, EngineResultOk } from '@alice/interface/models/alice-model-engine';
+import { Effect, EmptyModel, EngineResultOk } from '@alice/alice-common/models/alice-model-engine';
 
 import { Config, EventHandler } from '../../config';
 import { Worker } from '../../worker';

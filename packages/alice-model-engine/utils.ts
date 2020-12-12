@@ -1,7 +1,7 @@
 import * as glob from 'glob';
 import { assign, clone, merge as _merge } from 'lodash';
-import { ModelCallbacks } from '@alice/interface/callbacks';
-import { EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { ModelCallbacks } from '@alice/alice-common/callbacks';
+import { EmptyModel } from '@alice/alice-common/models/alice-model-engine';
 import { logger } from '@alice/alice-model-engine/logger';
 
 export interface FolderLoader {

@@ -1,4 +1,4 @@
-import { AquiredObjects, EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { AquiredObjects, EmptyModel } from '@alice/alice-common/models/alice-model-engine';
 
 export interface AquiredModelsStorage {
   // Returns the maximal timestamp of all models currently present in storage.

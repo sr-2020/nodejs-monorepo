@@ -3,7 +3,7 @@
  */
 
 import { default as helpers } from '../helpers/model-helper';
-import { EffectModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 
 /**

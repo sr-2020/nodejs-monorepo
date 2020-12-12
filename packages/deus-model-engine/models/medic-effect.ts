@@ -3,7 +3,7 @@
  */
 import { DamageModifier, ImplantModifier } from '../helpers/catalog_types';
 
-import { EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import * as moment from 'moment';
 import { default as consts } from '../helpers/constants';

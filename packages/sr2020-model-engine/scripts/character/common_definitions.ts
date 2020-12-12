@@ -8,7 +8,7 @@ import {
   TargetSignature,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { TargetType } from '@alice/sr2020-model-engine/scripts/character/active_abilities_library';
-import { Modifier } from '@alice/interface/models/alice-model-engine';
+import { Modifier } from '@alice/alice-common/models/alice-model-engine';
 
 export type ActiveAbilityData = Partial<Targetable> &
   LocationMixin & {

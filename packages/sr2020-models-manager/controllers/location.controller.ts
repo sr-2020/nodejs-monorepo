@@ -1,9 +1,9 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
-import { Empty } from '@alice/interface/models/empty.model';
+import { Empty } from '@alice/alice-common/models/empty.model';
 import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
-import { PushService } from '@alice/interface/services/push.service';
+import { PushService } from '@alice/alice-common/services/push.service';
 import { inject } from '@loopback/core';
-import { EventRequest } from '@alice/interface/models/alice-model-engine';
+import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { Location, LocationCreationRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { EntityManager, getManager, Transaction, TransactionManager } from 'typeorm';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';

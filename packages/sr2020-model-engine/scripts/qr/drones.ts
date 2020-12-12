@@ -1,4 +1,4 @@
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { DroneQrData, SpiritQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { AddedActiveAbility } from '@alice/sr2020-common/models/sr2020-character.model';

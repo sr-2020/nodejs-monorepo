@@ -1,5 +1,5 @@
 import { inject, Provider } from '@loopback/core';
-import { EventRequest } from '@alice/interface/models/alice-model-engine';
+import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { Location } from '@alice/sr2020-common/models/location.model';

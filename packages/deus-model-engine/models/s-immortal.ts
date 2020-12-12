@@ -2,7 +2,7 @@ import { default as consts } from '../helpers/constants';
 import { default as helpers } from '../helpers/model-helper';
 import { default as medhelpers } from '../helpers/medic-helper';
 import { DeusExModel } from '../deus-ex-model';
-import { EffectModelApi, EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 
 /**
  * Обработчик события "serenity-immortality-ready"

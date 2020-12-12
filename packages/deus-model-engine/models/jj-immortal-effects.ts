@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { default as helpers } from '../helpers/model-helper';
 import { default as medichelpers } from '../helpers/medic-helper';

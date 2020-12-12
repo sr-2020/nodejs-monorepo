@@ -3,9 +3,9 @@ import { Location } from '@alice/sr2020-common/models/location.model';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { ModelEngineService, processAny } from '@alice/sr2020-common/services/model-engine.service';
-import { EmptyModel, Event, EventForModelType } from '@alice/interface/models/alice-model-engine';
+import { EmptyModel, Event, EventForModelType } from '@alice/alice-common/models/alice-model-engine';
 import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
-import { ModelProcessResponse } from '@alice/interface/models/process-requests-respose';
+import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 
 export interface EventDispatcherService {
   dispatchEventsRecursively(events: EventForModelType[], aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>[]>;

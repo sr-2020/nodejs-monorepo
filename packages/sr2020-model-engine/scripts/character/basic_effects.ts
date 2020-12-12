@@ -3,7 +3,7 @@
 import { clamp } from 'lodash';
 
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { EffectModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { EffectModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 
 export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {

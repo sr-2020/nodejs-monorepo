@@ -1,4 +1,4 @@
-import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { Condition, Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import * as moment from 'moment';
 import {
   allSystemsIndices,

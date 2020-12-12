@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EthicGroup, EthicScale, EthicTrigger, kAllCrysises, kAllEthicGroups, kEthicAbilities, kEthicLevels } from './ethics_library';
-import { Event, EventModelApi, UserVisibleError } from '@alice/interface/models/alice-model-engine';
+import { Event, EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { ActiveAbilityData } from './common_definitions';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume, unconsume } from '../qr/events';

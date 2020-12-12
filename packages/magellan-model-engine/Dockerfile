@@ -4,7 +4,7 @@ COPY *.json ./
 COPY yarn.lock .
 COPY packages/magellan-model-engine/package.json ./packages/magellan-model-engine/
 COPY packages/magellan-model-engine/yarn.lock ./packages/magellan-model-engine/
-COPY packages/interface/package.json ./packages/interface/
+COPY packages/alice-common/package.json ./packages/alice-common/
 COPY packages/alice-model-engine/package.json ./packages/alice-model-engine/
 COPY packages/alice-model-engine/yarn.lock ./packages/alice-model-engine/
 
@@ -12,7 +12,7 @@ RUN yarn
 RUN yarn run deps
 
 COPY packages/magellan-model-engine/.  ./packages/magellan-model-engine
-COPY packages/interface/.  ./packages/interface
+COPY packages/alice-common/.  ./packages/alice-common
 COPY packages/alice-model-engine/.  ./packages/alice-model-engine
 
 RUN yarn --cwd packages/magellan-model-engine run build

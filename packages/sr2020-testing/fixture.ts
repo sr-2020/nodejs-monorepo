@@ -1,13 +1,13 @@
 import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
 import { Engine } from '@alice/alice-model-engine/engine';
 import { loadModels, TestFolderLoader } from '@alice/alice-model-engine/utils';
-import { PubSubNotification, PushNotification } from '@alice/interface/models/push-notification.model';
-import { PushResult } from '@alice/interface/models/push-result.model';
-import { EventRequest } from '@alice/interface/models/alice-model-engine';
+import { PubSubNotification, PushNotification } from '@alice/alice-common/models/push-notification.model';
+import { PushResult } from '@alice/alice-common/models/push-result.model';
+import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { Location } from '@alice/sr2020-common//models/location.model';
 import { QrCode } from '@alice/sr2020-common//models/qr-code.model';
 import { Sr2020Character } from '@alice/sr2020-common//models/sr2020-character.model';
-import { PushService } from '@alice/interface/services/push.service';
+import { PushService } from '@alice/alice-common/services/push.service';
 import { ModelsManagerApplication } from '@alice/sr2020-models-manager/application';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
@@ -15,7 +15,7 @@ import { getDbConnectionOptions } from '@alice/sr2020-models-manager/utils/conne
 import { ModelEngineController } from '@alice/sr2020-model-engine/controllers/model-engine.controller';
 import * as dotenv from 'dotenv';
 import { Connection, createConnection } from 'typeorm';
-import { ModelProcessResponse } from '@alice/interface/models/process-requests-respose';
+import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Duration } from 'moment';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { logger } from '@alice/alice-model-engine/logger';

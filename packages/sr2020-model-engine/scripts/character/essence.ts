@@ -1,4 +1,4 @@
-import { Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/interface/models/alice-model-engine';
+import { Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { increaseCharisma, increaseMagic, increaseResonance } from './basic_effects';
 import { removeImplant } from './merchandise';

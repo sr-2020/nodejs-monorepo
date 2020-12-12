@@ -9,14 +9,14 @@ import {
   Modifier,
   PendingAquire,
   UserVisibleError,
-} from '@alice/interface/models/alice-model-engine';
+} from '@alice/alice-common/models/alice-model-engine';
 
 import * as config from './config';
 import { Context } from './context';
 import * as dispatcher from './dispatcher';
 import Logger from './logger';
 import { EffectModelApiFactory, PreprocessApiFactory, ViewModelApiFactory } from './model_api';
-import { EffectCallback, ModelCallbacks, ViewModelCallback } from '@alice/interface/callbacks';
+import { EffectCallback, ModelCallbacks, ViewModelCallback } from '@alice/alice-common/callbacks';
 
 export class Engine<T extends EmptyModel> {
   public static readonly bindingKey = 'ModelEngine';

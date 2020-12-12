@@ -1,4 +1,4 @@
-import { Modifier } from '@alice/interface/models/alice-model-engine';
+import { Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { modifierFromEffect } from './util';
 import {
   increaseBiofeedbackResistance,

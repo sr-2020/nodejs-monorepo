@@ -1,4 +1,4 @@
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { Location, SpellTrace } from '@alice/sr2020-common/models/location.model';
 import * as uuid from 'uuid';
 import { duration } from 'moment';

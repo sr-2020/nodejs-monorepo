@@ -14,10 +14,10 @@ import { ModelAquirerServiceProvider } from '@alice/sr2020-models-manager/servic
 import { LoggerServiceProvider } from '@alice/alice-models-manager/services/logger.service';
 import { EventDispatcherServiceProvider } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { ModelEngineServiceProvider } from '@alice/sr2020-common/services/model-engine.service';
-import { PushServiceProvider } from '@alice/interface/services/push.service';
+import { PushServiceProvider } from '@alice/alice-common/services/push.service';
 import { PubSubServiceProvider } from '@alice/alice-models-manager/services/pubsub.service';
 import { ModelEngineHttpApiDataSource } from '@alice/sr2020-common/datasources/model-engine-http-api.datasource';
-import { PushHttpApiDataSource } from '@alice/interface/datasources/push-http-api.datasource';
+import { PushHttpApiDataSource } from '@alice/alice-common/datasources/push-http-api.datasource';
 
 export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
   constructor(options: ApplicationConfig = {}) {
@@ -34,7 +34,6 @@ export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestA
 
     this.bind(RestBindings.SequenceActions.REJECT).toProvider(CustomRejectProvider);
 
-    // const dirs = ['alice-models-manager', 'sr2020-models-manager', 'sr2020-common', 'interface'];
     this.bind('controllers.PingController').toClass(PingController);
     this.bind('controllers.CharacterController').toClass(CharacterController);
     this.bind('controllers.LocationController').toClass(LocationController);

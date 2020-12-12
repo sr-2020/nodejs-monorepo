@@ -1,15 +1,15 @@
-import { EmptyModel, EventRequest } from '@alice/interface/models/alice-model-engine';
+import { EmptyModel, EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { ModelEngineService, processAny } from '@alice/sr2020-common/services/model-engine.service';
-import { PushService } from '@alice/interface/services/push.service';
+import { PushService } from '@alice/alice-common/services/push.service';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
-import { PushResult } from '@alice/interface/models/push-result.model';
+import { PushResult } from '@alice/alice-common/models/push-result.model';
 import { EntityManager, getManager, getRepository } from 'typeorm';
 import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
-import { ModelProcessResponse } from '@alice/interface/models/process-requests-respose';
-import { Empty } from '@alice/interface/models/empty.model';
+import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
+import { Empty } from '@alice/alice-common/models/empty.model';
 import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 

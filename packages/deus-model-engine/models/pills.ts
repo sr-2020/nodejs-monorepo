@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { default as consts } from '../helpers/constants';
 import { default as helpers } from '../helpers/model-helper';
 import { default as medichelpers } from '../helpers/medic-helper';
-import { EventModelApi, Modifier, PreprocessApiInterface } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi, Modifier, PreprocessApiInterface } from '@alice/alice-common/models/alice-model-engine';
 import { DeusExModel } from '../deus-ex-model';
 import { Narcotic } from '../helpers/catalog_types';
 

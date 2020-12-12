@@ -1,6 +1,6 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, JsonColumn, rproperty } from '@alice/interface/models/alice-model-engine';
-import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/interface/models/process-requests-respose';
+import { EmptyModel, JsonColumn, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 
 export type QrType =

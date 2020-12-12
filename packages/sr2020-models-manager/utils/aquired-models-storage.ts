@@ -1,4 +1,4 @@
-import { AquiredObjects, EmptyModel } from '@alice/interface/models/alice-model-engine';
+import { AquiredObjects, EmptyModel } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Location } from '@alice/sr2020-common/models/location.model';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';

@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { cloneDeep } from 'lodash';
 
-import { AquiredObjects, EmptyModel, Event, EventForModelType, PendingAquire, Timer } from '@alice/interface/models/alice-model-engine';
-import { PubSubNotification, PushNotification } from '@alice/interface/models/push-notification.model';
+import { AquiredObjects, EmptyModel, Event, EventForModelType, PendingAquire, Timer } from '@alice/alice-common/models/alice-model-engine';
+import { PubSubNotification, PushNotification } from '@alice/alice-common/models/push-notification.model';
 import { assert } from 'console';
 
 export type FieldName = string | string[];

@@ -4,7 +4,7 @@
 
 import { default as helpers } from '../helpers/model-helper';
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@alice/interface/models/alice-model-engine';
+import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 
 /**
  * Обработчик события "enterVR" (вход в VR)
