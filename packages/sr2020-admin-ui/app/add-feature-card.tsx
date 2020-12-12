@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import axios from 'axios';
 import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
+import { allFeatures } from '@alice/sr2020-admin-ui/app/models-engine-api';
 
 export interface AddFeatureCardState {
   features: Feature[];
@@ -15,7 +15,7 @@ export class AddFeatureCard extends React.Component<
   state: AddFeatureCardState = { features: [], selectedFeature: 'magic-1' };
 
   componentDidMount() {
-    axios.get<Feature[]>(`https://model-engine.evarun.ru/features`).then((response) => this.setState({ features: response.data }));
+    allFeatures().then((features) => this.setState({ features }));
   }
 
   render() {
