@@ -1,6 +1,5 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@alice/alice-common/models/empty.model';
-import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { PushService } from '@alice/alice-common/services/push.service';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
@@ -9,14 +8,15 @@ import { EntityManager, getManager, Transaction, TransactionManager } from 'type
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
-import { AnyModelController } from '@alice/sr2020-models-manager/controllers/anymodel.controller';
-import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
+import { AnyModelController } from '@alice/alice-models-manager/controllers/anymodel.controller';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
+import { Sr2020ModelEngineHttpService, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 
 export class LocationController extends AnyModelController<Location> {
   constructor(
-    @inject('services.ModelEngineService')
-    protected modelEngineService: ModelEngineService,
+    @inject('services.ModelEngineHttpService')
+    protected sr2020ModelEngineService: Sr2020ModelEngineHttpService,
     @inject('services.TimeService')
     protected timeService: TimeService,
     @inject('services.EventDispatcherService')
@@ -30,7 +30,16 @@ export class LocationController extends AnyModelController<Location> {
     @inject('services.LoggerService')
     protected logger: LoggerService,
   ) {
-    super(Location, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService, logger);
+    super(
+      Location,
+      new Sr2020ModelEngineService(sr2020ModelEngineService),
+      timeService,
+      eventDispatcherService,
+      modelAquirerService,
+      pushService,
+      pubSubService,
+      logger,
+    );
   }
 
   @put('/location/model', {
@@ -54,7 +63,7 @@ export class LocationController extends AnyModelController<Location> {
     },
   })
   async setDefault(@param.path.number('id') id: number, @requestBody() req: LocationCreationRequest): Promise<Empty> {
-    const model = await this.modelEngineService.defaultLocation(new Empty());
+    const model = await this.sr2020ModelEngineService.defaultLocation(new Empty());
     model.modelId = id.toString();
 
     await getManager().transaction(async (manager) => {

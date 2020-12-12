@@ -1,5 +1,4 @@
 import { EmptyModel, EventRequest } from '@alice/alice-common/models/alice-model-engine';
-import { ModelEngineService, processAny } from '@alice/sr2020-common/services/model-engine.service';
 import { PushService } from '@alice/alice-common/services/push.service';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
@@ -10,12 +9,10 @@ import { HttpErrors } from '@loopback/rest';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Empty } from '@alice/alice-common/models/empty.model';
-import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
+import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
+import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 
-// TODO(cleanup) It doesn't actually have any sr2020 specific besides ModelEngineService (which "knows" which specific
-// model types are present). As such it should be moved to alice-models-manager package after figuring out how to deal
-// with ModelEngineService.
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(
     protected tmodel: new () => TModel,
@@ -45,7 +42,7 @@ export class AnyModelController<TModel extends EmptyModel> {
   async predict(id: number, timestamp: number): Promise<ModelProcessResponse<TModel>> {
     try {
       const baseModel = await getRepository(this.tmodel).findOneOrFail(id);
-      const result = await processAny(this.tmodel, this.modelEngineService, {
+      const result = await this.modelEngineService.process(this.tmodel, {
         baseModel,
         events: [],
         timestamp,

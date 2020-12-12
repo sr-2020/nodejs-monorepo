@@ -13,11 +13,11 @@ import { TimeServiceProvider } from '@alice/alice-models-manager/services/time.s
 import { ModelAquirerServiceProvider } from '@alice/sr2020-models-manager/services/model-aquirer.service';
 import { LoggerServiceProvider } from '@alice/alice-models-manager/services/logger.service';
 import { EventDispatcherServiceProvider } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
-import { ModelEngineServiceProvider } from '@alice/sr2020-common/services/model-engine.service';
 import { PushServiceProvider } from '@alice/alice-common/services/push.service';
 import { PubSubServiceProvider } from '@alice/alice-models-manager/services/pubsub.service';
 import { ModelEngineHttpApiDataSource } from '@alice/sr2020-common/datasources/model-engine-http-api.datasource';
 import { PushHttpApiDataSource } from '@alice/alice-common/datasources/push-http-api.datasource';
+import { Sr2020ModelEngineHttpServiceProvider, Sr2020ModelEngineServiceProvider } from '@alice/sr2020-common/services/model-engine.service';
 
 export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
   constructor(options: ApplicationConfig = {}) {
@@ -46,7 +46,8 @@ export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestA
     this.bind('services.ModelAquirerService').toProvider(ModelAquirerServiceProvider);
     this.bind('services.LoggerService').toProvider(LoggerServiceProvider);
     this.bind('services.EventDispatcherService').toProvider(EventDispatcherServiceProvider);
-    this.bind('services.ModelEngineService').toProvider(ModelEngineServiceProvider);
+    this.bind('services.ModelEngineService').toProvider(Sr2020ModelEngineServiceProvider);
+    this.bind('services.ModelEngineHttpService').toProvider(Sr2020ModelEngineHttpServiceProvider);
     this.bind('services.PushService').toProvider(PushServiceProvider);
     this.bind('services.PubSubService').toProvider(PubSubServiceProvider);
   }

@@ -12,7 +12,6 @@ import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Location, LocationProcessRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
-import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { initEthic } from '../scripts/character/ethics';
 import { createEssenceSystemEffect } from '../scripts/character/essence';
@@ -23,6 +22,7 @@ import { addKarmaGivingTimer, kMaxKarmaPerCycle } from '@alice/sr2020-model-engi
 import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { templateSettings } from 'lodash';
 import * as Chance from 'chance';
+import { Sr2020ModelEngineHttpService } from '@alice/sr2020-common/services/model-engine.service';
 
 const chance = new Chance();
 
@@ -50,7 +50,7 @@ function spec(modelType: string, responseType: any): OperationObject {
   };
 }
 
-export class ModelEngineController implements ModelEngineService {
+export class ModelEngineController implements Sr2020ModelEngineHttpService {
   constructor(
     @inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
     @inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,

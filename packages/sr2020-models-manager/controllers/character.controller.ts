@@ -9,7 +9,6 @@ import {
   Sr2020Character,
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
-import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { PushService } from '@alice/alice-common/services/push.service';
 import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
 
@@ -17,15 +16,16 @@ import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
-import { AnyModelController } from '@alice/sr2020-models-manager/controllers/anymodel.controller';
-import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
+import { AnyModelController } from '@alice/alice-models-manager/controllers/anymodel.controller';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import * as moment from 'moment';
+import { Sr2020ModelEngineHttpService, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 
 export class CharacterController extends AnyModelController<Sr2020Character> {
   constructor(
-    @inject('services.ModelEngineService')
-    protected modelEngineService: ModelEngineService,
+    @inject('services.ModelEngineHttpService')
+    protected sr2020ModelEngineService: Sr2020ModelEngineHttpService,
     @inject('services.TimeService')
     protected timeService: TimeService,
     @inject('services.EventDispatcherService')
@@ -41,7 +41,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   ) {
     super(
       Sr2020Character,
-      modelEngineService,
+      new Sr2020ModelEngineService(sr2020ModelEngineService),
       timeService,
       eventDispatcherService,
       modelAquirerService,
@@ -102,7 +102,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   })
   async setDefault(@param.path.number('id') id: number, @requestBody() req: CharacterCreationRequest): Promise<Empty> {
     this.logger.info(`Initializing character ${id} with following data: ${JSON.stringify(req)}`);
-    const model = await this.modelEngineService.defaultCharacter(req);
+    const model = await this.sr2020ModelEngineService.defaultCharacter(req);
     model.timestamp = this.timeService.timestamp();
     model.modelId = id.toString();
     model.mentalQrId = id + 10000;
@@ -212,6 +212,6 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   })
   async availableFeatures(@param.path.number('id') id: number): Promise<Feature[]> {
     const model = await getRepository(Sr2020Character).findOneOrFail(id);
-    return this.modelEngineService.availableFeatures(model);
+    return this.sr2020ModelEngineService.availableFeatures(model);
   }
 }

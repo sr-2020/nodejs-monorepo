@@ -1,7 +1,6 @@
 import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { PushService } from '@alice/alice-common/services/push.service';
-import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { inject } from '@loopback/core';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
@@ -9,9 +8,10 @@ import { QrCode, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-co
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
-import { AnyModelController } from '@alice/sr2020-models-manager/controllers/anymodel.controller';
-import { EventDispatcherService } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
+import { AnyModelController } from '@alice/alice-models-manager/controllers/anymodel.controller';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
+import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
+import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 
 export class QrCodeController extends AnyModelController<QrCode> {
   constructor(

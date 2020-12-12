@@ -2,12 +2,12 @@ import { AquiredObjects, EmptyModel } from '@alice/alice-common/models/alice-mod
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Location } from '@alice/sr2020-common/models/location.model';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
-import { ModelEngineService, processAny } from '@alice/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { cloneDeep } from 'lodash';
 import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
 import { getAndLockModel } from '@alice/alice-models-manager/utils/db-utils';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
+import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 
 export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
   private _baseModels = { Location: {}, Sr2020Character: {}, QrCode: {} };
@@ -48,9 +48,8 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
         timestamp: this.maximalTimestamp,
         aquiredObjects: {},
       };
-      const processingResult = await processAny(
+      const processingResult = await this._modelEngineService.process(
         { Location: Location, Sr2020Character: Sr2020Character, QrCode: QrCode }[modelType],
-        this._modelEngineService,
         req,
       );
       this._baseModels[modelType][modelId] = processingResult.baseModel;

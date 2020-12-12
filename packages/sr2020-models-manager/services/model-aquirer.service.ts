@@ -1,6 +1,5 @@
 import { inject, Provider } from '@loopback/core';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
-import { ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { EntityManager } from 'typeorm';
 import { Location } from '@alice/sr2020-common/models/location.model';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
@@ -9,6 +8,7 @@ import { AquiredModelsStorageTypeOrm } from '../utils/aquired-models-storage';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
+import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 
 class ModelAquirerServiceImpl implements ModelAquirerService {
   constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}

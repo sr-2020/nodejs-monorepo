@@ -20,6 +20,7 @@ import { Duration } from 'moment';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { logger } from '@alice/alice-model-engine/logger';
 import * as Path from 'path';
+import { Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 
 logger.level = 'error';
 
@@ -123,7 +124,9 @@ export class TestFixture {
       rest: restConfig,
     });
 
-    app.bind('services.ModelEngineService').to(new ModelEngineController(characterEngine, locationEngine, qrCodeEngine));
+    const modelEngine = new ModelEngineController(characterEngine, locationEngine, qrCodeEngine);
+    app.bind('services.ModelEngineHttpService').to(modelEngine);
+    app.bind('services.ModelEngineService').to(new Sr2020ModelEngineService(modelEngine));
 
     const timeService = new MockTimeService();
     app.bind('services.TimeService').to(timeService);
