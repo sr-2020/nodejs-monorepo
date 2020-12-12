@@ -10,8 +10,7 @@ export async function getCharacter(id: string): Promise<Sr2020Character> {
   return response.data.workModel;
 }
 
-// How to trigger reload here?
 export async function sendCharacterEvent(id: string, event: EventRequest): Promise<Sr2020Character> {
-  const response = await axios.post<Sr2020CharacterProcessResponse>(MODELS_MANAGER_CHARACTER_URL + id);
+  const response = await axios.post<Sr2020CharacterProcessResponse>(MODELS_MANAGER_CHARACTER_URL + id, event);
   return response.data.workModel;
 }

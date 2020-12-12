@@ -1,7 +1,8 @@
 import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Card } from 'react-bootstrap';
-import { getCharacter } from '@alice/sr2020-admin-ui/app/models-manager-api';
+import { AddToast } from 'react-toast-notifications';
+import { getCharacter, sendCharacterEvent } from '@alice/sr2020-admin-ui/app/models-manager-api';
 import { BasicCharacterStats } from '@alice/sr2020-admin-ui/app/basic-character-stats';
 import { MagicCharactersStats } from '@alice/sr2020-admin-ui/app/magic-character-stats';
 import { HackerCharactersStats } from '@alice/sr2020-admin-ui/app/hacker-character-stats';
@@ -15,9 +16,14 @@ import { ActiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/active-abilities
 import { SpellsCard } from '@alice/sr2020-admin-ui/app/spells-card';
 import { ImplantsCard } from '@alice/sr2020-admin-ui/app/implants-card';
 import { TimersCard } from '@alice/sr2020-admin-ui/app/timers-card';
+import { AddFeatureCard } from '@alice/sr2020-admin-ui/app/add-feature-card';
 
-export class CharacterPage extends React.Component<{ id: string }, Sr2020Character> {
+export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
+  sendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
+    this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
+    this.props.addToast(successMessage, { appearance: 'success' });
+  };
 
   componentDidMount() {
     getCharacter(this.props.id).then((c) => {
@@ -47,6 +53,7 @@ export class CharacterPage extends React.Component<{ id: string }, Sr2020Charact
           <SpellsCard abilities={this.state.spells} />
           <ImplantsCard implants={this.state.implants} />
           <TimersCard timers={this.state.timers} />
+          <AddFeatureCard sendEvent={this.sendEvent} />
         </Card>
       </div>
     );
