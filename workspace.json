@@ -375,6 +375,76 @@
           }
         }
       }
+    },
+    "sr2020-admin-ui": {
+      "root": "packages/sr2020-admin-ui",
+      "sourceRoot": "packages/sr2020-admin-ui",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/packages/sr2020-admin-ui",
+            "index": "packages/sr2020-admin-ui/index.html",
+            "main": "packages/sr2020-admin-ui/main.tsx",
+            "polyfills": "packages/sr2020-admin-ui/polyfills.ts",
+            "tsConfig": "packages/sr2020-admin-ui/tsconfig.app.json",
+            "assets": ["packages/sr2020-admin-ui/favicon.ico"],
+            "styles": ["packages/sr2020-admin-ui/styles.css"],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "packages/sr2020-admin-ui/environments/environment.ts",
+                  "with": "packages/sr2020-admin-ui/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "sr2020-admin-ui:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "sr2020-admin-ui:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/sr2020-admin-ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/sr2020-admin-ui/jest.config.ts",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

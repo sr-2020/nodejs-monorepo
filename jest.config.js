@@ -12,5 +12,6 @@ module.exports = {
     '<rootDir>/packages/sr2020-testing',
     '<rootDir>/packages/alice-qr-lib',
     '<rootDir>/packages/sheets-export',
+    '<rootDir>/packages/sr2020-admin-ui',
   ],
 };
