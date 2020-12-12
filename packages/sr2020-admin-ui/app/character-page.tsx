@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { Card } from 'react-bootstrap';
+import { Card, CardGroup } from 'react-bootstrap';
 import { AddToast } from 'react-toast-notifications';
 import { getCharacter, sendCharacterEvent } from '@alice/sr2020-admin-ui/app/models-manager-api';
 import { BasicCharacterStats } from '@alice/sr2020-admin-ui/app/basic-character-stats';
@@ -48,13 +48,15 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
             <EssenceCharacterStats essence={this.state.essence} essenceDetails={this.state.essenceDetails} />
             <KarmaCharacterStats karma={this.state.karma} />
           </Card.Body>
-          <PassiveAbilitiesCard abilities={this.state.passiveAbilities} />
-          <ActiveAbilitiesCard abilities={this.state.activeAbilities} />
-          <SpellsCard abilities={this.state.spells} />
-          <ImplantsCard implants={this.state.implants} />
-          <TimersCard timers={this.state.timers} />
-          <AddFeatureCard sendEvent={this.sendEvent} />
         </Card>
+        <PassiveAbilitiesCard abilities={this.state.passiveAbilities} />
+        <ActiveAbilitiesCard abilities={this.state.activeAbilities} />
+        <SpellsCard abilities={this.state.spells} />
+        <ImplantsCard implants={this.state.implants} />
+        <TimersCard timers={this.state.timers} />
+        <CardGroup className="mt-3">
+          <AddFeatureCard sendEvent={this.sendEvent} />
+        </CardGroup>
       </div>
     );
   }
