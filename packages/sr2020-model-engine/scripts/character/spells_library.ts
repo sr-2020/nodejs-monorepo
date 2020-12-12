@@ -30,7 +30,7 @@ import {
   trackBallSpell,
   trackpointSpell,
 } from './spells';
-import { Spell } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 // Not exported by design, use kAllSpells instead.

@@ -8,7 +8,7 @@ import {
   Sr2020Character,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
-import { ActiveAbility, PassiveAbility, Spell } from './common_definitions';
+import { ActiveAbility, PassiveAbility, Spell } from '@alice/sr2020-common/models/common_definitions';
 import { cloneDeep, template } from 'lodash';
 import {
   getAllActiveAbilities,

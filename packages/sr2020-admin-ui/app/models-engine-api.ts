@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
-import { Implant } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { Implant } from '@alice/sr2020-common/models/common_definitions';
 
 const MODEL_ENGINE_URL = 'https://model-engine.evarun.ru/';
 

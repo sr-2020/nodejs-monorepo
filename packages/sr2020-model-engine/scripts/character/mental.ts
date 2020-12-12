@@ -2,7 +2,7 @@ import { AddedActiveAbility, Sr2020Character } from '@alice/sr2020-common/models
 import { EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { MentalAbilityData, writeMentalAbility } from '../qr/events';
-import { FullActiveAbilityData, FullTargetedAbilityData } from './common_definitions';
+import { FullActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { increaseMentalProtection } from './basic_effects';
 import { duration } from 'moment';

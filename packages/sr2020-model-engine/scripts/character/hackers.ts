@@ -11,7 +11,7 @@ import { duration } from 'moment';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { template } from 'lodash';
 import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 

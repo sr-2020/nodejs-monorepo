@@ -14,7 +14,7 @@ import { createMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchan
 import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 import * as Chance from 'chance';
 import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
-import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 
 const chance = new Chance();
 

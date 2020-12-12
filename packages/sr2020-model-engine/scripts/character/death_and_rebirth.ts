@@ -2,7 +2,7 @@ import { duration } from 'moment';
 import { HealthState, LocationData, LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
-import { ActiveAbilityData, FullTargetedAbilityData } from './common_definitions';
+import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { kReviveModifierId } from './implants_library';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';

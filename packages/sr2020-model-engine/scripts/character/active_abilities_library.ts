@@ -67,7 +67,7 @@ import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/characte
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
-import { ActiveAbility } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {

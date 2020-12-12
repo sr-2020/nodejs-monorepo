@@ -27,7 +27,7 @@ import {
   onKoshcgheiNanohiveInstall,
   onKoshcgheiNanohiveRemove,
 } from '@alice/sr2020-model-engine/scripts/character/nanohives';
-import { Implant } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { Implant } from '@alice/sr2020-common/models/common_definitions';
 
 export const kReviveModifierId = 'medkit-revive-modifier';
 

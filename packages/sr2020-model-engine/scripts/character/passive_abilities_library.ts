@@ -71,7 +71,7 @@ import {
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
 } from './basic_effects';
-import { PassiveAbility } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 // Not exported by design, use getAllPassiveAbilities() instead.

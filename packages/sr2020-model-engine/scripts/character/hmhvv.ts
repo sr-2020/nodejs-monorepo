@@ -1,6 +1,6 @@
 import { EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { LocationMixin, MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { ActiveAbilityData } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
+import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { healthStateTransition, reviveAbsolute } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { consumeChemo } from '@alice/sr2020-model-engine/scripts/character/chemo';
 
