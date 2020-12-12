@@ -1,22 +1,13 @@
-import { Entity, model, property } from '@loopback/repository';
+import { model } from '@loopback/repository';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { rproperty } from '@alice/alice-common/models/alice-model-engine';
 
-@model({
+@model()
+@Entity({
   name: 'firebase_tokens',
 })
-export class FirebaseToken extends Entity {
-  @property({ type: 'number', id: true, required: true })
-  id: number;
+export class FirebaseToken {
+  @rproperty() @PrimaryColumn() id: number;
 
-  @property({ type: 'string' })
-  token?: string;
-
-  constructor(data?: Partial<FirebaseToken>) {
-    super(data);
-  }
+  @rproperty() @Column() token: string;
 }
-
-export interface FirebaseTokenRelations {
-  // describe navigational properties here
-}
-
-export type FirebaseTokenWithRelations = FirebaseToken & FirebaseTokenRelations;

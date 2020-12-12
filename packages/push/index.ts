@@ -1,13 +1,17 @@
 import { PushApplication } from './application';
 import { ApplicationConfig } from '@loopback/core';
 import * as dotenv from 'dotenv';
+import { createConnection } from 'typeorm';
+import { getDbConnectionOptions } from '@alice/push/connection';
 
 export async function main(options: ApplicationConfig = {}) {
   dotenv.config({ path: '../../.env' });
 
   const app = new PushApplication(options);
+
+  await createConnection(getDbConnectionOptions());
+
   await app.start();
-  await app.migrateSchema({ existingSchema: 'alter' });
 
   const url = app.restServer.url;
   console.log(`Server is running at ${url}`);

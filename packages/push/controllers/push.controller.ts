@@ -1,17 +1,14 @@
-import { repository } from '@loopback/repository';
 import { param, post, put, requestBody } from '@loopback/rest';
-import { FirebaseTokenRepository } from '../repositories/firebase-token.repository';
 import { PushNotification } from '@alice/alice-common/models/push-notification.model';
 import { PushResult } from '@alice/alice-common/models/push-result.model';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
 import { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
 import { inject } from '@loopback/core';
+import { getRepository } from 'typeorm';
 
 export class PushController {
   constructor(
-    @repository(FirebaseTokenRepository)
-    public firebaseTokenRepository: FirebaseTokenRepository,
     @inject('services.FirebaseMessagingService')
     protected firebaseService: FirebaseMessagingService,
   ) {}
@@ -25,11 +22,7 @@ export class PushController {
     },
   })
   async saveToken(@requestBody() firebaseToken: FirebaseToken): Promise<Empty> {
-    try {
-      await this.firebaseTokenRepository.replaceById(firebaseToken.id, firebaseToken);
-    } catch {
-      await this.firebaseTokenRepository.create(firebaseToken);
-    }
+    await getRepository(FirebaseToken).save(firebaseToken);
     return new Empty();
   }
 
@@ -42,11 +35,12 @@ export class PushController {
     },
   })
   async sendNotification(@param.path.number('id') id: number, @requestBody() notification: PushNotification): Promise<PushResult> {
-    if (!(await this.firebaseTokenRepository.exists(id))) {
+    const receiverToken = await getRepository(FirebaseToken).findOne(id);
+
+    if (!receiverToken) {
       return new PushResult({ success: 0, failure: 1 });
     }
-    const receiverToken = (await this.firebaseTokenRepository.findById(id)).token!;
-    const sendResult = await this.firebaseService.send(receiverToken, notification.title, notification.body);
-    return new PushResult({ ...sendResult, token_used: receiverToken });
+    const sendResult = await this.firebaseService.send(receiverToken.token, notification.title, notification.body);
+    return new PushResult({ ...sendResult, token_used: receiverToken.token });
   }
 }
