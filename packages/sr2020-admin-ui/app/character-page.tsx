@@ -21,8 +21,16 @@ import { AddFeatureCard } from '@alice/sr2020-admin-ui/app/add-feature-card';
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
   sendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
-    this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
-    this.props.addToast(successMessage, { appearance: 'success' });
+    try {
+      this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
+      this.props.addToast(successMessage, { appearance: 'success' });
+    } catch (e) {
+      if (e.body && e.body.error && e.body.error.message) {
+        this.props.addToast(e.body.error.message, { appearance: 'error' });
+      } else {
+        this.props.addToast('Неизвестная ошибка сервера :(', { appearance: 'error' });
+      }
+    }
   };
 
   componentDidMount() {
