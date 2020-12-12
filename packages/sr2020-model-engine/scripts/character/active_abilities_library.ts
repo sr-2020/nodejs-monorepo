@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 
-export type TargetType = 'scan' | 'show';
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',

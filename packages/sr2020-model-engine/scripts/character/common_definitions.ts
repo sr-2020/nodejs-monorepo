@@ -7,7 +7,6 @@ import {
   Targetable,
   TargetSignature,
 } from '@alice/sr2020-common/models/sr2020-character.model';
-import { TargetType } from '@alice/sr2020-model-engine/scripts/character/active_abilities_library';
 import { Modifier } from '@alice/alice-common/models/alice-model-engine';
 
 export type ActiveAbilityData = Partial<Targetable> &
@@ -19,6 +18,7 @@ export type FullActiveAbilityData = ActiveAbilityData & AddedActiveAbility;
 
 export type FullTargetedAbilityData = FullActiveAbilityData & { targetCharacterId: string };
 
+export type TargetType = 'scan' | 'show';
 export interface ActiveAbility extends Feature {
   target: TargetType;
   targetsSignature: TargetSignature[];
@@ -41,4 +41,19 @@ export interface Addiction extends Modifier {
   stage: number;
   amount: -1;
   element: keyof Concentrations;
+}
+
+export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
+
+export interface Implant {
+  id: string;
+  name: string;
+  description: string;
+  slot: ImplantSlot;
+  grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
+  essenceCost: number;
+  installDifficulty: number;
+  modifiers: Modifier[];
+  onInstallEvent?: string;
+  onRemoveEvent?: string;
 }

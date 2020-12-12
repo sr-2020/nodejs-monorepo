@@ -27,21 +27,7 @@ import {
   onKoshcgheiNanohiveInstall,
   onKoshcgheiNanohiveRemove,
 } from '@alice/sr2020-model-engine/scripts/character/nanohives';
-
-export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
-
-export interface Implant {
-  id: string;
-  name: string;
-  description: string;
-  slot: ImplantSlot;
-  grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
-  essenceCost: number;
-  installDifficulty: number;
-  modifiers: Modifier[];
-  onInstallEvent?: string;
-  onRemoveEvent?: string;
-}
+import { Implant } from '@alice/sr2020-model-engine/scripts/character/common_definitions';
 
 export const kReviveModifierId = 'medkit-revive-modifier';
 
