@@ -10,6 +10,11 @@ import { ChemoCharacterStats } from '@alice/sr2020-admin-ui/app/chemo-character-
 import { RiggerCharacterStats } from '@alice/sr2020-admin-ui/app/rigger-character-stats';
 import { EssenceCharacterStats } from '@alice/sr2020-admin-ui/app/essence-character-stats';
 import { KarmaCharacterStats } from '@alice/sr2020-admin-ui/app/karma-character-stats';
+import { PassiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/passive-abilities-card';
+import { ActiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/active-abilities-card';
+import { SpellsCard } from '@alice/sr2020-admin-ui/app/spells-card';
+import { ImplantsCard } from '@alice/sr2020-admin-ui/app/implants-card';
+import { TimersCard } from '@alice/sr2020-admin-ui/app/timers-card';
 
 export class CharacterPage extends React.Component<{ id: string }, Sr2020Character> {
   state: Sr2020Character;
@@ -23,20 +28,27 @@ export class CharacterPage extends React.Component<{ id: string }, Sr2020Charact
   render() {
     if (!this.state) return <div>Загрузка...</div>;
     return (
-      <Card>
-        <Card.Body>
-          Персонаж {this.state.name} (model ID = {this.state.modelId}), состояние на{' '}
-          {new Date(this.state.timestamp).toLocaleString('ru-RU')}
-          <BasicCharacterStats {...this.state} />
-          <MagicCharactersStats magicStats={this.state.magicStats} />
-          <HackerCharactersStats hacking={this.state.hacking} />
-          <EconomicCharacterStats billing={this.state.billing} discounts={this.state.discounts} />
-          <ChemoCharacterStats chemo={this.state.chemo} />
-          <RiggerCharacterStats drones={this.state.drones} rigging={this.state.rigging} />
-          <EssenceCharacterStats essence={this.state.essence} essenceDetails={this.state.essenceDetails} />
-          <KarmaCharacterStats karma={this.state.karma} />
-        </Card.Body>
-      </Card>
+      <div>
+        <Card>
+          <Card.Body>
+            Персонаж {this.state.name} (model ID = {this.state.modelId}), состояние на{' '}
+            {new Date(this.state.timestamp).toLocaleString('ru-RU')}
+            <BasicCharacterStats {...this.state} />
+            <MagicCharactersStats magicStats={this.state.magicStats} />
+            <HackerCharactersStats hacking={this.state.hacking} />
+            <EconomicCharacterStats billing={this.state.billing} discounts={this.state.discounts} />
+            <ChemoCharacterStats chemo={this.state.chemo} />
+            <RiggerCharacterStats drones={this.state.drones} rigging={this.state.rigging} />
+            <EssenceCharacterStats essence={this.state.essence} essenceDetails={this.state.essenceDetails} />
+            <KarmaCharacterStats karma={this.state.karma} />
+          </Card.Body>
+          <PassiveAbilitiesCard abilities={this.state.passiveAbilities} />
+          <ActiveAbilitiesCard abilities={this.state.activeAbilities} />
+          <SpellsCard abilities={this.state.spells} />
+          <ImplantsCard implants={this.state.implants} />
+          <TimersCard timers={this.state.timers} />
+        </Card>
+      </div>
     );
   }
 }
