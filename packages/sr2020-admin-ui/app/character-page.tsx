@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { CardGroup } from 'react-bootstrap';
+import { CardDeck } from 'react-bootstrap';
 import { AddToast } from 'react-toast-notifications';
 import { getCharacter, sendCharacterEvent } from '@alice/sr2020-admin-ui/app/models-manager-api';
 import { PassiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/passive-abilities-card';
@@ -48,17 +48,17 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
         <SpellsCard abilities={this.state.spells} />
         <ImplantsCard implants={this.state.implants} />
         <TimersCard timers={this.state.timers} />
-        <CardGroup className="mt-3">
+        <CardDeck className="mt-3">
           <AddFeatureCard sendEvent={this.sendEvent} />
-        </CardGroup>
-        <CardGroup className="mt-3">
+        </CardDeck>
+        <CardDeck className="mt-3">
           <AddImplantCard sendEvent={this.sendEvent} />
           <GiveKarmaCard sendEvent={this.sendEvent} />
-        </CardGroup>
-        <CardGroup className="mt-3">
+        </CardDeck>
+        <CardDeck className="mt-3">
           <DeathAndRebirthCard sendEvent={this.sendEvent} />
           <ScanQrCard sendEvent={this.sendEvent} />
-        </CardGroup>
+        </CardDeck>
       </div>
     );
   }
