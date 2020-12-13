@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { CardDeck } from 'react-bootstrap';
+import { Button, CardDeck, FormControl, InputGroup } from 'react-bootstrap';
 import { AddToast } from 'react-toast-notifications';
 import { getCharacter, sendCharacterEvent, setDefaultCharacter } from '@alice/sr2020-admin-ui/app/api/models-manager';
 import { PassiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/character/cards/passive-abilities-card';
@@ -21,9 +21,9 @@ import { EthicsCard } from '@alice/sr2020-admin-ui/app/character/cards/ethics-ca
 import { EssenceCard } from '@alice/sr2020-admin-ui/app/character/cards/essence-card';
 import { CharacterResetCard } from '@alice/sr2020-admin-ui/app/character/cards/character-reset-card';
 
-export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
-  state: Sr2020Character;
+type SetCharacter = (character: Sr2020Character) => void;
 
+export class LoadedCharacterPage extends React.Component<{ character: Sr2020Character; addToast: AddToast; setter: SetCharacter }> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleError(e: any) {
     const errorMessage = e?.response?.data?.error?.message;
@@ -36,7 +36,7 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
 
   sendEvent: SendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
     try {
-      this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
+      this.props.setter(await sendCharacterEvent(this.props.character.modelId, { eventType, data }));
       this.props.addToast(successMessage, { appearance: 'success' });
     } catch (e) {
       this.handleError(e);
@@ -45,29 +45,22 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
 
   reset = async () => {
     try {
-      await setDefaultCharacter(this.state.modelId, this.state.name);
+      await setDefaultCharacter(this.props.character.modelId, this.props.character.name);
       await this.sendEvent('_', {}, 'Персонаж пересоздан!');
     } catch (e) {
       this.handleError(e);
     }
   };
 
-  componentDidMount() {
-    getCharacter(this.props.id).then((c) => {
-      this.setState(c);
-    });
-  }
-
   render() {
-    if (!this.state) return <div>Загрузка...</div>;
     return (
       <div>
-        <CharacterStatsCard {...this.state} />
-        <PassiveAbilitiesCard abilities={this.state.passiveAbilities} />
-        <ActiveAbilitiesCard abilities={this.state.activeAbilities} />
-        <SpellsCard abilities={this.state.spells} />
-        <ImplantsCard implants={this.state.implants} />
-        <TimersCard timers={this.state.timers} />
+        <CharacterStatsCard {...this.props.character} />
+        <PassiveAbilitiesCard abilities={this.props.character.passiveAbilities} />
+        <ActiveAbilitiesCard abilities={this.props.character.activeAbilities} />
+        <SpellsCard abilities={this.props.character.spells} />
+        <ImplantsCard implants={this.props.character.implants} />
+        <TimersCard timers={this.props.character.timers} />
         <CardDeck className="mt-3">
           <AddFeatureCard sendEvent={this.sendEvent} />
         </CardDeck>
@@ -84,7 +77,7 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
           <ChangeRaceCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">
-          <EthicsCard sendEvent={this.sendEvent} states={this.state.ethic.state} triggers={this.state.ethic.trigger} />
+          <EthicsCard sendEvent={this.sendEvent} states={this.props.character.ethic.state} triggers={this.props.character.ethic.trigger} />
         </CardDeck>
         <CardDeck className="mt-3">
           <EssenceCard sendEvent={this.sendEvent} />
@@ -92,6 +85,52 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
         <CardDeck className="mt-3">
           <CharacterResetCard reset={this.reset} />
         </CardDeck>
+      </div>
+    );
+  }
+}
+
+export class CharacterPage extends React.Component<
+  { id: string; addToast: AddToast },
+  { character: Sr2020Character | undefined; desiredCharacterId: string }
+> {
+  state = { character: undefined, desiredCharacterId: '51614' };
+
+  loadCharacter() {
+    getCharacter(this.state.desiredCharacterId).then((character) => {
+      this.setState({ character });
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="mt-3">
+          <InputGroup>
+            <InputGroup.Prepend>
+              <InputGroup.Text>ID персонажа</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              type="number"
+              value={this.state.desiredCharacterId}
+              onChange={(e) => this.setState({ desiredCharacterId: e.target.value })}
+            />
+            <InputGroup.Append>
+              <Button variant="outline-primary" onClick={() => this.loadCharacter()}>
+                Обновить
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </div>
+        {this.state.character ? (
+          <LoadedCharacterPage
+            character={this.state.character}
+            addToast={this.props.addToast}
+            setter={(character) => this.setState({ character })}
+          />
+        ) : (
+          <div />
+        )}
       </div>
     );
   }
