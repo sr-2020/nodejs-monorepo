@@ -1,16 +1,16 @@
 import React from 'react';
-import { AddedPassiveAbility } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Accordion, Card, Table } from 'react-bootstrap';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
+import { Timer } from '@alice/alice-common/models/alice-model-engine';
 
-export class PassiveAbilitiesCard extends React.Component<{ abilities: AddedPassiveAbility[] }> {
+export class TimersCard extends React.Component<{ timers: Timer[] }> {
   render() {
     return (
       <Card body={false}>
         <Accordion>
           <Card.Header>
             <Accordion.Toggle as={WideButton} eventKey="0">
-              Всего пассивных способностей: {this.props.abilities.length}
+              Всего таймеров: {this.props.timers.length}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
@@ -19,14 +19,18 @@ export class PassiveAbilitiesCard extends React.Component<{ abilities: AddedPass
                 <tbody>
                   <tr>
                     <th>ID</th>
-                    <th>Название</th>
                     <th>Описание</th>
+                    <th>Осталось мс</th>
+                    <th>Тип события</th>
+                    <th>Данные</th>
                   </tr>
-                  {this.props.abilities.map((ability, index) => (
+                  {this.props.timers.map((timer, index) => (
                     <tr key={index}>
-                      <td>{ability.id}</td>
-                      <td>{ability.humanReadableName}</td>
-                      <td>{ability.description}</td>
+                      <td>{timer.name}</td>
+                      <td>{timer.description}</td>
+                      <td>{timer.miliseconds}</td>
+                      <td>{timer.eventType}</td>
+                      <td>{JSON.stringify(timer.data)}</td>
                     </tr>
                   ))}
                 </tbody>

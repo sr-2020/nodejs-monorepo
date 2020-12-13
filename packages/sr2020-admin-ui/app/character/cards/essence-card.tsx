@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
 export class EssenceCard extends React.Component<{ sendEvent: SendEvent }> {
   increaseEssence() {

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Card } from 'react-bootstrap';
-import { BasicCharacterStats } from '@alice/sr2020-admin-ui/app/basic-character-stats';
-import { MagicCharactersStats } from '@alice/sr2020-admin-ui/app/magic-character-stats';
-import { HackerCharactersStats } from '@alice/sr2020-admin-ui/app/hacker-character-stats';
-import { EconomicCharacterStats } from '@alice/sr2020-admin-ui/app/economic-character-stats';
-import { ChemoCharacterStats } from '@alice/sr2020-admin-ui/app/chemo-character-stats';
-import { RiggerCharacterStats } from '@alice/sr2020-admin-ui/app/rigger-character-stats';
-import { EssenceCharacterStats } from '@alice/sr2020-admin-ui/app/essence-character-stats';
-import { KarmaCharacterStats } from '@alice/sr2020-admin-ui/app/karma-character-stats';
+import { BasicCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/basic-character-stats';
+import { MagicCharactersStats } from '@alice/sr2020-admin-ui/app/character/stats/magic-character-stats';
+import { HackerCharactersStats } from '@alice/sr2020-admin-ui/app/character/stats/hacker-character-stats';
+import { EconomicCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/economic-character-stats';
+import { ChemoCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/chemo-character-stats';
+import { RiggerCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/rigger-character-stats';
+import { EssenceCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/essence-character-stats';
+import { KarmaCharacterStats } from '@alice/sr2020-admin-ui/app/character/stats/karma-character-stats';
 
 export class CharacterStatsCard extends React.Component<Sr2020Character> {
   render() {

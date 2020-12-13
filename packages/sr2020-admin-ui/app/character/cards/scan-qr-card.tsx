@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
-import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
 export class ScanQrCard extends React.Component<{ sendEvent: SendEvent }, { id: string }> {
   state = { id: '1' };

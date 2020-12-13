@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
-import { allFeatures } from '@alice/sr2020-admin-ui/app/models-engine-api';
-import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
+import { allFeatures } from '@alice/sr2020-admin-ui/app/api/models-engine';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
 export interface AddFeatureCardState {
   features: Feature[];

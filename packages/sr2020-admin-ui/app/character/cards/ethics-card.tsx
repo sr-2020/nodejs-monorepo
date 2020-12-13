@@ -1,8 +1,8 @@
 import React from 'react';
 import { Accordion, Button, Card, InputGroup, Table } from 'react-bootstrap';
-import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 import { AddedEthicState, AddedEthicTrigger } from '@alice/sr2020-common/models/sr2020-character.model';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
 
 export interface EthicsCardState {
   violence: number;

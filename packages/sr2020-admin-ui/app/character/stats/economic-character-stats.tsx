@@ -1,7 +1,7 @@
 import React from 'react';
 import { Billing, Discounts } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Accordion, Table } from 'react-bootstrap';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
 
 export class EconomicCharacterStats extends React.Component<{ billing: Billing; discounts: Discounts }> {
   render() {

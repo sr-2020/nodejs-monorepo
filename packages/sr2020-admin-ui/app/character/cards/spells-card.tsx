@@ -1,6 +1,6 @@
 import React from 'react';
 import { Accordion, Card, Table } from 'react-bootstrap';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
 import { AddedSpell } from '@alice/sr2020-common/models/sr2020-character.model';
 
 export class SpellsCard extends React.Component<{ abilities: AddedSpell[] }> {

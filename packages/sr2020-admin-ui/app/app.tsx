@@ -4,7 +4,7 @@ import './app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useToasts } from 'react-toast-notifications';
 import { Container } from 'react-bootstrap';
-import { CharacterPage } from '@alice/sr2020-admin-ui/app/character-page';
+import { CharacterPage } from '@alice/sr2020-admin-ui/app/character/character-page';
 import { Link, Route } from 'react-router-dom';
 
 export function App() {

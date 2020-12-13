@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drones, Rigging } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Accordion, Table } from 'react-bootstrap';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
 
 export class RiggerCharacterStats extends React.Component<{ drones: Drones; rigging: Rigging }> {
   render() {

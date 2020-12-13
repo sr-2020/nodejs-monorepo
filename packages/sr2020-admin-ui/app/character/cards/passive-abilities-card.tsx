@@ -1,16 +1,16 @@
 import React from 'react';
+import { AddedPassiveAbility } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Accordion, Card, Table } from 'react-bootstrap';
-import { WideButton } from '@alice/sr2020-admin-ui/app/wide-button';
-import { Timer } from '@alice/alice-common/models/alice-model-engine';
+import { WideButton } from '@alice/sr2020-admin-ui/app/components/wide-button';
 
-export class TimersCard extends React.Component<{ timers: Timer[] }> {
+export class PassiveAbilitiesCard extends React.Component<{ abilities: AddedPassiveAbility[] }> {
   render() {
     return (
       <Card body={false}>
         <Accordion>
           <Card.Header>
             <Accordion.Toggle as={WideButton} eventKey="0">
-              Всего таймеров: {this.props.timers.length}
+              Всего пассивных способностей: {this.props.abilities.length}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
@@ -19,18 +19,14 @@ export class TimersCard extends React.Component<{ timers: Timer[] }> {
                 <tbody>
                   <tr>
                     <th>ID</th>
+                    <th>Название</th>
                     <th>Описание</th>
-                    <th>Осталось мс</th>
-                    <th>Тип события</th>
-                    <th>Данные</th>
                   </tr>
-                  {this.props.timers.map((timer, index) => (
+                  {this.props.abilities.map((ability, index) => (
                     <tr key={index}>
-                      <td>{timer.name}</td>
-                      <td>{timer.description}</td>
-                      <td>{timer.miliseconds}</td>
-                      <td>{timer.eventType}</td>
-                      <td>{JSON.stringify(timer.data)}</td>
+                      <td>{ability.id}</td>
+                      <td>{ability.humanReadableName}</td>
+                      <td>{ability.description}</td>
                     </tr>
                   ))}
                 </tbody>
