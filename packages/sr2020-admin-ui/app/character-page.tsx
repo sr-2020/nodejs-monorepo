@@ -10,6 +10,7 @@ import { ImplantsCard } from '@alice/sr2020-admin-ui/app/implants-card';
 import { TimersCard } from '@alice/sr2020-admin-ui/app/timers-card';
 import { AddFeatureCard } from '@alice/sr2020-admin-ui/app/add-feature-card';
 import { CharacterStatsCard } from '@alice/sr2020-admin-ui/app/character-stats-card';
+import { AddImplantCard } from '@alice/sr2020-admin-ui/app/add-implant-card';
 
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
@@ -45,6 +46,9 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
         <TimersCard timers={this.state.timers} />
         <CardGroup className="mt-3">
           <AddFeatureCard sendEvent={this.sendEvent} />
+        </CardGroup>
+        <CardGroup className="mt-3">
+          <AddImplantCard sendEvent={this.sendEvent} />
         </CardGroup>
       </div>
     );
