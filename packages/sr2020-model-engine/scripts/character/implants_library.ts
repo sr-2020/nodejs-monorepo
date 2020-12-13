@@ -314,7 +314,7 @@ export const kAllImplants: Implant[] = [
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
-    id: 'shaper-bio',
+    id: 'shaper-gamma',
     name: 'Шейпер',
     slot: 'head',
     description:
@@ -325,7 +325,7 @@ export const kAllImplants: Implant[] = [
     modifiers: [modifierFromEffect(increaseMatrixHp, { amount: 1 })],
   },
   {
-    id: 'shaper-gamma',
+    id: 'shaper-delta',
     name: 'Шейпер',
     slot: 'head',
     description:
