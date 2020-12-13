@@ -96,10 +96,19 @@ export class CharacterPage extends React.Component<
 > {
   state = { character: undefined, desiredCharacterId: '51614' };
 
-  loadCharacter() {
-    getCharacter(this.state.desiredCharacterId).then((character) => {
+  async loadCharacter() {
+    try {
+      const character = await getCharacter(this.state.desiredCharacterId);
       this.setState({ character });
-    });
+      this.props.addToast('Персонаж загружен', { appearance: 'success' });
+    } catch (e) {
+      this.props.addToast(
+        e?.response?.status == 404 ? 'Персонаж не найден' : `Неожиданная ошибка сервера: ${e?.response?.data?.statusText}`,
+        {
+          appearance: 'error',
+        },
+      );
+    }
   }
 
   render() {
