@@ -24,6 +24,7 @@ import { CharacterResetCard } from '@alice/sr2020-admin-ui/app/character-reset-c
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleError(e: any) {
     const errorMessage = e?.response?.data?.error?.message;
     if (errorMessage) {
