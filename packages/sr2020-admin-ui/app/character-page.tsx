@@ -16,6 +16,7 @@ import { DeathAndRebirthCard } from '@alice/sr2020-admin-ui/app/death-and-rebirt
 import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 import { ScanQrCard } from '@alice/sr2020-admin-ui/app/scan-qr-card';
 import { DumpshockCard } from '@alice/sr2020-admin-ui/app/dumpshock-card';
+import { ChangeRaceCard } from '@alice/sr2020-admin-ui/app/change-race-card';
 
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
@@ -62,6 +63,7 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
         </CardDeck>
         <CardDeck className="mt-3">
           <DumpshockCard sendEvent={this.sendEvent} />
+          <ChangeRaceCard sendEvent={this.sendEvent} />
         </CardDeck>
       </div>
     );
