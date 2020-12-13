@@ -13,10 +13,11 @@ import { CharacterStatsCard } from '@alice/sr2020-admin-ui/app/character-stats-c
 import { AddImplantCard } from '@alice/sr2020-admin-ui/app/add-implant-card';
 import { GiveKarmaCard } from '@alice/sr2020-admin-ui/app/give-karma-card';
 import { DeathAndRebirthCard } from '@alice/sr2020-admin-ui/app/death-and-rebirth-card';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
-  sendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
+  sendEvent: SendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
     try {
       this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
       this.props.addToast(successMessage, { appearance: 'success' });

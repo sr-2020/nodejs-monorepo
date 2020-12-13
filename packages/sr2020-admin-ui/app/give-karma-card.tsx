@@ -1,10 +1,8 @@
 import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 
-export class GiveKarmaCard extends React.Component<
-  { sendEvent: (eventType: string, data: unknown, message?: string) => void },
-  { amount: number }
-> {
+export class GiveKarmaCard extends React.Component<{ sendEvent: SendEvent }, { amount: number }> {
   state = { amount: 10 };
 
   earnKarma() {

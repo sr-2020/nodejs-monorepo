@@ -2,16 +2,14 @@ import React from 'react';
 import { Button, Card, InputGroup } from 'react-bootstrap';
 import { allImplants } from '@alice/sr2020-admin-ui/app/models-engine-api';
 import { Implant } from '@alice/sr2020-common/models/common_definitions';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 
 export interface AddImplantCardState {
   implants: Implant[];
   selected: string;
 }
 
-export class AddImplantCard extends React.Component<
-  { sendEvent: (eventType: string, data: unknown, message: string) => void },
-  AddImplantCardState
-> {
+export class AddImplantCard extends React.Component<{ sendEvent: SendEvent }, AddImplantCardState> {
   state: AddImplantCardState = { implants: [], selected: 'rcc-alpha' };
 
   componentDidMount() {

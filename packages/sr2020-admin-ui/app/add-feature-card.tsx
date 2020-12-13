@@ -2,16 +2,14 @@ import React from 'react';
 import { Button, Card, FormControl, InputGroup } from 'react-bootstrap';
 import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
 import { allFeatures } from '@alice/sr2020-admin-ui/app/models-engine-api';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 
 export interface AddFeatureCardState {
   features: Feature[];
   selectedFeature: string;
 }
 
-export class AddFeatureCard extends React.Component<
-  { sendEvent: (eventType: string, data: unknown, message: string) => void },
-  AddFeatureCardState
-> {
+export class AddFeatureCard extends React.Component<{ sendEvent: SendEvent }, AddFeatureCardState> {
   state: AddFeatureCardState = { features: [], selectedFeature: 'magic-1' };
 
   componentDidMount() {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { SendEvent } from '@alice/sr2020-admin-ui/app/event-sender';
 
-export class DeathAndRebirthCard extends React.Component<{ sendEvent: (eventType: string, data: unknown, message?: string) => void }> {
+export class DeathAndRebirthCard extends React.Component<{ sendEvent: SendEvent }> {
   wound() {
     this.props.sendEvent('wound', {});
   }
