@@ -8,7 +8,7 @@ export function getDbConnectionOptions(): ConnectionOptions {
     host: process.env.POSTGRESQL_HOST!,
     username: process.env.POSTGRESQL_USER,
     password: process.env.POSTGRESQL_PASSWORD!,
-    synchronize: false,
+    synchronize: true,
     entities: [FirebaseToken],
   };
 }
