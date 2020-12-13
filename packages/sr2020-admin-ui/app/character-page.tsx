@@ -18,8 +18,9 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
       this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
       this.props.addToast(successMessage, { appearance: 'success' });
     } catch (e) {
-      if (e.body && e.body.error && e.body.error.message) {
-        this.props.addToast(e.body.error.message, { appearance: 'error' });
+      const errorMessage = e?.response?.data?.error?.message;
+      if (errorMessage) {
+        this.props.addToast(errorMessage, { appearance: 'error' });
       } else {
         this.props.addToast('Неизвестная ошибка сервера :(', { appearance: 'error' });
       }
