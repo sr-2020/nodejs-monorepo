@@ -14,3 +14,10 @@ export async function sendCharacterEvent(id: string, event: EventRequest): Promi
   const response = await axios.post<Sr2020CharacterProcessResponse>(MODELS_MANAGER_CHARACTER_URL + id, event);
   return response.data.workModel;
 }
+
+export async function setDefaultCharacter(id: string, name: string): Promise<Sr2020Character> {
+  const response = await axios.put<Sr2020CharacterProcessResponse>(MODELS_MANAGER_CHARACTER_URL.replace('/model/', '/default/') + id, {
+    name,
+  });
+  return response.data.workModel;
+}

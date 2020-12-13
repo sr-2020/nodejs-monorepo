@@ -2,7 +2,7 @@ import React from 'react';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { CardDeck } from 'react-bootstrap';
 import { AddToast } from 'react-toast-notifications';
-import { getCharacter, sendCharacterEvent } from '@alice/sr2020-admin-ui/app/models-manager-api';
+import { getCharacter, sendCharacterEvent, setDefaultCharacter } from '@alice/sr2020-admin-ui/app/models-manager-api';
 import { PassiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/passive-abilities-card';
 import { ActiveAbilitiesCard } from '@alice/sr2020-admin-ui/app/active-abilities-card';
 import { SpellsCard } from '@alice/sr2020-admin-ui/app/spells-card';
@@ -18,20 +18,36 @@ import { ScanQrCard } from '@alice/sr2020-admin-ui/app/scan-qr-card';
 import { DumpshockCard } from '@alice/sr2020-admin-ui/app/dumpshock-card';
 import { ChangeRaceCard } from '@alice/sr2020-admin-ui/app/change-race-card';
 import { EthicsCard } from '@alice/sr2020-admin-ui/app/ethics-card';
+import { EssenceCard } from '@alice/sr2020-admin-ui/app/essence-card';
+import { CharacterResetCard } from '@alice/sr2020-admin-ui/app/character-reset-card';
 
 export class CharacterPage extends React.Component<{ id: string; addToast: AddToast }, Sr2020Character> {
   state: Sr2020Character;
+
+  handleError(e: any) {
+    const errorMessage = e?.response?.data?.error?.message;
+    if (errorMessage) {
+      this.props.addToast(errorMessage, { appearance: 'error' });
+    } else {
+      this.props.addToast('Неизвестная ошибка сервера :(', { appearance: 'error' });
+    }
+  }
+
   sendEvent: SendEvent = async (eventType: string, data: unknown, successMessage = 'Успех!') => {
     try {
       this.setState(await sendCharacterEvent(this.state.modelId, { eventType, data }));
       this.props.addToast(successMessage, { appearance: 'success' });
     } catch (e) {
-      const errorMessage = e?.response?.data?.error?.message;
-      if (errorMessage) {
-        this.props.addToast(errorMessage, { appearance: 'error' });
-      } else {
-        this.props.addToast('Неизвестная ошибка сервера :(', { appearance: 'error' });
-      }
+      this.handleError(e);
+    }
+  };
+
+  reset = async () => {
+    try {
+      await setDefaultCharacter(this.state.modelId, this.state.name);
+      await this.sendEvent('_', {}, 'Персонаж пересоздан!');
+    } catch (e) {
+      this.handleError(e);
     }
   };
 
@@ -68,6 +84,12 @@ export class CharacterPage extends React.Component<{ id: string; addToast: AddTo
         </CardDeck>
         <CardDeck className="mt-3">
           <EthicsCard sendEvent={this.sendEvent} states={this.state.ethic.state} triggers={this.state.ethic.trigger} />
+        </CardDeck>
+        <CardDeck className="mt-3">
+          <EssenceCard sendEvent={this.sendEvent} />
+        </CardDeck>
+        <CardDeck className="mt-3">
+          <CharacterResetCard reset={this.reset} />
         </CardDeck>
       </div>
     );
