@@ -7,6 +7,7 @@ import { Container, Tab, Tabs } from 'react-bootstrap';
 import { CharacterPage } from '@alice/sr2020-admin-ui/app/character/character-page';
 import { Link, Route } from 'react-router-dom';
 import { QrPage } from '@alice/sr2020-admin-ui/app/qr/qr-page';
+import { GlobalActionsPage } from '@alice/sr2020-admin-ui/app/global/global-actions';
 
 export function App() {
   const { addToast } = useToasts();
@@ -21,7 +22,7 @@ export function App() {
             <QrPage id="1" addToast={addToast} />
           </Tab>
           <Tab eventKey="contact" title="Глобальные действия">
-            TODO
+            <GlobalActionsPage addToast={addToast} />
           </Tab>
         </Tabs>
       </Container>
