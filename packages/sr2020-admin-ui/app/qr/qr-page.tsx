@@ -5,6 +5,12 @@ import { getQr, sendQrEvent } from '@alice/sr2020-admin-ui/app/api/models-manage
 import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { BasicQrStatsCard } from '@alice/sr2020-admin-ui/app/qr/stats/basic-qr-stats';
+import { WriteImplantCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-implant-card';
+import { WritePillCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-pill-card';
+import { WriteReagentCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-reagent-card';
+import { WriteDroneCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-drone-card';
+import { WriteCyberdeckCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-cyberdeck-card';
+import { WriteSoftwareCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-software-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -32,7 +38,16 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
     return (
       <div>
         <BasicQrStatsCard {...this.props.qr} />
-        <CardDeck className="mt-3"></CardDeck>
+        <CardDeck className="mt-3">
+          <WriteImplantCard sendEvent={this.sendEvent} />
+          <WritePillCard sendEvent={this.sendEvent} />
+          <WriteReagentCard sendEvent={this.sendEvent} />
+        </CardDeck>
+        <CardDeck className="mt-3">
+          <WriteDroneCard sendEvent={this.sendEvent} />
+          <WriteCyberdeckCard sendEvent={this.sendEvent} />
+          <WriteSoftwareCard sendEvent={this.sendEvent} />
+        </CardDeck>
       </div>
     );
   }
