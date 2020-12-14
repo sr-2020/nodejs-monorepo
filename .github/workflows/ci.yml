@@ -57,13 +57,18 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - uses: bahmutov/npm-install@v1.1.0
+      - run: npx nx build sr2020-admin-ui --prod
       - uses: actions-hub/gcloud@318.0.0
         env:
           PROJECT_ID: imposing-elixir-249711
           APPLICATION_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
           CLI: gsutil
         with:
-          args: -h "Cache-Control:no-cache,max-age=0" cp packages/admin-ui/* gs://admin-ui.evarun.ru
+          args: -h "Cache-Control:no-cache,max-age=0" cp dist/packages/sr2020-admin-ui/* gs://admin-ui.evarun.ru
 
   deploy_gke:
     runs-on: ubuntu-latest
