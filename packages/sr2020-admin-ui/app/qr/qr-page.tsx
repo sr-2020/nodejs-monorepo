@@ -19,6 +19,7 @@ import { WriteFeatureCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-feat
 import { WriteFoodCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-food-card';
 import { WriteFocusCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-focus-card';
 import { WriteEthicCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ethic-card';
+import { WriteReanimateCapsuleCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-reanimate-capsule-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -74,11 +75,12 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
         <CardDeck className="mt-3">
           <WriteEthicCard sendEvent={this.sendEvent} />
         </CardDeck>
+        <CardDeck className="mt-3">
+          <WriteReanimateCapsuleCard sendEvent={this.sendEvent} />
+        </CardDeck>
       </div>
     );
   }
-
-  // TODO: Запись воскрешательной капсулы на QR
 }
 
 export class QrPage extends React.Component<{ id: string; addToast: AddToast }, { qr: QrCode | undefined; desiredQrId: string }> {
