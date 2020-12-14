@@ -99,7 +99,6 @@ export class QrPage extends React.Component<{ idToLoad?: string; addToast: AddTo
   state = { qr: undefined, desiredQrId: '1' };
 
   componentDidMount() {
-    console.log(this.props.idToLoad);
     if (this.props.idToLoad) {
       this.setState({ desiredQrId: this.props.idToLoad });
       this.loadQr();
