@@ -95,7 +95,7 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
   }
 }
 
-export class QrPage extends React.Component<{ id: string; addToast: AddToast }, { qr: QrCode | undefined; desiredQrId: string }> {
+export class QrPage extends React.Component<{ addToast: AddToast }, { qr: QrCode | undefined; desiredQrId: string }> {
   state = { qr: undefined, desiredQrId: '1' };
 
   async loadQr() {

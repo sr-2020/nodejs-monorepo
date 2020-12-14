@@ -16,10 +16,10 @@ export function App() {
       <Container>
         <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
           <Tab eventKey="home" title="Персонаж">
-            <CharacterPage id="51614" addToast={addToast} />
+            <CharacterPage addToast={addToast} />
           </Tab>
           <Tab eventKey="profile" title="QR-код">
-            <QrPage id="1" addToast={addToast} />
+            <QrPage addToast={addToast} />
           </Tab>
           <Tab eventKey="contact" title="Глобальные действия">
             <GlobalActionsPage addToast={addToast} />
