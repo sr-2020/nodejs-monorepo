@@ -5,40 +5,29 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useToasts } from 'react-toast-notifications';
 import { Container, Tab, Tabs } from 'react-bootstrap';
 import { CharacterPage } from '@alice/sr2020-admin-ui/app/character/character-page';
-import { Link, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
 import { QrPage } from '@alice/sr2020-admin-ui/app/qr/qr-page';
 import { GlobalActionsPage } from '@alice/sr2020-admin-ui/app/global/global-actions';
 
 export function App() {
   const { addToast } = useToasts();
+  const history = useHistory();
+  const tab = useLocation().pathname.split('/')[1] || 'character';
+  const setPage = (page: string) => history.push('/' + page);
+
   return (
     <div className="app">
       <Container>
-        <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
-          <Tab eventKey="home" title="Персонаж">
-            <CharacterPage addToast={addToast} />
-          </Tab>
-          <Tab eventKey="profile" title="QR-код">
-            <QrPage addToast={addToast} />
-          </Tab>
-          <Tab eventKey="contact" title="Глобальные действия">
-            <GlobalActionsPage addToast={addToast} />
-          </Tab>
+        <Tabs defaultActiveKey={tab} onSelect={setPage}>
+          <Tab eventKey="character" title="Персонаж" />
+          <Tab eventKey="qr" title="QR-код" />
+          <Tab eventKey="global" title="Глобальные действия" />
         </Tabs>
+        <Route path="/" exact render={() => <Redirect to="/character" />} />
+        <Route path="/character" exact render={() => <CharacterPage addToast={addToast} />} />
+        <Route path="/qr" exact render={() => <QrPage addToast={addToast} />} />
+        <Route path="/global" exact render={() => <GlobalActionsPage addToast={addToast} />} />
       </Container>
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <Route path="/" exact render={() => <div></div>} />
-      <Route
-        path="/page-2"
-        exact
-        render={() => (
-          <div>
-            <Link to="/">Click here to go back to root page.</Link>
-          </div>
-        )}
-      />
       {/* END: routes */}
     </div>
   );
