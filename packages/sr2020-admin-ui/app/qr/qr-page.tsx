@@ -16,6 +16,7 @@ import { WriteAiSymbolCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ai-
 import { WriteKarmaCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-karma-card';
 import { WriteSpiritCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-spirit-card';
 import { WriteFeatureCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-feature-card';
+import { WriteFoodCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-food-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -63,12 +64,12 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
         </CardDeck>
         <CardDeck className="mt-3">
           <WriteFeatureCard sendEvent={this.sendEvent} />
+          <WriteFoodCard sendEvent={this.sendEvent} />
         </CardDeck>
       </div>
     );
   }
 
-  // TODO: Запись еды на QR
   // TODO: Запись фокуса на QR
   // TODO: Запись локуса этической группы / универсального заряда на QR
   // TODO: Запись воскрешательной капсулы на QR
