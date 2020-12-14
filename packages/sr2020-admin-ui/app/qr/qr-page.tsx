@@ -11,6 +11,9 @@ import { WriteReagentCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-reag
 import { WriteDroneCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-drone-card';
 import { WriteCyberdeckCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-cyberdeck-card';
 import { WriteSoftwareCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-software-card';
+import { WriteBodystorageCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-bodystorage-card';
+import { WriteAiSymbolCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ai-symbol-card';
+import { WriteKarmaCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-karma-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -47,6 +50,11 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
           <WriteDroneCard sendEvent={this.sendEvent} />
           <WriteCyberdeckCard sendEvent={this.sendEvent} />
           <WriteSoftwareCard sendEvent={this.sendEvent} />
+        </CardDeck>
+        <CardDeck className="mt-3">
+          <WriteBodystorageCard sendEvent={this.sendEvent} />
+          <WriteAiSymbolCard sendEvent={this.sendEvent} />
+          <WriteKarmaCard sendEvent={this.sendEvent} />
         </CardDeck>
       </div>
     );
