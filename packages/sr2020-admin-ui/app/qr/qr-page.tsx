@@ -20,6 +20,7 @@ import { WriteFoodCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-food-ca
 import { WriteFocusCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-focus-card';
 import { WriteEthicCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ethic-card';
 import { WriteReanimateCapsuleCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-reanimate-capsule-card';
+import { ClearQrCard } from '@alice/sr2020-admin-ui/app/qr/cards/clear-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -44,6 +45,17 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
   };
 
   render() {
+    if (this.props.qr.type != 'empty') {
+      return (
+        <div>
+          <BasicQrStatsCard {...this.props.qr} />
+          <CardDeck className="mt-3">
+            <ClearQrCard sendEvent={this.sendEvent} />
+          </CardDeck>
+        </div>
+      );
+    }
+
     return (
       <div>
         <BasicQrStatsCard {...this.props.qr} />
