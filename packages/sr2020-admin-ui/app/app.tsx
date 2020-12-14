@@ -6,6 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import { Container, Tab, Tabs } from 'react-bootstrap';
 import { CharacterPage } from '@alice/sr2020-admin-ui/app/character/character-page';
 import { Link, Route } from 'react-router-dom';
+import { QrPage } from '@alice/sr2020-admin-ui/app/qr/qr-page';
 
 export function App() {
   const { addToast } = useToasts();
@@ -17,7 +18,7 @@ export function App() {
             <CharacterPage id="51614" addToast={addToast} />
           </Tab>
           <Tab eventKey="profile" title="QR-код">
-            TODO
+            <QrPage id="1" addToast={addToast} />
           </Tab>
           <Tab eventKey="contact" title="Глобальные действия">
             TODO
