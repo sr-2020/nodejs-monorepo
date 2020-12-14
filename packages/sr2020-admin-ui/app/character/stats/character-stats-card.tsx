@@ -23,6 +23,12 @@ export class CharacterStatsCard extends React.Component<Sr2020Character, { encod
     );
   }
 
+  componentDidUpdate(prevProps: Readonly<Sr2020Character>) {
+    if (prevProps.modelId != this.props.modelId || prevProps.timestamp != this.props.timestamp) {
+      this.componentDidMount();
+    }
+  }
+
   getQrType(model: Sr2020Character) {
     if (model.currentBody == 'astral') return 9;
     if (model.currentBody == 'drone') return 10;
