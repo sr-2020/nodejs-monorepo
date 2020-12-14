@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button, Card, InputGroup } from 'react-bootstrap';
-import { allImplants } from '@alice/sr2020-admin-ui/app/api/models-engine';
-import { Implant } from '@alice/sr2020-common/models/common_definitions';
+import { allImplants, DictionaryItem } from '@alice/sr2020-admin-ui/app/api/models-engine';
 import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
 export interface AddImplantCardState {
-  implants: Implant[];
+  implants: DictionaryItem[];
   selected: string;
 }
 
