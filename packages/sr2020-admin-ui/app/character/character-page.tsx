@@ -91,10 +91,17 @@ export class LoadedCharacterPage extends React.Component<{ character: Sr2020Char
 }
 
 export class CharacterPage extends React.Component<
-  { addToast: AddToast },
+  { idToLoad?: string; addToast: AddToast },
   { character: Sr2020Character | undefined; desiredCharacterId: string }
 > {
   state = { character: undefined, desiredCharacterId: '51614' };
+
+  componentDidMount() {
+    if (this.props.idToLoad) {
+      this.setState({ desiredCharacterId: this.props.idToLoad });
+      this.loadCharacter();
+    }
+  }
 
   async loadCharacter() {
     try {
