@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "nx": "nx",
+    "affected_apps": "nx affected:apps --plain --base=origin/master~1 --head=origin/master",
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
