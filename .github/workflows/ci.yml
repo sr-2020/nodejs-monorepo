@@ -6,7 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "::set-output name=action_fruit::apple"
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
@@ -16,7 +15,13 @@ jobs:
         with:
           targets: lint,build,test
           affected: true
+      - run: echo "::set-output name=sr2020_model_engine_affected::"`nx affected:apps | grep sr2020-model-engine -c`
+      - run: echo "::set-output name=sr2020_models_manager_affected::"`nx affected:apps | grep sr2020-admin-ui -c`
+      - run: echo "::set-output name=sr2020_push_affected::"`nx affected:apps | grep push -c`
+      - run: echo "::set-output name=sr2020_admin_ui_affected::"`nx affected:apps | grep sr2020-admin-ui -c`
   docker_models_manager:
+    needs: [test]
+    if: needs.test.outputs.sr2020_models_manager_affected
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -29,6 +34,8 @@ jobs:
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_model_engine:
+    needs: [test]
+    if: needs.test.outputs.sr2020_model_engine_affected
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -41,6 +48,8 @@ jobs:
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
   docker_push:
+    needs: [test]
+    if: needs.test.outputs.sr2020_push_affected
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -55,7 +64,7 @@ jobs:
   deploy_admin_ui:
     runs-on: ubuntu-latest
     needs: [test]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_admin_ui_affected
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -71,10 +80,10 @@ jobs:
         with:
           args: -h "Cache-Control:no-cache,max-age=0" cp dist/packages/sr2020-admin-ui/* gs://admin-ui.evarun.ru
 
-  deploy_gke:
+  deploy_push:
     runs-on: ubuntu-latest
-    needs: [test, docker_models_manager, docker_model_engine, docker_push]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.action_fruit == 'apple'
+    needs: [docker_push]
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -86,8 +95,36 @@ jobs:
       - run: |
           kubectl config set-context --current --namespace=production
           kubectl set image deployment/push push=sr2020/push:$GITHUB_SHA --record
-          kubectl set image deployment/model-engine model-engine=sr2020/model-engine:$GITHUB_SHA --record
-          kubectl set image deployment/models-manager models-manager=sr2020/models-manager:$GITHUB_SHA --record
           kubectl rollout status deployment/push
-          kubectl rollout status deployment/model-engine
+  deploy_model_engine:
+    runs-on: ubuntu-latest
+    needs: [docker_model_engine]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_email: ${{ secrets.SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - run: gcloud components install kubectl
+      - run: gcloud container clusters get-credentials prod --project imposing-elixir-249711 --zone europe-west3-b
+      - uses: actions/checkout@v1
+      - run: |
+          kubectl config set-context --current --namespace=production
+          kubectl set image deployment/model-engine model-engine=sr2020/model-engine:$GITHUB_SHA --record
+          kubectl rollout status deployment/push
+  deploy_models_manager:
+    runs-on: ubuntu-latest
+    needs: [docker_models_manager]
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_email: ${{ secrets.SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+      - run: gcloud components install kubectl
+      - run: gcloud container clusters get-credentials prod --project imposing-elixir-249711 --zone europe-west3-b
+      - uses: actions/checkout@v1
+      - run: |
+          kubectl config set-context --current --namespace=production
+          kubectl set image deployment/models-manager models-manager=sr2020/models-manager:$GITHUB_SHA --record
           kubectl rollout status deployment/models-manager
