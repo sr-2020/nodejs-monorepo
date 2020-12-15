@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "::set-output name=action_fruit::strawberry"
+      - run: echo "::set-output name=action_fruit::apple"
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
