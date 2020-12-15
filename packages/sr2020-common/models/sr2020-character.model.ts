@@ -1,5 +1,15 @@
 import { model, property } from '@loopback/repository';
-import { BigIntTransformer, EmptyModel, JsonColumn, JsonNullableColumn, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import {
+  ArrayProperty,
+  BigIntTransformer,
+  BoolProperty,
+  EmptyModel,
+  JsonColumn,
+  JsonNullableColumn,
+  NumberProperty,
+  ObjectProperty,
+  StringProperty,
+} from '@alice/alice-common/models/alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 import { QrType } from './qr-code.model';
@@ -27,17 +37,17 @@ export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'au
 export class AddedSpell {
   // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
   // other features: active abilities, spells, etc.
-  @rproperty() id: string;
+  @StringProperty() id: string;
 
   // Short-ish human-readable name to be shown in the UI.
-  @rproperty() humanReadableName: string;
+  @StringProperty() humanReadableName: string;
 
   // Full description. Can be multiline.
-  @rproperty() description: string;
+  @StringProperty() description: string;
 
-  @rproperty() hasTarget: boolean;
+  @BoolProperty() hasTarget: boolean;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   sphere: SpellSphere;
 }
 
@@ -62,10 +72,10 @@ export interface LocationMixin {
 @model()
 export class TargetSignature {
   // Human-readable name to e.g. show on button
-  @rproperty() name: string;
-  @property.array(String) allowedTypes: QrType[];
+  @StringProperty() name: string;
+  @ArrayProperty(String) allowedTypes: QrType[];
   // Name of field inside data in which client should pass an id of corresponding target
-  @property({ required: true, type: 'string' }) field: keyof Targetable;
+  @StringProperty() field: keyof Targetable;
 }
 
 // Active ability contained in the model object (as opposed to ActiveAbility which is configuration/dictionary kind).
@@ -73,29 +83,29 @@ export class TargetSignature {
 export class AddedActiveAbility {
   // Unique string identifier. Should be unique not only among all AddedActiveAbility, but also among
   // other features: passive abilities, spells, etc.
-  @rproperty() id: string;
+  @StringProperty() id: string;
 
   // Short-ish human-readable name to be shown in the UI.
-  @rproperty() humanReadableName: string;
+  @StringProperty() humanReadableName: string;
 
   // Full description. Can be multiline.
-  @rproperty() description: string;
+  @StringProperty() description: string;
 
   // True if ability needs a target - other character or object
-  @property({ required: true, type: 'string' }) target: 'scan' | 'show';
+  @StringProperty() target: 'scan' | 'show';
 
   // True if ability needs a target - other character or object
-  @property.array(TargetSignature) targetsSignature: TargetSignature[];
+  @ArrayProperty(TargetSignature) targetsSignature: TargetSignature[];
 
   // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
-  @property() validUntil?: number;
+  @NumberProperty({ optional: true }) validUntil?: number;
 
   // Normal cooldown in minutes.
-  @property() cooldownMinutes: number;
+  @NumberProperty() cooldownMinutes: number;
 
   // Unix timestamp in milliseconds.
-  @property() cooldownUntil: number;
+  @NumberProperty() cooldownUntil: number;
 }
 
 // Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).
@@ -103,22 +113,22 @@ export class AddedActiveAbility {
 export class AddedPassiveAbility {
   // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
   // other features: active abilities, spells, etc.
-  @rproperty() id: string;
+  @StringProperty() id: string;
 
   // Short-ish human-readable name to be shown in the UI.
-  @rproperty() humanReadableName: string;
+  @StringProperty() humanReadableName: string;
 
   // Full description. Can be multiline.
-  @rproperty() description: string;
+  @StringProperty() description: string;
 
   // Unix timestamp in milliseconds. Set only if ability is temporary
   // (e.g. was added by effect of some other ability or spell)
-  @property() validUntil?: number;
+  @NumberProperty({ optional: true }) validUntil?: number;
 
   // List of modifiers added by this passive ability. Used to remove them when feature is being removed.
   // Can be omitted if this passive abiliy doesn't have any modifiers (i.e. it's only effect is to
   // show some text to the user).
-  @property.array(String) modifierIds?: string[];
+  @ArrayProperty(String, { optional: true }) modifierIds?: string[];
 }
 
 export interface PackInfo {
@@ -160,517 +170,517 @@ export const kFeatureDescriptor = {
 // Ethic trigger contained in the model object (as opposed to EthicTrigger which is configuration/dictionary kind).
 @model()
 export class AddedEthicTrigger {
-  @rproperty() id: string;
+  @StringProperty() id: string;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   kind: 'action' | 'crysis' | 'principle';
 
   // Full description. Can be multiline.
-  @rproperty() description: string;
+  @StringProperty() description: string;
 }
 
 @model()
 export class AddedEthicState {
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   scale: 'violence' | 'control' | 'individualism' | 'mind';
 
-  @rproperty() value: number;
+  @NumberProperty() value: number;
 
   // Full description. Can be multiline.
-  @rproperty() description: string;
+  @StringProperty() description: string;
 }
 
 @model()
 export class AddedImplant {
-  @rproperty() id: string;
-  @rproperty() name: string;
-  @rproperty() description: string;
+  @StringProperty() id: string;
+  @StringProperty() name: string;
+  @StringProperty() description: string;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   slot: 'body' | 'arm' | 'head' | 'rcc';
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
 
-  @rproperty() installDifficulty: number;
-  @rproperty() essenceCost: number;
+  @NumberProperty() installDifficulty: number;
+  @NumberProperty() essenceCost: number;
 
   // List of modifiers added by this implant. Used to remove them when implant is being removed.
-  @property.array(String) modifierIds: string[];
+  @ArrayProperty(String) modifierIds: string[];
 
   // Various economics crap. Only needed to support implant extraction case
-  @rproperty() basePrice: number;
-  @rproperty() rentPrice: number;
-  @rproperty() gmDescription: string;
-  @rproperty() dealId: string;
-  @rproperty() lifestyle: string;
+  @NumberProperty() basePrice: number;
+  @NumberProperty() rentPrice: number;
+  @StringProperty() gmDescription: string;
+  @StringProperty() dealId: string;
+  @StringProperty() lifestyle: string;
 }
 
 @model()
 export class HistoryRecord {
-  @rproperty() id: string;
-  @rproperty() timestamp: number;
-  @rproperty() title: string;
-  @rproperty() shortText: string;
-  @rproperty() longText: string;
+  @StringProperty() id: string;
+  @NumberProperty() timestamp: number;
+  @StringProperty() title: string;
+  @StringProperty() shortText: string;
+  @StringProperty() longText: string;
 }
 
 @model()
 export class ChemoConsumptionRecord {
-  @rproperty() timestamp: number;
-  @rproperty() chemoName: string;
+  @NumberProperty() timestamp: number;
+  @StringProperty() chemoName: string;
 }
 
 @model()
 export class AnalyzedBody {
-  @rproperty() healthState: HealthState;
-  @rproperty() essence: number;
+  @StringProperty() healthState: HealthState;
+  @NumberProperty() essence: number;
 
-  @property.array(AddedImplant, { required: true })
+  @ArrayProperty(AddedImplant)
   @JsonColumn()
   implants: AddedImplant[];
 }
 
 @model()
 export class Discounts {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   weaponsArmor: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   everything: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   ares: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   aztechnology: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   saederKrupp: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   spinradGlobal: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   neonet1: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   evo: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   horizon: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   wuxing: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   russia: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   renraku: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   mutsuhama: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   shiavase: number;
 }
 
 @model()
 export class Concentrations {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   teqgel: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   iodine: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   argon: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   radium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   junius: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   custodium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   polonium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   silicon: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   magnium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   chromium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   opium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   elba: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   barium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   uranium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   moscovium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   iconium: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   vampirium: number;
 }
 
 @model()
 export class Chemo {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 160 })
   baseEffectThreshold: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 220 })
   uberEffectThreshold: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 280 })
   superEffectThreshold: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 340 })
   crysisThreshold: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 280 })
   sensitivity: number; // which concentration can detect when using whats-in-the-body
 
-  @rproperty()
+  @ObjectProperty(Concentrations)
   @Column((type) => Concentrations, { prefix: 'concentration' })
   concentration: Concentrations;
 }
 
 @model()
 export class MagicStats {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   feedbackMultiplier: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1.0 })
   recoverySpeedMultiplier: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1.0 })
   spiritResistanceMultiplier: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1.0 })
   auraReadingMultiplier: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1.0 })
   auraMarkMultiplier: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   auraMask: number;
 
-  @rproperty()
+  @StringProperty()
   @Column()
   aura: string;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   maxPowerBonus: number;
 }
 
 @model()
 export class Hacking {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   maxTimeAtHost: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   hostEntrySpeed: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   conversionAttack: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   conversionFirewall: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   conversionSleaze: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   conversionDataprocessing: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   fadingResistance: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   biofeedbackResistance: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   adminHostNumber: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   spriteLevel: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   resonanceForControlBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   varianceResistance: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   compilationFadingResistance: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   additionalRequests: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   additionalSprites: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   additionalBackdoors: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   backdoorTtl: number;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   jackedIn: boolean;
 }
 
 @model()
 export class Drones {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: -1000 })
   maxDifficulty: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 60 })
   maxTimeInside: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 50 })
   recoveryTime: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   medicraftBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   autodocBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   aircraftBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   groundcraftBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   feedbackModifier: number;
 }
 
 @model()
 export class Rigging {
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   canWorkWithBioware: boolean;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   implantsBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   tuningBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   repomanBonus: number;
 }
 
 @model()
 export class Billing {
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   anonymous: boolean;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   stockGainPercentage: number;
 }
 
 @model()
 export class EssenceDetails {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 600 })
   max: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   used: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   gap: number;
 }
 
 @model()
 export class Karma {
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0, type: 'real' })
   available: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0, type: 'real' })
   spent: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0, type: 'real' })
   spentOnPassives: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0, type: 'real' })
   cycleLimit: number;
 }
 
 @model()
 export class Screens {
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   billing: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   spellbook: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   activeAbilities: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   passiveAbilities: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   karma: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   implants: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   autodoc: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   autodocWoundHeal: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   autodocImplantInstall: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   autodocImplantRemoval: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   ethics: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: false })
   location: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   wound: boolean;
 
-  @rproperty()
+  @BoolProperty()
   @Column({ default: true })
   scanQr: boolean;
 }
 
 @model()
 export class Ethic {
-  @property.array(String, { required: true })
+  @ArrayProperty(String)
   @JsonColumn()
   groups: string[];
 
-  @property.array(AddedEthicState, { required: true })
+  @ArrayProperty(AddedEthicState)
   @JsonColumn()
   state: AddedEthicState[];
 
-  @property.array(AddedEthicTrigger, { required: true })
+  @ArrayProperty(AddedEthicTrigger)
   @JsonColumn()
   trigger: AddedEthicTrigger[];
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0, type: 'bigint', transformer: new BigIntTransformer() })
   lockedUntil: number;
 }
@@ -680,139 +690,139 @@ export class Ethic {
   name: 'sr2020-character',
 })
 export class Sr2020Character extends EmptyModel {
-  @rproperty()
+  @StringProperty()
   @Column({ default: '' })
   name: string;
 
-  @rproperty()
+  @StringProperty()
   @Column({ type: 'text', default: 'physical' })
   currentBody: BodyType;
 
-  @rproperty()
+  @NumberProperty()
   @Column()
   maxHp: number;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   @Column({ type: 'text', default: 'healthy' })
   healthState: HealthState;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   @Column({ type: 'text', default: 'meta-norm' })
   metarace: MetaRace;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   body: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   strength: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   depth: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   intelligence: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   charisma: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   essence: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   mentalAttackBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   mentalDefenceBonus: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   mentalQrId: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   magic: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   resonance: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1 })
   matrixHp: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 30 })
   maxTimeInVr: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 1.0 })
   cooldownCoefficient: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 2 })
   implantsBodySlots: number;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ default: 0 })
   implantsRemovalResistance: number; // 0 - 100, measured in percents.
 
-  @rproperty()
+  @ObjectProperty(MagicStats)
   @Column((type) => MagicStats, { prefix: 'magic' })
   magicStats: MagicStats;
 
-  @rproperty()
+  @ObjectProperty(Hacking)
   @Column((type) => Hacking, { prefix: 'hacking' })
   hacking: Hacking;
 
-  @rproperty()
+  @ObjectProperty(Drones)
   @Column((type) => Drones, { prefix: 'drones' })
   drones: Drones;
 
-  @rproperty()
+  @ObjectProperty(Chemo)
   @Column((type) => Chemo, { prefix: 'chemo' })
   chemo: Chemo;
 
-  @rproperty()
+  @ObjectProperty(Billing)
   @Column((type) => Billing, { prefix: 'billing' })
   billing: Billing;
 
-  @rproperty()
+  @ObjectProperty(Discounts)
   @Column((type) => Discounts, { prefix: 'discounts' })
   discounts: Discounts;
 
-  @rproperty()
+  @ObjectProperty(Screens)
   @Column((type) => Screens, { prefix: 'screens' })
   screens: Screens;
 
-  @property.array(AddedSpell, { required: true })
+  @ArrayProperty(AddedSpell)
   @JsonColumn()
   spells: AddedSpell[];
 
-  @property.array(AddedActiveAbility, { required: true })
+  @ArrayProperty(AddedActiveAbility)
   @JsonColumn()
   activeAbilities: AddedActiveAbility[];
 
-  @property.array(AddedPassiveAbility, { required: true })
+  @ArrayProperty(AddedPassiveAbility)
   @JsonColumn()
   passiveAbilities: AddedPassiveAbility[];
 
-  @rproperty()
+  @ObjectProperty(Ethic)
   @Column((type) => Ethic, { prefix: 'ethic' })
   ethic: Ethic;
 
-  @property.array(AddedImplant, { required: true })
+  @ArrayProperty(AddedImplant)
   @JsonColumn()
   implants: AddedImplant[];
 
-  @property.array(ChemoConsumptionRecord, { required: true })
+  @ArrayProperty(ChemoConsumptionRecord)
   @JsonColumn()
   chemoConsumptionRecords: ChemoConsumptionRecord[];
 
@@ -820,49 +830,49 @@ export class Sr2020Character extends EmptyModel {
   @JsonNullableColumn()
   analyzedBody: null;
 
-  @rproperty()
+  @ObjectProperty(Rigging)
   @Column((type) => Rigging, { prefix: 'rigging' })
   rigging: Rigging;
 
-  @rproperty()
+  @ObjectProperty(EssenceDetails)
   @Column((type) => EssenceDetails, { prefix: 'essence' })
   essenceDetails: EssenceDetails;
 
-  @rproperty()
+  @ObjectProperty(Karma)
   @Column((type) => Karma, { prefix: 'karma' })
   karma: Karma;
 
-  @property.array(HistoryRecord, { required: true })
+  @ArrayProperty(HistoryRecord)
   @JsonColumn()
   history: HistoryRecord[];
 }
 
 @model()
 export class Sr2020CharacterProcessRequest extends BaseModelProcessRequest {
-  @rproperty()
+  @ObjectProperty(Sr2020Character)
   baseModel: Sr2020Character;
 }
 
 @model()
 export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
-  @rproperty()
+  @ObjectProperty(Sr2020Character)
   baseModel: Sr2020Character;
 
-  @rproperty()
+  @ObjectProperty(Sr2020Character)
   workModel: Sr2020Character;
 }
 
 @model()
 export class CharacterCreationRequest {
-  @property({ required: false })
+  @StringProperty({ optional: true })
   name?: string;
 
-  @property({ required: false, type: 'string' })
+  @StringProperty({ optional: true })
   metarace?: MetaRace;
 
-  @property.array(String, { required: false })
+  @ArrayProperty(String, { optional: true })
   features?: string[];
 
-  @property({ required: false })
+  @NumberProperty({ optional: true })
   karma?: number;
 }

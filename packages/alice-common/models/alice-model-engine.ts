@@ -36,6 +36,26 @@ export function rproperty() {
   return property({ required: true });
 }
 
+export function StringProperty(options: { optional: boolean } = { optional: false }) {
+  return property({ required: !options.optional });
+}
+
+export function BoolProperty(options: { optional: boolean } = { optional: false }) {
+  return property({ required: !options.optional });
+}
+
+export function ArrayProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
+  return property.array(itemType, { required: !options.optional });
+}
+
+export function NumberProperty(options: { optional: boolean } = { optional: false }) {
+  return property({ required: !options.optional });
+}
+
+export function ObjectProperty<T extends unknown>(_itemType: new () => T) {
+  return property({ required: true });
+}
+
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
 export class EventRequest {
