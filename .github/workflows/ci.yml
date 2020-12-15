@@ -74,7 +74,7 @@ jobs:
   deploy_gke:
     runs-on: ubuntu-latest
     needs: [test, docker_models_manager, docker_model_engine, docker_push]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && needs.test.outputs.action_fruit == 'apple'
     steps:
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
