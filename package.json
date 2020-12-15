@@ -58,8 +58,6 @@
     "@babel/core": "7.9.6",
     "@babel/preset-env": "7.9.6",
     "@babel/preset-typescript": "7.9.0",
-    "@loopback/build": "^6.2.2",
-    "@loopback/eslint-config": "^6.0.1",
     "@loopback/testlab": "3.2.4",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
