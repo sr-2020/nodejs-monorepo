@@ -31,11 +31,6 @@ jobs:
         run: echo "::set-output name=affected::"`yarn affected_apps | grep push -c`
       - id: detect_sr2020_admin_ui
         run: echo "::set-output name=affected::"`yarn affected_apps | grep sr2020-admin-ui -c`
-  debug:
-    runs-on: ubuntu-latest
-    needs: [test]
-    steps:
-      - run: echo ${{ needs.test.outputs.sr2020_admin_ui_affected }}
   docker_models_manager:
     needs: [test]
     if: needs.test.outputs.sr2020_models_manager_affected == 1
