@@ -1,5 +1,5 @@
-import { model, property } from '@loopback/repository';
-import { EmptyModel, JsonColumn, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import { model } from '@loopback/repository';
+import { EmptyModel, JsonColumn, NumberProperty, ObjectProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 
@@ -44,42 +44,42 @@ export type QrType =
   name: 'qr',
 })
 export class QrCode extends EmptyModel {
-  @rproperty()
+  @NumberProperty()
   @Column()
   usesLeft: number = 0;
 
-  @property({ required: true, type: 'string' })
+  @StringProperty()
   @Column({ type: 'text', default: 'empty' })
   type: QrType = 'empty';
 
-  @rproperty()
+  @StringProperty()
   @Column({ default: '' })
   name: string = '';
 
-  @rproperty()
+  @StringProperty()
   @Column({ default: '' })
   description: string = '';
 
-  @property()
+  @StringProperty({ optional: true })
   @Column()
   eventType?: string;
 
-  @property()
+  @ObjectProperty(Object)
   @JsonColumn()
   data: Record<string, any>;
 }
 
 @model()
 export class QrCodeProcessRequest extends BaseModelProcessRequest {
-  @rproperty()
+  @ObjectProperty(QrCode)
   baseModel: QrCode;
 }
 
 @model()
 export class QrCodeProcessResponse extends BaseModelProcessResponse {
-  @rproperty()
+  @ObjectProperty(QrCode)
   baseModel: QrCode;
 
-  @rproperty()
+  @ObjectProperty(QrCode)
   workModel: QrCode;
 }

@@ -1,42 +1,50 @@
-import { Condition, EmptyModel, Event, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import {
+  BoolProperty,
+  Condition,
+  EmptyModel,
+  Event,
+  NumberProperty,
+  ObjectProperty,
+  StringProperty,
+} from '@alice/alice-common/models/alice-model-engine';
 import { model, property } from '@loopback/repository';
 
 @model()
 export class MemoryEntry {
-  @rproperty()
+  @StringProperty()
   title: string;
 
-  @rproperty()
+  @StringProperty()
   text: string;
 
-  @rproperty()
+  @StringProperty()
   url: string;
 
-  @rproperty()
+  @StringProperty()
   mID: string;
 }
 
 @model()
 export class Change {
-  @rproperty()
+  @StringProperty()
   mID: string;
 
-  @rproperty()
+  @StringProperty()
   text: string;
 
-  @rproperty()
+  @NumberProperty()
   timestamp: number;
 }
 
 @model()
 export class Message {
-  @rproperty()
+  @StringProperty()
   mID: string;
 
-  @rproperty()
+  @StringProperty()
   title: string;
 
-  @rproperty()
+  @StringProperty()
   text: string;
 }
 
@@ -45,97 +53,97 @@ export class DeusExModel extends EmptyModel {
   @property.array(MemoryEntry, { required: true })
   memory: MemoryEntry[];
 
-  @rproperty()
+  @NumberProperty()
   hp: number;
 
-  @rproperty()
+  @NumberProperty()
   maxHp: number;
 
-  @rproperty()
+  @NumberProperty()
   randomSeed: number;
 
-  @rproperty()
+  @StringProperty()
   login: string;
 
-  @rproperty()
+  @StringProperty()
   mail: string;
 
-  @rproperty()
+  @StringProperty({ optional: true })
   generation?: string;
 
-  @rproperty()
+  @StringProperty()
   profileType: string;
 
-  @rproperty()
+  @StringProperty()
   firstName: string;
 
-  @rproperty()
+  @StringProperty()
   nicName: string;
 
-  @rproperty()
+  @StringProperty()
   lastName: string;
 
-  @rproperty()
+  @StringProperty()
   model: string; //For droids
 
-  @rproperty()
+  @StringProperty()
   sweethome: string;
 
-  @rproperty()
+  @StringProperty()
   sex: string;
 
-  @rproperty()
+  @StringProperty()
   corporation: string;
 
-  @rproperty()
+  @NumberProperty()
   salaryLevel: number;
 
-  @rproperty()
+  @StringProperty()
   insurance: string;
 
-  @rproperty()
+  @NumberProperty()
   insuranceLevel: number;
 
-  @rproperty()
+  @StringProperty()
   insuranceDiplayName: string;
 
-  @property()
+  @StringProperty({ optional: true })
   hackingLogin?: string;
 
-  @rproperty()
+  @NumberProperty()
   hackingProtection: number;
 
-  @rproperty()
+  @NumberProperty()
   lockReduction: number;
 
-  @rproperty()
+  @NumberProperty()
   proxyRegen: number;
 
-  @rproperty()
+  @NumberProperty()
   maxProxy: number;
 
-  @rproperty()
+  @NumberProperty()
   maxSecondsInVr: number;
 
-  @rproperty()
+  @StringProperty()
   owner: string;
 
-  @rproperty()
+  @StringProperty()
   creator: string;
 
-  @rproperty()
+  @BoolProperty()
   isAlive: boolean;
 
-  @rproperty()
+  @NumberProperty()
   lastVREnterTimestamp: number;
 
-  @rproperty()
+  @NumberProperty()
   lastVREnterDuration: number;
 
-  @rproperty()
+  @NumberProperty()
   totalSpentInVR: number;
 
-  @rproperty()
+  @ObjectProperty(Object)
   mind: any;
 
   @property.array(Number, { required: true })
@@ -144,7 +152,7 @@ export class DeusExModel extends EmptyModel {
   @property.array(Number, { required: true })
   systems?: number[];
 
-  @rproperty()
+  @StringProperty()
   password: string;
 
   @property.array(Change, { required: true })
@@ -156,27 +164,27 @@ export class DeusExModel extends EmptyModel {
   @property.array(Message, { required: true })
   conditions: Condition[];
 
-  @property()
+  @BoolProperty({ optional: true })
   showTechnicalInfo?: boolean;
 }
 
 @model()
 export class DeusExProcessModelRequest {
-  @rproperty()
+  @ObjectProperty(DeusExModel)
   baseModel: DeusExModel;
 
   @property.array(Event, { required: true })
   events: Event[];
 
-  @rproperty()
+  @NumberProperty()
   timestamp: number;
 }
 
 @model()
 export class DeusExProcessModelResponse {
-  @rproperty()
+  @ObjectProperty(DeusExModel)
   baseModel: DeusExModel;
 
-  @rproperty()
+  @ObjectProperty(DeusExModel)
   workModel: DeusExModel;
 }

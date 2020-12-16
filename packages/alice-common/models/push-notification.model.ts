@@ -1,20 +1,20 @@
-import { model, property } from '@loopback/repository';
-import { rproperty } from './alice-model-engine';
+import { model } from '@loopback/repository';
+import { ObjectProperty, StringProperty } from './alice-model-engine';
 
 @model()
 export class PushNotification {
-  @property({ type: 'string', required: true })
+  @StringProperty()
   title: string;
 
-  @property({ type: 'string', required: true })
+  @StringProperty()
   body: string;
 }
 
 @model()
 export class PubSubNotification {
-  @rproperty()
+  @StringProperty()
   topic: string;
 
-  @rproperty()
+  @ObjectProperty(Object)
   body: any;
 }

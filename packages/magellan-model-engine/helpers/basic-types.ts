@@ -1,4 +1,4 @@
-import { Condition, EmptyModel, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import { Condition, EmptyModel, NumberProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 import { model } from '@loopback/repository';
 
 export enum BiologicalSystems {
@@ -103,13 +103,13 @@ export interface System {
 
 @model()
 export class Change {
-  @rproperty()
+  @StringProperty()
   mID: string;
 
-  @rproperty()
+  @StringProperty()
   text: string;
 
-  @rproperty()
+  @NumberProperty()
   timestamp: number;
 }
 

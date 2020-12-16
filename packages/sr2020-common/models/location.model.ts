@@ -1,16 +1,16 @@
 import { model, property } from '@loopback/repository';
-import { EmptyModel, JsonColumn, rproperty } from '@alice/alice-common/models/alice-model-engine';
+import { EmptyModel, JsonColumn, NumberProperty, ObjectProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 
 @model()
 export class SpellTrace {
-  @rproperty() timestamp: number;
-  @rproperty() spellName: string;
-  @rproperty() casterAura: string;
-  @rproperty() metarace: string;
-  @rproperty() power: number;
-  @rproperty() magicFeedback: number;
+  @NumberProperty() timestamp: number;
+  @StringProperty() spellName: string;
+  @StringProperty() casterAura: string;
+  @StringProperty() metarace: string;
+  @NumberProperty() power: number;
+  @NumberProperty() magicFeedback: number;
 }
 
 @model()
@@ -29,16 +29,16 @@ export class Location extends EmptyModel {
 
 @model()
 export class LocationProcessRequest extends BaseModelProcessRequest {
-  @rproperty()
+  @ObjectProperty(Location)
   baseModel: Location;
 }
 
 @model()
 export class LocationProcessResponse extends BaseModelProcessResponse {
-  @rproperty()
+  @ObjectProperty(Location)
   baseModel: Location;
 
-  @rproperty()
+  @ObjectProperty(Location)
   workModel: Location;
 }
 

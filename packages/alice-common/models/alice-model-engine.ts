@@ -32,10 +32,6 @@ export function JsonNullableColumn() {
   }
 }
 
-export function rproperty() {
-  return property({ required: true });
-}
-
 export function StringProperty(options: { optional: boolean } = { optional: false }) {
   return property({ type: String, required: !options.optional });
 }
@@ -59,7 +55,7 @@ export function ObjectProperty<T extends unknown>(_itemType: new () => T) {
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 @model()
 export class EventRequest {
-  @rproperty()
+  @StringProperty()
   eventType: string;
 
   @property()
@@ -69,19 +65,19 @@ export class EventRequest {
 // This one doesn't modelId (server can figure it out from model.modelId).
 @model()
 export class IdLessEvent extends EventRequest {
-  @rproperty()
+  @NumberProperty()
   timestamp: number;
 }
 
 @model()
 export class Event extends IdLessEvent {
-  @rproperty()
+  @StringProperty()
   modelId: string;
 }
 
 @model()
 export class EventForModelType extends Event {
-  @rproperty()
+  @StringProperty()
   modelType: string;
 }
 
@@ -96,10 +92,10 @@ export interface ModelMetadata {
 
 @model()
 export class Timer {
-  @rproperty() name: string;
-  @rproperty() miliseconds: number;
-  @rproperty() eventType: string;
-  @rproperty() description: string;
+  @StringProperty() name: string;
+  @NumberProperty() miliseconds: number;
+  @StringProperty() eventType: string;
+  @StringProperty() description: string;
   @property({ type: Object }) data: any;
 }
 
@@ -109,42 +105,42 @@ export class Effect {
   // Doesn't really used by the scripts code, typical usage is to get effect
   // by id from some external static data storage (e.g. DB containing all existing effects.
   // If Effect is created from the code, can be skipped altogether.
-  @property()
+  @StringProperty({ optional: true })
   id?: string;
 
   // If set to false, Effect won't be applied. Can be useful to temporarily disable something
   // without removing the whole Effect.
-  @rproperty()
+  @BoolProperty()
   enabled: boolean;
 
   // 'Functional' effects can change enabled/disabed state of 'normal' effects.
   // In particular, all functional effects are applied before normal ones.
   // If your effect doesn't change enabled/disabled state - make it normal.
-  @rproperty()
+  @StringProperty()
   type: 'normal' | 'functional';
 
   // Name of TypeScript/JavaScript function which will be called to apply this Effect.
   // If set from the code, consider passing foo.name instead of "foo" so you will get compilation failure
   // if handler function is removed, but there is an effect referencing it.
-  @rproperty()
+  @StringProperty()
   handler: string;
 }
 
 @model({ settings: { strict: false } })
 export class Modifier {
-  @rproperty()
+  @StringProperty()
   mID: string;
 
-  @property()
+  @StringProperty({ optional: true })
   name?: string;
 
-  @property()
+  @StringProperty({ optional: true })
   class?: string;
 
-  @property()
+  @StringProperty({ optional: true })
   system?: string;
 
-  @rproperty()
+  @BoolProperty()
   enabled: boolean;
 
   @property.array(Effect, { required: true })
@@ -155,19 +151,19 @@ export class Modifier {
 
 @model()
 export class Condition {
-  @rproperty()
+  @StringProperty()
   id: string;
 
-  @rproperty()
+  @StringProperty()
   class: string;
 
-  @rproperty()
+  @StringProperty()
   text: string;
 
-  @property()
+  @StringProperty({ optional: true })
   details?: string;
 
-  @property()
+  @StringProperty({ optional: true })
   group?: string;
 
   @property()
@@ -241,11 +237,11 @@ export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog 
 
 @model()
 export class EmptyModel {
-  @rproperty()
+  @StringProperty()
   @PrimaryColumn()
   modelId: string;
 
-  @rproperty()
+  @NumberProperty()
   @Column({ type: 'bigint', transformer: new BigIntTransformer() })
   timestamp: number;
 

@@ -1,13 +1,13 @@
 import { model, property } from '@loopback/repository';
-import { Event, EventForModelType, AquiredObjects, EmptyModel, rproperty } from './alice-model-engine';
-import { PushNotification, PubSubNotification } from './push-notification.model';
+import { AquiredObjects, EmptyModel, Event, EventForModelType, NumberProperty } from './alice-model-engine';
+import { PubSubNotification, PushNotification } from './push-notification.model';
 
 @model()
 export class BaseModelProcessRequest {
   @property.array(Event, { required: true })
   events: Event[];
 
-  @rproperty()
+  @NumberProperty()
   timestamp: number;
 
   @property()
