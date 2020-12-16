@@ -37,7 +37,7 @@ export function rproperty() {
 }
 
 export function StringProperty(options: { optional: boolean } = { optional: false }) {
-  return property({ required: !options.optional });
+  return property({ type: String, required: !options.optional });
 }
 
 export function BoolProperty(options: { optional: boolean } = { optional: false }) {
