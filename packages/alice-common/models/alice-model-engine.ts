@@ -48,8 +48,8 @@ export function NumberProperty(options: { optional: boolean } = { optional: fals
   return property({ required: !options.optional });
 }
 
-export function ObjectProperty<T extends unknown>(_itemType: new () => T) {
-  return property({ required: true });
+export function ObjectProperty<T extends unknown>(_itemType: new () => T, options: { optional: boolean } = { optional: false }) {
+  return property({ required: !options.optional });
 }
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
@@ -58,7 +58,7 @@ export class EventRequest {
   @StringProperty()
   eventType: string;
 
-  @property()
+  @ObjectProperty(Object, { optional: true })
   data?: any;
 }
 
@@ -96,7 +96,7 @@ export class Timer {
   @NumberProperty() miliseconds: number;
   @StringProperty() eventType: string;
   @StringProperty() description: string;
-  @property({ type: Object }) data: any;
+  @ObjectProperty(Object) data: any;
 }
 
 @model()
@@ -143,7 +143,7 @@ export class Modifier {
   @BoolProperty()
   enabled: boolean;
 
-  @property.array(Effect, { required: true })
+  @ArrayProperty(Effect)
   effects: Effect[];
 
   [key: string]: any;
@@ -166,12 +166,12 @@ export class Condition {
   @StringProperty({ optional: true })
   group?: string;
 
-  @property()
+  @NumberProperty({ optional: true })
   level?: number;
 }
 export type PendingAquire = Array<[string, string]>;
 
-export interface AquiredObjects {
+export class AquiredObjects {
   [db: string]: {
     [id: string]: any;
   };
@@ -245,11 +245,11 @@ export class EmptyModel {
   @Column({ type: 'bigint', transformer: new BigIntTransformer() })
   timestamp: number;
 
-  @property.array(Modifier, { required: true })
+  @ArrayProperty(Modifier)
   @JsonColumn()
   modifiers: Modifier[];
 
-  @property.array(Timer, { required: true })
+  @ArrayProperty(Timer)
   @JsonColumn()
   timers: Timer[];
 }

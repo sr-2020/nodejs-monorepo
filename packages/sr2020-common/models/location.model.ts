@@ -1,5 +1,12 @@
-import { model, property } from '@loopback/repository';
-import { EmptyModel, JsonColumn, NumberProperty, ObjectProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
+import { model } from '@loopback/repository';
+import {
+  ArrayProperty,
+  EmptyModel,
+  JsonColumn,
+  NumberProperty,
+  ObjectProperty,
+  StringProperty,
+} from '@alice/alice-common/models/alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 
@@ -18,11 +25,11 @@ export class SpellTrace {
   name: 'location',
 })
 export class Location extends EmptyModel {
-  @property.array(SpellTrace, { required: true })
+  @ArrayProperty(SpellTrace)
   @JsonColumn()
   spellTraces: SpellTrace[];
 
-  @property()
+  @StringProperty()
   @Column({ default: 'aaaaabbbbbcccccddddd' })
   aura: string;
 }

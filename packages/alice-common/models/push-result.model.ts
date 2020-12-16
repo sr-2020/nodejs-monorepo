@@ -1,14 +1,15 @@
-import { Model, model, property } from '@loopback/repository';
+import { Model, model } from '@loopback/repository';
+import { NumberProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 
 @model()
 export class PushResult extends Model {
-  @property({ type: 'string', required: false })
+  @StringProperty({ optional: true })
   token_used?: string;
 
-  @property({ type: 'number', required: true })
+  @NumberProperty()
   success: number;
 
-  @property({ type: 'number', required: true })
+  @NumberProperty()
   failure: number;
 
   constructor(data?: Partial<PushResult>) {

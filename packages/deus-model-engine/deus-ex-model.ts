@@ -1,4 +1,5 @@
 import {
+  ArrayProperty,
   BoolProperty,
   Condition,
   EmptyModel,
@@ -7,7 +8,7 @@ import {
   ObjectProperty,
   StringProperty,
 } from '@alice/alice-common/models/alice-model-engine';
-import { model, property } from '@loopback/repository';
+import { model } from '@loopback/repository';
 
 @model()
 export class MemoryEntry {
@@ -50,7 +51,7 @@ export class Message {
 
 @model()
 export class DeusExModel extends EmptyModel {
-  @property.array(MemoryEntry, { required: true })
+  @ArrayProperty(MemoryEntry)
   memory: MemoryEntry[];
 
   @NumberProperty()
@@ -146,22 +147,22 @@ export class DeusExModel extends EmptyModel {
   @ObjectProperty(Object)
   mind: any;
 
-  @property.array(Number, { required: true })
+  @ArrayProperty(Number, { optional: true })
   genome?: number[];
 
-  @property.array(Number, { required: true })
+  @ArrayProperty(Number, { optional: true })
   systems?: number[];
 
   @StringProperty()
   password: string;
 
-  @property.array(Change, { required: true })
+  @ArrayProperty(Change)
   changes: Change[];
 
-  @property.array(Message, { required: true })
+  @ArrayProperty(Message)
   messages: Message[];
 
-  @property.array(Message, { required: true })
+  @ArrayProperty(Condition)
   conditions: Condition[];
 
   @BoolProperty({ optional: true })
@@ -173,7 +174,7 @@ export class DeusExProcessModelRequest {
   @ObjectProperty(DeusExModel)
   baseModel: DeusExModel;
 
-  @property.array(Event, { required: true })
+  @ArrayProperty(Event)
   events: Event[];
 
   @NumberProperty()

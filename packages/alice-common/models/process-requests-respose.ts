@@ -1,32 +1,32 @@
-import { model, property } from '@loopback/repository';
-import { AquiredObjects, EmptyModel, Event, EventForModelType, NumberProperty } from './alice-model-engine';
+import { model } from '@loopback/repository';
+import { AquiredObjects, ArrayProperty, EmptyModel, Event, EventForModelType, NumberProperty, ObjectProperty } from './alice-model-engine';
 import { PubSubNotification, PushNotification } from './push-notification.model';
 
 @model()
 export class BaseModelProcessRequest {
-  @property.array(Event, { required: true })
+  @ArrayProperty(Event)
   events: Event[];
 
   @NumberProperty()
   timestamp: number;
 
-  @property()
+  @ObjectProperty(AquiredObjects)
   aquiredObjects: AquiredObjects;
 }
 
 @model()
 export class BaseModelProcessResponse {
-  @property.array(EventForModelType, { required: true })
+  @ArrayProperty(EventForModelType)
   outboundEvents: EventForModelType[];
 
-  @property.array(PushNotification, { required: true })
+  @ArrayProperty(PushNotification)
   notifications: PushNotification[];
 
-  @property.array(PubSubNotification, { required: true })
+  @ArrayProperty(PubSubNotification)
   pubSubNotifications: PubSubNotification[];
 
   // TODO: Can we improve typings or do something else to make it less hacky?
-  @property()
+  @ObjectProperty(Object, { optional: true })
   tableResponse?: any;
 }
 
