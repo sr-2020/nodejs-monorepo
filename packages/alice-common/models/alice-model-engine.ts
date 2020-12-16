@@ -48,8 +48,8 @@ export function NumberProperty(options: { optional: boolean } = { optional: fals
   return property({ required: !options.optional });
 }
 
-export function ObjectProperty<T extends unknown>(_itemType: new () => T, options: { optional: boolean } = { optional: false }) {
-  return property({ required: !options.optional });
+export function ObjectProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
+  return property({ type: itemType, required: !options.optional });
 }
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).

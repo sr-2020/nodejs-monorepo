@@ -10,7 +10,7 @@ export class BaseModelProcessRequest {
   @NumberProperty()
   timestamp: number;
 
-  @ObjectProperty(AquiredObjects)
+  @ObjectProperty(Object)
   aquiredObjects: AquiredObjects;
 }
 
