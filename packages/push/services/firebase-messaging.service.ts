@@ -11,13 +11,21 @@ export class FirebaseMessagingServiceImpl implements FirebaseMessagingService {
 
   async send(recipient: string, title: string, body: string): Promise<PushResult> {
     const response = await this.httpService
-      .post<PushResult>('https://fcm.googleapis.com/fcm/send', {
-        to: recipient,
-        notification: {
-          body,
-          title,
+      .post<PushResult>(
+        'https://fcm.googleapis.com/fcm/send',
+        {
+          to: recipient,
+          notification: {
+            body,
+            title,
+          },
         },
-      })
+        {
+          headers: {
+            authorization: `key=${process.env.FIREBASE_SERVER_TOKEN}`,
+          },
+        },
+      )
       .toPromise();
     return response.data;
   }
