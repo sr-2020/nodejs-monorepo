@@ -1,10 +1,14 @@
-export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
-export type LogSource = 'default' | 'manager' | 'engine' | 'model';
+import { IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Duration } from 'moment';
 import { model, property } from '@loopback/repository';
 import { PubSubNotification, PushNotification } from './push-notification.model';
 import { EventCallback } from '../callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+
+export type LogLevel = 'debug' | 'info' | 'notice' | 'warn' | 'error' | 'crit' | 'alert' | 'emerg';
+export type LogSource = 'default' | 'manager' | 'engine' | 'model';
 
 class JsonToTextTransformer implements ValueTransformer {
   to = (v: any) => JSON.stringify(v);
@@ -33,23 +37,63 @@ export function JsonNullableColumn() {
 }
 
 export function StringProperty(options: { optional: boolean } = { optional: false }) {
-  return property({ type: String, required: !options.optional });
+  return (target: unknown, name: string) => {
+    ApiProperty()(target, name);
+    IsString()(target, name);
+    if (options.optional) {
+      IsOptional()(target, name);
+    }
+    property({ type: String, required: !options.optional })(target, name);
+  };
 }
 
 export function BoolProperty(options: { optional: boolean } = { optional: false }) {
-  return property({ required: !options.optional });
-}
-
-export function ArrayProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
-  return property.array(itemType, { required: !options.optional });
+  return (target: unknown, name: string) => {
+    ApiProperty()(target, name);
+    IsBoolean()(target, name);
+    if (options.optional) {
+      IsOptional()(target, name);
+    }
+    property({ required: !options.optional })(target, name);
+  };
 }
 
 export function NumberProperty(options: { optional: boolean } = { optional: false }) {
-  return property({ required: !options.optional });
+  return (target: unknown, name: string) => {
+    ApiProperty()(target, name);
+    IsNumber()(target, name);
+    if (options.optional) {
+      IsOptional()(target, name);
+    }
+    property({ required: !options.optional })(target, name);
+  };
+}
+
+export function ArrayProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return (target: object, name: string) => {
+    ApiProperty()(target, name);
+    IsArray()(target, name);
+    ValidateNested({ each: true })(target, name);
+    Type(() => itemType)(target, name);
+    if (options.optional) {
+      IsOptional()(target, name);
+    }
+    property.array(itemType, { required: !options.optional })(target, name);
+  };
 }
 
 export function ObjectProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
-  return property({ type: itemType, required: !options.optional });
+  return (target: unknown, name: string) => {
+    ApiProperty()(target, name);
+    IsObject()(target, name);
+    ValidateNested()(target, name);
+    Type(() => itemType)(target, name);
+    if (options.optional) {
+      IsOptional()(target, name);
+    }
+    property({ type: itemType, required: !options.optional })(target, name);
+  };
 }
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
