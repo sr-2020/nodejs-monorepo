@@ -26,7 +26,7 @@
           "builder": "@nrwl/node:build",
           "options": {
             "outputPath": "dist/packages/push",
-            "main": "packages/push/index.ts",
+            "main": "packages/push/main.ts",
             "tsConfig": "packages/push/tsconfig.app.json",
             "assets": ["packages/push/assets"]
           },

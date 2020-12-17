@@ -1,16 +1,16 @@
-import { PushApplication } from '../../application';
-import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
+import { Client, givenHttpServerConfig } from '@loopback/testlab';
 import { getDbConnectionOptions } from '@alice/push/connection';
 import { createConnection } from 'typeorm';
+import { INestApplication } from '@nestjs/common';
+import { createApp } from '@alice/push/application';
+import * as request from 'supertest';
 
 let connectionCreated = false;
 
 export async function setupApplication(): Promise<AppWithClient> {
   const restConfig = givenHttpServerConfig({});
 
-  const app = new PushApplication({
-    rest: restConfig,
-  });
+  const app = await createApp({ port: restConfig.port });
 
   if (!connectionCreated) {
     const prodConnectionOptions = getDbConnectionOptions();
@@ -18,14 +18,12 @@ export async function setupApplication(): Promise<AppWithClient> {
     connectionCreated = true;
   }
 
-  await app.start();
-
-  const client = createRestAppClient(app);
+  const client = request(app.getHttpServer());
 
   return { app, client };
 }
 
 export interface AppWithClient {
-  app: PushApplication;
+  app: INestApplication;
   client: Client;
 }

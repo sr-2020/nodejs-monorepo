@@ -1,11 +1,11 @@
 import { Client } from '@loopback/testlab';
-import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
 import { getRepository, Repository } from 'typeorm';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
+import { INestApplication } from '@nestjs/common';
 
 describe('TokenController', () => {
-  let app: PushApplication;
+  let app: INestApplication;
   let client: Client;
   let repo: Repository<FirebaseToken>;
 
@@ -15,7 +15,7 @@ describe('TokenController', () => {
   });
 
   afterEach(async () => {
-    await app.stop();
+    await app.close();
     await repo.clear();
   });
 

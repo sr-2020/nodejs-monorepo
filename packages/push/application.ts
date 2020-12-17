@@ -1,30 +1,26 @@
-import { ApplicationConfig } from '@loopback/core';
-import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
-import { RepositoryMixin } from '@loopback/repository';
-import { RestApplication } from '@loopback/rest';
-import { ServiceMixin } from '@loopback/service-proxy';
-import * as path from 'path';
-import { PingController } from '@alice/push/controllers/ping.controller';
-import { PushController } from '@alice/push/controllers/push.controller';
-import { FirebaseMessagingServiceProvider } from '@alice/push/services/firebase-messaging.service';
-import { FirebaseHttpApiDataSource } from '@alice/push/datasources/firebase-http-api.datasource';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '@alice/push/app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export class PushApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
-  constructor(options: ApplicationConfig = {}) {
-    super(options);
+export interface AppConfig {
+  port: number;
+}
 
-    // Set up default home page
-    this.static('/', path.join(__dirname, 'assets'));
+export async function createApp(config: AppConfig): Promise<INestApplication> {
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('');
 
-    // Customize @loopback/rest-explorer configuration here
-    this.bind(RestExplorerBindings.CONFIG).to({
-      path: '/explorer',
-    });
-    this.component(RestExplorerComponent);
+  const options = new DocumentBuilder()
+    .setTitle('Push service')
+    .setDescription('Service responsible for sending push notification to players.')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('explorer', app, document);
 
-    this.bind('controllers.PingController').toClass(PingController);
-    this.bind('controllers.PushController').toClass(PushController);
-    this.bind('services.FirebaseMessagingService').toProvider(FirebaseMessagingServiceProvider);
-    this.bind('datasources.FirebaseHttpApi').toClass(FirebaseHttpApiDataSource);
-  }
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.enableCors();
+
+  await app.listen(config.port);
+  return app;
 }

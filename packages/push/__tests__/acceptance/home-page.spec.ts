@@ -1,9 +1,9 @@
 import { Client } from '@loopback/testlab';
-import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
+import { INestApplication } from '@nestjs/common';
 
 describe('HomePage', () => {
-  let app: PushApplication;
+  let app: INestApplication;
   let client: Client;
 
   beforeEach(async () => {
@@ -11,7 +11,7 @@ describe('HomePage', () => {
   });
 
   afterEach(async () => {
-    await app.stop();
+    await app.close();
   });
 
   it('exposes a default home page', async () => {
@@ -26,6 +26,6 @@ describe('HomePage', () => {
       .get('/explorer/')
       .expect(200)
       .expect('Content-Type', /text\/html/)
-      .expect(/<title>LoopBack API Explorer/);
+      .expect(/<title>Swagger UI/);
   });
 });

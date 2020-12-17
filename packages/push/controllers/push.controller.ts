@@ -1,41 +1,27 @@
-import { param, post, put, requestBody } from '@loopback/rest';
 import { PushNotification } from '@alice/alice-common/models/push-notification.model';
 import { PushResult } from '@alice/alice-common/models/push-result.model';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
 import { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
-import { inject } from '@loopback/core';
 import { getRepository } from 'typeorm';
+import { Body, Controller, Inject, Param, Post, Put } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 
+@Controller()
 export class PushController {
-  constructor(
-    @inject('services.FirebaseMessagingService')
-    protected firebaseService: FirebaseMessagingService,
-  ) {}
+  constructor(@Inject('FirebaseMessagingService') private firebaseService: FirebaseMessagingService) {}
 
-  @put('/save_token', {
-    responses: {
-      '200': {
-        description: 'Token was successfully saved',
-        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
-      },
-    },
-  })
-  async saveToken(@requestBody() firebaseToken: FirebaseToken): Promise<Empty> {
+  @Put('/save_token')
+  @ApiResponse({ status: 200, type: Empty, description: 'Token was successfully saved' })
+  async saveToken(@Body() firebaseToken: FirebaseToken): Promise<Empty> {
     await getRepository(FirebaseToken).save(firebaseToken);
     return new Empty();
   }
 
-  @post('/send_notification/{id}', {
-    responses: {
-      '200': {
-        description: 'Successfully send notification',
-        content: { 'application/json': { schema: { 'x-ts-type': PushResult } } },
-      },
-    },
-  })
-  async sendNotification(@param.path.number('id') id: number, @requestBody() notification: PushNotification): Promise<PushResult> {
-    const receiverToken = await getRepository(FirebaseToken).findOne(id);
+  @Post('/send_notification/:id')
+  @ApiResponse({ status: 200, type: PushResult, description: 'Successfully send notification' })
+  async sendNotification(@Param('id') id: string, @Body() notification: PushNotification): Promise<PushResult> {
+    const receiverToken = await getRepository(FirebaseToken).findOne(Number(id));
 
     if (!receiverToken) {
       return new PushResult({ success: 0, failure: 1 });

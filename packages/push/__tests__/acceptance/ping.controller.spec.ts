@@ -1,9 +1,9 @@
 import { Client } from '@loopback/testlab';
-import { PushApplication } from '../../application';
 import { setupApplication } from './test-helper';
+import { INestApplication } from '@nestjs/common';
 
 describe('PingController', () => {
-  let app: PushApplication;
+  let app: INestApplication;
   let client: Client;
 
   beforeEach(async () => {
@@ -11,7 +11,7 @@ describe('PingController', () => {
   });
 
   afterEach(async () => {
-    await app.stop();
+    await app.close();
   });
 
   it('invokes GET /ping', async () => {
