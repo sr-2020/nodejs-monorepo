@@ -94,18 +94,18 @@ export class CharacterPage extends React.Component<
   { idToLoad?: string; addToast: AddToast },
   { character: Sr2020Character | undefined; desiredCharacterId: string }
 > {
-  state = { character: undefined, desiredCharacterId: '51614' };
+  state = { character: undefined, desiredCharacterId: '' };
 
   componentDidMount() {
     if (this.props.idToLoad) {
       this.setState({ desiredCharacterId: this.props.idToLoad });
-      this.loadCharacter();
+      this.loadCharacter(this.props.idToLoad);
     }
   }
 
-  async loadCharacter() {
+  async loadCharacter(id: string) {
     try {
-      const character = await getCharacter(this.state.desiredCharacterId);
+      const character = await getCharacter(id);
       this.setState({ character });
       this.props.addToast('Персонаж загружен', { appearance: 'success' });
     } catch (e) {
@@ -132,7 +132,7 @@ export class CharacterPage extends React.Component<
               onChange={(e) => this.setState({ desiredCharacterId: e.target.value })}
             />
             <InputGroup.Append>
-              <Button variant="outline-primary" onClick={() => this.loadCharacter()}>
+              <Button variant="outline-primary" onClick={() => this.loadCharacter(this.state.desiredCharacterId)}>
                 Обновить
               </Button>
             </InputGroup.Append>
