@@ -6,10 +6,11 @@ import { FirebaseMessagingService } from '@alice/push/services/firebase-messagin
 import { getRepository } from 'typeorm';
 import { Body, Controller, Inject, Param, Post, Put } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PushService } from '@alice/alice-common/services/push.service';
 
 @Controller()
 @ApiTags('Push')
-export class PushController {
+export class PushController implements PushService {
   constructor(@Inject('FirebaseMessagingService') private firebaseService: FirebaseMessagingService) {}
 
   @Put('/save_token')
@@ -21,7 +22,7 @@ export class PushController {
 
   @Post('/send_notification/:id')
   @ApiResponse({ status: 200, type: PushResult, description: 'Successfully send notification' })
-  async sendNotification(@Param('id') id: string, @Body() notification: PushNotification): Promise<PushResult> {
+  async send(@Param('id') id: string, @Body() notification: PushNotification): Promise<PushResult> {
     const receiverToken = await getRepository(FirebaseToken).findOne(Number(id));
 
     if (!receiverToken) {
