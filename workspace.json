@@ -103,38 +103,9 @@
     "deus-model-engine": {
       "root": "packages/deus-model-engine",
       "sourceRoot": "packages/deus-model-engine",
-      "projectType": "application",
-      "prefix": "deus-model-engine",
+      "projectType": "library",
       "schematics": {},
       "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/packages/deus-model-engine",
-            "main": "packages/deus-model-engine/index.ts",
-            "tsConfig": "packages/deus-model-engine/tsconfig.app.json",
-            "assets": ["packages/deus-model-engine/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "packages/deus-model-engine/environments/environment.ts",
-                  "with": "packages/deus-model-engine/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "deus-model-engine:build"
-          }
-        },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
