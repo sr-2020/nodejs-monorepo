@@ -1,5 +1,5 @@
 import { HttpModule, Module } from '@nestjs/common';
-import { PingController } from '@alice/push/controllers/ping.controller';
+import { PingController } from '@alice/alice-common/controllers/ping.controller';
 import { PushController } from '@alice/push/controllers/push.controller';
 import { FirebaseMessagingServiceImpl } from '@alice/push/services/firebase-messaging.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
