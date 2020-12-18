@@ -1,5 +1,4 @@
 import { Condition, EmptyModel, NumberProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
-import { model } from '@loopback/repository';
 
 export enum BiologicalSystems {
   Nervous,
@@ -101,7 +100,6 @@ export interface System {
   lastModified: number;
 }
 
-@model()
 export class Change {
   @StringProperty()
   mID: string;
