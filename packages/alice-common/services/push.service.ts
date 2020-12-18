@@ -5,7 +5,7 @@ import { PushNotification } from '../models/push-notification.model';
 import { PushResult } from '../models/push-result.model';
 
 export interface PushService {
-  send(recipient: number, notification: PushNotification): Promise<PushResult>;
+  send(recipient: string, notification: PushNotification): Promise<PushResult>;
 }
 
 export class PushServiceProvider implements Provider<PushService> {

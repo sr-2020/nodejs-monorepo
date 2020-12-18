@@ -105,7 +105,7 @@ export class AnyModelController<TModel extends EmptyModel> {
     const pubSubPromises: Promise<string>[] = [];
     for (const r of results) {
       for (const notification of r.notifications) {
-        promises.push(this.pushService.send(Number(r.baseModel.modelId), notification));
+        promises.push(this.pushService.send(r.baseModel.modelId, notification));
       }
 
       for (const pubSubNotification of r.pubSubNotifications) {
