@@ -5,9 +5,10 @@ import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
 import { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
 import { getRepository } from 'typeorm';
 import { Body, Controller, Inject, Param, Post, Put } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller()
+@ApiTags('Push')
 export class PushController {
   constructor(@Inject('FirebaseMessagingService') private firebaseService: FirebaseMessagingService) {}
 
