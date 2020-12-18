@@ -1,8 +1,8 @@
-import { Client } from '@loopback/testlab';
+import * as supertest from 'supertest';
 import { getApplication } from './testing/test-helper';
 
 describe('HomePage', () => {
-  let client: Client;
+  let client: supertest.SuperTest<supertest.Test>;
 
   beforeEach(async () => {
     client = (await getApplication()).client;
@@ -20,6 +20,6 @@ describe('HomePage', () => {
       .get('/explorer/')
       .expect(200)
       .expect('Content-Type', /text\/html/)
-      .expect(/<title>LoopBack API Explorer/);
+      .expect(/<title>Swagger UI/);
   });
 });

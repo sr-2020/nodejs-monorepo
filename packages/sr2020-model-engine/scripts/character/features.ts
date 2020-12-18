@@ -18,7 +18,7 @@ import {
 import { Duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from '@alice/sr2020-model-engine/scripts/character/util';
 import { TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
-import { HttpErrors } from '@loopback/rest';
+import * as HttpErrors from 'http-errors';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   addFeatureToModel(api.model, data.id);

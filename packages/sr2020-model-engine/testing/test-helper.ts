@@ -1,5 +1,6 @@
-import { SR2020ModelsApplication } from '../application';
-import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
+import { createApp } from '@alice/sr2020-model-engine/application';
+import * as supertest from 'supertest';
+import { INestApplication } from '@nestjs/common';
 
 let gAppWithClient: AppWithClient | null = null;
 
@@ -13,21 +14,13 @@ export async function getApplication(): Promise<AppWithClient> {
   return gAppWithClient;
 }
 
-async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({});
-
-  const app = new SR2020ModelsApplication({
-    rest: restConfig,
-  });
-
-  await app.start();
-
-  const client = createRestAppClient(app);
-
+export async function setupApplication(): Promise<AppWithClient> {
+  const app = await createApp({ port: 0 });
+  const client = supertest(app.getHttpServer());
   return { app, client };
 }
 
 export interface AppWithClient {
-  app: SR2020ModelsApplication;
-  client: Client;
+  app: INestApplication;
+  client: supertest.SuperTest<supertest.Test>;
 }

@@ -1,8 +1,8 @@
-import { Client } from '@loopback/testlab';
 import { getApplication } from '../testing/test-helper';
+import * as supertest from 'supertest';
 
 describe('PingController', () => {
-  let client: Client;
+  let client: supertest.SuperTest<supertest.Test>;
 
   beforeEach(async () => {
     client = (await getApplication()).client;

@@ -243,7 +243,7 @@
           "builder": "@nrwl/node:build",
           "options": {
             "outputPath": "dist/packages/sr2020-model-engine",
-            "main": "packages/sr2020-model-engine/index.ts",
+            "main": "packages/sr2020-model-engine/main.ts",
             "tsConfig": "packages/sr2020-model-engine/tsconfig.app.json",
             "assets": ["packages/sr2020-model-engine/assets"]
           },

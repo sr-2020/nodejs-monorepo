@@ -1,61 +1,29 @@
-import { get } from '@loopback/rest';
 import { kAllImplants } from '../scripts/character/implants_library';
 import { kAllPills } from '../scripts/character/chemo_library';
 import { kAllReagents } from '../scripts/qr/reagents_library';
 import { kAllEthicGroups } from '../scripts/character/ethics_library';
 import { kAllDrones } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
-import { Feature, kFeatureDescriptor } from '@alice/sr2020-common/models/sr2020-character.model';
+import { Feature } from '@alice/sr2020-common/models/sr2020-character.model';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 import { kAllFocuses } from '@alice/sr2020-model-engine/scripts/qr/focus_library';
 import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
 import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@Controller()
+@ApiTags('Dictionaries')
 export class DictionariesController {
-  @get('/features', {
-    summary: `Returns the list of implemented character features with their names and descriptions`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: kFeatureDescriptor,
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/features')
+  @ApiOperation({ summary: `Returns the list of implemented character features with their names and descriptions` })
+  @ApiResponse({ status: 200 })
   features(): Feature[] {
     return getAllFeatures();
   }
 
-  @get('/implants', {
-    summary: `Returns the list of implemented implants`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                  description: { type: 'string' },
-                  slot: { type: 'string' },
-                  grade: { type: 'string' },
-                  essenceCost: { type: 'number' },
-                  installDifficulty: { type: 'number' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/implants')
+  @ApiOperation({ summary: `Returns the list of implemented implants` })
+  @ApiResponse({ status: 200 })
   implants() {
     return kAllImplants.map((it) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,180 +32,51 @@ export class DictionariesController {
     });
   }
 
-  @get('/pills', {
-    summary: `Returns the list of implemented pills`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/pills')
+  @ApiOperation({ summary: `Returns the list of implemented pills` })
+  @ApiResponse({ status: 200 })
   pills(): { id: string; name: string }[] {
     return kAllPills.map((p) => ({ id: p.id, name: p.name }));
   }
 
-  @get('/reagents', {
-    summary: `Returns the list of implemented reagents`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/reagents')
+  @ApiOperation({ summary: `Returns the list of implemented reagents` })
+  @ApiResponse({ status: 200 })
   reagents(): { id: string; name: string }[] {
     return kAllReagents;
   }
 
-  @get('/drones', {
-    summary: `Returns the list of implemented drones`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                  description: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/drones')
+  @ApiOperation({ summary: `Returns the list of implemented drones` })
+  @ApiResponse({ status: 200 })
   drones(): { id: string; name: string; description: string }[] {
     return kAllDrones.map((p) => ({ id: p.id, name: p.name, description: p.description }));
   }
 
-  @get('/cyberdecks', {
-    summary: `Returns the list of implemented cyberdecks`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                  description: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/cyberdecks')
+  @ApiOperation({ summary: `Returns the list of implemented cyberdecks` })
+  @ApiResponse({ status: 200 })
   cyberdecks(): { id: string; name: string; description: string }[] {
     return kALlCyberDecks.map((p) => ({ id: p.id, name: p.name, description: p.description }));
   }
 
-  @get('/software', {
-    summary: `Returns the list of implemented software`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                  description: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/software')
+  @ApiOperation({ summary: `Returns the list of implemented software` })
+  @ApiResponse({ status: 200 })
   software(): { id: string; name: string; description: string }[] {
     return kAllSoftware.map((p) => ({ id: p.id, name: p.name, description: p.description }));
   }
 
-  @get('/focuses', {
-    summary: `Returns the list of implemented magic focuses`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/focuses')
+  @ApiOperation({ summary: `Returns the list of implemented magic focuses` })
+  @ApiResponse({ status: 200 })
   focuses(): { id: string; name: string }[] {
     return kAllFocuses.map((p) => ({ id: p.id, name: p.name }));
   }
 
-  @get('/ethic_groups', {
-    summary: `Returns the list of implemented ethic groups`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  name: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
+  @Get('/ethic_groups')
+  @ApiOperation({ summary: `Returns the list of implemented ethic groups` })
+  @ApiResponse({ status: 200 })
   ethicGroups(): { id: string; name: string }[] {
     return kAllEthicGroups.map((p) => ({ id: p.id, name: p.name }));
   }

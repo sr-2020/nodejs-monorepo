@@ -1,14 +1,12 @@
-import { get, HttpErrors, OperationObject, post, requestBody } from '@loopback/rest';
+import * as HttpErrors from 'http-errors';
 import {
   CharacterCreationRequest,
   Feature,
-  kFeatureDescriptor,
   Sr2020Character,
   Sr2020CharacterProcessRequest,
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Engine } from '@alice/alice-model-engine/engine';
-import { inject } from '@loopback/core';
 import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Location, LocationProcessRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
@@ -23,70 +21,72 @@ import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/charact
 import { templateSettings } from 'lodash';
 import * as Chance from 'chance';
 import { Sr2020ModelEngineHttpService } from '@alice/sr2020-common/services/model-engine.service';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 const chance = new Chance();
 
-function spec(modelType: string, responseType: any): OperationObject {
-  return {
-    summary: `Calculates state of provided ${modelType} model at given timestamp in the future (compared to model timestamp) given some events.`,
-    description: 'NB: This method is stateless. Caller should handle persistent storing of returned baseModel.',
-    responses: {
-      '200': {
-        description: 'Model processing is successfull. Response will contain calculated base/work model.',
-        content: {
-          'application/json': { schema: { 'x-ts-type': responseType } },
-        },
-      },
-      '422': {
-        description:
-          "There were problems with the request body. Either it doesn't conform to schema, or timestamp order is wrong. " +
-          'Required order is baseModel.timestamp < event.timestamp (for all events) < timestamp.',
-      },
-      '500': {
-        description:
-          'Model processing failed. Typical reasons are unsupported events, invalid event payloads, or exceptions in model scripts.',
-      },
-    },
+function PerModelApiResponse<T extends {}>(modelName: string, model: new () => T) {
+  return (target: unknown, name: string, descriptor: unknown) => {
+    ApiOperation({
+      summary: `Calculates state of provided ${modelName} model at given timestamp in the future (compared to model timestamp) given some events.`,
+      description: 'NB: This method is stateless. Caller should handle persistent storing of returned baseModel.',
+    })(target, name, descriptor);
+    ApiResponse({
+      status: 200,
+      description: 'Model processing is successful. Response will contain calculated base/work model.',
+      type: model,
+    })(target, name, descriptor);
+    ApiResponse({
+      status: 422,
+      description:
+        "There were problems with the request body. Either it doesn't conform to schema, or timestamp order is wrong. " +
+        'Required order is baseModel.timestamp < event.timestamp (for all events) < timestamp.',
+    })(target, name, descriptor);
+    ApiResponse({
+      status: 500,
+      description:
+        'Model processing failed. Typical reasons are unsupported events, invalid event payloads, or exceptions in model scripts.',
+    })(target, name, descriptor);
   };
 }
 
+@Controller()
+@ApiTags('Model Engine')
 export class ModelEngineController implements Sr2020ModelEngineHttpService {
   constructor(
-    @inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
-    @inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,
-    @inject(Engine.bindingKey + '.QrCode') private _qrCodeEngine: Engine<QrCode>,
+    @Inject(Engine.bindingKey + '.Sr2020Character') private _characterEngine: Engine<Sr2020Character>,
+    @Inject(Engine.bindingKey + '.Location') private _locationEngine: Engine<Location>,
+    @Inject(Engine.bindingKey + '.QrCode') private _qrCodeEngine: Engine<QrCode>,
   ) {
     // Needed to allow {{ variableName }} substitutions in ability descriptions.
     templateSettings.interpolate = /{{([\s\S]+?)}}/g;
   }
 
-  @post('/character/process', spec('character', Sr2020CharacterProcessResponse))
-  async processCharacter(@requestBody() req: Sr2020CharacterProcessRequest): Promise<Sr2020CharacterProcessResponse> {
+  @Post('/character/process')
+  @PerModelApiResponse('character', Sr2020CharacterProcessResponse)
+  async processCharacter(@Body() req: Sr2020CharacterProcessRequest): Promise<Sr2020CharacterProcessResponse> {
     return this.process(this._characterEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
-  @post('/location/process', spec('location', LocationProcessResponse))
-  async processLocation(@requestBody() req: LocationProcessRequest): Promise<LocationProcessResponse> {
+  @Post('/location/process')
+  @PerModelApiResponse('location', LocationProcessResponse)
+  async processLocation(@Body() req: LocationProcessRequest): Promise<LocationProcessResponse> {
     return this.process(this._locationEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
-  @post('/qr/process', spec('qr', QrCodeProcessResponse))
-  async processQr(@requestBody() req: QrCodeProcessRequest): Promise<QrCodeProcessResponse> {
+  @PerModelApiResponse('qr', QrCodeProcessResponse)
+  async processQr(@Body() req: QrCodeProcessRequest): Promise<QrCodeProcessResponse> {
     return this.process(this._qrCodeEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
-  @post('/character/default', {
+  @Post('/character/default')
+  @ApiOperation({
     summary: 'Returns default character object.',
     description: 'Returns default character object. Some field can be randomly populated, other will have default "empty" state.',
-    responses: {
-      '200': {
-        content: {
-          'application/json': { schema: { 'x-ts-type': Sr2020Character } },
-        },
-      },
-    },
   })
-  async defaultCharacter(@requestBody() req: CharacterCreationRequest): Promise<Sr2020Character> {
+  @ApiResponse({ status: 200, type: Sr2020Character })
+  async defaultCharacter(@Body() req: CharacterCreationRequest): Promise<Sr2020Character> {
     const auraChars: string[] = [];
     for (let i = 0; i < AURA_LENGTH; ++i) auraChars.push(chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }));
     const aura = auraChars.join('');
@@ -264,37 +264,22 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
     return result;
   }
 
-  @get('/character/available_features', {
-    summary: `Returns the list of features provided character can buy for karma`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: kFeatureDescriptor,
-            },
-          },
-        },
-      },
-    },
+  @Get('/character/available_features')
+  @ApiOperation({
+    summary: 'Returns the list of features provided character can buy for karma',
   })
-  async availableFeatures(@requestBody() req: Sr2020Character): Promise<Feature[]> {
+  @ApiResponse({ status: 200 })
+  async availableFeatures(@Body() req: Sr2020Character): Promise<Feature[]> {
     return getAllAvailableFeatures(req);
   }
 
-  @post('/location/default', {
+  @Post('/location/default')
+  @ApiOperation({
     summary: 'Returns default location object.',
     description: 'Returns default location object. Some field can be randomly populated, other will have default "empty" state.',
-    responses: {
-      '200': {
-        content: {
-          'application/json': { schema: { 'x-ts-type': Location } },
-        },
-      },
-    },
   })
-  async defaultLocation(@requestBody() _: Empty): Promise<Location> {
+  @ApiResponse({ status: 200, type: Location })
+  async defaultLocation(@Body() _: Empty): Promise<Location> {
     const auraChars: string[] = [];
     for (let i = 0; i < AURA_LENGTH; ++i) auraChars.push(chance.character({ pool: 'abcdefghijklmnopqrstuvwxyz' }));
     const aura = auraChars.join('');
