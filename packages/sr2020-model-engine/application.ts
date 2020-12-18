@@ -18,7 +18,7 @@ export async function createApp(config: AppConfig): Promise<INestApplication> {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('explorer', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: false }));
   app.enableCors();
 
   await app.listen(config.port);
