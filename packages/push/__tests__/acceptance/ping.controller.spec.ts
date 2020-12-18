@@ -1,10 +1,10 @@
-import { Client } from '@loopback/testlab';
+import * as supertest from 'supertest';
 import { setupApplication } from './test-helper';
 import { INestApplication } from '@nestjs/common';
 
 describe('PingController', () => {
   let app: INestApplication;
-  let client: Client;
+  let client: supertest.SuperTest<supertest.Test>;
 
   beforeEach(async () => {
     ({ app, client } = await setupApplication());

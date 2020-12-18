@@ -1,16 +1,13 @@
-import { Client, givenHttpServerConfig } from '@loopback/testlab';
 import { getDbConnectionOptions } from '@alice/push/connection';
 import { createConnection } from 'typeorm';
 import { INestApplication } from '@nestjs/common';
 import { createApp } from '@alice/push/application';
-import * as request from 'supertest';
+import * as supertest from 'supertest';
 
 let connectionCreated = false;
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({});
-
-  const app = await createApp({ port: restConfig.port });
+  const app = await createApp({ port: 0 });
 
   if (!connectionCreated) {
     const prodConnectionOptions = getDbConnectionOptions();
@@ -18,12 +15,12 @@ export async function setupApplication(): Promise<AppWithClient> {
     connectionCreated = true;
   }
 
-  const client = request(app.getHttpServer());
+  const client = supertest(app.getHttpServer());
 
   return { app, client };
 }
 
 export interface AppWithClient {
   app: INestApplication;
-  client: Client;
+  client: supertest.SuperTest<supertest.Test>;
 }

@@ -1,4 +1,4 @@
-import { Client } from '@loopback/testlab';
+import * as supertest from 'supertest';
 import { setupApplication } from './test-helper';
 import { getRepository, Repository } from 'typeorm';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
@@ -6,7 +6,7 @@ import { INestApplication } from '@nestjs/common';
 
 describe('TokenController', () => {
   let app: INestApplication;
-  let client: Client;
+  let client: supertest.SuperTest<supertest.Test>;
   let repo: Repository<FirebaseToken>;
 
   beforeEach(async () => {
