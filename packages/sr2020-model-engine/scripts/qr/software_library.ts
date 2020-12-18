@@ -27,12 +27,12 @@ export const kAllSoftware: Software[] = [
   {
     id: 'soft-backdoor',
     name: 'бэкдор',
-    description: 'Закладка на чужом хосте, позвоялющая зайти сзади',
+    description: 'закладка на чужом хосте, позволяющая зайти в обход правил безопасности',
     ram: 6,
     kind: 'deployment',
     charges: 1,
   },
-  { id: 'soft-autobot', name: 'автобот', description: 'слабый, тупой и агресивный лед', ram: 12, kind: 'deployment', charges: 1 },
+  { id: 'soft-autobot', name: 'автобот', description: 'слабый, тупой и агрессивный лед', ram: 12, kind: 'deployment', charges: 1 },
   { id: 'soft-glassscreen', name: 'гласскрин', description: 'фиговый листок вашей защиты', ram: 4, kind: 'armor', charges: 5 },
   {
     id: 'soft-steelscreen',
@@ -67,7 +67,7 @@ export const kAllSoftware: Software[] = [
   {
     id: 'soft-grinder',
     name: 'мясокрутка',
-    description: 'да серьезно?! эксплойт нейропривода, выжиагающий мозг подключенного?! биофидбек?',
+    description: 'да серьезно?! эксплойт нейропривода, выжигающий мозг подключенного?! биофидбек?',
     ram: 10,
     kind: 'weapon',
     charges: 5,
@@ -88,11 +88,11 @@ export const kAllSoftware: Software[] = [
     kind: 'deployment',
     charges: 1,
   },
-  { id: 'sofr-void', name: 'void', description: 'эта хрень убивает. навесегда.', ram: 2, kind: 'weapon', charges: 1 },
+  { id: 'sofr-void', name: 'void', description: 'эта хрень убивает. навсегда.', ram: 2, kind: 'weapon', charges: 1 },
   {
     id: 'soft-cypter',
     name: 'криптер',
-    description: 'это реализация алгоритма Хальберстама. Криптография? давай-досвидания!',
+    description: 'это реализация алгоритма Хальберстама. Криптография? давай-до-свидания!',
     ram: 20,
     kind: 'deployment',
     charges: 1,
