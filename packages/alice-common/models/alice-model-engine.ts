@@ -38,7 +38,7 @@ export function JsonNullableColumn() {
 
 export function StringProperty(options: { optional: boolean } = { optional: false }) {
   return (target: unknown, name: string) => {
-    ApiProperty()(target, name);
+    ApiProperty({ required: !options.optional })(target, name);
     IsString()(target, name);
     if (options.optional) {
       IsOptional()(target, name);
@@ -49,7 +49,7 @@ export function StringProperty(options: { optional: boolean } = { optional: fals
 
 export function BoolProperty(options: { optional: boolean } = { optional: false }) {
   return (target: unknown, name: string) => {
-    ApiProperty()(target, name);
+    ApiProperty({ required: !options.optional })(target, name);
     IsBoolean()(target, name);
     if (options.optional) {
       IsOptional()(target, name);
@@ -60,7 +60,7 @@ export function BoolProperty(options: { optional: boolean } = { optional: false 
 
 export function NumberProperty(options: { optional: boolean } = { optional: false }) {
   return (target: unknown, name: string) => {
-    ApiProperty()(target, name);
+    ApiProperty({ required: !options.optional })(target, name);
     IsNumber()(target, name);
     if (options.optional) {
       IsOptional()(target, name);
@@ -72,7 +72,7 @@ export function NumberProperty(options: { optional: boolean } = { optional: fals
 export function ArrayProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return (target: object, name: string) => {
-    ApiProperty({ type: itemType, isArray: true })(target, name);
+    ApiProperty({ type: itemType, isArray: true, required: !options.optional })(target, name);
     IsArray()(target, name);
     if (itemType.name == 'String') {
       IsString({ each: true });
@@ -89,7 +89,7 @@ export function ArrayProperty<T extends unknown>(itemType: new () => T, options:
 
 export function ObjectProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
   return (target: unknown, name: string) => {
-    ApiProperty()(target, name);
+    ApiProperty({ required: !options.optional })(target, name);
     IsObject()(target, name);
     ValidateNested()(target, name);
     Type(() => itemType)(target, name);
