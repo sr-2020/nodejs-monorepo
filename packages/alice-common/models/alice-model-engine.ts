@@ -72,7 +72,7 @@ export function NumberProperty(options: { optional: boolean } = { optional: fals
 export function ArrayProperty<T extends unknown>(itemType: new () => T, options: { optional: boolean } = { optional: false }) {
   // eslint-disable-next-line @typescript-eslint/ban-types
   return (target: object, name: string) => {
-    ApiProperty()(target, name);
+    ApiProperty({ type: itemType, isArray: true })(target, name);
     IsArray()(target, name);
     if (itemType.name == 'String') {
       IsString({ each: true });
