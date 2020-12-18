@@ -1,4 +1,4 @@
-import { model, property } from '@loopback/repository';
+import { model } from '@loopback/repository';
 import {
   ArrayProperty,
   BigIntTransformer,
@@ -826,9 +826,9 @@ export class Sr2020Character extends EmptyModel {
   @JsonColumn()
   chemoConsumptionRecords: ChemoConsumptionRecord[];
 
-  @property({ type: 'null' })
+  @ObjectProperty(AnalyzedBody, { optional: true })
   @JsonNullableColumn()
-  analyzedBody: null;
+  analyzedBody?: AnalyzedBody;
 
   @ObjectProperty(Rigging)
   @Column((type) => Rigging, { prefix: 'rigging' })
