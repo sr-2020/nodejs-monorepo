@@ -74,8 +74,12 @@ export function ArrayProperty<T extends unknown>(itemType: new () => T, options:
   return (target: object, name: string) => {
     ApiProperty()(target, name);
     IsArray()(target, name);
-    ValidateNested({ each: true })(target, name);
-    Type(() => itemType)(target, name);
+    if (itemType.name == 'String') {
+      IsString({ each: true });
+    } else {
+      ValidateNested({ each: true })(target, name);
+      Type(() => itemType)(target, name);
+    }
     if (options.optional) {
       IsOptional()(target, name);
     }
