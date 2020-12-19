@@ -1,21 +1,18 @@
-import { getService } from '@loopback/service-proxy';
-import { inject, Provider } from '@loopback/core';
-import { PushHttpApiDataSource } from '../datasources/push-http-api.datasource';
 import { PushNotification } from '../models/push-notification.model';
 import { PushResult } from '../models/push-result.model';
+import { HttpService, Injectable } from '@nestjs/common';
 
 export interface PushService {
   send(recipient: string, notification: PushNotification): Promise<PushResult>;
 }
 
-export class PushServiceProvider implements Provider<PushService> {
-  constructor(
-    // PushHttpApi must match the name property in the datasource json file
-    @inject('datasources.PushHttpApi')
-    protected dataSource: PushHttpApiDataSource = new PushHttpApiDataSource(),
-  ) {}
+@Injectable()
+export class PushServiceImpl implements PushService {
+  constructor(private httpService: HttpService) {}
 
-  value(): Promise<PushService> {
-    return getService(this.dataSource);
+  async send(recipient: string, notification: PushNotification): Promise<PushResult> {
+    const baseURL: string = process.env.PUSH_URL ?? 'http://push';
+    const response = await this.httpService.post<PushResult>(`${baseURL}/send_notification/${recipient}`, notification).toPromise();
+    return response.data;
   }
 }
