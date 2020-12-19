@@ -1,5 +1,4 @@
 import { HandlerContext } from '@loopback/rest/dist/types';
-import { HttpError } from 'http-errors';
 import { inject } from '@loopback/core';
 import { LoggerService } from './logger.service';
 import { RejectProvider } from '@loopback/rest';
@@ -15,14 +14,10 @@ export class CustomRejectProvider extends RejectProvider {
     });
   }
 
-  action({ request, response }: HandlerContext, error: Error) {
-    const statusCode = (error as HttpError).statusCode;
+  action({ request, response }: HandlerContext, error: any) {
+    const statusCode = error?.response?.status;
     if (statusCode) {
-      try {
-        error = <HttpError>JSON.parse(error.message) ?? error;
-      } catch (e) {
-        // This is fine, probably error was returned by non-Nest service, so let's keep current error value
-      }
+      error = error?.response?.data ?? error;
       if (statusCode == 400) {
         // UserVisibleError goes here, no need to alert or warn in logs.
         this.logger.info(error.message, error);
