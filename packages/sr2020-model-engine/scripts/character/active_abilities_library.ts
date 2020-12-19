@@ -2112,7 +2112,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         allowedTypes: ['cyberdeck'],
       },
     ],
-    cooldownMinutes: 30,
+    cooldownMinutes: 3,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     availability: 'master',
