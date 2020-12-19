@@ -8,9 +8,7 @@ import {
   ObjectProperty,
   StringProperty,
 } from '@alice/alice-common/models/alice-model-engine';
-import { model } from '@loopback/repository';
 
-@model()
 export class MemoryEntry {
   @StringProperty()
   title: string;
@@ -25,7 +23,6 @@ export class MemoryEntry {
   mID: string;
 }
 
-@model()
 export class Change {
   @StringProperty()
   mID: string;
@@ -37,7 +34,6 @@ export class Change {
   timestamp: number;
 }
 
-@model()
 export class Message {
   @StringProperty()
   mID: string;
@@ -49,7 +45,6 @@ export class Message {
   text: string;
 }
 
-@model()
 export class DeusExModel extends EmptyModel {
   @ArrayProperty(MemoryEntry)
   memory: MemoryEntry[];
@@ -169,7 +164,6 @@ export class DeusExModel extends EmptyModel {
   showTechnicalInfo?: boolean;
 }
 
-@model()
 export class DeusExProcessModelRequest {
   @ObjectProperty(DeusExModel)
   baseModel: DeusExModel;
@@ -181,7 +175,6 @@ export class DeusExProcessModelRequest {
   timestamp: number;
 }
 
-@model()
 export class DeusExProcessModelResponse {
   @ObjectProperty(DeusExModel)
   baseModel: DeusExModel;
