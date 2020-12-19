@@ -16,21 +16,21 @@ export class CustomRejectProvider extends RejectProvider {
   }
 
   action({ request, response }: HandlerContext, error: Error) {
-    if ((error as HttpError).statusCode) {
+    const statusCode = (error as HttpError).statusCode;
+    if (statusCode) {
       try {
-        error = <HttpError>JSON.parse(error.message).error ?? error;
+        error = <HttpError>JSON.parse(error.message) ?? error;
       } catch (e) {
-        // This is fine, probably error was returned by non-Loopback service, so let's keep current error value
+        // This is fine, probably error was returned by non-Nest service, so let's keep current error value
       }
-      const httpError = error as HttpError;
-      if (httpError.statusCode == 400) {
+      if (statusCode == 400) {
         // UserVisibleError goes here, no need to alert or warn in logs.
         this.logger.info(error.message, error);
-      } else if (httpError.statusCode == 404) {
+      } else if (statusCode == 404) {
         // Typically still caused by a user doing something weird, no need to alert,
         // but it's nice to have an error in logs.
         this.logger.error(error.message, error);
-      } else if (httpError.statusCode == 422) {
+      } else if (statusCode == 422) {
         this.logger.error(error.message, error);
       } else {
         this.logger.error(error.message, error);
