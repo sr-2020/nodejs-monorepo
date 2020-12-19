@@ -83,6 +83,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
     return this.process(this._locationEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
   }
 
+  @Post('/qr/process')
   @PerModelApiResponse('qr', QrCodeProcessResponse)
   async processQr(@Body() req: QrCodeProcessRequest): Promise<QrCodeProcessResponse> {
     return this.process(this._qrCodeEngine, req.baseModel, req.events, req.timestamp, req.aquiredObjects);
