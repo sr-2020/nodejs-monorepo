@@ -96,18 +96,18 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
 }
 
 export class QrPage extends React.Component<{ idToLoad?: string; addToast: AddToast }, { qr: QrCode | undefined; desiredQrId: string }> {
-  state = { qr: undefined, desiredQrId: '1' };
+  state = { qr: undefined, desiredQrId: '' };
 
   componentDidMount() {
     if (this.props.idToLoad) {
       this.setState({ desiredQrId: this.props.idToLoad });
-      this.loadQr();
+      this.loadQr(this.props.idToLoad);
     }
   }
 
-  async loadQr() {
+  async loadQr(id: string) {
     try {
-      const qr = await getQr(this.state.desiredQrId);
+      const qr = await getQr(id);
       this.setState({ qr });
       this.props.addToast('QR загружен', { appearance: 'success' });
     } catch (e) {
@@ -127,7 +127,7 @@ export class QrPage extends React.Component<{ idToLoad?: string; addToast: AddTo
             </InputGroup.Prepend>
             <FormControl type="number" value={this.state.desiredQrId} onChange={(e) => this.setState({ desiredQrId: e.target.value })} />
             <InputGroup.Append>
-              <Button variant="outline-primary" onClick={() => this.loadQr()}>
+              <Button variant="outline-primary" onClick={() => this.loadQr(this.state.desiredQrId)}>
                 Обновить
               </Button>
             </InputGroup.Append>

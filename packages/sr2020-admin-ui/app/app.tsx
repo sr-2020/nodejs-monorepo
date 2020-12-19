@@ -13,7 +13,7 @@ export function App() {
   const { addToast } = useToasts();
   const history = useHistory();
   const maybeCharacterId = useRouteMatch<{ id: string }>('/character/:id');
-  const maybeQrId = useRouteMatch<{ id: string }>('/qr/:xd');
+  const maybeQrId = useRouteMatch<{ id: string }>('/qr/:id');
   const tab = useLocation().pathname.split('/')[1] || 'character';
   const setPage = (page: string) => history.push('/' + page);
 
