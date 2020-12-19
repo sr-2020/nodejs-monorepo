@@ -99,5 +99,5 @@ export const kAllSoftware: Software[] = [
   },
   { id: 'soft-item1', name: 'заглушка1', description: '', ram: 10, kind: 'deployment', charges: 1 },
   { id: 'soft-item2', name: 'заглушка2', description: '', ram: 10, kind: 'deployment', charges: 1 },
-  { id: 'soft-item2', name: 'заглушка2', description: '', ram: 10, kind: 'deployment', charges: 1 },
+  { id: 'soft-item3', name: 'заглушка3', description: '', ram: 10, kind: 'deployment', charges: 1 },
 ];
