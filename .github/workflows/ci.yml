@@ -37,42 +37,60 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Build & push to dockerhub
-        uses: elgohr/Publish-Docker-Github-Action@master
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          name: sr2020/models-manager
-          tags: ${{ github.sha }}
-          dockerfile: packages/sr2020-models-manager/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: packages/sr2020-models-manager/Dockerfile
+          push: true
+          tags: sr2020/models-manager:${{ github.sha }}
   docker_model_engine:
     needs: [test]
     if: needs.test.outputs.sr2020_model_engine_affected == 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Build & push to dockerhub
-        uses: elgohr/Publish-Docker-Github-Action@master
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          name: sr2020/model-engine
-          tags: ${{ github.sha }}
-          dockerfile: packages/sr2020-model-engine/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: packages/sr2020-model-engine/Dockerfile
+          push: true
+          tags: sr2020/model-engine:${{ github.sha }}
   docker_push:
     needs: [test]
     if: needs.test.outputs.sr2020_push_affected == 1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Build & push to dockerhub
-        uses: elgohr/Publish-Docker-Github-Action@master
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          name: sr2020/push
-          tags: ${{ github.sha }}
-          dockerfile: packages/push/Dockerfile
           username: sr2020
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: packages/push/Dockerfile
+          push: true
+          tags: sr2020/push:${{ github.sha }}
   deploy_admin_ui:
     runs-on: ubuntu-latest
     needs: [test]
