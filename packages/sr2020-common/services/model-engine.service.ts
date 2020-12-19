@@ -32,8 +32,10 @@ export class Sr2020ModelEngineService implements ModelEngineService {
 
 @Injectable()
 export class Sr2020ModelEngineHttpServiceRemote implements Sr2020ModelEngineHttpService {
-  readonly baseURL: string = process.env.MODEL_ENGINE_URL ?? 'http://model-engine';
-  constructor(private httpService: HttpService) {}
+  baseURL: string;
+  constructor(private httpService: HttpService) {
+    this.baseURL = process.env.MODEL_ENGINE_URL ?? 'http://model-engine';
+  }
 
   async defaultCharacter(req: CharacterCreationRequest): Promise<Sr2020Character> {
     const response = await this.httpService.post<Sr2020Character>(`${this.baseURL}/character/default`, req).toPromise();
