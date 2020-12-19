@@ -15,8 +15,7 @@ import { LoggerServiceProvider } from '@alice/alice-models-manager/services/logg
 import { EventDispatcherServiceProvider } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { PushServiceImpl } from '@alice/alice-common/services/push.service';
 import { PubSubServiceProvider } from '@alice/alice-models-manager/services/pubsub.service';
-import { ModelEngineHttpApiDataSource } from '@alice/sr2020-common/datasources/model-engine-http-api.datasource';
-import { Sr2020ModelEngineHttpServiceProvider, Sr2020ModelEngineServiceProvider } from '@alice/sr2020-common/services/model-engine.service';
+import { Sr2020ModelEngineHttpServiceRemote, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { HttpService } from '@nestjs/common';
 
 export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestApplication)) {
@@ -39,15 +38,16 @@ export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestA
     this.bind('controllers.LocationController').toClass(LocationController);
     this.bind('controllers.QrCodeController').toClass(QrCodeController);
 
-    this.bind('datasources.ModelEngineHttpApi').toClass(ModelEngineHttpApiDataSource);
-
     this.bind('services.TimeService').toProvider(TimeServiceProvider);
     this.bind('services.ModelAquirerService').toProvider(ModelAquirerServiceProvider);
     this.bind('services.LoggerService').toProvider(LoggerServiceProvider);
     this.bind('services.EventDispatcherService').toProvider(EventDispatcherServiceProvider);
-    this.bind('services.ModelEngineService').toProvider(Sr2020ModelEngineServiceProvider);
-    this.bind('services.ModelEngineHttpService').toProvider(Sr2020ModelEngineHttpServiceProvider);
-    this.bind('services.PushService').to(new PushServiceImpl(new HttpService()));
+
+    const httpService = new HttpService();
+    const modelEngineHttpService = new Sr2020ModelEngineHttpServiceRemote(httpService);
+    this.bind('services.ModelEngineService').to(new Sr2020ModelEngineService(modelEngineHttpService));
+    this.bind('services.ModelEngineHttpService').to(modelEngineHttpService);
+    this.bind('services.PushService').to(new PushServiceImpl(httpService));
     this.bind('services.PubSubService').toProvider(PubSubServiceProvider);
   }
 }
