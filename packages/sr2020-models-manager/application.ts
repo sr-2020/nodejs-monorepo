@@ -14,7 +14,7 @@ import { ModelAquirerServiceProvider } from '@alice/sr2020-models-manager/servic
 import { LoggerServiceProvider } from '@alice/alice-models-manager/services/logger.service';
 import { EventDispatcherServiceProvider } from '@alice/sr2020-models-manager/services/event-dispatcher.service';
 import { PushServiceImpl } from '@alice/alice-common/services/push.service';
-import { PubSubServiceProvider } from '@alice/alice-models-manager/services/pubsub.service';
+import { getPubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { Sr2020ModelEngineHttpServiceRemote, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { HttpService } from '@nestjs/common';
 
@@ -48,6 +48,6 @@ export class ModelsManagerApplication extends ServiceMixin(RepositoryMixin(RestA
     this.bind('services.ModelEngineService').to(new Sr2020ModelEngineService(modelEngineHttpService));
     this.bind('services.ModelEngineHttpService').to(modelEngineHttpService);
     this.bind('services.PushService').to(new PushServiceImpl(httpService));
-    this.bind('services.PubSubService').toProvider(PubSubServiceProvider);
+    this.bind('services.PubSubService').to(getPubSubService());
   }
 }

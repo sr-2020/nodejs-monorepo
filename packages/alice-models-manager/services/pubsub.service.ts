@@ -1,5 +1,4 @@
 import { PubSub } from '@google-cloud/pubsub';
-import { Provider } from '@loopback/core';
 
 const kEnablePubSub: boolean = process.env.ENABLE_PUBSUB != 'false';
 const kPubSubTopicPrefix: string = process.env.PUBSUB_TOPIC_PREFIX ?? '';
@@ -22,8 +21,6 @@ export class NoOpPubSubServiceImpl implements PubSubService {
   }
 }
 
-export class PubSubServiceProvider implements Provider<PubSubService> {
-  value(): PubSubService {
-    return kEnablePubSub ? new PubSubServiceImpl() : new NoOpPubSubServiceImpl();
-  }
+export function getPubSubService(): PubSubService {
+  return kEnablePubSub ? new PubSubServiceImpl() : new NoOpPubSubServiceImpl();
 }
