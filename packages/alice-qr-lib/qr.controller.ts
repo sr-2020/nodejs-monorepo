@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, Query, Redirect } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Query, Redirect } from '@nestjs/common';
 import { EncodedQrData, QrData } from '@alice/alice-qr-lib/qr.dto';
 import { decode, encode } from './qr';
 import { ApiResponse } from '@nestjs/swagger';
@@ -12,7 +12,7 @@ export class QrController {
       return decode(query.content);
     } catch (e) {
       console.warn('exception in /decode: ', e);
-      throw new HttpException('Wrong data format', 400);
+      throw new BadRequestException('Wrong data format');
     }
   }
 
@@ -23,7 +23,7 @@ export class QrController {
       return { content: encode(query) };
     } catch (e) {
       console.warn('exception in /encode: ', e);
-      throw new HttpException('Wrong data format', 400);
+      throw new BadRequestException('Wrong data format');
     }
   }
 
@@ -38,7 +38,7 @@ export class QrController {
       };
     } catch (e) {
       console.warn('exception in /encode_to_image: ', e);
-      throw new HttpException('Wrong data format', 400);
+      throw new BadRequestException('Wrong data format');
     }
   }
 }

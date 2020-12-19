@@ -1,4 +1,3 @@
-import * as HttpErrors from 'http-errors';
 import {
   CharacterCreationRequest,
   Feature,
@@ -21,7 +20,16 @@ import { createJackedInEffect } from '@alice/sr2020-model-engine/scripts/charact
 import { templateSettings } from 'lodash';
 import * as Chance from 'chance';
 import { Sr2020ModelEngineHttpService } from '@alice/sr2020-common/services/model-engine.service';
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  InternalServerErrorException,
+  Post,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 const chance = new Chance();
@@ -298,20 +306,20 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
   async process<T extends EmptyModel>(engine: Engine<T>, baseModel: T, events: Event[], timestamp: number, aquired: AquiredObjects) {
     events.forEach((event) => {
       if (event.timestamp < baseModel.timestamp)
-        throw new HttpErrors.UnprocessableEntity(
+        throw new UnprocessableEntityException(
           `One of the events (${JSON.stringify(event)}) is in the past compared to model timestamp (${baseModel.timestamp})`,
         );
     });
 
     events.forEach((event) => {
       if (event.timestamp > timestamp)
-        throw new HttpErrors.UnprocessableEntity(
+        throw new UnprocessableEntityException(
           `One of the events (${JSON.stringify(event)}) is in the future compared to calculation timestamp (${timestamp})`,
         );
     });
 
     if (timestamp < baseModel.timestamp) {
-      throw new HttpErrors.UnprocessableEntity(
+      throw new UnprocessableEntityException(
         `Model is is in the future (t = ${baseModel.timestamp} compared to calculation timestamp (${timestamp})`,
       );
     }
@@ -330,9 +338,9 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
       };
     } else {
       if (res.error instanceof UserVisibleError) {
-        throw new HttpErrors.BadRequest(`${res.error.message}`);
+        throw new BadRequestException(`${res.error.message}`);
       } else {
-        throw new HttpErrors.InternalServerError(`Error during model processing: ${res.error}`);
+        throw new InternalServerErrorException(`Error during model processing: ${res.error}`);
       }
     }
   }

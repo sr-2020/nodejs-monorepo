@@ -18,7 +18,7 @@ import {
 import { Duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect, validUntil } from '@alice/sr2020-model-engine/scripts/character/util';
 import { TemporaryModifier } from '@alice/sr2020-model-engine/scripts/character/typedefs';
-import * as HttpErrors from 'http-errors';
+import { BadRequestException } from '@nestjs/common';
 
 export function addFeature(api: EventModelApi<Sr2020Character>, data: { id: string }) {
   addFeatureToModel(api.model, data.id);
@@ -43,7 +43,7 @@ export function addFeatureToModel(model: Sr2020Character, featureId: string) {
     return;
   }
 
-  throw new HttpErrors.BadRequest(`Feature ${featureId} not found in the features library`);
+  throw new BadRequestException(`Feature ${featureId} not found in the features library`);
 }
 
 function addPassiveAbility(model: Sr2020Character, ability: PassiveAbility) {
