@@ -7,7 +7,7 @@ export interface EventDispatcherService {
   dispatchEventsRecursively(events: EventForModelType[], aquiredModels: AquiredModelsStorage): Promise<ModelProcessResponse<EmptyModel>[]>;
 }
 
-export class GenerocEventDispatcherService implements EventDispatcherService {
+export class GenericEventDispatcherService implements EventDispatcherService {
   constructor(private _modelEngineService: ModelEngineService, private _knownModelTypes: (new () => any)[]) {}
 
   async dispatchEventsRecursively(
