@@ -165,7 +165,7 @@
           "builder": "@nrwl/node:build",
           "options": {
             "outputPath": "dist/packages/sr2020-models-manager",
-            "main": "packages/sr2020-models-manager/index.ts",
+            "main": "packages/sr2020-models-manager/main.ts",
             "tsConfig": "packages/sr2020-models-manager/tsconfig.app.json",
             "assets": ["packages/sr2020-models-manager/assets"]
           },

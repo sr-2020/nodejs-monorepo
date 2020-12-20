@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { HttpErrors } from '@loopback/rest';
+import { NotFoundException } from '@nestjs/common';
 
 export async function getAndLockModel<TModelEntity>(
   tmodel: new () => TModelEntity,
@@ -15,7 +15,7 @@ export async function getAndLockModel<TModelEntity>(
 
   const maybeModel = await queryBuilder.getOne();
   if (maybeModel == undefined) {
-    throw new HttpErrors.NotFound(`${tmodel.name} model with id = ${id} not found`);
+    throw new NotFoundException(`${tmodel.name} model with id = ${id} not found`);
   }
   return maybeModel;
 }

@@ -1,4 +1,4 @@
-import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
+import { Client } from '@loopback/testlab';
 import { Engine } from '@alice/alice-model-engine/engine';
 import { loadModels, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import { PubSubNotification, PushNotification } from '@alice/alice-common/models/push-notification.model';
@@ -8,7 +8,6 @@ import { Location } from '@alice/sr2020-common//models/location.model';
 import { QrCode } from '@alice/sr2020-common//models/qr-code.model';
 import { Sr2020Character } from '@alice/sr2020-common//models/sr2020-character.model';
 import { PushService } from '@alice/alice-common/services/push.service';
-import { ModelsManagerApplication } from '@alice/sr2020-models-manager/application';
 import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { getDbConnectionOptions } from '@alice/sr2020-models-manager/utils/connection';
@@ -21,6 +20,11 @@ import { LoggerService } from '@alice/alice-models-manager/services/logger.servi
 import { logger } from '@alice/alice-model-engine/logger';
 import * as Path from 'path';
 import { Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import { INestApplication } from '@nestjs/common';
+import { Sr2020ModelsManagerModule } from '@alice/sr2020-models-manager/sr2020-models-manager.module';
+import { Test } from '@nestjs/testing';
+import * as supertest from 'supertest';
+import { HttpAdapterHost } from '@nestjs/core';
 
 logger.level = 'error';
 
@@ -107,7 +111,7 @@ export class TestFixture {
   constructor(
     public client: Client,
     private _connection: Connection,
-    private _app: ModelsManagerApplication,
+    private _app: INestApplication,
     private _timeService: MockTimeService,
     private _pushService: MockPushService,
     private _pubSubService: MockPubSubService,
@@ -118,27 +122,34 @@ export class TestFixture {
   static async create(): Promise<TestFixture> {
     if (this.cached) return this.cached;
 
-    const restConfig = givenHttpServerConfig({});
-
-    const app = new ModelsManagerApplication({
-      rest: restConfig,
-    });
-
     const modelEngine = new ModelEngineController(characterEngine, locationEngine, qrCodeEngine);
-    app.bind('services.ModelEngineHttpService').to(modelEngine);
-    app.bind('services.ModelEngineService').to(new Sr2020ModelEngineService(modelEngine));
-
     const timeService = new MockTimeService();
-    app.bind('services.TimeService').to(timeService);
-
     const pushService = new MockPushService();
-    app.bind('services.PushService').to(pushService);
-
     const pubSubService = new MockPubSubService();
-    app.bind('services.PubSubService').to(pubSubService);
-
     const loggerService = new NoOpLoggerService();
-    app.bind('services.LoggerService').to(loggerService);
+
+    const moduleRef = await Test.createTestingModule({
+      imports: [Sr2020ModelsManagerModule],
+    })
+      .overrideProvider('ModelEngineHttpService')
+      .useValue(modelEngine)
+      .overrideProvider('ModelEngineService')
+      .useValue(new Sr2020ModelEngineService(modelEngine))
+      .overrideProvider('TimeService')
+      .useValue(timeService)
+      .overrideProvider('PushService')
+      .useValue(pushService)
+      .overrideProvider('PubSubService')
+      .useValue(pubSubService)
+      .overrideProvider('LoggerService')
+      .useValue(loggerService)
+      .compile();
+
+    const app = moduleRef.createNestApplication();
+    await app.init();
+    const { httpAdapter } = app.get(HttpAdapterHost);
+    // app.useGlobalFilters(new GlobalExceptionsFilter(httpAdapter, app.get('LoggerService')));
+    await app.listen(0);
 
     let connection: Connection;
     if (process.env.NODE_ENV == 'test') {
@@ -149,9 +160,7 @@ export class TestFixture {
       connection = await createConnection(getDbConnectionOptions());
     }
 
-    await app.start();
-
-    const client = createRestAppClient(app);
+    const client = supertest(app.getHttpServer());
 
     this.cached = new TestFixture(client, connection, app, timeService, pushService, pubSubService);
     return this.cached;
@@ -186,7 +195,7 @@ export class TestFixture {
   async sendCharacterEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
     this._pushService.reset();
     this._pubSubService.reset();
-    const resp = await this.client.post(`/character/model/${id}`).send(event).expect(200);
+    const resp = await this.client.post(`/character/model/${id}`).send(event).expect(201);
     return resp.body;
   }
 
@@ -194,7 +203,7 @@ export class TestFixture {
     this._pushService.reset();
     this._pubSubService.reset();
     const resp = await this.client.post(`/character/model/${id}`).send(event).expect(400);
-    return resp?.body?.error?.message;
+    return resp?.body?.message;
   }
 
   addCharacterFeature(featureId: string, characterId: number | string = 0): Promise<ModelProcessResponse<Sr2020Character>> {
@@ -211,7 +220,7 @@ export class TestFixture {
 
   async sendLocationEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<Location>> {
     this._pushService.reset();
-    const resp = await this.client.post(`/location/model/${id}`).send(event).expect(200);
+    const resp = await this.client.post(`/location/model/${id}`).send(event).expect(201);
     return resp.body;
   }
 
@@ -221,7 +230,7 @@ export class TestFixture {
 
   async sendQrCodeEvent(event: EventRequest, id: number | string = 0): Promise<ModelProcessResponse<QrCode>> {
     this._pushService.reset();
-    const resp = await this.client.post(`/qr/model/${id}`).send(event).expect(200);
+    const resp = await this.client.post(`/qr/model/${id}`).send(event).expect(201);
     return resp.body;
   }
 

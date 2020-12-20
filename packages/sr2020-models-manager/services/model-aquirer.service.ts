@@ -1,4 +1,3 @@
-import { inject, Provider } from '@loopback/core';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { EntityManager } from 'typeorm';
 import { Location } from '@alice/sr2020-common/models/location.model';
@@ -9,9 +8,13 @@ import { ModelAquirerService } from '@alice/alice-models-manager/services/model-
 import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
+import { Inject } from '@nestjs/common';
 
-class ModelAquirerServiceImpl implements ModelAquirerService {
-  constructor(private _modelEngineService: ModelEngineService, private _pubSubService: PubSubService) {}
+export class ModelAquirerServiceImpl implements ModelAquirerService {
+  constructor(
+    @Inject('ModelEngineService') private _modelEngineService: ModelEngineService,
+    @Inject('PubSubService') private _pubSubService: PubSubService,
+  ) {}
 
   async aquireModels(manager: EntityManager, event: EventRequest, now: number): Promise<AquiredModelsStorage> {
     const result = new AquiredModelsStorageTypeOrm(manager, this._pubSubService, this._modelEngineService, now);
@@ -48,18 +51,5 @@ class ModelAquirerServiceImpl implements ModelAquirerService {
     }
     await result.synchronizeModels();
     return result;
-  }
-}
-
-export class ModelAquirerServiceProvider implements Provider<ModelAquirerService> {
-  constructor(
-    @inject('services.ModelEngineService')
-    private _modelEngineService: ModelEngineService,
-    @inject('services.PubSubService')
-    private _pubSubService: PubSubService,
-  ) {}
-
-  value(): ModelAquirerService {
-    return new ModelAquirerServiceImpl(this._modelEngineService, this._pubSubService);
   }
 }

@@ -4,14 +4,14 @@ import { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { PushResult } from '@alice/alice-common/models/push-result.model';
-import { EntityManager, getManager, getRepository } from 'typeorm';
-import { HttpErrors } from '@loopback/rest';
+import { getConnection, getRepository } from 'typeorm';
 import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
+import { NotFoundException } from '@nestjs/common';
 
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(
@@ -30,13 +30,13 @@ export class AnyModelController<TModel extends EmptyModel> {
     return new Empty();
   }
 
-  async delete(id: number, manager: EntityManager): Promise<Empty> {
-    await manager.getRepository(this.tmodel).delete(id);
+  async delete(id: number): Promise<Empty> {
+    await getRepository(this.tmodel).delete(id);
     return new Empty();
   }
 
-  get(id: number, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
-    return this.postEventImpl(id, { eventType: '_' }, manager);
+  get(id: number): Promise<ModelProcessResponse<TModel>> {
+    return this.postEventImpl(id, { eventType: '_' });
   }
 
   async predict(id: number, timestamp: number): Promise<ModelProcessResponse<TModel>> {
@@ -50,21 +50,19 @@ export class AnyModelController<TModel extends EmptyModel> {
       });
       return result;
     } catch (e) {
-      if (e instanceof EntityNotFoundError) throw new HttpErrors.NotFound(`${this.tmodel.name} model with id = ${id} not found`);
+      if (e instanceof EntityNotFoundError) throw new NotFoundException(`${this.tmodel.name} model with id = ${id} not found`);
       throw e;
     }
   }
 
-  postEvent(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
-    return this.postEventImpl(id, event, manager);
+  postEvent(id: number, event: EventRequest): Promise<ModelProcessResponse<TModel>> {
+    return this.postEventImpl(id, event);
   }
 
   async broadcastEvent(event: EventRequest): Promise<Empty> {
     const models = await getRepository(this.tmodel).createQueryBuilder().getMany();
     for (const model of models) {
-      await getManager().transaction(async (transactionManager) => {
-        await this.postEvent(Number(model.modelId), event, transactionManager);
-      });
+      await this.postEvent(Number(model.modelId), event);
     }
     return new Empty();
   }
@@ -72,32 +70,43 @@ export class AnyModelController<TModel extends EmptyModel> {
   // We can't call postEvent directly from get(...) because it will call child's this.postEvent(...). And that wouldn't work
   // because of @Transaction decorator on this method - basically it will be applied twice (on initial child's get(...) call, and then
   // on child's postEvent(...) call.
-  async postEventImpl(id: number, event: EventRequest, manager: EntityManager): Promise<ModelProcessResponse<TModel>> {
+  async postEventImpl(id: number, event: EventRequest): Promise<ModelProcessResponse<TModel>> {
     if (!event.eventType.startsWith('_')) {
       this.logger.info(`Processing event ${JSON.stringify(event)} for ${this.tmodel.name} with id ${id}`);
     }
 
-    const aquired = await this.modelAquirerService.aquireModels(manager, event, this.timeService.timestamp());
-    const results = await this.eventDispatcherService.dispatchEventsRecursively(
-      [
-        {
-          ...event,
-          timestamp: aquired.maximalTimestamp,
-          modelId: id.toString(),
-          modelType: this.tmodel.name,
-        },
-      ],
-      aquired,
-    );
-    await Promise.all([this._sendNotifications(results), aquired.flush()]);
-    return {
-      baseModel: aquired.getBaseModels()[this.tmodel.name][id.toString()],
-      workModel: aquired.getWorkModels()[this.tmodel.name][id.toString()],
-      notifications: [],
-      outboundEvents: [],
-      pubSubNotifications: [],
-      tableResponse: results[0].tableResponse,
-    };
+    const queryRunner = getConnection().createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const aquired = await this.modelAquirerService.aquireModels(queryRunner.manager, event, this.timeService.timestamp());
+      const results = await this.eventDispatcherService.dispatchEventsRecursively(
+        [
+          {
+            ...event,
+            timestamp: aquired.maximalTimestamp,
+            modelId: id.toString(),
+            modelType: this.tmodel.name,
+          },
+        ],
+        aquired,
+      );
+      await Promise.all([this._sendNotifications(results), aquired.flush()]);
+      await queryRunner.commitTransaction();
+      return {
+        baseModel: aquired.getBaseModels()[this.tmodel.name][id.toString()],
+        workModel: aquired.getWorkModels()[this.tmodel.name][id.toString()],
+        notifications: [],
+        outboundEvents: [],
+        pubSubNotifications: [],
+        tableResponse: results[0].tableResponse,
+      };
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw e;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private async _sendNotifications(results: ModelProcessResponse<EmptyModel>[]) {

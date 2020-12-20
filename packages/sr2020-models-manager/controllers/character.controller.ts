@@ -1,16 +1,13 @@
-import { inject } from '@loopback/core';
-import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import {
   CharacterCreationRequest,
   Feature,
-  kFeatureDescriptor,
   Sr2020Character,
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { PushService } from '@alice/alice-common/services/push.service';
-import { EntityManager, getManager, getRepository, Transaction, TransactionManager } from 'typeorm';
+import { getManager, getRepository } from 'typeorm';
 
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
@@ -21,22 +18,26 @@ import { LoggerService } from '@alice/alice-models-manager/services/logger.servi
 import * as moment from 'moment';
 import { Sr2020ModelEngineHttpService, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
 import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@Controller()
+@ApiTags('Character')
 export class CharacterController extends AnyModelController<Sr2020Character> {
   constructor(
-    @inject('services.ModelEngineHttpService')
+    @Inject('ModelEngineHttpService')
     protected sr2020ModelEngineService: Sr2020ModelEngineHttpService,
-    @inject('services.TimeService')
+    @Inject('TimeService')
     protected timeService: TimeService,
-    @inject('services.EventDispatcherService')
+    @Inject('EventDispatcherService')
     protected eventDispatcherService: EventDispatcherService,
-    @inject('services.ModelAquirerService')
+    @Inject('ModelAquirerService')
     protected modelAquirerService: ModelAquirerService,
-    @inject('services.PushService')
+    @Inject('PushService')
     protected pushService: PushService,
-    @inject('services.PubSubService')
+    @Inject('PubSubService')
     protected pubSubService: PubSubService,
-    @inject('services.LoggerService')
+    @Inject('LoggerService')
     protected logger: LoggerService,
   ) {
     super(
@@ -51,56 +52,30 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     );
   }
 
-  @get('/character/update_all', {
-    responses: {
-      '200': {
-        description: 'Transaction PUT success',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                count: { type: 'number' },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  async updateAll(@param.query.number('older_than_seconds') olderThanSeconds: number = 0): Promise<{ count: number }> {
+  @Get('/character/update_all')
+  async updateAll(@Query('older_than_seconds', ParseIntPipe) olderThanSeconds: number = 0): Promise<{ count: number }> {
     const ts = moment().subtract(olderThanSeconds, 'seconds').valueOf();
     const characters = await getRepository(Sr2020Character).createQueryBuilder().where('timestamp < :ts', { ts }).getMany();
     for (const character of characters) {
-      await getManager().transaction(async (transactionManager) => {
-        await this.get(Number(character.modelId), transactionManager);
-      });
+      await this.get(Number(character.modelId));
     }
 
     return { count: characters.length };
   }
 
-  @put('/character/model', {
-    responses: {
-      '200': {
-        description: 'Transaction PUT success',
-      },
-    },
-  })
-  async replaceById(@requestBody() model: Sr2020Character): Promise<Empty> {
+  @Put('/character/model')
+  @ApiResponse({ type: Empty })
+  async replaceById(@Body() model: Sr2020Character): Promise<Empty> {
     return super.replaceById(model);
   }
 
-  @put('/character/default/{id}', {
+  @Put('/character/default/:id')
+  @ApiOperation({
     summary: 'Inits character default character model',
     description: 'Creates and saves default character model. Some field can be randomly populated, other will have default "empty" state.',
-    responses: {
-      content: {
-        'application/json': { schema: { 'x-ts-type': Sr2020Character } },
-      },
-    },
   })
-  async setDefault(@param.path.number('id') id: number, @requestBody() req: CharacterCreationRequest): Promise<Empty> {
+  @ApiResponse({ type: Empty })
+  async setDefault(@Param('id', ParseIntPipe) id: number, @Body() req: CharacterCreationRequest): Promise<Empty> {
     this.logger.info(`Initializing character ${id} with following data: ${JSON.stringify(req)}`);
     const model = await this.sr2020ModelEngineService.defaultCharacter(req);
     model.timestamp = this.timeService.timestamp();
@@ -128,89 +103,41 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     return new Empty();
   }
 
-  @del('/character/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction DELETE success',
-        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
-      },
-    },
-  })
-  @Transaction()
-  async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
-    return super.delete(id, manager);
+  @Delete('/character/model/:id')
+  @ApiResponse({ type: Empty })
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<Empty> {
+    return super.delete(id);
   }
 
-  @get('/character/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': Sr2020CharacterProcessResponse } } },
-      },
-    },
-  })
-  @Transaction()
-  async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Sr2020CharacterProcessResponse> {
-    return super.get(id, manager);
+  @Get('/character/model/:id')
+  @ApiResponse({ type: Sr2020CharacterProcessResponse })
+  async get(@Param('id', ParseIntPipe) id: number): Promise<Sr2020CharacterProcessResponse> {
+    return super.get(id);
   }
 
-  @get('/character/model/{id}/predict', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': Sr2020CharacterProcessResponse } } },
-      },
-    },
-  })
-  async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<Sr2020CharacterProcessResponse> {
+  @Get('/character/model/:id/predict')
+  @ApiResponse({ type: Sr2020CharacterProcessResponse })
+  async predict(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('t', ParseIntPipe) timestamp: number,
+  ): Promise<Sr2020CharacterProcessResponse> {
     return super.predict(id, timestamp);
   }
 
-  @post('/character/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': Sr2020CharacterProcessResponse } } },
-      },
-    },
-  })
-  @Transaction()
-  async postEvent(
-    @param.path.number('id') id: number,
-    @requestBody() event: EventRequest,
-    @TransactionManager() manager?: EntityManager,
-  ): Promise<Sr2020CharacterProcessResponse> {
-    return super.postEvent(id, event, manager!);
+  @Post('/character/model/:id')
+  @ApiResponse({ type: Sr2020CharacterProcessResponse })
+  async postEvent(@Param('id', ParseIntPipe) id: number, @Body() event: EventRequest): Promise<Sr2020CharacterProcessResponse> {
+    return super.postEvent(id, event);
   }
 
-  @post('/character/broadcast', {
-    responses: {
-      '200': {
-        description: 'Event successfully broadcasted',
-        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
-      },
-    },
-  })
-  broadcast(@requestBody() event: EventRequest): Promise<Empty> {
+  @Post('/character/broadcast')
+  @ApiResponse({ description: 'Event successfully broadcasted', type: Empty })
+  broadcast(@Body() event: EventRequest): Promise<Empty> {
     return this.broadcastEvent(event);
   }
 
-  @get('/character/available_features/{id}', {
-    summary: `Returns the list of features provided character can buy for karma`,
-    responses: {
-      '200': {
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: kFeatureDescriptor,
-            },
-          },
-        },
-      },
-    },
-  })
-  async availableFeatures(@param.path.number('id') id: number): Promise<Feature[]> {
+  @Get('/character/available_features/:id')
+  async availableFeatures(@Param('id', ParseIntPipe) id: number): Promise<Feature[]> {
     const model = await getRepository(Sr2020Character).findOneOrFail(id);
     return this.sr2020ModelEngineService.availableFeatures(model);
   }

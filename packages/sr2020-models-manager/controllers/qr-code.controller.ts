@@ -1,9 +1,6 @@
-import { del, get, param, post, put, requestBody } from '@loopback/rest';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { PushService } from '@alice/alice-common/services/push.service';
-import { inject } from '@loopback/core';
 import { EventRequest } from '@alice/alice-common/models/alice-model-engine';
-import { EntityManager, Transaction, TransactionManager } from 'typeorm';
 import { QrCode, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
 import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
@@ -12,102 +9,64 @@ import { AnyModelController } from '@alice/alice-models-manager/controllers/anym
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@Controller()
+@ApiTags('QR')
 export class QrCodeController extends AnyModelController<QrCode> {
   constructor(
-    @inject('services.ModelEngineService')
+    @Inject('ModelEngineService')
     protected modelEngineService: ModelEngineService,
-    @inject('services.TimeService')
+    @Inject('TimeService')
     protected timeService: TimeService,
-    @inject('services.EventDispatcherService')
+    @Inject('EventDispatcherService')
     protected eventDispatcherService: EventDispatcherService,
-    @inject('services.ModelAquirerService')
+    @Inject('ModelAquirerService')
     protected modelAquirerService: ModelAquirerService,
-    @inject('services.PushService')
+    @Inject('PushService')
     protected pushService: PushService,
-    @inject('services.PubSubService')
+    @Inject('PubSubService')
     protected pubSubService: PubSubService,
-    @inject('services.LoggerService')
+    @Inject('LoggerService')
     protected logger: LoggerService,
   ) {
     super(QrCode, modelEngineService, timeService, eventDispatcherService, modelAquirerService, pushService, pubSubService, logger);
   }
 
-  @put('/qr/model', {
-    responses: {
-      '200': {
-        description: 'Transaction PUT success',
-      },
-    },
-  })
-  async replaceById(@requestBody() model: QrCode): Promise<Empty> {
+  @Put('/qr/model')
+  @ApiResponse({ type: Empty })
+  async replaceById(@Body() model: QrCode): Promise<Empty> {
     return super.replaceById(model);
   }
 
-  @del('/qr/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction DELETE success',
-        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
-      },
-    },
-  })
-  @Transaction()
-  async delete(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<Empty> {
-    return super.delete(id, manager);
+  @Delete('/qr/model/:id')
+  @ApiResponse({ type: Empty })
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<Empty> {
+    return super.delete(id);
   }
 
-  @get('/qr/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': QrCodeProcessResponse } } },
-      },
-    },
-  })
-  @Transaction()
-  async get(@param.path.number('id') id: number, @TransactionManager() manager: EntityManager): Promise<QrCodeProcessResponse> {
-    return super.get(id, manager);
+  @Get('/qr/model/:id')
+  @ApiResponse({ type: QrCodeProcessResponse })
+  async get(@Param('id', ParseIntPipe) id: number): Promise<QrCodeProcessResponse> {
+    return super.get(id);
   }
 
-  @get('/qr/model/{id}/predict', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': QrCodeProcessResponse } } },
-      },
-    },
-  })
-  async predict(@param.path.number('id') id: number, @param.query.number('t') timestamp: number): Promise<QrCodeProcessResponse> {
+  @Get('/qr/model/:id/predict')
+  @ApiResponse({ type: QrCodeProcessResponse })
+  async predict(@Param('id', ParseIntPipe) id: number, @Query('t', ParseIntPipe) timestamp: number): Promise<QrCodeProcessResponse> {
     return super.predict(id, timestamp);
   }
 
-  @post('/qr/model/{id}', {
-    responses: {
-      '200': {
-        description: 'Transaction GET success',
-        content: { 'application/json': { schema: { 'x-ts-type': QrCodeProcessResponse } } },
-      },
-    },
-  })
-  @Transaction()
-  async postEvent(
-    @param.path.number('id') id: number,
-    @requestBody() event: EventRequest,
-    @TransactionManager() manager: EntityManager,
-  ): Promise<QrCodeProcessResponse> {
-    return super.postEvent(id, event, manager);
+  @Post('/qr/model/:id')
+  @ApiResponse({ type: QrCodeProcessResponse })
+  async postEvent(@Param('id', ParseIntPipe) id: number, @Body() event: EventRequest): Promise<QrCodeProcessResponse> {
+    return super.postEvent(id, event);
   }
 
-  @post('/qr/broadcast', {
-    responses: {
-      '200': {
-        description: 'Event successfully broadcasted',
-        content: { 'application/json': { schema: { 'x-ts-type': Empty } } },
-      },
-    },
-  })
-  broadcast(@requestBody() event: EventRequest): Promise<Empty> {
+  @Post('/qr/broadcast')
+  @ApiResponse({ description: 'Event successfully broadcasted', type: Empty })
+  broadcast(@Body() event: EventRequest): Promise<Empty> {
     return this.broadcastEvent(event);
   }
 }

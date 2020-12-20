@@ -5,7 +5,7 @@ import { QrCode } from '../models/qr-code.model';
 import { CharacterCreationRequest, Feature, Sr2020Character } from '../models/sr2020-character.model';
 import { Location } from '../models/location.model';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Inject, Injectable } from '@nestjs/common';
 
 export interface Sr2020ModelEngineHttpService {
   processCharacter(req: ModelProcessRequest<Sr2020Character>): Promise<ModelProcessResponse<Sr2020Character>>;
@@ -20,7 +20,7 @@ export interface Sr2020ModelEngineHttpService {
 
 @Injectable()
 export class Sr2020ModelEngineService implements ModelEngineService {
-  constructor(private inner: Sr2020ModelEngineHttpService) {}
+  constructor(@Inject('ModelEngineHttpService') private inner: Sr2020ModelEngineHttpService) {}
 
   process<TModel extends EmptyModel>(tmodel: { new (): TModel }, req: ModelProcessRequest<TModel>): Promise<ModelProcessResponse<TModel>> {
     if (new tmodel() instanceof Location) return this.inner.processLocation(req as any) as any;

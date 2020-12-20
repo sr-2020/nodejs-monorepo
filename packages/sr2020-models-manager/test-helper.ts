@@ -1,21 +1,14 @@
-import { ModelsManagerApplication } from './application';
-import { Client, createRestAppClient, givenHttpServerConfig } from '@loopback/testlab';
+import { createApp } from '@alice/sr2020-models-manager/application';
+import * as supertest from 'supertest';
+import { INestApplication } from '@nestjs/common';
 
 export async function setupApplication(): Promise<AppWithClient> {
-  const restConfig = givenHttpServerConfig({});
-
-  const app = new ModelsManagerApplication({
-    rest: restConfig,
-  });
-
-  await app.start();
-
-  const client = createRestAppClient(app);
-
+  const app = await createApp({ port: 0 });
+  const client = supertest(app.getHttpServer());
   return { app, client };
 }
 
 export interface AppWithClient {
-  app: ModelsManagerApplication;
-  client: Client;
+  app: INestApplication;
+  client: supertest.SuperTest<supertest.Test>;
 }
