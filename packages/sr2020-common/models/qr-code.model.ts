@@ -1,4 +1,3 @@
-import { model } from '@loopback/repository';
 import { EmptyModel, JsonColumn, NumberProperty, ObjectProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
@@ -39,7 +38,6 @@ export type QrType =
   | 'focus'; // Magic focus
 // When adding new QR types here, add them to kMerchandiseQrTypes also if they are merchandise
 
-@model()
 @Entity({
   name: 'qr',
 })
@@ -69,13 +67,11 @@ export class QrCode extends EmptyModel {
   data: Record<string, any>;
 }
 
-@model()
 export class QrCodeProcessRequest extends BaseModelProcessRequest {
   @ObjectProperty(QrCode)
   baseModel: QrCode;
 }
 
-@model()
 export class QrCodeProcessResponse extends BaseModelProcessResponse {
   @ObjectProperty(QrCode)
   baseModel: QrCode;

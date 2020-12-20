@@ -5,13 +5,13 @@ import { ModelAquirerService } from '@alice/alice-models-manager/services/model-
 import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
 import { PushResult } from '@alice/alice-common/models/push-result.model';
 import { getConnection, getRepository } from 'typeorm';
-import { EntityNotFoundError } from '@loopback/repository';
 import { ModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 import { NotFoundException } from '@nestjs/common';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 export class AnyModelController<TModel extends EmptyModel> {
   constructor(

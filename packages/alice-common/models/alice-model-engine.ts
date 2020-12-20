@@ -1,6 +1,5 @@
 import { IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Duration } from 'moment';
-import { model, property } from '@loopback/repository';
 import { PubSubNotification, PushNotification } from './push-notification.model';
 import { EventCallback } from '../callbacks';
 import { Column, PrimaryColumn, ValueTransformer } from 'typeorm';
@@ -43,7 +42,6 @@ export function StringProperty(options: { optional: boolean } = { optional: fals
     if (options.optional) {
       IsOptional()(target, name);
     }
-    property({ type: String, required: !options.optional })(target, name);
   };
 }
 
@@ -54,7 +52,6 @@ export function BoolProperty(options: { optional: boolean } = { optional: false 
     if (options.optional) {
       IsOptional()(target, name);
     }
-    property({ required: !options.optional })(target, name);
   };
 }
 
@@ -65,7 +62,6 @@ export function NumberProperty(options: { optional: boolean } = { optional: fals
     if (options.optional) {
       IsOptional()(target, name);
     }
-    property({ required: !options.optional })(target, name);
   };
 }
 
@@ -83,7 +79,6 @@ export function ArrayProperty<T extends unknown>(itemType: new () => T, options:
     if (options.optional) {
       IsOptional()(target, name);
     }
-    property.array(itemType, { required: !options.optional })(target, name);
   };
 }
 
@@ -96,12 +91,10 @@ export function ObjectProperty<T extends unknown>(itemType: new () => T, options
     if (options.optional) {
       IsOptional()(target, name);
     }
-    property({ type: itemType, required: !options.optional })(target, name);
   };
 }
 
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
-@model()
 export class EventRequest {
   @StringProperty()
   eventType: string;
@@ -111,19 +104,16 @@ export class EventRequest {
 }
 
 // This one doesn't modelId (server can figure it out from model.modelId).
-@model()
 export class IdLessEvent extends EventRequest {
   @NumberProperty()
   timestamp: number;
 }
 
-@model()
 export class Event extends IdLessEvent {
   @StringProperty()
   modelId: string;
 }
 
-@model()
 export class EventForModelType extends Event {
   @StringProperty()
   modelType: string;
@@ -138,7 +128,6 @@ export interface ModelMetadata {
   scheduledUpdateTimestamp: number;
 }
 
-@model()
 export class Timer {
   @StringProperty() name: string;
   @NumberProperty() miliseconds: number;
@@ -147,7 +136,6 @@ export class Timer {
   @ObjectProperty(Object) data: any;
 }
 
-@model()
 export class Effect {
   // Unique id of this effect "kind" (not of specific effect instance).
   // Doesn't really used by the scripts code, typical usage is to get effect
@@ -174,7 +162,6 @@ export class Effect {
   handler: string;
 }
 
-@model({ settings: { strict: false } })
 export class Modifier {
   @StringProperty()
   mID: string;
@@ -197,7 +184,6 @@ export class Modifier {
   [key: string]: any;
 }
 
-@model()
 export class Condition {
   @StringProperty()
   id: string;
@@ -283,7 +269,6 @@ export type EngineReplyReady = {
 
 export type EngineReply = EngineReplyReady | EngineReplyResult | EngineReplyLog | EngineReplyAquire;
 
-@model()
 export class EmptyModel {
   @StringProperty()
   @PrimaryColumn()

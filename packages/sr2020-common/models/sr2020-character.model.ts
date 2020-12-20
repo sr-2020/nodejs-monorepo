@@ -1,4 +1,3 @@
-import { model } from '@loopback/repository';
 import {
   ArrayProperty,
   BigIntTransformer,
@@ -33,7 +32,6 @@ export type BodyType = 'physical' | 'astral' | 'drone' | 'ectoplasm';
 export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
 
 // Spell contained in the model object (as opposed to Spell which is configuration/dictionary kind).
-@model()
 export class AddedSpell {
   // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
   // other features: active abilities, spells, etc.
@@ -69,7 +67,6 @@ export interface LocationMixin {
   location: LocationData;
 }
 
-@model()
 export class TargetSignature {
   // Human-readable name to e.g. show on button
   @StringProperty() name: string;
@@ -79,7 +76,6 @@ export class TargetSignature {
 }
 
 // Active ability contained in the model object (as opposed to ActiveAbility which is configuration/dictionary kind).
-@model()
 export class AddedActiveAbility {
   // Unique string identifier. Should be unique not only among all AddedActiveAbility, but also among
   // other features: passive abilities, spells, etc.
@@ -109,7 +105,6 @@ export class AddedActiveAbility {
 }
 
 // Passive ability contained in the model object (as opposed to PassiveAbility which is configuration/dictionary kind).
-@model()
 export class AddedPassiveAbility {
   // Unique string identifier. Should be unique not only among all AddedPassiveAbility, but also among
   // other features: active abilities, spells, etc.
@@ -168,7 +163,6 @@ export const kFeatureDescriptor = {
 };
 
 // Ethic trigger contained in the model object (as opposed to EthicTrigger which is configuration/dictionary kind).
-@model()
 export class AddedEthicTrigger {
   @StringProperty() id: string;
 
@@ -179,7 +173,6 @@ export class AddedEthicTrigger {
   @StringProperty() description: string;
 }
 
-@model()
 export class AddedEthicState {
   @StringProperty()
   scale: 'violence' | 'control' | 'individualism' | 'mind';
@@ -190,7 +183,6 @@ export class AddedEthicState {
   @StringProperty() description: string;
 }
 
-@model()
 export class AddedImplant {
   @StringProperty() id: string;
   @StringProperty() name: string;
@@ -216,7 +208,6 @@ export class AddedImplant {
   @StringProperty() lifestyle: string;
 }
 
-@model()
 export class HistoryRecord {
   @StringProperty() id: string;
   @NumberProperty() timestamp: number;
@@ -225,13 +216,11 @@ export class HistoryRecord {
   @StringProperty() longText: string;
 }
 
-@model()
 export class ChemoConsumptionRecord {
   @NumberProperty() timestamp: number;
   @StringProperty() chemoName: string;
 }
 
-@model()
 export class AnalyzedBody {
   @StringProperty() healthState: HealthState;
   @NumberProperty() essence: number;
@@ -241,7 +230,6 @@ export class AnalyzedBody {
   implants: AddedImplant[];
 }
 
-@model()
 export class Discounts {
   @NumberProperty()
   @Column({ default: 1 })
@@ -300,7 +288,6 @@ export class Discounts {
   shiavase: number;
 }
 
-@model()
 export class Concentrations {
   @NumberProperty()
   @Column({ default: 0 })
@@ -371,7 +358,6 @@ export class Concentrations {
   vampirium: number;
 }
 
-@model()
 export class Chemo {
   @NumberProperty()
   @Column({ default: 160 })
@@ -398,7 +384,6 @@ export class Chemo {
   concentration: Concentrations;
 }
 
-@model()
 export class MagicStats {
   @NumberProperty()
   @Column({ default: 1 })
@@ -433,7 +418,6 @@ export class MagicStats {
   maxPowerBonus: number;
 }
 
-@model()
 export class Hacking {
   @NumberProperty()
   @Column({ default: 0 })
@@ -508,7 +492,6 @@ export class Hacking {
   jackedIn: boolean;
 }
 
-@model()
 export class Drones {
   @NumberProperty()
   @Column({ default: -1000 })
@@ -543,7 +526,6 @@ export class Drones {
   feedbackModifier: number;
 }
 
-@model()
 export class Rigging {
   @BoolProperty()
   @Column({ default: false })
@@ -562,7 +544,6 @@ export class Rigging {
   repomanBonus: number;
 }
 
-@model()
 export class Billing {
   @BoolProperty()
   @Column({ default: false })
@@ -573,7 +554,6 @@ export class Billing {
   stockGainPercentage: number;
 }
 
-@model()
 export class EssenceDetails {
   @NumberProperty()
   @Column({ default: 600 })
@@ -588,7 +568,6 @@ export class EssenceDetails {
   gap: number;
 }
 
-@model()
 export class Karma {
   @NumberProperty()
   @Column({ default: 0, type: 'real' })
@@ -607,7 +586,6 @@ export class Karma {
   cycleLimit: number;
 }
 
-@model()
 export class Screens {
   @BoolProperty()
   @Column({ default: true })
@@ -666,7 +644,6 @@ export class Screens {
   scanQr: boolean;
 }
 
-@model()
 export class Ethic {
   @ArrayProperty(String)
   @JsonColumn()
@@ -685,7 +662,6 @@ export class Ethic {
   lockedUntil: number;
 }
 
-@model()
 @Entity({
   name: 'sr2020-character',
 })
@@ -847,13 +823,11 @@ export class Sr2020Character extends EmptyModel {
   history: HistoryRecord[];
 }
 
-@model()
 export class Sr2020CharacterProcessRequest extends BaseModelProcessRequest {
   @ObjectProperty(Sr2020Character)
   baseModel: Sr2020Character;
 }
 
-@model()
 export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
   @ObjectProperty(Sr2020Character)
   baseModel: Sr2020Character;
@@ -862,7 +836,6 @@ export class Sr2020CharacterProcessResponse extends BaseModelProcessResponse {
   workModel: Sr2020Character;
 }
 
-@model()
 export class CharacterCreationRequest {
   @StringProperty({ optional: true })
   name?: string;

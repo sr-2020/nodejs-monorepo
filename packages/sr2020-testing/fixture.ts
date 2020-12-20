@@ -1,4 +1,3 @@
-import { Client } from '@loopback/testlab';
 import { Engine } from '@alice/alice-model-engine/engine';
 import { loadModels, TestFolderLoader } from '@alice/alice-model-engine/utils';
 import { PubSubNotification, PushNotification } from '@alice/alice-common/models/push-notification.model';
@@ -109,7 +108,7 @@ class NoOpLoggerService implements LoggerService {
 
 export class TestFixture {
   constructor(
-    public client: Client,
+    public client: supertest.SuperTest<supertest.Test>,
     private _connection: Connection,
     private _app: INestApplication,
     private _timeService: MockTimeService,

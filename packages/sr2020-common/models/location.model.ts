@@ -1,4 +1,3 @@
-import { model } from '@loopback/repository';
 import {
   ArrayProperty,
   EmptyModel,
@@ -10,7 +9,6 @@ import {
 import { BaseModelProcessRequest, BaseModelProcessResponse } from '@alice/alice-common/models/process-requests-respose';
 import { Column, Entity } from 'typeorm';
 
-@model()
 export class SpellTrace {
   @NumberProperty() timestamp: number;
   @StringProperty() spellName: string;
@@ -20,7 +18,6 @@ export class SpellTrace {
   @NumberProperty() magicFeedback: number;
 }
 
-@model()
 @Entity({
   name: 'location',
 })
@@ -34,13 +31,11 @@ export class Location extends EmptyModel {
   aura: string;
 }
 
-@model()
 export class LocationProcessRequest extends BaseModelProcessRequest {
   @ObjectProperty(Location)
   baseModel: Location;
 }
 
-@model()
 export class LocationProcessResponse extends BaseModelProcessResponse {
   @ObjectProperty(Location)
   baseModel: Location;
@@ -49,5 +44,4 @@ export class LocationProcessResponse extends BaseModelProcessResponse {
   workModel: Location;
 }
 
-@model()
 export class LocationCreationRequest {}

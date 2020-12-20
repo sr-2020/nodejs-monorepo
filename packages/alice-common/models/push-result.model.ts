@@ -1,8 +1,6 @@
-import { Model, model } from '@loopback/repository';
 import { NumberProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 
-@model()
-export class PushResult extends Model {
+export class PushResult {
   @StringProperty({ optional: true })
   token_used?: string;
 
@@ -11,8 +9,4 @@ export class PushResult extends Model {
 
   @NumberProperty()
   failure: number;
-
-  constructor(data?: Partial<PushResult>) {
-    super(data);
-  }
 }

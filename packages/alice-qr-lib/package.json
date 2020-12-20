@@ -1,5 +1,8 @@
 {
   "name": "alice-qr-lib",
   "version": "1.0.0",
-  "description": "Utilities for QR code content generation and parsing"
+  "description": "Utilities for QR code content generation and parsing",
+  "dependencies": {
+    "md5": "^2.3.0"
+  }
 }

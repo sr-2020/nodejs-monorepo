@@ -1,8 +1,6 @@
-import { model } from '@loopback/repository';
 import { AquiredObjects, ArrayProperty, EmptyModel, Event, EventForModelType, NumberProperty, ObjectProperty } from './alice-model-engine';
 import { PubSubNotification, PushNotification } from './push-notification.model';
 
-@model()
 export class BaseModelProcessRequest {
   @ArrayProperty(Event)
   events: Event[];
@@ -14,7 +12,6 @@ export class BaseModelProcessRequest {
   aquiredObjects: AquiredObjects;
 }
 
-@model()
 export class BaseModelProcessResponse {
   @ArrayProperty(EventForModelType)
   outboundEvents: EventForModelType[];
