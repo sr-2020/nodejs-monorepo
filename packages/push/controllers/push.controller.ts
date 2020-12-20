@@ -2,7 +2,7 @@ import { PushNotification } from '@alice/alice-common/models/push-notification.m
 import { PushResult } from '@alice/alice-common/models/push-result.model';
 import { Empty } from '@alice/alice-common/models/empty.model';
 import { FirebaseToken } from '@alice/alice-common/models/firebase-token.model';
-import { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
+import type { FirebaseMessagingService } from '@alice/push/services/firebase-messaging.service';
 import { getRepository } from 'typeorm';
 import { Body, Controller, Inject, Param, Post, Put } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';

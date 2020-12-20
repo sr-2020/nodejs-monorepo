@@ -4,10 +4,10 @@ import { Location } from '@alice/sr2020-common/models/location.model';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { AquiredModelsStorageTypeOrm } from '../utils/aquired-models-storage';
-import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
+import type { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
 import { AquiredModelsStorage } from '@alice/alice-models-manager/utils/aquired-models-storage';
-import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
-import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
+import type { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
+import type { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 import { Inject } from '@nestjs/common';
 
 export class ModelAquirerServiceImpl implements ModelAquirerService {

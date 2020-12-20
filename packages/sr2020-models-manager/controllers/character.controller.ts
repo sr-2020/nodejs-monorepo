@@ -6,18 +6,19 @@ import {
   Sr2020Character,
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
-import { PushService } from '@alice/alice-common/services/push.service';
+import type { PushService } from '@alice/alice-common/services/push.service';
 import { getManager, getRepository } from 'typeorm';
 
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
-import { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
-import { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
-import { TimeService } from '@alice/alice-models-manager/services/time.service';
+import type { ModelAquirerService } from '@alice/alice-models-manager/services/model-aquirer.service';
+import type { PubSubService } from '@alice/alice-models-manager/services/pubsub.service';
+import type { TimeService } from '@alice/alice-models-manager/services/time.service';
 import { AnyModelController } from '@alice/alice-models-manager/controllers/anymodel.controller';
-import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
+import type { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import * as moment from 'moment';
-import { Sr2020ModelEngineHttpService, Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
-import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
+import type { Sr2020ModelEngineHttpService } from '@alice/sr2020-common/services/model-engine.service';
+import { Sr2020ModelEngineService } from '@alice/sr2020-common/services/model-engine.service';
+import type { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
 import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
