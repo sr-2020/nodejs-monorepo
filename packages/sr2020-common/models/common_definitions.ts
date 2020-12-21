@@ -44,13 +44,14 @@ export interface Addiction extends Modifier {
 }
 
 export type ImplantSlot = 'body' | 'arm' | 'head' | 'rcc';
+export type ImplantGrade = 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
 
 export interface Implant {
   id: string;
   name: string;
   description: string;
   slot: ImplantSlot;
-  grade: 'alpha' | 'beta' | 'gamma' | 'delta' | 'bio';
+  grade: ImplantGrade;
   essenceCost: number;
   installDifficulty: number;
   modifiers: Modifier[];

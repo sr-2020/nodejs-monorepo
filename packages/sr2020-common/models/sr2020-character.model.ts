@@ -126,21 +126,21 @@ export class AddedPassiveAbility {
   @ArrayProperty(String, { optional: true }) modifierIds?: string[];
 }
 
-export interface PackInfo {
-  id: string;
-  level: number;
+export class PackInfo {
+  @StringProperty() id: string;
+  @NumberProperty() level: number;
 }
 
 export type FeatureAvailability = 'open' | 'closed' | 'master';
 
-export interface Feature {
-  id: string;
-  humanReadableName: string;
-  description: string;
-  karmaCost: number;
-  prerequisites: string[];
-  pack?: PackInfo;
-  availability: FeatureAvailability;
+export class Feature {
+  @StringProperty() id: string;
+  @StringProperty() humanReadableName: string;
+  @StringProperty() description: string;
+  @NumberProperty() karmaCost: number;
+  @ArrayProperty(String) prerequisites: string[];
+  @ObjectProperty(PackInfo, { optional: true }) pack?: PackInfo;
+  @StringProperty() availability: FeatureAvailability;
 }
 
 export const kFeatureDescriptor = {

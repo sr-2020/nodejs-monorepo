@@ -138,6 +138,7 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
   }
 
   @Get('/character/available_features/:id')
+  @ApiResponse({ status: 200, type: [Feature] })
   async availableFeatures(@Param('id', ParseIntPipe) id: number): Promise<Feature[]> {
     const model = await getRepository(Sr2020Character).findOneOrFail(id);
     return this.sr2020ModelEngineService.availableFeatures(model);
