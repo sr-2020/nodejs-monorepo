@@ -8,6 +8,9 @@ export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: ne
       modifier.priority = Modifier.kDefaultPriority;
     }
   }
+
+  const systemModifier = api.getModifierById('_system');
+  systemModifier.priority = Modifier.kPriorityEarliest;
 }
 
 // Validates that character model is ready to be updated to a new "schema"
