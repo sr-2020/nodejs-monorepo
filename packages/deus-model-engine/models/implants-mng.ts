@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { DeusExModel } from '../deus-ex-model';
-import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
+import { EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { ImplantModifier } from '../helpers/catalog_types';
 import { default as consts } from '../helpers/constants';
 import { default as helpers } from '../helpers/model-helper';
@@ -29,6 +29,7 @@ export function addImplantEvent(api: EventModelApi<DeusExModel>, data: { id: str
     const implant: ImplantModifier = {
       ...loadedImplant,
       mID: '',
+      priority: Modifier.kDefaultPriority,
       enabled: true,
     };
 

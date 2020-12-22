@@ -215,6 +215,7 @@ type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneD
 function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
     mID: kInDroneModifierId,
+    priority: Modifier.kDefaultPriority,
     enabled: true,
     effects: [
       {

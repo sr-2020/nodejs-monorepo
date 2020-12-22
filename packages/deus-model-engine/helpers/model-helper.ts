@@ -500,6 +500,7 @@ function createEffectModifier(
     class: modifierClass,
     effects: [effect],
     enabled: true,
+    priority: Modifier.kDefaultPriority,
   };
 
   return modifier;

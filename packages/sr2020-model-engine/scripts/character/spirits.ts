@@ -86,6 +86,7 @@ type InTheSpiritModifier = Modifier & { hp: number; spiritQrId: string; postSpir
 function createSpiritModifier(spirit: SpiritQrData, spiritQrId: string): InTheSpiritModifier {
   return {
     mID: kInSpiritModifierId,
+    priority: Modifier.kDefaultPriority,
     enabled: true,
     effects: [
       {

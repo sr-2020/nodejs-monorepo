@@ -32,7 +32,7 @@ import { Implant } from '@alice/sr2020-common/models/common_definitions';
 export const kReviveModifierId = 'medkit-revive-modifier';
 
 function createReviveModifier(): Modifier {
-  return { mID: kReviveModifierId, enabled: true, effects: [] };
+  return { mID: kReviveModifierId, priority: Modifier.kDefaultPriority, enabled: true, effects: [] };
 }
 
 export const kAllImplants: Implant[] = [

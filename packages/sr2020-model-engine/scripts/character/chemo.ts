@@ -925,6 +925,7 @@ function createAddiction(element: keyof Concentrations): Addiction {
   return {
     mID: `${element}-addiction`,
     class: `${element}-addiction`,
+    priority: Modifier.kDefaultPriority,
     enabled: true,
     stage: 0,
     effects: [

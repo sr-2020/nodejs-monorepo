@@ -181,6 +181,11 @@ export class Modifier {
   @ArrayProperty(Effect)
   effects: Effect[];
 
+  @NumberProperty({ optional: true })
+  priority?: number;
+
+  static kDefaultPriority = 5;
+
   [key: string]: any;
 }
 

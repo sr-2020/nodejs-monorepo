@@ -142,7 +142,12 @@ export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
 export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');
-  addTemporaryModifier(api, { mID: kIWillSurviveModifierId, enabled: true, effects: [] }, d, 'Действие способности I will survive');
+  addTemporaryModifier(
+    api,
+    { mID: kIWillSurviveModifierId, enabled: true, effects: [], priority: Modifier.kDefaultPriority },
+    d,
+    'Действие способности I will survive',
+  );
 }
 
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

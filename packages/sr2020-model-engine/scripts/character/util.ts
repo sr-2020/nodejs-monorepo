@@ -33,6 +33,7 @@ export function modifierFromEffect<T>(
   return {
     ...additionalData,
     mID: handler + '-' + uuid.v4(),
+    priority: Modifier.kDefaultPriority,
     enabled: true,
     class: reason,
     effects: [

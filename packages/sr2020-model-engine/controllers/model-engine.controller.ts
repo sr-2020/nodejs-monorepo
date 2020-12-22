@@ -6,7 +6,7 @@ import {
   Sr2020CharacterProcessResponse,
 } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Engine } from '@alice/alice-model-engine/engine';
-import { AquiredObjects, EmptyModel, Event, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
+import { AquiredObjects, EmptyModel, Event, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Location, LocationProcessRequest, LocationProcessResponse } from '@alice/sr2020-common/models/location.model';
 import { QrCode, QrCodeProcessRequest, QrCodeProcessResponse } from '@alice/sr2020-common/models/qr-code.model';
 import { Empty } from '@alice/alice-common/models/empty.model';
@@ -259,6 +259,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
       modifiers: [
         {
           mID: '_system',
+          priority: Modifier.kDefaultPriority,
           enabled: true,
           effects: [createEssenceSystemEffect(), createJackedInEffect()],
         },

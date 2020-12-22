@@ -1,4 +1,5 @@
 import { DeusExModel } from '../../deus-ex-model';
+import { Modifier } from '@alice/alice-common/models/alice-model-engine';
 
 function randomId() {
   return Math.floor(Math.random() * 10000)
@@ -84,6 +85,7 @@ export function getExampleModel(id?: string): DeusExModel & { genome: number[] }
     modifiers: [
       {
         id: '_damage',
+        priority: Modifier.kDefaultPriority,
         displayName: 'internal damage modificator',
         class: '_internal',
         effects: [
@@ -99,6 +101,7 @@ export function getExampleModel(id?: string): DeusExModel & { genome: number[] }
       },
       {
         id: 'mindcubes_showdata',
+        priority: Modifier.kDefaultPriority,
         displayName: 'internal mind cube conditions modifier',
         class: '_internal',
         effects: [

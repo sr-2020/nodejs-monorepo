@@ -1,4 +1,4 @@
-import { Effect, EmptyModel, EngineResultOk } from '@alice/alice-common/models/alice-model-engine';
+import { Effect, EmptyModel, EngineResultOk, Modifier } from '@alice/alice-common/models/alice-model-engine';
 
 import { Config, EventHandler } from '../../config';
 import { Worker } from '../../worker';
@@ -179,6 +179,7 @@ describe('Worker', () => {
       modifiers: [
         {
           mID: 'test modifier',
+          priority: Modifier.kDefaultPriority,
           enabled: true,
           operand: 'value',
           class: 'normal',

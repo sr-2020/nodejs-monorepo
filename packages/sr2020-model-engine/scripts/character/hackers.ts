@@ -21,6 +21,7 @@ interface DumpshockModifier extends Modifier {
 
 const kDumpshockModifier: DumpshockModifier = {
   mID: 'dumpshock',
+  priority: Modifier.kDefaultPriority,
   amount: 0,
   enabled: true,
   effects: [

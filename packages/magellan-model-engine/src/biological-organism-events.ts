@@ -141,7 +141,7 @@ function enterShip(api: EventModelApi<OrganismModel>, data: number) {
 
   leaveShip(api, null);
   const eff: Effect = { enabled: true, type: 'normal', handler: 'onTheShip' };
-  const m: OnTheShipModifier = { mID: 'OnTheShip', enabled: true, effects: [eff], shipId: data };
+  const m: OnTheShipModifier = { mID: 'OnTheShip', priority: Modifier.kDefaultPriority, enabled: true, effects: [eff], shipId: data };
   api.addModifier(m);
 }
 

@@ -42,6 +42,7 @@ export function jjImmortalOneStartEvent(api: EventModelApi<DeusExModel>, data) {
 
   const modifier: JjImmortalOneModifier = {
     mID: '',
+    priority: Modifier.kDefaultPriority,
     name: 'jj-immortal-one',
     currentStage: 0,
     stages: pill.stages,
