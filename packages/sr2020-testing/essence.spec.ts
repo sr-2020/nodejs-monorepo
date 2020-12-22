@@ -24,7 +24,7 @@ describe('Essence', function () {
     expect((await fixture.getCharacter()).workModel).toMatchObject({ essence: 450, charisma: 2, resonance: 2, magic: 2 });
 
     await fixture.saveCharacter({ charisma: 3, resonance: 3, magic: 3, essenceDetails: { max: 600, used: 500, gap: 100 } });
-    expect((await fixture.getCharacter()).workModel).toMatchObject({ essence: 0, charisma: 0, resonance: 0, magic: 0 });
+    expect((await fixture.getCharacter()).workModel).toMatchObject({ essence: 0, charisma: 0, resonance: 0, magic: -2 });
 
     await fixture.saveCharacter({ charisma: 6, resonance: 6, magic: 6, essenceDetails: { max: 600, used: 500, gap: 100 } });
     expect((await fixture.getCharacter()).workModel).toMatchObject({ essence: 0, charisma: 1, resonance: 1, magic: 1 });

@@ -42,11 +42,11 @@ describe('Spells', function () {
     expect(workModel.spells).toHaveLength(0);
   });
 
-  it('Cast dummy spell', async () => {
-    await fixture.saveCharacter({ resonance: 12 });
+  it('Cast increase resonance spell', async () => {
+    await fixture.saveCharacter({ resonance: 7 });
     await fixture.addCharacterFeature('ground-heal');
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'increaseResonanceSpell', data: {} });
-    expect(workModel).toMatchObject({ resonance: 13 });
+    expect(workModel).toMatchObject({ resonance: 8 });
     expect(fixture.getCharacterNotifications().length).toBe(1);
   });
 

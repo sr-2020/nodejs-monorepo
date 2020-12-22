@@ -1,16 +1,14 @@
 // Basic effects adjusting value of some characteristic.
-// Must handle min-max clamping.
 import { clamp } from 'lodash';
 
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { EffectModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
+import { Effect, EffectModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 
 export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   if (api.model.currentBody != 'physical') return;
 
   api.model.maxHp += m.amount;
-  api.model.maxHp = clamp(api.model.maxHp, 0, 6);
   // Checking for healthState here to prevent infinite loop
   // (sending event leads to effect being re-applied leading to event send)
   if (api.model.maxHp == 0 && api.model.healthState != 'clinically_dead') {
@@ -19,11 +17,60 @@ export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: Modif
   }
 }
 
+export function createClamingEffect(): Effect {
+  return {
+    enabled: true,
+    type: 'normal',
+    handler: clampAttributes.name,
+  };
+}
+
+export function clampAttributes(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.maxHp = clamp(api.model.maxHp, 0, 6);
+  api.model.charisma = clamp(api.model.charisma, 0, 8);
+  api.model.intelligence = clamp(api.model.intelligence, 0, 8);
+  api.model.body = clamp(api.model.body, 0, 8);
+  api.model.strength = clamp(api.model.strength, 0, 8);
+  api.model.depth = clamp(api.model.depth, 0, 8);
+  api.model.resonance = clamp(api.model.resonance, 0, 8);
+  api.model.hacking.resonanceForControlBonus = clamp(api.model.hacking.resonanceForControlBonus, 0, 3);
+  api.model.hacking.maxTimeAtHost = clamp(api.model.hacking.maxTimeAtHost, 15, 60);
+  api.model.hacking.hostEntrySpeed = clamp(api.model.hacking.hostEntrySpeed, 5, 20);
+  api.model.hacking.conversionAttack = clamp(api.model.hacking.conversionAttack, 5, 20);
+  api.model.hacking.conversionFirewall = clamp(api.model.hacking.conversionFirewall, 5, 20);
+  api.model.hacking.conversionSleaze = clamp(api.model.hacking.conversionSleaze, 5, 20);
+  api.model.hacking.conversionDataprocessing = clamp(api.model.hacking.conversionDataprocessing, 5, 20);
+  api.model.hacking.fadingResistance = clamp(api.model.hacking.fadingResistance, 1, 50);
+  api.model.hacking.compilationFadingResistance = clamp(api.model.hacking.compilationFadingResistance, 0, 100);
+  api.model.hacking.varianceResistance = clamp(api.model.hacking.varianceResistance, 0, 100);
+  api.model.hacking.biofeedbackResistance = clamp(api.model.hacking.biofeedbackResistance, 0, 50);
+  api.model.matrixHp = clamp(api.model.matrixHp, 1, 6);
+  api.model.hacking.adminHostNumber = clamp(api.model.hacking.adminHostNumber, 3, 10);
+  api.model.hacking.additionalBackdoors = clamp(api.model.hacking.additionalBackdoors, 0, 5);
+  api.model.hacking.backdoorTtl = clamp(api.model.hacking.backdoorTtl, 0, 9000);
+  api.model.hacking.additionalRequests = clamp(api.model.hacking.additionalRequests, 0, 5);
+  api.model.hacking.spriteLevel = clamp(api.model.hacking.spriteLevel, 0, 3);
+  api.model.hacking.additionalSprites = clamp(api.model.hacking.additionalSprites, 0, 5);
+  api.model.maxTimeInVr = clamp(api.model.maxTimeInVr, 30, 9000);
+  api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
+  api.model.magicStats.auraMarkMultiplier = clamp(api.model.magicStats.auraMarkMultiplier, 0.1, 2.0);
+  api.model.magicStats.auraReadingMultiplier = clamp(api.model.magicStats.auraReadingMultiplier, 0.1, 2.0);
+  api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 9000);
+  api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
+  api.model.chemo.uberEffectThreshold = clamp(api.model.chemo.uberEffectThreshold, 0, 9000);
+  api.model.chemo.superEffectThreshold = clamp(api.model.chemo.superEffectThreshold, 0, 9000);
+  api.model.chemo.crysisThreshold = clamp(api.model.chemo.crysisThreshold, 0, 9000);
+  api.model.billing.stockGainPercentage = clamp(api.model.billing.stockGainPercentage, 0, 50);
+  api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
+  api.model.drones.maxTimeInside = clamp(api.model.drones.maxTimeInside, 6, 120);
+  api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
+  api.model.implantsBodySlots = clamp(api.model.implantsBodySlots, 0, 10);
+}
+
 export function increaseMaxEctoplasmHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   if (api.model.currentBody != 'ectoplasm') return;
 
   api.model.maxHp += m.amount;
-  api.model.maxHp = clamp(api.model.maxHp, 0, 6);
 }
 
 export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -36,37 +83,30 @@ export function increaseAllBaseStats(api: EffectModelApi<Sr2020Character>, m: Mo
 
 export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.charisma += m.amount;
-  api.model.charisma = clamp(api.model.charisma, 0, 8);
 }
 
 export function increaseIntelligence(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.intelligence += m.amount;
-  api.model.intelligence = clamp(api.model.intelligence, 0, 8);
 }
 
 export function increaseBody(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.body += m.amount;
-  api.model.body = clamp(api.model.body, 0, 8);
 }
 
 export function increaseStrength(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.strength += m.amount;
-  api.model.strength = clamp(api.model.strength, 0, 8);
 }
 
 export function increaseDepth(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.depth += m.amount;
-  api.model.depth = clamp(api.model.depth, 0, 8);
 }
 
 export function increaseResonance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.resonance += m.amount;
-  api.model.resonance = clamp(api.model.resonance, 0, 8);
 }
 
 export function increaseMagic(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magic += m.amount;
-  api.model.magic = clamp(api.model.magic, 0, 9000);
 }
 
 export function multiplyMagicFeedbackMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -79,97 +119,78 @@ export function increaseMaxMagicPower(api: EffectModelApi<Sr2020Character>, m: M
 
 export function increaseResonanceForControl(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.resonanceForControlBonus += m.amount;
-  api.model.hacking.resonanceForControlBonus = clamp(api.model.hacking.resonanceForControlBonus, 0, 3);
 }
 
 export function increaseMaxTimeAtHost(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.maxTimeAtHost += m.amount;
-  api.model.hacking.maxTimeAtHost = clamp(api.model.hacking.maxTimeAtHost, 15, 60);
 }
 
 export function increaseHostEntrySpeed(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.hostEntrySpeed += m.amount;
-  api.model.hacking.hostEntrySpeed = clamp(api.model.hacking.hostEntrySpeed, 5, 20);
 }
 
 export function increaseConversionAttack(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.conversionAttack += m.amount;
-  api.model.hacking.conversionAttack = clamp(api.model.hacking.conversionAttack, 5, 20);
 }
 
 export function increaseConversionFirewall(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.conversionFirewall += m.amount;
-  api.model.hacking.conversionFirewall = clamp(api.model.hacking.conversionFirewall, 5, 20);
 }
 
 export function increaseConversionSleaze(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.conversionSleaze += m.amount;
-  api.model.hacking.conversionSleaze = clamp(api.model.hacking.conversionSleaze, 5, 20);
 }
 
 export function increaseConversionDataprocessing(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.conversionDataprocessing += m.amount;
-  api.model.hacking.conversionDataprocessing = clamp(api.model.hacking.conversionDataprocessing, 5, 20);
 }
 
 export function increaseFadingResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.fadingResistance += m.amount;
-  api.model.hacking.fadingResistance = clamp(api.model.hacking.fadingResistance, 1, 50);
 }
 
 export function increaseCompilationFadingResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.compilationFadingResistance += m.amount;
-  api.model.hacking.compilationFadingResistance = clamp(api.model.hacking.compilationFadingResistance, 0, 100);
 }
 
 export function increaseVarianceResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.varianceResistance += m.amount;
-  api.model.hacking.varianceResistance = clamp(api.model.hacking.varianceResistance, 0, 100);
 }
 
 export function increaseBiofeedbackResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.biofeedbackResistance += m.amount;
-  api.model.hacking.biofeedbackResistance = clamp(api.model.hacking.biofeedbackResistance, 0, 50);
 }
 
 export function increaseMatrixHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.matrixHp += m.amount;
-  api.model.matrixHp = clamp(api.model.matrixHp, 1, 6);
 }
 
 export function increaseAdminHostNumber(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.adminHostNumber += m.amount;
-  api.model.hacking.adminHostNumber = clamp(api.model.hacking.adminHostNumber, 3, 10);
 }
 
 export function increaseBackdoors(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.additionalBackdoors += m.amount;
-  api.model.hacking.additionalBackdoors = clamp(api.model.hacking.additionalBackdoors, 0, 5);
 }
 
 export function increaseBackdoorTtl(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.backdoorTtl += m.amount;
-  api.model.hacking.backdoorTtl = clamp(api.model.hacking.backdoorTtl, 0, 9000);
 }
 
 export function increaseControlRequests(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.additionalRequests += m.amount;
-  api.model.hacking.additionalRequests = clamp(api.model.hacking.additionalRequests, 0, 5);
 }
 
 export function increaseSpriteLevel(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.spriteLevel += m.amount;
-  api.model.hacking.spriteLevel = clamp(api.model.hacking.spriteLevel, 0, 3);
 }
 
 export function increaseSpriteCount(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.additionalSprites += m.amount;
-  api.model.hacking.additionalSprites = clamp(api.model.hacking.additionalSprites, 0, 5);
 }
 
 export function increaseMaxTimeInVr(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.maxTimeInVr += m.amount;
-  api.model.maxTimeInVr = clamp(api.model.maxTimeInVr, 30, 9000);
 }
 
 export function muliplyMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -178,47 +199,38 @@ export function muliplyMagicRecoverySpeed(api: EffectModelApi<Sr2020Character>, 
 
 export function multiplySpiritResistanceMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magicStats.spiritResistanceMultiplier *= m.amount;
-  api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
 }
 
 export function increaseAuraMarkMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magicStats.auraMarkMultiplier += m.amount;
-  api.model.magicStats.auraMarkMultiplier = clamp(api.model.magicStats.auraMarkMultiplier, 0.1, 2.0);
 }
 
 export function increaseAuraReadingMultiplier(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magicStats.auraReadingMultiplier += m.amount;
-  api.model.magicStats.auraReadingMultiplier = clamp(api.model.magicStats.auraReadingMultiplier, 0.1, 2.0);
 }
 
 export function increaseAuraMask(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.magicStats.auraMask += m.amount;
-  api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 9000);
 }
 
 export function increaseСhemoBaseEffectThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.baseEffectThreshold += m.amount;
-  api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
 }
 
 export function increaseСhemoUberEffectThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.uberEffectThreshold += m.amount;
-  api.model.chemo.uberEffectThreshold = clamp(api.model.chemo.uberEffectThreshold, 0, 9000);
 }
 
 export function increaseСhemoSuperEffectThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.superEffectThreshold += m.amount;
-  api.model.chemo.superEffectThreshold = clamp(api.model.chemo.superEffectThreshold, 0, 9000);
 }
 
 export function increaseСhemoCrysisThreshold(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.crysisThreshold += m.amount;
-  api.model.chemo.crysisThreshold = clamp(api.model.chemo.crysisThreshold, 0, 9000);
 }
 
 export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.billing.stockGainPercentage += m.amount;
-  api.model.billing.stockGainPercentage = clamp(api.model.billing.stockGainPercentage, 0, 50);
 }
 
 export function multiplyCorpDiscountAres(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -292,7 +304,6 @@ export function increaseMentalAttackAndProtection(api: EffectModelApi<Sr2020Char
 
 export function increaseMaxDroneDifficulty(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.maxDifficulty += m.amount;
-  api.model.drones.maxDifficulty = clamp(api.model.drones.maxDifficulty, -1000, 40);
 }
 
 export function increaseAircraftBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -319,12 +330,10 @@ export function increaseDroneCrafts(api: EffectModelApi<Sr2020Character>, m: Mod
 
 export function increaseMaxTimeInDrone(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.maxTimeInside += m.amount;
-  api.model.drones.maxTimeInside = clamp(api.model.drones.maxTimeInside, 6, 120);
 }
 
 export function increasePostDroneRecoveryTime(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.drones.recoveryTime += m.amount;
-  api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
 }
 
 export function increaseDroneFeedback(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -365,7 +374,6 @@ export function setTransactionAnonymous(api: EffectModelApi<Sr2020Character>, m:
 
 export function increaseImplantsSlots(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.implantsBodySlots += m.amount;
-  api.model.implantsBodySlots = clamp(api.model.implantsBodySlots, 0, 10);
 }
 
 export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {

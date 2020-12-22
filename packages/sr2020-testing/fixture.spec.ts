@@ -22,9 +22,9 @@ describe('Fixture', function () {
   });
 
   it('Send character event', async () => {
-    await fixture.saveCharacter({ resonance: 12 });
+    await fixture.saveCharacter({ resonance: 7 });
     await fixture.sendCharacterEvent({ eventType: 'increase-resonance-spell', data: {} });
-    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 13 } });
+    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 8 } });
     expect(fixture.getCharacterNotifications().length).toBe(1);
   });
 
@@ -47,13 +47,13 @@ describe('Fixture', function () {
   });
 
   it('QR codes with events', async () => {
-    await fixture.saveCharacter({ resonance: 10 });
+    await fixture.saveCharacter({ resonance: 5 });
     await fixture.saveQrCode({ usesLeft: 5, type: 'event', eventType: 'increase-resonance-spell', data: {} });
     await fixture.sendCharacterEvent({
       eventType: 'scan-qr',
       data: { qrCode: '0' },
     });
     expect(await fixture.getQrCode()).toMatchObject({ workModel: { usesLeft: 4, type: 'event' } });
-    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 11 } });
+    expect(await fixture.getCharacter()).toMatchObject({ workModel: { resonance: 6 } });
   });
 });
