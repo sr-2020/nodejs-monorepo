@@ -110,9 +110,7 @@ export class Engine<T extends EmptyModel> {
     return context.workModel.modifiers
       .filter((m) => m.enabled)
       .sort((a, b) => {
-        if (a.class != '_internal' && b.class == '_internal') return -1;
-        if (a.class == '_internal' && b.class != '_internal') return 1;
-        return 0;
+        return a.priority - b.priority;
       });
   }
 
