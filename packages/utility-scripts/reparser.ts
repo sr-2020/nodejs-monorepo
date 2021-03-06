@@ -1,7 +1,15 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as prettier from 'prettier';
-import { FeatureAvailability, PackInfo } from '@alice/sr2020-common/models/sr2020-character.model';
+
+export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
+
+export class PackInfo {
+  id: string;
+  level: number;
+}
+
+export type FeatureAvailability = 'open' | 'closed' | 'master';
 
 export interface PassiveAbility {
   id: string;
