@@ -2,6 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Sr2020ModelEngineModule } from '@alice/sr2020-model-engine/sr2020-model-engine.module';
+import { json } from 'body-parser';
 
 export interface AppConfig {
   port: number;
@@ -10,6 +11,7 @@ export interface AppConfig {
 export async function createApp(config: AppConfig): Promise<INestApplication> {
   const app = await NestFactory.create(Sr2020ModelEngineModule);
   app.setGlobalPrefix('');
+  app.use(json({ limit: '2mb' }));
 
   const options = new DocumentBuilder()
     .setTitle('Model Engine service')

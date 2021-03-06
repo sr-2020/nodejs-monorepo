@@ -2,9 +2,11 @@
   "name": "sr2020-model-engine",
   "version": "0.0.1",
   "devDependencies": {
+    "@types/body-parser": "^1.19.0",
     "@types/chance": "^1.0.6"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "chance": "^1.1.0",
     "cuid": "^2.1.8",
     "lodash": "^4.17.15"
