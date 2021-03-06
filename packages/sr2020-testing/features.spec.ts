@@ -87,7 +87,7 @@ describe('Features-related events', function () {
 
     it('True if prerequisites are satisfied', async () => {
       await fixture.saveCharacter();
-      await fixture.addCharacterFeature('arch-samurai-assasin');
+      await fixture.addCharacterFeature('arch-samurai');
       await fixture.addCharacterFeature('marauder-1');
       expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('marauder-2')!)).toBe(true);
     });
