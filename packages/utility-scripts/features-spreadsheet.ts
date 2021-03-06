@@ -24,6 +24,7 @@ const kPlayerDescriptionColumn = 14;
 const kMasterDescriptionColumn = 15;
 const kCooldownColumn = 10;
 const kSpellSphereColumn = 19;
+const kMinimalEssenceColumn = 20;
 const kKarmaCostColumn = 9;
 const kAvailabilityColumn = 13;
 
@@ -37,6 +38,16 @@ class SpreadsheetProcessor {
     const result = Number(input);
     if (isNaN(result)) {
       console.log(`Unexpected karma cost for ${id}: ${input}`);
+      return 0;
+    }
+    return result;
+  }
+
+  parseMinimalEssence(id: string, input: string | undefined): number {
+    if (!input) return 0;
+    const result = Number(input);
+    if (isNaN(result)) {
+      console.log(`Unexpected minimal essence for ${id}: ${input}`);
       return 0;
     }
     return result;
@@ -119,6 +130,7 @@ class SpreadsheetProcessor {
       gmDescription: row[kMasterDescriptionColumn] ?? '',
       cooldown: this.parseCooldown(id, row[kCooldownColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
+      minimalEssence: this.parseMinimalEssence(id, row[kMinimalEssenceColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
       availability: this.parseAvailability(id, row[kAvailabilityColumn]),
@@ -218,6 +230,10 @@ class SpreadsheetProcessor {
 
     if (!header[kAvailabilityColumn].startsWith('Availability')) {
       throw new Error('Availability column was moved! Exiting.');
+    }
+
+    if (!header[kMinimalEssenceColumn].startsWith('Essence_needed')) {
+      throw new Error('Minimal essence column was moved! Exiting.');
     }
 
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {
