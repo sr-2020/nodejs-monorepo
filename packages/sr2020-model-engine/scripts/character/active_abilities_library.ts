@@ -68,6 +68,7 @@ import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engi
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
+import { decreaseMaxEssence, essenceReset, increaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -1961,7 +1962,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: tincasmAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  его  базовый показатель Эссенса увеличивается на +1.
   //  itMaxEssense = itMaxEssense + 100.
@@ -1976,9 +1976,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: increaseMaxEssence.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  его  базовый показатель Эссенса уменьшается на -1
   //  itMaxEssense = itMaxEssense - 100
@@ -1993,9 +1992,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: decreaseMaxEssence.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  меняются показатели:
   // itUsedEssense = 0
@@ -2012,7 +2010,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: essenceReset.name,
   },
   // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.

@@ -36,6 +36,10 @@ export function increaseMaxEssence(api: EventModelApi<Sr2020Character>, data: { 
   api.model.essenceDetails.max += data.amount ?? 100;
 }
 
+export function decreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: { amount?: number }) {
+  api.model.essenceDetails.max -= data.amount ?? 100;
+}
+
 export function essenceReset(api: EventModelApi<Sr2020Character>, data: {}) {
   while (api.model.implants.length) {
     removeImplant(api, { id: api.model.implants[api.model.implants.length - 1].id });
