@@ -1488,6 +1488,28 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'face-geshaftmacher-trader', level: 3 },
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }),
   },
+  // Множитель 0,6 при покупке любого товара  данным персонажем
+  {
+    id: 'discount-all-4',
+    humanReadableName: 'Скидосы - 40%',
+    description: 'Скидки Стоимость товара умножается на 0,6 при покупке любого товара ',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-face', 'discount-all-3'],
+    pack: undefined,
+    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.6 }),
+  },
+  // Множитель 0,5 при покупке любого товара  данным персонажем
+  {
+    id: 'discount-all-5',
+    humanReadableName: 'Скидосы - 50%',
+    description: 'Скидки Стоимость товара умножается на 0,5 при покупке любого товара ',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-face', 'discount-all-4'],
+    pack: undefined,
+    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.5 }),
+  },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
   // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
   {
@@ -4516,30 +4538,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-samurai', "clubs'n'swords-3"],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // Множитель 0,6 при покупке любого товара  данным персонажем
-  {
-    id: 'discount-all-4',
-    humanReadableName: 'Скидосы - 40%',
-    description: 'Скидки Стоимость товара умножается на 0,6 при покупке любого товара ',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-face', 'discount-all-3'],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // Множитель 0,5 при покупке любого товара  данным персонажем
-  {
-    id: 'discount-all-5',
-    humanReadableName: 'Скидосы - 50%',
-    description: 'Скидки Стоимость товара умножается на 0,5 при покупке любого товара ',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-face', 'discount-all-4'],
     pack: undefined,
     modifier: [],
   },
