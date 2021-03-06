@@ -31,7 +31,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { createClamingEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { createClampingEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 
 const chance = new Chance();
 
@@ -268,7 +268,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
           mID: '_limiter',
           priority: Modifier.kPriorityLatest,
           enabled: true,
-          effects: [createClamingEffect()],
+          effects: [createClampingEffect()],
         },
       ],
       timers: [],

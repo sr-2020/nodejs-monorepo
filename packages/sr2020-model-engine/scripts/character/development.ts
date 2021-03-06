@@ -1,6 +1,6 @@
 import { EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { createClamingEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { createClampingEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 
 // Migrates to updated character model (e.g. sets some optional fields to the default values).
 export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: never) {
@@ -18,7 +18,7 @@ export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: ne
       mID: '_limiter',
       priority: Modifier.kPriorityLatest,
       enabled: true,
-      effects: [createClamingEffect()],
+      effects: [createClampingEffect()],
     });
   }
 }

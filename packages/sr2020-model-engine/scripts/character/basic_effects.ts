@@ -17,7 +17,7 @@ export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: Modif
   }
 }
 
-export function createClamingEffect(): Effect {
+export function createClampingEffect(): Effect {
   return {
     enabled: true,
     type: 'normal',
