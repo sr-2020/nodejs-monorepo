@@ -6,6 +6,7 @@ import { CardDeck } from 'react-bootstrap';
 import { NewCycleCard } from '@alice/sr2020-admin-ui/app/global/cards/new-cycle-card';
 import { NightPauseCard } from '@alice/sr2020-admin-ui/app/global/cards/night-pause-card';
 import { MigrationCard } from '@alice/sr2020-admin-ui/app/global/cards/migration-card';
+import { EthicsCard } from '@alice/sr2020-admin-ui/app/global/cards/ethics-card';
 
 export class GlobalActionsPage extends React.Component<{ addToast: AddToast }> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,6 +37,9 @@ export class GlobalActionsPage extends React.Component<{ addToast: AddToast }> {
         </CardDeck>
         <CardDeck className="mt-3">
           <NightPauseCard broadcastEvent={this.broadcastEvent} />
+        </CardDeck>
+        <CardDeck className="mt-3">
+          <EthicsCard broadcastEvent={this.broadcastEvent} />
         </CardDeck>
         <CardDeck className="mt-3">
           <MigrationCard broadcastEvent={this.broadcastEvent} />

@@ -311,3 +311,11 @@ export function chargeLocusAbility(api: EventModelApi<Sr2020Character>, data: Ac
 
 // Intentionally don't do anything, the only purpose here is to set cooldown and add history record (which is done by useAbility).
 export function prophetAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
+
+export function showEthic(api: EventModelApi<Sr2020Character>, data: never) {
+  api.model.screens.ethics = true;
+}
+
+export function hideEthic(api: EventModelApi<Sr2020Character>, data: never) {
+  api.model.screens.ethics = false;
+}
