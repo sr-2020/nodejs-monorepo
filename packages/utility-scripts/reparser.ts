@@ -236,6 +236,10 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
 }
 
+function createCooldownFunction(cooldown: number) {
+  return ts.createIdentifier(`(m) => ${cooldown}`);
+}
+
 export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
   const file = readSourceFileWithoutComments(ACTIVE_ABILITIES_FILENAME);
 
@@ -250,7 +254,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
           ts.createPropertyAssignment(ts.createIdentifier('description'), ts.createStringLiteral(ability.description)),
           ts.createPropertyAssignment(ts.createIdentifier('target'), ts.createStringLiteral('scan')),
           ts.createPropertyAssignment(ts.createIdentifier('targetsSignature'), ts.createIdentifier('kNoTarget')),
-          ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), ts.createNumericLiteral(ability.cooldown)),
+          ts.createPropertyAssignment(ts.createIdentifier('cooldownMinutes'), createCooldownFunction(ability.cooldown)),
           ts.createPropertyAssignment(
             ts.createIdentifier('prerequisites'),
             ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id))),
@@ -289,7 +293,8 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
         return createPackLiteral(ability.pack);
       }
       if (propertyName == 'cooldownMinutes') {
-        return ts.createNumericLiteral(ability.cooldown);
+        // return ts.createNumericLiteral(ability.cooldown);
+        return createCooldownFunction(ability.cooldown);
       }
       if (propertyName == 'availability') {
         return ts.createStringLiteral(ability.availability);
