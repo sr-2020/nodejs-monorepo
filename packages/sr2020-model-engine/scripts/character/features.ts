@@ -71,7 +71,7 @@ function addActiveAbility(model: Sr2020Character, ability: ActiveAbility) {
     description: ability.description,
     target: ability.target,
     targetsSignature: ability.targetsSignature,
-    cooldownMinutes: ability.cooldownMinutes,
+    cooldownMinutes: 0,
     cooldownUntil: 0,
   });
 }
@@ -215,7 +215,7 @@ export function addTemporaryActiveAbilityEffect(api: EffectModelApi<Sr2020Charac
     description: m.ability.description,
     target: m.ability.target,
     targetsSignature: m.ability.targetsSignature,
-    cooldownMinutes: m.ability.cooldownMinutes,
+    cooldownMinutes: 0,
     cooldownUntil: 0,
     validUntil: m.validUntil,
   });

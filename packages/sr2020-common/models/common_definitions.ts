@@ -4,6 +4,7 @@ import {
   Feature,
   LocationMixin,
   SpellSphere,
+  Sr2020Character,
   Targetable,
   TargetSignature,
 } from '@alice/sr2020-common/models/sr2020-character.model';
@@ -22,7 +23,7 @@ export type TargetType = 'scan' | 'show';
 export interface ActiveAbility extends Feature {
   target: TargetType;
   targetsSignature: TargetSignature[];
-  cooldownMinutes: number;
+  cooldownMinutes: (model: Sr2020Character) => number;
   minimalEssence: number; // in 0-6 range, not 0-600.
   eventType: string;
 }

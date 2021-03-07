@@ -96,11 +96,25 @@ describe('Chemo events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(40);
       expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 1000);
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
       expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 700);
+    }
+  });
+
+  it('Silicon', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('i-dont-trust-anybody');
+    {
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(40);
+    }
+    {
+      const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam' } });
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(32);
     }
   });
 

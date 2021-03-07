@@ -1,6 +1,6 @@
 import { EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { createClampingEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { createClampingEffect, createCooldownCalculatorEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 
 // Migrates to updated character model (e.g. sets some optional fields to the default values).
 export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: never) {
@@ -19,6 +19,15 @@ export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: ne
       priority: Modifier.kPriorityLatest,
       enabled: true,
       effects: [createClampingEffect()],
+    });
+  }
+
+  if (!api.getModifierById('_cooldown_calculator')) {
+    api.addModifier({
+      mID: '_cooldown_calculator',
+      priority: Modifier.kPriorityLatest,
+      enabled: true,
+      effects: [createCooldownCalculatorEffect()],
     });
   }
 }

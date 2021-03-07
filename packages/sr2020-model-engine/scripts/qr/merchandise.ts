@@ -106,7 +106,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
           id: maybeActiveAbility.id,
           humanReadableName: maybeActiveAbility.humanReadableName,
           description: maybeActiveAbility.description,
-          cooldownMinutes: maybeActiveAbility.cooldownMinutes,
+          cooldownMinutes: 0,
           cooldownUntil: 0,
           target: maybeActiveAbility.target,
           targetsSignature: maybeActiveAbility.targetsSignature,

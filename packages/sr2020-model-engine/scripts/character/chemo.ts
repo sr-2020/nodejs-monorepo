@@ -21,6 +21,7 @@ import { ModifierWithAmount, TemporaryModifier } from '@alice/sr2020-model-engin
 import { addTemporaryPassiveAbilityEffect } from '@alice/sr2020-model-engine/scripts/character/features';
 import { scanQr } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
 import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -881,7 +882,9 @@ export function heavyWeaponsEffect(api: EffectModelApi<Sr2020Character>, m: Temp
 
 export function reduceCooldowns(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
   for (const ability of api.model.activeAbilities) {
-    ability.cooldownUntil -= duration(ability.cooldownMinutes, 'minutes').asMilliseconds() * data.amount;
+    const libraryAbility = getAllActiveAbilities().get(ability.id)!;
+    const cooldownMinutes = libraryAbility.cooldownMinutes(api.model) * api.model.cooldownCoefficient;
+    ability.cooldownUntil -= duration(cooldownMinutes, 'minutes').asMilliseconds() * data.amount;
   }
 }
 

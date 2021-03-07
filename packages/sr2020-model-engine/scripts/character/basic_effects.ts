@@ -4,6 +4,7 @@ import { clamp } from 'lodash';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { Effect, EffectModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
+import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 export function increaseMaxMeatHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   if (api.model.currentBody != 'physical') return;
@@ -65,6 +66,21 @@ export function clampAttributes(api: EffectModelApi<Sr2020Character>, m: Modifie
   api.model.drones.maxTimeInside = clamp(api.model.drones.maxTimeInside, 6, 120);
   api.model.drones.recoveryTime = clamp(api.model.drones.recoveryTime, 6, 300);
   api.model.implantsBodySlots = clamp(api.model.implantsBodySlots, 0, 10);
+}
+
+export function createCooldownCalculatorEffect(): Effect {
+  return {
+    enabled: true,
+    type: 'normal',
+    handler: calculateCooldowns.name,
+  };
+}
+
+export function calculateCooldowns(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  for (const ability of api.model.activeAbilities) {
+    const libraryAbility = getAllActiveAbilities().get(ability.id)!;
+    ability.cooldownMinutes = libraryAbility.cooldownMinutes(api.model) * api.model.cooldownCoefficient;
+  }
 }
 
 export function increaseMaxEctoplasmHp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
