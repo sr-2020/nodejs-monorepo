@@ -32,7 +32,6 @@ import {
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-
 // Not exported by design, use kAllSpells instead.
 const kAllSpellsList: Spell[] = [
   {
@@ -49,7 +48,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'keep-yourself',
     humanReadableName: 'Keep yourself',
-    description: 'Увеличение своих хитов. Чем больше Мощь, тем больше хитов и дольше срок',
+    description:
+      'Маг может увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше шести',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-spirit', level: 2 },
     availability: 'open',
@@ -61,7 +61,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'ground-heal',
     humanReadableName: 'Ground Heal',
-    description: 'Поднять цель из тяжрана. Восстановить хиты до максимума. Чем больше Мощь, тем на большее время запасено заклинание',
+    description:
+      'У мага появляется на время T/на одно использование (что раньше закончится) способность поднять другую цель из тяжрана. T=Мощь*10 минут',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-protect', level: 3 },
     availability: 'open',
@@ -73,7 +74,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'live-long-and-prosper',
     humanReadableName: 'Live long and prosper',
-    description: 'Увеличить кому-то количество хитов. Чем больше Мощь, тем больше хитов и дольше срок',
+    description:
+      'Маг увеличивает указанной во время каста цели количество максимальных и текущих хитов на N на время T. N=Мощь. T=10*Мощь минут. Общее количество хитов не может быть больше 6 (согласно правилам по боевке)',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-protect', level: 3 },
     availability: 'open',
@@ -86,7 +88,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'fast-charge',
     humanReadableName: 'Fast charge',
-    description: 'Зарядиться на время молниями. Чем больше Мощь, тем больше снарядов и срок',
+    description:
+      'У мага на Мощь*10 минут появляется пассивная способность Fast Charge, позволяющая кидать молнии. Молния должна выглядеть как обшитый мягким теннисный шар  с длинным (не менее 2м) хвостом, и его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). Количество доступных молний: Мощь - 2 (но не меньше 1),',
     prerequisites: ['arch-mage-spellcaster'],
     availability: 'open',
     karmaCost: 50,
@@ -97,7 +100,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'fireball',
     humanReadableName: 'Fireball',
-    description: 'Зарядиться на время файерболами. Чем больше Мощь, тем больше снарядов и срок',
+    description:
+      'У мага на Мощь*8 минут появляется пассивная способность Fireball, позволяющая кидать файерболы. Файербол должен выглядеть как обшитый мягким теннисный шар, и его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). Количество доступных файерболов: Мощь - 3 (но не меньше 1),',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-combat', level: 1 },
     availability: 'open',
@@ -110,7 +114,7 @@ const kAllSpellsList: Spell[] = [
     id: 'tease-lesser-mind',
     humanReadableName: 'Tease lesser mind',
     description:
-      'Временно выдаёт способность "раскрыть магический щит" (прозрачный зонтик, защищает от любого легкого оружия), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+      'На Мощь*10 минут выдаёт способность "раскрыть магический щит" (прозрачный зонтик, в течение 5 минут защищает от любого легкого оружия), потребуется её активация перед использованием.',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-combat', level: 3 },
     availability: 'open',
@@ -123,7 +127,7 @@ const kAllSpellsList: Spell[] = [
     id: 'enlarge-your-pencil',
     humanReadableName: 'Enlarge Your Pencil',
     description:
-      'Временно выдаёт другому существу способность "Pencil, large!" (одно оружие в руках будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+      'На Мощь*20 минут выдаёт другому существу способность "Pencil, large!" (одно оружие в руках 5 минут будет считаться тяжёлым), потребуется её активация перед использованием.',
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 40,
@@ -135,7 +139,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'stone-skin',
     humanReadableName: 'Skin stoner',
-    description: 'Временно выдаёт магу способность "Skin, Stone!". Чем больше Мощь, тем дольше сроки хранения',
+    description:
+      'На Мощь*20 минут выдаёт магу способность "Skin, Stone!" (имеющаяся броня 5 минут считается тяжёлой). Потребуется её активация',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-protect', level: 1 },
     availability: 'open',
@@ -147,7 +152,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'avalanche',
     humanReadableName: 'Avalanche',
-    description: 'Один раз снять со всех в реале в этой локации хиты. Чем больше Мощь, тем больше снимется',
+    description: 'Один раз снять со всех в реале в этой локации хиты (Мощь/2)',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-astralog', level: 3 },
     availability: 'open',
@@ -160,8 +165,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'birds',
     humanReadableName: 'Birds',
-    description:
-      'Каждую минуту, пока не пройдет заклинание, снимать со всех в реале в этой локации по 1 хиту. Чем больше Мощь, тем больше срок',
+    description: 'В течение Мощь*3 минут каждую минуту со всех в реале в этой локации снимается по 1 хиту.',
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 100,
@@ -174,7 +178,7 @@ const kAllSpellsList: Spell[] = [
     id: 'cacophony',
     humanReadableName: 'Cacophony',
     description:
-      'Каждую минуту, пока не пройдет заклинание, все в астрале в этой локации должны сделать 20 приседаний. Чем больше Мощь, тем больше срок',
+      'В течение Мощь*5 минут каждую минуту все в астрале в этой локации кроме самого мага и его друзей должны сделать 20 приседаний. Кто не делает - должен немедленно покинуть астральное тело.',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'closed',
     karmaCost: 100,
@@ -185,7 +189,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'healton',
     humanReadableName: 'Healton',
-    description: 'Ты временно получаешь свойство Healtouch. Чем больше Мощь, тем больше срок',
+    description:
+      'Ты получаешь свойство Healtouch (касанием восстанавливать мясным/экто телам текущие хиты до максимума) на Мощь*20 минут. Чем больше Мощь, тем больше срок',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-spirit', level: 3 },
     availability: 'closed',
@@ -198,7 +203,7 @@ const kAllSpellsList: Spell[] = [
     id: 'trackpoint',
     humanReadableName: 'Trackpoint',
     description:
-      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние несколько минут.  Чем больше Мощь, тем точнее будут данные об аурах заклинателей',
+      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние 10+Мощь минут.  Ауры считываются на 10+Мощь*5 процентов, но не более 40',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-astralog', level: 1 },
     availability: 'open',
@@ -211,7 +216,7 @@ const kAllSpellsList: Spell[] = [
     id: 'trackball',
     humanReadableName: 'Trackball',
     description:
-      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последний час. Чем больше Мощь, тем точнее будут данные об аурах заклинателей',
+      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последний час. Ауры считываются на 20+Мощь*10 процентов, но не более 60',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-astralog', level: 2 },
     availability: 'open',
@@ -226,7 +231,7 @@ const kAllSpellsList: Spell[] = [
     id: 'tempus-fugit',
     humanReadableName: 'Tempus Fugit',
     description:
-      'Единоразово сдвинуть в текущей локации следы всех заклинаний за последние несколько минут на несколько минут в прошлое. Чем больше Мощь, тем больше следов захватит заклинание и тем дальше сдвинет',
+      'Единоразово сдвинуть в текущей локации следы всех заклинаний за последние Мощь*5 минут на Мощь*4 минут в прошлое. Чем больше Мощь, тем больше следов захватит заклинание и тем дальше сдвинет',
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 50,
@@ -238,7 +243,7 @@ const kAllSpellsList: Spell[] = [
     id: 'brasilia',
     humanReadableName: 'Brasilia',
     description:
-      'Пока не кончится заклинание, все следы всех заклинаний в этой локации, попадающих в интервал "последние 10 минут", будут каждую минуту сдвигаться в прошлое на 5 минут. Чем больше Мощь, тем больше срок',
+      'В течение Мощь*6 минут все следы всех заклинаний в этой локации, попадающих в интервал "последние 10 минут", будут каждую минуту сдвигаться в прошлое на 5 минут.',
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 100,
@@ -252,8 +257,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'eh-bien',
     humanReadableName: 'Eh bien',
-    description:
-      'Получить информацию о тех, кто был в этой локации в интервале, содержащем указанный момент времени. Чем больше Мощь, тем больше интервал',
+    description: 'Получить информацию о тех, кто был в текущей локации в интервале (Мощь*5 минут), содержащем указанный момент времени.',
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -265,8 +269,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'beacon',
     humanReadableName: 'Beacon',
-    description:
-      'Пока не кончится заклинание, в эту локацию будут созываться духи из соседних (слабые духи проще). Чем больше Мощь, тем больше срок',
+    description: 'В течение Мощь*5 минут в эту локацию будут созываться духи из соседних (слабые духи проще).',
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -278,8 +281,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'run-spirit-run',
     humanReadableName: 'Run, spirit, run',
-    description:
-      'Пока не кончится заклинание, из этой локации будут распугиваться духи (слабые духи проще). Чем больше Мощь, тем больше срок',
+    description: 'В течение Мощь*5 минут из этой локации будут распугиваться духи (слабые духи проще). Чем больше Мощь, тем больше срок',
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -291,8 +293,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'input-stream',
     humanReadableName: 'InputStream',
-    description:
-      'Пока не кончится заклинание, мана из соседних локаций будет призываться в эту  (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
+    description: 'В течение Мощь*3 минут мана из соседних локаций периодически будет призываться в эту  (с некоторой вероятностью).',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 1,
@@ -305,7 +306,7 @@ const kAllSpellsList: Spell[] = [
     id: 'output-stream',
     humanReadableName: 'OutputStream',
     description:
-      'Пока не кончится заклинание, мана из этой локации будет изгоняться в соседние (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
+      'В течение Мощь*3 минут мана из этой локации будет изгоняться в соседние (с некоторой вероятностью). Чем больше Мощь, тем больше срок и вероятность',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 1,
@@ -342,7 +343,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'feed-the-cat',
     humanReadableName: 'Feed the cat',
-    description: 'На время понизить Сопротивляемость указанного духа. Чем больше Мощь, тем больше срок и эффект',
+    description: 'На Мощь*5 минут понизить Сопротивляемость указанного духа на Мощь*10.',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -354,7 +355,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'tame-the-dog',
     humanReadableName: 'Tame the dog',
-    description: 'понизить Сопротивляемость духа по отношению к себе',
+    description: 'Перманентно понизить Сопротивляемость духа на 10 по отношению к себе',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -366,7 +367,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'whip-the-horse',
     humanReadableName: 'Whip the horse',
-    description: 'Повысить Сопротивляемость указанного духа. Чем больше Мощь, тем больше эффект',
+    description: 'Перманентно повысить Сопротивляемость указанного духа на 10 ко всем. Чем больше Мощь, тем больше эффект',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -379,7 +380,7 @@ const kAllSpellsList: Spell[] = [
     id: 'spirit-suit',
     humanReadableName: 'Spirit Suit',
     description:
-      'Временно появится Own Spirit, с её помощью можно попытаться поймать духа в текущей локации и поместить его в телохранилище (можно создать с помощью Spirit Jar). Чем больше Мощь, тем больше вероятность поимки.',
+      'На Мощь*10 минут появится способность Own Spirit, с её помощью можно попытаться поймать духа в текущей локации и поместить его в телохранилище (можно создать с помощью Spirit Jar). Чем больше Мощь, тем больше вероятность поимки.',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -391,7 +392,8 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'exorcizamus',
     humanReadableName: 'Exorcizamus',
-    description: 'Попытаться изгнать духа из текущей локации',
+    description:
+      'Попытаться изгнать духа из текущей локации на Мощь*30. Вероятность успеха зависит от ранга духа и его Сопротивления этому магу, от вложенной Мощи.',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 30,
@@ -402,7 +404,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'mene',
     humanReadableName: 'Mene',
-    description: 'Узнать часть ауры не сопротивляющегося человека',
+    description: 'Узнать 90% ауры не сопротивляющегося человека',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-simpatic', level: 1 },
     availability: 'open',
@@ -416,7 +418,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'tekel',
     humanReadableName: 'Tekel',
-    description: 'Узнать часть ауры одного из присутствующих духов',
+    description: 'Узнать 60% ауры одного из присутствующих духов',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'open',
     karmaCost: 2,
@@ -427,7 +429,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'fares',
     humanReadableName: 'Fares',
-    description: 'Узнать часть ауры локации',
+    description: 'Узнать ауру локации',
     prerequisites: ['arch-mage-summoner'],
     availability: 'open',
     karmaCost: 30,
@@ -439,8 +441,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'panopticon',
     humanReadableName: 'Panopticon',
-    description:
-      'Узнать часть ауры всех присутствующих в этой локации в реале и в астрале людей. Чем больше Мощь, тем больший фрагмент аур удастся прочитать',
+    description: 'Узнать часть ауры (10 + Мощь*5 - ЗащитаАуры*5)% каждого присутствующего в этой локации в реале и в астрале человека.',
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
     availability: 'closed',
     karmaCost: 2,
@@ -451,7 +452,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'nothing-special',
     humanReadableName: 'Nothing special',
-    description: 'Временно усилить цели маску ауры. Чем больше Мощь, тем больше защита',
+    description: 'На 6 минут усилить цели маску ауры на Мощь*2.',
     prerequisites: ['arch-mage-spellcaster'],
     availability: 'open',
     karmaCost: 30,
@@ -464,7 +465,7 @@ const kAllSpellsList: Spell[] = [
     id: 'odus',
     humanReadableName: 'Odus',
     description:
-      'Временно понизить Резонанс цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут понизить на Мощь -1 (но не меньше 1) Резонанс цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 2 },
     availability: 'open',
@@ -478,7 +479,7 @@ const kAllSpellsList: Spell[] = [
     id: 'frog-skin',
     humanReadableName: 'Frog skin',
     description:
-      'Временно понизить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут понизить на 1, если Мощь <4, иначе на 2 Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 2 },
     availability: 'open',
@@ -492,7 +493,7 @@ const kAllSpellsList: Spell[] = [
     id: 'charm',
     humanReadableName: 'Charm',
     description:
-      'Временно повысить Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут повысить на 1, если Мощь <4, иначе на 2  Харизму цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 2 },
     availability: 'open',
@@ -506,7 +507,7 @@ const kAllSpellsList: Spell[] = [
     id: 'shtopping',
     humanReadableName: 'Shtopping',
     description:
-      'Временно повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут на Мощь*10 (но не более, чем на 50) повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 2 },
     availability: 'open',
@@ -520,7 +521,7 @@ const kAllSpellsList: Spell[] = [
     id: 'tax-free',
     humanReadableName: 'Tax free',
     description:
-      'Временно понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут на Мощь*10 (но не более, чем на 50) понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 3 },
     availability: 'open',
@@ -534,7 +535,7 @@ const kAllSpellsList: Spell[] = [
     id: 'dumpty-humpty',
     humanReadableName: 'Dumpty-Humpty',
     description:
-      'Временно понизить штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию. Чем больше Мощь, тем больше срок и эффект',
+      'На Мощь*10 минут понизить на 1 штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом или с помощью ауры через симпатическую магию.',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 3 },
     availability: 'open',
@@ -548,7 +549,7 @@ const kAllSpellsList: Spell[] = [
     id: 'enlarge-my-pencil',
     humanReadableName: 'Enlarge My Pencil',
     description:
-      'Временно выдаёт магу способность "Pencil, large!" (одно оружие в руках будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
+      'На Мощь*20 минут выдаёт магу способность "Pencil, large!" (одно оружие в руках 5 минут будет считаться тяжёлым), потребуется её активация перед использованием. Чем больше Мощь, тем дольше сроки хранения',
     prerequisites: ['arch-mage-summoner'],
     pack: { id: 'mage-summon-fate', level: 1 },
     availability: 'open',
@@ -561,12 +562,42 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'scum-stoner',
     humanReadableName: 'Scum stoner',
-    description: 'Временно выдаёт другому существу способность "Skin, Stone!". Чем больше Мощь, тем дольше сроки хранения',
+    description:
+      'На Мощь*20 минут выдаёт другому существу способность "Skin, Stone!" (имеющаяся броня 5 минут считается тяжёлой). Потребуется её активация',
     prerequisites: ['arch-mage-spellcaster'],
     pack: { id: 'mage-conjur-protect', level: 2 },
     availability: 'open',
     karmaCost: 50,
     sphere: 'protection',
+    eventType: dummySpell.name,
+    hasTarget: false,
+  },
+  // TODO(aeremin): Add proper implementation
+  // В течение Мощь*8 минут каждые 60с маг в приложении получает текстом информацию, ближе или дальше он стал от цели, которую он указал вводом ее ауры.
+  {
+    id: 'hot-and-cold',
+    humanReadableName: 'Hot and Cold',
+    description:
+      'В течение Мощь*8 минут каждые 60с будешь получать сообщение, ближе или дальше от цели ты оказался. Чем больше Мощь, тем больше срок',
+    prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    sphere: 'astral',
+    eventType: dummySpell.name,
+    hasTarget: false,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Текстом выдается аура локации, в которой на момент активации находится цель, указанная вводом ее ауры.
+  {
+    id: 'now-i-see',
+    humanReadableName: 'Now I see',
+    description: 'Получить ауру локации, в которой находится цель (указанная её аурой)',
+    prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    sphere: 'astral',
     eventType: dummySpell.name,
     hasTarget: false,
   },

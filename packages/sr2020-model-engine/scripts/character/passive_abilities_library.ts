@@ -73,7 +73,6 @@ import {
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-
 // Not exported by design, use getAllPassiveAbilities() instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // TODO(https://trello.com/c/i5oFZkFF/216-метатипы): Implement and add modifier here
@@ -1496,7 +1495,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-face', 'discount-all-3'],
-    pack: undefined,
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.6 }),
   },
   // Множитель 0,5 при покупке любого товара  данным персонажем
@@ -1507,7 +1505,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-face', 'discount-all-4'],
-    pack: undefined,
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.5 }),
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
@@ -1653,7 +1650,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-1',
     humanReadableName: 'Магия 1',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 40,
     prerequisites: ['arch-mage-spellcaster'],
@@ -1664,7 +1661,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-2',
     humanReadableName: 'Магия 2',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 30,
     prerequisites: ['magic-1'],
@@ -1674,7 +1671,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-3',
     humanReadableName: 'Магия 3',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 50,
     prerequisites: ['magic-2', 'spirit-enemy-1'],
@@ -1684,7 +1681,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-4',
     humanReadableName: 'Магия 4',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 70,
     prerequisites: ['magic-3', 'spirit-enemy-2'],
@@ -1694,7 +1691,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-5',
     humanReadableName: 'Магия 5',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 90,
     prerequisites: ['magic-4', 'spirit-enemy-3'],
@@ -1704,7 +1701,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-resistance-1',
     humanReadableName: 'Сопротивление Откату 1',
-    description: 'Ты легче выносишь Откат',
+    description: 'Перманентно снижает Откат на 10%',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-mage-spellcaster'],
@@ -1717,7 +1714,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-resistance-2',
     humanReadableName: 'Сопротивление Откату 2',
-    description: 'Ты легче выносишь Откат',
+    description: 'Перманентно снижает Откат на 10%',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['magic-feedback-resistance-1'],
@@ -1729,7 +1726,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-resistance-3',
     humanReadableName: 'Сопротивление Откату 3',
-    description: 'Ты легче выносишь Откат',
+    description: 'Перманентно снижает Откат на 10%',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['magic-feedback-resistance-2'],
@@ -1741,7 +1738,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-unresistance-1',
     humanReadableName: 'Откатошный 1',
-    description: 'Ты тяжелее выносишь Откат',
+    description: 'Перманентно увеличивает Откат на 20%',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-mage-spellcaster'],
@@ -1753,7 +1750,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-unresistance-2',
     humanReadableName: 'Откатошный 2',
-    description: 'Ты тяжелее выносишь Откат',
+    description: 'Перманентно увеличивает Откат на 20%',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['magic-feedback-unresistance-1'],
@@ -1765,7 +1762,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-feedback-unresistance-3',
     humanReadableName: 'Откатошный 3',
-    description: 'Ты тяжелее выносишь Откат',
+    description: 'Перманентно увеличивает Откат на 20%',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['magic-feedback-unresistance-2'],
@@ -1777,7 +1774,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-recovery-1',
     humanReadableName: 'Воспрянь и пой 1',
-    description: 'Магия возвращается к тебе быстрее',
+    description: 'Перманентно ускоряет восстановление Магии на 20%.',
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-mage-spellcaster'],
@@ -1788,7 +1785,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-recovery-2',
     humanReadableName: 'Воспрянь и пой 2',
-    description: 'Магия возвращается к тебе быстрее',
+    description: 'Перманентно ускоряет восстановление Магии на 20%.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['magic-recovery-1'],
@@ -1798,7 +1795,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-recovery-3',
     humanReadableName: 'Воспрянь и пой 3',
-    description: 'Магия возвращается к тебе быстрее',
+    description: 'Перманентно ускоряет восстановление Магии на 20%.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['magic-recovery-2'],
@@ -1808,7 +1805,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-friend-1',
     humanReadableName: 'Дружелюбие духов 1',
-    description: 'Ты понимаешь настроения духов',
+    description: 'Перманентно уменьшает Сопротивление духов',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage-summoner', 'master-of-the-universe'],
@@ -1820,7 +1817,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-friend-2',
     humanReadableName: 'Дружелюбие духов 2',
-    description: 'Ты понимаешь настроения духов',
+    description: 'Перманентно уменьшает Сопротивление духов',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['spirit-friend-1', 'magic-feedback-unresistance-1'],
@@ -1832,7 +1829,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-friend-3',
     humanReadableName: 'Дружелюбие духов 3',
-    description: 'Ты понимаешь настроения духов',
+    description: 'Перманентно уменьшает Сопротивление духов',
     availability: 'open',
     karmaCost: 70,
     prerequisites: ['spirit-friend-2'],
@@ -1844,7 +1841,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-enemy-1',
     humanReadableName: 'Духопротивный 1',
-    description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
+    description: 'Перманентно увеличивает Сопротивление духов',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
@@ -1856,7 +1853,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-enemy-2',
     humanReadableName: 'Духопротивный 2',
-    description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
+    description: 'Перманентно увеличивает Сопротивление духов',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['spirit-enemy-1'],
@@ -1868,7 +1865,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'spirit-enemy-3',
     humanReadableName: 'Духопротивный 3',
-    description: 'Инструменты, вот кто духи для тебя. Рабовладелец - вот кто ты для них',
+    description: 'Перманентно увеличивает Сопротивление духов',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['spirit-enemy-2'],
@@ -1880,7 +1877,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'light-step',
     humanReadableName: 'Light Step ',
-    description: 'След твоих заклинаний содержит меньше ауры',
+    description: 'В астральном следе заклинаний обладателя абилки остается только 60% его ауры. ',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-mage-spellcaster'],
@@ -1889,14 +1886,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // Позволяет просканировать во время каста qr-коды мясных тел в состоянии тяжран (не годятся здоров/КС/АС) и с Эссенсом>=1ед для эффекта "кровавый ритуал":  Использование (сканирование) N этих кодов приводит к:
   //  1) временному (на T минут) появлению пассивной абилки "Магия в крови" (amount = √N)
-  // 2) временному (на T минут) появлению пассивной способности "Кровавый Прилив", добавляющей в КоэффициентСопротивленияОткату множитель K=1/(6+N).
+  // 2) временному (на T минут) появлению пассивной способности "Кровавый Прилив" (amount = N),
   // T = N*5 минут.
   // Жертва теряет 1ед Эссенса и переходит в КС и в этом состоянии для повторного использования в другом таком же ритуале непригодна.
   {
     id: 'bathory-charger',
     humanReadableName: 'Bathory Charger',
     description:
-      'Использование металюдей для увеличения Мощи и снижения Отката заклинаний на некоторое время. Чем больше жертв использовано, тем больше эффект',
+      'Можно использовать людей в тяжране (сканируя их QR) для увеличения (по времени, а не на один каст) доступной Мощи и снижения Отката',
     availability: 'closed',
     karmaCost: 70,
     prerequisites: ['master-of-the-universe'],
@@ -1906,7 +1903,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'dictator-control',
     humanReadableName: 'Dictator Control',
-    description: 'При чтении астральных следов извлекается больше ауры',
+    description: 'При чтении астральных следов ты извлекаешь на 20% больше ауры',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-mage-summoner'],
@@ -1919,7 +1916,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'agnus-dei',
     humanReadableName: 'Agnus dei ',
-    description: 'В ритуальном хоре твой голос неоценим.',
+    description: 'В ритуальных практиках ты считаешься за 3х человек',
     availability: 'open',
     karmaCost: 90,
     prerequisites: ['arch-mage-adeptus'],
@@ -2404,7 +2401,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'trollton-effect',
     humanReadableName: 'Trollton',
-    description: 'У вас тяжелая броня.',
+    description: 'У вас тяжёлая броня.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -2474,7 +2471,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'kudesnik',
     humanReadableName: 'Кудесник',
-    description: 'Ты очень хорошо сопротивляешься Откату',
+    description: 'Откат делится пополам',
     availability: 'closed',
     karmaCost: 20,
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
@@ -2490,7 +2487,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Абилка ничего не делает, просто показывает текст "какое-то одно оружие в руках считается тяжелым" (необходима его маркировка красной лентой)
+  // Абилка ничего не делает, просто показывает текст "какое-то одно оружие в руках 5 минут считается тяжелым (необходима его маркировка красной лентой)"
   {
     id: 'pencil',
     humanReadableName: 'PENCIL',
@@ -2500,7 +2497,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Абилка ничего не делает, просто показывает текст "броня считается тяжелым" (необходима её маркировка красной лентой)
+  // Абилка ничего не делает, просто показывает текст "Имеющаяся броня 5 минут считается тяжелым (необходима её маркировка красной лентой)"
   {
     id: 'stone-skin-result',
     humanReadableName: 'Stone skin',
@@ -3440,7 +3437,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-1-summ',
     humanReadableName: 'Магия 1-П!',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 80,
     prerequisites: ['arch-mage-summoner'],
@@ -3451,7 +3448,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'magic-2-summ',
     humanReadableName: 'Магия 2-П!',
-    description: 'Подвластная тебе Мощь увеличивается',
+    description: 'Перманентно увеличивает характеристику Магия на 1',
     availability: 'master',
     karmaCost: 30,
     prerequisites: ['magic-1-summ'],
@@ -3722,17 +3719,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  //
+  // Добавляет в КоэффициентСопротивленияОткату множитель K=1/(6+{{ amount }} ).  По умолчанию amount = 1
   {
     id: 'bloody-tide',
     humanReadableName: 'Кровавый прилив',
-    description: 'Увеличивает сопротивление откату',
+    description: 'Увеличивает сопротивление Откату',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
-  //
+  // Увеличивает максимальную доступную Мощь на {{ amount }}. По умолчанию amount = 1
   {
     id: 'magic-in-the-blood',
     humanReadableName: 'Магия в крови',
@@ -4538,7 +4535,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-samurai', "clubs'n'swords-3"],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4551,7 +4547,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4560,11 +4555,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'in-the-astral',
     humanReadableName: 'Астрал',
     description:
-      'Ты неуязвим для физических воздействий. Можешь слышать и видеть всё происходящее в физическом мире и проходить куда угодно. Не можешь брать ничего материального.\nЕсли не вернёшься в физическое тело за {{amount}} минут - окажешься в КС.\nПри предъявлении тебе менее, чем с 2м текста способности AstralopithecusRage - действуй согласно её описанию и тому, что предпринимает её владелец.',
+      'Ты в астральном теле, неуязвим для физических воздействий и сам не можешь воздействовать на физические объекты. Можешь слышать и видеть всё происходящее в физическом мире и проходить куда угодно (можно открыть дверь для прохода тела игрока, но не для других персонажей). Не можешь брать ничего материального.\nЕсли не вернёшься в физическое тело за {{amount}} минут - окажешься в КС.\nПри предъявлении тебе менее, чем с 2м текста способности AstralopithecusRage - действуй согласно её описанию и тому, что предпринимает её владелец.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
   // В описании абилки в "Пассивных" текст: "Можешь видеть сущности, находящиеся в астрале (красный дождевик), и изгонять их из помещения, в котором вы находитесь, или на длину твоего выпада холодным оружием"
@@ -4572,11 +4566,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'astralopithecus-rage',
     humanReadableName: 'AstralopithecusRage',
     description:
-      'Ты можешь видеть сущности, находящиеся в астрале (красный дождевик), и изгонять их из помещения, в котором вы находитесь, или на длину твоего выпада холодным оружием.',
+      'Ты можешь видеть сущности, находящиеся в астрале (красный дождевик), и изгонять их из помещения, в котором вы находитесь, или отгонять на длину твоего выпада холодным оружием Попадание по ним не снимает у них хитов, но вынуждает отойти за пределы твоей атаки. Они не могут действовать на тебя физически.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-mage-adeptus', 'master-of-the-universe'],
-    pack: undefined,
     modifier: [],
   },
 ];
