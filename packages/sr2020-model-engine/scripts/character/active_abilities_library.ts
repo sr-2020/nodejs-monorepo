@@ -68,7 +68,8 @@ import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engi
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
-import { decreaseMaxEssence, essenceReset, increaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1972,13 +1973,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Эссенс "+1"',
     description: 'Увеличить Эссенс персонажа +1',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (m) => 0,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: increaseMaxEssence.name,
+    eventType: gmIncreaseMaxEssence.name,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  его  базовый показатель Эссенса уменьшается на -1
@@ -1988,13 +1989,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Эссенс "-1"',
     description: 'Уменьшить Эссенс на -1',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (m) => 0,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: decreaseMaxEssence.name,
+    eventType: gmDecreaseMaxEssence.name,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  меняются показатели:
@@ -2006,13 +2007,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Полное восстановление Эссенс',
     description: 'Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (m) => 0,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: essenceReset.name,
+    eventType: gmEssenceReset.name,
   },
   // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.

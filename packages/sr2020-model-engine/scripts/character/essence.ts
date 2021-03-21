@@ -2,6 +2,7 @@ import { Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/alice-co
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { increaseCharisma, increaseMagic, increaseResonance } from './basic_effects';
 import { removeImplant } from './merchandise';
+import { FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 
 export function createEssenceSystemEffect(): Effect {
   return {
@@ -46,4 +47,16 @@ export function essenceReset(api: EventModelApi<Sr2020Character>, data: {}) {
   }
   api.model.essenceDetails.used = 0;
   api.model.essenceDetails.gap = 0;
+}
+
+export function gmIncreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseMaxEssence, {});
+}
+
+export function gmDecreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, decreaseMaxEssence, {});
+}
+
+export function gmEssenceReset(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, essenceReset, {});
 }
