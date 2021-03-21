@@ -103,6 +103,7 @@ export class AnyModelController<TModel extends EmptyModel> {
       };
     } catch (e) {
       await queryRunner.rollbackTransaction();
+      this.logger.error(`Error while processing event ${JSON.stringify(event)} for ${this.tmodel.name} with id ${id}: ${e.message}`);
       throw e;
     } finally {
       await queryRunner.release();
