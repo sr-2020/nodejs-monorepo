@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -380,7 +379,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (m) => 20,
-    prerequisites: ['arch-face-mentalist'],
+    prerequisites: [],
     pack: { id: 'face-mentalist-talker', level: 2 },
     availability: 'open',
     karmaCost: 30,
@@ -2185,7 +2184,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (m) => 0,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
-    availability: 'master',
+    availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: activateSoft.name,
@@ -2280,7 +2279,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'executioner-1',
     humanReadableName: 'Палач: быстрое добивание',
     description:
-      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценится среди самураев-ассасинов. Настоящий профи может добить нескольких человек в считанные минуты. Отсканируй куар персоанажа в тяжране, чтобы перевести его в КС.',
+      'Способность быстро уничтожить выбранную цель не поднимая лишнего шума высоко ценится среди самураев-ассасинов. Настоящий профи может добить нескольких человек в считанные минуты. Отсканируй куар персонажа в тяжране, чтобы перевести его в КС.',
     target: 'scan',
     targetsSignature: [
       {

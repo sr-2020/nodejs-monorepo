@@ -492,7 +492,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'linklock',
     description: 'новая команда linklock [target]\nхакер, захваченный в линклок не может перемещаться некоторое время',
     availability: 'open',
-    karmaCost: 2,
+    karmaCost: 10,
     prerequisites: ['fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: [],
@@ -504,7 +504,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'новая команда: autolock [target]\nона автоматически попытается захватить в линклок цель (то есть без ручного ввода команды)',
     availability: 'open',
-    karmaCost: 4,
+    karmaCost: 30,
     prerequisites: ['link-lock'],
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
@@ -552,7 +552,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-deck-guru', level: 1 },
     modifier: [],
   },
-  // Позволяет реактивировать вырубленый IC
   {
     id: 'diagnostician',
     humanReadableName: 'Диагност (техномант)',
@@ -562,7 +561,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
-  // Вэрианс на 10% быстрее падает
   {
     id: 'just-a-normal-guy',
     humanReadableName: 'Обыкновенный',
@@ -572,7 +570,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseVarianceResistance, { amount: 10 }),
   },
-  // Фейдинг на 10% меньше
   {
     id: 'quite-enduring-guy',
     humanReadableName: 'Стойкий',
@@ -1514,7 +1511,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Скидка на броню и оружие',
     description: 'У тебя есть скидка 10% на покупку оружия и брони.',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai'],
     modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
   },
@@ -2719,7 +2716,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Медик. Ты знаешь всё про полевую медицину и импланты.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-rigger'],
+    prerequisites: ['arch-rigger', 'master-of-the-universe'],
     pack: { id: 'gen-arch-rigger-medic', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
@@ -2730,7 +2727,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инженер. Химия, дроны, кибердеки и их модификация.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-rigger'],
+    prerequisites: ['arch-rigger', 'master-of-the-universe'],
     pack: { id: 'gen-arch-rigger-engineer', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
@@ -2741,7 +2738,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Пилот. Умеешь управлять дронами.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-rigger', '!tech-blockade'],
+    prerequisites: ['arch-rigger', 'master-of-the-universe', '!tech-blockade'],
     pack: { id: 'gen-arch-rigger-pilot', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
@@ -2775,7 +2772,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Стрелок. Огнестрельное оружие - твой путь.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-samurai'],
+    prerequisites: ['arch-samurai', 'master-of-the-universe'],
     pack: { id: 'gen-arch-samurai-gunner', level: 1 },
     modifier: [modifierFromEffect(increaseStrength, { amount: 1 })],
   },
@@ -2786,7 +2783,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Громила. Холодное оружие и несокрушимая броня - твой путь.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-samurai'],
+    prerequisites: ['arch-samurai', 'master-of-the-universe'],
     pack: { id: 'gen-arch-samurai-fighter', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
@@ -2797,7 +2794,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ассасин. Уловки и хитрости - твой путь.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-samurai'],
+    prerequisites: ['arch-samurai', 'master-of-the-universe'],
     pack: { id: 'gen-arch-samurai-assasin', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
@@ -2827,22 +2824,22 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Intelligence +1
   {
     id: 'arch-hackerman-decker',
-    humanReadableName: 'Аспект: Хакер Декер',
+    humanReadableName: 'Архетип Хакер Декер',
     description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-hackerman'],
+    prerequisites: [],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   //
   {
     id: 'arch-hackerman-technomancer',
-    humanReadableName: 'Аспект: Хакер Техномант',
+    humanReadableName: 'Архетип Хакер Техномант',
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman', '!arch-mage', '!tech-blockade', 'master-of-the-universe'],
+    prerequisites: ['!arch-mage', '!tech-blockade', ''],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [],
   },
@@ -2908,7 +2905,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг адепт. Твои способности выходят за грань доступного метачеловеку, но заклинания ограничены.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'master-of-the-universe'],
     pack: { id: 'gen-arch-mage-adeptus', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
@@ -2919,7 +2916,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг заклинатель. Снимаю, порчу, колдую.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'master-of-the-universe'],
     pack: { id: 'gen-arch-mage-spellcaster', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2930,7 +2927,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг призыватель. Духи и зачарования.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'master-of-the-universe'],
     pack: { id: 'gen-arch-mage-summoner', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2964,7 +2961,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Менталист. Очень, очень убедителен. И это не просто так.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'master-of-the-universe'],
     pack: { id: 'gen-arch-face-mentalist', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
@@ -2986,7 +2983,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Гешефтмахер. Контракты и нюйены интересуют тебя.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'master-of-the-universe'],
     pack: { id: 'gen-arch-face-geshaftmacher', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
   },
@@ -3040,7 +3037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'дальнобойное оружие: винтовки',
     description: 'Ты умеешь использовать винтовку (механика, до 10 патронов). Атака пробивает легкий доспех. ',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai'],
     modifier: [],
   },
@@ -3050,7 +3047,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'дальнобойное оружие: автоматы',
     description: 'Ты можешь использовать автомат (электрика, до 25 патронов).  Атака пробивает легкий доспех. ',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai', 'guns-1'],
     modifier: [],
   },
@@ -3061,7 +3058,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты можешь использовать пулемёт (электрика, без ограничения патронов). Атака пробивает легкий доспех. Оружие необходимо держать двумя руками.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai', 'guns-2'],
     modifier: [],
   },
@@ -3071,7 +3068,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'броня: подкожная броня',
     description: 'Слой подкожной брони самурая сильно мешает рипоменам удалять имеющиеся импланты',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai'],
     pack: { id: 'sam-gun-armor', level: 1 },
     modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 50 })],
@@ -3082,7 +3079,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'броня: легкая броня',
     description: 'Ты можешь носить легкую броню. +2 хита, снижение урона от тяжелого оружия, требует наличие импланта "крепкая спина"',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai', 'armor-1'],
     pack: { id: 'sam-gun-armor', level: 2 },
     modifier: [],
@@ -3093,8 +3090,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'броня: тяжелая броня',
     description:
       'Ты можешь носить легкую броню. +2 хита, Иммунитет к Легкому холодному и легкому дистанционному оружию, тяжелое оружие снимает один хит одним попаданием.\nтребует наличие импланта "усиленные кости"',
-    availability: 'master',
-    karmaCost: 0,
+    availability: 'open',
+    karmaCost: 60,
     prerequisites: ['arch-samurai', 'armor-2'],
     pack: { id: 'sam-gun-armor', level: 3 },
     modifier: [],
@@ -3138,7 +3135,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'холодное оружие: дубинки',
     description: 'Ты можешь использовать легкое холодное оружие - дубинки, биты, монтировки длиной до 60см, Атака пробивает легкий доспех.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai'],
     modifier: [],
   },
@@ -3149,7 +3146,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты можешь использовать легкое холодное оружие - мечи, сабли до 120 см, топоры длиной до 100 см, атака пробивает легкий доспех.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai', "clubs'n'swords-1"],
     modifier: [],
   },
@@ -3159,8 +3156,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'холодное оружие: двуручное оружие',
     description:
       'Ты умеешь использовать двуручное оружие. Двуручные топоры, молоты, мечи, дубины. От 120 до 170 см. Атака пробивает тяжелый доспех. Оружие необходимо держать двумя руками.',
-    availability: 'master',
-    karmaCost: 0,
+    availability: 'open',
+    karmaCost: 60,
     prerequisites: ['arch-samurai', "clubs'n'swords-2"],
     modifier: [],
   },
@@ -3226,13 +3223,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Сканирует тело, находящееся  в КС.
-  // Со счета жертвы на счет самурая переводится 10% средств.
+  // Сканирует тело, находящееся  в тяжране.
+  // Со счета жертвы на счет самурая переводится 10% средств. После применения абилки тело переходит в КС
   {
     id: 'marauder-2',
     humanReadableName: 'Мародер: грабеж',
     description:
-      'Говорят, что нет чести среди воров. И ведь правильно говорят. Ты можешь показать эту способность своему противнику и он обязан тебе перевести 10% своих имеющихся денег. Это действие нельзя прерывать. ',
+      'Ты можешь ограбить тяжелораненного персонажа, для этого отсканируй его куар - тебе переведется 10% с его счета. После грабежа жертва перейдет в состояние клинической смерти.',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-samurai', 'marauder-1'],
@@ -3279,7 +3276,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-face'],
-    pack: { id: 'face-badfate', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3291,10 +3287,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-face-negative-1'],
-    pack: { id: 'face-badfate', level: 2 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Харизма уменьшена на 1
   {
     id: 'arch-face-negative-3',
@@ -3303,7 +3297,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-face-negative-2'],
-    pack: { id: 'face-badfate', level: 3 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -3342,7 +3335,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'mage-badfate', level: 3 },
     modifier: [],
   },
-  // Отображает текст на экране персонажа
+  // Персонажам, имеющим абилку, Случай начисляет Х денег в конце каждого цикла
   {
     id: 'dividends-1',
     humanReadableName: 'Дивиденды *',
@@ -3354,7 +3347,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'dividends', level: 1 },
     modifier: [],
   },
-  // Отображает текст на экране персонажа
+  // Персонажам, имеющим абилку, Случай начисляет ХХ денег в конце каждого цикла
   {
     id: 'dividends-2',
     humanReadableName: 'Дивиденды **',
@@ -3365,7 +3358,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'dividends', level: 2 },
     modifier: [],
   },
-  // Отображает текст на экране персонажа
+  // Персонажам, имеющим абилку, Случай начисляет ХХХ денег в конце каждого цикла
   {
     id: 'dividends-3',
     humanReadableName: 'Дивиденды ***',
@@ -3545,7 +3538,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'эконом 1',
     description: 'возможность использовать useapi read на экономноде',
     availability: 'open',
-    karmaCost: 2,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'arch-hack-decker-econ', level: 1 },
     modifier: [],
@@ -3556,7 +3549,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'эконом 2',
     description: 'возможность использовать расширенную useapi read на экономноде.',
     availability: 'open',
-    karmaCost: 4,
+    karmaCost: 20,
     prerequisites: ['arch-hack-decker-econ-1'],
     pack: { id: 'arch-hack-decker-econ', level: 2 },
     modifier: [],
@@ -3567,7 +3560,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'эконом 3',
     description: 'возможность использовать расширенную и улучшкеную useapi read на экономноде',
     availability: 'open',
-    karmaCost: 8,
+    karmaCost: 40,
     prerequisites: ['arch-hack-decker-econ-2'],
     pack: { id: 'arch-hack-decker-econ', level: 3 },
     modifier: [],
@@ -3578,7 +3571,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицина и Хром 1',
     description: 'возможность использовать useapi read на биомониторе и rcc',
     availability: 'open',
-    karmaCost: 2,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'arch-hack-decker-med', level: 1 },
     modifier: [],
@@ -3589,7 +3582,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицина и Хром 2',
     description: 'возможность использовать расширенную useapi read на биомониторе и rcc',
     availability: 'open',
-    karmaCost: 4,
+    karmaCost: 20,
     prerequisites: ['arch-hack-decker-med-1'],
     pack: { id: 'arch-hack-decker-med', level: 2 },
     modifier: [],
@@ -3600,7 +3593,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Медицина и Хром 3',
     description: 'возможность использовать расширенную и улучшкеную useapi read на биомониторе и rcc',
     availability: 'open',
-    karmaCost: 8,
+    karmaCost: 40,
     prerequisites: ['arch-hack-decker-med-2'],
     pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
@@ -4488,7 +4481,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Амбидекстр',
     description: 'Ты можешь использовать два одноручных оружия в двух руках.',
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 60,
     prerequisites: ['arch-samurai', "clubs'n'swords-3"],
     modifier: [],
   },
@@ -4525,6 +4518,56 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-mage-adeptus', 'master-of-the-universe'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 40%
+  {
+    id: 'hardened-1',
+    humanReadableName: 'Крепкий и надежный: родство с имплантами',
+    description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
+    availability: 'open',
+    karmaCost: 0,
+    prerequisites: ['arch-samurai-fighter'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // показывает игроку текст абилки, больше ничего
+  {
+    id: 'tools-of-trade-1',
+    humanReadableName: 'Оружие ассасина: дубинки, автоматы',
+    description:
+      'Скорее громила, чем скрытный убийца, самурай привык пользоваться простейшим оружием ближнего боя и скорострельным оружием дальнего боя',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-samurai-assasin'],
+    pack: { id: 'sam-assa-tools', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // показывает игроку текст абилки, больше ничего
+  {
+    id: 'tools-of-trade-2',
+    humanReadableName: 'Оружие ассасина: мечи, топоры, винтовки',
+    description: 'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется с винтовками',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-samurai-assasin', 'tools-of-trade-1'],
+    pack: { id: 'sam-assa-tools', level: 2 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // показывает игроку текст абилки, больше ничего
+  {
+    id: 'tools-of-trade-3',
+    humanReadableName: 'Оружие ассасина: оружие в каждой руке',
+    description:
+      'Тренируя ловкость и координацию самурай изучает технику владения оружием обеими руками, что позволяет одновременно использовать и огнестрельное и холодное оружие, или оружие одного типа в двух руках',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-samurai-assasin', 'tools-of-trade-2'],
+    pack: { id: 'sam-assa-tools', level: 3 },
     modifier: [],
   },
 ];

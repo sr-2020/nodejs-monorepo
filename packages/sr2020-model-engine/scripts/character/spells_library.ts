@@ -572,7 +572,6 @@ const kAllSpellsList: Spell[] = [
     eventType: dummySpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // В течение Мощь*8 минут каждые 60с маг в приложении получает текстом информацию, ближе или дальше он стал от цели, которую он указал вводом ее ауры.
   {
     id: 'hot-and-cold',
@@ -580,21 +579,18 @@ const kAllSpellsList: Spell[] = [
     description:
       'В течение Мощь*8 минут каждые 60с будешь получать сообщение, ближе или дальше от цели ты оказался. Чем больше Мощь, тем больше срок',
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     sphere: 'astral',
     eventType: dummySpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // Текстом выдается аура локации, в которой на момент активации находится цель, указанная вводом ее ауры.
   {
     id: 'now-i-see',
     humanReadableName: 'Now I see',
     description: 'Получить ауру локации, в которой находится цель (указанная её аурой)',
     prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     sphere: 'astral',

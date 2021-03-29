@@ -106,6 +106,7 @@ describe('Features-related events', function () {
     it('True if negative prerequisite is satisfied', async () => {
       await fixture.saveCharacter();
       await fixture.addCharacterFeature('arch-rigger');
+      await fixture.addCharacterFeature('master-of-the-universe');
       expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-rigger-pilot')!)).toBe(
         true,
       );
