@@ -3192,51 +3192,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-samurai-fighter', 'combat-armor-2'],
     modifier: [],
   },
-  // усложняет вырезание имплантов рипоменами при применении абилок  repoman-black и repoman-active,  с вероятностью неудачи 40%
-  {
-    id: 'hardened-1',
-    humanReadableName: 'Крепкий и надежный: родство с имплантами',
-    description: 'Генетика самурая позволяет телу принимать импланты, как часть себя, усложняя их удаление рипоменами',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['arch-samurai-fighter'],
-    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 40 })],
-  },
-  // показывает игроку текст абилки, больше ничего
-  {
-    id: 'tools-of-trade-1',
-    humanReadableName: 'Оружие ассасина: дубинки, автоматы',
-    description:
-      'Скорее громила, чем скрытный убийца, самурай привык пользоваться простейшим оружием ближнего боя и скорострельным оружием дальнего боя',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai-assasin'],
-    pack: { id: 'sam-assa-tools', level: 1 },
-    modifier: [],
-  },
-  // показывает игроку текст абилки, больше ничего
-  {
-    id: 'tools-of-trade-2',
-    humanReadableName: 'Оружие ассасина: мечи, топоры, винтовки',
-    description: 'Точность и смертоносность. Самурай использует смертоносные мечи и топоры, а также прекрасно управляется с винтовками',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai-assasin', 'tools-of-trade-1'],
-    pack: { id: 'sam-assa-tools', level: 2 },
-    modifier: [],
-  },
-  // показывает игроку текст абилки, больше ничего
-  {
-    id: 'tools-of-trade-3',
-    humanReadableName: 'Оружие ассасина: оружие в каждой руке',
-    description:
-      'Тренируя ловкость и координацию самурай изучает технику владения оружием обеими руками, что позволяет одновременно использовать и огнестрельное и холодное оружие, или оружие одного типа в двух руках',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai-assasin', 'tools-of-trade-2'],
-    pack: { id: 'sam-assa-tools', level: 3 },
-    modifier: [],
-  },
   // показывает игроку текст абилки, больше ничего
   {
     id: 'executioner-2',
