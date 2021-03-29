@@ -22,7 +22,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).toMatchObject({
       available: 30,
-      cycleLimit: 270,
+      cycleLimit: 4970,
     });
   });
 
@@ -39,7 +39,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).toMatchObject({
       available: 40,
-      cycleLimit: 260,
+      cycleLimit: 4960,
     });
   });
 
@@ -71,10 +71,10 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
-    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
+    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 4999 } });
 
     expect(baseModel.karma).toMatchObject({
-      available: 300,
+      available: 5000,
       cycleLimit: 0,
     });
   });
@@ -84,11 +84,11 @@ describe('Karma events', function () {
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
     await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
-    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 255 } });
+    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 4999 } });
 
     expect(baseModel.karma).toMatchObject({
-      available: 310,
-      cycleLimit: 45,
+      available: 5000,
+      cycleLimit: 0,
     });
   });
 
@@ -96,12 +96,12 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     for (let i = 0; i < 10; ++i) {
-      await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 90 } });
+      await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 900 } });
       await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
     }
 
     expect((await fixture.getCharacter()).baseModel.karma).toMatchObject({
-      available: 800,
+      available: 5000,
     });
   });
 
