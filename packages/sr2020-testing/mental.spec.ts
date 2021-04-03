@@ -102,7 +102,7 @@ describe('Mentalistic events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     let { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
     expect(workModel.mentalDefenceBonus).toBe(11);
-    expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 1000);
+    expect(workModel.activeAbilities[0].cooldownUntil).toBe(120 * 60 * 1000);
     await fixture.advanceTime(duration(29, 'minutes'));
     expect((await fixture.getCharacter()).workModel.mentalDefenceBonus).toBe(11);
     await fixture.advanceTime(duration(1, 'minute'));
@@ -112,10 +112,10 @@ describe('Mentalistic events', function () {
     const message = await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'i-dont-trust-anybody' } });
     expect(message).toContain('кулдаун');
 
-    await fixture.advanceTime(duration(30, 'minutes'));
+    await fixture.advanceTime(duration(300, 'minutes'));
 
     workModel = (await fixture.useAbility({ id: 'i-dont-trust-anybody' })).workModel;
-    expect(workModel.activeAbilities[0].cooldownUntil).toBe((29 + 1 + 30 + 40) * 60 * 1000);
+    expect(workModel.activeAbilities[0].cooldownUntil).toBe((29 + 1 + 300 + 120) * 60 * 1000);
   });
 
   it('You do not trust anybody', async () => {

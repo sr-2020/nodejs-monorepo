@@ -32,6 +32,7 @@ const kPackLevelColumn = 8;
 const kPlayerDescriptionColumn = 14;
 const kMasterDescriptionColumn = 15;
 const kCooldownColumn = 10;
+const kCooldownFormulaColumn = 11;
 const kSpellSphereColumn = 19;
 const kMinimalEssenceColumn = 20;
 const kKarmaCostColumn = 9;
@@ -62,12 +63,13 @@ class SpreadsheetProcessor {
     return result;
   }
 
-  parseCooldown(id: string, input: string | undefined): number {
+  parseCooldown(id: string, input: string | undefined, input_formula): string {
     if (!input || !/^[\d\.]+$/.test(input)) {
+      if (input_formula) return input_formula;
       console.error(`Ability ${id} cooldown is non-numeric, setting to 9000.`);
-      return 9000;
+      return "9000";
     }
-    return Number(input);
+    return input;
   }
 
   parseAvailability(id: string, input: string | undefined): FeatureAvailability {
@@ -137,7 +139,7 @@ class SpreadsheetProcessor {
       humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
-      cooldown: this.parseCooldown(id, row[kCooldownColumn]),
+      cooldown: this.parseCooldown(id, row[kCooldownColumn], row[kCooldownFormulaColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       minimalEssence: this.parseMinimalEssence(id, row[kMinimalEssenceColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
@@ -227,6 +229,10 @@ class SpreadsheetProcessor {
 
     if (!header[kCooldownColumn].startsWith('Cooldown_min')) {
       throw new Error('Cooldown column was moved! Exiting.');
+    }
+
+    if (!header[kCooldownFormulaColumn].startsWith('Cooldown_formula')) {
+      throw new Error('Cooldown formula column was moved! Exiting.');
     }
 
     if (!header[kSpellSphereColumn].startsWith('Spell_sphere')) {

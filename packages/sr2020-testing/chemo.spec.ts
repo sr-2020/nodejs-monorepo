@@ -96,12 +96,12 @@ describe('Chemo events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.useAbility({ id: 'i-dont-trust-anybody' });
-      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(40);
-      expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 1000);
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(120);
+      expect(workModel.activeAbilities[0].cooldownUntil).toBe(120 * 60 * 1000);
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'aist' } });
-      expect(workModel.activeAbilities[0].cooldownUntil).toBe(40 * 60 * 700);
+      expect(workModel.activeAbilities[0].cooldownUntil).toBe(120 * 60 * 700);
     }
   });
 
@@ -110,11 +110,11 @@ describe('Chemo events', function () {
     await fixture.addCharacterFeature('i-dont-trust-anybody');
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(40);
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(120);
     }
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam' } });
-      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(32);
+      expect(workModel.activeAbilities[0].cooldownMinutes).toBe(96);
     }
   });
 

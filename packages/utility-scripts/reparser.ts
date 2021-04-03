@@ -27,7 +27,7 @@ export interface ActiveAbility {
   humanReadableName: string;
   description: string;
   gmDescription: string;
-  cooldown: number;
+  cooldown: string;
   karmaCost: number;
   minimalEssence: number; // in 0-6 range, not 0-600.
   prerequisites: string[];
@@ -236,8 +236,8 @@ export function rewritePassiveAbilities(abilities: PassiveAbility[]) {
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], PASSIVE_ABILITIES_FILENAME);
 }
 
-function createCooldownFunction(cooldown: number) {
-  return ts.createIdentifier(`(m) => ${cooldown}`);
+function createCooldownFunction(cooldown: string) {
+  return ts.createIdentifier(`(character) => ${cooldown}`);
 }
 
 export function rewriteActiveAbilities(abilities: ActiveAbility[]) {

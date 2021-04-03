@@ -116,8 +116,8 @@ describe('Karma events', function () {
   });
 
   it('Can get feature discount', async () => {
-    await fixture.saveCharacter({ metarace: 'meta-norm', karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
-    await fixture.addCharacterFeature('arch-rigger-medic');
+    await fixture.saveCharacter({ metarace: 'meta-dwarf', karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
+    await fixture.addCharacterFeature('arch-rigger');
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'buyFeatureForKarma', data: { id: 'auto-doc-1' } });
     const feature = getAllFeatures().find((f) => f.id == 'auto-doc-1')!;
     expect(workModel.karma.available).toBe(1000 - 0.9 * feature.karmaCost);
