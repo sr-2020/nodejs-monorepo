@@ -2878,7 +2878,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-face', level: 1 },
-    modifier: [modifierFromEffect(increaseCharisma, { amount: 1 })],
+    modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
   {
     id: 'arch-face-mentalist',
