@@ -165,7 +165,7 @@ describe('Karma events', function () {
     await fixture.saveCharacter({ karma: { available: 10, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     const message = await fixture.sendCharacterEventExpectingError({
       eventType: 'buyFeatureForKarma',
-      data: { id: 'arch-rigger-pilot' },
+      data: { id: 'arch-technomancer-boost' },
     });
     expect(message).toContain('Не удовлетворены пререквизиты');
   });

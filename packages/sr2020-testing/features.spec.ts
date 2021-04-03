@@ -99,24 +99,21 @@ describe('Features-related events', function () {
 
     it('False if prerequisites are only partially satisfied', async () => {
       await fixture.saveCharacter();
-      await fixture.addCharacterFeature('arch-samurai-assasin');
+      await fixture.addCharacterFeature('arch-samurai');
       expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('marauder-2')!)).toBe(false);
     });
 
     it('True if negative prerequisite is satisfied', async () => {
       await fixture.saveCharacter();
-      await fixture.addCharacterFeature('arch-rigger');
-      await fixture.addCharacterFeature('master-of-the-universe');
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-rigger-pilot')!)).toBe(
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-mage')!)).toBe(
         true,
       );
     });
 
     it('False if negative prerequisite is not satisfied', async () => {
       await fixture.saveCharacter();
-      await fixture.addCharacterFeature('arch-rigger');
       await fixture.addCharacterFeature('tech-blockade');
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-rigger-pilot')!)).toBe(
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-hackerman-technomancer')!)).toBe(
         false,
       );
     });
