@@ -527,33 +527,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-deck-guru', level: 1 },
     modifier: [],
   },
-  {
-    id: 'diagnostician',
-    humanReadableName: 'Диагност (техномант)',
-    description: '',
-    availability: 'open',
-    karmaCost: 4,
-    prerequisites: ['arch-hackerman-technomancer'],
-    modifier: [],
-  },
-  {
-    id: 'just-a-normal-guy',
-    humanReadableName: 'Обыкновенный',
-    description: '',
-    availability: 'open',
-    karmaCost: 4,
-    prerequisites: ['arch-hackerman-technomancer'],
-    modifier: modifierFromEffect(increaseVarianceResistance, { amount: 10 }),
-  },
-  {
-    id: 'quite-enduring-guy',
-    humanReadableName: 'Стойкий',
-    description: '',
-    availability: 'master',
-    karmaCost: 4,
-    prerequisites: ['arch-hackerman-technomancer'],
-    modifier: modifierFromEffect(increaseFadingResistance, { amount: 10 }),
-  },
   // Увеличивает возможное количество бэкдоров. Зависит от уровня резонанса
   {
     id: 'squid',
@@ -2222,16 +2195,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 }),
-  },
-  // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Implement corresponding mechanic
-  {
-    id: 'thats-my-chrome',
-    humanReadableName: 'это мой хром!',
-    description: 'Импланты, установленные у тебя сложнее вырезать рипоменам.',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
   {
