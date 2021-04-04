@@ -1313,7 +1313,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'my-scoring',
     humanReadableName: 'Мой скоринг',
-    description: 'отображается  текущий коэф. скоринга данного персонажа',
+    description: 'отображается  текущий коэф. скоринга данного персонажа с множителями.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-face'],
@@ -1458,7 +1458,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидки Стоимость товара умножается на 0,6 при покупке любого товара ',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-face', 'discount-all-3'],
+    prerequisites: ['arch-face', 'discount-all-3', 'igra-na-birge-1'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.6 }),
   },
   // Множитель 0,5 при покупке любого товара  данным персонажем
@@ -1468,7 +1468,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Скидки Стоимость товара умножается на 0,5 при покупке любого товара ',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-face', 'discount-all-4'],
+    prerequisites: ['arch-face', 'discount-all-4', 'igra-na-birge-2'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.5 }),
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
@@ -2681,22 +2681,26 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-samurai-boost', level: 1 },
     modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseStrength, { amount: 2 })],
   },
+  // Intelligence +1
   {
     id: 'arch-hackerman-decker',
-    humanReadableName: 'Архетип Хакер Декер',
+    humanReadableName: 'Архетип Декер',
     description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
     availability: 'open',
     karmaCost: 60,
     prerequisites: [],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
+  //
   {
     id: 'arch-hackerman-technomancer',
-    humanReadableName: 'Архетип Хакер Техномант',
+    humanReadableName: 'Архетип Техномант',
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['!arch-mage', '!tech-blockade'],
+    pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [],
   },
   {
@@ -4105,8 +4109,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Intelligence +1
   {
     id: 'arch-decker',
     humanReadableName: 'Архетип Декер',
@@ -4114,7 +4116,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: [],
-    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4141,7 +4142,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // инструкция про киберруки
   {
     id: 'hands-samurai',
@@ -4151,10 +4151,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 1,
     prerequisites: ['arch-samurai'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'sprites-basic',
@@ -4163,22 +4161,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
-  {
-    id: 'keys',
-    humanReadableName: 'ключи',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'keys', humanReadableName: 'ключи', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
   {
     id: 'water-walkers',
@@ -4187,10 +4173,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'pen-n-note',
@@ -4199,22 +4183,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
-  {
-    id: 'balls',
-    humanReadableName: 'шарики',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'balls', humanReadableName: 'шарики', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
   {
     id: 'rubber-glowes',
@@ -4223,58 +4195,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
-  {
-    id: 'racket',
-    humanReadableName: 'ракетка',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'racket', humanReadableName: 'ракетка', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
-  {
-    id: 'candy',
-    humanReadableName: 'конфетка',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'candy', humanReadableName: 'конфетка', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
-  {
-    id: 'backdoor',
-    humanReadableName: 'бэкдор',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'backdoor', humanReadableName: 'бэкдор', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
-  {
-    id: 'pipe',
-    humanReadableName: 'труба',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'pipe', humanReadableName: 'труба', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
   {
     id: 'armor-light',
@@ -4283,10 +4213,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'armor-heavy',
@@ -4295,22 +4223,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
-  {
-    id: 'shield',
-    humanReadableName: 'щит',
-    description: '',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
+  { id: 'shield', humanReadableName: 'щит', description: '', availability: 'master', karmaCost: 0, prerequisites: [], modifier: [] },
   //
   {
     id: 'sword-short',
@@ -4319,10 +4235,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'sword-twohanded',
@@ -4331,10 +4245,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'sword-short-doubled',
@@ -4343,10 +4255,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'initiative-sign',
@@ -4355,10 +4265,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'complex-form-basic',
@@ -4367,10 +4275,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'backdoor-hold-2',
@@ -4379,10 +4285,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'backdoor-hold-3',
@@ -4391,10 +4295,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'backdoor-hold-4',
@@ -4403,10 +4305,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'backdoor-hold-5',
@@ -4415,10 +4315,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'identity-hide',
@@ -4427,10 +4325,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'initiative-basic',
@@ -4439,10 +4335,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'control-basic',
@@ -4451,10 +4345,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'fading-restore',
@@ -4463,10 +4355,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'resonance-basic',
@@ -4475,6 +4365,31 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Body  +2
+  // Intelligence +2
+  {
+    id: 'arch-rigger-boost',
+    humanReadableName: 'Опытный Риггер',
+    description: 'Очень опытный риггер.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-rigger'],
+    pack: { id: 'gen-arch-rigger-boost', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // показывает игроку текст абилки, больше ничего
+  {
+    id: "clubs'n'swords-3",
+    humanReadableName: 'Двуручное оружие',
+    description:
+      'Ты умеешь использовать двуручное оружие. Двуручные топоры, молоты, мечи, дубины. От 120 до 170 см. Оружие необходимо держать двумя руками. Атака снимает 3 хита с цели либо 1 хит с цели в тяжелом доспехе. ',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['arch-samurai', "clubs'n'swords-2"],
     pack: undefined,
     modifier: [],
   },

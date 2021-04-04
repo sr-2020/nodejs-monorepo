@@ -309,7 +309,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'lie-to-me'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -372,7 +372,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
-    prerequisites: [],
+    prerequisites: ['arch-face', 'paralysis-1'],
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
@@ -443,13 +443,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'kill-him',
     humanReadableName: 'Агрессия',
     description:
-      'Цель активно пытается убить персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается. Пока цель жива - твоя жертва пытается её убить.',
+      'Цель активно пытается убить (в Клиническую смерть)  персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается. Пока цель жива - твоя жертва пытается её убить.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 360 : 360 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face', 'scorn-him'],
+    prerequisites: ['arch-face', 'scorn-him', 'paralysis-3'],
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 100,
     minimalEssence: 0,
     eventType: killHimAbility.name,
   },
@@ -571,7 +571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 180 : 120 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'billioner-walk'],
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
@@ -585,7 +585,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 120 : 60 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'danila-i-need-help'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -599,7 +599,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => (character.magic < 1 ? 240 : 180 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'paralysis-3'],
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
@@ -627,7 +627,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 240 : 120 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face', 'you-dont-trust-anybody'],
+    prerequisites: ['arch-face'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -641,7 +641,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => (character.magic < 1 ? 240 : 180 * (1 / Math.sqrt(character.magic))),
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', 'i-dont-trust-anybody'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -671,8 +671,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь узнать что-то интересное про этот товар. ',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['arch-face'],
+    cooldownMinutes: (character) => 100 - 10 * character.intelligence,
+    prerequisites: ['arch-face', 're-rent'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -728,8 +728,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         allowedTypes: ['HEALTHY_BODY'],
       },
     ],
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-face'],
+    cooldownMinutes: (character) => 70 - 10 * character.intelligence,
+    prerequisites: ['arch-face', 'let-me-pay'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -745,8 +745,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'ГМ может целевому персонажу переоформить контракт с новым коэфициентом скоринга. ',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-face'],
+    cooldownMinutes: (character) => 70 - 10 * character.intelligence,
+    prerequisites: ['arch-face', 'let-him-pay'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -759,8 +759,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-face'],
+    cooldownMinutes: (character) => 60,
+    prerequisites: ['arch-face', 'my-scoring'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -2319,7 +2319,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // текстовая абилка
   {
     id: 'rummage',
@@ -2330,13 +2329,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-samurai'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // показывает игроку текст абилки, больше ничего
   {
     id: 'marauder-1',
@@ -2346,13 +2343,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60 - 5 * character.body,
     prerequisites: ['arch-samurai', 'rummage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // показывает игроку текст абилки, больше ничего
   {
     id: 'marauder-3',
@@ -2362,13 +2357,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 130 - 10 * character.body,
     prerequisites: ['arch-samurai', 'marauder-1'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // показывает игроку текст абилки, больше ничего
   {
     id: 'executioner-3',
@@ -2378,13 +2371,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60 - 5 * character.charisma - 5 * character.intelligence,
     prerequisites: ['arch-samurai', 'rummage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Сканирует тело, находящееся  в тяжране.
   // Со счета жертвы на счет самурая переводится 10% средств. После применения абилки тело переходит в КС
   {
@@ -2396,13 +2387,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
     prerequisites: ['arch-samurai', 'rummage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // текстовая абилка
   {
     id: 'rowing',
@@ -2413,13 +2402,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
     prerequisites: ['rummage', 'arch-samurai'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // текстовая абилка
   {
     id: 'binding',
@@ -2430,13 +2417,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-samurai'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // текстовая абилка
   {
     id: 'unbinding',
@@ -2447,13 +2432,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
     prerequisites: ['arch-samurai', 'binding'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // текстовая абилка
   {
     id: 'stunning',
@@ -2464,13 +2447,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-samurai', 'binding'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'levitation',
@@ -2480,13 +2461,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'magnetism',
@@ -2496,13 +2475,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'bond-breaker',
@@ -2512,13 +2489,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'one-for-all',
@@ -2528,13 +2503,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-time-1',
@@ -2544,13 +2517,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-time-2',
@@ -2560,13 +2531,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-time-3',
@@ -2576,13 +2545,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-time-4',
@@ -2592,13 +2559,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-time-5',
@@ -2608,13 +2573,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'add-basement',
@@ -2624,13 +2587,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'bell-silence',
@@ -2640,13 +2601,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'photo-memory',
@@ -2656,13 +2615,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'second-sight',
@@ -2672,13 +2629,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'remove-excees',
@@ -2688,13 +2643,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'remove-half',
@@ -2704,13 +2657,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'backdoor-set',
@@ -2720,13 +2671,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'lockpicking',
@@ -2736,13 +2685,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'attack-drone',
@@ -2752,13 +2699,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'pipe-install',
@@ -2768,13 +2713,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'identity-scan',
@@ -2784,13 +2727,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'initiative-add-2',
@@ -2800,13 +2741,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-add-ally-1',
@@ -2816,13 +2755,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-add-ally-2',
@@ -2832,13 +2769,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-add-ally-all-1',
@@ -2848,13 +2783,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-add-ally-all-2',
@@ -2864,13 +2797,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-remove-foe-1',
@@ -2880,13 +2811,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-remove-foe-2',
@@ -2896,13 +2825,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-remove-foe-all-1',
@@ -2912,13 +2839,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'hp-remove-foe-all-2',
@@ -2928,13 +2853,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'bind-foe',
@@ -2944,13 +2867,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'bind-foe-all',
@@ -2960,13 +2881,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   {
     id: 'magic-remove',
@@ -2976,7 +2895,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
