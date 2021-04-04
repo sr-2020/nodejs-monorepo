@@ -1,7 +1,10 @@
 import { TestFixture } from './fixture';
 
 import { satisfiesPrerequisites } from '@alice/sr2020-model-engine/scripts/character/features';
-import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import {
+  getAllActiveAbilities,
+  getAllPassiveAbilities,
+} from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 describe('Features-related events', function () {
   let fixture: TestFixture;
@@ -88,19 +91,19 @@ describe('Features-related events', function () {
     it('True if prerequisites are satisfied', async () => {
       await fixture.saveCharacter();
       await fixture.addCharacterFeature('arch-samurai');
-      await fixture.addCharacterFeature('marauder-1');
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('marauder-2')!)).toBe(true);
+      await fixture.addCharacterFeature('rummage');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllActiveAbilities().get('marauder-2')!)).toBe(true);
     });
 
     it('False if prerequisites are not satisfied', async () => {
       await fixture.saveCharacter();
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('marauder-2')!)).toBe(false);
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllActiveAbilities().get('marauder-2')!)).toBe(false);
     });
 
     it('False if prerequisites are only partially satisfied', async () => {
       await fixture.saveCharacter();
       await fixture.addCharacterFeature('arch-samurai');
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('marauder-2')!)).toBe(false);
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllActiveAbilities().get('marauder-2')!)).toBe(false);
     });
 
     it('True if negative prerequisite is satisfied', async () => {
