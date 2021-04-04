@@ -2253,15 +2253,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: [],
   },
-  {
-    id: 'grenades-usage',
-    humanReadableName: 'гранаты',
-    description: 'разрешает использовать гранаты',
-    availability: 'closed',
-    karmaCost: 60,
-    prerequisites: ['arch-samurai', 'arch-samurai-gunner'],
-    modifier: [],
-  },
   // Описание способностей дрона Бульдозер
   {
     id: 'drone-dozer',
@@ -2439,7 +2430,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Откат делится пополам',
     availability: 'closed',
     karmaCost: 20,
-    prerequisites: ['arch-mage-spellcaster', 'master-of-the-universe'],
+    prerequisites: ['master-of-the-universe'],
     modifier: [modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.5 })],
   },
   // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак лёгким оружием - холодным и дистанционным"
@@ -2705,7 +2696,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['!arch-mage', '!tech-blockade', ''],
+    prerequisites: ['!arch-mage', '!tech-blockade'],
     modifier: [],
   },
   {
@@ -2733,7 +2724,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг, повелитель заклинаний!',
     availability: 'open',
     karmaCost: 100,
-    prerequisites: ['!arch-technomancer', '!magic-blockade'],
+    prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
     pack: { id: 'gen-arch-mage', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -3935,16 +3926,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-shaman-channeler', level: 1 },
     modifier: [],
   },
-  {
-    id: 'stunning',
-    humanReadableName: 'Оглушение',
-    description:
-      'Оглушение. (1 раз в 30 минут). Нужно подойти к цели сзади и нанести слабый удар по плечу ты можешь оглушать рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: [],
-    modifier: [],
-  },
   // текстовая абилка
   {
     id: 'stunning-resist',
@@ -3953,36 +3934,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-samurai', 'faster-regen-1'],
-    modifier: [],
-  },
-  {
-    id: 'rummage',
-    humanReadableName: 'Обыск',
-    description:
-      'Обыск. (1 раз в 30 минут). Покажи этот текст тому, кого хочешь обыскать. Тот, кого обыскивают, должен показать тебе все игровые предметы, не встроенные в тело. Показывать надо все, на чем есть qr-код. Также он показывает игровые документы, письма, записки. обыскивающий может их прочесть и сфотографировать.  НЕ показывает чаты, импланты, содержание телефона и игрового приложения.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: [],
-    modifier: [],
-  },
-  {
-    id: 'rowing',
-    humanReadableName: 'Грабеж',
-    description:
-      'Грабеж. (1 раз в час)   Если вы обыскиваете человека - вы можете его ограбить. Покажите этот текст тому, кого вы собираетесь ограбить.  Вы можете забрать у жертвы три любые игровые предмета из числа тех, которые вы нашли при обыске. Телефон и доступ в сеть заблокировать обыском нельзя. Оружие (оружие, броня и т.п, все, на чем чип “оружие допущено”) при обыске забрать нельзя.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['rummage', 'arch-samurai'],
-    modifier: [],
-  },
-  {
-    id: 'binding',
-    humanReadableName: 'Cвязывание',
-    description:
-      'Связывание. (1 раз в 30 минут.) Ты можешь связать человека, который не сопротивляется (добровольно) или оглушен или тяжело ранен. Для моделирования связывания человеку надевают на кисти рук две веревочные петли (чисто символические, на самом деле ничего связывать не надо). Эти петли запрещено прятать, по человеку всегда должно быть понятно, что он связан.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: [],
     modifier: [],
   },
   // текстовая абилка
@@ -4032,16 +3983,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'sam-badfate', level: 3 },
     modifier: [],
   },
-  {
-    id: 'unbinding',
-    humanReadableName: 'Освобождение связанного',
-    description:
-      'Ты можешь освободить связанного. Надо 30 секунд изображать как ты оружием перепиливаешь\\отстреливаешь\\пережигаешь заклинанием связующие путы. Это должно быть хорошо заметное внешнее воздействие. ',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['binding'],
-    modifier: [],
-  },
   // текстовая абилка
   {
     id: 'self-unbinding-mage',
@@ -4083,7 +4024,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Тихий взлом замков. (1 раз в 30 минут) Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['lock-the-door', 'arch-technomancer'],
+    prerequisites: ['lock-the-door', 'arch-hackerman-technomancer'],
     modifier: [],
   },
   // текстовая абилка
@@ -4189,18 +4130,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  //
-  {
-    id: 'arch-technomancer',
-    humanReadableName: 'Архетип Техномант',
-    description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['!arch-mage', '!tech-blockade', ''],
-    pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
   // resonance +2
   {
     id: 'arch-technomancer-boost',
@@ -4208,7 +4137,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный хакер техномант.',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['arch-technomancer', 'master-of-the-universe'],
+    prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
     pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [],
   },

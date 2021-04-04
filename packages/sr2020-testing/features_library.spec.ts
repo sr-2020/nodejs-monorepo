@@ -3,6 +3,9 @@ import {
   getAllPassiveAbilities,
   getAllSpells,
 } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import '@alice/sr2020-model-engine/scripts/character/passive_abilities_library';
+import '@alice/sr2020-model-engine/scripts/character/active_abilities_library';
+import '@alice/sr2020-model-engine/scripts/character/spells_library';
 
 describe('Features library', () => {
   function addNo(ids: string[]): string[] {
@@ -17,6 +20,12 @@ describe('Features library', () => {
     expect(getAllSpells()).toBeDefined();
   });
 
+  it('Non-empty', () => {
+    expect(getAllActiveAbilities().size).toBeGreaterThan(0);
+    expect(getAllPassiveAbilities().size).toBeGreaterThan(0);
+    expect(getAllSpells().size).toBeGreaterThan(0);
+  });
+
   it('No id duplication between different kinds of features', () => {
     expect(allIds.size).toBe(getAllActiveAbilities().size + getAllPassiveAbilities().size + getAllSpells().size);
   });
@@ -28,7 +37,7 @@ describe('Features library', () => {
   });
 
   it('Passive abilities prerequisites are valid', () => {
-    for (const [, feature] of getAllActiveAbilities()) {
+    for (const [, feature] of getAllPassiveAbilities()) {
       for (const prereq of feature.prerequisites) {
         expect([...allValidPrerequisites]).toContain(prereq);
       }
@@ -36,7 +45,7 @@ describe('Features library', () => {
   });
 
   it('Passive ability does not require itself', () => {
-    for (const [id, feature] of getAllActiveAbilities()) {
+    for (const [id, feature] of getAllPassiveAbilities()) {
       for (const prereq of feature.prerequisites) {
         expect(prereq).not.toBe(id);
       }
@@ -44,7 +53,7 @@ describe('Features library', () => {
   });
 
   it('Passive ability prerequisites are not duplicated', () => {
-    for (const [, feature] of getAllActiveAbilities()) {
+    for (const [, feature] of getAllPassiveAbilities()) {
       const prereqs = feature.prerequisites;
       expect(new Set<string>(prereqs).size).toBe(prereqs.length);
     }
