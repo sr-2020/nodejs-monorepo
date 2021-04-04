@@ -4109,15 +4109,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
-  {
-    id: 'arch-decker',
-    humanReadableName: 'Архетип Декер',
-    description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
-    availability: 'open',
-    karmaCost: 60,
-    prerequisites: [],
-    modifier: [],
-  },
   // TODO(aeremin): Implement and add modifier here
   // Intelligence +2
   {
