@@ -84,6 +84,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
   },
   // chemo.baseEffectThreshold -40
@@ -97,6 +98,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: -40 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: -30 }),
@@ -112,6 +114,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-elf', level: 1 },
     modifier: [],
   },
   // chemo.crysisThreshold +40
@@ -122,6 +125,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 })],
   },
   // magicStats.feedbackMultiplier *0.9
@@ -132,6 +136,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 0.9,
     }),
@@ -145,6 +150,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [
       modifierFromEffect(increaseFadingResistance, { amount: 1 }),
       modifierFromEffect(increaseBiofeedbackResistance, { amount: 1 }),
@@ -158,6 +164,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseDroneFeedback, { amount: -1 })],
   },
   // у обычных метарасов 6 слотов.
@@ -169,6 +176,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: -1 })],
   },
   // maxHp +1
@@ -179,6 +187,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [modifierFromEffect(increaseMaxMeatHp, { amount: 1 })],
   },
   // magicStats.spiritResistanceMultiplier *0.8
@@ -189,6 +198,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [modifierFromEffect(multiplySpiritResistanceMultiplier, { amount: 0.8 })],
   },
   //
@@ -199,6 +209,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
   //
@@ -209,6 +220,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // у обычных метарасов 6 слотов.
@@ -220,6 +232,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [modifierFromEffect(increaseImplantsSlots, { amount: 1 })],
   },
   //
@@ -230,6 +243,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
@@ -240,6 +254,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   //
@@ -250,6 +265,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // Эссенс персонажа уменьшается на 0,2 каждый час
@@ -262,6 +278,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-ghoul'],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // Эссенс персонажа уменьшается на 1 каждый час
@@ -273,6 +290,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-vampire'],
+    pack: { id: 'gen-meta-vampire', level: 1 },
     modifier: [],
   },
   // Если itEssense <1, то у персонажа блокируется активация всех активных абилок кроме абилок ghoul-feast и vampire-feast. Проверка проводится при каждом пересчете itEssense.
@@ -283,6 +301,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // chemo.baseEffectThreshold +30
@@ -296,6 +315,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [
       modifierFromEffect(increaseСhemoBaseEffectThreshold, { amount: 30 }),
       modifierFromEffect(increaseСhemoUberEffectThreshold, { amount: 80 }),
@@ -311,6 +331,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // в типах имплантах есть разделение, надо посмотреть как оно там сделано
@@ -321,6 +342,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // вписано в требования архетипов
@@ -331,6 +353,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // вписано в требования архетипов
@@ -341,6 +364,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-AI', level: 1 },
     modifier: [],
   },
   //
@@ -1453,6 +1477,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 1,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'Samurai_pack', level: 1 },
     modifier: modifierFromEffect(multiplyDiscountWeaponsArmor, { amount: 0.9 }),
   },
   // множитель 0,9 на  все товары с параметром Corporation = Ares Macrotechnolgy
@@ -2482,6 +2507,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-norm', level: 1 },
     modifier: [],
   },
   // elven-prices
@@ -2492,6 +2518,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-elf', level: 1 },
     modifier: [],
   },
   // chem-resist
@@ -2507,6 +2534,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [],
   },
   // extra-hp
@@ -2518,6 +2546,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
   // extra-hp
@@ -2536,6 +2565,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 40,
     prerequisites: [],
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
   // strong-arm
@@ -2554,6 +2584,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
   // strong-arm
@@ -2572,6 +2603,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 20,
     prerequisites: [],
+    pack: { id: 'gen-meta-vampire', level: 1 },
     modifier: [],
   },
   // magic-blockade
@@ -2582,6 +2614,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-AI', level: 1 },
     modifier: [],
   },
   // magic-blockade
@@ -2594,6 +2627,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-eghost', level: 1 },
     modifier: [],
   },
   // tech-blockade
@@ -2608,6 +2642,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // Body +1
@@ -2666,6 +2701,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [],
   },
+  // Intelligence +2
   {
     id: 'arch-hackerman-decker-boost',
     humanReadableName: 'Опытный Декер',
@@ -2673,8 +2709,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker-boost', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 2 })],
   },
+  // resonance +2
   {
     id: 'arch-hackerman-technomancer-boost',
     humanReadableName: 'Опытный Техномант',
@@ -2682,6 +2720,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
+    pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
   // magic  +1
@@ -2759,6 +2798,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
@@ -2920,6 +2960,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-mage'],
+    pack: { id: 'mage-badfate', level: 1 },
     modifier: [],
   },
   //
@@ -2930,6 +2971,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-mage-negative-1'],
+    pack: { id: 'mage-badfate', level: 2 },
     modifier: [],
   },
   //
@@ -2940,6 +2982,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-mage-negative-2'],
+    pack: { id: 'mage-badfate', level: 3 },
     modifier: [],
   },
   // Персонажам, имеющим абилку, Случай начисляет Х денег в конце каждого цикла
@@ -4013,7 +4056,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: [],
-    pack: { id: 'chummer_zero', level: 0 },
+    pack: { id: 'chummer_zero', level: 1 },
     modifier: [],
   },
   //
@@ -4024,7 +4067,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: [],
-    pack: { id: 'chummer_zero', level: 0 },
+    pack: { id: 'chummer_zero', level: 1 },
     modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
@@ -4072,8 +4115,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Intelligence +2
   {
     id: 'arch-decker-boost',
     humanReadableName: 'Опытный Декер',
@@ -4081,11 +4122,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'gen-arch-hackerman-decker-boost', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // resonance +2
   {
     id: 'arch-technomancer-boost',
     humanReadableName: 'Опытный Техномант',
@@ -4093,7 +4131,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer', 'master-of-the-universe'],
-    pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [],
   },
   // инструкция про киберруки
@@ -4105,6 +4142,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 1,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'Samurai_pack', level: 1 },
     modifier: [],
   },
   //
@@ -4334,7 +4372,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-rigger-boost', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // показывает игроку текст абилки, больше ничего
   {
     id: "clubs'n'swords-3",
@@ -4344,7 +4381,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-samurai', "clubs'n'swords-2"],
-    pack: undefined,
     modifier: [],
   },
 ];
