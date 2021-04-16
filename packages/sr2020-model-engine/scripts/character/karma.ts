@@ -13,8 +13,8 @@ import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/chara
 
 export const kMaxKarmaPerGame = 5000;
 export const kMaxKarmaPerCycle = 5000;
-export const kKarmaActiveAbilityCoefficient = 0.1;
-export const kKarmaSpellCoefficient = 0.1;
+export const kKarmaActiveAbilityCoefficient = 0.05;
+export const kKarmaSpellCoefficient = 0.05;
 export const kPassiveAbilityCoefficient = 0.01;
 const kKarmaForPassivesTimerName = 'give-karma-for-passives';
 const kKarmaForPassivesTimerPeriod = duration(1, 'hour');
