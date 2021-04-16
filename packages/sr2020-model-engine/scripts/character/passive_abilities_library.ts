@@ -42,7 +42,6 @@ import {
   increaseStockGainPercentage,
   increaseStrength,
   increaseTuningBonus,
-  increaseVarianceResistance,
   increaseСhemoBaseEffectThreshold,
   increaseСhemoCrysisThreshold,
   increaseСhemoSuperEffectThreshold,
@@ -807,18 +806,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 4,
     prerequisites: ['sly-2'],
     pack: { id: 'hack-deck-sly', level: 2 },
-    modifier: [],
-  },
-  // IT: команда в кривда-матрице
-  {
-    id: 'quell',
-    humanReadableName: 'quell',
-    description:
-      'новая команда: quell <target>\nкоманда применяется в бою с льдом. Атакованный IC пропустит несколько своих следующих атак (зависит от Firewall)',
-    availability: 'open',
-    karmaCost: 4,
-    prerequisites: ['breacher-2'],
-    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -3019,18 +3006,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'dividends', level: 3 },
     modifier: [],
   },
-  // IT: команда в кривда-матрице
-  {
-    id: 'hophop',
-    humanReadableName: 'hophop',
-    description:
-      'новая команда: hop\nМгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)\n\nвместе с партией!',
-    availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['sly-3'],
-    pack: { id: 'hack-deck-sly', level: 3 },
-    modifier: [],
-  },
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-1-summ',
@@ -3081,29 +3056,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
-  },
-  //
-  {
-    id: 'hack-deck-commander',
-    humanReadableName: 'Командир',
-    description:
-      'Ты можешь создавать объединять декеров в команду.\nДекеры, входящие в команду перемещаются за лидером и не атакуют друг-друга френдли файером',
-    availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
-    modifier: [],
-  },
-  //
-  {
-    id: 'hack-deck-general',
-    humanReadableName: 'Комбат',
-    description: 'Твоя команда стала лучше. например, теперь вход на хост происходит по лучшему времени в группе.',
-    availability: 'open',
-    karmaCost: 8,
-    prerequisites: ['hack-deck-commander', 'fencer-3'],
-    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
