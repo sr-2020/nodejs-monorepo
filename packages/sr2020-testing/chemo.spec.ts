@@ -63,31 +63,31 @@ describe('Chemo events', function () {
   });
 
   it('Multi opium', async () => {
-    await fixture.saveCharacter();
+    await fixture.saveCharacter({ body: 2 });
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
-      expect(workModel.mentalAttackBonus).toBe(3);
+      expect(workModel.body).toBe(3);
     }
 
     await fixture.advanceTime(duration(15, 'minutes'));
 
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'pam' } });
-      expect(workModel.mentalAttackBonus).toBe(5);
+      expect(workModel.body).toBe(3);
     }
 
     await fixture.advanceTime(duration(15, 'minutes'));
 
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.mentalAttackBonus).toBe(5);
+      expect(workModel.body).toBe(3);
     }
 
-    await fixture.advanceTime(duration(15, 'minutes'));
+    await fixture.advanceTime(duration(45, 'minutes'));
 
     {
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.mentalAttackBonus).toBe(0);
+      expect(workModel.body).toBe(2);
     }
   });
 
@@ -159,10 +159,10 @@ describe('Chemo events', function () {
   });
 
   it('Opium + Elba', async () => {
-    await fixture.saveCharacter();
+    await fixture.saveCharacter({ body: 2 });
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'consumeChemo', data: { id: 'watson' } });
-      expect(workModel.mentalAttackBonus).toBe(3);
+      expect(workModel.body).toBe(3);
       expect(workModel.chemo.concentration).toMatchObject({ opium: 200, polonium: 100, argon: 80 });
     }
 

@@ -5,10 +5,10 @@ import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotific
 import { duration, Duration } from 'moment';
 import {
   increaseAllBaseStats,
+  increaseBody,
   increaseCharisma,
   increaseIntelligence,
   increaseMaxMeatHp,
-  increaseMentalAttack,
   increaseMentalAttackAndProtection,
   increaseMentalProtection,
   increaseResonance,
@@ -465,41 +465,41 @@ export const kAllChemoEffects: ChemoEffect[] = [
     element: 'opium',
     level: 'base',
     durationEffect: {
-      handler: increaseMentalAttack,
-      amount: 3,
+      handler: increaseBody,
+      amount: 1,
       duration: duration(30, 'minutes'),
     },
-    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию.',
+    message: 'У тебя повысился Боди на 30 минут.',
   },
   {
     element: 'opium',
     level: 'uber',
     durationEffect: {
-      handler: increaseMentalAttack,
-      amount: 10,
-      duration: duration(30, 'minutes'),
+      handler: increaseBody,
+      amount: 3,
+      duration: duration(60, 'minutes'),
     },
-    message: 'На 30 минут сильно увеличивает способности персонажа-менталиста к ментальному воздействию.',
+    message: 'У тебя сильно повысился Боди на 60 минут.',
   },
   {
     element: 'opium',
     level: 'super',
     durationEffect: {
-      handler: increaseMentalAttack,
-      amount: 5,
-      duration: duration(30, 'minutes'),
+      handler: increaseBody,
+      amount: 1,
+      duration: duration(60, 'minutes'),
     },
-    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию.',
+    message: 'У тебя повысился Боди на 60 минут.',
   },
   {
     element: 'opium',
     level: 'crysis',
     durationEffect: {
-      handler: increaseMentalAttack,
-      amount: 5,
-      duration: duration(30, 'minutes'),
+      handler: increaseBody,
+      amount: 1,
+      duration: duration(60, 'minutes'),
     },
-    message: 'На 30 минут увеличивает способности персонажа-менталиста к ментальному воздействию. Появилась зависимость.',
+    message: 'У тебя повысился Боди на 60 минут, появилась зависимость.',
   },
 
   {
