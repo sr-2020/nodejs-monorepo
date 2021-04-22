@@ -60,7 +60,13 @@ export function clear(api: EventModelApi<QrCode>) {
 }
 
 function isMerchandise(api: EventModelApi<QrCode>) {
-  return api.model.type == 'implant' || api.model.type == 'pill' || api.model.type == 'reagent' || api.model.type == 'locus_charge';
+  return (
+    api.model.type == 'implant' ||
+    api.model.type == 'pill' ||
+    api.model.type == 'reagent' ||
+    api.model.type == 'locus_charge' ||
+    api.model.type == 'food'
+  );
 }
 
 function makeEmptyBox(api: EventModelApi<QrCode>) {
