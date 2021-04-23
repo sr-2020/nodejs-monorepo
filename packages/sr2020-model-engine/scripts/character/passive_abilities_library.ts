@@ -41,7 +41,6 @@ import {
   increaseSpriteLevel,
   increaseStockGainPercentage,
   increaseStrength,
-  increaseTuningBonus,
   increaseСhemoBaseEffectThreshold,
   increaseСhemoCrysisThreshold,
   increaseСhemoSuperEffectThreshold,
@@ -1964,39 +1963,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseImplantsBonus, { amount: 4 }),
       modifierFromEffect(allowBiowareInstallation, {}),
     ],
-  },
-  // rigging.tuningBonus +2
-  {
-    id: 'tuning-1',
-    humanReadableName: 'Тюнинг 1',
-    description: 'Ты можешь ставить простые моды.',
-    availability: 'master',
-    karmaCost: 20,
-    prerequisites: ['tuning-active', 'arch-rigger', 'master-of-the-universe'],
-    pack: { id: 'rigger-eng-mech', level: 1 },
-    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
-  },
-  // rigging.tuningBonus +2
-  {
-    id: 'tuning-2',
-    humanReadableName: 'Тюнинг 2',
-    description: 'Ты можешь ставить сложные моды.',
-    availability: 'master',
-    karmaCost: 40,
-    prerequisites: ['tuning-1', 'arch-rigger', 'master-of-the-universe'],
-    pack: { id: 'rigger-eng-mech', level: 2 },
-    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 2 })],
-  },
-  // rigging.tuningBonus +4
-  {
-    id: 'tuning-3',
-    humanReadableName: 'Тюнинг 3',
-    description: 'Ты можешь ставить самые сложные моды.',
-    availability: 'master',
-    karmaCost: 80,
-    prerequisites: ['tuning-2', 'arch-rigger', 'master-of-the-universe'],
-    pack: { id: 'rigger-eng-mech', level: 3 },
-    modifier: [modifierFromEffect(increaseTuningBonus, { amount: 4 })],
   },
   // rigging.repomanBonus +4
   {

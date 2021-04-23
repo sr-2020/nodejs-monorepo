@@ -133,10 +133,6 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Этот дрон в настоящий момент уже используется.');
   }
 
-  if (!data.id.startsWith(drone.type)) {
-    throw new UserVisibleError('Этот навык не подходит к дрону данного класса.');
-  }
-
   if (api.workModel.drones.maxDifficulty < -100) {
     throw new UserVisibleError('Невозможно управлять дроном не имея RCC.');
   }
@@ -146,15 +142,11 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   }
 
   if (api.workModel.intelligence + droneCraft(api.workModel, drone.type) < drone.sensor) {
-    throw new UserVisibleError('Ваши навыки недостаточны для управления данным дроном.');
+    throw new UserVisibleError('У вас не хватает навыков управления этим типом дрона.');
   }
 
   const timeInDrone = duration(7 * api.workModel.body + api.workModel.drones.maxTimeInside, 'minutes');
   api.setTimer(kDroneTimerIds[0], 'Аварийный выход из дрона', timeInDrone, droneTimeout, {});
-
-  const thisAbility = api.model.activeAbilities.find((a) => a.id == data.id)!;
-  const cooldown = duration(Math.max(0, api.workModel.drones.recoveryTime - 5 * api.workModel.body), 'minutes');
-  thisAbility.cooldownUntil = api.model.timestamp + cooldown.asMilliseconds() * api.workModel.cooldownCoefficient;
 
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,

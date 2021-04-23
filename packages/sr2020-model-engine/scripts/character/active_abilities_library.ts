@@ -1218,28 +1218,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: capsuleReanimate.name,
   },
-  // TODO(https://trello.com/c/lbmO5n8E/337-дроны-модификация-дронов-реализовать-возможность-установки-и-снятия-модов-в-дроны): Add proper implementation
-  // Активирует процесс установки мода.
-  // надо отсканировать:
-  // - QR Мастерской
-  // - QR мода
-  // - QR целевого дрона \ кибердеки
-  //
-  // особый экран НЕ показывается, все проверки проходят в бэкнде, выдается только результат "получилось \ не получилось"
-  {
-    id: 'tuning-active',
-    humanReadableName: 'Тюнинг: установка мода в дрон\\кибердеку',
-    description: 'Для установки мода в дрон\\кибердеку используй эту способность.Необходима мастерская!',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 20,
-    prerequisites: ['arch-rigger', 'master-of-the-universe'],
-    pack: { id: 'rigger-eng-mech', level: 1 },
-    availability: 'master',
-    karmaCost: 60,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
   // Активирует процесс снятия импланта\мода.
   // надо отсканировать
   // QR чаммера \ дрона \ кибердеки
@@ -1283,77 +1261,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 50,
     minimalEssence: 0,
     eventType: repomanBlackAbility.name,
-  },
-  // Активирует процесс включения в дрона.
-  // надо отсканировать:
-  // - QR дрона
-  // - QR телохранилища
-  {
-    id: 'medicart-active',
-    humanReadableName: 'Управление медицинским дроном',
-    description: 'Активируй, чтобы включиться в дрона-медикарт.',
-    target: 'scan',
-    targetsSignature: kDroneAndBodyStorageTargeted,
-    cooldownMinutes: (character) => 40,
-    prerequisites: ['arch-rigger'],
-    pack: { id: 'rigger-medic-combat', level: 1 },
-    availability: 'open',
-    karmaCost: 50,
-    minimalEssence: 0,
-    eventType: enterDrone.name,
-  },
-  // Активирует процесс включения в автодок.
-  // надо отсканировать:
-  // - QR дрона
-  // - QR телохранилища
-  {
-    id: 'autodoc-active',
-    humanReadableName: 'Управление автодоком',
-    description: 'Активируй, чтобы подключиться к Автодоку.',
-    target: 'scan',
-    targetsSignature: kDroneAndBodyStorageTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-rigger'],
-    availability: 'open',
-    karmaCost: 50,
-    minimalEssence: 0,
-    eventType: enterDrone.name,
-  },
-  // Активирует процесс включения в дрона.
-  // надо отсканировать:
-  // - QR дрона
-  // - QR телохранилища
-  {
-    id: 'groundcraft-active',
-    humanReadableName: 'Управление наземным дроном',
-    description: 'Активируй, чтобы включиться в наземного дрона.',
-    target: 'scan',
-    targetsSignature: kDroneAndBodyStorageTargeted,
-    cooldownMinutes: (character) => 40,
-    prerequisites: ['arch-rigger'],
-    pack: { id: 'rigger-pilot-ground', level: 1 },
-    availability: 'master',
-    karmaCost: 40,
-    minimalEssence: 0,
-    eventType: enterDrone.name,
-  },
-  // Активирует процесс включения в дрона.
-  // надо отсканировать:
-  // - QR дрона
-  // - QR телохранилища
-  {
-    id: 'aircraft-active',
-    humanReadableName: 'Управление воздушным дроном',
-    description: 'Активируй, чтобы включиться в воздушного дрона.',
-    target: 'scan',
-    targetsSignature: kDroneAndBodyStorageTargeted,
-    cooldownMinutes: (character) => 40,
-    prerequisites: ['arch-rigger'],
-    pack: { id: 'rigger-pilot-air', level: 1 },
-    availability: 'open',
-    karmaCost: 40,
-    minimalEssence: 0,
-    eventType: enterDrone.name,
   },
   // При активации кнопки необходимо выбрать ЯЧЕЙКУ телохранилища, в котором лежит тело ригги.
   // Риггер выходит из дрона, пропадают абилки дрона, появляются абилки риггера.
@@ -3008,7 +2915,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Активирует процесс включения в дрона.
   // надо отсканировать:
   // - QR дрона
@@ -3018,14 +2924,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Активировать управление дроном',
     description: 'Активируй, чтобы включиться в дрона.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kDroneAndBodyStorageTargeted,
     cooldownMinutes: (character) => Math.max(0, character.drones.recoveryTime - 5 * character.body),
     prerequisites: ['arch-rigger'],
     pack: { id: 'base-rigger', level: 1 },
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: enterDrone.name,
   },
   // TODO(aeremin): Add proper implementation
   // Сравнивает навык риггера drone.recovery.skill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше - дрон переходит из состояния Сломан в состояние Работает
