@@ -14,3 +14,7 @@ export function stopUsingDroneOrSpirit(api: EventModelApi<QrCode>, data: { activ
     typedQrData<DroneQrData>(api.model).broken = true;
   }
 }
+
+export function repairDrone(api: EventModelApi<QrCode>, data: {}) {
+  typedQrData<DroneQrData>(api.model).broken = false;
+}

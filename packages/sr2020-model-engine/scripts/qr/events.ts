@@ -65,7 +65,8 @@ function isMerchandise(api: EventModelApi<QrCode>) {
     api.model.type == 'pill' ||
     api.model.type == 'reagent' ||
     api.model.type == 'locus_charge' ||
-    api.model.type == 'food'
+    api.model.type == 'food' ||
+    api.model.type == 'repair_kit'
   );
 }
 

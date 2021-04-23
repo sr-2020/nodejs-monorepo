@@ -60,7 +60,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { droneDangerAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
@@ -2940,14 +2940,25 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Ремонт дрона',
     description: 'Восстанавливает работоспособность дрона (необходимо отсканировать сломанного дрона и предмет "ремкомплект")',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Дрон',
+        allowedTypes: ['drone'],
+        field: 'droneId',
+      },
+      {
+        name: 'Ремкомплект',
+        allowedTypes: ['repair_kit'],
+        field: 'qrCodeId',
+      },
+    ],
     cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
     prerequisites: ['arch-rigger'],
     pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
-    eventType: dummyAbility.name,
+    eventType: droneRepairAbility.name,
   },
   // TODO(aeremin): Add proper implementation
   // null

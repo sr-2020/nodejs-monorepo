@@ -54,6 +54,11 @@ export class RiggerCharacterStats extends React.Component<{ drones: Drones; rigg
                 <td>{this.props.drones.groundcraftBonus}</td>
               </tr>
               <tr>
+                <th>Навык ремонта дронов</th>
+                <td>drones.recoverySkill</td>
+                <td>{this.props.drones.recoverySkill}</td>
+              </tr>
+              <tr>
                 <th>Может работать с биоваром</th>
                 <td>rigging.canWorkWithBioware</td>
                 <td>{this.props.rigging.canWorkWithBioware}</td>

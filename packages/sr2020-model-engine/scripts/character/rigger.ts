@@ -6,12 +6,18 @@ import { installImplant, removeImplant } from './merchandise';
 import { consume } from '../qr/events';
 import { createMerchandise } from '../qr/merchandise';
 import { autodocHeal, autodocRevive, healthStateTransition } from './death_and_rebirth';
-import { BodyStorageQrData, DroneQrData, MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import {
+  BodyStorageQrData,
+  DroneQrData,
+  MerchandiseQrData,
+  RepairKitQrData,
+  typedQrData,
+} from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { ActiveAbilityData, Implant } from '@alice/sr2020-common/models/common_definitions';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
 import { DroneType, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
-import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
+import { repairDrone, startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 
@@ -194,6 +200,21 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   // Not calling directly as we need to remove modifier and recalculate max HP first.
   api.sendSelfEvent(applyPostDroneDamange, { amount: m.postDroneDamage, location: data.location });
   api.removeModifier(m.mID);
+}
+
+export function droneRepairAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
+  if (!drone.broken) {
+    throw new UserVisibleError('Этот дрон не сломан.');
+  }
+
+  const droneRepairSkill = api.model.drones.recoverySkill + typedQrData<RepairKitQrData>(api.aquired(QrCode, data.qrCodeId!)).bonus;
+  if (droneRepairSkill < drone.sensor) {
+    throw new UserVisibleError('Ремонт не удался.');
+  }
+
+  api.sendOutboundEvent(QrCode, data.droneId!, repairDrone, {});
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, {});
 }
 
 export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data: { amount: number } & LocationMixin) {

@@ -190,6 +190,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         aircraftBonus: 2,
         groundcraftBonus: 2,
         feedbackModifier: 0,
+        recoverySkill: 0,
       },
       rigging: {
         canWorkWithBioware: false,

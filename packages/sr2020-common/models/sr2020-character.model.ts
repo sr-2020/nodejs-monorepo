@@ -524,6 +524,10 @@ export class Drones {
   @NumberProperty()
   @Column({ default: 0 })
   feedbackModifier: number;
+
+  @NumberProperty()
+  @Column({ default: 0 })
+  recoverySkill: number;
 }
 
 export class Rigging {
