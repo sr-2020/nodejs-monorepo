@@ -40,6 +40,7 @@ export interface BodyStorageQrData {
 
 export interface DroneData {
   type: DroneType;
+  broken: boolean;
   modSlots: number;
   moddingCapacity: number;
   sensor: number;
@@ -80,6 +81,11 @@ export interface SpiritQrData {
   hitpoints: number;
   activeAbilities: AddedActiveAbility[];
   passiveAbilities: AddedPassiveAbility[];
+}
+
+// qr.type == 'repair_kit'
+export interface RepairKitQrData {
+  bonus: number;
 }
 
 export function typedQrData<T>(qr: QrCode) {

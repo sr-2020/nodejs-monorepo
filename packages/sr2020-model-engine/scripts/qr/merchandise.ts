@@ -78,6 +78,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
   const maybeDrone = kAllDrones.find(sameId);
   if (maybeDrone) {
     const droneData: DroneData = {
+      broken: false,
       hitpoints: maybeDrone.hitpoints,
       modSlots: maybeDrone.modSlots,
       moddingCapacity: maybeDrone.moddingCapacity,
@@ -151,6 +152,17 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       name: maybeSoftware.name,
       description: maybeSoftware.description,
       data: maybeSoftware,
+    };
+  }
+
+  if (id.startsWith('repair-kit-')) {
+    return {
+      type: 'repair_kit',
+      name: 'Ремкомплект',
+      description: 'Комплект запчастей для ремонта дронов.',
+      data: {
+        bonus: { '1': 2, '2': 4, '3': 6 }[id[id.length - 1]],
+      },
     };
   }
 

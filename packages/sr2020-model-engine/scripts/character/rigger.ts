@@ -129,6 +129,10 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   }
 
   const drone = typedQrData<DroneQrData>(api.aquired(QrCode, data.droneId!));
+  if (drone.broken) {
+    throw new UserVisibleError('Ты не можешь подключитсья к этому дрону, он сломан.');
+  }
+
   if (drone.inUse) {
     throw new UserVisibleError('Этот дрон в настоящий момент уже используется.');
   }
@@ -180,6 +184,7 @@ export function exitDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   const m = findInDroneModifier(api);
   api.sendOutboundEvent(QrCode, m.droneQrId, stopUsingDroneOrSpirit, {
     activeAbilities: api.workModel.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id)),
+    broken: m.broken,
   });
 
   for (const abilityId of kDroneAbilityIds) {
@@ -202,7 +207,7 @@ export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data:
   }
 }
 
-type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number; stage: number };
+type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number; stage: number; broken: boolean };
 
 function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
@@ -220,6 +225,7 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDam
     droneQrId,
     postDroneDamage,
     stage: 0,
+    broken: false,
   };
 }
 
@@ -253,17 +259,17 @@ export function droneTimeout(api: EventModelApi<Sr2020Character>, data: {}) {
   droneEmergencyExit(api, data);
 }
 
-export function droneWounded(api: EventModelApi<Sr2020Character>, data: {}) {
-  sendNotificationAndHistoryRecord(api, 'Дрон критически поврежден', 'Необходимо срочно вернуться в мясное тело во избежание урона.');
-  droneEmergencyExit(api, data);
-}
-
 export function bodyInStorageWounded(api: EventModelApi<Sr2020Character>, data: {}) {
   sendNotificationAndHistoryRecord(
     api,
     'Мясное тело атаковано',
     'Кто-то атаковал ваше мясное тело в телохранилище. Необходимо срочно в него вернуться во избежание урона.',
   );
+  droneEmergencyExit(api, data);
+}
+
+export function droneDangerAbility(api: EventModelApi<Sr2020Character>, data: {}) {
+  findInDroneModifier(api).broken = true;
   droneEmergencyExit(api, data);
 }
 

@@ -35,7 +35,8 @@ export type QrType =
   | 'foundation_node'
   | 'reanimate_capsule'
   | 'ai_symbol'
-  | 'focus'; // Magic focus
+  | 'focus' // Magic focus
+  | 'repair_kit';
 // When adding new QR types here, add them to kMerchandiseQrTypes also if they are merchandise
 
 @Entity({

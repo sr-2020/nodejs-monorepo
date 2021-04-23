@@ -60,7 +60,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { droneEmergencyExit, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { droneDangerAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
@@ -1298,7 +1298,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
-    eventType: droneEmergencyExit.name,
+    eventType: droneDangerAbility.name,
   },
   // При активации аблики игрок сканирует куар-код с препаратом, видит его название и самый крупный компонент.
   // формат:

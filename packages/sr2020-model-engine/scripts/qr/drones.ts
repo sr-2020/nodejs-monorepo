@@ -7,7 +7,10 @@ export function startUsingDroneOrSpirit(api: EventModelApi<QrCode>, data: {}) {
   typedQrData<DroneQrData | SpiritQrData>(api.model).inUse = true;
 }
 
-export function stopUsingDroneOrSpirit(api: EventModelApi<QrCode>, data: { activeAbilities: AddedActiveAbility[] }) {
+export function stopUsingDroneOrSpirit(api: EventModelApi<QrCode>, data: { activeAbilities: AddedActiveAbility[]; broken?: boolean }) {
   typedQrData<DroneQrData | SpiritQrData>(api.model).activeAbilities = data.activeAbilities;
   typedQrData<DroneQrData | SpiritQrData>(api.model).inUse = false;
+  if (data.broken) {
+    typedQrData<DroneQrData>(api.model).broken = true;
+  }
 }
