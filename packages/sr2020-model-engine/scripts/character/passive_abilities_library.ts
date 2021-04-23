@@ -2631,7 +2631,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: ['!arch-mage', '!tech-blockade'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // Intelligence +2
   {
