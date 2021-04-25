@@ -36,6 +36,7 @@ export type QrType =
   | 'reanimate_capsule'
   | 'ai_symbol'
   | 'focus' // Magic focus
+  | 'focus_on_cooldown'
   | 'repair_kit';
 // When adding new QR types here, add them to kMerchandiseQrTypes also if they are merchandise
 

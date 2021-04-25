@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Duration } from 'moment';
-import { EffectModelApi, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
+import { EffectModelApi, EmptyModel, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
 import { MAX_HISTORY_LINES } from './consts';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import * as uuid from 'uuid';
@@ -24,8 +24,8 @@ export function sendNotificationAndHistoryRecord(api: EventModelApi<Sr2020Charac
 
 // Сreates an modifier having a single Effect. additionalData will be embedded into Modifier so effect handler will be able
 // access it.
-export function modifierFromEffect<T>(
-  effect: (api: EffectModelApi<Sr2020Character>, m: Modifier & T) => void,
+export function modifierFromEffect<U extends EmptyModel, T>(
+  effect: (api: EffectModelApi<U>, m: Modifier & T) => void,
   additionalData: T,
   reason: string = '',
 ): Modifier {

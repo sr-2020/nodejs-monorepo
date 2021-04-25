@@ -1,6 +1,6 @@
-import { EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
+import { EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
-import { duration } from 'moment';
+import { Duration, duration } from 'moment';
 import { kAllEthicGroups } from '../character/ethics_library';
 import {
   AiSymbolData,
@@ -15,6 +15,7 @@ import { buyFeatureForKarma, earnKarma } from '@alice/sr2020-model-engine/script
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
 import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllSpirits, kCommonSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import * as uuid from 'uuid';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -314,4 +315,16 @@ export function writeSpirit(api: EventModelApi<QrCode>, data: { id: string }) {
     timers: [],
     data: qrData,
   };
+}
+
+// Adds 'self-destructing' modifier. If you need some temporary Effect - use it in the composition with modifierFromEffect.
+export function addTemporaryQrModifier(api: EventModelApi<QrCode>, m: Modifier, duration: Duration) {
+  api.addModifier(m);
+  api.setTimer(uuid.v4(), '', duration, removeQrModifier, { mID: m.mID });
+}
+
+// Implementation detail: we need to have it as an Event handler so we can call it on Timer.
+// Don't call directly from the code, use direct api.removeModifier call instead.
+export function removeQrModifier(api: EventModelApi<QrCode>, data: { mID: string }) {
+  api.removeModifier(data.mID);
 }

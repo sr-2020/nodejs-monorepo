@@ -67,6 +67,7 @@ export interface AiSymbolData {
 export interface MagicFocusData {
   amount: number;
   sphere: SpellSphere;
+  cooldownSeconds: number;
 }
 
 // qr.type == 'focus'
