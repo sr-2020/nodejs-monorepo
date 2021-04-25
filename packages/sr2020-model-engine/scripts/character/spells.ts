@@ -26,6 +26,7 @@ import { ModifierWithAmount, TemporaryModifierWithAmount } from '@alice/sr2020-m
 import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { getAllPassiveAbilities, getAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { markAsUsed } from '@alice/sr2020-model-engine/scripts/qr/focus';
 
 type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -66,6 +67,10 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
   const librarySpell = getAllSpells().get(data.id);
   if (!librarySpell) {
     throw new UserVisibleError('Несуществующий спелл!');
+  }
+
+  if (data.focusId) {
+    api.sendOutboundEvent(QrCode, data.focusId, markAsUsed, {});
   }
 
   const ritualStats = getRitualStatsAndAffectVictims(api, data);
