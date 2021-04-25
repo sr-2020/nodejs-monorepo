@@ -2592,21 +2592,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // Игрок может установить купленный бэкдор в основании
-  // techno.fading +200
-  {
-    id: 'backdoor-set',
-    humanReadableName: 'установка бэкдора',
-    description: 'Можешь установить бэкдор',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
   // Игрок может вскрывать цифровые замки в реальном мире.
   // techno.fading + 25
   {
@@ -2634,21 +2619,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sword-short'],
     availability: 'open',
     karmaCost: 40,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // Игрок может установить трубу между хостом-источником нейротензоров и хостом, на котором собирается проект
-  //
-  {
-    id: 'pipe-install',
-    humanReadableName: 'установить трубу',
-    description: 'Можешь установить трубу между хостом с колодцем нейротензоров и хостом проекта',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
-    availability: 'open',
-    karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -2849,40 +2819,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
-  // Игрок может установить трубу между хостом-источником нейротензоров и хостом, на котором собирается проект
-  //
-  {
-    id: 'pipe-install-hide',
-    humanReadableName: 'скрытый монтаж трубы',
-    description: 'Можешь установить трубу между хостом с колодцем нейротензоров и хостом проекта и никто этого не заметит',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
-    pack: undefined,
-    availability: 'open',
-    karmaCost: 20,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  // Игрок может уничтожить трубу между хостом-источником нейротензоров и хостом, на котором собирается проект
-  //
-  {
-    id: 'pipe-crush',
-    humanReadableName: 'сломать трубу',
-    description: 'Можешь сломать трубу между хостом с колодцем нейротензоров и хостом проекта',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
-    pack: undefined,
-    availability: 'open',
-    karmaCost: 20,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
   // Игрок может покинуть основнаие в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
   {
     id: 'runaway',
@@ -2895,23 +2831,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     pack: undefined,
     availability: 'open',
     karmaCost: 50,
-    minimalEssence: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  // Игрок может установить купленный бэкдор в основании
-  // techno.fading +300
-  {
-    id: 'backdoor-set-hide',
-    humanReadableName: 'скрытый монтаж бэкдора',
-    description: 'Можешь установить бэкдор незаметно',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
-    pack: undefined,
-    availability: 'open',
-    karmaCost: 15,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },

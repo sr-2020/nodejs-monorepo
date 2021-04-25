@@ -3997,16 +3997,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
-  // Игрок может купить бэкдор
-  {
-    id: 'backdoor',
-    humanReadableName: 'Спрайт "бэкдор"',
-    description: 'Можешь купить бэкдор',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    modifier: [],
-  },
   // Игрок может использовать спрайт "Труба" в Основании
   {
     id: 'pipe',
@@ -4104,7 +4094,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь использовать 2 бэкдора одновременно',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-technomancer', 'backdoor-set'],
+    prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
   // Игрок может держать (иметь дотуп к информации черз бэкдор) 3 бэкдора
