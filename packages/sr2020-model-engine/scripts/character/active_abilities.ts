@@ -54,7 +54,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   // This will lead to maybeAbility being undefined. But it's fine: such abilities are one-time-use anyway, so no need to
   // set cooldown.
   if (maybeAbility) {
-    maybeAbility.cooldownUntil = api.model.timestamp + ability.cooldownMinutes * 60 * 1000;
+    maybeAbility.cooldownUntil = Math.floor(api.model.timestamp + ability.cooldownMinutes * 60 * 1000);
   } else {
     const mods = api.getModifiersByName(`add-active-ability-${ability.id}`);
     if (mods.length) {
