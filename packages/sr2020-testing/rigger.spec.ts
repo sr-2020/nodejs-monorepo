@@ -160,9 +160,9 @@ describe('Rigger abilities', () => {
     }
   });
 
-  it('Breaking drone', async () => {
+  it('Breaking and repairing drone', async () => {
     // Rigger set up
-    await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10, recoverySkill: 100 } });
     await fixture.addCharacterFeature('arch-rigger');
     await fixture.addCharacterFeature('drones-active');
 
@@ -183,9 +183,25 @@ describe('Rigger abilities', () => {
     // Leave drone
     await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
 
-    const { workModel } = await fixture.getQrCode('2');
-    expect(workModel.type).toBe('drone');
-    expect(typedQrData<DroneQrData>(workModel).broken).toBe(true);
+    {
+      const { workModel } = await fixture.getQrCode('2');
+      expect(workModel.type).toBe('drone');
+      expect(typedQrData<DroneQrData>(workModel).broken).toBe(true);
+      expect(workModel.name).toContain('(сломан)');
+    }
+
+    // Repair drone
+    await fixture.addCharacterFeature('drone-recovery');
+    await fixture.saveQrCode({ modelId: '3' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'repair-kit-1' } }, '3');
+    await fixture.useAbility({ id: 'drone-recovery', droneId: '2', qrCodeId: '3' });
+
+    {
+      const { workModel } = await fixture.getQrCode('2');
+      expect(workModel.type).toBe('drone');
+      expect(typedQrData<DroneQrData>(workModel).broken).toBe(false);
+      expect(workModel.name).not.toContain('(сломан)');
+    }
   });
 
   it('Spending too long in drone will wound you', async () => {
