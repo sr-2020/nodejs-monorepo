@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 
-import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { BodyStorageQrData, DroneQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 import { kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
@@ -158,6 +158,34 @@ describe('Rigger abilities', () => {
       );
       expect(workModel.currentBody).toBe('physical');
     }
+  });
+
+  it('Breaking drone', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.addCharacterFeature('arch-rigger');
+    await fixture.addCharacterFeature('drones-active');
+
+    // Body storage set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
+
+    // Drone set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
+
+    // Enter drone
+    await fixture.useAbility({ id: 'drones-active', bodyStorageId: '1', droneId: '2' });
+
+    // Mark drone as broken
+    await fixture.useAbility({ id: 'drone-danger', bodyStorageId: '1' });
+
+    // Leave drone
+    await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });
+
+    const { workModel } = await fixture.getQrCode('2');
+    expect(workModel.type).toBe('drone');
+    expect(typedQrData<DroneQrData>(workModel).broken).toBe(true);
   });
 
   it('Spending too long in drone will wound you', async () => {
