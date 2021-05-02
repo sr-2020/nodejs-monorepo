@@ -78,8 +78,10 @@ export function createCooldownCalculatorEffect(): Effect {
 
 export function calculateCooldowns(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   for (const ability of api.model.activeAbilities) {
-    const libraryAbility = getAllActiveAbilities().get(ability.id)!;
-    ability.cooldownMinutes = libraryAbility.cooldownMinutes(api.model) * api.model.cooldownCoefficient;
+    const libraryAbility = getAllActiveAbilities().get(ability.id);
+    if (libraryAbility) {
+      ability.cooldownMinutes = libraryAbility.cooldownMinutes(api.model) * api.model.cooldownCoefficient;
+    }
   }
 }
 
