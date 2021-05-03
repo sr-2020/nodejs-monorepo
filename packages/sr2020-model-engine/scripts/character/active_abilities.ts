@@ -306,7 +306,7 @@ export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: Active
   }
   const implant = potentialImplants.sort((i1, i2) => {
     const diff = i1.installDifficulty - i2.installDifficulty;
-    return chooseStrategy == ImplantToExtract.kMostComplex ? diff : -diff;
+    return chooseStrategy == ImplantToExtract.kSimplest ? diff : -diff;
   })[0];
 
   api.sendOutboundEvent(Sr2020Character, victim.modelId, removeImplant, { id: implant.id });

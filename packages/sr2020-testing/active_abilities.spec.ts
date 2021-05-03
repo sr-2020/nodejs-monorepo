@@ -100,7 +100,7 @@ describe('Active abilities', function () {
       usesLeft: 1,
       type: 'implant',
       data: {
-        id: 'cyber-hand-beta',
+        id: 'cyber-hand-alpha',
       },
     });
 
@@ -126,7 +126,7 @@ describe('Active abilities', function () {
       usesLeft: 1,
       type: 'implant',
       data: {
-        id: 'cyber-hand-alpha',
+        id: 'cyber-hand-beta',
       },
     });
 
