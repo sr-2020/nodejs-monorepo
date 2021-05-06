@@ -154,7 +154,7 @@ describe('Rigger abilities', () => {
       expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
       expect(workModel.activeAbilities).toHaveLength(1); // Enter drone
       expect(workModel.activeAbilities[0].cooldownUntil).toBe(
-        duration(/* default recovery time */ 120 - /* body with arch-rigger bonus */ 4 * 5, 'minutes').asMilliseconds(),
+        duration(/* default recovery time */ 120 - /* body with arch-rigger bonus */ 5 * 5, 'minutes').asMilliseconds(),
       );
       expect(workModel.currentBody).toBe('physical');
     }

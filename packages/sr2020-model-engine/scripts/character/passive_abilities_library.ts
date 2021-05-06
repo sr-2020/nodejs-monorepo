@@ -35,8 +35,8 @@ import {
   increaseMedicraftBonus,
   increaseMentalProtection,
   increasePostDroneRecoveryTime,
-  increaseRepomanBonus,
   increaseRecoverySkill,
+  increaseRepomanBonus,
   increaseResonance,
   increaseSpriteCount,
   increaseSpriteLevel,
@@ -2553,7 +2553,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-rigger', level: 1 },
-    modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseIntelligence, { amount: 2 }), modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 })],
+    modifier: [
+      modifierFromEffect(increaseBody, { amount: 2 }),
+      modifierFromEffect(increaseIntelligence, { amount: 2 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+    ],
   },
   // Body +1
   {
