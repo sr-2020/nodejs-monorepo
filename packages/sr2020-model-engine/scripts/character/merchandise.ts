@@ -5,7 +5,13 @@ import { sendNotificationAndHistoryRecord } from './util';
 import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { Implant, ImplantSlot } from '@alice/sr2020-common/models/common_definitions';
 
-export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
+export interface ImplantInstallData {
+  installer: string;
+  autodocLifestyle: string;
+  autodocQrId: string;
+}
+
+export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin & ImplantInstallData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Импланты можно устанавливать только в мясное тело');
   }
@@ -55,8 +61,9 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     characterId: api.model.modelId,
     id: implant.id,
     implantLifestyle: data.lifestyle,
-    // TODO(aeremin) Send actual autodoc lifestyle.
-    autodocLifestyle: 'irridium',
+    autodocLifestyle: data.autodocLifestyle,
+    autodocQrId: data.autodocQrId,
+    installer: data.installer,
     location: data.location,
   });
 }
