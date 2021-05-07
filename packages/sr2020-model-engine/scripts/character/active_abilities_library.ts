@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -184,7 +183,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'ground-heal-ability',
-    humanReadableName: 'Ground Heal',
+    humanReadableName: 'Ground Heal - Эффект',
     description: 'Поднимает одну цель из КС/тяжрана в полные хиты.',
     target: 'scan',
     targetsSignature: [
@@ -195,7 +194,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -225,7 +224,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'finish-him',
-    humanReadableName: 'добивание тела из тяжрана в КС',
+    humanReadableName: 'Добивание тела из тяжрана в КС',
     description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
     targetsSignature: [
@@ -767,7 +766,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: investigateScoring.name,
   },
-  // На допросе цель развернуто отвечает на заданный вопрос и теряет одну единицу эссенса (начисляется на Папу Драконов). Абилка-сертификат с кулдауном
   {
     id: 'chain-interrogation',
     humanReadableName: 'Конвейерный допрос',
@@ -782,7 +780,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: doNothingAbility.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
   {
     id: 'orthodox-exorcism',
     humanReadableName: 'Отчитка',
@@ -851,7 +848,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 55,
-    prerequisites: ['astral-body-1-summ', 'master-of-the-universe'],
+    prerequisites: ['astral-body-1-summ', 'arch-mage'],
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
@@ -867,7 +864,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 125,
-    prerequisites: ['astral-body-2', 'master-of-the-universe'],
+    prerequisites: ['astral-body-2', 'arch-mage'],
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
@@ -877,7 +874,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'silentium-est-aurum',
     humanReadableName: 'Silentium est aurum',
-    description: 'Временно частично изменить цели ее ауру. Требуемая эссенция мага: больше 4',
+    description: 'Временно частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4',
     target: 'scan',
     targetsSignature: [
       {
@@ -887,8 +884,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 40,
-    prerequisites: ['master-of-the-universe'],
-    pack: { id: 'mage-adept-healer', level: 3 },
+    prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 4,
@@ -899,12 +895,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'hammer-of-justice',
     humanReadableName: 'Hammer of Justice',
     description:
-      'Активируемый статус "тяжелое" для одноручного оружия.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 5 минут.',
+      'Активируемый статус "тяжелое" для одноручного оружия в твоих руках.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 15 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 5,
-    prerequisites: [],
-    pack: { id: 'mage-adept-fighter', level: 1 },
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 90,
     minimalEssence: 3,
@@ -915,14 +910,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'arrowgant',
     humanReadableName: 'Arrowgant',
     description:
-      'Активируемая защита от дистанционного легкого оружия.  Требуемая эссенция: больше 4. Время действия "5+уровень маны в локации" минут. Кулдаун 5 минут.',
+      'Активируемая защита от дистанционного легкого оружия в твоих руках.  Требуемая эссенция: больше 4. Время действия "5+уровень маны в локации" минут. Кулдаун 15 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
-    prerequisites: [],
-    pack: { id: 'mage-adept-fighter', level: 2 },
+    prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 90,
+    karmaCost: 50,
     minimalEssence: 4,
     eventType: arrowgant.name,
   },
@@ -931,14 +925,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'trollton',
     humanReadableName: 'Trollton',
     description:
-      'Активируемая тяжелая броня.  Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
+      'Активируемая тяжелая броня на тебе (не требуется лёгкой).  Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
-    prerequisites: [],
-    pack: { id: 'mage-adept-healer', level: 3 },
+    prerequisites: ['arch-mage'],
     availability: 'closed',
-    karmaCost: 50,
+    karmaCost: 100,
     minimalEssence: 2,
     eventType: trollton.name,
   },
@@ -947,12 +940,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'i-will-survive',
     humanReadableName: 'I will survive ',
     description:
-      'Возможность в течение "5+2*уровень маны в локации" минут один раз автоматически перейти из тяжрана в состояние Здоров. Требуемая эссенция: больше 2. Кулдаун 20 минут.',
+      'Возможность самому в течение "5+2*уровень маны в локации" минут один раз автоматически перейти из тяжрана в состояние Здоров. Требуемая эссенция: больше 2. Кулдаун 20 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: [],
-    pack: { id: 'mage-adept-fighter', level: 3 },
+    prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 90,
     minimalEssence: 2,
@@ -962,7 +954,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'stand-up-and-fight',
     humanReadableName: 'Stand up and fight ',
-    description: 'Мгновенное поднятие цели из тяжрана. Требуемая эссенция: больше 5. Кулдаун 5 минут.',
+    description: 'Мгновенное поднятие другого персонажа из тяжрана. Требуемая эссенция: больше 5. Кулдаун 5 минут.',
     target: 'scan',
     targetsSignature: [
       {
@@ -972,10 +964,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 5,
-    prerequisites: [],
-    pack: { id: 'mage-adept-healer', level: 2 },
+    prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 90,
+    karmaCost: 80,
     minimalEssence: 5,
     eventType: reviveOnTarget.name,
   },
@@ -1167,15 +1158,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 40,
     minimalEssence: 2,
     eventType: alloHomorusAbility.name,
   },
-  // Для мчс
-  //
-  // Переводит чаммера из состояния КС в состояние Здоров
+  // Для мчс  Переводит чаммера из состояния КС в состояние Здоров
   // надо отсканировать:
   // - QR воскрешательной капсулы
   // - QR ИИ
@@ -1211,10 +1200,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    cooldownMinutes: (character) => 10,
+    cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'master',
-    karmaCost: 10,
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: capsuleReanimate.name,
   },
@@ -1782,7 +1771,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
-  // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
@@ -1804,8 +1792,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Раскрыть "магический щит" (прозрачный зонтик, защищает от любого легкого оружия), требуется активация способности перед использованием. После активации действует 5 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 100000,
-    prerequisites: [],
+    cooldownMinutes: (character) => 9000,
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1818,8 +1806,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Получить силу - одно оружие в руках будет считаться тяжёлым. После активации действует 5 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 100000,
-    prerequisites: [],
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1833,7 +1821,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 100000,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -2033,7 +2021,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 45,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
@@ -2048,7 +2036,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 45,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
@@ -2080,7 +2068,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
   {
     id: 'finish-his-body',
-    humanReadableName: '',
+    humanReadableName: 'Добивание',
     description: 'Добей это тело!  *работает только на тело, находящееся в телохранилище',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2186,13 +2174,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'astralopithecus',
     humanReadableName: 'Astralopithecus',
     description:
-      'Сможешь из реала видеть и изгонять сущности, находящиеся в астрале. Требуемая эссенция: больше 3. Время действия 20 минут. Кулдаун 30 минут',
+      'Ты можешь из реала видеть и изгонять сущности, находящиеся в астрале. Требуемая эссенция: больше 3. Время действия 20 минут. Кулдаун 30 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 50,
     minimalEssence: 3,
     eventType: dummyAbility.name,
   },
@@ -2368,167 +2356,167 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
   // А так же считается, что он собрал три предмета, если есть задание собрать предметы висящие на веревках. деревьях и т.д, поскольку он мог добраться до них при помощи левитации.
   // techno.fading + 500
-  // Если techno.fading+ [resonance*100]
+  //
   {
     id: 'levitation',
     humanReadableName: 'левитация',
     description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'magnetism', 'add-basement'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 15,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
-  // techno.fading + 150
+  // techno.fading + 70
   {
     id: 'magnetism',
-    humanReadableName: 'магнетизм(притянуть нужный предмет)',
-    description: 'У тебя в рукаха магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один',
+    humanReadableName: 'магнетизм',
+    description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 15,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
-  // techno.fading  + 230
+  // techno.fading  + 80
   {
     id: 'bond-breaker',
     humanReadableName: 'освобождение от пут',
     description: 'Ты можешь освободить одну руку себе или товарищу',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'remove-excees'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 15,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
-  // techno.fading + 600
+  // techno.fading + 200
   {
     id: 'one-for-all',
     humanReadableName: 'один за всех',
     description: 'Ты можешь пройти эту комнату один за всю свою команду',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'initiative-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 30,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 200
+  // techno.fading + 30
   {
     id: 'add-time-1',
     humanReadableName: 'больше времени +1',
     description: 'Теперь у вас на 1 минуту больше времени в данже',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 300
+  // techno.fading + 40
   {
     id: 'add-time-2',
     humanReadableName: 'больше времени +2',
     description: 'Теперь у вас на 2 минуты больше времени в данже',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'add-time-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 400
+  // techno.fading + 60
   {
     id: 'add-time-3',
     humanReadableName: 'больше времени +3',
     description: 'Теперь у вас на 3 минуты больше времени в данже',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'add-time-2'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 500
+  // techno.fading + 80
   {
     id: 'add-time-4',
     humanReadableName: 'Больше времени +4',
     description: 'Теперь у вас на 4 минуты больше времени в данже',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'add-time-3'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 600
+  // techno.fading + 100
   {
     id: 'add-time-5',
     humanReadableName: 'больше времени +5',
     description: 'Теперь у вас на 5 минут больше времени в данже',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'add-time-4'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
-  // techno.fading +325
+  // techno.fading +120
   {
     id: 'add-basement',
     humanReadableName: 'добавить опору',
     description: 'Укажи, где должна появиться дополнительная опора',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
-  // techno.fading +200
+  // techno.fading +150
   {
     id: 'bell-silence',
     humanReadableName: 'молчание колокольчиков',
     description: 'Ты можешь задевать колокольчики, матрица их не услышит',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -2536,14 +2524,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 230
   {
     id: 'photo-memory',
-    humanReadableName: 'фотографическая память(выслать фото конструкции)',
+    humanReadableName: 'фотографическая память',
     description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -2551,44 +2539,44 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +100
   {
     id: 'second-sight',
-    humanReadableName: 'ясновидение(игротех подсказывает, где взять еще два шарика)',
-    description: 'Теперь матрица может подсказать тебе расположение двух деталей конструкции',
+    humanReadableName: 'ясновидение',
+    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'photo-memory'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
-  // techno.fading + 400
+  // techno.fading + 200
   {
     id: 'remove-excees',
     humanReadableName: 'убрать все лишнее',
     description: 'Теперь матрица подскажет тебе, какие детали лишние',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'remove-half'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
-  // techno.fading + 260
+  // techno.fading + 150
   {
     id: 'remove-half',
-    humanReadableName: 'оставить половину ',
+    humanReadableName: 'убрать половину ',
     description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
@@ -2622,12 +2610,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // Игрок может в VR посмотреть син любого дрругого игрока, у которого простая аватара.
+  // Игрок может в VR посмотреть син любого другого игрока, у которого простая аватара.
   // techno.fading +100
   {
     id: 'identity-scan',
-    humanReadableName: 'VR: узнавание личности любой простой аватары',
-    description: '\nРаботает только в VR\n"Покажи син"',
+    humanReadableName: 'VR: узнать личность аватарки',
+    description: 'Работает только в VR. Покажи это персонажу, к которому ты хочешь узнать личность, он должен показать тебе свой SIN.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
@@ -2638,197 +2626,198 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // параметр techno.initiative +2 (у нападающих базовая и = 1, у защитников базовая и = 0) применяется строго до входа в красную комнату
-  // techno.fading +123
+  // techno.fading +120
   {
     id: 'initiative-add-2',
-    humanReadableName: 'инициатива +2 (у нападающих базовая и = 1, у защитников базовая и = 0)',
-    description: 'Твои лидерские качества улучшились, Инициатива +2 ',
+    humanReadableName: 'инициатива +2 ',
+    description: 'Твои лидерские качества улучшились, Инициатива +2 \n(у нападающих базовая и = 1, у защитников базовая и = 0)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer'],
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // добавлет 1 хит союзнику. хиты считают сами
-  // techno.fading +
+  // techno.fading +80
   {
     id: 'hp-add-ally-1',
     humanReadableName: 'добавить 1 хит союзнику',
     description: 'Добавить один хит союзнику (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // добавлет 2 хита союзнику. хиты считают сами
-  // techno.fading +
+  // techno.fading +100
   {
     id: 'hp-add-ally-2',
     humanReadableName: 'добавить 2 хита союзнику',
     description: 'Добавить два хита союзнику (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-add-ally-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // добавляет 1 хит всем союзникам. хиты считают сами
-  // techno.fading +
+  // techno.fading +150
   {
     id: 'hp-add-ally-all-1',
     humanReadableName: 'добавить 1 хит всем союзникам',
     description: 'Добавить один хит всем союзникам (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-add-ally-2'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // добавляет 2 хита всем союзникам. хиты считают сами
-  // techno.fading +
+  // techno.fading +200
   {
     id: 'hp-add-ally-all-2',
     humanReadableName: 'добавить 2 хита всем союзникам',
     description: 'Добавить два хита всем союзникам (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-add-ally-all-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // снимает 1 хит противника. хиты считают сами
-  // techno.fading +
+  // techno.fading +100
   {
     id: 'hp-remove-foe-1',
     humanReadableName: 'снять 1 хит противника',
     description: 'Снять один хит противника (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-add-ally-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 5,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // снимает 2 хита противника. хиты считают сами
-  // techno.fading +
+  // techno.fading +120
   {
     id: 'hp-remove-foe-2',
     humanReadableName: 'снять 2 хита противника',
     description: 'Снять два хита противника (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-remove-foe-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // снимает 1 хит со всех противников. хиты считают сами
-  // techno.fading +
+  // techno.fading +180
   {
     id: 'hp-remove-foe-all-1',
     humanReadableName: 'снять 1 хит всем противникам',
     description: 'Снять один хит со всех противников (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-remove-foe-2'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // снимает 2 хита со всех противников. хиты считают сами
-  // techno.fading +
+  // techno.fading +300
   {
     id: 'hp-remove-foe-all-2',
     humanReadableName: 'снять 2 хита всем противникам',
     description: 'Снять два хита со всех противников (Хиты считаете сами)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-remove-foe-all-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 40,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // игрок убирает одну руку за спину, она связана. игрок не может держать двуручное оружие или щит
-  // techno.fading +
+  // techno.fading +50
   {
     id: 'bind-foe',
-    humanReadableName: 'путы (1 рука за спину) на одного противника',
-    description: 'Ты связал одну руку противника, теперь он не может ее использовать',
+    humanReadableName: 'путы на одного противника',
+    description:
+      'Ты связал одну руку противника, теперь он не может ее использовать (должен убрать за спину и не может применять никакие предметы в этой руке)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'hp-remove-foe-1', 'initiative-add-2'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 5,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // игроки убирают однуруку за спину, она связана. игроки не могут держать двуручное оружие или щиты
-  // techno.fading +
+  // techno.fading +150
   {
     id: 'bind-foe-all',
     humanReadableName: 'путы на всех противников',
     description: 'Ты связал одну руку у всех противников, теперь они не могут ее использовать',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'bind-foe', 'hp-remove-foe-all-1'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 15,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
   // Игроки с этого момента не могут больше использовать КФ в красной комнате, все, что было скастовано - отменятся.
-  // techno.fading +750
+  // techno.fading +600
   {
     id: 'magic-remove',
-    humanReadableName: '"безмагия" на всех, кто в комнате(не позволяет использовать кф и отменяет все предыдущие)',
+    humanReadableName: '"безмагия" на всех, кто в комнате',
     description:
       'После использования этой комплексной формы никто не может использовать комплексные формы и все действительные эффекты комплексных форм - отменяются ',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'one-for-all'],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 80,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // Игрок может покинуть основнаие в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
+  // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
+  // techno.fading +300
   {
     id: 'runaway',
-    humanReadableName: 'Бегство',
-    description: '"Ты можешь покинуть основание прямо сейчас"',
+    humanReadableName: 'Бегство из Основания',
+    description:
+      'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
@@ -2852,7 +2841,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: enterDrone.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Сравнивает навык риггера drone.recovery.skill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше - дрон переходит из состояния Сломан в состояние Работает
   {
     id: 'drone-recovery',
@@ -2873,14 +2861,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
     prerequisites: ['arch-rigger'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     eventType: droneRepairAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // null
   {
     id: 'mod-kamikadze',
     humanReadableName: 'дрон-мод Камикадзе',
@@ -2890,9 +2875,335 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
+  {
+    id: 'gm-decrease-magic',
+    humanReadableName: 'Увеличение магии "+1"',
+    description: 'Уменьшение магии -1',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 0,
+    prerequisites: [],
     pack: undefined,
     availability: 'master',
     karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  //
+  // Отсканировать куар нода Основания матрицы.
+  // Отсканировать куар спрайта
+  // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
+  // techno.fading +80
+  {
+    id: 'settle-backdoor',
+    humanReadableName: 'Установить спрайт ',
+    description: 'Установить спрайт на хост. ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар нода Основания матрицы.
+  // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
+  // techno.fading +200
+  {
+    id: 'delete-backdoor',
+    humanReadableName: 'Удалить спрайт ',
+    description: 'Удалить спрайт с данного хоста.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Посмотреть спрайты на хосте.
+  // Абилка-маркер для сайта Кривды
+  // techno.fading +150
+  {
+    id: 'see-backdoor',
+    humanReadableName: 'Посмотреть спрайты',
+    description: 'Ты можешь посмотреть спрайт, установленные на данный хост.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 9000,
+    prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'keys',
+    humanReadableName: 'Спрайт "ключи"',
+    description: 'Ты умеешь использовать спрайт "Ключи" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'water-walkers',
+    humanReadableName: 'Спрайт "кувшинки" (мокроступы)',
+    description: 'Ты умеешь использовать спрайт "Кувшинки" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'pen-n-note',
+    humanReadableName: 'Спрайт "блокнот и карандаш"',
+    description: 'Ты умеешь использовать спрайт "Блокнот и карандаш" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'balls',
+    humanReadableName: 'Спрайт "шарики"',
+    description: 'Ты умеешь использовать спрайт "Шарики" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'rubber-glowes',
+    humanReadableName: 'Спрайт "перчатки"',
+    description: 'Ты умеешь использовать спрайт "Перчатки" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'racket',
+    humanReadableName: 'Спрайт "ракетка"',
+    description: 'Ты умеешь использовать спрайт "Ракетка" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'rubber-glowes'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'candy',
+    humanReadableName: 'Спрайт "конфетка"',
+    description: 'Ты умеешь использовать спрайт "Конфетка" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'pipe',
+    humanReadableName: 'Спрайт "труба"',
+    description: 'Ты умеешь использовать спрайт "Труба" в Основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'armor-light',
+    humanReadableName: 'легкий доспех',
+    description: 'Ты можешь использовать Легкий доспех в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'armor-heavy',
+    humanReadableName: 'тяжелый доспех',
+    description: 'Ты можешь использовать Тяжелый доспех в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'armor-light'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'shield',
+    humanReadableName: 'щит',
+    description: 'Ты можешь использовать  Щит в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'sword-short',
+    humanReadableName: 'одноручный меч',
+    description: 'Ты можешь использовать Одноручный меч в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'sword-twohanded',
+    humanReadableName: 'двуручный меч',
+    description: 'Ты можешь использовать  Двуручный меч в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'sword-short-doubled',
+    humanReadableName: 'два коротких меча',
+    description: 'Ты можешь использовать два коротких меча  в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайт
+  // techno.fading + 10
+  {
+    id: 'initiative-sign',
+    humanReadableName: 'значок иициативы',
+    description: 'Ты можешь использовать значок инициативы в Красной комнате',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'initiative-basic'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },

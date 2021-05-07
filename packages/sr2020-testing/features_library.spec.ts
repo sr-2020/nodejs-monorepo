@@ -30,6 +30,12 @@ describe('Features library', () => {
     expect(allIds.size).toBe(getAllActiveAbilities().size + getAllPassiveAbilities().size + getAllSpells().size);
   });
 
+  it('No id duplication between active and passive abilities', () => {
+    for (const [id] of getAllActiveAbilities()) {
+      expect(getAllPassiveAbilities().keys()).not.toContain(id);
+    }
+  });
+
   it('All ids use correct format', () => {
     for (const id of allIds) {
       expect(id).toMatch(/^[a-z0-9-']+$/);

@@ -90,7 +90,7 @@ describe('Spells', function () {
       );
       expect(fixture.getCharacterNotifications(1).length).toBe(1);
       expect(workModel.activeAbilities.length).toBe(1);
-      expect(workModel.activeAbilities[0].humanReadableName).toBe('Ground Heal');
+      expect(workModel.activeAbilities[0].humanReadableName).toContain('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).toBe(1500 * 1000);
     }
 
@@ -100,7 +100,7 @@ describe('Spells', function () {
       await fixture.advanceTime(duration(1199, 'seconds'));
       const { workModel } = await fixture.getCharacter(1);
       expect(workModel.activeAbilities.length).toBe(1);
-      expect(workModel.activeAbilities[0].humanReadableName).toBe('Ground Heal');
+      expect(workModel.activeAbilities[0].humanReadableName).toContain('Ground Heal');
       expect(workModel.activeAbilities[0].validUntil).toBe(1500 * 1000);
       abilityId = workModel.activeAbilities[0].id;
     }
@@ -471,7 +471,6 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(
       expect.objectContaining({
         id: 'fireball-able',
-        humanReadableName: 'Fireball',
         description: `Можете кинуть 2 огненных шаров.`,
       }),
     );
@@ -487,7 +486,6 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(
       expect.objectContaining({
         id: 'fast-charge-able',
-        humanReadableName: 'Fast Charge',
         description: `Можете кинуть 3 молний.`,
       }),
     );
