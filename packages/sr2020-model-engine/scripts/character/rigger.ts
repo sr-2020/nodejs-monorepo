@@ -100,7 +100,17 @@ export function riggerUninstallImplant(
     throw new UserVisibleError('Отсканированный QR-код не является пустышкой.');
   }
 
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, removeImplant, { id: implant.id });
+  const inTheDroneModifier = findInDroneModifier(api);
+  if (!inTheDroneModifier) {
+    throw new UserVisibleError('Для удаления имплантов нужно быть в автодоке.');
+  }
+
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, removeImplant, {
+    id: implant.id,
+    installer: api.model.modelId,
+    autodocQrId: inTheDroneModifier.droneQrId,
+    autodocLifestyle: inTheDroneModifier.droneLifestyle,
+  });
   api.sendOutboundEvent(QrCode, data.qrCode, createMerchandise, {
     id: implant.id,
     name: implant.name,

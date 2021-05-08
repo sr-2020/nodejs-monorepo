@@ -68,7 +68,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
   });
 }
 
-export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string }) {
+export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: string } & Partial<ImplantInstallData>) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Импланты можно удалять только из мясного тела');
   }
@@ -93,6 +93,13 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
   sendNotificationAndHistoryRecord(api, 'Имплант удален', `Удален имплант ${implant.name}`);
   api.model.implants[implantIndex].modifierIds.forEach((id) => api.removeModifier(id));
   api.model.implants.splice(implantIndex, 1);
+
+  api.sendPubSubNotification('implant_uninstall', {
+    characterId: api.model.modelId,
+    id: implant.id,
+    autodocQrId: data.autodocQrId,
+    installer: data.installer,
+  });
 }
 
 function maxImplantsPerSlot(model: Sr2020Character, slot: ImplantSlot) {
