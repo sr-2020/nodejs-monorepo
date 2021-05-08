@@ -76,6 +76,7 @@ export function riggerInstallImplant(
     installer: api.model.modelId,
     autodocQrId: inTheDroneModifier.droneQrId,
     autodocLifestyle: inTheDroneModifier.droneLifestyle,
+    abilityId: 'autodoc',
   });
 
   // Not calling analyzeBody directly as we need for install event above propagate first

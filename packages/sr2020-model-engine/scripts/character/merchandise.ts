@@ -9,6 +9,7 @@ export interface ImplantInstallData {
   installer: string;
   autodocLifestyle: string;
   autodocQrId: string;
+  abilityId: string;
 }
 
 export function installImplant(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin & ImplantInstallData) {
@@ -65,6 +66,7 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     autodocQrId: data.autodocQrId,
     installer: data.installer,
     location: data.location,
+    abilityId: data.abilityId,
   });
 }
 
@@ -99,6 +101,7 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
     id: implant.id,
     autodocQrId: data.autodocQrId,
     installer: data.installer,
+    abilityId: data.abilityId,
   });
 }
 
