@@ -4239,7 +4239,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет читать данные из геоноды.
   // Абилка-маркер для сайта Кривды
   {
@@ -4252,7 +4251,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет лучше читать данные из геоноды.
   // Абилка-маркер для сайта Кривды
   {
@@ -4265,7 +4263,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет больше и еще лучше читать данные из геоноды.
   // Абилка-маркер для сайта Кривды
   {
@@ -4278,7 +4275,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет читать данные из биомонитора и rcc
   // Абилка-маркер для сайта Кривды
   {
@@ -4291,7 +4287,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет лучше читать данные из биомонитора и rcc.
   // Абилка-маркер для сайта Кривды
   {
@@ -4304,7 +4299,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет больше и еще лучше читать данные из биомонитора и rcc.
   // Абилка-маркер для сайта Кривды
   {
@@ -4317,7 +4311,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет читать данные из экономноды
   // Абилка-маркер для сайта Кривды
   {
@@ -4330,7 +4323,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет лучше читать данные из экономноды.
   // Абилка-маркер для сайта Кривды
   {
@@ -4343,7 +4335,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // позволяет больше и еще лучше читать данные из экономноды.
   // Абилка-маркер для сайта Кривды
   {
