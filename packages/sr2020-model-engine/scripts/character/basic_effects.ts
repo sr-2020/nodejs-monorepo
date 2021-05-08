@@ -413,3 +413,7 @@ export function setImplantsRemovalResistance(api: EffectModelApi<Sr2020Character
 export function decreaseChemoSensitivity(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.chemo.sensitivity -= m.amount;
 }
+
+export function increaseMaxEssenceEffect(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.essenceDetails.max += m.amount;
+}

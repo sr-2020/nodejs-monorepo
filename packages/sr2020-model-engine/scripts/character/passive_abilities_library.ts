@@ -28,6 +28,7 @@ import {
   increaseIntelligence,
   increaseMagic,
   increaseMaxEctoplasmHp,
+  increaseMaxEssenceEffect,
   increaseMaxMeatHp,
   increaseMaxTimeAtHost,
   increaseMaxTimeInDrone,
@@ -2787,7 +2788,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'whats-in-the-body-2'],
     modifier: [modifierFromEffect(decreaseChemoSensitivity, { amount: 100 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // ментальная защита снижена на 3
   {
     id: 'arch-face-negative-1',
@@ -2796,9 +2796,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: -20,
     prerequisites: ['arch-face'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMentalProtection, { amount: -3 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // эссенс снижен на 1
   {
     id: 'arch-face-negative-2',
@@ -2807,7 +2806,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: -40,
     prerequisites: ['arch-face-negative-1'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxEssenceEffect, { amount: -100 })],
   },
   // Харизма уменьшена на 1
   {
@@ -2817,7 +2816,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: -80,
     prerequisites: ['arch-face-negative-2'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseCharisma, { amount: -1 })],
   },
   //
   {
