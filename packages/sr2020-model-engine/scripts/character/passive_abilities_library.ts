@@ -4193,7 +4193,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // resonance +1
   {
     id: 'resonanse-increase1',
@@ -4203,9 +4202,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-5'],
     pack: undefined,
-    modifier: [],
+    modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // resonance +1
   {
     id: 'resonanse-increase2',
@@ -4215,9 +4213,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase1'],
     pack: undefined,
-    modifier: [],
+    modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // resonance +1
   {
     id: 'resonanse-increase3',
@@ -4227,7 +4224,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase2'],
     pack: undefined,
-    modifier: [],
+    modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // TODO(aeremin): Implement and add modifier here
   // Улучшенное установление спрайтов.
