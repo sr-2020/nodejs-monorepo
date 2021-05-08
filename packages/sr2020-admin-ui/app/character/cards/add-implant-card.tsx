@@ -25,6 +25,8 @@ export class AddImplantCard extends React.Component<{ sendEvent: SendEvent }, Ad
         dealId: '',
         lifestyle: '',
         gmDescription: '',
+        installer: 'админ',
+        abilityId: 'админка',
       },
       'Имплант установлен',
     );
@@ -35,6 +37,8 @@ export class AddImplantCard extends React.Component<{ sendEvent: SendEvent }, Ad
       'removeImplant',
       {
         id: this.state.selected,
+        installer: 'админ',
+        abilityId: 'админка',
       },
       'Имплант удален',
     );
