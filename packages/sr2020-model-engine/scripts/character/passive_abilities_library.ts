@@ -3896,7 +3896,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 25,
     prerequisites: ['arch-hackerman-technomancer'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
   // Игрок может держать (иметь доступ к информации черз бэкдор) 3 бэкдора
   {
@@ -3906,7 +3906,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 25,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-2'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
   // Игрок может держать (иметь доступ к информации черз бэкдор) 4 бэкдора
   {
@@ -3916,7 +3916,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-3'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
   // Игрок может держать (иметь доступ к информации черз бэкдор) 5 бэкдоров
   {
@@ -3926,7 +3926,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-4'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
   // Игрок не реагирует на команду "покажи син" в VR
   //
@@ -4226,7 +4226,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Улучшенное установление спрайтов.
   // Абилка-маркер для сайта Кривды
   {
