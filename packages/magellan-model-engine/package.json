@@ -14,7 +14,7 @@
     "chance": "^1.0.10",
     "clone": "^1.0.4",
     "fs.realpath": "^1.0.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "shuffle-array": "^1.0.1",
     "type-detect": "^4.0.8",
     "uuid": "^3.2.1"
