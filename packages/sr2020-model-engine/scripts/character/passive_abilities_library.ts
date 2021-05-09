@@ -73,6 +73,7 @@ import {
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { Modifier } from '@alice/alice-common/models/alice-model-engine';
 // Not exported by design, use getAllPassiveAbilities() instead.
 const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // hacking.fadingResistance +1
@@ -2806,7 +2807,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: -40,
     prerequisites: ['arch-face-negative-1'],
-    modifier: [modifierFromEffect(increaseMaxEssenceEffect, { amount: -100 })],
+    modifier: [{ ...modifierFromEffect(increaseMaxEssenceEffect, { amount: -100 }), priority: Modifier.kPriorityEarliest }],
   },
   // Харизма уменьшена на 1
   {

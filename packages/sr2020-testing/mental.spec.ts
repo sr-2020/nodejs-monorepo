@@ -130,4 +130,10 @@ describe('Mentalistic events', function () {
     await fixture.advanceTime(duration(1, 'minute'));
     expect((await fixture.getCharacter(2)).workModel.mentalDefenceBonus).toBe(2);
   });
+
+  it('arch-face-negative-2 reduces essence', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('arch-face-negative-2');
+    expect((await fixture.getCharacter()).workModel.essence).toEqual(500);
+  });
 });
