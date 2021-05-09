@@ -57,6 +57,11 @@ export function riggerInstallImplant(
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
   }
 
+  const inTheDroneModifier = findInDroneModifier(api);
+  if (!inTheDroneModifier) {
+    throw new UserVisibleError('Для установки имплантов нужно быть в автодоке.');
+  }
+
   const implant = kAllImplants.find((it) => it.id == typedQrData<MerchandiseQrData>(qr).id);
   if (implant == undefined) {
     throw new UserVisibleError('Отсканированный QR-код не является имплантом.');
@@ -68,6 +73,10 @@ export function riggerInstallImplant(
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, installImplant, {
     ...typedQrData<MerchandiseQrData>(qr),
     location: data.location,
+    installer: api.model.modelId,
+    autodocQrId: inTheDroneModifier.droneQrId,
+    autodocLifestyle: inTheDroneModifier.droneLifestyle,
+    abilityId: 'autodoc',
   });
 
   // Not calling analyzeBody directly as we need for install event above propagate first
@@ -92,7 +101,17 @@ export function riggerUninstallImplant(
     throw new UserVisibleError('Отсканированный QR-код не является пустышкой.');
   }
 
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, removeImplant, { id: implant.id });
+  const inTheDroneModifier = findInDroneModifier(api);
+  if (!inTheDroneModifier) {
+    throw new UserVisibleError('Для удаления имплантов нужно быть в автодоке.');
+  }
+
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, removeImplant, {
+    id: implant.id,
+    installer: api.model.modelId,
+    autodocQrId: inTheDroneModifier.droneQrId,
+    autodocLifestyle: inTheDroneModifier.droneLifestyle,
+  });
   api.sendOutboundEvent(QrCode, data.qrCode, createMerchandise, {
     id: implant.id,
     name: implant.name,
@@ -228,7 +247,14 @@ export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data:
   }
 }
 
-type InTheDroneModifier = Modifier & { hp: number; droneQrId: string; postDroneDamage: number; stage: number; broken: boolean };
+type InTheDroneModifier = Modifier & {
+  hp: number;
+  droneQrId: string;
+  droneLifestyle: string;
+  postDroneDamage: number;
+  stage: number;
+  broken: boolean;
+};
 
 function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
@@ -244,6 +270,7 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDam
     ],
     hp: drone.hitpoints,
     droneQrId,
+    droneLifestyle: drone.lifestyle,
     postDroneDamage,
     stage: 0,
     broken: false,

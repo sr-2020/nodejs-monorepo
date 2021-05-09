@@ -84,15 +84,28 @@ describe('Active abilities', function () {
 
   it('Repoman', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // victim
+
     await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // repoman
     await fixture.addCharacterFeature('repoman-active', '2');
+
+    await fixture.saveCharacter({ modelId: '3', rigging: { implantsBonus: 100 }, drones: { maxDifficulty: 100, autodocBonus: 100 } }); // rigger
+    await fixture.addCharacterFeature('arch-rigger', '3');
+    await fixture.addCharacterFeature('drones-active', '3');
+
     await fixture.saveQrCode({ modelId: '3' }); // implant
     await fixture.saveQrCode({ modelId: '4' }); // implant
     await fixture.saveQrCode({ modelId: '5' }); // container
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-alpha' } }, 3);
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-beta' } }, 4);
-    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, 2);
-    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, 2);
+
+    await fixture.saveQrCode({ modelId: '6' }); // drone
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '6');
+    await fixture.saveQrCode({ modelId: '7' }); // body storage
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '7');
+    await fixture.useAbility({ id: 'drones-active', bodyStorageId: '7', droneId: '6' }, '3');
+
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, '3');
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, '3');
     await fixture.useAbility({ id: 'repoman-active', targetCharacterId: '1', qrCodeId: '5' }, '2');
 
     const containerQr = await fixture.getQrCode('5');
@@ -112,13 +125,25 @@ describe('Active abilities', function () {
     await fixture.saveCharacter({ modelId: '1' }); // victim
     await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // repoman
     await fixture.addCharacterFeature('repoman-black', '2');
+
+    await fixture.saveCharacter({ modelId: '3', rigging: { implantsBonus: 100 }, drones: { maxDifficulty: 100, autodocBonus: 100 } }); // rigger
+    await fixture.addCharacterFeature('arch-rigger', '3');
+    await fixture.addCharacterFeature('drones-active', '3');
+
     await fixture.saveQrCode({ modelId: '3' }); // implant
     await fixture.saveQrCode({ modelId: '4' }); // implant
     await fixture.saveQrCode({ modelId: '5' }); // container
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-alpha' } }, 3);
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyber-hand-beta' } }, 4);
-    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, 2);
-    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, 2);
+
+    await fixture.saveQrCode({ modelId: '6' }); // drone
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '6');
+    await fixture.saveQrCode({ modelId: '7' }); // body storage
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '7');
+    await fixture.useAbility({ id: 'drones-active', bodyStorageId: '7', droneId: '6' }, '3');
+
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '3' } }, 3);
+    await fixture.sendCharacterEvent({ eventType: 'riggerInstallImplant', data: { targetCharacterId: '1', qrCode: '4' } }, 3);
     await fixture.useAbility({ id: 'repoman-black', targetCharacterId: '1', qrCodeId: '5' }, '2');
 
     const containerQr = await fixture.getQrCode('5');

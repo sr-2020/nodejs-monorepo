@@ -49,7 +49,17 @@ describe('Rigger abilities', () => {
 
   it('Implant installation and removal - happy path', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // patient
-    await fixture.saveCharacter({ modelId: '2', intelligence: 10 }); // rigger
+
+    await fixture.saveCharacter({ modelId: '2', rigging: { implantsBonus: 100 }, drones: { maxDifficulty: 100, autodocBonus: 100 } }); // rigger
+    await fixture.addCharacterFeature('arch-rigger', '2');
+    await fixture.addCharacterFeature('drones-active', '2');
+
+    await fixture.saveQrCode({ modelId: '6' }); // drone
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '6');
+    await fixture.saveQrCode({ modelId: '7' }); // body storage
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '7');
+    await fixture.useAbility({ id: 'drones-active', bodyStorageId: '7', droneId: '6' }, '2');
+
     await fixture.saveQrCode({ modelId: '3' }); // implant
     await fixture.saveQrCode({ modelId: '4' }); // implant
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'rcc-beta', basePrice: 10 } }, 3);
@@ -154,7 +164,7 @@ describe('Rigger abilities', () => {
       expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
       expect(workModel.activeAbilities).toHaveLength(1); // Enter drone
       expect(workModel.activeAbilities[0].cooldownUntil).toBe(
-        duration(/* default recovery time */ 120 - /* body with arch-rigger bonus */ 4 * 5, 'minutes').asMilliseconds(),
+        duration(/* default recovery time */ 120 - /* body with arch-rigger bonus */ 5 * 5, 'minutes').asMilliseconds(),
       );
       expect(workModel.currentBody).toBe('physical');
     }

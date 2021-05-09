@@ -43,7 +43,7 @@ export function decreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: { 
 
 export function essenceReset(api: EventModelApi<Sr2020Character>, data: {}) {
   while (api.model.implants.length) {
-    removeImplant(api, { id: api.model.implants[api.model.implants.length - 1].id });
+    removeImplant(api, { id: api.model.implants[api.model.implants.length - 1].id, abilityId: 'gm-reset-essence' });
   }
   api.model.essenceDetails.used = 0;
   api.model.essenceDetails.gap = 0;

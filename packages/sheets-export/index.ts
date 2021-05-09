@@ -7,6 +7,8 @@ import * as moment from 'moment';
      gcloud functions deploy abilityUsedToSheet --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=ability_used --region=europe-west3 --no-allow-unauthenticated
      gcloud functions deploy spellCastToSheet   --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=spell_cast   --region=europe-west3 --no-allow-unauthenticated
      gcloud functions deploy reanimatesToSheet  --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=reanimates   --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy implantInstallToSheet   --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=implant_install   --region=europe-west3 --no-allow-unauthenticated
+     gcloud functions deploy implantUninstallToSheet --source=dist/packages/sheets-export --runtime=nodejs10 --trigger-topic=implant_uninstall   --region=europe-west3 --no-allow-unauthenticated
 */
 
 function currentMoscowDateTime() {
@@ -79,19 +81,48 @@ export async function spellCastToSheet(event: { data: string }) {
   ]);
 }
 
-export async function reanimatesToSheet(event: { data: string }) {
-  const payload: { medic: string; patient: string; capsuleName: string; ai: string; essenceGet: number; essenceAir: number } = JSON.parse(
-    Buffer.from(event.data, 'base64').toString(),
-  );
+export async function implantInstallToSheet(event: { data: string }) {
+  const payload: {
+    location: { id: string };
+    characterId: string;
+    id: string;
+    implantLifestyle: string;
+    autodocLifestyle: string;
+    autodocQrId: string;
+    installer: string;
+    abilityId: string;
+  } = JSON.parse(Buffer.from(event.data, 'base64').toString());
   console.log(payload);
 
-  await appendToSpreadsheet('Воскрешения!A1:G1', [
+  await appendToSpreadsheet('Установки имплантов!A1:G1', [
     currentMoscowDateTime(),
-    payload.medic,
-    payload.patient,
-    payload.capsuleName,
-    payload.ai,
-    payload.essenceAir,
-    payload.essenceGet,
+    'Установка',
+    payload.characterId,
+    payload.installer,
+    payload.abilityId,
+    payload.id,
+    payload.autodocQrId,
+  ]);
+}
+
+export async function implantUninstallToSheet(event: { data: string }) {
+  const payload: {
+    characterId: string;
+    id: string;
+    autodocLifestyle: string;
+    autodocQrId: string;
+    installer: string;
+    abilityId: string;
+  } = JSON.parse(Buffer.from(event.data, 'base64').toString());
+  console.log(payload);
+
+  await appendToSpreadsheet('Установки имплантов!A1:G1', [
+    currentMoscowDateTime(),
+    'Удаление',
+    payload.characterId,
+    payload.installer,
+    payload.abilityId,
+    payload.id,
+    payload.autodocQrId,
   ]);
 }
