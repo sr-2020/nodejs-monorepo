@@ -362,8 +362,8 @@ export function increaseImplantsBonus(api: EffectModelApi<Sr2020Character>, m: M
   api.model.rigging.implantsBonus += m.amount;
 }
 
-export function increaseRecoverySkill(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.drones.recoverySkill += m.amount;
+export function increaseTuningBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.rigging.tuningBonus += m.amount;
 }
 
 export function increaseRepomanBonus(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {

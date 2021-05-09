@@ -36,7 +36,6 @@ import {
   increaseMentalProtection,
   increasePostDroneRecoveryTime,
   increaseRepomanBonus,
-  increaseRecoverySkill,
   increaseResonance,
   increaseSpriteCount,
   increaseSpriteLevel,
@@ -2553,7 +2552,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-rigger', level: 1 },
-    modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseIntelligence, { amount: 2 }), modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 })],
+    modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
   },
   // Body +1
   {
@@ -4187,7 +4186,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
     pack: { id: 'gen-arch-rigger-boost', level: 1 },
-    modifier: [modifierFromEffect(increaseBody, { amount: 2 }), modifierFromEffect(increaseIntelligence, { amount: 2 })],
+    modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -4345,7 +4344,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger', 'drone-recovery'],
     pack: undefined,
-    modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
+    modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // drone.recovery.skill+4
@@ -4357,7 +4356,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-1'],
     pack: undefined,
-    modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
+    modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // drone.recovery.skill+4
@@ -4369,7 +4368,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-2'],
     pack: undefined,
-    modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
+    modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // int+1
