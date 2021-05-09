@@ -11,7 +11,7 @@ export function developmentMigrate(api: EventModelApi<Sr2020Character>, data: ne
   }
 
   const systemModifier = api.getModifierById('_system');
-  systemModifier.priority = Modifier.kPriorityEarliest;
+  systemModifier.priority = Modifier.kPriorityEarly;
 
   if (!api.getModifierById('_limiter')) {
     api.addModifier({

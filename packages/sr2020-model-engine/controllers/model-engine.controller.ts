@@ -261,7 +261,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
       modifiers: [
         {
           mID: '_system',
-          priority: Modifier.kPriorityEarliest,
+          priority: Modifier.kPriorityEarly,
           enabled: true,
           effects: [createEssenceSystemEffect(), createJackedInEffect()],
         },
