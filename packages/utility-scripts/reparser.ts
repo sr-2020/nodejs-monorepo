@@ -30,6 +30,7 @@ export interface ActiveAbility {
   cooldown: string;
   karmaCost: number;
   minimalEssence: number; // in 0-6 range, not 0-600.
+  fadingPrice: number;
   prerequisites: string[];
   pack?: PackInfo;
   availability: FeatureAvailability;
@@ -263,6 +264,7 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
           ts.createPropertyAssignment(ts.createIdentifier('availability'), ts.createStringLiteral(ability.availability)),
           ts.createPropertyAssignment(ts.createIdentifier('karmaCost'), ts.createNumericLiteral(ability.karmaCost)),
           ts.createPropertyAssignment(ts.createIdentifier('minimalEssence'), ts.createNumericLiteral(ability.minimalEssence)),
+          ts.createPropertyAssignment(ts.createIdentifier('fadingPrice'), ts.createNumericLiteral(ability.fadingPrice)),
           ts.createPropertyAssignment(
             ts.createIdentifier('eventType'),
             ts.createPropertyAccess(ts.createIdentifier('dummyAbility'), ts.createIdentifier('name')),
@@ -286,6 +288,9 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
       if (propertyName == 'minimalEssence') {
         return ts.createNumericLiteral(ability.minimalEssence);
       }
+      if (propertyName == 'fadingPrice') {
+        return ts.createNumericLiteral(ability.fadingPrice);
+      }
       if (propertyName == 'prerequisites') {
         return ts.createArrayLiteral(ability.prerequisites.map((id) => ts.createStringLiteral(id)));
       }
@@ -301,7 +306,17 @@ export function rewriteActiveAbilities(abilities: ActiveAbility[]) {
       }
       throw new Error(`Unexpected property name: ${propertyName}`);
     },
-    ['humanReadableName', 'description', 'karmaCost', 'minimalEssence', 'prerequisites', 'pack', 'availability', 'cooldownMinutes'],
+    [
+      'humanReadableName',
+      'description',
+      'karmaCost',
+      'minimalEssence',
+      'fadingPrice',
+      'prerequisites',
+      'pack',
+      'availability',
+      'cooldownMinutes',
+    ],
   );
 
   writeSourceFile(ts.transform(file, [transformer]).transformed[0], ACTIVE_ABILITIES_FILENAME);

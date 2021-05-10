@@ -35,6 +35,7 @@ const kCooldownColumn = 10;
 const kCooldownFormulaColumn = 11;
 const kSpellSphereColumn = 19;
 const kMinimalEssenceColumn = 20;
+const kFadingCostColumn = 21;
 const kKarmaCostColumn = 9;
 const kAvailabilityColumn = 13;
 
@@ -63,11 +64,21 @@ class SpreadsheetProcessor {
     return result;
   }
 
+  parseFadingPrice(id: string, input: string | undefined): number {
+    if (!input) return 0;
+    const result = Number(input);
+    if (isNaN(result)) {
+      console.log(`Unexpected fading price for ${id}: ${input}`);
+      return 0;
+    }
+    return result;
+  }
+
   parseCooldown(id: string, input: string | undefined, input_formula): string {
     if (!input || !/^[\d\.]+$/.test(input)) {
       if (input_formula) return input_formula;
       console.error(`Ability ${id} cooldown is non-numeric, setting to 9000.`);
-      return "9000";
+      return '9000';
     }
     return input;
   }
@@ -143,6 +154,7 @@ class SpreadsheetProcessor {
       cooldown: this.parseCooldown(id, row[kCooldownColumn], row[kCooldownFormulaColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       minimalEssence: this.parseMinimalEssence(id, row[kMinimalEssenceColumn]),
+      fadingPrice: this.parseFadingPrice(id, row[kFadingCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
       availability: this.parseAvailability(id, row[kAvailabilityColumn]),
@@ -250,6 +262,10 @@ class SpreadsheetProcessor {
 
     if (!header[kMinimalEssenceColumn].startsWith('Essence_needed')) {
       throw new Error('Minimal essence column was moved! Exiting.');
+    }
+
+    if (!header[kFadingCostColumn].startsWith('techno.fading')) {
+      throw new Error('techno.fading column was moved! Exiting.');
     }
 
     for (let r = FLAGS.row_from - 1; r < FLAGS.row_to; ++r) {

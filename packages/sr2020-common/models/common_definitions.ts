@@ -25,6 +25,7 @@ export interface ActiveAbility extends Feature {
   targetsSignature: TargetSignature[];
   cooldownMinutes: (model: Sr2020Character) => number;
   minimalEssence: number; // in 0-6 range, not 0-600.
+  fadingPrice: number;
   eventType: string;
 }
 
