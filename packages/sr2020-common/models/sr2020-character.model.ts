@@ -490,6 +490,10 @@ export class Hacking {
   @BoolProperty()
   @Column({ default: false })
   jackedIn: boolean;
+
+  @NumberProperty()
+  @Column({ default: 0 })
+  fading: number;
 }
 
 export class Drones {

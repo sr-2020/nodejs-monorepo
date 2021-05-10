@@ -138,6 +138,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         resonanceForControlBonus: 0,
         varianceResistance: 0,
         jackedIn: false,
+        fading: 0,
       },
       matrixHp: 1,
       maxTimeInVr: 60,

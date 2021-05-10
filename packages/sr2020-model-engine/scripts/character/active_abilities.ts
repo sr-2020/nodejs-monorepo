@@ -15,6 +15,7 @@ import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 import * as Chance from 'chance';
 import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
+import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 
 const chance = new Chance();
 
@@ -61,6 +62,14 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
       // We remove the first one as it's the "oldest" one.
       api.removeModifier(mods[0].mID);
     }
+  }
+
+  api.model.hacking.fading += libraryAbility.fadingPrice;
+  if (api.model.hacking.fading > 100 * api.model.resonance) {
+    dumpshock(api, {});
+    return;
+  } else if (api.model.hacking.fading == 100 * api.model.resonance) {
+    dumpshock(api, {});
   }
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
