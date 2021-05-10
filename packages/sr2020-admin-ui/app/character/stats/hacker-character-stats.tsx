@@ -98,6 +98,11 @@ export class HackerCharactersStats extends React.Component<{ hacking: Hacking }>
                 <td>hacking.varianceResistance</td>
                 <td>{this.props.hacking.varianceResistance}</td>
               </tr>
+              <tr>
+                <th>Текущий фейдинг</th>
+                <td>hacking.fading</td>
+                <td>{this.props.hacking.fading}</td>
+              </tr>
             </tbody>
           </Table>
         </Accordion.Collapse>
