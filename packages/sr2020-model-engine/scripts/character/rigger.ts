@@ -111,6 +111,7 @@ export function riggerUninstallImplant(
     installer: api.model.modelId,
     autodocQrId: inTheDroneModifier.droneQrId,
     autodocLifestyle: inTheDroneModifier.droneLifestyle,
+    abilityId: 'autodoc',
   });
   api.sendOutboundEvent(QrCode, data.qrCode, createMerchandise, {
     id: implant.id,
