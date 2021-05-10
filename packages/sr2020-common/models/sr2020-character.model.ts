@@ -494,6 +494,10 @@ export class Hacking {
   @NumberProperty()
   @Column({ default: 0 })
   fading: number;
+
+  @NumberProperty()
+  @Column({ default: 0 })
+  fadingDecrease: number;
 }
 
 export class Drones {
