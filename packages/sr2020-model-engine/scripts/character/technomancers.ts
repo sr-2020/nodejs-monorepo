@@ -16,6 +16,6 @@ export function addFadingDecreaseTimer(model: Sr2020Character) {
 }
 
 export function decreaseCurrentFading(api: EventModelApi<Sr2020Character>, data: {}) {
-  api.model.hacking.fading = Math.max(0, api.model.hacking.fading - api.model.hacking.fadingDecrease);
+  api.model.hacking.fading = Math.max(0, api.model.hacking.fading - api.workModel.hacking.fadingDecrease);
   addFadingDecreaseTimer(api.model);
 }
