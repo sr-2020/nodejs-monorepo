@@ -32,6 +32,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { createClampingEffect, createCooldownCalculatorEffect } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { addFadingDecreaseTimer } from '@alice/sr2020-model-engine/scripts/character/technomancers';
 
 const chance = new Chance();
 
@@ -285,6 +286,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
     initEthic(result);
     setRaceForModel(result, req.metarace ?? 'meta-norm');
     addKarmaGivingTimer(result);
+    addFadingDecreaseTimer(result);
     (req.features ?? []).forEach((f) => addFeatureToModel(result, f));
 
     return result;
