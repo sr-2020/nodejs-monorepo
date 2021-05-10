@@ -20,6 +20,7 @@ import {
   increaseConversionSleaze,
   increaseDepth,
   increaseDroneFeedback,
+  increaseFadingDecrease,
   increaseFadingResistance,
   increaseGroundcraftBonus,
   increaseHostEntrySpeed,
@@ -4098,7 +4099,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 2 })],
   },
   // techno.fading - 4 в минуту
   //
@@ -4109,7 +4110,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'fading-decrease-basic'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 2 })],
   },
   // drone.recovery.skill+4
   {
@@ -4340,7 +4341,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-hackerman-technomancer', 'fading-decrease-2'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 3 })],
   },
 ];
 setAllPassiveAbilities(

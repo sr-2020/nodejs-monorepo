@@ -172,6 +172,10 @@ export function increaseCompilationFadingResistance(api: EffectModelApi<Sr2020Ch
   api.model.hacking.compilationFadingResistance += m.amount;
 }
 
+export function increaseFadingDecrease(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.hacking.fadingDecrease += m.amount;
+}
+
 export function increaseVarianceResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.varianceResistance += m.amount;
 }
