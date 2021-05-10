@@ -369,6 +369,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-AI', level: 1 },
     modifier: [],
   },
+  //
   {
     id: 'spirit-attuned',
     humanReadableName: 'Сильный призыватель духов',
@@ -378,6 +379,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'orkish-ethics',
     humanReadableName: 'Твердость кодекса',
@@ -387,6 +389,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // `
   {
     id: 'trollish-ethics',
     humanReadableName: '',
@@ -397,6 +400,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'elven-ethics',
     humanReadableName: 'Гибкость кодекса',
@@ -579,6 +583,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
+  // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
+  // maxTimeInVr+20 минут
   {
     id: 'longer-vr-stays-1',
     humanReadableName: 'Мужчина, продлевать будете? ',
@@ -588,6 +594,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
+  // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
+  // maxTimeInVr+300 минут
   {
     id: 'longer-vr-stays-2',
     humanReadableName: 'Мужчина, продлевать будете?  v2',
@@ -597,6 +605,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
+  // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
   {
     id: 'unlimited-vr-stays',
     humanReadableName: 'Виар. А я вообще тут живу.',
@@ -606,6 +615,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 9000 }),
   },
+  // Резонанс +1
   {
     id: 'resonance-1',
     humanReadableName: 'Резонанс -1',
@@ -1072,6 +1082,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 2,
     }),
   },
+  // IT: команда в кривда-матрице
   {
     id: 'burn',
     humanReadableName: 'burn',
@@ -1306,6 +1317,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
+  // Все кулдауны способностей дискурсмонгера снижены на 20%
   {
     id: 'dm-fanatic-1',
     humanReadableName: 'Фанатик-1',
@@ -1317,6 +1329,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.8,
     }),
   },
+  // Все кулдауны способностей дискурсмонгера снижены на 40%
   {
     id: 'dm-fanatic-2',
     humanReadableName: 'Фанатик-2',
@@ -1328,6 +1341,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.6 / 0.8,
     }),
   },
+  // Все кулдауны способностей дискурсмонгера снижены на 60%
   {
     id: 'dm-fanatic-3',
     humanReadableName: 'Фанатик-3',
@@ -1339,6 +1353,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.4 / 0.6,
     }),
   },
+  // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
   {
     id: 'dm-soul-expert',
     humanReadableName: 'Душевед',
@@ -1348,6 +1363,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['master-of-the-universe'],
     modifier: [],
   },
+  // Абилка-сертификат
   {
     id: 'churched',
     humanReadableName: 'Воцерковленный',
@@ -2196,6 +2212,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  //
   {
     id: 'comcon-ethic-ability',
     humanReadableName: 'Вы достигли!',
@@ -2502,6 +2519,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-eghost', level: 1 },
     modifier: [],
   },
+  // tech-blockade
+  // base-body-astral
+  // current-body-astral
+  // can-be-exorcized
+  // fleshpoint
   {
     id: 'meta-spirit',
     humanReadableName: 'Дух',
@@ -2509,6 +2531,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // Body +2
@@ -2662,6 +2685,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-ai-matrix', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
+  //
   {
     id: 'can-be-exorcized',
     humanReadableName: 'Бойся экзорцистов!',
@@ -2669,6 +2693,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-spirit', level: 1 },
     modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
@@ -3216,6 +3241,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'use-pills-on-others'],
     modifier: [],
   },
+  // Отображает текст на экране персонажа
   {
     id: 'troubles-common-1',
     humanReadableName: 'Общие проблемы *',
@@ -3224,8 +3250,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -10,
     prerequisites: [],
+    pack: { id: 'troubles-common', level: 1 },
     modifier: [],
   },
+  // Отображает текст на экране персонажа
   {
     id: 'troubles-common-2',
     humanReadableName: 'Общие проблемы **',
@@ -3233,8 +3261,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['troubles-common-1'],
+    pack: { id: 'troubles-common', level: 2 },
     modifier: [],
   },
+  // Отображает текст на экране персонажа
   {
     id: 'troubles-common-3',
     humanReadableName: 'Общие проблемы ***',
@@ -3242,6 +3272,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['troubles-common-2'],
+    pack: { id: 'troubles-common', level: 3 },
     modifier: [],
   },
   //
@@ -3692,6 +3723,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['lock-the-door'],
     modifier: [],
   },
+  // Надо взорвать пакет на 3-4 варианта
   {
     id: 'troubles-samurai-1',
     humanReadableName: 'Проблемы самурая *',
@@ -3699,8 +3731,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['arch-samurai'],
+    pack: { id: 'sam-badfate', level: 1 },
     modifier: [],
   },
+  // Надо взорвать пакет на 3-4 варианта
   {
     id: 'troubles-samurai-2',
     humanReadableName: 'Проблемы самурая **',
@@ -3708,8 +3742,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['troubles-samurai-1'],
+    pack: { id: 'sam-badfate', level: 2 },
     modifier: [],
   },
+  // Надо взорвать пакет на 3-4 варианта
   {
     id: 'troubles-samurai-3',
     humanReadableName: 'Проблемы самурая ***',
@@ -3717,6 +3753,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: -20,
     prerequisites: ['troubles-samurai-2'],
+    pack: { id: 'sam-badfate', level: 3 },
     modifier: [],
   },
   // текстовая абилка
@@ -3774,6 +3811,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['lock-the-door', 'arch-rigger'],
     modifier: [],
   },
+  // базовый навык всех персонажей
   {
     id: 'base-dagger',
     humanReadableName: 'Холодное оружие: кинжал (all)',
@@ -3781,8 +3819,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'chummer_zero', level: 1 },
     modifier: [],
   },
+  //
   {
     id: 'base-gun',
     humanReadableName: 'Огнестрельное оружие: пистолет (all)',
@@ -3790,6 +3830,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'chummer_zero', level: 1 },
     modifier: [],
   },
   // показывает игроку текст абилки, больше ничего
@@ -4010,6 +4051,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'hack-deck-general',
     humanReadableName: 'Комбат',
@@ -4017,8 +4059,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['hack-deck-commander', 'fencer-3'],
+    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: [],
   },
+  // IT: команда в кривда-матрице
   {
     id: 'quell',
     humanReadableName: 'quell',
@@ -4026,8 +4070,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['breacher-2'],
+    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
+  // IT: команда в кривда-матрице
   {
     id: 'hophop',
     humanReadableName: 'hophop',
@@ -4036,6 +4082,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sly-3'],
+    pack: { id: 'hack-deck-sly', level: 3 },
     modifier: [],
   },
   // отрочка публикации CVE увеличена на час
@@ -4142,6 +4189,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-2'],
     modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
   },
+  // int+1
   {
     id: 'factory-bonus-1',
     humanReadableName: 'бонус мастерская 1',
@@ -4151,6 +4199,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  // int+3
   {
     id: 'factory-bonus-3',
     humanReadableName: 'бонус мастерская 2',
@@ -4160,6 +4209,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  // int +5
   {
     id: 'factory-bonus-5',
     humanReadableName: 'бонус мастерская 3',
@@ -4169,6 +4219,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  // доступен экран мастерской
   {
     id: 'factory-screen',
     humanReadableName: 'Экран мастерской',

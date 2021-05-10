@@ -526,6 +526,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: chargeLocusAbility.name,
   },
+  // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.  Дает карму владельцу абилки.
   {
     id: 'dm-add-guru',
     humanReadableName: 'Гуру',
@@ -540,6 +541,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: discourseGroupAddGuru.name,
   },
+  // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 1. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
   {
     id: 'dm-exclude-inq-1',
     humanReadableName: 'Инквизитор-1',
@@ -554,6 +556,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: discourseGroupInquisitor1.name,
   },
+  // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 2. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
   {
     id: 'dm-exclude-inq-2',
     humanReadableName: 'Инквизитор-2',
@@ -568,6 +571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: discourseGroupInquisitor2.name,
   },
+  // Абилка-сертификат с кулдауном. Предъявителю выдается QR локуса дискурс-группы, к которой он принадлежит.
   {
     id: 'dm-prophet',
     humanReadableName: 'Пророк',
@@ -799,6 +803,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: investigateScoring.name,
   },
+  // На допросе цель развернуто отвечает на заданный вопрос и теряет одну единицу эссенса (начисляется на Папу Драконов). Абилка-сертификат с кулдауном
   {
     id: 'chain-interrogation',
     humanReadableName: 'Конвейерный допрос',
@@ -806,7 +811,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -814,6 +819,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: doNothingAbility.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
+  // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
   {
     id: 'orthodox-exorcism',
     humanReadableName: 'Отчитка',
@@ -1865,6 +1871,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
+  // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
@@ -1872,7 +1879,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3029,6 +3036,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
+  // null
   {
     id: 'mod-kamikadze',
     humanReadableName: 'дрон-мод Камикадзе',
@@ -3413,6 +3421,91 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 30,
     prerequisites: ['master-of-the-universe'],
     availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-1',
+    humanReadableName: 'Голосовать за кандидата 1',
+    description: 'ты можешь проголосовать за кандидата 1',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-2',
+    humanReadableName: 'Голосовать за кандидата 2',
+    description: 'ты можешь проголосовать за кандидата 2',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-3',
+    humanReadableName: 'Голосовать за кандидата 3',
+    description: 'ты можешь проголосовать за кандидата 3',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-4',
+    humanReadableName: 'Голосовать за кандидата 4',
+    description: 'ты можешь проголосовать за кандидата 4',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-5',
+    humanReadableName: 'Голосовать за кандидата 5',
+    description: 'ты можешь проголосовать за кандидата 5',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
