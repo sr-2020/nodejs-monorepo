@@ -1305,7 +1305,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
-  // Все кулдауны способностей дискурсмонгера снижены на 20%
   {
     id: 'dm-fanatic-1',
     humanReadableName: 'Фанатик-1',
@@ -1317,7 +1316,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.8,
     }),
   },
-  // Все кулдауны способностей дискурсмонгера снижены на 40%
   {
     id: 'dm-fanatic-2',
     humanReadableName: 'Фанатик-2',
@@ -4201,7 +4199,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-5'],
-    pack: undefined,
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // resonance +1
@@ -4212,7 +4209,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase1'],
-    pack: undefined,
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // resonance +1
@@ -4223,7 +4219,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 100,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase2'],
-    pack: undefined,
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
   // Улучшенное установление спрайтов.
@@ -4235,7 +4230,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет читать данные из геоноды.
@@ -4247,7 +4241,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет лучше читать данные из геоноды.
@@ -4259,7 +4252,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-geo-1'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из геоноды.
@@ -4271,7 +4263,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-geo-2'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет читать данные из биомонитора и rcc
@@ -4283,7 +4274,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет лучше читать данные из биомонитора и rcc.
@@ -4295,7 +4285,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-bio-1'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из биомонитора и rcc.
@@ -4307,7 +4296,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-bio-2'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет читать данные из экономноды
@@ -4319,7 +4307,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет лучше читать данные из экономноды.
@@ -4331,7 +4318,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-econ-1'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из экономноды.
@@ -4343,10 +4329,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-econ-2'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // techno.fading - 7 в минуту
   //
   {
@@ -4356,7 +4340,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['arch-hackerman-technomancer', 'fading-decrease-2'],
-    pack: undefined,
     modifier: [],
   },
 ];

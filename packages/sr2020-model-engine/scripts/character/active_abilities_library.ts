@@ -506,7 +506,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: chargeLocusAbility.name,
   },
-  // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.  Дает карму владельцу абилки.
   {
     id: 'dm-add-guru',
     humanReadableName: 'Гуру',
@@ -520,7 +519,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: discourseGroupAddGuru.name,
   },
-  // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 1. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
   {
     id: 'dm-exclude-inq-1',
     humanReadableName: 'Инквизитор-1',
@@ -534,7 +532,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: discourseGroupInquisitor1.name,
   },
-  // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 2. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
   {
     id: 'dm-exclude-inq-2',
     humanReadableName: 'Инквизитор-2',
@@ -548,7 +545,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: discourseGroupInquisitor2.name,
   },
-  // Абилка-сертификат с кулдауном. Предъявителю выдается QR локуса дискурс-группы, к которой он принадлежит.
   {
     id: 'dm-prophet',
     humanReadableName: 'Пророк',
@@ -2880,28 +2876,25 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
-    humanReadableName: 'Увеличение магии "+1"',
+    humanReadableName: 'Уменьшение магии "-1"',
     description: 'Уменьшение магии -1',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   // Отсканировать куар нода Основания матрицы.
   // Отсканировать куар спрайта
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
-  // techno.fading +80
+  //
   {
     id: 'settle-backdoor',
     humanReadableName: 'Установить спрайт ',
@@ -2910,13 +2903,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар нода Основания матрицы.
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
   // techno.fading +200
@@ -2928,13 +2919,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Посмотреть спрайты на хосте.
   // Абилка-маркер для сайта Кривды
   // techno.fading +150
@@ -2946,13 +2935,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2963,13 +2950,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2980,13 +2965,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2997,13 +2980,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3014,13 +2995,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3031,13 +3010,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3048,13 +3025,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'rubber-glowes'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3065,13 +3040,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3082,13 +3055,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3099,13 +3070,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3116,13 +3085,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'armor-light'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3133,13 +3100,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3150,13 +3115,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3167,13 +3130,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3184,13 +3145,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3201,9 +3160,78 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'initiative-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Гражданство: Россия
+  // Распорядитель: нет
+  // Виза: не применимо
+  {
+    id: 'passport-citizen',
+    humanReadableName: 'Принять в гражданство',
+    description: 'Ты можешь сделать чаммера полноправным гражданином корпорации Россия',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Распорядитель: как у персонажа, применившего абилку
+  // фейлится, если Распорядитель = Россия до применения
+  {
+    id: 'passport-kz',
+    humanReadableName: 'Выкупить акцию',
+    description: 'Ты можешь выкупить гражданскую акцию Корпорации Россия в залог',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Гражданство: нет
+  // Виза: нет
+  // фейлится, если Гражданство = не Россия
+  {
+    id: 'passport-hobo',
+    humanReadableName: 'Лишить гражданства России',
+    description: 'Ты можешь лишить чаммера гражданства Корпорация Россия',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Виза: нет
+  // успешно, если Гражданство = не Россия
+  {
+    id: 'passport-visa-null',
+    humanReadableName: 'Аннулировать визу',
+    description: 'Ты можешь аннулировать визу России чаммеру, не являющемуся гражданином России',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
     minimalEssence: 0,
     eventType: dummyAbility.name,
   },
