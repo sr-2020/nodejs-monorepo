@@ -52,6 +52,7 @@ export function clampAttributes(api: EffectModelApi<Sr2020Character>, m: Modifie
   api.model.hacking.additionalRequests = clamp(api.model.hacking.additionalRequests, 0, 5);
   api.model.hacking.spriteLevel = clamp(api.model.hacking.spriteLevel, 0, 3);
   api.model.hacking.additionalSprites = clamp(api.model.hacking.additionalSprites, 0, 5);
+  api.model.hacking.fading = clamp(api.model.hacking.fading, 0, 2000);
   api.model.maxTimeInVr = clamp(api.model.maxTimeInVr, 30, 9000);
   api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
   api.model.magicStats.auraMarkMultiplier = clamp(api.model.magicStats.auraMarkMultiplier, 0.1, 2.0);
@@ -169,6 +170,10 @@ export function increaseFadingResistance(api: EffectModelApi<Sr2020Character>, m
 
 export function increaseCompilationFadingResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.hacking.compilationFadingResistance += m.amount;
+}
+
+export function increaseFadingDecrease(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.hacking.fadingDecrease += m.amount;
 }
 
 export function increaseVarianceResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {

@@ -198,6 +198,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: oneTimeRevive.name,
   },
   // добивание до АС (из тяжрана или КС)
@@ -218,6 +219,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 100,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: absoluteDeathAbility.name,
   },
   // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
@@ -240,6 +242,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 120,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: finishHimAbility.name,
   },
   // TODO(https://trello.com/c/npKNMNV9/323-вход-нахождение-и-выход-из-вр): Add proper implementation
@@ -256,6 +259,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Целевой персонаж забывает события "этой сцены", если персонажу не был нанесен физический урон (снят хотя бы 1 хит) за это время.
@@ -271,6 +275,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: oblivionAbility.name,
   },
   // Персонаж забывает события "этой сцены", даже если персонажу был нанесен физический урон (снят хотя бы 1 хит) за это время.
@@ -285,6 +290,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: fullOblivionAbility.name,
   },
   // Целевой персонаж не забывает события перед КС, срок действия - 6 часов. Для менталиста эта абилка  активная. У целевого персонажа появляется абилка cloud-memory-temporary на 6 часов.
@@ -299,6 +305,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: cloudMemoryAbility.name,
   },
   // Цель честно отвечает на 3 вопроса.
@@ -313,6 +320,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: tellMeTheTruthAbility.name,
   },
   // Цель озвучивает какой-то признак (щелканье пальцами, пожимание плечами, заикание), и в течение беседы в следующие 15 минут должна воспроизводить этот признак, если врет.
@@ -328,6 +336,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: lieToMeAbility.name,
   },
   // Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.
@@ -343,6 +352,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: danilaINeedHelpAbility.name,
   },
   // Цель выполняет любую просьбу (кроме самоубийства). Выполнение услуги не должно занимать больше 30 минут.
@@ -358,6 +368,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: lukeIAmYourFatherAbility.name,
   },
   // цели выдается текстовое сообщение с эффектом
@@ -376,6 +387,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: flyYouFoolAbility.name,
   },
   // Цель не может двигаться 10 минут или пока ей не нанесён физический урон (-1хит).
@@ -391,6 +403,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: paralysis1Ability.name,
   },
   // Цель не может двигаться 10 минут.
@@ -406,6 +419,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: paralysis2Ability.name,
   },
   // Цель не может двигаться и говорить 10 минут.
@@ -421,6 +435,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: paralysis3Ability.name,
   },
   // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
@@ -436,6 +451,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: scornHimAbility.name,
   },
   // Цель активно пытается убить персонажа, на которого указывает менталист.
@@ -451,6 +467,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 100,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: killHimAbility.name,
   },
   // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы, локус теряет заряд. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает. Дает карму владельцу абилки.
@@ -465,6 +482,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: discourseGroupAddAbility.name,
   },
   // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Дает карму владельцу абилки.
@@ -479,6 +497,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: discourseGroupExcludeAbility.name,
   },
   // Сканируется код локуса, код пополнения заряда. Количество зарядов на локусе увеличивается на 1.
@@ -504,6 +523,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: chargeLocusAbility.name,
   },
   // Сканируется код локуса, код персонажа, персонаж приобретает абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Если на локусе нет зарядов, абилка не работает.  Дает карму владельцу абилки.
@@ -518,6 +538,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: discourseGroupAddGuru.name,
   },
   // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 1. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
@@ -532,6 +553,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: discourseGroupInquisitor1.name,
   },
   // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Количество зарядов локуса увеличивается на 2. Запускается процедура пересчета дискурс-абилок.  Дает карму владельцу абилки.
@@ -546,6 +568,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: discourseGroupInquisitor2.name,
   },
   // Абилка-сертификат с кулдауном. Предъявителю выдается QR локуса дискурс-группы, к которой он принадлежит.
@@ -560,6 +583,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: prophetAbility.name,
   },
   // Цель дарит менталисту 1 игровой предмет по выбору менталиста.
@@ -575,6 +599,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: reallyNeedItAbility.name,
   },
   // Убеждает жертву перевести со своего на счет менталиста 50%
@@ -589,6 +614,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: billionerWalkAbility.name,
   },
   // Добавляет +8 к ментальной защите целевого персонажа  на 12 часов
@@ -603,6 +629,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: increaseTheMentalProtectionAbility.name,
   },
   // Добавляет -8 к ментальной защите целевого персонажа на 6 часов
@@ -617,6 +644,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 80,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: reduceTheMentalProtectionAbility.name,
   },
   // Менталист увеличивает свою ментальную защиту на +8 на 30 минут.
@@ -631,6 +659,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: iDontTrustAnybody.name,
   },
   // Менталист увеличивает ментальную защиту другого персонажа на +8 на 30 минут
@@ -645,6 +674,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: youDontTrustAnybody.name,
   },
   // qr товара содержит информацию о базовой стоимости товара при его покупке
@@ -661,6 +691,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: howMuchItCosts.name,
   },
   // Выводит на экран гм информацию из скрытого текстового поля товара .
@@ -676,6 +707,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: whoNeedsIt.name,
   },
   // Показывает (возвращает) размер рентного платежа по данному товару. Данная информация записывается на QR при его покупке.
@@ -691,6 +723,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: howMuchTheRent.name,
   },
   // ГМ переписывает кредит за предмет с другого перонажа на себя. При этом сумма последующих рентных платежей пересчитывается. Новые рентные платежи рассчитываются исходя из скоринга гма на момент активации абилки.
@@ -708,6 +741,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: letMePay.name,
   },
   // Переписать долг за 1 предмет c QR с персонажа А на персонажа Б.
@@ -733,6 +767,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: letHimPay.name,
   },
   // ГМ переписывает кредит за предмет: пересчитывается сумма последующих рентных платежей . Новые рентные платежи рассчитываются исходя из скоринга персонажа, на которого записан кредит на момент активации абилки.
@@ -750,6 +785,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: reRent.name,
   },
   // Показывает актуальные коэффициенты, которые влияют на скоринг. У целевого персонажа в течение следующих 5 минут отображаются его коэффициенты скоринга.
@@ -764,8 +800,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: investigateScoring.name,
   },
+  // На допросе цель развернуто отвечает на заданный вопрос и теряет одну единицу эссенса (начисляется на Папу Драконов). Абилка-сертификат с кулдауном
   {
     id: 'chain-interrogation',
     humanReadableName: 'Конвейерный допрос',
@@ -773,13 +811,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
+  // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
   {
     id: 'orthodox-exorcism',
     humanReadableName: 'Отчитка',
@@ -791,6 +831,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: spiritsRelatedSpell.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
@@ -806,6 +847,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
@@ -821,6 +863,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
@@ -836,6 +879,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 16,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
@@ -852,6 +896,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
@@ -868,6 +913,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
@@ -888,6 +934,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: changeAuraAbility.name,
   },
   // - время действия 10+N минут, кулдаун 5 минут. Дает на время действия абилку hammer-of-justice-effect. N=умвл*3 минут
@@ -903,6 +950,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 90,
     minimalEssence: 3,
+    fadingPrice: 0,
     eventType: hammerOfJustice.name,
   },
   // - время действия 5+N минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время. N=умвл*1 минут
@@ -918,6 +966,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: arrowgant.name,
   },
   // - время действия 5+N минут, кулдаун 30 минут. Дает абилку trollton-effect. N=умвл*2 минут
@@ -933,6 +982,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 100,
     minimalEssence: 2,
+    fadingPrice: 0,
     eventType: trollton.name,
   },
   // - время действия 5+N минут, кулдаун 20 минут. Позволяет автоматически подняться из тяжрана через 30с с полным запасом текущих хитов. N=умвл*2 минут
@@ -948,6 +998,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 90,
     minimalEssence: 2,
+    fadingPrice: 0,
     eventType: iWillSurvive.name,
   },
   // - мгновенное, кулдаун 5 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
@@ -968,6 +1019,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 5,
+    fadingPrice: 0,
     eventType: reviveOnTarget.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -983,6 +1035,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -998,6 +1051,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1013,6 +1067,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1028,6 +1083,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1043,6 +1099,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1058,6 +1115,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1073,6 +1131,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1088,6 +1147,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1103,6 +1163,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1118,6 +1179,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1133,6 +1195,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
@@ -1148,6 +1211,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
@@ -1162,6 +1226,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 2,
+    fadingPrice: 0,
     eventType: alloHomorusAbility.name,
   },
   // Для мчс  Переводит чаммера из состояния КС в состояние Здоров
@@ -1205,6 +1270,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: capsuleReanimate.name,
   },
   // Активирует процесс снятия импланта\мода.
@@ -1228,6 +1294,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: repomanAbility.name,
   },
   // TODO(https://trello.com/c/OBEicfEg/330-реализовать-вырезание-имплантов-рипоменами): Add proper implementation
@@ -1249,6 +1316,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: repomanBlackAbility.name,
   },
   // При активации кнопки необходимо выбрать ЯЧЕЙКУ телохранилища, в котором лежит тело ригги.
@@ -1266,6 +1334,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: exitDrone.name,
   },
   // Эта кнопка символизирует аварийное отключение.
@@ -1287,6 +1356,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: droneDangerAbility.name,
   },
   // При активации аблики игрок сканирует куар-код с препаратом, видит его название и самый крупный компонент.
@@ -1304,6 +1374,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: getPillNameAbility.name,
     cooldownMinutes: (character) => 0,
   },
@@ -1327,6 +1398,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: reviveAbsoluteOnTarget.name,
     cooldownMinutes: (character) => 0,
   },
@@ -1342,6 +1414,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
@@ -1356,6 +1429,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
@@ -1370,6 +1444,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartHealAbility.name,
   },
   // Активная абилка Медикарта
@@ -1384,6 +1459,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
@@ -1398,6 +1474,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
@@ -1412,6 +1489,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: medcartReviveAbility.name,
   },
   // Активная абилка Медикарта
@@ -1426,6 +1504,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: reviveOnTarget.name,
   },
   // появляется абилка granite-skin-effect на 15 минут
@@ -1442,6 +1521,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
@@ -1457,6 +1537,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveShooterAbility.name,
   },
   // мясное тело +2 хита на 15 минут
@@ -1472,6 +1553,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveHealhAbility.name,
   },
   // появляется текст "ты забыл эпизод"
@@ -1487,6 +1569,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
   },
   // появляется абилка granite-skin-effect на 15 минут
@@ -1503,6 +1586,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
@@ -1518,6 +1602,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveShooterAbility.name,
   },
   // мясное тело +2 хита на 15 минут
@@ -1533,6 +1618,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveHealhAbility.name,
   },
   // появляется текст "ты забыл эпизод"
@@ -1548,6 +1634,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
   },
   // появляется абилка granite-skin-effect на 15 минут
@@ -1564,6 +1651,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
@@ -1579,6 +1667,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveShooterAbility.name,
   },
   // мясное тело +2 хита на 15 минут
@@ -1594,6 +1683,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveHealhAbility.name,
   },
   // появляется текст "ты забыл эпизод"
@@ -1609,6 +1699,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
   },
   // появляется абилка granite-skin-effect на 15 минут
@@ -1625,6 +1716,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
@@ -1640,6 +1732,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveShooterAbility.name,
   },
   // мясное тело +2 хита на 15 минут
@@ -1655,6 +1748,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveHealhAbility.name,
   },
   // появляется текст "ты забыл эпизод"
@@ -1670,6 +1764,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
   },
   // Эта абилка нужна как мастерская.
@@ -1690,6 +1785,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: gmRespawnHmhvv.name,
   },
   // Гуль сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
@@ -1712,6 +1808,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: ghoulBite.name,
   },
   // Вампир сканирует QR другого персонажа, находящегося в тяжелом ранении ИЛИ добровольно показавшего свой QR.
@@ -1734,6 +1831,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: vampireBite.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -1749,6 +1847,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -1768,9 +1867,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
+  // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
@@ -1778,10 +1879,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // При активации на 5 минут выдаёт способность Magic Shield
@@ -1797,6 +1899,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: takeNoHarmAbility.name,
   },
   // При активации на 5 минут выдаёт способность PENCIL
@@ -1811,6 +1914,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: pencilLargeAbility.name,
   },
   // При активации на 5 минут выдаёт способность Stone Skin
@@ -1825,6 +1929,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: skinStoneAbility.name,
   },
   // После активации абилки у мага появляется на 10 минут пассивная абилка tincasm-able.
@@ -1839,6 +1944,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 300,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: tincasmAbility.name,
   },
   // Эта абилка нужна как мастерская.
@@ -1855,6 +1961,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: gmIncreaseMaxEssence.name,
   },
   // Эта абилка нужна как мастерская.
@@ -1871,6 +1978,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: gmDecreaseMaxEssence.name,
   },
   // Эта абилка нужна как мастерская.
@@ -1889,6 +1997,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: gmEssenceReset.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -1907,6 +2016,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -1922,6 +2032,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/EqKhMPbH/373-реализовать-абилку-fleshpoint)
@@ -1941,6 +2052,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 16,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перечислены все вещества, которые находятся в чаммере в формате
@@ -1958,6 +2070,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: whatsInTheBodyAbility.name,
   },
   // Показывает текстовое сообщение ( в лог?) формата
@@ -1975,6 +2088,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: biomonitorScanAbility.name,
   },
   // Надо отсканировать QR кибердеки. +посылает PubSub ability_used
@@ -1996,6 +2110,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: jackInAbility.name,
   },
   // Сама абилка ничего не делает, но посылает PubSub ability_used. ничего страшного если ее будут жамкать пока не заджеканы. если есть какой-то простой способ дизейблить- я его не знаю
@@ -2010,6 +2125,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: jackOutAbility.name,
   },
   // Выдаётся Серебряная нить, amount=15
@@ -2025,6 +2141,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Выдаётся Серебряная нить, amount=15
@@ -2040,6 +2157,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Сама абилка ничего не делает, но посылает PubSub ability_used
@@ -2062,6 +2180,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: activateSoft.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -2078,6 +2197,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 120,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Применяет препарат на другого персонажа
@@ -2094,6 +2214,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: usePillsOnOthersAbility.name,
   },
   // При активации игроку показывается список духов, присутствующих в этой локации в этот момент. При выборе одного из них (и подтверждении выбора) делается попытка с вероятностью (M*10-W)/100 захватить указанного духа. Если попытка удалась, то магу предлагается поместить этого духа в свободное телохранилище (через сканирование QR-кода, ранее записанного как "телохранилище"). При закрытии этого диалога попытка ловли отменяется и можно сделать новую (если Own Spirit ещё доступна). При успешной записи в телохранилище захваченный свободный дух (не персонаж) исчезает из пространства игры (не слышен в океане маны, не входит в списки целей "присутствующие духи" и тд), зато доступен для Suit Up (через сканирование этого духохранилища). W это текущая Сопротивляемость духа*Коэффициент Сопротивления духов этого мага. M = {{ might }}, с которой выдавалась эта абилка
@@ -2112,6 +2233,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: enterSpirit.name,
   },
   // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле.
@@ -2126,6 +2248,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: exitSpirit.name,
   },
   // Эта кнопка символизирует разрушение оболочки духа
@@ -2145,6 +2268,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: spiritEmergencyExit.name,
   },
   // для применения надо отсканировать куар код мясного телуа в состоянии "тяжело ранен" - переводит его в состояние КС.
@@ -2166,6 +2290,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: finishHimAbility.name,
   },
   // Абилка доступна для применения только из мясного тела (т.е. из физического мира)
@@ -2182,6 +2307,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 3,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -2201,6 +2327,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(aeremin): Add proper implementation
@@ -2217,6 +2344,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // текстовая абилка
@@ -2232,6 +2360,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
@@ -2246,6 +2375,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
@@ -2261,6 +2391,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
@@ -2275,6 +2406,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Сканирует тело, находящееся  в тяжране.
@@ -2291,6 +2423,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // текстовая абилка
@@ -2306,6 +2439,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // текстовая абилка
@@ -2321,6 +2455,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // текстовая абилка
@@ -2336,6 +2471,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // текстовая абилка
@@ -2351,6 +2487,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
@@ -2368,6 +2505,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
+    fadingPrice: 500,
     eventType: dummyAbility.name,
   },
   // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
@@ -2383,6 +2521,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
+    fadingPrice: 70,
     eventType: dummyAbility.name,
   },
   // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
@@ -2398,6 +2537,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
+    fadingPrice: 80,
     eventType: dummyAbility.name,
   },
   // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
@@ -2413,6 +2553,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 200,
     eventType: dummyAbility.name,
   },
   // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
@@ -2428,6 +2569,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 30,
     eventType: dummyAbility.name,
   },
   // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
@@ -2443,6 +2585,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 40,
     eventType: dummyAbility.name,
   },
   // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
@@ -2458,6 +2601,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 60,
     eventType: dummyAbility.name,
   },
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
@@ -2473,6 +2617,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 80,
     eventType: dummyAbility.name,
   },
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
@@ -2488,6 +2633,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 100,
     eventType: dummyAbility.name,
   },
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
@@ -2503,6 +2649,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 120,
     eventType: dummyAbility.name,
   },
   // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
@@ -2518,6 +2665,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
   // Игрок может сфотографировать объект и переслать фото другой части команды в основании
@@ -2533,6 +2681,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 230,
     eventType: dummyAbility.name,
   },
   // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
@@ -2548,6 +2697,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 100,
     eventType: dummyAbility.name,
   },
   // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
@@ -2563,6 +2713,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 200,
     eventType: dummyAbility.name,
   },
   // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
@@ -2578,6 +2729,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
   // Игрок может вскрывать цифровые замки в реальном мире.
@@ -2593,6 +2745,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 25,
     eventType: dummyAbility.name,
   },
   // Игрок может вывести из строя дрона в прямой видимости.
@@ -2608,6 +2761,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 200,
     eventType: dummyAbility.name,
   },
   // Игрок может в VR посмотреть син любого другого игрока, у которого простая аватара.
@@ -2623,6 +2777,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 100,
     eventType: dummyAbility.name,
   },
   // параметр techno.initiative +2 (у нападающих базовая и = 1, у защитников базовая и = 0) применяется строго до входа в красную комнату
@@ -2638,6 +2793,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 120,
     eventType: dummyAbility.name,
   },
   // добавлет 1 хит союзнику. хиты считают сами
@@ -2653,6 +2809,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 80,
     eventType: dummyAbility.name,
   },
   // добавлет 2 хита союзнику. хиты считают сами
@@ -2668,6 +2825,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 100,
     eventType: dummyAbility.name,
   },
   // добавляет 1 хит всем союзникам. хиты считают сами
@@ -2683,6 +2841,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
   // добавляет 2 хита всем союзникам. хиты считают сами
@@ -2698,6 +2857,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 200,
     eventType: dummyAbility.name,
   },
   // снимает 1 хит противника. хиты считают сами
@@ -2713,6 +2873,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 5,
     minimalEssence: 0,
+    fadingPrice: 100,
     eventType: dummyAbility.name,
   },
   // снимает 2 хита противника. хиты считают сами
@@ -2728,6 +2889,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
+    fadingPrice: 120,
     eventType: dummyAbility.name,
   },
   // снимает 1 хит со всех противников. хиты считают сами
@@ -2743,6 +2905,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 180,
     eventType: dummyAbility.name,
   },
   // снимает 2 хита со всех противников. хиты считают сами
@@ -2758,6 +2921,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 300,
     eventType: dummyAbility.name,
   },
   // игрок убирает одну руку за спину, она связана. игрок не может держать двуручное оружие или щит
@@ -2774,6 +2938,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 5,
     minimalEssence: 0,
+    fadingPrice: 50,
     eventType: dummyAbility.name,
   },
   // игроки убирают однуруку за спину, она связана. игроки не могут держать двуручное оружие или щиты
@@ -2789,6 +2954,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
   // Игроки с этого момента не могут больше использовать КФ в красной комнате, все, что было скастовано - отменятся.
@@ -2805,6 +2971,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
+    fadingPrice: 600,
     eventType: dummyAbility.name,
   },
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
@@ -2821,6 +2988,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
+    fadingPrice: 300,
     eventType: dummyAbility.name,
   },
   // Активирует процесс включения в дрона.
@@ -2839,6 +3007,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: enterDrone.name,
   },
   // Сравнивает навык риггера drone.recovery.skill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше - дрон переходит из состояния Сломан в состояние Работает
@@ -2864,8 +3033,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
+  // null
   {
     id: 'mod-kamikadze',
     humanReadableName: 'дрон-мод Камикадзе',
@@ -2878,30 +3049,29 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
-    humanReadableName: 'Увеличение магии "+1"',
+    humanReadableName: 'Уменьшение магии "-1"',
     description: 'Уменьшение магии -1',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   //
   // Отсканировать куар нода Основания матрицы.
   // Отсканировать куар спрайта
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
-  // techno.fading +80
+  //
   {
     id: 'settle-backdoor',
     humanReadableName: 'Установить спрайт ',
@@ -2910,13 +3080,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 80,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар нода Основания матрицы.
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
   // techno.fading +200
@@ -2928,13 +3097,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 200,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Посмотреть спрайты на хосте.
   // Абилка-маркер для сайта Кривды
   // techno.fading +150
@@ -2946,13 +3114,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2963,13 +3130,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2980,13 +3146,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -2997,13 +3162,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3014,13 +3178,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3031,13 +3194,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3048,13 +3210,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'rubber-glowes'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3065,13 +3226,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3082,13 +3242,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3099,13 +3258,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3116,13 +3274,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'armor-light'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3133,13 +3290,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3150,13 +3306,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3167,13 +3322,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3184,13 +3338,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -3201,10 +3354,161 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'initiative-basic'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
+    fadingPrice: 10,
+    eventType: dummyAbility.name,
+  },
+  // Гражданство: Россия
+  // Распорядитель: нет
+  // Виза: не применимо
+  {
+    id: 'passport-citizen',
+    humanReadableName: 'Принять в гражданство',
+    description: 'Ты можешь сделать чаммера полноправным гражданином корпорации Россия',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Распорядитель: как у персонажа, применившего абилку
+  // фейлится, если Распорядитель = Россия до применения
+  {
+    id: 'passport-kz',
+    humanReadableName: 'Выкупить акцию',
+    description: 'Ты можешь выкупить гражданскую акцию Корпорации Россия в залог',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Гражданство: нет
+  // Виза: нет
+  // фейлится, если Гражданство = не Россия
+  {
+    id: 'passport-hobo',
+    humanReadableName: 'Лишить гражданства России',
+    description: 'Ты можешь лишить чаммера гражданства Корпорация Россия',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Виза: нет
+  // успешно, если Гражданство = не Россия
+  {
+    id: 'passport-visa-null',
+    humanReadableName: 'Аннулировать визу',
+    description: 'Ты можешь аннулировать визу России чаммеру, не являющемуся гражданином России',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['master-of-the-universe'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-1',
+    humanReadableName: 'Голосовать за кандидата 1',
+    description: 'ты можешь проголосовать за кандидата 1',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-2',
+    humanReadableName: 'Голосовать за кандидата 2',
+    description: 'ты можешь проголосовать за кандидата 2',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-3',
+    humanReadableName: 'Голосовать за кандидата 3',
+    description: 'ты можешь проголосовать за кандидата 3',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-4',
+    humanReadableName: 'Голосовать за кандидата 4',
+    description: 'ты можешь проголосовать за кандидата 4',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // показывает текст игроку, включает кулдаун
+  // работает только с пререквизитами:
+  // Гражданство: Россия && Распорядитель: Нет
+  {
+    id: 'voting-5',
+    humanReadableName: 'Голосовать за кандидата 5',
+    description: 'ты можешь проголосовать за кандидата 5',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
 ];
