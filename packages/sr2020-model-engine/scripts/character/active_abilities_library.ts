@@ -69,6 +69,7 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -2506,7 +2507,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 500,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
   // techno.fading + 70
@@ -2522,7 +2523,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 70,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
   // techno.fading  + 80
@@ -2538,7 +2539,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
   // techno.fading + 200
@@ -2554,7 +2555,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 30
@@ -2570,7 +2571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 30,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 40
@@ -2586,7 +2587,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 40,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 60
@@ -2602,7 +2603,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 60,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 80
@@ -2618,7 +2619,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 100
@@ -2634,7 +2635,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
   // techno.fading +120
@@ -2650,7 +2651,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 120,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
   // techno.fading +150
@@ -2666,7 +2667,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок может сфотографировать объект и переслать фото другой части команды в основании
   // techno.fading + 230
@@ -2682,7 +2683,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 230,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
   // techno.fading +100
@@ -2698,7 +2699,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
   // techno.fading + 200
@@ -2714,7 +2715,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
   // techno.fading + 150
@@ -2730,7 +2731,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок может вскрывать цифровые замки в реальном мире.
   // techno.fading + 25
@@ -2810,7 +2811,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // добавлет 2 хита союзнику. хиты считают сами
   // techno.fading +100
@@ -2826,7 +2827,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // добавляет 1 хит всем союзникам. хиты считают сами
   // techno.fading +150
@@ -2842,7 +2843,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // добавляет 2 хита всем союзникам. хиты считают сами
   // techno.fading +200
@@ -2858,7 +2859,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // снимает 1 хит противника. хиты считают сами
   // techno.fading +100
@@ -2890,7 +2891,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 120,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // снимает 1 хит со всех противников. хиты считают сами
   // techno.fading +180
@@ -2906,7 +2907,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 180,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // снимает 2 хита со всех противников. хиты считают сами
   // techno.fading +300
@@ -2922,7 +2923,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // игрок убирает одну руку за спину, она связана. игрок не может держать двуручное оружие или щит
   // techno.fading +50
@@ -2939,7 +2940,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 5,
     minimalEssence: 0,
     fadingPrice: 50,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // игроки убирают однуруку за спину, она связана. игроки не могут держать двуручное оружие или щиты
   // techno.fading +150
@@ -2955,7 +2956,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игроки с этого момента не могут больше использовать КФ в красной комнате, все, что было скастовано - отменятся.
   // techno.fading +600
@@ -2972,7 +2973,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 600,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
   // techno.fading +300
@@ -2989,7 +2990,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: dummyAbility.name,
+    eventType: doNothingAbility.name,
   },
   // Активирует процесс включения в дрона.
   // надо отсканировать:
