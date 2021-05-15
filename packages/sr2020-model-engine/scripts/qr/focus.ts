@@ -12,5 +12,7 @@ export function markAsUsed(api: EventModelApi<QrCode>, data: {}) {
 
 export function markAsOnCooldown(api: EffectModelApi<QrCode>, data: { cooldownUntil: number }) {
   api.model.type = 'focus_on_cooldown';
-  api.model.description = `${api.model.description}\nНа кулдауне еще ${(data.cooldownUntil - api.model.timestamp) / 1000} секунд.`;
+  api.model.description = `${api.model.description}\nНа кулдауне еще ${Math.ceil(
+    (data.cooldownUntil - api.model.timestamp) / 1000,
+  )} секунд.`;
 }
