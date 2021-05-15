@@ -6,13 +6,11 @@ import { addTemporaryQrModifier } from '@alice/sr2020-model-engine/scripts/qr/ev
 import { duration } from 'moment';
 
 export function markAsUsed(api: EventModelApi<QrCode>, data: {}) {
-  addTemporaryQrModifier(
-    api,
-    modifierFromEffect(markAsOnCooldown, {}),
-    duration(typedQrData<MagicFocusData>(api.model).cooldownSeconds, 'seconds'),
-  );
+  const d = duration(typedQrData<MagicFocusData>(api.model).cooldownSeconds, 'seconds');
+  addTemporaryQrModifier(api, modifierFromEffect(markAsOnCooldown, { cooldownUntil: api.model.timestamp + d.asMilliseconds() }), d);
 }
 
-export function markAsOnCooldown(api: EffectModelApi<QrCode>, data: {}) {
+export function markAsOnCooldown(api: EffectModelApi<QrCode>, data: { cooldownUntil: number }) {
   api.model.type = 'focus_on_cooldown';
+  api.model.description = `${api.model.description}\nНа кулдауне еще ${(data.cooldownUntil - api.model.timestamp) / 1000} секунд.`;
 }
