@@ -3360,9 +3360,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 10,
     eventType: dummyAbility.name,
   },
+  // Реализовано у Кривды
   // Гражданство: Россия
   // Распорядитель: нет
   // Виза: не применимо
+  //
   {
     id: 'passport-citizen',
     humanReadableName: 'Принять в гражданство',
@@ -3370,15 +3372,17 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
+  // Реализовано у Кривды
   // Распорядитель: как у персонажа, применившего абилку
   // фейлится, если Распорядитель = Россия до применения
+  //
   {
     id: 'passport-kz',
     humanReadableName: 'Выкупить акцию',
@@ -3386,16 +3390,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
+  // Реализовано у Кривды
   // Гражданство: нет
   // Виза: нет
   // фейлится, если Гражданство = не Россия
+  // фейлится, если Гражданство клерка = не Россия
   {
     id: 'passport-hobo',
     humanReadableName: 'Лишить гражданства России',
@@ -3403,15 +3409,17 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
-  // Виза: нет
+  // Реализовано у Кривды
+  // Виза: null
   // успешно, если Гражданство = не Россия
+  //
   {
     id: 'passport-visa-null',
     humanReadableName: 'Аннулировать визу',
@@ -3419,8 +3427,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -3506,6 +3514,43 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 60,
     prerequisites: [],
     availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Реализовано у Кривды
+  // Виза: Есть
+  // успешно, если Гражданство = не Россия
+  //
+  {
+    id: 'passport-visa',
+    humanReadableName: 'Выдать визу в Россию',
+    description: 'Ты можешь выдать визу России чаммеру, не являющемуся гражданином России',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Реализовано у Кривды
+  // Распорядитель: нет
+  //
+  {
+    id: 'passport-kz-null',
+    humanReadableName: 'Вернуть акцию из залога',
+    description: 'Возвращает гражданскую акцию Корпорации Россия в из залога',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
