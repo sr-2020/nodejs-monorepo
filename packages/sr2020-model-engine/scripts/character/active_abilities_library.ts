@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1326,7 +1325,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // где DroneFeedback = DroneFeedback1 + DroneFeedback2 + DroneFeedback3
   {
     id: 'drone-logoff',
-    humanReadableName: 'Штатное отключение от дрона',
+    humanReadableName: 'Отключение от дрона',
     description: 'Если вы хотите отключиться от дрона - нажмите эту кнопку, после чего вернитесь в свое тело.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -1347,9 +1346,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // DroneFeedback1 = 1
   {
     id: 'drone-danger',
-    humanReadableName: 'Аварийное отключение от дрона',
+    humanReadableName: 'Повреждение дрона',
     description:
-      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". После чего немедленно вернитесь в свое тело. ',
+      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". Примените абилку "Отключение от дрона". После чего немедленно вернитесь в свое тело. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
@@ -2402,7 +2401,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь допросить тяжело раненного персонажа. Допрашиваемый обязан честно и полно ответить на три вопроса.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60 - 5 * character.charisma - 5 * character.intelligence,
+    cooldownMinutes: (character) => Math.max(0, 60 - 5 * character.charisma - 5 * character.intelligence),
     prerequisites: ['arch-samurai', 'rummage'],
     availability: 'open',
     karmaCost: 40,
@@ -2483,7 +2482,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Нужно подойти к цели сзади и нанести слабый удар по плечу ты можешь оглушать рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 60 - 5 * character.body,
     prerequisites: ['arch-samurai', 'binding'],
     availability: 'open',
     karmaCost: 40,
@@ -2790,7 +2789,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat'],
+    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat', 'initiative-basic'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3011,7 +3010,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: enterDrone.name,
   },
-  // Сравнивает навык риггера drone.recovery.skill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше - дрон переходит из состояния Сломан в состояние Работает
+  // Сравнивает навык риггера drones.recoverySkill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше или равно - дрон переходит из состояния Сломан в состояние Работает
   {
     id: 'drone-recovery',
     humanReadableName: 'Ремонт дрона',
