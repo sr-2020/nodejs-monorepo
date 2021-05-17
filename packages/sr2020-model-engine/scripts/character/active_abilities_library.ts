@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3372,7 +3371,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь сделать чаммера полноправным гражданином корпорации Россия',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -3390,7 +3389,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь выкупить гражданскую акцию Корпорации Россия в залог',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -3409,7 +3408,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь лишить чаммера гражданства Корпорация Россия',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -3427,7 +3426,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь аннулировать визу России чаммеру, не являющемуся гражданином России',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -3530,9 +3529,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь выдать визу России чаммеру, не являющемуся гражданином России',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3548,9 +3546,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Возвращает гражданскую акцию Корпорации Россия в из залога',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 3,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
