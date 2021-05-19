@@ -2882,7 +2882,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Дивиденды *',
     description:
       'Дивиденды гарантируют вашему персонажу регулярный пассивный доход на игре, без регистрации и СМС. Shut up and take my nuyens! Да, этого точно хватит чтобы поесть и оплатить некоторые развлечения.',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 70,
     prerequisites: [],
     pack: { id: 'dividends', level: 1 },
@@ -2893,7 +2893,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'dividends-2',
     humanReadableName: 'Дивиденды **',
     description: 'Больше пассивного дохода!',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 70,
     prerequisites: ['dividends-1'],
     pack: { id: 'dividends', level: 2 },
@@ -2904,7 +2904,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'dividends-3',
     humanReadableName: 'Дивиденды ***',
     description: 'Еще больше пассивного дохода, ты сумел вырваться из крысиных бегов, чаммер!',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 70,
     prerequisites: ['dividends-2'],
     pack: { id: 'dividends', level: 3 },
@@ -4159,7 +4159,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'fading-decrease-basic'],
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 2 })],
   },
-  // drone.recovery.skill+4
+  // drones.recoverySkill +4
   {
     id: 'drone-recovery-bonus-1',
     humanReadableName: 'Ремонт бонус 1',
@@ -4169,7 +4169,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'drone-recovery'],
     modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
   },
-  // drone.recovery.skill+4
+  // drones.recoverySkill +4
   {
     id: 'drone-recovery-bonus-2',
     humanReadableName: 'Ремонт бонус 2',
@@ -4179,7 +4179,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-1'],
     modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
   },
-  // drone.recovery.skill+4
+  // drones.recoverySkill +4
   {
     id: 'drone-recovery-bonus-3',
     humanReadableName: 'Ремонт бонус 3',

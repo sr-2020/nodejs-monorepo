@@ -69,7 +69,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1326,7 +1325,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // где DroneFeedback = DroneFeedback1 + DroneFeedback2 + DroneFeedback3
   {
     id: 'drone-logoff',
-    humanReadableName: 'Штатное отключение от дрона',
+    humanReadableName: 'Отключение от дрона',
     description: 'Если вы хотите отключиться от дрона - нажмите эту кнопку, после чего вернитесь в свое тело.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -1347,9 +1346,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // DroneFeedback1 = 1
   {
     id: 'drone-danger',
-    humanReadableName: 'Аварийное отключение от дрона',
+    humanReadableName: 'Повреждение дрона',
     description:
-      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". После чего немедленно вернитесь в свое тело. ',
+      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". Примените абилку "Отключение от дрона". После чего немедленно вернитесь в свое тело. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
@@ -2402,7 +2401,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь допросить тяжело раненного персонажа. Допрашиваемый обязан честно и полно ответить на три вопроса.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60 - 5 * character.charisma - 5 * character.intelligence,
+    cooldownMinutes: (character) => Math.max(0, 60 - 5 * character.charisma - 5 * character.intelligence),
     prerequisites: ['arch-samurai', 'rummage'],
     availability: 'open',
     karmaCost: 40,
@@ -2483,7 +2482,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Нужно подойти к цели сзади и нанести слабый удар по плечу ты можешь оглушать рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 60 - 5 * character.body,
     prerequisites: ['arch-samurai', 'binding'],
     availability: 'open',
     karmaCost: 40,
@@ -2790,7 +2789,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat'],
+    prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat', 'initiative-basic'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3011,7 +3010,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: enterDrone.name,
   },
-  // Сравнивает навык риггера drone.recovery.skill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше - дрон переходит из состояния Сломан в состояние Работает
+  // Сравнивает навык риггера drones.recoverySkill  ПЛЮС бонус ремкомплекта  с сенсором Дрона, если больше или равно - дрон переходит из состояния Сломан в состояние Работает
   {
     id: 'drone-recovery',
     humanReadableName: 'Ремонт дрона',
@@ -3361,67 +3360,75 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 10,
     eventType: dummyAbility.name,
   },
+  // Реализовано у Кривды
   // Гражданство: Россия
   // Распорядитель: нет
   // Виза: не применимо
+  //
   {
     id: 'passport-citizen',
     humanReadableName: 'Принять в гражданство',
     description: 'Ты можешь сделать чаммера полноправным гражданином корпорации Россия',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
+  // Реализовано у Кривды
   // Распорядитель: как у персонажа, применившего абилку
   // фейлится, если Распорядитель = Россия до применения
+  //
   {
     id: 'passport-kz',
     humanReadableName: 'Выкупить акцию',
     description: 'Ты можешь выкупить гражданскую акцию Корпорации Россия в залог',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
+  // Реализовано у Кривды
   // Гражданство: нет
   // Виза: нет
   // фейлится, если Гражданство = не Россия
+  // фейлится, если Гражданство клерка = не Россия
   {
     id: 'passport-hobo',
     humanReadableName: 'Лишить гражданства России',
     description: 'Ты можешь лишить чаммера гражданства Корпорация Россия',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: doNothingAbility.name,
   },
-  // Виза: нет
+  // Реализовано у Кривды
+  // Виза: null
   // успешно, если Гражданство = не Россия
+  //
   {
     id: 'passport-visa-null',
     humanReadableName: 'Аннулировать визу',
     description: 'Ты можешь аннулировать визу России чаммеру, не являющемуся гражданином России',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 30,
-    prerequisites: ['master-of-the-universe'],
-    availability: 'master',
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -3511,6 +3518,41 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
+  },
+  // Реализовано у Кривды
+  // Виза: Есть
+  // успешно, если Гражданство = не Россия
+  //
+  {
+    id: 'passport-visa',
+    humanReadableName: 'Выдать визу в Россию',
+    description: 'Ты можешь выдать визу России чаммеру, не являющемуся гражданином России',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: doNothingAbility.name,
+  },
+  // Реализовано у Кривды
+  // Распорядитель: нет
+  //
+  {
+    id: 'passport-kz-null',
+    humanReadableName: 'Вернуть акцию из залога',
+    description: 'Возвращает гражданскую акцию Корпорации Россия в из залога',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 3,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: doNothingAbility.name,
   },
 ];
 setAllActiveAbilities(
