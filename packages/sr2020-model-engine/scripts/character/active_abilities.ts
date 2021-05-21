@@ -318,6 +318,7 @@ export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: Active
     return chooseStrategy == ImplantToExtract.kSimplest ? diff : -diff;
   })[0];
 
+  api.sendNotification('Имплант вырезан', `Имплант ${implant.name} вырезан успешно.`);
   api.sendOutboundEvent(Sr2020Character, victim.modelId, removeImplant, {
     id: implant.id,
     installer: api.model.modelId,
