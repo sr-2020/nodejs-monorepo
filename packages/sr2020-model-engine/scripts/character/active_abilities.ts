@@ -318,6 +318,7 @@ export function repomanGeneric(api: EventModelApi<Sr2020Character>, data: Active
     return chooseStrategy == ImplantToExtract.kSimplest ? diff : -diff;
   })[0];
 
+  api.sendNotification('Имплант вырезан', `Имплант ${implant.name} вырезан успешно.`);
   api.sendOutboundEvent(Sr2020Character, victim.modelId, removeImplant, {
     id: implant.id,
     installer: api.model.modelId,
@@ -350,8 +351,7 @@ export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAb
 }
 
 // For cases when no IT action is needed
-export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
-
-export function doNothing2Ability(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  api.sendNotification('Успех', 'Абилка применена')
+export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);
+  api.sendNotification('Успех', `Способность ${ability.humanReadableName} успешно применена)`);
 }
