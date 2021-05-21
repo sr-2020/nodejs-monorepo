@@ -18,7 +18,7 @@ export class WriteEthicCard extends React.Component<{ sendEvent: SendEvent }, Wr
 
   writeLocusChargeQr() {
     this.props.sendEvent('createMerchandise', {
-      id: this.state.selected,
+      id: 'locus-charge',
       name: '',
       description: 'Позволяет зарядить любой локус при наличии соответствующей способности ',
       numberOfUses: this.state.amount,
