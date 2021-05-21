@@ -51,10 +51,10 @@ export class WriteEthicCard extends React.Component<{ sendEvent: SendEvent }, Wr
               ))}
             </select>
             <InputGroup.Append>
-              <Button variant="success" onClick={() => this.writeLocusChargeQr()}>
+              <Button variant="success" onClick={() => this.writeLocusQr()}>
                 Записать локус
               </Button>
-              <Button variant="success" onClick={() => this.writeLocusQr()}>
+              <Button variant="success" onClick={() => this.writeLocusChargeQr()}>
                 Записать заряд локуса
               </Button>
             </InputGroup.Append>
