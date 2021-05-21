@@ -4404,6 +4404,39 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'fading-decrease-2'],
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 3 })],
   },
+  // Абилка ничего модельного не делает
+  {
+    id: 'paralizard-effect',
+    humanReadableName: 'Paralizard-effect',
+    description:
+      'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'death-touch-effect',
+    humanReadableName: 'Death Touch-effect',
+    description:
+      'Ты можешь касанием (рукой или кинжалом) И криком "Смертный час!" лишить всех хитов любое мясное/эктоплазменное тело - игнорируя любую броню',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  // Абилка ничего модельного не делает
+  {
+    id: 'let-it-go-effect',
+    humanReadableName: 'Let it go Effect',
+    description:
+      ' течение 1 минуты ты можешь изгнать одного материализованного духа. Потребуется коснуться его рукой или кинжалом с возгласом "Изыди!"\n После этого дух теряет все хиты.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    modifier: [],
+  },
 ];
 setAllPassiveAbilities(
   (() => {

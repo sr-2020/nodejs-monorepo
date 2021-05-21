@@ -579,3 +579,13 @@ export function cacophonySpell(api: EventModelApi<Sr2020Character>, data: SpellD
 
 // For cases when no IT action is needed
 export function doNothingSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {}
+
+export function paralizardSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'paralizard-effect', duration(2 * data.power, 'minutes'));
+}
+export function deathTouchSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'death-touch-effect', duration(3 * data.power, 'minutes'));
+}
+export function letItGoSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'let-it-go-effect', duration(1, 'minutes'));
+}

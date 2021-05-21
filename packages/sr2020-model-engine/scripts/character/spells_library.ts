@@ -4,6 +4,7 @@ import {
   brasiliaSpell,
   cacophonySpell,
   charmSpell,
+  deathTouchSpell,
   doNothingSpell,
   dummyAreaSpell,
   dummySpell,
@@ -16,9 +17,11 @@ import {
   groundHealSpell,
   increaseResonanceSpell,
   keepYourselfSpell,
+  letItGoSpell,
   liveLongAndProsperSpell,
   nothingSpecialSpell,
   odusSpell,
+  paralizardSpell,
   readCharacterAuraSpell,
   readLocationAuraSpell,
   shtoppingSpell,
@@ -573,6 +576,45 @@ const kAllSpellsList: Spell[] = [
     karmaCost: 30,
     sphere: 'astral',
     eventType: dummySpell.name,
+    hasTarget: false,
+  },
+  // На Мощь*2 минут магу выдаётся абилка Paralizard-effect
+  {
+    id: 'paralizard',
+    humanReadableName: 'Paralizard',
+    description:
+      'В течение Мощь*2 минуты маг способен касанием и криком "Паралич!" обездвижить любое мясное тело на 90 секунд - игнорируя любую броню.',
+    prerequisites: ['arch-mage'],
+    availability: 'open',
+    karmaCost: 70,
+    sphere: 'fighting',
+    eventType: paralizardSpell.name,
+    hasTarget: false,
+  },
+  // На Мощь*3 минут магу выдаётся абилка Death Touch-effect
+  {
+    id: 'death-touch',
+    humanReadableName: 'Death Touch',
+    description:
+      'В течение Мощь*3 минуты маг способен касанием и криком "Смертный час!" лишить всех хитов любое мясное/эктоплазменное тело - игнорируя любую броню.',
+    prerequisites: ['arch-mage'],
+    availability: 'open',
+    karmaCost: 100,
+    sphere: 'fighting',
+    eventType: deathTouchSpell.name,
+    hasTarget: false,
+  },
+  // На 60с выдаётся способность Let it go Effect
+  {
+    id: 'let-it-go',
+    humanReadableName: 'Let it go',
+    description:
+      'В течение 1 минуты сможешь изгнать одного материализованного духа. Потребуется коснуться его рукой или кинжалом с возгласом ""Изыди!" После этого дух теряет все хиты.',
+    prerequisites: ['arch-mage'],
+    availability: 'open',
+    karmaCost: 80,
+    sphere: 'fighting',
+    eventType: letItGoSpell.name,
     hasTarget: false,
   },
 ];
