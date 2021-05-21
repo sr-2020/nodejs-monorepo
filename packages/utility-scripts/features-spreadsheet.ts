@@ -162,14 +162,14 @@ class SpreadsheetProcessor {
     this.activeAbilities.push(ability);
   }
 
-  spellSphereToEnum(sphere: string): SpellSphere {
+  spellSphereToEnum(id: string, sphere: string): SpellSphere {
     if (sphere == 'Защита') return 'protection';
     if (sphere == 'Лечение') return 'healing';
     if (sphere == 'Боевая') return 'fighting';
     if (sphere == 'Анализ астрала') return 'astral';
     if (sphere == 'Анализ ауры') return 'aura';
     if (sphere == 'Влияние на характеристики') return 'stats';
-    throw new Error(`Unsupported spell sphere: ${sphere}`);
+    throw new Error(`Unsupported spell ${id} sphere: ${sphere}`);
   }
 
   async processSpell(line: number, id: string, row: any[]) {
@@ -178,7 +178,7 @@ class SpreadsheetProcessor {
       humanReadableName: row[kNameColumn],
       description: row[kPlayerDescriptionColumn] ?? '',
       gmDescription: row[kMasterDescriptionColumn] ?? '',
-      sphere: this.spellSphereToEnum(row[kSpellSphereColumn]),
+      sphere: this.spellSphereToEnum(id, row[kSpellSphereColumn]),
       karmaCost: this.parseKarmaCost(id, row[kKarmaCostColumn]),
       prerequisites: this.parsePrerequisites(id, row[kPrerequisitesColumn]),
       pack: this.parsePack(id, row[kPackIdColumn], row[kPackLevelColumn]),
