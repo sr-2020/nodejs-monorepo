@@ -6,7 +6,6 @@ import {
   biomonitorScanAbility,
   changeAuraAbility,
   cloudMemoryAbility,
-  doNothing2Ability,
   doNothingAbility,
   dummyAbility,
   finishHimAbility,
@@ -1521,7 +1520,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothing2Ability.name,
+    eventType: doNothingAbility.name,
   },
     // Активная абилка Полицаев, клон абилки paralizard-effect
   {
@@ -1536,7 +1535,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothing2Ability.name,
+    eventType: doNothingAbility.name,
   },
   // Активная абилка Полицаев, клон абилки paralizard-effect
   {
@@ -1551,7 +1550,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothing2Ability.name,
+    eventType: doNothingAbility.name,
   },
   // появляется абилка granite-skin-effect на 15 минут
   // itGapEssense +5
