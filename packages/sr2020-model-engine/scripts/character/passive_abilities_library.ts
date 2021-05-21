@@ -2131,11 +2131,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: [],
   },
+// Описание способностей дронов разных
+{
+  id: 'drone-heavy',
+  humanReadableName: 'Дрон c тяжёлой бронёй',
+  description: 'Тяжёлая броня',
+  availability: 'master',
+  karmaCost: 0,
+  prerequisites: ['in-drone'],
+  modifier: [],
+},
   // Описание способностей дрона Бульдозер
   {
     id: 'drone-dozer',
     humanReadableName: 'Дрон Бульдозер',
-    description: 'Щит. Тяжелая броня.',
+    description: 'Щит.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -2155,7 +2165,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-ekzo',
     humanReadableName: 'Дрон Экзоскелет',
-    description: 'Пулемет. Тяжелая броня.',
+    description: 'Пулемет.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -2196,7 +2206,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-heli',
     humanReadableName: 'Дрон Вертолет',
-    description: 'Может перевозить 3 персонажей. Иммунитет ко всему холодному оружию и легкому огнестрельному. Тяжелая броня.',
+    description: 'Может перевозить 3 персонажей. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],

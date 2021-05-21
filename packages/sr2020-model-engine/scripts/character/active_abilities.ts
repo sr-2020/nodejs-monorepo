@@ -351,3 +351,7 @@ export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAb
 
 // For cases when no IT action is needed
 export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
+
+export function doNothing2Ability(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendNotification('Успех', 'Абилка применена')
+}
