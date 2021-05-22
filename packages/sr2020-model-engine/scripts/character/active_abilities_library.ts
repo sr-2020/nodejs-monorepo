@@ -27,6 +27,7 @@ import {
   takeNoHarmAbility,
   tincasmAbility,
   trollton,
+  useSpriteAbility,
   whoNeedsIt,
 } from './active_abilities';
 import {
@@ -3293,8 +3294,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: externalAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  //
   // Отсканировать куар спрайта
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
   //
@@ -3303,7 +3302,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Использовать спрайт',
     description: 'Использовать спрайт',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Спрайт',
+        field: 'qrCodeId',
+        allowedTypes: ['sprite'],
+      },
+    ],
     cooldownMinutes: (character) => 0,
     prerequisites: ['arch-hackerman-technomancer'],
     pack: undefined,
@@ -3311,7 +3316,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: dummyAbility.name,
+    eventType: useSpriteAbility.name,
   },
   // TODO(aeremin): Add proper implementation
   // У мага на 10 минут появляется пассивная способность fireball-able, amount=1.

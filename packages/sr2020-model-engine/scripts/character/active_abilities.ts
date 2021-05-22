@@ -5,7 +5,7 @@ import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirt
 import { duration } from 'moment';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
-import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { addFeatureToModel, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
@@ -348,6 +348,16 @@ export function biomonitorScanAbility(api: EventModelApi<Sr2020Character>, data:
 
 export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, { noClear: false });
+}
+
+export function useSpriteAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const sprite = typedQrData<SpriteQrData>(api.aquired(QrCode, data.qrCodeId!));
+  const canUse = api.workModel.passiveAbilities.some((ability) => `$sprite-{ability.id}` == sprite.id);
+  if (!canUse) {
+    throw new UserVisibleError('Вы не умеете работать со спрайтами этого типа!');
+  }
+  api.sendNotification('Успех', `Вы успешно скомпилировали спрайт.`);
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, {});
 }
 
 // For cases when no IT action is needed
