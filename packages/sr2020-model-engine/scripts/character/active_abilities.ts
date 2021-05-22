@@ -351,10 +351,13 @@ export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAb
 }
 
 // For cases when no IT action is needed
-export function doNothingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+export function noItActionAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);
   api.sendNotification('Успех', `Способность ${ability.humanReadableName} успешно применена)`);
 }
+
+// Ability implemented by some other service via pubsub listening
+export function externalAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {}
 
 export function marauderAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, clinicalDeath, data);

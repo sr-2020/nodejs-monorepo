@@ -6,8 +6,8 @@ import {
   biomonitorScanAbility,
   changeAuraAbility,
   cloudMemoryAbility,
-  doNothingAbility,
   dummyAbility,
+  externalAbility,
   finishHimAbility,
   hammerOfJustice,
   howMuchItCosts,
@@ -17,6 +17,7 @@ import {
   letHimPay,
   letMePay,
   marauderAbility,
+  noItActionAbility,
   oneTimeRevive,
   pencilLargeAbility,
   repomanAbility,
@@ -818,7 +819,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
@@ -1852,7 +1853,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  пересчитывается itEssense
   // itUsedEssense = 0
@@ -1870,7 +1870,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: gmEssenceReset.name,
   },
   // TODO(aeremin): Add proper implementation
   // На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Абилка-сертификат с кулдауном
@@ -1886,7 +1886,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // При активации на 5 минут выдаёт способность Magic Shield
   {
@@ -2357,7 +2357,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -2372,7 +2372,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -2388,7 +2388,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -2403,7 +2403,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Сканирует тело, находящееся  в тяжране.
   // Со счета жертвы на счет самурая переводится 10% средств. После применения абилки тело переходит в КС
@@ -2452,7 +2452,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // текстовая абилка
   {
@@ -2468,7 +2468,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // текстовая абилка
   {
@@ -2484,7 +2484,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
   // А так же считается, что он собрал три предмета, если есть задание собрать предметы висящие на веревках. деревьях и т.д, поскольку он мог добраться до них при помощи левитации.
@@ -2502,7 +2502,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 500,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
   // techno.fading + 70
@@ -2518,7 +2518,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 70,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
   // techno.fading  + 80
@@ -2534,7 +2534,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
   // techno.fading + 200
@@ -2550,7 +2550,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 30
@@ -2566,7 +2566,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 30,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 40
@@ -2582,7 +2582,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 40,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 60
@@ -2598,7 +2598,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 60,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 80
@@ -2614,7 +2614,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 100
@@ -2630,7 +2630,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
   // techno.fading +120
@@ -2646,7 +2646,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 120,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
   // techno.fading +150
@@ -2662,7 +2662,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может сфотографировать объект и переслать фото другой части команды в основании
   // techno.fading + 230
@@ -2678,7 +2678,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 230,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
   // techno.fading +100
@@ -2694,7 +2694,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
   // techno.fading + 200
@@ -2710,7 +2710,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
   // techno.fading + 150
@@ -2726,7 +2726,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может вскрывать цифровые замки в реальном мире.
   // techno.fading + 25
@@ -2758,7 +2758,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может в VR посмотреть син любого другого игрока, у которого простая аватара.
   // techno.fading +100
@@ -2774,7 +2774,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // параметр techno.initiative +2 (у нападающих базовая и = 1, у защитников базовая и = 0) применяется строго до входа в красную комнату
   // techno.fading +120
@@ -2790,7 +2790,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 120,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // добавлет 1 хит союзнику. хиты считают сами
   // techno.fading +80
@@ -2806,7 +2806,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // добавлет 2 хита союзнику. хиты считают сами
   // techno.fading +100
@@ -2822,7 +2822,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // добавляет 1 хит всем союзникам. хиты считают сами
   // techno.fading +150
@@ -2838,7 +2838,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // добавляет 2 хита всем союзникам. хиты считают сами
   // techno.fading +200
@@ -2854,7 +2854,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // снимает 1 хит противника. хиты считают сами
   // techno.fading +100
@@ -2870,7 +2870,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 5,
     minimalEssence: 0,
     fadingPrice: 100,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // снимает 2 хита противника. хиты считают сами
   // techno.fading +120
@@ -2886,7 +2886,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 120,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // снимает 1 хит со всех противников. хиты считают сами
   // techno.fading +180
@@ -2902,7 +2902,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 180,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // снимает 2 хита со всех противников. хиты считают сами
   // techno.fading +300
@@ -2918,7 +2918,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // игрок убирает одну руку за спину, она связана. игрок не может держать двуручное оружие или щит
   // techno.fading +50
@@ -2935,7 +2935,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 5,
     minimalEssence: 0,
     fadingPrice: 50,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // игроки убирают однуруку за спину, она связана. игроки не могут держать двуручное оружие или щиты
   // techno.fading +150
@@ -2951,7 +2951,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игроки с этого момента не могут больше использовать КФ в красной комнате, все, что было скастовано - отменятся.
   // techno.fading +600
@@ -2968,7 +2968,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 600,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
   // techno.fading +300
@@ -2985,7 +2985,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: doNothingAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Активирует процесс включения в дрона.
   // надо отсканировать:
@@ -3046,7 +3046,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
@@ -3080,7 +3080,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // Отсканировать куар нода Основания матрицы.
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
@@ -3097,7 +3097,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // Посмотреть спрайты на хосте.
   // Абилка-маркер для сайта Кривды
@@ -3114,7 +3114,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // Отсканировать куар Спрайт
   // techno.fading + 10
@@ -3373,7 +3373,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
   // Реализовано у Кривды
   // Распорядитель: как у персонажа, применившего абилку
@@ -3391,7 +3391,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
   // Реализовано у Кривды
   // Гражданство: нет
@@ -3410,7 +3410,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
   // Реализовано у Кривды
   // Виза: null
@@ -3428,7 +3428,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
   // показывает текст игроку, включает кулдаун
   // работает только с пререквизитами:
@@ -3445,7 +3445,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // показывает текст игроку, включает кулдаун
   // работает только с пререквизитами:
@@ -3462,7 +3462,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // показывает текст игроку, включает кулдаун
   // работает только с пререквизитами:
@@ -3479,7 +3479,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // показывает текст игроку, включает кулдаун
   // работает только с пререквизитами:
@@ -3496,7 +3496,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // показывает текст игроку, включает кулдаун
   // работает только с пререквизитами:
@@ -3513,7 +3513,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: externalAbility.name,
   },
   // Реализовано у Кривды
   // Виза: Есть
@@ -3531,7 +3531,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
   // Реализовано у Кривды
   // Распорядитель: нет
@@ -3548,7 +3548,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: doNothingAbility.name,
+    eventType: externalAbility.name,
   },
 ];
 setAllActiveAbilities(
