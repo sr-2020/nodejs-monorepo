@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, InputGroup } from 'react-bootstrap';
-import { allFocuses, DictionaryItem } from '@alice/sr2020-admin-ui/app/api/models-engine';
+import { allSprites, DictionaryItem } from '@alice/sr2020-admin-ui/app/api/models-engine';
 import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
 export interface WriteSpriteCardState {
@@ -12,7 +12,7 @@ export class WriteSpriteCard extends React.Component<{ sendEvent: SendEvent }, W
   state: WriteSpriteCardState = { sprites: [], selected: 'sprite-keys' };
 
   componentDidMount() {
-    allFocuses().then((sprites) => this.setState({ sprites }));
+    allSprites().then((sprites) => this.setState({ sprites }));
   }
 
   writeQr() {
