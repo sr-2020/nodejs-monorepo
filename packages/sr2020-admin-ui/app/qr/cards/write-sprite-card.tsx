@@ -9,7 +9,7 @@ export interface WriteSpriteCardState {
 }
 
 export class WriteSpriteCard extends React.Component<{ sendEvent: SendEvent }, WriteSpriteCardState> {
-  state: WriteSpriteCardState = { sprites: [], selected: 'keys' };
+  state: WriteSpriteCardState = { sprites: [], selected: 'sprite-keys' };
 
   componentDidMount() {
     allFocuses().then((sprites) => this.setState({ sprites }));
