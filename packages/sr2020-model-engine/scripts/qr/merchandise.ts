@@ -134,15 +134,15 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       name: maybeFocus.name,
       data: maybeFocus,
     };
+  }
 
-    const maybeSprite = kAllSprites.find(sameId);
-    if (maybeSprite) {
-      return {
-        type: 'sprite',
-        name: maybeSprite.name,
-        data: {},
-      };
-    }
+  const maybeSprite = kAllSprites.find(sameId);
+  if (maybeSprite) {
+    return {
+      type: 'sprite',
+      name: maybeSprite.name,
+      data: {},
+    };
   }
 
   const maybeCyberDeck = kALlCyberDecks.find(sameId);
