@@ -20,7 +20,7 @@ export interface MentalQrData {
   disablesAbilities: boolean;
 }
 
-// qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod'
+// qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod', 'sprite'
 export interface MerchandiseQrData {
   id: string;
   basePrice: number;
@@ -88,6 +88,9 @@ export interface SpiritQrData {
 export interface RepairKitQrData {
   bonus: number;
 }
+
+// qr.type == 'sprite'
+export type SpriteQrData = MerchandiseQrData;
 
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;

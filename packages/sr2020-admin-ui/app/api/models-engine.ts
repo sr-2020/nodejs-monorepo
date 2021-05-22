@@ -53,3 +53,8 @@ export async function allFocuses(): Promise<DictionaryItem[]> {
   const response = await axios.get<DictionaryItem[]>(MODEL_ENGINE_URL + 'focuses');
   return response.data;
 }
+
+export async function allSprites(): Promise<DictionaryItem[]> {
+  const response = await axios.get<DictionaryItem[]>(MODEL_ENGINE_URL + 'sprites');
+  return response.data;
+}

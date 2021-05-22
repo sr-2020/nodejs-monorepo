@@ -28,7 +28,7 @@ export type QrType =
   | 'spirit' // Not the spirit body! This is the spirit you can "enter"
   | 'drone' // Not the drone body! This is drone you can jack in
   | 'drone_mod'
-  | 'sprite'
+  | 'sprite' // Sprite, can be used by technomancers
   | 'cyberdeck'
   | 'cyberdeck_mod'
   | 'software'

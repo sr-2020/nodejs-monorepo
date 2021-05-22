@@ -22,6 +22,7 @@ import { WriteEthicCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ethic-
 import { WriteReanimateCapsuleCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-reanimate-capsule-card';
 import { ClearQrCard } from '@alice/sr2020-admin-ui/app/qr/cards/clear-card';
 import { WriteRepairKitCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-repair-kit-card';
+import { WriteSpriteCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-sprite-card';
 
 type SetQrCode = (qr: QrCode) => void;
 
@@ -84,6 +85,9 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
         </CardDeck>
         <CardDeck className="mt-3">
           <WriteFocusCard sendEvent={this.sendEvent} />
+          <WriteSpriteCard sendEvent={this.sendEvent} />
+        </CardDeck>
+        <CardDeck className="mt-3">
           <WriteKarmaCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">

@@ -1,0 +1,17 @@
+export const kAllSprites = [
+  { id: 'keys' },
+  { id: 'water-walkers' },
+  { id: 'pen-n-note' },
+  { id: 'balls' },
+  { id: 'rubber-glowes' },
+  { id: 'racket' },
+  { id: 'candy' },
+  { id: 'pipe' },
+  { id: 'armor-light' },
+  { id: 'armor-heavy' },
+  { id: 'shield' },
+  { id: 'sword-short' },
+  { id: 'sword-twohanded' },
+  { id: 'sword-short-doubled' },
+  { id: 'initiative-sign' },
+];

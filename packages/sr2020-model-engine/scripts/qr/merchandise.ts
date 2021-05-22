@@ -10,6 +10,7 @@ import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-mod
 import { kAllFocuses } from '@alice/sr2020-model-engine/scripts/qr/focus_library';
 import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
 import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
+import { kAllSprites } from '@alice/sr2020-model-engine/scripts/qr/sprites_library';
 
 interface MerchandiseExternalData {
   id: string;
@@ -133,6 +134,14 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       name: maybeFocus.name,
       data: maybeFocus,
     };
+
+    const maybeSprite = kAllSprites.find(sameId);
+    if (maybeSprite) {
+      return {
+        type: 'sprite',
+        data: {},
+      };
+    }
   }
 
   const maybeCyberDeck = kALlCyberDecks.find(sameId);

@@ -12,6 +12,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NumberProperty, StringProperty } from '@alice/alice-common/models/alice-model-engine';
 import type { ImplantGrade, ImplantSlot } from '@alice/sr2020-common/models/common_definitions';
+import { kAllSprites } from '@alice/sr2020-model-engine/scripts/qr/sprites_library';
 
 class DictionaryEntity {
   @StringProperty() id: string;
@@ -25,6 +26,7 @@ class Drone extends DictionaryEntity {}
 class Cyberdeck extends DictionaryEntity {}
 class Software extends DictionaryEntity {}
 class Focus extends DictionaryEntity {}
+class Sprite extends DictionaryEntity {}
 class EthicGroup extends DictionaryEntity {}
 
 class Implant extends DictionaryEntity {
@@ -95,6 +97,13 @@ export class DictionariesController {
   @ApiResponse({ status: 200, type: [Focus] })
   focuses(): Focus[] {
     return kAllFocuses.map((p) => ({ id: p.id, name: p.name }));
+  }
+
+  @Get('/sprites')
+  @ApiOperation({ summary: `Returns the list of implemented sprites` })
+  @ApiResponse({ status: 200, type: [Sprite] })
+  sprites(): Sprite[] {
+    return kAllSprites.map((p) => ({ id: p.id, name: '' }));
   }
 
   @Get('/ethic_groups')
