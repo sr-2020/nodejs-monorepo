@@ -73,7 +73,6 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
         <CardDeck className="mt-3">
           <WriteBodystorageCard sendEvent={this.sendEvent} />
           <WriteAiSymbolCard sendEvent={this.sendEvent} />
-          <WriteKarmaCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">
           <WriteSpiritCard sendEvent={this.sendEvent} />
@@ -85,6 +84,7 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
         </CardDeck>
         <CardDeck className="mt-3">
           <WriteFocusCard sendEvent={this.sendEvent} />
+          <WriteKarmaCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">
           <WriteEthicCard sendEvent={this.sendEvent} />
