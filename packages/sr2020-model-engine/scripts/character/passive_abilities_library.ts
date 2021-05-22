@@ -4443,7 +4443,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4456,7 +4455,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4469,7 +4467,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4482,7 +4479,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4495,7 +4491,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4508,7 +4503,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4521,7 +4515,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4534,7 +4527,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4547,7 +4539,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4560,7 +4551,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4573,7 +4563,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4586,7 +4575,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4599,7 +4587,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4612,7 +4599,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
