@@ -32,7 +32,7 @@ export class WriteSpriteCard extends React.Component<{ sendEvent: SendEvent }, W
             >
               {this.state.sprites.map((f) => (
                 <option key={f.id} value={f.id}>
-                  {f.id}
+                  {f.name} ({f.id})
                 </option>
               ))}
             </select>

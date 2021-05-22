@@ -139,6 +139,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     if (maybeSprite) {
       return {
         type: 'sprite',
+        name: maybeSprite.name,
         data: {},
       };
     }

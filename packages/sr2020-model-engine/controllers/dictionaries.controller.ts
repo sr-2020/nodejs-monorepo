@@ -103,7 +103,7 @@ export class DictionariesController {
   @ApiOperation({ summary: `Returns the list of implemented sprites` })
   @ApiResponse({ status: 200, type: [Sprite] })
   sprites(): Sprite[] {
-    return kAllSprites.map((p) => ({ id: p.id, name: '' }));
+    return kAllSprites.map((p) => ({ id: p.id, name: p.name }));
   }
 
   @Get('/ethic_groups')
