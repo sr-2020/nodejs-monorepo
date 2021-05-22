@@ -30,7 +30,7 @@ describe('Karma events', function () {
     await fixture.saveCharacter();
 
     await fixture.saveQrCode();
-    await fixture.sendQrCodeEvent({ eventType: 'writeKarmaSource', data: { amount: 40 } });
+    await fixture.sendQrCodeEvent({ eventType: 'writeKarmaSource', data: { amount: 40, charges: 10 } });
 
     const { baseModel } = await fixture.sendCharacterEvent({
       eventType: 'scanQr',
@@ -41,6 +41,11 @@ describe('Karma events', function () {
       available: 40,
       cycleLimit: 4960,
     });
+
+    {
+      const { baseModel } = await fixture.getQrCode();
+      expect(baseModel.usesLeft).toEqual(9);
+    }
   });
 
   it('Using abilities gives karma', async () => {

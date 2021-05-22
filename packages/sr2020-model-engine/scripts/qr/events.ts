@@ -216,7 +216,7 @@ export function writeAiSymbol(api: EventModelApi<QrCode>, data: AiSymbolData) {
   };
 }
 
-export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: number }) {
+export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: number; charges: number }) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }
@@ -228,7 +228,7 @@ export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: num
     eventType: earnKarma.name,
     name: 'Карма',
     description: `Отсканируй, чтоб получить ${data.amount} кармы.`,
-    usesLeft: 999999,
+    usesLeft: data.charges,
     modifiers: [],
     timers: [],
     data: { ...data, notify: true },
