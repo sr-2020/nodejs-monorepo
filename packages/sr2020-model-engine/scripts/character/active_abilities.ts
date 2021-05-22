@@ -352,7 +352,7 @@ export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAb
 
 export function useSpriteAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const sprite = typedQrData<SpriteQrData>(api.aquired(QrCode, data.qrCodeId!));
-  const canUse = api.workModel.passiveAbilities.some((ability) => `$sprite-{ability.id}` == sprite.id);
+  const canUse = api.workModel.passiveAbilities.some((ability) => `sprite-${ability.id}` == sprite.id);
   if (!canUse) {
     throw new UserVisibleError('Вы не умеете работать со спрайтами этого типа!');
   }
