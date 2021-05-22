@@ -16,6 +16,7 @@ import {
   iWillSurvive,
   letHimPay,
   letMePay,
+  marauderAbility,
   oneTimeRevive,
   pencilLargeAbility,
   repomanAbility,
@@ -69,6 +70,7 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -177,6 +179,12 @@ const kEmptyQrTarget: TargetSignature = {
   allowedTypes: ['empty'],
   field: 'qrCodeId',
 };
+const kWoundedBodyTarget: TargetSignature = {
+  name: 'Жертва',
+  allowedTypes: ['WOUNDED_BODY'],
+  field: 'targetCharacterId',
+};
+
 const kBodyAndContainerTargeted: TargetSignature[] = [...kPhysicalBodyTargeted, kEmptyQrTarget];
 // Not exported by design, use kAllActiveAbilities instead.
 export const kAllActiveAbilitiesList: ActiveAbility[] = [
@@ -229,13 +237,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Добивание тела из тяжрана в КС',
     description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Жертва',
-        allowedTypes: ['WOUNDED_BODY'],
-        field: 'targetCharacterId',
-      },
-    ],
+    targetsSignature: [kWoundedBodyTarget],
     cooldownMinutes: (character) => 30,
     prerequisites: [],
     pack: { id: 'chummer-zero', level: 1 },
@@ -2278,13 +2280,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Быстрое добивание',
     description: 'Используй эту способность чтобы быстро добить из тяжрана в КС',
     target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Жертва',
-        allowedTypes: ['WOUNDED_BODY'],
-        field: 'targetCharacterId',
-      },
-    ],
+    targetsSignature: [kWoundedBodyTarget],
     cooldownMinutes: (character) => 3,
     prerequisites: ['arch-samurai', 'binding'],
     availability: 'open',
@@ -2417,14 +2413,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'Ты можешь ограбить тяжелораненного персонажа, для этого отсканируй его куар - тебе переведется 10% с его счета. После грабежа жертва перейдет в состояние клинической смерти.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kWoundedBodyTarget],
     cooldownMinutes: (character) => 60,
     prerequisites: ['arch-samurai', 'rummage'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: marauderAbility.name,
   },
   // текстовая абилка
   {
