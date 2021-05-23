@@ -72,7 +72,6 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3099,7 +3098,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 150,
     eventType: externalAbility.name,
   },
-
   // Реализовано у Кривды
   // Гражданство: Россия
   // Распорядитель: нет
@@ -3294,6 +3292,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: externalAbility.name,
   },
+  //
   // Отсканировать куар спрайта
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
   //
@@ -3311,14 +3310,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => 0,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 80,
     eventType: useSpriteAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // У мага на 10 минут появляется пассивная способность fireball-able, amount=1.
   {
     id: 'faerbol',
@@ -3329,14 +3326,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Открывается окошко, куда маг вводит ауру чаммера.
   // Если чаммер с такой аурой на полигоне есть - эффект успешен.
   // Открывается экран отсканирования куар кода и на него запишется Кукла Вуду  = гиперссылка, которая ведет на мясного чаммера.
@@ -3353,14 +3348,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 100,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
   {
@@ -3371,14 +3364,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['in-drone'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
   {
@@ -3389,14 +3380,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['in-drone'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
   {
@@ -3407,15 +3396,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['in-drone'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // Длительность эффекта maxTimeInVr, кулдаун vr.recoveryTime
   {
     id: 'enter-vr',
     humanReadableName: 'зайти в Виар (колдсим)',
@@ -3424,15 +3410,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 1,
     prerequisites: [],
-    pack: { id: 'null', level: 0 },
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  //
   {
     id: 'exit-vr',
     humanReadableName: 'Выйти из Виар',
@@ -3441,7 +3424,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,

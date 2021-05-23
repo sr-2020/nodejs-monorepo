@@ -576,7 +576,6 @@ const kAllSpellsList: Spell[] = [
     eventType: dummySpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // На Мощь*2 минут магу выдаётся абилка Paralizard-effect
   {
     id: 'paralizard',
@@ -584,14 +583,12 @@ const kAllSpellsList: Spell[] = [
     description:
       'В течение Мощь*2 минуты маг способен касанием и криком "Паралич!" обездвижить любое мясное тело на 90 секунд - игнорируя любую броню.',
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 70,
     sphere: 'fighting',
     eventType: dummySpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // На Мощь*3 минут магу выдаётся абилка Death Touch-effect
   {
     id: 'death-touch',
@@ -599,10 +596,24 @@ const kAllSpellsList: Spell[] = [
     description:
       'В течение Мощь*3 минуты маг способен касанием и криком "Смертный час!" лишить всех хитов любое мясное/эктоплазменное тело - игнорируя любую броню.',
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 100,
     sphere: 'fighting',
+    eventType: dummySpell.name,
+    hasTarget: false,
+  },
+  // TODO(aeremin): Add proper implementation
+  // На 60с выдаётся способность Let it go Effect
+  {
+    id: 'let-it-go',
+    humanReadableName: 'Let it go',
+    description:
+      'В течение 1 минуты сможешь изгнать одного материализованного духа. Потребуется коснуться его рукой или кинжалом с возгласом "Изыди!"\nПосле этого дух теряет все хиты.',
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 80,
+    sphere: 'astral',
     eventType: dummySpell.name,
     hasTarget: false,
   },

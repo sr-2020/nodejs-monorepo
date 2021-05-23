@@ -214,11 +214,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
-  //
+  // Ты толстокожий и совершенно не понимаешь шутки.
   {
     id: 'skin-armor',
     humanReadableName: 'Кожный панцирь',
-    description: 'Ты толстокожий и совершенно не понимаешь шутки.',
+    description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -358,7 +358,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
-  // вписано в требования архетипов
   {
     id: 'magic-blockade',
     humanReadableName: 'Отторжение Магии',
@@ -366,7 +365,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   //
@@ -584,8 +582,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
-  // Увеличение длительности пребывания в виаре - для Техномантов. Покупается за карму.
-  // maxTimeInVr+20 минут
   {
     id: 'longer-vr-stays-1',
     humanReadableName: 'Мужчина, продлевать будете? ',
@@ -595,8 +591,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
   },
-  // Увеличение длительности пребывания в виаре - для жителей Виара и Основания. Мастерская, дается силой рельсы
-  // maxTimeInVr+300 минут
   {
     id: 'longer-vr-stays-2',
     humanReadableName: 'Мужчина, продлевать будете?  v2',
@@ -606,7 +600,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseMaxTimeInVr, { amount: 120 }),
   },
-  // Абилка егостов и ИИ. Мастерская, дается силой рельсы.
   {
     id: 'unlimited-vr-stays',
     humanReadableName: 'Виар. А я вообще тут живу.',
@@ -676,6 +669,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseSpriteCount, { amount: 1 }),
   },
+  // Увеличивает какой-то контроль запросов на 1 что ли (функция increaseControlRequests)
   {
     id: 'additional-query',
     humanReadableName: 'Чтец',
@@ -697,6 +691,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // ничего не делает
   {
     id: 'longer-party-vr-stays-1',
@@ -709,6 +704,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // ничего не делает
   {
     id: 'longer-party-vr-stays-2',
@@ -719,6 +715,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'longer-party-vr-stays-1'],
     modifier: [],
   },
+  // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // TODO(https://trello.com/c/J6ufYQBm/99-формализовать-абилки-добавляет-время-пребывания-в-основании-партии): Implement
   // ничего не делает
@@ -1095,7 +1092,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 2,
     }),
   },
-  // IT: команда в кривда-матрице
   {
     id: 'burn',
     humanReadableName: 'burn',
@@ -1178,13 +1174,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 20,
     }),
   },
+  // Меняет какой-то параметр компиляции спрайтов на 30
   {
     id: 'native-compile',
     humanReadableName: 'Нативная компиляция',
     description: 'Тебе намного проще компилировать спрайты',
     availability: 'open',
     karmaCost: 8,
-    prerequisites: [],
+    prerequisites: ['arch-hackerman-technomancer', 'deep-compile'],
     modifier: modifierFromEffect(increaseCompilationFadingResistance, {
       amount: 30,
     }),
@@ -2601,7 +2598,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arch-hackerman-technomancer',
     humanReadableName: 'Архетип Техномант',
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 100,
     prerequisites: ['!arch-mage', '!tech-blockade'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
@@ -2634,7 +2631,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arch-mage',
     humanReadableName: 'Архетип: Маг',
     description: 'Маг, повелитель заклинаний!',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 100,
     prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
     pack: { id: 'gen-arch-mage', level: 1 },
@@ -2679,13 +2676,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arch-ai',
     humanReadableName: 'Архетип: Искусственный интеллект',
     description: 'Искусственный интеллект. ',
-    availability: 'master',
-    karmaCost: 100,
-    prerequisites: ['meta-ai'],
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['meta-digital'],
     pack: { id: 'gen-arch-ai', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
-  // depth +1
   {
     id: 'arch-ai-matrix',
     humanReadableName: 'Аспект: ИИ Матрица',
@@ -2693,7 +2689,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 60,
     prerequisites: ['arch-ai'],
-    pack: { id: 'gen-arch-ai-matrix', level: 1 },
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   //
@@ -3438,6 +3433,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger'],
     modifier: [modifierFromEffect(unlockAutodockImplantInstall, {})],
   },
+  // Ничего не делает
   {
     id: 'ghost',
     humanReadableName: 'ПРизрак',
@@ -3457,6 +3453,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: [],
   },
+  // Ничего не делает
   {
     id: 'hammer-fall',
     humanReadableName: 'Хаммер фолл',
@@ -4091,7 +4088,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  //
   {
     id: 'hack-deck-general',
     humanReadableName: 'Комбат',
@@ -4099,10 +4095,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['hack-deck-commander', 'fencer-3'],
-    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: [],
   },
-  // IT: команда в кривда-матрице
   {
     id: 'quell',
     humanReadableName: 'quell',
@@ -4110,10 +4104,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 4,
     prerequisites: ['breacher-2'],
-    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
-  // IT: команда в кривда-матрице
   {
     id: 'hophop',
     humanReadableName: 'hophop',
@@ -4122,7 +4114,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 8,
     prerequisites: ['sly-3'],
-    pack: { id: 'hack-deck-sly', level: 3 },
     modifier: [],
   },
   // отрочка публикации CVE увеличена на час
@@ -4265,10 +4256,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // magic-blockade
-  // digital-life
-  // vr-protection
   {
     id: 'meta-digital',
     humanReadableName: 'Цифровой персонаж',
@@ -4276,7 +4263,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   // resonance +1
@@ -4430,7 +4416,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'fading-decrease-2'],
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 3 })],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Отсканировать куар Спрайт
   // techno.fading + 10
   {
@@ -4440,7 +4425,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4452,7 +4436,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4464,7 +4447,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4476,7 +4458,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4488,7 +4469,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4500,7 +4480,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'rubber-glowes'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4512,7 +4491,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4524,7 +4502,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4536,7 +4513,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4548,7 +4524,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'armor-light'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4560,7 +4535,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4572,7 +4546,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4584,7 +4557,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4596,7 +4568,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
-    pack: undefined,
     modifier: [],
   },
   // Отсканировать куар Спрайт
@@ -4608,10 +4579,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'initiative-basic'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Абилка ничего модельного не делает
   {
     id: 'paralizard-effect',
@@ -4620,10 +4589,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'death-touch-effect',
@@ -4633,10 +4600,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Кукла живет +1 час (итого 3 часа)
   {
     id: 'voodoo-people-boost',
@@ -4645,10 +4610,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 50,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Кукла живет +1 час (итого 4 часа)
   {
     id: 'voodoo-people-boost-super',
@@ -4657,10 +4620,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 50,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'let-it-go-effect',
@@ -4670,10 +4631,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Описание способностей дронов разных
   {
     id: 'drone-heavy',
@@ -4682,11 +4641,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'digital-life',
     humanReadableName: 'Цифровая форма жизни',
@@ -4694,11 +4650,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'vr-protection',
     humanReadableName: 'Защита в Виар',
@@ -4706,11 +4659,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Отличный скоринг и хорошие цены (работает как у Эльфов)
   {
     id: 'digital-prices',
     humanReadableName: 'Прекрасные цены',
@@ -4718,11 +4668,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'hotsim-ever',
     humanReadableName: 'А ты горяч!',
@@ -4730,11 +4677,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'meta-sub-agent',
     humanReadableName: 'Агент',
@@ -4742,23 +4686,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Должна быть доступна Агентам
   {
     id: 'no-enter-gh',
     humanReadableName: 'Запрет Доступа',
-    description: 'Покажи эту способность персонажу. Он должен покинуть заведение, сотрудником которого ты являешься',
+    description: 'Покажи эту способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['meta-sub-agent'],
-    pack: undefined,
+    prerequisites: ['arch-sub-agent', 'arch-digital'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'meta-sub-eghost',
     humanReadableName: 'Электронный призрак',
@@ -4766,11 +4705,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
   {
     id: 'meta-sub-ai',
     humanReadableName: 'Проекция ИИ',
@@ -4778,6 +4714,53 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['meta-digital'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-digital',
+    humanReadableName: 'Цифровая сущность',
+    description: 'Цифровая сущность, егост или агент',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['meta-digital'],
+    pack: { id: 'gen-arch-ai', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-sub-agent',
+    humanReadableName: 'Агент',
+    description: 'Ты сервисная программа, которая обеспечивает работу хоста в Матрице',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-sub-eghost',
+    humanReadableName: 'Электронный призрак',
+    description: 'Ты сервисная программа с нарушением кода',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'arch-sub-ai',
+    humanReadableName: 'Проекция ИИ',
+    description: 'Ты часть проекции Искусственного Интеллекта, сгусток программ и кода, живущий в Матрице. ',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
     pack: undefined,
     modifier: [],
   },
