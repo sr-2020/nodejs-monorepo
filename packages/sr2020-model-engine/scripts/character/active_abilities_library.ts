@@ -3374,7 +3374,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
@@ -3390,7 +3390,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
@@ -3406,7 +3406,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   {
     id: 'enter-vr',
