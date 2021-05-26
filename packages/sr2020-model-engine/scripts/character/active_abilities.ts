@@ -360,6 +360,12 @@ export function useSpriteAbility(api: EventModelApi<Sr2020Character>, data: Acti
   api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, {});
 }
 
+export function faerbolAbility(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  api.sendNotification('Успех', 'Абилка успешно применена');
+  const amount = 1;
+  addTemporaryPassiveAbility(api, 'fireball-able', duration(10, 'minutes'), { amount }, 'Возможность использовать огненные шары');
+}
+
 // For cases when no IT action is needed
 export function noItActionAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const ability = api.workModel.activeAbilities.find((s) => s.id == data.id);
