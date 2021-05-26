@@ -199,8 +199,8 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
 
 export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   api.sendNotification('Успех', 'Заклинание успешно применено');
-  const d = duration(8 * data.power, 'minutes');
-  const amount = Math.max(1, data.power - 3);
+  const d = duration(4 * data.power, 'minutes');
+  const amount = Math.ceil(data.power / 2);
   addTemporaryPassiveAbility(api, 'fireball-able', d, { amount }, 'Возможность использовать огненные шары');
 }
 
