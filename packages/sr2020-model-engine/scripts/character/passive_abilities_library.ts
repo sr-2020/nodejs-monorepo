@@ -3751,17 +3751,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: [],
   },
-  // текстовая абилка
-  {
-    id: 'loud-break-in',
-    humanReadableName: 'Громкий взлом',
-    description:
-      'Громкий взлом замков.  (1 раз в 30 минут). Ты можешь открыть дверь, закрытую на замок. Для этого надо в течении 5 минут громко изображать попытки выбить замок / сломать дверь. Попытки должны быть громкими и заметными окружающим.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['lock-the-door'],
-    modifier: [],
-  },
   // Надо взорвать пакет на 3-4 варианта
   {
     id: 'troubles-samurai-1',
@@ -3826,28 +3815,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: [],
-    modifier: [],
-  },
-  // текстовая абилка
-  {
-    id: 'quiet-break-in-hacker',
-    humanReadableName: 'Тихий взлом (техномант)',
-    description:
-      'Тихий взлом замков. (1 раз в 30 минут) Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['lock-the-door', 'arch-hackerman-technomancer'],
-    modifier: [],
-  },
-  // текстовая абилка
-  {
-    id: 'quiet-break-in-rigger',
-    humanReadableName: 'Тихий взлом (риггер)',
-    description:
-      'Тихий взлом замков. (1 раз в 30 минут) Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['lock-the-door', 'arch-rigger'],
     modifier: [],
   },
   {

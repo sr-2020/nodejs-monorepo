@@ -2419,7 +2419,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // текстовая абилка
   {
@@ -3429,6 +3429,53 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
+  },
+    // текстовая абилка
+    {
+      id: 'loud-break-in',
+      humanReadableName: 'Громкий взлом',
+      description:
+        'Ты можешь открыть дверь, закрытую на замок. Для этого надо в течении 5 минут громко изображать попытки выбить замок / сломать дверь. Попытки должны быть громкими и заметными окружающим.',
+      target: 'scan',
+      targetsSignature: kNoTarget,
+      cooldownMinutes: (character) => 30,
+      prerequisites: ['lock-the-door'],
+      availability: 'open',
+      karmaCost: 10,
+      minimalEssence: 0,
+      fadingPrice: 0,
+      eventType: noItActionAbility.name,
+    },
+      // текстовая абилка
+  {
+    id: 'quiet-break-in-hacker',
+    humanReadableName: 'Тихий взлом (техномант)',
+    description:
+      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['lock-the-door', 'arch-hackerman-technomancer'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: noItActionAbility.name,
+  },
+  {
+    id: 'quiet-break-in-rigger',
+    humanReadableName: 'Тихий взлом (риггер)',
+    description:
+      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['lock-the-door', 'arch-rigger'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: noItActionAbility.name,
   },
 ];
 setAllActiveAbilities(
