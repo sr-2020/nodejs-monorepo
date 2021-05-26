@@ -8,6 +8,7 @@ import {
   cloudMemoryAbility,
   dummyAbility,
   externalAbility,
+  faerbolAbility,
   finishHimAbility,
   hammerOfJustice,
   howMuchItCosts,
@@ -3330,7 +3331,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: faerbolAbility.name,
   },
   // Открывается окошко, куда маг вводит ауру чаммера.
   // Если чаммер с такой аурой на полигоне есть - эффект успешен.
