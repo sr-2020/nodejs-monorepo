@@ -3015,21 +3015,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
-  {
-    id: 'mod-kamikadze',
-    humanReadableName: 'дрон-мод Камикадзе',
-    description:
-      'При активации необходимо громко озвучить словесный маркер "ВЗРЫВ".  Эффект = атака тяжелым оружием по всем персонажам в радиусе 2 метров от точки взрыва . (3 хита по персонажам без брони \\ 1 хит по персонажам в тяжелой броне). После использования необходимо вернуться к телу. Дрон будет уничтожен.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['in-drone'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: noItActionAbility.name,
-  },
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
@@ -3292,30 +3277,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: externalAbility.name,
   },
-  //
-  // Отсканировать куар спрайта
-  // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
-  //
-  {
-    id: 'use-sprite',
-    humanReadableName: 'Использовать спрайт',
-    description: 'Использовать спрайт',
-    target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Спрайт',
-        field: 'qrCodeId',
-        allowedTypes: ['sprite'],
-      },
-    ],
-    cooldownMinutes: (character) => 0,
-    prerequisites: ['arch-hackerman-technomancer'],
-    availability: 'open',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 80,
-    eventType: useSpriteAbility.name,
-  },
   // У мага на 10 минут появляется пассивная способность fireball-able, amount=1.
   {
     id: 'faerbol',
@@ -3429,6 +3390,32 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
+  },
+
+  //Тоже на удаление, но перепроверить
+
+  // Отсканировать куар спрайта
+  // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
+  //
+  {
+    id: 'use-sprite',
+    humanReadableName: 'Использовать спрайт',
+    description: 'Использовать спрайт',
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Спрайт',
+        field: 'qrCodeId',
+        allowedTypes: ['sprite'],
+      },
+    ],
+    cooldownMinutes: (character) => 0,
+    prerequisites: ['arch-hackerman-technomancer'],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 80,
+    eventType: useSpriteAbility.name,
   },
 ];
 setAllActiveAbilities(

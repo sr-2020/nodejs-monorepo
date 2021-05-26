@@ -80,12 +80,12 @@ export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: Dumpsho
   increaseCharisma(api, { ...m, amount: -m.amount });
   increaseBody(api, { ...m, amount: -m.amount });
   increaseIntelligence(api, { ...m, amount: -m.amount });
-  const ability = getAllPassiveAbilities().get('dump-shock-survivor')!;
+/*  const ability = getAllPassiveAbilities().get('dump-shock-survivor')!;
   api.model.passiveAbilities.push({
     id: ability.id,
     humanReadableName: ability.humanReadableName,
     description: template(ability.description)({ amount: m.amount }),
-  });
+  }); */
 }
 
 export function createJackedInEffect(): Effect {
