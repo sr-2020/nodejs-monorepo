@@ -225,7 +225,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     durationEffect: {
       handler: increaseResonance,
       amount: 1,
-      duration: duration(30, 'minutes'),
+      duration: duration(60, 'minutes'),
     },
   },
   {
@@ -244,7 +244,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     message: 'У тебя повысился Резонанс на 60 минут',
     durationEffect: {
       handler: increaseResonance,
-      amount: 1,
+      amount: 2,
       duration: duration(60, 'minutes'),
     },
   },
@@ -254,7 +254,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
     message: 'У тебя повысился Резонанс на 60 минут, появилась зависимость',
     durationEffect: {
       handler: increaseResonance,
-      amount: 1,
+      amount: 2,
       duration: duration(60, 'minutes'),
     },
   },
