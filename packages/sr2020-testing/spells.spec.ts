@@ -471,7 +471,7 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(
       expect.objectContaining({
         id: 'fireball-able',
-        description: `Можете кинуть 2 огненных шаров.`,
+        description: `Можете кинуть 3 огненных шаров.`,
       }),
     );
   });
