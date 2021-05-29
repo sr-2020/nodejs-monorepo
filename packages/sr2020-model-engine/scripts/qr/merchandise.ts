@@ -12,16 +12,19 @@ import { kALlCyberDecks } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_
 import { kAllSoftware } from '@alice/sr2020-model-engine/scripts/qr/software_library';
 import { kAllSprites } from '@alice/sr2020-model-engine/scripts/qr/sprites_library';
 
-interface MerchandiseExternalData {
+export interface MerchandiseRewrittableData {
+  basePrice: number;
+  rentPrice: number;
+  dealId: string;
+  lifestyle: string;
+  gmDescription: string;
+}
+
+interface MerchandiseExternalData extends Partial<MerchandiseRewrittableData> {
   id: string;
   name?: string;
   description?: string;
   numberOfUses?: number;
-  basePrice?: number;
-  rentPrice?: number;
-  dealId?: string;
-  lifestyle?: string;
-  gmDescription?: string;
   additionalData: any;
 }
 
@@ -31,6 +34,18 @@ interface MerchandiseLibraryData {
   description?: string;
   eventType?: string;
   data: object;
+}
+
+export function isMerchandise(api: EventModelApi<QrCode>) {
+  return (
+    api.model.type == 'implant' ||
+    api.model.type == 'pill' ||
+    api.model.type == 'reagent' ||
+    api.model.type == 'locus_charge' ||
+    api.model.type == 'food' ||
+    api.model.type == 'repair_kit' ||
+    api.model.type == 'focus'
+  );
 }
 
 function getLibraryData(id: string): MerchandiseLibraryData {
@@ -206,5 +221,16 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseE
     modifiers: [],
     timers: [],
     modelId: api.model.modelId,
+  };
+}
+
+export function updateMerchandise(api: EventModelApi<QrCode>, data: MerchandiseRewrittableData) {
+  if (!isMerchandise(api)) {
+    throw new UserVisibleError('Not a merchandise!');
+  }
+
+  api.model.data = {
+    ...api.model.data,
+    ...data,
   };
 }

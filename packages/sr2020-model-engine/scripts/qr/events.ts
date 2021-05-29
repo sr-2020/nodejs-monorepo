@@ -16,6 +16,7 @@ import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/fea
 import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { kAllSpirits, kCommonSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 import * as uuid from 'uuid';
+import { isMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
 
 export function consume(api: EventModelApi<QrCode>, data: { noClear?: boolean }) {
   if (api.model.usesLeft <= 0 || api.model.type == 'empty') {
@@ -58,17 +59,6 @@ export function clear(api: EventModelApi<QrCode>) {
     modifiers: [],
     timers: [],
   };
-}
-
-function isMerchandise(api: EventModelApi<QrCode>) {
-  return (
-    api.model.type == 'implant' ||
-    api.model.type == 'pill' ||
-    api.model.type == 'reagent' ||
-    api.model.type == 'locus_charge' ||
-    api.model.type == 'food' ||
-    api.model.type == 'repair_kit'
-  );
 }
 
 function makeEmptyBox(api: EventModelApi<QrCode>) {

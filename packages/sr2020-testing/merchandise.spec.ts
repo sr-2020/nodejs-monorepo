@@ -1,6 +1,7 @@
 import { TestFixture } from './fixture';
 
 import { DroneQrData, MagicFocusQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { MerchandiseRewrittableData } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
 
 describe('Merchandise', () => {
   let fixture: TestFixture;
@@ -57,5 +58,26 @@ describe('Merchandise', () => {
     expect(focusData.id).toBe('first-warmth');
     expect(focusData.sphere).toBe('healing');
     expect(focusData.amount).toBe(3);
+  });
+
+  it('Merchandise data rewrite', async () => {
+    await fixture.saveQrCode();
+
+    await fixture.sendQrCodeEvent({
+      eventType: 'createMerchandise',
+      data: { id: 'first-warmth', basePrice: 10, rentPrice: 20, dealId: 'xyz', lifestyle: 'Gold', gmDescription: 'Something' },
+    });
+
+    const { baseModel } = await fixture.sendQrCodeEvent({
+      eventType: 'updateMerchandise',
+      data: { rentPrice: 30, dealId: 'abc', lifestyle: 'Gold', gmDescription: '' },
+    });
+
+    const data = baseModel.data as MerchandiseRewrittableData;
+    expect(data.basePrice).toEqual(10);
+    expect(data.rentPrice).toEqual(30);
+    expect(data.dealId).toEqual('abc');
+    expect(data.lifestyle).toEqual('Gold');
+    expect(data.gmDescription).toEqual('');
   });
 });
