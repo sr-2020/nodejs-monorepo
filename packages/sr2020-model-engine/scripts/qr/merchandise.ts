@@ -195,7 +195,7 @@ export function createMerchandise(api: EventModelApi<QrCode>, data: MerchandiseE
       ...data.additionalData,
       id: data.id,
       basePrice: data.basePrice ?? 0,
-      rentPrice: data.basePrice ?? 0,
+      rentPrice: data.rentPrice ?? 0,
       dealId: data.dealId ?? '',
       gmDescription: data.gmDescription ?? '',
       lifestyle: data.lifestyle ?? '',
