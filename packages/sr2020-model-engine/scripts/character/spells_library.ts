@@ -96,7 +96,7 @@ const kAllSpellsList: Spell[] = [
     sphere: 'fighting',
     eventType: fastChargeSpell.name,
   },
-  // у мага на время T появляется пассивная способность fireball-able. T и amount зависят от Мощи. Снаряд выглядит как мягкий шар, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). N=Мощь/2 с округлением вверх, amount=Мощь*8 минут
+  // у мага на время T появляется пассивная способность fireball-able. T и amount зависят от Мощи. Снаряд выглядит как мягкий шар, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). amount=Мощь/2 с округлением вверх, duration=Мощь*4 минут
   {
     id: 'fireball',
     humanReadableName: 'Fireball',
@@ -516,11 +516,12 @@ const kAllSpellsList: Spell[] = [
     eventType: taxFreeSpell.name,
     hasTarget: true,
   },
-  // у цели на время T штраф от дамп-шока уменьшается на 1. T=Мощь*10 минут.
+  // У цели штраф от дамп-шока уменьшается на 1. Мощь заклинания должна быть >= 4, иначе эффекта нет
   {
     id: 'dumpty-humpty',
     humanReadableName: 'Dumpty-Humpty',
-    description: 'На Мощь*10 минут понизить на 1 штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом.',
+    description:
+      'Перманентно понизить на 1 имеющийся штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом. Потребуется Мощь не меньше 4.',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 50,
@@ -605,7 +606,6 @@ const kAllSpellsList: Spell[] = [
     eventType: deathTouchSpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // На 60с выдаётся способность Let it go Effect
   {
     id: 'let-it-go',
@@ -613,7 +613,6 @@ const kAllSpellsList: Spell[] = [
     description:
       'В течение 1 минуты сможешь изгнать одного материализованного духа. Потребуется коснуться его рукой или кинжалом с возгласом "Изыди!"\nПосле этого дух теряет все хиты.',
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 80,
     sphere: 'astral',

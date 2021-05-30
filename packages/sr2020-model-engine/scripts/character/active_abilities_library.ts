@@ -73,6 +73,7 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -2268,7 +2269,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 3,
     prerequisites: ['arch-samurai', 'binding'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: finishHimAbility.name,
@@ -2430,26 +2431,26 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       ' Ты можешь связать человека, который не сопротивляется (добровольно) или оглушен или тяжело ранен. Для моделирования связывания человеку надевают на кисти рук две веревочные петли (чисто символические, на самом деле ничего связывать не надо). Эти петли запрещено прятать, по человеку всегда должно быть понятно, что он связан.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 20,
     prerequisites: ['arch-samurai'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
-  // текстовая абилка
+  //
   {
     id: 'unbinding',
     humanReadableName: 'Освобождение связанного',
     description:
-      'Ты можешь освободить связанного. Надо 30 секунд изображать как ты оружием перепиливаешь\\отстреливаешь\\пережигаешь заклинанием связующие путы. Это должно быть хорошо заметное внешнее воздействие. ',
+      'Ты можешь освободить связанного мгновенно и в боевой ситуации. Отыграй, как ты оружием перепиливаешь\\отстреливаешь связующие путы. Это должно быть хорошо заметное внешнее воздействие. ',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60,
+    cooldownMinutes: (character) => 20,
     prerequisites: ['arch-samurai', 'binding'],
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: noItActionAbility.name,
@@ -2459,7 +2460,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'stunning',
     humanReadableName: 'Оглушение',
     description:
-      'Нужно подойти к цели сзади и нанести слабый удар по плечу ты можешь оглушать рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
+      'ты можешь оглушать. Нужно подойти к цели сзади и нанести слабый удар по плечу рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60 - 5 * character.body,
@@ -2713,11 +2714,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // Игрок может вскрывать цифровые замки в реальном мире.
+  // Через 2 минуты после активации абилки показать текст "Замок вскрыт"
   // techno.fading + 25
   {
     id: 'lockpicking',
     humanReadableName: 'Real: вскрытие замков',
-    description: 'Вскрытие цифровых замков',
+    description: 'Ты можешь вскрыть цифровой замок за 2 минуты',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
@@ -2728,16 +2730,17 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 25,
     eventType: dummyAbility.name,
   },
-  // Игрок может вывести из строя дрона в прямой видимости.
+  // Игрок может вывести из строя дрон на 90 секунд
   // techno.fading +200
   {
     id: 'attack-drone',
-    humanReadableName: 'Real: нападение на дрона',
-    description: 'Можешь вывести из строя дрон',
+    humanReadableName: 'Real: оглушение дрона',
+    description:
+      '"Ты можешь касанием (рукой или кинжалом) И криком ""Паралич!"" обездвижить любое эктоплазменное тело (дрон) на 90 секунд."',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['arch-hackerman-technomancer', 'sword-short'],
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-hackerman-technomancer', 'attack-drone-2'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -2745,6 +2748,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // Игрок может в VR посмотреть син любого другого игрока, у которого простая аватара.
+  // Показывать текст "Покажи SIN"
   // techno.fading +100
   {
     id: 'identity-scan',
@@ -2752,7 +2756,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Работает только в VR. Покажи это персонажу, к которому ты хочешь узнать личность, он должен показать тебе свой SIN.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 5,
     prerequisites: ['arch-hackerman-technomancer', 'identity-hide'],
     availability: 'open',
     karmaCost: 20,
@@ -2955,6 +2959,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
+  // Показывает текст "Ты сбежал из основания обратно в свое тело"
   // techno.fading +300
   {
     id: 'runaway',
@@ -3091,7 +3096,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь посмотреть спрайт, установленные на данный хост.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 40,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
     availability: 'open',
     karmaCost: 30,
@@ -3178,7 +3183,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-1',
-    humanReadableName: 'Голосовать за кандидата 1',
+    humanReadableName: 'за кандидата 1',
     description: 'ты можешь проголосовать за кандидата 1',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3195,7 +3200,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-2',
-    humanReadableName: 'Голосовать за кандидата 2',
+    humanReadableName: ' за кандидата 2',
     description: 'ты можешь проголосовать за кандидата 2',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3212,7 +3217,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-3',
-    humanReadableName: 'Голосовать за кандидата 3',
+    humanReadableName: ' за кандидата 3',
     description: 'ты можешь проголосовать за кандидата 3',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3229,7 +3234,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-4',
-    humanReadableName: 'Голосовать за кандидата 4',
+    humanReadableName: ' за кандидата 4',
     description: 'ты можешь проголосовать за кандидата 4',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3293,10 +3298,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: externalAbility.name,
   },
-  //
-  // Отсканировать куар спрайта
-  // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
-  //
   {
     id: 'use-sprite',
     humanReadableName: 'Использовать спрайт',
@@ -3322,7 +3323,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'faerbol',
     humanReadableName: 'Faerbol',
     description:
-      'У мага на 10 минуты появляется пассивная способность Fireball-Эффект, позволяющая кинуть 1 файербол. Файербол должен выглядеть как обшитый мягким теннисный шар с красной лентой, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие).',
+      'У мага на 10 минут появляется пассивная способность Fireball-Эффект, позволяющая кинуть 1 файербол. Файербол должен выглядеть как обшитый мягким теннисный шар с красной лентой, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие).',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -3431,23 +3432,23 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-    // текстовая абилка
-    {
-      id: 'loud-break-in',
-      humanReadableName: 'Громкий взлом',
-      description:
-        'Ты можешь открыть дверь, закрытую на замок. Для этого надо в течении 5 минут громко изображать попытки выбить замок / сломать дверь. Попытки должны быть громкими и заметными окружающим.',
-      target: 'scan',
-      targetsSignature: kNoTarget,
-      cooldownMinutes: (character) => 30,
-      prerequisites: ['lock-the-door'],
-      availability: 'open',
-      karmaCost: 10,
-      minimalEssence: 0,
-      fadingPrice: 0,
-      eventType: noItActionAbility.name,
-    },
-      // текстовая абилка
+  // текстовая абилка
+  {
+    id: 'loud-break-in',
+    humanReadableName: 'Громкий взлом',
+    description:
+      'Ты можешь открыть дверь, закрытую на замок. Для этого надо в течении 5 минут громко изображать попытки выбить замок / сломать дверь. Попытки должны быть громкими и заметными окружающим.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['lock-the-door'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: noItActionAbility.name,
+  },
+  // текстовая абилка
   {
     id: 'quiet-break-in-hacker',
     humanReadableName: 'Тихий взлом (техномант)',
@@ -3463,6 +3464,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
+  // текстовая абилка
   {
     id: 'quiet-break-in-rigger',
     humanReadableName: 'Тихий взлом (риггер)',
@@ -3477,6 +3479,63 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: noItActionAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может снять хит с дрона
+  // techno.fading +200
+  {
+    id: 'attack-drone-2',
+    humanReadableName: 'Real: нападение на дрона',
+    description:
+      '"Ты можешь касанием (рукой или кинжалом) И криком ""НАпадение на дрон"" \nснять 1 хит с любого эктоплазменного тела (дрона)',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-hackerman-technomancer', 'sword-short'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 200,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // После использования этой КФ игрок, на которого она была направлена, попадает в состояние КС
+  // techno.fading +150
+  {
+    id: 'clinical-death-rr',
+    humanReadableName: 'Добивание в КС в красной комнате',
+    description:
+      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам КС реального мира. цена 150Ф',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 30,
+    prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 150,
+    minimalEssence: 0,
+    fadingPrice: 150,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // После использования этой КФ игрок, на которого она была направлена, попадает в состояние АС
+  // techno.fading +300
+  {
+    id: 'absolutely-death-rr',
+    humanReadableName: 'Добивание в АС в красной комнате',
+    description:
+      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам АС реального мира. цена 300Ф',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 90,
+    prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short', 'clinical-death-rr'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 300,
+    minimalEssence: 0,
+    fadingPrice: 300,
+    eventType: dummyAbility.name,
   },
 ];
 setAllActiveAbilities(
