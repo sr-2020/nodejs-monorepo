@@ -14,7 +14,7 @@ export class EthicsCard extends React.Component<{ broadcastEvent: SendEvent }> {
   render() {
     return (
       <Card body={false}>
-        <Card.Header>Для разработчика</Card.Header>
+        <Card.Header>Этика</Card.Header>
         <Card.Body>
           <Button variant="success" onClick={() => this.hide()}>
             Скрыть этику
