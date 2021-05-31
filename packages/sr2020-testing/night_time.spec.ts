@@ -14,6 +14,7 @@ describe('Night time', () => {
 
   it('Can pause for night', async () => {
     await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: { id: 'food' } });
     await fixture.sendCharacterEvent({ eventType: 'pauseAndPostpone', data: { pauseDurationHours: 7, postponeDurationHours: 8 } });
     await fixture.advanceTime(duration(6, 'hours'));
     let { workModel } = await fixture.getCharacter();

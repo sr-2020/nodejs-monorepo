@@ -2,7 +2,7 @@ import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-ch
 import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
-import { isHmhvv, removeHunger, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import { isHmhvv, removeHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
 
 const kHmhvvHungerTimer = 'hmhvv-hunger';
 const kHmhvvHungerTimerDescription = 'Голод HMHVV';
@@ -64,7 +64,7 @@ export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
     model.essenceDetails = { max: 1000, gap: 700, used: 0 };
   } else {
     // Reset hunger to set proper hunger timer depending on troll/not troll.
-    resetHunger(model);
+    // resetHunger(model);
     removeHmhvvHunger(model);
   }
 }

@@ -14,6 +14,7 @@ describe('Hunger-related events', function () {
 
   it('Hunger leads to wounded and then clinically dead state', async () => {
     await fixture.saveCharacter();
+    await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: { id: 'food' } });
     await fixture.advanceTime(duration(6, 'hours'));
     expect((await fixture.getCharacter()).workModel.healthState).toBe('healthy');
     await fixture.advanceTime(duration(6, 'hours'));

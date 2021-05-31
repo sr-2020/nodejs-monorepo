@@ -245,6 +245,7 @@ describe('Rigger abilities', () => {
   it('Spending way too long in drone and hunger', async () => {
     // Rigger set up
     await fixture.saveCharacter({ maxHp: 6, drones: { maxDifficulty: 10, medicraftBonus: 10 } });
+    await fixture.sendCharacterEvent({ eventType: 'consumeFood', data: { id: 'food' } });
     await fixture.addCharacterFeature('arch-rigger');
     await fixture.addCharacterFeature('drones-active');
 
