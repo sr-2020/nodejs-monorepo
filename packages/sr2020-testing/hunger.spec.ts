@@ -14,17 +14,17 @@ describe('Hunger-related events', function () {
 
   it('Hunger leads to wounded and then clinically dead state', async () => {
     await fixture.saveCharacter();
-    await fixture.advanceTime(duration(3, 'hours'));
+    await fixture.advanceTime(duration(6, 'hours'));
     expect((await fixture.getCharacter()).workModel.healthState).toBe('healthy');
-    await fixture.advanceTime(duration(3, 'hours'));
+    await fixture.advanceTime(duration(6, 'hours'));
     expect((await fixture.getCharacter()).workModel.healthState).toBe('wounded');
 
     // Need to do it here - otherwise character will go into clinically_dead state due to being wounded.
     await fixture.sendCharacterEvent({ eventType: 'revive', data: {} });
 
-    await fixture.advanceTime(duration(3, 'hours'));
+    await fixture.advanceTime(duration(6, 'hours'));
     expect((await fixture.getCharacter()).workModel.healthState).toBe('healthy');
-    await fixture.advanceTime(duration(3, 'hours'));
+    await fixture.advanceTime(duration(6, 'hours'));
     expect((await fixture.getCharacter()).workModel.healthState).toBe('clinically_dead');
   });
 

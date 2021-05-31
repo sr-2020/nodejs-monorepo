@@ -27,7 +27,7 @@ describe('Night time', () => {
     expect(workModel.screens.activeAbilities).toBe(true);
     expect(workModel.healthState).toBe('healthy');
 
-    await fixture.advanceTime(duration(7, 'hours'));
+    await fixture.advanceTime(duration(13, 'hours'));
     ({ workModel } = await fixture.getCharacter());
     // Hunger finally activates
     expect(workModel.screens.activeAbilities).toBe(true);

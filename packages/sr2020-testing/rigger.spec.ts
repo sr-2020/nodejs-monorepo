@@ -260,7 +260,7 @@ describe('Rigger abilities', () => {
     await fixture.useAbility({ id: 'drones-active', bodyStorageId: '1', droneId: '2' });
 
     // Wait for long time
-    await fixture.advanceTime(duration(10, 'hours'));
+    await fixture.advanceTime(duration(20, 'hours'));
 
     await fixture.getCharacter();
 
