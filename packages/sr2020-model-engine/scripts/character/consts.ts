@@ -11,3 +11,11 @@ export const kHungerTimerName = 'normal-hunger';
 export const kHungerTimerDuration = duration(12, 'hours').asMilliseconds();
 export const kHungerTimerStage1Description = 'Голодный обморок';
 export const kHungerTimerStage2Description = 'Смерть от голода';
+
+export const kHmhvvHungerTimer = 'hmhvv-hunger';
+export const kHmhvvHungerTimerDescription = 'Голод HMHVV';
+export const kHmhvvHungerPeriod = duration(1, 'hour');
+export const kEssenceLostPerHungerTickVampires = 100;
+export const kEssenceLostPerHungerTickGhouls = 20;
+
+export const kGameStarted = false;

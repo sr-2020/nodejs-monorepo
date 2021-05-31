@@ -65,6 +65,7 @@ describe('Race changes', () => {
   it('Hungry HMHHV can not use abilities', async () => {
     await fixture.saveCharacter();
     await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } });
+    await fixture.sendCharacterEvent({ eventType: 'restartAllHungersEvent', data: {} });
     await fixture.addCharacterFeature('enter-vr');
     await fixture.advanceTime(duration(6, 'hours'));
 
@@ -76,6 +77,7 @@ describe('Race changes', () => {
     await fixture.saveCharacter();
     await fixture.saveCharacter({ modelId: '5' }); // victim
     await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race: 'meta-vampire' } });
+    await fixture.sendCharacterEvent({ eventType: 'restartAllHungersEvent', data: {} });
     await fixture.advanceTime(duration(6, 'hours'));
 
     await fixture.sendCharacterEvent({ eventType: 'useAbility', data: { id: 'vampire-feast', targetCharacterId: '5' } });

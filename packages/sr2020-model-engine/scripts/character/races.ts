@@ -1,14 +1,16 @@
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
-import { duration } from 'moment';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
-import { isHmhvv, removeHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
-
-const kHmhvvHungerTimer = 'hmhvv-hunger';
-const kHmhvvHungerTimerDescription = 'Голод HMHVV';
-const kHmhvvHungerPeriod = duration(1, 'hour');
-const kEssenceLostPerHungerTickVampires = 100;
-const kEssenceLostPerHungerTickGhouls = 20;
+import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import {
+  kEssenceLostPerHungerTickGhouls,
+  kEssenceLostPerHungerTickVampires,
+  kGameStarted,
+  kHmhvvHungerPeriod,
+  kHmhvvHungerTimer,
+  kHmhvvHungerTimerDescription,
+} from '@alice/sr2020-model-engine/scripts/character/consts';
+import { restartAllHungers } from '@alice/sr2020-model-engine/scripts/character/hunger';
 
 const kRaceFeatures: { [race in MetaRace]: string[] } = {
   'meta-norm': ['meta-norm', 'feel-matrix', 'chem-weak'],
@@ -58,35 +60,17 @@ export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
   for (const id of kRaceFeatures[model.metarace]) addFeatureToModel(model, id);
 
   if (isHmhvv(model)) {
-    // HMHVV don't have "normal" hunger.
-    removeHunger(model);
-    resetHmhvvHunger(model);
     model.essenceDetails = { max: 1000, gap: 700, used: 0 };
-  } else {
-    // Reset hunger to set proper hunger timer depending on troll/not troll.
-    // resetHunger(model);
-    removeHmhvvHunger(model);
+  }
+
+  if (kGameStarted) {
+    restartAllHungers(model);
   }
 }
 
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
   if (api.model.metarace == data.race) return;
   setRaceForModel(api.model, data.race);
-}
-
-export function removeHmhvvHunger(model: Sr2020Character) {
-  model.timers = model.timers.filter((timer) => timer.name != kHmhvvHungerTimer);
-}
-
-export function resetHmhvvHunger(model: Sr2020Character) {
-  removeHmhvvHunger(model);
-  model.timers.push({
-    name: kHmhvvHungerTimer,
-    description: kHmhvvHungerTimerDescription,
-    miliseconds: kHmhvvHungerPeriod.asMilliseconds(),
-    eventType: hungerTick.name,
-    data: {},
-  });
 }
 
 export function hungerTick(api: EventModelApi<Sr2020Character>, data: {}) {

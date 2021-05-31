@@ -6,8 +6,9 @@ import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common
 import { kReviveModifierId } from './implants_library';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { AiSymbolData, ReanimateCapsuleData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { isHmhvv, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
 import { kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
+import { resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger';
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');

@@ -4,8 +4,18 @@ import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatyp
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
-import { getHungerTimerDuration, isHmhvv, resetHunger } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
-import { kHungerTimerName, kHungerTimerStage2Description } from '@alice/sr2020-model-engine/scripts/character/consts';
+import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
+import {
+  kHmhvvHungerPeriod,
+  kHmhvvHungerTimer,
+  kHmhvvHungerTimerDescription,
+  kHungerTimerDuration,
+  kHungerTimerName,
+  kHungerTimerStage1Description,
+  kHungerTimerStage2Description,
+} from '@alice/sr2020-model-engine/scripts/character/consts';
+import { hungerTick } from '@alice/sr2020-model-engine/scripts/character/races';
+import { duration } from 'moment';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
   if (data.id == 'food') {
@@ -62,4 +72,59 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
       // TODO(aeremin): Handle this (similar to drone case?)
     }
   }
+}
+
+export function removeHunger(model: Sr2020Character) {
+  model.timers = model.timers.filter((timer) => timer.name != kHungerTimerName);
+}
+
+export function resetHunger(model: Sr2020Character) {
+  removeHunger(model);
+  model.timers.push({
+    name: kHungerTimerName,
+    description: kHungerTimerStage1Description,
+    miliseconds: getHungerTimerDuration(model).asMilliseconds(),
+    eventType: 'hungerStage1',
+    data: {},
+  });
+}
+
+export function removeHmhvvHunger(model: Sr2020Character) {
+  model.timers = model.timers.filter((timer) => timer.name != kHmhvvHungerTimer);
+}
+
+export function resetHmhvvHunger(model: Sr2020Character) {
+  removeHmhvvHunger(model);
+  model.timers.push({
+    name: kHmhvvHungerTimer,
+    description: kHmhvvHungerTimerDescription,
+    miliseconds: kHmhvvHungerPeriod.asMilliseconds(),
+    eventType: hungerTick.name,
+    data: {},
+  });
+}
+
+export function getHungerTimerDuration(model: Sr2020Character) {
+  const eatsMoreOften = !!model.passiveAbilities.find((ability) => ability.id == 'feed-tamagochi');
+  return duration(kHungerTimerDuration * (eatsMoreOften ? 0.5 : 1), 'milliseconds');
+}
+
+export function restartAllHungers(model: Sr2020Character) {
+  removeHmhvvHunger(model);
+  removeHunger(model);
+
+  if (isHmhvv(model)) {
+    resetHmhvvHunger(model);
+  } else {
+    resetHunger(model);
+  }
+}
+
+export function stopAllHungersEvent(api: EventModelApi<Sr2020Character>, data: never) {
+  removeHmhvvHunger(api.model);
+  removeHunger(api.model);
+}
+
+export function restartAllHungersEvent(api: EventModelApi<Sr2020Character>, data: never) {
+  restartAllHungers(api.model);
 }
