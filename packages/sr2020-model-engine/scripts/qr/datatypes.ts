@@ -20,7 +20,7 @@ export interface MentalQrData {
   disablesAbilities: boolean;
 }
 
-// qr.type == 'implant', 'pill', 'reagent', 'locus_charge', 'box', 'drone', 'drone_mod', 'cyberdeck', 'cyberdeck_mod', 'sprite'
+// qr.type in kMerchandiseQrTypes
 export interface MerchandiseQrData {
   id: string;
   basePrice: number;
