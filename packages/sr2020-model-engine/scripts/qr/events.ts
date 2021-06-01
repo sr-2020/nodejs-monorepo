@@ -316,7 +316,7 @@ export function writeFoundationNode(api: EventModelApi<QrCode>, data: Foundation
   api.model = {
     modelId: api.model.modelId,
     timestamp: api.model.timestamp,
-    type: 'ai_symbol',
+    type: 'foundation_node',
     name: `Нода основания ${data.id}`,
     description: '',
     usesLeft: 1,
