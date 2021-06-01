@@ -92,6 +92,11 @@ export interface RepairKitQrData {
 // qr.type == 'sprite'
 export type SpriteQrData = MerchandiseQrData;
 
+// qr.type == 'foundation_node'
+export interface FoundationNodeQrData {
+  id: string;
+}
+
 export function typedQrData<T>(qr: QrCode) {
   return qr.data as T;
 }

@@ -5,6 +5,7 @@ import { kAllEthicGroups } from '../character/ethics_library';
 import {
   AiSymbolData,
   BodyStorageQrData,
+  FoundationNodeQrData,
   LocusQrData,
   MentalQrData,
   ReanimateCapsuleData,
@@ -304,6 +305,24 @@ export function writeSpirit(api: EventModelApi<QrCode>, data: { id: string }) {
     modifiers: [],
     timers: [],
     data: qrData,
+  };
+}
+
+export function writeFoundationNode(api: EventModelApi<QrCode>, data: FoundationNodeQrData) {
+  if (api.model.type != 'empty' && api.model.type != 'foundation_node') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'ai_symbol',
+    name: `Нода основания ${data.id}`,
+    description: '',
+    usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data,
   };
 }
 
