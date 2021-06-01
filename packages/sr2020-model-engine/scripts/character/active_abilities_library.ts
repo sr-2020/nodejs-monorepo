@@ -52,7 +52,6 @@ import {
   youDontTrustAnybody,
 } from './mental';
 import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
-import { QrType } from '@alice/sr2020-common/models/qr-code.model';
 import { TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
@@ -73,6 +72,7 @@ import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/script
 import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -132,20 +132,7 @@ const kLocusAndPhysicalBody: TargetSignature[] = [
   ...kPhysicalBodyTargeted,
 ];
 const kNoTarget: TargetSignature[] = [];
-const kMerchandiseQrTypes: QrType[] = [
-  'implant',
-  'pill',
-  'reagent',
-  'locus_charge',
-  'box',
-  'drone',
-  'drone_mod',
-  'cyberdeck',
-  'cyberdeck_mod',
-  'reagent',
-  'focus',
-  'sprite',
-];
+
 const kMerchandiseTargeted: TargetSignature = {
   name: 'Товар',
   allowedTypes: kMerchandiseQrTypes,

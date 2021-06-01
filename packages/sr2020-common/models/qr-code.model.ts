@@ -37,8 +37,30 @@ export type QrType =
   | 'ai_symbol'
   | 'focus' // Magic focus
   | 'focus_on_cooldown'
-  | 'repair_kit';
+  | 'repair_kit'
+  | 'armour'
+  | 'weapon';
 // When adding new QR types here, add them to kMerchandiseQrTypes also if they are merchandise
+
+export const kMerchandiseQrTypes: QrType[] = [
+  'pill',
+  'implant',
+  'food',
+  'reagent',
+  'locus_charge',
+  'box',
+  'drone',
+  'drone_mod',
+  'sprite',
+  'cyberdeck',
+  'cyberdeck_mod',
+  'software',
+  'focus',
+  'focus_on_cooldown',
+  'repair_kit',
+  'armour',
+  'weapon',
+];
 
 @Entity({
   name: 'qr',

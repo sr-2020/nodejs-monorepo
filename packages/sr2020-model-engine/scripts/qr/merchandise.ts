@@ -1,4 +1,4 @@
-import { QrCode, QrType } from '@alice/sr2020-common/models/qr-code.model';
+import { kMerchandiseQrTypes, QrCode, QrType } from '@alice/sr2020-common/models/qr-code.model';
 import { kAllImplants } from '../character/implants_library';
 import { kAllPills } from '../character/chemo_library';
 import { kAllReagents } from './reagents_library';
@@ -37,15 +37,7 @@ interface MerchandiseLibraryData {
 }
 
 export function isMerchandise(api: EventModelApi<QrCode>) {
-  return (
-    api.model.type == 'implant' ||
-    api.model.type == 'pill' ||
-    api.model.type == 'reagent' ||
-    api.model.type == 'locus_charge' ||
-    api.model.type == 'food' ||
-    api.model.type == 'repair_kit' ||
-    api.model.type == 'focus'
-  );
+  return kMerchandiseQrTypes.includes(api.workModel.type);
 }
 
 function getLibraryData(id: string): MerchandiseLibraryData {
