@@ -11,6 +11,10 @@ export class DeathAndRebirthCard extends React.Component<{ sendEvent: SendEvent 
     this.props.sendEvent('clinicalDeath0MaxHp', {});
   }
 
+  absoluteDeath() {
+    this.props.sendEvent('absoluteDeath', {});
+  }
+
   revive() {
     this.props.sendEvent('debugReviveAbsolute', {});
   }
@@ -25,6 +29,9 @@ export class DeathAndRebirthCard extends React.Component<{ sendEvent: SendEvent 
           </Button>
           <Button variant="danger" onClick={() => this.clinicalDeath()}>
             Упасть в КС
+          </Button>
+          <Button variant="danger" onClick={() => this.absoluteDeath()}>
+            Упасть в AС
           </Button>
           <Button variant="success" onClick={() => this.revive()}>
             Воскресить
