@@ -110,6 +110,7 @@ function injectedTargetsData(api: EventModelApi<Sr2020Character>, data: ActiveAb
     locus: getQrTarget(api, data.locusId),
     drone: getQrTarget(api, data.droneId),
     bodyStorage: getQrTarget(api, data.bodyStorageId),
+    node: getQrTarget(api, data.nodeId),
   };
 }
 

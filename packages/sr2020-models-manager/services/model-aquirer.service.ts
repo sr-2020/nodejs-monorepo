@@ -25,7 +25,7 @@ export class ModelAquirerServiceImpl implements ModelAquirerService {
         await result.lockAndGetBaseModel(Location, locationId);
       }
 
-      for (const key of ['pillId', 'locusId', 'qrCode', 'qrCodeId', 'droneId', 'bodyStorageId', 'focusId']) {
+      for (const key of ['pillId', 'locusId', 'qrCode', 'qrCodeId', 'droneId', 'bodyStorageId', 'focusId', 'nodeId']) {
         if (event.data[key]) {
           await result.lockAndGetBaseModel(QrCode, Number(event.data[key]));
         }

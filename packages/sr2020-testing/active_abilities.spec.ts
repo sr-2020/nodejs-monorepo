@@ -158,4 +158,33 @@ describe('Active abilities', function () {
     const victim = await fixture.getCharacter('1');
     expect(victim.workModel.implants).not.toContain(expect.objectContaining({ id: 'cyber-hand-alpha' }));
   });
+
+  it('Settle backdoor', async () => {
+    await fixture.saveLocation({ modelId: '7' });
+
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('settle-backdoor');
+
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'sprite-pipe' } }, '2');
+
+    await fixture.saveQrCode({ modelId: '3' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeFoundationNode', data: { id: 'birch' } }, '3');
+
+    await fixture.useAbility({ id: 'settle-backdoor', qrCodeId: '2', nodeId: '3', location: { id: 7, manaLevel: 5 } });
+
+    expect(fixture.getPubSubNotifications()).toContainEqual(
+      expect.objectContaining({
+        topic: 'ability_used',
+        body: expect.objectContaining({
+          characterId: '0',
+          id: 'settle-backdoor',
+          qrCodeId: '2',
+          qrCode: expect.objectContaining({ data: expect.objectContaining({ id: 'sprite-pipe' }) }),
+          nodeId: '3',
+          node: expect.objectContaining({ data: { id: 'birch' } }),
+        }),
+      }),
+    );
+  });
 });

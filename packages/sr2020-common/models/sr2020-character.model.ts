@@ -56,6 +56,7 @@ export interface Targetable {
   qrCodeId: string;
   droneId: string;
   bodyStorageId: string;
+  nodeId: string;
 }
 
 export interface LocationData {

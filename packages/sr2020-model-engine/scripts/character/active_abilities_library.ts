@@ -3048,7 +3048,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Установить спрайт на хост',
     description: 'Установить спрайт на хост. ',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Спрайт',
+        field: 'qrCodeId',
+        allowedTypes: ['sprite'],
+      },
+      {
+        name: 'Нода',
+        field: 'nodeId',
+        allowedTypes: ['foundation_node'],
+      },
+    ],
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-hackerman-technomancer'],
     availability: 'open',
@@ -3065,7 +3076,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Удалить спрайт ',
     description: 'Удалить спрайт с данного хоста.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Нода',
+        field: 'nodeId',
+        allowedTypes: ['foundation_node'],
+      },
+    ],
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
     availability: 'open',
