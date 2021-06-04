@@ -141,7 +141,7 @@ describe('Rigger abilities', () => {
     {
       // Rigger is in drone and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).toBe(3);
+      expect(workModel.maxHp).toBe(4);
       expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
       expect(workModel.activeAbilities).toHaveLength(6); // Heals 2x2
       expect(workModel.currentBody).toBe('drone');
