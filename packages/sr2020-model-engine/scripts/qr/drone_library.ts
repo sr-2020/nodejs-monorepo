@@ -315,8 +315,8 @@ export const kAllDrones: Drone[] = [
       'medcart-heavy-heal-2',
       'medcart-heavy-heal-3',
       'medcart-reanimate',
-      'medcart-ekzo',
-      'medcart-heavy',
+      'drone-ekzo',
+      'drone-heavy',
     ],
   },
   {
