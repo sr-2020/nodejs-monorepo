@@ -47,6 +47,15 @@ function checkIfCanWorkWithImplant(rigger: Sr2020Character, implant: AddedImplan
   }
 }
 
+function checkIfCanWorkWithImplantUninstall(rigger: Sr2020Character, implant: AddedImplant | Implant) {
+  if (implant.grade == 'bio') {
+    throw new UserVisibleError('Вы не можете удалять биовар');
+  }
+
+  if (rigger.intelligence + Math.max(rigger.rigging.implantsBonus, rigger.rigging.repomanBonus) < implant.installDifficulty) {
+    throw new UserVisibleError('Вы не умеете работать с настолько сложными имплантами');
+  }
+}
 // Tries to install implant from the QR code.
 export function riggerInstallImplant(
   api: EventModelApi<Sr2020Character>,
@@ -94,7 +103,7 @@ export function riggerUninstallImplant(
     throw new UserVisibleError('Имплант не найден. Попробуйте переподключиться к пациенту для актуализации списка имплантов.');
   }
 
-  checkIfCanWorkWithImplant(api.workModel, implant);
+  checkIfCanWorkWithImplantUninstall(api.workModel, implant);
 
   const qr = api.aquired(QrCode, data.qrCode);
   if (qr.type != 'empty') {
