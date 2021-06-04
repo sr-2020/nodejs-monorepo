@@ -43,7 +43,7 @@ describe('Race changes', () => {
 
   it('Can switch to any race', async () => {
     // Not a meta-norm so first switch is not a no-op
-    await fixture.saveCharacter({ metarace: 'meta-spirit' });
+    await fixture.saveCharacter({ metarace: 'meta-ghoul' });
     const allRaces: MetaRace[] = [
       'meta-norm',
       'meta-elf',
@@ -52,9 +52,6 @@ describe('Race changes', () => {
       'meta-troll',
       'meta-vampire',
       'meta-ghoul',
-      'meta-ai',
-      'meta-eghost',
-      'meta-spirit',
     ];
     for (const race of allRaces) {
       await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race } });
