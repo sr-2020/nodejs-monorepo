@@ -1893,7 +1893,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Поднять щиты - надетая согласно остальным правилам лёгкая броня будет считаться тяжёлой. После активации действует 5 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 100000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,

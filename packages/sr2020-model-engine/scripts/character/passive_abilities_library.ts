@@ -209,16 +209,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [],
   },
-  // Ты толстокожий и совершенно не понимаешь шутки.
+  // добавляет +3 к ментальной защите персонажа метатипа Тролль
   {
     id: 'skin-armor',
     humanReadableName: 'Кожный панцирь',
-    description: 'Твоя шкура крепкая как броня. Тяжелое оружие бьет тебя по хитам.',
+    description: 'Ты толстокожий и совершенно не понимаешь шутки.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
     pack: { id: 'gen-meta-troll', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMentalProtection, { amount: 3 })],
   },
   // у обычных метарасов 6 слотов.
   // у троллей 7 (+7 слот в Теле)
@@ -243,7 +243,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-troll', level: 1 },
     modifier: [],
   },
-  // Обычный персонаж "ест" раз в цикл (в 6 часов), тролли едят каждые 3 часа.
+  // Обычный персонаж "ест" раз в цикл (в 12 часов), тролли едят каждые 6 часа.
   {
     id: 'feed-tamagochi',
     humanReadableName: 'Голодный как тролль!',
@@ -2092,7 +2092,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Улучшает способность по использованию автодока и повышает сложность имплантов которые ты можешь ставить.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-rigger', 'implant-install'],
+    prerequisites: ['arch-rigger'],
     modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // rigging.implantsBonus +2
