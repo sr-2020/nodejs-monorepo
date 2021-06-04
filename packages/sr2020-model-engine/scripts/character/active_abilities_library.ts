@@ -73,7 +73,6 @@ import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-mode
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -132,7 +131,6 @@ const kLocusAndPhysicalBody: TargetSignature[] = [
   ...kPhysicalBodyTargeted,
 ];
 const kNoTarget: TargetSignature[] = [];
-
 const kMerchandiseTargeted: TargetSignature = {
   name: 'Товар',
   allowedTypes: kMerchandiseQrTypes,
@@ -673,8 +671,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Текст по умолчанию: Ты не знаешь ничего интересного про этот товар.
   {
     id: 'who-needs-it',
-    humanReadableName: 'знание редкостей',
-    description: 'Ты можешь узнать что-то интересное про этот товар. ',
+    humanReadableName: 'Кто платит',
+    description: 'Ты можешь посмотреть кто платит ренту по этому товару.',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
     cooldownMinutes: (character) => 100 - 10 * character.intelligence,
@@ -858,34 +856,32 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
-  // Выдаётся Серебряная нить, amount=30
+  // magicStats.AstralDuration= +20
   {
     id: 'astral-body-2',
     humanReadableName: 'Астральное тело',
-    description:
-      'Перейти в астральное тело на 30 минут. При этом видны и слышны объекты как астрального, так и  реального мира. В то же время из реального мира тебя видно только при активации специальных абилок.\r\nБрать никакие предметы из реального мира нельзя.\nМаркер: красный дождевик.',
+    description: 'Увеличивает время нахождения в астрале на 20 минут (итого 35)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 55,
     prerequisites: ['astral-body-1-summ', 'arch-mage'],
-    availability: 'open',
+    availability: 'master',
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/GpCUz0q2/138-магия-реализовать-способности-для-астрала-астральное-тельце-астральное-тело-корпус-а)
-  // Выдаётся Серебряная нить, amount=120
+  // magicStats.AstralDuration= +90
   {
     id: 'astral-body-3',
     humanReadableName: 'Корпус А',
-    description:
-      'Перейти в астральное тело на 120 минут. При этом видны и слышны объекты как астрального, так и  реального мира. В то же время из реального мира тебя видно только при активации специальных абилок.\r\nБрать никакие предметы из реального мира нельзя.\nМаркер: красный дождевик.',
+    description: 'Увеличивает время нахождения в астрале на 90 минут (итого 120)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 125,
     prerequisites: ['astral-body-2', 'arch-mage'],
-    availability: 'open',
+    availability: 'master',
     karmaCost: 70,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -895,7 +891,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'silentium-est-aurum',
     humanReadableName: 'Silentium est aurum',
-    description: 'Временно частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4',
+    description: 'На 60 минут частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4',
     target: 'scan',
     targetsSignature: [
       {
@@ -907,23 +903,23 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 40,
     prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     minimalEssence: 4,
     fadingPrice: 0,
     eventType: changeAuraAbility.name,
   },
-  // - время действия 10+N минут, кулдаун 5 минут. Дает на время действия абилку hammer-of-justice-effect. N=умвл*3 минут
+  // - время действия 10+N минут, кулдаун 25 минут. Дает на время действия абилку hammer-of-justice-effect. N=умвл*3 минут
   {
     id: 'hammer-of-justice',
     humanReadableName: 'Hammer of Justice',
     description:
-      'Активируемый статус "тяжелое" для одноручного оружия в твоих руках.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 15 минут.',
+      'Активируемый статус "тяжелое" для одноручного оружия.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 25 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: ['arch-mage'],
+    cooldownMinutes: (character) => 25,
+    prerequisites: ['arch-mage', 'i-will-survive'],
     availability: 'open',
-    karmaCost: 90,
+    karmaCost: 80,
     minimalEssence: 3,
     fadingPrice: 0,
     eventType: hammerOfJustice.name,
@@ -933,13 +929,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'arrowgant',
     humanReadableName: 'Arrowgant',
     description:
-      'Активируемая защита от дистанционного легкого оружия в твоих руках.  Требуемая эссенция: больше 4. Время действия "5+уровень маны в локации" минут. Кулдаун 15 минут.',
+      'Активируемая защита от дистанционного легкого оружия. Требуемая эссенция: больше 4. Время действия "5+уровень маны в локации" минут. Кулдаун 15 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 30,
     minimalEssence: 4,
     fadingPrice: 0,
     eventType: arrowgant.name,
@@ -949,13 +945,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'trollton',
     humanReadableName: 'Trollton',
     description:
-      'Активируемая тяжелая броня на тебе (не требуется лёгкой).  Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
+      'Активируемый эффект Тяжелой брони. Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-mage'],
-    availability: 'closed',
-    karmaCost: 100,
+    prerequisites: ['arch-mage', 'stand-up-and-fight'],
+    availability: 'open',
+    karmaCost: 80,
     minimalEssence: 2,
     fadingPrice: 0,
     eventType: trollton.name,
@@ -971,7 +967,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 90,
+    karmaCost: 50,
     minimalEssence: 2,
     fadingPrice: 0,
     eventType: iWillSurvive.name,
@@ -990,9 +986,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 5,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'agnus-dei'],
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 50,
     minimalEssence: 5,
     fadingPrice: 0,
     eventType: reviveOnTarget.name,
@@ -1134,7 +1130,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'closed',
     karmaCost: 20,
     minimalEssence: 4,
@@ -1174,7 +1170,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
-  // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Exorcizamus - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
   {
     id: 'artifact-exorcizamus',
     humanReadableName: 'Crate of the art: Exorcizamus',
@@ -1199,7 +1194,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     minimalEssence: 2,
     fadingPrice: 0,
     eventType: alloHomorusAbility.name,
@@ -1864,11 +1859,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'take-no-harm',
     humanReadableName: 'Take no harm',
-    description:
-      'Раскрыть "магический щит" (прозрачный зонтик, защищает от любого легкого оружия), требуется активация способности перед использованием. После активации действует 5 минут',
+    description: 'Доступна активация магического щита',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
@@ -2118,17 +2112,22 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // Выдаётся Серебряная нить, amount=15
+  // Сканируется ТОЛЬКО телохранилище.  т.к. дифференциации видов астрала у нас нет.
+  // фиксируем что тело лежит в телохранилище и его потом надо забрать.
+  // Магу выдается абилка
+  //  in-the-astral  длительностью  magicStats.AstralDuration=15
+  // это длительность пребывания в астрале. и
+  // silver-thread   это выход из астрала
   {
     id: 'astral-body-1-summ',
     humanReadableName: 'Астральное тельце',
     description:
-      'Перейти в астральное тело на 15 минут. При этом видны и слышны объекты как астрального, так и  реального мира. В то же время из реального мира тебя видно только при активации специальных абилок.\nБрать никакие предметы из реального мира нельзя.\nМаркер: красный дождевик.',
+      'Оставив в телохранилище своё мясное тело, перейти в астральное тело на 15 минут. При этом видны и слышны объекты как астрального, так и  реального мира. В то же время из реального мира тебя видно только при активации специальных абилок.\nБрать никакие предметы из реального мира нельзя.\nМаркер: красный дождевик.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 45,
     prerequisites: ['arch-mage'],
-    availability: 'open',
+    availability: 'master',
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -2271,9 +2270,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'allo-homorus'],
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 40,
     minimalEssence: 3,
     fadingPrice: 0,
     eventType: dummyAbility.name,
@@ -2289,7 +2288,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Временно (базово - на 20 минут) перейти в эктоплазменное тело духа, находящегося в духохранилище. Своё мясное тело маг должен оставить в телохранилище.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 20,
+    cooldownMinutes: (character) => 40,
     prerequisites: ['arch-mage'],
     pack: { id: 'mage-summon-spirit', level: 1 },
     availability: 'open',
@@ -2447,7 +2446,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'stunning',
     humanReadableName: 'Оглушение',
     description:
-      'ты можешь оглушать. Нужно подойти к цели сзади и нанести слабый удар по плечу рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
+      'Ты можешь оглушать. Нужно подойти к цели сзади и нанести слабый удар по плечу рукоятью холодного оружия или нерфа и произнести маркер “оглушен”. Оглушение можно производить только в небоевой ситуции.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60 - 5 * character.body,
@@ -2721,9 +2720,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +200
   {
     id: 'attack-drone',
-    humanReadableName: 'Real: оглушение дрона',
-    description:
-      '"Ты можешь касанием (рукой или кинжалом) И криком ""Паралич!"" обездвижить любое эктоплазменное тело (дрон) на 90 секунд."',
+    humanReadableName: 'Real: паралич дрона',
+    description: '"Ты можешь касанием (рукой или кинжалом) И криком ""Паралич!"" обездвижить любого дрона на 90 секунд."',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -3331,9 +3329,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'arrowgant'],
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: faerbolAbility.name,
@@ -3484,7 +3482,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может снять хит с дрона
   // techno.fading +200
   {
@@ -3496,14 +3493,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 200,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // После использования этой КФ игрок, на которого она была направлена, попадает в состояние КС
   // techno.fading +150
   {
@@ -3515,14 +3510,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 150,
     minimalEssence: 0,
     fadingPrice: 150,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // После использования этой КФ игрок, на которого она была направлена, попадает в состояние АС
   // techno.fading +300
   {
@@ -3534,11 +3527,44 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 90,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short', 'clinical-death-rr'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 300,
     minimalEssence: 0,
     fadingPrice: 300,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар Спрайта, чтобы потратить его
+  {
+    id: 'native-compile',
+    humanReadableName: 'Компиляция спрайта',
+    description: 'Компиляция спрайта в основании',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 9000,
+    prerequisites: ['arch-hackerman-technomancer'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 8,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Let it go - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
+  {
+    id: 'artifact-let-it-go',
+    humanReadableName: 'Crate of the art: Let It Go',
+    description: 'Ты можешь создавать артефакты, содержащие заклинание Let it go. Требуемая эссенция: больше 4',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 20,
+    minimalEssence: 4,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
 ];

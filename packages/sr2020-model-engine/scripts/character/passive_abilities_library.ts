@@ -1312,7 +1312,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 1',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 40,
+    karmaCost: 30,
     prerequisites: ['arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1322,7 +1322,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 2',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 30,
+    karmaCost: 40,
     prerequisites: ['magic-1', 'arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1342,7 +1342,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 4',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 70,
+    karmaCost: 60,
     prerequisites: ['magic-3', 'arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1352,7 +1352,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 5',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 90,
+    karmaCost: 70,
     prerequisites: ['magic-4', 'arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1362,7 +1362,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Сопротивление Откату 1',
     description: 'Перманентно снижает твой Откат на 10%',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 0.9,
@@ -1386,7 +1386,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Сопротивление Откату 3',
     description: 'Перманентно снижает твой Откат на 10%',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     prerequisites: ['magic-feedback-resistance-2', 'arch-mage'],
     modifier: modifierFromEffect(multiplyMagicFeedbackMultiplier, {
       amount: 0.9,
@@ -1434,7 +1434,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Воспрянь и пой 1',
     description: 'Перманентно ускоряет восстановление твоей Магии на 20%.',
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
@@ -1454,7 +1454,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Воспрянь и пой 3',
     description: 'Перманентно ускоряет восстановление твоей Магии на 20%.',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     prerequisites: ['magic-recovery-2', 'arch-mage'],
     modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
@@ -1536,8 +1536,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Light Step ',
     description: 'В астральном следе твоих заклинаний остается только 60% ауры. ',
     availability: 'open',
-    karmaCost: 40,
-    prerequisites: ['arch-mage'],
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'silentium-est-aurum'],
     modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
   // Позволяет просканировать во время каста qr-коды мясных тел в состоянии тяжран (не годятся здоров/КС/АС) и с Эссенсом>=1ед для эффекта "кровавый ритуал":  Использование (сканирование) N этих кодов приводит к:
@@ -1551,7 +1551,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Можно использовать людей в тяжране (сканируя их QR) для увеличения (по времени, а не на один каст) доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 70,
+    karmaCost: 60,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1561,8 +1561,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Dictator Control',
     description: 'При чтении астральных следов ты извлекаешь на 20% больше ауры',
     availability: 'open',
-    karmaCost: 40,
-    prerequisites: ['arch-mage'],
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'silentium-est-aurum'],
     modifier: modifierFromEffect(increaseAuraReadingMultiplier, {
       amount: 0.2,
     }),
@@ -1573,7 +1573,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Agnus dei ',
     description: 'В ритуальных практиках ты считаешься за 3х человек',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 30,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1583,7 +1583,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Ритуальная магия',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи',
     availability: 'closed',
-    karmaCost: 80,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1595,7 +1595,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Православная ритуальная магия',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 80,
+    karmaCost: 60,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1977,7 +1977,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'trollton-effect',
     humanReadableName: 'Trollton',
-    description: 'На тебе тяжёлая броня.',
+    description: 'На тебя действует эффект тяжёлой брони.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -2053,11 +2053,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.5 })],
   },
-  // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак лёгким оружием - холодным и дистанционным"
+  // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак оружием - холодным и дистанционным. Двигаться с раскрытым щитом нельзя. Любая контактная атака на щит приводит нападающего в тяжран"
   {
     id: 'magic-shield',
     humanReadableName: 'Magic Shield',
-    description: 'Активирован "магический щит" (раскрытым прозрачным зонтиком можно защищаться от попаданий любого лёгкого оружия).',
+    description:
+      'Активирован магический щит (раскрытым прозрачным зонтиком можно защищаться от попаданий любого оружия).\nC раскрытым маг.щитом нельзя перемещаться. Если такое случилось, эффект заклинания заканчивается, маг.щит нужно сложить и в этом бою раскрывать больше нельзя.\nПока активен эффект - складывать/раскладывать маг.щит можно сколько угодно раз\nКасание раскрытого маг.щита, в том числе оружием (кроме снарядов) приводит в тяжран нападающего',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -2596,7 +2597,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 1-П!',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 80,
+    karmaCost: 60,
     prerequisites: ['arch-mage'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2606,7 +2607,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 2-П!',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 30,
+    karmaCost: 60,
     prerequisites: ['magic-1-summ', 'arch-mage'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2990,7 +2991,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь использовать автодок для снятия имплантов.',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['arch-rigger', 'auto-doc-2', 'repoman-2'],
+    prerequisites: ['arch-rigger', 'auto-doc-2', 'repoman-1'],
     modifier: [modifierFromEffect(unlockAutodockImplantRemoval, {})],
   },
   // Это сводная абилка для свойств духа типа1
@@ -3097,12 +3098,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // Выдаётся при входе в астрал на конкретный срок. Чем более крутая абилка используется для входа в астрал - тем больше срок. Если маг пропустил время и не вернулся вовремя - то при выходе из астрала обратно в мясное тело через телохранилище должен сложиться в КС
+  // При сканировании телохранилища.
+  // если маг возвращается в мясное тело в рамках astral.duration - все хорошо.
+  // Если срок пребывания превышен - складывается в тяжран.
   {
     id: 'silver-thread',
     humanReadableName: 'Серебряная нить',
     description:
-      'Связывает твой разум с мясным телом, когда ты в астрале. Если ты окажешься в астрале без этой способности - то перейдёшь в клиническую смерть.',
+      'Позволяет вернуться в мясное тело из астрала. Не позволяй серебряной нити порваться! (отсканируй телохранилище, чтобы вернуться в мясное тело)',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3114,7 +3117,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'in-the-astral',
     humanReadableName: 'Астрал',
     description:
-      'Ты в астральном теле, неуязвим для физических воздействий и сам не можешь воздействовать на физические объекты. Можешь слышать и видеть всё происходящее в физическом мире и проходить куда угодно (можно открыть дверь для прохода тела игрока, но не для других персонажей). Не можешь брать ничего материального.\nЕсли не вернёшься в физическое тело за {{amount}} минут - окажешься в КС.\nПри предъявлении тебе менее, чем с 2м текста способности AstralopithecusRage - действуй согласно её описанию и тому, что предпринимает её владелец.',
+      'Ты в астральном теле. Ты неуязвим для физических воздействий и сам не можешь воздействовать на физические объекты. Можешь слышать и видеть всё происходящее в физическом мире и проходить куда угодно (можно открыть дверь для прохода тела игрока, но не для других персонажей). Не можешь брать ничего материального.\nПри предъявлении тебе менее, чем с 2м текста способности AstralopithecusRage - действуй согласно её описанию и тому, что предпринимает её владелец.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3682,7 +3685,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'paralizard-effect',
     humanReadableName: 'Paralizard-effect',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
+    description:
+      'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить одно любое мясное/эктоплазменное тело на 90 секунд.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3693,7 +3697,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'death-touch-effect',
     humanReadableName: 'Death Touch-effect',
     description:
-      'Ты можешь касанием (рукой или кинжалом) И криком "Смертный час!" лишить всех хитов любое мясное/эктоплазменное тело - игнорируя любую броню',
+      'Ты можешь касанием (рукой или кинжалом) И криком "Смертный час!" лишить всех хитов одно любое мясное/эктоплазменное тело - игнорируя любую броню',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
