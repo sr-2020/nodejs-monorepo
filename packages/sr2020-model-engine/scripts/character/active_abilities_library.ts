@@ -3533,7 +3533,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 300,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар Спрайта, чтобы потратить его
   {
     id: 'native-compile',
@@ -3543,14 +3542,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 8,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Let it go - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
   {
     id: 'artifact-let-it-go',
@@ -3560,7 +3557,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 20,
     minimalEssence: 4,
