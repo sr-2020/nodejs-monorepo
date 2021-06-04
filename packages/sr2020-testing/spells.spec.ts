@@ -486,7 +486,7 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(
       expect.objectContaining({
         id: 'fast-charge-able',
-        description: `Можете кинуть 3 молний.`,
+        description: `Можете кинуть 6 молний.`,
       }),
     );
   });

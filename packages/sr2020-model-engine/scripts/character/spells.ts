@@ -209,7 +209,7 @@ export function fireballSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 // (тяжелое магическое оружие). N=Мощь-2 (но не меньше 1), T=Мощь*10 минут
 export function fastChargeSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = Math.max(1, data.power - 2);
+  const amount = Math.max(1, data.power + 1);
   sendNotificationAndHistoryRecord(api, 'Заклинание', `Fast Charge: ${amount} молний на ${d.asMinutes()} минут`);
   addTemporaryPassiveAbility(api, 'fast-charge-able', d, { amount }, 'Возможность использовать молнии');
 }
