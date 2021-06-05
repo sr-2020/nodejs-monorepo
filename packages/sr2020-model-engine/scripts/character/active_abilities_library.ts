@@ -1169,22 +1169,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(https://trello.com/c/TwTAHAut/142-магия-реализовать-способности-адептов-связанные-с-артефактами-fresh-new-day-и-набор-crate-of-the-art)
-  {
-    id: 'artifact-exorcizamus',
-    humanReadableName: 'Crate of the art: Exorcizamus',
-    description: 'Ты можешь создавать артефакты, содержащие заклинание Exorcizamus. Требуемая эссенция: больше 4',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 120,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 20,
-    minimalEssence: 4,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
-  // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
+    // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
   {
     id: 'allo-homorus',
     humanReadableName: 'Allo, homorus!',
@@ -2097,21 +2082,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: jackOutAbility.name,
   },
-  {
-    id: 'astral-body-1-cast',
-    humanReadableName: 'Астральное тельце',
-    description:
-      'Перейти в астральное тело на 15 минут. Почти полная физическая неуязвимость и возможность наблюдать за реальным миром.\nМаркер: красный дождевик.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 45,
-    prerequisites: [],
-    availability: 'open',
-    karmaCost: 30,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
   // Сканируется ТОЛЬКО телохранилище.  т.к. дифференциации видов астрала у нас нет.
   // фиксируем что тело лежит в телохранилище и его потом надо забрать.
   // Магу выдается абилка
@@ -3006,21 +2976,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
-  {
-    id: 'mod-kamikadze',
-    humanReadableName: 'дрон-мод Камикадзе',
-    description:
-      'При активации необходимо громко озвучить словесный маркер "ВЗРЫВ".  Эффект = атака тяжелым оружием по всем персонажам в радиусе 2 метров от точки взрыва . (3 хита по персонажам без брони \\ 1 хит по персонажам в тяжелой броне). После использования необходимо вернуться к телу. Дрон будет уничтожен.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
-    prerequisites: ['in-drone'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: noItActionAbility.name,
-  },
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
@@ -3300,26 +3255,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: externalAbility.name,
   },
-  {
-    id: 'use-sprite',
-    humanReadableName: 'Использовать спрайт',
-    description: 'Использовать спрайт',
-    target: 'scan',
-    targetsSignature: [
-      {
-        name: 'Спрайт',
-        field: 'qrCodeId',
-        allowedTypes: ['sprite'],
-      },
-    ],
-    cooldownMinutes: (character) => 0,
-    prerequisites: ['arch-hackerman-technomancer'],
-    availability: 'open',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 80,
-    eventType: useSpriteAbility.name,
-  },
   // У мага на 10 минут появляется пассивная способность fireball-able, amount=1.
   {
     id: 'faerbol',
@@ -3539,14 +3474,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Компиляция спрайта',
     description: 'Компиляция спрайта в основании',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Спрайт',
+        field: 'qrCodeId',
+        allowedTypes: ['sprite'],
+      },
+    ],
     cooldownMinutes: (character) => 9000,
     prerequisites: ['arch-hackerman-technomancer'],
     availability: 'open',
     karmaCost: 8,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: useSpriteAbility.name,
   },
   // - мгновенное, кулдаун 120 минут. Позволяет создать артефакт, содержащий подготовленное заклинание Let it go - из расчета как будто у адепта Магия=2. Вместо активации заклинание привязывается к материальному носителю (что-то с qr-кодом), и активация произойдет только после сканирования qr-кода и подтверждения активации в интерфейсе.
   {
