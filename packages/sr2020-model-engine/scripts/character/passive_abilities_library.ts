@@ -3291,19 +3291,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  //
-  {
-    id: 'hack-deck-commander',
-    humanReadableName: 'Командир',
-    description:
-      'Ты можешь создавать объединять декеров в команду.\nДекеры, входящие в команду перемещаются за лидером и не атакуют друг-друга френдли файером',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
-    modifier: [],
-  },
   // Игрок может использовать одноручный меч и прокачивать навыки использования других спрайтов красной комнаты
   {
     id: 'sprites-combat',
