@@ -1538,4 +1538,32 @@ export const kAllEthicGroups: EthicGroup[] = [
     ],
     abilityIds: ['chain-interrogation'],
   },
+
+  {
+    id: 'dm-usin',
+    name: 'Усин',
+    ethicStyle: [
+      {
+        scale: 'violence',
+        conditionMin: -2,
+        conditionMax: 2,
+      },
+      {
+        scale: 'control',
+        conditionMin: 2,
+        conditionMax: 4,
+      },
+      {
+        scale: 'individualism',
+        conditionMin: -4,
+        conditionMax: -2,
+      },
+      {
+        scale: 'mind',
+        conditionMin: 1,
+        conditionMax: 4,
+      },
+    ],
+    abilityIds: ['lock-the-door', 'loud-break-in'],
+  },
 ];
