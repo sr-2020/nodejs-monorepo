@@ -2806,9 +2806,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // Эффект химоты
   {
-    id: 'light-armor-effect',
-    humanReadableName: 'Легкая броня',
-    description: 'Тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    id: 'heavy-armor-effect',
+    humanReadableName: 'Эффект Тяжёлая броня',
+    description: 'На тебя действуют правила по хитосъему, соответствующие тяжелой броне.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],

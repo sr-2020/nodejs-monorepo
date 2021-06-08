@@ -302,11 +302,11 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'polonium',
     level: 'base',
-    message: 'Ближайшие 5 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    message: 'Ближайшие 15 минут у тебя + 2 хита.',
     durationEffect: {
-      handler: lightArmorEffect,
-      duration: duration(5, 'minutes'),
-      amount: 0,
+      handler: increaseMaxMeatHp,
+      duration: duration(15, 'minutes'),
+      amount: 2,
     },
   },
   {
@@ -323,21 +323,21 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'polonium',
     level: 'super',
-    message: 'Ближайшие 30 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони).',
+    message: 'Ближайшие 30 минут у тебя + 2 хита.',
     durationEffect: {
-      handler: lightArmorEffect,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
-      amount: 0,
+      amount: 2,
     },
   },
   {
     element: 'polonium',
     level: 'crysis',
-    message: 'Ближайшие 30 минут тяжелое оружие бьет тебя по хитам (эффект лёгкой брони). Появилась зависимость.',
+    message: 'Ближайшие 30 минут у тебя + 2 хита. Появилась зависимость.',
     durationEffect: {
-      handler: lightArmorEffect,
+      handler: increaseMaxMeatHp,
       duration: duration(30, 'minutes'),
-      amount: 0,
+      amount: 2,
     },
   },
 
@@ -542,7 +542,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'barium',
     level: 'base',
-    message: 'Позволяет использовать автоматическое оружие без кибер-рук 15 минут.',
+    message: 'Позволяет использовать автоматическое оружие 15 минут при наличии одного импланта кибер рука или абилки биосила.',
     durationEffect: {
       handler: automaticWeaponsEffect,
       duration: duration(15, 'minutes'),
@@ -552,7 +552,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'barium',
     level: 'uber',
-    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 1 час',
+    message: 'Позволяет использовать автоматическое оружие 60 минут при наличии одного импланта кибер рука или абилки биосила.',
     durationEffect: {
       handler: automaticWeaponsEffect,
       duration: duration(1, 'hour'),
@@ -562,7 +562,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'barium',
     level: 'super',
-    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 30 минут',
+    message: 'Позволяет использовать автоматическое оружие 30 минут при наличии одного импланта кибер рука или абилки биосила.',
     durationEffect: {
       handler: automaticWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -572,7 +572,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'barium',
     level: 'crysis',
-    message: 'Позволяет использовать автоматическое оружие без кибер-рук на 30 минут. Появилась зависимость.',
+    message: 'Позволяет использовать автоматическое оружие 30 минут при наличии одного импланта кибер рука или абилки биосила. Появилась зависимость.',
     durationEffect: {
       handler: automaticWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -616,31 +616,31 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'moscovium',
     level: 'base',
-    message: 'Добавляет +1 максимальных хита на 30 минут',
+    message: 'Даёт эффект тяжёлой брони на 10 минут.',
     durationEffect: {
-      handler: increaseMaxMeatHp,
-      duration: duration(30, 'minutes'),
-      amount: 1,
+      handler: heavyArmorEffect,
+      duration: duration(10, 'minutes'),
+      amount: 0,
     },
   },
   {
     element: 'moscovium',
     level: 'uber',
-    message: 'Добавляет +4 максимальных хита на 30 минут',
+    message: 'Даёт эффект тяжёлой брони на 30 минут.',
     durationEffect: {
-      handler: increaseMaxMeatHp,
-      duration: duration(30, 'minutes'),
-      amount: 4,
+      handler: heavyArmorEffect,
+      duration: duration(60, 'minutes'),
+      amount: 0,
     },
   },
   {
     element: 'moscovium',
     level: 'super',
-    message: 'Добавляет +2 максимальных хита на 30 минут',
+    message: 'Даёт эффект тяжёлой брони на 30 минут. Появилась зависимость.',
     durationEffect: {
-      handler: increaseMaxMeatHp,
+      handler: heavyArmorEffect,
       duration: duration(30, 'minutes'),
-      amount: 2,
+      amount: 0,
     },
   },
   {
@@ -648,16 +648,16 @@ export const kAllChemoEffects: ChemoEffect[] = [
     level: 'crysis',
     message: 'Добавляет +2 максимальных хита на 30 минут Появилась зависимость.',
     durationEffect: {
-      handler: increaseMaxMeatHp,
+      handler: heavyArmorEffect,
       duration: duration(30, 'minutes'),
-      amount: 2,
+      amount: 0,
     },
   },
 
   {
     element: 'iconium',
     level: 'base',
-    message: 'Персонаж может использовать тяжёлое оружие 15 минут',
+    message: 'Персонаж может использовать тяжёлое оружие 15 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила.',
     durationEffect: {
       handler: heavyWeaponsEffect,
       duration: duration(15, 'minutes'),
@@ -667,7 +667,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'iconium',
     level: 'uber',
-    message: 'Персонаж может использовать тяжёлое оружие 1 час',
+    message: 'Персонаж может использовать тяжёлое оружие 60 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила.',
     durationEffect: {
       handler: heavyWeaponsEffect,
       duration: duration(1, 'hour'),
@@ -677,7 +677,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'iconium',
     level: 'super',
-    message: 'Персонаж может использовать тяжёлое оружие 30 минут',
+    message: 'Персонаж может использовать тяжёлое оружие 30 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила.',
     durationEffect: {
       handler: heavyWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -687,7 +687,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'iconium',
     level: 'crysis',
-    message: 'Персонаж может использовать тяжёлое оружие 30 минут, Появилась зависимость',
+    message: 'Персонаж может использовать тяжёлое оружие 30 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила., Появилась зависимость',
     durationEffect: {
       handler: heavyWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -864,8 +864,8 @@ export function reduceCurrentMagicFeedback(api: EventModelApi<Sr2020Character>, 
   }
 }
 
-export function lightArmorEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
-  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'light-armor-effect' });
+export function heavyArmorEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
+  addTemporaryPassiveAbilityEffect(api, { ...m, abilityId: 'heavy-armor-effect' });
 }
 
 export function berserkEffect(api: EffectModelApi<Sr2020Character>, m: TemporaryModifier) {
