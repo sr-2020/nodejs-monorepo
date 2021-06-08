@@ -65,7 +65,7 @@ import {
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
-import { nanohiveArmorAbility, nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
+import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
@@ -1463,23 +1463,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: reviveOnTarget.name,
   },
-  // появляется абилка granite-skin-effect на 15 минут
-  // itGapEssense +5
-  {
-    id: 'kokkoro-armor',
-    humanReadableName: 'Гранитная кожа',
-    description:
-      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: nanohiveArmorAbility.name,
-  },
   // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
@@ -1527,23 +1510,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
-  },
-  // появляется абилка granite-skin-effect на 15 минут
-  // itGapEssense +5
-  {
-    id: 'koshcghei-armor',
-    humanReadableName: 'Гранитная кожа',
-    description:
-      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
@@ -1593,23 +1559,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
   },
-  // появляется абилка granite-skin-effect на 15 минут
-  // itGapEssense +5
-  {
-    id: 'horizon-armor',
-    humanReadableName: 'Гранитная кожа',
-    description:
-      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: nanohiveArmorAbility.name,
-  },
   // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5
   {
@@ -1657,23 +1606,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: nanohiveBackupAbility.name,
-  },
-  // появляется абилка granite-skin-effect на 15 минут
-  // itGapEssense +5
-  {
-    id: 'badass-armor',
-    humanReadableName: 'Гранитная кожа',
-    description:
-      'С тебя снимаются хиты, как если бы ты находился в легкой броне. Активация абилки хитов не добавляет. Продолжительность - 15  минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: nanohiveArmorAbility.name,
   },
   // появляется абилка automatic-weapons-unlock на 15 минут
   // itGapEssense +5

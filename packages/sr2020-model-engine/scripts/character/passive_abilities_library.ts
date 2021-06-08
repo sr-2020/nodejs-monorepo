@@ -1841,16 +1841,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // Эффект *-armor абилок
-  {
-    id: 'granite-skin-effect',
-    humanReadableName: 'Гранитная кожа',
-    description: 'С тебя снимаются хиты, как если бы ты находился в легкой броне.',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
   // Эффект *-shooter абилок и химоты
   {
     id: 'automatic-weapons-unlock',
