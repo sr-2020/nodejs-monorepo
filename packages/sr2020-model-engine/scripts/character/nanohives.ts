@@ -45,7 +45,7 @@ export function onBadassNanohiveRemove(api: EventModelApi<Sr2020Character>, data
 
 type AiId = 'kokkoro' | 'koshcghei' | 'horizon' | 'badass';
 
-const kNanohiveAbilitySuffixes = ['armor', 'shooter', 'health', 'backup'];
+const kNanohiveAbilitySuffixes = ['shooter', 'health', 'backup'];
 
 function onNanohiveInstall(api: EventModelApi<Sr2020Character>, aiId: AiId) {
   for (const suffix of kNanohiveAbilitySuffixes) {
@@ -57,11 +57,6 @@ function onNanohiveRemove(api: EventModelApi<Sr2020Character>, aiId: AiId) {
   for (const suffix of kNanohiveAbilitySuffixes) {
     removeFeature(api, { id: `${aiId}-${suffix}` });
   }
-}
-
-export function nanohiveArmorAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  reduceEssence(api);
-  addTemporaryPassiveAbility(api, 'granite-skin-effect', duration(15, 'minutes'));
 }
 
 export function nanohiveShooterAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

@@ -301,6 +301,7 @@ export function increaseDroneCrafts(api: EffectModelApi<Sr2020Character>, m: Mod
   increaseAircraftBonus(api, m);
   increaseMedicraftBonus(api, m);
   increaseGroundcraftBonus(api, m);
+  increaseAutodocBonus(api, m);
 }
 
 export function increaseMaxTimeInDrone(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
