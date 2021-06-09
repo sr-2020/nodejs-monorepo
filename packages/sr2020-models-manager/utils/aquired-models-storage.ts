@@ -87,6 +87,8 @@ export class AquiredModelsStorageTypeOrm implements AquiredModelsStorage {
       }
       {
         const characterWork: Sr2020Character = cloneDeep(this._workModels['Sr2020Character'][m]);
+        dbWritePromises.push(this._manager.getRepository<Sr2020Character>('sr2020-character-cached').save(characterWork));
+
         characterWork.history = [];
         characterWork.timers = [];
         characterWork.modifiers = [];
