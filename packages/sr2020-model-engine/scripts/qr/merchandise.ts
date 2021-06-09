@@ -53,6 +53,14 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return { type: 'locus_charge', data: {} };
   }
 
+  if (id == 'weapon') {
+    return { type: 'weapon', data: {} };
+  }
+
+  if (id == 'armour') {
+    return { type: 'armour', data: {} };
+  }
+
   const sameId = (item: { id: string }) => item.id == id;
   const maybeImplant = kAllImplants.find(sameId);
   if (maybeImplant) {
