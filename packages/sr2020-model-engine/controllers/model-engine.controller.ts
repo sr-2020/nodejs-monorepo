@@ -208,18 +208,6 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
       discounts: {
         weaponsArmor: 1,
         everything: 1,
-        ares: 1,
-        aztechnology: 1,
-        evo: 1,
-        horizon: 1,
-        mutsuhama: 1,
-        neonet1: 1,
-        renraku: 1,
-        russia: 1,
-        saederKrupp: 1,
-        shiavase: 1,
-        spinradGlobal: 1,
-        wuxing: 1,
       },
       essenceDetails: {
         max: 600,

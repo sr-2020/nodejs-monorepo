@@ -239,54 +239,6 @@ export class Discounts {
   @NumberProperty()
   @Column({ default: 1 })
   everything: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  ares: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  aztechnology: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  saederKrupp: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  spinradGlobal: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  neonet1: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  evo: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  horizon: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  wuxing: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  russia: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  renraku: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  mutsuhama: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  shiavase: number;
 }
 
 export class Concentrations {

@@ -256,54 +256,6 @@ export function increaseStockGainPercentage(api: EffectModelApi<Sr2020Character>
   api.model.billing.stockGainPercentage += m.amount;
 }
 
-export function multiplyCorpDiscountAres(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.ares *= m.amount;
-}
-
-export function multiplyCorpDiscountAztechnology(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.aztechnology *= m.amount;
-}
-
-export function multiplyCorpDiscountSaederKrupp(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.saederKrupp *= m.amount;
-}
-
-export function multiplyCorpDiscountSpinradGlobal(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.spinradGlobal *= m.amount;
-}
-
-export function multiplyCorpDiscountNeonet1(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.neonet1 *= m.amount;
-}
-
-export function multiplyCorpDiscountEvo(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.evo *= m.amount;
-}
-
-export function multiplyCorpDiscountHorizon(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.horizon *= m.amount;
-}
-
-export function multiplyCorpDiscountWuxing(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.wuxing *= m.amount;
-}
-
-export function multiplyCorpDiscountRussia(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.russia *= m.amount;
-}
-
-export function multiplyCorpDiscountRenraku(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.renraku *= m.amount;
-}
-
-export function multiplyCorpDiscountMutsuhama(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.mutsuhama *= m.amount;
-}
-
-export function multiplyCorpDiscountShiavase(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.discounts.shiavase *= m.amount;
-}
-
 export function multiplyAllDiscounts(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.discounts.everything *= m.amount;
 }
