@@ -3667,18 +3667,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-digital'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
-  {
-    id: 'dm-prophet',
-    humanReadableName: 'Душевед',
-    description: 'Предъявите экран с описанием способности игроку, чтобы тот показал вам свой этикпрофиль',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
 ];
 setAllPassiveAbilities(
   (() => {
