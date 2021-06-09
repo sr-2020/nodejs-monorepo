@@ -747,8 +747,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'flee',
     humanReadableName: 'flee',
-    description:
-      'новая команда:flee\nПозволяет попытаться сбежать из линклока. \nЗависит от соотношения значений  вашего Sleaze и Attack цели',
+    description: 'новая команда:flee\nПозволяет попытаться сбежать из софт-лока (мягкого линклока). \nШанс успеха зависит от Sleaze',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
@@ -972,7 +971,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'increase-the-charisma-1',
     humanReadableName: 'Увеличение харизмы 1',
     description: 'Перманентное увеличение Харизмы персонажа - 1',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 80,
     prerequisites: ['arch-face', 'paralysis-3'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
@@ -1076,13 +1075,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'anonymous-transaction',
     humanReadableName: 'фиксер',
-    description: 'гм производит анонимный перевод между двумя персонажами. ',
+    description: 'Все твои переводы анонимны',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
     modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
-  // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
   {
     id: 'dm-soul-expert',
     humanReadableName: 'Душевед',
@@ -1857,7 +1855,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'automatic-weapons-unlock',
     humanReadableName: 'Автоматическое оружие',
-    description: 'Позволяет использовать автоматическое оружие (даже без кибер-рук).',
+    description: 'Позволяет использовать автоматическое оружие. \n(При наличии импланта Кибер-рука или абилки Биосила)',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -2648,7 +2646,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'heavy-weapons-unlock',
     humanReadableName: 'Тяжелое оружие',
-    description: 'Позволяет использовать тяжелое оружие.',
+    description: 'Позволяет использовать тяжелое оружие.\n(При наличии 2-х имплантов Кибер-рука или 1-й руки и абилки Биосила)',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -2999,7 +2997,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'hands-samurai',
     humanReadableName: 'Киберруки и БиоСила',
     description:
-      'Чтобы пользоваться оружием - тебе нужен соответствующий Навык и Усиленные руки. Для одноручного оружия - нужна способность БиоСила или один имплант Киберрука. Чтобы держать оружие двумя руками (двуручное холодное, пулемет, или два одноручных) - БиоСила плюс Киберрука или два импланта Киберрука.',
+      'Чтобы пользоваться оружием - тебе нужен соответствующий Навык и Усиленные руки. Для одноручного оружия - нужна способность БиоСила или один имплант Кибер-рука. Чтобы держать оружие двумя руками (двуручное холодное, пулемет, или два одноручных) - БиоСила + Кибер-рука или 2 импланта Кибер-рука.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-samurai'],
@@ -3452,7 +3450,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // Отсканировать куар Спрайт
-  // techno.fading + 10
+  //
   {
     id: 'armor-light',
     humanReadableName: 'легкий доспех',

@@ -240,7 +240,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'oblivion',
     humanReadableName: 'Забвение',
     description:
-      'Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (снят хотя бы 1 хит). ',
+      'Целевой персонаж не помнит события последней сцены. Работает только, если персонажу не был нанесен урон (снят хотя бы 1 хит).  Начало сцены определяет менталист, но не больше 30 минут.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
@@ -255,7 +255,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'full-oblivion',
     humanReadableName: 'Полное Забвение',
-    description: 'Персонаж не помнит события последней сцены.',
+    description: 'Персонаж не помнит события последней сцены. Начало сцены определяет менталист, но не больше 30 минут.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
@@ -285,7 +285,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'tell-me-truth',
     humanReadableName: 'Скажи как есть.',
-    description: 'Целевой персонаж честно отвечает на 3 вопроса. \nТы честно отвечаешь на 3 вопроса',
+    description: 'Целевой персонаж честно отвечает на 3 вопроса. \n',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
@@ -317,7 +317,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'danila-i-need-help',
     humanReadableName: 'Оказать услугу',
     description:
-      'Данила, ай нид хелп. Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 1 экономический цикл). Выполнение услуги не должно занимать больше 10 минут.',
+      'Данила, ай нид хелп. Цель оказывает услугу, даже если это грозит ей средними проблемами (потеря дохода за 6 часов). Выполнение услуги не должно занимать больше 10 минут.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
@@ -411,12 +411,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: paralysis3Ability.name,
   },
-  // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )
+  // Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям)
   {
     id: 'scorn-him',
     humanReadableName: 'Презрение',
     description:
-      'Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям ) ',
+      'Цель старается сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, выразить презрение убеждениям )  Адресат должен находиться в прямой видимости. ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 20 : 10 * (1 / Math.sqrt(character.magic))),
@@ -432,7 +432,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'kill-him',
     humanReadableName: 'Агрессия',
     description:
-      'Цель активно пытается убить (в Клиническую смерть)  персонажа, на которого указывает менталист. Если цель убита - эффект воздействия прекращается. Пока цель жива - твоя жертва пытается её убить.',
+      'Цель активно пытается убить (в Клиническую смерть)  персонажа, на которого указывает менталист (персонаж должен быть в прямой видимости). Если цель убита - эффект воздействия прекращается. Пока цель жива - твоя жертва пытается её убить. После клинической смерти персонажа, попавшего под действие менталиста, воздействие проходит.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 360 : 360 * (1 / Math.sqrt(character.magic))),
@@ -579,7 +579,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'billioner-walk',
     humanReadableName: 'Прогулка миллионера',
-    description: 'Цель переводит на счет менталиста 20% денег со своего счета.',
+    description:
+      'Цель переводит на счет менталиста 20% денег со своего счета. Способность не работает на персонажей с иридиевым лафстайлом.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 120 : 60 * (1 / Math.sqrt(character.magic))),
@@ -624,7 +625,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'i-dont-trust-anybody',
     humanReadableName: 'Я никому не верю',
-    description: 'Временно увеличивает сопротивляемость менталиста ментальному воздействию.',
+    description: 'Временно увеличивает сопротивляемость менталиста ментальному воздействию. Срок воздействия меньше часа.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 240 : 120 * (1 / Math.sqrt(character.magic))),
@@ -675,10 +676,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь посмотреть кто платит ренту по этому товару.',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 100 - 10 * character.intelligence,
+    cooldownMinutes: (character) => 30 - 3 * character.intelligence,
     prerequisites: ['arch-face', 're-rent'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: whoNeedsIt.name,
@@ -768,7 +769,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'другой персонаж сможет видеть свои коэффициенты скоринга в течение 5 минут.',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
-    cooldownMinutes: (character) => 60,
+    cooldownMinutes: (character) => 20,
     prerequisites: ['arch-face', 'my-scoring'],
     availability: 'open',
     karmaCost: 20,
@@ -1169,7 +1170,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-    // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
+  // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
   {
     id: 'allo-homorus',
     humanReadableName: 'Allo, homorus!',
@@ -1516,7 +1517,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'kokkoro-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1581,7 +1582,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'koshcghei-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1646,7 +1647,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'horizon-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1711,7 +1712,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'badass-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь забыть эпизод, если расскажешь о нем Искусственному интеллекту',
+    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -2678,7 +2679,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь вскрыть цифровой замок за 2 минуты',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'bond-breaker'],
     availability: 'open',
     karmaCost: 20,
@@ -2923,7 +2924,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 60,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic'],
     availability: 'open',
     karmaCost: 50,
@@ -3208,7 +3209,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-5',
-    humanReadableName: 'Голосовать за кандидата 5',
+    humanReadableName: 'за кандидата 5',
     description: 'ты можешь проголосовать за кандидата 5',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3501,6 +3502,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'closed',
     karmaCost: 20,
     minimalEssence: 4,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Тех заходит на сайт, создает или выбирает ран, переводит регистрацию на себя (кнопка на сайте)
+  // После чего начинает сканить кр игроков
+  {
+    id: 'foundation-tech-register',
+    humanReadableName: 'Регистрация на ран',
+    description: 'Регистрация игроков в ран. Переключи нужный ран на себя и отсканируй игроков',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 0,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
