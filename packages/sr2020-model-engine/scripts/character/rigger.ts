@@ -16,11 +16,12 @@ import {
 import { ActiveAbilityData, Implant } from '@alice/sr2020-common/models/common_definitions';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
-import { DroneType, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { DroneType, kCommonDroneAbilityIds, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { repairDrone, startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 
+const kDroneDangerAbilityIds = new Set(kCommonDroneAbilityIds);
 const kInDroneModifierId = 'in-the-drone';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }) {
@@ -262,6 +263,7 @@ type InTheDroneModifier = Modifier & {
   droneQrId: string;
   droneLifestyle: string;
   postDroneDamage: number;
+  triggerDanger: number;
   stage: number;
   broken: boolean;
 };
@@ -282,6 +284,7 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDam
     droneQrId,
     droneLifestyle: drone.lifestyle,
     postDroneDamage,
+    triggerDanger: 0,
     stage: 0,
     broken: false,
   };
@@ -298,7 +301,13 @@ function findInDroneModifier(api: EventModelApi<Sr2020Character>) {
 export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;
-  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
+  if (m.triggerDanger == 0) {api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));}
+    else {  
+      api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
+      api.model.screens.autodoc = false;
+      api.model.screens.karma = false;
+      if (m.broken) api.model.screens.passiveAbilities = false;
+    }
   //  What to do with the passive ones?
 
   api.model.screens.billing = false;
@@ -311,7 +320,7 @@ export function droneTimeout(api: EventModelApi<Sr2020Character>, data: {}) {
   sendNotificationAndHistoryRecord(
     api,
     'Превышено максимальное время пребывания в дроне',
-    'Необходимо срочно вернуться в мясное тело во избежание урона.',
+    'Канал связи нарушен, возможности дрона недоступны! Необходимо срочно вернуться в мясное тело во избежание урона мясному телу.',
   );
 
   droneEmergencyExit(api, data);
@@ -321,13 +330,19 @@ export function bodyInStorageWounded(api: EventModelApi<Sr2020Character>, data: 
   sendNotificationAndHistoryRecord(
     api,
     'Мясное тело атаковано',
-    'Кто-то атаковал ваше мясное тело в телохранилище. Необходимо срочно в него вернуться во избежание урона.',
+    'Канал связи нарушен, возможности дрона недоступны! Кто-то атаковал ваше мясное тело в телохранилище. Необходимо срочно в него вернуться во избежание урона мясному телу.',
   );
   droneEmergencyExit(api, data);
 }
 
 export function droneDangerAbility(api: EventModelApi<Sr2020Character>, data: {}) {
   findInDroneModifier(api).broken = true;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Внимание, дрон поврежден',
+    'Возможности дрона недоступны! Необходимо срочно вернуться в мясное тело во избежание урона мясному телу.',
+  );
+
   droneEmergencyExit(api, data);
 }
 
@@ -335,18 +350,21 @@ export function droneEmergencyExit(api: EventModelApi<Sr2020Character>, data: {}
   const m = findInDroneModifier(api);
   if (m.stage != 0) return; // Emergency exit already triggered
   m.postDroneDamage += 1;
+  m.triggerDanger += 1;
 
   const timerDescription = 'Увеличение штрафа за слишком долгое пребывание в дроне после аварийного выхода';
-  api.setTimer(kDroneTimerIds[1], timerDescription, duration(10, 'minutes'), droneReturnTimeoutTick1, {});
-  api.setTimer(kDroneTimerIds[2], timerDescription, duration(30, 'minutes'), droneReturnTimeoutTick2, {});
+  api.setTimer(kDroneTimerIds[1], timerDescription, duration(3 * api.workModel.body, 'minutes'), droneReturnTimeoutTick1, {});
+  api.setTimer(kDroneTimerIds[2], timerDescription, duration(6 * api.workModel.body, 'minutes'), droneReturnTimeoutTick2, {});
 }
 
 export function droneReturnTimeoutTick1(api: EventModelApi<Sr2020Character>, data: {}) {
   findInDroneModifier(api).postDroneDamage += 1;
+  api.sendNotification('Внимание!', 'Необходимо срочно вернуться в мясное тело во избежание сильного урона ему.');
 }
 
 export function droneReturnTimeoutTick2(api: EventModelApi<Sr2020Character>, data: {}) {
   findInDroneModifier(api).postDroneDamage += 2;
+  api.sendNotification('Внимание!', 'Необходимо срочно вернуться в мясное тело во избежание сильнейшего урона ему.');
 }
 
 export function hungerWhileInDone(api: EventModelApi<Sr2020Character>, data: {}) {

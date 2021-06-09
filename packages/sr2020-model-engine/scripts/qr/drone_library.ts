@@ -353,6 +353,6 @@ export const kAllDrones: Drone[] = [
     abilityIds: ['auto-doc-screen', 'auto-doc-bonus-5'],
   },
 ];
-export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff'];
+export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff', 'in-drone'];
 
 export const kDroneAbilityIds = new Set(kCommonDroneAbilityIds.concat(...kAllDrones.map((drone) => drone.abilityIds)));
