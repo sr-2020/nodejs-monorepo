@@ -233,11 +233,11 @@ export class AnalyzedBody {
 
 export class Discounts {
   @NumberProperty()
-  @Column({ default: 1 })
+  @Column({ default: 1.0, type: 'real' })
   weaponsArmor: number;
 
   @NumberProperty()
-  @Column({ default: 1 })
+  @Column({ default: 1.0, type: 'real' })
   everything: number;
 }
 
@@ -339,23 +339,23 @@ export class Chemo {
 
 export class MagicStats {
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   feedbackMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   recoverySpeedMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   spiritResistanceMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   auraReadingMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   auraMarkMultiplier: number;
 
   @NumberProperty()
@@ -397,7 +397,7 @@ export class Hacking {
   conversionDataprocessing: number;
 
   @NumberProperty()
-  @Column({ default: 0.0, type: 'double precision' })
+  @Column({ default: 0.0, type: 'real' })
   fadingResistance: number;
 
   @NumberProperty()
@@ -704,7 +704,7 @@ export class Sr2020Character extends EmptyModel {
   maxTimeInVr: number;
 
   @NumberProperty()
-  @Column({ default: 1.0, type: 'double precision' })
+  @Column({ default: 1.0, type: 'real' })
   cooldownCoefficient: number;
 
   @NumberProperty()
