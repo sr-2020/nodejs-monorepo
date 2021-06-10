@@ -10,7 +10,7 @@ import { Empty } from '@alice/alice-common/models/empty.model';
 import { LoggerService } from '@alice/alice-models-manager/services/logger.service';
 import { ModelEngineService } from '@alice/alice-common/services/model-engine.service';
 import { EventDispatcherService } from '@alice/alice-models-manager/services/event-dispatcher.service';
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
 export class AnyModelController<TModel extends EmptyModel> {
@@ -60,10 +60,19 @@ export class AnyModelController<TModel extends EmptyModel> {
   }
 
   async broadcastEvent(event: EventRequest): Promise<Empty> {
+    let successes = 0;
+    let failures = 0;
     const models = await getRepository(this.tmodel).createQueryBuilder().getMany();
     for (const model of models) {
-      await this.postEvent(Number(model.modelId), event);
+      try {
+        await this.postEvent(Number(model.modelId), event);
+        successes++;
+      } catch (e) {
+        failures++;
+      }
     }
+    this.logger.info(`Broadcast results: ${successes} successes, ${failures} failures.`);
+    if (failures > 0) throw new InternalServerErrorException(`Broadcast results: ${successes} successes, ${failures} failures.`);
     return new Empty();
   }
 
