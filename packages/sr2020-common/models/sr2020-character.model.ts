@@ -339,7 +339,7 @@ export class Chemo {
 
 export class MagicStats {
   @NumberProperty()
-  @Column({ default: 1 })
+  @Column({ default: 1.0 })
   feedbackMultiplier: number;
 
   @NumberProperty()
