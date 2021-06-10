@@ -1,6 +1,7 @@
 import { TestFixture } from './fixture';
 
 import { duration } from 'moment';
+import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 describe('Hackers-related events', function () {
   let fixture: TestFixture;
@@ -126,5 +127,26 @@ describe('Hackers-related events', function () {
         timestamp: 0,
       },
     });
+  });
+
+  it('Breaking cyberdeck', async () => {
+    // Hacker set up
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('jack-in');
+
+    // Cyberdeck set up
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyberdeck-navigator' } }, '2');
+
+    {
+      // Break cyberdeck
+      const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'breakCyberDeck', data: {} }, '2');
+      expect(workModel.type).toBe('cyberdeck');
+      expect(typedQrData<CyberDeckQrData>(workModel).broken).toBe(true);
+      expect(workModel.name).toContain('(сломана)');
+    }
+
+    // Try (and fail) to jack in
+    await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'jack-in', qrCodeId: '2' } });
   });
 });

@@ -14,6 +14,8 @@ import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character
 import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { template } from 'lodash';
 import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -102,6 +104,9 @@ export function jackedInEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 }
 
 export function jackInAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (typedQrData<CyberDeckQrData>(api.aquired(QrCode, data.qrCodeId!)).broken) {
+    throw new UserVisibleError('Кибердека сломана!');
+  }
   api.model.hacking.jackedIn = true;
 }
 

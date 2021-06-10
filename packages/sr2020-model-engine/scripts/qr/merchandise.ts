@@ -166,7 +166,10 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       type: 'cyberdeck',
       name: maybeCyberDeck.name,
       description: maybeCyberDeck.description,
-      data: maybeCyberDeck,
+      data: {
+        ...maybeCyberDeck,
+        broken: false,
+      },
     };
   }
 
