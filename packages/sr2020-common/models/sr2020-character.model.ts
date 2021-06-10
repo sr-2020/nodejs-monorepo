@@ -339,23 +339,23 @@ export class Chemo {
 
 export class MagicStats {
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   feedbackMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   recoverySpeedMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   spiritResistanceMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   auraReadingMultiplier: number;
 
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   auraMarkMultiplier: number;
 
   @NumberProperty()
@@ -397,7 +397,7 @@ export class Hacking {
   conversionDataprocessing: number;
 
   @NumberProperty()
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'double' })
   fadingResistance: number;
 
   @NumberProperty()
@@ -704,7 +704,7 @@ export class Sr2020Character extends EmptyModel {
   maxTimeInVr: number;
 
   @NumberProperty()
-  @Column({ default: 1.0 })
+  @Column({ default: 0, type: 'double' })
   cooldownCoefficient: number;
 
   @NumberProperty()
