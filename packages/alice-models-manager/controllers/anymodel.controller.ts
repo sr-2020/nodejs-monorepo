@@ -71,7 +71,7 @@ export class AnyModelController<TModel extends EmptyModel> {
         failures++;
       }
     }
-    this.logger.info(`Broadcast results: ${successes} successes, ${failures} failures.`);
+    this.logger.warning(`Broadcast results: ${successes} successes, ${failures} failures.`);
     if (failures > 0) throw new InternalServerErrorException(`Broadcast results: ${successes} successes, ${failures} failures.`);
     return new Empty();
   }
