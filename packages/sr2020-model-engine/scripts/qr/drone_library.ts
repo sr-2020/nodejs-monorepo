@@ -355,4 +355,5 @@ export const kAllDrones: Drone[] = [
 ];
 export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff', 'in-drone'];
 
+export const kDroneDangerAbilityIds = new Set(kCommonDroneAbilityIds);
 export const kDroneAbilityIds = new Set(kCommonDroneAbilityIds.concat(...kAllDrones.map((drone) => drone.abilityIds)));
