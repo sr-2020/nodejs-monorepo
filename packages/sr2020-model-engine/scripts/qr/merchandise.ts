@@ -53,11 +53,11 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return { type: 'locus_charge', data: {} };
   }
 
-  if (id == 'weapon') {
+  if (id == 'weapon' || id.startsWith('weapon-')) {
     return { type: 'weapon', data: {} };
   }
 
-  if (id == 'armour') {
+  if (id == 'armour' || id.startsWith('armour-')) {
     return { type: 'armour', data: {} };
   }
 
