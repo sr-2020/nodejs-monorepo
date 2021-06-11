@@ -8,8 +8,13 @@ import { CharacterPage } from '@alice/sr2020-admin-ui/app/character/character-pa
 import { Redirect, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { QrPage } from '@alice/sr2020-admin-ui/app/qr/qr-page';
 import { GlobalActionsPage } from '@alice/sr2020-admin-ui/app/global/global-actions';
+import { authToken } from '@alice/sr2020-admin-ui/app/api/models-manager';
 
 export function App() {
+  if (!authToken()) {
+    window.location.href = `https://web.evarun.ru/login`;
+  }
+
   const { addToast } = useToasts();
   const history = useHistory();
   const maybeCharacterId = useRouteMatch<{ id: string }>('/character/:id');

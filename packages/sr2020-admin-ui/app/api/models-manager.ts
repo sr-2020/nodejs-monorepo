@@ -7,17 +7,21 @@ const MODELS_MANAGER_URL = 'https://gateway.evarun.ru/api/v1/models-manager/';
 const MODELS_MANAGER_CHARACTER_URL = MODELS_MANAGER_URL + 'character/model/';
 const MODELS_MANAGER_QR_URL = MODELS_MANAGER_URL + 'qr/model/';
 
+export function authToken(): string | undefined {
+  const m = document.cookie.match(/Authorization=([^;]*)/);
+  if (!m) return undefined;
+  return m[1];
+}
+
 function config(): AxiosRequestConfig {
-  const token = document.cookie.match(/Authorization=([^;]*)/)[1];
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${authToken()}`,
     },
   };
 }
 
 export async function getCharacter(id: string): Promise<Sr2020Character> {
-  console.log(document.cookie.match(/Authorization=[^;]*/)[0]);
   const response = await axios.get<Sr2020CharacterProcessResponse>(MODELS_MANAGER_CHARACTER_URL + id, config());
   return response.data.workModel;
 }
