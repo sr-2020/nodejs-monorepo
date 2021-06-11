@@ -12,7 +12,7 @@ import { authToken } from '@alice/sr2020-admin-ui/app/api/models-manager';
 
 export function App() {
   if (!authToken()) {
-    window.location.href = `https://web.evarun.ru/login`;
+    window.location.href = `https://web.evarun.ru/login?externalUrl=${encodeURIComponent(window.location.href)}`;
   }
 
   const { addToast } = useToasts();
