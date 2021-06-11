@@ -16,12 +16,11 @@ import {
 import { ActiveAbilityData, Implant } from '@alice/sr2020-common/models/common_definitions';
 import { duration } from 'moment';
 import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
-import { DroneType, kCommonDroneAbilityIds, kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+import { DroneType, kDroneAbilityIds, kDroneDangerAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { repairDrone, startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 
-const kDroneDangerAbilityIds = new Set(kCommonDroneAbilityIds);
 const kInDroneModifierId = 'in-the-drone';
 
 export function analyzeBody(api: EventModelApi<Sr2020Character>, data: { targetCharacterId: string }) {
@@ -271,7 +270,7 @@ type InTheDroneModifier = Modifier & {
 function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDamage: number): InTheDroneModifier {
   return {
     mID: kInDroneModifierId,
-    priority: Modifier.kDefaultPriority,
+    priority: Modifier.kPriorityLater,
     enabled: true,
     effects: [
       {
@@ -304,9 +303,9 @@ export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneMo
   if (m.triggerDanger == 0) {api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));}
     else {  
       api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
+      if (m.broken) api.model.screens.passiveAbilities = false;
       api.model.screens.autodoc = false;
       api.model.screens.karma = false;
-      if (m.broken) api.model.screens.passiveAbilities = false;
     }
   //  What to do with the passive ones?
 
