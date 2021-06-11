@@ -9,6 +9,7 @@ import {
   increaseCharisma,
   increaseIntelligence,
   increaseMaxMeatHp,
+  increaseMaxTimeInVr,
   increaseMentalAttackAndProtection,
   increaseMentalProtection,
   increaseResonance,
@@ -93,22 +94,42 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'teqgel',
     level: 'base',
-    message: 'TODO',
+    message: 'При входе в VR в течение часа после приёма препарата, время нахождения в VR увеличивается на 30 минут.',
+    durationEffect: {
+      handler: increaseMaxTimeInVr,
+      amount: 30,
+      duration: duration(60, 'minutes'),
+    },
   },
   {
     element: 'teqgel',
     level: 'uber',
-    message: 'TODO',
+    message: 'При входе в VR в течение часа после приёма препарата, время нахождения в VR увеличивается на 90 минут.',
+    durationEffect: {
+      handler: increaseMaxTimeInVr,
+      amount: 90,
+      duration: duration(60, 'minutes'),
+    },
   },
   {
     element: 'teqgel',
     level: 'super',
-    message: 'TODO',
+    message: 'При входе в VR в течение часа после приёма препарата, время нахождения в VR увеличивается на 60 минут.',
+    durationEffect: {
+      handler: increaseMaxTimeInVr,
+      amount: 60,
+      duration: duration(60, 'minutes'),
+    },
   },
   {
     element: 'teqgel',
     level: 'crysis',
-    message: 'TODO',
+    message: 'При входе в VR в течение часа после приёма препарата, время нахождения в VR увеличивается на 60 минут. Появилась зависимость',
+    durationEffect: {
+      handler: increaseMaxTimeInVr,
+      amount: 60,
+      duration: duration(60, 'minutes'),
+    },
   },
 
   {
