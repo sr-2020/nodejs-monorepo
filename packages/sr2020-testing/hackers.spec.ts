@@ -78,7 +78,7 @@ describe('Hackers-related events', function () {
           qrCode: expect.objectContaining({
             data: expect.objectContaining({
               id: 'cyberdeck-chariot',
-              modSlots: 4,
+              modSlots: 3,
             }),
             type: 'cyberdeck',
           }),

@@ -70,7 +70,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: { id: 'gen-meta-norm', level: 1 },
-    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
+    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 }), modifierFromEffect(increaseHostEntrySpeed, { amount: -1 })],
   },
   // chemo.baseEffectThreshold -40
   // chemo.uberEffectThreshold -30
@@ -717,31 +717,31 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 1 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT:
   // [+10] Декер_скорость_входа_на_хост
   {
     id: 'quick-to-enter-2',
     humanReadableName: 'Очень шустрый',
-    description: 'Снижает время входа на хост на еще на 2 минуты',
+    description: 'Снижает время входа на хост на еще минуту',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1', 'fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 2 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -1 }),
   },
   // IT:
   // [+10] Декер_скорость_входа_на_хост
   {
     id: 'quick-to-enter-3',
     humanReadableName: 'Супер шустрый',
-    description: '.. и еще снижает время входа на хост на 1 минуту',
+    description: '.. и еще снижает время входа на хост еще на 2 минуты',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2', 'fencer-3'],
     pack: { id: 'hack-deck-fencer', level: 3 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT: команда в кривда-матрице
   {
@@ -765,7 +765,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-breacher', level: 1 },
-    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 20 }),
   },
   // IT:
   // [+1] Декер_конверсия_Firewall
@@ -777,7 +777,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'breacher-1'],
     pack: { id: 'hack-deck-breacher', level: 2 },
-    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
   },
   // IT:
   // [+1] Декер_конверсия_Firewall
@@ -789,7 +789,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     pack: { id: 'hack-deck-breacher', level: 3 },
-    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Attack
   // IT:
@@ -802,7 +802,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-fencer', level: 1 },
-    modifier: modifierFromEffect(increaseConversionAttack, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 20 }),
   },
   // IT:
   // [+1] Декер_конверсия_Attack
@@ -814,7 +814,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 2 },
-    modifier: modifierFromEffect(increaseConversionAttack, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 10 }),
   },
   // IT:
   // [+1] Декер_конверсия_Attack
@@ -826,7 +826,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 3 },
-    modifier: modifierFromEffect(increaseConversionAttack, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionAttack, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Sleaze
   // IT:
@@ -839,7 +839,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-sly', level: 1 },
-    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 20 }),
   },
   // IT:
   // [+1] Декер_конверсия_Sleaze
@@ -851,7 +851,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
     pack: { id: 'hack-deck-sly', level: 2 },
-    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
   },
   // IT:
   // [+1] Декер_конверсия_Sleaze
@@ -863,7 +863,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
     pack: { id: 'hack-deck-sly', level: 3 },
-    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 1 }),
+    modifier: modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Dataprocessing
   // IT:
@@ -876,7 +876,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'hack-deck-miner', level: 1 },
-    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 2 }),
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 20 }),
   },
   // IT:
   // [+1] Декер_конверсия_Dataprocessing
@@ -888,9 +888,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'miner-1'],
     pack: { id: 'hack-deck-miner', level: 2 },
-    modifier: modifierFromEffect(increaseConversionDataprocessing, {
-      amount: 1,
-    }),
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
   // IT:
   // [+1] Декер_конверсия_Dataprocessing
@@ -902,9 +900,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'miner-2'],
     pack: { id: 'hack-deck-miner', level: 3 },
-    modifier: modifierFromEffect(increaseConversionDataprocessing, {
-      amount: 1,
-    }),
+    modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
   {
