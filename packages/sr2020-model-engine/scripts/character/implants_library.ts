@@ -140,7 +140,7 @@ export const kAllImplants: Implant[] = [
     id: 'cyber-hand-alpha',
     name: 'Кибер-рука',
     slot: 'arm',
-    description: 
+    description:
       'При наличии одного импланта и нужного навыка позволяет использовать любое легкое холодное одноручное оружие, а также винтовки и автоматы. \nПри наличии двух имплантов и нужного навыка позволяет использовать любое тяжелое холодное двуручное оружие, а так же пулемёты.',
     grade: 'alpha',
     essenceCost: 1.5,
@@ -151,7 +151,7 @@ export const kAllImplants: Implant[] = [
     id: 'cyber-hand-beta',
     name: 'Кибер-рука',
     slot: 'arm',
-    description: 
+    description:
       'При наличии одного импланта и нужного навыка позволяет использовать любое легкое холодное одноручное оружие, а также винтовки и автоматы. \nПри наличии двух имплантов и нужного навыка позволяет использовать любое тяжелое холодное двуручное оружие, а так же пулемёты.',
     grade: 'beta',
     essenceCost: 1.2,
@@ -162,7 +162,7 @@ export const kAllImplants: Implant[] = [
     id: 'cyber-hand-gamma',
     name: 'Кибер-рука',
     slot: 'arm',
-    description: 
+    description:
       'При наличии одного импланта и нужного навыка позволяет использовать любое легкое холодное одноручное оружие, а также винтовки и автоматы. \nПри наличии двух имплантов и нужного навыка позволяет использовать любое тяжелое холодное двуручное оружие, а так же пулемёты.',
     grade: 'gamma',
     essenceCost: 0.9,
@@ -173,7 +173,7 @@ export const kAllImplants: Implant[] = [
     id: 'cyber-hand-delta',
     name: 'Кибер-рука',
     slot: 'arm',
-    description: 
+    description:
       'При наличии одного импланта и нужного навыка позволяет использовать любое легкое холодное одноручное оружие, а также винтовки и автоматы. \nПри наличии двух имплантов и нужного навыка позволяет использовать любое тяжелое холодное двуручное оружие, а так же пулемёты.',
     grade: 'delta',
     essenceCost: 0.6,
@@ -184,7 +184,7 @@ export const kAllImplants: Implant[] = [
     id: 'cyber-hand-bio',
     name: 'Кибер-рука',
     slot: 'arm',
-    description: 
+    description:
       'При наличии одного импланта и нужного навыка позволяет использовать любое легкое холодное одноручное оружие, а также винтовки и автоматы. \nПри наличии двух имплантов и нужного навыка позволяет использовать любое тяжелое холодное двуручное оружие, а так же пулемёты.',
     grade: 'bio',
     essenceCost: 0.3,
@@ -367,7 +367,7 @@ export const kAllImplants: Implant[] = [
     name: 'Гондон',
     slot: 'body',
     description:
-      'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейдж-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность при проводном подключении через дата-линк к хот-симе Матрицы, ценой значительной потери остроты ощущений. \nВ настоящий момент его снова облюбовали декеры, а остальным он интересен очень слабо.\n\nУменьшает вероятность травмы от биофидбека',    
+      'Официальное название этого импланта "Биофидбек-фильтр", но так его называют разве что вейдж-слейвы на митингах в коворкингах. Его придумали много лет назад, чтобы повысить безопасность при проводном подключении через дата-линк к хот-симе Матрицы, ценой значительной потери остроты ощущений. \nВ настоящий момент его снова облюбовали декеры, а остальным он интересен очень слабо.\n\nУменьшает вероятность травмы от биофидбека',
     grade: 'beta',
     essenceCost: 1.2,
     installDifficulty: 9,
@@ -719,7 +719,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 1.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
   },
   {
     id: 'elbrus-beta',
@@ -739,7 +739,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 0.9,
     installDifficulty: 11,
-    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
   },
   {
     id: 'elbrus-delta',
@@ -749,7 +749,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 0.6,
     installDifficulty: 15,
-    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
   },
   {
     id: 'elbrus-bio',
@@ -759,7 +759,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.3,
     installDifficulty: 21,
-    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
   },
   {
     id: 'goblin-alpha',
@@ -769,7 +769,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 1.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 10 })],
   },
   {
     id: 'goblin-beta',
@@ -779,7 +779,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.2,
     installDifficulty: 9,
-    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 10 })],
   },
   {
     id: 'goblin-gamma',
@@ -789,7 +789,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 0.9,
     installDifficulty: 11,
-    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 10 })],
   },
   {
     id: 'goblin-delta',
@@ -799,7 +799,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 0.6,
     installDifficulty: 15,
-    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 10 })],
   },
   {
     id: 'goblin-bio',
@@ -809,7 +809,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.3,
     installDifficulty: 21,
-    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionSleaze, { amount: 10 })],
   },
   {
     id: 'kunai-alpha',
@@ -819,7 +819,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 1.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 10 })],
   },
   {
     id: 'kunai-beta',
@@ -829,7 +829,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.2,
     installDifficulty: 9,
-    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 10 })],
   },
   {
     id: 'kunai-gamma',
@@ -839,7 +839,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 0.9,
     installDifficulty: 11,
-    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 10 })],
   },
   {
     id: 'kunai-delta',
@@ -849,7 +849,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 0.6,
     installDifficulty: 15,
-    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 10 })],
   },
   {
     id: 'kunai-bio',
@@ -859,7 +859,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.3,
     installDifficulty: 21,
-    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionAttack, { amount: 10 })],
   },
   {
     id: 'geffen-alpha',
@@ -869,7 +869,7 @@ export const kAllImplants: Implant[] = [
     grade: 'alpha',
     essenceCost: 1.5,
     installDifficulty: 7,
-    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 10 })],
   },
   {
     id: 'geffen-beta',
@@ -879,7 +879,7 @@ export const kAllImplants: Implant[] = [
     grade: 'beta',
     essenceCost: 1.2,
     installDifficulty: 9,
-    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 10 })],
   },
   {
     id: 'geffen-gamma',
@@ -889,7 +889,7 @@ export const kAllImplants: Implant[] = [
     grade: 'gamma',
     essenceCost: 0.9,
     installDifficulty: 11,
-    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 10 })],
   },
   {
     id: 'geffen-delta',
@@ -899,7 +899,7 @@ export const kAllImplants: Implant[] = [
     grade: 'delta',
     essenceCost: 0.6,
     installDifficulty: 15,
-    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 10 })],
   },
   {
     id: 'geffen-bio',
@@ -909,7 +909,7 @@ export const kAllImplants: Implant[] = [
     grade: 'bio',
     essenceCost: 0.3,
     installDifficulty: 21,
-    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 1 })],
+    modifiers: [modifierFromEffect(increaseConversionFirewall, { amount: 10 })],
   },
   {
     id: 'dreamcast-alpha',
