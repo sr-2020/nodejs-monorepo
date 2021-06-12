@@ -70,7 +70,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: { id: 'gen-meta-norm', level: 1 },
-    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 })],
+    modifier: [modifierFromEffect(increaseFadingResistance, { amount: 1 }), modifierFromEffect(increaseHostEntrySpeed, { amount: -1 })],
   },
   // chemo.baseEffectThreshold -40
   // chemo.uberEffectThreshold -30
@@ -717,31 +717,31 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     pack: { id: 'hack-deck-fencer', level: 1 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 5 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT:
   // [+10] Декер_скорость_входа_на_хост
   {
     id: 'quick-to-enter-2',
     humanReadableName: 'Очень шустрый',
-    description: 'Снижает время входа на хост на еще на 2 минуты',
+    description: 'Снижает время входа на хост на еще минуту',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1', 'fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 2 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -1 }),
   },
   // IT:
   // [+10] Декер_скорость_входа_на_хост
   {
     id: 'quick-to-enter-3',
     humanReadableName: 'Супер шустрый',
-    description: '.. и еще снижает время входа на хост на 1 минуту',
+    description: '.. и еще снижает время входа на хост еще на 2 минуты',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2', 'fencer-3'],
     pack: { id: 'hack-deck-fencer', level: 3 },
-    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: 10 }),
+    modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT: команда в кривда-матрице
   {
