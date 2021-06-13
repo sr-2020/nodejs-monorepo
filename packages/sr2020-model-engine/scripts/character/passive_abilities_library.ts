@@ -54,6 +54,7 @@ import {
   unlockAutodockImplantInstall,
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
+  unlockScoringDetailsScreen,
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -1031,7 +1032,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-face'],
-    modifier: [],
+    modifier: [modifierFromEffect(unlockScoringDetailsScreen, {})],
   },
   // После списания рентных платежей гм получает кэшбек в размере 2% от списанной суммы. Начисляется после каждого списания рентных платежей.
   {

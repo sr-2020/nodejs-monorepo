@@ -352,6 +352,10 @@ export function increaseImplantsSlots(api: EffectModelApi<Sr2020Character>, m: M
   api.model.implantsBodySlots += m.amount;
 }
 
+export function unlockScoringDetailsScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.screens.scoring = true;
+}
+
 export function unlockAutodockScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.screens.autodoc = true;
 }

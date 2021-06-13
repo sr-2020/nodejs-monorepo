@@ -235,6 +235,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         location: false,
         wound: true,
         scanQr: true,
+        scoring: false,
       },
       analyzedBody: null,
       spells: [],

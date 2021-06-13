@@ -607,6 +607,10 @@ export class Screens {
   @BoolProperty()
   @Column({ default: true })
   scanQr: boolean;
+
+  @BoolProperty()
+  @Column({ default: false })
+  scoring: boolean;
 }
 
 export class Ethic {
