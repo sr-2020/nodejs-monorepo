@@ -107,7 +107,7 @@ jobs:
   deploy_push:
     runs-on: ubuntu-latest
     needs: [test, docker_push]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_push_affected == 1
+    if: github.ref == 'refs/heads/helm'
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -118,12 +118,14 @@ jobs:
       - uses: actions/checkout@v1
       - run: |
           kubectl config set-context --current --namespace=production
-          kubectl set image deployment/push push=sr2020/push:$GITHUB_SHA --record
-          kubectl rollout status deployment/push
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          helm version
+          helm upgrade push helm/push/ --wait \
+            --set image.tag=$GITHUB_SHA
   deploy_model_engine:
     runs-on: ubuntu-latest
     needs: [test, docker_model_engine]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_model_engine_affected == 1
+    if: github.ref == 'refs/heads/helm'
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -134,12 +136,14 @@ jobs:
       - uses: actions/checkout@v1
       - run: |
           kubectl config set-context --current --namespace=production
-          kubectl set image deployment/model-engine model-engine=sr2020/model-engine:$GITHUB_SHA --record
-          kubectl rollout status deployment/model-engine
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          helm version
+          helm upgrade model-engine helm/model-engine/ --wait \
+            --set image.tag=$GITHUB_SHA
   deploy_models_manager:
     runs-on: ubuntu-latest
     needs: [test, docker_models_manager]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_models_manager_affected == 1
+    if: github.ref == 'refs/heads/helm'
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -150,5 +154,7 @@ jobs:
       - uses: actions/checkout@v1
       - run: |
           kubectl config set-context --current --namespace=production
-          kubectl set image deployment/models-manager models-manager=sr2020/models-manager:$GITHUB_SHA --record
-          kubectl rollout status deployment/models-manager
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          helm version
+          helm upgrade models-manager helm/models-manager/ --wait \
+            --set image.tag=$GITHUB_SHA

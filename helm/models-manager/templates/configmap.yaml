@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  POSTGRESQL_HOST: {{ .Values.app.dbHost | quote }}
+  POSTGRESQL_DATABASE: {{ .Values.app.dbName | quote }}
