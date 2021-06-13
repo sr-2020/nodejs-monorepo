@@ -486,7 +486,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'compressor',
     humanReadableName: 'Компрессор',
-    description: 'Ты разобрался со всеми примудростями квантовой компрессии. Что позволяет сократить размер софта в памяти деки на 20%\n',
+    description: 'Ты разобрался со всеми премудростями квантовой компрессии. Что позволяет сократить размер софта в памяти деки на 20%\n',
     availability: 'closed',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
@@ -664,7 +664,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'stubbornness-2',
     humanReadableName: 'Удивительная упертость',
-    description: 'Продлевает максимальное время нахождения на хосте на еще на10 минут',
+    description: 'Продлевает максимальное время нахождения на хосте на еще на 10 минут',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
@@ -1077,6 +1077,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
+  // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
   {
     id: 'dm-soul-expert',
     humanReadableName: 'Душевед',
@@ -2090,7 +2091,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Риггер, повелитель дронов, хрома и химоты.',
     availability: 'open',
     karmaCost: 100,
-    prerequisites: [],
+    prerequisites: ['!meta-ghoul', '!meta-vampire'],
     pack: { id: 'gen-arch-rigger', level: 1 },
     modifier: [
       modifierFromEffect(increaseBody, { amount: 2 }),
@@ -2139,7 +2140,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['!arch-mage', '!tech-blockade'],
+    prerequisites: ['!arch-mage', '!tech-blockade', '!meta-ghoul', '!meta-vampire'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2501,7 +2502,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hack-deck-harm',
     humanReadableName: 'harm',
-    description: 'новая команда: harm\nПоражает хакера биофидбеком. грязная штука.',
+    description: 'новая команда: harm\nПозволяет добить(КС) поверженного хакера биофидбеком.  грязная штука.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
@@ -2512,9 +2513,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hack-deck-kill',
     humanReadableName: 'kill',
-    description: 'новая команда: kill\nУбивает поражаенного хакера. Да, наглухо',
+    description: 'новая команда: kill\nУБИВАЕТ(АС) поверженного хакера. Да, наглухо \nДля применения понадобится специальный эксплойт',
     availability: 'closed',
-    karmaCost: 10,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'fencer-3', 'hack-deck-harm'],
     modifier: [],
   },
@@ -3180,17 +3181,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-recovery-bonus-1',
     humanReadableName: 'Ремонт бонус 1',
-    description: 'Улучшает способность по ремонту дронов.',
+    description: 'Улучшает способность по ремонту дронов в Мастерской.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['arch-rigger', 'drone-recovery'],
+    prerequisites: ['arch-rigger'],
     modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
   },
   // drones.recoverySkill +4
   {
     id: 'drone-recovery-bonus-2',
     humanReadableName: 'Ремонт бонус 2',
-    description: 'Сильнее улучшает способность по ремонту дронов.',
+    description: 'Сильнее улучшает способность по ремонту дронов в Мастерской.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-1'],
@@ -3200,7 +3201,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-recovery-bonus-3',
     humanReadableName: 'Ремонт бонус 3',
-    description: 'Максимально улучшает способность по ремонту дронов.',
+    description: 'Максимально улучшает способность по ремонту дронов в Мастерской.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-2'],
@@ -3618,10 +3619,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Покажи эту способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
     availability: 'open',
     karmaCost: 0,
-    prerequisites: ['arch-sub-agent', 'arch-digital'],
+    prerequisites: ['sub-agent', 'arch-digital'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'arch-digital',
@@ -3629,8 +3629,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Цифровая сущность, егост или агент',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
-    pack: { id: 'gen-arch-ai', level: 1 },
+    prerequisites: [],
     modifier: [],
   },
   //
@@ -3661,6 +3660,54 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-digital'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'sub-agent',
+    humanReadableName: 'Агент',
+    description: 'Ты сервисная программа, которая обеспечивает работу хоста в Матрице',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'sub-eghost',
+    humanReadableName: 'Электронный призрак',
+    description: 'Ты сервисная программа с нарушением кода',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'sub-ai',
+    humanReadableName: 'Проекция ИИ',
+    description: 'Ты часть проекции Искусственного Интеллекта, сгусток программ и кода, живущий в Матрице. ',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'ai-techno-copy',
+    humanReadableName: 'Digital Techno Copyrast',
+    description: 'Эта способность позволяет тебе развивать способности техноманта',
+    availability: 'closed',
+    karmaCost: 30,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];

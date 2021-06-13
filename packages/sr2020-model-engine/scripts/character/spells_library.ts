@@ -520,11 +520,10 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'dumpty-humpty',
     humanReadableName: 'Dumpty-Humpty',
-    description:
-      'Перманентно понизить на 1 имеющийся штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом. Потребуется Мощь не меньше 4.',
-    prerequisites: ['arch-mage'],
+    description: 'Перманентно понизить на 1 имеющийся штраф от дамп-шока цели, указанной добровольно предоставленным qr-кодом.',
+    prerequisites: ['arch-mage', 'ground-heal'],
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 30,
     sphere: 'stats',
     eventType: dumptyHumptySpell.name,
     hasTarget: true,

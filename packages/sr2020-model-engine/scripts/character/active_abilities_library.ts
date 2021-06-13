@@ -73,7 +73,6 @@ import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scri
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1305,10 +1304,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'drone-danger',
     humanReadableName: 'Повреждение дрона',
     description:
-      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". Примените абилку "Отключение от дрона". После чего немедленно вернитесь в свое тело. ',
+      'Если ваш дрон атакован и с него сняли все хиты - нажмите эту кнопку. Оставьте QR дрона там где вы находитесь. Дрон перейдет в состояние "Сломан". \nСами наденьте белый хайратник, вернитесь к месту, где вы оставили тело и примените абилку "Отключение от дрона". После чего немедленно вернитесь в свое тело. ',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 0,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
@@ -1992,7 +1991,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         allowedTypes: ['cyberdeck'],
       },
     ],
-    cooldownMinutes: (character) => 60,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-decker'],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     availability: 'open',
@@ -2005,7 +2004,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'jack-out',
     humanReadableName: 'Jack-out',
-    description: 'Выстегнуться из деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если еще соединен с терминалом',
+    description: 'Выстегнуться из деки (jack-out).\nВНИМАНИЕ: ты получишь дампшок, если находишься в HotSim',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
@@ -2625,7 +2624,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'attack-drone',
     humanReadableName: 'Real: паралич дрона',
-    description: '"Ты можешь касанием (рукой или кинжалом) И криком ""Паралич!"" обездвижить любого дрона на 90 секунд."',
+    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любого дрона на 90 секунд.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2903,7 +2902,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
-    prerequisites: ['arch-rigger'],
+    prerequisites: ['in-drone'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3356,8 +3355,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'attack-drone-2',
     humanReadableName: 'Real: нападение на дрона',
-    description:
-      '"Ты можешь касанием (рукой или кинжалом) И криком ""НАпадение на дрон"" \nснять 1 хит с любого эктоплазменного тела (дрона)',
+    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Нападение на дрон"\nснять 1 хит с любого тела типа дрон',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -3438,7 +3436,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Тех заходит на сайт, создает или выбирает ран, переводит регистрацию на себя (кнопка на сайте)
   // После чего начинает сканить кр игроков
   {
@@ -3449,11 +3446,320 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Модельного действия нет, просто выводится этот текст. Да, тут нет телохранилищ и значит маги могут так путешествовать. Но на входе и выходе они беззащитны, поэтому не смогут ни мгновенно убежать, ни где-либо мгновенно появиться и атаковать.
+  {
+    id: 'astral-gate',
+    humanReadableName: 'Астральные врата',
+    description:
+      'Ты переходишь в астральный план, можешь провести там до 40 минут. Маркер: красный дождевик.\nПосле активации абилки и до входа в астрал (надевания красного дождевика) тебе надо на 20 секунд замереть на месте. Всё это время ты ещё в реальном мире и доступен для любых воздействий.\nАналогично происходит выход (по желанию или по окончанию времени действия) - ты снимаешь дождевик, оказываясь в реальном мире, доступным для любых воздействий, и должен на 30 секунд замереть на месте.\nКогда ты находишься в астрале, ты видишь и слышишь реальный мир, но не можешь воздействовать на него.\nТебя из реального мира не воспринимают и никак не могут атаковать (если только у них нет абилки, которая явным образом утверждает иное).',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 60,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
+  // Показывает текст "Ты сбежал из основания обратно в свое тело"
+  // techno.fading +300
+  {
+    id: 'ai-runaway',
+    humanReadableName: 'Бегство из Основания',
+    description:
+      'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 50,
+    minimalEssence: 0,
+    fadingPrice: 300,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
+  // techno.fading + 70
+  {
+    id: 'ai-magnetism',
+    humanReadableName: 'магнетизм',
+    description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 15,
+    minimalEssence: 0,
+    fadingPrice: 70,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
+  // А так же считается, что он собрал три предмета, если есть задание собрать предметы висящие на веревках. деревьях и т.д, поскольку он мог добраться до них при помощи левитации.
+  // techno.fading + 500
+  //
+  {
+    id: 'ai-levitation',
+    humanReadableName: 'левитация',
+    description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 15,
+    minimalEssence: 0,
+    fadingPrice: 500,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
+  // techno.fading  + 80
+  {
+    id: 'ai-bond-breaker',
+    humanReadableName: 'освобождение от пут',
+    description: 'Ты можешь освободить одну руку себе или товарищу',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-remove-excees'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 15,
+    minimalEssence: 0,
+    fadingPrice: 80,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
+  // techno.fading + 200
+  {
+    id: 'ai-one-for-all',
+    humanReadableName: 'один за всех',
+    description: 'Ты можешь пройти эту комнату один за всю свою команду',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 0,
+    fadingPrice: 200,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
+  // techno.fading + 30
+  {
+    id: 'ai-add-time-1',
+    humanReadableName: 'больше времени +1',
+    description: 'Теперь у вас на 1 минуту больше времени в данже',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 30,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
+  // techno.fading + 40
+  {
+    id: 'ai-add-time-2',
+    humanReadableName: 'больше времени +2',
+    description: 'Теперь у вас на 2 минуты больше времени в данже',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-1'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 40,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
+  // techno.fading + 60
+  {
+    id: 'ai-add-time-3',
+    humanReadableName: 'больше времени +3',
+    description: 'Теперь у вас на 3 минуты больше времени в данже',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-2'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 60,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
+  // techno.fading + 80
+  {
+    id: 'ai-add-time-4',
+    humanReadableName: 'Больше времени +4',
+    description: 'Теперь у вас на 4 минуты больше времени в данже',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-3'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 80,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
+  // techno.fading + 100
+  {
+    id: 'ai-add-time-5',
+    humanReadableName: 'больше времени +5',
+    description: 'Теперь у вас на 5 минут больше времени в данже',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-4'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 100,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
+  // techno.fading +120
+  {
+    id: 'ai-add-basement',
+    humanReadableName: 'добавить опору',
+    description: 'Укажи, где должна появиться дополнительная опора',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 120,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
+  // techno.fading +150
+  {
+    id: 'ai-bell-silence',
+    humanReadableName: 'молчание колокольчиков',
+    description: 'Ты можешь задевать колокольчики, матрица их не услышит',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 150,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игрок может сфотографировать объект и переслать фото другой части команды в основании
+  // techno.fading + 230
+  {
+    id: 'ai-photo-memory',
+    humanReadableName: 'фотографическая память',
+    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 230,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
+  // techno.fading +100
+  {
+    id: 'ai-second-sight',
+    humanReadableName: 'ясновидение',
+    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-photo-memory'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 100,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
+  // techno.fading + 200
+  {
+    id: 'ai-remove-excees',
+    humanReadableName: 'убрать все лишнее',
+    description: 'Теперь матрица подскажет тебе, какие детали лишние',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy', 'ai-remove-half'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 200,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
+  // techno.fading + 150
+  {
+    id: 'ai-remove-half',
+    humanReadableName: 'убрать половину ',
+    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['ai-techno-copy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 150,
     eventType: dummyAbility.name,
   },
 ];
