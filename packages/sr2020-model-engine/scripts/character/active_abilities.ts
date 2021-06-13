@@ -64,12 +64,14 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     }
   }
 
-  api.model.hacking.fading += libraryAbility.fadingPrice;
-  if (api.model.hacking.fading > 100 * api.workModel.resonance) {
-    dumpshock(api, {});
-    return;
-  } else if (api.model.hacking.fading == 100 * api.workModel.resonance) {
-    dumpshock(api, {});
+  if (libraryAbility.fadingPrice > 0) {
+    api.model.hacking.fading += libraryAbility.fadingPrice;
+    if (api.model.hacking.fading > 100 * api.workModel.resonance) {
+      dumpshock(api, {});
+      return;
+    } else if (api.model.hacking.fading == 100 * api.workModel.resonance) {
+      dumpshock(api, {});
+    }
   }
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
