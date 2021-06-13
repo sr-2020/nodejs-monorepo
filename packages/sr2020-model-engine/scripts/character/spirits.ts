@@ -1,46 +1,29 @@
 import { EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
-import { BodyStorageQrData, SpiritQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { duration } from 'moment';
-import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
 import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-engine/scripts/character/features';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { kSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
-import { startUsingDroneOrSpirit, stopUsingDroneOrSpirit } from '@alice/sr2020-model-engine/scripts/qr/drones';
+import { kCommonSpiritAbilityIds, Spirit } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 
 const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2'];
 const kInSpiritModifierId = 'in-the-spirit';
 
-export function enterSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Для входа в духа необходимо быть в мясном теле.');
-  }
-
-  const spirit = typedQrData<SpiritQrData>(api.aquired(QrCode, data.droneId!));
-
-  if (spirit.inUse) {
-    throw new UserVisibleError('Этот дух в настоящий момент уже используется.');
   }
 
   const timeInSpirit = duration(15, 'minutes');
   api.setTimer(kSpiritTimerIds[0], 'Выход из духа', timeInSpirit, spiritTimeout, {});
 
-  api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
-    characterId: api.model.modelId,
-    bodyType: api.workModel.currentBody,
-  });
-
-  api.sendOutboundEvent(QrCode, data.droneId!, startUsingDroneOrSpirit, {});
-
-  api.model.activeAbilities = api.model.activeAbilities.concat(spirit.activeAbilities);
-  for (const passiveAbility of spirit.passiveAbilities) {
-    addFeatureToModel(api.model, passiveAbility.id);
+  data.abilityIds = [...data.abilityIds, ...kCommonSpiritAbilityIds];
+  for (const id of data.abilityIds) {
+    addFeatureToModel(api.model, id);
   }
 
-  api.addModifier(createSpiritModifier(spirit, data.droneId!));
+  api.addModifier(createSpiritModifier(data));
 }
 
 export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
@@ -48,20 +31,10 @@ export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Для выхода из духа необходимо быть подключенным к нему.');
   }
 
-  const storage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId!));
-  if (!(storage?.body?.characterId == api.model.modelId)) {
-    throw new UserVisibleError('Данная ячейка телохранилище не содержит ваше тело.');
-  }
-  api.sendOutboundEvent(QrCode, data.bodyStorageId!, removeBodyFromStorage, {});
-
   for (const timerId of kSpiritTimerIds) api.removeTimer(timerId);
 
   const m = findInSpiritModifier(api);
-  api.sendOutboundEvent(QrCode, m.spiritQrId, stopUsingDroneOrSpirit, {
-    activeAbilities: api.workModel.activeAbilities.filter((ability) => kSpiritAbilityIds.has(ability.id)),
-  });
-
-  for (const abilityId of kSpiritAbilityIds) {
+  for (const abilityId of m.abilityIds) {
     removeFeatureFromModel(api.model, abilityId);
   }
 
@@ -81,9 +54,13 @@ export function applyPostSpiritDamange(api: EventModelApi<Sr2020Character>, data
   }
 }
 
-type InTheSpiritModifier = Modifier & { hp: number; spiritQrId: string; postSpiritDamage: number; stage: number };
+type InTheSpiritModifier = Modifier &
+  Spirit & {
+    postSpiritDamage: number;
+    stage: number;
+  };
 
-function createSpiritModifier(spirit: SpiritQrData, spiritQrId: string): InTheSpiritModifier {
+function createSpiritModifier(spirit: Spirit): InTheSpiritModifier {
   return {
     mID: kInSpiritModifierId,
     priority: Modifier.kDefaultPriority,
@@ -95,8 +72,7 @@ function createSpiritModifier(spirit: SpiritQrData, spiritQrId: string): InTheSp
         enabled: true,
       },
     ],
-    hp: spirit.hitpoints,
-    spiritQrId,
+    ...spirit,
     postSpiritDamage: 0,
     stage: 0,
   };
@@ -112,9 +88,9 @@ function findInSpiritModifier(api: EventModelApi<Sr2020Character>) {
 
 export function inTheSpirit(api: EffectModelApi<Sr2020Character>, m: InTheSpiritModifier) {
   api.model.currentBody = 'ectoplasm';
+  api.model.name = m.name;
   api.model.maxHp = m.hp;
-  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kSpiritAbilityIds.has(ability.id));
-  //  What to do with the passive ones?
+  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => m.abilityIds.includes(ability.id));
 
   api.model.screens.billing = false;
   api.model.screens.spellbook = false;

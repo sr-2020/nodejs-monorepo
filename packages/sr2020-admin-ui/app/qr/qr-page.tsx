@@ -14,7 +14,6 @@ import { WriteSoftwareCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-sof
 import { WriteBodystorageCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-bodystorage-card';
 import { WriteAiSymbolCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-ai-symbol-card';
 import { WriteKarmaCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-karma-card';
-import { WriteSpiritCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-spirit-card';
 import { WriteFeatureCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-feature-card';
 import { WriteFoodCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-food-card';
 import { WriteFocusCard } from '@alice/sr2020-admin-ui/app/qr/cards/write-focus-card';
@@ -78,7 +77,6 @@ export class LoadedQrCodePage extends React.Component<{ qr: QrCode; addToast: Ad
           <WriteAiSymbolCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">
-          <WriteSpiritCard sendEvent={this.sendEvent} />
           <WriteRepairKitCard sendEvent={this.sendEvent} />
         </CardDeck>
         <CardDeck className="mt-3">

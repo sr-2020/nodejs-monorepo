@@ -69,10 +69,11 @@ import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility } f
 import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
-import { enterSpirit, exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
+import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -2110,7 +2111,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: enterSpirit.name,
+    eventType: externalAbility.name,
   },
   // Деятельность в качестве духа прекращается, игроку необходимо вернуться в телохранилище, чтобы продолжить действовать в своём мясном теле.
   {
@@ -2118,7 +2119,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Dispirit',
     description: 'Вылезти из духа\n*Применяется для нормального выхода из эктотела*',
     target: 'scan',
-    targetsSignature: kBodyStorageTargeted,
+    targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'master',

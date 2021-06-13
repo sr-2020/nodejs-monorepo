@@ -1,8 +1,5 @@
 import { TestFixture } from './fixture';
-
-import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
-import { kSpiritAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
-import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { Spirit } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
 
 describe('Spirits-related abilities', () => {
   let fixture: TestFixture;
@@ -15,62 +12,39 @@ describe('Spirits-related abilities', () => {
     await fixture.destroy();
   });
 
-  it('Spirit abilities are valid', () => {
-    for (const id of kSpiritAbilityIds) {
-      expect(getAllFeatures()).toContainEqual(expect.objectContaining({ id }));
-    }
-  });
-
   it('Entering and leaving spirit', async () => {
     // Mage set up
-    await fixture.saveCharacter({ maxHp: 2, magic: 5 });
-    await fixture.addCharacterFeature('own-spirit');
+    await fixture.saveCharacter({ name: 'Vasya', maxHp: 2, magic: 5 });
 
-    // Body storage set up
-    await fixture.saveQrCode({ modelId: '1' });
-    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '1');
-
-    // Spirit set up
-    await fixture.saveQrCode({ modelId: '2' });
-    await fixture.sendQrCodeEvent({ eventType: 'writeSpirit', data: { id: 'spirit-type-1' } }, '2');
-
+    const spirit: Spirit = {
+      name: 'Petya',
+      hp: 6,
+      abilityIds: ['magic-3'],
+    };
     // Enter spirit
-    await fixture.useAbility({ id: 'own-spirit', bodyStorageId: '1', droneId: '2' });
-
-    {
-      // Body is in storage
-      const { baseModel } = await fixture.getQrCode('1');
-      const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).toEqual({
-        characterId: '0',
-        type: 'physical',
-      });
-    }
+    await fixture.sendCharacterEvent({ eventType: 'enterSpirit', data: spirit });
 
     {
       // Mage is in spirit and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).toBe(4);
+      expect(workModel.name).toBe('Petya');
+      expect(workModel.maxHp).toBe(6);
+      expect(workModel.magic).toBe(6);
       expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'dispirit' }));
       expect(workModel.currentBody).toBe('ectoplasm');
     }
 
     // Leave spirit
-    await fixture.useAbility({ id: 'dispirit', bodyStorageId: '1' });
-
-    {
-      // Storage is empty
-      const { baseModel } = await fixture.getQrCode('1');
-      const storage = typedQrData<BodyStorageQrData>(baseModel);
-      expect(storage.body).toBeUndefined();
-    }
+    await fixture.useAbility({ id: 'dispirit' });
 
     {
       // Mage is not in the spirit
       const { workModel } = await fixture.getCharacter();
+      expect(workModel.name).toBe('Vasya');
       expect(workModel.maxHp).toBe(2);
-      expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'dispirit' }));
-      expect(workModel.activeAbilities).toHaveLength(1); // Enter spirit
+      expect(workModel.magic).toBe(5);
+      expect(workModel.passiveAbilities).not.toContainEqual(expect.objectContaining({ id: 'magic-3' }));
+      expect(workModel.activeAbilities).toHaveLength(0); // Enter spirit
       expect(workModel.currentBody).toBe('physical');
     }
   });
