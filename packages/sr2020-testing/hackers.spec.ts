@@ -14,7 +14,7 @@ describe('Hackers-related events', function () {
     await fixture.destroy();
   });
 
-  it.skip('Dump shock reduces resonance', async () => {
+  it('Dump shock reduces resonance', async () => {
     await fixture.saveCharacter({ resonance: 5 });
     {
       const { workModel } = await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} });
