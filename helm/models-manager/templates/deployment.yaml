@@ -22,13 +22,13 @@ spec:
             - containerPort: 3000
           readinessProbe:
             httpGet:
-              path: /
+              path: /character/model/51614
               port: 3000
             initialDelaySeconds: 3
             periodSeconds: 20
           livenessProbe:
             httpGet:
-              path: /
+              path: /character/model/51614
               port: 3000
             initialDelaySeconds: 3
             periodSeconds: 20
