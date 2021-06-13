@@ -1,8 +1,6 @@
 import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { increaseIntelligence, increaseResonance } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
-import * as cuid from 'cuid';
-import { duration } from 'moment';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
@@ -41,14 +39,6 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
 
   sendNotificationAndHistoryRecord(api, 'Дампшок!', 'Вы испытали дампшок! Клиническая смерть.');
   api.sendPubSubNotification('dumpshock', { characterId: api.model.modelId });
-}
-
-export function temporaryAntiDumpshock(api: EventModelApi<Sr2020Character>, data: { durationInMinutes: number }) {
-  if (adjustDumpshock(api, { amount: -1 })) {
-    api.setTimer(cuid(), 'Завершение эффекта уменьшения дампшока', duration(data.durationInMinutes, 'minutes'), adjustDumpshock, {
-      amount: 1,
-    });
-  }
 }
 
 export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amount: number }): boolean {

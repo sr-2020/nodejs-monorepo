@@ -26,7 +26,7 @@ describe('Hackers-related events', function () {
     }
   });
 
-  it.skip('Dump shock versus dumpty humpty', async () => {
+  it('Dump shock versus dumpty humpty', async () => {
     await fixture.saveCharacter({ modelId: '1', resonance: 5 }); // Hacker
     await fixture.saveCharacter({ modelId: '2', magic: 10 }); // Caster
     await fixture.saveLocation(); // Needed by spell
@@ -51,8 +51,8 @@ describe('Hackers-related events', function () {
     await fixture.sendCharacterEvent(castEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Not more!
 
-    await fixture.advanceTime(duration(10, 'minutes'));
-    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(4); // Only temporary :(
+    await fixture.advanceTime(duration(10, 'hours'));
+    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5);
   });
 
   it('Activating cyberdeck', async () => {

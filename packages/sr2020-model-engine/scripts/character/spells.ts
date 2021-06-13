@@ -20,13 +20,13 @@ import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonanc
 import { duration } from 'moment';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { temporaryAntiDumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { earnKarma, kKarmaSpellCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { getAllPassiveAbilities, getAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { markAsUsed } from '@alice/sr2020-model-engine/scripts/qr/focus';
+import { adjustDumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 
 type SpellData = LocationMixin & {
   id: string; // corresponds to Spell.id and AddedSpell.id
@@ -529,8 +529,7 @@ export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data:
 }
 
 export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
-  const durationInMinutes = 10 * data.power;
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, temporaryAntiDumpshock, { durationInMinutes });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, adjustDumpshock, { amount: -1 });
 }
 
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
