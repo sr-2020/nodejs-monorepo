@@ -40,8 +40,8 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
     throw new UserVisibleError('Цель не находится в мясном теле.');
   }
 
-  if (api.model.healthState != 'biologically_dead') {
-    healthStateTransition(api, 'clinically_dead', undefined);
+  if (api.model.healthState == 'healthy') {
+    healthStateTransition(api, 'wounded', undefined);
   }
 
   adjustDumpshock(api, { amount: 1 });
