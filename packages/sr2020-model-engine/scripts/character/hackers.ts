@@ -1,19 +1,12 @@
 import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import {
-  increaseBody,
-  increaseCharisma,
-  increaseIntelligence,
-  increaseResonance,
-} from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { increaseIntelligence, increaseResonance } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 import * as cuid from 'cuid';
 import { duration } from 'moment';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
-import { template } from 'lodash';
-import { getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 
@@ -78,15 +71,7 @@ export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amo
 
 export function dumpshockEffect(api: EffectModelApi<Sr2020Character>, m: DumpshockModifier) {
   increaseResonance(api, { ...m, amount: -m.amount });
-  increaseCharisma(api, { ...m, amount: -m.amount });
-  increaseBody(api, { ...m, amount: -m.amount });
   increaseIntelligence(api, { ...m, amount: -m.amount });
-  const ability = getAllPassiveAbilities().get('dump-shock-survivor')!;
-  api.model.passiveAbilities.push({
-    id: ability.id,
-    humanReadableName: ability.humanReadableName,
-    description: template(ability.description)({ amount: m.amount }),
-  });
 }
 
 export function createJackedInEffect(): Effect {
