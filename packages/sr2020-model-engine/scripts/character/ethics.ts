@@ -13,9 +13,9 @@ import {
   satisfiesPrerequisites,
 } from '@alice/sr2020-model-engine/scripts/character/features';
 import { LocusQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { kEthicCooldown } from '@alice/sr2020-model-engine/scripts/character/consts';
 
 const MAX_ETHIC_VALUE = 4;
-const ETHIC_COOLDOWN_MS = 30 * 1000;
 
 export function initEthic(model: Sr2020Character) {
   updatePersonalEthic(
@@ -186,7 +186,7 @@ export function ethicTrigger(api: EventModelApi<Sr2020Character>, data: { id: st
   const gotNewAbility = updatePersonalEthic(api.model, values);
 
   if (valuesShifted) {
-    api.model.ethic.lockedUntil = api.model.timestamp + ETHIC_COOLDOWN_MS;
+    api.model.ethic.lockedUntil = api.model.timestamp + kEthicCooldown.asMilliseconds();
   }
 
   if (valuesShifted) {

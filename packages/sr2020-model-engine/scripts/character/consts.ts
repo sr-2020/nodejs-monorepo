@@ -19,3 +19,5 @@ export const kEssenceLostPerHungerTickVampires = 100;
 export const kEssenceLostPerHungerTickGhouls = 20;
 
 export const kGameStarted = false;
+
+export const kEthicCooldown = duration(30, 'minutes');
