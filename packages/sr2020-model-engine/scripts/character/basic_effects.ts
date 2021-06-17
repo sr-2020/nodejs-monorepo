@@ -29,7 +29,7 @@ export function createClampingEffect(): Effect {
 export function clampAttributes(api: EffectModelApi<Sr2020Character>, m: Modifier) {
   api.model.maxHp = clamp(api.model.maxHp, 0, 6);
   api.model.charisma = clamp(api.model.charisma, 0, 8);
-  api.model.intelligence = clamp(api.model.intelligence, 0, 8);
+  api.model.intelligence = clamp(api.model.intelligence, 1, 8);
   api.model.body = clamp(api.model.body, 0, 8);
   api.model.strength = clamp(api.model.strength, 0, 8);
   api.model.depth = clamp(api.model.depth, 0, 8);

@@ -668,7 +668,7 @@ export class Sr2020Character extends EmptyModel {
   depth: number;
 
   @NumberProperty()
-  @Column({ default: 0 })
+  @Column({ default: 1 })
   intelligence: number;
 
   @NumberProperty()
