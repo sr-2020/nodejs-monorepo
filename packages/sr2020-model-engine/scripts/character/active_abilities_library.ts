@@ -210,9 +210,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    cooldownMinutes: (character) => 240,
+    cooldownMinutes: (character) => 180,
     prerequisites: [],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 100,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -229,7 +229,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 30,
     prerequisites: [],
     pack: { id: 'chummer-zero', level: 1 },
-    availability: 'master',
+    availability: 'open',
     karmaCost: 120,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -660,7 +660,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'посмотреть на qr и сказать сколько это стоит, базовую цену товара',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 1,
+    cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
     prerequisites: ['arch-face'],
     availability: 'open',
     karmaCost: 10,
@@ -809,7 +809,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: spiritsRelatedSpell.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
-  // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 5 минут
   {
     id: 'pray-s',
     humanReadableName: 'Pray my lame',
@@ -825,7 +824,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
-  // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 10 минут
   {
     id: 'pray-m',
     humanReadableName: 'Pray my name',
@@ -841,7 +839,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/J2QfWUnU/286-реализовать-абилки-pray-my-lame-name-fame): Add proper implementation
-  // При сканировании qr-кода астрального тела духа сокращает у этого духа кулдаун способности Fleshpoint на 30 минут
   {
     id: 'pray-xl',
     humanReadableName: 'Pray my fame',
@@ -1223,7 +1220,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => 0,
     prerequisites: [],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -1751,7 +1748,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360,
     prerequisites: [],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -1762,7 +1759,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
-    description: 'На допросе цель развернуто отвечает на заданный вопрос и теряет один хит.',
+    description:
+      'На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Покажи таймер цели. Там должно быть "20 минут" (только что применено)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -1923,11 +1921,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // TODO(https://trello.com/c/EqKhMPbH/373-реализовать-абилку-fleshpoint)
-  // Время действия 120 минут, кулдаун 20 минут. Эктоплазменное тело имеет 3 хита, 0 эссенции и все абилки, которые были у духа (кроме Материализации).
-  // Current body меняется на Ecto
-  // Добавляется абилка Disfleshment / Развоплощение
-  //
-  // по идее, надо добавить какой-то счетчик, чтобы если спирит сам не нажал кнопку Disfleshment, чтобы его выкидывало. Или накладывало какой-то жесткий штраф. Например: (время в эктоплазменном теле - 120), если >0 -  то умножаем на десять и прибавляем к кулдауну абилки при следующем нажатии
   {
     id: 'fleshpoint',
     humanReadableName: 'Fleshpoint',
@@ -2063,15 +2056,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
   {
     id: 'finish-his-body',
-    humanReadableName: 'Добивание',
+    humanReadableName: 'Атака на тело в телохранилище',
     description: 'Добей это тело!  *работает только на тело, находящееся в телохранилище',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
     prerequisites: [],
     pack: { id: 'null', level: 1 },
-    availability: 'master',
-    karmaCost: 120,
+    availability: 'closed',
+    karmaCost: 60,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
@@ -3073,8 +3066,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-1',
-    humanReadableName: 'за кандидата 1',
-    description: 'ты можешь проголосовать за кандидата 1',
+    humanReadableName: 'Голосование: вариант 1',
+    description: 'Ты голосуешь за вариант 1 в голосовании.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3090,8 +3083,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-2',
-    humanReadableName: ' за кандидата 2',
-    description: 'ты можешь проголосовать за кандидата 2',
+    humanReadableName: 'Голосование: вариант 2',
+    description: 'Ты голосуешь за вариант 2 в голосовании.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3107,8 +3100,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-3',
-    humanReadableName: ' за кандидата 3',
-    description: 'ты можешь проголосовать за кандидата 3',
+    humanReadableName: 'Голосование: вариант 3',
+    description: 'Ты голосуешь за вариант 3 в голосовании.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3124,8 +3117,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-4',
-    humanReadableName: ' за кандидата 4',
-    description: 'ты можешь проголосовать за кандидата 4',
+    humanReadableName: 'Голосование: вариант 4',
+    description: 'Ты голосуешь за вариант 4 в голосовании.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3141,8 +3134,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Гражданство: Россия && Распорядитель: Нет
   {
     id: 'voting-5',
-    humanReadableName: 'за кандидата 5',
-    description: 'ты можешь проголосовать за кандидата 5',
+    humanReadableName: 'Голосование: вариант 5',
+    description: 'Ты голосуешь за вариант 5 в голосовании.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3452,7 +3445,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Модельного действия нет, просто выводится этот текст. Да, тут нет телохранилищ и значит маги могут так путешествовать. Но на входе и выходе они беззащитны, поэтому не смогут ни мгновенно убежать, ни где-либо мгновенно появиться и атаковать.
   {
     id: 'astral-gate',
@@ -3463,14 +3455,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
   // Показывает текст "Ты сбежал из основания обратно в свое тело"
   // techno.fading +300
@@ -3483,14 +3473,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 300,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
   // techno.fading + 70
   {
@@ -3501,14 +3489,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 70,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
   // А так же считается, что он собрал три предмета, если есть задание собрать предметы висящие на веревках. деревьях и т.д, поскольку он мог добраться до них при помощи левитации.
   // techno.fading + 500
@@ -3519,16 +3505,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
+    cooldownMinutes: (character) => 15,
     prerequisites: ['ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 500,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
   // techno.fading  + 80
   {
@@ -3539,14 +3523,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-remove-excees'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 15,
     minimalEssence: 0,
     fadingPrice: 80,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
   // techno.fading + 200
   {
@@ -3557,14 +3539,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 30
   {
@@ -3575,14 +3555,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 30,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 40
   {
@@ -3593,14 +3571,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-add-time-1'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 40,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 60
   {
@@ -3611,14 +3587,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-add-time-2'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 60,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 80
   {
@@ -3629,14 +3603,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-add-time-3'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 80,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
   // techno.fading + 100
   {
@@ -3647,14 +3619,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-add-time-4'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
   // techno.fading +120
   {
@@ -3665,14 +3635,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 120,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
   // techno.fading +150
   {
@@ -3683,14 +3651,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игрок может сфотографировать объект и переслать фото другой части команды в основании
   // techno.fading + 230
   {
@@ -3701,14 +3667,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 230,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
   // techno.fading +100
   {
@@ -3719,14 +3683,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-photo-memory'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 100,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
   // techno.fading + 200
   {
@@ -3737,14 +3699,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy', 'ai-remove-half'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 200,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
   // techno.fading + 150
   {
@@ -3755,7 +3715,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: ['ai-techno-copy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
