@@ -801,7 +801,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -899,9 +899,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 40,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', 'nothing-special'],
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 40,
     minimalEssence: 4,
     fadingPrice: 0,
     eventType: changeAuraAbility.name,
@@ -911,13 +911,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'hammer-of-justice',
     humanReadableName: 'Hammer of Justice',
     description:
-      'Активируемый статус "тяжелое" для одноручного оружия.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 25 минут.',
+      'Активируемый статус "тяжелое" для одноручного холодного оружия.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 25 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 25,
     prerequisites: ['arch-mage', 'i-will-survive'],
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 60,
     minimalEssence: 3,
     fadingPrice: 0,
     eventType: hammerOfJustice.name,
@@ -949,7 +949,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-mage', 'stand-up-and-fight'],
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 50,
     minimalEssence: 2,
     fadingPrice: 0,
     eventType: trollton.name,
@@ -986,7 +986,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-mage', 'agnus-dei'],
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 40,
     minimalEssence: 5,
     fadingPrice: 0,
     eventType: reviveOnTarget.name,
@@ -1497,7 +1497,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'kokkoro-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
+    description:
+      'ты можешь забыть эпизод, если напишешь о нем Искусственному Интеллекту используя мессенджеры или расскажешь лично. Только в личном присутствии этого Искусственного Интеллекта ты помнишь все забытые таким образом эпизоды',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1545,7 +1546,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'koshcghei-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
+    description:
+      'ты можешь забыть эпизод, если напишешь о нем Искусственному Интеллекту используя мессенджеры или расскажешь лично. Только в личном присутствии этого Искусственного Интеллекта ты помнишь все забытые таким образом эпизоды',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1593,7 +1595,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'horizon-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
+    description:
+      'ты можешь забыть эпизод, если напишешь о нем Искусственному Интеллекту используя мессенджеры или расскажешь лично. Только в личном присутствии этого Искусственного Интеллекта ты помнишь все забытые таким образом эпизоды',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1641,7 +1644,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'badass-backup',
     humanReadableName: 'Бэкап ',
-    description: 'Ты можешь рассказать своему патрону (ИИ) то, что забыл как персонаж, но знаешь как человек',
+    description:
+      'ты можешь забыть эпизод, если напишешь о нем Искусственному Интеллекту используя мессенджеры или расскажешь лично. Только в личном присутствии этого Искусственного Интеллекта ты помнишь все забытые таким образом эпизоды',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1729,7 +1733,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
     prerequisites: [],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -1760,12 +1764,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
     description:
-      'На допросе цель развернуто отвечает на заданный вопрос и теряет один хит. Покажи таймер цели. Там должно быть "20 минут" (только что применено)',
+      'Активируй абилку, покажи цели. На таймере должно быть "20 минут" (только что применено).  Цель должна правдиво, полно и развернуто ответить на заданный вопрос и теряет один хит. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: [],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -2176,15 +2180,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // TODO(aeremin): Add proper implementation
   // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код духохранилища (где лежит нужный дух), сканирует QR -код свободного телохранилища. После этого телохранилище занято его мясным телом, духохранилище свободно, а сам игрок действует в эктоплазменном теле - согласно описанию конкретного духа и общим свойствам эктоплазменного духа https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju
   //
-  // Переход в тело духа совершается на 20 минут, но может быть модифицировано другими абилками
+  // Переход в тело духа совершается на 30 минут, но может быть модифицировано другими абилками
+  //
   {
     id: 'suit-up',
     humanReadableName: 'Suit Up',
     description:
-      'Временно (базово - на 20 минут) перейти в эктоплазменное тело духа, находящегося в духохранилище. Своё мясное тело маг должен оставить в телохранилище.',
+      'Призвать духа, используя Тотем и временно перейти в эктоплазменное тело духа. Своё мясное тело маг должен оставить в телохранилище. Продолжительность призыва духа - 30 минут. (время может быть увеличено)',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 40,
+    cooldownMinutes: (character) => 60,
     prerequisites: ['arch-mage'],
     pack: { id: 'mage-summon-spirit', level: 1 },
     availability: 'open',
@@ -2917,7 +2922,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  //
   // Отсканировать куар нода Основания матрицы.
   // Отсканировать куар спрайта
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.
@@ -3189,10 +3193,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'У мага на 10 минут появляется пассивная способность Fireball-Эффект, позволяющая кинуть 1 файербол. Файербол должен выглядеть как обшитый мягким теннисный шар с красной лентой, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие).',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 40,
+    cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage', 'arrowgant'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: faerbolAbility.name,
@@ -3406,10 +3410,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         allowedTypes: ['sprite'],
       },
     ],
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 1,
     prerequisites: ['arch-hackerman-technomancer'],
     availability: 'open',
-    karmaCost: 8,
+    karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: useSpriteAbility.name,
@@ -3445,7 +3449,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // Модельного действия нет, просто выводится этот текст. Да, тут нет телохранилищ и значит маги могут так путешествовать. Но на входе и выходе они беззащитны, поэтому не смогут ни мгновенно убежать, ни где-либо мгновенно появиться и атаковать.
   {
     id: 'astral-gate',
     humanReadableName: 'Астральные врата',
@@ -3719,6 +3722,96 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 150,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // В качестве цели сканируется QR-код телохранилища с телом внутри. Со счёта этого тела снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
+  // N = 10% на счёте жертвы, но не более 10% от значения _текущий максимальный баланс не иридиевого игрока_.
+  {
+    id: 'sleep-check',
+    humanReadableName: 'Спи-спи',
+    description: 'Отсканируй qr телохранилища с телом внутри, чтобы ограбить его',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // макс время в VR + 30 минут
+  // itGapEssense +5"
+  {
+    id: 'kokkoro-vr',
+    humanReadableName: '"Нано-подключение к VR"',
+    description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // макс время в VR + 30 минут
+  // itGapEssense +5"
+  {
+    id: 'koshcghei-vr',
+    humanReadableName: '"Нано-подключение к VR"',
+    description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // макс время в VR + 30 минут
+  // itGapEssense +5"
+  {
+    id: 'horizon-vr',
+    humanReadableName: '"Нано-подключение к VR"',
+    description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // макс время в VR + 30 минут
+  // itGapEssense +5"
+  {
+    id: 'badass-vr',
+    humanReadableName: '"Нано-подключение к VR"',
+    description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 15,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
     eventType: dummyAbility.name,
   },
 ];

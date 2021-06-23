@@ -1092,7 +1092,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Воцерковленный',
     description:
       'После исповеди или участия в богослужении вы можете нажать "Готово" на любом Поступке личной этики, не выполняя его требований',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
@@ -1390,8 +1390,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Light Step ',
     description: 'В астральном следе твоих заклинаний остается только 60% ауры. ',
     availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-mage', 'silentium-est-aurum'],
+    karmaCost: 20,
+    prerequisites: ['arch-mage', 'trackpoint'],
     modifier: modifierFromEffect(increaseAuraMarkMultiplier, { amount: -0.4 }),
   },
   // Позволяет просканировать во время каста qr-коды мясных тел в состоянии тяжран (не годятся здоров/КС/АС) и с Эссенсом>=1ед для эффекта "кровавый ритуал":  Использование (сканирование) N этих кодов приводит к:
@@ -1415,8 +1415,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Dictator Control',
     description: 'При чтении астральных следов ты извлекаешь на 20% больше ауры',
     availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-mage', 'silentium-est-aurum'],
+    karmaCost: 20,
+    prerequisites: ['arch-mage', 'trackpoint'],
     modifier: modifierFromEffect(increaseAuraReadingMultiplier, {
       amount: 0.2,
     }),
@@ -1642,12 +1642,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['groundcraft-2', 'arch-rigger'],
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
-  // drones.maxTimeInside  +20
-  // drones.recoveryTime= -20
+  // drones.maxTimeInside  +15
+  // drones.recoveryTime= -15
   {
     id: 'drone-sync-1',
     humanReadableName: 'Синхронизация 1',
-    description: 'Увеличивает время в дроне и сокращает перерыв между включениями.',
+    description: 'Увеличивает время в дроне на 15 минут и сокращает перерыв между включениями на 15 минут.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
@@ -1656,12 +1656,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
     ],
   },
-  // drones.maxTimeInside +10
-  // drones.recoveryTime -10
+  // drones.maxTimeInside +15
+  // drones.recoveryTime -15
   {
     id: 'drone-sync-2',
     humanReadableName: 'Синхронизация 2',
-    description: 'Сильнее увеличивает время в дроне и сокращает перерыв между включениями.',
+    description: 'Еще увеличивает время в дроне на 15 минут и сокращает перерыв между включениями на 15 минут.',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['drone-sync-1', 'arch-rigger'],
@@ -1670,12 +1670,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
     ],
   },
-  // drones.maxTimeInside  +10
-  // drones.recoveryTime-10
+  // drones.maxTimeInside  +15
+  // drones.recoveryTime-15
   {
     id: 'drone-sync-3',
     humanReadableName: 'Синхронизация 3',
-    description: 'Намного сильнее увеличивает время пребывания в дроне и сокращает перерыв между включениями.',
+    description: 'И еще увеличивает время в дроне на 15 минут и сокращает перерыв между включениями на 15 минут.',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['drone-sync-2', 'arch-rigger'],
@@ -1851,7 +1851,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hammer-of-justice-effect',
     humanReadableName: 'Hammer of Justice - эффект',
-    description: 'Одноручное оружие считается тяжёлым.',
+    description: 'Одноручное холодное оружие считается тяжёлым.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3422,8 +3422,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  //
+  // текстовая абилка
   {
     id: 'armor-light',
     humanReadableName: 'легкий доспех',
@@ -3433,8 +3432,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
+  // текстовая абилка
   {
     id: 'armor-heavy',
     humanReadableName: 'тяжелый доспех',
@@ -3455,8 +3453,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
+  // текстовая абилка
   {
     id: 'sword-short',
     humanReadableName: 'одноручный меч',
@@ -3466,8 +3463,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-combat'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
+  // текстовая абилка
   {
     id: 'sword-twohanded',
     humanReadableName: 'двуручный меч',
@@ -3477,8 +3473,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
+  // текстовая абилка
   {
     id: 'sword-short-doubled',
     humanReadableName: 'два одноручных меча',
@@ -3488,8 +3483,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
+  // текстовая абилка
   {
     id: 'initiative-sign',
     humanReadableName: 'значок иициативы',
@@ -3686,6 +3680,78 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 30,
     prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'sub-surge',
+    humanReadableName: 'SURGE',
+    description: 'Ты болеешь SURGE.  (необъяснимая генетическая экспрессия). Некоторые части твоего тела превратились в звериные.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'geomancy',
+    humanReadableName: 'Geomancy',
+    description: 'Ты можешь изучить заклинания геомантии.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // spirit.maxTimeInside+30
+  {
+    id: 'nice-suit',
+    humanReadableName: 'Nice suit',
+    description: 'Увеличивает продолжительность призыва духа на 30 минут',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'suit-up'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'dual-layer-suit',
+    humanReadableName: 'Dual layer suit',
+    description: 'У духов, которых ты призываешь на 1 хит больше',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'suit-up'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // spirit.maxTimeInside+30
+  {
+    id: 'leisure-suit',
+    humanReadableName: 'Leisure suit',
+    description: 'Увеличивает продолжительность призыва духа еще на 30 минут',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'nice-suit'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // spirit.recoveryTime-30
+  {
+    id: 'fast-dress-up',
+    humanReadableName: 'Fast dress up',
+    description: 'Сокращает время между призывами духа на 30 минут',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'suit-up'],
+    pack: undefined,
     modifier: [],
   },
 ];
