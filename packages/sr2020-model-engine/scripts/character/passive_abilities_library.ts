@@ -3760,7 +3760,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMentalProtection, { amount: 2 })],
   },
   // maxTimeInVr +30
   {
@@ -3770,7 +3770,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
   },
   // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
   // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
@@ -3949,6 +3949,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  {
+    id: 'ethic-reason',
+    humanReadableName: 'Холодный разум',
+    description:
+      'Твои эмоциональные тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #аналитик - и твой вклад будет учтен..',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];

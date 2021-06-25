@@ -40,14 +40,14 @@ export interface EthicGroup {
 }
 
 export const kEthicAbilities: EthicAbilityCondition[] = [
-  { scale: 'control', value: -4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'control', value: 4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'individualism', value: -4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'individualism', value: 4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'mind', value: -4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'mind', value: 4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'violence', value: -4, abilityId: 'comcon-ethic-ability' },
-  { scale: 'violence', value: 4, abilityId: 'comcon-ethic-ability' },
+  { scale: 'control', value: -4, abilityId: 'ethic-freedom' },
+  { scale: 'control', value: 4, abilityId: 'ethic-control' },
+  { scale: 'individualism', value: -4, abilityId: 'ethic-common' },
+  { scale: 'individualism', value: 4, abilityId: 'ethic-individual' },
+  { scale: 'mind', value: -4, abilityId: 'ethic-emotions' },
+  { scale: 'mind', value: 4, abilityId: 'ethic-reason' },
+  { scale: 'violence', value: -4, abilityId: 'ethic-kind' },
+  { scale: 'violence', value: 4, abilityId: 'ethic-violence' },
 ];
 
 export const kAllCrysises: EthicTrigger[] = [
