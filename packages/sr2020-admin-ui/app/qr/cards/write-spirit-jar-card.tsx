@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 
-export class WriteSpiritJarCard extends React.Component<{ sendEvent: SendEvent }, {}> {
+export class WriteSpiritJarCard extends React.Component<{ sendEvent: SendEvent }> {
   write() {
     this.props.sendEvent('writeSpiritJar', {});
   }
