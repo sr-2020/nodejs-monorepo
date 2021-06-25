@@ -50,10 +50,20 @@ describe('Spirits-related abilities', () => {
     }
   });
 
-  it('Creating spirit jar', async () => {
+  it('Put spirit in jar and free it', async () => {
     await fixture.saveQrCode();
-    const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'writeSpiritJar', data: {} });
-    expect(workModel.type).toEqual('spirit_jar');
-    expect(typedQrData<SpiritJarQrData>(workModel)).toEqual({});
+    {
+      const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'writeSpiritJar', data: {} });
+      expect(workModel.type).toEqual('spirit_jar');
+      expect(typedQrData<SpiritJarQrData>(workModel)).toEqual({});
+    }
+    {
+      const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'putSpiritInJar', data: { spiritId: 'Petya' } });
+      expect(typedQrData<SpiritJarQrData>(workModel)).toEqual({ spiritId: 'Petya', emptiness_reason: undefined });
+    }
+    {
+      const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'freeSpirit', data: { reason: 'Stuff' } });
+      expect(typedQrData<SpiritJarQrData>(workModel)).toEqual({ spiritId: undefined, emptiness_reason: 'Stuff' });
+    }
   });
 });

@@ -11,6 +11,7 @@ import {
   ReanimateCapsuleData,
   SpiritJarQrData,
   TypedQrCode,
+  typedQrData,
 } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { buyFeatureForKarma, earnKarma } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
@@ -181,6 +182,34 @@ export function writeSpiritJar(api: EventModelApi<QrCode>, data: {}) {
     timers: [],
     data: qrData,
   };
+}
+
+export function putSpiritInJar(api: EventModelApi<QrCode>, data: { spiritId: string }) {
+  if (api.model.type != 'spirit_jar') {
+    throw new UserVisibleError('Не код духохранилища!');
+  }
+
+  let content = typedQrData<SpiritJarQrData>(api.model);
+  if (content.spiritId) {
+    throw new UserVisibleError('Духохранилище не пусто!');
+  }
+
+  content.spiritId = data.spiritId;
+  content.emptiness_reason = undefined;
+}
+
+export function freeSpirit(api: EventModelApi<QrCode>, data: { reason: string }) {
+  if (api.model.type != 'spirit_jar') {
+    throw new UserVisibleError('Не код духохранилища!');
+  }
+
+  let content = typedQrData<SpiritJarQrData>(api.model);
+  if (!content.spiritId) {
+    throw new UserVisibleError('Духохранилище пусто!');
+  }
+
+  content.spiritId = undefined;
+  content.emptiness_reason = data.reason;
 }
 
 export function writeReanimateCapsule(api: EventModelApi<QrCode>, data: { name: string; description: string } & ReanimateCapsuleData) {
