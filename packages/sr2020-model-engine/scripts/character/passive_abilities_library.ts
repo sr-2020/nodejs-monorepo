@@ -1809,16 +1809,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   //
   {
-    id: 'comcon-ethic-ability',
-    humanReadableName: 'Вы достигли!',
-    description: 'Приходите на наш воскресный семинар по приложению и выиграйте футболку в лотерее!',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
-  //
-  {
     id: 'arrowgant-effect',
     humanReadableName: 'Arrowgant - эффект',
     description: 'Ты защищён от дистанционных атак (только от нерфов).',
