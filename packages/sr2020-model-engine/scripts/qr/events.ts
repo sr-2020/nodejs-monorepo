@@ -189,7 +189,7 @@ export function putSpiritInJar(api: EventModelApi<QrCode>, data: { spiritId: str
     throw new UserVisibleError('Не код духохранилища!');
   }
 
-  let content = typedQrData<SpiritJarQrData>(api.model);
+  const content = typedQrData<SpiritJarQrData>(api.model);
   if (content.spiritId) {
     throw new UserVisibleError('Духохранилище не пусто!');
   }
@@ -203,7 +203,7 @@ export function freeSpirit(api: EventModelApi<QrCode>, data: { reason: string })
     throw new UserVisibleError('Не код духохранилища!');
   }
 
-  let content = typedQrData<SpiritJarQrData>(api.model);
+  const content = typedQrData<SpiritJarQrData>(api.model);
   if (!content.spiritId) {
     throw new UserVisibleError('Духохранилище пусто!');
   }
