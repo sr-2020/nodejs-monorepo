@@ -6,17 +6,35 @@ import { addFeatureToModel, removeFeatureFromModel } from '@alice/sr2020-model-e
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 import { kCommonSpiritAbilityIds, Spirit } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
+import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-engine/scripts/qr/body_storage';
+import { freeSpirit, putSpiritInJar } from '@alice/sr2020-model-engine/scripts/qr/events';
+import { BodyStorageQrData, SpiritJarQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2'];
 const kInSpiritModifierId = 'in-the-spirit';
 
-export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit) {
+export function suitSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & ActiveAbilityData) {
+  const spiritJarId = data.qrCodeId;
+  if (!spiritJarId || api.aquired(QrCode, spiritJarId).type != 'spirit_jar') {
+    throw new UserVisibleError('Цель не является духохранилищем.');
+  }
+
+  const spiritJar = typedQrData<SpiritJarQrData>(api.aquired(QrCode, spiritJarId));
+
+  const bodyStorageId = data.bodyStorageId;
+  if (!bodyStorageId || api.aquired(QrCode, bodyStorageId).type != 'body_storage') {
+    throw new UserVisibleError('Цель не является телохранилищем.');
+  }
+  api.sendOutboundEvent(QrCode, bodyStorageId, putBodyToStorage, { characterId: api.model.modelId, bodyType: api.model.currentBody });
+  api.sendOutboundEvent(QrCode, spiritJarId, freeSpirit, { reason: 'Дух используется.' });
+  enterSpirit(api, { ...data, spiritId: spiritJar.spiritId, bodyStorageId });
+}
+
+export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & { spiritId: string; bodyStorageId: string }) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Для входа в духа необходимо быть в мясном теле.');
   }
-
-  const timeInSpirit = duration(15, 'minutes');
-  api.setTimer(kSpiritTimerIds[0], 'Выход из духа', timeInSpirit, spiritTimeout, {});
 
   data.abilityIds = [...data.abilityIds, ...kCommonSpiritAbilityIds];
   for (const id of data.abilityIds) {
@@ -26,7 +44,7 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit) {
   api.addModifier(createSpiritModifier(data));
 }
 
-export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+export function exitSpirit(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   if (api.workModel.currentBody != 'ectoplasm') {
     throw new UserVisibleError('Для выхода из духа необходимо быть подключенным к нему.');
   }
@@ -43,6 +61,30 @@ export function exitSpirit(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.removeModifier(m.mID);
 }
 
+export function dispirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const spiritJarId = data.qrCodeId;
+  const bodyStorageId = data.bodyStorageId;
+  if (!bodyStorageId || api.aquired(QrCode, bodyStorageId).type != 'body_storage') {
+    throw new UserVisibleError('Цель не является телохранилищем.');
+  }
+  const storage = typedQrData<BodyStorageQrData>(api.aquired(QrCode, bodyStorageId));
+  if (!(storage?.body?.characterId == api.model.modelId)) {
+    throw new UserVisibleError('Данная ячейка телохранилище не содержит ваше тело.');
+  }
+  api.sendOutboundEvent(QrCode, bodyStorageId, removeBodyFromStorage, {});
+
+  if (spiritJarId) {
+    api.sendOutboundEvent(QrCode, spiritJarId, putSpiritInJar, { spiritId: findInSpiritModifier(api).spiritId });
+  }
+  exitSpirit(api, data);
+}
+
+export function emergencySpiritExit(api: EventModelApi<Sr2020Character>, data: unknown) {
+  const bodyStorageId = findInSpiritModifier(api).bodyStorageId;
+  api.sendOutboundEvent(QrCode, bodyStorageId, removeBodyFromStorage, {});
+  exitSpirit(api, { location: undefined });
+}
+
 export function applyPostSpiritDamange(api: EventModelApi<Sr2020Character>, data: { amount: number } & LocationMixin) {
   if (data.amount <= 0) {
     sendNotificationAndHistoryRecord(api, 'Выход из духа', 'Вы вышли из духа, все в порядке.');
@@ -56,11 +98,13 @@ export function applyPostSpiritDamange(api: EventModelApi<Sr2020Character>, data
 
 type InTheSpiritModifier = Modifier &
   Spirit & {
+    bodyStorageId: string;
     postSpiritDamage: number;
     stage: number;
+    spiritId: string;
   };
 
-function createSpiritModifier(spirit: Spirit): InTheSpiritModifier {
+function createSpiritModifier(spirit: Spirit & { spiritId: string; bodyStorageId: string }): InTheSpiritModifier {
   return {
     mID: kInSpiritModifierId,
     priority: Modifier.kDefaultPriority,
