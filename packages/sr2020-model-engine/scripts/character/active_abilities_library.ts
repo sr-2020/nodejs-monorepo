@@ -25,6 +25,7 @@ import {
   repomanBlackAbility,
   reRent,
   skinStoneAbility,
+  sleepCheckAbility,
   takeNoHarmAbility,
   tincasmAbility,
   trollton,
@@ -73,6 +74,7 @@ import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scri
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3731,14 +3733,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Спи-спи',
     description: 'Отсканируй qr телохранилища с телом внутри, чтобы ограбить его',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 5,
     prerequisites: [],
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: sleepCheckAbility.name,
   },
   // макс время в VR + 30 минут
   // itGapEssense +5"

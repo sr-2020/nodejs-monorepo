@@ -5,7 +5,7 @@ import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirt
 import { duration } from 'moment';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
-import { MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { addFeatureToModel, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
@@ -381,4 +381,16 @@ export function externalAbility(api: EventModelApi<Sr2020Character>, data: Activ
 
 export function marauderAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, clinicalDeath, data);
+}
+
+export function sleepCheckAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (
+    data.bodyStorageId &&
+    api.aquired(QrCode, data.bodyStorageId).type == 'body_storage' &&
+    typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId)).body
+  ) {
+    // Pass. Billing will handle it
+  } else {
+    throw new UserVisibleError('Это телохранилище пусто.');
+  }
 }
