@@ -2462,12 +2462,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума
+  // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума. Из тяжрана не поднимает.
   {
     id: 'healtouch',
     humanReadableName: 'Healtouch',
     description:
-      'Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума',
+      'Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума. Из тяжрана не поднимает.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3498,7 +3498,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'paralizard-effect',
     humanReadableName: 'Paralizard-effect',
     description:
-      'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить одно любое мясное/эктоплазменное тело на 90 секунд.',
+      'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" парализовать одно любое мясное/эктоплазменное тело на 90 секунд.\nПарализованное тело не способно передвигаться, уклоняться, применять какие-либо способности. Может говорить, может являться целью чужих способностей (в том числе, требующих скана QR).',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -3682,7 +3682,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'sub-surge',
@@ -3691,10 +3690,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'geomancy',
@@ -3703,10 +3700,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // spirit.maxTimeInside+30
   {
     id: 'nice-suit',
@@ -3715,10 +3710,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'suit-up'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'dual-layer-suit',
@@ -3727,10 +3720,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'suit-up'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // spirit.maxTimeInside+30
   {
     id: 'leisure-suit',
@@ -3739,10 +3730,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'nice-suit'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // spirit.recoveryTime-30
   {
     id: 'fast-dress-up',
@@ -3751,7 +3740,215 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'suit-up'],
-    pack: undefined,
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-violence',
+    humanReadableName: 'Танатос',
+    description: 'Добей 10 человек в КС. Сними пруфы этого. Покажи региональному мастеру',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Ментальная защита +2
+  {
+    id: 'ethic-freedom',
+    humanReadableName: 'Вольный стрелок',
+    description: 'Ты получаешь +2 к ментальной защите. Эффект постоянный.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // maxTimeInVr +30
+  {
+    id: 'ethic-emotions',
+    humanReadableName: 'Ловец эмоций',
+    description: 'Твое время в VR увеличено на 30 минут. Развлекайся!',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
+  // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
+  // 2) включают в КоэффициентСниженияОтката множитель 1/(2+N)
+  {
+    id: 'monastery-ritual-magic',
+    humanReadableName: 'Монастырская ритуальная магия',
+    description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
+    availability: 'closed',
+    karmaCost: 60,
+    prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  // chemo.crysisThreshold +20
+  //
+  {
+    id: 'ethic-wuxing',
+    humanReadableName: '',
+    description:
+      'Защита от вредных веществ\nГармония и сохранение позволяют последователям Усин поддерживать баланс веществ и энергий в организме. Порог Кризиса по веществам у тебя увеличен.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Неудача 50% при использовании на персонажа абилки repoman-black
+  {
+    id: 'ethic-arepo',
+    humanReadableName: '',
+    description: 'Увеличвает вероятность неудачи, если с тебя рипомен срезает имплант.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-unbind',
+    humanReadableName: 'Абсолютная свобода',
+    description:
+      'Ты можешь снимать любые веревки с себя (даже в связанном состоянии), можешь открывать любые замки. На тебя не действует оглушение. Способность действует всегда.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-roleplay',
+    humanReadableName: 'Ролеплей',
+    description:
+      'Покажи это цели. Расскажи ему историю, кто ты, кто он и почему он должен быть наказан. Цель испытвает непреодолимое желание, чтобы его наказали прямо сейчас.  Помоги ему и накажи цель. Если ты причинишь цели ущерб (снимешь хит) - воздействие тут же спадет. Иначе - воздействие держится десять минут. Цель всё осознает. Ты можешь использовать эту способность один раз за цикл.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'ethic-kokkoro',
+    humanReadableName: 'Бэкдор по знакомству',
+    description:
+      'Один раз в цикл ты можешь получить бэкдор на любой хост. Тебе надо знать ID хоста. (заявка отправляется в мастера по Хакерам)',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'ethic-kazak',
+    humanReadableName: 'Казацкая сабля',
+    description: 'Казацкая сабля!\nЗащита от нежити\nЕсли ты сражаешься против Гулей или Вампиров - у тебя +2 хита (максимум 6)',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // "В чем сила, брат? Сила в Правде! Для того, чтобы использовать пулемет или двуручное оружие - тебе достаточно одной кибер руки \ способности Биосила.
+  //
+  // Обученный Риггер
+  // +1 ко всем навыкам управления дронами "
+  {
+    id: 'ethic-sila',
+    humanReadableName: 'Сила в Правде',
+    description:
+      '"В чем сила, брат? Сила в Правде! Для того, чтобы использовать пулемет или двуручное оружие - тебе достаточно одной кибер руки \\ способности Биосила.\n\nОбученный Риггер \n+1 ко всем навыкам управления дронами "',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Больше экзорцизма. Лучше изгонять духов. Убийство гуля - позволяет вылечить кого-то рядом
+  {
+    id: 'ethic-carrion',
+    humanReadableName: 'Лечебные ингредиенты',
+    description: '\nТы можешь вылечить персонажа (восстановить все хиты, но НЕ поднять из тяжрана), если добьешь гуля. ',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая абилка
+  {
+    id: 'ethic-avidity',
+    humanReadableName: 'Убийственная жадность.',
+    description: 'Если на тебя применяют способность менталиста "прогулка миллионера" - ты  переводишь не 20%, а 10%',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Если в бою 5 членов триад (дискурса) - каждый получает +1 хит
+  {
+    id: 'ethic-triada',
+    humanReadableName: 'Сила пяти',
+    description:
+      'Сила Трех \\ Семейные узы.\nЕсли в бою участвует 3 и более членов триады (дискурса) с этой способностью - каждый из них получает +1 хит (максимум 6)',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-badass',
+    humanReadableName: 'Сила ненависти',
+    description:
+      'В боестолкновении, где Бэдэс сражается против мясных чаммеров - он получает дополнительные хиты. (В Основании +2, максимум 10. В мясном мире +1, максимум 6, применимо к дронам)',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-horizon',
+    humanReadableName: 'Сила слова',
+    description:
+      'Твои тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #вестник - и твой вклад будет учтен..\nЕсли ты журналист - получи +2 очка влияния за цикл. Заяви это мастеру по СМИ\n',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // body -1
+  // intelligence -2
+  // charisma +1
+  // magic +1
+  {
+    id: 'ethic-buryaty',
+    humanReadableName: 'Волшебство',
+    description: 'Ты получаешь +1 к Магии и Харизме. -2 к Интеллекту, -1 к Боди.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-aks',
+    humanReadableName: 'Увлеченный рассказчик. ',
+    description:
+      'Покажи это цели. Расскажи ему историю, кто ты, кто он и что вы сейчас делаете. Цель верит тебе и испытвает непреодолимое желание делать то, что ты рассказываешь. Помоги ему и сделай то, о чем ты говоришь. Если в процессе взаимодействия цели будет причинен любой ущерб (потеря хитов, потеря имущества...) - воздействие тут же спадет. Иначе - воздействие держится пять минут. Цель всё осознает. Ты можешь использовать эту способность один раз за цикл.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // текстовая
+  {
+    id: 'ethic-lzg',
+    humanReadableName: 'Заживление ран',
+    description:
+      'Заживление ран. \nТы можешь вылечить себе два хита, прикоснувшись к Гулю. Обними гуля на одну минуту. Ты можешь использовать эту способность один раз в час.\nНе работает, если ты находишься в тяжелом ранении.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
     modifier: [],
   },
 ];

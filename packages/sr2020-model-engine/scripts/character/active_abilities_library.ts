@@ -943,7 +943,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'trollton',
     humanReadableName: 'Trollton',
     description:
-      'Активируемый эффект Тяжелой брони. Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
+      'На время активности повяжи на себя красную ленту - считается, что на тебе тяжёлая броня. Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -1763,8 +1763,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
-    description:
-      'Активируй абилку, покажи цели. На таймере должно быть "20 минут" (только что применено).  Цель должна правдиво, полно и развернуто ответить на заданный вопрос и теряет один хит. ',
+    description: 'Ты можешь допрашивать персонажей. На допросе цель развернуто отвечает на заданный вопрос и теряет один хит.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -3724,8 +3723,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 150,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // В качестве цели сканируется QR-код телохранилища с телом внутри. Со счёта этого тела снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
+  // В качестве цели сканируется QR-код телохранилища с телом внутри. Если тела нет - сразу получаем сообщение о невалидной цели (абилка не срабатывает, кулдаун не идёт).
+  // Со счёта этого тела снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
   // N = 10% на счёте жертвы, но не более 10% от значения _текущий максимальный баланс не иридиевого игрока_.
   {
     id: 'sleep-check',
@@ -3735,14 +3734,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: [],
-    pack: undefined,
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // макс время в VR + 30 минут
   // itGapEssense +5"
   {
@@ -3753,14 +3750,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // макс время в VR + 30 минут
   // itGapEssense +5"
   {
@@ -3771,14 +3766,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // макс время в VR + 30 минут
   // itGapEssense +5"
   {
@@ -3789,14 +3782,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // макс время в VR + 30 минут
   // itGapEssense +5"
   {
@@ -3807,9 +3798,149 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-kind',
+    humanReadableName: 'Сострадание',
+    description:
+      'Если вы видите как кого-то планируют добить в КС, вы можете призвать атакующего проявить милосердие, показав ему эту абилку. Несостоявшийся убийца должен помочь спастись своей жертве и вам тоже (вывести из опасной ситуации). Вы должны находиться в здоровом\\легкораненом состоянии и быть способны говорить для применения этой способности. ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 180,
+    prerequisites: [],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-control',
+    humanReadableName: 'Решай за других',
+    description: 'Ты можешь заставить другого персонажа показать его куар ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: [],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-common',
+    humanReadableName: 'Моральная поддержка',
+    description:
+      'Покажите текст цели. Цель может нажать "Готово" на любом поступке личной этики, не выполняя его условий. Ты можешь оказать поддержку один раз в час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-individual',
+    humanReadableName: 'Волк-одиночка',
+    description:
+      'Если после твоей атаки враг перешел в тяжелое ранение - ты вылечиваешь все хиты. Ты можешь использовать эту способность один раз в час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-deanon',
+    humanReadableName: 'Абсолютный деанон',
+    description:
+      'Если ты используешь способность Деанон - от нее не спасают способности Режим Инкогнито и Режим Фаерволл. Ты можешь использовать эту способсноть один раз в час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-treat',
+    humanReadableName: 'Экстренная перевязка. ',
+    description:
+      'Ты можешь вылечить два хита. Способность работает как в боевой, так и  в небоевой ситуации. Ты не можешь применить способность сам на себя.  Ты можешь использовать эту способность один раз в час. Не работает на персонажей в тяжране.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-shadow',
+    humanReadableName: 'Флагеллянт',
+    description:
+      'Адепт должен причинить себе наказание, громко и прилюдно. После чего может проигнорировать первое попадание оружия в бою (даже тяжелого оружия).. Ты можешь использовать эту способность один раз в час.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // текстовая
+  {
+    id: 'ethic-ordo',
+    humanReadableName: 'Давление',
+    description: 'Ты можешь заставить другого персонажа показать его куар ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // absolutely-finish-him
+  {
+    id: 'ethic-absolutely-finish-him',
+    humanReadableName: 'Абсолютная смерть',
+    description: 'ты можешь убивать в Абсолютную смерть',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 180,
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 100,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,

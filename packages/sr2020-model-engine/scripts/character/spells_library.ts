@@ -188,7 +188,7 @@ const kAllSpellsList: Spell[] = [
     id: 'healton',
     humanReadableName: 'Healton',
     description:
-      'Ты получаешь свойство Healtouch (касанием восстанавливать другим мясным/экто телам текущие хиты до максимума) на Мощь*20 минут. Чем больше Мощь, тем больше срок',
+      'Ты получаешь свойство Healtouch (касанием в течение минуты восстанавливать другим мясным/экто телам текущие хиты до максимума. Из тяжрана не поднимает) на Мощь*20 минут. Чем больше Мощь, тем больше срок',
     prerequisites: ['arch-mage', 'ground-heal'],
     availability: 'open',
     karmaCost: 50,
@@ -577,7 +577,7 @@ const kAllSpellsList: Spell[] = [
     id: 'paralizard',
     humanReadableName: 'Paralizard',
     description:
-      'В течение Мощь*2 минуты маг способен касанием и криком "Паралич!" обездвижить одно любое мясное (не эктоплазменное) тело на 90 секунд - игнорируя любую броню.',
+      'В течение Мощь*2 минуты маг способен касанием и криком "Паралич!" парализовать одно любое мясное (не эктоплазменное) тело на 90 секунд - игнорируя любую броню.\nПарализованное тело не способно передвигаться, уклоняться, применять какие-либо способности. Может говорить, может являться целью чужих способностей (в том числе, требующих скана QR).',
     prerequisites: ['arch-mage', 'hammer-of-justice'],
     availability: 'open',
     karmaCost: 70,
@@ -611,7 +611,6 @@ const kAllSpellsList: Spell[] = [
     eventType: letItGoSpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели на время T понижается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
   {
     id: 'dumbie',
@@ -619,14 +618,12 @@ const kAllSpellsList: Spell[] = [
     description:
       'Понизить Интеллект. На Мощь*10 минут понизить на 1, если Мощь <4, иначе на 2 Интеллект цели, указанной добровольно предоставленным qr-кодом.',
     prerequisites: ['arch-mage', 'shtopping'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     sphere: 'stats',
     eventType: dummySpell.name,
     hasTarget: false,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели на время T повышается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
   {
     id: 'smartie',
@@ -634,7 +631,6 @@ const kAllSpellsList: Spell[] = [
     description:
       'Повысить Интеллект. На Мощь*10 минут повысить на 1, если Мощь <4, иначе на 2  Интеллект цели, указанной добровольно предоставленным qr-кодом.',
     prerequisites: ['arch-mage', 'tax-free'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     sphere: 'stats',
