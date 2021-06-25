@@ -1,5 +1,6 @@
 import { TestFixture } from './fixture';
 import { Spirit } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import { SpiritJarQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
 describe('Spirits-related abilities', () => {
   let fixture: TestFixture;
@@ -47,5 +48,12 @@ describe('Spirits-related abilities', () => {
       expect(workModel.activeAbilities).toHaveLength(0); // Enter spirit
       expect(workModel.currentBody).toBe('physical');
     }
+  });
+
+  it('Creating spirit jar', async () => {
+    await fixture.saveQrCode();
+    const { workModel } = await fixture.sendQrCodeEvent({ eventType: 'writeSpiritJar', data: {} });
+    expect(workModel.type).toEqual('spirit_jar');
+    expect(typedQrData<SpiritJarQrData>(workModel)).toEqual({});
   });
 });

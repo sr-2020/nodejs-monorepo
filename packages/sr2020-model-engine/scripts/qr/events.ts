@@ -9,6 +9,7 @@ import {
   LocusQrData,
   MentalQrData,
   ReanimateCapsuleData,
+  SpiritJarQrData,
   TypedQrCode,
 } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { buyFeatureForKarma, earnKarma } from '@alice/sr2020-model-engine/scripts/character/karma';
@@ -156,6 +157,26 @@ export function writeBodyStorage(api: EventModelApi<QrCode>, data: { name: strin
     name: data.name,
     description: '',
     usesLeft: 1,
+    modifiers: [],
+    timers: [],
+    data: qrData,
+  };
+}
+
+export function writeSpiritJar(api: EventModelApi<QrCode>, data: {}) {
+  if (api.model.type != 'empty') {
+    throw new UserVisibleError('QR-код уже записан!');
+  }
+
+  const qrData: SpiritJarQrData = {};
+
+  api.model = {
+    modelId: api.model.modelId,
+    timestamp: api.model.timestamp,
+    type: 'spirit_jar',
+    name: 'Духохранилище',
+    description: '',
+    usesLeft: 9999,
     modifiers: [],
     timers: [],
     data: qrData,

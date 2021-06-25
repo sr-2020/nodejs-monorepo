@@ -84,6 +84,12 @@ export interface SpiritQrData {
   passiveAbilities: AddedPassiveAbility[];
 }
 
+// qr.type == 'spirit_jar'
+export interface SpiritJarQrData {
+  spiritId?: string;
+  emptiness_reason?: string;
+}
+
 // qr.type == 'repair_kit'
 export interface RepairKitQrData {
   bonus: number;
