@@ -27,14 +27,14 @@ describe('Hackers-related events', function () {
   });
 
   it('Dump shock versus dumpty humpty', async () => {
-    await fixture.saveCharacter({ modelId: '1', resonance: 5 }); // Hacker
+    await fixture.saveCharacter({ modelId: '1', resonance: 5, intelligence: 3 }); // Hacker
     await fixture.saveCharacter({ modelId: '2', magic: 10 }); // Caster
     await fixture.saveLocation(); // Needed by spell
     await fixture.addCharacterFeature('dumpty-humpty', '2');
 
     const castEvent = {
       eventType: 'castSpell',
-      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 1, location: { id: 0, manaLevel: 0 } },
+      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 4, location: { id: 0, manaLevel: 0 } },
     };
     await fixture.sendCharacterEvent(castEvent, '2');
 
@@ -44,15 +44,19 @@ describe('Hackers-related events', function () {
 
     await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(4); // Damaged by dumpshock
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(2); // Damaged by dumpshock
 
     await fixture.sendCharacterEvent(castEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Healed a bit
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Healed a bit
 
     await fixture.sendCharacterEvent(castEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Not more!
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Not more!
 
     await fixture.advanceTime(duration(10, 'hours'));
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5);
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3);
   });
 
   it('Activating cyberdeck', async () => {

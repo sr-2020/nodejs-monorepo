@@ -529,7 +529,11 @@ export function readLocationAuraSpell(api: EventModelApi<Sr2020Character>, data:
 }
 
 export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, adjustDumpshock, { amount: -1 });
+  if (data.power >= 4) {
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, adjustDumpshock, { amount: -1 });
+  } else {
+    api.sendNotification('Ничего не происходит', 'Мощности заклинания не хватает');
+  }
 }
 
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
