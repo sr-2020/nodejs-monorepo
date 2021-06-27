@@ -37,7 +37,7 @@ export function dumpshock(api: EventModelApi<Sr2020Character>, data: {}) {
 
   adjustDumpshock(api, { amount: 1 });
 
-  sendNotificationAndHistoryRecord(api, 'Дампшок!', 'Вы испытали дампшок! Клиническая смерть.');
+  sendNotificationAndHistoryRecord(api, 'Дампшок!', 'Вы испытали дампшок! Вы тяжело ранены.');
   api.sendPubSubNotification('dumpshock', { characterId: api.model.modelId });
 }
 
