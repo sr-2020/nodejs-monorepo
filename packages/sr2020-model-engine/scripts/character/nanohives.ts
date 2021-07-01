@@ -4,7 +4,7 @@ import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definition
 import { addFeature, addTemporaryPassiveAbility, removeFeature } from '@alice/sr2020-model-engine/scripts/character/features';
 import { duration } from 'moment';
 import { addTemporaryModifier, modifierFromEffect } from '@alice/sr2020-model-engine/scripts/character/util';
-import { increaseMaxMeatHp } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { increaseMaxMeatHp, increaseMaxTimeInVr } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 
 function reduceEssence(api: EventModelApi<Sr2020Character>) {
   const price = Math.min(5, api.workModel.essence);
@@ -45,7 +45,7 @@ export function onBadassNanohiveRemove(api: EventModelApi<Sr2020Character>, data
 
 type AiId = 'kokkoro' | 'koshcghei' | 'horizon' | 'badass';
 
-const kNanohiveAbilitySuffixes = ['shooter', 'health', 'backup'];
+const kNanohiveAbilitySuffixes = ['shooter', 'health', 'backup', 'vr'];
 
 function onNanohiveInstall(api: EventModelApi<Sr2020Character>, aiId: AiId) {
   for (const suffix of kNanohiveAbilitySuffixes) {
@@ -70,11 +70,21 @@ export function nanohiveHealhAbility(api: EventModelApi<Sr2020Character>, data: 
     api,
     modifierFromEffect(increaseMaxMeatHp, { amount: 2 }),
     duration(15, 'minutes'),
-    'Увеличение количества хитов на 2',
+    'Увеличение количества хитов на 2 (максимум 6)',
   );
 }
 
 export function nanohiveBackupAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   reduceEssence(api);
   // Do nothing intentionally - the player knows what to do
+}
+
+export function nanohiveVrAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  reduceEssence(api);
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(increaseMaxTimeInVr, { amount: 60 }),
+    duration(40, 'minutes'),
+    'Время пребывания в VR увеличено на час',
+  );
 }
