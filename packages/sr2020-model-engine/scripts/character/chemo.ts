@@ -23,6 +23,7 @@ import { addTemporaryPassiveAbilityEffect } from '@alice/sr2020-model-engine/scr
 import { scanQr } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
 import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -593,7 +594,8 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'barium',
     level: 'crysis',
-    message: 'Позволяет использовать автоматическое оружие 30 минут при наличии одного импланта кибер рука или абилки биосила. Появилась зависимость.',
+    message:
+      'Позволяет использовать автоматическое оружие 30 минут при наличии одного импланта кибер рука или абилки биосила. Появилась зависимость.',
     durationEffect: {
       handler: automaticWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -708,7 +710,8 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'iconium',
     level: 'crysis',
-    message: 'Персонаж может использовать тяжёлое оружие 30 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила., Появилась зависимость',
+    message:
+      'Персонаж может использовать тяжёлое оружие 30 минут при наличии 2х имплантов киберрука или 1 киберрука + абилка биосила., Появилась зависимость',
     durationEffect: {
       handler: heavyWeaponsEffect,
       duration: duration(30, 'minutes'),
@@ -1021,7 +1024,12 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
     sendNotificationAndHistoryRecord(api, 'Зависимость', 'Максимальные хиты уменьшились.');
     addiction.effects[1].enabled = true;
     api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(4, 'hour'), advanceAddiction, data);
-  } else if (addiction.stage == 4) {
+  } else if (addiction.stage >= 4) {
+    if (api.model.currentBody != 'physical') {
+      sendNotificationAndHistoryRecord(api, 'Зависимость', 'После возвращения в мясное тело вы упадете в тяжран.');
+      hungerWhileInDone(api, {});
+    }
+
     if (api.workModel.healthState != 'biologically_dead') {
       healthStateTransition(api, 'clinically_dead', undefined);
     }
