@@ -1028,6 +1028,7 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
     if (api.model.currentBody != 'physical') {
       sendNotificationAndHistoryRecord(api, 'Зависимость', 'После возвращения в мясное тело вы упадете в тяжран.');
       hungerWhileInDone(api, {});
+      api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(1, 'hour'), advanceAddiction, data);
     }
 
     if (api.workModel.healthState != 'biologically_dead') {
