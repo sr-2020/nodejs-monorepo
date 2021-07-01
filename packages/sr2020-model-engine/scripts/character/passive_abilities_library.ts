@@ -1409,7 +1409,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Panopticon, Tweet-tweet little bird), извлекает значение ауры на 20% больше. Например, если заклинание было скастовано с такой Мощью, что должно было извлечь 10 символов, то с этой абилкой будет извлечено 12. То есть Коэффициент чтения астральных следов у этого мага равен 1.2.
+  // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Tweet-tweet little bird), извлекает значение ауры на 20% больше. Например, если заклинание было скастовано с такой Мощью, что должно было извлечь 10 символов, то с этой абилкой будет извлечено 12. То есть Коэффициент чтения астральных следов у этого мага равен 1.2.
   {
     id: 'dictator-control',
     humanReadableName: 'Dictator Control',
@@ -1855,24 +1855,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 80,
     prerequisites: [],
-    modifier: [],
-  },
-  {
-    id: 'astro-fighter',
-    humanReadableName: 'Астробоевик',
-    description: 'В астральной боёвке 4 меча и 3 щита',
-    availability: 'open',
-    karmaCost: 50,
-    prerequisites: ['astro-boy-summ'],
-    modifier: [],
-  },
-  {
-    id: 'astro-boogie',
-    humanReadableName: 'Астробугай',
-    description: 'В астральной боёвке 6 мечей и 5 щитов',
-    availability: 'open',
-    karmaCost: 70,
-    prerequisites: ['astro-fighter'],
     modifier: [],
   },
   // КоэффициентСопротивленияОткату умножается на 0.5
@@ -2356,33 +2338,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-face-negative-2'],
     modifier: [modifierFromEffect(increaseCharisma, { amount: -1 })],
   },
-  {
-    id: 'arch-mage-negative-1',
-    humanReadableName: 'проблемы мага - 1 ',
-    description: 'У тебя проблемы, маг.',
-    availability: 'master',
-    karmaCost: -20,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
-  {
-    id: 'arch-mage-negative-2',
-    humanReadableName: 'проблемы мага - 2',
-    description: 'У тебя серьезные проблемы, маг.',
-    availability: 'master',
-    karmaCost: -20,
-    prerequisites: ['arch-mage-negative-1'],
-    modifier: [],
-  },
-  {
-    id: 'arch-mage-negative-3',
-    humanReadableName: 'проблемы мага - 3',
-    description: 'У тебя очень серьезные проблемы, маг.',
-    availability: 'master',
-    karmaCost: -20,
-    prerequisites: ['arch-mage-negative-2'],
-    modifier: [],
-  },
   // Персонажам, имеющим абилку, Случай начисляет Х денег в конце каждого цикла
   {
     id: 'dividends-1',
@@ -2433,24 +2388,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['magic-1-summ', 'arch-mage'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
-  },
-  {
-    id: 'astro-boy-cast',
-    humanReadableName: 'Астробой-З',
-    description: 'В астральной боёвке 2 меча и 1 щит',
-    availability: 'master',
-    karmaCost: 30,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
-  {
-    id: 'astro-boy-summ',
-    humanReadableName: 'Астробой-П!',
-    description: 'В астральной боёвке 2 меча и 1 щит',
-    availability: 'master',
-    karmaCost: 30,
-    prerequisites: ['arch-mage'],
-    modifier: [],
   },
   // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума. Из тяжрана не поднимает.
   {
