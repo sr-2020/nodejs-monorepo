@@ -1029,10 +1029,10 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
       sendNotificationAndHistoryRecord(api, 'Зависимость', 'После возвращения в мясное тело вы упадете в тяжран.');
       hungerWhileInDone(api, {});
       api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(1, 'hour'), advanceAddiction, data);
-    }
-
-    if (api.workModel.healthState != 'biologically_dead') {
-      healthStateTransition(api, 'clinically_dead', undefined);
+    } else {
+      if (api.workModel.healthState != 'biologically_dead') {
+        healthStateTransition(api, 'clinically_dead', undefined);
+      }
     }
   } else {
     api.error(`Incorrect addiction stage: ${addiction.stage}`);
