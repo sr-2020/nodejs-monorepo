@@ -259,28 +259,6 @@ const kAllSpellsList: Spell[] = [
     sphere: 'astral',
     eventType: dummySpell.name,
   },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'beacon',
-    humanReadableName: 'Beacon',
-    description: 'В течение Мощь*5 минут в эту локацию будут созываться духи из соседних (слабые духи проще).',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'astral',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'run-spirit-run',
-    humanReadableName: 'Run, spirit, run',
-    description: 'В течение Мощь*5 минут из этой локации будут распугиваться духи (слабые духи проще). Чем больше Мощь, тем больше срок',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'astral',
-    eventType: spiritsRelatedSpell.name,
-  },
   // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   // В течение Мощь*3 минут каждые 60с будет сделана попытка (с вероятностью Мощь*20) вытянуть 1 уровень плотности маны из случайной соседней локации (там понизится, тут повысится).
   {
@@ -308,62 +286,6 @@ const kAllSpellsList: Spell[] = [
     eventType: doNothingSpell.name,
   },
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'mosquito-tree',
-    humanReadableName: 'Mosquito Tree',
-    description: 'Создать генератор духов, при активации надо сосканировать qr-код человека. Чем больше Мощь, тем сильнее духи',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'astral',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'tweet-tweet-little-bird',
-    humanReadableName: 'Tweet-tweet little bird',
-    description:
-      'Установить контакт с выбранным из присутствующих духом. Узнать часть его ауры. Послать ему сообщение. Получить от него сообщение',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'aura',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'feed-the-cat',
-    humanReadableName: 'Feed the cat',
-    description: 'На Мощь*5 минут понизить Сопротивляемость указанного духа на Мощь*10.',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'aura',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'tame-the-dog',
-    humanReadableName: 'Tame the dog',
-    description: 'Перманентно понизить Сопротивляемость духа на 10 по отношению к себе',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'aura',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'whip-the-horse',
-    humanReadableName: 'Whip the horse',
-    description: 'Перманентно повысить Сопротивляемость указанного духа на 10 ко всем. Чем больше Мощь, тем больше эффект',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'aura',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   // На T минут выдаётся способность Own Spirit с фактором {{ might }} . T=Мощь*10 минут. might = Мощь
   {
     id: 'spirit-suit',
@@ -374,18 +296,6 @@ const kAllSpellsList: Spell[] = [
     availability: 'master',
     karmaCost: 30,
     sphere: 'astral',
-    eventType: spiritsRelatedSpell.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'exorcizamus',
-    humanReadableName: 'Exorcizamus',
-    description:
-      'Попытаться изгнать духа из текущей локации на Мощь*30. Вероятность успеха зависит от ранга духа и его Сопротивления этому магу, от вложенной Мощи.',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 30,
-    sphere: 'fighting',
     eventType: spiritsRelatedSpell.name,
   },
   // маг узнает часть ауры цели (90% для метачеловека, не сопротивляющегося сканированию своего qr).
@@ -400,17 +310,6 @@ const kAllSpellsList: Spell[] = [
     hasTarget: true,
     eventType: readCharacterAuraSpell.name,
   },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  {
-    id: 'tekel',
-    humanReadableName: 'Tekel',
-    description: 'Узнать 60% ауры одного из присутствующих духов',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 2,
-    sphere: 'aura',
-    eventType: spiritsRelatedSpell.name,
-  },
   // маг узнает ауру текущей локации
   {
     id: 'fares',
@@ -421,17 +320,6 @@ const kAllSpellsList: Spell[] = [
     karmaCost: 20,
     sphere: 'aura',
     eventType: readLocationAuraSpell.name,
-  },
-  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
-  {
-    id: 'panopticon',
-    humanReadableName: 'Panopticon',
-    description: 'Узнать часть ауры (10 + Мощь*5 - ЗащитаАуры*5)% каждого присутствующего в этой локации в реале и в астрале человека.',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 2,
-    sphere: 'aura',
-    eventType: dummyAreaSpell.name,
   },
   // У цели в течение 60 минут маска ауры увеличена на Мощь*2
   {
@@ -556,17 +444,6 @@ const kAllSpellsList: Spell[] = [
       'В течение Мощь*8 минут каждые 60с будешь получать сообщение, ближе или дальше от цели ты оказался. Чем больше Мощь, тем больше срок',
     prerequisites: [],
     availability: 'closed',
-    karmaCost: 30,
-    sphere: 'astral',
-    eventType: dummySpell.name,
-    hasTarget: false,
-  },
-  {
-    id: 'now-i-see',
-    humanReadableName: 'Now I see',
-    description: 'Получить ауру локации, в которой находится цель (указанная её аурой)',
-    prerequisites: [],
-    availability: 'master',
     karmaCost: 30,
     sphere: 'astral',
     eventType: dummySpell.name,
