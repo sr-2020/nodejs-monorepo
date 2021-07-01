@@ -74,7 +74,6 @@ import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scri
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -452,10 +451,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Принять персонажа в дискурс-группу',
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 5,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: discourseGroupAddAbility.name,
@@ -467,10 +466,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Исключить персонажа из дискурс-группы',
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 5,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: discourseGroupExcludeAbility.name,
@@ -895,11 +894,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: iWillSurvive.name,
   },
-  // - мгновенное, кулдаун 5 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
+  // - мгновенное, кулдаун 15 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
   {
     id: 'stand-up-and-fight',
     humanReadableName: 'Stand up and fight ',
-    description: 'Мгновенное поднятие другого персонажа из тяжрана. Требуемая эссенция: больше 5. Кулдаун 5 минут.',
+    description: 'Мгновенное поднятие другого персонажа из тяжрана. Требуемая эссенция: больше 5. Кулдаун 15 минут.',
     target: 'scan',
     targetsSignature: [
       {
@@ -908,7 +907,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    cooldownMinutes: (character) => 5,
+    cooldownMinutes: (character) => 15,
     prerequisites: ['arch-mage', 'agnus-dei'],
     availability: 'open',
     karmaCost: 40,
@@ -1512,10 +1511,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
-    description: 'Ты можешь допрашивать персонажей. На допросе цель развернуто отвечает на заданный вопрос и теряет один хит.',
+    description: 'Ты можешь допрашивать персонажей. На допросе цель развернуто отвечает на 3 заданных вопрос и теряет один хит.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 20,
+    cooldownMinutes: (character) => 60,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -2886,7 +2885,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'passport-kz-null',
     humanReadableName: 'Вернуть акцию из залога',
-    description: 'Возвращает гражданскую акцию Корпорации Россия в из залога',
+    description: 'Возвращает гражданскую акцию Корпорации Россия из залога',
     target: 'scan',
     targetsSignature: kHealthyBodyTargeted,
     cooldownMinutes: (character) => 3,
@@ -2983,24 +2982,32 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
+  // Активация отключает все активные абилки (как при входе в дрона)
+  // И оставляет "тело" в телохранилище.
+  // - QR телохранилища
+  // отсканировать одно, другое и подключиться.
+  // QR аватарок мы не вводим, потому что все аватарки одинаковые и ничего не делают.  Способностей у них нет никаких.
   {
     id: 'enter-vr',
-    humanReadableName: 'зайти в Виар (колдсим)',
-    description: 'Отсканируй аватарку и телохранилище, чтобы зайти в VR (колдсим)',
+    humanReadableName: 'Зайти в Виар (колдсим)',
+    description:
+      'Активируй, чтобы зайти в VR (колдсим). Надо отсканировать телохранилище. Помни, что время пребывания в Виар ограничено. Если ты опоздаешь - можешь получить биофидбек (хиты, тяжран или КС).',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 1,
+    cooldownMinutes: (character) => 120,
     prerequisites: [],
+    pack: { id: 'chummer_zero', level: 0 },
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
+  //
   {
     id: 'exit-vr',
     humanReadableName: 'Выйти из Виар',
-    description: 'Нажми эту способность, чтобы выйти из VR. Не забудь отсканировать телохранилище и забрать свое тело.',
+    description: 'вернись к телохранилищу, чтобы покинуть VR. активируй способность и забери свое тело.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 9000,
@@ -3110,6 +3117,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // Отсканировать куар Спрайта, чтобы потратить его
+  // +80
+  //
   {
     id: 'native-compile',
     humanReadableName: 'Компиляция спрайта',
@@ -3127,7 +3136,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
-    fadingPrice: 0,
+    fadingPrice: 80,
     eventType: useSpriteAbility.name,
   },
   // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
@@ -3390,8 +3399,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 150,
     eventType: dummyAbility.name,
   },
-  // В качестве цели сканируется QR-код телохранилища с телом внутри. Если тела нет - сразу получаем сообщение о невалидной цели (абилка не срабатывает, кулдаун не идёт).
-  // Со счёта этого тела снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
+  // В качестве цели сканируется QR-код телохранилища .Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
+  // Если тела нет - получаем сообщение "Увы, камера пуста".
+  // Если тело есть - со счёта этого персонажа снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
   // N = 10% на счёте жертвы, но не более 10% от значения _текущий максимальный баланс не иридиевого игрока_.
   {
     id: 'sleep-check',
@@ -3402,16 +3412,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     cooldownMinutes: (character) => 5,
     prerequisites: [],
     availability: 'open',
-    karmaCost: 0,
+    karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: sleepCheckAbility.name,
   },
-  // макс время в VR + 30 минут
+  // макс время в VR + 60 минут
   // itGapEssense +5"
   {
     id: 'kokkoro-vr',
-    humanReadableName: '"Нано-подключение к VR"',
+    humanReadableName: 'Нано-подключение к VR',
     description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3423,11 +3433,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // макс время в VR + 30 минут
+  // макс время в VR + 60 минут
   // itGapEssense +5"
   {
     id: 'koshcghei-vr',
-    humanReadableName: '"Нано-подключение к VR"',
+    humanReadableName: 'Нано-подключение к VR',
     description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3439,11 +3449,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // макс время в VR + 30 минут
+  // макс время в VR + 60 минут
   // itGapEssense +5"
   {
     id: 'horizon-vr',
-    humanReadableName: '"Нано-подключение к VR"',
+    humanReadableName: 'Нано-подключение к VR',
     description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3455,11 +3465,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // макс время в VR + 30 минут
+  // макс время в VR + 60 минут
   // itGapEssense +5"
   {
     id: 'badass-vr',
-    humanReadableName: '"Нано-подключение к VR"',
+    humanReadableName: 'Нано-подключение к VR',
     description: 'При подключении к VR в течение 40 минут, время пребывания там увеличено на час.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3491,7 +3501,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ethic-control',
     humanReadableName: 'Решай за других',
-    description: 'Ты можешь заставить другого персонажа показать его куар ',
+    description: 'Ты можешь заставить другого персонажа показать его куар (при активации способности 1 раз)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
@@ -3566,7 +3576,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // текстовая
+  // Более быстрое уменьшение фейдинга
   {
     id: 'ethic-shadow',
     humanReadableName: 'Флагеллянт',
@@ -3601,13 +3611,286 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ethic-absolutely-finish-him',
     humanReadableName: 'Абсолютная смерть',
-    description: 'ты можешь убивать в Абсолютную смерть',
+    description: 'Ты можешь убивать в Абсолютную смерть',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 100,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
+  // Если тела нет - получаем сообщение "Увы, камера пуста".
+  // Если тело есть - персонажу выдается сообщение "Ваше тело атаковано! Если вы вернетесь за 10 минут - будете здоровый, за 30 минут - тяжран, более - КС".  То это должно работать  на три  кейса: дух, дрон, подключение к виар.  Важно: если у персонажа есть какие-то триггеры его собственные (например по длительности времени в дроне), то выбирается худшая опция.
+  // в идеале (если например там дрон или дух) - отключать абилки дрона \ духа. Чтобы совсем наприятно было.  И страничку с экономикой тоже, чтобы в Виаре бухать не могли
+  {
+    id: 'sleep-shock',
+    humanReadableName: 'Электрошок в мягкое тельце!',
+    description: 'Отсканируй qr телохранилища с телом внутри, чтобы ударить его шоком и принудить вернуться к телу.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-rigger'],
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
+  // Если тела нет - получаем сообщение "Увы, камера пуста".
+  // Если тело есть - персонажу выдается сообщение "Ваше тело атаковано! Если вы вернетесь за 10 минут - будете здоровый, за 30 минут - тяжран, более - КС".  То это должно работать  на три  кейса: дух, дрон, подключение к виар.  Важно: если у персонажа есть какие-то триггеры его собственные (например по длительности времени в дроне), то выбирается худшая опция.
+  // в идеале (если например там дрон или дух) - отключать абилки дрона \ духа. Чтобы совсем наприятно было.  И страничку с экономикой тоже, чтобы в Виаре бухать не могли
+  {
+    id: 'sleep-kick',
+    humanReadableName: 'Пинок в мягкое тельце!',
+    description: 'Отсканируй qr телохранилища с телом внутри, чтобы больно ударить его и принудить вернуться к телу.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['arch-samurai'],
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "здесь лежит чаммер.", указываем его имя и метатип. если нет - получаем сообщение "Здесь никого нет."
+  {
+    id: 'sleep-whois-decker',
+    humanReadableName: 'Кто в коробчонке? (декер)',
+    description: 'Отсканируй qr телохранилища с телом внутри, чтобы узнать, кто там лежит.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 4,
+    prerequisites: ['arch-hackerman-decker'],
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "здесь лежит чаммер.", указываем его имя и метатип. если нет - получаем сообщение "Здесь никого нет."
+  {
+    id: 'sleep-whois-technomancer',
+    humanReadableName: 'Кто в коробчонке? (техномант)',
+    description: 'Отсканируй qr телохранилища с телом внутри, чтобы узнать, кто там лежит.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 4,
+    prerequisites: ['arch-hackerman-technomancer'],
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "да, здесь есть тело", если нет - получаем сообщение "Здесь тела нет."
+  {
+    id: 'sleep-isthere-mage',
+    humanReadableName: 'Есть ли кто-то в коробчонке? (маг)',
+    description: 'Отсканируй qr телохранилища, чтобы проверить, есть ли кто-то внутри.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 2,
+    prerequisites: ['arch-mage'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "да, здесь есть тело", если нет - получаем сообщение "Здесь тела нет."
+  {
+    id: 'sleep-isthere-rigger',
+    humanReadableName: 'Есть ли кто-то в коробчонке? (риггер)',
+    description: 'Отсканируй qr телохранилища, чтобы проверить, есть ли кто-то внутри.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 2,
+    prerequisites: ['arch-rigger'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  //
+  {
+    id: 'enter-vr-hot',
+    humanReadableName: 'Стать аватаркой и зайти в Виар (ХОТСИМ)',
+    description:
+      'Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: ['arch-hackerman-technomancer'],
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'no-enter-agent',
+    humanReadableName: 'Запрет Доступа (агент)',
+    description:
+      'Покажи активированную способность персонажу в VR. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 2,
+    prerequisites: ['sub-agent', 'arch-digital'],
+    availability: 'open',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'want-to-speak',
+    humanReadableName: 'А поговорить?',
+    description:
+      'Покажи только что активированную способность на персонажа в Виар. Он должен быть с тобой рядом и поддерживать разговор не менее чем 5 минут. Будь вежлив и интересен! ',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 60,
+    prerequisites: ['sub-eghost'],
+    availability: 'open',
+    karmaCost: 40,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'forget-it-all-eghost',
+    humanReadableName: 'Забвение',
+    description:
+      'Покажи активированную способность персонажу в VR (на Цифровых не действует!) . Цель способности забывает последние 10 минут проведенные в ВИАР. Применяется только в VR.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 90,
+    prerequisites: ['want-to-speak'],
+    availability: 'open',
+    karmaCost: 40,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'big-mommy-eghost',
+    humanReadableName: 'Спроси Большого Брата',
+    description: 'Задать мастеру вопрос на который можно ответить "Да", "Нет", "Это не имеет значения" и получить ответ.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 240,
+    prerequisites: ['want-to-speak'],
+    availability: 'open',
+    karmaCost: 60,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'tell-me-what-you-know-eghost',
+    humanReadableName: 'Скажи как есть',
+    description:
+      'Покажи активированную способность персонажу в VR (на ифровых не действует!) Цель честно отвечает на 3 вопроса. Применяется только в VR.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 90,
+    prerequisites: ['want-to-speak'],
+    availability: 'open',
+    karmaCost: 40,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'no-enter-eghost',
+    humanReadableName: 'Запрет Доступа (егост)',
+    description:
+      'Покажи только что активированную способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 20,
+    prerequisites: ['sub-eghost', 'arch-digital'],
+    availability: 'open',
+    karmaCost: 20,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // делает ничего, просто запускает кулдаун
+  {
+    id: 'come-with-me-shit-eater',
+    humanReadableName: 'Пойдем, выйдем',
+    description: 'Вызвать на дуэль проекцию другого ИИ. В Красной комнате вы можете использовать только одноручный меч.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 180,
+    prerequisites: ['sub-ai'],
+    availability: 'open',
+    karmaCost: 60,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Активация равна входу обычного чаммера в Виар . Нужен
+  // QR телохранилища
+  // отсканировать и подключиться.
+  // При активакии  делает все то же самое, что и обычный вход в Виар,  выдает абилку exit-vr для обратного входа в тело.
+  // Смысл абилки - ИИ может делать это очень быстро. Каждые 10 минут
+  {
+    id: 'compile-coldsim',
+    humanReadableName: 'Закрыться аватаркой (перейти в колдсим)',
+    description: 'Активируй, чтобы подключиться в Колдсим (ты спрячешься в аватарку,  станешь беспомощным, но анонимным)',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 10,
+    prerequisites: ['compile-hotsim', 'sub-ai'],
+    availability: 'open',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Штука должна работать и на хотсим (техноманты) и на колдсим (все остальные).  В колдсиме персонаж в аватарке - надо подумать. можно ли это закодить. Либо можно делать это через мастера, Потому что Позитив все равно у нас на бусинах и ручном контроле
+  {
+    id: 'black-ice-ai',
+    humanReadableName: 'Черный лед',
+    description:
+      'Ты можешь убивать в Клиническую смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из  VR. После возвращения в тело с ним случится КС.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: ['sub-ai'],
+    availability: 'closed',
+    karmaCost: 80,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // Штука должна работать и на хотсим (техноманты) и на колдсим (все остальные).  В колдсиме персонаж в аватарке - надо подумать. можно ли это закодить. Либо можно делать это через мастера, Потому что Позитив все равно у нас на бусинах и ручном контроле
+  {
+    id: 'storm-blast-ai',
+    humanReadableName: 'Цифровой шторм',
+    description:
+      'Ты можешь убивать в Абсолютную смерть. Применение требует траты Позитива (заверь у мастера). Отсканируй QR персонажа в VR, он должен немедленно выйти из  VR. После возвращения в тело с ним случится АС.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 240,
+    prerequisites: ['black-ice-ai'],
+    availability: 'closed',
+    karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,

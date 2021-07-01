@@ -342,13 +342,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
+  // может получиться косяк, эту абилку мы уже выдаем другим метатипам
   {
     id: 'magic-blockade',
     humanReadableName: 'Отторжение Магии',
     description: 'Ты не можешь изучать навыки Мага',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   // САБЖ, как в описании. Выдаем какую-то прикольную сюжетную инфу
@@ -442,12 +444,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Автоматический захват цели в линклок при появлении
   {
     id: 'auto-link-lock',
-    humanReadableName: 'autolinklock',
-    description:
-      'новая команда: autolock [target]\nона автоматически попытается захватить в линклок цель (то есть без ручного ввода команды)',
+    humanReadableName: 'autolock',
+    description: 'новая команда: autolock [target]\nАвтоматически атакует указанного декера при встрече(то есть без ручного ввода команды)',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-hackerman-decker', 'link-lock'],
+    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
     pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
@@ -574,7 +575,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'feelmatrix',
     humanReadableName: 'feelmatrix',
     description:
-      'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\nАктивируется перед входом в на Хост\nВыдает список хостов, на которых есть другие декеры и примерный уровень группы. Чем сильнее твой Sleaze, тем больше таких хостов ты найдешь',
+      'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\nВыдает список хостов, на которых есть другие декеры. Чем выше твой Sleaze, тем больше инфы ты получишь',
     availability: 'closed',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
@@ -2535,7 +2536,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'tincasm-able',
-    humanReadableName: 'Think as a master',
+    humanReadableName: 'Think as a master effect',
     description:
       'В течение 10 минут после активации заклинания все персонажи, присутствующие в реале в поле зрения мага (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), переходят в тяжран, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам',
     availability: 'master',
@@ -2980,13 +2981,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'drone-recovery-bonus-2'],
     modifier: [modifierFromEffect(increaseRecoverySkill, { amount: 4 })],
   },
+  //
   {
     id: 'meta-digital',
-    humanReadableName: 'Цифровой персонаж',
+    humanReadableName: 'Цифровой разум',
     description: 'Ты цифровой разум, сгусток программ и кода, живущий в Матрице. ',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   // resonance +1
@@ -3332,43 +3335,50 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['in-drone'],
     modifier: [],
   },
+  // maxTimeInVr +6000
   {
     id: 'digital-life',
     humanReadableName: 'Цифровая форма жизни',
     description: 'Ты можешь неограниченное время пребывать в VR',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
+  //
   {
     id: 'vr-protection',
     humanReadableName: 'Защита в Виар',
     description: 'К тебе нельзя применить способности, заставляющие покинуть VR',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
+  // Отличный скоринг и хорошие цены (работает как у Эльфов) - сверить с Марьяной
   {
     id: 'digital-prices',
     humanReadableName: 'Прекрасные цены',
     description: 'У тебя отличный скоринг и выгодные цены',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
+  //
   {
     id: 'hotsim-ever',
     humanReadableName: 'А ты горяч!',
-    description: 'Ты в находишься в состоянии Хотсим. Ты включен, бодр, горяч и можешь пользоваться способностями.',
+    description: 'В Виаре ты в находишься в состоянии Хотсим. Ты включен, бодр, горяч и можешь пользоваться способностями.',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-digital'],
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // Должна быть доступна Агентам
   {
     id: 'no-enter-gh',
     humanReadableName: 'Запрет Доступа',
@@ -3574,12 +3584,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // текстовая абилка
+  // hacking.fadingDecrease =3
   {
     id: 'ethic-kokkoro',
     humanReadableName: 'Бэкдор по знакомству',
-    description:
-      'Один раз в цикл ты можешь получить бэкдор на любой хост. Тебе надо знать ID хоста. (заявка отправляется в мастера по Хакерам)',
+    description: 'Более быстрое уменьшение фейдинга',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3589,21 +3598,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'ethic-kazak',
     humanReadableName: 'Казацкая сабля',
-    description: 'Казацкая сабля!\nЗащита от нежити\nЕсли ты сражаешься против Гулей или Вампиров - у тебя +2 хита (максимум 6)',
+    description: 'Защита от нежити. Если ты сражаешься против Гулей или Вампиров - у тебя +2 хита (максимум 6)',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
-  // "В чем сила, брат? Сила в Правде! Для того, чтобы использовать пулемет или двуручное оружие - тебе достаточно одной кибер руки \ способности Биосила.
   //
-  // Обученный Риггер
-  // +1 ко всем навыкам управления дронами "
   {
     id: 'ethic-sila',
     humanReadableName: 'Сила в Правде',
     description:
-      '"В чем сила, брат? Сила в Правде! Для того, чтобы использовать пулемет или двуручное оружие - тебе достаточно одной кибер руки \\ способности Биосила.\n\nОбученный Риггер \n+1 ко всем навыкам управления дронами "',
+      'В чем сила, брат? Сила в Правде! Для того, чтобы использовать пулемет или двуручное оружие - тебе достаточно одной кибер руки \\ способности Биосила.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3613,7 +3619,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'ethic-carrion',
     humanReadableName: 'Лечебные ингредиенты',
-    description: '\nТы можешь вылечить персонажа (восстановить все хиты, но НЕ поднять из тяжрана), если добьешь гуля. ',
+    description: 'Ты можешь вылечить персонажа (восстановить все хиты, но НЕ поднять из тяжрана), если добьешь гуля. ',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3629,12 +3635,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Если в бою 5 членов триад (дискурса) - каждый получает +1 хит
+  // Если в бою уаствуют 3 члена триад (дискурса) - каждый получает +1 хит
   {
     id: 'ethic-triada',
-    humanReadableName: 'Сила пяти',
-    description:
-      'Сила Трех \\ Семейные узы.\nЕсли в бою участвует 3 и более членов триады (дискурса) с этой способностью - каждый из них получает +1 хит (максимум 6)',
+    humanReadableName: 'Сила Триады',
+    description: 'Если в бою участвует 3 и более членов триады (дискурса) с этой способностью - каждый из них получает +1 хит (максимум 6)',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3656,16 +3661,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'ethic-horizon',
     humanReadableName: 'Сила слова',
     description:
-      'Твои тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #вестник - и твой вклад будет учтен..\nЕсли ты журналист - получи +2 очка влияния за цикл. Заяви это мастеру по СМИ\n',
+      'Твои тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #вестник - и твой вклад будет учтен..\nЕсли ты журналист - получи +2 очка влияния за цикл. Заяви это мастеру по СМИ',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
-  // body -1
-  // intelligence -2
-  // charisma +1
-  // magic +1
   {
     id: 'ethic-buryaty',
     humanReadableName: 'Волшебство',
@@ -3680,7 +3681,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'ethic-aks',
     humanReadableName: 'Увлеченный рассказчик. ',
     description:
-      'Покажи это цели. Расскажи ему историю, кто ты, кто он и что вы сейчас делаете. Цель верит тебе и испытвает непреодолимое желание делать то, что ты рассказываешь. Помоги ему и сделай то, о чем ты говоришь. Если в процессе взаимодействия цели будет причинен любой ущерб (потеря хитов, потеря имущества...) - воздействие тут же спадет. Иначе - воздействие держится пять минут. Цель всё осознает. Ты можешь использовать эту способность один раз за цикл.',
+      'Покажи это цели. Расскажи ему историю, кто ты, кто он и что вы сейчас делаете. Цель верит тебе и испытывает непреодолимое желание делать то, что ты рассказываешь. Помоги ему и сделай то, о чем ты говоришь. Если в процессе взаимодействия цели будет причинен любой ущерб (потеря хитов, потеря имущества...) - воздействие тут же спадет. Иначе - воздействие держится пять минут. Цель всё осознает. Ты можешь использовать эту способность один раз за цикл.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3691,21 +3692,202 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'ethic-lzg',
     humanReadableName: 'Заживление ран',
     description:
-      'Заживление ран. \nТы можешь вылечить себе два хита, прикоснувшись к Гулю. Обними гуля на одну минуту. Ты можешь использовать эту способность один раз в час.\nНе работает, если ты находишься в тяжелом ранении.',
+      'Ты можешь вылечить себе два хита, прикоснувшись к Гулю. Обними гуля на одну минуту. Ты можешь использовать эту способность один раз в час.\nНе работает, если ты находишься в тяжелом ранении.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
+  //
   {
     id: 'ethic-reason',
     humanReadableName: 'Холодный разум',
     description:
-      'Твои эмоциональные тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #аналитик - и твой вклад будет учтен..',
+      'Твои тексты высоко ценятся в СМИ и повышают им рейтинг. Напиши за цикл не менее трех сообщений (строго в одно СМИ), используй личный хештег и тег #аналитик - и твой вклад будет учтен..',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
+    modifier: [],
+  },
+  // Пассивная. Закрытая. Выдается мастерами.
+  {
+    id: 'vr-who-is',
+    humanReadableName: 'Who Is',
+    description:
+      'Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион.  Абилка Режим Инкогнито защищает от проверки.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['!arch-mage'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'vr-deanon',
+    humanReadableName: 'Деанон',
+    description:
+      'Ты можешь спросить чаммера кто он (даже с режимом Инкогнито)  - и он должен назвать тебе имя, метатип, регион и SIN. От проверки защищает только абилка режим Firewall.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['vr-who-is'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'vr-incognito',
+    humanReadableName: 'Режим "Инкогнито"',
+    description:
+      'Если ты находишься в VR в аватарке (плащ, очки, или зачипованная аватарка), то тебя нельзя узнать без применения специальных абилок или способностей. Абилка Who is на вас не действует.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: [],
+    modifier: [],
+  },
+  // maxTimeInVr +30
+  {
+    id: 'vr-firewall',
+    humanReadableName: 'Режим "Фаервол"',
+    description:
+      'Ты нарисовал себе классную аватарку. Молодец! Тебя нельзя деанонимировать никаким способом. Если кто-то пытается - покажи ему этот текст. И да, у тебя +30 минут в VR! Развлекайся, чаммер!',
+    availability: 'closed',
+    karmaCost: 20,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Пассивная. Закрытая. Выдается мастерами при генережке
+  {
+    id: 'vr-employee',
+    humanReadableName: 'Работник VR',
+    description: 'Сотрудник заведения VR, подтвержденный мастером региона',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // maxTimeInVr +120
+  {
+    id: 'vr-employee-long-time',
+    humanReadableName: 'Я работаю в VR',
+    description: 'Твое время в VR увеличено на 2 часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['vr-employee'],
+    modifier: [],
+  },
+  // maxTimeInVr +30
+  {
+    id: 'vr-better-vr',
+    humanReadableName: 'Better VR',
+    description: 'Возможность времени в VR увеличена на 30 минут.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // maxTimeInVr +30
+  {
+    id: 'vr-more-better-vr',
+    humanReadableName: 'More Better VR',
+    description: 'Возможность времени в VR увеличена еще на 30 минут.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['vr-better-vr'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'compile-hotsim',
+    humanReadableName: 'Скомпилировать аватарку (хотсим)',
+    description: 'Если у тебя сняли все хиты - ты можешь собрать себя обратно. Проведи у Ассемблера 45 минут для компиляции.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-digital'],
+    pack: { id: 'gen-meta-digital', level: 1 },
+    modifier: [],
+  },
+  // Требуется согласование с Марьяной
+  {
+    id: 'neo-legacy',
+    humanReadableName: 'Наследство Нео',
+    description: 'Небольшой пассивный доход',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['sub-eghost'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'restioration-1',
+    humanReadableName: 'Жажда действий',
+    description: 'Тебе достаточно провести 30 минут у ассемблера для компиляции',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['compile-hotsim', 'sub-ai'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'restioration-2',
+    humanReadableName: 'Жажда действий 2.0',
+    description: 'Тебе достаточно провести 15 минут у ассемблера для компиляции',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['restioration-1'],
+    modifier: [],
+  },
+  // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
+  {
+    id: 'depth-master',
+    humanReadableName: 'Повелитель Глубины',
+    description: 'Ты развиваешь свою Глубину и повышаешь эффективность использования навыков.. Глубина +1',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['sub-ai'],
+    modifier: [],
+  },
+  // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
+  {
+    id: 'deep-er',
+    humanReadableName: 'Глубже',
+    description: 'Ты очень хорошо чувствуешь происходящее в Матрице, Глубина +1',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['depth-master'],
+    modifier: [],
+  },
+  // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
+  {
+    id: 'more-deep-er',
+    humanReadableName: 'Еще глубже',
+    description: 'Тебе все проще дается взаимодействие с Матрицей, Глубина +1',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['deep-er'],
+    modifier: [],
+  },
+  // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
+  {
+    id: 'just-like-that',
+    humanReadableName: 'Ну очень глубоко',
+    description: 'Ты повелитель глубинных слоев Матрицы, Глубина+1',
+    availability: 'open',
+    karmaCost: 60,
+    prerequisites: ['more-deep-er'],
+    modifier: [],
+  },
+  // drones.medicraftBonus +1
+  // drones.aircraftBonus  +1
+  // drones.groundcraftBonus +2
+  // drones.autodocBonus +1
+  // drones.maxTimeInside +10
+  // rigging.repomanBonus +2
+  {
+    id: 'ethic-sila-chrome',
+    humanReadableName: 'Сила в Хроме',
+    description: 'В чем сила, брат? Сила в Хроме!  + ко всем "боевым" навыкам риггера',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: ['arch-rigger'],
     modifier: [],
   },
 ];

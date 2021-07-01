@@ -487,6 +487,32 @@ const kAllSpellsList: Spell[] = [
     eventType: dummySpell.name,
     hasTarget: false,
   },
+  // у цели на время T повышается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
+  {
+    id: 'ethic-buryaty-smartie',
+    humanReadableName: 'Буряты умные!',
+    description:
+      'Повысить Интеллект. На Мощь*10 минут повысить на 1, если Мощь <4, иначе на 2  Интеллект цели, указанной добровольно предоставленным qr-кодом.',
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    sphere: 'stats',
+    eventType: dummySpell.name,
+    hasTarget: false,
+  },
+  // у цели на время T понижается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
+  {
+    id: 'ethic-buryaty-dumbie',
+    humanReadableName: 'Буряты хитрые!',
+    description:
+      'Понизить Интеллект. На Мощь*10 минут понизить на 1, если Мощь <4, иначе на 2 Интеллект цели, указанной добровольно предоставленным qr-кодом.',
+    prerequisites: [],
+    availability: 'closed',
+    karmaCost: 0,
+    sphere: 'stats',
+    eventType: dummySpell.name,
+    hasTarget: false,
+  },
 ];
 setAllSpells(
   (() => {
