@@ -494,27 +494,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'hack-deck-guru', level: 1 },
     modifier: [],
   },
-  // Увеличивает возможное количество бэкдоров
-  {
-    id: 'squid',
-    humanReadableName: 'Сквид',
-    description: 'Увеличивает возможное количество бэкдоров',
-    availability: 'closed',
-    karmaCost: 40,
-    prerequisites: ['arch-hackerman-decker'],
-    modifier: modifierFromEffect(increaseBackdoors, { amount: 3 }),
-  },
-  // Бэкдоры дохнут медленнее
-  // [Время_жизни_бэкдоров] +20
-  {
-    id: 'last-droplet',
-    humanReadableName: 'Ну еще капельку',
-    description: 'Бэкдоры живут медленнее. Твои бекдоры живут на 20 минут больше',
-    availability: 'closed',
-    karmaCost: 40,
-    prerequisites: ['arch-hackerman-decker'],
-    modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 20 }),
-  },
   // бекдоры живут на 40 минут дольше
   // Абилка-маркер для сайта Кривды
   {
@@ -1312,78 +1291,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['magic-recovery-2', 'arch-mage'],
     modifier: modifierFromEffect(muliplyMagicRecoverySpeed, { amount: 1.2 }),
   },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
-  {
-    id: 'spirit-friend-1',
-    humanReadableName: 'Дружелюбие духов 1',
-    description: 'Перманентно уменьшает Сопротивление духов',
-    availability: 'master',
-    karmaCost: 30,
-    prerequisites: [],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 0.8,
-    }),
-  },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
-  {
-    id: 'spirit-friend-2',
-    humanReadableName: 'Дружелюбие духов 2',
-    description: 'Перманентно уменьшает Сопротивление духов',
-    availability: 'open',
-    karmaCost: 50,
-    prerequisites: ['spirit-friend-1', 'magic-feedback-unresistance-1'],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 0.8,
-    }),
-  },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 0.8
-  {
-    id: 'spirit-friend-3',
-    humanReadableName: 'Дружелюбие духов 3',
-    description: 'Перманентно уменьшает Сопротивление духов',
-    availability: 'open',
-    karmaCost: 70,
-    prerequisites: ['spirit-friend-2'],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 0.8,
-    }),
-  },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
-  {
-    id: 'spirit-enemy-1',
-    humanReadableName: 'Духопротивный 1',
-    description: 'Перманентно увеличивает Сопротивление духов',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 1.3,
-    }),
-  },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
-  {
-    id: 'spirit-enemy-2',
-    humanReadableName: 'Духопротивный 2',
-    description: 'Перманентно увеличивает Сопротивление духов',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['spirit-enemy-1'],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 1.3,
-    }),
-  },
-  // В Коэффициент Сопротивления Духов у мага перманентно добавляется множитель 1.3
-  {
-    id: 'spirit-enemy-3',
-    humanReadableName: 'Духопротивный 3',
-    description: 'Перманентно увеличивает Сопротивление духов',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['spirit-enemy-2'],
-    modifier: modifierFromEffect(multiplySpiritResistanceMultiplier, {
-      amount: 1.3,
-    }),
-  },
   // В астральном следе заклинаний обладателя абилки остается только 60% ауры. То есть Коэффициент Отчетливости Астральных Следов у него равен 0.6
   {
     id: 'light-step',
@@ -1857,16 +1764,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // КоэффициентСопротивленияОткату умножается на 0.5
-  {
-    id: 'kudesnik',
-    humanReadableName: 'Кудесник',
-    description: 'Откат делится пополам',
-    availability: 'master',
-    karmaCost: 20,
-    prerequisites: [],
-    modifier: [modifierFromEffect(multiplyMagicFeedbackMultiplier, { amount: 0.5 })],
-  },
   // Абилка ничего не делает, просто показывает текст "магический щит, защищает от атак оружием - холодным и дистанционным. Двигаться с раскрытым щитом нельзя. Любая контактная атака на щит приводит нападающего в тяжран"
   {
     id: 'magic-shield',
@@ -2179,17 +2076,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-face'],
     pack: { id: 'gen-arch-face-boost', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
-  },
-  // depth +1
-  {
-    id: 'arch-ai',
-    humanReadableName: 'Архетип: Искусственный интеллект',
-    description: 'Искусственный интеллект. ',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: ['meta-digital'],
-    pack: { id: 'gen-arch-ai', level: 1 },
-    modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   // показывает игроку текст абилки, больше ничего
   {
@@ -2855,32 +2741,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // При сканировании телохранилища.
-  // если маг возвращается в мясное тело в рамках astral.duration - все хорошо.
-  // Если срок пребывания превышен - складывается в тяжран.
-  {
-    id: 'silver-thread',
-    humanReadableName: 'Серебряная нить',
-    description:
-      'Позволяет вернуться в мясное тело из астрала. Не позволяй серебряной нити порваться! (отсканируй телохранилище, чтобы вернуться в мясное тело)',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  //
-  {
-    id: 'in-the-astral',
-    humanReadableName: 'Астрал',
-    description:
-      'Ты в астральном теле. Ты неуязвим для физических воздействий и сам не можешь воздействовать на физические объекты. Можешь слышать и видеть всё происходящее в физическом мире и проходить куда угодно (можно открыть дверь для прохода тела игрока, но не для других персонажей). Не можешь брать ничего материального.\nПри предъявлении тебе менее, чем с 2м текста способности AstralopithecusRage - действуй согласно её описанию и тому, что предпринимает её владелец.',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
   // В описании абилки в "Пассивных" текст: "Можешь видеть сущности, находящиеся в астрале (красный дождевик), и изгонять их из помещения, в котором вы находитесь, или на длину твоего выпада холодным оружием"
   {
     id: 'astralopithecus-rage',
@@ -3369,17 +3229,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'armor-light'],
     modifier: [],
   },
-  // Отсканировать куар Спрайт
-  // techno.fading + 10
-  {
-    id: 'shield',
-    humanReadableName: 'щит',
-    description: 'Ты можешь использовать  Щит в Красной комнате',
-    availability: 'closed',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-technomancer', 'sprites-combat', 'control-basic'],
-    modifier: [],
-  },
   // текстовая абилка
   {
     id: 'sword-short',
@@ -3537,36 +3386,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
-  },
-  //
-  {
-    id: 'arch-sub-agent',
-    humanReadableName: 'Агент',
-    description: 'Ты сервисная программа, которая обеспечивает работу хоста в Матрице',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: ['arch-digital'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'arch-sub-eghost',
-    humanReadableName: 'Электронный призрак',
-    description: 'Ты сервисная программа с нарушением кода',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: ['arch-digital'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'arch-sub-ai',
-    humanReadableName: 'Проекция ИИ',
-    description: 'Ты часть проекции Искусственного Интеллекта, сгусток программ и кода, живущий в Матрице. ',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: ['arch-digital'],
     modifier: [],
   },
   //

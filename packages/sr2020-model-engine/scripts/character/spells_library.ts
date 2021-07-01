@@ -245,20 +245,6 @@ const kAllSpellsList: Spell[] = [
     sphere: 'astral',
     eventType: brasiliaSpell.name,
   },
-  // TODO(https://trello.com/c/Tyuy7Xes/158-реализовать-заклинание-eh-bien)
-  // Заклинание для расследований. Маг указывает конкретный момент и получает такой текстовый лог по интервалу длиной T, центром которого является указанный момент:
-  // “0-5 минут из интервала - такие-то [раса-пол-кусок ауры-лайфстайл, раса-пол-кусок ауры-лайфстайл, раса-пол-кусок ауры-лайфстайл...], 5-10 минут - такие-то… и тд”
-  // T=Мощь*5 минут
-  {
-    id: 'eh-bien',
-    humanReadableName: 'Eh bien',
-    description: 'Получить информацию о тех, кто был в текущей локации в интервале (Мощь*5 минут), содержащем указанный момент времени.',
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 30,
-    sphere: 'astral',
-    eventType: dummySpell.name,
-  },
   // TODO(https://trello.com/c/j2mrFQSU/156-реализовать-заклинания-работающие-с-плотностью-маны)
   // В течение Мощь*3 минут каждые 60с будет сделана попытка (с вероятностью Мощь*20) вытянуть 1 уровень плотности маны из случайной соседней локации (там понизится, тут повысится).
   {
@@ -433,19 +419,6 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 40,
     sphere: 'protection',
-    eventType: dummySpell.name,
-    hasTarget: false,
-  },
-  // В течение Мощь*8 минут каждые 60с маг в приложении получает текстом информацию, ближе или дальше он стал от цели, которую он указал вводом ее ауры.
-  {
-    id: 'hot-and-cold',
-    humanReadableName: 'Hot and Cold',
-    description:
-      'В течение Мощь*8 минут каждые 60с будешь получать сообщение, ближе или дальше от цели ты оказался. Чем больше Мощь, тем больше срок',
-    prerequisites: [],
-    availability: 'closed',
-    karmaCost: 30,
-    sphere: 'astral',
     eventType: dummySpell.name,
     hasTarget: false,
   },
