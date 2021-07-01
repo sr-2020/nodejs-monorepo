@@ -52,6 +52,12 @@ export class QrCodeController extends AnyModelController<QrCode> {
     return super.get(id);
   }
 
+  @Get('/qr/model/raw/:id')
+  @ApiResponse({ type: QrCode })
+  async getRaw(@Param('id', ParseIntPipe) id: number): Promise<QrCode> {
+    return super.getRaw(id);
+  }
+
   @Get('/qr/model/:id/predict')
   @ApiResponse({ type: QrCodeProcessResponse })
   async predict(@Param('id', ParseIntPipe) id: number, @Query('t', ParseIntPipe) timestamp: number): Promise<QrCodeProcessResponse> {

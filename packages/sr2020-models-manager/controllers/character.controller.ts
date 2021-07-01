@@ -116,6 +116,12 @@ export class CharacterController extends AnyModelController<Sr2020Character> {
     return super.get(id);
   }
 
+  @Get('/character/model/raw/:id')
+  @ApiResponse({ type: Sr2020Character })
+  async getRaw(@Param('id', ParseIntPipe) id: number): Promise<Sr2020Character> {
+    return super.getRaw(id);
+  }
+
   @Get('/character/model/:id/predict')
   @ApiResponse({ type: Sr2020CharacterProcessResponse })
   async predict(

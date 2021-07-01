@@ -80,6 +80,12 @@ export class LocationController extends AnyModelController<Location> {
     return super.get(id);
   }
 
+  @Get('/location/model/raw/:id')
+  @ApiResponse({ type: Location })
+  async getRaw(@Param('id', ParseIntPipe) id: number): Promise<Location> {
+    return super.getRaw(id);
+  }
+
   @Get('/location/model/:id/predict')
   @ApiResponse({ type: LocationProcessResponse })
   async predict(@Param('id', ParseIntPipe) id: number, @Query('t', ParseIntPipe) timestamp: number): Promise<LocationProcessResponse> {

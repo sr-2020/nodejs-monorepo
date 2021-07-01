@@ -39,6 +39,10 @@ export class AnyModelController<TModel extends EmptyModel> {
     return this.postEventImpl(id, { eventType: '_' });
   }
 
+  getRaw(id: number): Promise<TModel> {
+    return getRepository(this.tmodel).findOneOrFail(id);
+  }
+
   async predict(id: number, timestamp: number): Promise<ModelProcessResponse<TModel>> {
     try {
       const baseModel = await getRepository(this.tmodel).findOneOrFail(id);
