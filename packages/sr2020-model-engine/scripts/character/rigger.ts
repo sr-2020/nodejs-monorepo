@@ -252,7 +252,7 @@ export function applyPostDroneDamange(api: EventModelApi<Sr2020Character>, data:
   } else if (data.amount < api.workModel.maxHp) {
     sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов.`);
   } else {
-    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли ${data.amount} хитов, что привело к тяжрану.`);
+    sendNotificationAndHistoryRecord(api, 'Выход из дрона', `При выходе из дрона вы потеряли все хиты, что привело к тяжрану.`);
     healthStateTransition(api, 'wounded', data.location);
   }
 }
