@@ -3343,7 +3343,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: ['arch-digital'],
     pack: { id: 'gen-meta-digital', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 6000 })],
   },
   //
   {
@@ -3792,7 +3792,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['vr-better-vr'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'compile-hotsim',

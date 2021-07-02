@@ -23,8 +23,7 @@ export type MetaRace =
   | 'meta-troll'
   | 'meta-vampire'
   | 'meta-ghoul'
-  | 'meta-ai'
-  | 'meta-eghost'
+  | 'meta-digital'
   | 'meta-spirit';
 
 export type BodyType = 'physical' | 'astral' | 'drone' | 'ectoplasm';

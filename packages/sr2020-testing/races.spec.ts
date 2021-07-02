@@ -52,6 +52,8 @@ describe('Race changes', () => {
       'meta-troll',
       'meta-vampire',
       'meta-ghoul',
+      'meta-spirit',
+      'meta-digital',
     ];
     for (const race of allRaces) {
       await fixture.sendCharacterEvent({ eventType: 'setRace', data: { race } });

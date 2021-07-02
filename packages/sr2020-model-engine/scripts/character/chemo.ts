@@ -771,6 +771,10 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
     throw new UserVisibleError('Только мясное тело может принимать препараты!');
   }
 
+  if (api.workModel.metarace == 'meta-digital') {
+    throw new UserVisibleError('Вы не можете принимать препараты!');
+  }
+
   const pill = kAllPills.find((it) => it.id == data.id);
   if (!pill) {
     throw new UserVisibleError('Такого препарата не существует');

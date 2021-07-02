@@ -18,6 +18,8 @@ import { hungerTick } from '@alice/sr2020-model-engine/scripts/character/races';
 import { duration } from 'moment';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
+  if (api.model.metarace == 'meta-digital') throw new UserVisibleError('Вы не испытываете потребности в пище.');
+
   if (data.id == 'food') {
     if (isHmhvv(api.model)) throw new UserVisibleError('Вы не можете употреблять такую еду');
     resetHunger(api.model);
@@ -112,6 +114,8 @@ export function getHungerTimerDuration(model: Sr2020Character) {
 export function restartAllHungers(model: Sr2020Character) {
   removeHmhvvHunger(model);
   removeHunger(model);
+
+  if (model.metarace == 'meta-digital') return;
 
   if (isHmhvv(model)) {
     resetHmhvvHunger(model);

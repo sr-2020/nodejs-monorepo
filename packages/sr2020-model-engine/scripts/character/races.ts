@@ -49,9 +49,8 @@ const kRaceFeatures: { [race in MetaRace]: string[] } = {
     'chrome-blockade',
     'tech-blockade',
   ],
-  'meta-spirit': ['meta-spirit', 'tech-blockade', 'can-be-exorcized', 'fleshpoint'],
-  'meta-ai': ['meta-ai', 'magic-blockade'],
-  'meta-eghost': ['meta-eghost', 'magic-blockade'],
+  'meta-spirit': ['tech-blockade'],
+  'meta-digital': ['meta-digital'],
 };
 
 export function setRaceForModel(model: Sr2020Character, race: MetaRace) {

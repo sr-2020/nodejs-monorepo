@@ -133,7 +133,7 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
 
   if (stateFrom == 'biologically_dead' || stateFrom == 'clinically_dead') {
     api.sendSelfEvent('resetAllAddictions', {});
-    if (!isHmhvv(api.model)) {
+    if (!isHmhvv(api.model) && api.model.metarace != 'meta-digital') {
       resetHunger(api.model);
     }
   }
