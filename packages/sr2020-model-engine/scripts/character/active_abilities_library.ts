@@ -3490,7 +3490,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -3506,7 +3506,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -3522,7 +3522,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -3537,7 +3537,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 60,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -3553,7 +3553,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -3569,7 +3569,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 20,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // делает ничего, просто запускает кулдаун
   {
