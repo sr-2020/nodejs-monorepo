@@ -3584,7 +3584,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 60,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Активация равна входу обычного чаммера в Виар . Нужен
   // QR телохранилища

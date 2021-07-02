@@ -16,6 +16,7 @@ import {
   increaseConversionDataprocessing,
   increaseConversionFirewall,
   increaseConversionSleaze,
+  increaseDepth,
   increaseDroneFeedback,
   increaseFadingDecrease,
   increaseFadingResistance,
@@ -3841,7 +3842,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['sub-ai'],
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseDepth, { amount: 1 }),
+      modifierFromEffect(increaseIntelligence, { amount: 1 }),
+      modifierFromEffect(increaseBody, { amount: 1 }),
+      modifierFromEffect(increaseResonance, { amount: 1 }),
+      modifierFromEffect(increaseCharisma, { amount: 1 }),
+    ],
   },
   // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
   {
@@ -3851,7 +3858,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['depth-master'],
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseDepth, { amount: 1 }),
+      modifierFromEffect(increaseIntelligence, { amount: 1 }),
+      modifierFromEffect(increaseBody, { amount: 1 }),
+      modifierFromEffect(increaseResonance, { amount: 1 }),
+      modifierFromEffect(increaseCharisma, { amount: 1 }),
+    ],
   },
   // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
   {
@@ -3861,7 +3874,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['deep-er'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
   {
@@ -3871,7 +3884,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['more-deep-er'],
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseDepth, { amount: 1 }),
+      modifierFromEffect(increaseIntelligence, { amount: 1 }),
+      modifierFromEffect(increaseBody, { amount: 1 }),
+      modifierFromEffect(increaseResonance, { amount: 1 }),
+      modifierFromEffect(increaseCharisma, { amount: 1 }),
+    ],
   },
   // drones.medicraftBonus +1
   // drones.aircraftBonus  +1
