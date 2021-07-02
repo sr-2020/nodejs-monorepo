@@ -16,7 +16,6 @@ import {
   increaseConversionDataprocessing,
   increaseConversionFirewall,
   increaseConversionSleaze,
-  increaseDepth,
   increaseDroneFeedback,
   increaseFadingDecrease,
   increaseFadingResistance,
@@ -359,9 +358,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Собрать компромат',
     description:
       'Напиши большую статью об интересующем тебя человеке или организации. Добейся, чтобы эта статья вошла в топ-20 понравившихся материалов. Получи от МГ компромат на этого человека или организацию. Степень подробности информации зависит от положения статьи в рейтинге топ-20. Вы не можете собирать компромат в течении 12 часов после получения прошлых итогов компромата.',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['media-person'],
     modifier: [],
   },
   // САБЖ, как в описании.
@@ -370,9 +369,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Всегда на связи',
     description:
       'Чтобы с вами ни происходило, в каком бы вы ни были состоянии, как бы вас ни заколдовали, если вы живы - вы можете пользоваться телеграммом для передачи игровых сообщений. В мире игре этого не видно, по вам нельзя понять, что вы что-то пишете, отнять телефон и так далее.',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['media-person'],
     modifier: [],
   },
   // САБЖ, как в описании.
@@ -381,9 +380,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Это мой последний репортаж',
     description:
       'Если вас каким-либо образом все-таки убили, вы можете написать сообщение с описанием подробностей вашей смерти, как все это происходило, что вы об этом думаете, оставить последние пожелания для подписчиков и опубликовать это в вашем телеграмм-канале. Вы можете описывать что происходило с вашим телом и вокруг него. ',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['media-person'],
     modifier: [],
   },
   // САБЖ, как в описании.
@@ -392,9 +391,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спроси анонимуса',
     description:
       'Раз в 12 часов вы можете получить ответ от мастеров на любой вопрос, подразумевающий ответ "да или нет" или подробный ответ на вопрос, касающийся бэка игры и событий, произошедших в мире игры до ее начала. Кто-то из ваших читателей скинул вам эту инфу в личку. Данную информацию нельзя использовать как доказательства в суде - ведь остальные могут сомневаться в том, что анонимус знает все. Но вы не сомневаетесь в этом. ',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['media-person'],
     modifier: [],
   },
   // САБЖ, как в описании.
@@ -403,9 +402,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Поддержка блоггеров',
     description:
       'Раз в 12 часов вы можете назвать мастерам некую личность или организацию и защитить ее от использования способности "собрать компромат" на 12 часов.',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['media-person'],
     modifier: [],
   },
   // для проект-менеджера  с 1 слотом
@@ -1994,7 +1993,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'arch-hackerman-decker',
     humanReadableName: 'Архетип: Декер',
     description: 'Ты постиг премудрости работы с кибердекой и научился использовать gUmMMy протокол!',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
@@ -2201,7 +2200,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'проблемы фейса-1',
     description: 'У тебя проблемы, фейс.',
     availability: 'open',
-    karmaCost: -20,
+    karmaCost: -15,
     prerequisites: ['arch-face'],
     modifier: [modifierFromEffect(increaseMentalProtection, { amount: -3 })],
   },
@@ -2211,7 +2210,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'проблемы фейса-2',
     description: 'У тебя серьезные проблемы, фейс.',
     availability: 'open',
-    karmaCost: -40,
+    karmaCost: -35,
     prerequisites: ['arch-face-negative-1'],
     modifier: [{ ...modifierFromEffect(increaseMaxEssenceEffect, { amount: -100 }), priority: Modifier.kPriorityEarliest }],
   },
@@ -2221,7 +2220,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'проблемы фейса-3',
     description: 'У тебя очень серьезные проблемы, фейс.',
     availability: 'open',
-    karmaCost: -80,
+    karmaCost: -50,
     prerequisites: ['arch-face-negative-2'],
     modifier: [modifierFromEffect(increaseCharisma, { amount: -1 })],
   },
@@ -3432,7 +3431,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'ai-techno-copy',
     humanReadableName: 'Digital Techno Copyrast',
-    description: 'Эта способность позволяет тебе развивать способности техноманта',
+    description: 'Этот ИИ научился подражать способностям Техноманта. Все эти способности работают только в Основании.',
     availability: 'closed',
     karmaCost: 30,
     prerequisites: [],
@@ -3888,6 +3887,511 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'media-person',
+    humanReadableName: 'Медиа-персона',
+    description: 'Ты медиа персона и можешь развивать навыки работы со СМИ, новостями и информацией.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-explorer',
+    humanReadableName: 'AI eXplore',
+    description: 'Этот ИИ занимается не-цифровым миром.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['sub-ai'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'do-it-yourself-one',
+    humanReadableName: 'Хочешь что-то сделать - сделай сам 1.0',
+    description: 'Ты можешь подключаться к биологическому чаммеру, пораженному CFD, первого уровня. CFD-1',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-explorer'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'do-it-yourself-two',
+    humanReadableName: 'Хочешь что-то сделать - сделай сам 2.0',
+    description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-2',
+    availability: 'closed',
+    karmaCost: 40,
+    prerequisites: ['do-it-yourself-one'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'do-it-yourself-three',
+    humanReadableName: 'Хочешь что-то сделать - сделай сам 3.0',
+    description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-3. Лучшие мясные тела для тебя!',
+    availability: 'closed',
+    karmaCost: 40,
+    prerequisites: ['do-it-yourself-two'],
+    modifier: [],
+  },
+  // Характеристика - Depth +2
+  {
+    id: 'ai-researcher',
+    humanReadableName: 'AI eXpand',
+    description:
+      'Этот ИИ занимается Расширением в Цифровом мире и Проектами. Все способности этой ветки требуют обращения к мастеру-региональщику.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['sub-ai'],
+    modifier: [],
+  },
+  // Хорошо бы сделать активную, динамический кулдаун, вот такая формула 180-10*character.depth
+  {
+    id: 'ai-big-mommy',
+    humanReadableName: 'Спроси Большого Брата',
+    description: 'Задать вопрос на который можно ответить "Да", "Нет", "Это не имеет значения" и получить ответ.',
+    availability: 'open',
+    karmaCost: 50,
+    prerequisites: ['ai-researcher'],
+    modifier: [],
+  },
+  // Абилка делает ничего.
+  // Потом, мастер через админку, посчитав Эссенс, выдает цели sub-ai  .
+  // Можно наверное, сначала принять эссенс, а потом просканировать персонажа, и если он sub-eghost или sub-agent - выдать дополнительно sub-ai
+  {
+    id: 'ai-additional-projection',
+    humanReadableName: 'Нас становится больше',
+    description: 'Сделать цифрового чаммера E-ghosta своей дополнительной проекцией.  Необходима трата эссенса. Работает раз в 3 часа.',
+    availability: 'open',
+    karmaCost: 100,
+    prerequisites: ['ai-researcher'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-project-creation',
+    humanReadableName: 'Рассчитать Проект',
+    description: 'Получить рецепт Проекта потратив Позитив.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-researcher'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-project-creation-essens',
+    humanReadableName: 'Прочувствовать Проект',
+    description: 'Получить рецепт Проекта потратив Эссенс.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-researcher'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-project-boost',
+    humanReadableName: 'Не нашел, а наторговал!',
+    description: 'Обменять Позитив на ресурс для Проекта.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-researcher'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-manager',
+    humanReadableName: 'AI eXploit',
+    description: 'Этот ИИ занимается Эксплуатацией. Все способности этой ветки требуют обращения к мастеру-региональщику.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['sub-ai'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-precious',
+    humanReadableName: 'Моя прелесть',
+    description: 'Вы можете поставить метку своего ИИ на заведение. Работает раз в два часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-manager'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-qouta',
+    humanReadableName: 'Настраиваемые квоты',
+    description:
+      'Может забрать себе содержимое одной заполненной коробки Позитива из заведения, где стоит ваша метка. Работает раз в два часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-precious'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'ai-its-mine',
+    humanReadableName: 'Это моё!',
+    description:
+      'Может забрать себе содержимое одной заполненной коробки Позитива из заведения, где НЕ стоит ваша метка. Работает раз в 6 часов.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-precious'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'ai-more-precious',
+    humanReadableName: 'Нужно больше Позитива',
+    description:
+      'Вы можете увеличить запасы Вашего Позитива на 50% от имеющегося количества на момент применения способности. Раз в 6 часов. ',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-precious'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-agressive-marketing',
+    humanReadableName: 'Агрессивный Маркетинг',
+    description: 'Добавляет Заведению одну белую коробку для Позитива. Раз в 2 часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-precious'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-black-pr',
+    humanReadableName: 'Чёрный Пиар',
+    description: 'Добавляет Заведению одну чёрную коробку для Негатива. Раз в 2 часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-manager'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'ai-sabotage',
+    humanReadableName: 'Саботаж',
+    description: 'Убирает у Заведения одну белую коробку для Позитива. Раз в 6 часов.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-black-pr'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-confidential',
+    humanReadableName: 'Конфиденциальные протоколы',
+    description: 'Ты можешь поместить временную печать на ящик Позитива или Негатива. Раз в 2 часа.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-black-pr'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'ai-concurents',
+    humanReadableName: 'Происки конкурентов',
+    description: 'Заполнить один ящик Негатива указанного заведения (необходим мастер, он заполнит коробку бусинами). Раз в 6 часов.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-black-pr'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'ai-sherlock',
+    humanReadableName: 'Комплексный Анализ',
+    description:
+      'Вы можете узнать у Мастера, кто и как манипулировал коробками, Позитивом и Негативом в текущем цикле в выбранном Заведении.. Раз в 2 часа.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-manager'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'ai-digital-violence',
+    humanReadableName: 'Цифровое Ультранасилие',
+    description: 'Позволяет временно заблокировать работу магазина указанного заведения. Раз в 6 часов.',
+    availability: 'closed',
+    karmaCost: 40,
+    prerequisites: ['ai-manager'],
+    modifier: [],
+  },
+  // Depth +1
+  {
+    id: 'ai-troubleshooter',
+    humanReadableName: 'AI eXterminate',
+    description: 'Этот ИИ занимается Уничтожением и Техномантами.',
+    availability: 'master',
+    karmaCost: 50,
+    prerequisites: ['sub-ai'],
+    modifier: [],
+  },
+  // 360-20*character.depth
+  {
+    id: 'back-up-ai',
+    humanReadableName: 'BackUp',
+    description:
+      'После смерти в Красной комнате вы восстанавливаетесь в полных хитах как на начало боя и можете продолжить сражаться. Работает один раз в 6 часов.',
+    availability: 'master',
+    karmaCost: 40,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  // 180-20*character.depth
+  {
+    id: 'fish-in-water',
+    humanReadableName: 'Рыба в воде',
+    description:
+      'Ты можешь изменить менять формат боя в Красной Комнате по своему выбору из двух доступных: групповое сражение и дуэль. В случае, если несколько проекций ИИ используют эту способность одновременно, право выбора решает жребий.',
+    availability: 'master',
+    karmaCost: 40,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'programm-code-ai',
+    humanReadableName: 'Программный код',
+    description: '+1 хит в Красной Комнате',
+    availability: 'master',
+    karmaCost: 30,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'super-programme-code',
+    humanReadableName: 'Усиленный программный код',
+    description: 'еще +1 хит в Красной Комнате',
+    availability: 'master',
+    karmaCost: 30,
+    prerequisites: ['programm-code-ai'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'die-hard',
+    humanReadableName: 'Крепкий орешек',
+    description: 'еще +1 хит в Красной Комнате',
+    availability: 'master',
+    karmaCost: 30,
+    prerequisites: ['super-programme-code'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'deep-legacy',
+    humanReadableName: 'Наследник Стрелка',
+    description: 'Ты можешь использовать любое холодное оружие в Красной комнате. ',
+    availability: 'master',
+    karmaCost: 30,
+    prerequisites: ['programm-code-ai'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'situation-analazis',
+    humanReadableName: 'Анализ ситуации',
+    description: 'Инициатива +2 в Красной комнате',
+    availability: 'master',
+    karmaCost: 30,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  // 120-10*character.depth
+  {
+    id: 'ai-buff-double-damage',
+    humanReadableName: 'Двойной удар',
+    description:
+      'Усиление для Техномантов в Красной Комнате. Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Работает раз в час.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  // 120-10*character.depth
+  {
+    id: 'ai-dismorale',
+    humanReadableName: 'Провал морали',
+    description:
+      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться.  Работает раз в час.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-troubleshooter'],
+    modifier: [],
+  },
+  // 120-10*character.depth
+  {
+    id: 'ai-matrix-gift',
+    humanReadableName: 'Матричный дар',
+    description:
+      'Усиление для Техномантов в Красной Комнате.  Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Применяется на 3 цели одновременно.   Работает раз в час.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-buff-double-damage'],
+    modifier: [],
+  },
+  // 120-10*character.depth
+  {
+    id: 'ai-matrix-curse',
+    humanReadableName: 'Матричное проклятье',
+    description:
+      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. Применяется на 3 цели одновременно.  Работает раз в час.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-dismorale'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-runaway',
+    humanReadableName: 'AI Бегство из Основания',
+    description:
+      'Ты можешь покинуть основание когда захочешь. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. Работает раз в 2 часа.',
+    availability: 'open',
+    karmaCost: 40,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-magnetism',
+    humanReadableName: 'AI магнетизм',
+    description:
+      'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один. Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-levitation',
+    humanReadableName: 'AI левитация',
+    description: 'Ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь. Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-bond-breaker',
+    humanReadableName: 'AI освобождение от пут',
+    description: 'Ты можешь освободить одну руку себе или товарищу. Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-techno-copy', 'ai-remove-excees'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-one-for-all',
+    humanReadableName: 'AI один за всех',
+    description: 'Ты можешь пройти эту комнату один за всю свою команду. Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-add-time-1',
+    humanReadableName: 'AI больше времени +1',
+    description: 'У вашей группы на 3 минуты больше времени в данже. Покажи это при входе в данж.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-add-time-2',
+    humanReadableName: 'AI больше времени +2',
+    description: 'У вашей группы еще на 3 минуты больше времени в данже. (итого +6) Покажи это при входе в данж.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-1'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-add-time-3',
+    humanReadableName: 'AI больше времени +3',
+    description: 'У вашей группы еще на 4 минуты больше времени в данже. (итого +10) Покажи это при входе в данж.',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['ai-techno-copy', 'ai-add-time-2'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-add-basement',
+    humanReadableName: 'AI добавить опору',
+    description: 'Ты можешь создать дополнительную "опору" (круг 20 см). Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-bell-silence',
+    humanReadableName: 'AI молчание колокольчиков',
+    description: 'Ты можешь задевать колокольчики, матрица их не услышит. Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-photo-memory',
+    humanReadableName: 'AI фотографическая память',
+    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику команды.  Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-second-sight',
+    humanReadableName: 'AI ясновидение',
+    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции.  Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy', 'ai-photo-memory'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-remove-excees',
+    humanReadableName: 'AI убрать все лишнее',
+    description: 'Теперь матрица подскажет тебе, какие детали лишние.  Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy', 'ai-remove-half'],
+    modifier: [],
+  },
+  //
+  {
+    id: 'ai-remove-half',
+    humanReadableName: 'AI убрать половину ',
+    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции.  Работает раз в 10 минут.',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['ai-techno-copy'],
     modifier: [],
   },
 ];

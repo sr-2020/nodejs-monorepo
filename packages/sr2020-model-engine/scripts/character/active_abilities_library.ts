@@ -74,6 +74,7 @@ import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scri
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -737,7 +738,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         allowedTypes: ['HEALTHY_BODY'],
       },
     ],
-    cooldownMinutes: (character) => 70 - 10 * character.intelligence,
+    cooldownMinutes: (character) => 70 - 5 * character.intelligence,
     prerequisites: ['arch-face', 'let-me-pay'],
     availability: 'open',
     karmaCost: 40,
@@ -755,7 +756,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'ГМ может целевому персонажу переоформить контракт с новым коэфициентом скоринга. ',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 70 - 10 * character.intelligence,
+    cooldownMinutes: (character) => 70 - 5 * character.intelligence,
     prerequisites: ['arch-face', 'let-him-pay'],
     availability: 'open',
     karmaCost: 40,
@@ -990,7 +991,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Активируй, чтобы снять имплант\\мод с чаммера. Выберется самый слабый.  Для использования тебе не нужны медикарт или автодок. Нужен пустой QR чип.',
     target: 'scan',
     targetsSignature: kBodyAndContainerTargeted,
-    cooldownMinutes: (character) => Math.max(2, 30 - 2 * character.intelligence - 2 * character.rigging.repomanBonus),
+    cooldownMinutes: (character) => Math.max(5, 30 - 2 * character.intelligence - 2 * character.rigging.repomanBonus),
     prerequisites: ['arch-rigger'],
     availability: 'open',
     karmaCost: 40,
@@ -1012,7 +1013,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Активируй, чтобы снять имплант\\мод. Выберется самый сложный.  Для использования тебе не нужны медикарт или автодок. Нужен пустой QR чип.',
     target: 'scan',
     targetsSignature: kBodyAndContainerTargeted,
-    cooldownMinutes: (character) => Math.max(2, 30 - 2 * character.intelligence - 2 * character.rigging.repomanBonus),
+    cooldownMinutes: (character) => Math.max(5, 30 - 2 * character.intelligence - 2 * character.rigging.repomanBonus),
     prerequisites: ['arch-rigger', 'repoman-3'],
     availability: 'open',
     karmaCost: 50,
@@ -1077,7 +1078,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: getPillNameAbility.name,
-    cooldownMinutes: (character) => 0,
+    cooldownMinutes: (character) => 7,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
@@ -1790,10 +1791,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'use-pills-on-others',
     humanReadableName: 'Вколоть препарат',
-    description: 'Активируй, чтобы применить препарат на другого персонажа',
+    description:
+      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и качания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
     target: 'scan',
     targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
-    cooldownMinutes: (character) => 2,
+    cooldownMinutes: (character) => 7,
     prerequisites: ['arch-rigger'],
     availability: 'open',
     karmaCost: 30,
@@ -3139,266 +3141,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 80,
     eventType: useSpriteAbility.name,
   },
-  // Игрок может покинуть основание в любой момент прохождения, например, прихватив лут из призовой комнаты, если он там будет, или поняв, что он не сможет пройти испытание и т.д.
-  // Показывает текст "Ты сбежал из основания обратно в свое тело"
-  // techno.fading +300
-  {
-    id: 'ai-runaway',
-    humanReadableName: 'Бегство из Основания',
-    description:
-      'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 120,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 50,
-    minimalEssence: 0,
-    fadingPrice: 300,
-    eventType: dummyAbility.name,
-  },
-  // Прменив эту КФ игрок может выбрать любой предмет из тех, что надо собрать и игротехник должен подать игроку этот предмет.
-  // techno.fading + 70
-  {
-    id: 'ai-magnetism',
-    humanReadableName: 'магнетизм',
-    description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 15,
-    minimalEssence: 0,
-    fadingPrice: 70,
-    eventType: dummyAbility.name,
-  },
-  // Игрок может пройти по земле вместо лазанья по бревнам, сеткам и форсирования прочих препятствий припрохождении комнаты в данже. Либо игрок может применить эту комплексную форму к другому игроку.
-  // А так же считается, что он собрал три предмета, если есть задание собрать предметы висящие на веревках. деревьях и т.д, поскольку он мог добраться до них при помощи левитации.
-  // techno.fading + 500
-  //
-  {
-    id: 'ai-levitation',
-    humanReadableName: 'левитация',
-    description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: ['ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
-    availability: 'open',
-    karmaCost: 15,
-    minimalEssence: 0,
-    fadingPrice: 500,
-    eventType: dummyAbility.name,
-  },
-  // Игрок может игнорировать усложениня типа - прохождение с одной рукой, завязанные глаза, может использовать КФ на другого игрока команды, может использовать в красной комнате, если его команда применяет КФ вторыми и кто-то в команде связан.
-  // techno.fading  + 80
-  {
-    id: 'ai-bond-breaker',
-    humanReadableName: 'освобождение от пут',
-    description: 'Ты можешь освободить одну руку себе или товарищу',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-remove-excees'],
-    availability: 'open',
-    karmaCost: 15,
-    minimalEssence: 0,
-    fadingPrice: 80,
-    eventType: dummyAbility.name,
-  },
-  // Игрок, на которого применили эту КФ может пройти комнату в основании один, остальные спокойно проходят за ним по земле игнорируя препятствия.
-  // techno.fading + 200
-  {
-    id: 'ai-one-for-all',
-    humanReadableName: 'один за всех',
-    description: 'Ты можешь пройти эту комнату один за всю свою команду',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 30,
-    minimalEssence: 0,
-    fadingPrice: 200,
-    eventType: dummyAbility.name,
-  },
-  // Добавляет 1 минуту к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 30
-  {
-    id: 'ai-add-time-1',
-    humanReadableName: 'больше времени +1',
-    description: 'Теперь у вас на 1 минуту больше времени в данже',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 30,
-    eventType: dummyAbility.name,
-  },
-  // Добавляет 2 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 40
-  {
-    id: 'ai-add-time-2',
-    humanReadableName: 'больше времени +2',
-    description: 'Теперь у вас на 2 минуты больше времени в данже',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-add-time-1'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 40,
-    eventType: dummyAbility.name,
-  },
-  // Добавляет 3 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 60
-  {
-    id: 'ai-add-time-3',
-    humanReadableName: 'больше времени +3',
-    description: 'Теперь у вас на 3 минуты больше времени в данже',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-add-time-2'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 60,
-    eventType: dummyAbility.name,
-  },
-  // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 80
-  {
-    id: 'ai-add-time-4',
-    humanReadableName: 'Больше времени +4',
-    description: 'Теперь у вас на 4 минуты больше времени в данже',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-add-time-3'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 80,
-    eventType: dummyAbility.name,
-  },
-  // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 100
-  {
-    id: 'ai-add-time-5',
-    humanReadableName: 'больше времени +5',
-    description: 'Теперь у вас на 5 минут больше времени в данже',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-add-time-4'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 100,
-    eventType: dummyAbility.name,
-  },
-  // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
-  // techno.fading +120
-  {
-    id: 'ai-add-basement',
-    humanReadableName: 'добавить опору',
-    description: 'Укажи, где должна появиться дополнительная опора',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 120,
-    eventType: dummyAbility.name,
-  },
-  // Игрок может задевать колокольчики, это не будет считаться проваленным прохождением комнаты.
-  // techno.fading +150
-  {
-    id: 'ai-bell-silence',
-    humanReadableName: 'молчание колокольчиков',
-    description: 'Ты можешь задевать колокольчики, матрица их не услышит',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 150,
-    eventType: dummyAbility.name,
-  },
-  // Игрок может сфотографировать объект и переслать фото другой части команды в основании
-  // techno.fading + 230
-  {
-    id: 'ai-photo-memory',
-    humanReadableName: 'фотографическая память',
-    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 230,
-    eventType: dummyAbility.name,
-  },
-  // Игротехник подсказывает игроку расположение двух деталей конструкции, либо нахождение двух из искомых предметов
-  // techno.fading +100
-  {
-    id: 'ai-second-sight',
-    humanReadableName: 'ясновидение',
-    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-photo-memory'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 100,
-    eventType: dummyAbility.name,
-  },
-  // Игротехник убирает все лишние детали из предложенных команде при прохождении комнаты в данже
-  // techno.fading + 200
-  {
-    id: 'ai-remove-excees',
-    humanReadableName: 'убрать все лишнее',
-    description: 'Теперь матрица подскажет тебе, какие детали лишние',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy', 'ai-remove-half'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 200,
-    eventType: dummyAbility.name,
-  },
-  // Игротехник убирает половину деталей из предложенных команде при прохождении комнаты в данже
-  // techno.fading + 150
-  {
-    id: 'ai-remove-half',
-    humanReadableName: 'убрать половину ',
-    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
-    prerequisites: ['ai-techno-copy'],
-    availability: 'open',
-    karmaCost: 10,
-    minimalEssence: 0,
-    fadingPrice: 150,
-    eventType: dummyAbility.name,
-  },
   // В качестве цели сканируется QR-код телохранилища .Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
   // Если тела нет - получаем сообщение "Увы, камера пуста".
   // Если тело есть - со счёта этого персонажа снимается N имеющихся нюйен и переводится на счёт того, кто активировал абилку.
@@ -3726,7 +3468,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 120,
+    cooldownMinutes: (character) => 40,
     prerequisites: ['arch-hackerman-technomancer'],
     availability: 'open',
     karmaCost: 30,
@@ -3836,7 +3578,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Вызвать на дуэль проекцию другого ИИ. В Красной комнате вы можете использовать только одноручный меч.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 180,
+    cooldownMinutes: (character) => 90,
     prerequisites: ['sub-ai'],
     availability: 'open',
     karmaCost: 60,
