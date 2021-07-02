@@ -865,6 +865,8 @@ export function checkConcentrations(
     } else {
       api.sendNotification('Химия', `Вы чувствуете ${effectsCount} эффекта от химии. Подробности по каждому смотрите на экране истории.`);
     }
+  } else {
+    api.sendNotification('Химия', 'Ты принял препарат, но эффекта не почувствовал.');
   }
 }
 
