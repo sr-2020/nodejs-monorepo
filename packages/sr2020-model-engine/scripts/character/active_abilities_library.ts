@@ -69,11 +69,12 @@ import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } fr
 import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility, nanohiveVrAbility } from './nanohives';
 import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
-import { jackInAbility, jackOutAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
+import { jackInAbility, jackOutAbility, settleBackdoorAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -2662,7 +2663,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 80,
-    eventType: externalAbility.name,
+    eventType: settleBackdoorAbility.name,
   },
   // Отсканировать куар нода Основания матрицы.
   // Информацию об активации абилки персонажем забирает Кривда на свой сайт.

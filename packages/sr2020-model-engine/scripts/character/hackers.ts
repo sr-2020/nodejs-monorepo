@@ -7,6 +7,7 @@ import { ModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character
 import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
+import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
@@ -86,4 +87,8 @@ export function jackInAbility(api: EventModelApi<Sr2020Character>, data: ActiveA
 
 export function jackOutAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.model.hacking.jackedIn = false;
+}
+
+export function settleBackdoorAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, consume, {});
 }
