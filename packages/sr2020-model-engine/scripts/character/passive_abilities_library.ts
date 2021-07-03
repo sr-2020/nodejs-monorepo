@@ -438,7 +438,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
-    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: [],
   },
   // Автоматический захват цели в линклок при появлении
@@ -449,7 +448,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
   // Позволяет реактивировать вырубленный IC
@@ -460,7 +458,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
-    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: [],
   },
   // Позволяет пережить одну атаку черного льда
@@ -481,7 +478,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
-    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
   // Значительно экономит память деки, позволяя размесить в ней больше софта
@@ -492,7 +488,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
-    pack: { id: 'hack-deck-guru', level: 1 },
     modifier: [],
   },
   // бекдоры живут на 40 минут дольше
@@ -536,7 +531,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
-    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // установка дряни / пользы в чужой хост
@@ -552,7 +546,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
-    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // очистка хоста от чужой дряни / пользы
@@ -565,7 +558,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // Показывает список хостов под атакой в данже Основание. Показывает сумму резонанса группы. Отображает группу, если резонанса достататочно (Кривда придумает формулу)
@@ -601,7 +593,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -612,7 +603,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'breacher-1'],
-    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: [],
   },
   // IT: буду запрашивать сам факт наличия фичи
@@ -623,7 +613,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
-    pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: [],
   },
   // IT:
@@ -635,7 +624,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-guru', level: 1 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
   // IT:
@@ -647,7 +635,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
-    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT:
@@ -659,7 +646,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
-    pack: { id: 'hack-deck-guru', level: 3 },
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
@@ -671,7 +657,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-1', 'deploy'],
-    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -683,7 +668,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2', 'deploy'],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // IT:
@@ -695,7 +679,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
-    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT:
@@ -707,7 +690,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -1 }),
   },
   // IT:
@@ -719,7 +701,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2', 'fencer-3'],
-    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT: команда в кривда-матрице
@@ -730,7 +711,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: [],
   },
   // Абилка конверсии Intellect в Firewall
@@ -743,7 +723,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-breacher', level: 1 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 20 }),
   },
   // IT:
@@ -755,7 +734,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'breacher-1'],
-    pack: { id: 'hack-deck-breacher', level: 2 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
   },
   // IT:
@@ -767,7 +745,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
-    pack: { id: 'hack-deck-breacher', level: 3 },
     modifier: modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Attack
@@ -780,7 +757,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-fencer', level: 1 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 20 }),
   },
   // IT:
@@ -792,7 +768,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 10 }),
   },
   // IT:
@@ -804,7 +779,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 3 },
     modifier: modifierFromEffect(increaseConversionAttack, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Sleaze
@@ -817,7 +791,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-sly', level: 1 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 20 }),
   },
   // IT:
@@ -829,7 +802,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
-    pack: { id: 'hack-deck-sly', level: 2 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
   },
   // IT:
@@ -841,7 +813,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    pack: { id: 'hack-deck-sly', level: 3 },
     modifier: modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
   },
   // Абилка конверсии Intellect в Dataprocessing
@@ -854,7 +825,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-miner', level: 1 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 20 }),
   },
   // IT:
@@ -866,7 +836,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'miner-1'],
-    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
   // IT:
@@ -878,7 +847,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'miner-2'],
-    pack: { id: 'hack-deck-miner', level: 3 },
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
@@ -890,7 +858,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
-    pack: { id: 'hack-deck-guru', level: 2 },
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -902,7 +869,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'miner-1'],
-    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
@@ -914,7 +880,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-decker', 'steal'],
-    pack: { id: 'hack-deck-miner', level: 2 },
     modifier: [],
   },
   // IT: ключ команды в кривда-матрице
@@ -925,7 +890,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'steal-pro'],
-    pack: { id: 'hack-deck-miner', level: 3 },
     modifier: [],
   },
   // IT:
@@ -938,7 +902,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
-    pack: { id: 'hack-deck-guru', level: 3 },
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -2007,7 +1970,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['!arch-mage', '!tech-blockade', '!meta-ghoul', '!meta-vampire'],
+    prerequisites: ['!arch-mage', '!tech-blockade', '!meta-ghoul', '!meta-vampire', '!magic-blockade'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2029,7 +1992,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный техномант.',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman-technomancer'],
+    prerequisites: ['arch-hackerman-technomancer', '!magic-blockade'],
     pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
@@ -2052,7 +2015,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный маг.',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-mage'],
+    prerequisites: ['arch-mage', '!magic-blockade'],
     pack: { id: 'gen-arch-mage-boost', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 2 }), modifierFromEffect(increaseBody, { amount: 2 })],
   },
@@ -2063,7 +2026,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Фейс, эксперт по переговорам.',
     availability: 'open',
     karmaCost: 100,
-    prerequisites: [],
+    prerequisites: ['!magic-blockade'],
     pack: { id: 'gen-arch-face', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
@@ -2074,7 +2037,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный фейс',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-face'],
+    prerequisites: ['arch-face', '!magic-blockade'],
     pack: { id: 'gen-arch-face-boost', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
@@ -2295,7 +2258,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
   // поражает противника по живым хитам, а не по матричным
@@ -2306,7 +2268,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: { id: 'hack-deck-fencer', level: 2 },
     modifier: [],
   },
   // убивает пораженного чамера. Абсолютная смерть
@@ -2327,7 +2288,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'hack-deck-miner', level: 1 },
     modifier: [],
   },
   // позволяет читать данные из геоноды
@@ -2338,7 +2298,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-geo', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из геоноды.
@@ -2349,7 +2308,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-geo-1'],
-    pack: { id: 'arch-hack-decker-geo', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из геоноды.
@@ -2360,7 +2318,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-geo-2'],
-    pack: { id: 'arch-hack-decker-geo', level: 3 },
     modifier: [],
   },
   // позволяет читать данные из экономноды
@@ -2371,7 +2328,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-econ', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из экономноды.
@@ -2382,7 +2338,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-econ-1'],
-    pack: { id: 'arch-hack-decker-econ', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из экономноды.
@@ -2393,7 +2348,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-econ-2'],
-    pack: { id: 'arch-hack-decker-econ', level: 3 },
     modifier: [],
   },
   // позволяет читать данные из биомонитора и rcc
@@ -2404,7 +2358,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
-    pack: { id: 'arch-hack-decker-med', level: 1 },
     modifier: [],
   },
   // позволяет лучше читать данные из биомонитора и rcc.
@@ -2415,7 +2368,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-med-1'],
-    pack: { id: 'arch-hack-decker-med', level: 2 },
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из биомонитора и rcc.
@@ -2426,7 +2378,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-med-2'],
-    pack: { id: 'arch-hack-decker-med', level: 3 },
     modifier: [],
   },
   // Эффект химоты
@@ -2538,7 +2489,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'tincasm-able',
     humanReadableName: 'Think as a master effect',
     description:
-      'В течение 10 минут после активации заклинания все персонажи, присутствующие в реале в поле зрения мага (мясо/экто/дрон - кроме самого мага и тех, кого он вслух укажет), переходят в тяжран, если персонаж не занят _исключительно_ убеганием от мага. Начавшие убегать должны продолжать бежать, пока не досчитают до 60 (после этого эффект заклинания на них больше не действует). Во время убегания они доступны для атаки по обычным правилам',
+      'После крика мага "Замри" все в этой локации, кто видит или слышит мага, столбенеют на месте.\nВ этом состоянии нельзя двигаться, атаковать, защищаться, пользоваться способностями - но можно быть целью для чужих способностей.\nМаг может вывести одну цель из остолбенения, погладив её по голове.\nОстолбеневшие снова могут двигаться через 60с или после потери хитов по любой причине.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -2938,6 +2889,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-technomancer'],
+    pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 2 })],
   },
   // techno.fading - 4 в минуту
@@ -4410,6 +4362,104 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['ai-techno-copy'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'mr-cellophane',
+    humanReadableName: 'Mr.Cellophane',
+    description:
+      'Ты находишься в астральном плане. Необходимый маркер: красный дождевик.\nТы видишь и слышишь реальный мир, но не можешь воздействовать на него.\nИз реального мира тебя не воспринимают и никак не могут атаковать (если только у них нет абилки, которая явным образом утверждает иное).',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'hammer-time',
+    humanReadableName: 'HammerTime',
+    description: 'Можешь взять одноручное холодное оружие до 100см, оно считается тяжёлым.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 5х человек.
+  {
+    id: 'nomen-illis-legio',
+    humanReadableName: 'Nomen illis legio',
+    description: 'В ритуальных практиках ты считаешься за 5х человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'adamantaeu',
+    humanReadableName: 'Adamantaeu',
+    description: 'На тебя действует эффект тяжёлой брони.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'fireball-back',
+    humanReadableName: 'Fireball - back',
+    description: 'Можешь кинуть 3 огненных шара. Затем эффект исчерпан до выхода из духа',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'fireball-halfback',
+    humanReadableName: 'Fireball - halfback',
+    description: 'Можешь кинуть 5 огненных шаров. Затем эффект исчерпан до выхода из духа',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'fireball-forward',
+    humanReadableName: 'Fireball - forward',
+    description: 'Можешь кинуть 9 огненных шаров. Затем эффект исчерпан до выхода из духа',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума
+  {
+    id: 'over-the-pills',
+    humanReadableName: 'Over the pills',
+    description:
+      'Все мясные/экто тела, касающиеся этого духа на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];
