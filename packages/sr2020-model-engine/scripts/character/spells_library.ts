@@ -32,6 +32,8 @@ import {
   tempusFugitSpell,
   trackBallSpell,
   trackpointSpell,
+  dumbieSpell,
+  smartieSpell,
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -471,8 +473,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 30,
     sphere: 'stats',
-    eventType: dummySpell.name,
-    hasTarget: false,
+    eventType: dumbieSpell.name,
+    hasTarget: true,
   },
   // у цели на время T повышается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
   {
@@ -484,8 +486,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 30,
     sphere: 'stats',
-    eventType: dummySpell.name,
-    hasTarget: false,
+    eventType: smartieSpell.name,
+    hasTarget: true,
   },
   // у цели на время T повышается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
   {
@@ -497,8 +499,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'closed',
     karmaCost: 0,
     sphere: 'stats',
-    eventType: dummySpell.name,
-    hasTarget: false,
+    eventType: smartieSpell.name,
+    hasTarget: true,
   },
   // у цели на время T понижается Интеллект на N. T=Мощь*10 минут. Если Мощь < 4, то N=1. Если Мощь >= 4, то N=2
   {
@@ -510,8 +512,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'closed',
     karmaCost: 0,
     sphere: 'stats',
-    eventType: dummySpell.name,
-    hasTarget: false,
+    eventType: dumbieSpell.name,
+    hasTarget: true,
   },
 ];
 setAllSpells(
