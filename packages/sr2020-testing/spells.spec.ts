@@ -423,7 +423,7 @@ describe('Spells', function () {
     );
   });
 
-  it('Frog skin', async () => {
+  it('Frog skin weak', async () => {
     await fixture.saveCharacter({ modelId: '1', charisma: 5, magic: 10 });
     await fixture.saveCharacter({ modelId: '2', charisma: 3 });
     await fixture.addCharacterFeature('frog-skin', 1);
@@ -440,6 +440,61 @@ describe('Spells', function () {
       expect(workModel.charisma).toBe(2);
     }
   });
+
+  it('Frog skin strong', async () => {
+    await fixture.saveCharacter({ modelId: '1', charisma: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', charisma: 3 });
+    await fixture.addCharacterFeature('frog-skin', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'frog-skin', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
+        1,
+      );
+      expect(workModel.charisma).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.charisma).toBe(1);
+    }
+  });
+
+  it('Charm weak', async () => {
+    await fixture.saveCharacter({ modelId: '1', charisma: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', charisma: 3 });
+    await fixture.addCharacterFeature('charm', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'charm', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
+        1,
+      );
+      expect(workModel.charisma).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.charisma).toBe(4);
+    }
+  });
+
+  it('Charm strong', async () => {
+    await fixture.saveCharacter({ modelId: '1', charisma: 6, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', charisma: 3 });
+    await fixture.addCharacterFeature('charm', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'charm', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
+        1,
+      );
+      expect(workModel.charisma).toBe(6);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.charisma).toBe(5);
+    }
+  });
+
 
   it('Use reagents', async () => {
     await fixture.saveCharacter({ metarace: 'meta-elf', magic: 10 });
@@ -579,6 +634,17 @@ describe('Spells', function () {
       const { workModel } = await fixture.getCharacter(2);
       expect(workModel.intelligence).toBe(5);
     }
+  });
+
+  it('Healton', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('healton');
+    const { workModel } = await fixture.sendCharacterEvent({
+      eventType: 'castSpell',
+      data: { id: 'healton', location: { id: 0, manaLevel: 0 }, power: 1 },
+    });
+
+    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'healtouch' }));
   });
 
 
