@@ -3817,7 +3817,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 60,
     prerequisites: ['deep-er'],
-    modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
+    modifier: [
+      modifierFromEffect(increaseDepth, { amount: 1 }),
+      modifierFromEffect(increaseIntelligence, { amount: 1 }),
+      modifierFromEffect(increaseBody, { amount: 1 }),
+      modifierFromEffect(increaseResonance, { amount: 1 }),
+      modifierFromEffect(increaseCharisma, { amount: 1 }),
+    ],
   },
   // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
   {
@@ -3909,29 +3915,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['sub-ai'],
-    modifier: [],
-  },
-  // Хорошо бы сделать активную, динамический кулдаун, вот такая формула 180-10*character.depth
-  {
-    id: 'ai-big-mommy',
-    humanReadableName: 'Спроси Большого Брата',
-    description: 'Задать вопрос на который можно ответить "Да", "Нет", "Это не имеет значения" и получить ответ.',
-    availability: 'open',
-    karmaCost: 50,
-    prerequisites: ['ai-researcher'],
-    modifier: [],
-  },
-  // Абилка делает ничего.
-  // Потом, мастер через админку, посчитав Эссенс, выдает цели sub-ai  .
-  // Можно наверное, сначала принять эссенс, а потом просканировать персонажа, и если он sub-eghost или sub-agent - выдать дополнительно sub-ai
-  {
-    id: 'ai-additional-projection',
-    humanReadableName: 'Нас становится больше',
-    description: 'Сделать цифрового чаммера E-ghosta своей дополнительной проекцией.  Необходима трата эссенса. Работает раз в 3 часа.',
-    availability: 'open',
-    karmaCost: 100,
-    prerequisites: ['ai-researcher'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseDepth, { amount: 2 })],
   },
   //
   {
@@ -3973,120 +3957,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['sub-ai'],
     modifier: [],
   },
-  // 180-20*character.depth
-  {
-    id: 'ai-precious',
-    humanReadableName: 'Моя прелесть',
-    description: 'Вы можете поставить метку своего ИИ на заведение. Работает раз в два часа.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-manager'],
-    modifier: [],
-  },
-  // 180-20*character.depth
-  {
-    id: 'ai-qouta',
-    humanReadableName: 'Настраиваемые квоты',
-    description:
-      'Может забрать себе содержимое одной заполненной коробки Позитива из заведения, где стоит ваша метка. Работает раз в два часа.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-precious'],
-    modifier: [],
-  },
-  // 360-20*character.depth
-  {
-    id: 'ai-its-mine',
-    humanReadableName: 'Это моё!',
-    description:
-      'Может забрать себе содержимое одной заполненной коробки Позитива из заведения, где НЕ стоит ваша метка. Работает раз в 6 часов.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-precious'],
-    modifier: [],
-  },
-  // 360-20*character.depth
-  {
-    id: 'ai-more-precious',
-    humanReadableName: 'Нужно больше Позитива',
-    description:
-      'Вы можете увеличить запасы Вашего Позитива на 50% от имеющегося количества на момент применения способности. Раз в 6 часов. ',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-precious'],
-    modifier: [],
-  },
-  // 180-20*character.depth
-  {
-    id: 'ai-agressive-marketing',
-    humanReadableName: 'Агрессивный Маркетинг',
-    description: 'Добавляет Заведению одну белую коробку для Позитива. Раз в 2 часа.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-precious'],
-    modifier: [],
-  },
-  // 180-20*character.depth
-  {
-    id: 'ai-black-pr',
-    humanReadableName: 'Чёрный Пиар',
-    description: 'Добавляет Заведению одну чёрную коробку для Негатива. Раз в 2 часа.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-manager'],
-    modifier: [],
-  },
-  // 360-20*character.depth
-  {
-    id: 'ai-sabotage',
-    humanReadableName: 'Саботаж',
-    description: 'Убирает у Заведения одну белую коробку для Позитива. Раз в 6 часов.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-black-pr'],
-    modifier: [],
-  },
-  // 180-20*character.depth
-  {
-    id: 'ai-confidential',
-    humanReadableName: 'Конфиденциальные протоколы',
-    description: 'Ты можешь поместить временную печать на ящик Позитива или Негатива. Раз в 2 часа.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-black-pr'],
-    modifier: [],
-  },
-  // 360-20*character.depth
-  {
-    id: 'ai-concurents',
-    humanReadableName: 'Происки конкурентов',
-    description: 'Заполнить один ящик Негатива указанного заведения (необходим мастер, он заполнит коробку бусинами). Раз в 6 часов.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['ai-black-pr'],
-    modifier: [],
-  },
-  // 180-20*character.depth
-  {
-    id: 'ai-sherlock',
-    humanReadableName: 'Комплексный Анализ',
-    description:
-      'Вы можете узнать у Мастера, кто и как манипулировал коробками, Позитивом и Негативом в текущем цикле в выбранном Заведении.. Раз в 2 часа.',
-    availability: 'open',
-    karmaCost: 40,
-    prerequisites: ['ai-manager'],
-    modifier: [],
-  },
-  // 360-20*character.depth
-  {
-    id: 'ai-digital-violence',
-    humanReadableName: 'Цифровое Ультранасилие',
-    description: 'Позволяет временно заблокировать работу магазина указанного заведения. Раз в 6 часов.',
-    availability: 'closed',
-    karmaCost: 40,
-    prerequisites: ['ai-manager'],
-    modifier: [],
-  },
   // Depth +1
   {
     id: 'ai-troubleshooter',
@@ -4095,7 +3965,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 50,
     prerequisites: ['sub-ai'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   // 360-20*character.depth
   {
