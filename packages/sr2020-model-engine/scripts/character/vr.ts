@@ -118,7 +118,7 @@ export function inVr(api: EffectModelApi<Sr2020Character>, m: InVrModifier) {
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
   addFeatureToModel(api.model, 'exit-vr');
-  api.model.activeAbilities = api.model.activeAbilities.filter((it) => it.id != 'enter-vr');
+  api.model.activeAbilities = api.model.activeAbilities.filter((it) => it.id != 'enter-vr' && it.id != 'compile-coldsim');
 }
 
 export function vrFirstNotice(api: EventModelApi<Sr2020Character>, data: {}) {

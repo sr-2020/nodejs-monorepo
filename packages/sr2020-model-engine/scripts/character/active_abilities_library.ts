@@ -67,7 +67,6 @@ import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/charac
 import { droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility, nanohiveVrAbility } from './nanohives';
-import { spiritsRelatedSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
 import { jackInAbility, jackOutAbility, settleBackdoorAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
@@ -3734,7 +3733,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ai-sherlock',
     humanReadableName: 'Комплексный Анализ',
-    description: 'Вы можете узнать у Мастера, кто и как манипулировал коробками, Позитивом и Негативом в текущем цикле в выбранном Заведении.',
+    description:
+      'Вы можете узнать у Мастера, кто и как манипулировал коробками, Позитивом и Негативом в текущем цикле в выбранном Заведении.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
@@ -3777,7 +3777,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: enterVr.name,
   },
   // Штука должна работать и на хотсим (техноманты) и на колдсим (все остальные).  В колдсиме персонаж в аватарке - надо подумать. можно ли это закодить. Либо можно делать это через мастера, Потому что Позитив все равно у нас на бусинах и ручном контроле
   {
