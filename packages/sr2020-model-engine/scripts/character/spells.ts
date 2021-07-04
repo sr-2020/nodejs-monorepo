@@ -193,6 +193,10 @@ export function keepYourselfSpell(api: EventModelApi<Sr2020Character>, data: Spe
   addTemporaryModifier(api, m, d, 'Увеличение хитов');
 }
 
+export function healtonSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  addTemporaryPassiveAbility(api, 'healtouch', duration(20 * data.power, 'minutes'));
+}
+
 //
 // Offensive spells
 //
@@ -296,7 +300,7 @@ export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
 
 export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = -Math.max(1, data.power - 1);
+  const amount = -(data.power >= 4 ? 2 : 1);
   const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
@@ -307,7 +311,7 @@ export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 
 export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = Math.max(1, data.power - 2);
+  const amount = (data.power >= 4 ? 2 : 1);
   const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,

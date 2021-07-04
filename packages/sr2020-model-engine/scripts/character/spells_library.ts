@@ -33,6 +33,7 @@ import {
   trackpointSpell,
   dumbieSpell,
   smartieSpell,
+  healtonSpell,
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -184,7 +185,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 50,
     sphere: 'healing',
-    eventType: dummyAreaSpell.name,
+    eventType: healtonSpell.name,
   },
   // После активации заклинания в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 10+Мощь минут - список (название заклинания,  Мощь, Откат, (10+N)% ауры творца, метарасу творца). N=Мощь*5, но не более 40
   {
