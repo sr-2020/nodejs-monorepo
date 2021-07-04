@@ -26,7 +26,7 @@ export type MetaRace =
   | 'meta-digital'
   | 'meta-spirit';
 
-export type BodyType = 'physical' | 'astral' | 'drone' | 'ectoplasm';
+export type BodyType = 'physical' | 'astral' | 'drone' | 'ectoplasm' | 'vr';
 
 export type SpellSphere = 'healing' | 'fighting' | 'protection' | 'astral' | 'aura' | 'stats';
 

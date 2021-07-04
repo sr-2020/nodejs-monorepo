@@ -74,6 +74,7 @@ import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scri
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
+import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -2970,7 +2971,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'Активируй, чтобы зайти в VR (колдсим). Надо отсканировать телохранилище. Помни, что время пребывания в Виар ограничено. Если ты опоздаешь - можешь получить биофидбек (хиты, тяжран или КС).',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 120,
     prerequisites: [],
     pack: { id: 'chummer_zero', level: 1 },
@@ -2978,7 +2979,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: enterVr.name,
   },
   //
   {
@@ -2986,14 +2987,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Выйти из Виар',
     description: 'вернись к телохранилищу, чтобы покинуть VR. активируй способность и забери свое тело.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: exitVr.name,
   },
   // текстовая абилка
   {

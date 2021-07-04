@@ -300,13 +300,14 @@ function findInDroneModifier(api: EventModelApi<Sr2020Character>) {
 export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;
-  if (m.triggerDanger == 0) {api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));}
-    else {  
-      api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
-      if (m.broken) api.model.screens.passiveAbilities = false;
-      api.model.screens.autodoc = false;
-      api.model.screens.karma = false;
-    }
+  if (m.triggerDanger == 0) {
+    api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
+  } else {
+    api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
+    if (m.broken) api.model.screens.passiveAbilities = false;
+    api.model.screens.autodoc = false;
+    api.model.screens.karma = false;
+  }
   //  What to do with the passive ones?
 
   api.model.screens.billing = false;
@@ -366,6 +367,6 @@ export function droneReturnTimeoutTick2(api: EventModelApi<Sr2020Character>, dat
   api.sendNotification('Внимание!', 'Необходимо срочно вернуться в мясное тело во избежание сильнейшего урона ему.');
 }
 
-export function hungerWhileInDone(api: EventModelApi<Sr2020Character>, data: {}) {
+export function hungerWhileInDrone(api: EventModelApi<Sr2020Character>, data: {}) {
   findInDroneModifier(api).postDroneDamage += 10;
 }

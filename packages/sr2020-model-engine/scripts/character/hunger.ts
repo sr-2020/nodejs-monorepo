@@ -3,7 +3,6 @@ import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr20
 import { MerchandiseQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 import { healthStateTransition } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
-import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/common_helpers';
 import {
   kHmhvvHungerPeriod,
@@ -16,6 +15,9 @@ import {
 } from '@alice/sr2020-model-engine/scripts/character/consts';
 import { hungerTick } from '@alice/sr2020-model-engine/scripts/character/races';
 import { duration } from 'moment';
+import { hungerWhileInSpirit } from '@alice/sr2020-model-engine/scripts/character/spirits';
+import { hungerWhileInDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { hungerWhileInVr } from '@alice/sr2020-model-engine/scripts/character/vr';
 
 export function consumeFood(api: EventModelApi<Sr2020Character>, data: MerchandiseQrData & LocationMixin) {
   if (api.model.metarace == 'meta-digital') throw new UserVisibleError('Вы не испытываете потребности в пище.');
@@ -47,11 +49,18 @@ export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {
     }
     case 'drone': {
       sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из дрона вы упадете в тяжран.');
-      hungerWhileInDone(api, {});
+      hungerWhileInDrone(api, {});
       break;
     }
-    case 'astral': {
-      // TODO(aeremin): Handle this (similar to drone case?)
+    case 'ectoplasm': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из духа вы упадете в тяжран.');
+      hungerWhileInSpirit(api, {});
+      break;
+    }
+    case 'vr': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из VR вы упадете в тяжран.');
+      hungerWhileInVr(api, {});
+      break;
     }
   }
 }
@@ -67,11 +76,21 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
     }
     case 'drone': {
       sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из дрона вы упадете в тяжран.');
-      hungerWhileInDone(api, {});
+      api.setTimer(kHungerTimerName, kHungerTimerStage2Description, duration(1, 'hour'), hungerStage2, {});
+      hungerWhileInDrone(api, {});
       break;
     }
-    case 'astral': {
-      // TODO(aeremin): Handle this (similar to drone case?)
+    case 'ectoplasm': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из духа вы упадете в тяжран.');
+      api.setTimer(kHungerTimerName, kHungerTimerStage2Description, duration(1, 'hour'), hungerStage2, {});
+      hungerWhileInSpirit(api, {});
+      break;
+    }
+    case 'vr': {
+      sendNotificationAndHistoryRecord(api, 'Голод', 'Вы очень голодны. После выхода из VR вы упадете в тяжран.');
+      api.setTimer(kHungerTimerName, kHungerTimerStage2Description, duration(1, 'hour'), hungerStage2, {});
+      hungerWhileInVr(api, {});
+      break;
     }
   }
 }

@@ -23,7 +23,9 @@ import { addTemporaryPassiveAbilityEffect } from '@alice/sr2020-model-engine/scr
 import { scanQr } from '@alice/sr2020-model-engine/scripts/character/scan_qr';
 import { typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { getAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { hungerWhileInDone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { hungerWhileInDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { hungerWhileInSpirit } from '@alice/sr2020-model-engine/scripts/character/spirits';
+import { hungerWhileInVr } from '@alice/sr2020-model-engine/scripts/character/vr';
 
 export type ChemoLevel = 'base' | 'uber' | 'super' | 'crysis';
 
@@ -1032,8 +1034,22 @@ export function advanceAddiction(api: EventModelApi<Sr2020Character>, data: { el
     api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(4, 'hour'), advanceAddiction, data);
   } else if (addiction.stage >= 4) {
     if (api.workModel.currentBody != 'physical') {
+      switch (api.workModel.currentBody) {
+        case 'drone': {
+          hungerWhileInDrone(api, {});
+          break;
+        }
+        case 'ectoplasm': {
+          hungerWhileInSpirit(api, {});
+          break;
+        }
+        case 'vr': {
+          hungerWhileInVr(api, {});
+          break;
+        }
+      }
+
       sendNotificationAndHistoryRecord(api, 'Зависимость', 'После возвращения в мясное тело вы упадете в тяжран.');
-      hungerWhileInDone(api, {});
       api.setTimer(addictionTimerName(data.element), kAddictionNextStageTimerDescription, duration(1, 'hour'), advanceAddiction, data);
     } else {
       if (api.workModel.healthState != 'biologically_dead') {

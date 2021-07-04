@@ -3714,7 +3714,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['vr-employee'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 120 })],
   },
   // maxTimeInVr +30
   {
@@ -3724,7 +3724,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
   },
   // maxTimeInVr +30
   {
@@ -3734,7 +3734,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['vr-better-vr'],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
   },
   //
   {
