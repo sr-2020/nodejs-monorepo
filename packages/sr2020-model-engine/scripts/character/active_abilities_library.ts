@@ -779,37 +779,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: investigateScoring.name,
   },
-  // На допросе цель развернуто отвечает на заданный вопрос и теряет одну единицу эссенса (начисляется на Папу Драконов). Абилка-сертификат с кулдауном
-  {
-    id: 'chain-interrogation',
-    humanReadableName: 'Конвейерный допрос',
-    description: 'На допросе цель развернуто отвечает на заданный вопрос и теряет единицу эссенса.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60,
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: noItActionAbility.name,
-  },
-  // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  // При использовании абилки Exorcizamus ее коэффициент К=5 (значение может быть изменено для нужд балансировки).
-  {
-    id: 'orthodox-exorcism',
-    humanReadableName: 'Отчитка',
-    description: 'Благословением Божиим ваша способность Exorcizamus срабатывает с кратно увеличенной вероятностью.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60,
-    prerequisites: ['arch-mage'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: spiritsRelatedSpell.name,
-  },
   // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
   {
     id: 'silentium-est-aurum',

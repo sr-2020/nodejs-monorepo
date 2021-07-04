@@ -15,7 +15,6 @@ import {
   fireballSpell,
   frogSkinSpell,
   groundHealSpell,
-  increaseResonanceSpell,
   keepYourselfSpell,
   letItGoSpell,
   liveLongAndProsperSpell,
@@ -39,16 +38,6 @@ import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 // Not exported by design, use kAllSpells instead.
 const kAllSpellsList: Spell[] = [
-  {
-    id: 'dummy-spell',
-    humanReadableName: 'Заглушка',
-    description: 'Спелл-заглушка.',
-    prerequisites: [],
-    availability: 'master',
-    karmaCost: 0,
-    sphere: 'aura',
-    eventType: increaseResonanceSpell.name,
-  },
   // маг может увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше шести
   {
     id: 'keep-yourself',
