@@ -4390,18 +4390,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 5х человек.
-  {
-    id: 'nomen-illis-legio',
-    humanReadableName: 'Nomen illis legio',
-    description: 'В ритуальных практиках ты считаешься за 5х человек',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'adamantaeu',

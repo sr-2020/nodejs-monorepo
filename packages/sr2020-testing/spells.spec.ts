@@ -509,6 +509,79 @@ describe('Spells', function () {
     }
   });
 
+  it('Dumbie weak', async () => {
+    await fixture.saveCharacter({ modelId: '1', intelligence: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
+    await fixture.addCharacterFeature('dumbie', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'dumbie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
+        1,
+      );
+      expect(workModel.intelligence).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.intelligence).toBe(2);
+    }
+  });
+
+  it('Dumbie strong', async () => {
+    await fixture.saveCharacter({ modelId: '1', intelligence: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
+    await fixture.addCharacterFeature('dumbie', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'dumbie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
+        1,
+      );
+      expect(workModel.intelligence).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.intelligence).toBe(1);
+    }
+  });
+
+  it('Smartie weak', async () => {
+    await fixture.saveCharacter({ modelId: '1', intelligence: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
+    await fixture.addCharacterFeature('smartie', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'smartie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
+        1,
+      );
+      expect(workModel.intelligence).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.intelligence).toBe(4);
+    }
+  });
+
+  it('Smartie strong', async () => {
+    await fixture.saveCharacter({ modelId: '1', intelligence: 5, magic: 10 });
+    await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
+    await fixture.addCharacterFeature('smartie', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'smartie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
+        1,
+      );
+      expect(workModel.intelligence).toBe(5);
+    }
+
+    {
+      const { workModel } = await fixture.getCharacter(2);
+      expect(workModel.intelligence).toBe(5);
+    }
+  });
+
+
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
       const feedback = calculateMagicFeedback({
