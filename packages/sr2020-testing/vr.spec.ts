@@ -33,6 +33,8 @@ describe('VR abilities', () => {
       expect(storage.body).toEqual({
         characterId: '0',
         type: 'physical',
+        metarace: 'meta-norm',
+        name: 'Вася Пупкин',
       });
     }
 

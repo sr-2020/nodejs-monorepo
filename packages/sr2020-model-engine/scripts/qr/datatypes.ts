@@ -1,5 +1,11 @@
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
-import { AddedActiveAbility, AddedPassiveAbility, BodyType, SpellSphere } from '@alice/sr2020-common/models/sr2020-character.model';
+import {
+  AddedActiveAbility,
+  AddedPassiveAbility,
+  BodyType,
+  MetaRace,
+  SpellSphere,
+} from '@alice/sr2020-common/models/sr2020-character.model';
 import { DroneType } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { CyberDeck } from '@alice/sr2020-model-engine/scripts/qr/cyberdeck_library';
 
@@ -35,6 +41,8 @@ export interface BodyStorageQrData {
   body?: {
     characterId: string;
     type: BodyType;
+    name: string;
+    metarace: MetaRace;
   };
 }
 

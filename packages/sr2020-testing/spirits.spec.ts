@@ -88,7 +88,9 @@ describe('Spirits-related abilities', () => {
       expect(workModel.name).toEqual('Petya');
 
       const bodyStorage = await fixture.getQrCode('2');
-      expect(bodyStorage.workModel.data).toEqual({ body: { characterId: '0', type: 'physical' } });
+      expect(bodyStorage.workModel.data).toEqual({
+        body: { characterId: '0', type: 'physical', metarace: 'meta-norm', name: 'Tester' },
+      });
 
       const spiritStorage = await fixture.getQrCode('1');
       expect(spiritStorage.workModel.data).toEqual({ emptiness_reason: 'Дух используется.' });

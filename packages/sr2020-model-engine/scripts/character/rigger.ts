@@ -190,6 +190,8 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
     bodyType: api.workModel.currentBody,
+    name: api.workModel.name,
+    metarace: api.workModel.metarace,
   });
 
   api.sendOutboundEvent(QrCode, data.droneId!, startUsingDroneOrSpirit, {});

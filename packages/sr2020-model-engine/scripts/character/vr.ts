@@ -45,6 +45,8 @@ export function enterVr(api: EventModelApi<Sr2020Character>, data: ActiveAbility
   api.sendOutboundEvent(QrCode, data.bodyStorageId!, putBodyToStorage, {
     characterId: api.model.modelId,
     bodyType: api.workModel.currentBody,
+    name: api.workModel.name,
+    metarace: api.workModel.metarace,
   });
 
   api.addModifier(createVrModifier());

@@ -1,5 +1,5 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
-import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
+import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
@@ -356,7 +356,7 @@ export function activateSoft(api: EventModelApi<Sr2020Character>, data: ActiveAb
 
 export function useSpriteAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const sprite = typedQrData<SpriteQrData>(api.aquired(QrCode, data.qrCodeId!));
-/*  const canUse = api.workModel.passiveAbilities.some((ability) => `sprite-${ability.id}` == sprite.id);
+  /*  const canUse = api.workModel.passiveAbilities.some((ability) => `sprite-${ability.id}` == sprite.id);
   if (!canUse) {
     throw new UserVisibleError('Вы не умеете работать со спрайтами этого типа!');
   } */
@@ -383,14 +383,51 @@ export function marauderAbility(api: EventModelApi<Sr2020Character>, data: Activ
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, clinicalDeath, data);
 }
 
-export function sleepCheckAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+function getBodyStorageContent(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   if (
     data.bodyStorageId &&
     api.aquired(QrCode, data.bodyStorageId).type == 'body_storage' &&
     typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId)).body
   ) {
+    return typedQrData<BodyStorageQrData>(api.aquired(QrCode, data.bodyStorageId)).body;
+  } else {
+    return undefined;
+  }
+}
+
+export function sleepCheckAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (getBodyStorageContent(api, data)) {
     // Pass. Billing will handle it
   } else {
     throw new UserVisibleError('Это телохранилище пусто.');
+  }
+}
+
+const kRaceNames: { [key in MetaRace]: string } = {
+  'meta-norm': 'Норм',
+  'meta-dwarf': 'Дварф',
+  'meta-ork': 'Орк',
+  'meta-troll': 'Тролль',
+  'meta-elf': 'Эльф',
+  'meta-vampire': 'Вампир',
+  'meta-ghoul': 'Гуль',
+  'meta-digital': 'Цифровой',
+  'meta-spirit': 'Дух',
+};
+
+export function sleepWhoIs(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const content = getBodyStorageContent(api, data);
+  if (content) {
+    api.sendNotification(`В этом телохранилище находится тело ${content.name}, метатип ${kRaceNames[content.metarace]}`, '');
+  } else {
+    api.sendNotification('Это телохранилище пусто.', '');
+  }
+}
+
+export function sleepIsThere(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (getBodyStorageContent(api, data)) {
+    api.sendNotification('В этом телохранилище есть чье-то тело.', '');
+  } else {
+    api.sendNotification('Это телохранилище пусто.', '');
   }
 }

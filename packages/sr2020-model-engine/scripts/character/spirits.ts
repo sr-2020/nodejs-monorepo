@@ -26,7 +26,12 @@ export function suitSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & A
   if (!bodyStorageId || api.aquired(QrCode, bodyStorageId).type != 'body_storage') {
     throw new UserVisibleError('Цель не является телохранилищем.');
   }
-  api.sendOutboundEvent(QrCode, bodyStorageId, putBodyToStorage, { characterId: api.model.modelId, bodyType: api.model.currentBody });
+  api.sendOutboundEvent(QrCode, bodyStorageId, putBodyToStorage, {
+    characterId: api.model.modelId,
+    bodyType: api.model.currentBody,
+    name: api.workModel.name,
+    metarace: api.workModel.metarace,
+  });
   api.sendOutboundEvent(QrCode, spiritJarId, freeSpirit, { reason: 'Дух используется.' });
   enterSpirit(api, { ...data, spiritId: spiritJar.spiritId, bodyStorageId });
 }
