@@ -3331,15 +3331,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  {
-    id: 'no-enter-gh',
-    humanReadableName: 'Запрет Доступа',
-    description: 'Покажи эту способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
-    availability: 'open',
-    karmaCost: 0,
-    prerequisites: ['sub-agent', 'arch-digital'],
-    modifier: [],
-  },
   //
   {
     id: 'arch-digital',
