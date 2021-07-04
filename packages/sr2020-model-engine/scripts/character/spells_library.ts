@@ -6,7 +6,7 @@ import {
   charmSpell,
   deathTouchSpell,
   doNothingSpell,
-  dummyAreaSpell,
+  dumbieSpell,
   dummySpell,
   dumptyHumptySpell,
   enlargeMyPencilSpell,
@@ -15,6 +15,7 @@ import {
   fireballSpell,
   frogSkinSpell,
   groundHealSpell,
+  healtonSpell,
   keepYourselfSpell,
   letItGoSpell,
   liveLongAndProsperSpell,
@@ -24,6 +25,7 @@ import {
   readCharacterAuraSpell,
   readLocationAuraSpell,
   shtoppingSpell,
+  smartieSpell,
   spiritsRelatedSpell,
   stoneSkinSpell,
   taxFreeSpell,
@@ -31,9 +33,6 @@ import {
   tempusFugitSpell,
   trackBallSpell,
   trackpointSpell,
-  dumbieSpell,
-  smartieSpell,
-  healtonSpell,
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';

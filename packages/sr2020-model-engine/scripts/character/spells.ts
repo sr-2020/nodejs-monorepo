@@ -16,7 +16,14 @@ import {
   sendNotificationAndHistoryRecord,
   validUntil,
 } from './util';
-import { increaseAuraMask, increaseCharisma, increaseMaxMeatHp, increaseResonance, multiplyAllDiscounts, increaseIntelligence } from './basic_effects';
+import {
+  increaseAuraMask,
+  increaseCharisma,
+  increaseIntelligence,
+  increaseMaxMeatHp,
+  increaseResonance,
+  multiplyAllDiscounts,
+} from './basic_effects';
 import { duration } from 'moment';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
 import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
@@ -311,7 +318,7 @@ export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 
 export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = (data.power >= 4 ? 2 : 1);
+  const amount = data.power >= 4 ? 2 : 1;
   const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
@@ -357,7 +364,7 @@ export function dumbieSpell(api: EventModelApi<Sr2020Character>, data: SpellData
 export function smartieSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
 
-  const amount = (data.power >= 4 ? 2 : 1);
+  const amount = data.power >= 4 ? 2 : 1;
   const m = modifierFromEffect(increaseIntelligence, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
@@ -365,7 +372,6 @@ export function smartieSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
     effectDescription: 'Увеличение интеллекта',
   });
 }
-
 
 //
 // Helper functons
@@ -572,11 +578,6 @@ export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
 export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
-}
-
-export function dummyAreaSpell(api: EventModelApi<Sr2020Character>, data: never) {
-  // TODO(https://trello.com/c/hIHZn9De/154-реализовать-заклинания-бьющие-по-всем-в-текущей-локации)
-  api.sendNotification('Спелл еще не реализован :(', 'Площадные заклинания не реализованы.');
 }
 
 export function teaseLesserMindSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
