@@ -6,7 +6,7 @@ export class WriteFoodCard extends React.Component<{ sendEvent: SendEvent }, { a
   state = { amount: 5 };
 
   write(id: string) {
-    this.props.sendEvent('createMerchandise', { numberOfUses: Number(this.state.amount), id: 'food' });
+    this.props.sendEvent('createMerchandise', { numberOfUses: Number(this.state.amount), id });
   }
 
   writeFood() {
