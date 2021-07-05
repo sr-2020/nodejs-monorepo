@@ -85,21 +85,17 @@ describe('Active abilities', function () {
   });
 
   it('Astralopithecus', async () => {
-    await fixture.saveCharacter({ modelId: '1' }); // Ability user
-
+    await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('astralopithecus', '1');
 
     {
-      let rageOn = 0;
       const { workModel } = await fixture.useAbility({ id: 'astralopithecus' }, 1);
-      for (let i = 0; i < workModel.passiveAbilities.length; i++) {
-        if (workModel.passiveAbilities[i].id == 'astralopithecus-rage') {
-          rageOn = 1;
-          expect(workModel.passiveAbilities[i].validUntil).toBe(1200 * 1000);
-        }
-      }
-      expect(rageOn).toBe(1);
-
+      expect(workModel.passiveAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'astralopithecus-rage',
+          validUntil: 20 * 60 * 1000,
+        }),
+      );
     }
   });
 
