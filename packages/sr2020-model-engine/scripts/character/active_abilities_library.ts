@@ -34,6 +34,7 @@ import {
   useSpriteAbility,
   whoNeedsIt,
   changeAuraSpiritAbility,
+  astralopithecus,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -1860,7 +1861,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 3,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: astralopithecus.name,
   },
   // TODO(aeremin): Add proper implementation
   // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код духохранилища (где лежит нужный дух), сканирует QR -код свободного телохранилища. После этого телохранилище занято его мясным телом, духохранилище свободно, а сам игрок действует в эктоплазменном теле - согласно описанию конкретного духа и общим свойствам эктоплазменного духа https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju

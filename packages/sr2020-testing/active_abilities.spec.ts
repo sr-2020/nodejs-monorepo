@@ -55,14 +55,13 @@ describe('Active abilities', function () {
       expect(aura).toBe(startingAura);
     }
   });
-
   it('Aurma', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // Ability user
     await fixture.saveCharacter({ modelId: '2' }); // Target
     const startingAura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
 
-    await fixture.addCharacterFeature('silentium-est-aurum', '1');
-    await fixture.useAbility({ id: 'silentium-est-aurum', targetCharacterId: '2' }, '1');
+    await fixture.addCharacterFeature('aurma', '1');
+    await fixture.useAbility({ id: 'aurma', targetCharacterId: '2' }, '1');
 
     {
       const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
@@ -73,7 +72,7 @@ describe('Active abilities', function () {
         expect(aura[i].match(/[a-z]/));
         if (aura[i] == startingAura[i]) sameCharacters++;
       }
-      expect(sameCharacters).toBeGreaterThanOrEqual(aura.length * 0.7);
+      expect(sameCharacters).toBeLessThanOrEqual(aura.length * 0.7);
       expect(sameCharacters).toBeLessThan(aura.length);
     }
 
@@ -82,6 +81,21 @@ describe('Active abilities', function () {
     {
       const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
       expect(aura).toBe(startingAura);
+    }
+  });
+
+  it('Astralopithecus', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.addCharacterFeature('astralopithecus', '1');
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'astralopithecus' }, 1);
+      expect(workModel.passiveAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'astralopithecus-rage',
+          validUntil: 20 * 60 * 1000,
+        }),
+      );
     }
   });
 
