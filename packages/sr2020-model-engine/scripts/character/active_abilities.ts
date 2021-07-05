@@ -275,6 +275,20 @@ export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   api.model.magicStats.aura = auraChars.join('');
 }
 
+export function changeAuraSpiritAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, changeAuraSpiritEvent, {});
+}
+
+export function changeAuraSpiritEvent(api: EventModelApi<Sr2020Character>, data: {}) {
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(30) }),
+    duration(80, 'minutes'),
+    'Изменение ауры',
+  );
+}
+
+
 export function takeNoHarmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'magic-shield', duration(5, 'minutes'));
 }

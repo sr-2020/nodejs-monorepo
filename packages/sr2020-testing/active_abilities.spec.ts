@@ -37,6 +37,7 @@ describe('Active abilities', function () {
 
     {
       const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+      expect(aura).not.toBe(startingAura);
       expect(aura.length).toBe(startingAura.length);
       let sameCharacters = 0;
       for (let i = 0; i < aura.length; ++i) {
@@ -54,6 +55,36 @@ describe('Active abilities', function () {
       expect(aura).toBe(startingAura);
     }
   });
+
+  it('Aurma', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // Ability user
+    await fixture.saveCharacter({ modelId: '2' }); // Target
+    const startingAura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+
+    await fixture.addCharacterFeature('silentium-est-aurum', '1');
+    await fixture.useAbility({ id: 'silentium-est-aurum', targetCharacterId: '2' }, '1');
+
+    {
+      const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+      expect(aura).not.toBe(startingAura);
+      expect(aura.length).toBe(startingAura.length);
+      let sameCharacters = 0;
+      for (let i = 0; i < aura.length; ++i) {
+        expect(aura[i].match(/[a-z]/));
+        if (aura[i] == startingAura[i]) sameCharacters++;
+      }
+      expect(sameCharacters).toBeGreaterThanOrEqual(aura.length * 0.7);
+      expect(sameCharacters).toBeLessThan(aura.length);
+    }
+
+    await fixture.advanceTime(duration(80, 'minutes'));
+
+    {
+      const aura = (await fixture.getCharacter('2')).workModel.magicStats.aura;
+      expect(aura).toBe(startingAura);
+    }
+  });
+
 
   it('Finish him on body', async () => {
     await fixture.saveLocation();

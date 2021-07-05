@@ -33,6 +33,7 @@ import {
   trollton,
   useSpriteAbility,
   whoNeedsIt,
+  changeAuraSpiritAbility,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3813,23 +3814,29 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
+
   // Время действия 80 минут. Аура цели на это время случайным образом меняется на 30% (и случайный фрагмент, и на случайное значение).
   {
     id: 'aurma',
     humanReadableName: 'Aurma',
-    description: 'На 80 минут частично изменить другому персонажу его ауру. Кулдаун 60 минут',
+    description: 'На 80 минут частично изменить другому персонажу его ауру.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 60,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: changeAuraSpiritAbility.name,
   },
+
   // TODO(aeremin): Add proper implementation
   // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 5 минут
   {
