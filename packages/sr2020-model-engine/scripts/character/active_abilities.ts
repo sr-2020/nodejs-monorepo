@@ -162,6 +162,10 @@ export function iWillSurvive(api: EventModelApi<Sr2020Character>, data: ActiveAb
   );
 }
 
+export function astralopithecus(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'astralopithecus-rage', duration(20, 'minutes'));
+}
+
 export function absoluteDeathAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, absoluteDeath, data);
 }
