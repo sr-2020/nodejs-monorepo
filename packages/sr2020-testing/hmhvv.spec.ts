@@ -28,7 +28,7 @@ describe('HMHVV abilities', function () {
 
     const victim = (await fixture.getCharacter('2')).workModel;
     expect(victim.essence).toBe(0);
-    expect(victim.healthState).toBe('clinically_dead');
+    expect(victim.healthState).toBe('healthy');
     expect(victim.chemo.concentration.vampirium).toBeGreaterThanOrEqual(1000);
 
     // A bit of cow blood now

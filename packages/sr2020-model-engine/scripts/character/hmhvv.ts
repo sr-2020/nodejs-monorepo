@@ -40,12 +40,13 @@ export function bittenEvent(api: EventModelApi<Sr2020Character>, data: { essence
     throw new UserVisibleError('Можно кусать только персонажей метарас эльф, орк, гном, норм, тролль.');
   }
 
+  api.model.essenceDetails.gap += data.essenceLoss;
+
   if (data.vampiric) {
     consumeChemo(api, { id: 'vampire-saliva', location: data.location });
+  } else {
+    healthStateTransition(api, 'clinically_dead', data.location);
   }
-
-  api.model.essenceDetails.gap += data.essenceLoss;
-  healthStateTransition(api, 'clinically_dead', data.location);
 }
 
 export function gmRespawnHmhvv(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
