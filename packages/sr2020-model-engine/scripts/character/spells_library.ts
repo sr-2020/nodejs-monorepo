@@ -38,12 +38,12 @@ import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 // Not exported by design, use kAllSpells instead.
 const kAllSpellsList: Spell[] = [
-  // маг может увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше шести
+  // маг может увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше 6 (согласно правилам по боевке)
   {
     id: 'keep-yourself',
     humanReadableName: 'Keep yourself',
     description:
-      'Ты можешь увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше шести',
+      'Ты можешь увеличить себе максимальные и текущие хиты на N на время T. N=Мощь. T=10*Мощь минут. Хиты не могут стать больше 6 (согласно правилам по боевке)',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 20,
@@ -83,7 +83,7 @@ const kAllSpellsList: Spell[] = [
       'У мага на Мощь*10 минут появляется пассивная способность Fast Charge, позволяющая кидать молнии. Молния должна выглядеть как обшитый мягким теннисный шар с красной лентой и длинным (не менее 2м) хвостом, её попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие). Количество доступных молний: Мощь + 1 (но не меньше 1),',
     prerequisites: ['arch-mage', 'arrowgant'],
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     sphere: 'fighting',
     eventType: fastChargeSpell.name,
   },
@@ -161,7 +161,7 @@ const kAllSpellsList: Spell[] = [
     sphere: 'fighting',
     eventType: birdsSpell.name,
   },
-  // На время T минут у мага появляется пассивная абилка cacophony-able. amount=Мощь*5. <Такое-то время> - момент активации заклинания.
+  // На время T=Мощь*2 минуты у мага появляется пассивная абилка cacophony-able.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что астральное тело подвергается атаке, и заставляет приседать
   {
     id: 'cacophony',
@@ -191,7 +191,7 @@ const kAllSpellsList: Spell[] = [
     id: 'trackpoint',
     humanReadableName: 'Trackpoint',
     description:
-      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние 10+Мощь минут.  Ауры считываются на 10+Мощь*5 процентов, но не более 40',
+      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние 10+Мощь минут.  Ауры считываются на 10+(Мощь*5, но не более 40)%',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 30,
@@ -203,7 +203,7 @@ const kAllSpellsList: Spell[] = [
     id: 'trackball',
     humanReadableName: 'Trackball',
     description:
-      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последний час. Ауры считываются на 20+Мощь*10 процентов, но не более 60',
+      'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последний час. Ауры считываются на 20+(Мощь*10, но не более 60)%',
     prerequisites: ['arch-mage', 'trackpoint'],
     availability: 'open',
     karmaCost: 30,

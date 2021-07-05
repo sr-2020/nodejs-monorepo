@@ -3487,7 +3487,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'ethic-wuxing',
-    humanReadableName: '',
+    humanReadableName: 'Гармония Усин',
     description:
       'Защита от вредных веществ\nГармония и сохранение позволяют последователям Усин поддерживать баланс веществ и энергий в организме. Порог Кризиса по веществам у тебя увеличен.',
     availability: 'closed',
@@ -3754,7 +3754,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Небольшой пассивный доход',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['sub-eghost'],
+    prerequisites: ['arch-digital', 'sub-eghost'],
     modifier: [],
   },
   //
@@ -3764,7 +3764,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Тебе достаточно провести 30 минут у ассемблера для компиляции',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['compile-hotsim', 'sub-ai'],
+    prerequisites: ['arch-digital', 'compile-hotsim', 'sub-ai'],
     modifier: [],
   },
   //
@@ -3774,7 +3774,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Тебе достаточно провести 15 минут у ассемблера для компиляции',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['restioration-1'],
+    prerequisites: ['arch-digital', 'restioration-1'],
     modifier: [],
   },
   // Depth +1,  Intelligence +1, Body +1, Resonance +1, Charisma +1
@@ -3784,7 +3784,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты развиваешь свою Глубину и повышаешь эффективность использования навыков.. Глубина +1',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
       modifierFromEffect(increaseIntelligence, { amount: 1 }),
@@ -3800,7 +3800,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты очень хорошо чувствуешь происходящее в Матрице, Глубина +1',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['depth-master'],
+    prerequisites: ['arch-digital', 'depth-master'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
       modifierFromEffect(increaseIntelligence, { amount: 1 }),
@@ -3816,7 +3816,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Тебе все проще дается взаимодействие с Матрицей, Глубина +1',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['deep-er'],
+    prerequisites: ['arch-digital', 'deep-er'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
       modifierFromEffect(increaseIntelligence, { amount: 1 }),
@@ -3832,7 +3832,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты повелитель глубинных слоев Матрицы, Глубина+1',
     availability: 'open',
     karmaCost: 60,
-    prerequisites: ['more-deep-er'],
+    prerequisites: ['arch-digital', 'more-deep-er'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
       modifierFromEffect(increaseIntelligence, { amount: 1 }),
@@ -3873,7 +3873,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Этот ИИ занимается не-цифровым миром.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [],
   },
   //
@@ -3883,7 +3883,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь подключаться к биологическому чаммеру, пораженному CFD, первого уровня. CFD-1',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['ai-explorer'],
+    prerequisites: ['arch-digital', 'ai-explorer'],
     modifier: [],
   },
   //
@@ -3893,7 +3893,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-2',
     availability: 'closed',
     karmaCost: 40,
-    prerequisites: ['do-it-yourself-one'],
+    prerequisites: ['arch-digital', 'do-it-yourself-one'],
     modifier: [],
   },
   //
@@ -3903,7 +3903,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-3. Лучшие мясные тела для тебя!',
     availability: 'closed',
     karmaCost: 40,
-    prerequisites: ['do-it-yourself-two'],
+    prerequisites: ['arch-digital', 'do-it-yourself-two'],
     modifier: [],
   },
   // Характеристика - Depth +2
@@ -3914,7 +3914,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Этот ИИ занимается Расширением в Цифровом мире и Проектами. Все способности этой ветки требуют обращения к мастеру-региональщику.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [modifierFromEffect(increaseDepth, { amount: 2 })],
   },
   //
@@ -3924,7 +3924,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Получить рецепт Проекта потратив Позитив.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['ai-researcher'],
+    prerequisites: ['arch-digital', 'ai-researcher'],
     modifier: [],
   },
   //
@@ -3934,7 +3934,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Получить рецепт Проекта потратив Эссенс.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['ai-researcher'],
+    prerequisites: ['arch-digital', 'ai-researcher'],
     modifier: [],
   },
   //
@@ -3944,7 +3944,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Обменять Позитив на ресурс для Проекта.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['ai-researcher'],
+    prerequisites: ['arch-digital', 'ai-researcher'],
     modifier: [],
   },
   //
@@ -3954,7 +3954,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Этот ИИ занимается Эксплуатацией. Все способности этой ветки требуют обращения к мастеру-региональщику.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [],
   },
   // Depth +1
@@ -3964,7 +3964,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Этот ИИ занимается Уничтожением и Техномантами.',
     availability: 'master',
     karmaCost: 50,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
   // 360-20*character.depth
@@ -3975,7 +3975,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'После смерти в Красной комнате вы восстанавливаетесь в полных хитах как на начало боя и можете продолжить сражаться. Работает один раз в 6 часов.',
     availability: 'master',
     karmaCost: 40,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   // 180-20*character.depth
@@ -3986,7 +3986,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты можешь изменить менять формат боя в Красной Комнате по своему выбору из двух доступных: групповое сражение и дуэль. В случае, если несколько проекций ИИ используют эту способность одновременно, право выбора решает жребий.',
     availability: 'master',
     karmaCost: 40,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   //
@@ -3996,7 +3996,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '+1 хит в Красной Комнате',
     availability: 'master',
     karmaCost: 30,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   //
@@ -4006,7 +4006,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'еще +1 хит в Красной Комнате',
     availability: 'master',
     karmaCost: 30,
-    prerequisites: ['programm-code-ai'],
+    prerequisites: ['arch-digital', 'programm-code-ai'],
     modifier: [],
   },
   //
@@ -4016,7 +4016,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'еще +1 хит в Красной Комнате',
     availability: 'master',
     karmaCost: 30,
-    prerequisites: ['super-programme-code'],
+    prerequisites: ['arch-digital', 'super-programme-code'],
     modifier: [],
   },
   //
@@ -4026,7 +4026,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь использовать любое холодное оружие в Красной комнате. ',
     availability: 'master',
     karmaCost: 30,
-    prerequisites: ['programm-code-ai'],
+    prerequisites: ['arch-digital', 'programm-code-ai'],
     modifier: [],
   },
   //
@@ -4036,7 +4036,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Инициатива +2 в Красной комнате',
     availability: 'master',
     karmaCost: 30,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   // 120-10*character.depth
@@ -4047,7 +4047,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Усиление для Техномантов в Красной Комнате. Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Работает раз в час.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   // 120-10*character.depth
@@ -4058,7 +4058,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться.  Работает раз в час.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['ai-troubleshooter'],
+    prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
   // 120-10*character.depth
@@ -4069,7 +4069,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Усиление для Техномантов в Красной Комнате.  Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Применяется на 3 цели одновременно.   Работает раз в час.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['ai-buff-double-damage'],
+    prerequisites: ['arch-digital', 'ai-buff-double-damage'],
     modifier: [],
   },
   // 120-10*character.depth
@@ -4080,7 +4080,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. Применяется на 3 цели одновременно.  Работает раз в час.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['ai-dismorale'],
+    prerequisites: ['arch-digital', 'ai-dismorale'],
     modifier: [],
   },
   //
@@ -4091,7 +4091,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты можешь покинуть основание когда захочешь. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. Работает раз в 2 часа.',
     availability: 'open',
     karmaCost: 40,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4102,7 +4102,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один. Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4112,7 +4112,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь. Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
+    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
     modifier: [],
   },
   //
@@ -4122,7 +4122,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь освободить одну руку себе или товарищу. Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['ai-techno-copy', 'ai-remove-excees'],
+    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-remove-excees'],
     modifier: [],
   },
   //
@@ -4132,7 +4132,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь пройти эту комнату один за всю свою команду. Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4142,7 +4142,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'У вашей группы на 3 минуты больше времени в данже. Покажи это при входе в данж.',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4172,7 +4172,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь создать дополнительную "опору" (круг 20 см). Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4182,7 +4182,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь задевать колокольчики, матрица их не услышит. Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4192,7 +4192,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты можешь сфотографировать объект и переслать фото другому участнику команды.  Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   //
@@ -4202,7 +4202,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции.  Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy', 'ai-photo-memory'],
+    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-photo-memory'],
     modifier: [],
   },
   //
@@ -4212,7 +4212,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Теперь матрица подскажет тебе, какие детали лишние.  Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy', 'ai-remove-half'],
+    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-remove-half'],
     modifier: [],
   },
   //
@@ -4222,10 +4222,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции.  Работает раз в 10 минут.',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['ai-techno-copy'],
+    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'mr-cellophane',
@@ -4235,10 +4234,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'hammer-time',
@@ -4247,10 +4244,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'adamantaeu',
@@ -4259,10 +4254,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'fireball-back',
@@ -4271,10 +4264,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'fireball-halfback',
@@ -4283,10 +4274,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'fireball-forward',
@@ -4295,20 +4284,38 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
-  // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума
+  // Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума
   {
     id: 'over-the-pills',
     humanReadableName: 'Over the pills',
     description:
-      'Все мясные/экто тела, касающиеся этого духа на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума',
+      'Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
+    modifier: [],
+  },
+  //
+  {
+    id: 'fireball-keeper',
+    humanReadableName: 'Fireball - keeper',
+    description: 'Можешь кинуть 2 огненных шара. Затем эффект исчерпан до выхода из духа',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Все мясные/экто тела, щекочущие владельца абилки на протяжении 2 минут, в конце этой минуты восстанавливают текущие хиты до максимума
+  {
+    id: 'tick-a-lick-a-boo',
+    humanReadableName: 'Tick-a-lick-a-boo',
+    description:
+      'Все мясные/экто тела, щекочущие этого духа на протяжении 2 минут, в конце этого интервала восстанавливают текущие хиты до максимума',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     modifier: [],
   },
 ];

@@ -78,7 +78,6 @@ import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -698,7 +697,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'посмотреть на qr и сказать размер рентного платежа чаммера. ',
     target: 'scan',
     targetsSignature: [kMerchandiseTargeted],
-    cooldownMinutes: (character) => 1,
+    cooldownMinutes: (character) => 15,
     prerequisites: ['arch-face'],
     availability: 'open',
     karmaCost: 20,
@@ -1413,7 +1412,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 1.',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
-    cooldownMinutes: (character) => 10,
+    cooldownMinutes: (character) => 0,
     prerequisites: ['meta-ghoul'],
     pack: { id: 'gen-meta-ghoul', level: 1 },
     availability: 'master',
@@ -1436,7 +1435,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Отсканируй QR жертвы для питания\nТвой Эссенс увеличится на 2.',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
-    cooldownMinutes: (character) => 10,
+    cooldownMinutes: (character) => 0,
     prerequisites: ['meta-vampire'],
     pack: { id: 'gen-meta-vampire', level: 1 },
     availability: 'master',
@@ -1765,7 +1764,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'use-pills-on-others',
     humanReadableName: 'Вколоть препарат',
     description:
-      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и качания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
+      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
     target: 'scan',
     targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
     cooldownMinutes: (character) => 7,
@@ -2560,7 +2559,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kDroneAndBodyStorageTargeted,
     cooldownMinutes: (character) => Math.max(0, character.drones.recoveryTime - 5 * character.body),
     prerequisites: ['arch-rigger'],
-    pack: { id: 'base-rigger', level: 1 },
+    pack: { id: 'gen-arch-rigger', level: 1 },
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3465,7 +3464,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 2,
-    prerequisites: ['sub-agent', 'arch-digital'],
+    prerequisites: ['arch-digital', 'sub-agent'],
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
@@ -3481,7 +3480,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: ['sub-eghost'],
+    prerequisites: ['arch-digital', 'sub-eghost'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3497,7 +3496,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 90,
-    prerequisites: ['want-to-speak'],
+    prerequisites: ['arch-digital', 'want-to-speak'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3512,7 +3511,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 240,
-    prerequisites: ['want-to-speak'],
+    prerequisites: ['arch-digital', 'want-to-speak'],
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
@@ -3528,7 +3527,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 90,
-    prerequisites: ['want-to-speak'],
+    prerequisites: ['arch-digital', 'want-to-speak'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3559,7 +3558,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 90,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     availability: 'open',
     karmaCost: 60,
     minimalEssence: 0,
@@ -3574,7 +3573,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 10 * character.depth,
-    prerequisites: ['ai-researcher'],
+    prerequisites: ['arch-digital', 'ai-researcher'],
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
@@ -3591,7 +3590,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
-    prerequisites: ['ai-researcher'],
+    prerequisites: ['arch-digital', 'ai-researcher'],
     availability: 'open',
     karmaCost: 100,
     minimalEssence: 0,
@@ -3606,7 +3605,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-manager'],
+    prerequisites: ['arch-digital', 'ai-manager'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3621,7 +3620,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-precious'],
+    prerequisites: ['arch-digital', 'ai-precious'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3636,7 +3635,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 20 * character.depth,
-    prerequisites: ['ai-precious'],
+    prerequisites: ['arch-digital', 'ai-precious'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3651,7 +3650,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 20 * character.depth,
-    prerequisites: ['ai-precious'],
+    prerequisites: ['arch-digital', 'ai-precious'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3666,7 +3665,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-precious'],
+    prerequisites: ['arch-digital', 'ai-precious'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3681,7 +3680,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-manager'],
+    prerequisites: ['arch-digital', 'ai-manager'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3696,7 +3695,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 20 * character.depth,
-    prerequisites: ['ai-black-pr'],
+    prerequisites: ['arch-digital', 'ai-black-pr'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3711,7 +3710,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-black-pr'],
+    prerequisites: ['arch-digital', 'ai-black-pr'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3726,7 +3725,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 20 * character.depth,
-    prerequisites: ['ai-black-pr'],
+    prerequisites: ['arch-digital', 'ai-black-pr'],
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
@@ -3742,7 +3741,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['ai-manager'],
+    prerequisites: ['arch-digital', 'ai-manager'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3757,7 +3756,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 20 * character.depth,
-    prerequisites: ['ai-manager'],
+    prerequisites: ['arch-digital', 'ai-manager'],
     availability: 'closed',
     karmaCost: 40,
     minimalEssence: 0,
@@ -3776,7 +3775,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: ['compile-hotsim', 'sub-ai'],
+    prerequisites: ['arch-digital', 'compile-hotsim', 'sub-ai'],
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3792,7 +3791,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120,
-    prerequisites: ['sub-ai'],
+    prerequisites: ['arch-digital', 'sub-ai'],
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
@@ -3808,19 +3807,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 240,
-    prerequisites: ['black-ice-ai'],
+    prerequisites: ['arch-digital', 'black-ice-ai'],
     availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-
   // Время действия 80 минут. Аура цели на это время случайным образом меняется на 30% (и случайный фрагмент, и на случайное значение).
   {
     id: 'aurma',
     humanReadableName: 'Aurma',
-    description: 'На 80 минут частично изменить другому персонажу его ауру.',
+    description: 'На 80 минут частично изменить другому персонажу его ауру. Кулдаун 60 минут',
     target: 'scan',
     targetsSignature: [
       {
@@ -3837,8 +3835,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: changeAuraSpiritAbility.name,
   },
-
-  // TODO(aeremin): Add proper implementation
   // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 5 минут
   {
     id: 'i-shall-pass',
@@ -3848,14 +3844,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // - время действия 10 минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время.
   {
     id: 'arr-ow',
@@ -3865,14 +3859,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели сканируется QR, она из тяжрана/КС переходит в состояние "здоров и в максимальных хитах"
   {
     id: 'undiena',
@@ -3882,14 +3874,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // У духа появляется на 3 минуты пассивная абилка avalance-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
     id: 'aval-festival',
@@ -3898,16 +3888,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'Снять со всех персонажей в реале в радиусе 5 метров от точки активации хиты в количестве 4. Действует на всех, кроме самого духа. \nРекомендуется привлекать для подтверждения эффекта представителя МГ.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 60,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // На 5 минут у духа появляется пассивная абилка birds-able.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают. Для подтверждения может показать текст.
   {
@@ -3917,16 +3905,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       'В течение 5 минут каждую минуту со всех в реале в радиусе 5 метров от точки активации эффекта снимается по 1 хиту (рекомендуется привлекать для подтверждения эффекта представителя МГ). \nДействует на всех, кроме самого духа.\nЕсли дух отходит от точки активации больше чем на 2 метра - действие эффекта прекращается.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 60,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, Откат, 40% ауры творца, метарасу творца).
   {
     id: 'trackpointer',
@@ -3937,14 +3923,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, DMX Отката, 80% ауры творца, метарасу творца).
   {
     id: 'trackeeteer',
@@ -3955,14 +3939,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // В течение 15 минут каждые 60с будет безусловно вытягиваться 1 уровень плотности маны из случайной соседней локации в текущую (там понизится, тут повысится).
   {
     id: 'get-high',
@@ -3972,14 +3954,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // В течение 15 минут каждые 60с 1 уровень плотности маны будет безусловно выгоняться в случайную соседнюю локацию (там понизится, тут повысится).
   {
     id: 'get-low',
@@ -3989,14 +3969,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // дух узнает часть ауры цели (95% для метачеловека, не сопротивляющегося сканированию своего qr).
   {
     id: 'auriel',
@@ -4006,14 +3984,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // дух узнает ауру текущей локации
   {
     id: 'reefwise',
@@ -4023,14 +3999,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели на 60 минут понижается Резонанс на 3.
   {
     id: 'surge-the-unclean',
@@ -4038,16 +4012,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'На 60 минут понизить на 3 Резонанс цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели на 60 минут понижается Харизма на 2.
   {
     id: 'ugly-is-pechi',
@@ -4055,16 +4027,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // у цели на 60 минут повышается Харизма на 2 - но не выше 5
   {
     id: 'beautti-frutti',
@@ -4072,9 +4042,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'На 60 минут повысить Харизму на 2, но не выше 5, цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 9000,
+    cooldownMinutes: (character) => 10,
     prerequisites: [],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
