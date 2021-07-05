@@ -596,6 +596,10 @@ export function stoneSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   addTemporaryActiveAbility(api, 'skin-stone', duration(20 * data.power, 'minutes'));
 }
 
+export function scumStoneSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, stoneSkinSpell, data);
+}
+
 export function paralizardSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   addTemporaryPassiveAbility(api, 'paralizard-effect', duration(2 * data.power, 'minutes'));
 }

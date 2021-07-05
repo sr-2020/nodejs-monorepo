@@ -33,6 +33,7 @@ import {
   tempusFugitSpell,
   trackBallSpell,
   trackpointSpell,
+  scumStoneSkinSpell,
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -410,8 +411,8 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 40,
     sphere: 'protection',
-    eventType: dummySpell.name,
-    hasTarget: false,
+    eventType: scumStoneSkinSpell.name,
+    hasTarget: true,
   },
   // На Мощь*2 минут магу выдаётся абилка Paralizard-effect
   {

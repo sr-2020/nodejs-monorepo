@@ -673,6 +673,23 @@ describe('Spells', function () {
 
   });
 
+  it('Scum stoner', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.addCharacterFeature('scum-stoner', 1);
+    await fixture.saveCharacter({ modelId: '2' });
+
+    await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'scum-stoner', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 1 },
+    }, 1);
+
+    expect((await fixture.getCharacter('2')).workModel.activeAbilities).toContainEqual(expect.objectContaining({
+         id: 'skin-stone'
+    }));
+
+  });
+
+
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
       const feedback = calculateMagicFeedback({
