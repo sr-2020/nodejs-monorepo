@@ -636,6 +636,7 @@ describe('Spells', function () {
     }
   });
 
+<<<<<<< Updated upstream
   it('Healton', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('healton');
@@ -647,6 +648,33 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'healtouch' }));
   });
 
+=======
+  it('Cacophony', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('cacophony');
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'cacophony', location: { id: 0, manaLevel: 0 }, power: 1 },
+      });
+      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'cacophony-able' }));
+    }
+
+  });
+
+  it('Let it go', async () => {
+    await fixture.saveCharacter({ magic: 10 });
+    await fixture.addCharacterFeature('let-it-go');
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'let-it-go', location: { id: 0, manaLevel: 0 }, power: 1 },
+      });
+      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'let-it-go-effect' }));
+    }
+
+  });
+>>>>>>> Stashed changes
 
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
