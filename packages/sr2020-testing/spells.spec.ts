@@ -636,7 +636,6 @@ describe('Spells', function () {
     }
   });
 
-<<<<<<< Updated upstream
   it('Healton', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('healton');
@@ -648,7 +647,6 @@ describe('Spells', function () {
     expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'healtouch' }));
   });
 
-=======
   it('Cacophony', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.addCharacterFeature('cacophony');
@@ -674,7 +672,6 @@ describe('Spells', function () {
     }
 
   });
->>>>>>> Stashed changes
 
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
