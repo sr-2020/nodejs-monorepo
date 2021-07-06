@@ -61,6 +61,10 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return { type: 'armour', data: {} };
   }
 
+  if (id == 'artifact' || id.startsWith('artifact-')) {
+    return { type: 'artifact', data: {} };
+  }
+
   const sameId = (item: { id: string }) => item.id == id;
   const maybeImplant = kAllImplants.find(sameId);
   if (maybeImplant) {
