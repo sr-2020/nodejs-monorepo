@@ -683,9 +683,10 @@ describe('Spells', function () {
         data: { id: 'scum-stoner', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 1 },
     }, 1);
 
-    expect((await fixture.getCharacter('2')).workModel.activeAbilities).toContainEqual(expect.objectContaining({
+    expect((await fixture.getCharacter('2')).workModel.activeAbilities).
+      toContainEqual(expect.objectContaining({
          id: 'skin-stone'
-    }));
+      }));
 
   });
 

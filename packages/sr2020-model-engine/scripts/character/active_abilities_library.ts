@@ -35,6 +35,7 @@ import {
   whoNeedsIt,
   changeAuraSpiritAbility,
   astralopithecus,
+  arr_ow,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3848,7 +3849,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: alloHomorusAbility.name,
   },
   // - время действия 10 минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время.
   {
@@ -3863,7 +3864,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: arr_ow.name,
   },
   // у цели сканируется QR, она из тяжрана/КС переходит в состояние "здоров и в максимальных хитах"
   {

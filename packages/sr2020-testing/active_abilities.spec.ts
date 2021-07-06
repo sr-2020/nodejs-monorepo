@@ -99,6 +99,33 @@ describe('Active abilities', function () {
     }
   });
 
+  it('Arr-ow', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('arr-ow');
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'arr-ow' });
+      expect(workModel.passiveAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'arrowgant-effect',
+          validUntil: 10 * 60 * 1000,
+        }),
+      );
+    }
+  });
+
+
+  it('I shall pass', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('i-shall-pass');
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'i-shall-pass' });
+      expect(fixture.getCharacterNotifications()[0].body).toContain('Вы можете приступить к взлому замка в соответствии с правилами по взлому');
+    }
+  });
+
+
 
   it('Finish him on body', async () => {
     await fixture.saveLocation();
