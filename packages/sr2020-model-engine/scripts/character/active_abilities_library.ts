@@ -36,6 +36,10 @@ import {
   changeAuraSpiritAbility,
   astralopithecus,
   arr_ow,
+  howMuchIsThePssh,
+  undiena,
+  avalFest,
+  dobirds,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3879,7 +3883,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: undiena.name,
   },
   // У духа появляется на 3 минуты пассивная абилка avalance-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
@@ -3895,7 +3899,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: avalFest.name,
   },
   // На 5 минут у духа появляется пассивная абилка birds-able.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают. Для подтверждения может показать текст.
@@ -3912,7 +3916,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: dobirds.name,
   },
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, Откат, 40% ауры творца, метарасу творца).
   {
@@ -4066,7 +4070,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 5,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: howMuchIsThePssh.name,
   },
 ];
 setAllActiveAbilities(
