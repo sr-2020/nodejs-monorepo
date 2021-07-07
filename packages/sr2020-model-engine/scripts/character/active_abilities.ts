@@ -274,7 +274,12 @@ export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   const auraChars: string[] = [];
   for (let i = 0; i < mask.length; ++i) {
     if (mask[i] != kUnknowAuraCharacter) {
-      auraChars.push(mask[i]);
+      if(mask[i] != api.model.magicStats.aura[i]) {
+        auraChars.push(mask[i]);
+      } else {
+        const slide = (mask[i] == 'z')?-25:1;
+        auraChars.push(String.fromCharCode(mask[i].charCodeAt(0) + slide));
+      }
     } else {
       auraChars.push(api.model.magicStats.aura[i]);
     }
