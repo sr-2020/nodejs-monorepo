@@ -66,7 +66,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'feel-matrix',
     humanReadableName: 'Чувствительность к Матрице',
-    description: 'Ты чувствуешь матрицу. Устойчивость к фейдингу техноманта, у декера уменьшается время между входами на хоcт.',
+    description: 'Ты чувствуешь матрицу. Устойчивость к фейдингу техноманта, у декера уменьшается время входа на хоcт.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -435,7 +435,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'link-lock',
     humanReadableName: 'linklock',
     description: 'новая команда linklock [target]\nхакер, захваченный в линклок не может перемещаться некоторое время',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     modifier: [],
@@ -542,7 +542,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'deploy',
     humanReadableName: 'deploy',
-    description: 'новая команда: deploy\nУстанавливает агента (софт) в Ноду Хоста\n--name:<имя>\nУспешность определяется по Sleaze',
+    description: 'новая команда: deploy\nУстанавливает агента (софт) на Ноду Хоста\n\nСкрытность установки определяется по Sleaze',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
@@ -553,8 +553,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // IT: команда в Кривда-матрице
   {
     id: 'uninstall',
-    humanReadableName: 'uninstall',
-    description: 'новая команда: uninstall\nУдаляет агента с Ноды\nУспешность определяется по Sleaze',
+    humanReadableName: 'undeploy',
+    description: 'новая команда: undeploy\nУдаляет агента с Ноды\nУспешность определяется по Sleaze',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
@@ -584,7 +584,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
     modifier: [],
   },
-  // IT: команда в кривда-матрице
   {
     id: 'hop',
     humanReadableName: 'hop',
@@ -612,7 +611,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'breacher-2'],
+    prerequisites: ['arch-hackerman-decker', 'stubbornness-3'],
     modifier: [],
   },
   // IT:
@@ -651,9 +650,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // IT: команда в кривда-матрице
   {
     id: 'persistent-deploy',
-    humanReadableName: 'Persistent deploy',
-    description:
-      'новый ключ:install --persistent\nПозволяет применять ключ --persistant команды deploy\nключ позволяет агенту переживать обновлие хоста',
+    humanReadableName: 'Durable deployments',
+    description: 'Разблокирует ключ команды deploy: --durable\n\nПозволяет агенту переживать обновлие хоста',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-1', 'deploy'],
@@ -662,9 +660,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // IT: команда в кривда-матрице
   {
     id: 'shadow-deploy',
-    humanReadableName: 'Shadow deploy',
-    description:
-      'новый ключ:install --shadow\nПозволяет применять ключ --shadow команды deploy\nключ затрудняет обнаружение агента (зависит от значения Sleaze ищущего)',
+    humanReadableName: 'Shadow deployments',
+    description: 'Разблокирует ключ команды deploy: --shadow\n\nИспользование добавляет +20 к скрытности агента',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2', 'deploy'],
@@ -709,7 +706,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'flee',
     description: 'новая команда:flee\nПозволяет попытаться сбежать из софт-лока (мягкого линклока). \nШанс успеха зависит от Sleaze',
     availability: 'open',
-    karmaCost: 10,
+    karmaCost: 25,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
     modifier: [],
   },
@@ -876,7 +873,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'steal-pro',
     humanReadableName: 'Фрод профи',
     description:
-      'Новый ключ: steal --enterprize:\nработа с кошельками юр лиц\nНовый ключ: steal --comment\nпозволяет ввести текст "основания перевода", вместо билиберды по умолчанию\nувеличивает сумму кражи',
+      'Теперь ты можешь работать с кошельками юр лиц\n\nкроме того, разблокирован ключ: steal --comment\nОн позволяет ввести текст "основания перевода", вместо билиберды по умолчанию\nувеличивает сумму кражи',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-decker', 'steal'],
@@ -886,7 +883,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'steal-expert',
     humanReadableName: 'Фрод эксперт',
-    description: 'Новый ключ: steal --SIN:\n--SIN: переводит сумму на другой SIN\nдополнительно увеличивает сумму кражи',
+    description: 'Новый ключ: steal --sin:\n--sin: переводит сумму на другой SIN\nи дополнительно увеличивает сумму кражи',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'steal-pro'],
@@ -898,7 +895,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'quarter-god',
     humanReadableName: 'Четвертак',
     description:
-      'Русское название для слэнга "qouterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\nЕще 5 хостов, на защиту которых ты можешь подписаться',
+      'Русское название для слэнга "quaterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\nЕще 5 хостов, на защиту которых ты можешь подписаться',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
@@ -1996,7 +1993,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
-  // magic  +1
+  // magic  +2
   {
     id: 'arch-mage',
     humanReadableName: 'Архетип: Маг',
@@ -2254,7 +2251,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hack-deck-deanon',
     humanReadableName: 'deanon',
-    description: 'новая команда: deanon\nОтображает адрес PAN хоста поверженного (выброшенного в ходе боя из Матрицы) декера',
+    description: 'новая команда: deanon\nОтображает адрес PAN хоста и SIN поверженного (выброшенного в ходе боя из Матрицы) декера',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
@@ -2286,7 +2283,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'useapi',
     description: 'новая команда: useapi\nБазовая команда для работы со специальным нодам',
     availability: 'open',
-    karmaCost: 10,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
@@ -4316,6 +4313,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // IT: команда в кривда-матрице
+  {
+    id: 'hack-deck-fire',
+    humanReadableName: 'fire',
+    description: 'новая команда: fire\nпозволяет применять эксплойты типа "бобма"',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    pack: undefined,
     modifier: [],
   },
 ];

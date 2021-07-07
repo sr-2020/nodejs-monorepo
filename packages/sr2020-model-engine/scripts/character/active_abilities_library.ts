@@ -1427,7 +1427,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // может иметь целью только персонажей метарас эльф, орк, гном, норм, тролль, находящихся в базовом мясном теле при применении абилки.
   //
   // Эссенс вампира увеличивается на  min (200, itEssense жертвы)
-  // Эссенс персонажа уменьшается на min ( 200, itEssense жертвы). Укушенный персонаж переходит в состояние КС
+  // Эссенс персонажа уменьшается на min ( 200, itEssense жертвы).
   // itGapEssense Жертвы = itGapEssense + [min ( 200, itEssense жертвы)]
   // itGapEssense вампира= itGapEssense - кусьВампира
   {
@@ -3870,7 +3870,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'undiena',
     humanReadableName: 'Undiena',
-    description: 'Поднимает одну цель из КС/тяжрана в полные хиты.',
+    description: 'Активируемая возможность поднять одну цель из КС/тяжрана в полные хиты. Время действия: 30 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -4048,6 +4048,23 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // В нотификации выводится уровень маны в текущей локации
+  {
+    id: 'how-much-is-the-pssh',
+    humanReadableName: 'How much is the pssh',
+    description: 'Увидеть уровень маны в локации',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 3,
+    prerequisites: ['arch-mage', 'geomancy'],
+    pack: undefined,
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 5,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
