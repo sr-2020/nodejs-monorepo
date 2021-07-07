@@ -61,6 +61,7 @@ export const kMerchandiseQrTypes: QrType[] = [
   'repair_kit',
   'armour',
   'weapon',
+  'artifact',
 ];
 
 @Entity({
