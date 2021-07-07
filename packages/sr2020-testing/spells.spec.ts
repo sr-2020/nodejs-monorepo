@@ -690,6 +690,36 @@ describe('Spells', function () {
 
   });
 
+  it('Tax free', async () => {
+    await fixture.saveCharacter({modelId: '1',  magic: 10 });
+    await fixture.addCharacterFeature('tax-free', 1);
+    await fixture.saveCharacter({ modelId: '2', discounts: { everything: 1 } });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'tax-free', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
+      }, 1);
+
+      expect((await fixture.getCharacter(2)).workModel.discounts.everything).toBe(0.8);
+    }
+
+  });
+
+  it('Shtopping', async () => {
+    await fixture.saveCharacter({modelId: '1',  magic: 10 });
+    await fixture.addCharacterFeature('shtopping', 1);
+    await fixture.saveCharacter({ modelId: '2', discounts: { everything: 1 } });
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'castSpell',
+        data: { id: 'shtopping', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
+      }, 1);
+
+      expect((await fixture.getCharacter(2)).workModel.discounts.everything).toBe(1.2);
+    }
+
+  });
+
 
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {

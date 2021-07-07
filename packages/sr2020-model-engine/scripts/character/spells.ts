@@ -285,7 +285,7 @@ export function brasiliaSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 
 export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = 1 + Math.max(0.5, 0.1 * data.power);
+  const amount = 1 + Math.min(0.5, 0.1 * data.power);
   const m = modifierFromEffect(multiplyAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
@@ -296,7 +296,7 @@ export function shtoppingSpell(api: EventModelApi<Sr2020Character>, data: SpellD
 
 export function taxFreeSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const d = duration(10 * data.power, 'minutes');
-  const amount = 1 - Math.max(0.5, 0.1 * data.power);
+  const amount = 1 - Math.min(0.5, 0.1 * data.power);
   const m = modifierFromEffect(multiplyAllDiscounts, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
