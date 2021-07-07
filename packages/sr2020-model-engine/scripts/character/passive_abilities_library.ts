@@ -2005,7 +2005,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
     pack: { id: 'gen-arch-mage', level: 1 },
-    modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
+    modifier: [modifierFromEffect(increaseMagic, { amount: 2 })],
   },
   // Magic +2
   // body +2
