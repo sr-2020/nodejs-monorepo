@@ -6,7 +6,7 @@ import { duration } from 'moment';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
 import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { addFeatureToModel, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
+import { addFeatureToModel, addTemporaryPassiveAbility, addTemporaryActiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merchandise';
@@ -183,6 +183,23 @@ export function finishHimAbility(api: EventModelApi<Sr2020Character>, data: Acti
 export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendNotification('Взлом', 'Вы можете приступить к взлому замка в соответствии с правилами по взлому');
 }
+
+export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendNotification('Уровень маны', 'Сейчас здесь мана на уровне: ' + data.location.manaLevel);
+}
+
+export function undiena(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData ) {
+  addTemporaryActiveAbility(api, 'ground-heal-ability', duration(30, 'minutes'));
+}
+
+export function avalFest(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'avalanche-able', duration(3, 'minutes'), { amount: 4 });
+}
+
+export function dobirds(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'birds-able', duration(15, 'minutes'), { amount: 15 });
+}
+
 
 export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, cloudMemoryEnable, {});

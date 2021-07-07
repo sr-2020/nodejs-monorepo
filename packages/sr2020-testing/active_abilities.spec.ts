@@ -114,14 +114,61 @@ describe('Active abilities', function () {
     }
   });
 
-
-  it('I shall pass', async () => {
+  it('Undiena', async () => {
     await fixture.saveCharacter();
-    await fixture.addCharacterFeature('i-shall-pass');
+    await fixture.addCharacterFeature('undiena');
 
     {
-      const { workModel } = await fixture.useAbility({ id: 'i-shall-pass' });
-      expect(fixture.getCharacterNotifications()[0].body).toContain('Вы можете приступить к взлому замка в соответствии с правилами по взлому');
+      const { workModel } = await fixture.useAbility({ id: 'undiena' });
+      expect(workModel.activeAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'ground-heal-ability',
+          validUntil: 30 * 60 * 1000,
+        }),
+      );
+    }
+  });
+
+  it('Aval festival', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('aval-festival');
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'aval-festival' });
+      expect(workModel.passiveAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'avalanche-able',
+          validUntil: 3 * 60 * 1000,
+        }),
+      );
+    }
+  });
+
+  it('Date of birds', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('date-of-birds');
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'date-of-birds' });
+      expect(workModel.passiveAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'birds-able',
+          validUntil: 15 * 60 * 1000,
+        }),
+      );
+    }
+  });
+
+
+
+  it('How much is the pssh', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('how-much-is-the-pssh');
+    await fixture.saveLocation();
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'how-much-is-the-pssh', location: { id: '0', manaLevel: 5 } });
+      expect(fixture.getCharacterNotifications()[0].body).toContain('Сейчас здесь мана на уровне: 5');
     }
   });
 
