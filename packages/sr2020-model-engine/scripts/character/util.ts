@@ -22,6 +22,10 @@ export function sendNotificationAndHistoryRecord(api: EventModelApi<Sr2020Charac
   addHistoryRecord(api, title, shortText, longText);
 }
 
+export function sendNotificationWithHistory(api: EventModelApi<Sr2020Character>, data: { title: string; body: string }) {
+  sendNotificationAndHistoryRecord(api, data.title, data.body);
+}
+
 // Сreates an modifier having a single Effect. additionalData will be embedded into Modifier so effect handler will be able
 // access it.
 export function modifierFromEffect<U extends EmptyModel, T>(
