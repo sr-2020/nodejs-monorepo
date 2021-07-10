@@ -437,7 +437,11 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
   let participants = 0;
 
   if (data.ritualMembersIds?.length) {
-    if (!api.workModel.passiveAbilities.some((a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic')) {
+    if (
+      !api.workModel.passiveAbilities.some(
+        (a) => a.id == 'ritual-magic' || a.id == 'orthodox-ritual-magic' || a.id == 'monastery-ritual-magic',
+      )
+    ) {
       throw new UserVisibleError('Нет навыков разрешающих проводить ритуалы!');
     }
 

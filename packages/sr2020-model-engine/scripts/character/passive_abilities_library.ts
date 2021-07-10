@@ -3490,7 +3490,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 20 })],
   },
   // Неудача 50% при использовании на персонажа абилки repoman-black
   {
@@ -3500,7 +3500,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 50 })],
   },
   // текстовая
   {
@@ -3532,7 +3532,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 3 })],
   },
   // текстовая абилка
   {

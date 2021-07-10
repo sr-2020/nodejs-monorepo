@@ -2,15 +2,21 @@ import {
   absoluteDeathAbility,
   activateSoft,
   alloHomorusAbility,
+  arr_ow,
   arrowgant,
+  astralopithecus,
+  avalFest,
   biomonitorScanAbility,
   changeAuraAbility,
+  changeAuraSpiritAbility,
   cloudMemoryAbility,
+  dobirds,
   dummyAbility,
   externalAbility,
   faerbolAbility,
   finishHimAbility,
   hammerOfJustice,
+  howMuchIsThePssh,
   howMuchItCosts,
   howMuchTheRent,
   investigateScoring,
@@ -31,15 +37,9 @@ import {
   takeNoHarmAbility,
   tincasmAbility,
   trollton,
+  undiena,
   useSpriteAbility,
   whoNeedsIt,
-  changeAuraSpiritAbility,
-  astralopithecus,
-  arr_ow,
-  howMuchIsThePssh,
-  undiena,
-  avalFest,
-  dobirds,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -83,6 +83,7 @@ import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3284,7 +3285,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // текстовая
   {
@@ -3300,7 +3301,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // Более быстрое уменьшение фейдинга
   {
@@ -3316,7 +3317,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // текстовая
   {
@@ -3331,7 +3332,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // absolutely-finish-him
   {
@@ -3339,14 +3340,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Абсолютная смерть',
     description: 'Ты можешь убивать в Абсолютную смерть',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        allowedTypes: ['WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 180,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 100,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: absoluteDeathAbility.name,
   },
   // В качестве цели сканируется QR-код телохранилища. Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
   // Если тела нет - получаем сообщение "Увы, камера пуста".
