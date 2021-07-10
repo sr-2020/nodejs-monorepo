@@ -70,7 +70,9 @@ function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScal
   }
 
   const characterEthicAbilities = new Set(
-    [...model.activeAbilities, ...model.passiveAbilities].filter((it) => allEthicAbilitiesIds.includes(it.id)).map((it) => it.id),
+    [...model.activeAbilities, ...model.passiveAbilities, ...model.spells]
+      .filter((it) => allEthicAbilitiesIds.includes(it.id))
+      .map((it) => it.id),
   );
 
   const newPersonalEthicAbilities = hasCrysis(model)
