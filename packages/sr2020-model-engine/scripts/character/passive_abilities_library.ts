@@ -45,7 +45,6 @@ import {
   increaseСhemoSuperEffectThreshold,
   increaseСhemoUberEffectThreshold,
   muliplyMagicRecoverySpeed,
-  multiplyAllDiscounts,
   multiplyDiscountWeaponsArmor,
   multiplyMagicFeedbackMultiplier,
   multiplySpiritResistanceMultiplier,
@@ -1046,7 +1045,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-face'],
-    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.9 }),
+    modifier: [],
   },
   // Множитель 0,8 при покупке любого товара  данным персонажем
   {
@@ -1056,7 +1055,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-face', 'discount-all-1'],
-    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.8 }),
+    modifier: [],
   },
   // Множитель 0,7 при покупке любого товара  данным персонажем
   {
@@ -1066,7 +1065,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-face', 'discount-all-2'],
-    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.7 }),
+    modifier: [],
   },
   // Множитель 0,6 при покупке любого товара  данным персонажем
   {
@@ -1076,7 +1075,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 70,
     prerequisites: ['arch-face', 'discount-all-3', 'igra-na-birge-1'],
-    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.6 }),
+    modifier: [],
   },
   // Множитель 0,5 при покупке любого товара  данным персонажем
   {
@@ -1086,7 +1085,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 80,
     prerequisites: ['arch-face', 'discount-all-4', 'igra-na-birge-3'],
-    modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.5 }),
+    modifier: [],
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
   // ДИСТАНЦИОННОЕ ОРУЖИЕ, БРОНЯ.
