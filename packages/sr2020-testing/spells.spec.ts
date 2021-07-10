@@ -198,7 +198,7 @@ describe('Spells', function () {
     expect(tableResponse.length).toBe(2);
     expect(tableResponse).toContainEqual(
       expect.objectContaining({
-        spellName: 'Fireball',
+        spellName: 'Fireball (S)',
         timestamp: 120000,
         power: 4,
         magicFeedback: 8,
@@ -206,7 +206,7 @@ describe('Spells', function () {
     );
     expect(tableResponse).toContainEqual(
       expect.objectContaining({
-        spellName: 'Ground Heal',
+        spellName: 'Ground Heal (S)',
         timestamp: 1020000,
         power: 6,
         magicFeedback: 9,
@@ -241,7 +241,7 @@ describe('Spells', function () {
     expect(tableResponse.length).toBe(1);
     expect(tableResponse).toContainEqual(
       expect.objectContaining({
-        spellName: 'Fireball',
+        spellName: 'Fireball (S)',
         timestamp: 120000,
         power: 4,
         magicFeedback: 8,
@@ -366,19 +366,19 @@ describe('Spells', function () {
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: 600000,
-        spellName: 'Fireball',
+        spellName: 'Fireball (S)',
       }),
     );
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: (1300 - 480) * 1000,
-        spellName: 'Ground Heal',
+        spellName: 'Ground Heal (S)',
       }),
     );
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: (1600 - 480) * 1000,
-        spellName: 'Tempus Fugit',
+        spellName: 'Tempus Fugit (S)',
       }),
     );
   });
@@ -406,19 +406,19 @@ describe('Spells', function () {
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: -100000,
-        spellName: 'Ground Heal',
+        spellName: 'Ground Heal (S)',
       }),
     );
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: 200000,
-        spellName: 'Fireball',
+        spellName: 'Fireball (S)',
       }),
     );
     expect(workModel.spellTraces).toContainEqual(
       expect.objectContaining({
         timestamp: 200000,
-        spellName: 'Brasilia',
+        spellName: 'Brasilia (S)',
       }),
     );
   });

@@ -1074,7 +1074,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Скидосы - 40%',
     description: 'Скидки Стоимость товара умножается на 0,6 при покупке любого товара ',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 70,
     prerequisites: ['arch-face', 'discount-all-3', 'igra-na-birge-1'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.6 }),
   },
@@ -1084,8 +1084,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Скидосы - 50%',
     description: 'Скидки Стоимость товара умножается на 0,5 при покупке любого товара ',
     availability: 'open',
-    karmaCost: 60,
-    prerequisites: ['arch-face', 'discount-all-4', 'igra-na-birge-2'],
+    karmaCost: 80,
+    prerequisites: ['arch-face', 'discount-all-4', 'igra-na-birge-3'],
     modifier: modifierFromEffect(multiplyAllDiscounts, { amount: 0.5 }),
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
@@ -1103,7 +1103,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-1',
-    humanReadableName: 'Магия 1',
+    humanReadableName: 'Магия 1 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 30,
@@ -1113,7 +1113,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-2',
-    humanReadableName: 'Магия 2',
+    humanReadableName: 'Магия 2 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 40,
@@ -1123,7 +1123,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-3',
-    humanReadableName: 'Магия 3',
+    humanReadableName: 'Магия 3 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 50,
@@ -1133,7 +1133,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-4',
-    humanReadableName: 'Магия 4',
+    humanReadableName: 'Магия 4 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 60,
@@ -1143,7 +1143,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-5',
-    humanReadableName: 'Магия 5',
+    humanReadableName: 'Магия 5 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 70,
@@ -1153,7 +1153,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. То есть от базового получается 1*0.9=0.9)
   {
     id: 'magic-feedback-resistance-1',
-    humanReadableName: 'Сопротивление Откату 1',
+    humanReadableName: 'Сопротивление Откату 1 (P)',
     description: 'Перманентно снижает твой Откат на 10%',
     availability: 'open',
     karmaCost: 50,
@@ -1165,7 +1165,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. С учетом необходимого СопрОткату1 коэффициентСопротивленияОткату = 1*0.9*0.9=0.81)
   {
     id: 'magic-feedback-resistance-2',
-    humanReadableName: 'Сопротивление Откату 2',
+    humanReadableName: 'Сопротивление Откату 2 (P)',
     description: 'Перманентно снижает твой Откат на 10%',
     availability: 'open',
     karmaCost: 40,
@@ -1177,7 +1177,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно снижает Откат на 10% (добавляет в коэффициентСопротивленияОткату множитель 0.9. С учетом необходимых СопрОткату1-2 коэффициентСопротивленияОткату = 1*0.9*0.9*0.9=0.729)
   {
     id: 'magic-feedback-resistance-3',
-    humanReadableName: 'Сопротивление Откату 3',
+    humanReadableName: 'Сопротивление Откату 3 (P)',
     description: 'Перманентно снижает твой Откат на 10%',
     availability: 'open',
     karmaCost: 30,
@@ -1189,7 +1189,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. То есть от базового получается 1*1.2=1.2)
   {
     id: 'magic-feedback-unresistance-1',
-    humanReadableName: 'Откатошный 1',
+    humanReadableName: 'Откатошный 1 (P)',
     description: 'Перманентно увеличивает твой Откат на 20%',
     availability: 'open',
     karmaCost: -20,
@@ -1201,7 +1201,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. С учетом необходимого Откатошный1 коэффициентСопротивленияОткату = 1*1.2*1.2=1.44)
   {
     id: 'magic-feedback-unresistance-2',
-    humanReadableName: 'Откатошный 2',
+    humanReadableName: 'Откатошный 2 (P)',
     description: 'Перманентно увеличивает твой Откат на 20%',
     availability: 'open',
     karmaCost: -30,
@@ -1213,7 +1213,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает Откат на 20% (добавляет в коэффициентСопротивленияОткату множитель 1.2. С учетом необходимых Откатошный1-2 коэффициентСопротивленияОткату = 1*1.2*1.2*1.2=1.728)
   {
     id: 'magic-feedback-unresistance-3',
-    humanReadableName: 'Откатошный 3',
+    humanReadableName: 'Откатошный 3 (P)',
     description: 'Перманентно увеличивает твой Откат на 20%',
     availability: 'open',
     karmaCost: -40,
@@ -1225,7 +1225,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно ускоряет восстановление Магии на 20%. То есть от базового 1 КоэффициентВосстановленияМагии станет 1*1.2=1.2
   {
     id: 'magic-recovery-1',
-    humanReadableName: 'Воспрянь и пой 1',
+    humanReadableName: 'Воспрянь и пой 1 (P)',
     description: 'Перманентно ускоряет восстановление твоей Магии на 20%.',
     availability: 'open',
     karmaCost: 50,
@@ -1235,7 +1235,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно ускоряет восстановление Магии на 20%. Поскольку уже был взят Воспрянь и пой 1, то КоэффициентВосстановленияМагии станет 1*1.2*1.2=1.44
   {
     id: 'magic-recovery-2',
-    humanReadableName: 'Воспрянь и пой 2',
+    humanReadableName: 'Воспрянь и пой 2 (P)',
     description: 'Перманентно ускоряет восстановление твоей Магии на 20%.',
     availability: 'open',
     karmaCost: 40,
@@ -1245,7 +1245,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно ускоряет восстановление Магии на 20%. Поскольку уже были Воспрянь и пой 1-2, КоэффициентВосстановленияМагии станет 1*1.2*1.2*1.2=1.728
   {
     id: 'magic-recovery-3',
-    humanReadableName: 'Воспрянь и пой 3',
+    humanReadableName: 'Воспрянь и пой 3 (P)',
     description: 'Перманентно ускоряет восстановление твоей Магии на 20%.',
     availability: 'open',
     karmaCost: 30,
@@ -1255,7 +1255,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // В астральном следе заклинаний обладателя абилки остается только 60% ауры. То есть Коэффициент Отчетливости Астральных Следов у него равен 0.6
   {
     id: 'light-step',
-    humanReadableName: 'Light Step ',
+    humanReadableName: 'Light Step (P)',
     description: 'В астральном следе твоих заклинаний остается только 60% ауры. ',
     availability: 'open',
     karmaCost: 20,
@@ -1269,7 +1269,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Жертва теряет 1ед Эссенса и переходит в КС и в этом состоянии для повторного использования в другом таком же ритуале непригодна.
   {
     id: 'bathory-charger',
-    humanReadableName: 'Bathory Charger',
+    humanReadableName: 'Bathory Charger (P)',
     description:
       'Можно использовать людей в тяжране (сканируя их QR) для увеличения (по времени, а не на один каст) доступной Мощи и снижения Отката',
     availability: 'closed',
@@ -1280,7 +1280,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Обладатель абилки при анализе следов заклинаний (заклинания Trackpoint, Trackball, Know each other, Tweet-tweet little bird), извлекает значение ауры на 20% больше. Например, если заклинание было скастовано с такой Мощью, что должно было извлечь 10 символов, то с этой абилкой будет извлечено 12. То есть Коэффициент чтения астральных следов у этого мага равен 1.2.
   {
     id: 'dictator-control',
-    humanReadableName: 'Dictator Control',
+    humanReadableName: 'Dictator Control (P)',
     description: 'При чтении астральных следов ты извлекаешь на 20% больше ауры',
     availability: 'open',
     karmaCost: 20,
@@ -1292,17 +1292,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 3х человек.
   {
     id: 'agnus-dei',
-    humanReadableName: 'Agnus dei ',
+    humanReadableName: 'Agnus dei (P)',
     description: 'В ритуальных практиках ты считаешься за 3х человек',
     availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-mage'],
+    karmaCost: 50,
+    prerequisites: [],
     modifier: [],
   },
   // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
   {
     id: 'ritual-magic',
-    humanReadableName: 'Ритуальная магия',
+    humanReadableName: 'Ритуальная магия (P)',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи',
     availability: 'closed',
     karmaCost: 50,
@@ -1314,7 +1314,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // 2) включают в КоэффициентСниженияОтката множитель 1/(2+N)
   {
     id: 'orthodox-ritual-magic',
-    humanReadableName: 'Православная ритуальная магия',
+    humanReadableName: 'Православная ритуальная магия (P)',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
     karmaCost: 60,
@@ -1688,7 +1688,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'trollton-effect',
-    humanReadableName: 'Trollton',
+    humanReadableName: 'Trollton (P)',
     description: 'На тебя действует эффект тяжёлой брони.',
     availability: 'master',
     karmaCost: 0,
@@ -2219,7 +2219,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-1-summ',
-    humanReadableName: 'Магия 1-П!',
+    humanReadableName: 'Магия 1-П! (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 60,
@@ -2229,7 +2229,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Перманентно увеличивает характеристику Магия на 1
   {
     id: 'magic-2-summ',
-    humanReadableName: 'Магия 2-П!',
+    humanReadableName: 'Магия 2-П! (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
     karmaCost: 60,
@@ -2239,7 +2239,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума. Из тяжрана не поднимает.
   {
     id: 'healtouch',
-    humanReadableName: 'Healtouch',
+    humanReadableName: 'Healtouch (P)',
     description:
       'Все мясные/экто тела, касающиеся владельца абилки на протяжении минуты, в конце этой минуты восстанавливают текущие хиты до максимума. Из тяжрана не поднимает.',
     availability: 'master',
@@ -3391,7 +3391,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'geomancy',
-    humanReadableName: 'Geomancy',
+    humanReadableName: 'Geomancy (P)',
     description: 'Ты можешь изучить заклинания геомантии.',
     availability: 'closed',
     karmaCost: 0,
@@ -3401,7 +3401,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // spirit.maxTimeInside+30
   {
     id: 'nice-suit',
-    humanReadableName: 'Nice suit',
+    humanReadableName: 'Nice suit (P)',
     description: 'Увеличивает продолжительность призыва духа на 30 минут',
     availability: 'open',
     karmaCost: 30,
@@ -3411,7 +3411,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'dual-layer-suit',
-    humanReadableName: 'Dual layer suit',
+    humanReadableName: 'Dual layer suit (P)',
     description: 'У духов, которых ты призываешь на 1 хит больше',
     availability: 'open',
     karmaCost: 30,
@@ -3421,7 +3421,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // spirit.maxTimeInside+30
   {
     id: 'leisure-suit',
-    humanReadableName: 'Leisure suit',
+    humanReadableName: 'Leisure suit (P)',
     description: 'Увеличивает продолжительность призыва духа еще на 30 минут',
     availability: 'open',
     karmaCost: 30,
@@ -3431,7 +3431,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // spirit.recoveryTime-30
   {
     id: 'fast-dress-up',
-    humanReadableName: 'Fast dress up',
+    humanReadableName: 'Fast dress up (P)',
     description: 'Сокращает время между призывами духа на 30 минут',
     availability: 'open',
     karmaCost: 30,
@@ -4323,6 +4323,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 0 человек.
+  {
+    id: 'soul-exhaustion',
+    humanReadableName: 'Soul exhaustion (P)',
+    description: 'В ритуальных практиках ты считаешься за 0х человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     pack: undefined,
     modifier: [],
   },

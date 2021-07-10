@@ -186,11 +186,11 @@ const kWoundedBodyTarget: TargetSignature = {
 const kBodyAndContainerTargeted: TargetSignature[] = [...kPhysicalBodyTargeted, kEmptyQrTarget];
 // Not exported by design, use kAllActiveAbilities instead.
 export const kAllActiveAbilitiesList: ActiveAbility[] = [
-  //
+  // Только из тяжрана, не годятся здоров/КС/АС
   {
     id: 'ground-heal-ability',
     humanReadableName: 'Ground Heal - Эффект',
-    description: 'Поднимает одну цель из КС/тяжрана в полные хиты.',
+    description: 'Поднимает одну цель из тяжрана в полные хиты.',
     target: 'scan',
     targetsSignature: [
       {
@@ -790,7 +790,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Время действия 60 минут. Кулдаун 40 минут. Аура цели на это время случайным образом меняется на 20% (и случайный фрагмент, и на случайное значение).
   {
     id: 'silentium-est-aurum',
-    humanReadableName: 'Silentium est aurum',
+    humanReadableName: 'Silentium est aurum (A)',
     description: 'На 60 минут частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4',
     target: 'scan',
     targetsSignature: [
@@ -811,7 +811,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - время действия 10+N минут, кулдаун 25 минут. Дает на время действия абилку hammer-of-justice-effect. N=умвл*3 минут
   {
     id: 'hammer-of-justice',
-    humanReadableName: 'Hammer of Justice',
+    humanReadableName: 'Hammer of Justice (A)',
     description:
       'Активируемый статус "тяжелое" для одноручного холодного оружия.  Требуемая эссенция: больше 3. Время действия "10+3*уровень маны в локации" минут. Кулдаун 25 минут.',
     target: 'scan',
@@ -827,7 +827,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - время действия 5+N минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время. N=умвл*1 минут
   {
     id: 'arrowgant',
-    humanReadableName: 'Arrowgant',
+    humanReadableName: 'Arrowgant (A)',
     description:
       'Активируемая защита от дистанционного легкого оружия. Требуемая эссенция: больше 4. Время действия "5+уровень маны в локации" минут. Кулдаун 15 минут.',
     target: 'scan',
@@ -843,7 +843,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - время действия 5+N минут, кулдаун 30 минут. Дает абилку trollton-effect. N=умвл*2 минут
   {
     id: 'trollton',
-    humanReadableName: 'Trollton',
+    humanReadableName: 'Trollton (A)',
     description:
       'На время активности повяжи на себя красную ленту - считается, что на тебе тяжёлая броня. Требуемая эссенция: больше 2.  Время действия "5+2*уровень маны в локации" минут. Кулдаун 30 минут.',
     target: 'scan',
@@ -859,7 +859,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - время действия 5+N минут, кулдаун 20 минут. Позволяет автоматически подняться из тяжрана через 30с с полным запасом текущих хитов. N=умвл*2 минут
   {
     id: 'i-will-survive',
-    humanReadableName: 'I will survive ',
+    humanReadableName: 'I will survive (A)',
     description:
       'Возможность самому в течение "5+2*уровень маны в локации" минут один раз автоматически перейти из тяжрана в состояние Здоров. Требуемая эссенция: больше 2. Кулдаун 20 минут.',
     target: 'scan',
@@ -875,7 +875,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - мгновенное, кулдаун 15 минут. Позволяет поднять из тяжрана одного другого персонажа с полным запасом текущих хитов
   {
     id: 'stand-up-and-fight',
-    humanReadableName: 'Stand up and fight ',
+    humanReadableName: 'Stand up and fight (A)',
     description: 'Мгновенное поднятие другого персонажа из тяжрана. Требуемая эссенция: больше 5. Кулдаун 15 минут.',
     target: 'scan',
     targetsSignature: [
@@ -896,7 +896,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
   {
     id: 'allo-homorus',
-    humanReadableName: 'Allo, homorus!',
+    humanReadableName: 'Allo, homorus! (A)',
     description: 'Активация дает возможность открыть один замок. Требуемая эссенция: больше 2. Кулдаун 20 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1073,7 +1073,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1396,7 +1396,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1549,7 +1549,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // После активации абилки у мага появляется на 10 минут пассивная абилка tincasm-able.
   {
     id: 'tincasm',
-    humanReadableName: 'Think as a master',
+    humanReadableName: 'Think as a master (A)',
     description: 'Последнее китайское предупреждение уже было.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1571,7 +1571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1588,7 +1588,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1607,7 +1607,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1626,7 +1626,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1642,7 +1642,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1854,7 +1854,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // На 20 минут выдаётся AstralopithecusRage
   {
     id: 'astralopithecus',
-    humanReadableName: 'Astralopithecus',
+    humanReadableName: 'Astralopithecus (A)',
     description:
       'Ты можешь из реала видеть и изгонять сущности, находящиеся в астрале. Требуемая эссенция: больше 3. Время действия 20 минут. Кулдаун 30 минут',
     target: 'scan',
@@ -1874,7 +1874,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'suit-up',
-    humanReadableName: 'Suit Up',
+    humanReadableName: 'Suit Up (A)',
     description:
       'Призвать духа, используя Тотем и временно перейти в эктоплазменное тело духа. Своё мясное тело маг должен оставить в телохранилище. Продолжительность призыва духа - 30 минут. (время может быть увеличено)',
     target: 'scan',
@@ -1892,7 +1892,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // При активации абилки открывается окно сканирования QR-кода, необходимо сосканировать пустой QR-код. После этого будет создано свободное телохранилище, действующее в течение 600 минут. По окончании этого срока QR-код освободится, и если там находился дух - он окажется на свободе
   {
     id: 'spirit-jar',
-    humanReadableName: 'Spirit Jar',
+    humanReadableName: 'Spirit Jar (A)',
     description: 'Создать телохранилище (нужен QR-код пустышка).  Срок действия - 600минут',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2605,7 +2605,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: [],
+    prerequisites: ['master-of-the-universe'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -2884,7 +2884,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // У мага на 10 минут появляется пассивная способность fireball-able, amount=1.
   {
     id: 'faerbol',
-    humanReadableName: 'Faerbol',
+    humanReadableName: 'Faerbol (A)',
     description:
       'У мага на 10 минут появляется пассивная способность Fireball-Эффект, позволяющая кинуть 1 файербол. Файербол должен выглядеть как обшитый мягким теннисный шар с красной лентой, его попадание обрабатывается согласно правилам по боевке (тяжелое магическое оружие).',
     target: 'scan',
@@ -3885,7 +3885,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: undiena.name,
   },
-  // У духа появляется на 3 минуты пассивная абилка avalance-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
+  // У духа появляется на 3 минуты пассивная абилка avalanche-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
     id: 'aval-festival',
     humanReadableName: 'Aval-festival',
@@ -4055,22 +4055,54 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // В нотификации выводится уровень маны в текущей локации
   {
     id: 'how-much-is-the-pssh',
-    humanReadableName: 'How much is the pssh',
+    humanReadableName: 'How much is the pssh (A)',
     description: 'Увидеть уровень маны в локации',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 3,
     prerequisites: ['arch-mage', 'geomancy'],
-    pack: undefined,
     availability: 'open',
     karmaCost: 30,
     minimalEssence: 5,
     fadingPrice: 0,
     eventType: howMuchIsThePssh.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар целевого персонажа, у целевого персонажа харизма увеличивается на 1.
+  {
+    id: 'gm-increase-charisma',
+    humanReadableName: 'Увеличение магии "+1"',
+    description: 'Увеличение Харизмы +1',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 0,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Отсканировать куар целевого персонажа, у целевого персонажа Харизма уменьшается на 1.
+  {
+    id: 'gm-dencrease-charisma',
+    humanReadableName: 'Уменьшение магии "-1"',
+    description: 'Уменьшение Харизмы -1',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 0,
+    prerequisites: ['master-of-the-universe'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
   },
 ];
 setAllActiveAbilities(
