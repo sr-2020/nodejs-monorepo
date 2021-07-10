@@ -1456,114 +1456,245 @@ export const kEthicLevels: EthicLevel[] = [
 
 export const kAllEthicGroups: EthicGroup[] = [
   {
-    id: 'russian-orthodox-church',
-    name: 'Русская Православная Церковь',
-    ethicStyle: [
-      {
-        scale: 'violence',
-        conditionMin: -4,
-        conditionMax: 3,
-      },
-      {
-        scale: 'control',
-        conditionMin: -3,
-        conditionMax: 4,
-      },
-      {
-        scale: 'individualism',
-        conditionMin: -4,
-        conditionMax: 1,
-      },
-      {
-        scale: 'mind',
-        conditionMin: -4,
-        conditionMax: 4,
-      },
-    ],
+    id: 'dm-alb',
+    name: 'Албанцы',
     abilityIds: ['churched'],
-  },
-
-  {
-    id: 'orthodox-miracle-doers',
-    name: 'Православные чудотворцы',
     ethicStyle: [
-      {
-        scale: 'violence',
-        conditionMin: -4,
-        conditionMax: -3,
-      },
-      {
-        scale: 'control',
-        conditionMin: 2,
-        conditionMax: 3,
-      },
-      {
-        scale: 'individualism',
-        conditionMin: -3,
-        conditionMax: -2,
-      },
-      {
-        scale: 'mind',
-        conditionMin: 0,
-        conditionMax: 1,
-      },
+      { scale: 'violence', conditionMin: 2, conditionMax: 4 },
+      { scale: 'control', conditionMin: -4, conditionMax: -2 },
+      { scale: 'individualism', conditionMin: -2, conditionMax: 1 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
     ],
-    abilityIds: ['orthodox-exorcism'],
   },
-
   {
-    id: 'cold-head-and-hot-heart',
-    name: 'Холодная голова и горячее сердце',
+    id: 'dm-neob',
+    name: 'ФКБ и ко',
+    abilityIds: ['termorectal-analysis'],
     ethicStyle: [
-      {
-        scale: 'violence',
-        conditionMin: 3,
-        conditionMax: 4,
-      },
-      {
-        scale: 'control',
-        conditionMin: 2,
-        conditionMax: 4,
-      },
-      {
-        scale: 'individualism',
-        conditionMin: -2,
-        conditionMax: 0,
-      },
-      {
-        scale: 'mind',
-        conditionMin: 3,
-        conditionMax: 4,
-      },
+      { scale: 'violence', conditionMin: 3, conditionMax: 4 },
+      { scale: 'control', conditionMin: 2, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
     ],
-    abilityIds: ['chain-interrogation'],
   },
-
+  {
+    id: 'dm-rpc',
+    name: 'РПЦ',
+    abilityIds: ['churched'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -4, conditionMax: 4 },
+      { scale: 'control', conditionMin: 1, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -1 },
+      { scale: 'mind', conditionMin: -3, conditionMax: 3 },
+    ],
+  },
   {
     id: 'dm-usin',
     name: 'Усин',
+    abilityIds: ['ethic-wuxing'],
     ethicStyle: [
-      {
-        scale: 'violence',
-        conditionMin: -2,
-        conditionMax: 2,
-      },
-      {
-        scale: 'control',
-        conditionMin: 2,
-        conditionMax: 4,
-      },
-      {
-        scale: 'individualism',
-        conditionMin: -4,
-        conditionMax: -2,
-      },
-      {
-        scale: 'mind',
-        conditionMin: 1,
-        conditionMax: 4,
-      },
+      { scale: 'violence', conditionMin: -2, conditionMax: 2 },
+      { scale: 'control', conditionMin: 2, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: 1, conditionMax: 4 },
     ],
-    abilityIds: ['lock-the-door', 'loud-break-in'],
+  },
+  {
+    id: 'dm-grey-coats',
+    name: 'Private Military&Security Company “Grey Coats”',
+    abilityIds: ['ethic-arepo'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 1, conditionMax: 3 },
+      { scale: 'control', conditionMin: 2, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: 3, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-hack',
+    name: 'ring 0 (хакеры)',
+    abilityIds: ['ethic-deanon'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -4, conditionMax: 4 },
+      { scale: 'control', conditionMin: -4, conditionMax: -3 },
+      { scale: 'individualism', conditionMin: -2, conditionMax: 0 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-socbr',
+    name: 'Соцбригада',
+    abilityIds: ['ethic-treat'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -1, conditionMax: 2 },
+      { scale: 'control', conditionMin: -3, conditionMax: -1 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: -1, conditionMax: -3 },
+    ],
+  },
+  {
+    id: 'dm-rd',
+    name: 'Русский дух',
+    abilityIds: ['ethic-unbind'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -4, conditionMax: -2 },
+      { scale: 'control', conditionMin: -4, conditionMax: -3 },
+      { scale: 'individualism', conditionMin: 2, conditionMax: 4 },
+      { scale: 'mind', conditionMin: -4, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-shad',
+    name: 'Шадоу',
+    abilityIds: ['ethic-shadow', 'ethic-roleplay'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 2, conditionMax: 4 },
+      { scale: 'control', conditionMin: 3, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
+    ],
+  },
+  {
+    id: 'dm-kok',
+    name: 'Коккоро',
+    abilityIds: ['ethic-kokkoro'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -2, conditionMax: 2 },
+      { scale: 'control', conditionMin: -4, conditionMax: -2 },
+      { scale: 'individualism', conditionMin: 1, conditionMax: 3 },
+      { scale: 'mind', conditionMin: 3, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-cosak',
+    name: 'Казаки',
+    abilityIds: ['ethic-kazak'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 1, conditionMax: 3 },
+      { scale: 'control', conditionMin: -2, conditionMax: 0 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -3 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
+    ],
+  },
+  {
+    id: 'dm-intbr',
+    name: 'Интербригада',
+    abilityIds: ['ethic-sila', 'ethic-sila-chrome'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 2, conditionMax: 4 },
+      { scale: 'control', conditionMin: 3, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -3, conditionMax: -1 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-znmon',
+    name: 'Знаменский монастарь',
+    abilityIds: ['ethic-carrion'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -2, conditionMax: 2 },
+      { scale: 'control', conditionMin: 2, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
+      { scale: 'mind', conditionMin: 1, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-gesheft',
+    name: 'Гешефтмахеры',
+    abilityIds: ['ethic-avidity'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -4, conditionMax: -2 },
+      { scale: 'control', conditionMin: 1, conditionMax: 3 },
+      { scale: 'individualism', conditionMin: -3, conditionMax: 0 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-triad',
+    name: 'Триады',
+    abilityIds: ['ethic-triada'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -4, conditionMax: 4 },
+      { scale: 'control', conditionMin: 3, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -1 },
+      { scale: 'mind', conditionMin: -1, conditionMax: 2 },
+    ],
+  },
+  {
+    id: 'dm-bedes',
+    name: 'Бэдэс',
+    abilityIds: ['ethic-badass'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 3, conditionMax: 4 },
+      { scale: 'control', conditionMin: 2, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: 2, conditionMax: 4 },
+      { scale: 'mind', conditionMin: 3, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-hori',
+    name: 'Горизонт',
+    abilityIds: ['ethic-horizon'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 0, conditionMax: 3 },
+      { scale: 'control', conditionMin: -1, conditionMax: 1 },
+      { scale: 'individualism', conditionMin: 2, conditionMax: 4 },
+      { scale: 'mind', conditionMin: 1, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-bur',
+    name: 'Буряты',
+    abilityIds: ['ethic-buryaty-smartie', 'ethic-buryaty-dumbie'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 0, conditionMax: 3 },
+      { scale: 'control', conditionMin: 1, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -3 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
+    ],
+  },
+  {
+    id: 'dm-sgrant',
+    name: 'АКС Эс Грант. Орден Прометея',
+    abilityIds: ['ethic-aks'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -2, conditionMax: 2 },
+      { scale: 'control', conditionMin: -4, conditionMax: -2 },
+      { scale: 'individualism', conditionMin: 1, conditionMax: 4 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
+    ],
+  },
+  {
+    id: 'dm-ordma',
+    name: 'Ордо максимум',
+    abilityIds: ['ethic-ordo'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 3, conditionMax: 4 },
+      { scale: 'control', conditionMin: -4, conditionMax: -2 },
+      { scale: 'individualism', conditionMin: 1, conditionMax: 4 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
+    ],
+  },
+  {
+    id: 'dm-guli',
+    name: 'Лига защиты гулей',
+    abilityIds: ['ethic-lzg'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: -3, conditionMax: -1 },
+      { scale: 'control', conditionMin: -2, conditionMax: 0 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: -1 },
+      { scale: 'mind', conditionMin: -4, conditionMax: -2 },
+    ],
+  },
+  {
+    id: 'dm-kill',
+    name: 'Мастеркая АС',
+    abilityIds: ['absolutely-finish-him'],
+    ethicStyle: [
+      { scale: 'violence', conditionMin: 4, conditionMax: 4 },
+      { scale: 'control', conditionMin: -4, conditionMax: 4 },
+      { scale: 'individualism', conditionMin: -4, conditionMax: 4 },
+      { scale: 'mind', conditionMin: -4, conditionMax: 4 },
+    ],
   },
 ];
