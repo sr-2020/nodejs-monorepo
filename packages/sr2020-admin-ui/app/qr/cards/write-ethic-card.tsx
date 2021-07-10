@@ -10,7 +10,7 @@ export interface WriteEthicCardState {
 }
 
 export class WriteEthicCard extends React.Component<{ sendEvent: SendEvent }, WriteEthicCardState> {
-  state: WriteEthicCardState = { ethicGroups: [], selected: 'russian-orthodox-church', amount: 5 };
+  state: WriteEthicCardState = { ethicGroups: [], selected: 'dm-alb', amount: 5 };
 
   componentDidMount() {
     allEthicGroups().then((ethicGroups) => this.setState({ ethicGroups }));
