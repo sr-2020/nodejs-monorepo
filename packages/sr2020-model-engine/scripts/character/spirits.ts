@@ -84,6 +84,19 @@ export function dispirit(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
   exitSpirit(api, data);
 }
 
+export function zeroSpiritAbilities(api: EventModelApi<Sr2020Character>, data: never) {
+  const m = findInSpiritModifier(api);
+  if (!m) {
+    throw new UserVisibleError('Персонаж не в духе.');
+  }
+  for (const abilityId of m.abilityIds) {
+    if (!kCommonSpiritAbilityIds.includes(abilityId)) {
+      removeFeatureFromModel(api.model, abilityId);
+    }
+  }
+  m.abilityIds = kCommonSpiritAbilityIds;
+}
+
 export function emergencySpiritExit(api: EventModelApi<Sr2020Character>, data: unknown) {
   const bodyStorageId = findInSpiritModifier(api).bodyStorageId;
   api.sendOutboundEvent(QrCode, bodyStorageId, removeBodyFromStorage, {});
