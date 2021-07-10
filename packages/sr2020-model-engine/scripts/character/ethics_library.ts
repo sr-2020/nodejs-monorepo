@@ -250,7 +250,7 @@ export const kAllCrysises: EthicTrigger[] = [
   },
   {
     id: '3104de57-5d9e-11ea-b518-e5c6714f0b78',
-    description: 'Сделайте ставку на любую из команд Urban Brawl',
+    description: 'Сделайте ставку, сыграйте в азартную игру',
     kind: 'crysis',
     crysises: [],
     shifts: [
