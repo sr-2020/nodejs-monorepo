@@ -34,7 +34,7 @@ describe('Hackers-related events', function () {
 
     const castEvent = {
       eventType: 'castSpell',
-      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 4, location: { id: 0, manaLevel: 0 } },
+      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 4, location: { id: 0, manaLevel: 10 } },
     };
     await fixture.sendCharacterEvent(castEvent, '2');
 

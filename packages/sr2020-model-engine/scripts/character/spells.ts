@@ -26,7 +26,7 @@ import {
 } from './basic_effects';
 import { duration } from 'moment';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
-import { MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { MagicFocusQrData, MerchandiseQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { ModifierWithAmount, TemporaryModifierWithAmount } from '@alice/sr2020-model-engine/scripts/character/typedefs';
 import { addTemporaryActiveAbility, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
@@ -64,6 +64,17 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
 
   if (data.power <= 0) {
     throw new UserVisibleError('Мощь должна быть положительной!');
+  }
+
+  const manaLevelToPowerBonus = [-2, -2, -1, 0, 1, 1, 2, 3, 4, 5, 6];
+  const maxAllowedPower =
+    api.workModel.magic +
+    api.workModel.magicStats.maxPowerBonus +
+    (data.location.manaLevel > manaLevelToPowerBonus.length ? 6 : manaLevelToPowerBonus[data.location.manaLevel]) +
+    (data.focusId ? typedQrData<MagicFocusQrData>(api.aquired(QrCode, data.focusId)).amount : 0);
+
+  if (data.power > maxAllowedPower) {
+    throw new UserVisibleError('Вы не можете кастовать с такой мощью!');
   }
 
   const spell = api.workModel.spells.find((s) => s.id == data.id);

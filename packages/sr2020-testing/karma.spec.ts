@@ -61,7 +61,7 @@ describe('Karma events', function () {
   });
 
   it('Casting spells gives karma', async () => {
-    await fixture.saveCharacter();
+    await fixture.saveCharacter({ magic: 3 });
     await fixture.saveLocation({ modelId: '7' });
     await fixture.addCharacterFeature('ground-heal');
     const { baseModel } = await fixture.sendCharacterEvent({

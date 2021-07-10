@@ -169,7 +169,7 @@ describe('Spells', function () {
   });
 
   it('Trackpoint', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 100 });
     await fixture.addCharacterFeature('fireball', 1);
     await fixture.addCharacterFeature('ground-heal', 1);
 
@@ -177,14 +177,14 @@ describe('Spells', function () {
     await fixture.addCharacterFeature('ground-heal', 2);
 
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 2 } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 2 } },
       1,
     );
     await fixture.advanceTime(duration(2, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 4 } }, 1);
     await fixture.advanceTime(duration(15, 'minutes'));
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 6 } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 6 } },
       2,
     );
 
@@ -192,7 +192,7 @@ describe('Spells', function () {
     await fixture.addCharacterFeature('trackpoint', 3);
 
     const { tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 5 } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 10 }, power: 5 } },
       3,
     );
     expect(tableResponse.length).toBe(2);
@@ -201,7 +201,7 @@ describe('Spells', function () {
         spellName: 'Fireball (S)',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 8,
+        magicFeedback: 10,
       }),
     );
     expect(tableResponse).toContainEqual(
@@ -209,7 +209,7 @@ describe('Spells', function () {
         spellName: 'Ground Heal (S)',
         timestamp: 1020000,
         power: 6,
-        magicFeedback: 9,
+        magicFeedback: 11,
       }),
     );
 
@@ -223,7 +223,7 @@ describe('Spells', function () {
   });
 
   it('Trackpoint against Light Step', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
     await fixture.addCharacterFeature('light-step', 1);
     await fixture.addCharacterFeature('fireball', 1);
 
@@ -231,11 +231,11 @@ describe('Spells', function () {
     await fixture.addCharacterFeature('trackpoint', 2);
 
     await fixture.advanceTime(duration(2, 'minutes'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 4 } }, 1);
 
     // power 8 + auraReadingMultiplier 2.0 gives us 100% read
     const { tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
+      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 10 }, power: 8 } },
       2,
     );
     expect(tableResponse.length).toBe(1);
@@ -244,7 +244,7 @@ describe('Spells', function () {
         spellName: 'Fireball (S)',
         timestamp: 120000,
         power: 4,
-        magicFeedback: 8,
+        magicFeedback: 10,
       }),
     );
 
@@ -258,7 +258,7 @@ describe('Spells', function () {
   });
 
   it('Ritual with 2 participants increase power by 1', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
     await fixture.addCharacterFeature('ritual-magic', 1);
     await fixture.addCharacterFeature('ground-heal', 1);
 
@@ -266,7 +266,7 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '3' });
 
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
     expect(workModel.activeAbilities.length).toBe(1);
@@ -274,7 +274,7 @@ describe('Spells', function () {
   });
 
   it('Ritual with agnus dei', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 5 });
     await fixture.addCharacterFeature('ritual-magic', 1);
     await fixture.addCharacterFeature('ground-heal', 1);
 
@@ -283,7 +283,7 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '3' });
 
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2', '3'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4, ritualMembersIds: ['2', '3'] } },
       1,
     );
     expect(workModel.activeAbilities.length).toBe(1);
@@ -298,7 +298,7 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
 
     const { workModel } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
     expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'magic-in-the-blood' }));
@@ -319,7 +319,7 @@ describe('Spells', function () {
     for (const healthState of states) {
       await fixture.saveCharacter({ modelId: '2', healthState });
       const message = await fixture.sendCharacterEventExpectingError(
-        { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+        { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4, ritualVictimIds: ['2'] } },
         1,
       );
       expect(message).toContain('должны быть в тяжране');
@@ -333,7 +333,7 @@ describe('Spells', function () {
 
     await fixture.saveCharacter({ modelId: '2', healthState: 'wounded', essenceDetails: { max: 600, used: 501 } });
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4, ritualVictimIds: ['2'] } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4, ritualVictimIds: ['2'] } },
       1,
     );
 
@@ -342,23 +342,23 @@ describe('Spells', function () {
   });
 
   it('Tempus Fugit', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.addCharacterFeature('ground-heal', 1);
     await fixture.addCharacterFeature('fireball', 1);
     await fixture.addCharacterFeature('tempus-fugit', 1);
 
     await fixture.advanceTime(duration(600, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 4 } }, 1);
 
     await fixture.advanceTime(duration(700, 'seconds'));
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4 } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4 } },
       1,
     );
 
     await fixture.advanceTime(duration(300, 'seconds'));
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'tempus-fugit', location: { id: 0, manaLevel: 0 }, power: 2 } },
+      { eventType: 'castSpell', data: { id: 'tempus-fugit', location: { id: 0, manaLevel: 10 }, power: 2 } },
       1,
     );
 
@@ -384,21 +384,21 @@ describe('Spells', function () {
   });
 
   it('Brasilia', async () => {
-    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.saveCharacter({ modelId: '1', magic: 100 });
     await fixture.addCharacterFeature('ground-heal', 1);
     await fixture.addCharacterFeature('fireball', 1);
     await fixture.addCharacterFeature('brasilia', 1);
 
     await fixture.advanceTime(duration(200, 'seconds'));
     await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 0 }, power: 4 } },
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 4 } },
       1,
     );
 
     await fixture.advanceTime(duration(300, 'seconds'));
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 2 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 2 } }, 1);
 
-    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', location: { id: 0, manaLevel: 0 }, power: 1 } }, 1);
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'brasilia', location: { id: 0, manaLevel: 10 }, power: 1 } }, 1);
 
     await fixture.advanceTime(duration(60, 'seconds'));
 
@@ -494,7 +494,6 @@ describe('Spells', function () {
       expect(workModel.charisma).toBe(5);
     }
   });
-
 
   it('Use reagents', async () => {
     await fixture.saveCharacter({ metarace: 'meta-elf', magic: 10 });
@@ -657,7 +656,6 @@ describe('Spells', function () {
       });
       expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'cacophony-able' }));
     }
-
   });
 
   it('Let it go', async () => {
@@ -670,7 +668,6 @@ describe('Spells', function () {
       });
       expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'let-it-go-effect' }));
     }
-
   });
 
   it('Scum stoner', async () => {
@@ -678,48 +675,54 @@ describe('Spells', function () {
     await fixture.addCharacterFeature('scum-stoner', 1);
     await fixture.saveCharacter({ modelId: '2' });
 
-    await fixture.sendCharacterEvent({
+    await fixture.sendCharacterEvent(
+      {
         eventType: 'castSpell',
         data: { id: 'scum-stoner', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 1 },
-    }, 1);
+      },
+      1,
+    );
 
-    expect((await fixture.getCharacter('2')).workModel.activeAbilities).
-      toContainEqual(expect.objectContaining({
-         id: 'skin-stone'
-      }));
-
+    expect((await fixture.getCharacter('2')).workModel.activeAbilities).toContainEqual(
+      expect.objectContaining({
+        id: 'skin-stone',
+      }),
+    );
   });
 
   it('Tax free', async () => {
-    await fixture.saveCharacter({modelId: '1',  magic: 10 });
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.addCharacterFeature('tax-free', 1);
     await fixture.saveCharacter({ modelId: '2', discounts: { everything: 1 } });
     {
-      const { workModel } = await fixture.sendCharacterEvent({
-        eventType: 'castSpell',
-        data: { id: 'tax-free', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
-      }, 1);
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'tax-free', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
+        },
+        1,
+      );
 
       expect((await fixture.getCharacter(2)).workModel.discounts.everything).toBe(0.8);
     }
-
   });
 
   it('Shtopping', async () => {
-    await fixture.saveCharacter({modelId: '1',  magic: 10 });
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.addCharacterFeature('shtopping', 1);
     await fixture.saveCharacter({ modelId: '2', discounts: { everything: 1 } });
     {
-      const { workModel } = await fixture.sendCharacterEvent({
-        eventType: 'castSpell',
-        data: { id: 'shtopping', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
-      }, 1);
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'shtopping', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 },
+        },
+        1,
+      );
 
       expect((await fixture.getCharacter(2)).workModel.discounts.everything).toBe(1.2);
     }
-
   });
-
 
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {
