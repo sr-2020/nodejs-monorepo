@@ -475,3 +475,15 @@ export function sleepIsThere(api: EventModelApi<Sr2020Character>, data: ActiveAb
     api.sendNotification('Это телохранилище пусто.', '');
   }
 }
+
+export function increaseCharismaEvent(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
+  api.model.charisma += data.amount;
+}
+
+export function gmIncreaseCharisma(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseCharismaEvent, { amount: 1 });
+}
+
+export function gmDecreaseCharisma(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseCharismaEvent, { amount: -1 });
+}

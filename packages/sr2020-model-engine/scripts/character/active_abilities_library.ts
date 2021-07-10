@@ -15,6 +15,8 @@ import {
   externalAbility,
   faerbolAbility,
   finishHimAbility,
+  gmDecreaseCharisma,
+  gmIncreaseCharisma,
   hammerOfJustice,
   howMuchIsThePssh,
   howMuchItCosts,
