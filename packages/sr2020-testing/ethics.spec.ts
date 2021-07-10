@@ -314,4 +314,57 @@ describe('Ethic events', function () {
     expect(emptyCharge.baseModel.type).toBe('box');
     expect(emptyCharge.baseModel.usesLeft).toBe(0);
   });
+
+  it('Add to many groups', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // Discourse monger
+    await fixture.addCharacterFeature('dgroup-add', 1);
+
+    await fixture.saveCharacter({
+      modelId: '2',
+      ethic: {
+        state: [
+          {
+            scale: 'violence',
+            value: 0,
+            description: '',
+          },
+          {
+            scale: 'control',
+            value: 2,
+            description: '',
+          },
+          {
+            scale: 'individualism',
+            value: -3,
+            description: '',
+          },
+          {
+            scale: 'mind',
+            value: 3,
+            description: '',
+          },
+        ],
+      },
+    }); // Acolyte
+
+    // Prepare locus
+    {
+      await fixture.saveQrCode({ modelId: '3' }); // Locus
+      await fixture.sendQrCodeEvent({ eventType: 'createLocusQr', data: { groupId: 'dm-rpc', numberOfUses: 1 } }, 3);
+      await fixture.saveQrCode({ modelId: '4' }); // Locus
+      await fixture.sendQrCodeEvent({ eventType: 'createLocusQr', data: { groupId: 'dm-usin', numberOfUses: 1 } }, 4);
+    }
+
+    // Add to groups
+    {
+      await fixture.useAbility({ id: 'dgroup-add', locusId: '3', targetCharacterId: '2' }, 1);
+      await fixture.useAbility({ id: 'dgroup-add', locusId: '4', targetCharacterId: '2' }, 1);
+      const acolyte = await fixture.getCharacter(2);
+      expect(acolyte.baseModel.ethic.groups).toEqual(['dm-rpc', 'dm-usin']);
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'churched' }));
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'ethic-wuxing' }));
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'dm-rpc' }));
+      expect(acolyte.baseModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'dm-usin' }));
+    }
+  });
 });

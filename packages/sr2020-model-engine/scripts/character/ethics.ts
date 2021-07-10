@@ -10,7 +10,7 @@ import {
   addFeatureToModel,
   getAllFeatures,
   removeFeatureFromModel,
-  satisfiesPrerequisites,
+  satisfiesPrerequisitesOrPresent,
 } from '@alice/sr2020-model-engine/scripts/character/features';
 import { LocusQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { kEthicCooldown } from '@alice/sr2020-model-engine/scripts/character/consts';
@@ -91,7 +91,7 @@ function updateEthicAbilities(model: Sr2020Character, ethicValues: Map<EthicScal
   }
 
   newGroupEthicAbilities = newGroupEthicAbilities.filter((abilityId) =>
-    satisfiesPrerequisites(model, getAllFeatures().find((f) => f.id == abilityId)!),
+    satisfiesPrerequisitesOrPresent(model, getAllFeatures().find((f) => f.id == abilityId)!),
   );
 
   const newEthicAbilities = new Set([...newPersonalEthicAbilities, ...newGroupEthicAbilities]);

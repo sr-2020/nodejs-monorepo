@@ -240,6 +240,12 @@ export function satisfiesPrerequisites(model: Sr2020Character, f: Feature): bool
   });
 }
 
+export function satisfiesPrerequisitesOrPresent(model: Sr2020Character, f: Feature): boolean {
+  const modelFeatureIds = getFeatureIdsInModel(model);
+  if (modelFeatureIds.includes(f.id)) return true;
+  return satisfiesPrerequisites(model, f);
+}
+
 export function getAllFeatures(): Feature[] {
   const extractFeatureFields = (f: Feature): Feature => ({
     id: f.id,
