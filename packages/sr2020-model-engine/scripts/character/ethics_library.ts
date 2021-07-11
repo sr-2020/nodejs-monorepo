@@ -1529,7 +1529,7 @@ export const kAllEthicGroups: EthicGroup[] = [
       { scale: 'violence', conditionMin: -1, conditionMax: 2 },
       { scale: 'control', conditionMin: -3, conditionMax: -1 },
       { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
-      { scale: 'mind', conditionMin: -1, conditionMax: -3 },
+      { scale: 'mind', conditionMin: -3, conditionMax: -1 },
     ],
   },
   {

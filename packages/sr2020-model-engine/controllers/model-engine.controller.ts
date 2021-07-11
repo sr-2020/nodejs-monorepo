@@ -158,6 +158,8 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         },
       healthState: 'healthy',
       cooldownCoefficient: 1.0,
+      victimCoefficient: 1,
+      participantCoefficient: 1,
       implantsBodySlots: 2,
       implantsRemovalResistance: 0,
       chemo: {

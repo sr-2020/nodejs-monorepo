@@ -847,6 +847,26 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker', 'miner-2'],
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
+  // IT:
+  // ВЫДАЕТСЯ АВТОМАТИЧЕСКИ Кривдой
+  //  +10 конверсии ИНТ в
+  // Декер_конверсия_Attack
+  // Декер_конверсия_Firewall
+  // Декер_конверсия_Sleaze
+  // Декер_конверсия_Dataprocessing"
+  {
+    id: 'luck-spent',
+    humanReadableName: 'Легендарный Майнер',
+    description: 'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker'],
+    modifier: [
+      modifierFromEffect(increaseConversionAttack, { amount: 10 }),
+      modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
+      modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
+      modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
+  },
   // IT: команда в кривда-матрице
   {
     id: 'arpscan',
@@ -1340,6 +1360,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(multiplyVictimCoefficient, {
       amount: 5,
     }),
+
   },
 
   // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
