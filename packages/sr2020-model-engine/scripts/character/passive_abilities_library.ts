@@ -262,7 +262,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твой эссенс уменьшается  на 0,2 каждый час',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-ghoul'],
+    prerequisites: [],
     pack: { id: 'gen-meta-ghoul', level: 1 },
     modifier: [],
   },
@@ -274,7 +274,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Твой эссенс уменьшается на 1 каждый час',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['meta-vampire'],
+    prerequisites: [],
     pack: { id: 'gen-meta-vampire', level: 1 },
     modifier: [],
   },
@@ -346,9 +346,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'magic-blockade',
     humanReadableName: 'Отторжение Магии',
     description: 'Ты не можешь изучать навыки Мага',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
@@ -445,7 +445,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'autolock',
     description: 'новая команда: autolock [target]\nАвтоматически атакует указанного декера при встрече(то есть без ручного ввода команды)',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
     modifier: [],
   },
@@ -453,9 +453,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'reactivate',
     humanReadableName: 'reactivate',
-    description: 'новая команда: reactivate <target>\nвключает назад вырубленный Лед',
+    description: 'новая команда: reactivate <target>\nвключает назад вырубленный лед',
     availability: 'open',
-    karmaCost: 10,
+    karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     modifier: [],
   },
@@ -463,7 +463,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'huge-lucker',
     humanReadableName: 'Конский лак ',
-    description: 'Говорят, ты родился в рубашке. Возможно, ожнажды эта "рубашка" спасет тебе жизнь',
+    description: 'Говорят, ты родился в рубашке. Возможно, однажды эта "рубашка" спасет тебе жизнь',
     availability: 'closed',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
@@ -475,8 +475,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Админ',
     description: 'Еще 3 хоста, на защиту которых ты можешь подписаться',
     availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
+    karmaCost: 5,
+    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 3 }),
   },
   // Значительно экономит память деки, позволяя размесить в ней больше софта
@@ -485,8 +485,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Компрессор',
     description: 'Ты разобрался со всеми премудростями квантовой компрессии. Что позволяет сократить размер софта в памяти деки на 20%\n',
     availability: 'closed',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     modifier: [],
   },
   // бекдоры живут на 40 минут дольше
@@ -527,8 +527,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'scan',
     humanReadableName: 'scan',
     description: 'новая команда: scan\nСканирует ноду и выводит список обнаруженных в ней агентов\nУспешность определяется по Sleaze',
-    availability: 'open',
-    karmaCost: 10,
+    availability: 'master',
+    karmaCost: 0,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
     modifier: [],
   },
@@ -541,7 +541,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'deploy',
     humanReadableName: 'deploy',
-    description: 'новая команда: deploy\nУстанавливает агента (софт) на Ноду Хоста\n\nСкрытность установки определяется по Sleaze',
+    description: 'новая команда: deploy\nУстанавливает агента (софт) на Ноду Хоста',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'sly-1'],
@@ -553,7 +553,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'uninstall',
     humanReadableName: 'undeploy',
-    description: 'новая команда: undeploy\nУдаляет агента с Ноды\nУспешность определяется по Sleaze',
+    description: 'новая команда: undeploy <target>\nУдаляет агента (софт) с Ноды',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
@@ -566,10 +566,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'feelmatrix',
     humanReadableName: 'feelmatrix',
     description:
-      'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\nВыдает список хостов, на которых есть другие декеры. Чем выше твой Sleaze, тем больше инфы ты получишь',
+      'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\nВыдает список хостов, на которых есть другие декеры.\n\nВысокие значения Sleaze обмануть эту команду',
     availability: 'closed',
-    karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker'],
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker', 'sly-3', 'arpscan'],
     modifier: [],
   },
   //
@@ -577,10 +577,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'bypass',
     humanReadableName: 'bypass',
     description:
-      'новая команда: bypass\nты переходишь в ghost режим, который сохранится до следующего входа в хотсим\nВ нем, в зависимости от значения Sleaze, ты сможешь обойти некоторое число ICE, запустить несколько команд deploy и useapi\nПри этом ты не сможешь атаковать и применять практически все остальные команды\nОСТОРОЖНО! Помни про путь назад. Ведь считается каждый проход ICE, и ты можешь крепко застрять!',
+      'новая команда: bypass\nты переходишь в ghost режим, который сохранится до следующего входа в хотсим\nВ нем, в зависимости от значения Sleaze, ты сможешь обойти некоторое число ICE, запустить несколько команд deploy и useapi\nПри этом ты не сможешь атаковать и применять практически все остальные команды\nОСТОРОЖНО! Помни про путь назад. Ведь считается каждый проход ноды, и ты можешь крепко застрять!',
     availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'sly-2'],
+    karmaCost: 30,
+    prerequisites: ['arch-hackerman-decker', 'sly-3'],
     modifier: [],
   },
   {
@@ -608,7 +608,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vulnerabilities-sniffer',
     humanReadableName: 'Нюх на уязвимости',
     description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'stubbornness-3'],
     modifier: [],
@@ -617,11 +617,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // [+5] Декер_макс_время_на_хосте
   {
     id: 'stubbornness-1',
-    humanReadableName: 'Выдающаяся упертость',
+    humanReadableName: 'Упертость',
     description: 'Продлевает максимальное время нахождения на хосте на 5 минут',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker'],
+    prerequisites: ['arch-hackerman-decker', 'breacher-1'],
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 5 }),
   },
   // IT:
@@ -650,10 +650,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'persistent-deploy',
     humanReadableName: 'Durable deployments',
-    description: 'Разблокирует ключ команды deploy: --durable\n\nПозволяет агенту переживать обновлие хоста',
+    description: 'Разблокирует ключ команды deploy: --durable\n\nПозволяет агенту переживать обновление хоста',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'sly-1', 'deploy'],
+    prerequisites: ['arch-hackerman-decker', 'sly-3', 'deploy'],
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -661,7 +661,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'shadow-deploy',
     humanReadableName: 'Shadow deployments',
     description: 'Разблокирует ключ команды deploy: --shadow\n\nИспользование добавляет +20 к скрытности агента',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2', 'deploy'],
     modifier: [],
@@ -674,7 +674,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает время входа на хост на 2 минуты',
     availability: 'open',
     karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
+    prerequisites: ['arch-hackerman-decker', 'sly-1'],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT:
@@ -685,7 +685,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает время входа на хост на еще минуту',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1', 'fencer-2'],
+    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1'],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -1 }),
   },
   // IT:
@@ -696,7 +696,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '.. и еще снижает время входа на хост еще на 2 минуты',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2', 'fencer-3'],
+    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2'],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT: команда в кривда-матрице
@@ -705,7 +705,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'flee',
     description: 'новая команда:flee\nПозволяет попытаться сбежать из софт-лока (мягкого линклока). \nШанс успеха зависит от Sleaze',
     availability: 'open',
-    karmaCost: 25,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
     modifier: [],
   },
@@ -845,17 +845,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker', 'miner-2'],
     modifier: modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
   },
-  // IT:
   // ВЫДАЕТСЯ АВТОМАТИЧЕСКИ Кривдой
-  //  +10 конверсии ИНТ в
+  // ' +10 конверсии ИНТ в
   // Декер_конверсия_Attack
   // Декер_конверсия_Firewall
   // Декер_конверсия_Sleaze
-  // Декер_конверсия_Dataprocessing"
+  // Декер_конверсия_Dataprocessing
   {
     id: 'luck-spent',
-    humanReadableName: 'Легендарный Майнер',
-    description: 'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
+    humanReadableName: 'Шрам в форме молнии',
+    description:
+      'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
@@ -863,17 +863,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseConversionAttack, { amount: 10 }),
       modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
       modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
-      modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
+      modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
+    ],
   },
   // IT: команда в кривда-матрице
   {
     id: 'arpscan',
     humanReadableName: 'arpscan',
-    description:
-      'новая команда:arpscan\nВыводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze или специальные спосбности могут обмануть эту команду',
+    description: 'новая команда:arpscan\nВыводит список всех Персон, находящихся на хосте\n\nВысокие значения Sleaze обмануть эту команду',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
+    prerequisites: ['arch-hackerman-decker', 'sly-2'],
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -881,7 +881,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'steal',
     humanReadableName: 'steal',
     description:
-      'новая команда: steal\nНаходясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\nСумма зависит от значенияй ваших характеристик Sleaze и Dataprocessing',
+      'новая команда: steal\nНаходясь на ноде PAN хоста с определенным API, позволяет осуществить перевод автоматически определяемой суммы денег\n\nСумма зависит от вашего проффесионализма и DataProccessing',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'miner-1'],
@@ -892,7 +892,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'steal-pro',
     humanReadableName: 'Фрод профи',
     description:
-      'Теперь ты можешь работать с кошельками юр лиц\n\nкроме того, разблокирован ключ: steal --comment\nОн позволяет ввести текст "основания перевода", вместо билиберды по умолчанию\nувеличивает сумму кражи',
+      'Теперь ты можешь работать с кошельками юр лиц\n\nкроме того, разблокирован ключ: steal --comment\nОн позволяет ввести текст "основания перевода", вместо билиберды по умолчанию\nи дополнительно увеличивает сумму кражи',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-hackerman-decker', 'steal'],
@@ -916,8 +916,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Русское название для слэнга "quaterGOD", шутливое название для серьезных людей: профессиональных контракторов по частной защиты Хостов.\nЕще 5 хостов, на защиту которых ты можешь подписаться',
     availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
+    karmaCost: 15,
+    prerequisites: ['arch-hackerman-decker', 'admin'],
     modifier: modifierFromEffect(increaseAdminHostNumber, { amount: 5 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -1292,7 +1292,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Можно использовать людей в тяжране (сканируя их QR) для увеличения (по времени, а не на один каст) доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1308,23 +1308,25 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.2,
     }),
   },
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 3х человек.
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 3х человек.
   {
     id: 'agnus-dei',
     humanReadableName: 'Agnus dei (P)',
-    description: 'В ритуальных практиках ты считаешься за 3х человек',
+    description: 'В ритуальных практиках соучастия ты считаешься за 3х человек',
     availability: 'open',
     karmaCost: 50,
     prerequisites: [],
     modifier: [],
   },
-  // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
+  // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
+  // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
+  // 2) включают в КоэффициентСниженияОтката множитель 1/(2+N)
   {
     id: 'ritual-magic',
     humanReadableName: 'Ритуальная магия (P)',
-    description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи',
+    description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 50,
+    karmaCost: 60,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1769,7 +1771,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'stone-skin-result',
     humanReadableName: 'Stone skin',
-    description: 'Надетая согласно остальным правилам лёгкая броня считается тяжёлой',
+    description: 'Надетая согласно остальным правилам лёгкая броня 5 минут считается тяжелым (необходима её маркировка красной лентой)',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -1861,6 +1863,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   },
   // extra-hp
   // spirit-feed
+  // strong-blood
   {
     id: 'meta-ork',
     humanReadableName: 'Орк',
@@ -1880,6 +1883,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // this-my-glory-hole
   // strong-arm
   // feed-tamagochi
+  // strongest-blood
   {
     id: 'meta-troll',
     humanReadableName: 'Тролль',
@@ -1986,7 +1990,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Ты теперь чувствуешь Матрицу. Обычные люди на такое не способны.',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['!arch-mage', '!tech-blockade', '!meta-ghoul', '!meta-vampire', '!magic-blockade'],
+    prerequisites: ['!arch-mage', '!meta-ghoul', '!meta-vampire', '!meta-digital'],
     pack: { id: 'gen-arch-hackerman-technomancer', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2008,7 +2012,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный техномант.',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman-technomancer', '!magic-blockade'],
+    prerequisites: ['arch-hackerman-technomancer'],
     pack: { id: 'gen-arch-technomancer-boost', level: 1 },
     modifier: [modifierFromEffect(increaseResonance, { amount: 2 })],
   },
@@ -2019,7 +2023,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Маг, повелитель заклинаний!',
     availability: 'closed',
     karmaCost: 100,
-    prerequisites: ['!arch-hackerman-technomancer', '!magic-blockade'],
+    prerequisites: ['!arch-hackerman-technomancer', '!meta-digital'],
     pack: { id: 'gen-arch-mage', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 2 })],
   },
@@ -2031,7 +2035,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный маг.',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-mage', '!magic-blockade'],
+    prerequisites: ['arch-mage'],
     pack: { id: 'gen-arch-mage-boost', level: 1 },
     modifier: [modifierFromEffect(increaseMagic, { amount: 2 }), modifierFromEffect(increaseBody, { amount: 2 })],
   },
@@ -2042,7 +2046,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Фейс, эксперт по переговорам.',
     availability: 'open',
     karmaCost: 100,
-    prerequisites: ['!magic-blockade'],
+    prerequisites: ['!meta-digital'],
     pack: { id: 'gen-arch-face', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
@@ -2053,7 +2057,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Очень опытный фейс',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-face', '!magic-blockade'],
+    prerequisites: ['arch-face'],
     pack: { id: 'gen-arch-face-boost', level: 1 },
     modifier: [modifierFromEffect(increaseCharisma, { amount: 2 })],
   },
@@ -2272,27 +2276,30 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'deanon',
     description: 'новая команда: deanon\nОтображает адрес PAN хоста и SIN поверженного (выброшенного в ходе боя из Матрицы) декера',
     availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    karmaCost: 10,
+    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     modifier: [],
   },
-  // поражает противника по живым хитам, а не по матричным
+  // IT: команда в Кривда-матрице
+  //
+  // КС другого декера
   {
     id: 'hack-deck-harm',
     humanReadableName: 'harm',
     description: 'новая команда: harm\nПозволяет добить(КС) поверженного хакера биофидбеком.  грязная штука.',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
     modifier: [],
   },
+  // IT: команда в Кривда-матрице
   // убивает пораженного чамера. Абсолютная смерть
   {
     id: 'hack-deck-kill',
     humanReadableName: 'kill',
     description: 'новая команда: kill\nУБИВАЕТ(АС) поверженного хакера. Да, наглухо \nДля применения понадобится специальный эксплойт',
     availability: 'closed',
-    karmaCost: 50,
+    karmaCost: 0,
     prerequisites: ['arch-hackerman-decker', 'fencer-3', 'hack-deck-harm'],
     modifier: [],
   },
@@ -2300,17 +2307,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'useapi',
     humanReadableName: 'useapi',
-    description: 'новая команда: useapi\nБазовая команда для работы со специальным нодам',
+    description: 'новая команда: useapi\nБазовая команда для работы API',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [],
   },
   // позволяет читать данные из геоноды
   {
     id: 'arch-hack-decker-geo-1',
-    humanReadableName: 'геоспец 1',
-    description: 'возможность использовать useapi read на геоноде',
+    humanReadableName: 'Технические системы 1',
+    description: 'возможность использовать useapi на нодах технических систем хоста и API геолокации',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
@@ -2319,28 +2327,28 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // позволяет лучше читать данные из геоноды.
   {
     id: 'arch-hack-decker-geo-2',
-    humanReadableName: 'геоспец 2',
-    description: 'возможность использовать расширенную useapi read на геоноде',
+    humanReadableName: 'Технические системы 2',
+    description: 'дополнительные возможности useapi на нодах технических систем хоста и API геолокации',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 25,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-geo-1'],
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из геоноды.
   {
     id: 'arch-hack-decker-geo-3',
-    humanReadableName: 'геоспец 3',
-    description: 'возможность использовать расширенную и улучшкеную useapi read на геоноде',
+    humanReadableName: 'Технические системы 3',
+    description: 'расширенные возможности useapi на нодах нодах технических систем хоста и API геолокации',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-geo-2'],
     modifier: [],
   },
   // позволяет читать данные из экономноды
   {
     id: 'arch-hack-decker-econ-1',
-    humanReadableName: 'эконом 1',
-    description: 'возможность использовать useapi read на экономноде',
+    humanReadableName: 'Финансы 1',
+    description: 'возможность использовать useapi в финансовых API',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
@@ -2349,20 +2357,20 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // позволяет лучше читать данные из экономноды.
   {
     id: 'arch-hack-decker-econ-2',
-    humanReadableName: 'эконом 2',
-    description: 'возможность использовать расширенную useapi read на экономноде.',
+    humanReadableName: 'Финансы 2',
+    description: 'дополнительные возможности useapi в финансовых API',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 25,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-econ-1'],
     modifier: [],
   },
   // позволяет больше и еще лучше читать данные из экономноды.
   {
     id: 'arch-hack-decker-econ-3',
-    humanReadableName: 'эконом 3',
-    description: 'возможность использовать расширенную и улучшкеную useapi read на экономноде',
+    humanReadableName: 'Финансы 3',
+    description: 'расширенные возможности useapi в финансовых API',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-econ-2'],
     modifier: [],
   },
@@ -2370,7 +2378,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-hack-decker-med-1',
     humanReadableName: 'Медицина и Хром 1',
-    description: 'возможность использовать useapi read на биомониторе и rcc',
+    description: 'возможность использовать useapi API биомонитора и rcc',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker'],
@@ -2380,9 +2388,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-hack-decker-med-2',
     humanReadableName: 'Медицина и Хром 2',
-    description: 'возможность использовать расширенную useapi read на биомониторе и rcc',
+    description: 'дополнительные возможности useapi на API биомонитора и rcc',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 25,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-med-1'],
     modifier: [],
   },
@@ -2390,9 +2398,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'arch-hack-decker-med-3',
     humanReadableName: 'Медицина и Хром 3',
-    description: 'возможность использовать расширенную и улучшкеную useapi read на биомониторе и rcc',
+    description: 'расширенные возможности useapi на API биомонитора и rcc',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-decker', 'arch-hack-decker-med-2'],
     modifier: [],
   },
@@ -2640,10 +2648,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'god-mode',
     humanReadableName: 'god mode',
-    description: 'GOD mode. Для откладки.\nДает персонажу декеру ВСЕ команды и доплнительные способности',
+    description: 'GOD mode. Для откладки.\nДает персонажу декеру ВСЕ команды и дополнительные способности',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: ['master-of-the-universe', 'arch-hackerman-decker'],
     modifier: [],
   },
   // делает доступной кнопку установки импланта на экране автодока
@@ -2861,10 +2869,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'deck-cve-delay-publish',
     humanReadableName: 'Криптоанархист',
-    description: 'отрочка публикации CVE увеличена на час',
+    description: 'отсрочка публикации CVE увеличена на час',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker'],
+    prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     modifier: [],
   },
   // количество нужных дампов для получения CVE на один меньше
@@ -2873,8 +2881,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'вывих мозга "МехМат"',
     description: 'количество нужных дампов для получения CVE на один меньше',
     availability: 'closed',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker'],
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     modifier: [],
   },
   // Игрок может использовать одноручный меч и прокачивать навыки использования других спрайтов красной комнаты
@@ -3308,9 +3316,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'digital-life',
     humanReadableName: 'Цифровая форма жизни',
     description: 'Ты можешь неограниченное время пребывать в VR',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 6000 })],
   },
@@ -3319,20 +3327,20 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vr-protection',
     humanReadableName: 'Защита в Виар',
     description: 'К тебе нельзя применить способности, заставляющие покинуть VR',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   // Отличный скоринг и хорошие цены (работает как у Эльфов) - сверить с Марьяной
   {
     id: 'digital-prices',
-    humanReadableName: 'Прекрасные цены',
+    humanReadableName: 'Цифровые цены',
     description: 'У тебя отличный скоринг и выгодные цены',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
@@ -3341,9 +3349,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'hotsim-ever',
     humanReadableName: 'А ты горяч!',
     description: 'В Виаре ты в находишься в состоянии Хотсим. Ты включен, бодр, горяч и можешь пользоваться способностями.',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
@@ -3495,7 +3503,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Монастырская ритуальная магия',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -3514,7 +3522,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Неудача 50% при использовании на персонажа абилки repoman-black
   {
     id: 'ethic-arepo',
-    humanReadableName: '',
+    humanReadableName: 'Серые плащи',
     description: 'Увеличвает вероятность неудачи, если с тебя рипомен срезает имплант.',
     availability: 'closed',
     karmaCost: 0,
@@ -3673,7 +3681,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vr-who-is',
     humanReadableName: 'Who Is',
     description:
-      'Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион.  Абилка Режим Инкогнито защищает от проверки.',
+      '[только для VR] Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион.  Абилка Режим Инкогнито защищает от проверки.',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['!arch-mage'],
@@ -3684,7 +3692,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vr-deanon',
     humanReadableName: 'Деанон',
     description:
-      'Ты можешь спросить чаммера кто он (даже с режимом Инкогнито)  - и он должен назвать тебе имя, метатип, регион и SIN. От проверки защищает только абилка режим Firewall.',
+      '[только для VR] Ты можешь спросить чаммера кто он (даже с режимом Инкогнито)  - и он должен назвать тебе имя, метатип, регион и SIN. От проверки защищает только абилка режим Firewall.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['vr-who-is'],
@@ -3695,7 +3703,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vr-incognito',
     humanReadableName: 'Режим "Инкогнито"',
     description:
-      'Если ты находишься в VR в аватарке (плащ, очки, или зачипованная аватарка), то тебя нельзя узнать без применения специальных абилок или способностей. Абилка Who is на вас не действует.',
+      '[только для VR] Если ты находишься в VR в аватарке (плащ, очки, или зачипованная аватарка), то тебя нельзя узнать без применения специальных абилок или способностей. Абилка Who is на вас не действует.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: [],
@@ -3706,7 +3714,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'vr-firewall',
     humanReadableName: 'Режим "Фаервол"',
     description:
-      'Ты нарисовал себе классную аватарку. Молодец! Тебя нельзя деанонимировать никаким способом. Если кто-то пытается - покажи ему этот текст. И да, у тебя +30 минут в VR! Развлекайся, чаммер!',
+      '[только для VR] Ты нарисовал себе классную аватарку. Молодец! Тебя нельзя деанонимировать никаким способом. Если кто-то пытается - покажи ему этот текст. И да, у тебя +30 минут в VR! Развлекайся, чаммер!',
     availability: 'closed',
     karmaCost: 20,
     prerequisites: [],
@@ -3716,7 +3724,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'vr-employee',
     humanReadableName: 'Работник VR',
-    description: 'Сотрудник заведения VR, подтвержденный мастером региона',
+    description: '[только для VR] Сотрудник заведения VR, подтвержденный мастером региона',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3726,7 +3734,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'vr-employee-long-time',
     humanReadableName: 'Я работаю в VR',
-    description: 'Твое время в VR увеличено на 2 часа.',
+    description: '[только для VR] Твое время в VR увеличено на 2 часа.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['vr-employee'],
@@ -3736,7 +3744,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'vr-better-vr',
     humanReadableName: 'Better VR',
-    description: 'Возможность времени в VR увеличена на 30 минут.',
+    description: '[только для VR] Возможность времени в VR увеличена на 30 минут.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -3746,7 +3754,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'vr-more-better-vr',
     humanReadableName: 'More Better VR',
-    description: 'Возможность времени в VR увеличена еще на 30 минут.',
+    description: '[только для VR] Возможность времени в VR увеличена еще на 30 минут.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['vr-better-vr'],
@@ -3757,9 +3765,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'compile-hotsim',
     humanReadableName: 'Скомпилировать аватарку (хотсим)',
     description: 'Если у тебя сняли все хиты - ты можешь собрать себя обратно. Проведи у Ассемблера 45 минут для компиляции.',
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-digital'],
+    prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
@@ -3907,8 +3915,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'do-it-yourself-two',
     humanReadableName: 'Хочешь что-то сделать - сделай сам 2.0',
     description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-2',
-    availability: 'closed',
-    karmaCost: 40,
+    availability: 'open',
+    karmaCost: 50,
     prerequisites: ['arch-digital', 'do-it-yourself-one'],
     modifier: [],
   },
@@ -3917,8 +3925,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'do-it-yourself-three',
     humanReadableName: 'Хочешь что-то сделать - сделай сам 3.0',
     description: 'Увеличивает способноcть управления мясными телами. Теперь ты можешь подключаться к CFD-3. Лучшие мясные тела для тебя!',
-    availability: 'closed',
-    karmaCost: 40,
+    availability: 'open',
+    karmaCost: 60,
     prerequisites: ['arch-digital', 'do-it-yourself-two'],
     modifier: [],
   },
@@ -3978,7 +3986,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'ai-troubleshooter',
     humanReadableName: 'AI eXterminate',
     description: 'Этот ИИ занимается Уничтожением и Техномантами.',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
@@ -3989,7 +3997,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'BackUp',
     description:
       'После смерти в Красной комнате вы восстанавливаетесь в полных хитах как на начало боя и можете продолжить сражаться. Работает один раз в 6 часов.',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
@@ -4000,7 +4008,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Рыба в воде',
     description:
       'Ты можешь изменить менять формат боя в Красной Комнате по своему выбору из двух доступных: групповое сражение и дуэль. В случае, если несколько проекций ИИ используют эту способность одновременно, право выбора решает жребий.',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
@@ -4010,7 +4018,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'programm-code-ai',
     humanReadableName: 'Программный код',
     description: '+1 хит в Красной Комнате',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
@@ -4020,7 +4028,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'super-programme-code',
     humanReadableName: 'Усиленный программный код',
     description: 'еще +1 хит в Красной Комнате',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-digital', 'programm-code-ai'],
     modifier: [],
@@ -4030,7 +4038,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'die-hard',
     humanReadableName: 'Крепкий орешек',
     description: 'еще +1 хит в Красной Комнате',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-digital', 'super-programme-code'],
     modifier: [],
@@ -4040,7 +4048,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'deep-legacy',
     humanReadableName: 'Наследник Стрелка',
     description: 'Ты можешь использовать любое холодное оружие в Красной комнате. ',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-digital', 'programm-code-ai'],
     modifier: [],
@@ -4050,7 +4058,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'situation-analazis',
     humanReadableName: 'Анализ ситуации',
     description: 'Инициатива +2 в Красной комнате',
-    availability: 'master',
+    availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
@@ -4338,18 +4346,66 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hack-deck-fire',
     humanReadableName: 'fire',
-    description: 'новая команда: fire\nпозволяет применять эксплойты типа "бобма"',
+    description: 'новая команда: fire\nпозволяет применять эксплойты типа "бомба"',
     availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    karmaCost: 10,
+    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
+    modifier: [],
+  },
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 0 человек.
+  {
+    id: 'soul-exhaustion',
+    humanReadableName: 'Soul exhaustion',
+    description: 'Ты слишком устал, чтобы участвовать в ритуале',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 0 человек.
+  // IT: команда в Кривда-матрице
+  // сжигает кибердеку
   {
-    id: 'soul-exhaustion',
-    humanReadableName: 'Soul exhaustion (P)',
-    description: 'В ритуальных практиках ты считаешься за 0х человек',
+    id: 'hack-deck-burn',
+    humanReadableName: 'burn',
+    description: 'новая команда: burn\nПозволяет повредить кибердеку поверженного хакера. Подлый удар по кошельку!',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'hack-deck-rungc',
+    humanReadableName: 'rungc',
+    description:
+      'Новая команда: rungc\nПозволяет принудительно активировать сборку мусора в памяти деки, эффективно "оживляя" канал связи\n\nвосстанавливает матричные хиты в зависимости от значения Firewall',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-hackerman-decker', 'breacher-3'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 3х человек.
+  {
+    id: 'strong-blood',
+    humanReadableName: 'Strong blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 3 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 5х человек.
+  {
+    id: 'strongest-blood',
+    humanReadableName: 'Strongest blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],

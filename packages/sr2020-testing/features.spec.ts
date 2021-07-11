@@ -1,10 +1,7 @@
 import { TestFixture } from './fixture';
 
 import { satisfiesPrerequisites } from '@alice/sr2020-model-engine/scripts/character/features';
-import {
-  getAllActiveAbilities,
-  getAllPassiveAbilities,
-} from '@alice/sr2020-model-engine/scripts/character/library_registrator';
+import { getAllActiveAbilities, getAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
 
 describe('Features-related events', function () {
   let fixture: TestFixture;
@@ -108,17 +105,13 @@ describe('Features-related events', function () {
 
     it('True if negative prerequisite is satisfied', async () => {
       await fixture.saveCharacter();
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-mage')!)).toBe(
-        true,
-      );
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-mage')!)).toBe(true);
     });
 
     it('False if negative prerequisite is not satisfied', async () => {
       await fixture.saveCharacter();
-      await fixture.addCharacterFeature('tech-blockade');
-      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-hackerman-technomancer')!)).toBe(
-        false,
-      );
+      await fixture.addCharacterFeature('meta-ghoul');
+      expect(satisfiesPrerequisites((await fixture.getCharacter()).workModel, getAllPassiveAbilities().get('arch-rigger')!)).toBe(false);
     });
 
     it('False if feature already present', async () => {
