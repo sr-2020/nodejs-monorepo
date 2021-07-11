@@ -155,7 +155,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         maxPowerBonus: 0,
         victimCoefficient: 1,
         participantCoefficient: 1,
-        },
+      },
       healthState: 'healthy',
       cooldownCoefficient: 1.0,
       victimCoefficient: 1,

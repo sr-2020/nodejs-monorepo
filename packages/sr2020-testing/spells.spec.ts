@@ -5,7 +5,6 @@ import { calculateMagicFeedback } from '@alice/sr2020-model-engine/scripts/chara
 import { HealthState } from '@alice/sr2020-common/models/sr2020-character.model';
 import { addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 
-
 describe('Spells', function () {
   let fixture: TestFixture;
 
@@ -727,81 +726,81 @@ describe('Spells', function () {
   });
 
   describe('Rituals bonuses', function () {
+    //no ritual: input power=4
+    //Should  be: power=4, feedback=8
+    it('No ritual', async () => {
+      await fixture.saveCharacter({ modelId: '1', magic: 10 });
+      await fixture.addCharacterFeature('fireball', 1);
 
-  //no ritual: input power=4
-  //Should  be: power=4, feedback=8
-  it('No ritual', async () => {
-    await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.addCharacterFeature('fireball', 1);
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
+      await fixture.addCharacterFeature('trackpoint', 2);
 
-    await fixture.saveCharacter({ modelId: '2', magic: 10});
-    await fixture.addCharacterFeature('trackpoint', 2);
+      await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 } },
+        1,
+      );
 
-    await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                                      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4 }
-                                    }, 1);
-
-    const { tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
-      2,
-    );
-    expect(tableResponse.length).toBe(1);
-    expect(tableResponse).toContainEqual(
-      expect.objectContaining({
-        spellName: 'Fireball (S)',
-        power: 4,
-        magicFeedback: 8,
-      }),
-    );
-    })
-
-  //orthodox-ritual-magic: input power=4, 1 plain participant.
-  //Should  be: power=round(4+1^0.5)=5, feedback=round(8.8)/(2+1)=3
-  it('Normal ritual1, members: 1 plain', async () => {
-    await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.addCharacterFeature('ritual-magic', 1);
-    await fixture.addCharacterFeature('fireball', 1);
-
-    await fixture.saveCharacter({ modelId: '2', magic: 10});
-    await fixture.addCharacterFeature('trackpoint', 2);
-    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(1);
-
-    await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                                      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] }
-                                    }, 1);
-
-    const { tableResponse } = await fixture.sendCharacterEvent(
-      { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
-      2,
-    );
-    expect(tableResponse.length).toBe(1);
-    expect(tableResponse).toContainEqual(
-      expect.objectContaining({
-        spellName: 'Fireball (S)',
-        power: 5,
-        magicFeedback: 3,
-      }),
-    );
-
-    // expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(
-            // expect.objectContaining({ id: 'soul-exhaustion' }));
-
+      const { tableResponse } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
+        2,
+      );
+      expect(tableResponse.length).toBe(1);
+      expect(tableResponse).toContainEqual(
+        expect.objectContaining({
+          spellName: 'Fireball (S)',
+          power: 4,
+          magicFeedback: 8,
+        }),
+      );
     });
 
-  it('Normal ritual2, members: 1 agnus', async () => {
+    //orthodox-ritual-magic: input power=4, 1 plain participant.
+    //Should  be: power=round(4+1^0.5)=5, feedback=round(8.8)/(2+1)=3
+    it('Normal ritual1, members: 1 plain', async () => {
       await fixture.saveCharacter({ modelId: '1', magic: 10 });
       await fixture.addCharacterFeature('ritual-magic', 1);
       await fixture.addCharacterFeature('fireball', 1);
 
-      await fixture.saveCharacter({ modelId: '2', magic: 10});
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
+      await fixture.addCharacterFeature('trackpoint', 2);
+      expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(1);
+
+      await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] } },
+        1,
+      );
+
+      const { tableResponse } = await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
+        2,
+      );
+      expect(tableResponse.length).toBe(1);
+      expect(tableResponse).toContainEqual(
+        expect.objectContaining({
+          spellName: 'Fireball (S)',
+          power: 5,
+          magicFeedback: 3,
+        }),
+      );
+
+      // expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(
+      // expect.objectContaining({ id: 'soul-exhaustion' }));
+    });
+
+    it('Normal ritual2, members: 1 agnus', async () => {
+      await fixture.saveCharacter({ modelId: '1', magic: 10 });
+      await fixture.addCharacterFeature('ritual-magic', 1);
+      await fixture.addCharacterFeature('fireball', 1);
+
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
       await fixture.addCharacterFeature('trackpoint', 2);
       await fixture.addCharacterFeature('agnus-dei', 2);
       expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
 
-
-      await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                                        data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] }
-                                      }, 1);
+      await fixture.sendCharacterEvent(
+        { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] } },
+        1,
+      );
 
       const { tableResponse } = await fixture.sendCharacterEvent(
         { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 8 } },
@@ -815,180 +814,175 @@ describe('Spells', function () {
           magicFeedback: 2,
         }),
       );
-  });
+    });
 
-  it('Normal ritual3, 2 trys, members: 1 agnus (then exhausted)', async () => {
-    await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.addCharacterFeature('ritual-magic', 1);
-    await fixture.addCharacterFeature('fireball', 1);
-    await fixture.addCharacterFeature('fast-charge', 1);
+    it('Normal ritual3, 2 trys, members: 1 agnus (then exhausted)', async () => {
+      await fixture.saveCharacter({ modelId: '1', magic: 10 });
+      await fixture.addCharacterFeature('ritual-magic', 1);
+      await fixture.addCharacterFeature('fireball', 1);
+      await fixture.addCharacterFeature('fast-charge', 1);
 
-    await fixture.saveCharacter({ modelId: '2', magic: 10});
-    await fixture.addCharacterFeature('trackpoint', 2);
-    await fixture.addCharacterFeature('agnus-dei', 2);
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
+      await fixture.addCharacterFeature('trackpoint', 2);
+      await fixture.addCharacterFeature('agnus-dei', 2);
 
-    expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
-      expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
-
-    {
-      await fixture.sendCharacterEvent({ eventType: 'castSpell',
-      data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] }
-    }, 1);
-
-      const { tableResponse } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
-        2,
+      expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
+        expect.objectContaining({ id: 'soul-exhaustion' }),
       );
-      expect(tableResponse.length).toBe(1);
-      expect(tableResponse).toContainEqual(
-        expect.objectContaining({
-          spellName: 'Fireball (S)',
-          power: 6,
-          magicFeedback: 2,
-        }),
-      );
+      expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
 
-    }
+      {
+        await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] } },
+          1,
+        );
 
-    expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(
-      expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(0);
-
-    {
-      await fixture.sendCharacterEvent({ eventType: 'castSpell',
-        data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 3, ritualMembersIds: ['2'] }
-      }, 1);
-
-      const { tableResponse } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
-        2,
-      );
-      expect(tableResponse.length).toBe(3);
-      expect(tableResponse).toContainEqual(
-        expect.objectContaining({
-          spellName: 'Fast charge (S)',
-          power: 3,
-          magicFeedback: 8,
-        }),
-      );
-
-    }
-
-    await fixture.advanceTime(duration(35, 'minutes'));
-    expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
-      expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
-
-
-
-
-  });
-
-
-  it('Bloody ritual1, members: 1 plain', async () => {
-    await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.addCharacterFeature('bathory-charger', 1);
-    await fixture.addCharacterFeature('fireball', 1);
-    await fixture.addCharacterFeature('fast-charge', 1);
-
-    await fixture.saveCharacter({ modelId: '2', magic: 10});
-    await fixture.addCharacterFeature('trackpoint', 2);
-
-    await fixture.saveCharacter({ modelId: '3' });
-    await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
-
-    //got bonus to user-chosen power and feedback/divider
-    {
-      const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 6, ritualVictimIds: ['3'] } },
-        1,
-      );
-    //now user1 should get bloody-tide, magic-in-the-blood
-    expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining(
-        { id: 'magic-in-the-blood', description:'Увеличивает максимальную доступную тебе Мощь на 1' }));
-      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
-
-      await fixture.advanceTime(duration(1, 'minutes'));
-      const { tableResponse } = await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                  data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
           2,
-      );
-      expect(tableResponse.length).toBe(1);
-      expect(tableResponse).toContainEqual(
-        expect.objectContaining({
-          spellName: 'Fireball (S)',
-          power: 6,
-          magicFeedback: 1,
-        }),
-      );
-    }
+        );
+        expect(tableResponse.length).toBe(1);
+        expect(tableResponse).toContainEqual(
+          expect.objectContaining({
+            spellName: 'Fireball (S)',
+            power: 6,
+            magicFeedback: 2,
+          }),
+        );
+      }
 
-    //bonus to power available in APP, but feedback/divider=1/7 still here
-    {
-      await fixture.advanceTime(duration(1, 'minutes'));
-      const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 7 } },
-        1,
-      );
+      expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'soul-exhaustion' }));
+      expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(0);
 
-      await fixture.advanceTime(duration(1, 'minutes'));
-      const { tableResponse } = await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                  data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+      {
+        await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 3, ritualMembersIds: ['2'] } },
+          1,
+        );
+
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
           2,
+        );
+        expect(tableResponse.length).toBe(3);
+        expect(tableResponse).toContainEqual(
+          expect.objectContaining({
+            spellName: 'Fast charge (S)',
+            power: 3,
+            magicFeedback: 8,
+          }),
+        );
+      }
+
+      await fixture.advanceTime(duration(35, 'minutes'));
+      expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
+        expect.objectContaining({ id: 'soul-exhaustion' }),
       );
-      expect(tableResponse.length).toBe(3);
-      expect(tableResponse).toContainEqual(
-        expect.objectContaining({
-          spellName: 'Fast charge (S)',
-          power: 7,
-          magicFeedback: 1,
-        }),
-      );
+      expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
+    });
 
-    }
-  });
+    it('Bloody ritual1, members: 1 plain', async () => {
+      await fixture.saveCharacter({ modelId: '1', magic: 10 });
+      await fixture.addCharacterFeature('bathory-charger', 1);
+      await fixture.addCharacterFeature('fireball', 1);
+      await fixture.addCharacterFeature('fast-charge', 1);
 
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
+      await fixture.addCharacterFeature('trackpoint', 2);
 
-  it('Bloody ritual2, members: 1 strong-blood', async () => {
-    await fixture.saveCharacter({ modelId: '1', magic: 10 });
-    await fixture.addCharacterFeature('bathory-charger', 1);
-    await fixture.addCharacterFeature('fireball', 1);
-
-    await fixture.saveCharacter({ modelId: '2', magic: 10});
-    await fixture.addCharacterFeature('trackpoint', 2);
-
-    await fixture.saveCharacter({ modelId: '3' });
-    await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
-    await fixture.addCharacterFeature('strong-blood', 2);
-    expect((await fixture.getCharacter(2)).workModel.magicStats.victimCoefficient).toBe(3);
+      await fixture.saveCharacter({ modelId: '3' });
+      await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
 
       //got bonus to user-chosen power and feedback/divider
-    {
-      const { workModel } = await fixture.sendCharacterEvent(
-        { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 6, ritualVictimIds: ['3'] } },
-        1,
-      );
-      //now user1 should get bloody-tide, magic-in-the-blood
-      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining(
-          { id: 'magic-in-the-blood', description:'Увеличивает максимальную доступную тебе Мощь на 1' }));
-      expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
+      {
+        const { workModel } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 6, ritualVictimIds: ['3'] } },
+          1,
+        );
+        //now user1 should get bloody-tide, magic-in-the-blood
+        expect(workModel.passiveAbilities).toContainEqual(
+          expect.objectContaining({ id: 'magic-in-the-blood', description: 'Увеличивает максимальную доступную тебе Мощь на 1' }),
+        );
+        expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
 
-      await fixture.advanceTime(duration(1, 'minutes'));
-      const { tableResponse } = await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                  data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+        await fixture.advanceTime(duration(1, 'minutes'));
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
           2,
-      );
-      expect(tableResponse.length).toBe(1);
-      expect(tableResponse).toContainEqual(
-        expect.objectContaining({
-          spellName: 'Fireball (S)',
-          power: 6,
-          magicFeedback: 1,
-        }),
-      );
-    }
+        );
+        expect(tableResponse.length).toBe(1);
+        expect(tableResponse).toContainEqual(
+          expect.objectContaining({
+            spellName: 'Fireball (S)',
+            power: 6,
+            magicFeedback: 1,
+          }),
+        );
+      }
 
+      //bonus to power available in APP, but feedback/divider=1/7 still here
+      {
+        await fixture.advanceTime(duration(1, 'minutes'));
+        const { workModel } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'fast-charge', location: { id: 0, manaLevel: 0 }, power: 7 } },
+          1,
+        );
+
+        await fixture.advanceTime(duration(1, 'minutes'));
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+          2,
+        );
+        expect(tableResponse.length).toBe(3);
+        expect(tableResponse).toContainEqual(
+          expect.objectContaining({
+            spellName: 'Fast charge (S)',
+            power: 7,
+            magicFeedback: 1,
+          }),
+        );
+      }
+    });
+
+    it('Bloody ritual2, members: 1 strong-blood', async () => {
+      await fixture.saveCharacter({ modelId: '1', magic: 10 });
+      await fixture.addCharacterFeature('bathory-charger', 1);
+      await fixture.addCharacterFeature('fireball', 1);
+
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
+      await fixture.addCharacterFeature('trackpoint', 2);
+
+      await fixture.saveCharacter({ modelId: '3' });
+      await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
+      await fixture.addCharacterFeature('strong-blood', 2);
+      expect((await fixture.getCharacter(2)).workModel.magicStats.victimCoefficient).toBe(3);
+
+      //got bonus to user-chosen power and feedback/divider
+      {
+        const { workModel } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 6, ritualVictimIds: ['3'] } },
+          1,
+        );
+        //now user1 should get bloody-tide, magic-in-the-blood
+        expect(workModel.passiveAbilities).toContainEqual(
+          expect.objectContaining({ id: 'magic-in-the-blood', description: 'Увеличивает максимальную доступную тебе Мощь на 1' }),
+        );
+        expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
+
+        await fixture.advanceTime(duration(1, 'minutes'));
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+          2,
+        );
+        expect(tableResponse.length).toBe(1);
+        expect(tableResponse).toContainEqual(
+          expect.objectContaining({
+            spellName: 'Fireball (S)',
+            power: 6,
+            magicFeedback: 1,
+          }),
+        );
+      }
     });
 
     //victim with strongest-blood
@@ -997,7 +991,7 @@ describe('Spells', function () {
       await fixture.addCharacterFeature('bathory-charger', 1);
       await fixture.addCharacterFeature('fireball', 1);
 
-      await fixture.saveCharacter({ modelId: '2', magic: 10});
+      await fixture.saveCharacter({ modelId: '2', magic: 10 });
       await fixture.addCharacterFeature('trackpoint', 2);
 
       await fixture.saveCharacter({ modelId: '3' });
@@ -1005,21 +999,22 @@ describe('Spells', function () {
       await fixture.addCharacterFeature('strongest-blood', 3);
       expect((await fixture.getCharacter(3)).workModel.magicStats.victimCoefficient).toBe(5);
 
-        //got bonus to user-chosen power and feedback/divider
+      //got bonus to user-chosen power and feedback/divider
       {
         const { workModel } = await fixture.sendCharacterEvent(
           { eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 8, ritualVictimIds: ['3'] } },
           1,
         );
         //now user1 should get bloody-tide, magic-in-the-blood
-        expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining(
-            { id: 'magic-in-the-blood', description:'Увеличивает максимальную доступную тебе Мощь на 2' }));
+        expect(workModel.passiveAbilities).toContainEqual(
+          expect.objectContaining({ id: 'magic-in-the-blood', description: 'Увеличивает максимальную доступную тебе Мощь на 2' }),
+        );
         expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'bloody-tide' }));
 
         await fixture.advanceTime(duration(1, 'minutes'));
-        const { tableResponse } = await fixture.sendCharacterEvent({ eventType: 'castSpell',
-                    data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
-            2,
+        const { tableResponse } = await fixture.sendCharacterEvent(
+          { eventType: 'castSpell', data: { id: 'trackpoint', location: { id: 0, manaLevel: 0 }, power: 1 } },
+          2,
         );
         expect(tableResponse.length).toBe(1);
         expect(tableResponse).toContainEqual(
@@ -1030,11 +1025,8 @@ describe('Spells', function () {
           }),
         );
       }
-
-      });
-
+    });
   });
-
 
   describe('Magic feedback calculation', function () {
     it('Example 13', () => {

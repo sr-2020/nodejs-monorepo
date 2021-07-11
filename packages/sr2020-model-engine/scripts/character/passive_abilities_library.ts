@@ -857,7 +857,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'luck-spent',
     humanReadableName: 'Легендарный Майнер',
-    description: 'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
+    description:
+      'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-hackerman-decker'],
@@ -865,7 +866,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseConversionAttack, { amount: 10 }),
       modifierFromEffect(increaseConversionFirewall, { amount: 10 }),
       modifierFromEffect(increaseConversionSleaze, { amount: 10 }),
-      modifierFromEffect(increaseConversionDataprocessing, { amount: 10 })],
+      modifierFromEffect(increaseConversionDataprocessing, { amount: 10 }),
+    ],
   },
   // IT: команда в кривда-матрице
   {
@@ -1360,7 +1362,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: modifierFromEffect(multiplyVictimCoefficient, {
       amount: 5,
     }),
-
   },
 
   // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
