@@ -15,8 +15,6 @@ import {
   externalAbility,
   faerbolAbility,
   finishHimAbility,
-  gmDecreaseCharisma,
-  gmIncreaseCharisma,
   hammerOfJustice,
   howMuchIsThePssh,
   howMuchItCosts,
@@ -82,9 +80,15 @@ import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engi
 import { jackInAbility, jackOutAbility, settleBackdoorAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
-import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+import {
+  essenceScanAbility,
+  gmDecreaseMaxEssence,
+  gmEssenceReset,
+  gmIncreaseMaxEssence,
+} from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3221,14 +3225,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Сострадание',
     description: 'Ты можешь посмотреть точную информацию об уровне эссенса другого персонажа',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 120,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: noItActionAbility.name,
+    eventType: essenceScanAbility.name,
   },
   // текстовая
   {
