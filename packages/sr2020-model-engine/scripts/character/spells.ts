@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 import { cloneDeep, template } from 'lodash';
 import { EffectModelApi, EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
-import { Location } from '@alice/sr2020-common/models/location.model';
+import { Location, SpellTrace } from '@alice/sr2020-common/models/location.model';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
@@ -23,6 +23,7 @@ import {
   increaseMaxMeatHp,
   increaseResonance,
   multiplyAllDiscounts,
+  multiplyParticipantCoefficient,
 } from './basic_effects';
 import { duration } from 'moment';
 import { kAllReagents, kEmptyContent } from '../qr/reagents_library';
@@ -144,7 +145,15 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
   });
 
   applyMagicFeedback(api, feedback);
-  saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback));
+  saveSpellTrace(api, data, spell.humanReadableName, Math.round(feedback.feedback), ritualStats);
+
+  // exhausting all ritual members
+  if(data.ritualMembersIds != null) {
+    for (const memberId of data.ritualMembersIds) {
+      data.targetCharacterId = memberId;
+      api.sendOutboundEvent(Sr2020Character, memberId, soulExhaustionEffect, data);
+    }
+  }
 
   addHistoryRecord(
     api,
@@ -463,7 +472,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
         throw new UserVisibleError('Участники ритуала должны быть живы!');
       }
 
-      participants += participant.passiveAbilities.some((a) => a.id == 'agnus-dei') ? 3 : 1;
+      participants += participant.participantCoefficient;//agnus-dei, soul-exhaustion
     }
   }
 
@@ -486,7 +495,8 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
         continue;
       }
 
-      ++victims;
+      victims += victim.victimCoefficient;
+
       api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, data);
     }
   }
@@ -543,15 +553,26 @@ export function bloodRitualEffect(api: EffectModelApi<Sr2020Character>, m: Tempo
 }
 
 // Magic feedback implementation
-function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number) {
-  api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, {
-    spellName,
+function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, spellName: string, feedbackAmount: number, ritualStats: RitualStats) {
+  const saveData = {
+    spellName: spellName,
     timestamp: api.model.timestamp,
     casterAura: generateAuraSubset(api.workModel.magicStats.aura, api.workModel.magicStats.auraMarkMultiplier * 100),
     metarace: api.workModel.metarace,
     power: data.power,
     magicFeedback: feedbackAmount,
-  });
+    participantsAmount: (ritualStats.participants != null) ? ritualStats.participants : 0,
+    victimsAmount: (ritualStats.victims != null) ? ritualStats.victims : 0,
+  };
+/*
+  if(data.ritualMembersIds != null) {
+    saveData.participantsAmount = data.ritualMembersIds.length;
+  }
+  if(data.ritualVictimIds != null) {
+    saveData.victimsAmount = data.ritualVictimIds.length;
+  }
+  */
+  api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, saveData);
 }
 
 export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
@@ -624,6 +645,22 @@ export function deathTouchSpell(api: EventModelApi<Sr2020Character>, data: Spell
 export function letItGoSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   addTemporaryPassiveAbility(api, 'let-it-go-effect', duration(1, 'minutes'));
 }
+
+export function soulExhaustionEffect(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  const amount = 0;
+  const d = duration(30, 'minutes');
+  const m = modifierFromEffect(multiplyParticipantCoefficient, { amount });
+
+  addTemporaryPassiveAbility(api, 'soul-exhaustion', d);
+
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds: d.asSeconds(),
+    effectDescription: 'Ты слишком устал, чтобы участвовать в ритуале',
+  });
+
+}
+
 
 // Location-attack spells
 
