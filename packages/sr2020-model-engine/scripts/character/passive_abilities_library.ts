@@ -54,6 +54,8 @@ import {
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
   unlockScoringDetailsScreen,
+  multiplyParticipantCoefficient,
+  multiplyVictimCoefficient,
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -1288,7 +1290,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0.2,
     }),
   },
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 3х человек.
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 3х человек.
   {
     id: 'agnus-dei',
     humanReadableName: 'Agnus dei (P)',
@@ -1296,8 +1298,50 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: [],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 3,
+    }),
   },
+
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 0 человек.
+  {
+    id: 'soul-exhaustion',
+    humanReadableName: 'Soul exhaustion',
+    description: 'Ты слишком устал, чтобы участвовать в ритуале',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 10,
+    }),
+  },
+
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 3 человек.
+  {
+    id: 'strong-blood',
+    humanReadableName: 'Strong blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 3 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 3,
+    }),
+  },
+
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 5 человек.
+  {
+    id: 'strongest-blood',
+    humanReadableName: 'Strongest blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 5,
+    }),
+  },
+
   // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
   {
     id: 'ritual-magic',
@@ -4322,18 +4366,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала, он считается за 0 человек.
-  {
-    id: 'soul-exhaustion',
-    humanReadableName: 'Soul exhaustion (P)',
-    description: 'В ритуальных практиках ты считаешься за 0х человек',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    pack: undefined,
     modifier: [],
   },
 ];

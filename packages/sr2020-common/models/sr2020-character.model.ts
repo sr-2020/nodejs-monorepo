@@ -711,6 +711,14 @@ export class Sr2020Character extends EmptyModel {
   cooldownCoefficient: number;
 
   @NumberProperty()
+  @Column({ default: 1 })
+  victimCoefficient: number;
+
+  @NumberProperty()
+  @Column({ default: 1 })
+  participantCoefficient: number;
+
+  @NumberProperty()
   @Column({ default: 2 })
   implantsBodySlots: number;
 
