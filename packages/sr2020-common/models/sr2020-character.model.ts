@@ -368,6 +368,14 @@ export class MagicStats {
   @NumberProperty()
   @Column({ default: 0 })
   maxPowerBonus: number;
+
+  @NumberProperty()
+  @Column({ default: 1 })
+  victimCoefficient: number;
+
+  @NumberProperty()
+  @Column({ default: 1 })
+  participantCoefficient: number;
 }
 
 export class Hacking {
@@ -709,14 +717,6 @@ export class Sr2020Character extends EmptyModel {
   @NumberProperty()
   @Column({ default: 1.0, type: 'real' })
   cooldownCoefficient: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  victimCoefficient: number;
-
-  @NumberProperty()
-  @Column({ default: 1 })
-  participantCoefficient: number;
 
   @NumberProperty()
   @Column({ default: 2 })

@@ -764,7 +764,7 @@ describe('Spells', function () {
 
     await fixture.saveCharacter({ modelId: '2', magic: 10});
     await fixture.addCharacterFeature('trackpoint', 2);
-    expect((await fixture.getCharacter(2)).workModel.participantCoefficient).toBe(1);
+    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(1);
 
     await fixture.sendCharacterEvent({ eventType: 'castSpell',
                                       data: { id: 'fireball', location: { id: 0, manaLevel: 0 }, power: 4, ritualMembersIds: ['2'] }
@@ -796,7 +796,7 @@ describe('Spells', function () {
       await fixture.saveCharacter({ modelId: '2', magic: 10});
       await fixture.addCharacterFeature('trackpoint', 2);
       await fixture.addCharacterFeature('agnus-dei', 2);
-      expect((await fixture.getCharacter(2)).workModel.participantCoefficient).toBe(3);
+      expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
 
 
       await fixture.sendCharacterEvent({ eventType: 'castSpell',
@@ -829,7 +829,7 @@ describe('Spells', function () {
 
     expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
       expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.participantCoefficient).toBe(3);
+    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
 
     {
       await fixture.sendCharacterEvent({ eventType: 'castSpell',
@@ -853,7 +853,7 @@ describe('Spells', function () {
 
     expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(
       expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.participantCoefficient).toBe(0);
+    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(0);
 
     {
       await fixture.sendCharacterEvent({ eventType: 'castSpell',
@@ -878,7 +878,7 @@ describe('Spells', function () {
     await fixture.advanceTime(duration(35, 'minutes'));
     expect((await fixture.getCharacter(2)).workModel.passiveAbilities).not.toContainEqual(
       expect.objectContaining({ id: 'soul-exhaustion' }));
-    expect((await fixture.getCharacter(2)).workModel.participantCoefficient).toBe(3);
+    expect((await fixture.getCharacter(2)).workModel.magicStats.participantCoefficient).toBe(3);
 
 
 
@@ -961,7 +961,7 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '3' });
     await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
     await fixture.addCharacterFeature('strong-blood', 2);
-    expect((await fixture.getCharacter(2)).workModel.victimCoefficient).toBe(3);
+    expect((await fixture.getCharacter(2)).workModel.magicStats.victimCoefficient).toBe(3);
 
       //got bonus to user-chosen power and feedback/divider
     {
@@ -1003,7 +1003,7 @@ describe('Spells', function () {
       await fixture.saveCharacter({ modelId: '3' });
       await fixture.saveCharacter({ modelId: '3', healthState: 'wounded' });
       await fixture.addCharacterFeature('strongest-blood', 3);
-      expect((await fixture.getCharacter(3)).workModel.victimCoefficient).toBe(5);
+      expect((await fixture.getCharacter(3)).workModel.magicStats.victimCoefficient).toBe(5);
 
         //got bonus to user-chosen power and feedback/divider
       {

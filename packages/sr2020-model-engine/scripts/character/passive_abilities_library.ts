@@ -1312,7 +1312,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     modifier: modifierFromEffect(multiplyParticipantCoefficient, {
-      amount: 10,
+      amount: 0,
     }),
   },
 

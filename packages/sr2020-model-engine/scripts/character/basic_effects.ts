@@ -337,11 +337,11 @@ export function multiplyCooldownCoefficient(api: EffectModelApi<Sr2020Character>
 }
 
 export function multiplyParticipantCoefficient(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.participantCoefficient *= m.amount;
+  api.model.magicStats.participantCoefficient *= m.amount;
 }
 
 export function multiplyVictimCoefficient(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
-  api.model.victimCoefficient *= m.amount;
+  api.model.magicStats.victimCoefficient *= m.amount;
 }
 
 export function multiplyDiscourseMongerCooldowns(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {

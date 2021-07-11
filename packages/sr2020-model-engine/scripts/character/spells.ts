@@ -150,8 +150,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
   // exhausting all ritual members
   if(data.ritualMembersIds != null) {
     for (const memberId of data.ritualMembersIds) {
-      data.targetCharacterId = memberId;
-      api.sendOutboundEvent(Sr2020Character, memberId, soulExhaustionEffect, data);
+      api.sendOutboundEvent(Sr2020Character, memberId, soulExhaustionEvent, {target: memberId});
     }
   }
 
@@ -472,7 +471,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
         throw new UserVisibleError('Участники ритуала должны быть живы!');
       }
 
-      participants += participant.participantCoefficient;//agnus-dei, soul-exhaustion
+      participants += participant.magicStats.participantCoefficient;//agnus-dei, soul-exhaustion
     }
   }
 
@@ -495,7 +494,7 @@ export function getRitualStatsAndAffectVictims(api: EventModelApi<Sr2020Characte
         continue;
       }
 
-      victims += victim.victimCoefficient;
+      victims += victim.magicStats.victimCoefficient;
 
       api.sendOutboundEvent(Sr2020Character, victimId, affectRitualVictim, data);
     }
@@ -561,8 +560,10 @@ function saveSpellTrace(api: EventModelApi<Sr2020Character>, data: SpellData, sp
     metarace: api.workModel.metarace,
     power: data.power,
     magicFeedback: feedbackAmount,
-    participantsAmount: (ritualStats.participants != null) ? ritualStats.participants : 0,
-    victimsAmount: (ritualStats.victims != null) ? ritualStats.victims : 0,
+    // participantsAmount: (ritualStats.participants != null) ? ritualStats.participants : 0,
+    // victimsAmount: (ritualStats.victims != null) ? ritualStats.victims : 0,
+    participantsAmount: ritualStats.participants,
+    victimsAmount: ritualStats.victims,
   };
 /*
   if(data.ritualMembersIds != null) {
@@ -646,14 +647,14 @@ export function letItGoSpell(api: EventModelApi<Sr2020Character>, data: SpellDat
   addTemporaryPassiveAbility(api, 'let-it-go-effect', duration(1, 'minutes'));
 }
 
-export function soulExhaustionEffect(api: EventModelApi<Sr2020Character>, data: SpellData) {
+export function soulExhaustionEvent(api: EventModelApi<Sr2020Character>, data: {target: string}) {
   const amount = 0;
   const d = duration(30, 'minutes');
   const m = modifierFromEffect(multiplyParticipantCoefficient, { amount });
 
   addTemporaryPassiveAbility(api, 'soul-exhaustion', d);
 
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+  api.sendOutboundEvent(Sr2020Character, data.target!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),
     effectDescription: 'Ты слишком устал, чтобы участвовать в ритуале',
