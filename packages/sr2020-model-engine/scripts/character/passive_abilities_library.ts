@@ -856,7 +856,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Декер_конверсия_Dataprocessing"
   {
     id: 'luck-spent',
-    humanReadableName: 'Легендарный Майнер',
+    humanReadableName: 'Шрам в форме молнии',
     description:
       'Про таких, как ты, говорят сама Матрица поцеловала их в лобик. \n\nКонверсия Интеллекта во все характеристики улучшена\n\nот МГ: шрам рисовать не обязательно, но будет круто',
     availability: 'master',
@@ -1324,47 +1324,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 3,
     }),
   },
-
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 0 человек.
-  {
-    id: 'soul-exhaustion',
-    humanReadableName: 'Soul exhaustion',
-    description: 'Ты слишком устал, чтобы участвовать в ритуале',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
-      amount: 0,
-    }),
-  },
-
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 3 человек.
-  {
-    id: 'strong-blood',
-    humanReadableName: 'Strong blood',
-    description: 'В жертвенных ритуальных практиках ты считаешься за 3 человек',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: modifierFromEffect(multiplyVictimCoefficient, {
-      amount: 3,
-    }),
-  },
-
-  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 5 человек.
-  {
-    id: 'strongest-blood',
-    humanReadableName: 'Strongest blood',
-    description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: modifierFromEffect(multiplyVictimCoefficient, {
-      amount: 5,
-    }),
-  },
-
-  // Разблокирует возможность сканить во время каста заклинания qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N разных сосканированных за время действия заклинания qr-кодов увеличивают магу выбранную для этого заклинания Мощь на √N, округленное вверх.
+  // "Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта ""православный ритуал"": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
+  // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
+  // 2) включают в КоэффициентСниженияОтката множитель 1/(2+N)"
   {
     id: 'ritual-magic',
     humanReadableName: 'Ритуальная магия (P)',
@@ -4389,6 +4351,72 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
     modifier: [],
+  },
+  // - Когда qr-код обладателя такой способности сканируют во время ритуала соучастия, он считается за 0 человек.
+  {
+    id: 'soul-exhaustion',
+    humanReadableName: 'Soul exhaustion',
+    description: 'Ты слишком устал, чтобы участвовать в ритуале',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 0,
+    }),
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // IT: команда в Кривда-матрице
+  // сжигает кибердеку
+  {
+    id: 'hack-deck-burn',
+    humanReadableName: 'burn',
+    description: 'новая команда: burn\nПозволяет повредить кибердеку поверженного хакера. Подлый удар по кошельку!',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'hack-deck-rungc',
+    humanReadableName: 'rungc',
+    description:
+      'Новая команда: rungc\nПозволяет принудительно активировать сборку мусора в памяти деки, эффективно "оживляя" канал связи\n\nвосстанавливает матричные хиты в зависимости от значения Firewall',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-hackerman-decker', 'breacher-3'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 3х человек.
+  {
+    id: 'strong-blood',
+    humanReadableName: 'Strong blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 3 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 3,
+    }),
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 5х человек.
+  {
+    id: 'strongest-blood',
+    humanReadableName: 'Strongest blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 5,
+    }),
   },
 ];
 setAllPassiveAbilities(
