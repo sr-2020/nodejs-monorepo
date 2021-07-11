@@ -429,16 +429,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Захват цели в линк лок
-  {
-    id: 'link-lock',
-    humanReadableName: 'linklock',
-    description: 'новая команда linklock [target]\nхакер, захваченный в линклок не может перемещаться некоторое время',
-    availability: 'master',
-    karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
-    modifier: [],
-  },
   // Автоматический захват цели в линклок при появлении
   {
     id: 'auto-link-lock',
@@ -583,16 +573,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker', 'sly-3'],
     modifier: [],
   },
-  {
-    id: 'hop',
-    humanReadableName: 'hop',
-    description:
-      'новая команда: hop\nМгновенное перемещение по временному трейлу в ноду, в которой установлен якорный агент (backdoor, anchor...) с известным тебе именем (то есть значением ключа --name команды deploy)',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    modifier: [],
-  },
   // IT: команда в кривда-матрице
   {
     id: 'getdump',
@@ -601,16 +581,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'breacher-1'],
-    modifier: [],
-  },
-  // IT: буду запрашивать сам факт наличия фичи
-  {
-    id: 'vulnerabilities-sniffer',
-    humanReadableName: 'Нюх на уязвимости',
-    description: 'Позволяет получить дополнительные фрагменты дампов, в зависимости от значения Attack',
-    availability: 'master',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-3'],
     modifier: [],
   },
   // IT:
@@ -654,16 +624,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-3', 'deploy'],
-    modifier: [],
-  },
-  // IT: команда в кривда-матрице
-  {
-    id: 'shadow-deploy',
-    humanReadableName: 'Shadow deployments',
-    description: 'Разблокирует ключ команды deploy: --shadow\n\nИспользование добавляет +20 к скрытности агента',
-    availability: 'master',
-    karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'sly-2', 'deploy'],
     modifier: [],
   },
   // IT:
