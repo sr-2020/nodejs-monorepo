@@ -135,9 +135,9 @@ export function scannedConsumedMentalAbility(api: EventModelApi<Sr2020Character>
 
 export function yourAbilityResult(api: EventModelApi<Sr2020Character>, data: { success: boolean }) {
   if (data.success) {
-    api.sendNotification('Успех!', 'Ваша способность подействовала.');
+    sendNotificationAndHistoryRecord(api, 'Успех!', 'Ваша способность подействовала.');
   } else {
-    api.sendNotification('Провал!', 'Цель защитилась от вашего воздействия.');
+    sendNotificationAndHistoryRecord(api, 'Провал!', 'Цель защитилась от вашего воздействия.');
   }
 }
 

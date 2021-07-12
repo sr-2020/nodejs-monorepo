@@ -15,8 +15,6 @@ import {
   externalAbility,
   faerbolAbility,
   finishHimAbility,
-  gmDecreaseCharisma,
-  gmIncreaseCharisma,
   hammerOfJustice,
   howMuchIsThePssh,
   howMuchItCosts,
@@ -82,7 +80,12 @@ import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engi
 import { jackInAbility, jackOutAbility, settleBackdoorAbility } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import { exitSpirit, spiritEmergencyExit } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { ActiveAbility } from '@alice/sr2020-common/models/common_definitions';
-import { gmDecreaseMaxEssence, gmEssenceReset, gmIncreaseMaxEssence } from '@alice/sr2020-model-engine/scripts/character/essence';
+import {
+  essenceScanAbility,
+  gmDecreaseMaxEssence,
+  gmEssenceReset,
+  gmIncreaseMaxEssence,
+} from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
 
@@ -314,7 +317,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'lie-to-me',
     humanReadableName: 'Лай ту ми',
     description:
-      'Целевой персонаж не может скрыть свою ложь. Ты говоришь маркер цели (например щелканье пальцами). Если она лжет, то выполняет это маркер. Эффект длится 15 минут',
+      'Целевой персонаж не может скрыть свою ложь. Если цель лжет лжет, то выполняет это щелкает пальцами. Эффект длится 15 минут',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 30 : 30 * (1 / Math.sqrt(character.magic))),
@@ -628,7 +631,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => (character.magic < 1 ? 180 : 120 * (1 / Math.sqrt(character.magic))),
     prerequisites: ['arch-face'],
-    availability: 'master',
+    availability: 'closed',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -1421,7 +1424,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['meta-ghoul'],
+    prerequisites: [],
     pack: { id: 'gen-meta-ghoul', level: 1 },
     availability: 'master',
     karmaCost: 0,
@@ -1444,7 +1447,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['meta-vampire'],
+    prerequisites: [],
     pack: { id: 'gen-meta-vampire', level: 1 },
     availability: 'master',
     karmaCost: 0,
@@ -1492,10 +1495,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'termorectal-analysis',
     humanReadableName: 'Терморектальный криптоанализ',
-    description: 'Ты можешь допрашивать персонажей. На допросе цель развернуто отвечает на 3 заданных вопрос и теряет один хит.',
+    description:
+      'Активируй абилку, покажи цели. На таймере должно быть "20 минут" (только что применено).  Цель должна правдиво, полно и развернуто ответить на заданный вопрос и теряет один хит. ',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60,
+    cooldownMinutes: (character) => 20,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -1538,7 +1542,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'skin-stone',
     humanReadableName: 'Skin, Stone!',
     description:
-      'Поднять щиты - надетая согласно остальным правилам лёгкая броня будет считаться тяжёлой. После активации действует 5 минут.',
+      'Поднять щиты - надетая согласно остальным правилам лёгкая броня будет считаться тяжёлой. После активации действует 5 минут.  Потребуется маркировка красной лентой',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2058,7 +2062,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'levitation',
     humanReadableName: 'левитация',
-    description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь',
+    description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь\nfading +500',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2074,7 +2078,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'magnetism',
     humanReadableName: 'магнетизм',
-    description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один',
+    description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один\nfading +70',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2090,7 +2094,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'bond-breaker',
     humanReadableName: 'освобождение от пут',
-    description: 'Ты можешь освободить одну руку себе или товарищу',
+    description: 'Ты можешь освободить одну руку себе или товарищу\nfading +80',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2106,7 +2110,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'one-for-all',
     humanReadableName: 'один за всех',
-    description: 'Ты можешь пройти эту комнату один за всю свою команду',
+    description: 'Ты можешь пройти эту комнату один за всю свою команду\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2122,7 +2126,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'add-time-1',
     humanReadableName: 'больше времени +1',
-    description: 'Теперь у вас на 1 минуту больше времени в данже',
+    description: 'Теперь у вас на 1 минуту больше времени в данже\nfading +30',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2138,7 +2142,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'add-time-2',
     humanReadableName: 'больше времени +2',
-    description: 'Теперь у вас на 2 минуты больше времени в данже',
+    description: 'Теперь у вас на 2 минуты больше времени в данже\nfading +40',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2154,7 +2158,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'add-time-3',
     humanReadableName: 'больше времени +3',
-    description: 'Теперь у вас на 3 минуты больше времени в данже',
+    description: 'Теперь у вас на 3 минуты больше времени в данже\nfading +60',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2166,11 +2170,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // Добавляет 4 минуты к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 80
+  // techno.fading + 200
   {
     id: 'add-time-4',
     humanReadableName: 'Больше времени +4',
-    description: 'Теперь у вас на 4 минуты больше времени в данже',
+    description: 'Теперь у вас на 4 минуты больше времени в данже\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2178,15 +2182,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
-    fadingPrice: 80,
+    fadingPrice: 200,
     eventType: noItActionAbility.name,
   },
   // Добавляет 5 минут к прохождению основания, это должно быть вписано в карточку команды, как только КФ применена.
-  // techno.fading + 100
+  // techno.fading + 400
   {
     id: 'add-time-5',
     humanReadableName: 'больше времени +5',
-    description: 'Теперь у вас на 5 минут больше времени в данже',
+    description: 'Теперь у вас на 5 минут больше времени в данже\nfading +400',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2194,7 +2198,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     minimalEssence: 0,
-    fadingPrice: 100,
+    fadingPrice: 400,
     eventType: noItActionAbility.name,
   },
   // При использовании игроком этой КФ игротехник добавляет в указанном игроком месте "опору" - кладет на землю круг диаметром 20 см
@@ -2202,7 +2206,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'add-basement',
     humanReadableName: 'добавить опору',
-    description: 'Укажи, где должна появиться дополнительная опора',
+    description: 'Укажи, где должна появиться дополнительная опора\nfading +120',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2218,7 +2222,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'bell-silence',
     humanReadableName: 'молчание колокольчиков',
-    description: 'Ты можешь задевать колокольчики, матрица их не услышит',
+    description: 'Ты можешь задевать колокольчики, матрица их не услышит\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2234,7 +2238,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'photo-memory',
     humanReadableName: 'фотографическая память',
-    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады',
+    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады\nfading +230',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2250,7 +2254,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'second-sight',
     humanReadableName: 'ясновидение',
-    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции',
+    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2266,7 +2270,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'remove-excees',
     humanReadableName: 'убрать все лишнее',
-    description: 'Теперь матрица подскажет тебе, какие детали лишние',
+    description: 'Теперь матрица подскажет тебе, какие детали лишние\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2282,7 +2286,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'remove-half',
     humanReadableName: 'убрать половину ',
-    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции',
+    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2294,12 +2298,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // Игрок может вскрывать цифровые замки в реальном мире.
-  // Через 2 минуты после активации абилки показать текст "Замок вскрыт"
+  // Через 30 секунд после активации абилки показать текст "Замок вскрыт"
   // techno.fading + 25
   {
     id: 'lockpicking',
     humanReadableName: 'Real: вскрытие замков',
-    description: 'Ты можешь вскрыть цифровой замок за 2 минуты',
+    description: 'Ты можешь вскрыть цифровой замок за 30 секунд\nfading +25',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -2315,7 +2319,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'attack-drone',
     humanReadableName: 'Real: паралич дрона',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любого дрона на 90 секунд.',
+    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любого дрона на 90 секунд.\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2332,7 +2336,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'identity-scan',
     humanReadableName: 'VR: узнать личность аватарки',
-    description: 'Работает только в VR. Покажи это персонажу, к которому ты хочешь узнать личность, он должен показать тебе свой SIN.',
+    description:
+      'Работает только в VR. Покажи это персонажу, к которому ты хочешь узнать личность, он должен показать тебе свой SIN.\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
@@ -2344,11 +2349,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: noItActionAbility.name,
   },
   // параметр techno.initiative +2 (у нападающих базовая и = 1, у защитников базовая и = 0) применяется строго до входа в красную комнату
-  // techno.fading +120
+  // techno.fading +60
   {
     id: 'initiative-add-2',
     humanReadableName: 'инициатива +2 ',
-    description: 'Твои лидерские качества улучшились, Инициатива +2 \n(у нападающих базовая и = 1, у защитников базовая и = 0)',
+    description: 'Твои лидерские качества улучшились, Инициатива +2 \n(у нападающих базовая и = 1, у защитников базовая и = 0)\nfading +60',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2356,7 +2361,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     minimalEssence: 0,
-    fadingPrice: 120,
+    fadingPrice: 60,
     eventType: noItActionAbility.name,
   },
   // добавлет 1 хит союзнику. хиты считают сами
@@ -2364,7 +2369,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-add-ally-1',
     humanReadableName: 'добавить 1 хит союзнику',
-    description: 'Добавить один хит союзнику (Хиты считаете сами)',
+    description: 'Добавить один хит союзнику (Хиты считаете сами)\nfading +80',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2380,7 +2385,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-add-ally-2',
     humanReadableName: 'добавить 2 хита союзнику',
-    description: 'Добавить два хита союзнику (Хиты считаете сами)',
+    description: 'Добавить два хита союзнику (Хиты считаете сами)\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2396,7 +2401,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-add-ally-all-1',
     humanReadableName: 'добавить 1 хит всем союзникам',
-    description: 'Добавить один хит всем союзникам (Хиты считаете сами)',
+    description: 'Добавить один хит всем союзникам (Хиты считаете сами)\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2412,7 +2417,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-add-ally-all-2',
     humanReadableName: 'добавить 2 хита всем союзникам',
-    description: 'Добавить два хита всем союзникам (Хиты считаете сами)',
+    description: 'Добавить два хита всем союзникам (Хиты считаете сами)\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2428,7 +2433,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-remove-foe-1',
     humanReadableName: 'снять 1 хит противника',
-    description: 'Снять один хит противника (Хиты считаете сами)',
+    description: 'Снять один хит противника (Хиты считаете сами)\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2444,7 +2449,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-remove-foe-2',
     humanReadableName: 'снять 2 хита противника',
-    description: 'Снять два хита противника (Хиты считаете сами)',
+    description: 'Снять два хита противника (Хиты считаете сами)\nfading +120',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2460,7 +2465,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-remove-foe-all-1',
     humanReadableName: 'снять 1 хит всем противникам',
-    description: 'Снять один хит со всех противников (Хиты считаете сами)',
+    description: 'Снять один хит со всех противников (Хиты считаете сами)\nfading +180',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2476,7 +2481,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'hp-remove-foe-all-2',
     humanReadableName: 'снять 2 хита всем противникам',
-    description: 'Снять два хита со всех противников (Хиты считаете сами)',
+    description: 'Снять два хита со всех противников (Хиты считаете сами)\nfading +300',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2493,7 +2498,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'bind-foe',
     humanReadableName: 'путы на одного противника',
     description:
-      'Ты связал одну руку противника, теперь он не может ее использовать (должен убрать за спину и не может применять никакие предметы в этой руке)',
+      'Ты связал одну руку противника, теперь он не может ее использовать (должен убрать за спину и не может применять никакие предметы в этой руке)\nfading +50',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2509,7 +2514,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'bind-foe-all',
     humanReadableName: 'путы на всех противников',
-    description: 'Ты связал одну руку у всех противников, теперь они не могут ее использовать',
+    description: 'Ты связал одну руку у всех противников, теперь они не могут ее использовать\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2526,7 +2531,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'magic-remove',
     humanReadableName: '"безмагия" на всех, кто в комнате',
     description:
-      'После использования этой комплексной формы никто не может использовать комплексные формы и все действительные эффекты комплексных форм - отменяются ',
+      'После использования этой комплексной формы никто не может использовать комплексные формы и все действительные эффекты комплексных форм - отменяются \nfading +600',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2544,7 +2549,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'runaway',
     humanReadableName: 'Бегство из Основания',
     description:
-      'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
+      'Активируй способность, чтобы покинуть основание прямо сейчас. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. \nfading +300',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -2622,7 +2627,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'settle-backdoor',
     humanReadableName: 'Установить спрайт на хост',
-    description: 'Установить спрайт на хост. ',
+    description: 'Установить спрайт на хост. \nfading +80',
     target: 'scan',
     targetsSignature: [
       {
@@ -2662,7 +2667,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'settle-backdoor'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
@@ -2674,7 +2679,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'see-backdoor',
     humanReadableName: 'Посмотреть спрайты',
-    description: 'Ты можешь посмотреть спрайт, установленные на данный хост.',
+    description: 'Ты можешь посмотреть спрайт, установленные на данный хост.\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -2979,7 +2984,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'enter-vr',
     humanReadableName: 'Зайти в Виар (колдсим)',
     description:
-      'Активируй, чтобы зайти в VR (колдсим). Надо отсканировать телохранилище. Помни, что время пребывания в Виар ограничено. Если ты опоздаешь - можешь получить биофидбек (хиты, тяжран или КС).',
+      '[только для VR]  Активируй, чтобы зайти в VR (колдсим). Надо отсканировать телохранилище. Помни, что время пребывания в Виар ограничено. Если ты опоздаешь - можешь получить биофидбек (хиты, тяжран или КС).',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 120,
@@ -2995,7 +3000,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'exit-vr',
     humanReadableName: 'Выйти из Виар',
-    description: 'вернись к телохранилищу, чтобы покинуть VR. активируй способность и забери свое тело.',
+    description: '[только для VR] вернись к телохранилищу, чтобы покинуть VR. активируй способность и забери свое тело.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 0,
@@ -3059,7 +3064,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'attack-drone-2',
     humanReadableName: 'Real: нападение на дрона',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Нападение на дрон"\nснять 1 хит с любого тела типа дрон',
+    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Нападение на дрон"\nснять 1 хит с любого тела типа дрон\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -3076,7 +3081,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'clinical-death-rr',
     humanReadableName: 'Добивание в КС в красной комнате',
     description:
-      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам КС реального мира. цена 150Ф',
+      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам КС реального мира. \nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -3093,7 +3098,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'absolutely-death-rr',
     humanReadableName: 'Добивание в АС в красной комнате',
     description:
-      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам АС реального мира. цена 300Ф',
+      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам АС реального мира. \nfading +300',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 90,
@@ -3105,12 +3110,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: dummyAbility.name,
   },
   // Отсканировать куар Спрайта, чтобы потратить его
-  // +80
+  // +20
   //
   {
     id: 'native-compile',
     humanReadableName: 'Компиляция спрайта',
-    description: 'Компиляция спрайта в основании',
+    description: 'Компиляция спрайта в основании\nfading +20',
     target: 'scan',
     targetsSignature: [
       {
@@ -3125,7 +3130,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     availability: 'open',
     karmaCost: 0,
     minimalEssence: 0,
-    fadingPrice: 80,
+    fadingPrice: 20,
     eventType: useSpriteAbility.name,
   },
   // В качестве цели сканируется QR-код телохранилища .Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
@@ -3210,21 +3215,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: nanohiveVrAbility.name,
   },
-  // текстовая
+  // Отсканировать другого персонажа, показать пуш
+  // Показывает пуш:
+  // Эссенс всего = essenceDetails.max
+  // занят имплантами = essenceDetails.used
+  // остаток = Essence
   {
     id: 'ethic-kind',
     humanReadableName: 'Сострадание',
-    description:
-      'Если вы видите как кого-то планируют добить в КС, вы можете призвать атакующего проявить милосердие, показав ему эту абилку. Несостоявшийся убийца должен помочь спастись своей жертве и вам тоже (вывести из опасной ситуации). Вы должны находиться в здоровом\\легкораненом состоянии и быть способны говорить для применения этой способности. ',
+    description: 'Ты можешь посмотреть точную информацию об уровне эссенса другого персонажа',
     target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 180,
+    targetsSignature: kPhysicalBodyTargeted,
+    cooldownMinutes: (character) => 120,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: noItActionAbility.name,
+    eventType: essenceScanAbility.name,
   },
   // текстовая
   {
@@ -3278,7 +3286,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ethic-deanon',
     humanReadableName: 'Абсолютный деанон',
     description:
-      'Если ты используешь способность Деанон - от нее не спасают способности Режим Инкогнито и Режим Фаерволл. Ты можешь использовать эту способсноть один раз в час.',
+      '[только для VR] Если ты используешь способность Деанон - от нее не спасают способности Режим Инкогнито и Режим Фаерволл. Ты можешь использовать эту способность один раз в час.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3325,7 +3333,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ethic-ordo',
     humanReadableName: 'Давление',
-    description: 'Ты можешь заставить другого персонажа показать его куар ',
+    description: 'Ты можешь заставить другого персонажа показать его куар (для взаимодействия)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
@@ -3458,7 +3466,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'enter-vr-hot',
     humanReadableName: 'Стать аватаркой и зайти в Виар (ХОТСИМ)',
     description:
-      'Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
+      '[только для VR] Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -4079,7 +4087,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: howMuchIsThePssh.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар целевого персонажа, у целевого персонажа харизма увеличивается на 1.
   {
     id: 'gm-increase-charisma',
@@ -4089,14 +4096,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
     prerequisites: ['master-of-the-universe'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Отсканировать куар целевого персонажа, у целевого персонажа Харизма уменьшается на 1.
   {
     id: 'gm-dencrease-charisma',
@@ -4106,7 +4111,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
     prerequisites: ['master-of-the-universe'],
-    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,

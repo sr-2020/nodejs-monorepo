@@ -4364,6 +4364,18 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 5х человек.
+  {
+    id: 'strongest-blood',
+    humanReadableName: 'Strongest blood',
+    description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: modifierFromEffect(multiplyVictimCoefficient, {
       amount: 3,
     }),

@@ -3,6 +3,7 @@ import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-ch
 import { increaseCharisma, increaseMagic, increaseResonance } from './basic_effects';
 import { removeImplant } from './merchandise';
 import { FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
 
 export function createEssenceSystemEffect(): Effect {
   return {
@@ -59,4 +60,13 @@ export function gmDecreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: 
 
 export function gmEssenceReset(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, essenceReset, {});
+}
+
+export function essenceScanAbility(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+  sendNotificationAndHistoryRecord(
+    api,
+    'Анализ эссенса',
+    `Всего: ${target.essenceDetails.max / 100}. Занято имплантами: ${target.essenceDetails.used}. Остаток: ${target.essence}.`,
+  );
 }
