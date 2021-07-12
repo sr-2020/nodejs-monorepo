@@ -16,6 +16,8 @@ export class SpellTrace {
   @StringProperty() metarace: string;
   @NumberProperty() power: number;
   @NumberProperty() magicFeedback: number;
+  @NumberProperty() participantsAmount: number;
+  @NumberProperty() victimsAmount: number;
 }
 
 @Entity({

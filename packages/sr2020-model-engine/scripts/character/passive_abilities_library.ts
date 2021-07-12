@@ -54,6 +54,8 @@ import {
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
   unlockScoringDetailsScreen,
+  multiplyParticipantCoefficient,
+  multiplyVictimCoefficient,
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -1276,7 +1278,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: [],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 3,
+    }),
   },
   // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
   // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
@@ -4320,7 +4324,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 0,
+    }),
   },
   // TODO(aeremin): Implement and add modifier here
   // IT: команда в Кривда-матрице
@@ -4358,8 +4364,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
-    modifier: [],
-  },
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 3,
+    }),
+},
   // TODO(aeremin): Implement and add modifier here
   // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 5х человек.
   {
@@ -4370,7 +4378,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
-    modifier: [],
+    modifier: modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 5,
+    }),
   },
 ];
 setAllPassiveAbilities(

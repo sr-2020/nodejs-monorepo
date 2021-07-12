@@ -336,6 +336,14 @@ export function multiplyCooldownCoefficient(api: EffectModelApi<Sr2020Character>
   api.model.cooldownCoefficient *= m.amount;
 }
 
+export function multiplyParticipantCoefficient(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.participantCoefficient *= m.amount;
+}
+
+export function multiplyVictimCoefficient(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  api.model.magicStats.victimCoefficient *= m.amount;
+}
+
 export function multiplyDiscourseMongerCooldowns(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   for (const ability of api.model.activeAbilities) {
     if (ability.id.startsWith('dgroup-') || ability.id.startsWith('dm-')) {
