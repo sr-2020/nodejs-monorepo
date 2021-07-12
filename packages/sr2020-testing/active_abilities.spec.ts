@@ -27,6 +27,28 @@ describe('Active abilities', function () {
     expect((await fixture.getCharacter()).workModel.healthState).toBe('healthy');
   });
 
+  it('Ground Heal - Эффект', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.addCharacterFeature('ground-heal-ability', 1);
+
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
+    await fixture.saveCharacter({ modelId: '3', healthState: 'clinically_dead' });
+
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('wounded');
+    await fixture.useAbility({ id: 'ground-heal-ability', targetCharacterId: '2' }, '1');
+    expect((await fixture.getCharacter('2')).workModel.healthState).toBe('healthy');
+    expect(fixture.getCharacterNotifications('2')[0].body).toContain('Хиты полностью восстановлены');
+
+    await fixture.advanceTime(duration(31, 'second'));
+
+    expect((await fixture.getCharacter('3')).workModel.healthState).toBe('clinically_dead');
+    await fixture.sendCharacterEventExpectingError(
+      { eventType: 'useAbility', data: { id: 'ground-heal-ability', targetCharacterId: '3' } },
+      '1',
+    );
+    expect((await fixture.getCharacter('3')).workModel.healthState).toBe('clinically_dead');
+  });
+
   it('Silentium est aurum', async () => {
     await fixture.saveCharacter({ modelId: '1' }); // Ability user
     await fixture.saveCharacter({ modelId: '2' }); // Target
@@ -159,8 +181,6 @@ describe('Active abilities', function () {
     }
   });
 
-
-
   it('How much is the pssh', async () => {
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('how-much-is-the-pssh');
@@ -171,8 +191,6 @@ describe('Active abilities', function () {
       expect(fixture.getCharacterNotifications()[0].body).toContain('Сейчас здесь мана на уровне: 5');
     }
   });
-
-
 
   it('Finish him on body', async () => {
     await fixture.saveLocation();
