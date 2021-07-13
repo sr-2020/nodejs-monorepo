@@ -201,7 +201,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],

@@ -6,7 +6,11 @@ import { duration } from 'moment';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
 import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import { addFeatureToModel, addTemporaryPassiveAbility, addTemporaryActiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
+import {
+  addFeatureToModel,
+  addTemporaryPassiveAbility,
+  addTemporaryActiveAbility,
+} from '@alice/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merchandise';
@@ -117,6 +121,11 @@ function injectedTargetsData(api: EventModelApi<Sr2020Character>, data: ActiveAb
 }
 
 export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData, _: Event) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+  if (target.healthState != 'wounded') {
+    throw new UserVisibleError('Жертва не находится в тяжране.');
+  }
+
   sendNotificationAndHistoryRecord(
     api,
     'Навык',
@@ -188,7 +197,7 @@ export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: Acti
   api.sendNotification('Уровень маны', 'Сейчас здесь мана на уровне: ' + data.location.manaLevel);
 }
 
-export function undiena(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData ) {
+export function undiena(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryActiveAbility(api, 'ground-heal-ability', duration(30, 'minutes'));
 }
 
@@ -199,7 +208,6 @@ export function avalFest(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
 export function dobirds(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'birds-able', duration(15, 'minutes'), { amount: 15 });
 }
-
 
 export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, cloudMemoryEnable, {});
@@ -291,10 +299,10 @@ export function changeAuraEffect(api: EffectModelApi<Sr2020Character>, m: Modifi
   const auraChars: string[] = [];
   for (let i = 0; i < mask.length; ++i) {
     if (mask[i] != kUnknowAuraCharacter) {
-      if(mask[i] != api.model.magicStats.aura[i]) {
+      if (mask[i] != api.model.magicStats.aura[i]) {
         auraChars.push(mask[i]);
       } else {
-        const slide = (mask[i] == 'z')?-25:1;
+        const slide = mask[i] == 'z' ? -25 : 1;
         auraChars.push(String.fromCharCode(mask[i].charCodeAt(0) + slide));
       }
     } else {
@@ -317,7 +325,6 @@ export function changeAuraSpiritEvent(api: EventModelApi<Sr2020Character>, data:
     'Изменение ауры',
   );
 }
-
 
 export function takeNoHarmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'magic-shield', duration(5, 'minutes'));

@@ -782,9 +782,6 @@ describe('Spells', function () {
           magicFeedback: 3,
         }),
       );
-
-      // expect((await fixture.getCharacter(2)).workModel.passiveAbilities).toContainEqual(
-      // expect.objectContaining({ id: 'soul-exhaustion' }));
     });
 
     it('Normal ritual2, members: 1 agnus', async () => {
