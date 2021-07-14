@@ -32,25 +32,33 @@ describe('Hackers-related events', function () {
     await fixture.saveLocation(); // Needed by spell
     await fixture.addCharacterFeature('dumpty-humpty', '2');
 
-    const castEvent = {
+    const weakCastEvent = {
+      eventType: 'castSpell',
+      data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 3, location: { id: 0, manaLevel: 10 } },
+    };
+
+    const strongCastEvent = {
       eventType: 'castSpell',
       data: { id: 'dumpty-humpty', targetCharacterId: '1', power: 4, location: { id: 0, manaLevel: 10 } },
     };
-    await fixture.sendCharacterEvent(castEvent, '2');
+
+    await fixture.sendCharacterEvent(weakCastEvent, '2');
 
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // No increase
     await fixture.advanceTime(duration(1, 'hour'));
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // No decrease either
 
     await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
-    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(4); // Damaged by dumpshock
-    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(2); // Damaged by dumpshock
+    await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
+    await fixture.sendCharacterEvent({ eventType: 'dumpshock', data: {} }, '1');
+    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(2); // Damaged by dumpshock
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(1); // Damaged by dumpshock
 
-    await fixture.sendCharacterEvent(castEvent, '2');
-    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Healed a bit
-    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Healed a bit
+    await fixture.sendCharacterEvent(weakCastEvent, '2');
+    expect((await fixture.getCharacter('1')).workModel.resonance).toBe(3); // Healed a bit
+    expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(1); // Healed a bit
 
-    await fixture.sendCharacterEvent(castEvent, '2');
+    await fixture.sendCharacterEvent(strongCastEvent, '2');
     expect((await fixture.getCharacter('1')).workModel.resonance).toBe(5); // Not more!
     expect((await fixture.getCharacter('1')).workModel.intelligence).toBe(3); // Not more!
 

@@ -47,8 +47,8 @@ export function adjustDumpshock(api: EventModelApi<Sr2020Character>, data: { amo
   if (m) {
     const dumpshockModifier = m as ModifierWithAmount;
     const updatedDumpshockAmount = dumpshockModifier.amount + data.amount;
-    if (updatedDumpshockAmount >= 0 && updatedDumpshockAmount <= 5) {
-      dumpshockModifier.amount = updatedDumpshockAmount;
+    if (updatedDumpshockAmount <= 5) {
+      dumpshockModifier.amount = updatedDumpshockAmount > 0 ? updatedDumpshockAmount : 0;
       return true;
     } else {
       return false;
