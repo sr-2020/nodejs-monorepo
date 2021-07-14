@@ -16,7 +16,7 @@ export class DeathAndRebirthCard extends React.Component<{ sendEvent: SendEvent 
   }
 
   revive() {
-    this.props.sendEvent('debugReviveAbsolute', {});
+    this.props.sendEvent('debugReviveAbsoluteSecret', {});
   }
 
   render() {
