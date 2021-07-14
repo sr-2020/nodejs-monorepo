@@ -57,7 +57,7 @@ describe('Karma events', function () {
       data: { id: 'trollton', location: { id: '7', manaLevel: 0 } },
     });
 
-    expect(baseModel.karma.available).toBe(2.5);
+    expect(baseModel.karma.available).toBe(3);
   });
 
   it('Casting spells gives karma', async () => {

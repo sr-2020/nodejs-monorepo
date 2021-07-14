@@ -47,15 +47,15 @@ import {
   muliplyMagicRecoverySpeed,
   multiplyDiscountWeaponsArmor,
   multiplyMagicFeedbackMultiplier,
+  multiplyParticipantCoefficient,
   multiplySpiritResistanceMultiplier,
+  multiplyVictimCoefficient,
   setImplantsRemovalResistance,
   setTransactionAnonymous,
   unlockAutodockImplantInstall,
   unlockAutodockImplantRemoval,
   unlockAutodockScreen,
   unlockScoringDetailsScreen,
-  multiplyParticipantCoefficient,
-  multiplyVictimCoefficient,
 } from './basic_effects';
 import { PassiveAbility } from '@alice/sr2020-common/models/common_definitions';
 import { setAllPassiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -354,23 +354,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
-  // САБЖ, как в описании. Выдаем какую-то прикольную сюжетную инфу
-  {
-    id: 'incriminating-evidence',
-    humanReadableName: 'Собрать компромат',
-    description:
-      'Напиши большую статью об интересующем тебя человеке или организации. Добейся, чтобы эта статья вошла в топ-20 понравившихся материалов. Получи от МГ компромат на этого человека или организацию. Степень подробности информации зависит от положения статьи в рейтинге топ-20. Вы не можете собирать компромат в течении 12 часов после получения прошлых итогов компромата.',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['media-person'],
-    modifier: [],
-  },
   // САБЖ, как в описании.
   {
     id: 'always-online',
     humanReadableName: 'Всегда на связи',
     description:
-      'Чтобы с вами ни происходило, в каком бы вы ни были состоянии, как бы вас ни заколдовали, если вы живы - вы можете пользоваться телеграммом для передачи игровых сообщений. В мире игре этого не видно, по вам нельзя понять, что вы что-то пишете, отнять телефон и так далее.',
+      'Пока ваш персонаж жив и не находится под запрещающим использовать связь ментальным контролем, вы можете писать сообщения в телеграмм, даже если вы связаны или без сознания. Если у окружающих возникают к вам вопросы, продемонстрируйте им наличие у вас этой способности.',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['media-person'],
@@ -381,18 +370,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'last-report',
     humanReadableName: 'Это мой последний репортаж',
     description:
-      'Если вас каким-либо образом все-таки убили, вы можете написать сообщение с описанием подробностей вашей смерти, как все это происходило, что вы об этом думаете, оставить последние пожелания для подписчиков и опубликовать это в вашем телеграмм-канале. Вы можете описывать что происходило с вашим телом и вокруг него. ',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['media-person'],
-    modifier: [],
-  },
-  // САБЖ, как в описании.
-  {
-    id: 'ask-anon',
-    humanReadableName: 'Спроси анонимуса',
-    description:
-      'Раз в 12 часов вы можете получить ответ от мастеров на любой вопрос, подразумевающий ответ "да или нет" или подробный ответ на вопрос, касающийся бэка игры и событий, произошедших в мире игры до ее начала. Кто-то из ваших читателей скинул вам эту инфу в личку. Данную информацию нельзя использовать как доказательства в суде - ведь остальные могут сомневаться в том, что анонимус знает все. Но вы не сомневаетесь в этом. ',
+      'Эта способность сработает только если вашм персонаж был добит в КС. Вы можете записать на камеру рассказ про последние 15 минут вашей жизни, даже если вы были без сознания и чего-то не видели - можете это описать.\r\nЗапись можно выложить в любой канал, где у вас остались права на размещение материалов или послать кому-то личным сообщением.',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['media-person'],
@@ -404,7 +382,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Поддержка блоггеров',
     description:
       'Раз в 12 часов вы можете назвать мастерам некую личность или организацию и защитить ее от использования способности "собрать компромат" на 12 часов.',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['media-person'],
     modifier: [],
@@ -413,22 +391,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // У игрока просто отображается текст пассивной абилки
   {
     id: 'project-manager-1',
-    humanReadableName: 'ты - проект-менеджер1',
-    description: 'сертификат проект-менеджера. может вести не более 1 проекта одновременно',
+    humanReadableName: 'ты - проект-менеджер',
+    description: 'Сертификат проект-менеджера. Ты можешь вести проекты, но необходимо выбрать специализацию (тип проекта). ',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
-  // для проект-менеджера с 3 слотами
-  // У игрока просто отображается текст пассивной абилки
+  //
   {
     id: 'project-manager-3',
-    humanReadableName: 'ты - проект-менеджер3',
-    description: 'сертификат проект-менеджера. может вести до 3 проектов одновременно',
+    humanReadableName: 'Эффективность ресурсов проекта',
+    description: 'Проект, который ведешь ты - требует на 20% меньше ресурсов.',
     availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
+    karmaCost: 40,
+    prerequisites: ['project-manager-1'],
     modifier: [],
   },
   // Автоматический захват цели в линклок при появлении
@@ -454,11 +431,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Позволяет пережить одну атаку черного льда
   {
     id: 'huge-lucker',
-    humanReadableName: 'Конский лак ',
+    humanReadableName: 'Конский лак',
     description: 'Говорят, ты родился в рубашке. Возможно, однажды эта "рубашка" спасет тебе жизнь',
     availability: 'closed',
     karmaCost: 10,
-    prerequisites: ['arch-hackerman-decker'],
+    prerequisites: ['arch-hackerman-decker', 'fencer-1'],
     modifier: [],
   },
   // Еще 3 хоста, на защиту которых ты можешь подписаться
@@ -477,7 +454,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Компрессор',
     description: 'Ты разобрался со всеми премудростями квантовой компрессии. Что позволяет сократить размер софта в памяти деки на 20%\n',
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 25,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
     modifier: [],
   },
@@ -488,7 +465,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Выжать до капли',
     description: 'Можешь использовать бекдоры на 40 минут дольше',
     availability: 'open',
-    karmaCost: 4,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: modifierFromEffect(increaseBackdoorTtl, { amount: 40 }),
   },
@@ -560,7 +537,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'новая команда:feelmatrix\nТы теперь просто нутром чувствуешь, где в Основании можно надрать кому-то цифровой зад!\nВыдает список хостов, на которых есть другие декеры.\n\nВысокие значения Sleaze обмануть эту команду',
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'sly-3', 'arpscan'],
     modifier: [],
   },
@@ -888,8 +865,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Увеличение харизмы 1',
     description: 'Перманентное увеличение Харизмы персонажа - 1',
     availability: 'closed',
-    karmaCost: 80,
-    prerequisites: ['arch-face', 'paralysis-3'],
+    karmaCost: 60,
+    prerequisites: ['arch-face'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
   // Увеличивает Харизму персонажа менталиста на +1
@@ -898,7 +875,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Увеличение харизмы 2',
     description: 'Перманентное увеличение Харизмы персонажа - 2',
     availability: 'closed',
-    karmaCost: 80,
+    karmaCost: 60,
     prerequisites: ['arch-face', 'increase-the-charisma-1'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
@@ -908,7 +885,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Увеличение харизмы 3',
     description: 'Перманентное увеличение Харизмы персонажа - 3',
     availability: 'closed',
-    karmaCost: 100,
+    karmaCost: 80,
     prerequisites: ['arch-face', 'increase-the-charisma-2'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
@@ -918,7 +895,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Увеличение харизмы 4',
     description: 'Перманентное увеличение Харизмы персонажа - 4',
     availability: 'closed',
-    karmaCost: 100,
+    karmaCost: 80,
     prerequisites: ['arch-face', 'increase-the-charisma-3'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
@@ -928,7 +905,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Увеличение харизмы 5',
     description: 'Перманентное увеличение Харизмы персонажа - 5',
     availability: 'closed',
-    karmaCost: 100,
+    karmaCost: 80,
     prerequisites: ['arch-face', 'increase-the-charisma-4'],
     modifier: modifierFromEffect(increaseCharisma, { amount: 1 }),
   },
@@ -969,7 +946,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Игра на бирже 2',
     description: 'ты получаешь кэшбэк 5% от всех своих рентных платежей.',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 30,
     prerequisites: ['arch-face', 'igra-na-birge-1'],
     modifier: modifierFromEffect(increaseStockGainPercentage, {
       amount: 5 - 2,
@@ -981,7 +958,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Игра на бирже 3',
     description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-face', 'igra-na-birge-2'],
     modifier: modifierFromEffect(increaseStockGainPercentage, {
       amount: 13 - 5,
@@ -992,20 +969,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'anonymous-transaction',
     humanReadableName: 'фиксер',
     description: 'Все твои переводы анонимны',
-    availability: 'master',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: modifierFromEffect(setTransactionAnonymous, {}),
-  },
-  // Абилка-сертификат, позволяющий просмотреть чужой этикпрофиль
-  {
-    id: 'dm-soul-expert',
-    humanReadableName: 'Душевед',
-    description: 'Предъявите экран с описанием способности игроку, чтобы тот показал вам свой этикпрофиль',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    modifier: [],
+    modifier: modifierFromEffect(setTransactionAnonymous, {}),
   },
   // Абилка-сертификат
   {
@@ -1018,55 +985,54 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Множитель 0,9 на стоимость товара при покупке любого товара  данным персонажем
-  //
+  // Скидка 10% товары
   {
     id: 'discount-all-1',
     humanReadableName: 'Скидосы - 10%',
-    description: 'Скидки. Стоимость товара умножается на 0,9 при покупке любого товара ',
+    description: 'Скидка 10% товары',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-face'],
     modifier: [],
   },
-  // Множитель 0,8 при покупке любого товара  данным персонажем
+  // Скидка +10% на товары
   {
     id: 'discount-all-2',
     humanReadableName: 'Скидосы - 20%',
-    description: 'Скидка. Стоимость товара умножается на 0,8 при покупке любого товара',
+    description: 'Скидка +10% на товары',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-face', 'discount-all-1'],
     modifier: [],
   },
-  // Множитель 0,7 при покупке любого товара  данным персонажем
+  // Скидки +10% на товары
   {
     id: 'discount-all-3',
     humanReadableName: 'Скидосы - 30%',
-    description: 'Скидки Стоимость товара умножается на 0,7 при покупке любого товара ',
+    description: 'Скидки +10% на товары',
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 30,
     prerequisites: ['arch-face', 'discount-all-2'],
     modifier: [],
   },
-  // Множитель 0,6 при покупке любого товара  данным персонажем
+  // Скидки +10% на товары
   {
     id: 'discount-all-4',
     humanReadableName: 'Скидосы - 40%',
-    description: 'Скидки Стоимость товара умножается на 0,6 при покупке любого товара ',
+    description: 'Скидки +10% на товары',
     availability: 'open',
-    karmaCost: 70,
-    prerequisites: ['arch-face', 'discount-all-3', 'igra-na-birge-1'],
+    karmaCost: 30,
+    prerequisites: ['arch-face', 'discount-all-3'],
     modifier: [],
   },
-  // Множитель 0,5 при покупке любого товара  данным персонажем
+  // Твои гешефтмахерские скидки удваиваются!
   {
     id: 'discount-all-5',
-    humanReadableName: 'Скидосы - 50%',
-    description: 'Скидки Стоимость товара умножается на 0,5 при покупке любого товара ',
+    humanReadableName: 'Удвоение скидок',
+    description: 'Твои гешефтмахерские скидки удваиваются!',
     availability: 'open',
-    karmaCost: 80,
-    prerequisites: ['arch-face', 'discount-all-4', 'igra-na-birge-3'],
+    karmaCost: 50,
+    prerequisites: ['arch-face', 'igra-na-birge-3', 'discount-all-4', 'let-him-pay'],
     modifier: [],
   },
   // множитель 0,9 при покупке товаров типа ХОЛОДНОЕ ОРУЖИЕ,
@@ -1117,7 +1083,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 4 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['magic-3', 'arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1127,7 +1093,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 5 (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 70,
+    karmaCost: 50,
     prerequisites: ['magic-4', 'arch-mage'],
     modifier: modifierFromEffect(increaseMagic, { amount: 1 }),
   },
@@ -1254,7 +1220,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Можно использовать людей в тяжране (сканируя их QR) для увеличения (по времени, а не на один каст) доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 50,
+    karmaCost: 40,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1276,7 +1242,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Agnus dei (P)',
     description: 'В ритуальных практиках соучастия ты считаешься за 3х человек',
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 30,
     prerequisites: [],
     modifier: modifierFromEffect(multiplyParticipantCoefficient, {
       amount: 3,
@@ -1290,7 +1256,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Ритуальная магия (P)',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1302,7 +1268,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Православная ритуальная магия (P)',
     description: 'Во время каста можно использовать людей (сканируя их QR) для увеличения доступной Мощи и снижения Отката',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [],
   },
@@ -1555,7 +1521,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Устойчивость к химии',
     description: 'Дает устойчивость к негативным эффектам при употреблении препаратов.',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 40,
     prerequisites: ['arch-samurai', 'faster-regen-1'],
     modifier: modifierFromEffect(increaseСhemoCrysisThreshold, { amount: 40 }),
   },
@@ -2041,7 +2007,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Автоматы',
     description: 'Ты можешь использовать автомат (до 25 патронов, электромех).  Атака НЕ пробивает тяжелую броню.',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 70,
     prerequisites: ['arch-samurai', 'guns-1'],
     modifier: [],
   },
@@ -2052,7 +2018,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты можешь использовать пулемёт (без ограничения патронов, электромех). Оружие необходимо держать двумя руками. Атака НЕ пробивает тяжелую броню.',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 80,
     prerequisites: ['arch-samurai', 'guns-2'],
     modifier: [],
   },
@@ -2060,9 +2026,9 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'armor-1',
     humanReadableName: 'Приживление имплантов',
-    description: 'Усиленное приживление имплантов сильно мешает рипоменам срезать имеющиеся импланты.',
+    description: 'Усиленное приживление имплантов сильно мешает рипоменам срезать имеющиеся у тебя импланты.',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 70,
     prerequisites: ['arch-samurai', 'armor-2'],
     modifier: [modifierFromEffect(setImplantsRemovalResistance, { amount: 50 })],
   },
@@ -2084,7 +2050,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты можешь носить тяжелую броню. При наличии тяжелой брони ты получаешь иммунитет к Легкому холодному и легкому дистанционному оружию. Тяжелое оружие снимает с тебя только один хит одним попаданием. Надеть тяжелую броню можно только при наличии импланта "усиленные кости"',
     availability: 'open',
-    karmaCost: 80,
+    karmaCost: 90,
     prerequisites: ['arch-samurai', 'armor-1'],
     modifier: [],
   },
@@ -2118,7 +2084,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты можешь использовать легкое холодное оружие - мечи, сабли до 120 см, топоры длиной до 100 см. Атака НЕ пробивает тяжелую броню.',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 70,
     prerequisites: ['arch-samurai', "clubs'n'swords-1"],
     modifier: [],
   },
@@ -2197,7 +2163,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'dividends-3',
     humanReadableName: 'Дивиденды ***',
-    description: 'Еще больше пассивного дохода, ты сумел вырваться из крысиных бегов, чаммер!',
+    description: 'Еще больше пассивного дохода, чаммер!',
     availability: 'open',
     karmaCost: 70,
     prerequisites: ['dividends-2'],
@@ -2209,7 +2175,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 1-П! (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-mage'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2219,7 +2185,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Магия 2-П! (P)',
     description: 'Перманентно увеличивает твою характеристику Магия на 1',
     availability: 'closed',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['magic-1-summ', 'arch-mage'],
     modifier: [modifierFromEffect(increaseMagic, { amount: 1 })],
   },
@@ -2730,7 +2696,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'держать 2 бэкдора',
     description: 'Можешь использовать 2 бэкдора одновременно',
     availability: 'open',
-    karmaCost: 25,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer'],
     modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
@@ -2740,7 +2706,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'держать 3 бэкдора',
     description: 'Можешь использовать 3 бэкдора одновременно',
     availability: 'open',
-    karmaCost: 25,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-2'],
     modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
@@ -2750,7 +2716,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'держать 4 бэкдора',
     description: 'Можешь использовать 4 бэкдора одновременно',
     availability: 'open',
-    karmaCost: 15,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-3'],
     modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
@@ -2760,7 +2726,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'держать 5 бэкдоров',
     description: 'Можешь использовать 5 бэкдоров одновременно',
     availability: 'open',
-    karmaCost: 15,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-4'],
     modifier: [modifierFromEffect(increaseBackdoors, { amount: 1 })],
   },
@@ -2791,7 +2757,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Контроль',
     description: 'Теперь ты можешь выбрать больше интересных навыков',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'complex-form-basic'],
     modifier: [],
   },
@@ -2815,7 +2781,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Ты умеешь использовать двуручное оружие. Двуручные топоры, молоты, мечи, дубины. От 120 до 170 см. Оружие необходимо держать двумя руками. Атака снимает 4 хита с цели либо 1 хит с цели в тяжелом доспехе. ',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 80,
     prerequisites: ['arch-samurai', "clubs'n'swords-2"],
     modifier: [],
   },
@@ -2887,7 +2853,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Уменьшение фейдинга ускоренное',
     description: 'Фейдинг персонажа уменьшается на ещё 2 единиц в минуту',
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 40,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'fading-decrease-basic'],
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 2 })],
   },
@@ -2938,7 +2904,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Погружение в Резонанс 1',
     description: 'Увеличивает Резонанс на +1',
     availability: 'open',
-    karmaCost: 100,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'backdoor-hold-5'],
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2948,7 +2914,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Погружение в Резонанс 2',
     description: 'Увеличивает Резонанс на +1',
     availability: 'open',
-    karmaCost: 100,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase1', 'runaway'],
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2958,7 +2924,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Погружение в Резонанс 3',
     description: 'Увеличивает Резонанс на +1',
     availability: 'open',
-    karmaCost: 100,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'resonanse-increase2'],
     modifier: [modifierFromEffect(increaseResonance, { amount: 1 })],
   },
@@ -2980,7 +2946,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по гео-2',
     description: 'возможность использовать расширенную useapi read на геоноде',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 15,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-geo-1'],
     modifier: [],
   },
@@ -2991,7 +2957,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по гео-3',
     description: 'возможность использовать расширенную и улучшенную useapi read на геоноде',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-geo-2'],
     modifier: [],
   },
@@ -3013,7 +2979,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по био/инфо-2',
     description: 'возможность использовать расширенную useapi read на биомониторе и rcc',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 15,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-bio-1'],
     modifier: [],
   },
@@ -3024,7 +2990,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по био/инфо-3',
     description: 'возможность использовать расширенную и улучшкеную useapi read на биомониторе и rcc',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-bio-2'],
     modifier: [],
   },
@@ -3046,7 +3012,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по экономике-2',
     description: 'возможность использовать расширенную useapi read на экономноде.',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 15,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-econ-1'],
     modifier: [],
   },
@@ -3057,7 +3023,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спец по экономике-3',
     description: 'возможность использовать расширенную и улучшкеную useapi read на экономноде',
     availability: 'open',
-    karmaCost: 40,
+    karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'arch-hack-tech-econ-2'],
     modifier: [],
   },
@@ -3068,7 +3034,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Уменьшение фейдинга максимальное',
     description: 'Фейдинг персонажа уменьшается ещё на 3 единиц в минуту',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-hackerman-technomancer', 'fading-decrease-2'],
     modifier: [modifierFromEffect(increaseFadingDecrease, { amount: 3 })],
   },
@@ -3078,7 +3044,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "ключи"',
     description: 'Ты умеешь использовать спрайт "Ключи" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3088,7 +3054,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "кувшинки" (мокроступы)',
     description: 'Ты умеешь использовать спрайт "Кувшинки" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3098,7 +3064,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "блокнот и карандаш"',
     description: 'Ты умеешь использовать спрайт "Блокнот и карандаш" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3108,7 +3074,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "шарики"',
     description: 'Ты умеешь использовать спрайт "Шарики" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3118,7 +3084,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "перчатки"',
     description: 'Ты умеешь использовать спрайт "Перчатки" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3128,7 +3094,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "ракетка"',
     description: 'Ты умеешь использовать спрайт "Ракетка" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'rubber-glowes'],
     modifier: [],
   },
@@ -3138,7 +3104,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "конфетка"',
     description: 'Ты умеешь использовать спрайт "Конфетка" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3148,7 +3114,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Спрайт "труба"',
     description: 'Ты умеешь использовать спрайт "Труба" в Основании',
     availability: 'open',
-    karmaCost: 20,
+    karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
@@ -3395,7 +3361,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Nice suit (P)',
     description: 'Увеличивает продолжительность призыва духа на 30 минут',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-mage', 'suit-up'],
     modifier: [],
   },
@@ -3405,7 +3371,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Dual layer suit (P)',
     description: 'У духов, которых ты призываешь на 1 хит больше',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-mage', 'suit-up'],
     modifier: [],
   },
@@ -3415,7 +3381,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Leisure suit (P)',
     description: 'Увеличивает продолжительность призыва духа еще на 30 минут',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-mage', 'nice-suit'],
     modifier: [],
   },
@@ -3425,7 +3391,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Fast dress up (P)',
     description: 'Сокращает время между призывами духа на 30 минут',
     availability: 'open',
-    karmaCost: 30,
+    karmaCost: 20,
     prerequisites: ['arch-mage', 'suit-up'],
     modifier: [],
   },
@@ -3640,32 +3606,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // Пассивная. Закрытая. Выдается мастерами.
-  {
-    id: 'vr-who-is',
-    humanReadableName: 'Who Is',
-    description:
-      '[только для VR] Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион.  Абилка Режим Инкогнито защищает от проверки.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['!arch-mage'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'vr-deanon',
-    humanReadableName: 'Деанон',
-    description:
-      '[только для VR] Ты можешь спросить чаммера кто он (даже с режимом Инкогнито)  - и он должен назвать тебе имя, метатип, регион и SIN. От проверки защищает только абилка режим Firewall.',
-    availability: 'open',
-    karmaCost: 40,
-    prerequisites: ['vr-who-is'],
-    modifier: [],
-  },
   //
   {
     id: 'vr-incognito',
-    humanReadableName: 'Режим "Инкогнито"',
+    humanReadableName: 'VR Режим "Инкогнито"',
     description:
       '[только для VR] Если ты находишься в VR в аватарке (плащ, очки, или зачипованная аватарка), то тебя нельзя узнать без применения специальных абилок или способностей. Абилка Who is на вас не действует.',
     availability: 'open',
@@ -3676,7 +3620,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // maxTimeInVr +30
   {
     id: 'vr-firewall',
-    humanReadableName: 'Режим "Фаервол"',
+    humanReadableName: 'VR Режим "Фаервол"',
     description:
       '[только для VR] Ты нарисовал себе классную аватарку. Молодец! Тебя нельзя деанонимировать никаким способом. Если кто-то пытается - покажи ему этот текст. И да, у тебя +30 минут в VR! Развлекайся, чаммер!',
     availability: 'closed',
@@ -3687,7 +3631,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Пассивная. Закрытая. Выдается мастерами при генережке
   {
     id: 'vr-employee',
-    humanReadableName: 'Работник VR',
+    humanReadableName: 'VR Работник VR',
     description: '[только для VR] Сотрудник заведения VR, подтвержденный мастером региона',
     availability: 'closed',
     karmaCost: 0,
@@ -3697,7 +3641,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // maxTimeInVr +120
   {
     id: 'vr-employee-long-time',
-    humanReadableName: 'Я работаю в VR',
+    humanReadableName: 'VR Увеличенное время в VR для сотрудников',
     description: '[только для VR] Твое время в VR увеличено на 2 часа.',
     availability: 'open',
     karmaCost: 20,
@@ -3707,7 +3651,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // maxTimeInVr +30
   {
     id: 'vr-better-vr',
-    humanReadableName: 'Better VR',
+    humanReadableName: 'VR Better VR',
     description: '[только для VR] Возможность времени в VR увеличена на 30 минут.',
     availability: 'closed',
     karmaCost: 0,
@@ -3717,7 +3661,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // maxTimeInVr +30
   {
     id: 'vr-more-better-vr',
-    humanReadableName: 'More Better VR',
+    humanReadableName: 'VR More Better VR',
     description: '[только для VR] Возможность времени в VR увеличена еще на 30 минут.',
     availability: 'closed',
     karmaCost: 0,
@@ -3771,7 +3715,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Повелитель Глубины',
     description: 'Ты развиваешь свою Глубину и повышаешь эффективность использования навыков.. Глубина +1',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
@@ -3787,7 +3731,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Глубже',
     description: 'Ты очень хорошо чувствуешь происходящее в Матрице, Глубина +1',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-digital', 'depth-master'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
@@ -3803,7 +3747,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Еще глубже',
     description: 'Тебе все проще дается взаимодействие с Матрицей, Глубина +1',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-digital', 'deep-er'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
@@ -3819,7 +3763,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Ну очень глубоко',
     description: 'Ты повелитель глубинных слоев Матрицы, Глубина+1',
     availability: 'open',
-    karmaCost: 60,
+    karmaCost: 50,
     prerequisites: ['arch-digital', 'more-deep-er'],
     modifier: [
       modifierFromEffect(increaseDepth, { amount: 1 }),
@@ -3951,7 +3895,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'AI eXterminate',
     description: 'Этот ИИ занимается Уничтожением и Техномантами.',
     availability: 'open',
-    karmaCost: 50,
+    karmaCost: 40,
     prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [modifierFromEffect(increaseDepth, { amount: 1 })],
   },
@@ -4027,102 +3971,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-digital', 'ai-troubleshooter'],
     modifier: [],
   },
-  // 120-10*character.depth
-  {
-    id: 'ai-buff-double-damage',
-    humanReadableName: 'Двойной удар',
-    description:
-      'Усиление для Техномантов в Красной Комнате. Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Работает раз в час.',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-digital', 'ai-troubleshooter'],
-    modifier: [],
-  },
-  // 120-10*character.depth
-  {
-    id: 'ai-dismorale',
-    humanReadableName: 'Провал морали',
-    description:
-      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться.  Работает раз в час.',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-digital', 'ai-troubleshooter'],
-    modifier: [],
-  },
-  // 120-10*character.depth
-  {
-    id: 'ai-matrix-gift',
-    humanReadableName: 'Матричный дар',
-    description:
-      'Усиление для Техномантов в Красной Комнате.  Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Применяется на 3 цели одновременно.   Работает раз в час.',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-digital', 'ai-buff-double-damage'],
-    modifier: [],
-  },
-  // 120-10*character.depth
-  {
-    id: 'ai-matrix-curse',
-    humanReadableName: 'Матричное проклятье',
-    description:
-      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. Применяется на 3 цели одновременно.  Работает раз в час.',
-    availability: 'open',
-    karmaCost: 30,
-    prerequisites: ['arch-digital', 'ai-dismorale'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-runaway',
-    humanReadableName: 'AI Бегство из Основания',
-    description:
-      'Ты можешь покинуть основание когда захочешь. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. Работает раз в 2 часа.',
-    availability: 'open',
-    karmaCost: 40,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-magnetism',
-    humanReadableName: 'AI магнетизм',
-    description:
-      'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один. Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-levitation',
-    humanReadableName: 'AI левитация',
-    description: 'Ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь. Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-magnetism', 'ai-add-basement'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-bond-breaker',
-    humanReadableName: 'AI освобождение от пут',
-    description: 'Ты можешь освободить одну руку себе или товарищу. Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-remove-excees'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-one-for-all',
-    humanReadableName: 'AI один за всех',
-    description: 'Ты можешь пройти эту комнату один за всю свою команду. Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
   //
   {
     id: 'ai-add-time-1',
@@ -4151,66 +3999,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['ai-techno-copy', 'ai-add-time-2'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-add-basement',
-    humanReadableName: 'AI добавить опору',
-    description: 'Ты можешь создать дополнительную "опору" (круг 20 см). Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-bell-silence',
-    humanReadableName: 'AI молчание колокольчиков',
-    description: 'Ты можешь задевать колокольчики, матрица их не услышит. Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-photo-memory',
-    humanReadableName: 'AI фотографическая память',
-    description: 'Ты можешь сфотографировать объект и переслать фото другому участнику команды.  Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-second-sight',
-    humanReadableName: 'AI ясновидение',
-    description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции.  Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-photo-memory'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-remove-excees',
-    humanReadableName: 'AI убрать все лишнее',
-    description: 'Теперь матрица подскажет тебе, какие детали лишние.  Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy', 'ai-remove-half'],
-    modifier: [],
-  },
-  //
-  {
-    id: 'ai-remove-half',
-    humanReadableName: 'AI убрать половину ',
-    description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции.  Работает раз в 10 минут.',
-    availability: 'open',
-    karmaCost: 10,
-    prerequisites: ['arch-digital', 'ai-techno-copy'],
     modifier: [],
   },
   // модельного эффекта нет
@@ -4328,7 +4116,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 0,
     }),
   },
-  // TODO(aeremin): Implement and add modifier here
   // IT: команда в Кривда-матрице
   // сжигает кибердеку
   {
@@ -4338,10 +4125,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'hack-deck-rungc',
@@ -4351,7 +4136,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'breacher-3'],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4361,13 +4145,13 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Strong blood',
     description: 'В жертвенных ритуальных практиках ты считаешься за 3 человек',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: [],
-    pack: undefined,
+    pack: { id: 'gen-meta-ork', level: 1 },
     modifier: modifierFromEffect(multiplyVictimCoefficient, {
       amount: 3,
     }),
-},
+  },
   // TODO(aeremin): Implement and add modifier here
   // - Когда qr-код обладателя такой способности сканируют во время жертвенного ритуала, он считается за 5х человек.
   {
@@ -4375,12 +4159,134 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Strongest blood',
     description: 'В жертвенных ритуальных практиках ты считаешься за 5 человек',
     availability: 'master',
-    karmaCost: 0,
+    karmaCost: 20,
     prerequisites: [],
-    pack: undefined,
+    pack: { id: 'gen-meta-troll', level: 1 },
     modifier: modifierFromEffect(multiplyVictimCoefficient, {
       amount: 5,
     }),
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // текстовая абилка
+  {
+    id: 'project-artisan',
+    humanReadableName: 'Кустарное производство',
+    description: 'Ты можешь делать проекты кустарного производства',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['project-manager-1'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // текстовая абилка
+  {
+    id: 'project-industry',
+    humanReadableName: 'Массовое производство',
+    description: 'Ты можешь делать проекты массового производства',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['project-manager-1'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // текстовая абилка
+  {
+    id: 'project-foundation',
+    humanReadableName: 'Фундаментальная технология',
+    description: 'Ты можешь делать проекты фундаментальных технологий',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['project-manager-1'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // текстовая абилка
+  {
+    id: 'project-place',
+    humanReadableName: 'Перерождение',
+    description: 'Ты можешь делать проекты локального перерождения ',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['project-manager-1'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Команда в кривда-матрице
+  {
+    id: 'hack-deck-pecho',
+    humanReadableName: 'pecho',
+    description: 'Новая команда: pecho\nПозволяет шепнуть фразу другому декеру на том же хосте',
+    availability: 'open',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'hack-deck-echo',
+    humanReadableName: 'echo',
+    description: 'Новая команда: echo\nПослать фразу всем собравшимся на одной ноде с тобой',
+    availability: 'open',
+    karmaCost: 0,
+    prerequisites: ['arch-hackerman-decker'],
+    pack: { id: 'gen-arch-hackerman-decker', level: 1 },
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // IT: команда в Кривда-матрице
+  {
+    id: 'hack-deck-broadcast',
+    humanReadableName: 'broadcast',
+    description: 'Новая команда: broadcast\nПозволяет послать фразу всем собравшимся собрашився на одном хосте с тобой',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-hackerman-decker', 'fencer-2'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // IT: команда в Кривда-матрице
+  {
+    id: 'hack-deck-globalcast',
+    humanReadableName: 'globalcast',
+    description: 'Новая команда: globalcast\nПозволяет послать фразу ВСЕМ подключенным к Матрице. \nНе злоупотребляй, матрица обидчива',
+    availability: 'closed',
+    karmaCost: 15,
+    prerequisites: ['arch-hackerman-decker', 'hack-deck-broadcast'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'hack-deck-rungc-other',
+    humanReadableName: 'Опытный мусорщик',
+    description:
+      'Новая цель команды rungc: другой декер\n\nУдивительная способность принудительно активировать сборку мусора в канале другого декера, оживляя его канал.\n\nНесколько увеличивает эффективность работы rungc и несколько сокращает ее кулдаун.',
+    availability: 'closed',
+    karmaCost: 15,
+    prerequisites: ['arch-hackerman-decker', 'hack-deck-rungc'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // текстовая
+  {
+    id: 'ethic-deanon',
+    humanReadableName: 'Абсолютный деанон',
+    description:
+      '[только для VR] Если ты используешь способность Деанон - от нее не спасают способности Режим Инкогнито и Режим Фаерволл. Ты можешь использовать эту способность один раз в час.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
+    modifier: [],
   },
 ];
 setAllPassiveAbilities(
