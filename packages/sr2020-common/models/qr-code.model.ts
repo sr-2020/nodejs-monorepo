@@ -11,6 +11,7 @@ export type QrType =
   | 'ASTRAL_BODY'
   | 'ECTOPLASM_BODY'
   | 'ROBOT_BODY'
+  | 'VR_BODY'
   // Ones in snake_case are rewritable ones stored in the database
   | 'empty' // Empty QR, can be written.
   | 'pill' // Pharmaceuticals and similar
