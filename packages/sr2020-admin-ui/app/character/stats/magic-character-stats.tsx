@@ -48,6 +48,16 @@ export class MagicCharactersStats extends React.Component<{ magicStats: MagicSta
                 <td>magicStats.auraMask</td>
                 <td>{this.props.magicStats.auraMask}</td>
               </tr>
+              <tr>
+                <th>В ритуалах участия считается за</th>
+                <td>magicStats.participantCoefficient</td>
+                <td>{this.props.magicStats.participantCoefficient}</td>
+              </tr>
+              <tr>
+                <th>В жертвенных ритуалах считается за</th>
+                <td>magicStats.victimCoefficient</td>
+                <td>{this.props.magicStats.victimCoefficient}</td>
+              </tr>
             </tbody>
           </Table>
         </Accordion.Collapse>
