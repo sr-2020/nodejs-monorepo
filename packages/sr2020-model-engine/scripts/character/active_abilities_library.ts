@@ -4150,7 +4150,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Сохраним скоринг',
     description: 'переписать долг за 1 предмет по выбору на другого персонажа c сохранением прежнего скоринга',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      kMerchandiseTargeted,
+      {
+        name: 'Новый плательщик',
+        field: 'targetCharacterId',
+        allowedTypes: ['HEALTHY_BODY'],
+      },
+    ],
     cooldownMinutes: (character) => 70 - 5 * character.intelligence,
     prerequisites: ['arch-face', 'let-me-pay'],
     pack: undefined,
