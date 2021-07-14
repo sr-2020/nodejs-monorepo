@@ -1507,7 +1507,7 @@ export const kAllEthicGroups: EthicGroup[] = [
       { scale: 'violence', conditionMin: 1, conditionMax: 3 },
       { scale: 'control', conditionMin: 2, conditionMax: 4 },
       { scale: 'individualism', conditionMin: -4, conditionMax: -2 },
-      { scale: 'mind', conditionMin: 3, conditionMax: 4 },
+      { scale: 'mind', conditionMin: 2, conditionMax: 4 },
     ],
   },
   {
@@ -1689,7 +1689,7 @@ export const kAllEthicGroups: EthicGroup[] = [
   {
     id: 'dm-kill',
     name: 'Мастеркая АС',
-    abilityIds: ['absolutely-finish-him'],
+    abilityIds: ['absolutely-finish-him', 'hack-deck-kill'],
     ethicStyle: [
       { scale: 'violence', conditionMin: 4, conditionMax: 4 },
       { scale: 'control', conditionMin: -4, conditionMax: 4 },
