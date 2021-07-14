@@ -140,7 +140,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-dwarf', level: 1 },
     modifier: [
       modifierFromEffect(increaseFadingResistance, { amount: 1 }),
-      modifierFromEffect(increaseBiofeedbackResistance, { amount: 1 }),
+      modifierFromEffect(increaseBiofeedbackResistance, { amount: 10 }),
     ],
   },
   // drones.droneFeedback -1
