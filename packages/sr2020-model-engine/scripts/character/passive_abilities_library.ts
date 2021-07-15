@@ -2410,7 +2410,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'avalanche-able',
     humanReadableName: 'Avalanche - Эффект',
     description:
-      'У всех персонажей, присутствовавших на конец каста заклинания в реале в радиусе 5 метров от заклинателя (либо в рамках помещения)  кроме самого мага и тех, кого он вслух укажет и взаимодействующих с магом (слышащих/видящих/нападающих на него), хиты снижаются на {{ amount }}',
+      'У всех персонажей, присутствовавших в момент активации заклинания в реале в радиусе 5 метров от заклинателя (либо в рамках помещения, если оно меньше)  и взаимодействующих с ним (слышащих/видящих/нападающих на него), хиты снижаются на {{ amount }}. Эффект не действует на самого заклинателя и тех, кого он вслух укажет',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -2421,7 +2421,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'birds-able',
     humanReadableName: 'Birds effect',
     description:
-      'Каждые 60 секунд в течение {{ amount }} минут у всех присутствующих в реале  (мясо/экто/дрон -  кроме самого мага и тех, кого он вслух укажет) в радиусе 5 метров от точки активации спелла (либо в пределах этого помещения) текущие хиты уменьшаются на 1 на срок 30 минут. Если хиты уменьшились таким образом до нуля, то персонаж оказывается в тяжране',
+      'Каждые 60 секунд в течение {{ amount }} минут у всех присутствующих в реале  (мясо/экто/дрон) в радиусе 5 метров от точки активации спелла (либо в пределах этого помещения, если оно меньше) текущие хиты уменьшаются на 1 на срок 30 минут. Эффект не действует на самого заклинателя и тех, кого он вслух укажет.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
@@ -4000,7 +4000,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Ты находишься в астральном плане. Необходимый маркер: красный дождевик.\nТы видишь и слышишь реальный мир, но не можешь воздействовать на него.\nИз реального мира тебя не воспринимают и никак не могут атаковать (если только у них нет абилки, которая явным образом утверждает иное).',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   // модельного эффекта нет
@@ -4010,7 +4010,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь взять одноручное холодное оружие до 100см, оно считается тяжёлым.',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   // модельного эффекта нет
@@ -4020,7 +4020,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'На тебя действует эффект тяжёлой брони.',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   //
@@ -4030,7 +4030,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь кинуть 3 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   //
@@ -4040,7 +4040,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь кинуть 5 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   //
@@ -4050,7 +4050,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь кинуть 9 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   // Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума
@@ -4061,7 +4061,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   //
@@ -4071,7 +4071,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Можешь кинуть 2 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   // Все мясные/экто тела, щекочущие владельца абилки на протяжении 2 минут, в конце этой минуты восстанавливают текущие хиты до максимума
@@ -4082,7 +4082,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Все мясные/экто тела, щекочущие этого духа на протяжении 2 минут, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
     karmaCost: 0,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
   // IT: команда в кривда-матрице
@@ -4263,10 +4263,35 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
+  // учитывается в Spiritual, показывает абилки духов в океане (ещё непойманных)
+  {
+    id: 'fine-hearing',
+    humanReadableName: 'Fine hearing (P)',
+    description: 'Ты знаешь, какими способностями обладают духи вокруг тебя',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-mage', 'spirit-master-1'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // Всё делается в Spirtual, эта абилка просто флаг возможности надеть духа из тотема.
+  //
+  // В SP: Игрок нажимает кнопку Надеть духа, сканирует QR-код духохранилища (где лежит нужный дух), сканирует QR -код свободного телохранилища. После этого телохранилище занято его мясным телом, духохранилище свободно, а сам игрок действует в эктоплазменном теле - согласно описанию конкретного духа - хиты и активные абилки духа проливаются в Еву.
+  {
+    id: 'suit-up',
+    humanReadableName: 'Suit Up (P)',
+    description:
+      'Даёт возможность временно надеть тело духа из тотема. Своё мясное тело маг должен оставить в телохранилище. Продолжительность призыва духа - 30 минут. (время может быть увеличено)',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage'],
+    pack: { id: 'mage-summon-spirit', level: 1 },
+    modifier: [],
+  },
   // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 1
   {
-    id: 'spirit-master1',
+    id: 'spirit-master-1',
     humanReadableName: 'Spirit Apprentice (P)',
     description: 'Ты можешь ловить духов 1го ранга',
     availability: 'open',
@@ -4278,36 +4303,24 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 2
   {
-    id: 'spirit-master2',
+    id: 'spirit-master-2',
     humanReadableName: 'Spirit Disciple (P)',
     description: 'Ты можешь ловить духов 2го ранга',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-mage', 'spirit-master1'],
+    prerequisites: ['arch-mage', 'spirit-master-1'],
     pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 3
   {
-    id: 'spirit-master3',
+    id: 'spirit-master-3',
     humanReadableName: 'Spirit Master (P)',
     description: 'Ты можешь ловить духов 3го ранга',
     availability: 'open',
     karmaCost: 50,
-    prerequisites: ['arch-mage', 'spirit-master2'],
-    pack: undefined,
-    modifier: [],
-  },
-  // TODO(aeremin): Implement and add modifier here
-  // учитывается в Spiritual, показывает абилки духов в океане (ещё непойманных)
-  {
-    id: 'fine-hearing',
-    humanReadableName: 'Fine hearing (P)',
-    description: 'Ты знаешь, какими способностями обладают духи вокруг тебя',
-    availability: 'open',
-    karmaCost: 20,
-    prerequisites: ['arch-mage', 'spirit-master1'],
+    prerequisites: ['arch-mage', 'spirit-master-2'],
     pack: undefined,
     modifier: [],
   },
