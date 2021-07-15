@@ -17,11 +17,11 @@ async function run() {
   const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
 
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Импланты!A1:J900');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Импланты!A1:K900');
   const header = data[0];
   if (
-    header.slice(0, 10).join('  ') !=
-    'ID  название  Корпорация-производитель  слот  описание для игрока  эффект  грейд  стоимость эссенс  сложность установки  стоимость'
+    header.slice(0, 11).join('  ') !=
+    'ID  название  Корпорация-производитель  цикл ввода  слот  Описание (Public)  эффект  грейд  стоимость эссенс  сложность установки  стоимость'
   ) {
     throw new Error('Header has changed! Exiting.');
   }
@@ -40,12 +40,12 @@ async function run() {
         голова: 'head',
         'слот под RCC': 'rcc',
         'слот под коммлинк': 'commlink',
-      }[(row[3] as string).trim()],
-      description: row[4],
-      grade: { альфа: 'alpha', бета: 'beta', гамма: 'gamma', дельта: 'delta', био: 'bio' }[(row[6] as string).trim()],
-      essenceCost: Number(row[7]),
-      installDifficulty: Number(row[8]),
-      cost: Number(row[9]),
+      }[(row[4] as string).trim()],
+      description: row[5],
+      grade: { альфа: 'alpha', бета: 'beta', гамма: 'gamma', дельта: 'delta', био: 'bio' }[(row[7] as string).trim()],
+      essenceCost: Number(row[8]),
+      installDifficulty: Number(row[9]),
+      cost: Number(row[10]),
       modifiers: [],
     };
     implants.push(m);
