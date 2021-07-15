@@ -3564,15 +3564,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  {
-    id: 'ethic-buryaty',
-    humanReadableName: 'Волшебство',
-    description: 'Ты получаешь +1 к Магии и Харизме. -2 к Интеллекту, -1 к Боди.',
-    availability: 'closed',
-    karmaCost: 0,
-    prerequisites: [],
-    modifier: [],
-  },
   // текстовая
   {
     id: 'ethic-aks',
@@ -3626,7 +3617,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 20,
     prerequisites: [],
-    modifier: [],
+    modifier: [modifierFromEffect(increaseMaxTimeInVr, { amount: 30 })],
   },
   // Пассивная. Закрытая. Выдается мастерами при генережке
   {

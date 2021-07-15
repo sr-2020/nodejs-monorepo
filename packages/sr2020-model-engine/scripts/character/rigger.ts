@@ -176,7 +176,7 @@ export function enterDrone(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Невозможно управлять дроном не имея RCC.');
   }
 
-  if (api.workModel.drones.maxDifficulty < drone.sensor) {
+  if (api.workModel.drones.maxDifficulty + Math.floor(api.workModel.intelligence / 2) < drone.sensor) {
     throw new UserVisibleError('Ваш RCC не позволяет управлять данным дроном.');
   }
 
