@@ -26,13 +26,13 @@ export const kAllDrones: Drone[] = [
   },
   {
     id: 'trici',
-    name: 'Трици',
+    name: 'Sweet Ginger Bulldozer',
     type: 'groundcraft',
     modSlots: 1,
     moddingCapacity: 1,
     sensor: 5,
     hitpoints: 3,
-    description: 'Дроны модели Трици логичное продолжение модельного ряда дронов Беларусь, в них решили проблему надёжности (3 хита), но они стали чуть капризнее в управлении, могут служить надёжным Щитом, на них установлена Тяжелая броня.',
+    description: 'В дронах модели Sweet Ginger решили проблему надёжности (3 хита), но они стали чуть капризнее в управлении, могут служить надёжным Щитом, на них установлена Тяжелая броня.',
     abilityIds: ['drone-dozer', 'drone-heavy'],
   },
   {

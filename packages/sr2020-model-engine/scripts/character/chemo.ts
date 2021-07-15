@@ -774,7 +774,7 @@ export function consumeChemo(api: EventModelApi<Sr2020Character>, data: ChemoDat
   }
 
   if (api.workModel.metarace == 'meta-digital') {
-    throw new UserVisibleError('Вы не можете принимать препараты!');
+    throw new UserVisibleError('Вы не можете принимать препараты! Вы цифровая сущность!');
   }
 
   const pill = kAllPills.find((it) => it.id == data.id);
