@@ -4218,7 +4218,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
-    prerequisites: ['arch-digital', 'tell-me-what-you-know'],
+    prerequisites: ['arch-digital', 'tell-me-what-you-know-ai'],
     availability: 'open',
     karmaCost: 50,
     minimalEssence: 0,
