@@ -20,6 +20,7 @@ import * as Chance from 'chance';
 import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
+import { castSpell } from '@alice/sr2020-model-engine/scripts/character/spells';
 
 const chance = new Chance();
 
@@ -138,6 +139,26 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
 
 export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void) {
   api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
+}
+
+export function getHigh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendPubSubNotification('spell_cast', {
+    characterId: api.model.modelId,
+    reagentIds: [],
+    id: 'input-stream',
+    location: data.location,
+    power: 5,
+  });
+}
+
+export function getLow(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendPubSubNotification('spell_cast', {
+    characterId: api.model.modelId,
+    reagentIds: [],
+    id: 'output-stream',
+    location: data.location,
+    power: 5,
+  });
 }
 
 // Adept abilities
