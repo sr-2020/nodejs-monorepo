@@ -42,6 +42,8 @@ import {
   undiena,
   useSpriteAbility,
   whoNeedsIt,
+  getHigh,
+  getLow,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3971,7 +3973,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getHigh.name,
   },
   // В течение 15 минут каждые 60с 1 уровень плотности маны будет безусловно выгоняться в случайную соседнюю локацию (там понизится, тут повысится).
   {
@@ -3986,7 +3988,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getLow.name,
   },
   // дух узнает часть ауры цели (95% для метачеловека, не сопротивляющегося сканированию своего qr).
   {
@@ -4539,7 +4541,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: howMuchIsThePssh.name,
   },
 ];
 setAllActiveAbilities(

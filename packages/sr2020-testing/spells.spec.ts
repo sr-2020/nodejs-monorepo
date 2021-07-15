@@ -17,6 +17,31 @@ describe('Spells', function () {
     await fixture.destroy();
   });
 
+  it('InputStream', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.addCharacterFeature('input-stream', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'input-stream', location: { id: 0, manaLevel: 0 }, power: 4 },
+        },
+        1,
+      );
+      expect(fixture.getPubSubNotifications()).toContainEqual(
+        expect.objectContaining({
+          topic: 'spell_cast',
+          body: expect.objectContaining({
+            characterId: '1',
+            id: 'input-stream',
+            location: { id: 0, manaLevel: 0 },
+            power: 4,
+          }),
+        }),
+      );
+    }
+  });
+
   it('Spirit Catcher', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.addCharacterFeature('spirit-catcher', 1);
