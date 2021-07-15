@@ -614,6 +614,8 @@ export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: n
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
 }
 
+//задача этого спелла - просто случиться, что повлечёт нотификацию, запись в историю и главное - в пабсаб
+//откуда его подберёт Spiritual
 export function spiritCatcher(api: EventModelApi<Sr2020Character>, data: SpellData) {
   sendNotificationAndHistoryRecord(
     api,

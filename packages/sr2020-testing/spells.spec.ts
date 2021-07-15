@@ -36,6 +36,18 @@ describe('Spells', function () {
       expect(workModel.history[1].shortText).toBe(
         'В течение 8 минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку',
       ); // Spell casted
+
+      expect(fixture.getPubSubNotifications()).toContainEqual(
+        expect.objectContaining({
+          topic: 'spell_cast',
+          body: expect.objectContaining({
+            characterId: '1',
+            id: 'spirit-catcher',
+            location: { id: 0, manaLevel: 0 },
+            power: 4,
+          }),
+        }),
+      );
     }
   });
 
