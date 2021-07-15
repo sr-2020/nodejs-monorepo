@@ -17,6 +17,28 @@ describe('Spells', function () {
     await fixture.destroy();
   });
 
+  it('Spirit Catcher', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.addCharacterFeature('spirit-catcher', 1);
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'spirit-catcher', location: { id: 0, manaLevel: 0 }, power: 4 },
+        },
+        1,
+      );
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(fixture.getCharacterNotifications(1)[0].body).toContain(
+        'В течение 8 минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку',
+      );
+      expect(workModel.history.length).toBe(2);
+      expect(workModel.history[1].shortText).toBe(
+        'В течение 8 минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку',
+      ); // Spell casted
+    }
+  });
+
   it('Learn and forget increase ground heal spell', async () => {
     await fixture.saveCharacter();
     {

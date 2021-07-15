@@ -566,19 +566,9 @@ function saveSpellTrace(
     metarace: api.workModel.metarace,
     power: data.power,
     magicFeedback: feedbackAmount,
-    // participantsAmount: (ritualStats.participants != null) ? ritualStats.participants : 0,
-    // victimsAmount: (ritualStats.victims != null) ? ritualStats.victims : 0,
     participantsAmount: ritualStats.participants,
     victimsAmount: ritualStats.victims,
   };
-  /*
-  if(data.ritualMembersIds != null) {
-    saveData.participantsAmount = data.ritualMembersIds.length;
-  }
-  if(data.ritualVictimIds != null) {
-    saveData.victimsAmount = data.ritualVictimIds.length;
-  }
-  */
   api.sendOutboundEvent(Location, data.location.id.toString(), recordSpellTrace, saveData);
 }
 
@@ -622,6 +612,14 @@ export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
 export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
   api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
+}
+
+export function spiritCatcher(api: EventModelApi<Sr2020Character>, data: SpellData) {
+  sendNotificationAndHistoryRecord(
+    api,
+    'Охота на духов',
+    `В течение ${data.power * 2} минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку`,
+  );
 }
 
 export function teaseLesserMindSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {

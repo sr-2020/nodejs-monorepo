@@ -34,6 +34,7 @@ import {
   trackBallSpell,
   trackpointSpell,
   scumStoneSkinSpell,
+  spiritCatcher,
 } from './spells';
 import { Spell } from '@alice/sr2020-common/models/common_definitions';
 import { setAllSpells } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
@@ -515,7 +516,7 @@ const kAllSpellsList: Spell[] = [
     availability: 'open',
     karmaCost: 20,
     sphere: 'stats',
-    eventType: dummySpell.name,
+    eventType: spiritCatcher.name,
     hasTarget: false,
   },
 ];
