@@ -4166,7 +4166,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 5,
     }),
   },
-  // TODO(aeremin): Implement and add modifier here
   // текстовая абилка
   {
     id: 'project-artisan',
@@ -4175,10 +4174,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // текстовая абилка
   {
     id: 'project-industry',
@@ -4187,10 +4184,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // текстовая абилка
   {
     id: 'project-foundation',
@@ -4199,10 +4194,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // текстовая абилка
   {
     id: 'project-place',
@@ -4211,7 +4204,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
-    pack: undefined,
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4238,7 +4230,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // IT: команда в Кривда-матрице
   {
     id: 'hack-deck-broadcast',
@@ -4247,10 +4238,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-hackerman-decker', 'fencer-2'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // IT: команда в Кривда-матрице
   {
     id: 'hack-deck-globalcast',
@@ -4259,10 +4248,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 15,
     prerequisites: ['arch-hackerman-decker', 'hack-deck-broadcast'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'hack-deck-rungc-other',
@@ -4272,10 +4259,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 15,
     prerequisites: ['arch-hackerman-decker', 'hack-deck-rungc'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // текстовая
   {
     id: 'ethic-deanon',
@@ -4285,6 +4270,53 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // учитывается в Spiritual, разрешая ловить духов ранга 1
+  {
+    id: 'spirit-master1',
+    humanReadableName: 'Spirit Apprentice (P)',
+    description: 'Ты можешь ловить духов 1го ранга',
+    availability: 'open',
+    karmaCost: 10,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // учитывается в Spiritual, разрешая ловить духов ранга 2
+  {
+    id: 'spirit-master2',
+    humanReadableName: 'Spirit Disciple (P)',
+    description: 'Ты можешь ловить духов 2го ранга',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage', 'spirit-master1'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // учитывается в Spiritual, разрешая ловить духов ранга 3
+  {
+    id: 'spirit-master3',
+    humanReadableName: 'Spirit Master (P)',
+    description: 'Ты можешь ловить духов 3го ранга',
+    availability: 'open',
+    karmaCost: 50,
+    prerequisites: ['arch-mage', 'spirit-master2'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // учитывается в Spiritual, показывает абилки духов в океане (ещё непойманных)
+  {
+    id: 'fine-hearing',
+    humanReadableName: 'Fine hearing (P)',
+    description: 'Ты знаешь, какими способностями обладают духи вокруг тебя',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-mage', 'spirit-master1'],
     pack: undefined,
     modifier: [],
   },

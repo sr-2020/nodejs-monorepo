@@ -506,14 +506,12 @@ const kAllSpellsList: Spell[] = [
     eventType: dumbieSpell.name,
     hasTarget: true,
   },
-  // TODO(aeremin): Add proper implementation
-  // Спелл выдаёт в историю и нотификацией текст "В течение Power*2 минут можно один раз попытаться поймать духа. С увеличением Мощи растут и шансы на поимку", где Power это выбранная Мощь
+  // Спелл выдаёт в историю и нотификацией текст "В течение Power*2 минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку", где Power это выбранная Мощь
   {
     id: 'spirit-catcher',
-    humanReadableName: 'Spirit catcher',
-    description: 'В течение Мощь*2 минут можно один раз попытаться поймать духа. С увеличением Мощи растут и шансы на поимку',
-    prerequisites: [],
-    pack: undefined,
+    humanReadableName: 'Spirit catcher (S)',
+    description: 'В течение Мощь*2 минут можно три раза попытаться поймать духа. С увеличением Мощи растут и шансы на поимку',
+    prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 20,
     sphere: 'stats',
