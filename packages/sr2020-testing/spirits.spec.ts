@@ -20,7 +20,7 @@ describe('Spirits-related abilities', () => {
     const spirit: Spirit = {
       name: 'Petya',
       hp: 6,
-      abilityIds: ['magic-3'],
+      abilityIds: ['magic-3', 'dispirit'],
     };
     // Enter spirit
     await fixture.sendCharacterEvent({ eventType: 'enterSpirit', data: spirit });

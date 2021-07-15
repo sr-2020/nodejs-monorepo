@@ -4,4 +4,4 @@ export interface Spirit {
   abilityIds: string[];
 }
 
-export const kCommonSpiritAbilityIds = ['dispirit', 'spirit-danger'];
+export const kCommonSpiritAbilityIds = [];
