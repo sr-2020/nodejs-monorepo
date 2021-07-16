@@ -9,17 +9,17 @@ async function run() {
   const spreadsheetId = '1Vm1nbS-Gs9H_5FZaJ_cnA5hnCaeDZLfNfwxayl70evc';
 
   // Parse level descriptions
-  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны v2!A3:K32');
+  const data = await getDataFromSpreadsheet(spreadsheetId, 'Дроны v2!A3:K34');
   const header = data[0];
   if (
     header.slice(0, 11).join('  ') !=
-    'ID  название  Класс дрона  Тип дрона  Корпорация  Доступность (О,З,М)  Sensor-Drone  хиты  Описание для игрока  Мастерское - Выдать абилки при входе в дрон'
+    'ID  название  Класс дрона  Тип дрона  Корпорация  Стоимость  Доступность (О,З,М)  Sensor-Drone  хиты  Описание (Public)  Мастерское - Выдать абилки при входе в дрон'
   ) {
     throw new Error('Header has changed! Exiting.');
   }
 
   const drones: Drone[] = [];
-  for (let r = 1; r < 30; ++r) {
+  for (let r = 1; r < 31; ++r) {
     const row = data[r];
     if (!row?.[0]) continue;
 
