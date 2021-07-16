@@ -4579,21 +4579,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // Сравнивает смотри бонус ремкомплекта и если это 4-1, чинит кибердеку
-  {
-    id: 'cyberdeck-recovery',
-    humanReadableName: 'Ремонт Кибердеки',
-    description: 'Восстанавливает работоспособность Кибердеки (необходимо отсканировать сломанную кибердеку и предмет "Набор никросхем")',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
-    prerequisites: ['in-drone'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
 ];
 setAllActiveAbilities(
   (() => {
