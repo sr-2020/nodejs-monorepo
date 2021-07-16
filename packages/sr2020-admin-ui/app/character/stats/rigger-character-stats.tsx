@@ -29,7 +29,7 @@ export class RiggerCharacterStats extends React.Component<{ drones: Drones; rigg
                 <td>{this.props.drones.maxTimeInside}</td>
               </tr>
               <tr>
-                <th>Время восстановления после</th>
+                <th>Время восстановления после нахождения в дроне</th>
                 <td>drones.recoveryTime</td>
                 <td>{this.props.drones.recoveryTime}</td>
               </tr>
@@ -54,7 +54,7 @@ export class RiggerCharacterStats extends React.Component<{ drones: Drones; rigg
                 <td>{this.props.drones.groundcraftBonus}</td>
               </tr>
               <tr>
-                <th>Навык ремонта дронов</th>
+                <th>Навык ремонта дронов и кибердек</th>
                 <td>drones.recoverySkill</td>
                 <td>{this.props.drones.recoverySkill}</td>
               </tr>
