@@ -192,6 +192,17 @@ describe('Active abilities', function () {
     }
   });
 
+  it('I feel it in the water', async () => {
+    await fixture.saveCharacter();
+    await fixture.addCharacterFeature('i-feel-it-in-the-water');
+    await fixture.saveLocation();
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'i-feel-it-in-the-water', location: { id: '0', manaLevel: 4 } });
+      expect(fixture.getCharacterNotifications()[0].body).toContain('Сейчас здесь мана на уровне: 4');
+    }
+  });
+
   it('Finish him on body', async () => {
     await fixture.saveLocation();
     await fixture.saveCharacter({ modelId: '1' });
