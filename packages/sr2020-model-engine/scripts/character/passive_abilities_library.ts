@@ -4288,7 +4288,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'mage-summon-spirit', level: 1 },
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 1
   {
     id: 'spirit-master-1',
@@ -4297,10 +4296,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 2
   {
     id: 'spirit-master-2',
@@ -4309,10 +4306,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'spirit-master-1'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // учитывается в Spiritual, разрешая ловить духов ранга 3
   {
     id: 'spirit-master-3',
@@ -4321,7 +4316,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-mage', 'spirit-master-2'],
-    pack: undefined,
     modifier: [],
   },
 ];
