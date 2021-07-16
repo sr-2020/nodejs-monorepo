@@ -75,7 +75,13 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { cyberdeckRepairAbility, droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import {
+  cyberdeckRepairAbility,
+  droneDangerAbility,
+  droneRepairAbility,
+  enterDrone,
+  exitDrone,
+} from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility, nanohiveVrAbility } from './nanohives';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
@@ -1876,27 +1882,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     eventType: astralopithecus.name,
   },
   // TODO(aeremin): Add proper implementation
-  // По аналогии с дронами - игрок активирует эту абилку, сканирует QR-код духохранилища (где лежит нужный дух), сканирует QR -код свободного телохранилища. После этого телохранилище занято его мясным телом, духохранилище свободно, а сам игрок действует в эктоплазменном теле - согласно описанию конкретного духа и общим свойствам эктоплазменного духа https://docs.google.com/document/d/1TBug3i5LFEW7BTm-iSgBRf9Snpknuu7sSkhVgP_Iko0/edit#heading=h.gcmlf4uf63ju
-  //
-  // Переход в тело духа совершается на 30 минут, но может быть модифицировано другими абилками
-  //
-  {
-    id: 'suit-up',
-    humanReadableName: 'Suit Up (A)',
-    description:
-      'Призвать духа, используя Тотем и временно перейти в эктоплазменное тело духа. Своё мясное тело маг должен оставить в телохранилище. Продолжительность призыва духа - 30 минут. (время может быть увеличено)',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 60,
-    prerequisites: ['arch-mage'],
-    pack: { id: 'mage-summon-spirit', level: 1 },
-    availability: 'open',
-    karmaCost: 30,
-    minimalEssence: 4,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
-  // TODO(aeremin): Add proper implementation
   // При активации абилки открывается окно сканирования QR-кода, необходимо сосканировать пустой QR-код. После этого будет создано свободное телохранилище, действующее в течение 600 минут. По окончании этого срока QR-код освободится, и если там находился дух - он окажется на свободе
   {
     id: 'spirit-jar',
@@ -2584,7 +2569,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'drone-recovery',
     humanReadableName: 'Ремонт дрона',
-    description: 'Восстанавливает работоспособность дрона (необходимо отсканировать сломанного дрона и предмет "ремкомплект")',
+    description: 'Восстанавливает работоспособность дрона (необходимо отсканировать сломанного дрона и предмет "Ремкомплект")',
     target: 'scan',
     targetsSignature: [
       {
@@ -2631,7 +2616,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: cyberdeckRepairAbility.name,
-  },  
+  },
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
@@ -3862,7 +3847,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 60,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3877,7 +3862,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3892,7 +3877,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3907,7 +3892,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3919,28 +3904,28 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'aval-festival',
     humanReadableName: 'Aval-festival',
     description:
-      'Снять со всех персонажей в реале в радиусе 5 метров от точки активации хиты в количестве 4. Действует на всех, кроме самого духа. \nРекомендуется привлекать для подтверждения эффекта представителя МГ.',
+      'Снять со всех персонажей в реале в радиусе 5 метров от точки активации хиты в количестве 4. Действует на всех, кроме самого духа и тех, кого он укажет. \nРекомендуется привлекать для подтверждения эффекта представителя МГ.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: avalFest.name,
   },
-  // На 5 минут у духа появляется пассивная абилка birds-able.
+  // На 15 минут у духа появляется пассивная абилка birds-able.
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают. Для подтверждения может показать текст.
   {
     id: 'date-of-birds',
     humanReadableName: 'Date of birds',
     description:
-      'В течение 5 минут каждую минуту со всех в реале в радиусе 5 метров от точки активации эффекта снимается по 1 хиту (рекомендуется привлекать для подтверждения эффекта представителя МГ). \nДействует на всех, кроме самого духа.\nЕсли дух отходит от точки активации больше чем на 2 метра - действие эффекта прекращается.',
+      'В течение 15 минут каждую минуту со всех в реале в радиусе 5 метров от точки активации эффекта снимается по 1 хиту (рекомендуется привлекать для подтверждения эффекта представителя МГ). \nДействует на всех, кроме самого духа и тех, кого он укажет.\nЕсли дух отходит от точки активации больше чем на 2 метра - действие эффекта прекращается.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 60,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3956,7 +3941,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3972,7 +3957,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3987,7 +3972,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4002,7 +3987,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4017,7 +4002,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4032,7 +4017,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4047,7 +4032,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4062,7 +4047,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4077,7 +4062,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
-    prerequisites: [],
+    prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4193,7 +4178,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'vr-who-is',
     humanReadableName: 'VR Who Is',
     description:
-      '[только для VR] Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион.  Абилка Режим Инкогнито защищает от проверки.',
+      '[только для VR] Ты можешь спросить чаммера кто он - и он должен назвать тебе имя, метатип и регион. Абилка Режим Инкогнито защищает от проверки.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -4225,7 +4210,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'tell-me-what-you-know-ai',
     humanReadableName: 'Скажи что знаешь',
     description:
-      'Целевой персонаж в ВР честно отвечает на 3 вопроса. Способность НЕ действует на цифровых персонажей ( ИИ и Егосты). Применяется тольк в ВР.',
+      'Целевой персонаж в ВР честно отвечает на 3 вопроса. Способность НЕ действует на цифровых персонажей (ИИ и Егосты). Применяется только в ВР.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180 - 20 * character.depth,
@@ -4255,8 +4240,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'no-enter-ai',
     humanReadableName: 'Запрет Доступа ',
-    description:
-      'Покажи это персонажу в VR (не цифровому), ему надо покинуть VR максимально быстро. Применяется только в VR. Работает раз в 30 минут.',
+    description: 'Покажи это персонажу в VR (не цифровому), ему надо покинуть VR максимально быстро. Применяется только в VR.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30 - 2 * character.depth,
@@ -4273,7 +4257,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'alpha-code',
     humanReadableName: 'Кодировка Альфа-уровня',
-    description: 'Вы можете получить бэкдор по вашему запросу. Нужно знать идентификатор хоста (дата-трейл). Работает раз в три часа.',
+    description:
+      'Вы можете получить бэкдор по вашему запросу у мастера. Нужно знать идентификатор хоста (дата-трейл). Работает раз в 3 часа.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
@@ -4304,7 +4289,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ai-buff-double-damage',
     humanReadableName: 'Двойной удар',
     description:
-      'Усиление для Техномантов в Красной Комнате. Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Работает раз в час.',
+      'Усиление для Техномантов в Красной Комнате. Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120 - 10 * character.depth,
@@ -4319,8 +4304,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ai-dismorale',
     humanReadableName: 'Провал морали',
-    description:
-      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться.  Работает раз в час.',
+    description: 'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120 - 10 * character.depth,
@@ -4336,7 +4320,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ai-matrix-gift',
     humanReadableName: 'Матричный дар',
     description:
-      'Усиление для Техномантов в Красной Комнате.  Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Применяется на 3 цели одновременно.   Работает раз в час.',
+      'Усиление для Техномантов в Красной Комнате.  Атаки цели снимают два хита вместо одного на протяжении одного конфликта в КК. Применяется на 3 цели одновременно. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120 - 10 * character.depth,
@@ -4352,7 +4336,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ai-matrix-curse',
     humanReadableName: 'Матричное проклятье',
     description:
-      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. Применяется на 3 цели одновременно.  Работает раз в час.',
+      'Ослабление для Техномантов в Красной Комнате. Цель не может атаковать в течении одной минуты, только защищаться. Применяется на 3 цели одновременно. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120 - 10 * character.depth,
@@ -4368,7 +4352,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'ai-runaway',
     humanReadableName: 'AI Бегство из Основания',
     description:
-      'Ты можешь покинуть основание когда захочешь. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. Работает раз в 2 часа.',
+      'Ты можешь покинуть основание когда захочешь. В процессе выхода тебя никто не может остановить или как-то с тобой взаимодейстовать. Ты не можешь взаимодействовать с другими персонажами или объектами. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 120 - 10 * character.depth,
@@ -4544,6 +4528,52 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: noItActionAbility.name,
+  },
+  // В нотификации выводится уровень маны в текущей локации
+  {
+    id: 'i-feel-it-in-the-water',
+    humanReadableName: 'I feel it in the water',
+    description: 'Увидеть уровень маны в локации',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 5,
+    prerequisites: ['arch-mage'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // копия абилки use-pills-on-others
+  {
+    id: 'drone-use-pills',
+    humanReadableName: 'Вколоть препарат пациенту',
+    description:
+      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
+    prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // копия абилки whats-in-the-body-1
+  {
+    id: 'drone-whats-in-the-body',
+    humanReadableName: 'Диагностика пициента',
+    description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
+    prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
   },
 ];
 setAllActiveAbilities(
