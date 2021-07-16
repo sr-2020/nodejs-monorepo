@@ -8,6 +8,9 @@ import {
   kHmhvvHungerPeriod,
   kHmhvvHungerTimer,
   kHmhvvHungerTimerDescription,
+  kHungerReminderTimerDescription,
+  kHungerReminderTimerName,
+  kHungerReminderTimerOffset,
   kHungerTimerDuration,
   kHungerTimerName,
   kHungerTimerStage1Description,
@@ -38,8 +41,20 @@ export function consumeFood(api: EventModelApi<Sr2020Character>, data: Merchandi
   sendNotificationAndHistoryRecord(api, 'Питание', 'Вы поели и утолили голод.');
 }
 
+export function hungerReminder(api: EventModelApi<Sr2020Character>, data: {}) {
+  api.sendNotification('Голод', 'Вы голодны, нужно поесть в течение часа.');
+}
+
 export function hungerStage1(api: EventModelApi<Sr2020Character>, data: {}) {
   api.setTimer(kHungerTimerName, kHungerTimerStage2Description, getHungerTimerDuration(api.workModel), hungerStage2, {});
+  api.setTimer(
+    kHungerReminderTimerName,
+    kHungerReminderTimerDescription,
+    getHungerReminderTimerDuration(api.workModel),
+    hungerReminder,
+    {},
+  );
+
   if (api.workModel.healthState != 'healthy') return;
   switch (api.workModel.currentBody) {
     case 'physical': {
@@ -96,7 +111,7 @@ export function hungerStage2(api: EventModelApi<Sr2020Character>, data: {}) {
 }
 
 export function removeHunger(model: Sr2020Character) {
-  model.timers = model.timers.filter((timer) => timer.name != kHungerTimerName);
+  model.timers = model.timers.filter((timer) => ![kHungerTimerName, kHungerReminderTimerName].includes(timer.name));
 }
 
 export function resetHunger(model: Sr2020Character) {
@@ -105,7 +120,14 @@ export function resetHunger(model: Sr2020Character) {
     name: kHungerTimerName,
     description: kHungerTimerStage1Description,
     miliseconds: getHungerTimerDuration(model).asMilliseconds(),
-    eventType: 'hungerStage1',
+    eventType: hungerStage1.name,
+    data: {},
+  });
+  model.timers.push({
+    name: kHungerReminderTimerName,
+    description: kHungerReminderTimerDescription,
+    miliseconds: getHungerReminderTimerDuration(model).asMilliseconds(),
+    eventType: hungerReminder.name,
     data: {},
   });
 }
@@ -128,6 +150,10 @@ export function resetHmhvvHunger(model: Sr2020Character) {
 export function getHungerTimerDuration(model: Sr2020Character) {
   const eatsMoreOften = !!model.passiveAbilities.find((ability) => ability.id == 'feed-tamagochi');
   return duration(kHungerTimerDuration * (eatsMoreOften ? 0.5 : 1), 'milliseconds');
+}
+
+export function getHungerReminderTimerDuration(model: Sr2020Character) {
+  return duration(getHungerTimerDuration(model).asMilliseconds() - kHungerReminderTimerOffset.asMilliseconds(), 'milliseconds');
 }
 
 export function restartAllHungers(model: Sr2020Character) {

@@ -8,7 +8,10 @@ export const kIWillSurviveModifierId = 'i-will-survive-modifier';
 export const kActiveAbilitiesDisabledTimer = 'no-active-abilities-timer';
 
 export const kHungerTimerName = 'normal-hunger';
+export const kHungerReminderTimerName = 'normal-hunger-reminder';
 export const kHungerTimerDuration = duration(12, 'hours').asMilliseconds();
+export const kHungerReminderTimerOffset = duration(1, 'hour');
+export const kHungerReminderTimerDescription = 'Напоминание о том, что нужно поесть';
 export const kHungerTimerStage1Description = 'Голодный обморок';
 export const kHungerTimerStage2Description = 'Смерть от голода';
 
