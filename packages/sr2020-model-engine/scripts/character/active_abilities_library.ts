@@ -77,7 +77,13 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import {
+  cyberdeckRepairAbility,
+  droneDangerAbility,
+  droneRepairAbility,
+  enterDrone,
+  exitDrone,
+} from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility, nanohiveVrAbility } from './nanohives';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
@@ -2587,6 +2593,32 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
+  // Сравнивает смотри бонус ремкомплекта и если это 4-1, чинит кибердеку
+  {
+    id: 'cyberdeck-recovery',
+    humanReadableName: 'Ремонт Кибердеки',
+    description: 'Восстанавливает работоспособность Кибердеки (необходимо отсканировать сломанную кибердеку и предмет "Набор никросхем")',
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Дека',
+        allowedTypes: ['cyberdeck'],
+        field: 'droneId',
+      },
+      {
+        name: 'Микросхемы',
+        allowedTypes: ['repair_kit'],
+        field: 'qrCodeId',
+      },
+    ],
+    cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
+    prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: cyberdeckRepairAbility.name,
+  },
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
@@ -3947,7 +3979,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getHigh.name,
   },
   // В течение 15 минут каждые 60с 1 уровень плотности маны будет безусловно выгоняться в случайную соседнюю локацию (там понизится, тут повысится).
   {
@@ -3962,7 +3994,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getLow.name,
   },
   // дух узнает часть ауры цели (95% для метачеловека, не сопротивляющегося сканированию своего qr).
   {
@@ -4499,6 +4531,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
+  // TODO(aeremin): Add proper implementation
   // В нотификации выводится уровень маны в текущей локации
   {
     id: 'i-feel-it-in-the-water',
@@ -4508,6 +4541,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
     prerequisites: ['arch-mage'],
+    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,

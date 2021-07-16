@@ -8,7 +8,7 @@ export interface WriteRepairKitCardState {
 }
 
 export class WriteRepairKitCard extends React.Component<{ sendEvent: SendEvent }, WriteRepairKitCardState> {
-  state: WriteRepairKitCardState = { repairKits: ['repair-kit-1', 'repair-kit-2', 'repair-kit-3'], selected: 'repair-kit-1' };
+  state: WriteRepairKitCardState = { repairKits: ['repair-kit-1', 'repair-kit-2', 'repair-kit-3', 'repair-kit-4'], selected: 'repair-kit-1' };
 
   writeQr() {
     this.props.sendEvent('createMerchandise', { id: this.state.selected });

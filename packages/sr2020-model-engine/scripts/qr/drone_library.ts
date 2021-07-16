@@ -352,6 +352,17 @@ export const kAllDrones: Drone[] = [
     description: 'Асклепий - потрясающий автодок, в котором продвинутый Риггер сможет проводить достаточно сложные операции (если конечно разберется как с ним работать), ну а в руках мастера, автодок становится мощнейшим инструментом для операций с самыми сложными имплантами.',
     abilityIds: ['auto-doc-screen', 'auto-doc-bonus-5'],
   },
+  {
+    id: 'factory-1',
+    name: 'Морфиус',
+    type: 'autodoc',
+    modSlots: 0,
+    moddingCapacity: 0,
+    sensor: 4,
+    hitpoints: 6,
+    description: 'В этом дроне можно ремонтировать другие дроны и кибердеки, если они поломаны.',
+    abilityIds: ['drone-recovery', 'cyberdeck-recovery'],
+  },
 ];
 export const kCommonDroneAbilityIds = ['drone-danger', 'drone-logoff', 'in-drone'];
 

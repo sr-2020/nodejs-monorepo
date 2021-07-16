@@ -13,6 +13,44 @@ describe('Active abilities', function () {
     await fixture.destroy();
   });
 
+  it('Get high', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.saveLocation({ modelId: '7' });
+    await fixture.addCharacterFeature('get-high', 1);
+    await fixture.useAbility({ id: 'get-high', location: { id: 7, manaLevel: 5 } }, 1);
+
+    expect(fixture.getPubSubNotifications()).toContainEqual(
+      expect.objectContaining({
+        topic: 'spell_cast',
+        body: expect.objectContaining({
+          characterId: '1',
+          id: 'input-stream',
+          location: { id: 7, manaLevel: 5 },
+          power: 5,
+        }),
+      }),
+    );
+  });
+
+  it('Get low', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.saveLocation({ modelId: '7' });
+    await fixture.addCharacterFeature('get-low', 1);
+    await fixture.useAbility({ id: 'get-low', location: { id: 7, manaLevel: 5 } }, 1);
+
+    expect(fixture.getPubSubNotifications()).toContainEqual(
+      expect.objectContaining({
+        topic: 'spell_cast',
+        body: expect.objectContaining({
+          characterId: '1',
+          id: 'output-stream',
+          location: { id: 7, manaLevel: 5 },
+          power: 5,
+        }),
+      }),
+    );
+  });
+
   it('I will survive recovery', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.saveLocation({ modelId: '7' });

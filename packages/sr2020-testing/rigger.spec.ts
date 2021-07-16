@@ -1,6 +1,6 @@
 import { TestFixture } from './fixture';
 
-import { BodyStorageQrData, DroneQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { BodyStorageQrData, CyberDeckQrData, DroneQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
 import { kDroneAbilityIds } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
 import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
@@ -213,6 +213,43 @@ describe('Rigger abilities', () => {
       expect(workModel.type).toBe('drone');
       expect(typedQrData<DroneQrData>(workModel).broken).toBe(false);
       expect(workModel.name).not.toContain('(сломан)');
+    }
+  });
+
+  it('Breaking and repairing cyberdeck', async () => {
+    // Rigger set up
+    await fixture.saveCharacter({ maxHp: 2, body: 3, drones: { maxDifficulty: 10, medicraftBonus: 10, recoverySkill: 4 } });
+    await fixture.addCharacterFeature('arch-rigger');
+
+    // Cyberdeck set up
+    await fixture.saveQrCode({ modelId: '1' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyberdeck-excalibur' } }, '1');
+    await fixture.sendQrCodeEvent({ eventType: 'breakCyberDeck', data: {} }, '1'); 
+
+    {
+      // Break cyberdeck
+      const { workModel } = await fixture.getQrCode('1');
+      expect(workModel.type).toBe('cyberdeck');
+      expect(typedQrData<CyberDeckQrData>(workModel).broken).toBe(true);
+      expect(workModel.name).toContain('(сломана)');
+    }
+  
+    // Try (and fail) to be recovery cyberdeck with bad repair-kit
+    await fixture.addCharacterFeature('cyberdeck-recovery');
+    await fixture.saveQrCode({ modelId: '2' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'repair-kit-2' } }, '2');
+    await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'cyberdeck-recovery', droneId: '1', qrCodeId: '2' } });
+
+    // Repair cyberdeck
+    await fixture.saveQrCode({ modelId: '3' });
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'repair-kit-4' } }, '3');
+    await fixture.useAbility({ id: 'cyberdeck-recovery', droneId: '1', qrCodeId: '3' });
+   
+    {
+      const { workModel } = await fixture.getQrCode('1');
+      expect(workModel.type).toBe('cyberdeck');
+      expect(typedQrData<CyberDeckQrData>(workModel).broken).toBe(false);
+      expect(workModel.name).not.toContain('(сломана)');
     }
   });
 

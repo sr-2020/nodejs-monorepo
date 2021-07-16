@@ -70,14 +70,14 @@ export function exitVr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityD
   // Not calling directly as we need to remove modifier and recalculate max HP first.
   // api.sendSelfEvent(applyPostVrDamange, { amount: m.postDroneDamage, location: data.location });
   // TODO(aeremin) Wound/Clinical death if needed
-  api.sendSelfEvent(applyPostVrDamange, { amount: m.stage, location: data.location });
+  api.sendSelfEvent(applyPostVrDamange, { stage: m.stage, location: data.location });
   api.removeModifier(m.mID);
 }
 
-export function applyPostVrDamange(api: EventModelApi<Sr2020Character>, data: { amount: number } & LocationMixin) {
-  if (data.amount <= 0) {
+export function applyPostVrDamange(api: EventModelApi<Sr2020Character>, data: { stage: number } & LocationMixin) {
+  if (data.stage <= 0) {
     sendNotificationAndHistoryRecord(api, 'Выход из VR', 'Вы вышли из VR, все в порядке.');
-  } else if (data.amount < api.workModel.maxHp) {
+  } else if (data.stage == 1) {
     sendNotificationAndHistoryRecord(api, 'Выход из VR', 'Вы превысили максимальное время в VR, что привело к тяжрану.');
     healthStateTransition(api, 'wounded', data.location);
   } else {

@@ -4288,6 +4288,21 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'mage-summon-spirit', level: 1 },
     modifier: [],
   },
+  // TODO(aeremin): Implement and add modifier here
+  // Всё делается в Spirtual, эта абилка просто флаг возможности надеть духа из тотема.
+  //
+  // В SP: Игрок нажимает кнопку Надеть духа, сканирует QR-код духохранилища (где лежит нужный дух), сканирует QR -код свободного телохранилища. После этого телохранилище занято его мясным телом, духохранилище свободно, а сам игрок действует в эктоплазменном теле - согласно описанию конкретного духа - хиты и активные абилки духа проливаются в Еву.
+  {
+    id: 'suit-up',
+    humanReadableName: 'Suit Up (P)',
+    description:
+      'Даёт возможность временно надеть тело духа из тотема. Своё мясное тело маг должен оставить в телохранилище. Продолжительность призыва духа - 30 минут. (время может быть увеличено)',
+    availability: 'open',
+    karmaCost: 30,
+    prerequisites: ['arch-mage'],
+    pack: { id: 'mage-summon-spirit', level: 1 },
+    modifier: [],
+  },
   // учитывается в Spiritual, разрешая ловить духов ранга 1
   {
     id: 'spirit-master-1',
@@ -4306,6 +4321,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-mage', 'spirit-master-1'],
+    pack: undefined,
     modifier: [],
   },
   // учитывается в Spiritual, разрешая ловить духов ранга 3
@@ -4316,6 +4332,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-mage', 'spirit-master-2'],
+    pack: undefined,
     modifier: [],
   },
 ];
