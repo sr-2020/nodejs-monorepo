@@ -273,7 +273,7 @@ export function writeKarmaSource(api: EventModelApi<QrCode>, data: { amount: num
   };
 }
 
-export function writeBuyableFeature(api: EventModelApi<QrCode>, data: { id: string }) {
+export function writeBuyableFeature(api: EventModelApi<QrCode>, data: { id: string; uses: number }) {
   if (api.model.type != 'empty') {
     throw new UserVisibleError('QR-код уже записан!');
   }
@@ -290,7 +290,7 @@ export function writeBuyableFeature(api: EventModelApi<QrCode>, data: { id: stri
     eventType: buyFeatureForKarma.name,
     name: `Способность ${feature.humanReadableName}`,
     description: `Базовая цена (без учета скидки): ${feature.karmaCost} кармы.`,
-    usesLeft: 999999,
+    usesLeft: data.uses,
     modifiers: [],
     timers: [],
     data,

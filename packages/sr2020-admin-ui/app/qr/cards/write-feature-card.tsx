@@ -7,17 +7,18 @@ import { SendEvent } from '@alice/sr2020-admin-ui/app/api/event-sender';
 export interface WriteFeatureCardState {
   features: Feature[];
   selected: string;
+  uses: number;
 }
 
 export class WriteFeatureCard extends React.Component<{ sendEvent: SendEvent }, WriteFeatureCardState> {
-  state: WriteFeatureCardState = { features: [], selected: 'magic-1' };
+  state: WriteFeatureCardState = { features: [], selected: 'magic-1', uses: 9999 };
 
   componentDidMount() {
     allFeatures().then((features) => this.setState({ features }));
   }
 
   writeQr() {
-    this.props.sendEvent('writeBuyableFeature', { id: this.state.selected });
+    this.props.sendEvent('writeBuyableFeature', { id: this.state.selected, uses: this.state.uses });
   }
 
   render() {
@@ -38,6 +39,7 @@ export class WriteFeatureCard extends React.Component<{ sendEvent: SendEvent }, 
               ))}
             </select>
             <FormControl value={this.state.selected} onChange={(e) => this.setState({ selected: e.target.value })} />
+            <FormControl type="number" value={this.state.uses} onChange={(e) => this.setState({ uses: Number(e.target.value) })} />
             <InputGroup.Append>
               <Button variant="success" onClick={() => this.writeQr()}>
                 Записать

@@ -135,7 +135,7 @@ describe('Karma events', function () {
   it('Can buy feature for karma from QR', async () => {
     await fixture.saveCharacter({ karma: { available: 1000, spent: 0, spentOnPassives: 0, cycleLimit: 0 } });
     await fixture.saveQrCode();
-    await fixture.sendQrCodeEvent({ eventType: 'writeBuyableFeature', data: { id: 'arch-rigger' } });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBuyableFeature', data: { id: 'arch-rigger', uses: 10 } });
 
     const { workModel } = await fixture.sendCharacterEvent({ eventType: 'scanQr', data: { qrCode: '0' } });
     const riggerFeature = getAllFeatures().find((f) => f.id == 'arch-rigger')!;
