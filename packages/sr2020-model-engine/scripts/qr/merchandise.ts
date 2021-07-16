@@ -191,9 +191,9 @@ function getLibraryData(id: string): MerchandiseLibraryData {
     return {
       type: 'repair_kit',
       name: 'Ремкомплект',
-      description: 'Комплект запчастей для ремонта дронов.',
+      description: 'Комплект запчастей для ремонта.',
       data: {
-        bonus: { '1': 2, '2': 4, '3': 6 }[id[id.length - 1]],
+        bonus: { '1': 2, '2': 4, '3': 6, '4': 20 }[id[id.length - 1]],
       },
     };
   }
