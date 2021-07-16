@@ -30,7 +30,7 @@ export function earnKarma(api: EventModelApi<Sr2020Character>, data: { amount: n
   }
 
   if (data.notify) {
-    sendNotificationAndHistoryRecord(api, `Начисление кармы: ${amountEarned}`, '');
+    sendNotificationAndHistoryRecord(api, `Начисление кармы: ${amountEarned.toFixed(2)}`, '');
   }
 
   api.model.karma.available += amountEarned;
