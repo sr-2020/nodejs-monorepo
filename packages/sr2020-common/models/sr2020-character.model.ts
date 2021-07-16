@@ -542,19 +542,19 @@ export class EssenceDetails {
 
 export class Karma {
   @NumberProperty()
-  @Column({ default: 0, type: 'real' })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
   available: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'real' })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
   spent: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'real' })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
   spentOnPassives: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'real' })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
   cycleLimit: number;
 }
 
