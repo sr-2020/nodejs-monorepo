@@ -75,7 +75,7 @@ import {
   prophetAbility,
 } from './ethics';
 import { setAllActiveAbilities } from '@alice/sr2020-model-engine/scripts/character/library_registrator';
-import { droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
+import { cyberdeckRepairAbility, droneDangerAbility, droneRepairAbility, enterDrone, exitDrone } from '@alice/sr2020-model-engine/scripts/character/rigger';
 import { getPillNameAbility, usePillsOnOthersAbility, whatsInTheBodyAbility } from '@alice/sr2020-model-engine/scripts/character/chemo';
 import { nanohiveBackupAbility, nanohiveHealhAbility, nanohiveShooterAbility, nanohiveVrAbility } from './nanohives';
 import { ghoulBite, gmRespawnHmhvv, vampireBite } from '@alice/sr2020-model-engine/scripts/character/hmhvv';
@@ -2600,12 +2600,38 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
     prerequisites: ['in-drone'],
-    availability: 'open',
-    karmaCost: 40,
+    availability: 'master',
+    karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: droneRepairAbility.name,
   },
+  // Сравнивает смотри бонус ремкомплекта и если это 4-1, чинит кибердеку
+  {
+    id: 'cyberdeck-recovery',
+    humanReadableName: 'Ремонт Кибердеки',
+    description: 'Восстанавливает работоспособность Кибердеки (необходимо отсканировать сломанную кибердеку и предмет "Набор никросхем")',
+    target: 'scan',
+    targetsSignature: [
+      {
+        name: 'Дека',
+        allowedTypes: ['cyberdeck'],
+        field: 'droneId',
+      },
+      {
+        name: 'Микросхемы',
+        allowedTypes: ['repair_kit'],
+        field: 'qrCodeId',
+      },
+    ],
+    cooldownMinutes: (character) => Math.max(20, 150 - 15 * character.intelligence),
+    prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: cyberdeckRepairAbility.name,
+  },  
   // Отсканировать куар целевого персонажа, у целевого персонажа Магия уменьшается на 1.
   {
     id: 'gm-decrease-magic',
