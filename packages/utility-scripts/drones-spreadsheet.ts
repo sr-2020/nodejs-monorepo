@@ -1,5 +1,18 @@
 import { getDataFromSpreadsheet } from './spreadsheet_helper';
-import { Drone } from '@alice/sr2020-model-engine/scripts/qr/drone_library';
+
+export type DroneType = 'groundcraft' | 'aircraft' | 'medicart' | 'autodoc';
+
+export interface Drone {
+  id: string;
+  name: string;
+  description: string;
+  type: DroneType;
+  modSlots: number;
+  moddingCapacity: number;
+  sensor: number;
+  hitpoints: number;
+  abilityIds: string[];
+}
 
 // Running:
 //   npx ts-node -r tsconfig-paths/register packages/utility-scripts/drones-spreadsheet.ts
