@@ -266,7 +266,7 @@ describe('Chemo events', function () {
       if (shouldBeConsumed(qr, character)) ++used;
     }
 
-    expect(used).toBeLessThanOrEqual(80);
-    expect(used).toBeGreaterThanOrEqual(60);
+    expect(used).toBeLessThanOrEqual(85);
+    expect(used).toBeGreaterThanOrEqual(55);
   });
 });
