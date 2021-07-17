@@ -2230,7 +2230,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'новая команда: kill\nУБИВАЕТ(АС) поверженного хакера. Да, наглухо \nДля применения понадобится специальный эксплойт',
     availability: 'closed',
     karmaCost: 0,
-    prerequisites: ['arch-hackerman-decker', 'fencer-3', 'hack-deck-harm'],
+    prerequisites: ['arch-hackerman-decker'],
     modifier: [],
   },
   //
@@ -3293,6 +3293,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
+    pack: { id: 'gen-meta-digital', level: 1 },
     modifier: [],
   },
   //
