@@ -143,9 +143,9 @@ describe('Rigger abilities', () => {
     {
       // Rigger is in drone and has proper abilities and hp
       const { workModel } = await fixture.getCharacter();
-      expect(workModel.maxHp).toBe(4);
+      expect(workModel.maxHp).toBe(5);
       expect(workModel.passiveAbilities).toContainEqual(expect.objectContaining({ id: 'drone-medcart' }));
-      expect(workModel.activeAbilities).toHaveLength(6); // Heals 2x2
+      expect(workModel.activeAbilities).toHaveLength(7); // Heals 2x2
       expect(workModel.currentBody).toBe('drone');
     }
 
@@ -224,7 +224,7 @@ describe('Rigger abilities', () => {
     // Cyberdeck set up
     await fixture.saveQrCode({ modelId: '1' });
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'cyberdeck-excalibur' } }, '1');
-    await fixture.sendQrCodeEvent({ eventType: 'breakCyberDeck', data: {} }, '1'); 
+    await fixture.sendQrCodeEvent({ eventType: 'breakCyberDeck', data: {} }, '1');
 
     {
       // Break cyberdeck
@@ -233,18 +233,21 @@ describe('Rigger abilities', () => {
       expect(typedQrData<CyberDeckQrData>(workModel).broken).toBe(true);
       expect(workModel.name).toContain('(сломана)');
     }
-  
+
     // Try (and fail) to be recovery cyberdeck with bad repair-kit
     await fixture.addCharacterFeature('cyberdeck-recovery');
     await fixture.saveQrCode({ modelId: '2' });
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'repair-kit-2' } }, '2');
-    await fixture.sendCharacterEventExpectingError({ eventType: 'useAbility', data: { id: 'cyberdeck-recovery', droneId: '1', qrCodeId: '2' } });
+    await fixture.sendCharacterEventExpectingError({
+      eventType: 'useAbility',
+      data: { id: 'cyberdeck-recovery', droneId: '1', qrCodeId: '2' },
+    });
 
     // Repair cyberdeck
     await fixture.saveQrCode({ modelId: '3' });
     await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'repair-kit-4' } }, '3');
     await fixture.useAbility({ id: 'cyberdeck-recovery', droneId: '1', qrCodeId: '3' });
-   
+
     {
       const { workModel } = await fixture.getQrCode('1');
       expect(workModel.type).toBe('cyberdeck');

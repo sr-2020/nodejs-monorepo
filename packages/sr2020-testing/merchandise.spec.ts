@@ -46,7 +46,7 @@ describe('Merchandise', () => {
     expect(droneData.sensor).toBeGreaterThan(0);
     expect(droneData.hitpoints).toBeGreaterThan(0);
     expect(droneData.passiveAbilities).toHaveLength(2);
-    expect(droneData.activeAbilities).toHaveLength(6);
+    expect(droneData.activeAbilities).toHaveLength(7);
   });
 
   it('Focus creation', async () => {
