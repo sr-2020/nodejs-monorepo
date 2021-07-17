@@ -154,10 +154,6 @@ export function arrowgant(api: EventModelApi<Sr2020Character>, data: ActiveAbili
   addTemporaryPassiveAbility(api, 'arrowgant-effect', d);
 }
 
-export function arr_ow(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  addTemporaryPassiveAbility(api, 'arrowgant-effect', duration(10, 'minutes'));
-}
-
 export function trollton(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   const manaLevel = data.location.manaLevel;
   const d = duration(5 + 2 * manaLevel, 'minutes');

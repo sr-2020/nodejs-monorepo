@@ -2,7 +2,6 @@ import {
   absoluteDeathAbility,
   activateSoft,
   alloHomorusAbility,
-  arr_ow,
   arrowgant,
   astralopithecus,
   avalFest,
@@ -906,11 +905,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: reviveOnTarget.name,
   },
-  // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 20 минут
+  // Активация дает возможность тихо открыть один замок за 1 минуту - все это время надо держаться рукой за сертификат замка.
+  // Требуемая эссенция: больше 2. Кулдаун 20 минут
   {
     id: 'allo-homorus',
     humanReadableName: 'Allo, homorus! (A)',
-    description: 'Активация дает возможность открыть один замок. Требуемая эссенция: больше 2. Кулдаун 20 минут',
+    description:
+      'Активация дает возможность тихо открыть один замок за 1 минуту - все это время надо держаться рукой за сертификат замка.\nТребуемая эссенция: больше 2. Кулдаун 20 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -3836,7 +3837,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Время действия 80 минут. Аура цели на это время случайным образом меняется на 30% (и случайный фрагмент, и на случайное значение).
   {
     id: 'aurma',
-    humanReadableName: 'Aurma',
+    humanReadableName: 'ДУХ: Aurma',
     description: 'На 80 минут частично изменить другому персонажу его ауру. Кулдаун 60 минут',
     target: 'scan',
     targetsSignature: [
@@ -3854,11 +3855,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: changeAuraSpiritAbility.name,
   },
-  // Активация дает возможность открыть замок (см.правила по взломам в "Прочих моделях"). Кулдаун - 5 минут
+  // Активация дает возможность тихо открыть один замок за 1 минуту - все это время надо держаться рукой за сертификат замка.
+  // Кулдаун 5 минут
   {
     id: 'i-shall-pass',
-    humanReadableName: 'I shall pass',
-    description: 'Активация дает возможность открыть один замок. Кулдаун 5 минут',
+    humanReadableName: 'ДУХ: I shall pass',
+    description:
+      'Активация дает возможность тихо открыть один замок за 1 минуту - все это время надо держаться рукой за сертификат замка.\nКулдаун 5 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 5,
@@ -3869,25 +3872,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: alloHomorusAbility.name,
   },
-  // - время действия 10 минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время.
-  {
-    id: 'arr-ow',
-    humanReadableName: 'Arr! Ow...',
-    description: 'Активируемая защита от дистанционного легкого оружия. Время действия 10 минут. Кулдаун 15 минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: ['arch-mage'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: arr_ow.name,
-  },
   // у цели сканируется QR, она из тяжрана/КС переходит в состояние "здоров и в максимальных хитах"
   {
     id: 'undiena',
-    humanReadableName: 'Undiena',
+    humanReadableName: 'ДУХ: Undiena',
     description: 'Активируемая возможность поднять одну цель из КС/тяжрана в полные хиты. Время действия: 30 минут',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3902,7 +3890,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // У духа появляется на 3 минуты пассивная абилка avalanche-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
     id: 'aval-festival',
-    humanReadableName: 'Aval-festival',
+    humanReadableName: 'ДУХ: Aval-festival',
     description:
       'Снять со всех персонажей в реале в радиусе 5 метров от точки активации хиты в количестве 4. Действует на всех, кроме самого духа и тех, кого он укажет. \nРекомендуется привлекать для подтверждения эффекта представителя МГ.',
     target: 'scan',
@@ -3919,7 +3907,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты падают. Для подтверждения может показать текст.
   {
     id: 'date-of-birds',
-    humanReadableName: 'Date of birds',
+    humanReadableName: 'ДУХ: Date of birds',
     description:
       'В течение 15 минут каждую минуту со всех в реале в радиусе 5 метров от точки активации эффекта снимается по 1 хиту (рекомендуется привлекать для подтверждения эффекта представителя МГ). \nДействует на всех, кроме самого духа и тех, кого он укажет.\nЕсли дух отходит от точки активации больше чем на 2 метра - действие эффекта прекращается.',
     target: 'scan',
@@ -3935,7 +3923,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, Откат, 40% ауры творца, метарасу творца).
   {
     id: 'trackpointer',
-    humanReadableName: 'Trackpointer',
+    humanReadableName: 'ДУХ: Trackpointer',
     description:
       'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние 25 минут.  Ауры считываются на 40 процентов',
     target: 'scan',
@@ -3951,7 +3939,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, DMX Отката, 80% ауры творца, метарасу творца).
   {
     id: 'trackeeteer',
-    humanReadableName: 'Trackeeteer',
+    humanReadableName: 'ДУХ: Trackeeteer',
     description:
       'Получить данные обо всех заклинаниях, обнаруженных в этой локации за последние 15 минут.  Ауры считываются на 80 процентов',
     target: 'scan',
@@ -3967,7 +3955,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В течение 15 минут каждые 60с будет безусловно вытягиваться 1 уровень плотности маны из случайной соседней локации в текущую (там понизится, тут повысится).
   {
     id: 'get-high',
-    humanReadableName: 'Get high',
+    humanReadableName: 'ДУХ: Get high',
     description: 'В течение 15 минут мана из соседних локаций периодически будет призываться в эту',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3982,7 +3970,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В течение 15 минут каждые 60с 1 уровень плотности маны будет безусловно выгоняться в случайную соседнюю локацию (там понизится, тут повысится).
   {
     id: 'get-low',
-    humanReadableName: 'Get low',
+    humanReadableName: 'ДУХ: Get low',
     description: 'В течение 15 минут мана из этой локации будет изгоняться в соседние',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3997,7 +3985,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // дух узнает часть ауры цели (95% для метачеловека, не сопротивляющегося сканированию своего qr).
   {
     id: 'auriel',
-    humanReadableName: 'Auriel',
+    humanReadableName: 'ДУХ: Auriel',
     description: 'Узнать 95% ауры не сопротивляющегося человека',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4012,7 +4000,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // дух узнает ауру текущей локации
   {
     id: 'reefwise',
-    humanReadableName: 'Reefwise',
+    humanReadableName: 'ДУХ: Reefwise',
     description: 'Узнать ауру локации',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4027,7 +4015,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // у цели на 60 минут понижается Резонанс на 3.
   {
     id: 'surge-the-unclean',
-    humanReadableName: 'Surge the unclean',
+    humanReadableName: 'ДУХ: Surge the unclean',
     description: 'На 60 минут понизить на 3 Резонанс цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4042,7 +4030,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // у цели на 60 минут понижается Харизма на 2.
   {
     id: 'ugly-is-pechi',
-    humanReadableName: 'Ugly is pechi',
+    humanReadableName: 'ДУХ: Ugly is pechi',
     description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4057,7 +4045,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // у цели на 60 минут повышается Харизма на 2 - но не выше 5
   {
     id: 'beautti-frutti',
-    humanReadableName: 'Beautti-frutti',
+    humanReadableName: 'ДУХ: Beautti-frutti',
     description: 'На 60 минут повысить Харизму на 2, но не выше 5, цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4532,7 +4520,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В нотификации выводится уровень маны в текущей локации
   {
     id: 'i-feel-it-in-the-water',
-    humanReadableName: 'I feel it in the water',
+    humanReadableName: 'ДУХ: I feel it in the water',
     description: 'Увидеть уровень маны в локации',
     target: 'scan',
     targetsSignature: kNoTarget,

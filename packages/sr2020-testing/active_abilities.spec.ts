@@ -121,21 +121,6 @@ describe('Active abilities', function () {
     }
   });
 
-  it('Arr-ow', async () => {
-    await fixture.saveCharacter();
-    await fixture.addCharacterFeature('arr-ow');
-
-    {
-      const { workModel } = await fixture.useAbility({ id: 'arr-ow' });
-      expect(workModel.passiveAbilities).toContainEqual(
-        expect.objectContaining({
-          id: 'arrowgant-effect',
-          validUntil: 10 * 60 * 1000,
-        }),
-      );
-    }
-  });
-
   it('Undiena', async () => {
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('undiena');

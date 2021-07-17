@@ -177,11 +177,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-meta-ork', level: 1 },
     modifier: [modifierFromEffect(increaseMaxMeatHp, { amount: 1 })],
   },
-  // magicStats.spiritResistanceMultiplier *0.8
+  // Увеличивает вероятность поимки духов на 20%
   {
     id: 'spirit-feed',
-    humanReadableName: 'Знакомец духов',
-    description: 'Снижает Сопротивление духов этому магу.',
+    humanReadableName: 'Друг духов',
+    description: 'Тебе заметно легче ловить духов',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -387,12 +387,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['media-person'],
     modifier: [],
   },
-  // для проект-менеджера  с 1 слотом
+  //
   // У игрока просто отображается текст пассивной абилки
   {
     id: 'project-manager-1',
     humanReadableName: 'ты - проект-менеджер',
-    description: 'Сертификат проект-менеджера. Ты можешь вести проекты, но необходимо выбрать специализацию (тип проекта). ',
+    description: 'Сертификат проект-менеджера. Ты можешь вести проекты. Для каждого типа проектов необходим соответствующий навык.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
@@ -2623,7 +2623,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       'Если тебя связали - ты можешь развязаться в любой момент по своему желанию.  Необходимо громко должны сказать “развязался” и скинуть веревочные петли. ',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['binding', 'arch-face'],
+    prerequisites: ['arch-face'],
     modifier: [],
   },
   // текстовая абилка
@@ -3995,7 +3995,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // модельного эффекта нет
   {
     id: 'mr-cellophane',
-    humanReadableName: 'Mr.Cellophane',
+    humanReadableName: 'ДУХ: Mr.Cellophane',
     description:
       'Ты находишься в астральном плане. Необходимый маркер: красный дождевик.\nТы видишь и слышишь реальный мир, но не можешь воздействовать на него.\nИз реального мира тебя не воспринимают и никак не могут атаковать (если только у них нет абилки, которая явным образом утверждает иное).',
     availability: 'master',
@@ -4006,7 +4006,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // модельного эффекта нет
   {
     id: 'hammer-time',
-    humanReadableName: 'HammerTime',
+    humanReadableName: 'ДУХ: HammerTime',
     description: 'Можешь взять одноручное холодное оружие до 100см, оно считается тяжёлым.',
     availability: 'master',
     karmaCost: 0,
@@ -4016,7 +4016,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // модельного эффекта нет
   {
     id: 'adamantaeu',
-    humanReadableName: 'Adamantaeu',
+    humanReadableName: 'ДУХ: Adamantaeu',
     description: 'На тебя действует эффект тяжёлой брони.',
     availability: 'master',
     karmaCost: 0,
@@ -4026,7 +4026,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'fireball-back',
-    humanReadableName: 'Fireball - back',
+    humanReadableName: 'ДУХ: Fireball - back',
     description: 'Можешь кинуть 3 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
@@ -4036,7 +4036,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'fireball-halfback',
-    humanReadableName: 'Fireball - halfback',
+    humanReadableName: 'ДУХ: Fireball - halfback',
     description: 'Можешь кинуть 5 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
@@ -4046,7 +4046,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'fireball-forward',
-    humanReadableName: 'Fireball - forward',
+    humanReadableName: 'ДУХ: Fireball - forward',
     description: 'Можешь кинуть 9 огненных шаров. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
@@ -4056,7 +4056,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума
   {
     id: 'over-the-pills',
-    humanReadableName: 'Over the pills',
+    humanReadableName: 'ДУХ: Over the pills',
     description:
       'Все мясные/экто тела, касающиеся этого духа на протяжении 1 минуты, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
@@ -4067,7 +4067,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'fireball-keeper',
-    humanReadableName: 'Fireball - keeper',
+    humanReadableName: 'ДУХ: Fireball - keeper',
     description: 'Можешь кинуть 2 огненных шара. Затем эффект исчерпан до выхода из духа',
     availability: 'master',
     karmaCost: 0,
@@ -4077,7 +4077,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Все мясные/экто тела, щекочущие владельца абилки на протяжении 2 минут, в конце этой минуты восстанавливают текущие хиты до максимума
   {
     id: 'tick-a-lick-a-boo',
-    humanReadableName: 'Tick-a-lick-a-boo',
+    humanReadableName: 'ДУХ: Tick-a-lick-a-boo',
     description:
       'Все мясные/экто тела, щекочущие этого духа на протяжении 2 минут, в конце этого интервала восстанавливают текущие хиты до максимума',
     availability: 'master',
@@ -4316,6 +4316,26 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-mage', 'spirit-master-2'],
+    modifier: [],
+  },
+  // Вероятность поимки духов увеличивается на 10%
+  {
+    id: 'spirit-known',
+    humanReadableName: 'Знакомый духов (P)',
+    description: 'Тебе легче ловить духов',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  // модельного эффекта нет
+  {
+    id: 'arr-ow',
+    humanReadableName: 'ДУХ: Arr! Ow...',
+    description: 'Защита от дистанционного легкого оружия.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
     modifier: [],
   },
 ];
