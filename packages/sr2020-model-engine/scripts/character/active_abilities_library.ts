@@ -3869,21 +3869,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: alloHomorusAbility.name,
   },
-  // - время действия 10 минут, кулдаун 15 минут. Дает абилку arrowgant-effect на это время.
-  {
-    id: 'arr-ow',
-    humanReadableName: 'Arr! Ow...',
-    description: 'Активируемая защита от дистанционного легкого оружия. Время действия 10 минут. Кулдаун 15 минут.',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 15,
-    prerequisites: ['arch-mage'],
-    availability: 'master',
-    karmaCost: 0,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: arr_ow.name,
-  },
   // у цели сканируется QR, она из тяжрана/КС переходит в состояние "здоров и в максимальных хитах"
   {
     id: 'undiena',
