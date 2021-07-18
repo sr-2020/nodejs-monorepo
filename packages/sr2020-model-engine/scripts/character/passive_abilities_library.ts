@@ -581,7 +581,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на 10 минут',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-1'],
+    prerequisites: ['arch-hackerman-decker', 'stubbornness-1', 'breacher-2'],
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT:
@@ -592,7 +592,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Продлевает максимальное время нахождения на хосте на еще на 10 минут',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-hackerman-decker', 'stubbornness-2'],
+    prerequisites: ['arch-hackerman-decker', 'stubbornness-2', 'breacher-3'],
     modifier: modifierFromEffect(increaseMaxTimeAtHost, { amount: 10 }),
   },
   // IT: команда в кривда-матрице
@@ -624,7 +624,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: 'Снижает время входа на хост на еще минуту',
     availability: 'open',
     karmaCost: 20,
-    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1'],
+    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-1', 'sly-2'],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -1 }),
   },
   // IT:
@@ -635,7 +635,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description: '.. и еще снижает время входа на хост еще на 2 минуты',
     availability: 'open',
     karmaCost: 30,
-    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2'],
+    prerequisites: ['arch-hackerman-decker', 'quick-to-enter-2', 'sly-2'],
     modifier: modifierFromEffect(increaseHostEntrySpeed, { amount: -2 }),
   },
   // IT: команда в кривда-матрице
@@ -1248,7 +1248,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       amount: 3,
     }),
   },
-  // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "православный ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
+  // Разблокирует возможность сканить во время каста qr-коды мясных тел в состоянии здоров/тяжран (не годятся КС/АС) для эффекта "ритуал": N уникальных сосканированных за время действия заклинания qr-кодов для этого заклинания:
   // 1) добавляют √N (округленное вверх) к выбранной магом Мощи
   // 2) включают в КоэффициентСниженияОтката множитель 1/(2+N)
   {
@@ -4337,6 +4337,19 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  //
+  {
+    id: 'hack-deck-fantomas',
+    humanReadableName: 'Фантомас',
+    description:
+      'Ты просто Фантомас! Удивительный и непредсказуемый\n\nНовый ключ команды enter --rnd \nВ случае, если на хосте несколько порталов, ты попадешь на случайный из них (а не на обычный входной). Более того, обычный входной портал - исключен из этой лотереи!',
+    availability: 'open',
+    karmaCost: 20,
+    prerequisites: ['arch-hackerman-decker', 'sly-2'],
+    pack: undefined,
     modifier: [],
   },
 ];
