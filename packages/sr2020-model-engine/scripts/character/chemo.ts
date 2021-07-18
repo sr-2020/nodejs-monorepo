@@ -724,7 +724,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'vampirium',
     level: 'base',
-    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита увеличена на 60 минут. Появилась зависимость.',
     durationEffect: {
       handler: increaseMentalProtection,
       duration: duration(60, 'minutes'),
@@ -734,7 +734,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'vampirium',
     level: 'uber',
-    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита увеличена на 60 минут. Появилась зависимость.',
     durationEffect: {
       handler: increaseMentalProtection,
       duration: duration(60, 'minutes'),
@@ -744,7 +744,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'vampirium',
     level: 'super',
-    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита увеличена на 60 минут. Появилась зависимость.',
     durationEffect: {
       handler: increaseMentalProtection,
       duration: duration(60, 'minutes'),
@@ -754,7 +754,7 @@ export const kAllChemoEffects: ChemoEffect[] = [
   {
     element: 'vampirium',
     level: 'crysis',
-    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита +15 на 60 минут. Появилась зависимость',
+    message: 'Персонаж 10 минут пребывает в эйфории. Ментальная защита увеличена на 60 минут. Появилась зависимость.',
     durationEffect: {
       handler: increaseMentalProtection,
       duration: duration(60, 'minutes'),
