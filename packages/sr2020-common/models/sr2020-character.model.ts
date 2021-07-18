@@ -2,6 +2,7 @@ import {
   ArrayProperty,
   BigIntTransformer,
   BoolProperty,
+  ColumnNumericTransformer,
   EmptyModel,
   JsonColumn,
   JsonNullableColumn,
@@ -542,19 +543,19 @@ export class EssenceDetails {
 
 export class Karma {
   @NumberProperty()
-  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
   available: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
   spent: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
   spentOnPassives: number;
 
   @NumberProperty()
-  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2, transformer: new ColumnNumericTransformer() })
   cycleLimit: number;
 }
 

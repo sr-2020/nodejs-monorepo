@@ -94,6 +94,16 @@ export function ObjectProperty<T extends unknown>(itemType: new () => T, options
   };
 }
 
+export class ColumnNumericTransformer {
+  to(data: number): number {
+    return data;
+  }
+
+  from(data: string): number {
+    return parseFloat(data);
+  }
+}
+
 // This one doesn't contain timestamp (as server will calculate it) and modelId (server will figure it out from the URL).
 export class EventRequest {
   @StringProperty()
