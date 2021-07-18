@@ -184,13 +184,18 @@ describe('Rigger abilities', () => {
 
     // Drone set up
     await fixture.saveQrCode({ modelId: '2' });
-    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'hippocrates' } }, '2');
+    await fixture.sendQrCodeEvent({ eventType: 'createMerchandise', data: { id: 'tool-autodoc-1' } }, '2');
 
-    // Enter drone
-    await fixture.useAbility({ id: 'drones-active', bodyStorageId: '1', droneId: '2' });
-
-    // Mark drone as broken
-    await fixture.useAbility({ id: 'drone-danger', bodyStorageId: '1' });
+    {
+      // Enter drone
+      const { workModel } = await fixture.useAbility({ id: 'drones-active', bodyStorageId: '1', droneId: '2' });
+      expect(workModel.screens.autodoc).toBeTruthy();
+    }
+    {
+      // Mark drone as broken
+      const { workModel } = await fixture.useAbility({ id: 'drone-danger', bodyStorageId: '1' });
+      expect(workModel.screens.autodoc).toBeFalsy();
+    }
 
     // Leave drone
     await fixture.useAbility({ id: 'drone-logoff', bodyStorageId: '1' });

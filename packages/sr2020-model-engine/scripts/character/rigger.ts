@@ -305,6 +305,11 @@ function createDroneModifier(drone: DroneQrData, droneQrId: string, postDroneDam
         handler: inTheDrone.name,
         enabled: true,
       },
+      {
+        type: 'normal',
+        handler: inTheDroneDisabler.name,
+        enabled: true,
+      },
     ],
     hp: drone.hitpoints,
     droneQrId,
@@ -327,22 +332,21 @@ function findInDroneModifier(api: EventModelApi<Sr2020Character>) {
 export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;
-  if (m.triggerDanger == 0) {
-    api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
-  } else {
-    api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
-    if (m.broken) api.model.screens.passiveAbilities = false;
-    api.model.screens.autodoc = false;
-    api.model.screens.karma = false;
-  }
-  //  What to do with the passive ones?
-
+  api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
   api.model.screens.billing = false;
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
 }
 
+export function inTheDroneDisabler(api: EffectModelApi<Sr2020Character>, m: InTheDroneModifier) {
+  if (m.triggerDanger) {
+    api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
+    if (m.broken) api.model.screens.passiveAbilities = false;
+    api.model.screens.autodoc = false;
+    api.model.screens.karma = false;
+  }
+}
 export function droneTimeout(api: EventModelApi<Sr2020Character>, data: {}) {
   sendNotificationAndHistoryRecord(
     api,
