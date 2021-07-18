@@ -8,8 +8,8 @@ import { getAllActiveAbilities } from './library_registrator';
 import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import {
   addFeatureToModel,
-  addTemporaryPassiveAbility,
   addTemporaryActiveAbility,
+  addTemporaryPassiveAbility,
 } from '@alice/sr2020-model-engine/scripts/character/features';
 import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
@@ -42,7 +42,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     throw new UserVisibleError('Сейчас вы не можете пользоваться активными способностями!');
   }
 
-  if (data.id != 'ghoul-feast' && data.id != 'vampire-feast') {
+  if (!['ghoul-feast', 'vampire-feast', 'drone-logoff', 'exit-vr'].includes(data.id)) {
     const minEssenceToUse = Math.max(
       libraryAbility.minimalEssence,
       api.workModel.metarace == 'meta-vampire' || api.workModel.metarace == 'meta-ghoul' ? 1 : 0,
