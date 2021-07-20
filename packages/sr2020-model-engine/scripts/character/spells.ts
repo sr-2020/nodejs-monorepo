@@ -336,14 +336,19 @@ export function frogSkinSpell(api: EventModelApi<Sr2020Character>, data: SpellDa
 }
 
 export function charmSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
-  const d = duration(10 * data.power, 'minutes');
-  const amount = data.power >= 4 ? 2 : 1;
-  const m = modifierFromEffect(increaseCharisma, { amount });
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
-    modifier: m,
-    durationInSeconds: d.asSeconds(),
-    effectDescription: 'Увеличение харизмы',
-  });
+  const d = duration(5 * data.power, 'minutes');
+
+  if (data.power < 4) {
+    sendNotificationAndHistoryRecord(api, 'Заклинание не сработало', 'Слишком низкая Мощь');
+  } else {
+    const amount = 1;
+    const m = modifierFromEffect(increaseCharisma, { amount });
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+      modifier: m,
+      durationInSeconds: d.asSeconds(),
+      effectDescription: 'Увеличение харизмы',
+    });
+  }
 }
 
 export function nothingSpecialSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
@@ -381,15 +386,19 @@ export function dumbieSpell(api: EventModelApi<Sr2020Character>, data: SpellData
 }
 
 export function smartieSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
-  const d = duration(10 * data.power, 'minutes');
+  const d = duration(5 * data.power, 'minutes');
 
-  const amount = data.power >= 4 ? 2 : 1;
-  const m = modifierFromEffect(increaseIntelligence, { amount });
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
-    modifier: m,
-    durationInSeconds: d.asSeconds(),
-    effectDescription: 'Увеличение интеллекта',
-  });
+  if (data.power < 4) {
+    sendNotificationAndHistoryRecord(api, 'Заклинание не сработало', 'Слишком низкая Мощь');
+  } else {
+    const amount = 1;
+    const m = modifierFromEffect(increaseIntelligence, { amount });
+    api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+      modifier: m,
+      durationInSeconds: d.asSeconds(),
+      effectDescription: 'Увеличение интеллекта',
+    });
+  }
 }
 
 //
