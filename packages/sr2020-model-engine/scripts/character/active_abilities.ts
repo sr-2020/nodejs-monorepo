@@ -3,6 +3,8 @@ import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-ch
 import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
+import * as uuid from 'uuid';
+
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
 import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
@@ -489,4 +491,13 @@ export function gmIncreaseCharisma(api: EventModelApi<Sr2020Character>, data: Fu
 
 export function gmDecreaseCharisma(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseCharismaEvent, { amount: -1 });
+}
+
+export function lockpickingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  sendNotificationAndHistoryRecord(api, 'Взлом замка', 'Начинаем взлом - дождитесь результата');
+  api.setTimer(uuid.v4(), 'Взлом замка', duration(30, 'seconds'), lockpickingSuccess, {});
+}
+
+export function lockpickingSuccess(api: EventModelApi<Sr2020Character>, data: never) {
+  sendNotificationAndHistoryRecord(api, 'Взлом замка', 'Замок успешно взломан!');
 }

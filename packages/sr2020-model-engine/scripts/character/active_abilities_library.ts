@@ -24,6 +24,7 @@ import {
   iWillSurvive,
   letHimPay,
   letMePay,
+  lockpickingAbility,
   marauderAbility,
   noItActionAbility,
   oneTimeRevive,
@@ -2300,7 +2301,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 10,
     minimalEssence: 0,
     fadingPrice: 25,
-    eventType: dummyAbility.name,
+    eventType: lockpickingAbility.name,
   },
   // Игрок может вывести из строя дрон на 90 секунд
   // techno.fading +200
