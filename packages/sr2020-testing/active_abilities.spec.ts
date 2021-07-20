@@ -320,4 +320,33 @@ describe('Active abilities', function () {
       }),
     );
   });
+
+  it('Sleep check no body', async () => {
+    await fixture.saveCharacter(); // attacker
+    await fixture.addCharacterFeature('sleep-check');
+
+    await fixture.saveQrCode({ modelId: '7' }); // body storage
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '7');
+
+    const message = await fixture.sendCharacterEventExpectingError({
+      eventType: 'useAbility',
+      data: { id: 'sleep-check', bodyStorageId: '7' },
+    });
+    expect(message).toContain('Это телохранилище пусто');
+  });
+
+  it('Sleep check with body', async () => {
+    await fixture.saveCharacter({ modelId: '1' }); // attacker
+    await fixture.addCharacterFeature('sleep-check', '1');
+
+    await fixture.saveCharacter({ modelId: '2' }); // victim
+    await fixture.addCharacterFeature('enter-vr', '2');
+
+    await fixture.saveQrCode({ modelId: '7' }); // body storage
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: '' } }, '7');
+
+    await fixture.useAbility({ id: 'enter-vr', bodyStorageId: '7' }, '2');
+
+    await fixture.useAbility({ id: 'sleep-check', bodyStorageId: '7' }, '1');
+  });
 });
