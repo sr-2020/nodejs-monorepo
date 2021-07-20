@@ -5,7 +5,6 @@ import { isHmhvv } from '@alice/sr2020-model-engine/scripts/character/common_hel
 import {
   kEssenceLostPerHungerTickGhouls,
   kEssenceLostPerHungerTickVampires,
-  kGameStarted,
   kHmhvvHungerPeriod,
   kHmhvvHungerTimer,
   kHmhvvHungerTimerDescription,
@@ -62,9 +61,7 @@ export function setRaceForModel(model: Sr2020Character, race: MetaRace) {
     model.essenceDetails = { max: 1000, gap: 700, used: 0 };
   }
 
-  if (kGameStarted) {
-    restartAllHungers(model);
-  }
+  restartAllHungers(model);
 }
 
 export function setRace(api: EventModelApi<Sr2020Character>, data: { race: MetaRace }) {
