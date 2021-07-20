@@ -3970,11 +3970,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // В течение 15 минут каждые 60с будет безусловно вытягиваться 1 уровень плотности маны из случайной соседней локации в текущую (там понизится, тут повысится).
+  // На 30 минут умножает recoverySpeedMultiplier на 1.5
   {
     id: 'get-high',
     humanReadableName: 'ДУХ: Get high',
-    description: 'В течение 15 минут мана из соседних локаций периодически будет призываться в эту',
+    description: 'Повышает скорость восстановления магии цели',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -3985,11 +3985,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // В течение 15 минут каждые 60с 1 уровень плотности маны будет безусловно выгоняться в случайную соседнюю локацию (там понизится, тут повысится).
+  // На 30 минут умножает feedbackMultiplier на 0.3
   {
     id: 'get-low',
     humanReadableName: 'ДУХ: Get low',
-    description: 'В течение 15 минут мана из этой локации будет изгоняться в соседние',
+    description: 'Понижает Откат цели',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -4581,7 +4581,22 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
+  // На 30 минут добавляет 5 к participantCoefficient
+  {
+    id: 'celestial-song',
+    humanReadableName: 'ДУХ: Celestial song',
+    description: 'Настраивает цель на небесный хор, что даёт значимый эффект в ритуалах соучастия',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 20,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
   // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
   //
   {

@@ -4343,7 +4343,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  //
+  // TODO(aeremin): Implement and add modifier here
   {
     id: 'hack-deck-fantomas',
     humanReadableName: 'Фантомас',
@@ -4352,6 +4352,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
+    pack: undefined,
     modifier: [],
   },
 ];
