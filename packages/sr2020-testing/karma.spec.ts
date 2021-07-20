@@ -22,7 +22,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).toMatchObject({
       available: 30,
-      cycleLimit: 4970,
+      cycleLimit: 70,
     });
   });
 
@@ -39,7 +39,7 @@ describe('Karma events', function () {
 
     expect(baseModel.karma).toMatchObject({
       available: 40,
-      cycleLimit: 4960,
+      cycleLimit: 60,
     });
 
     {
@@ -79,7 +79,7 @@ describe('Karma events', function () {
     const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 4999 } });
 
     expect(baseModel.karma).toMatchObject({
-      available: 5000,
+      available: 100,
       cycleLimit: 0,
     });
   });
@@ -89,11 +89,11 @@ describe('Karma events', function () {
 
     await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
     await fixture.sendCharacterEvent({ eventType: 'newLargeCycle', data: {} });
-    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 4999 } });
+    const { baseModel } = await fixture.sendCharacterEvent({ eventType: 'earnKarma', data: { amount: 55 } });
 
     expect(baseModel.karma).toMatchObject({
-      available: 5000,
-      cycleLimit: 0,
+      available: 110,
+      cycleLimit: 45,
     });
   });
 
@@ -106,7 +106,7 @@ describe('Karma events', function () {
     }
 
     expect((await fixture.getCharacter()).baseModel.karma).toMatchObject({
-      available: 5000,
+      available: 500,
     });
   });
 
