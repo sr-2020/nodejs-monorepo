@@ -949,7 +949,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 30,
     prerequisites: ['arch-face', 'igra-na-birge-1'],
     modifier: modifierFromEffect(increaseStockGainPercentage, {
-      amount: 5 - 2,
+      amount: 5,
     }),
   },
   // После списания рентных платежей гм получает кэшбек в размере 13% от списанной суммы. Начисляется после каждого списания рентных платежей.
@@ -961,7 +961,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 50,
     prerequisites: ['arch-face', 'igra-na-birge-2'],
     modifier: modifierFromEffect(increaseStockGainPercentage, {
-      amount: 13 - 5,
+      amount: 13,
     }),
   },
   // анонимизация перевода - не показываем это в логах никому кроме фиксера, его контрагента и мастеров
