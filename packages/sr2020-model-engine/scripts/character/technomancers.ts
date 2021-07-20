@@ -1,7 +1,7 @@
 import { Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { duration } from 'moment';
-import { FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
+import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { absoluteDeathUnchecked, clinicalDeathUnchecked } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
 
 export const kFadingDecreaseTimerName = 'decrease-current-fading';
@@ -28,4 +28,8 @@ export function clinicalDeathRedRoom(api: EventModelApi<Sr2020Character>, data: 
 
 export function absoluteDeathRedRoom(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, absoluteDeathUnchecked, { location: data.location });
+}
+
+export function foundationRunawayAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendNotification('Runaway', 'Ты сбежал из основания обратно в свое тело');
 }

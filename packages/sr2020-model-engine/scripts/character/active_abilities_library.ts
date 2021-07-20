@@ -96,7 +96,11 @@ import {
 } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
-import { absoluteDeathRedRoom, clinicalDeathRedRoom } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+import {
+  absoluteDeathRedRoom,
+  clinicalDeathRedRoom,
+  foundationRunawayAbility,
+} from '@alice/sr2020-model-engine/scripts/character/technomancers';
 
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
@@ -2547,7 +2551,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: noItActionAbility.name,
+    eventType: foundationRunawayAbility.name,
   },
   // Активирует процесс включения в дрона.
   // надо отсканировать:
