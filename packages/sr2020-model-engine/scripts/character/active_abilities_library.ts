@@ -95,6 +95,8 @@ import {
 } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
 import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr';
+import { absoluteDeathRedRoom, clinicalDeathRedRoom } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3096,14 +3098,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам КС реального мира. \nfading +150',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        field: 'targetCharacterId',
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
+      },
+    ],
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short'],
     availability: 'open',
     karmaCost: 80,
     minimalEssence: 0,
     fadingPrice: 150,
-    eventType: dummyAbility.name,
+    eventType: clinicalDeathRedRoom.name,
   },
   // После использования этой КФ игрок, на которого она была направлена, попадает в состояние АС
   // techno.fading +300
@@ -3113,14 +3121,20 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам АС реального мира. \nfading +300',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Жертва',
+        field: 'targetCharacterId',
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+      },
+    ],
     cooldownMinutes: (character) => 90,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short', 'clinical-death-rr'],
     availability: 'closed',
     karmaCost: 100,
     minimalEssence: 0,
     fadingPrice: 300,
-    eventType: dummyAbility.name,
+    eventType: absoluteDeathRedRoom.name,
   },
   // Отсканировать куар Спрайта, чтобы потратить его
   // +20

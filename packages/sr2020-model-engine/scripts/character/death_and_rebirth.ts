@@ -28,6 +28,11 @@ export function wound(api: EventModelApi<Sr2020Character>, _data: {}) {
 
 export function clinicalDeath(api: EventModelApi<Sr2020Character>, data: { location?: LocationData }) {
   if (api.model.healthState != 'wounded') return;
+  clinicalDeathUnchecked(api, data);
+}
+
+export function clinicalDeathUnchecked(api: EventModelApi<Sr2020Character>, data: { location?: LocationData }) {
+  if (api.model.healthState == 'biologically_dead') return;
 
   healthStateTransition(api, 'clinically_dead', data.location);
   sendNotificationAndHistoryRecord(api, 'Ранение', 'Вы в состоянии клинической смерти');
@@ -78,6 +83,10 @@ export function absoluteDeath(api: EventModelApi<Sr2020Character>, data: Locatio
   if (api.model.healthState == 'healthy') {
     throw new UserVisibleError('Цель не ранена!');
   }
+  absoluteDeathUnchecked(api, data);
+}
+
+export function absoluteDeathUnchecked(api: EventModelApi<Sr2020Character>, data: LocationMixin) {
   sendNotificationAndHistoryRecord(api, 'Абсолютная смерть', 'Вы окончательно мертвы');
   healthStateTransition(api, 'biologically_dead', data.location);
 }
