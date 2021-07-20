@@ -503,12 +503,15 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'charm', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
         1,
       );
-      expect(workModel.charisma).toBe(5);
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(fixture.getCharacterNotifications(1)[0].body).toContain('Слишком низкая Мощь');
+      expect(workModel.history.length).toBe(2);
+      expect(workModel.history[1].shortText).toBe('Слишком низкая Мощь');
     }
 
     {
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.charisma).toBe(4);
+      expect(workModel.charisma).toBe(3);
     }
   });
 
@@ -526,7 +529,7 @@ describe('Spells', function () {
 
     {
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.charisma).toBe(5);
+      expect(workModel.charisma).toBe(4);
     }
   });
 
@@ -603,11 +606,10 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
     await fixture.addCharacterFeature('dumbie', 1);
     {
-      const { workModel } = await fixture.sendCharacterEvent(
+      await fixture.sendCharacterEvent(
         { eventType: 'castSpell', data: { id: 'dumbie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
         1,
       );
-      expect(workModel.intelligence).toBe(5);
     }
 
     {
@@ -621,11 +623,10 @@ describe('Spells', function () {
     await fixture.saveCharacter({ modelId: '2', intelligence: 3 });
     await fixture.addCharacterFeature('dumbie', 1);
     {
-      const { workModel } = await fixture.sendCharacterEvent(
+      await fixture.sendCharacterEvent(
         { eventType: 'castSpell', data: { id: 'dumbie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
         1,
       );
-      expect(workModel.intelligence).toBe(5);
     }
 
     {
@@ -643,12 +644,16 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'smartie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 2 } },
         1,
       );
-      expect(workModel.intelligence).toBe(5);
+
+      expect(fixture.getCharacterNotifications(1).length).toBe(1);
+      expect(fixture.getCharacterNotifications(1)[0].body).toContain('Слишком низкая Мощь');
+      expect(workModel.history.length).toBe(2);
+      expect(workModel.history[1].shortText).toBe('Слишком низкая Мощь');
     }
 
     {
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.intelligence).toBe(4);
+      expect(workModel.intelligence).toBe(3);
     }
   });
 
@@ -661,12 +666,11 @@ describe('Spells', function () {
         { eventType: 'castSpell', data: { id: 'smartie', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 4 } },
         1,
       );
-      expect(workModel.intelligence).toBe(5);
     }
 
     {
       const { workModel } = await fixture.getCharacter(2);
-      expect(workModel.intelligence).toBe(5);
+      expect(workModel.intelligence).toBe(4);
     }
   });
 
