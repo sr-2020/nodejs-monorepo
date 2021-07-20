@@ -1308,7 +1308,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseDroneFeedback, { amount: 1 }),
     ],
   },
-  // drones.medicraftBonus +2
+  // drones.medicraftBonus +4
   {
     id: 'medicraft-1',
     humanReadableName: 'Медицинские дроны 1',
@@ -1336,10 +1336,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
-  // drones.medicraftBonus +8
-  // drones.aircraftBonus = +2
-  // drones.groundcraftBonus = +2
-  // drones.autodocBonus +2
+  // drones.medicraftBonus +6
+  // drones.aircraftBonus = +1
+  // drones.groundcraftBonus = +1
+  // drones.autodocBonus +1
   {
     id: 'medicraft-3',
     humanReadableName: 'Медицинские дроны 3',
@@ -1356,7 +1356,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     ],
   },
   // rigging.implantsBonus +4
-  // drones.autodocBonus +4
+  // drones.autodocBonus +1
   // rigging.canWorkWithBioware true
   {
     id: 'auto-doc-neuro',
@@ -1401,7 +1401,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'repoman-2'],
     modifier: [modifierFromEffect(increaseRepomanBonus, { amount: 2 })],
   },
-  // drones.aircraftBonus =  +2
+  // drones.aircraftBonus =  +3
   {
     id: 'aircraft-1',
     humanReadableName: 'Воздушные дроны 1',
@@ -1411,7 +1411,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger'],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
   },
-  // drones.aircraftBonus = +4
+  // drones.aircraftBonus = +3
   {
     id: 'aircraft-2',
     humanReadableName: 'Воздушные дроны 2',
@@ -1422,16 +1422,20 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
   // drones.aircraftBonus = +4
+  // drones.medicraftBonus = +1
+  // drones.groundcraftBonus = +1
+  // drones.autodocBonus +1
   {
     id: 'aircraft-3',
     humanReadableName: 'Воздушные дроны 3',
-    description: 'Максимально улучшает способность по управлению воздушными дронами.',
+    description:
+      'Максимально улучшает способность по управлению воздушными дронами. Немного улучшает навык для всех остальных типов дронов.',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['aircraft-2', 'arch-rigger'],
     modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
   },
-  // drones.groundcraftBonus = +2
+  // drones.groundcraftBonus = +3
   {
     id: 'groundcraft-1',
     humanReadableName: 'Наземные дроны-1',
@@ -1462,11 +1466,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 4 })],
   },
   // drones.maxTimeInside  +15
-  // drones.recoveryTime= -15
+  // drones.recoveryTime= -10
   {
     id: 'drone-sync-1',
     humanReadableName: 'Синхронизация 1',
-    description: 'Увеличивает время в дроне на 15 минут и сокращает перерыв между включениями на 15 минут.',
+    description: 'Увеличивает время в дроне на 15 минут и сокращает перерыв между включениями на 10 минут.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
@@ -1490,7 +1494,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     ],
   },
   // drones.maxTimeInside  +15
-  // drones.recoveryTime-15
+  // drones.recoveryTime -15
   {
     id: 'drone-sync-3',
     humanReadableName: 'Синхронизация 3',
@@ -1708,7 +1712,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [],
   },
   // rigging.implantsBonus +2
-  // drones.autodocBonus +2
+  // drones.autodocBonus +3
   {
     id: 'auto-doc-1',
     humanReadableName: 'Хирургия 1',
@@ -1719,7 +1723,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // rigging.implantsBonus +2
-  // drones.autodocBonus +2
+  // drones.autodocBonus +3
   {
     id: 'auto-doc-2',
     humanReadableName: 'Хирургия 2',
@@ -2620,7 +2624,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'self-unbinding-face',
     humanReadableName: 'Развязывание (фейс)',
     description:
-      'Если тебя связали - ты можешь развязаться в любой момент по своему желанию.  Необходимо громко должны сказать “развязался” и скинуть веревочные петли. ',
+      'Если тебя связали - ты можешь развязаться в любой момент по своему желанию.  Необходимо громко сказать “развязался” и скинуть веревочные петли. ',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-face'],
@@ -3485,7 +3489,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // hacking.fadingDecrease =3
   {
     id: 'ethic-kokkoro',
-    humanReadableName: 'Бэкдор по знакомству',
+    humanReadableName: 'Свой в матрице',
     description: 'Более быстрое уменьшение фейдинга',
     availability: 'closed',
     karmaCost: 0,
@@ -4339,7 +4343,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   //
   {
     id: 'hack-deck-fantomas',
@@ -4349,7 +4352,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
-    pack: undefined,
     modifier: [],
   },
 ];

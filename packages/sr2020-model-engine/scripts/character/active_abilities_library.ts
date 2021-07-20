@@ -322,8 +322,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'lie-to-me',
     humanReadableName: 'Лай ту ми',
-    description:
-      'Целевой персонаж не может скрыть свою ложь. Если цель лжет лжет, то выполняет это щелкает пальцами. Эффект длится 15 минут',
+    description: 'Целевой персонаж не может скрыть свою ложь. Если цель лжет, то выполняет щелкает пальцами. Эффект длится 15 минут',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 30 : 30 * (1 / Math.sqrt(character.magic))),
@@ -339,7 +338,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'danila-i-need-help',
     humanReadableName: 'Оказать услугу',
     description:
-      'Данила, ай нид хелп. Цель оказывает услугу, даже если это грозит ей средними проблемами (отсутствие угрозы жизни). Выполнение услуги не должно занимать больше 10 минут. Перевод денег и подарок не могут быть услугой.',
+      'Данила, ай нид хелп. Цель оказывает услугу, даже если это грозит ей средними проблемами (отсутствие угрозы жизни). Выполнение услуги не должно занимать больше 10 минут.  Также нельзя попросить что-либо забыть или не говорить. Перевод денег и подарок не могут быть услугой.',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 60 : 60 * (1 / Math.sqrt(character.magic))),
@@ -355,7 +354,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'luke-i-am-your-father',
     humanReadableName: 'Выполнить любую просьбу',
     description:
-      'Люк, я твой отец. Цель выполняет любую просьбу (кроме самоубийства). перевод денег и подарок не могут быть услугой. Выполнение услуги не должно занимать больше 30 минут. ',
+      'Люк, я твой отец. Цель выполняет любую просьбу (кроме самоубийства). Перевод денег и подарок не могут быть услугой. Также нельзя попросить что-либо забыть или не говорить. Выполнение услуги не должно занимать больше 30 минут. ',
     target: 'show',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => (character.magic < 1 ? 180 : 120 * (1 / Math.sqrt(character.magic))),
@@ -4154,7 +4153,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
       },
     ],
     cooldownMinutes: (character) => 70 - 5 * character.intelligence,
-    prerequisites: ['arch-face', 'let-me-pay'],
+    prerequisites: ['arch-face', 'let-him-pay'],
     availability: 'open',
     karmaCost: 40,
     minimalEssence: 0,
@@ -4557,6 +4556,24 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
     prerequisites: ['in-drone'],
+    availability: 'master',
+    karmaCost: 0,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: dummyAbility.name,
+  },
+  // TODO(aeremin): Add proper implementation
+  // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
+  //
+  {
+    id: 'drone-finish-him',
+    humanReadableName: 'Добивание в КС',
+    description: 'Добей это тело!  *работает только на биологические объекты',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => Math.max(10, 150 - 20 * character.intelligence),
+    prerequisites: ['in-drone'],
+    pack: undefined,
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
