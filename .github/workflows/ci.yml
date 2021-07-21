@@ -107,7 +107,7 @@ jobs:
   deploy_push:
     runs-on: ubuntu-latest
     needs: [test, docker_push]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_push_affected == 1
+#    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_push_affected == 1
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -125,7 +125,7 @@ jobs:
   deploy_model_engine:
     runs-on: ubuntu-latest
     needs: [test, docker_model_engine]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_model_engine_affected == 1
+#    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_model_engine_affected == 1
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
@@ -143,7 +143,7 @@ jobs:
   deploy_models_manager:
     runs-on: ubuntu-latest
     needs: [test, docker_models_manager]
-    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_models_manager_affected == 1
+#    if: github.ref == 'refs/heads/master' && needs.test.outputs.sr2020_models_manager_affected == 1
     steps:
       - uses: google-github-actions/setup-gcloud@master
         with:
