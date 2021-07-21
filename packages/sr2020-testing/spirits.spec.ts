@@ -1,6 +1,8 @@
 import { TestFixture } from './fixture';
 import { Spirit } from '@alice/sr2020-model-engine/scripts/qr/spirits_library';
+import { kSpiritTimerIds } from '@alice/sr2020-model-engine/scripts/character/spirits';
 import { SpiritJarQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
+import { duration } from 'moment';
 
 describe('Spirits-related abilities', () => {
   let fixture: TestFixture;
@@ -74,6 +76,87 @@ describe('Spirits-related abilities', () => {
 
       const spiritStorage = await fixture.getQrCode('1');
       expect(spiritStorage.workModel.data).toEqual({ spiritId: 'xyz' });
+    }
+  });
+
+  it('Enter spirit and get declassified in it (due to overtime or fight loss)', async () => {
+    await fixture.saveQrCode({ modelId: '135' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeSpiritJar', data: {} }, '135');
+    await fixture.sendQrCodeEvent({ eventType: 'putSpiritInJar', data: { spiritId: '357' } }, '135');
+
+    await fixture.saveQrCode({ modelId: '246' });
+    await fixture.sendQrCodeEvent({ eventType: 'writeBodyStorage', data: { name: 'testBodyStorage1' } }, '246');
+
+    await fixture.saveCharacter({ maxHp: 2, name: 'testMage1' });
+    await fixture.addCharacterFeature('ground-heal-ability');
+
+    {
+      const { workModel } = await fixture.getCharacter();
+      //mage has its own active ability
+      expect(workModel.activeAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'ground-heal-ability',
+        }),
+      );
+
+      //mage hasn't spirit active ability yet
+      expect(workModel.activeAbilities).not.toContainEqual(
+        expect.objectContaining({
+          id: 'undiena',
+        }),
+      );
+    }
+
+    {
+      const { workModel } = await fixture.sendCharacterEvent({
+        eventType: 'suitSpirit',
+        data: { name: 'TestSpirit1', hp: 6, abilityIds: ['undiena'], qrCodeId: '135', bodyStorageId: '246' },
+      });
+
+      expect(workModel.currentBody).toEqual('ectoplasm');
+
+      //mage in spirit now has spirit active ability and lacks his own
+      expect(workModel.activeAbilities).not.toContainEqual(
+        expect.objectContaining({
+          id: 'ground-heal-ability',
+        }),
+      );
+      expect(workModel.activeAbilities).toContainEqual(
+        expect.objectContaining({
+          id: 'undiena',
+        }),
+      );
+    }
+
+    {
+      await fixture.sendCharacterEvent({
+        eventType: 'zeroSpiritAbilities',
+        data: {},
+      });
+      const { workModel } = await fixture.getCharacter();
+
+      expect(workModel.currentBody).toEqual('ectoplasm');
+
+      //mage in spirit looses spirit ability after overtime1 in spirit
+      expect(workModel.activeAbilities).not.toContainEqual(
+        expect.objectContaining({
+          id: 'undiena',
+        }),
+      );
+
+      expect(workModel.history[0].shortText).toBe(
+        'Вам нужно срочно вернуться в мясное тело, иначе через 10 минут наступит клиническая смерть',
+      );
+      expect(fixture.getCharacterNotifications()[0].body).toContain(
+        'Вам нужно срочно вернуться в мясное тело, иначе через 10 минут наступит клиническая смерть',
+      );
+
+      //mage gets timer per overtime2 in spirit leading to clinDeath
+      expect(workModel.timers).toContainEqual(
+        expect.objectContaining({
+          name: kSpiritTimerIds[3],
+        }),
+      );
     }
   });
 });
