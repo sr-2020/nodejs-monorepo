@@ -95,6 +95,12 @@ export function zeroSpiritAbilities(api: EventModelApi<Sr2020Character>, data: n
     }
   }
   m.abilityIds = kCommonSpiritAbilityIds;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Эктоплазма разрушается',
+    'Вам нужно срочно вернуться в мясное тело, иначе через 10 минут наступит клиническая смерть',
+  );
+  api.setTimer('zeroSpiritTimeToDie', 'Клиническая смерть, если не успеете вернуться в мясное тело', duration(10, 'minutes'), '_', {});
 }
 
 export function emergencySpiritExit(api: EventModelApi<Sr2020Character>, data: unknown) {
