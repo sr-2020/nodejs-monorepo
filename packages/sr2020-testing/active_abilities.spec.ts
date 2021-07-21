@@ -13,6 +13,50 @@ describe('Active abilities', function () {
     await fixture.destroy();
   });
 
+  it('Werewolf activated', async () => {
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.addCharacterFeature('meta-werewolf', '1');
+    await fixture.addCharacterFeature('strongest-blood', '1');
+
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.addCharacterFeature('meta-werewolf', '2');
+
+    await fixture.saveCharacter({ modelId: '3' });
+    await fixture.addCharacterFeature('strong-blood', '3');
+    await fixture.addCharacterFeature('meta-werewolf', '3');
+
+    //werewolf wasn't activated, no extra victim bonus, just troll's
+    {
+      const { workModel } = await fixture.getCharacter('1');
+      expect(workModel.magicStats.victimCoefficient).toBe(5);
+    }
+
+    //werewolf was activated, there is big extra victim bonus
+    {
+      const { workModel } = await fixture.useAbility({ id: 'meta-werewolf' }, '2');
+      expect(fixture.getCharacterNotifications('2')[0].body).toContain('На 60 минут ты принял свой истинный облик');
+      expect(workModel.modifiers).toContainEqual(
+        expect.objectContaining({
+          amount: 10,
+          effects: [
+            {
+              enabled: true,
+              handler: 'multiplyVictimCoefficient',
+              type: 'normal',
+            },
+          ],
+        }),
+      );
+      expect(workModel.magicStats.victimCoefficient).toBe(10);
+    }
+
+    //werewolf was activated on ork, there is huge extra victim bonus
+    {
+      const { workModel } = await fixture.useAbility({ id: 'meta-werewolf' }, '3');
+      expect(workModel.magicStats.victimCoefficient).toBe(30);
+    }
+  });
+
   it('I will survive recovery', async () => {
     await fixture.saveCharacter({ magic: 10 });
     await fixture.saveLocation({ modelId: '7' });

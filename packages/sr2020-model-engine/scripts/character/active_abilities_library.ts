@@ -42,6 +42,7 @@ import {
   undiena,
   useSpriteAbility,
   whoNeedsIt,
+  wereami,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -1483,7 +1484,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: wereami.name,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  пересчитывается itEssense

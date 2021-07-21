@@ -22,6 +22,7 @@ import * as Chance from 'chance';
 import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
+import { multiplyVictimCoefficient } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 
 const chance = new Chance();
 
@@ -140,6 +141,18 @@ export function oneTimeRevive(api: EventModelApi<Sr2020Character>, data: FullTar
 
 export function dummyAbility(api: EventModelApi<Sr2020Character>, data: void) {
   api.sendNotification('Способность еще не реализована :(', 'Приходите завтра. Или послезавтра?');
+}
+
+export function wereami(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  sendNotificationAndHistoryRecord(api, 'Трансформируюсь!', 'На 60 минут ты принял свой истинный облик');
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(multiplyVictimCoefficient, {
+      amount: 10,
+    }),
+    duration(14 * 24 * 60, 'minutes'),
+    'Кровь предков сильна',
+  );
 }
 
 // Adept abilities
