@@ -5,7 +5,7 @@
 replicaCount: 1
 
 app:
-  dbHost: postgres13
+  dbHost: pg13-postgresql
   dbName: model
 
 image:
