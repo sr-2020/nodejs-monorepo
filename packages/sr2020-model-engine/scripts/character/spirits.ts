@@ -11,7 +11,7 @@ import { putBodyToStorage, removeBodyFromStorage } from '@alice/sr2020-model-eng
 import { freeSpirit, putSpiritInJar } from '@alice/sr2020-model-engine/scripts/qr/events';
 import { BodyStorageQrData, SpiritJarQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 
-const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2'];
+export const kSpiritTimerIds = ['spirit-timer-stage-0', 'spirit-timer-stage-1', 'spirit-timer-stage-2', 'spirit-timer-stage-3'];
 const kInSpiritModifierId = 'in-the-spirit';
 
 export function suitSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & ActiveAbilityData) {
@@ -95,6 +95,12 @@ export function zeroSpiritAbilities(api: EventModelApi<Sr2020Character>, data: n
     }
   }
   m.abilityIds = kCommonSpiritAbilityIds;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Эктоплазма разрушается',
+    'Вам нужно срочно вернуться в мясное тело, иначе через 10 минут наступит клиническая смерть',
+  );
+  api.setTimer(kSpiritTimerIds[3], 'Клиническая смерть, если не успеете вернуться в мясное тело', duration(10, 'minutes'), '_', {});
 }
 
 export function emergencySpiritExit(api: EventModelApi<Sr2020Character>, data: unknown) {
