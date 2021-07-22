@@ -22,7 +22,13 @@ import * as Chance from 'chance';
 import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/sr2020-model-engine/scripts/character/consts';
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
-import { multiplyVictimCoefficient } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import {
+  multiplyVictimCoefficient,
+  multiplyParticipantCoefficient,
+  muliplyMagicRecoverySpeed,
+  multiplyMagicFeedbackMultiplier,
+} from '@alice/sr2020-model-engine/scripts/character/basic_effects';
+import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 
 const chance = new Chance();
 
@@ -201,7 +207,7 @@ export function finishHimAbility(api: EventModelApi<Sr2020Character>, data: Acti
 }
 
 export function alloHomorusAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  api.sendNotification('Взлом', 'Вы можете приступить к взлому замка в соответствии с правилами по взлому');
+  api.sendNotification('Взлом', 'Вы можете приступить к тихому взлому замка, это займёт одну минуту');
 }
 
 export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
@@ -218,6 +224,39 @@ export function avalFest(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
 
 export function dobirds(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'birds-able', duration(15, 'minutes'), { amount: 15 });
+}
+
+export function getHigh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(muliplyMagicRecoverySpeed, {
+      amount: 1.5,
+    }),
+    duration(30, 'minutes'),
+    'Действие способности Get high',
+  );
+}
+
+export function getLow(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(multiplyMagicFeedbackMultiplier, {
+      amount: 0.3,
+    }),
+    duration(30, 'minutes'),
+    'Действие способности Get low',
+  );
+}
+
+export function celestialSong(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryModifier(
+    api,
+    modifierFromEffect(multiplyParticipantCoefficient, {
+      amount: 5,
+    }),
+    duration(30, 'minutes'),
+    'Действие способности Celestial song',
+  );
 }
 
 export function cloudMemoryAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
@@ -334,6 +373,17 @@ export function changeAuraSpiritEvent(api: EventModelApi<Sr2020Character>, data:
     modifierFromEffect(changeAuraEffect, { mask: generateRandomAuraMask(30) }),
     duration(80, 'minutes'),
     'Изменение ауры',
+  );
+}
+
+export function readCharacterAuraSpiritAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId!);
+  let auraPercentage = 95 * api.workModel.magicStats.auraReadingMultiplier - 5 * target.magicStats.auraMask;
+  auraPercentage = auraPercentage > 100 ? 100 : auraPercentage < 0 ? 0 : auraPercentage;
+  sendNotificationAndHistoryRecord(
+    api,
+    'Результат чтения ауры персонажа',
+    splitAuraByDashes(generateAuraSubset(target.magicStats.aura, auraPercentage)),
   );
 }
 

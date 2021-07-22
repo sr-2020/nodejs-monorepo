@@ -43,6 +43,10 @@ import {
   useSpriteAbility,
   whoNeedsIt,
   wereami,
+  getHigh,
+  getLow,
+  celestialSong,
+  readCharacterAuraSpiritAbility,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3984,7 +3988,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getHigh.name,
   },
   // На 30 минут умножает feedbackMultiplier на 0.3
   {
@@ -3999,7 +4003,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: getLow.name,
   },
   // дух узнает часть ауры цели (95% для метачеловека, не сопротивляющегося сканированию своего qr).
   {
@@ -4007,15 +4011,22 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Auriel',
     description: 'Узнать 95% ауры не сопротивляющегося человека',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: readCharacterAuraSpiritAbility.name,
   },
+
   // дух узнает ауру текущей локации
   {
     id: 'reefwise',
@@ -4596,7 +4607,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: celestialSong.name,
   },
   // Применяется к мясному телу в состоянии "тяжело ранен" - переводит его в состояние КС.
   //

@@ -57,7 +57,7 @@ export function clampAttributes(api: EffectModelApi<Sr2020Character>, m: Modifie
   api.model.magicStats.spiritResistanceMultiplier = clamp(api.model.magicStats.spiritResistanceMultiplier, 0.2, 2.0);
   api.model.magicStats.auraMarkMultiplier = clamp(api.model.magicStats.auraMarkMultiplier, 0.1, 2.0);
   api.model.magicStats.auraReadingMultiplier = clamp(api.model.magicStats.auraReadingMultiplier, 0.1, 2.0);
-  api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 9000);
+  api.model.magicStats.auraMask = clamp(api.model.magicStats.auraMask, 0, 20);
   api.model.chemo.baseEffectThreshold = clamp(api.model.chemo.baseEffectThreshold, 0, 9000);
   api.model.chemo.uberEffectThreshold = clamp(api.model.chemo.uberEffectThreshold, 0, 9000);
   api.model.chemo.superEffectThreshold = clamp(api.model.chemo.superEffectThreshold, 0, 9000);

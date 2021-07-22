@@ -13,6 +13,63 @@ describe('Active abilities', function () {
     await fixture.destroy();
   });
 
+  it('Auriel', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10, maxHp: 2 });
+    await fixture.addCharacterFeature('auriel', '1');
+    await fixture.saveCharacter({ modelId: '2', magicStats: { auraMask: 10 } });
+    await fixture.saveCharacter({ modelId: '3', magicStats: { auraMask: 20 } });
+
+    //95-5*10=45% => should by 11* in result
+    {
+      const { workModel } = await fixture.useAbility({ id: 'auriel', targetCharacterId: '2' }, '1');
+      expect(fixture.getCharacterNotifications('1').length).toBe(1);
+      expect(fixture.getCharacterNotifications('1')[0].body.split('*').length - 1).toBe(11);
+    }
+
+    //waiting for cooldown
+    fixture.advanceTime(duration(10, 'minutes'));
+    //95-5*20=0% => should by 20* in result
+    {
+      const { workModel } = await fixture.useAbility({ id: 'auriel', targetCharacterId: '3' }, '1');
+      expect(fixture.getCharacterNotifications('1').length).toBe(1);
+      expect(fixture.getCharacterNotifications('1')[0].body.split('*').length - 1).toBe(20);
+    }
+  });
+
+  it('Get high', async () => {
+    await fixture.saveCharacter({ magic: 3 });
+    await fixture.addCharacterFeature('get-high');
+
+    {
+      await fixture.useAbility({ id: 'get-high' });
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magicStats.recoverySpeedMultiplier).toBe(1.5);
+    }
+  });
+
+  it('Get low', async () => {
+    await fixture.saveCharacter({ magic: 3 });
+    await fixture.addCharacterFeature('get-low');
+
+    {
+      await fixture.useAbility({ id: 'get-low' });
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magicStats.feedbackMultiplier).toBe(0.3);
+    }
+  });
+
+  it('Celestial song', async () => {
+    await fixture.saveCharacter({ magic: 3 });
+    await fixture.addCharacterFeature('celestial-song');
+    await fixture.addCharacterFeature('agnus-dei');
+
+    {
+      await fixture.useAbility({ id: 'celestial-song' });
+      const { workModel } = await fixture.getCharacter();
+      expect(workModel.magicStats.participantCoefficient).toBe(15);
+    }
+  });
+
   it('Werewolf activated', async () => {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('meta-werewolf', '1');

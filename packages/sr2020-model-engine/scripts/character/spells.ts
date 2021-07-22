@@ -587,7 +587,9 @@ export function magicFeedbackEffect(api: EffectModelApi<Sr2020Character>, m: Mod
 
 export function readCharacterAuraSpell(api: EventModelApi<Sr2020Character>, data: SpellData) {
   const target = api.aquired(Sr2020Character, data.targetCharacterId!);
-  const auraPercentage = 90 * api.workModel.magicStats.auraReadingMultiplier;
+  let auraPercentage = 90 * api.workModel.magicStats.auraReadingMultiplier - 5 * target.magicStats.auraMask;
+  auraPercentage = auraPercentage > 100 ? 100 : auraPercentage < 0 ? 0 : auraPercentage;
+
   sendNotificationAndHistoryRecord(
     api,
     'Результат чтения ауры персонажа',
@@ -615,12 +617,12 @@ export function dumptyHumptySpell(api: EventModelApi<Sr2020Character>, data: Spe
 }
 
 export function dummySpell(api: EventModelApi<Sr2020Character>, data: never) {
-  api.sendNotification('Спелл еще не реализован :(', 'Приходите завтра. Или послезавтра?');
+  api.sendNotification('Спелл еще не придуман :(', 'Приходите завтра. Или послезавтра?');
 }
 
 export function spiritsRelatedSpell(api: EventModelApi<Sr2020Character>, data: never) {
   // TODO(https://trello.com/c/XHT0b9Oj/155-реализовать-заклинания-работающие-с-духами)
-  api.sendNotification('Спелл еще не реализован :(', 'Спелл связан с духами которых пока что нет.');
+  api.sendNotification('Спелл еще не обнаружен :(', 'Спелл связан с духами, которых пока что не удалось изучить.');
 }
 
 //задача этого спелла - просто случиться, что повлечёт нотификацию, запись в историю и главное - в пабсаб
