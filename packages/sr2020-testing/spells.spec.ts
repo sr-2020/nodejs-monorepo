@@ -17,6 +17,40 @@ describe('Spells', function () {
     await fixture.destroy();
   });
 
+  it('Mene', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10, maxHp: 2 });
+    await fixture.addCharacterFeature('mene', '1');
+    await fixture.saveCharacter({ modelId: '2', magicStats: { auraMask: 0 } });
+
+    await fixture.saveCharacter({ modelId: '3', magicStats: { auraMask: 10 } });
+
+    //aura percentage: 90 (base percent). Should get 0.9*20=18 letters and 2 *
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'mene', location: { id: 0, manaLevel: 0 }, targetCharacterId: '2', power: 1 },
+        },
+        '1',
+      );
+      expect(fixture.getCharacterNotifications('1').length).toBe(1);
+      expect(fixture.getCharacterNotifications('1')[0].body.split('*').length - 1).toBe(2);
+    }
+
+    //aura percentage: 90 (base percent) - 5*10 (auraMask) = 40%. Should get 0.4*20=8 chars and 12*
+    {
+      const { workModel } = await fixture.sendCharacterEvent(
+        {
+          eventType: 'castSpell',
+          data: { id: 'mene', location: { id: 0, manaLevel: 0 }, targetCharacterId: '3', power: 1 },
+        },
+        '1',
+      );
+      expect(fixture.getCharacterNotifications('1').length).toBe(1);
+      expect(fixture.getCharacterNotifications('1')[0].body.split('*').length - 1).toBe(12);
+    }
+  });
+
   it('Spirit Catcher', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10 });
     await fixture.addCharacterFeature('spirit-catcher', 1);
