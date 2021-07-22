@@ -3901,7 +3901,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Undiena',
     description: 'Активируемая возможность поднять одну цель из КС/тяжрана в полные хиты. Время действия: 30 минут',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'master',
@@ -3981,7 +3987,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Get high',
     description: 'Повышает скорость восстановления магии цели',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'master',
@@ -3996,7 +4008,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Get low',
     description: 'Понижает Откат цели',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     availability: 'master',
@@ -4048,7 +4066,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Surge the unclean',
     description: 'На 60 минут понизить на 3 Резонанс цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
@@ -4063,7 +4087,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Ugly is pechi',
     description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
@@ -4078,7 +4108,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Beautti-frutti',
     description: 'На 60 минут повысить Харизму на 2, но не выше 5, цели, указанной добровольно предоставленным qr-кодом.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-mage'],
     availability: 'master',
