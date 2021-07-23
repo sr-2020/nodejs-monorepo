@@ -47,6 +47,8 @@ import {
   getLow,
   celestialSong,
   readCharacterAuraSpiritAbility,
+  readLocationAuraSpiritAbility,
+  surgeTheUnclean,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -4058,7 +4060,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: readLocationAuraSpiritAbility.name,
   },
   // у цели на 60 минут понижается Резонанс на 3.
   {
@@ -4079,7 +4081,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: surgeTheUnclean.name,
   },
   // у цели на 60 минут понижается Харизма на 2.
   {
