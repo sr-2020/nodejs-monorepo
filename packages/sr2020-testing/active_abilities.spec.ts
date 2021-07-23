@@ -13,6 +13,31 @@ describe('Active abilities', function () {
     await fixture.destroy();
   });
 
+  it('Surge the unclean', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('surge-the-unclean', '1');
+
+    await fixture.saveCharacter({ modelId: '2', resonance: 5 });
+
+    {
+      await fixture.useAbility({ id: 'surge-the-unclean', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
+      expect(workModel.resonance).toBe(2);
+    }
+  });
+
+  it('Reefwise', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 10 });
+    await fixture.addCharacterFeature('reefwise', '1');
+    await fixture.saveLocation({ modelId: '7', aura: 'abaabcbbcdccdeddefee' });
+
+    {
+      const { workModel } = await fixture.useAbility({ id: 'reefwise', location: { id: 7, manaLevel: 5 } }, '1');
+      expect(fixture.getCharacterNotifications('1')[0].body).toContain('abaa-bcbb-cdcc-dedd-efee');
+      expect(workModel.history[1].shortText).toBe('abaa-bcbb-cdcc-dedd-efee');
+    }
+  });
+
   it('Auriel', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 10, maxHp: 2 });
     await fixture.addCharacterFeature('auriel', '1');
@@ -41,6 +66,8 @@ describe('Active abilities', function () {
     await fixture.addCharacterFeature('get-high', '1');
 
     await fixture.saveCharacter({ modelId: '2', magicStats: { recoverySpeedMultiplier: 1 } });
+    const { workModel } = await fixture.getCharacter('2');
+    expect(workModel.magicStats.recoverySpeedMultiplier).toBe(1);
 
     {
       await fixture.useAbility({ id: 'get-high', targetCharacterId: '2' }, '1');

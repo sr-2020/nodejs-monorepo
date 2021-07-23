@@ -1,6 +1,12 @@
 import { EffectModelApi, Event, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
-import { addHistoryRecord, addTemporaryModifier, modifierFromEffect, sendNotificationAndHistoryRecord } from './util';
+import {
+  addHistoryRecord,
+  addTemporaryModifier,
+  addTemporaryModifierEvent,
+  modifierFromEffect,
+  sendNotificationAndHistoryRecord,
+} from './util';
 import { absoluteDeath, clinicalDeath, reviveOnTarget } from './death_and_rebirth';
 import { duration } from 'moment';
 import * as uuid from 'uuid';
@@ -27,8 +33,10 @@ import {
   multiplyParticipantCoefficient,
   muliplyMagicRecoverySpeed,
   multiplyMagicFeedbackMultiplier,
+  increaseResonance,
 } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
+import { Location, SpellTrace } from '@alice/sr2020-common/models/location.model';
 
 const chance = new Chance();
 
@@ -405,6 +413,25 @@ export function readCharacterAuraSpiritAbility(api: EventModelApi<Sr2020Characte
     'Результат чтения ауры персонажа',
     splitAuraByDashes(generateAuraSubset(target.magicStats.aura, auraPercentage)),
   );
+}
+
+export function readLocationAuraSpiritAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const target = api.aquired(Location, data.location.id.toString());
+  const auraPercentage = 100 * api.workModel.magicStats.auraReadingMultiplier;
+  sendNotificationAndHistoryRecord(api, 'Аура этой локации: ', splitAuraByDashes(generateAuraSubset(target.aura, auraPercentage)));
+}
+
+export function surgeTheUnclean(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  const d = duration(60, 'minutes');
+
+  const amount = -3;
+  const m = modifierFromEffect(increaseResonance, { amount });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds: d.asSeconds(),
+    effectDescription: 'Действие способности Surge the unclean',
+  });
 }
 
 export function takeNoHarmAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
