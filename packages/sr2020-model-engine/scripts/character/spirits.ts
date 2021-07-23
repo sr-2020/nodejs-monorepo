@@ -47,6 +47,7 @@ export function enterSpirit(api: EventModelApi<Sr2020Character>, data: Spirit & 
   }
 
   api.addModifier(createSpiritModifier(data));
+  sendNotificationAndHistoryRecord(api, 'Вход в духа', `Вы вошли в духа ${data.name}, все в порядке.`);
 }
 
 export function exitSpirit(api: EventModelApi<Sr2020Character>, data: LocationMixin) {

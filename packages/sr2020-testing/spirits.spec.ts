@@ -113,6 +113,8 @@ describe('Spirits-related abilities', () => {
         data: { name: 'TestSpirit1', hp: 6, abilityIds: ['undiena'], qrCodeId: '135', bodyStorageId: '246' },
       });
 
+      expect(workModel.history[0].shortText).toBe('Вы вошли в духа TestSpirit1, все в порядке.');
+
       expect(workModel.currentBody).toEqual('ectoplasm');
 
       //mage in spirit now has spirit active ability and lacks his own
@@ -144,7 +146,7 @@ describe('Spirits-related abilities', () => {
         }),
       );
 
-      expect(workModel.history[0].shortText).toBe(
+      expect(workModel.history[1].shortText).toBe(
         'Вам нужно срочно вернуться в мясное тело, иначе через 10 минут наступит клиническая смерть',
       );
       expect(fixture.getCharacterNotifications()[0].body).toContain(
