@@ -355,8 +355,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'shtopping',
     humanReadableName: 'Shtopping (S)',
-    description:
-      'Повысить цены. На Мощь*10 минут на Мощь*10 (но не более, чем на 50) повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'Повысить цены. На Мощь*10 минут повысить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом.',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 20,
@@ -368,8 +367,7 @@ const kAllSpellsList: Spell[] = [
   {
     id: 'tax-free',
     humanReadableName: 'Tax free (S)',
-    description:
-      'Понизить цены. На Мощь*10 минут на Мощь*10 (но не более, чем на 50) понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'Понизить цены. На Мощь*10 минут понизить стоимость всех покупок цели, указанной добровольно предоставленным qr-кодом.',
     prerequisites: ['arch-mage'],
     availability: 'open',
     karmaCost: 30,

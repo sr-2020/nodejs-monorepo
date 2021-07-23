@@ -394,7 +394,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'ты - проект-менеджер',
     description: 'Сертификат проект-менеджера. Ты можешь вести проекты. Для каждого типа проектов необходим соответствующий навык.',
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 50,
     prerequisites: [],
     modifier: [],
   },
@@ -556,7 +556,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'getdump',
     humanReadableName: 'getdump',
-    description: 'новая команда: getdump\nкоманда применяется в бою с IC. Позволяет получить фрагмент дампа IC для CVE анализа',
+    description: 'новая команда: getdump\nЕсли ваш навык Firewall достаточно высок, вы сможете найти уязвимость в сканируемом ICE',
     availability: 'open',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-decker', 'breacher-1'],
@@ -1917,7 +1917,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
     modifier: [modifierFromEffect(increaseIntelligence, { amount: 2 })],
   },
-  // resonance +1
+  // resonance +2
   {
     id: 'arch-hackerman-technomancer',
     humanReadableName: 'Архетип: Техномант',
@@ -2803,7 +2803,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'deck-cve-delay-publish',
     humanReadableName: 'Криптоанархист',
-    description: 'отсрочка публикации CVE увеличена на час',
+    description: 'отсрочка публикации CVE увеличена на 30м',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'breacher-2'],
@@ -3395,7 +3395,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'fast-dress-up',
     humanReadableName: 'Fast dress up (P)',
     description: 'Сокращает время между призывами духа на 30 минут',
-    availability: 'open',
+    availability: 'master',
     karmaCost: 20,
     prerequisites: ['arch-mage', 'suit-up'],
     modifier: [],
@@ -3834,7 +3834,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-digital', 'do-it-yourself-two'],
     modifier: [],
   },
-  // Характеристика - Depth +2
+  //
   {
     id: 'ai-researcher',
     humanReadableName: 'AI eXpand',
@@ -3885,7 +3885,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-digital', 'sub-ai'],
     modifier: [],
   },
-  // Depth +1
+  //
   {
     id: 'ai-troubleshooter',
     humanReadableName: 'AI eXterminate',
@@ -4167,7 +4167,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'project-artisan',
     humanReadableName: 'Кустарное производство',
     description: 'Ты можешь делать проекты кустарного производства',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
     modifier: [],
@@ -4177,7 +4177,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'project-industry',
     humanReadableName: 'Массовое производство',
     description: 'Ты можешь делать проекты массового производства',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
     modifier: [],
@@ -4187,7 +4187,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'project-foundation',
     humanReadableName: 'Фундаментальная технология',
     description: 'Ты можешь делать проекты фундаментальных технологий',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
     modifier: [],
@@ -4197,7 +4197,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     id: 'project-place',
     humanReadableName: 'Перерождение',
     description: 'Ты можешь делать проекты локального перерождения ',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['project-manager-1'],
     modifier: [],
@@ -4343,15 +4343,53 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
+  // IT: Команда в Кривда-Матрице, основного IT нет
   {
     id: 'hack-deck-fantomas',
-    humanReadableName: 'Фантомас',
+    humanReadableName: 'Чингачгук',
     description:
-      'Ты просто Фантомас! Удивительный и непредсказуемый\n\nНовый ключ команды enter --rnd \nВ случае, если на хосте несколько порталов, ты попадешь на случайный из них (а не на обычный входной). Более того, обычный входной портал - исключен из этой лотереи!',
+      'Ты -легендарный следопыт Матрицы, то есть знаток ее тайных тропок. То есть дата-трейлов. Таких троллят, называя их "чингачгуками"\n\nНовый ключ команды enter [trail]\nТы можешь войти на хост с разными путями, если, конечно, ты знаешь их трейлы. В команде enter в ты можешь, в дополнение к хосту, указать трейл бэкдора или портала. И попадешь прямиком на него.',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'barguzin-gift',
+    humanReadableName: 'ДУХ: Дар Баргузина',
+    description:
+      'Баргузин невысок, бородат, но сильнее всех богатырей. Одна беда - прям слишком. Без помощи других упирается, да силы тратит.\n\nПока дух с Даром Сармы держит за одну руку тебя, а за другую духа с Даром Култука - у тебя 6 хитов, тяжёлая броня (повяжи на себя красную ленту), когти считаются тяжёлым оружием (повяжи красную ленту на нож), ты можешь кинуть 5 файерболов и не подвержен изгнанию духов (Let it go). Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'kultuk-gift',
+    humanReadableName: 'ДУХ: Дар Култука',
+    description:
+      'Искажён лик Култука болезнями, но как всякая жизнь он себе дорожку находит. Одна беда - увлекается. Без помощи других хватается за разное, елозит туда-сюда, да вперёд почти не движется.\n\nПока дух с Даром Сармы держит за одну руку тебя, а за другую духа с Даром Баргузина - у тебя 6 хитов, тяжёлая броня (повяжи на себя красную ленту), когти считаются тяжёлым оружием (повяжи красную ленту на нож), ты можешь кинуть 5 файерболов и не подвержен изгнанию духов (Let it go). Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
+    pack: undefined,
+    modifier: [],
+  },
+  // TODO(aeremin): Implement and add modifier here
+  // модельного эффекта нет
+  {
+    id: 'sarma-gift',
+    humanReadableName: 'ДУХ: Дар Сармы',
+    description:
+      'Сарма все хвори прогоняет, хотела бы всех исцелить. Одна беда - живые вечно снова заболеть норовят. Без помощи других никак ей окончательно этот вопрос не решить.\n\nПока ты держишь одной рукой руку духа с Даром Баргузина, а другой духа с Даром Култука - у тебя 5 хитов, защита от лёгких снарядов и любые духи, что тебя касаются, пропев "Славное море, священный Байкал, Славный корабль омулёвая бочка" тут же восстановят все хиты. Если хотя бы одно из двух рукопожатий распалось - хиты всех трёх духов падают до нуля.',
+    availability: 'master',
+    karmaCost: 0,
+    prerequisites: ['arch-mage'],
     pack: undefined,
     modifier: [],
   },
