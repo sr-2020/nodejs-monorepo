@@ -37,35 +37,41 @@ describe('Active abilities', function () {
   });
 
   it('Get high', async () => {
-    await fixture.saveCharacter({ magic: 3 });
-    await fixture.addCharacterFeature('get-high');
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('get-high', '1');
+
+    await fixture.saveCharacter({ modelId: '2', magicStats: { recoverySpeedMultiplier: 1 } });
 
     {
-      await fixture.useAbility({ id: 'get-high' });
-      const { workModel } = await fixture.getCharacter();
+      await fixture.useAbility({ id: 'get-high', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
       expect(workModel.magicStats.recoverySpeedMultiplier).toBe(1.5);
     }
   });
 
   it('Get low', async () => {
-    await fixture.saveCharacter({ magic: 3 });
-    await fixture.addCharacterFeature('get-low');
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('get-low', '1');
+
+    await fixture.saveCharacter({ modelId: '2', magicStats: { feedbackMultiplier: 1 } });
 
     {
-      await fixture.useAbility({ id: 'get-low' });
-      const { workModel } = await fixture.getCharacter();
+      await fixture.useAbility({ id: 'get-low', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
       expect(workModel.magicStats.feedbackMultiplier).toBe(0.3);
     }
   });
 
   it('Celestial song', async () => {
-    await fixture.saveCharacter({ magic: 3 });
-    await fixture.addCharacterFeature('celestial-song');
-    await fixture.addCharacterFeature('agnus-dei');
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('celestial-song', '1');
+
+    await fixture.saveCharacter({ modelId: '2', magicStats: { participantCoefficient: 1 } });
+    await fixture.addCharacterFeature('agnus-dei', '2');
 
     {
-      await fixture.useAbility({ id: 'celestial-song' });
-      const { workModel } = await fixture.getCharacter();
+      await fixture.useAbility({ id: 'celestial-song', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
       expect(workModel.magicStats.participantCoefficient).toBe(15);
     }
   });
@@ -223,11 +229,15 @@ describe('Active abilities', function () {
   });
 
   it('Undiena', async () => {
-    await fixture.saveCharacter();
-    await fixture.addCharacterFeature('undiena');
+    await fixture.saveCharacter({ modelId: '1' });
+    await fixture.addCharacterFeature('undiena', '1');
+
+    await fixture.saveCharacter({ modelId: '2' });
 
     {
-      const { workModel } = await fixture.useAbility({ id: 'undiena' });
+      await fixture.useAbility({ id: 'undiena', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
+
       expect(workModel.activeAbilities).toContainEqual(
         expect.objectContaining({
           id: 'ground-heal-ability',

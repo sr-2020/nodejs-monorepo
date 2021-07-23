@@ -215,6 +215,11 @@ export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: Acti
 }
 
 export function undiena(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, grantTmpGroundHeal, {});
+}
+
+export function grantTmpGroundHeal(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryActiveAbility(api, 'ground-heal-ability', duration(30, 'minutes'));
 }
 
@@ -227,6 +232,11 @@ export function dobirds(api: EventModelApi<Sr2020Character>, data: ActiveAbility
 }
 
 export function getHigh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, increaseMagicRecoverySpeed, {});
+}
+
+export function increaseMagicRecoverySpeed(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryModifier(
     api,
     modifierFromEffect(muliplyMagicRecoverySpeed, {
@@ -238,6 +248,11 @@ export function getHigh(api: EventModelApi<Sr2020Character>, data: ActiveAbility
 }
 
 export function getLow(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, decreaseMagicFeedbackMultiplier, {});
+}
+
+export function decreaseMagicFeedbackMultiplier(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryModifier(
     api,
     modifierFromEffect(multiplyMagicFeedbackMultiplier, {
@@ -249,6 +264,11 @@ export function getLow(api: EventModelApi<Sr2020Character>, data: ActiveAbilityD
 }
 
 export function celestialSong(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, increaseParticipantCoefficient, {});
+}
+
+export function increaseParticipantCoefficient(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryModifier(
     api,
     modifierFromEffect(multiplyParticipantCoefficient, {

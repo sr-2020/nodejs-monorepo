@@ -4635,7 +4635,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'ДУХ: Celestial song',
     description: 'Настраивает цель на небесный хор, что даёт значимый эффект в ритуалах соучастия',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [
+      {
+        name: 'Персонаж',
+        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        field: 'targetCharacterId',
+      },
+    ],
     cooldownMinutes: (character) => 20,
     prerequisites: ['arch-mage'],
     pack: undefined,
