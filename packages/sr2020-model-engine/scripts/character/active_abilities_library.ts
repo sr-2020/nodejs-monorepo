@@ -19,7 +19,9 @@ import {
   getHigh,
   getLow,
   gmDecreaseCharisma,
+  gmDecreaseMagic,
   gmIncreaseCharisma,
+  gmIncreaseMagic,
   hammerOfJustice,
   howMuchIsThePssh,
   howMuchItCosts,
@@ -109,6 +111,7 @@ import {
   clinicalDeathRedRoom,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1661,7 +1664,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dummyAbility.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Увеличение нехуеватости Магии "+1".
   {
     id: 'gm-increase-magic',
@@ -1675,7 +1677,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: gmIncreaseMagic.name,
   },
   // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перечислены все вещества, которые находятся в чаммере в формате
   // имя_чаммера
@@ -2610,7 +2612,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: gmDecreaseMagic.name,
   },
   // Отсканировать куар нода Основания матрицы.
   // Отсканировать куар спрайта
