@@ -3101,7 +3101,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 200,
-    eventType: dummyAbility.name,
+    eventType: noItActionAbility.name,
   },
   // После использования этой КФ игрок, на которого она была направлена, попадает в состояние КС
   // techno.fading +150. абилка требует отсканировать куар типа нода основания матриц,ы
