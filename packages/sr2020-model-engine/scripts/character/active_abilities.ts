@@ -228,10 +228,6 @@ export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: Acti
   api.sendNotification('Уровень маны', 'Сейчас здесь мана на уровне: ' + data.location.manaLevel);
 }
 
-export function grantTmpGroundHeal(api: EventModelApi<Sr2020Character>, data: {}) {
-  addTemporaryActiveAbility(api, 'ground-heal-ability', duration(30, 'minutes'));
-}
-
 export function avalFest(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'avalanche-able', duration(3, 'minutes'), { amount: 4 });
 }
