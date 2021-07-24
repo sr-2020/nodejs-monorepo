@@ -109,6 +109,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
     ...data,
     ...injectedTargetsData(api, data),
     characterId: api.model.modelId,
+    aura: api.workModel.magicStats.aura,
     name: ability.humanReadableName,
   });
 }

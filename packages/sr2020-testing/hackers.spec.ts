@@ -85,6 +85,7 @@ describe('Hackers-related events', function () {
         topic: 'ability_used',
         body: {
           characterId: '0',
+          aura: expect.stringContaining(''),
           id: 'jack-in',
           name: 'Jack-in',
           qrCode: expect.objectContaining({
@@ -127,6 +128,7 @@ describe('Hackers-related events', function () {
       topic: 'ability_used',
       body: {
         characterId: '0',
+        aura: expect.stringContaining(''),
         id: 'activate-soft',
         name: 'Активация софта',
         qrCode: expect.objectContaining({

@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 import { cloneDeep, template } from 'lodash';
 import { EffectModelApi, EventModelApi, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
-import { Location, SpellTrace } from '@alice/sr2020-common/models/location.model';
+import { Location } from '@alice/sr2020-common/models/location.model';
 import { LocationMixin, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { brasiliaEffect, recordSpellTrace, shiftSpellTraces } from '../location/events';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
@@ -164,7 +164,12 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
 
   earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost, notify: false });
 
-  api.sendPubSubNotification('spell_cast', { ...data, characterId: api.model.modelId, name: spell.humanReadableName });
+  api.sendPubSubNotification('spell_cast', {
+    ...data,
+    characterId: api.model.modelId,
+    aura: api.workModel.magicStats.aura,
+    name: spell.humanReadableName,
+  });
 }
 
 function createArtifact(api: EventModelApi<Sr2020Character>, qrCode: string, whatItDoes: string, eventType: string, usesLeft = 1) {
