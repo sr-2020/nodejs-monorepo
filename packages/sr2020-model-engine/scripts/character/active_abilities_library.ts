@@ -109,7 +109,6 @@ import {
   clinicalDeathRedRoom,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -3103,13 +3102,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 200,
     eventType: noItActionAbility.name,
   },
-  // После использования этой КФ игрок, на которого она была направлена, попадает в состояние КС
-  // techno.fading +150. абилка требует отсканировать куар типа нода основания матриц,ы
+  // Цель применения:
+  // куар игрока в тяжране
+  // куар типа нода основания матриц,ы   (куар красной комнаты)
+  //
+  // Результат:
+  // персонаж, на которого она была направлена, попадает в состояние КС
+  // techno.fading +150. абилка требует отсканировать
   {
     id: 'clinical-death-rr',
     humanReadableName: 'Добивание в КС в красной комнате',
     description:
-      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам КС реального мира. \nfading +150',
+      'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит КС. \nfading +150',
     target: 'scan',
     targetsSignature: [
       {
@@ -3137,7 +3141,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'absolutely-death-rr',
     humanReadableName: 'Добивание в АС в красной комнате',
     description:
-      'После использования этой КФ игрок, на которого она была направлена, отправляется \nк месту, где персонаж оставил тело, а далее по правилам АС реального мира. \nfading +300',
+      'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит АС. \nfading +300',
     target: 'scan',
     targetsSignature: [
       {

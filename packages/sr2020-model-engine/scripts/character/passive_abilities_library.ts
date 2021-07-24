@@ -4354,7 +4354,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-decker', 'sly-2'],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'barguzin-gift',
@@ -4364,10 +4363,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'kultuk-gift',
@@ -4377,10 +4374,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // модельного эффекта нет
   {
     id: 'sarma-gift',
@@ -4390,7 +4385,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
-    pack: undefined,
     modifier: [],
   },
 ];
