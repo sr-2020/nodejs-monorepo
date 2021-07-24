@@ -40,18 +40,24 @@ export async function healthStateToSheet(event: { data: string }) {
 }
 
 export async function abilityUsedToSheet(event: { data: string }) {
-  const payload: { id: string; name: string; characterId: string; location: { id: string }; targetCharacterId?: string } = JSON.parse(
-    Buffer.from(event.data, 'base64').toString(),
-  );
+  const payload: {
+    id: string;
+    name: string;
+    characterId: string;
+    aura: string;
+    location: { id: string };
+    targetCharacterId?: string;
+  } = JSON.parse(Buffer.from(event.data, 'base64').toString());
   console.log(payload);
 
-  await appendToSpreadsheet('Применения способностей!A1:F1', [
+  await appendToSpreadsheet('Применения способностей!A1:G1', [
     currentMoscowDateTime(),
     payload.location.id,
     payload.characterId,
     payload.id,
     payload.name,
     payload.targetCharacterId ?? '',
+    payload.aura,
   ]);
 }
 
@@ -60,6 +66,7 @@ export async function spellCastToSheet(event: { data: string }) {
     id: string;
     name: string;
     characterId: string;
+    aura: string;
     location: { id: string };
     power: number;
     ritualMembersIds: string[];
@@ -68,7 +75,7 @@ export async function spellCastToSheet(event: { data: string }) {
   } = JSON.parse(Buffer.from(event.data, 'base64').toString());
   console.log(payload);
 
-  await appendToSpreadsheet('Касты спеллов!A1:I1', [
+  await appendToSpreadsheet('Касты спеллов!A1:J1', [
     currentMoscowDateTime(),
     payload.location.id,
     payload.characterId,
@@ -78,6 +85,7 @@ export async function spellCastToSheet(event: { data: string }) {
     payload.ritualMembersIds.length,
     payload.ritualVictimIds.length,
     payload.targetCharacterId ?? '',
+    payload.aura,
   ]);
 }
 
