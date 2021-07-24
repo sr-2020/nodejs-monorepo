@@ -48,10 +48,11 @@ import {
   takeNoHarmAbility,
   tincasmAbility,
   trollton,
-  undiena,
   useSpriteAbility,
   wereami,
   whoNeedsIt,
+  trackpointer,
+  trackeeteer,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3920,7 +3921,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: undiena.name,
+    eventType: oneTimeRevive.name,
   },
   // У духа появляется на 3 минуты пассивная абилка avalanche-able. amount=4. Пояснение как должно работать - сопровождающий мага мастер всем рассказывает, что у них хиты упали. Для подтверждения может показать текст.
   {
@@ -3969,7 +3970,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: trackpointer.name,
   },
   // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, DMX Отката, 80% ауры творца, метарасу творца).
   {
@@ -3985,7 +3986,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: trackeeteer.name,
   },
   // На 30 минут умножает recoverySpeedMultiplier на 1.5
   {

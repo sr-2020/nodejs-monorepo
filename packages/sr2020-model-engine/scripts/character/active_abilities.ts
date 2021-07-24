@@ -41,6 +41,7 @@ import {
   multiplyVictimCoefficient,
 } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
 import { Location } from '@alice/sr2020-common/models/location.model';
+import { dumpSpellTraces } from '@alice/sr2020-model-engine/scripts/character/spells';
 
 const chance = new Chance();
 
@@ -227,11 +228,6 @@ export function howMuchIsThePssh(api: EventModelApi<Sr2020Character>, data: Acti
   api.sendNotification('Уровень маны', 'Сейчас здесь мана на уровне: ' + data.location.manaLevel);
 }
 
-export function undiena(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
-  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, grantTmpGroundHeal, {});
-}
-
 export function grantTmpGroundHeal(api: EventModelApi<Sr2020Character>, data: {}) {
   addTemporaryActiveAbility(api, 'ground-heal-ability', duration(30, 'minutes'));
 }
@@ -242,6 +238,20 @@ export function avalFest(api: EventModelApi<Sr2020Character>, data: ActiveAbilit
 
 export function dobirds(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   addTemporaryPassiveAbility(api, 'birds-able', duration(15, 'minutes'), { amount: 15 });
+}
+
+export function trackpointer(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendNotification('Успех', 'Дух зрит');
+  const durationInSeconds = 25 * 60;
+  const auraPercentage = 40;
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
+}
+
+export function trackeeteer(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  api.sendNotification('Успех', 'Дух зрит в корень');
+  const durationInSeconds = 15 * 60;
+  const auraPercentage = 80;
+  dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
 }
 
 export function getHigh(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {

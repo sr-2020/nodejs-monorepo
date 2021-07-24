@@ -276,7 +276,12 @@ export function trackBallSpell(api: EventModelApi<Sr2020Character>, data: SpellD
   dumpSpellTraces(api, durationInSeconds, auraPercentage, data.location.id.toString());
 }
 
-function dumpSpellTraces(api: EventModelApi<Sr2020Character>, durationInSeconds: number, auraPercentage: number, locationId: string) {
+export function dumpSpellTraces(
+  api: EventModelApi<Sr2020Character>,
+  durationInSeconds: number,
+  auraPercentage: number,
+  locationId: string,
+) {
   const location = api.aquired(Location, locationId);
   const spellTraces = location.spellTraces.filter((trace) => trace.timestamp >= api.model.timestamp - durationInSeconds * 1000);
   for (const spell of spellTraces) {

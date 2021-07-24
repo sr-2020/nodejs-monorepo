@@ -13,6 +13,119 @@ describe('Active abilities', function () {
     await fixture.destroy();
   });
 
+  it('Trackpointer', async () => {
+    await fixture.saveLocation({ modelId: '0', aura: 'abaabcbbcdccdeddefee' });
+
+    await fixture.saveCharacter({ modelId: '1', magic: 100 });
+    await fixture.addCharacterFeature('fireball', 1);
+    await fixture.addCharacterFeature('ground-heal', 1);
+
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.addCharacterFeature('fast-charge', 2);
+
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 2 } },
+      1,
+    );
+    await fixture.advanceTime(duration(10, 'minutes'));
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 4 } }, 1);
+    await fixture.advanceTime(duration(20, 'minutes'));
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'fast-charge', location: { id: 0, manaLevel: 10 }, power: 6 } },
+      2,
+    );
+
+    await fixture.saveCharacter({ modelId: '3', magic: 5 });
+    await fixture.addCharacterFeature('trackpointer', 3);
+
+    const { tableResponse } = await fixture.useAbility({ id: 'trackpointer', location: { id: 0, manaLevel: 10 } }, '3');
+    expect(tableResponse.length).toBe(2);
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
+        spellName: 'Fireball (S)',
+        timestamp: 600000,
+        power: 4,
+        magicFeedback: 10,
+      }),
+    );
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
+        spellName: 'Fast charge (S)',
+        timestamp: 1800000,
+        power: 6,
+        magicFeedback: 11,
+      }),
+    );
+
+    for (const entry of tableResponse) {
+      const aura: string = entry.casterAura;
+      expect((aura.match(/[a-z]/g) ?? []).length).toBe(8);
+    }
+  });
+
+  it('Surge the unclean', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('surge-the-unclean', '1');
+
+    await fixture.saveCharacter({ modelId: '2', resonance: 5 });
+
+    {
+      await fixture.useAbility({ id: 'surge-the-unclean', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
+      expect(workModel.resonance).toBe(2);
+    }
+  });
+
+  it('Trackeeteer', async () => {
+    await fixture.saveLocation({ modelId: '0', aura: 'abaabcbbcdccdeddefee' });
+
+    await fixture.saveCharacter({ modelId: '1', magic: 100 });
+    await fixture.addCharacterFeature('fireball', 1);
+    await fixture.addCharacterFeature('ground-heal', 1);
+
+    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.addCharacterFeature('fast-charge', 2);
+
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'ground-heal', location: { id: 0, manaLevel: 10 }, power: 2 } },
+      1,
+    );
+    await fixture.advanceTime(duration(10, 'minutes'));
+    await fixture.sendCharacterEvent({ eventType: 'castSpell', data: { id: 'fireball', location: { id: 0, manaLevel: 10 }, power: 4 } }, 1);
+    await fixture.advanceTime(duration(10, 'minutes'));
+    await fixture.sendCharacterEvent(
+      { eventType: 'castSpell', data: { id: 'fast-charge', location: { id: 0, manaLevel: 10 }, power: 6 } },
+      2,
+    );
+
+    await fixture.saveCharacter({ modelId: '3', magic: 5 });
+    await fixture.addCharacterFeature('trackeeteer', 3);
+
+    const { tableResponse } = await fixture.useAbility({ id: 'trackeeteer', location: { id: 0, manaLevel: 10 } }, '3');
+    expect(tableResponse.length).toBe(2);
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
+        spellName: 'Fireball (S)',
+        timestamp: 600000,
+        power: 4,
+        magicFeedback: 10,
+      }),
+    );
+    expect(tableResponse).toContainEqual(
+      expect.objectContaining({
+        spellName: 'Fast charge (S)',
+        timestamp: 1200000,
+        power: 6,
+        magicFeedback: 11,
+      }),
+    );
+
+    for (const entry of tableResponse) {
+      const aura: string = entry.casterAura;
+      expect((aura.match(/[a-z]/g) ?? []).length).toBe(16);
+    }
+  });
+
   it('Surge the unclean', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 3 });
     await fixture.addCharacterFeature('surge-the-unclean', '1');
@@ -259,18 +372,11 @@ describe('Active abilities', function () {
     await fixture.saveCharacter({ modelId: '1' });
     await fixture.addCharacterFeature('undiena', '1');
 
-    await fixture.saveCharacter({ modelId: '2' });
+    await fixture.saveCharacter({ modelId: '2', healthState: 'wounded' });
 
     {
       await fixture.useAbility({ id: 'undiena', targetCharacterId: '2' }, '1');
-      const { workModel } = await fixture.getCharacter('2');
-
-      expect(workModel.activeAbilities).toContainEqual(
-        expect.objectContaining({
-          id: 'ground-heal-ability',
-          validUntil: 30 * 60 * 1000,
-        }),
-      );
+      expect((await fixture.getCharacter('2')).workModel.healthState).toBe('healthy');
     }
   });
 
