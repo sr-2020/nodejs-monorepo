@@ -177,6 +177,7 @@ function getLibraryData(id: string): MerchandiseLibraryData {
       data: {
         ...maybeCyberDeck,
         broken: false,
+        inUse: false,
       },
     };
   }

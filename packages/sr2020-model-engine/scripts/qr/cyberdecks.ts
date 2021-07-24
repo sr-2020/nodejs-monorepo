@@ -5,6 +5,14 @@ import { modifierFromEffect } from '@alice/sr2020-model-engine/scripts/character
 
 const kCyberdeckIsBrokenModifier = 'суberdeck-is-broken';
 
+export function startUsingCyberdeck(api: EventModelApi<QrCode>, data: {}) {
+  typedQrData<CyberDeckQrData>(api.model).inUse = true;
+}
+
+export function stopUsingCyberdeck(api: EventModelApi<QrCode>, data: {}) {
+  typedQrData<CyberDeckQrData>(api.model).inUse = false;
+}
+
 export function breakCyberDeck(api: EventModelApi<QrCode>, data: {}) {
   if (api.model.type != 'cyberdeck') throw new UserVisibleError('Это не QR кибердеки!');
   api.addModifier({ ...modifierFromEffect(cyberdeckIsBroken, {}), mID: kCyberdeckIsBrokenModifier});
@@ -13,6 +21,7 @@ export function breakCyberDeck(api: EventModelApi<QrCode>, data: {}) {
 export function repairCyberdeck(api: EventModelApi<QrCode>, data: {}) {
   api.removeModifier(kCyberdeckIsBrokenModifier);
 } 
+
 export function cyberdeckIsBroken(api: EffectModelApi<QrCode>, data: {}) {
   typedQrData<CyberDeckQrData>(api.model).broken = true;
   api.model.name = api.model.name + ' (сломана)';

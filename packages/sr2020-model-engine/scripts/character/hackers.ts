@@ -8,7 +8,9 @@ import { ActiveAbilityData } from '@alice/sr2020-common/models/common_definition
 import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
+import { startUsingCyberdeck, stopUsingCyberdeck } from '../qr/cyberdecks';
 
+const kCyberDeckModifierId = 'in-the-deck';
 interface DumpshockModifier extends Modifier {
   amount: number; // always positive or zero
 }
@@ -79,14 +81,42 @@ export function jackedInEffect(api: EffectModelApi<Sr2020Character>, m: Modifier
 }
 
 export function jackInAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
-  if (typedQrData<CyberDeckQrData>(api.aquired(QrCode, data.qrCodeId!)).broken) {
+  const cyberdeck = typedQrData<CyberDeckQrData>(api.aquired(QrCode, data.qrCodeId!));
+
+  if (cyberdeck.broken) {
     throw new UserVisibleError('Кибердека сломана!');
   }
+  if (cyberdeck.inUse) {
+    throw new UserVisibleError('Эта кибердека уже используется!');
+  }
+
+  api.sendOutboundEvent(QrCode, data.qrCodeId!, startUsingCyberdeck, {});
+  api.addModifier(createCyberdeckModifier(data.qrCodeId!));
+
   api.model.hacking.jackedIn = true;
 }
 
-export function jackOutAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+export function jackOutAbility(api: EventModelApi<Sr2020Character>) {
+
+  const m = api.getModifierById(kCyberDeckModifierId);
+  api.sendOutboundEvent(QrCode, m.deckQrId, stopUsingCyberdeck, {});
+  api.removeModifier(m.mID);
+
   api.model.hacking.jackedIn = false;
+}
+
+type InTheCyberDeckModifier = Modifier & {
+  deckQrId: string;
+};
+
+function createCyberdeckModifier(deckQrId: string): InTheCyberDeckModifier {
+  return {
+    mID: kCyberDeckModifierId,
+    priority: Modifier.kDefaultPriority,
+    enabled: true,
+    effects: [],
+    deckQrId,
+  };
 }
 
 export function settleBackdoorAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
