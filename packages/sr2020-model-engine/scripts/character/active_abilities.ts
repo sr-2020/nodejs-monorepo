@@ -19,7 +19,12 @@ import {
   addTemporaryActiveAbility,
   addTemporaryPassiveAbility,
 } from '@alice/sr2020-model-engine/scripts/character/features';
-import { generateRandomAuraMask, kUnknowAuraCharacter } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
+import {
+  generateAuraSubset,
+  generateRandomAuraMask,
+  kUnknowAuraCharacter,
+  splitAuraByDashes,
+} from '@alice/sr2020-model-engine/scripts/character/aura_utils';
 import { earnKarma, kKarmaActiveAbilityCoefficient } from '@alice/sr2020-model-engine/scripts/character/karma';
 import { removeImplant } from '@alice/sr2020-model-engine/scripts/character/merchandise';
 import { createMerchandise } from '@alice/sr2020-model-engine/scripts/qr/merchandise';
@@ -29,14 +34,13 @@ import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/s
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import {
-  multiplyVictimCoefficient,
-  multiplyParticipantCoefficient,
+  increaseResonance,
   muliplyMagicRecoverySpeed,
   multiplyMagicFeedbackMultiplier,
-  increaseResonance,
+  multiplyParticipantCoefficient,
+  multiplyVictimCoefficient,
 } from '@alice/sr2020-model-engine/scripts/character/basic_effects';
-import { generateAuraSubset, splitAuraByDashes } from '@alice/sr2020-model-engine/scripts/character/aura_utils';
-import { Location, SpellTrace } from '@alice/sr2020-common/models/location.model';
+import { Location } from '@alice/sr2020-common/models/location.model';
 
 const chance = new Chance();
 
@@ -610,4 +614,22 @@ export function lockpickingAbility(api: EventModelApi<Sr2020Character>, data: Ac
 
 export function lockpickingSuccess(api: EventModelApi<Sr2020Character>, data: never) {
   sendNotificationAndHistoryRecord(api, 'Взлом замка', 'Замок успешно взломан!');
+}
+
+export function bodyStorageAttackAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  const content = getBodyStorageContent(api, data);
+  if (content) {
+    sendNotificationAndHistoryRecord(api, 'Атака телохранилища', 'Вы успешно атаковали тело');
+    api.sendOutboundEvent(Sr2020Character, content.characterId, bodyInStorageWasAttacked, {});
+  } else {
+    sendNotificationAndHistoryRecord(api, 'Атака телохранилища', 'Увы, камера телохранилища пуста.');
+  }
+}
+
+export function bodyInStorageWasAttacked(api: EventModelApi<Sr2020Character>, data: never) {
+  sendNotificationAndHistoryRecord(
+    api,
+    'ВАЖНО! Ваше тело атаковано!',
+    'С того момента как вы прочитали это сообщение - вернитесь в свое тело  и нажмите кнопку "ранение" в приложении. У вас есть 15 минут.',
+  );
 }
