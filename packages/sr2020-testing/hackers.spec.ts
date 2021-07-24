@@ -101,6 +101,11 @@ describe('Hackers-related events', function () {
       }),
     );
 
+    {
+      const { workModel } = await fixture.getQrCode('0');
+      expect(typedQrData<CyberDeckQrData>(workModel).inUse).toBe(true);
+    }
+
     await fixture.useAbility({ id: 'jack-out' });
     expect(fixture.getPubSubNotifications()).toContainEqual(
       expect.objectContaining({
@@ -110,6 +115,11 @@ describe('Hackers-related events', function () {
         }),
       }),
     );
+
+    {
+      const { workModel } = await fixture.getQrCode('0');
+      expect(typedQrData<CyberDeckQrData>(workModel).inUse).toBe(false);
+    }
   });
 
   it('Activating software', async () => {

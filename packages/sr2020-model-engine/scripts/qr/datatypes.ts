@@ -82,7 +82,7 @@ export interface MagicFocusData {
 export type MagicFocusQrData = MagicFocusData & MerchandiseQrData;
 
 // qr.type == 'cyberdeck'
-export type CyberDeckQrData = CyberDeck & MerchandiseQrData & { broken: boolean };
+export type CyberDeckQrData = CyberDeck & MerchandiseQrData & { broken: boolean } & { inUse: boolean };
 
 // qr.type == 'spirit'
 export interface SpiritQrData {
