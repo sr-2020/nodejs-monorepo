@@ -73,7 +73,14 @@ import {
   tellMeTheTruthAbility,
   youDontTrustAnybody,
 } from './mental';
-import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import {
+  capsuleReanimate,
+  medcartHealAbility,
+  medcartReviveAbility,
+  reviveAbsoluteOnDigitalTarget,
+  reviveAbsoluteOnTarget,
+  reviveOnTarget,
+} from './death_and_rebirth';
 import { TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
@@ -1646,7 +1653,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: gmEssenceReset.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
   //
@@ -1656,14 +1662,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Воскрешение цифровой',
     description: 'Воскрешение Цифровой',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: reviveAbsoluteOnDigitalTarget.name,
   },
   // Увеличение нехуеватости Магии "+1".
   {
