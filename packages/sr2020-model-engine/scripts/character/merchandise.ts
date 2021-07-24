@@ -31,6 +31,10 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     supportedRaces.push('meta-vampire', 'meta-ghoul');
   }
 
+  if (implant.slot == 'rcc') {
+    supportedRaces.push('meta-digital');
+  }
+
   if (!supportedRaces.includes(api.model.metarace)) {
     throw new UserVisibleError('Данный имплант нельзя установить представителю этой метарасы');
   }

@@ -475,11 +475,11 @@ export class Drones {
   recoveryTime: number;
 
   @NumberProperty()
-  @Column({ default: 2 })
+  @Column({ default: 1 })
   medicraftBonus: number;
 
   @NumberProperty()
-  @Column({ default: 2 })
+  @Column({ default: 1 })
   autodocBonus: number;
 
   @NumberProperty()
