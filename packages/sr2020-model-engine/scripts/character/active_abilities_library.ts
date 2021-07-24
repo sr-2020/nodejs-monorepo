@@ -1895,23 +1895,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: astralopithecus.name,
   },
-  // TODO(aeremin): Add proper implementation
-  // При активации абилки открывается окно сканирования QR-кода, необходимо сосканировать пустой QR-код. После этого будет создано свободное телохранилище, действующее в течение 600 минут. По окончании этого срока QR-код освободится, и если там находился дух - он окажется на свободе
-  {
-    id: 'spirit-jar',
-    humanReadableName: 'Spirit Jar (A)',
-    description: 'Создать телохранилище (нужен QR-код пустышка).  Срок действия - 600минут',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 240,
-    prerequisites: ['arch-mage'],
-    pack: { id: 'mage-summon-spirit', level: 1 },
-    availability: 'closed',
-    karmaCost: 30,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
   // текстовая абилка
   {
     id: 'rummage',
