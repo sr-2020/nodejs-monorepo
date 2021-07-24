@@ -391,7 +391,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // У игрока просто отображается текст пассивной абилки
   {
     id: 'project-manager-1',
-    humanReadableName: 'ты - проект-менеджер',
+    humanReadableName: '1',
     description: 'Сертификат проект-менеджера. Ты можешь вести проекты. Для каждого типа проектов необходим соответствующий навык.',
     availability: 'closed',
     karmaCost: 50,
@@ -401,10 +401,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'project-manager-3',
-    humanReadableName: 'Эффективность ресурсов проекта',
-    description: 'Проект, который ведешь ты - требует на 20% меньше ресурсов.',
+    humanReadableName: 'Опытный проект-менеджер',
+    description: 'Ты - опытный проект-менеджер',
     availability: 'closed',
-    karmaCost: 40,
+    karmaCost: 0,
     prerequisites: ['project-manager-1'],
     modifier: [],
   },
@@ -1883,7 +1883,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
       modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
     ],
   },
-  // Body +1
+  // Body +2
+  //
   {
     id: 'arch-samurai',
     humanReadableName: 'Архетип: Самурай',
@@ -4163,41 +4164,41 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // текстовая абилка
   {
     id: 'project-artisan',
-    humanReadableName: 'Кустарное производство',
-    description: 'Ты можешь делать проекты кустарного производства',
+    humanReadableName: 'Экономия ресурсов',
+    description: 'паззлы',
     availability: 'closed',
     karmaCost: 30,
-    prerequisites: ['project-manager-1'],
+    prerequisites: ['project-manager-3'],
     modifier: [],
   },
   // текстовая абилка
   {
     id: 'project-industry',
-    humanReadableName: 'Массовое производство',
-    description: 'Ты можешь делать проекты массового производства',
+    humanReadableName: 'Экономия ресурсов -2',
+    description: 'паззлы2',
     availability: 'closed',
     karmaCost: 30,
-    prerequisites: ['project-manager-1'],
+    prerequisites: ['project-manager-3', 'project-artisan'],
     modifier: [],
   },
   // текстовая абилка
   {
     id: 'project-foundation',
-    humanReadableName: 'Фундаментальная технология',
-    description: 'Ты можешь делать проекты фундаментальных технологий',
+    humanReadableName: 'для пмов',
+    description: 'пм1',
     availability: 'closed',
     karmaCost: 30,
-    prerequisites: ['project-manager-1'],
+    prerequisites: ['project-manager-3'],
     modifier: [],
   },
   // текстовая абилка
   {
     id: 'project-place',
-    humanReadableName: 'Перерождение',
-    description: 'Ты можешь делать проекты локального перерождения ',
+    humanReadableName: 'для пмов2',
+    description: 'пм2',
     availability: 'closed',
     karmaCost: 30,
-    prerequisites: ['project-manager-1'],
+    prerequisites: ['project-manager-3'],
     modifier: [],
   },
   // TODO(aeremin): Implement and add modifier here
@@ -4383,6 +4384,16 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['arch-mage'],
+    modifier: [],
+  },
+  {
+    id: 'vr-hot-connected',
+    humanReadableName: 'VR в режиме хотсим!',
+    description: 'Ты можешь быть в VR в режиме хотсим. Все твои способности техноманта  работают.',
+    availability: 'closed',
+    karmaCost: 0,
+    prerequisites: [],
+    pack: undefined,
     modifier: [],
   },
 ];

@@ -109,7 +109,6 @@ import {
   clinicalDeathRedRoom,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1101,7 +1100,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1424,7 +1423,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1600,7 +1599,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1617,7 +1616,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1636,7 +1635,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1655,7 +1654,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1671,7 +1670,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -2606,7 +2605,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -3480,12 +3479,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: sleepIsThere.name,
   },
-  //
+  // Выдает абилку vr-hot-connected  длительностью maxTimeInVr
   {
     id: 'enter-vr-hot',
     humanReadableName: 'VR Стать аватаркой и зайти в Виар (ХОТСИМ)',
     description:
-      '[только для VR] Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
+      '[Вход в VR, Хотсим] При активации ты можешь зайти в VR в режиме горячего подключения, HotSim. Режим ХотСим необходим Техноманту для  использования абилок в VR, входа в Основание и использование там КФ и спрайтов. Переход разрешен только в точке c Виар-телохранилищами. Для выхода из Виар ничего нажимать не надо. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -3947,7 +3946,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: dobirds.name,
   },
-  // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 15 минут - список (название заклинания,  Мощь, Откат, 40% ауры творца, метарасу творца).
+  // После активации эффекта в приложении выводятся текстом данные о заклинаниях, сотворенных в этой локации в последние 25 минут - список (название заклинания,  Мощь, Откат, 40% ауры творца, метарасу творца).
   {
     id: 'trackpointer',
     humanReadableName: 'ДУХ: Trackpointer',
@@ -4143,7 +4142,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4158,7 +4157,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
