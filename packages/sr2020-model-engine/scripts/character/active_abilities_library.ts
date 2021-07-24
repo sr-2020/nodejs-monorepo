@@ -4602,14 +4602,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: usePillsOnOthersAbility.name,
   },
   // копия абилки whats-in-the-body-1
   {
@@ -4617,14 +4617,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Диагностика пициента',
     description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: whatsInTheBodyAbility.name,
   },
   // На 30 минут умножает participantCoefficient на 5
   {
@@ -4654,14 +4654,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Добивание в КС',
     description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kWoundedBodyTarget],
     cooldownMinutes: (character) => Math.max(10, 150 - 20 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: finishHimAbility.name,
   },
 ];
 setAllActiveAbilities(
