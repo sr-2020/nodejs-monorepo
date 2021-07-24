@@ -50,7 +50,7 @@ export function flyYouFoolAbility(api: EventModelApi<Sr2020Character>, data: Add
 export function scornHimAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
   useMentalAbility(
     api,
-    'Ты стараешься сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить, плюнуть на одежду, выразить презрение убеждениям )',
+    'Ты стараешься сделать агрессивное, но не смертельное действие к выбранному персонажу.  (оскорбить,  выразить презрение убеждениям ) ',
   );
 }
 
@@ -62,7 +62,7 @@ export function killHimAbility(api: EventModelApi<Sr2020Character>, data: AddedA
 }
 
 export function billionerWalkAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
-  useMentalAbility(api, 'Ты переводишь на счет менталиста половину денег со своего счета.');
+  useMentalAbility(api, 'Ты переводишь на счет менталиста 20% денег со своего счета. Не работает, если у тебя иридиевый лайфстайл.');
 }
 
 export function danilaINeedHelpAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
@@ -85,13 +85,13 @@ export function tellMeTheTruthAbility(api: EventModelApi<Sr2020Character>, data:
 }
 
 export function lieToMeAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
-  useMentalAbility(api, 'Тебе говорят маркер. Если в течение следующих 15 минут ты лжешь - ты выполняешь этот маркер.');
+  useMentalAbility(api, 'Если в течение следующих 15 минут ты лжешь - ты щелкаешь пальцами.');
 }
 
 export function oblivionAbility(api: EventModelApi<Sr2020Character>, data: AddedActiveAbility) {
   useMentalAbility(
     api,
-    'Ты забыл события последней сцены. Это работает только если тебе не был нанесён урон в течение сцены (снят хотя бы 1 хит). Если тебе был нанесён урон, ты говоришь об этом менталисту',
+    'Ты забыл события последней сцены. Это работает только если тебе не был нанесён урон в течение сцены (снят хотя бы 1 хит). Если тебе был нанесён урон, ты говоришь об этом менталисту.',
   );
 }
 
