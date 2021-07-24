@@ -459,9 +459,9 @@ export function calculateMagicFeedback(inputs: FeedbackInputs): MagicFeedback {
   feedback = Math.round(feedback * 100) / 100;
 
   let amount = feedback * 1.8;
-  if (!inputs.ophiuchusUsed) amount += 1;
   amount /= 4;
   amount = Math.round(amount);
+  if (!inputs.ophiuchusUsed) amount += 1;
 
   let feedbackDuration = feedback * 10;
   feedbackDuration *= inputs.feedbackDurationMultiplier;
