@@ -109,6 +109,7 @@ import {
   clinicalDeathRedRoom,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1772,23 +1773,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: activateSoft.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
-  {
-    id: 'finish-his-body',
-    humanReadableName: 'Атака на тело в телохранилище',
-    description: 'Добей это тело!  *работает только на тело, находящееся в телохранилище',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
-    prerequisites: [],
-    pack: { id: 'null', level: 1 },
-    availability: 'closed',
-    karmaCost: 60,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
   },
   // Применяет препарат на другого персонажа
   // цель 1: куар препарата
