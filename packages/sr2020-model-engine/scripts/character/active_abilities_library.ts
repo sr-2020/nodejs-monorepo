@@ -3117,6 +3117,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
         allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
       },
+      {
+        name: 'Нода',
+        field: 'nodeId',
+        allowedTypes: ['foundation_node'],
+      },
     ],
     cooldownMinutes: (character) => 30,
     prerequisites: ['arch-hackerman-technomancer', 'control-basic', 'initiative-basic', 'sword-short'],
@@ -3139,6 +3144,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         name: 'Жертва',
         field: 'targetCharacterId',
         allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+      },
+      {
+        name: 'Нода',
+        field: 'nodeId',
+        allowedTypes: ['foundation_node'],
       },
     ],
     cooldownMinutes: (character) => 90,
