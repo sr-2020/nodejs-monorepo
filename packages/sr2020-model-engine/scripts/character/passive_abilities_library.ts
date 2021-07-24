@@ -3752,7 +3752,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-rigger'],
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseMedicraftBonus, { amount: 1 }),
+      modifierFromEffect(increaseAircraftBonus, { amount: 1 }),
+      modifierFromEffect(increaseGroundcraftBonus, { amount: 2 }),
+      modifierFromEffect(increaseAutodocBonus, { amount: 1 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
+      modifierFromEffect(increaseRepomanBonus, { amount: 2 }),
+    ],
   },
   //
   {
