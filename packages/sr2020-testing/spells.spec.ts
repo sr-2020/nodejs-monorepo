@@ -1112,7 +1112,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).toMatchObject({ amount: 4, duration: 93 });
+      expect(feedback).toMatchObject({ amount: 5, duration: 93 });
     });
 
     it('Example 14', () => {
@@ -1129,7 +1129,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).toMatchObject({ amount: 1, duration: 16 });
+      expect(feedback).toMatchObject({ amount: 2, duration: 16 });
     });
 
     it('Example 19', () => {
@@ -1146,7 +1146,7 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).toMatchObject({ amount: 3, duration: 65 });
+      expect(feedback).toMatchObject({ amount: 4, duration: 65 });
     });
 
     it('Example 20', () => {
@@ -1163,7 +1163,24 @@ describe('Spells', function () {
         feedbackAmountMultiplier: 1,
       });
 
-      expect(feedback).toMatchObject({ amount: 3, duration: 65 });
+      expect(feedback).toMatchObject({ amount: 4, duration: 65 });
+    });
+
+    it('Example 34', () => {
+      const feedback = calculateMagicFeedback({
+        power: 1,
+        sphereReagents: 0,
+        metaTypeReagents: 0,
+        ritualParticipants: 0,
+        bloodRitualParticipants: 15,
+        manaLevel: 1,
+        inAstral: false,
+        ophiuchusUsed: false,
+        feedbackDurationMultiplier: 1,
+        feedbackAmountMultiplier: 1,
+      });
+
+      expect(feedback).toMatchObject({ amount: 1, duration: 4 });
     });
 
     it('Example 34', () => {
