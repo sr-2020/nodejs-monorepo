@@ -2,6 +2,8 @@ import { TestFixture } from './fixture';
 
 import { BodyStorageQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
 import { duration } from 'moment';
+import { getAllFeatures } from '@alice/sr2020-model-engine/scripts/character/features';
+import { kVrEnabledAbilities } from '@alice/sr2020-model-engine/scripts/character/vr';
 
 describe('VR abilities', () => {
   let fixture: TestFixture;
@@ -14,10 +16,18 @@ describe('VR abilities', () => {
     await fixture.destroy();
   });
 
+  it('VR-enabled abilities are valid', async () => {
+    for (const id of kVrEnabledAbilities) {
+      expect(getAllFeatures()).toContainEqual(expect.objectContaining({ id }));
+    }
+  });
+
   it('Entering and leaving VR', async () => {
     // Chummer set up
     await fixture.saveCharacter({ maxHp: 2, body: 3, maxTimeInVr: 10 });
     await fixture.addCharacterFeature('enter-vr');
+    await fixture.addCharacterFeature('finish-him');
+    await fixture.addCharacterFeature('dgroup-add');
 
     // Body storage set up
     await fixture.saveQrCode({ modelId: '1' });
@@ -43,6 +53,10 @@ describe('VR abilities', () => {
       const { workModel } = await fixture.getCharacter();
       expect(workModel.activeAbilities).not.toContainEqual(expect.objectContaining({ id: 'enter-vr' }));
       expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'exit-vr' }));
+
+      expect(workModel.activeAbilities).not.toContainEqual(expect.objectContaining({ id: 'finish-him' }));
+      expect(workModel.activeAbilities).toContainEqual(expect.objectContaining({ id: 'dgroup-add' }));
+
       expect(workModel.currentBody).toBe('vr');
     }
 

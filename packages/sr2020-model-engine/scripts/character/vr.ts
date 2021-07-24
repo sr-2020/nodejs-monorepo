@@ -13,6 +13,19 @@ const kInVrModifierId = 'in-vr';
 
 const kVrTimerIds = ['vr-timer-first-notice', 'vr-timer-last-notice', 'vr-timer-too-late', 'vr-timer-way-too-late'];
 
+export const kVrEnabledAbilities = [
+  'vr-who-is',
+  'vr-deanon',
+  'dgroup-add',
+  'dgroup-exclude',
+  'dm-inc-counter',
+  'dm-add-guru',
+  'dm-exclude-inq-1',
+  'dm-exclude-inq-2',
+  'dm-prophet',
+  'dm-soul-expert',
+];
+
 export function enterVr(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   if (api.workModel.currentBody != 'physical') {
     throw new UserVisibleError('Для входа в VR необходимо быть в мясном теле.');
@@ -119,8 +132,8 @@ export function inVr(api: EffectModelApi<Sr2020Character>, m: InVrModifier) {
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
+  api.model.activeAbilities = api.model.activeAbilities.filter((it) => kVrEnabledAbilities.includes(it.id));
   addFeatureToModel(api.model, 'exit-vr');
-  api.model.activeAbilities = api.model.activeAbilities.filter((it) => it.id != 'enter-vr' && it.id != 'compile-coldsim');
 }
 
 export function vrFirstNotice(api: EventModelApi<Sr2020Character>, data: {}) {
