@@ -614,6 +614,18 @@ export function gmDecreaseCharisma(api: EventModelApi<Sr2020Character>, data: Fu
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseCharismaEvent, { amount: -1 });
 }
 
+export function increaseMagicEvent(api: EventModelApi<Sr2020Character>, data: { amount: number }) {
+  api.model.magic += data.amount;
+}
+
+export function gmIncreaseMagic(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseMagicEvent, { amount: 1 });
+}
+
+export function gmDecreaseMagic(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, increaseMagicEvent, { amount: -1 });
+}
+
 export function lockpickingAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   sendNotificationAndHistoryRecord(api, 'Взлом замка', 'Начинаем взлом - дождитесь результата');
   api.setTimer(uuid.v4(), 'Взлом замка', duration(30, 'seconds'), lockpickingSuccess, {});

@@ -66,6 +66,14 @@ export function reviveAbsoluteOnTarget(api: EventModelApi<Sr2020Character>, data
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, reviveAbsolute, data);
 }
 
+export function reviveAbsoluteOnDigitalTarget(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  const target = api.aquired(Sr2020Character, data.targetCharacterId);
+  if (target.metarace != 'meta-digital') {
+    throw new UserVisibleError('Эта способность действует только на цифровых');
+  }
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, reviveAbsolute, data);
+}
+
 export function debugReviveAbsolute(api: EventModelApi<Sr2020Character>, data?: { location?: LocationData }) {
   throw new UserVisibleError('Нет этой кнопки больше :p Обновите приложение!');
 }

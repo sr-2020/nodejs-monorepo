@@ -19,7 +19,9 @@ import {
   getHigh,
   getLow,
   gmDecreaseCharisma,
+  gmDecreaseMagic,
   gmIncreaseCharisma,
+  gmIncreaseMagic,
   hammerOfJustice,
   howMuchIsThePssh,
   howMuchItCosts,
@@ -72,7 +74,14 @@ import {
   tellMeTheTruthAbility,
   youDontTrustAnybody,
 } from './mental';
-import { capsuleReanimate, medcartHealAbility, medcartReviveAbility, reviveAbsoluteOnTarget, reviveOnTarget } from './death_and_rebirth';
+import {
+  capsuleReanimate,
+  medcartHealAbility,
+  medcartReviveAbility,
+  reviveAbsoluteOnDigitalTarget,
+  reviveAbsoluteOnTarget,
+  reviveOnTarget,
+} from './death_and_rebirth';
 import { TargetSignature } from '@alice/sr2020-common/models/sr2020-character.model';
 import {
   chargeLocusAbility,
@@ -108,8 +117,10 @@ import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr
 import {
   absoluteDeathRedRoom,
   clinicalDeathRedRoom,
+  enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -1101,7 +1112,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1424,7 +1435,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1600,7 +1611,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1617,7 +1628,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -1636,14 +1647,13 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: gmEssenceReset.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.
   //
@@ -1653,16 +1663,15 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Воскрешение цифровой',
     description: 'Воскрешение Цифровой',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: reviveAbsoluteOnDigitalTarget.name,
   },
-  // TODO(aeremin): Add proper implementation
   // Увеличение нехуеватости Магии "+1".
   {
     id: 'gm-increase-magic',
@@ -1671,12 +1680,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: gmIncreaseMagic.name,
   },
   // В качестве ответа на применение абилки, надо сформировать текстовое сообщение ( в лог?), в котором перечислены все вещества, которые находятся в чаммере в формате
   // имя_чаммера
@@ -1773,23 +1782,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: activateSoft.name,
-  },
-  // TODO(aeremin): Add proper implementation
-  // применяется к телу, которое лежит в телохранилище - запускает процедуру "недобровольный выход из сменного тела"
-  {
-    id: 'finish-his-body',
-    humanReadableName: 'Атака на тело в телохранилище',
-    description: 'Добей это тело!  *работает только на тело, находящееся в телохранилище',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 30,
-    prerequisites: [],
-    pack: { id: 'null', level: 1 },
-    availability: 'closed',
-    karmaCost: 60,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
   },
   // Применяет препарат на другого персонажа
   // цель 1: куар препарата
@@ -2623,12 +2615,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: gmDecreaseMagic.name,
   },
   // Отсканировать куар нода Основания матрицы.
   // Отсканировать куар спрайта
@@ -3497,12 +3489,12 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: sleepIsThere.name,
   },
-  //
+  // Выдает абилку vr-hot-connected  длительностью maxTimeInVr
   {
     id: 'enter-vr-hot',
     humanReadableName: 'VR Стать аватаркой и зайти в Виар (ХОТСИМ)',
     description:
-      '[только для VR] Используй способность, чтобы зайти в Виар в режиме ХОТсим и использовать там свои способности. Переход разрешен только в точке c Виар-телохранилищами. Время пребывания в Виар ограничено, используй препараты, чтобы его увеличить. Для выхода из Виар ничего нажимать не надо.',
+      '[Вход в VR, Хотсим] При активации ты можешь зайти в VR в режиме горячего подключения, HotSim. Режим ХотСим необходим Техноманту для  использования абилок в VR, входа в Основание и использование там КФ и спрайтов. Переход разрешен только в точке c Виар-телохранилищами. Для выхода из Виар ничего нажимать не надо. ',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -3511,7 +3503,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: enterVrHot.name,
   },
   // делает ничего, просто запускает кулдаун
   {
@@ -4160,7 +4152,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4175,7 +4167,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 0,
-    prerequisites: ['master-of-the-universe'],
+    prerequisites: [],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
@@ -4619,14 +4611,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description:
       'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: usePillsOnOthersAbility.name,
   },
   // копия абилки whats-in-the-body-1
   {
@@ -4634,14 +4626,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Диагностика пициента',
     description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: whatsInTheBodyAbility.name,
   },
   // На 30 минут умножает participantCoefficient на 5
   {
@@ -4671,14 +4663,14 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Добивание в КС',
     description: 'Добей это тело!  *работает только на биологические объекты',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: [kWoundedBodyTarget],
     cooldownMinutes: (character) => Math.max(10, 150 - 20 * character.intelligence),
     prerequisites: ['in-drone'],
     availability: 'master',
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: finishHimAbility.name,
   },
 ];
 setAllActiveAbilities(
