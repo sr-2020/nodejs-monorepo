@@ -2066,7 +2066,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Всплеск адреналина',
     description:
       'Вылечить твое тяжелое ранение невозможно. Если ты упал в тяжран и тебя не добили - через 3 минуты ты сам встанешь из тяжрана. Через 30 минут автоматически упадешь в КС. ',
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 30,
     prerequisites: ['arch-samurai', 'binding'],
     modifier: [],
@@ -2667,7 +2667,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'hands-samurai',
     humanReadableName: 'Киберруки и БиоСила',
-    description: 'это просто напоминалка',
+    description:
+      'НАПОМИНАЛКА по правилам. Чтобы пользоваться оружием - тебе нужно иметь соответствующий Навык и установить себе имплант кибер-рука. Для одноручного оружия - нужна способность БиоСила или один имплант Кибер-рука. Чтобы держать оружие двумя руками (двуручное холодное, пулемет, или два одноручных) - БиоСила + Кибер-рука или 2 импланта Кибер-рука.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: ['arch-samurai'],
@@ -3203,26 +3204,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // Кукла живет +1 час (итого 3 часа)
-  {
-    id: 'voodoo-people-boost',
-    humanReadableName: 'Кукла вуду - улучшенная',
-    description: 'Куклы, создаваемые тобой, существуют дольше',
-    availability: 'closed',
-    karmaCost: 50,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
-  // Кукла живет +1 час (итого 4 часа)
-  {
-    id: 'voodoo-people-boost-super',
-    humanReadableName: 'Кукла вуду - максимальная',
-    description: 'Куклы, создаваемые тобой, существуют еще дольше',
-    availability: 'closed',
-    karmaCost: 50,
-    prerequisites: ['arch-mage'],
-    modifier: [],
-  },
   //
   {
     id: 'let-it-go-effect',
@@ -3387,16 +3368,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-mage', 'nice-suit'],
-    modifier: [],
-  },
-  // spirit.recoveryTime-30
-  {
-    id: 'fast-dress-up',
-    humanReadableName: 'Fast dress up (P)',
-    description: 'Сокращает время между призывами духа на 30 минут',
-    availability: 'master',
-    karmaCost: 20,
-    prerequisites: ['arch-mage', 'suit-up'],
     modifier: [],
   },
   // текстовая

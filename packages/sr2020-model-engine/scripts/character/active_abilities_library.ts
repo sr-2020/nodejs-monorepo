@@ -1672,7 +1672,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: reviveAbsoluteOnDigitalTarget.name,
   },
-  // Увеличение нехуеватости Магии "+1".
+  // Отсканировать куар целевого персонажа, у целевого персонажа Магия Увеличивается на 1.
   {
     id: 'gm-increase-magic',
     humanReadableName: 'Увеличение магии "+1"',
@@ -2282,7 +2282,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Ты можешь вскрыть замок за 30 секунд. fading +25',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 20,
+    cooldownMinutes: (character) => 10,
     prerequisites: ['arch-hackerman-technomancer', 'bond-breaker'],
     availability: 'open',
     karmaCost: 10,
@@ -2907,28 +2907,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: faerbolAbility.name,
   },
-  // Открывается окошко, куда маг вводит ауру чаммера.
-  // Если чаммер с такой аурой на полигоне есть - эффект успешен.
-  // Открывается экран отсканирования куар кода и на него запишется Кукла Вуду  = гиперссылка, которая ведет на мясного чаммера.
-  // То есть когда какое-то заклинание говорит "отсканируй чаммера" можно отсканировать куклу.
-  //
-  // Через 2 часа после создания куклы
-  // - кукла вуду должна самоуничтожиться
-  {
-    id: 'voodoo-people',
-    humanReadableName: 'Создать куклу вуду',
-    description:
-      'Ты можешь создать куклу Вуду. Для этого тебе надо узнать ауру чаммера. Помни, что кукла ограничена по времени и необратимо влияет на цель',
-    target: 'scan',
-    targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 20,
-    prerequisites: ['arch-mage'],
-    availability: 'closed',
-    karmaCost: 100,
-    minimalEssence: 0,
-    fadingPrice: 0,
-    eventType: dummyAbility.name,
-  },
   // Активная абилка Полицаев, клон абилки paralizard-effect
   //
   {
@@ -3329,7 +3307,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: noItActionAbility.name,
   },
-  // Более быстрое уменьшение фейдинга
+  //
   {
     id: 'ethic-shadow',
     humanReadableName: 'Флагеллянт',
@@ -4227,7 +4205,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     ],
     cooldownMinutes: (character) => 70 - 5 * character.intelligence,
     prerequisites: ['arch-face', 'let-him-pay'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 40,
     minimalEssence: 0,
     fadingPrice: 0,
