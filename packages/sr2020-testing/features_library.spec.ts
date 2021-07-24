@@ -36,6 +36,14 @@ describe('Features library', () => {
     }
   });
 
+  it('Log all unimplemented abilities', () => {
+    for (const [, ability] of getAllActiveAbilities()) {
+      if (ability.eventType == 'dummyAbility') {
+        console.log(ability.id);
+      }
+    }
+  });
+
   it('All ids use correct format', () => {
     for (const id of allIds) {
       expect(id).toMatch(/^[a-z0-9-']+$/);
