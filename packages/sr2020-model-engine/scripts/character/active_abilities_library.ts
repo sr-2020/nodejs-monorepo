@@ -109,6 +109,7 @@ import { enterVr, exitVr } from '@alice/sr2020-model-engine/scripts/character/vr
 import {
   absoluteDeathRedRoom,
   clinicalDeathRedRoom,
+  enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
 
@@ -3495,7 +3496,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 30,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: enterVrHot.name,
   },
   // делает ничего, просто запускает кулдаун
   {

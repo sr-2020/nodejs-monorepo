@@ -3,6 +3,8 @@ import { EventModelApi } from '@alice/alice-common/models/alice-model-engine';
 import { duration } from 'moment';
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { absoluteDeathUnchecked, clinicalDeathUnchecked } from '@alice/sr2020-model-engine/scripts/character/death_and_rebirth';
+import { sendNotificationAndHistoryRecord } from '@alice/sr2020-model-engine/scripts/character/util';
+import { addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 
 export const kFadingDecreaseTimerName = 'decrease-current-fading';
 const kFadingDecreaseTimerPeriod = duration(1, 'minute');
@@ -32,4 +34,9 @@ export function absoluteDeathRedRoom(api: EventModelApi<Sr2020Character>, data: 
 
 export function foundationRunawayAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
   api.sendNotification('Runaway', 'Ты сбежал из основания обратно в свое тело');
+}
+
+export function enterVrHot(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  addTemporaryPassiveAbility(api, 'vr-hot-connected', duration(api.workModel.maxTimeInVr, 'minutes'));
+  sendNotificationAndHistoryRecord(api, 'VR', 'Подключение к VR через HotSim осуществлено успешно.');
 }
