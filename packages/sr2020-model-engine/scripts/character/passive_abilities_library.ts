@@ -1893,7 +1893,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-samurai', level: 1 },
-    modifier: [modifierFromEffect(increaseBody, { amount: 1 })],
+    modifier: [modifierFromEffect(increaseBody, { amount: 2 })],
   },
   // Body  +2
   // Strength +2

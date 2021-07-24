@@ -333,7 +333,7 @@ export function inTheDrone(api: EffectModelApi<Sr2020Character>, m: InTheDroneMo
   api.model.currentBody = 'drone';
   api.model.maxHp = m.hp;
   api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneAbilityIds.has(ability.id));
-  api.model.screens.billing = false;
+//  api.model.screens.billing = false;
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
   api.model.screens.ethics = false;
@@ -343,6 +343,7 @@ export function inTheDroneDisabler(api: EffectModelApi<Sr2020Character>, m: InTh
   if (m.triggerDanger) {
     api.model.activeAbilities = api.model.activeAbilities.filter((ability) => kDroneDangerAbilityIds.has(ability.id));
     if (m.broken) api.model.screens.passiveAbilities = false;
+    api.model.screens.billing = false;
     api.model.screens.autodoc = false;
     api.model.screens.karma = false;
   }
