@@ -39,7 +39,9 @@ export function installImplant(api: EventModelApi<Sr2020Character>, data: Mercha
     throw new UserVisibleError('Данный имплант нельзя установить представителю этой метарасы');
   }
 
-  reduceEssenceDueToImplantInstall(api, implant);
+  if (!(implant.slot == 'rcc' && api.model.metarace == 'meta-digital')) {
+    reduceEssenceDueToImplantInstall(api, implant);
+  }
 
   if (implant.onInstallEvent) {
     api.sendSelfEvent(implant.onInstallEvent, {});
@@ -90,7 +92,9 @@ export function removeImplant(api: EventModelApi<Sr2020Character>, data: { id: s
   }
 
   const implant = api.model.implants[implantIndex];
-  createGapDueToImplantUninstall(api, implant);
+  if (!(implant.slot == 'rcc' && api.model.metarace == 'meta-digital')) {
+    createGapDueToImplantUninstall(api, implant);
+  }
 
   if (libraryImplant.onRemoveEvent) {
     api.sendSelfEvent(libraryImplant.onRemoveEvent, {});
