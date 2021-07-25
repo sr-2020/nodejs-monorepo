@@ -36,7 +36,6 @@ import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers'
 import {
   increaseResonance,
   increaseCharisma,
-  increaseCharismaCap5,
   muliplyMagicRecoverySpeed,
   multiplyMagicFeedbackMultiplier,
   multiplyParticipantCoefficient,
@@ -464,8 +463,8 @@ export function beauttiFrutti(api: EventModelApi<Sr2020Character>, data: ActiveA
   if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
   const d = duration(60, 'minutes');
 
-  const amount = 2;
-  const m = modifierFromEffect(increaseCharismaCap5, { amount });
+  const amount = 1;
+  const m = modifierFromEffect(increaseCharisma, { amount });
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
     modifier: m,
     durationInSeconds: d.asSeconds(),

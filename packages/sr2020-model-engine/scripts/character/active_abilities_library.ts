@@ -4067,11 +4067,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: surgeTheUnclean.name,
   },
-  // у цели на 60 минут понижается Харизма на 2.
+  // у цели на 60 минут понижается Харизма на 2
   {
     id: 'ugly-is-pechi',
     humanReadableName: 'ДУХ: Ugly is pechi',
-    description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом',
     target: 'scan',
     targetsSignature: [
       {
@@ -4088,11 +4088,11 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: uglyIsPechi.name,
   },
-  // у цели на 60 минут повышается Харизма на 2 - но не выше 5
+  // у цели на 60 минут повышается Харизма на 1
   {
     id: 'beautti-frutti',
     humanReadableName: 'ДУХ: Beautti-frutti',
-    description: 'На 60 минут повысить Харизму на 2, но не выше 5, цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'На 60 минут повысить Харизму на 1 цели, указанной добровольно предоставленным qr-кодом',
     target: 'scan',
     targetsSignature: [
       {
