@@ -14,11 +14,7 @@ import * as uuid from 'uuid';
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { getAllActiveAbilities } from './library_registrator';
 import { BodyStorageQrData, MerchandiseQrData, SpriteQrData, typedQrData } from '@alice/sr2020-model-engine/scripts/qr/datatypes';
-import {
-  addFeatureToModel,
-  addTemporaryActiveAbility,
-  addTemporaryPassiveAbility,
-} from '@alice/sr2020-model-engine/scripts/character/features';
+import { addFeatureToModel, addTemporaryPassiveAbility } from '@alice/sr2020-model-engine/scripts/character/features';
 import {
   generateAuraSubset,
   generateRandomAuraMask,
@@ -34,8 +30,8 @@ import { kActiveAbilitiesDisabledTimer, kIWillSurviveModifierId } from '@alice/s
 import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common/models/common_definitions';
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import {
-  increaseResonance,
   increaseCharisma,
+  increaseResonance,
   muliplyMagicRecoverySpeed,
   multiplyMagicFeedbackMultiplier,
   multiplyParticipantCoefficient,
@@ -103,7 +99,7 @@ export function useAbility(api: EventModelApi<Sr2020Character>, data: ActiveAbil
 
   api.sendSelfEvent(libraryAbility.eventType, { ...ability, ...data });
 
-  earnKarma(api, { amount: kKarmaActiveAbilityCoefficient * libraryAbility.karmaCost, notify: false });
+  earnKarma(api, { amount: (kKarmaActiveAbilityCoefficient * libraryAbility.karmaCost * ability.cooldownMinutes) / 30, notify: false });
 
   addHistoryRecord(api, 'Способность', ability.humanReadableName, `Способность ${ability.humanReadableName} успешно применена`);
 

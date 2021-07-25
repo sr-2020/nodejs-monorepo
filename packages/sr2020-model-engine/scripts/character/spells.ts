@@ -162,7 +162,7 @@ export function castSpell(api: EventModelApi<Sr2020Character>, data: SpellData) 
       ritualStats.notes,
   );
 
-  earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost, notify: false });
+  earnKarma(api, { amount: kKarmaSpellCoefficient * librarySpell.karmaCost * data.power, notify: false });
 
   api.sendPubSubNotification('spell_cast', {
     ...data,
