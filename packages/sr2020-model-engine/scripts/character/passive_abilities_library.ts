@@ -4377,7 +4377,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: [],
     modifier: [],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Уменьшает все нехуеватости на 1
   // body
   // intelligence
@@ -4393,9 +4392,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseBody, { amount: -1 }),
+      modifierFromEffect(increaseIntelligence, { amount: -1 }),
+      modifierFromEffect(increaseCharisma, { amount: -1 }),
+      modifierFromEffect(increaseResonance, { amount: -1 }),
+      modifierFromEffect(increaseStrength, { amount: -1 }),
+      modifierFromEffect(increaseDepth, { amount: -1 }),
+    ],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Уменьшает все нехуеватости на 1 (тот же список)
   {
     id: 'master-anger-2',
@@ -4405,9 +4410,15 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseBody, { amount: -1 }),
+      modifierFromEffect(increaseIntelligence, { amount: -1 }),
+      modifierFromEffect(increaseCharisma, { amount: -1 }),
+      modifierFromEffect(increaseResonance, { amount: -1 }),
+      modifierFromEffect(increaseStrength, { amount: -1 }),
+      modifierFromEffect(increaseDepth, { amount: -1 }),
+    ],
   },
-  // TODO(aeremin): Implement and add modifier here
   // Уменьшает все нехуеватости на 1 (тот же список)
   {
     id: 'master-anger-3',
@@ -4417,7 +4428,14 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: undefined,
-    modifier: [],
+    modifier: [
+      modifierFromEffect(increaseBody, { amount: -1 }),
+      modifierFromEffect(increaseIntelligence, { amount: -1 }),
+      modifierFromEffect(increaseCharisma, { amount: -1 }),
+      modifierFromEffect(increaseResonance, { amount: -1 }),
+      modifierFromEffect(increaseStrength, { amount: -1 }),
+      modifierFromEffect(increaseDepth, { amount: -1 }),
+    ],
   },
   // позволяет использовать трейл "this" для доступа к собственному PAN хосту. (вместо обычного трейла бэкдора)
   // Фактически - это вечный, неисчерпаемый и доступный только вам бэкдор на ваш собственный PAN
