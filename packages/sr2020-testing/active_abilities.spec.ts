@@ -126,6 +126,50 @@ describe('Active abilities', function () {
     }
   });
 
+  it('Ugly is pechi', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('ugly-is-pechi', '1');
+
+    await fixture.saveCharacter({ modelId: '2', charisma: 5 });
+
+    {
+      await fixture.useAbility({ id: 'ugly-is-pechi', targetCharacterId: '2' }, '1');
+      const { workModel } = await fixture.getCharacter('2');
+      expect(workModel.charisma).toBe(3);
+    }
+  });
+
+  it('Beautti-frutti', async () => {
+    await fixture.saveCharacter({ modelId: '1', magic: 3 });
+    await fixture.addCharacterFeature('beautti-frutti', '1');
+
+    await fixture.saveCharacter({ modelId: '3', charisma: 2 });
+    await fixture.saveCharacter({ modelId: '4', charisma: 4 });
+    await fixture.saveCharacter({ modelId: '5', charisma: 6 });
+
+    {
+      await fixture.useAbility({ id: 'beautti-frutti', targetCharacterId: '3' }, '1');
+      const { workModel } = await fixture.getCharacter('3');
+      expect(workModel.charisma).toBe(4);
+    }
+
+    //waiting for cooldown
+    fixture.advanceTime(duration(10, 'minutes'));
+    {
+      await fixture.useAbility({ id: 'beautti-frutti', targetCharacterId: '4' }, '1');
+      const { workModel } = await fixture.getCharacter('4');
+      expect(workModel.charisma).toBe(5);
+    }
+
+    //waiting for cooldown
+    fixture.advanceTime(duration(10, 'minutes'));
+    {
+      await fixture.useAbility({ id: 'beautti-frutti', targetCharacterId: '5' }, '1');
+      const { workModel } = await fixture.getCharacter('5');
+      expect(workModel.charisma).toBe(6);
+    }
+  });
+
   it('Surge the unclean', async () => {
     await fixture.saveCharacter({ modelId: '1', magic: 3 });
     await fixture.addCharacterFeature('surge-the-unclean', '1');

@@ -104,6 +104,17 @@ export function increaseCharisma(api: EffectModelApi<Sr2020Character>, m: Modifi
   api.model.charisma += m.amount;
 }
 
+export function increaseCharismaCap5(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
+  if (api.model.charisma >= 5) {
+    return;
+  } else {
+    api.model.charisma += m.amount;
+    if (api.model.charisma > 5) {
+      api.model.charisma = 5;
+    }
+  }
+}
+
 export function increaseIntelligence(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.intelligence += m.amount;
 }
