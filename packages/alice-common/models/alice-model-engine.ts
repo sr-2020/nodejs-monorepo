@@ -383,7 +383,7 @@ export interface EventModelApi<T extends EmptyModel> extends LogApiInterface {
 
   // Quick hack to be able to send some table data to the user
   // Needs some reconsideration
-  setTableResponse(table: any): this;
+  setTableResponse<T>(table: T[]): this;
 }
 
 export interface EffectModelApi<T extends EmptyModel> extends LogApiInterface {
