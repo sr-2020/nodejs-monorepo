@@ -122,7 +122,6 @@ import {
   enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -229,7 +228,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Только из тяжрана, не годятся здоров/КС/АС
   {
     id: 'ground-heal-ability',
-    humanReadableName: 'Ground Heal - Эффект',
+    humanReadableName: 'Ground Heal эффект',
     description: 'Поднимает одну цель из тяжрана в полные хиты.',
     target: 'scan',
     targetsSignature: [
@@ -250,7 +249,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // добивание до АС (из тяжрана или КС)
   {
     id: 'absolutely-finish-him',
-    humanReadableName: 'абсолютная смерть',
+    humanReadableName: 'Абсолютная смерть',
     description: 'Ты можешь добивать персонажа в Абсолютную смерть',
     target: 'scan',
     targetsSignature: [
@@ -510,7 +509,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Сканируется код локуса, код персонажа, персонаж теряет абилку “член группы” для соответствующей локусу группы. Запускается процедура пересчета дискурс-абилок. Дает карму владельцу абилки.
   {
     id: 'dgroup-exclude',
-    humanReadableName: 'Исключить из дискурс-группы',
+    humanReadableName: 'Изгнать из дискурс-группы',
     description: 'Исключить персонажа из дискурс-группы',
     target: 'scan',
     targetsSignature: kLocusAndPhysicalBody,
@@ -643,7 +642,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Добавляет +8 к ментальной защите целевого персонажа  на 12 часов
   {
     id: 'increase-the-mental-protection',
-    humanReadableName: 'увеличение м. защиты другого персонажа',
+    humanReadableName: 'Повысить м-защиту другому',
     description: 'на 12 часов увеличивает сопротивляемость целевого персонажа ментальному воздействию. ',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
@@ -658,7 +657,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Добавляет -8 к ментальной защите целевого персонажа на 6 часов
   {
     id: 'reduce-the-mental-protection',
-    humanReadableName: 'уменьшение м. защиты другого персонажа',
+    humanReadableName: 'Понизить м-защиту другому',
     description: 'на 6 часов  уменьшает сопротивляемость целевого персонажа ментальному воздействию. ',
     target: 'scan',
     targetsSignature: kNonDeadBodyTargeted,
@@ -1086,8 +1085,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // второй и далее компоненты НЕ показываем, только первый!
   {
     id: 'pill-name',
-    humanReadableName: 'Фармацевтика (что за таблетка?)',
-    description: 'Позволяет узнать название препарата и его основной компонент.',
+    humanReadableName: 'Фармацевтика',
+    description: 'Позволяет узнать название препарата и его основной компонент. \n(Отсканируй куар препарата этой абилкой).',
     target: 'scan',
     targetsSignature: [kPillTarget],
     prerequisites: ['arch-rigger'],
@@ -1170,7 +1169,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Активная абилка Медикарта
   {
     id: 'medcart-heavy-heal-1',
-    humanReadableName: 'Лечение тяжелых ранений (1)',
+    humanReadableName: 'Лечение тяжелых ран (1)',
     description: 'Вылечить тяжелое ранение (1)',
     target: 'scan',
     targetsSignature: kMedcartWoundedBodyTargeted,
@@ -1185,7 +1184,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Активная абилка Медикарта
   {
     id: 'medcart-heavy-heal-2',
-    humanReadableName: 'Лечение тяжелых ранений (2)',
+    humanReadableName: 'Лечение тяжелых ран (2)',
     description: 'Вылечить тяжелое ранение (2)',
     target: 'scan',
     targetsSignature: kMedcartWoundedBodyTargeted,
@@ -1200,7 +1199,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Активная абилка Медикарта
   {
     id: 'medcart-heavy-heal-3',
-    humanReadableName: 'Лечение тяжелых ранений (3)',
+    humanReadableName: 'Лечение тяжелых ран (3)',
     description: 'Вылечить тяжелое ранение (3)',
     target: 'scan',
     targetsSignature: kMedcartWoundedBodyTargeted,
@@ -1513,7 +1512,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Все импланты, установленные в тело персонажа-объекта - ломаются и выходят из строя. Тело их отторгает. (Импланты как товары - ломаются, слоты в теле персонажа - пустые)
   {
     id: 'rd-reset-essence',
-    humanReadableName: 'РД Полное восстановление Эссенс',
+    humanReadableName: 'Восстановление Эссенса',
     description: 'РД Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -1644,7 +1643,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Все импланты, установленные в тело персонажа-объекта - ломаются и выходят из строя. Тело их отторгает. (Импланты как товары - ломаются, слоты в теле персонажа - пустые)
   {
     id: 'gm-reset-essence',
-    humanReadableName: 'Полное восстановление Эссенс',
+    humanReadableName: 'Восстановление Эссенс',
     description: 'Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
@@ -1695,8 +1694,9 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Указываем только вещества с содержанием более чем  ( 280 - Интеллект * 10)  милиграмм
   {
     id: 'whats-in-the-body-1',
-    humanReadableName: 'Диагностика (что в чаммере?)',
-    description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
+    humanReadableName: 'Диагностика',
+    description:
+      'Ты можешь проверить, какие вещества находятся в теле пациенте.\n(появится таблица с перечислением веществ в теле, если веществ нет, она будет пустая)',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 15,
@@ -1714,7 +1714,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'biomonitor-scan',
     humanReadableName: 'Сканер биомонитора',
-    description: 'Отсканируй чаммера и увидишь список препаратов, которые он принимал за последние 4 часа.',
+    description:
+      'Отсканируй чаммера и увидишь список препаратов, которые он принимал за последние 4 часа.\n(появится таблица с перечислением принятых препаратов, если чаммер ничего не принимал, она будет пустая)',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 30,
@@ -1792,7 +1793,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'use-pills-on-others',
     humanReadableName: 'Вколоть препарат',
     description:
-      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока рукой, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
+      'Активируй, чтобы применить препарат на другого персонажа. После объявления "Колю препарат" и каcания игрока холодным оружием, игрок обязан показать QR своего тела для применения абилки, даже если он против.',
     target: 'scan',
     targetsSignature: [kPillTarget, ...kNonDeadBodyTargeted],
     cooldownMinutes: (character) => 7,
@@ -2039,7 +2040,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'levitation',
-    humanReadableName: 'левитация',
+    humanReadableName: 'КФО левитация',
     description: 'Сейчас ты можешь спокойно обойти препятствие или топь по земле, считается, что ты летишь\nfading +500',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2055,7 +2056,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 70
   {
     id: 'magnetism',
-    humanReadableName: 'магнетизм',
+    humanReadableName: 'КФО магнетизм',
     description: 'У тебя в руках магнит, он притягивает любой предмет, который надо собрать в этой комнате, но только один\nfading +70',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2071,7 +2072,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading  + 80
   {
     id: 'bond-breaker',
-    humanReadableName: 'освобождение от пут',
+    humanReadableName: 'КФО освобождение от пут',
     description: 'Ты можешь освободить одну руку себе или товарищу\nfading +80',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2087,7 +2088,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 200
   {
     id: 'one-for-all',
-    humanReadableName: 'один за всех',
+    humanReadableName: 'КФО один за всех',
     description: 'Ты можешь пройти эту комнату один за всю свою команду\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2103,7 +2104,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 30
   {
     id: 'add-time-1',
-    humanReadableName: 'больше времени +1',
+    humanReadableName: 'КФО больше времени +1',
     description: 'Теперь у вас на 1 минуту больше времени в данже\nfading +30',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2119,7 +2120,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 40
   {
     id: 'add-time-2',
-    humanReadableName: 'больше времени +2',
+    humanReadableName: 'КФО больше времени +2',
     description: 'Теперь у вас на 2 минуты больше времени в данже\nfading +40',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2135,7 +2136,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 60
   {
     id: 'add-time-3',
-    humanReadableName: 'больше времени +3',
+    humanReadableName: 'КФО больше времени +3',
     description: 'Теперь у вас на 3 минуты больше времени в данже\nfading +60',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2151,7 +2152,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 200
   {
     id: 'add-time-4',
-    humanReadableName: 'Больше времени +4',
+    humanReadableName: 'КФО больше времени +4',
     description: 'Теперь у вас на 4 минуты больше времени в данже\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2167,7 +2168,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 400
   {
     id: 'add-time-5',
-    humanReadableName: 'больше времени +5',
+    humanReadableName: 'КФО больше времени +5',
     description: 'Теперь у вас на 5 минут больше времени в данже\nfading +400',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2183,7 +2184,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +120
   {
     id: 'add-basement',
-    humanReadableName: 'добавить опору',
+    humanReadableName: 'КФО добавить опору',
     description: 'Укажи, где должна появиться дополнительная опора\nfading +120',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2199,7 +2200,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +150
   {
     id: 'bell-silence',
-    humanReadableName: 'молчание колокольчиков',
+    humanReadableName: 'КФО тишина колокольчиков',
     description: 'Ты можешь задевать колокольчики, матрица их не услышит\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2215,7 +2216,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 230
   {
     id: 'photo-memory',
-    humanReadableName: 'фотографическая память',
+    humanReadableName: 'КФО фотопамять',
     description: 'Ты можешь сфотографировать объект и переслать фото другому участнику комнады\nfading +230',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2231,7 +2232,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +100
   {
     id: 'second-sight',
-    humanReadableName: 'ясновидение',
+    humanReadableName: 'КФО ясновидение',
     description: 'Теперь матрица (в лице игротеха) может подсказать тебе расположение двух деталей конструкции\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2247,7 +2248,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 200
   {
     id: 'remove-excees',
-    humanReadableName: 'убрать все лишнее',
+    humanReadableName: 'КФО убрать все лишнее',
     description: 'Теперь матрица подскажет тебе, какие детали лишние\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2263,7 +2264,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading + 150
   {
     id: 'remove-half',
-    humanReadableName: 'убрать половину ',
+    humanReadableName: 'КФО убрать половину ',
     description: 'Теперь матрица убирает половину деталей, чтобы уменьшить сложность конструкции\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2297,7 +2298,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'attack-drone',
     humanReadableName: 'Real: паралич дрона',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любого дрона на 90 секунд.\nfading +200',
+    description: 'Ты можешь касанием кинжала, с криком "Паралич!" обездвижить любого дрона на 90 секунд.\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 10,
@@ -2313,7 +2314,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +100
   {
     id: 'identity-scan',
-    humanReadableName: 'VR: узнать личность аватарки',
+    humanReadableName: 'VR: узнать личность',
     description:
       'Работает только в VR. Покажи это персонажу, к которому ты хочешь узнать личность, он должен показать тебе свой SIN.\nfading +100',
     target: 'scan',
@@ -2330,7 +2331,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +60
   {
     id: 'initiative-add-2',
-    humanReadableName: 'инициатива +2 ',
+    humanReadableName: 'КФКК инициатива +2 ',
     description: 'Твои лидерские качества улучшились, Инициатива +2 \n(у нападающих базовая и = 1, у защитников базовая и = 0)\nfading +60',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2346,7 +2347,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +80
   {
     id: 'hp-add-ally-1',
-    humanReadableName: 'добавить 1 хит союзнику',
+    humanReadableName: 'КФКК +1 хит одному',
     description: 'Добавить один хит союзнику (Хиты считаете сами)\nfading +80',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2362,7 +2363,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +100
   {
     id: 'hp-add-ally-2',
-    humanReadableName: 'добавить 2 хита союзнику',
+    humanReadableName: 'КФКК +2 хита одному',
     description: 'Добавить два хита союзнику (Хиты считаете сами)\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2378,7 +2379,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +150
   {
     id: 'hp-add-ally-all-1',
-    humanReadableName: 'добавить 1 хит всем союзникам',
+    humanReadableName: 'КФКК +1 хит всем своих',
     description: 'Добавить один хит всем союзникам (Хиты считаете сами)\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2394,7 +2395,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +200
   {
     id: 'hp-add-ally-all-2',
-    humanReadableName: 'добавить 2 хита всем союзникам',
+    humanReadableName: 'КФКК +2 хита всем своим',
     description: 'Добавить два хита всем союзникам (Хиты считаете сами)\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2410,7 +2411,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +100
   {
     id: 'hp-remove-foe-1',
-    humanReadableName: 'снять 1 хит противника',
+    humanReadableName: 'КФКК -1 хит с противника',
     description: 'Снять один хит противника (Хиты считаете сами)\nfading +100',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2426,7 +2427,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +120
   {
     id: 'hp-remove-foe-2',
-    humanReadableName: 'снять 2 хита противника',
+    humanReadableName: 'КФКК -2 хита с противника',
     description: 'Снять два хита противника (Хиты считаете сами)\nfading +120',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2442,7 +2443,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +180
   {
     id: 'hp-remove-foe-all-1',
-    humanReadableName: 'снять 1 хит всем противникам',
+    humanReadableName: 'КФКК -1 хит всем чужим',
     description: 'Снять один хит со всех противников (Хиты считаете сами)\nfading +180',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2458,7 +2459,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +300
   {
     id: 'hp-remove-foe-all-2',
-    humanReadableName: 'снять 2 хита всем противникам',
+    humanReadableName: 'КФКК -2 хита всем чужим',
     description: 'Снять два хита со всех противников (Хиты считаете сами)\nfading +300',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2474,7 +2475,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +50
   {
     id: 'bind-foe',
-    humanReadableName: 'путы на одного противника',
+    humanReadableName: 'КФКК путы на одного чужого',
     description:
       'Ты связал одну руку противника, теперь он не может ее использовать (должен убрать за спину и не может применять никакие предметы в этой руке)\nfading +50',
     target: 'scan',
@@ -2491,7 +2492,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +150
   {
     id: 'bind-foe-all',
-    humanReadableName: 'путы на всех противников',
+    humanReadableName: 'КФКК путы на всех чужих',
     description: 'Ты связал одну руку у всех противников, теперь они не могут ее использовать\nfading +150',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -2507,7 +2508,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +600
   {
     id: 'magic-remove',
-    humanReadableName: '"безмагия" на всех, кто в комнате',
+    humanReadableName: 'КФКК "безмагия" на всех',
     description:
       'После использования этой комплексной формы никто не может использовать комплексные формы и все действительные эффекты комплексных форм - отменяются \nfading +600',
     target: 'scan',
@@ -2544,7 +2545,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // - QR телохранилища
   {
     id: 'drones-active',
-    humanReadableName: 'Активировать управление дроном',
+    humanReadableName: 'Включиться в дрона',
     description: 'Активируй, чтобы включиться в дрона.',
     target: 'scan',
     targetsSignature: kDroneAndBodyStorageTargeted,
@@ -2914,7 +2915,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'drone-paralysis-1',
     humanReadableName: 'Паралич движения 1',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
+    description: 'Ты можешь касанием (дубинкой) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -2930,7 +2931,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'drone-paralysis-2',
     humanReadableName: 'Паралич движения 2',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
+    description: 'Ты можешь касанием (дубинкой) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -2946,7 +2947,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'drone-paralysis-3',
     humanReadableName: 'Паралич движения 3',
-    description: 'Ты можешь касанием (рукой или кинжалом) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
+    description: 'Ты можешь касанием (дубинкой) И криком "Паралич!" обездвижить любое мясное/эктоплазменное тело на 90 секунд.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -3014,7 +3015,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'quiet-break-in-hacker',
     humanReadableName: 'Тихий взлом (техномант)',
     description:
-      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
+      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 1 минуту у закрытой двери, все это время держась рукой за сертификат замка.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -3030,7 +3031,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'quiet-break-in-rigger',
     humanReadableName: 'Тихий взлом (риггер)',
     description:
-      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 2 минуты у закрытой двери, все это время держась рукой за сертификат замка.',
+      'Ты можешь открыть дверь, закрытую на замок. Для этого надо стоять 1 минуту у закрытой двери, все это время держась рукой за сертификат замка.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 30,
@@ -3047,7 +3048,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'attack-drone-2',
     humanReadableName: 'Real: нападение на дрона',
     description:
-      'Ты можешь зарядить два энергетических Импульса, который является аналогом фаерболла, действует только на дронов (Импульс снимает 4 хита с дрона в легкой броне, 1 хит с дрона в тяжелой броне).  Импульс рассеивается через 20 минут после активации способности.\nfading +200',
+      'Ты можешь зарядить два энергетических Импульса, которые являются аналогом фаерболла, действуют только на дронов (Импульс снимает 4 хита с дрона в легкой броне, 1 хит с дрона в тяжелой броне).  Импульс рассеивается через 20 минут после активации способности.\nfading +200',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 40,
@@ -3067,7 +3068,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +150. абилка требует отсканировать
   {
     id: 'clinical-death-rr',
-    humanReadableName: 'Добивание в КС в красной комнате',
+    humanReadableName: 'КФКК добивание в КС в КК',
     description:
       'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит КС. \nfading +150',
     target: 'scan',
@@ -3095,7 +3096,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // techno.fading +300, абилка требует отсканировать куар типа нода основания матрицы
   {
     id: 'absolutely-death-rr',
-    humanReadableName: 'Добивание в АС в красной комнате',
+    humanReadableName: 'КФКК добивание в АС в КК',
     description:
       'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит АС. \nfading +300',
     target: 'scan',
@@ -3373,7 +3374,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Ничего больше не происходит, только пуш с текстом на тяжран.
   {
     id: 'sleep-shock',
-    humanReadableName: 'Электрошок в мягкое тельце!',
+    humanReadableName: 'Удар в мягкое тельце!',
     description: 'Отсканируй qr телохранилища с телом внутри, чтобы ударить его шоком и принудить вернуться к телу.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -3412,7 +3413,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "здесь лежит чаммер.", указываем его имя и метатип. если нет - получаем сообщение "Здесь никого нет."
   {
     id: 'sleep-whois-decker',
-    humanReadableName: 'Кто в коробчонке? (декер)',
+    humanReadableName: 'Кто лежит в ТХ? (декер)',
     description: 'Отсканируй qr телохранилища с телом внутри, чтобы узнать, кто там лежит.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -3427,7 +3428,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "здесь лежит чаммер.", указываем его имя и метатип. если нет - получаем сообщение "Здесь никого нет."
   {
     id: 'sleep-whois-technomancer',
-    humanReadableName: 'Кто в коробчонке? (техномант)',
+    humanReadableName: 'Кто лежит в ТХ? (техномант)',
     description: 'Отсканируй qr телохранилища с телом внутри, чтобы узнать, кто там лежит.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -3442,7 +3443,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "да, здесь есть тело", если нет - получаем сообщение "Здесь тела нет."
   {
     id: 'sleep-isthere-mage',
-    humanReadableName: 'Есть ли кто-то в коробчонке? (маг)',
+    humanReadableName: 'Есть кто в ТХ? (маг)',
     description: 'Отсканируй qr телохранилища, чтобы проверить, есть ли кто-то внутри.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -3457,7 +3458,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // В качестве цели сканируется QR-код телохранилища. Если тело есть - получаем сообщение "да, здесь есть тело", если нет - получаем сообщение "Здесь тела нет."
   {
     id: 'sleep-isthere-rigger',
-    humanReadableName: 'Есть ли кто-то в коробчонке? (риггер)',
+    humanReadableName: 'Есть кто в ТХ? (ригга)',
     description: 'Отсканируй qr телохранилища, чтобы проверить, есть ли кто-то внутри.',
     target: 'scan',
     targetsSignature: kBodyStorageTargeted,
@@ -3472,7 +3473,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Выдает абилку vr-hot-connected  длительностью maxTimeInVr
   {
     id: 'enter-vr-hot',
-    humanReadableName: 'VR Стать аватаркой и зайти в Виар (ХОТСИМ)',
+    humanReadableName: 'VR Зайти в VR (хотсим)',
     description:
       '[Вход в VR, Хотсим] При активации ты можешь зайти в VR в режиме горячего подключения, HotSim. Режим ХотСим необходим Техноманту для  использования абилок в VR, входа в Основание и использование там КФ и спрайтов. Переход разрешен только в точке c Виар-телохранилищами. Для выхода из Виар ничего нажимать не надо. ',
     target: 'scan',
@@ -3735,7 +3736,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // делает ничего, просто запускает кулдаун
   {
     id: 'ai-confidential',
-    humanReadableName: 'Конфиденциальные протоколы',
+    humanReadableName: 'Закрытытые протоколы',
     description: 'Ты можешь поместить временную печать на ящик Позитива или Негатива.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -3800,7 +3801,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Смысл абилки - ИИ может делать это очень быстро. Каждые 10 минут
   {
     id: 'compile-coldsim',
-    humanReadableName: 'Закрыться аватаркой (перейти в колдсим)',
+    humanReadableName: 'VR Перейти в КолдСим',
     description: 'Активируй, чтобы подключиться в Колдсим (ты спрячешься в аватарку,  станешь беспомощным, но анонимным)',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4279,7 +4280,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'no-enter-ai',
-    humanReadableName: 'Запрет Доступа ',
+    humanReadableName: 'Запрет Доступа (ИИ)',
     description: 'Покажи это персонажу в VR (не цифровому), ему надо покинуть VR максимально быстро. Применяется только в VR.',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4497,7 +4498,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   //
   {
     id: 'ai-photo-memory',
-    humanReadableName: 'AI фотографическая память',
+    humanReadableName: 'AI фото память',
     description: 'Ты можешь сфотографировать объект и переслать фото другому участнику команды.  Работает раз в 10 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
