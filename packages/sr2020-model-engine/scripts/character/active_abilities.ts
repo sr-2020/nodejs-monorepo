@@ -35,6 +35,7 @@ import { ActiveAbilityData, FullTargetedAbilityData } from '@alice/sr2020-common
 import { dumpshock } from '@alice/sr2020-model-engine/scripts/character/hackers';
 import {
   increaseResonance,
+  increaseCharisma,
   muliplyMagicRecoverySpeed,
   multiplyMagicFeedbackMultiplier,
   multiplyParticipantCoefficient,
@@ -442,6 +443,32 @@ export function surgeTheUnclean(api: EventModelApi<Sr2020Character>, data: Activ
     modifier: m,
     durationInSeconds: d.asSeconds(),
     effectDescription: 'Действие способности Surge the unclean',
+  });
+}
+
+export function uglyIsPechi(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  const d = duration(60, 'minutes');
+
+  const amount = -2;
+  const m = modifierFromEffect(increaseCharisma, { amount });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds: d.asSeconds(),
+    effectDescription: 'Действие способности Ugly is pechi',
+  });
+}
+
+export function beauttiFrutti(api: EventModelApi<Sr2020Character>, data: ActiveAbilityData) {
+  if (!data.targetCharacterId) throw new UserVisibleError('Нет целевого персонажа');
+  const d = duration(60, 'minutes');
+
+  const amount = 1;
+  const m = modifierFromEffect(increaseCharisma, { amount });
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId!, addTemporaryModifierEvent, {
+    modifier: m,
+    durationInSeconds: d.asSeconds(),
+    effectDescription: 'Действие способности Beautti-frutti',
   });
 }
 

@@ -53,6 +53,8 @@ import {
   whoNeedsIt,
   trackpointer,
   trackeeteer,
+  uglyIsPechi,
+  beauttiFrutti,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -3851,7 +3853,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -3889,7 +3891,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -3975,7 +3977,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -3996,7 +3998,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -4017,7 +4019,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -4053,7 +4055,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -4065,16 +4067,16 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     fadingPrice: 0,
     eventType: surgeTheUnclean.name,
   },
-  // у цели на 60 минут понижается Харизма на 2.
+  // у цели на 60 минут понижается Харизма на 2
   {
     id: 'ugly-is-pechi',
     humanReadableName: 'ДУХ: Ugly is pechi',
-    description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'На 60 минут понизить на 2 Харизму цели, указанной добровольно предоставленным qr-кодом',
     target: 'scan',
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -4084,18 +4086,18 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: uglyIsPechi.name,
   },
-  // у цели на 60 минут повышается Харизма на 2 - но не выше 5
+  // у цели на 60 минут повышается Харизма на 1
   {
     id: 'beautti-frutti',
     humanReadableName: 'ДУХ: Beautti-frutti',
-    description: 'На 60 минут повысить Харизму на 2, но не выше 5, цели, указанной добровольно предоставленным qr-кодом.',
+    description: 'На 60 минут повысить Харизму на 1 цели, указанной добровольно предоставленным qr-кодом',
     target: 'scan',
     targetsSignature: [
       {
         name: 'Персонаж',
-        allowedTypes: ['ASTRAL_BODY', 'HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY'],
+        allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY'],
         field: 'targetCharacterId',
       },
     ],
@@ -4105,7 +4107,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: dummyAbility.name,
+    eventType: beauttiFrutti.name,
   },
   // В нотификации выводится уровень маны в текущей локации
   {
