@@ -12,6 +12,7 @@ import { resetHunger } from '@alice/sr2020-model-engine/scripts/character/hunger
 
 const kClinicalDeathTimerName = 'timer-clinically-dead';
 const kClinicalDeathTimerTime = duration(30, 'minutes');
+const kClinicalDeathAiTimerTime = duration(0, 'minutes');
 
 const kMedkitReviveTimerName = 'timer-medkit-revive';
 const kMedkitReviveTimerTime = duration(10, 'minutes');
@@ -139,7 +140,12 @@ export function healthStateTransition(api: EventModelApi<Sr2020Character>, state
   }
 
   if (stateFrom == 'healthy' && stateTo == 'wounded') {
-    api.setTimer(kClinicalDeathTimerName, 'Клиническая смерть', kClinicalDeathTimerTime, clinicalDeath, { location: undefined });
+    if (api.workModel.metarace == 'meta-digital') {
+      api.setTimer(kClinicalDeathTimerName, 'Клиническая смерть', kClinicalDeathAiTimerTime, clinicalDeath, { location: undefined });
+    } else {
+      api.setTimer(kClinicalDeathTimerName, 'Клиническая смерть', kClinicalDeathTimerTime, clinicalDeath, { location: undefined });
+    }
+
     api.setTimer(kMedkitReviveTimerName, 'Лечение медкитом', kMedkitReviveTimerTime, medkitTryToRevive, {});
     if (hasEnabledIWillSurvive(api)) {
       api.setTimer(
