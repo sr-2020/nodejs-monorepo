@@ -5,6 +5,7 @@ import {
   arrowgant,
   astralopithecus,
   avalFest,
+  beauttiFrutti,
   biomonitorScanAbility,
   bodyStorageAttackAbility,
   celestialSong,
@@ -47,14 +48,13 @@ import {
   surgeTheUnclean,
   takeNoHarmAbility,
   tincasmAbility,
+  trackeeteer,
+  trackpointer,
   trollton,
+  uglyIsPechi,
   useSpriteAbility,
   wereami,
   whoNeedsIt,
-  trackpointer,
-  trackeeteer,
-  uglyIsPechi,
-  beauttiFrutti,
 } from './active_abilities';
 import {
   billionerWalkAbility,
@@ -122,6 +122,7 @@ import {
   enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
+
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -829,7 +830,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'silentium-est-aurum',
     humanReadableName: 'Silentium est aurum (A)',
-    description: 'На 60 минут частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4',
+    description: 'На 60 минут частично изменить другому персонажу его ауру. Требуемая эссенция мага: больше 4\n(В том числе телу в КС)',
     target: 'scan',
     targetsSignature: [
       {
@@ -1215,7 +1216,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'medcart-reanimate',
     humanReadableName: 'Лечение состояния КС',
-    description: 'Вылечить состояние КС',
+    description: 'Вылечить состояние КС\n(Ты можешь взаимодействовать с телом в КС)',
     target: 'scan',
     targetsSignature: kMedcartDeadBodyTargeted,
     cooldownMinutes: (character) => 120,
@@ -1280,7 +1281,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'koshcghei-shooter',
     humanReadableName: 'Стрелок',
-    description: 'Позволяет использовать автоматическое оружие. \n(При наличии импланта Кибер-рука или абилки Биосила)',
+    description: 'Позволяет использовать автоматы и/или винтовки. \n(При наличии импланта Кибер-рука или абилки Биосила)',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 15,
@@ -1516,7 +1517,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'РД Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 360,
+    cooldownMinutes: (character) => 180,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 0,
@@ -1696,10 +1697,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'whats-in-the-body-1',
     humanReadableName: 'Диагностика',
     description:
-      'Ты можешь проверить, какие вещества находятся в теле пациенте.\n(появится таблица с перечислением веществ в теле, если веществ нет, она будет пустая)',
+      'Ты можешь проверить, какие вещества находятся в теле пациенте.\n(появится таблица с перечислением веществ в теле, если веществ нет, она будет пустая)\nТы можешь сделать это, даже если тело в КС.',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
-    cooldownMinutes: (character) => 15,
+    cooldownMinutes: (character) => Math.max(5, 21 - 2 * character.intelligence),
     prerequisites: ['arch-rigger'],
     availability: 'open',
     karmaCost: 50,
@@ -1715,10 +1716,10 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'biomonitor-scan',
     humanReadableName: 'Сканер биомонитора',
     description:
-      'Отсканируй чаммера и увидишь список препаратов, которые он принимал за последние 4 часа.\n(появится таблица с перечислением принятых препаратов, если чаммер ничего не принимал, она будет пустая)',
+      'Отсканируй чаммера и увидишь список препаратов, которые он принимал за последние 4 часа.\n(появится таблица с перечислением принятых препаратов, если чаммер ничего не принимал, она будет пустая)\nТы можешь сделать это, даже если тело в КС.',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
-    cooldownMinutes: (character) => 30,
+    cooldownMinutes: (character) => Math.max(20, 36 - 2 * character.intelligence),
     prerequisites: ['arch-rigger', 'pill-name', 'whats-in-the-body-1'],
     availability: 'open',
     karmaCost: 40,
@@ -3070,7 +3071,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'clinical-death-rr',
     humanReadableName: 'КФКК добивание в КС в КК',
     description:
-      'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит КС. \nfading +150',
+      'Эту КФ можно применить только в Красной комнате, на персонажа, с которого сняты все хиты. Для применения надо активировать способность, затем сосканировать куар код жертвы, затем куар, который будет у игротехника.\nПосле применения КФ игрок должен выйти из данжа, к месту где оставил тело и там он получит КС. \nfading +150',
     target: 'scan',
     targetsSignature: [
       {
@@ -3098,7 +3099,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'absolutely-death-rr',
     humanReadableName: 'КФКК добивание в АС в КК',
     description:
-      'VR. Эту КФ можно применить только в VR, на персонажа, с которого сняты все хиты. \nПосле применения КФ игрок должен выйти из VR, к месту где оставил тело и там он получит АС. \nfading +300',
+      'Эту КФ можно применить только в Красной комнате, на персонажа, с которого сняты все хиты. Для применения надо активировать способность, затем сосканировать куар код жертвы, затем куар, который будет у игротехника.\r\nПосле применения КФ игрок должен выйти из данжа, к месту где оставил тело и там он получит КС. \r\nfading +150',
     target: 'scan',
     targetsSignature: [
       {
@@ -3345,7 +3346,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ethic-absolutely-finish-him',
     humanReadableName: 'Абсолютная смерть',
-    description: 'Ты можешь убивать в Абсолютную смерть',
+    description: 'Ты можешь убивать в Абсолютную смерть \n(в том числе персонажа в КС)',
     target: 'scan',
     targetsSignature: [
       {
@@ -3491,7 +3492,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'no-enter-agent',
     humanReadableName: 'Запрет Доступа (агент)',
     description:
-      'Покажи активированную способность персонажу в VR. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
+      'Покажи только что активированную способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься. Он не может вернуться обратно 30 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 2,
@@ -3570,7 +3571,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     id: 'no-enter-eghost',
     humanReadableName: 'Запрет Доступа (егост)',
     description:
-      'Покажи только что активированную способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься',
+      'Покажи только что активированную способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься. Он не может вернуться обратно 30 минут.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
@@ -3600,7 +3601,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ai-big-mommy',
     humanReadableName: 'Спроси Большого Брата',
-    description: 'Задать вопрос на который можно ответить "Да", "Нет", "Это не имеет значения" и получить ответ.',
+    description:
+      'Задать вопрос на который можно ответить "Да", "Нет", "Это не имеет значения" и получить ответ. Вопрос задается региональному мастеру.',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
@@ -4304,7 +4306,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
     prerequisites: ['arch-digital', 'ai-researcher'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -4319,7 +4321,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 180,
     prerequisites: ['arch-digital', 'alpha-code'],
-    availability: 'open',
+    availability: 'closed',
     karmaCost: 50,
     minimalEssence: 0,
     fadingPrice: 0,
@@ -4605,7 +4607,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'drone-whats-in-the-body',
     humanReadableName: 'Диагностика пициента',
-    description: 'Ты можешь проверить, какие вещества находятся в теле пациенте.\n',
+    description:
+      'Ты можешь проверить, какие вещества находятся в теле пациенте.\n(появится таблица с перечислением веществ в теле, если веществ нет, она будет пустая)\nТы можешь сделать это, даже если тело в КС.',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => Math.max(1, 10 - 2 * character.intelligence),
@@ -4652,6 +4655,38 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     minimalEssence: 0,
     fadingPrice: 0,
     eventType: finishHimAbility.name,
+  },
+  //
+  {
+    id: 'scout-decker',
+    humanReadableName: 'Разведка без боя',
+    description: 'Ты можешь прийти к данжу Основание, назвать ID хоста и запросить схему хоста (активируй абилку в присутствии мастера)',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 120,
+    prerequisites: ['arch-hackerman-decker', 'sly-2'],
+    availability: 'open',
+    karmaCost: 30,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: noItActionAbility.name,
+  },
+  // делает ничего, просто показывает сообщение "Немедленно покиньте это заведение и не возвращайтесь 30 минут" и запускает кулдаун
+  {
+    id: 'no-enter-tea',
+    humanReadableName: 'Даже чаю не попьете',
+    description:
+      'Покажи только что активированную способность персонажу. Он должен немедленно покинуть заведение, сотрудником которого ты являешься. Он не может вернуться обратно 30 минут',
+    target: 'scan',
+    targetsSignature: kNoTarget,
+    cooldownMinutes: (character) => 20,
+    prerequisites: [],
+    pack: undefined,
+    availability: 'closed',
+    karmaCost: 10,
+    minimalEssence: 0,
+    fadingPrice: 0,
+    eventType: noItActionAbility.name,
   },
 ];
 setAllActiveAbilities(

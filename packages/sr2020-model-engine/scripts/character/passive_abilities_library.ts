@@ -1554,7 +1554,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-dozer',
     humanReadableName: 'Дрон Бульдозер',
-    description: 'Щит.',
+    description: 'Этот дрон оснащён Щитом.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -1564,7 +1564,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-turret',
     humanReadableName: 'Дрон Турель',
-    description: 'Пушка.',
+    description: 'Этот дрон оснащён Пушкой.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -1574,7 +1574,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-ekzo',
     humanReadableName: 'Дрон Экзоскелет',
-    description: 'Пулемет.',
+    description: 'Этот дрон оснащён Пулеметом.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -1584,7 +1584,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-copter',
     humanReadableName: 'Дрон Коптер',
-    description: 'Видеокамера. Иммунитет ко всему холодному оружию и легкому огнестрельному.',
+    description: 'Видеокамера. Иммунитет ко всему холодному оружию и легкому огнестрельному. Может переносить до 3-х игровых предмета.',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -1625,7 +1625,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-medcart',
     humanReadableName: 'Дрон Медкарт',
-    description: 'Медикарт',
+    description: 'Вы в дроне типа Медикарт',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -1655,7 +1655,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'automatic-weapons-unlock',
     humanReadableName: 'Автоматическое оружие',
-    description: 'Позволяет использовать автоматическое оружие. \n(При наличии импланта Кибер-рука или абилки Биосила)',
+    description: 'Ты можешь использовать автомат и/или винтовку. \n(При наличии импланта Кибер-рука или абилки Биосила)',
     availability: 'master',
     karmaCost: 0,
     prerequisites: [],
@@ -1712,7 +1712,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-mage'],
     modifier: [],
   },
-  // rigging.implantsBonus +2
+  // rigging.implantsBonus +3
   // drones.autodocBonus +3
   {
     id: 'auto-doc-1',
@@ -1734,7 +1734,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-rigger', 'auto-doc-1'],
     modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
-  // rigging.implantsBonus +2
+  // rigging.implantsBonus +3
   // drones.autodocBonus +2
   {
     id: 'auto-doc-3',
@@ -3222,7 +3222,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'drone-heavy',
     humanReadableName: 'Дрон броня',
-    description: 'Тяжелая броня.',
+    description: 'На этом дроне установлена тяжелая броня. Дрон обладает "Эффектом тяжёлой брони"',
     availability: 'master',
     karmaCost: 0,
     prerequisites: ['in-drone'],
@@ -4386,12 +4386,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // depth
   {
     id: 'master-anger-1',
-    humanReadableName: 'Мастерский гнев 1',
-    description: 'Ты огорчил мастера. -1 ко всем характеристикам персонажа.',
+    humanReadableName: 'Гнев мироздания 1',
+    description: 'Ты огорчил мироздание. -1 ко всем характеристикам персонажа.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [
       modifierFromEffect(increaseBody, { amount: -1 }),
       modifierFromEffect(increaseIntelligence, { amount: -1 }),
@@ -4404,12 +4403,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Уменьшает все нехуеватости на 1 (тот же список)
   {
     id: 'master-anger-2',
-    humanReadableName: 'Мастерский гнев 2',
-    description: 'Ты огорчил мастера. Еще -1 ко всем характеристикам персонажа.',
+    humanReadableName: 'Гнев мироздания 2',
+    description: 'Ты огорчил мироздание. Еще -1 ко всем характеристикам персонажа.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [
       modifierFromEffect(increaseBody, { amount: -1 }),
       modifierFromEffect(increaseIntelligence, { amount: -1 }),
@@ -4422,12 +4420,11 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // Уменьшает все нехуеватости на 1 (тот же список)
   {
     id: 'master-anger-3',
-    humanReadableName: 'Мастерский гнев 3',
-    description: 'Ты огорчил мастера. И еще -1 ко всем характеристикам персонажа.',
+    humanReadableName: 'Гнев мироздания 3',
+    description: 'Ты огорчил мироздание. И еще -1 ко всем характеристикам персонажа.',
     availability: 'closed',
     karmaCost: 0,
     prerequisites: [],
-    pack: undefined,
     modifier: [
       modifierFromEffect(increaseBody, { amount: -1 }),
       modifierFromEffect(increaseIntelligence, { amount: -1 }),
@@ -4447,7 +4444,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 10,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
   // позволяет использовать трейл "self" для доступа к собственному PAN хосту. (вместо обычного трейла бэкдора)
@@ -4460,7 +4456,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer'],
-    pack: undefined,
     modifier: [],
   },
   //
@@ -4472,7 +4467,49 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'closed',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'self-awareness'],
-    pack: undefined,
+    modifier: [],
+  },
+  // показывает игроку текст абилки, больше ничего
+  {
+    id: 'hack-guns-1',
+    humanReadableName: 'Смартлинк',
+    description: 'Ты умеешь использовать винтовки и автоматы. Для использования необходим имплант киберрука или способность "биосила".',
+    availability: 'closed',
+    karmaCost: 30,
+    prerequisites: ['arch-hackerman-decker'],
+    modifier: [],
+  },
+  // Кривда дает название источника автобэкдоров и будет пополнять его по утрам.
+  {
+    id: 'breachmaster-ai',
+    humanReadableName: 'Теневой канал',
+    description:
+      'Вы подключились к источнику автобэкдоров от вашего материнского ИИ. Вам будет доступно 15 автобэкдоров в день. (подключение бэкдоров работает через сайт хакерства web.evarun.ru) ВАЖНО эта способность нужна только одному персонажу в проекции.',
+    availability: 'open',
+    karmaCost: 90,
+    prerequisites: ['arch-digital', 'ai-researcher', 'ai-big-mommy'],
+    modifier: [],
+  },
+  // Кривда дает название источника автобэкдоров и будет пополнять его по утрам.
+  {
+    id: 'breachmaster-fkb',
+    humanReadableName: 'Хакер из штабквартиры',
+    description:
+      'Вы подключились к источнику автобэкдоров от вашей организации.  Вам будет доступно 10 автобэкдоров в день. (подключение бэкдоров работает через сайт хакерства web.evarun.ru) ВАЖНО эта способность нужна только одному чаммеру в организации',
+    availability: 'closed',
+    karmaCost: 30,
+    prerequisites: [],
+    modifier: [],
+  },
+  // Кривда дает название источника автобэкдоров и будет пополнять его по утрам.
+  {
+    id: 'breachmaster-demigod',
+    humanReadableName: 'Админ подсмотрел пароль',
+    description:
+      'Вы подключились к источнику автобэкдоров от вашей организации.  Вам будет доступно 10 автобэкдоров в день. (подключение бэкдоров работает через сайт хакерства web.evarun.ru) ВАЖНО эта способность нужна только одному чаммеру в организации',
+    availability: 'closed',
+    karmaCost: 30,
+    prerequisites: [],
     modifier: [],
   },
 ];
