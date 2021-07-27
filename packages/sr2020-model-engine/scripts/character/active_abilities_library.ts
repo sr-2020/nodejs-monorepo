@@ -173,13 +173,17 @@ const kPhysicalBodyTargeted: TargetSignature[] = [
     field: 'targetCharacterId',
   },
 ];
-const kLocusAndPhysicalBody: TargetSignature[] = [
+const kLocusAndBody: TargetSignature[] = [
   {
     name: 'Локус',
     allowedTypes: ['locus'],
     field: 'locusId',
   },
-  ...kPhysicalBodyTargeted,
+  {
+    name: 'Персонаж',
+    allowedTypes: ['HEALTHY_BODY', 'WOUNDED_BODY', 'CLINICALLY_DEAD_BODY', 'ABSOLUTELY_DEAD_BODY', 'VR_BODY'],
+    field: 'targetCharacterId',
+  },
 ];
 const kNoTarget: TargetSignature[] = [];
 const kMerchandiseTargeted: TargetSignature = {
@@ -499,7 +503,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Принять в дискурс-группу',
     description: 'Принять персонажа в дискурс-группу',
     target: 'scan',
-    targetsSignature: kLocusAndPhysicalBody,
+    targetsSignature: kLocusAndBody,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'closed',
@@ -514,7 +518,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Изгнать из дискурс-группы',
     description: 'Исключить персонажа из дискурс-группы',
     target: 'scan',
-    targetsSignature: kLocusAndPhysicalBody,
+    targetsSignature: kLocusAndBody,
     cooldownMinutes: (character) => 0,
     prerequisites: [],
     availability: 'closed',
@@ -555,7 +559,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Гуру',
     description: 'Принять персонажа в дискурс-группу, не расходуя заряд локуса',
     target: 'scan',
-    targetsSignature: kLocusAndPhysicalBody,
+    targetsSignature: kLocusAndBody,
     cooldownMinutes: (character) => 60,
     prerequisites: [],
     availability: 'closed',
@@ -570,7 +574,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Инквизитор-1',
     description: 'Выгнать персонажа из дискурс-группы, восстановив заряд локуса',
     target: 'scan',
-    targetsSignature: kLocusAndPhysicalBody,
+    targetsSignature: kLocusAndBody,
     cooldownMinutes: (character) => 30,
     prerequisites: [],
     availability: 'closed',
@@ -585,7 +589,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Инквизитор-2',
     description: 'Выгнать персонажа из дискурс-группы, восстановив два заряда локуса',
     target: 'scan',
-    targetsSignature: kLocusAndPhysicalBody,
+    targetsSignature: kLocusAndBody,
     cooldownMinutes: (character) => 30,
     prerequisites: [],
     availability: 'closed',
