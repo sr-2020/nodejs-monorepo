@@ -13,6 +13,11 @@ export class BasicCharacterStats extends React.Component<Sr2020Character> {
             <td> {this.props.metarace}</td>
           </tr>
           <tr>
+            <th>Тип тела</th>
+            <td>currentBody</td>
+            <td> {this.props.currentBody}</td>
+          </tr>
+          <tr>
             <th>Состояние физического тела</th>
             <td>healthState</td>
             <td> {this.props.healthState}</td>
