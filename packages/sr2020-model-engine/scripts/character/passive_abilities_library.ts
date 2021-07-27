@@ -1318,9 +1318,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
-      modifierFromEffect(increaseMedicraftBonus, { amount: 2 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
   // drones.medicraftBonus +4
@@ -1332,8 +1330,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 50,
     prerequisites: ['arch-rigger', 'medicraft-1'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
       modifierFromEffect(increaseMedicraftBonus, { amount: 4 }),
     ],
   },
@@ -1349,11 +1345,10 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 50,
     prerequisites: ['arch-rigger', 'medicraft-2'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
-      modifierFromEffect(increaseAircraftBonus, { amount: 4 }),
-      modifierFromEffect(increaseAutodocBonus, { amount: 2 }),
-      modifierFromEffect(increaseMedicraftBonus, { amount: 8 }),
+      modifierFromEffect(increaseGroundcraftBonus, { amount: 1 }),
+      modifierFromEffect(increaseAircraftBonus, { amount: 1 }),
+      modifierFromEffect(increaseAutodocBonus, { amount: 1 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 6 }),
     ],
   },
   // rigging.implantsBonus +4
@@ -1367,7 +1362,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 60,
     prerequisites: ['arch-rigger', 'auto-doc-3'],
     modifier: [
-      modifierFromEffect(increaseAutodocBonus, { amount: 4 }),
+      modifierFromEffect(increaseAutodocBonus, { amount: 1 }),
       modifierFromEffect(increaseImplantsBonus, { amount: 4 }),
       modifierFromEffect(allowBiowareInstallation, {}),
     ],
@@ -1410,7 +1405,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
-    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 3 })],
   },
   // drones.aircraftBonus = +3
   {
@@ -1420,7 +1415,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['aircraft-1', 'arch-rigger'],
-    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
+    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 3 })],
   },
   // drones.aircraftBonus = +4
   // drones.medicraftBonus = +1
@@ -1434,7 +1429,12 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['aircraft-2', 'arch-rigger'],
-    modifier: [modifierFromEffect(increaseAircraftBonus, { amount: 4 })],
+    modifier: [
+      modifierFromEffect(increaseGroundcraftBonus, { amount: 1 }),
+      modifierFromEffect(increaseAircraftBonus, { amount: 4 }),
+      modifierFromEffect(increaseAutodocBonus, { amount: 1 }),
+      modifierFromEffect(increaseMedicraftBonus, { amount: 1 }),
+    ],
   },
   // drones.groundcraftBonus = +3
   {
@@ -1444,7 +1444,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
-    modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseGroundcraftBonus, { amount: 3 })],
   },
   // drones.groundcraftBonus = +4
   {
@@ -1476,8 +1476,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 40,
     prerequisites: ['arch-rigger'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 20 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -20 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
     ],
   },
   // drones.maxTimeInside +15
@@ -1490,8 +1490,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 50,
     prerequisites: ['drone-sync-1', 'arch-rigger'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -15 }),
     ],
   },
   // drones.maxTimeInside  +15
@@ -1504,8 +1504,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 50,
     prerequisites: ['drone-sync-2', 'arch-rigger'],
     modifier: [
-      modifierFromEffect(increaseMaxTimeInDrone, { amount: 10 }),
-      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -10 }),
+      modifierFromEffect(increaseMaxTimeInDrone, { amount: 15 }),
+      modifierFromEffect(increasePostDroneRecoveryTime, { amount: -15 }),
     ],
   },
   // Повышает защиту от ментальных заклинаний
@@ -1721,7 +1721,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-rigger'],
-    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 3 }), modifierFromEffect(increaseImplantsBonus, { amount: 3 })],
   },
   // rigging.implantsBonus +2
   // drones.autodocBonus +3
@@ -1732,7 +1732,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-rigger', 'auto-doc-1'],
-    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 3 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
   },
   // rigging.implantsBonus +3
   // drones.autodocBonus +2
@@ -1743,7 +1743,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-rigger', 'auto-doc-2'],
-    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseAutodocBonus, { amount: 2 }), modifierFromEffect(increaseImplantsBonus, { amount: 3 })],
   },
   // формальная абилка, которая показывает, что риггер подключен к дрону. Вроде бы не нужна, но на нее наверное можно навесить всякие нужные параметры, циферки и что-то еще что надо будет показывать.
   // Кроме того, это обязательный пререквизит для всех дроновских абилок
