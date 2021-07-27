@@ -112,6 +112,7 @@ import {
   essenceScanAbility,
   gmDecreaseMaxEssence,
   gmEssenceReset,
+  gmEssenceResetMaster,
   gmIncreaseMaxEssence,
 } from '@alice/sr2020-model-engine/scripts/character/essence';
 import { kMerchandiseQrTypes } from '@alice/sr2020-common/models/qr-code.model';
@@ -1516,7 +1517,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'Восстановление Эссенса',
     description: 'РД Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kNonDeadBodyTargeted,
     cooldownMinutes: (character) => 180,
     prerequisites: [],
     availability: 'closed',
@@ -1654,7 +1655,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     karmaCost: 0,
     minimalEssence: 0,
     fadingPrice: 0,
-    eventType: gmEssenceReset.name,
+    eventType: gmEssenceResetMaster.name,
   },
   // Эта абилка нужна как мастерская.
   // Активировать абилку, отсканировать QR-код персонажа-объекта. У персонажа-объекта  восстанавливаются все хиты.

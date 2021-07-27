@@ -1,4 +1,4 @@
-import { Effect, EffectModelApi, EventModelApi, Modifier } from '@alice/alice-common/models/alice-model-engine';
+import { Effect, EffectModelApi, EventModelApi, Modifier, UserVisibleError } from '@alice/alice-common/models/alice-model-engine';
 import { MetaRace, Sr2020Character } from '@alice/sr2020-common/models/sr2020-character.model';
 import { increaseCharisma, increaseMagic, increaseResonance } from './basic_effects';
 import { removeImplant } from './merchandise';
@@ -59,6 +59,20 @@ export function gmDecreaseMaxEssence(api: EventModelApi<Sr2020Character>, data: 
 }
 
 export function gmEssenceReset(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  //действует на расы: эльф, орк, норм, тролль, гном
+  const target = api.aquired(Sr2020Character, data.targetCharacterId);
+  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll'].includes(target.metarace)) {
+    throw new UserVisibleError('Эта способность действует только на  нормов, эльфов, орков, троллей и гномов');
+  }
+  api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, essenceReset, {});
+}
+
+export function gmEssenceResetMaster(api: EventModelApi<Sr2020Character>, data: FullTargetedAbilityData) {
+  //действует на расы: эльф, орк, норм, тролль, гном, hmhvv1, hmhvv3
+  const target = api.aquired(Sr2020Character, data.targetCharacterId);
+  if (!['meta-norm', 'meta-elf', 'meta-dwarf', 'meta-ork', 'meta-troll', 'meta-vampire', 'meta-ghoul'].includes(target.metarace)) {
+    throw new UserVisibleError('Эта способность действует только на  нормов, эльфов, орков, троллей, гномов, вампиров и гулей');
+  }
   api.sendOutboundEvent(Sr2020Character, data.targetCharacterId, essenceReset, {});
 }
 
