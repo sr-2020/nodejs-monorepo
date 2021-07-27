@@ -3811,7 +3811,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     humanReadableName: 'VR Перейти в КолдСим',
     description: 'Активируй, чтобы подключиться в Колдсим (ты спрячешься в аватарку,  станешь беспомощным, но анонимным)',
     target: 'scan',
-    targetsSignature: kNoTarget,
+    targetsSignature: kBodyStorageTargeted,
     cooldownMinutes: (character) => 10,
     prerequisites: ['arch-digital', 'compile-hotsim', 'sub-ai'],
     availability: 'open',
