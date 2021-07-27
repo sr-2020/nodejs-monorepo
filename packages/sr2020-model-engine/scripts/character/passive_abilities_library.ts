@@ -404,7 +404,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     humanReadableName: 'Опытный проект-менеджер',
     description: 'Ты - опытный проект-менеджер',
     availability: 'closed',
-    karmaCost: 0,
+    karmaCost: 30,
     prerequisites: ['project-manager-1'],
     modifier: [],
   },
@@ -944,7 +944,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'igra-na-birge-2',
     humanReadableName: 'Игра на бирже 2',
-    description: 'ты получаешь кэшбэк 5% от всех своих рентных платежей.',
+    description: 'ты получаешь кэшбэк +5% от всех своих рентных платежей.',
     availability: 'open',
     karmaCost: 30,
     prerequisites: ['arch-face', 'igra-na-birge-1'],
@@ -956,7 +956,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'igra-na-birge-3',
     humanReadableName: 'Игра на бирже 3',
-    description: 'ты получаешь кэшбэк 13% от всех своих рентных платежей.',
+    description: 'ты получаешь кэшбэк +13% от всех своих рентных платежей.',
     availability: 'open',
     karmaCost: 50,
     prerequisites: ['arch-face', 'igra-na-birge-2'],
@@ -3055,7 +3055,6 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     prerequisites: ['arch-hackerman-technomancer', 'sprites-basic'],
     modifier: [],
   },
-  // Игрок имеет право использовать этот пердмет в данже
   {
     id: 'water-walkers',
     humanReadableName: 'Спрайт "кувшинки"',
@@ -3578,7 +3577,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   //
   {
     id: 'vr-incognito',
-    humanReadableName: 'VR Режим "Инкогнито"',
+    humanReadableName: 'VR Режим Инкогнито',
     description:
       '[только для VR] Если ты находишься в VR в аватарке (плащ, очки, или зачипованная аватарка), то тебя нельзя узнать без применения специальных абилок или способностей. Абилка Who is на вас не действует.',
     availability: 'open',
@@ -3589,7 +3588,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   // maxTimeInVr +30
   {
     id: 'vr-firewall',
-    humanReadableName: 'VR Режим "Фаервол"',
+    humanReadableName: 'VR Режим Фаервол',
     description:
       '[только для VR] Ты нарисовал себе классную аватарку. Молодец! Тебя нельзя деанонимировать никаким способом. Если кто-то пытается - покажи ему этот текст. И да, у тебя +30 минут в VR! Развлекайся, чаммер!',
     availability: 'closed',
@@ -3859,7 +3858,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'ai-manager',
     humanReadableName: 'AI eXploit',
-    description: 'Этот ИИ занимается Эксплуатацией. Все способности этой ветки требуют обращения к мастеру-региональщику.',
+    description:
+      'Этот ИИ занимается Эксплуатацией. ВАЖНО. Все способности этой ветки требуют при активации обращения к мастеру-региональщику.',
     availability: 'open',
     karmaCost: 40,
     prerequisites: ['arch-digital', 'sub-ai'],
@@ -4146,17 +4146,17 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'project-artisan',
     humanReadableName: 'Экономия ресурсов',
-    description: 'паззлы',
+    description: 'Ты можешь заменить часть макроресурсов, собрав паззл',
     availability: 'closed',
     karmaCost: 30,
-    prerequisites: ['project-manager-3'],
+    prerequisites: ['project-manager-1'],
     modifier: [],
   },
   // текстовая абилка
   {
     id: 'project-industry',
     humanReadableName: 'Экономия ресурсов 2',
-    description: 'паззлы2',
+    description: 'Ты можешь заменить часть макроресурсов, собрав  сложный паззл',
     availability: 'closed',
     karmaCost: 30,
     prerequisites: ['project-manager-3', 'project-artisan'],
@@ -4497,7 +4497,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Вы подключились к источнику автобэкдоров от вашей организации.  Вам будет доступно 10 автобэкдоров в день. (подключение бэкдоров работает через сайт хакерства web.evarun.ru) ВАЖНО эта способность нужна только одному чаммеру в организации',
     availability: 'closed',
-    karmaCost: 30,
+    karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },
@@ -4508,7 +4508,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     description:
       'Вы подключились к источнику автобэкдоров от вашей организации.  Вам будет доступно 10 автобэкдоров в день. (подключение бэкдоров работает через сайт хакерства web.evarun.ru) ВАЖНО эта способность нужна только одному чаммеру в организации',
     availability: 'closed',
-    karmaCost: 30,
+    karmaCost: 0,
     prerequisites: [],
     modifier: [],
   },

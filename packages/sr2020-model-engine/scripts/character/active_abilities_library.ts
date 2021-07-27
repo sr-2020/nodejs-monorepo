@@ -123,7 +123,6 @@ import {
   enterVrHot,
   foundationRunawayAbility,
 } from '@alice/sr2020-model-engine/scripts/character/technomancers';
-
 const kHealthyBodyTargeted: TargetSignature[] = [
   {
     name: 'Персонаж',
@@ -966,7 +965,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // air-essense  = записывает в таблици количество Air Essense
   // reanimate-cooldown = кулдаун в минутах у персонажа, применившего абилку
   // price-reanimate  = Это коэффициент цены, его надо как-то учесть в экономике (прописать в цену услуги "воскрешение на оборудовании таком-то ???)
-  //
   // Зависимости, которые были у персонажа до КС сохраняются. После воскрешения таймер зависимостей переходит в состояние ноль.
   {
     id: 'reanimate',
@@ -1650,7 +1648,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'gm-reset-essence',
     humanReadableName: 'Восстановление Эссенс',
-    description: 'Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном',
+    description: 'Эссенс персонажа станет =6, все импланты деактивируются(ломаются)\nдействует на расы: эльф, орк, норм, тролль, гном, ',
     target: 'scan',
     targetsSignature: kPhysicalBodyTargeted,
     cooldownMinutes: (character) => 0,
@@ -2341,7 +2339,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     description: 'Твои лидерские качества улучшились, Инициатива +2 \n(у нападающих базовая и = 1, у защитников базовая и = 0)\nfading +60',
     target: 'scan',
     targetsSignature: kNoTarget,
-    cooldownMinutes: (character) => 10,
+    cooldownMinutes: (character) => 6,
     prerequisites: ['arch-hackerman-technomancer', 'complex-form-combat', 'initiative-basic'],
     availability: 'open',
     karmaCost: 20,
@@ -3373,10 +3371,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
   // Если тела нет - получаем сообщение "Увы, камера телохранилища пуста".
   // Если тело есть - тот кто применил абилку получает сообщение "Вы успешно атаковали тело"
-  //
   // Для того, кого атаковали:
   // персонажу (кто был атакован) выдается пуш сообщение "ВАЖНО. Ваше тело атаковано! С того момента как вы прочитали это сообщение - вернитесь в свое тело  и нажмите кнопку "ранение" в приложении. У вас есть 15 минут."
-  //
   // Ничего больше не происходит, только пуш с текстом на тяжран.
   {
     id: 'sleep-shock',
@@ -3397,10 +3393,8 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // Абилка срабатывает вне зависимости от того, есть там тело или нет. Кулдаун включается.
   // Если тела нет - получаем сообщение "Увы, камера телохранилища пуста".
   // Если тело есть - тот кто применил абилку получает сообщение "Вы успешно атаковали тело"
-  //
   // Для того, кого атаковали:
   // персонажу (кто был атакован) выдается пуш сообщение "ВАЖНО. Ваше тело атаковано! С того момента как вы прочитали это сообщение - вернитесь в свое тело  и нажмите кнопку "ранение" в приложении. У вас есть 15 минут."
-  //
   // Ничего больше не происходит, только пуш с текстом на тяжран.
   {
     id: 'sleep-kick',
@@ -3790,7 +3784,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   {
     id: 'ai-digital-violence',
     humanReadableName: 'Цифровое Ультранасилие',
-    description: 'Позволяет временно заблокировать работу магазина указанного заведения.',
+    description: 'Позволяет временно заблокировать работу магазина указанного заведения',
     target: 'scan',
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 360 - 30 * character.depth,
@@ -4320,7 +4314,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
   // запрос кнчн идет в мастера .
   {
     id: 'ip-code',
-    humanReadableName: 'Вычислю по айпи',
+    humanReadableName: '',
     description: 'Ты можешь написать запрос мастеру и получить идентификатор какого-либо хоста. Работает раз в 3 часа',
     target: 'scan',
     targetsSignature: kNoTarget,
@@ -4686,7 +4680,6 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
     targetsSignature: kNoTarget,
     cooldownMinutes: (character) => 20,
     prerequisites: [],
-    pack: undefined,
     availability: 'closed',
     karmaCost: 10,
     minimalEssence: 0,
