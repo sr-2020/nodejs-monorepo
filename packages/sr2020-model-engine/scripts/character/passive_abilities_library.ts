@@ -2,6 +2,7 @@ import { modifierFromEffect } from './util';
 import {
   allowBiowareInstallation,
   decreaseChemoSensitivity,
+  disableDigitalScreen,
   increaseAdminHostNumber,
   increaseAircraftBonus,
   increaseAuraMarkMultiplier,
@@ -3280,7 +3281,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 0,
     prerequisites: [],
     pack: { id: 'gen-meta-digital', level: 1 },
-    modifier: [],
+    modifier: [modifierFromEffect(disableDigitalScreen, {})],
   },
   //
   {

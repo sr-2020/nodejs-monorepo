@@ -376,6 +376,11 @@ export function unlockAutodockImplantRemoval(api: EffectModelApi<Sr2020Character
   api.model.screens.autodocImplantRemoval = true;
 }
 
+export function disableDigitalScreen(api: EffectModelApi<Sr2020Character>, m: Modifier) {
+  api.model.screens.spellbook = false;
+  api.model.screens.implants = false;
+}
+
 export function setImplantsRemovalResistance(api: EffectModelApi<Sr2020Character>, m: ModifierWithAmount) {
   api.model.implantsRemovalResistance = Math.max(api.model.implantsRemovalResistance, m.amount);
 }
