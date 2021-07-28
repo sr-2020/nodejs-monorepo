@@ -1290,7 +1290,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     availability: 'open',
     karmaCost: -30,
     prerequisites: ['arch-rigger-negative-1'],
-    modifier: [modifierFromEffect(increaseIntelligence, { amount: -1 }), modifierFromEffect(increaseBody, { amount: -1 })],
+    modifier: [modifierFromEffect(increaseBody, { amount: -1 })],
   },
   // Intelligence -1
   // Body-1
@@ -1304,8 +1304,8 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: -40,
     prerequisites: ['arch-rigger-negative-2'],
     modifier: [
-      modifierFromEffect(increaseIntelligence, { amount: -2 }),
-      modifierFromEffect(increaseBody, { amount: -2 }),
+      modifierFromEffect(increaseIntelligence, { amount: -1 }),
+      modifierFromEffect(increaseBody, { amount: -1 }),
       modifierFromEffect(increaseDroneFeedback, { amount: 1 }),
     ],
   },
@@ -1917,7 +1917,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
     karmaCost: 100,
     prerequisites: [],
     pack: { id: 'gen-arch-hackerman-decker', level: 1 },
-    modifier: [modifierFromEffect(increaseIntelligence, { amount: 2 })],
+    modifier: [modifierFromEffect(increaseIntelligence, { amount: 1 })],
   },
   // resonance +2
   {
@@ -3168,7 +3168,7 @@ const kAllPassiveAbilitiesList: PassiveAbility[] = [
   {
     id: 'sword-short-doubled',
     humanReadableName: 'Спрайт два меча',
-    description: 'Ты можешь использовать два одноручных меча  в Красной комнате',
+    description: 'Ты можешь использовать два одноручных меча в Красной комнате',
     availability: 'open',
     karmaCost: 20,
     prerequisites: ['arch-hackerman-technomancer', 'sword-short', 'control-basic'],
