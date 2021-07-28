@@ -264,7 +264,7 @@ export const kAllActiveAbilitiesList: ActiveAbility[] = [
         field: 'targetCharacterId',
       },
     ],
-    cooldownMinutes: (character) => 180,
+    cooldownMinutes: (character) => 360,
     prerequisites: [],
     availability: 'closed',
     karmaCost: 100,
