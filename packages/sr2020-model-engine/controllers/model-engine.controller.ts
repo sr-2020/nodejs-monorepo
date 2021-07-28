@@ -235,7 +235,7 @@ export class ModelEngineController implements Sr2020ModelEngineHttpService {
         autodocWoundHeal: true,
         autodocImplantInstall: false,
         autodocImplantRemoval: false,
-        ethics: false,
+        ethics: true,
         location: false,
         wound: true,
         scanQr: true,
