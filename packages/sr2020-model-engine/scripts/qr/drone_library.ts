@@ -82,7 +82,7 @@ export const kAllDrones: Drone[] = [
     sensor: 7,
     hitpoints: 2,
     description:
-      'Видеокамера. Иммунитет ко всему холодному оружию и легкому огнестрельному.Видеокамера. Иммунитет ко всему холодному оружию и легкому огнестрельному. 2 хита\n\nКласс: Воздушная техника\nТип: Коптер\nSensor: 7',
+      'Видеокамера. Иммунитет ко всему холодному оружию и легкому огнестрельному. 2 хита\n\nКласс: Воздушная техника\nТип: Коптер\nSensor: 7',
     abilityIds: ['drone-copter'],
   },
   {
@@ -178,8 +178,8 @@ export const kAllDrones: Drone[] = [
     sensor: 7,
     hitpoints: 3,
     description:
-      'В дронах модели Sweet Ginger решили проблему надёжности (3 хита), но они стали чуть капризнее в управлении, могут служить надёжным Щитом, на них установлена Тяжелая броня.\n\nКласс: Техника\nТип: Бульдозер\nSensor: 7',
-    abilityIds: ['drone-dozer', 'drone-heavy'],
+      'В дронах модели Sweet Ginger решили проблему надёжности (3 хита), но они стали чуть капризнее в управлении, обычно они красного цвета, могут служить надёжным Щитом, на них установлена Тяжелая броня.\n\nКласс: Техника\nТип: Бульдозер\nSensor: 7',
+    abilityIds: ['drone-dozer', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'heemeyer',
@@ -191,7 +191,7 @@ export const kAllDrones: Drone[] = [
     hitpoints: 5,
     description:
       'Химейер передовая модель бульдозеров. Надежность на высоте (5 хитов), они служат мощным Щитом, с Тяжелой бронёй.\n\nКласс: Техника\nТип: Бульдозер\nSensor: 11',
-    abilityIds: ['drone-dozer', 'drone-heavy'],
+    abilityIds: ['drone-dozer', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'dzerginsk',
@@ -202,7 +202,7 @@ export const kAllDrones: Drone[] = [
     sensor: 7,
     hitpoints: 5,
     description: 'Всем стоять! Работает полиция! дрон может применить Паралич движения. 5 хитов\n\nКласс: Техника\nТип: Полицай\nSensor: 7',
-    abilityIds: ['drone-paralysis-1'],
+    abilityIds: ['drone-paralysis-1', 'drone-finish-him'],
   },
   {
     id: 'trockiy',
@@ -214,7 +214,7 @@ export const kAllDrones: Drone[] = [
     hitpoints: 3,
     description:
       'Всем стоять! Работает полиция! У дрона Тяжелая броня, может применить два Паралича движения. 3 хита\n\nКласс: Техника\nТип: Полицай\nSensor: 11',
-    abilityIds: ['drone-paralysis-1', 'drone-paralysis-2', 'drone-heavy'],
+    abilityIds: ['drone-paralysis-1', 'drone-paralysis-2', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'beriya',
@@ -226,7 +226,7 @@ export const kAllDrones: Drone[] = [
     hitpoints: 4,
     description:
       'Всем стоять! Работает Робокоп! у дрона Тяжелая броня, пулемёт, может применить три Паралича движения. Обладает повышенной надёжностью (4 хита).\n\nКласс: Техника\nТип: Полицай\nSensor: 16',
-    abilityIds: ['drone-paralysis-1', 'drone-paralysis-2', 'drone-paralysis-3', 'drone-heavy', 'drone-ekzo'],
+    abilityIds: ['drone-paralysis-1', 'drone-paralysis-2', 'drone-paralysis-3', 'drone-heavy', 'drone-ekzo', 'drone-finish-him'],
   },
   {
     id: 'grom',
@@ -236,8 +236,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 6,
     hitpoints: 2,
-    description: 'Пушка. 2 хита\n\nКласс: Техника\nТип: Турель\nSensor: 6',
-    abilityIds: ['drone-turret'],
+    description: 'Турель с пушкой. 2 хита\n\nКласс: Техника\nТип: Турель\nSensor: 6',
+    abilityIds: ['drone-turret', 'drone-finish-him'],
   },
   {
     id: 'cat',
@@ -247,8 +247,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 8,
     hitpoints: 3,
-    description: 'Пушка. 3 хита\n\nКласс: Техника\nТип: Турель\nSensor: 8',
-    abilityIds: ['drone-turret'],
+    description: 'Турель с пушкой. 3 хита\n\nКласс: Техника\nТип: Турель\nSensor: 8',
+    abilityIds: ['drone-turret', 'drone-finish-him'],
   },
   {
     id: 'bfg',
@@ -258,8 +258,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 11,
     hitpoints: 4,
-    description: 'Пушка. 4 хита\r\n\r\nКласс: Техника\r\nТип: Турель\r\nSensor: 11',
-    abilityIds: ['drone-turret'],
+    description: 'Турель с пушкой. 4 хита\r\n\r\nКласс: Техника\r\nТип: Турель\r\nSensor: 11',
+    abilityIds: ['drone-turret', 'drone-finish-him'],
   },
   {
     id: 'marchal',
@@ -269,8 +269,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 12,
     hitpoints: 4,
-    description: 'Пулемет. Тяжелая броня. 4 хита.\r\n\r\nКласс: Техника\r\nТип: Экзоскелет\r\nSensor: 12',
-    abilityIds: ['drone-ekzo', 'drone-heavy'],
+    description: 'Экзоскелет с пулеметом, тяжелой бронёй и 4 хитами.\r\n\r\nКласс: Техника\r\nТип: Экзоскелет\r\nSensor: 12',
+    abilityIds: ['drone-ekzo', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'drednaught',
@@ -280,8 +280,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 8,
     hitpoints: 3,
-    description: 'Пулемет. Тяжелая броня. 3 хита.\n\nКласс: Техника\nТип: Экзоскелет\nSensor: 8',
-    abilityIds: ['drone-ekzo', 'drone-heavy'],
+    description: 'Экзоскелет с пулеметом, тяжелой бронёй и 3 хитами.\n\nКласс: Техника\nТип: Экзоскелет\nSensor: 8',
+    abilityIds: ['drone-ekzo', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'kosmos',
@@ -291,8 +291,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 18,
     hitpoints: 4,
-    description: 'Пулемет. Тяжелая броня. 4 хита. Может лечить на поле боя!\n\nКласс: Техника\nТип: Экзоскелет\nSensor: 18',
-    abilityIds: ['drone-ekzo', 'drone-heavy', 'medcart-light-heal-1', 'medcart-light-heal-2', 'medcart-heavy-heal-1'],
+    description: 'Экзоскелет с пулеметом, тяжелой бронёй и 4 хитами, который может лечить на поле боя!\n\nКласс: Техника\nТип: Экзоскелет\nSensor: 18',
+    abilityIds: ['drone-ekzo', 'drone-heavy', 'medcart-light-heal-1', 'medcart-light-heal-2', 'medcart-heavy-heal-1', 'drone-finish-him'],
   },
   {
     id: 'pecheneg',
@@ -302,8 +302,8 @@ export const kAllDrones: Drone[] = [
     moddingCapacity: 0,
     sensor: 16,
     hitpoints: 5,
-    description: 'Пулемет. Тяжелая броня. 5 хитов\r\n\r\nКласс: Техника\r\nТип: Экзоскелет\r\nSensor: 14',
-    abilityIds: ['drone-ekzo', 'drone-heavy'],
+    description: 'Экзоскелет с пулеметом, тяжелой бронёй и 5 хитами.\r\n\r\nКласс: Техника\r\nТип: Экзоскелет\r\nSensor: 14',
+    abilityIds: ['drone-ekzo', 'drone-heavy', 'drone-finish-him'],
   },
   {
     id: 'medicart',
@@ -345,7 +345,7 @@ export const kAllDrones: Drone[] = [
     sensor: 8,
     hitpoints: 4,
     description:
-      'Мечта группы силовой поддержки! Обладает возможностями Гиппократа  по лечению ( 2 легких и 2 тяжёлых за раз), но при этом на нём установлена Тяжёлая броня!\n\nКласс: Поддержка\nТип: Медикарт\nSensor: 8',
+      'Мечта группы силовой поддержки! Обладает возможностями Гиппократа  по лечению (2 легких и 2 тяжёлых за раз), но при этом на нём установлена Тяжёлая броня! 4 хита\n\nКласс: Поддержка\nТип: Медикарт\nSensor: 8',
     abilityIds: [
       'drone-medcart',
       'medcart-light-heal-1',
@@ -389,7 +389,7 @@ export const kAllDrones: Drone[] = [
     sensor: 18,
     hitpoints: 4,
     description:
-      'Самый топовый медикарт, секретная экспериментальная модель, обладает полными известными возможностями по реанимации полным комплексом защиты и самообороны! (пулемет, тяжелая броня)\n\nКласс: Поддержка\nТип: Медикарт\nSensor: 18',
+      'Самый топовый медикарт, секретная экспериментальная модель, обладает полными известными возможностями по реанимации полным комплексом защиты и самообороны! (пулемет, тяжелая броня). 4 хита\n\nКласс: Поддержка\nТип: Медикарт\nSensor: 18',
     abilityIds: [
       'drone-medcart',
       'medcart-light-heal-1',
@@ -403,6 +403,7 @@ export const kAllDrones: Drone[] = [
       'drone-heavy',
       'drone-use-pills',
       'drone-whats-in-the-body',
+      'drone-finish-him',
     ],
   },
 ];
