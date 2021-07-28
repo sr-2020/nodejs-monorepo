@@ -65,7 +65,7 @@ export function buyFeatureForKarma(api: EventModelApi<Sr2020Character>, data: { 
 
   if (getFeatureIdsInModel(api.workModel).includes(feature.id)) throw new UserVisibleError('Такая способность у вас уже есть');
 
-  if (!satisfiesPrerequisites(api.workModel, feature)) throw new UserVisibleError('Не удовлетворены пререквизиты для данной способности');
+  if (!satisfiesPrerequisites(api.model, feature)) throw new UserVisibleError('Не удовлетворены пререквизиты для данной способности');
 
   const karmaCost = getFeatureKarmaCost(api.workModel, feature);
   if (api.workModel.karma.available < karmaCost) throw new UserVisibleError('Недостаточно кармы для покупки способности');
