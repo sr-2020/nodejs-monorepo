@@ -131,7 +131,6 @@ export function inVr(api: EffectModelApi<Sr2020Character>, m: InVrModifier) {
   api.model.currentBody = 'vr';
   api.model.screens.spellbook = false;
   api.model.screens.implants = false;
-  api.model.screens.ethics = false;
   api.model.activeAbilities = api.model.activeAbilities.filter((it) => kVrEnabledAbilities.includes(it.id));
   addFeatureToModel(api.model, 'exit-vr');
 }
