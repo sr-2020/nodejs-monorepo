@@ -9,6 +9,7 @@ import { CyberDeckQrData, typedQrData } from '@alice/sr2020-model-engine/scripts
 import { QrCode } from '@alice/sr2020-common/models/qr-code.model';
 import { consume } from '@alice/sr2020-model-engine/scripts/qr/events';
 import { startUsingCyberdeck, stopUsingCyberdeck } from '../qr/cyberdecks';
+import { addFeature } from '@alice/sr2020-model-engine/scripts/character/features';
 
 const kCyberDeckModifierId = 'in-the-deck';
 interface DumpshockModifier extends Modifier {
@@ -94,10 +95,11 @@ export function jackInAbility(api: EventModelApi<Sr2020Character>, data: ActiveA
   api.addModifier(createCyberdeckModifier(data.qrCodeId!));
 
   api.model.hacking.jackedIn = true;
+
+  addFeature(api, { id: 'jack-out' });
 }
 
 export function jackOutAbility(api: EventModelApi<Sr2020Character>) {
-
   const m = api.getModifierById(kCyberDeckModifierId);
   api.sendOutboundEvent(QrCode, m.deckQrId, stopUsingCyberdeck, {});
   api.removeModifier(m.mID);

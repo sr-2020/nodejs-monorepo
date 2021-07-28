@@ -71,7 +71,6 @@ describe('Hackers-related events', function () {
     // Hacker set up
     await fixture.saveCharacter();
     await fixture.addCharacterFeature('jack-in');
-    await fixture.addCharacterFeature('jack-out');
 
     // Cyberdeck set up
     await fixture.saveQrCode();
